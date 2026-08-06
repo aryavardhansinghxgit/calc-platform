@@ -2,8 +2,7 @@
 
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { ArrowRight, Layers, Calculator } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { ArrowRight, Calculator } from "lucide-react";
 import { getRelatedCalculators } from "@/lib/calculator-engine/registry";
 
 export interface RelatedCalculatorsProps {
@@ -13,49 +12,30 @@ export interface RelatedCalculatorsProps {
 
 export function RelatedCalculators({ currentId = "", category = "Finance" }: RelatedCalculatorsProps) {
   const relatedList = useMemo(() => {
-    return getRelatedCalculators(currentId, category, 3);
+    return getRelatedCalculators(currentId, category, 4);
   }, [currentId, category]);
 
+  if (relatedList.length === 0) return null;
+
   return (
-    <section className="space-y-4 pt-4 border-t border-slate-800/80">
-      <div className="flex items-center justify-between">
-        <h3 className="text-base font-bold text-white flex items-center gap-2">
-          <Layers className="h-4 w-4 text-sky-400" /> Related Calculators
-        </h3>
-        <Link href={`/category/${category.toLowerCase()}`} className="text-xs font-semibold text-sky-400 hover:text-sky-300">
-          View All {category} Tools
+    <div className="flex gap-3 overflow-x-auto pb-1">
+      {relatedList.map((calc) => (
+        <Link
+          key={calc.id}
+          href={`/calculators/${calc.slug}`}
+          className="flex-shrink-0 w-52 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-zinc-300 dark:hover:border-zinc-600 transition-colors group"
+        >
+          <div className="flex items-center gap-2 mb-1">
+            <Calculator className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+            <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+              {calc.title}
+            </span>
+            <ArrowRight className="h-3 w-3 text-zinc-400 ml-auto shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+          </div>
+          <p className="text-[11px] text-zinc-500 dark:text-zinc-400 line-clamp-1">{calc.description}</p>
         </Link>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {relatedList.map((calc) => (
-          <Link key={calc.id} href={`/calculators/${calc.slug}`}>
-            <Card className="h-full bg-slate-900/60 border-slate-800/80 hover:border-sky-500/40 hover:bg-slate-900 transition-all cursor-pointer group">
-              <CardHeader className="p-4 space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="p-2 rounded-xl bg-slate-950/80 border border-slate-800 text-sky-400 group-hover:text-sky-300 transition-colors">
-                    <Calculator className="h-4 w-4" />
-                  </div>
-                  <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded-full bg-slate-800/80 text-slate-400 border border-slate-700">
-                    {calc.category}
-                  </span>
-                </div>
-
-                <div className="space-y-0.5">
-                  <CardTitle className="text-sm font-bold text-white group-hover:text-sky-300 transition-colors flex items-center justify-between">
-                    <span>{calc.title}</span>
-                    <ArrowRight className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-sky-400" />
-                  </CardTitle>
-                  <CardDescription className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
-                    {calc.description}
-                  </CardDescription>
-                </div>
-              </CardHeader>
-            </Card>
-          </Link>
-        ))}
-      </div>
-    </section>
+      ))}
+    </div>
   );
 }
 

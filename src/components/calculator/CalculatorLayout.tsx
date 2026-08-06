@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import dynamic from "next/dynamic";
 import { CalculatorDefinition, CalculationResult } from "@/lib/calculator-engine/types";
 import { CalculatorEngine } from "@/lib/calculator-engine/engine";
@@ -20,15 +20,12 @@ const MortgagePieChart = dynamic(() => import("./charts/MortgagePieChart").then(
 const BalanceLineChart = dynamic(() => import("./charts/BalanceLineChart").then((m) => m.BalanceLineChart), { ssr: false });
 const AmortizationAreaChart = dynamic(() => import("./charts/AmortizationAreaChart").then((m) => m.AmortizationAreaChart), { ssr: false });
 
-
-
 export interface CalculatorLayoutProps {
   definition: Omit<CalculatorDefinition, "calculate">;
   children?: React.ReactNode;
 }
 
 export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
-  // Initialize form state from definition defaultValues
   const initialInputs = useMemo(() => {
     const defaults: Record<string, any> = {};
     definition.inputs.forEach((input) => {
@@ -40,13 +37,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const [inputs, setInputs] = useState<Record<string, any>>(initialInputs);
 
   const handleInputChange = (key: string, value: any) => {
-    setInputs((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+    setInputs((prev) => ({ ...prev, [key]: value }));
   };
 
-  // Run calculation engine dynamically
   const calculationResult: CalculationResult = useMemo(() => {
     return CalculatorEngine.run(definition.id, inputs);
   }, [definition.id, inputs]);
@@ -61,40 +54,40 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isMortgage = definition.id.toLowerCase().includes("mortgage");
 
   return (
-    <div className="space-y-10 max-w-5xl mx-auto py-2">
-      {/* 1. Header & Navigation Breadcrumb */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-sky-400 transition-colors bg-slate-900/80 px-3.5 py-1.5 rounded-xl border border-slate-800 hover:border-slate-700"
-          >
-            <ArrowLeft className="h-4 w-4" /> All Calculators
-          </Link>
-          <Link
-            href={`/category/${definition.category.toLowerCase()}`}
-            className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-3 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 hover:border-sky-500/40 hover:bg-sky-500/20 transition-all"
-          >
-            <Sparkles className="h-3.5 w-3.5" /> {definition.category} Tool
-          </Link>
-        </div>
-
-        {/* Title & Description */}
-        <div className="space-y-2 border-b border-slate-800/80 pb-6">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-            {definition.title}
-          </h1>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed max-w-3xl">
-            {definition.description}
-          </p>
-        </div>
+    <div className="space-y-4 max-w-5xl mx-auto">
+      {/* 1. Compact Header */}
+      <div className="flex items-center gap-3">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
+          aria-label="Back to all calculators"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" /> All
+        </Link>
+        <span className="text-zinc-300 dark:text-zinc-600">/</span>
+        <Link
+          href={`/category/${definition.category.toLowerCase()}`}
+          className="text-xs text-zinc-500 hover:text-blue-600 transition-colors"
+        >
+          {definition.category}
+        </Link>
       </div>
 
-      {/* 3. Grid: Left Inputs, Right Outputs */}
+      {/* 2. Title */}
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
+          {definition.title}
+        </h1>
+        <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-1 max-w-2xl">
+          {definition.description}
+        </p>
+      </div>
+
+      {/* 3. Main Grid: Inputs (5) | Results (7) */}
       <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left: Input Form */}
-          <div className="lg:col-span-6 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-soft">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left: Inputs */}
+          <div className="lg:col-span-5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4">
             <CalculatorForm
               definition={definition}
               values={inputs}
@@ -102,55 +95,104 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             />
           </div>
 
-          {/* Right: Results Display & Pie Chart */}
-          <div className="lg:col-span-6 space-y-6">
-            <CalculatorResult
-              definition={definition}
-              result={calculationResult}
-            />
+          {/* Right: Results + Pie Chart */}
+          <div className="lg:col-span-7 space-y-4">
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4">
+              <CalculatorResult
+                definition={definition}
+                result={calculationResult}
+              />
+            </div>
 
             {isMortgage && calculationResult.data && (
-              <MortgagePieChart
-                principalAndInterest={Number(calculationResult.data.monthlyPrincipalAndInterest || 0)}
-                propertyTax={Number(calculationResult.data.monthlyPropertyTax || 0)}
-                insurance={Number(calculationResult.data.monthlyInsurance || 0)}
-                hoa={Number(calculationResult.data.hoaFeeMonthly || 0)}
-                extraPayment={Number(inputs.extraMonthlyPayment || 0)}
-              />
+              <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3">
+                <MortgagePieChart
+                  principalAndInterest={Number(calculationResult.data.monthlyPrincipalAndInterest || 0)}
+                  propertyTax={Number(calculationResult.data.monthlyPropertyTax || 0)}
+                  insurance={Number(calculationResult.data.monthlyInsurance || 0)}
+                  hoa={Number(calculationResult.data.hoaFeeMonthly || 0)}
+                  extraPayment={Number(inputs.extraMonthlyPayment || 0)}
+                />
+              </div>
             )}
           </div>
         </div>
       </CalculatorErrorBoundary>
 
-      {/* 4. Advanced Recharts Visual Analytics (Line & Area Charts) */}
-      {isMortgage && amortizationSchedule.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <BalanceLineChart schedule={amortizationSchedule} />
-          <AmortizationAreaChart schedule={amortizationSchedule} />
-        </div>
-      )}
+      {/* 4. Collapsible Sections */}
+      <div className="space-y-2">
+        {/* Charts */}
+        {isMortgage && amortizationSchedule.length > 0 && (
+          <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+            <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none">
+              Charts — Balance Over Time & Principal vs Interest
+            </summary>
+            <div className="px-4 pb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <BalanceLineChart schedule={amortizationSchedule} />
+              <AmortizationAreaChart schedule={amortizationSchedule} />
+            </div>
+          </details>
+        )}
 
-      {/* 5. Month-by-Month Amortization Table */}
-      {isMortgage && amortizationSchedule.length > 0 && (
-        <AmortizationTable schedule={amortizationSchedule} />
-      )}
+        {/* Amortization Table */}
+        {isMortgage && amortizationSchedule.length > 0 && (
+          <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+            <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none">
+              Amortization Schedule ({amortizationSchedule.length} payments)
+            </summary>
+            <div className="px-4 pb-4">
+              <AmortizationTable schedule={amortizationSchedule} />
+            </div>
+          </details>
+        )}
 
-      {/* 6. Formula Explanation */}
-      {definition.formulaDescription && (
-        <FormulaSection
-          formula={definition.formulaDescription}
-          explanation={`Detailed mathematical calculation formula applied in ${definition.title}.`}
-        />
-      )}
+        {/* Formula */}
+        {definition.formulaDescription && (
+          <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+            <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none">
+              Formula & Calculation Method
+            </summary>
+            <div className="px-4 pb-4">
+              <FormulaSection
+                formula={definition.formulaDescription}
+                explanation={`How ${definition.title} calculations work.`}
+              />
+            </div>
+          </details>
+        )}
 
-      {/* 7. Educational Content Section */}
-      {isMortgage && <MortgageContentSection />}
+        {/* Educational Content */}
+        {isMortgage && (
+          <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+            <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none">
+              How Mortgages Work — Guide & Examples
+            </summary>
+            <div className="px-4 pb-4">
+              <MortgageContentSection />
+            </div>
+          </details>
+        )}
 
-      {/* 8. FAQs */}
-      <FAQSection faqs={definition.faqs} />
+        {/* FAQs */}
+        <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+          <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none">
+            Frequently Asked Questions
+          </summary>
+          <div className="px-4 pb-4">
+            <FAQSection faqs={definition.faqs} />
+          </div>
+        </details>
 
-      {/* 9. Related Calculators */}
-      <RelatedCalculators currentId={definition.id} category={definition.category} />
+        {/* Related Calculators */}
+        <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl" open>
+          <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none">
+            Related Calculators
+          </summary>
+          <div className="px-4 pb-4">
+            <RelatedCalculators currentId={definition.id} category={definition.category} />
+          </div>
+        </details>
+      </div>
     </div>
   );
 }

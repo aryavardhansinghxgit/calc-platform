@@ -2,7 +2,6 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 export interface ResultCardProps {
   label: string;
@@ -22,33 +21,31 @@ export function ResultCard({
   className,
 }: ResultCardProps) {
   return (
-    <Card
+    <div
       className={cn(
-        "transition-all border rounded-[12px] p-5 space-y-2",
+        "px-3 py-2 rounded-lg",
         highlight
-          ? "bg-gradient-to-br from-sky-950/80 to-blue-900/40 border-sky-500/40 shadow-lg shadow-sky-500/10"
-          : "bg-slate-900/80 border-slate-800",
+          ? "bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800"
+          : "bg-zinc-50 dark:bg-zinc-800/50",
         className
       )}
+      title={description}
     >
-      <div className="space-y-1">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-          {label}
+      <p className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide leading-none mb-1">
+        {label}
+      </p>
+      <div className="flex items-baseline gap-0.5">
+        <span
+          className={cn(
+            "font-semibold tracking-tight font-mono",
+            highlight ? "text-xl text-blue-600 dark:text-blue-400" : "text-lg text-zinc-900 dark:text-zinc-100"
+          )}
+        >
+          {value}
         </span>
-        <div className="flex items-baseline gap-1">
-          <span
-            className={cn(
-              "text-2xl sm:text-3xl font-extrabold tracking-tight font-mono",
-              highlight ? "text-sky-400" : "text-white"
-            )}
-          >
-            {value}
-          </span>
-          {unit && <span className="text-xs text-slate-400 font-mono">{unit}</span>}
-        </div>
+        {unit && <span className="text-[10px] text-zinc-400 font-mono">{unit}</span>}
       </div>
-      {description && <p className="text-xs text-slate-400 leading-relaxed">{description}</p>}
-    </Card>
+    </div>
   );
 }
 

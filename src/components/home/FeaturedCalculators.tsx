@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles, Calculator as CalcIcon, ChevronRight } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   MortgageCalculator,
@@ -12,8 +12,7 @@ import {
   BmiCalculator,
   PercentageCalculator,
 } from "@/components/calculator";
-import { getFeaturedCalculators, CalculatorItem } from "@/data/calculators";
-
+import { getFeaturedCalculators } from "@/data/calculators";
 
 export interface FeaturedItem {
   id: string;
@@ -35,7 +34,6 @@ const defaultFeaturedList: FeaturedItem[] = getFeaturedCalculators().map((c) => 
   category: c.category,
 }));
 
-
 export function FeaturedCalculators({
   featuredList = defaultFeaturedList,
   selectedCalc,
@@ -50,14 +48,14 @@ export function FeaturedCalculators({
   };
 
   return (
-    <section className="space-y-6 pt-6 border-t border-slate-800/80">
+    <section className="space-y-6 pt-6 border-t border-zinc-200">
       {/* Section Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-sky-400" /> Featured Calculators
+          <h2 className="text-xl font-semibold tracking-tight text-zinc-900 flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-blue-600" /> Featured Calculators
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-zinc-500 mt-1">
             Choose a calculator below for instant real-time computation & data breakdown.
           </p>
         </div>
@@ -66,12 +64,12 @@ export function FeaturedCalculators({
       {/* Calculator Selector & Active View Tabs */}
       <Tabs value={activeCalc} onValueChange={handleSelect} className="w-full space-y-6">
         {/* Calculator Select Tabs Header */}
-        <TabsList className="bg-slate-900 border border-slate-800 p-1.5 rounded-2xl flex flex-wrap h-auto gap-1">
+        <TabsList className="bg-zinc-100 border border-zinc-200 p-1 rounded-xl flex flex-wrap h-auto gap-1">
           {featuredList.map((item) => (
             <TabsTrigger
               key={item.id}
               value={item.id}
-              className="data-[state=active]:bg-sky-500 data-[state=active]:text-white rounded-xl font-medium text-xs sm:text-sm px-3.5 py-2 text-slate-300 transition-all cursor-pointer"
+              className="data-[state=active]:bg-white data-[state=active]:text-zinc-900 data-[state=active]:shadow-sm rounded-lg font-medium text-xs sm:text-sm px-3.5 py-1.5 text-zinc-600 transition-all cursor-pointer"
             >
               {item.title}
             </TabsTrigger>

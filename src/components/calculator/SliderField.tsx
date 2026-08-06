@@ -26,12 +26,12 @@ export function SliderField({
   unit,
 }: SliderFieldProps) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-1.5">
       <div className="flex items-center justify-between">
-        <Label htmlFor={id} className="text-sm font-semibold text-slate-200">
+        <Label htmlFor={id} className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
           {label}
         </Label>
-        <div className="flex items-center gap-1 bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">
+        <div className="flex items-center gap-1 bg-zinc-50 dark:bg-zinc-800 px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-700">
           <Input
             id={id}
             type="number"
@@ -40,9 +40,13 @@ export function SliderField({
             min={min}
             max={max}
             step={step}
-            className="w-16 h-7 p-0 bg-transparent border-0 text-right font-mono font-bold text-sky-400 text-sm focus-visible:ring-0"
+            aria-valuenow={value}
+            aria-valuemin={min}
+            aria-valuemax={max}
+            aria-label={label}
+            className="w-14 h-5 p-0 bg-transparent border-0 text-right font-mono font-semibold text-blue-600 dark:text-blue-400 text-xs focus-visible:ring-0"
           />
-          {unit && <span className="text-xs text-slate-400 font-mono">{unit}</span>}
+          {unit && <span className="text-[10px] text-zinc-400 font-mono">{unit}</span>}
         </div>
       </div>
 
@@ -53,7 +57,11 @@ export function SliderField({
         step={step}
         value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500"
+        aria-valuenow={value}
+        aria-valuemin={min}
+        aria-valuemax={max}
+        aria-label={label}
+        className="w-full h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-full appearance-none cursor-pointer accent-blue-600"
       />
     </div>
   );

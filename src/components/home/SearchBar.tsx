@@ -24,6 +24,7 @@ export interface SearchBarProps {
 const defaultQuickTags: QuickTag[] = [
   { id: "mortgage", label: "Mortgage", category: "Finance" },
   { id: "loan", label: "Loan", category: "Finance" },
+  { id: "auto-loan", label: "Auto Loan", category: "Finance" },
   { id: "emi", label: "EMI", category: "Finance" },
   { id: "sip", label: "SIP", category: "Finance" },
   { id: "compound-interest", label: "Compound Interest", category: "Finance" },
@@ -51,7 +52,6 @@ export function SearchBar({
     if (onSearchChange) onSearchChange(val);
   };
 
-  // Instant registry-powered search suggestions
   const searchResults = useMemo(() => {
     if (!query || query.trim() === "") return [];
     return searchRegistry(query);
@@ -61,7 +61,7 @@ export function SearchBar({
     <div className="space-y-4 max-w-2xl mx-auto w-full relative">
       {/* Search Input Container */}
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 pointer-events-none" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400 pointer-events-none z-10" />
         <Input
           type="text"
           placeholder="Search 10+ calculators (e.g. Mortgage, EMI, SIP, GST, Age)..."
@@ -69,23 +69,23 @@ export function SearchBar({
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           onChange={(e) => handleQueryChange(e.target.value)}
-          className="pl-12 pr-10 h-14 text-base bg-slate-900/90 border-slate-800 text-slate-100 placeholder:text-slate-500 rounded-[12px] shadow-soft focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition-all"
+          className="pl-12 pr-10 h-13 text-base bg-white border-zinc-300 text-zinc-900 placeholder:text-zinc-400 rounded-xl shadow-sm focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all"
         />
         {query && (
           <button
             onClick={() => handleQueryChange("")}
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-white rounded-full bg-slate-800/80 hover:bg-slate-700 transition-colors"
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-zinc-700 rounded-full hover:bg-zinc-100 transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
         )}
       </div>
 
-      {/* Live Search Autocomplete Modal/Dropdown */}
+      {/* Live Search Autocomplete Dropdown */}
       {isFocused && query.trim() !== "" && (
-        <div className="absolute top-16 left-0 right-0 z-50 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto divide-y divide-slate-800/60">
+        <div className="absolute top-16 left-0 right-0 z-50 bg-white border border-zinc-200 rounded-xl shadow-lg overflow-hidden max-h-80 overflow-y-auto divide-y divide-zinc-100">
           {searchResults.length === 0 ? (
-            <div className="p-4 text-center text-xs text-slate-400">
+            <div className="p-4 text-center text-xs text-zinc-500">
               No calculators found matching &quot;{query}&quot;
             </div>
           ) : (
@@ -93,20 +93,20 @@ export function SearchBar({
               <Link
                 key={calc.id}
                 href={`/calculators/${calc.slug}`}
-                className="p-3.5 flex items-center justify-between hover:bg-slate-800/60 transition-colors group cursor-pointer"
+                className="p-3.5 flex items-center justify-between hover:bg-zinc-50 transition-colors group cursor-pointer"
               >
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-white group-hover:text-sky-300 transition-colors">
+                    <span className="text-sm font-semibold text-zinc-900 group-hover:text-blue-600 transition-colors">
                       {calc.title}
                     </span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                    <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200">
                       {calc.category}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400 line-clamp-1">{calc.description}</p>
+                  <p className="text-xs text-zinc-500 line-clamp-1">{calc.description}</p>
                 </div>
-                <ArrowRight className="h-4 w-4 text-slate-500 group-hover:text-sky-400 group-hover:translate-x-1 transition-all shrink-0" />
+                <ArrowRight className="h-4 w-4 text-zinc-400 group-hover:text-blue-600 transition-transform shrink-0" />
               </Link>
             ))
           )}
@@ -115,12 +115,12 @@ export function SearchBar({
 
       {/* Quick Filter Tags */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between px-1 text-xs text-slate-400">
-          <span className="flex items-center gap-1.5 font-medium text-slate-300">
-            <Tag className="h-3.5 w-3.5 text-sky-400" /> Quick Select
+        <div className="flex items-center justify-between px-1 text-xs text-zinc-500">
+          <span className="flex items-center gap-1.5 font-medium text-zinc-700">
+            <Tag className="h-3.5 w-3.5 text-blue-600" /> Popular Quick Select
           </span>
           {typeof filteredCount === "number" && (
-            <span className="text-slate-500 font-mono">{filteredCount} available</span>
+            <span className="text-zinc-400 font-mono">{filteredCount} available</span>
           )}
         </div>
 
@@ -136,10 +136,10 @@ export function SearchBar({
               >
                 <button
                   type="button"
-                  className={`px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-[12px] border transition-all duration-150 cursor-pointer ${
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-all cursor-pointer ${
                     isSelected
-                      ? "bg-sky-600 text-white border-sky-500 shadow-md shadow-sky-500/25 scale-105"
-                      : "bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700 hover:bg-slate-800"
+                      ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                      : "bg-white text-zinc-700 border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50"
                   }`}
                 >
                   {tag.label}

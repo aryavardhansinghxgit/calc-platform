@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-import { BookOpen, FunctionSquare } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
 export interface FormulaSectionProps {
   title?: string;
@@ -18,36 +16,24 @@ export function FormulaSection({
   variables = [],
 }: FormulaSectionProps) {
   return (
-    <Card className="bg-slate-900/60 border-slate-800/80 rounded-[12px] p-6 space-y-4">
-      <CardHeader className="p-0 pb-2 border-b border-slate-800">
-        <CardTitle className="text-base font-bold text-white flex items-center gap-2">
-          <FunctionSquare className="h-4 w-4 text-sky-400" /> {title}
-        </CardTitle>
-        {explanation && <CardDescription className="text-xs text-slate-400">{explanation}</CardDescription>}
-      </CardHeader>
+    <div className="space-y-3">
+      {explanation && <p className="text-xs text-zinc-500 dark:text-zinc-400">{explanation}</p>}
 
-      <CardContent className="p-0 space-y-4">
-        <div className="p-4 rounded-xl bg-slate-950 border border-slate-800/80 font-mono text-sm text-sky-400 font-bold overflow-x-auto">
-          {formula}
+      <div className="px-3 py-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 font-mono text-sm text-blue-600 dark:text-blue-400 font-semibold overflow-x-auto">
+        {formula}
+      </div>
+
+      {variables.length > 0 && (
+        <div className="grid grid-cols-2 gap-1.5 text-xs">
+          {variables.map((v, i) => (
+            <div key={i} className="flex items-center gap-1.5 px-2 py-1 rounded bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
+              <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">{v.symbol}</span>
+              <span className="text-zinc-600 dark:text-zinc-400">= {v.label}</span>
+            </div>
+          ))}
         </div>
-
-        {variables.length > 0 && (
-          <div className="space-y-1.5 pt-1">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Variable Definitions:
-            </span>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-              {variables.map((v, i) => (
-                <li key={i} className="flex items-center gap-2 p-2 rounded-lg bg-slate-950/40 border border-slate-800/50">
-                  <span className="font-mono font-bold text-sky-400">{v.symbol}</span>
-                  <span className="text-slate-300">= {v.label}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+      )}
+    </div>
   );
 }
 

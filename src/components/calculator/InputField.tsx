@@ -36,44 +36,43 @@ export function InputField({
   step,
 }: InputFieldProps) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
-          <Label htmlFor={id} className="text-sm font-semibold text-slate-200">
+        <div className="flex items-center gap-1">
+          <Label htmlFor={id} className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
             {label}
           </Label>
           {tooltip && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button type="button" className="text-slate-400 hover:text-sky-400 transition-colors">
-                    <HelpCircle className="h-3.5 w-3.5" />
+                  <button type="button" className="text-zinc-400 hover:text-blue-600 transition-colors" aria-label={`Help: ${label}`}>
+                    <HelpCircle className="h-3 w-3" />
                   </button>
                 </TooltipTrigger>
-                <TooltipContent className="bg-slate-900 border border-slate-800 text-slate-200 text-xs">
+                <TooltipContent className="bg-zinc-900 text-white text-xs rounded-md shadow-md max-w-[200px]">
                   <p>{tooltip}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           )}
         </div>
-        {unit && <span className="text-xs font-mono font-medium text-slate-400">{unit}</span>}
+        {unit && <span className="text-[11px] font-mono text-zinc-400">{unit}</span>}
       </div>
 
-      <div className="relative">
-        <Input
-          id={id}
-          type={type}
-          value={value}
-          onChange={(e) => onChange(type === "number" ? parseFloat(e.target.value) || 0 : e.target.value)}
-          placeholder={placeholder}
-          min={min}
-          max={max}
-          step={step}
-          className="h-11 bg-slate-950/80 border-slate-800 text-slate-100 text-sm rounded-[12px] focus:border-sky-500 focus:ring-sky-500/20"
-        />
-      </div>
-      {error && <p className="text-xs text-rose-400">{error}</p>}
+      <Input
+        id={id}
+        type={type}
+        value={value}
+        onChange={(e) => onChange(type === "number" ? parseFloat(e.target.value) || 0 : e.target.value)}
+        placeholder={placeholder}
+        min={min}
+        max={max}
+        step={step}
+        aria-label={label}
+        className="h-9 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 text-sm rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20"
+      />
+      {error && <p className="text-[11px] text-red-600 font-medium">{error}</p>}
     </div>
   );
 }

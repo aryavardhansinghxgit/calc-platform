@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Sparkles, ShieldCheck, BarChart3, FileSpreadsheet, Zap } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 export interface HeroProps {
   title?: string;
@@ -21,22 +20,19 @@ export function Hero({
   ];
 
   return (
-    <section className="relative text-center space-y-6 max-w-4xl mx-auto pt-6 pb-2">
-      {/* Background ambient lighting glow */}
-      <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
-
+    <section className="text-center space-y-5 max-w-4xl mx-auto pt-6 pb-2">
       {/* Top Feature Pill */}
-      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-sky-500/30 text-sky-400 text-xs font-semibold shadow-lg shadow-sky-500/10">
-        <Sparkles className="h-3.5 w-3.5 animate-pulse text-sky-400" />
+      <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium">
+        <Sparkles className="h-3.5 w-3.5 text-blue-600" />
         <span>Next-Generation Calculation Platform</span>
       </div>
 
       {/* Hero Headline */}
-      <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight">
+      <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-zinc-900 leading-tight">
         {title.includes("Calculator") ? (
           <>
             {title.split("Calculator")[0]}
-            <span className="bg-gradient-to-r from-sky-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
+            <span className="text-blue-600">
               Calculator
             </span>
             {title.split("Calculator")[1]}
@@ -47,20 +43,20 @@ export function Hero({
       </h1>
 
       {/* Subtitle */}
-      <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+      <p className="text-zinc-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
         {subtitle}
       </p>
 
       {/* Highlight Features Row */}
-      <div className="pt-3 flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+      <div className="pt-2 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
         {highlights.map((item, index) => {
           const Icon = item.icon;
           return (
             <div
               key={index}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/70 border border-slate-800 text-slate-300 text-xs font-medium backdrop-blur-sm"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-zinc-200 text-zinc-700 text-xs font-medium shadow-sm"
             >
-              <Icon className="h-3.5 w-3.5 text-sky-400" />
+              <Icon className="h-3.5 w-3.5 text-blue-600" />
               <span>{item.text}</span>
             </div>
           );
@@ -71,4 +67,3 @@ export function Hero({
 }
 
 export default Hero;
-

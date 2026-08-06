@@ -34,16 +34,16 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-blue-600 selection:text-white">
+      <body className="min-h-full flex flex-col bg-zinc-50 text-zinc-900 font-sans selection:bg-blue-600 selection:text-white">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem
+          defaultTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <TooltipProvider>
             <Navbar />
-            <main className="mx-auto max-w-7xl px-4 sm:px-6 py-8 flex-1 w-full space-y-8">
+            <main className="mx-auto max-w-7xl px-4 sm:px-6 py-4 flex-1 w-full space-y-4">
               {children}
             </main>
             <Footer />

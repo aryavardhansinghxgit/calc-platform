@@ -4,8 +4,6 @@ import React from "react";
 import { CalculatorDefinition } from "@/lib/calculator-engine/types";
 import { InputField } from "./InputField";
 import { SliderField } from "./SliderField";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { SlidersHorizontal } from "lucide-react";
 
 export interface CalculatorFormProps {
   definition: Omit<CalculatorDefinition, "calculate">;
@@ -13,29 +11,16 @@ export interface CalculatorFormProps {
   onChange: (key: string, val: any) => void;
 }
 
-
 export function CalculatorForm({ definition, values, onChange }: CalculatorFormProps) {
   return (
-    <Card className="bg-slate-900/90 border-slate-800/80 rounded-[12px] p-6 space-y-6">
-      <CardHeader className="p-0 pb-2 border-b border-slate-800 flex items-center justify-between">
-        <div>
-          <CardTitle className="text-lg font-bold text-white flex items-center gap-2">
-            <SlidersHorizontal className="h-4 w-4 text-sky-400" /> Input Parameters
-          </CardTitle>
-          <CardDescription className="text-xs text-slate-400">
-            Adjust the sliders or numeric inputs below to update calculations in real-time.
-          </CardDescription>
-        </div>
-      </CardHeader>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-3">
+      {definition.inputs.map((inputDef) => {
+        const val = values[inputDef.name] ?? inputDef.defaultValue;
 
-      <CardContent className="p-0 space-y-5">
-        {definition.inputs.map((inputDef) => {
-          const val = values[inputDef.name] ?? inputDef.defaultValue;
-
-          if (inputDef.type === "slider" && inputDef.min !== undefined && inputDef.max !== undefined) {
-            return (
+        if (inputDef.type === "slider" && inputDef.min !== undefined && inputDef.max !== undefined) {
+          return (
+            <div key={inputDef.name} className="sm:col-span-2">
               <SliderField
-                key={inputDef.name}
                 id={inputDef.name}
                 label={inputDef.label}
                 value={Number(val)}
@@ -45,27 +30,27 @@ export function CalculatorForm({ definition, values, onChange }: CalculatorFormP
                 step={inputDef.step || 1}
                 unit={inputDef.unit}
               />
-            );
-          }
-
-          return (
-            <InputField
-              key={inputDef.name}
-              id={inputDef.name}
-              label={inputDef.label}
-              value={val}
-              onChange={(v) => onChange(inputDef.name, v)}
-              type="number"
-              unit={inputDef.unit}
-              tooltip={inputDef.tooltip}
-              min={inputDef.min}
-              max={inputDef.max}
-              step={inputDef.step}
-            />
+            </div>
           );
-        })}
-      </CardContent>
-    </Card>
+        }
+
+        return (
+          <InputField
+            key={inputDef.name}
+            id={inputDef.name}
+            label={inputDef.label}
+            value={val}
+            onChange={(v) => onChange(inputDef.name, v)}
+            type="number"
+            unit={inputDef.unit}
+            tooltip={inputDef.tooltip}
+            min={inputDef.min}
+            max={inputDef.max}
+            step={inputDef.step}
+          />
+        );
+      })}
+    </div>
   );
 }
 

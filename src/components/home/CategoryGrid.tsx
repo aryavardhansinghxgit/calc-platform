@@ -16,13 +16,13 @@ export function CategoryGrid({ activeCategory = "Home", onSelectCategory }: Cate
   const gridCategories = NAVIGATION_CATEGORIES.filter((cat) => cat.id !== "home");
 
   return (
-    <section id="categories" className="space-y-4">
+    <section id="categories" className="space-y-4 pt-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-            <Layers className="h-5 w-5 text-sky-400" /> Browse Categories
+          <h2 className="text-xl font-semibold text-zinc-900 tracking-tight flex items-center gap-2">
+            <Layers className="h-5 w-5 text-blue-600" /> Browse Categories
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-zinc-500 mt-0.5">
             Select a category to explore targeted calculators & unit tools
           </p>
         </div>
@@ -30,7 +30,7 @@ export function CategoryGrid({ activeCategory = "Home", onSelectCategory }: Cate
         {activeCategory !== "Home" && (
           <button
             onClick={() => onSelectCategory && onSelectCategory("Home")}
-            className="text-xs font-semibold text-sky-400 hover:text-sky-300 underline underline-offset-4"
+            className="text-xs font-medium text-blue-600 hover:text-blue-700 underline underline-offset-4"
           >
             Show All
           </button>
@@ -52,30 +52,30 @@ export function CategoryGrid({ activeCategory = "Home", onSelectCategory }: Cate
               className="block"
             >
               <Card
-                className={`cursor-pointer transition-all duration-200 border rounded-2xl relative overflow-hidden group ${
+                className={`cursor-pointer transition-all duration-150 border rounded-xl group ${
                   isActive
-                    ? "bg-slate-900 border-sky-500/50 ring-2 ring-sky-500/40 shadow-lg shadow-sky-500/10"
-                    : "bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-900"
+                    ? "bg-blue-50/50 border-blue-300 shadow-sm"
+                    : "bg-white border-zinc-200 hover:border-zinc-300 hover:shadow-sm"
                 }`}
               >
                 <CardHeader className="p-5 space-y-3">
                   <div className="flex items-center justify-between">
-                    <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-sky-400 group-hover:text-sky-300 transition-colors">
+                    <div className="p-2 rounded-lg bg-zinc-50 border border-zinc-200 text-blue-600 group-hover:text-blue-700 transition-colors">
                       <Icon className="h-5 w-5" />
                     </div>
                     {typeof cat.count === "number" && (
-                      <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded-full bg-slate-800/80 text-slate-400 border border-slate-700">
+                      <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-600 border border-zinc-200">
                         {cat.count} Tools
                       </span>
                     )}
                   </div>
 
                   <div className="space-y-1">
-                    <CardTitle className="text-base font-bold text-white group-hover:text-sky-300 transition-colors flex items-center gap-1.5">
-                      {cat.name}
-                      <ArrowRight className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-sky-400" />
+                    <CardTitle className="text-base font-semibold text-zinc-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+                      <span>{cat.name}</span>
+                      <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-blue-600" />
                     </CardTitle>
-                    <CardDescription className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                    <CardDescription className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">
                       {cat.description}
                     </CardDescription>
                   </div>
