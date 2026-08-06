@@ -71,9 +71,12 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           >
             <ArrowLeft className="h-4 w-4" /> All Calculators
           </Link>
-          <span className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-3 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">
+          <Link
+            href={`/category/${definition.category.toLowerCase()}`}
+            className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-3 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20 hover:border-sky-500/40 hover:bg-sky-500/20 transition-all"
+          >
             <Sparkles className="h-3.5 w-3.5" /> {definition.category} Tool
-          </span>
+          </Link>
         </div>
 
         {/* Title & Description */}

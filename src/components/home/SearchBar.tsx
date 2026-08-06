@@ -126,19 +126,25 @@ export function SearchBar({
 
         <div className="flex flex-wrap items-center justify-center gap-2">
           {quickTags.map((tag) => {
+            const slug = tag.id.endsWith("-calculator") ? tag.id : `${tag.id}-calculator`;
             const isSelected = selectedCalc === tag.id;
             return (
-              <button
+              <Link
                 key={tag.id}
+                href={`/calculators/${slug}`}
                 onClick={() => onSelectCalc && onSelectCalc(tag.id)}
-                className={`px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-[12px] border transition-all duration-150 cursor-pointer ${
-                  isSelected
-                    ? "bg-sky-600 text-white border-sky-500 shadow-md shadow-sky-500/25 scale-105"
-                    : "bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700 hover:bg-slate-800"
-                }`}
               >
-                {tag.label}
-              </button>
+                <button
+                  type="button"
+                  className={`px-3.5 py-1.5 text-xs sm:text-sm font-medium rounded-[12px] border transition-all duration-150 cursor-pointer ${
+                    isSelected
+                      ? "bg-sky-600 text-white border-sky-500 shadow-md shadow-sky-500/25 scale-105"
+                      : "bg-slate-900/90 text-slate-300 border-slate-800 hover:border-slate-700 hover:bg-slate-800"
+                  }`}
+                >
+                  {tag.label}
+                </button>
+              </Link>
             );
           })}
         </div>

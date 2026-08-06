@@ -1006,12 +1006,57 @@ export function getCalculatorsByCategory(categorySlugOrName: string): Calculator
 export function searchRegistry(query: string): CalculatorDefinition[] {
   if (!query || query.trim() === "") return getAllCalculatorDefinitions();
   const q = query.toLowerCase().trim();
-  return getAllCalculatorDefinitions().filter(
-    (calc) =>
-      calc.title.toLowerCase().includes(q) ||
-      calc.description.toLowerCase().includes(q) ||
-      calc.category.toLowerCase().includes(q)
-  );
+  const tokens = q.split(/\s+/).filter(Boolean);
+
+  // Alias expansion for fuzzy discovery
+  const aliases: Record<string, string[]> = {
+    car: ["auto-loan", "loan"],
+    vehicle: ["auto-loan"],
+    auto: ["auto-loan"],
+    house: ["mortgage"],
+    home: ["mortgage"],
+    property: ["mortgage"],
+    tax: ["gst"],
+    vat: ["gst"],
+    investment: ["sip", "compound-interest", "fd", "rd"],
+    deposit: ["fd", "rd", "compound-interest"],
+    returns: ["sip", "compound-interest"],
+    installment: ["emi", "loan", "mortgage"],
+  };
+
+  const expandedTargetIds = new Set<string>();
+  Object.entries(aliases).forEach(([alias, targetIds]) => {
+    if (alias.includes(q) || q.includes(alias)) {
+      targetIds.forEach((id) => expandedTargetIds.add(id));
+    }
+  });
+
+  return getAllCalculatorDefinitions().filter((calc) => {
+    const title = calc.title.toLowerCase();
+    const desc = calc.description.toLowerCase();
+    const cat = calc.category.toLowerCase();
+    const id = calc.id.toLowerCase();
+    const slug = calc.slug.toLowerCase();
+
+    // 1. Direct match or alias match
+    if (title.includes(q) || desc.includes(q) || cat.includes(q) || id.includes(q) || slug.includes(q)) {
+      return true;
+    }
+
+    if (expandedTargetIds.has(id) || expandedTargetIds.has(slug)) {
+      return true;
+    }
+
+    // 2. Token match (all words in query must appear in title, desc, cat, or id)
+    return tokens.every(
+      (token) =>
+        title.includes(token) ||
+        desc.includes(token) ||
+        cat.includes(token) ||
+        id.includes(token) ||
+        slug.includes(token)
+    );
+  });
 }
 
 export function getRelatedCalculators(
