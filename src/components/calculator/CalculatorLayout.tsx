@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { ArrowLeft, Sparkles, HelpCircle } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
 import { CalculatorDefinition, CalculationResult } from "@/lib/calculator-engine/types";
 import { CalculatorEngine } from "@/lib/calculator-engine/engine";
 import { CalculatorForm } from "./CalculatorForm";
@@ -10,8 +10,12 @@ import { CalculatorResult } from "./CalculatorResult";
 import { FormulaSection } from "./FormulaSection";
 import { FAQSection } from "./FAQSection";
 import { RelatedCalculators } from "./RelatedCalculators";
-import { ChartCard, ChartSegment } from "./results/ChartCard";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { MortgagePieChart } from "./charts/MortgagePieChart";
+import { BalanceLineChart } from "./charts/BalanceLineChart";
+import { AmortizationAreaChart } from "./charts/AmortizationAreaChart";
+import { AmortizationTable } from "./mortgage/AmortizationTable";
+import { MortgageContentSection } from "./mortgage/MortgageContentSection";
+import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 
 export interface CalculatorLayoutProps {
   definition: Omit<CalculatorDefinition, "calculate">;
@@ -42,30 +46,14 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
     return CalculatorEngine.run(definition.id, inputs);
   }, [definition.id, inputs]);
 
-  // Construct chart segments dynamically from calculationResult
-  const chartSegments: ChartSegment[] = useMemo(() => {
-    if (!calculationResult.success || !calculationResult.data) return [];
+  const amortizationSchedule: AmortizationRow[] = useMemo(() => {
+    if (calculationResult.success && calculationResult.data?.amortizationSchedule) {
+      return calculationResult.data.amortizationSchedule;
+    }
+    return [];
+  }, [calculationResult]);
 
-    const data = calculationResult.data;
-    const colors = ["#38bdf8", "#34d399", "#f59e0b", "#a855f7", "#f43f5e"];
-    const segments: ChartSegment[] = [];
-
-    let colorIdx = 0;
-    definition.outputs.forEach((out) => {
-      const numVal = Number(data[out.name]);
-      if (!out.highlight && !isNaN(numVal) && numVal > 0) {
-        segments.push({
-          label: out.label,
-          value: numVal,
-          color: colors[colorIdx % colors.length],
-          formattedValue: calculationResult.formatted[out.name],
-        });
-        colorIdx++;
-      }
-    });
-
-    return segments;
-  }, [calculationResult, definition.outputs]);
+  const isMortgage = definition.id.toLowerCase().includes("mortgage");
 
   return (
     <div className="space-y-10 max-w-5xl mx-auto py-2">
@@ -105,24 +93,39 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           />
         </div>
 
-        {/* Right: Results Display & Visual Chart */}
+        {/* Right: Results Display & Pie Chart */}
         <div className="lg:col-span-6 space-y-6">
           <CalculatorResult
             definition={definition}
             result={calculationResult}
           />
 
-          {chartSegments.length > 0 && (
-            <ChartCard
-              title="Breakdown & Distribution"
-              segments={chartSegments}
-              centerLabel={definition.title.split(" ")[0]}
+          {isMortgage && calculationResult.data && (
+            <MortgagePieChart
+              principalAndInterest={Number(calculationResult.data.monthlyPrincipalAndInterest || 0)}
+              propertyTax={Number(calculationResult.data.monthlyPropertyTax || 0)}
+              insurance={Number(calculationResult.data.monthlyInsurance || 0)}
+              hoa={Number(calculationResult.data.hoaFeeMonthly || 0)}
+              extraPayment={Number(inputs.extraMonthlyPayment || 0)}
             />
           )}
         </div>
       </div>
 
-      {/* 4. How it Works / Formula Explanation */}
+      {/* 4. Advanced Recharts Visual Analytics (Line & Area Charts) */}
+      {isMortgage && amortizationSchedule.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <BalanceLineChart schedule={amortizationSchedule} />
+          <AmortizationAreaChart schedule={amortizationSchedule} />
+        </div>
+      )}
+
+      {/* 5. Month-by-Month Amortization Table */}
+      {isMortgage && amortizationSchedule.length > 0 && (
+        <AmortizationTable schedule={amortizationSchedule} />
+      )}
+
+      {/* 6. Formula Explanation */}
       {definition.formulaDescription && (
         <FormulaSection
           formula={definition.formulaDescription}
@@ -130,10 +133,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         />
       )}
 
-      {/* 5. FAQs */}
+      {/* 7. Educational Content Section */}
+      {isMortgage && <MortgageContentSection />}
+
+      {/* 8. FAQs */}
       <FAQSection faqs={definition.faqs} />
 
-      {/* 6. Related Calculators */}
+      {/* 9. Related Calculators */}
       <RelatedCalculators currentId={definition.id} category={definition.category} />
     </div>
   );
