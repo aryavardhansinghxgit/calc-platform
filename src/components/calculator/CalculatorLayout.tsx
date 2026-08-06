@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { ArrowLeft, Sparkles } from "lucide-react";
+import dynamic from "next/dynamic";
 import { CalculatorDefinition, CalculationResult } from "@/lib/calculator-engine/types";
 import { CalculatorEngine } from "@/lib/calculator-engine/engine";
 import { CalculatorForm } from "./CalculatorForm";
@@ -10,12 +11,16 @@ import { CalculatorResult } from "./CalculatorResult";
 import { FormulaSection } from "./FormulaSection";
 import { FAQSection } from "./FAQSection";
 import { RelatedCalculators } from "./RelatedCalculators";
-import { MortgagePieChart } from "./charts/MortgagePieChart";
-import { BalanceLineChart } from "./charts/BalanceLineChart";
-import { AmortizationAreaChart } from "./charts/AmortizationAreaChart";
 import { AmortizationTable } from "./mortgage/AmortizationTable";
 import { MortgageContentSection } from "./mortgage/MortgageContentSection";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
+import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
+
+const MortgagePieChart = dynamic(() => import("./charts/MortgagePieChart").then((m) => m.MortgagePieChart), { ssr: false });
+const BalanceLineChart = dynamic(() => import("./charts/BalanceLineChart").then((m) => m.BalanceLineChart), { ssr: false });
+const AmortizationAreaChart = dynamic(() => import("./charts/AmortizationAreaChart").then((m) => m.AmortizationAreaChart), { ssr: false });
+
+
 
 export interface CalculatorLayoutProps {
   definition: Omit<CalculatorDefinition, "calculate">;
@@ -82,35 +87,37 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         </div>
       </div>
 
-      {/* 2 & 3. Calculator Form & Results Layout Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left: Input Form */}
-        <div className="lg:col-span-6">
-          <CalculatorForm
-            definition={definition}
-            values={inputs}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        {/* Right: Results Display & Pie Chart */}
-        <div className="lg:col-span-6 space-y-6">
-          <CalculatorResult
-            definition={definition}
-            result={calculationResult}
-          />
-
-          {isMortgage && calculationResult.data && (
-            <MortgagePieChart
-              principalAndInterest={Number(calculationResult.data.monthlyPrincipalAndInterest || 0)}
-              propertyTax={Number(calculationResult.data.monthlyPropertyTax || 0)}
-              insurance={Number(calculationResult.data.monthlyInsurance || 0)}
-              hoa={Number(calculationResult.data.hoaFeeMonthly || 0)}
-              extraPayment={Number(inputs.extraMonthlyPayment || 0)}
+      {/* 3. Grid: Left Inputs, Right Outputs */}
+      <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left: Input Form */}
+          <div className="lg:col-span-6 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-soft">
+            <CalculatorForm
+              definition={definition}
+              values={inputs}
+              onChange={handleInputChange}
             />
-          )}
+          </div>
+
+          {/* Right: Results Display & Pie Chart */}
+          <div className="lg:col-span-6 space-y-6">
+            <CalculatorResult
+              definition={definition}
+              result={calculationResult}
+            />
+
+            {isMortgage && calculationResult.data && (
+              <MortgagePieChart
+                principalAndInterest={Number(calculationResult.data.monthlyPrincipalAndInterest || 0)}
+                propertyTax={Number(calculationResult.data.monthlyPropertyTax || 0)}
+                insurance={Number(calculationResult.data.monthlyInsurance || 0)}
+                hoa={Number(calculationResult.data.hoaFeeMonthly || 0)}
+                extraPayment={Number(inputs.extraMonthlyPayment || 0)}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      </CalculatorErrorBoundary>
 
       {/* 4. Advanced Recharts Visual Analytics (Line & Area Charts) */}
       {isMortgage && amortizationSchedule.length > 0 && (
