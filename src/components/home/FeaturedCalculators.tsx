@@ -12,12 +12,14 @@ import {
   BmiCalculator,
   PercentageCalculator,
 } from "@/components/calculator";
+import { getFeaturedCalculators, CalculatorItem } from "@/data/calculators";
+
 
 export interface FeaturedItem {
   id: string;
   title: string;
-  desc: string;
-  cat: string;
+  desc?: string;
+  category?: string;
 }
 
 export interface FeaturedCalculatorsProps {
@@ -26,15 +28,13 @@ export interface FeaturedCalculatorsProps {
   onSelectCalc?: (id: string) => void;
 }
 
-const defaultFeaturedList: FeaturedItem[] = [
-  { id: "mortgage", title: "Mortgage Calculator", desc: "Calculate home loans & interest", cat: "Finance" },
-  { id: "loan", title: "Loan Calculator", desc: "Estimate auto & personal loan payments", cat: "Finance" },
-  { id: "emi", title: "EMI Calculator", desc: "Equated Monthly Installment schedule", cat: "Finance" },
-  { id: "compound-interest", title: "Compound Interest", desc: "Interest growth over time", cat: "Finance" },
-  { id: "bmi", title: "BMI Calculator", desc: "Check Body Mass Index classification", cat: "Health" },
-  { id: "sip", title: "SIP Calculator", desc: "Systematic Investment Plan returns", cat: "Finance" },
-  { id: "percentage", title: "Percentage Calculator", desc: "Quick percent math & % change", cat: "Math" },
-];
+const defaultFeaturedList: FeaturedItem[] = getFeaturedCalculators().map((c) => ({
+  id: c.id,
+  title: c.title,
+  desc: c.description,
+  category: c.category,
+}));
+
 
 export function FeaturedCalculators({
   featuredList = defaultFeaturedList,
