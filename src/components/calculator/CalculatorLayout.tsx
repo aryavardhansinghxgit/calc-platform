@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft, Sparkles, HelpCircle } from "lucide-react";
 import { CalculatorDefinition, CalculationResult } from "@/lib/calculator-engine/types";
 import { CalculatorEngine } from "@/lib/calculator-engine/engine";
 import { CalculatorForm } from "./CalculatorForm";
@@ -10,12 +10,13 @@ import { CalculatorResult } from "./CalculatorResult";
 import { FormulaSection } from "./FormulaSection";
 import { FAQSection } from "./FAQSection";
 import { RelatedCalculators } from "./RelatedCalculators";
+import { ChartCard, ChartSegment } from "./results/ChartCard";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export interface CalculatorLayoutProps {
   definition: Omit<CalculatorDefinition, "calculate">;
   children?: React.ReactNode;
 }
-
 
 export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   // Initialize form state from definition defaultValues
@@ -40,6 +41,31 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const calculationResult: CalculationResult = useMemo(() => {
     return CalculatorEngine.run(definition.id, inputs);
   }, [definition.id, inputs]);
+
+  // Construct chart segments dynamically from calculationResult
+  const chartSegments: ChartSegment[] = useMemo(() => {
+    if (!calculationResult.success || !calculationResult.data) return [];
+
+    const data = calculationResult.data;
+    const colors = ["#38bdf8", "#34d399", "#f59e0b", "#a855f7", "#f43f5e"];
+    const segments: ChartSegment[] = [];
+
+    let colorIdx = 0;
+    definition.outputs.forEach((out) => {
+      const numVal = Number(data[out.name]);
+      if (!out.highlight && !isNaN(numVal) && numVal > 0) {
+        segments.push({
+          label: out.label,
+          value: numVal,
+          color: colors[colorIdx % colors.length],
+          formattedValue: calculationResult.formatted[out.name],
+        });
+        colorIdx++;
+      }
+    });
+
+    return segments;
+  }, [calculationResult, definition.outputs]);
 
   return (
     <div className="space-y-10 max-w-5xl mx-auto py-2">
@@ -79,16 +105,24 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           />
         </div>
 
-        {/* Right: Results Display */}
-        <div className="lg:col-span-6">
+        {/* Right: Results Display & Visual Chart */}
+        <div className="lg:col-span-6 space-y-6">
           <CalculatorResult
             definition={definition}
             result={calculationResult}
           />
+
+          {chartSegments.length > 0 && (
+            <ChartCard
+              title="Breakdown & Distribution"
+              segments={chartSegments}
+              centerLabel={definition.title.split(" ")[0]}
+            />
+          )}
         </div>
       </div>
 
-      {/* 4. Formula Explanation */}
+      {/* 4. How it Works / Formula Explanation */}
       {definition.formulaDescription && (
         <FormulaSection
           formula={definition.formulaDescription}

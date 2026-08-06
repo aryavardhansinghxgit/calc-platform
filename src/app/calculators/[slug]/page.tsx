@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { getCalculatorDefinition, getAllCalculatorDefinitions } from "@/lib/calculator-engine/registry";
 import { getCalculatorBySlug, CALCULATORS } from "@/data/calculators";
 import { CalculatorLayout } from "@/components/calculator/CalculatorLayout";
+import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-helpers";
 import {
   MortgageCalculator,
   LoanCalculator,
@@ -35,14 +36,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const dataCalc = getCalculatorBySlug(slug);
 
   const title = def?.title || dataCalc?.title;
-  const description = def?.description || dataCalc?.description;
+  const description = def?.description || dataCalc?.description || "";
 
   if (!title) return { title: "Calculator Not Found" };
 
-  return {
-    title: `${title} - Free Online Calculator | CalcPlatform`,
+  return generateCalculatorMetadata({
+    title,
     description,
-  };
+    slug,
+  });
 }
 
 export default async function CalculatorPage({ params }: PageProps) {
@@ -54,9 +56,26 @@ export default async function CalculatorPage({ params }: PageProps) {
   // 2. If definition is found in CalculatorRegistry -> Render generic CalculatorLayout!
   if (definition) {
     const { calculate, ...serializableDefinition } = definition;
-    return <CalculatorLayout definition={serializableDefinition} />;
-  }
+    const schemas = generateJsonLdSchema({
+      title: definition.title,
+      description: definition.description,
+      slug: definition.slug,
+      faqs: definition.faqs,
+    });
 
+    return (
+      <>
+        {schemas.map((schema, i) => (
+          <script
+            key={i}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
+        <CalculatorLayout definition={serializableDefinition} />
+      </>
+    );
+  }
 
   // 3. Fallback for custom calculators registered in data/calculators
   const dataCalc = getCalculatorBySlug(slug);
