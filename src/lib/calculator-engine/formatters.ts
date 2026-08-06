@@ -1,5 +1,5 @@
 /**
- * Formatting Utilities for Calculator Engine outputs.
+ * Formatters Module - Centralized Display Formatting Utilities.
  */
 
 export function formatCurrency(
@@ -20,7 +20,7 @@ export function formatPercent(value: number, decimals: number = 2): string {
   return `${value.toFixed(decimals)}%`;
 }
 
-export function formatNumber(value: number, decimals: number = 0): string {
+export function formatDecimal(value: number, decimals: number = 2): string {
   if (isNaN(value) || !isFinite(value)) return "0";
   return value.toLocaleString("en-US", {
     minimumFractionDigits: decimals,
@@ -28,10 +28,29 @@ export function formatNumber(value: number, decimals: number = 0): string {
   });
 }
 
-export function formatDurationYears(years: number): string {
-  if (years < 1) {
-    const months = Math.round(years * 12);
-    return `${months} ${months === 1 ? "month" : "months"}`;
+export const formatNumber = formatDecimal;
+
+
+export function formatCompactNumber(value: number): string {
+  if (isNaN(value) || !isFinite(value)) return "0";
+  if (Math.abs(value) >= 1_000_000_000) {
+    return (value / 1_000_000_000).toFixed(1) + "B";
   }
-  return `${years} ${years === 1 ? "year" : "years"}`;
+  if (Math.abs(value) >= 1_000_000) {
+    return (value / 1_000_000).toFixed(1) + "M";
+  }
+  if (Math.abs(value) >= 1_000) {
+    return (value / 1_000).toFixed(1) + "K";
+  }
+  return value.toString();
+}
+
+export function formatDate(date: Date | string | number): string {
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }

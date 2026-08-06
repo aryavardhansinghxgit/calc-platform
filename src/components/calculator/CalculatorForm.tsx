@@ -8,10 +8,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { SlidersHorizontal } from "lucide-react";
 
 export interface CalculatorFormProps {
-  definition: CalculatorDefinition;
+  definition: Omit<CalculatorDefinition, "calculate">;
   values: Record<string, any>;
   onChange: (key: string, val: any) => void;
 }
+
 
 export function CalculatorForm({ definition, values, onChange }: CalculatorFormProps) {
   return (

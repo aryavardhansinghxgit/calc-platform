@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import Link from "next/link";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { getCalculatorDefinition, getAllCalculatorDefinitions } from "@/lib/calculator-engine/registry";
 import { getCalculatorBySlug, CALCULATORS } from "@/data/calculators";
+import { CalculatorLayout } from "@/components/calculator/CalculatorLayout";
 import {
   MortgageCalculator,
   LoanCalculator,
@@ -18,31 +18,54 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return CALCULATORS.map((calc) => ({
-    slug: calc.slug,
+  const registryDefinitions = getAllCalculatorDefinitions();
+  const slugs = new Set([
+    ...registryDefinitions.map((d) => d.slug),
+    ...CALCULATORS.map((c) => c.slug),
+  ]);
+
+  return Array.from(slugs).map((slug) => ({
+    slug,
   }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const calc = getCalculatorBySlug(slug);
-  if (!calc) return { title: "Calculator Not Found" };
+  const def = getCalculatorDefinition(slug);
+  const dataCalc = getCalculatorBySlug(slug);
+
+  const title = def?.title || dataCalc?.title;
+  const description = def?.description || dataCalc?.description;
+
+  if (!title) return { title: "Calculator Not Found" };
 
   return {
-    title: `${calc.title} - Free Online Calculator | CalcPlatform`,
-    description: calc.description,
+    title: `${title} - Free Online Calculator | CalcPlatform`,
+    description,
   };
 }
 
 export default async function CalculatorPage({ params }: PageProps) {
   const { slug } = await params;
-  const calc = getCalculatorBySlug(slug);
 
-  if (!calc) {
+  // 1. Look up calculator in CalculatorRegistry
+  const definition = getCalculatorDefinition(slug);
+
+  // 2. If definition is found in CalculatorRegistry -> Render generic CalculatorLayout!
+  if (definition) {
+    const { calculate, ...serializableDefinition } = definition;
+    return <CalculatorLayout definition={serializableDefinition} />;
+  }
+
+
+  // 3. Fallback for custom calculators registered in data/calculators
+  const dataCalc = getCalculatorBySlug(slug);
+  if (!dataCalc) {
     notFound();
   }
 
-  const renderCalculatorComponent = (id: string) => {
+  // Render matching custom interactive component if available
+  const renderFallbackComponent = (id: string) => {
     switch (id) {
       case "mortgage":
       case "mortgage-calculator":
@@ -70,44 +93,9 @@ export default async function CalculatorPage({ params }: PageProps) {
     }
   };
 
-  const Icon = calc.icon;
-
   return (
-    <div className="space-y-8 max-w-5xl mx-auto py-2">
-      {/* Navigation Breadcrumb */}
-      <div className="flex items-center justify-between">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-sky-400 transition-colors bg-slate-900/80 px-3.5 py-1.5 rounded-xl border border-slate-800 hover:border-slate-700"
-        >
-          <ArrowLeft className="h-4 w-4" /> All Calculators
-        </Link>
-        <span className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-3 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">
-          <Sparkles className="h-3.5 w-3.5" /> {calc.category} Tool
-        </span>
-      </div>
-
-      {/* Calculator Header Info */}
-      <div className="space-y-3 text-left border-b border-slate-800/80 pb-6">
-        <div className="flex items-center gap-3.5">
-          <div className="p-3.5 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-400 shadow-lg shadow-sky-500/5">
-            <Icon className="h-7 w-7" />
-          </div>
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-              {calc.title}
-            </h1>
-            <p className="text-slate-400 text-sm sm:text-base mt-1 leading-relaxed">
-              {calc.description}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Interactive Calculator Render */}
-      <div className="w-full">
-        {renderCalculatorComponent(calc.id)}
-      </div>
+    <div className="space-y-6 max-w-5xl mx-auto py-2">
+      {renderFallbackComponent(dataCalc.id)}
     </div>
   );
 }

@@ -7,9 +7,10 @@ import { Sparkles, PieChart } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
 export interface CalculatorResultProps {
-  definition: CalculatorDefinition;
+  definition: Omit<CalculatorDefinition, "calculate">;
   result: CalculationResult;
 }
+
 
 export function CalculatorResult({ definition, result }: CalculatorResultProps) {
   if (!result.success) {
