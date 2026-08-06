@@ -8,8 +8,14 @@ import { calculateLoanFormula } from "./formulas/loan";
 import { calculateEmiFormula } from "./formulas/emi";
 import { calculateSipFormula } from "./formulas/sip";
 import { calculateCompoundInterestFormula } from "./formulas/compound-interest";
+import { calculateFdFormula } from "./formulas/fd";
+import { calculateRdFormula } from "./formulas/rd";
+import { calculateGstFormula } from "./formulas/gst";
+import { calculatePercentageFormula } from "./formulas/percentage";
+import { calculateAgeFormula } from "./formulas/age";
 import { formatCurrency, formatPercent, formatNumber } from "./formatters";
 
+// 1. Mortgage Calculator
 export const MORTGAGE_CALCULATOR: CalculatorDefinition = {
   id: "mortgage",
   title: "Mortgage Calculator",
@@ -186,7 +192,7 @@ export const MORTGAGE_CALCULATOR: CalculatorDefinition = {
   },
 };
 
-
+// 2. Loan Calculator
 export const LOAN_CALCULATOR: CalculatorDefinition = {
   id: "loan",
   title: "Loan Calculator",
@@ -194,6 +200,7 @@ export const LOAN_CALCULATOR: CalculatorDefinition = {
   category: "Finance",
   description: "Estimate monthly auto and personal loan payments with custom interest rates and terms.",
   iconName: "CalcIcon",
+  formulaDescription: "Monthly Payment = P × [r(1 + r)^n] / [(1 + r)^n - 1]",
   inputs: [
     {
       name: "loanAmount",
@@ -258,6 +265,7 @@ export const LOAN_CALCULATOR: CalculatorDefinition = {
   },
 };
 
+// 3. EMI Calculator
 export const EMI_CALCULATOR: CalculatorDefinition = {
   id: "emi",
   title: "EMI Calculator",
@@ -265,6 +273,7 @@ export const EMI_CALCULATOR: CalculatorDefinition = {
   category: "Finance",
   description: "Calculate Equated Monthly Installment (EMI) and interest component schedule.",
   iconName: "DollarSign",
+  formulaDescription: "EMI = P × r × (1 + r)^n / [(1 + r)^n - 1]",
   inputs: [
     {
       name: "principal",
@@ -329,77 +338,7 @@ export const EMI_CALCULATOR: CalculatorDefinition = {
   },
 };
 
-export const SIP_CALCULATOR: CalculatorDefinition = {
-  id: "sip",
-  title: "SIP Calculator",
-  slug: "sip-calculator",
-  category: "Finance",
-  description: "Estimate Systematic Investment Plan returns, compounding growth, and maturity value.",
-  iconName: "TrendingUp",
-  inputs: [
-    {
-      name: "monthlyInvestment",
-      label: "Monthly Investment",
-      type: "currency",
-      defaultValue: 500,
-      unit: "$",
-      min: 50,
-      max: 50000,
-      step: 50,
-    },
-    {
-      name: "expectedReturnRate",
-      label: "Expected Return Rate (p.a.)",
-      type: "percentage",
-      defaultValue: 12,
-      unit: "%",
-      min: 1,
-      max: 30,
-      step: 0.5,
-    },
-    {
-      name: "timePeriodYears",
-      label: "Time Period",
-      type: "slider",
-      defaultValue: 10,
-      unit: "years",
-      min: 1,
-      max: 40,
-      step: 1,
-    },
-  ],
-  outputs: [
-    {
-      name: "totalMaturityValue",
-      label: "Total Maturity Value",
-      format: "currency",
-      highlight: true,
-    },
-    {
-      name: "totalInvested",
-      label: "Total Invested Amount",
-      format: "currency",
-    },
-    {
-      name: "estimatedReturns",
-      label: "Estimated Returns",
-      format: "currency",
-    },
-  ],
-  calculate: (inputs) => {
-    const res = calculateSipFormula({
-      monthlyInvestment: Number(inputs.monthlyInvestment || 500),
-      expectedReturnRate: Number(inputs.expectedReturnRate || 12),
-      timePeriodYears: Number(inputs.timePeriodYears || 10),
-    });
-    return {
-      totalMaturityValue: res.totalMaturityValue,
-      totalInvested: res.totalInvested,
-      estimatedReturns: res.estimatedReturns,
-    };
-  },
-};
-
+// 4. Compound Interest Calculator
 export const COMPOUND_INTEREST_CALCULATOR: CalculatorDefinition = {
   id: "compound-interest",
   title: "Compound Interest Calculator",
@@ -407,6 +346,7 @@ export const COMPOUND_INTEREST_CALCULATOR: CalculatorDefinition = {
   category: "Finance",
   description: "Calculate compounding growth for savings, fixed deposits, and long-term investments.",
   iconName: "TrendingUp",
+  formulaDescription: "A = P(1 + r/n)^(nt)",
   inputs: [
     {
       name: "principal",
@@ -471,6 +411,384 @@ export const COMPOUND_INTEREST_CALCULATOR: CalculatorDefinition = {
   },
 };
 
+// 5. SIP Calculator
+export const SIP_CALCULATOR: CalculatorDefinition = {
+  id: "sip",
+  title: "SIP Calculator",
+  slug: "sip-calculator",
+  category: "Finance",
+  description: "Estimate Systematic Investment Plan returns, compounding growth, and maturity value.",
+  iconName: "TrendingUp",
+  formulaDescription: "M = P × [({1 + i}^n - 1) / i] × (1 + i)",
+  inputs: [
+    {
+      name: "monthlyInvestment",
+      label: "Monthly Investment",
+      type: "currency",
+      defaultValue: 500,
+      unit: "$",
+      min: 50,
+      max: 50000,
+      step: 50,
+    },
+    {
+      name: "expectedReturnRate",
+      label: "Expected Return Rate (p.a.)",
+      type: "percentage",
+      defaultValue: 12,
+      unit: "%",
+      min: 1,
+      max: 30,
+      step: 0.5,
+    },
+    {
+      name: "timePeriodYears",
+      label: "Time Period",
+      type: "slider",
+      defaultValue: 10,
+      unit: "years",
+      min: 1,
+      max: 40,
+      step: 1,
+    },
+  ],
+  outputs: [
+    {
+      name: "totalMaturityValue",
+      label: "Total Maturity Value",
+      format: "currency",
+      highlight: true,
+    },
+    {
+      name: "totalInvested",
+      label: "Total Invested Amount",
+      format: "currency",
+    },
+    {
+      name: "estimatedReturns",
+      label: "Estimated Returns",
+      format: "currency",
+    },
+  ],
+  calculate: (inputs) => {
+    const res = calculateSipFormula({
+      monthlyInvestment: Number(inputs.monthlyInvestment || 500),
+      expectedReturnRate: Number(inputs.expectedReturnRate || 12),
+      timePeriodYears: Number(inputs.timePeriodYears || 10),
+    });
+    return {
+      totalMaturityValue: res.totalMaturityValue,
+      totalInvested: res.totalInvested,
+      estimatedReturns: res.estimatedReturns,
+    };
+  },
+};
+
+// 6. FD (Fixed Deposit) Calculator
+export const FD_CALCULATOR: CalculatorDefinition = {
+  id: "fd",
+  title: "FD Calculator",
+  slug: "fd-calculator",
+  category: "Finance",
+  description: "Calculate Fixed Deposit (FD) maturity amount and interest earned.",
+  iconName: "Landmark",
+  formulaDescription: "A = P(1 + r/n)^(nt)",
+  inputs: [
+    {
+      name: "depositAmount",
+      label: "Total Deposit Amount",
+      type: "currency",
+      defaultValue: 10000,
+      unit: "$",
+      min: 1000,
+      max: 1000000,
+      step: 1000,
+    },
+    {
+      name: "interestRate",
+      label: "Interest Rate (p.a.)",
+      type: "percentage",
+      defaultValue: 7.5,
+      unit: "%",
+      min: 1,
+      max: 20,
+      step: 0.1,
+    },
+    {
+      name: "tenureYears",
+      label: "Tenure (Years)",
+      type: "slider",
+      defaultValue: 5,
+      unit: "years",
+      min: 1,
+      max: 20,
+      step: 1,
+    },
+  ],
+  outputs: [
+    {
+      name: "maturityAmount",
+      label: "Maturity Amount",
+      format: "currency",
+      highlight: true,
+    },
+    {
+      name: "totalInterestEarned",
+      label: "Total Interest Earned",
+      format: "currency",
+    },
+    {
+      name: "depositAmount",
+      label: "Principal Deposit",
+      format: "currency",
+    },
+  ],
+  calculate: (inputs) => {
+    const res = calculateFdFormula({
+      depositAmount: Number(inputs.depositAmount || 10000),
+      interestRate: Number(inputs.interestRate || 7.5),
+      tenureYears: Number(inputs.tenureYears || 5),
+    });
+    return {
+      maturityAmount: res.maturityAmount,
+      totalInterestEarned: res.totalInterestEarned,
+      depositAmount: res.depositAmount,
+    };
+  },
+};
+
+// 7. RD (Recurring Deposit) Calculator
+export const RD_CALCULATOR: CalculatorDefinition = {
+  id: "rd",
+  title: "RD Calculator",
+  slug: "rd-calculator",
+  category: "Finance",
+  description: "Calculate Recurring Deposit (RD) total investment returns and interest maturity value.",
+  iconName: "RefreshCw",
+  formulaDescription: "Interest = P × [n(n+1)/2] × (r/12)",
+  inputs: [
+    {
+      name: "monthlyDeposit",
+      label: "Monthly Deposit Amount",
+      type: "currency",
+      defaultValue: 500,
+      unit: "$",
+      min: 50,
+      max: 50000,
+      step: 50,
+    },
+    {
+      name: "interestRate",
+      label: "Interest Rate (p.a.)",
+      type: "percentage",
+      defaultValue: 6.8,
+      unit: "%",
+      min: 1,
+      max: 20,
+      step: 0.1,
+    },
+    {
+      name: "tenureMonths",
+      label: "Tenure (Months)",
+      type: "slider",
+      defaultValue: 24,
+      unit: "months",
+      min: 6,
+      max: 120,
+      step: 6,
+    },
+  ],
+  outputs: [
+    {
+      name: "maturityAmount",
+      label: "Maturity Amount",
+      format: "currency",
+      highlight: true,
+    },
+    {
+      name: "totalInvested",
+      label: "Total Invested Amount",
+      format: "currency",
+    },
+    {
+      name: "totalInterestEarned",
+      label: "Total Interest Earned",
+      format: "currency",
+    },
+  ],
+  calculate: (inputs) => {
+    const res = calculateRdFormula({
+      monthlyDeposit: Number(inputs.monthlyDeposit || 500),
+      interestRate: Number(inputs.interestRate || 6.8),
+      tenureMonths: Number(inputs.tenureMonths || 24),
+    });
+    return {
+      maturityAmount: res.maturityAmount,
+      totalInvested: res.totalInvested,
+      totalInterestEarned: res.totalInterestEarned,
+    };
+  },
+};
+
+// 8. GST Calculator
+export const GST_CALCULATOR: CalculatorDefinition = {
+  id: "gst",
+  title: "GST Calculator",
+  slug: "gst-calculator",
+  category: "Business",
+  description: "Calculate Goods and Services Tax (GST) inclusive and exclusive amounts.",
+  iconName: "Receipt",
+  formulaDescription: "GST Amount = (Amount × GST Rate) / 100",
+  inputs: [
+    {
+      name: "amount",
+      label: "Amount",
+      type: "currency",
+      defaultValue: 1000,
+      unit: "$",
+      min: 1,
+      max: 1000000,
+      step: 10,
+    },
+    {
+      name: "gstRate",
+      label: "GST Rate",
+      type: "percentage",
+      defaultValue: 18,
+      unit: "%",
+      min: 0,
+      max: 50,
+      step: 1,
+    },
+  ],
+  outputs: [
+    {
+      name: "totalAmount",
+      label: "Total Amount (Inc. GST)",
+      format: "currency",
+      highlight: true,
+    },
+    {
+      name: "gstAmount",
+      label: "GST Amount",
+      format: "currency",
+    },
+    {
+      name: "originalAmount",
+      label: "Net Amount (Exc. GST)",
+      format: "currency",
+    },
+  ],
+  calculate: (inputs) => {
+    const res = calculateGstFormula({
+      amount: Number(inputs.amount || 1000),
+      gstRate: Number(inputs.gstRate || 18),
+      type: "exclusive",
+    });
+    return {
+      totalAmount: res.totalAmount,
+      gstAmount: res.gstAmount,
+      originalAmount: res.originalAmount,
+    };
+  },
+};
+
+// 9. Percentage Calculator
+export const PERCENTAGE_CALCULATOR: CalculatorDefinition = {
+  id: "percentage",
+  title: "Percentage Calculator",
+  slug: "percentage-calculator",
+  category: "Math",
+  description: "Calculate percentage values, percentage increase/decrease, and proportions.",
+  iconName: "Percent",
+  formulaDescription: "Result = (Value1 / 100) × Value2",
+  inputs: [
+    {
+      name: "value1",
+      label: "Percentage (%)",
+      type: "percentage",
+      defaultValue: 15,
+      unit: "%",
+      min: 0,
+      max: 1000,
+      step: 1,
+    },
+    {
+      name: "value2",
+      label: "Total Number",
+      type: "number",
+      defaultValue: 500,
+      min: 0,
+      max: 1000000,
+      step: 10,
+    },
+  ],
+  outputs: [
+    {
+      name: "result",
+      label: "Calculated Value",
+      format: "number",
+      highlight: true,
+    },
+  ],
+  calculate: (inputs) => {
+    const res = calculatePercentageFormula({
+      value1: Number(inputs.value1 || 15),
+      value2: Number(inputs.value2 || 500),
+    });
+    return {
+      result: res.result,
+    };
+  },
+};
+
+// 10. Age Calculator
+export const AGE_CALCULATOR: CalculatorDefinition = {
+  id: "age",
+  title: "Age Calculator",
+  slug: "age-calculator",
+  category: "Date",
+  description: "Calculate exact age in years, months, days, total days, and countdown to next birthday.",
+  iconName: "Calendar",
+  formulaDescription: "Age = Target Date - Birth Date",
+  inputs: [
+    {
+      name: "birthDate",
+      label: "Date of Birth",
+      type: "text",
+      defaultValue: "1995-06-15",
+    },
+  ],
+  outputs: [
+    {
+      name: "ageSummary",
+      label: "Exact Age",
+      format: "text",
+      highlight: true,
+    },
+    {
+      name: "totalDays",
+      label: "Total Days Lived",
+      format: "number",
+    },
+    {
+      name: "nextBirthdayDays",
+      label: "Days Until Next Birthday",
+      format: "number",
+    },
+  ],
+  calculate: (inputs) => {
+    const res = calculateAgeFormula({
+      birthDate: String(inputs.birthDate || "1995-06-15"),
+    });
+    return {
+      ageSummary: `${res.years} years, ${res.months} months, ${res.days} days`,
+      totalDays: res.totalDays,
+      nextBirthdayDays: res.nextBirthdayDays,
+    };
+  },
+};
+
 const CALCULATOR_REGISTRY: Record<string, CalculatorDefinition> = {
   mortgage: MORTGAGE_CALCULATOR,
   "mortgage-calculator": MORTGAGE_CALCULATOR,
@@ -478,10 +796,20 @@ const CALCULATOR_REGISTRY: Record<string, CalculatorDefinition> = {
   "loan-calculator": LOAN_CALCULATOR,
   emi: EMI_CALCULATOR,
   "emi-calculator": EMI_CALCULATOR,
-  sip: SIP_CALCULATOR,
-  "sip-calculator": SIP_CALCULATOR,
   "compound-interest": COMPOUND_INTEREST_CALCULATOR,
   "compound-interest-calculator": COMPOUND_INTEREST_CALCULATOR,
+  sip: SIP_CALCULATOR,
+  "sip-calculator": SIP_CALCULATOR,
+  fd: FD_CALCULATOR,
+  "fd-calculator": FD_CALCULATOR,
+  rd: RD_CALCULATOR,
+  "rd-calculator": RD_CALCULATOR,
+  gst: GST_CALCULATOR,
+  "gst-calculator": GST_CALCULATOR,
+  percentage: PERCENTAGE_CALCULATOR,
+  "percentage-calculator": PERCENTAGE_CALCULATOR,
+  age: AGE_CALCULATOR,
+  "age-calculator": AGE_CALCULATOR,
 };
 
 export function getCalculatorDefinition(idOrSlug: string): CalculatorDefinition | undefined {
@@ -494,7 +822,12 @@ export function getAllCalculatorDefinitions(): CalculatorDefinition[] {
     MORTGAGE_CALCULATOR,
     LOAN_CALCULATOR,
     EMI_CALCULATOR,
-    SIP_CALCULATOR,
     COMPOUND_INTEREST_CALCULATOR,
+    SIP_CALCULATOR,
+    FD_CALCULATOR,
+    RD_CALCULATOR,
+    GST_CALCULATOR,
+    PERCENTAGE_CALCULATOR,
+    AGE_CALCULATOR,
   ];
 }

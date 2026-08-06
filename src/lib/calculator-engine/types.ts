@@ -2,7 +2,8 @@
  * Shared Type Definitions for the Calculator Engine.
  */
 
-export type InputType = "number" | "currency" | "percentage" | "select" | "slider";
+export type InputType = "number" | "currency" | "percentage" | "select" | "slider" | "text" | "date";
+
 
 export interface CalculatorInputValidation {
   min?: number;
