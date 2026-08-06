@@ -45,7 +45,17 @@ export const CALCULATORS: CalculatorItem[] = [
     description: "Estimate monthly auto and personal loan payments with custom interest rates.",
     featured: true,
     icon: CalcIcon,
-    tags: ["loan", "car loan", "personal loan", "monthly payment"],
+    tags: ["loan", "personal loan", "monthly payment"],
+  },
+  {
+    id: "auto-loan",
+    title: "Auto Loan Calculator",
+    slug: "auto-loan-calculator",
+    category: "Finance",
+    description: "Calculate monthly car payments, net loan amount, total interest, sales tax, fees, and total vehicle cost.",
+    featured: true,
+    icon: CalcIcon,
+    tags: ["auto loan", "car loan", "vehicle financing", "monthly payment", "sales tax"],
   },
   {
     id: "emi",

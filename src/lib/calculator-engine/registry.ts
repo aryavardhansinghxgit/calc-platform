@@ -13,6 +13,7 @@ import { calculateRdFormula } from "./formulas/rd";
 import { calculateGstFormula } from "./formulas/gst";
 import { calculatePercentageFormula } from "./formulas/percentage";
 import { calculateAgeFormula } from "./formulas/age";
+import { calculateAutoLoanFormula } from "./formulas/auto-loan";
 import { formatCurrency, formatPercent, formatNumber } from "./formatters";
 
 // 1. Mortgage Calculator
@@ -789,11 +790,170 @@ export const AGE_CALCULATOR: CalculatorDefinition = {
   },
 };
 
+// 11. Auto Loan Calculator
+export const AUTO_LOAN_CALCULATOR: CalculatorDefinition = {
+  id: "auto-loan",
+  title: "Auto Loan Calculator",
+  slug: "auto-loan-calculator",
+  category: "Finance",
+  description: "Calculate monthly car payments, net loan amount, total interest, sales tax, fees, and total vehicle cost.",
+  iconName: "CalcIcon",
+  formulaDescription: "Loan Amount = (Vehicle Price - Down Payment - Trade-In) × (1 + Tax Rate) + Fees; Monthly Payment = Loan Amount × [r(1 + r)^n] / [(1 + r)^n - 1]",
+  faqs: [
+    {
+      question: "How is an auto loan payment calculated?",
+      answer: "Monthly car payments are calculated based on the net loan amount (vehicle price minus down payment and trade-in, plus tax and fees), interest rate (APR), and loan term length.",
+    },
+    {
+      question: "Does trade-in value reduce sales tax?",
+      answer: "In most US states, trade-in value reduces the taxable purchase price of the vehicle, lowering the sales tax amount paid.",
+    },
+    {
+      question: "What is a standard auto loan term?",
+      answer: "Common auto loan terms range from 36 to 72 months (3 to 6 years). Longer terms offer lower monthly payments but increase total interest paid.",
+    },
+  ],
+  inputs: [
+    {
+      name: "vehiclePrice",
+      label: "Vehicle Price",
+      type: "currency",
+      defaultValue: 35000,
+      unit: "$",
+      min: 1000,
+      max: 500000,
+      step: 500,
+      tooltip: "Sticker price or negotiated price of the vehicle",
+    },
+    {
+      name: "downPayment",
+      label: "Down Payment",
+      type: "currency",
+      defaultValue: 5000,
+      unit: "$",
+      min: 0,
+      max: 200000,
+      step: 250,
+      tooltip: "Upfront cash paid towards the purchase",
+    },
+    {
+      name: "tradeInValue",
+      label: "Trade-in Value",
+      type: "currency",
+      defaultValue: 2000,
+      unit: "$",
+      min: 0,
+      max: 100000,
+      step: 250,
+      tooltip: "Allowance value for your trade-in vehicle",
+    },
+    {
+      name: "interestRate",
+      label: "Interest Rate (APR)",
+      type: "percentage",
+      defaultValue: 5.9,
+      unit: "%",
+      min: 0,
+      max: 30,
+      step: 0.1,
+      tooltip: "Annual interest rate on the loan",
+    },
+    {
+      name: "loanTermMonths",
+      label: "Loan Term",
+      type: "slider",
+      defaultValue: 60,
+      unit: "months",
+      min: 12,
+      max: 96,
+      step: 6,
+      tooltip: "Duration of the auto loan in months",
+    },
+    {
+      name: "salesTaxRate",
+      label: "Sales Tax Rate",
+      type: "percentage",
+      defaultValue: 7,
+      unit: "%",
+      min: 0,
+      max: 15,
+      step: 0.1,
+      tooltip: "State and local sales tax rate percentage",
+    },
+    {
+      name: "fees",
+      label: "Title, Reg & Dealer Fees",
+      type: "currency",
+      defaultValue: 500,
+      unit: "$",
+      min: 0,
+      max: 10000,
+      step: 50,
+      tooltip: "Documentation, title, registration, and dealer fees",
+    },
+  ],
+  outputs: [
+    {
+      name: "monthlyPayment",
+      label: "Monthly Payment",
+      format: "currency",
+      highlight: true,
+      description: "Estimated monthly loan payment amount",
+    },
+    {
+      name: "loanAmount",
+      label: "Total Financed Loan Amount",
+      format: "currency",
+      description: "Net vehicle cost including taxes and fees minus down payment",
+    },
+    {
+      name: "totalInterestPaid",
+      label: "Total Interest Paid",
+      format: "currency",
+      description: "Total interest paid over the life of the loan",
+    },
+    {
+      name: "totalSalesTax",
+      label: "Total Sales Tax",
+      format: "currency",
+      description: "Calculated sales tax amount",
+    },
+    {
+      name: "totalOutofPocketCost",
+      label: "Total Out-of-Pocket Cost",
+      format: "currency",
+      description: "Combined total of down payment, trade-in, and all loan payments",
+    },
+  ],
+  calculate: (inputs) => {
+    const res = calculateAutoLoanFormula({
+      vehiclePrice: Number(inputs.vehiclePrice || 35000),
+      downPayment: Number(inputs.downPayment || 5000),
+      tradeInValue: Number(inputs.tradeInValue || 2000),
+      salesTaxRate: Number(inputs.salesTaxRate || 7),
+      fees: Number(inputs.fees || 500),
+      interestRate: Number(inputs.interestRate || 5.9),
+      loanTermMonths: Number(inputs.loanTermMonths || 60),
+    });
+    return {
+      monthlyPayment: res.monthlyPayment,
+      loanAmount: res.loanAmount,
+      totalInterestPaid: res.totalInterestPaid,
+      totalSalesTax: res.totalSalesTax,
+      totalFees: res.totalFees,
+      totalPayment: res.totalPayment,
+      totalOutofPocketCost: res.totalOutofPocketCost,
+    };
+  },
+};
+
 const CALCULATOR_REGISTRY: Record<string, CalculatorDefinition> = {
   mortgage: MORTGAGE_CALCULATOR,
   "mortgage-calculator": MORTGAGE_CALCULATOR,
   loan: LOAN_CALCULATOR,
   "loan-calculator": LOAN_CALCULATOR,
+  "auto-loan": AUTO_LOAN_CALCULATOR,
+  "auto-loan-calculator": AUTO_LOAN_CALCULATOR,
   emi: EMI_CALCULATOR,
   "emi-calculator": EMI_CALCULATOR,
   "compound-interest": COMPOUND_INTEREST_CALCULATOR,
@@ -821,6 +981,7 @@ export function getAllCalculatorDefinitions(): CalculatorDefinition[] {
   return [
     MORTGAGE_CALCULATOR,
     LOAN_CALCULATOR,
+    AUTO_LOAN_CALCULATOR,
     EMI_CALCULATOR,
     COMPOUND_INTEREST_CALCULATOR,
     SIP_CALCULATOR,
