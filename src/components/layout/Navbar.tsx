@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { Calculator, Search, Menu, X, Landmark, HeartPulse, Binary, HardHat, Home, Sparkles } from "lucide-react";
+import { Calculator, Search, Menu, X, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { NAVIGATION_CATEGORIES } from "@/constants/navigation";
 
 export interface NavbarProps {
   onSearchChange?: (term: string) => void;
@@ -15,13 +16,8 @@ export function Navbar({ onSearchChange, activeCategory = "Home", onSelectCatego
   const [searchTerm, setSearchTerm] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const categories = [
-    { name: "Home", icon: Home },
-    { name: "Finance", icon: Landmark },
-    { name: "Health", icon: HeartPulse },
-    { name: "Math", icon: Binary },
-    { name: "Construction", icon: HardHat },
-  ];
+  const categories = NAVIGATION_CATEGORIES;
+
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
