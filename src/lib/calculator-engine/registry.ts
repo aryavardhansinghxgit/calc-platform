@@ -831,3 +831,53 @@ export function getAllCalculatorDefinitions(): CalculatorDefinition[] {
     AGE_CALCULATOR,
   ];
 }
+
+export function getCalculatorsByCategory(categorySlugOrName: string): CalculatorDefinition[] {
+  if (!categorySlugOrName) return [];
+  const target = categorySlugOrName.toLowerCase().trim();
+  return getAllCalculatorDefinitions().filter(
+    (calc) =>
+      calc.category.toLowerCase() === target ||
+      calc.category.toLowerCase().replace(/\s+/g, "-") === target
+  );
+}
+
+export function searchRegistry(query: string): CalculatorDefinition[] {
+  if (!query || query.trim() === "") return getAllCalculatorDefinitions();
+  const q = query.toLowerCase().trim();
+  return getAllCalculatorDefinitions().filter(
+    (calc) =>
+      calc.title.toLowerCase().includes(q) ||
+      calc.description.toLowerCase().includes(q) ||
+      calc.category.toLowerCase().includes(q)
+  );
+}
+
+export function getRelatedCalculators(
+  currentId: string,
+  category?: string,
+  count: number = 3
+): CalculatorDefinition[] {
+  const all = getAllCalculatorDefinitions();
+  const filtered = all.filter(
+    (c) =>
+      c.id.toLowerCase() !== currentId.toLowerCase() &&
+      c.slug.toLowerCase() !== currentId.toLowerCase()
+  );
+
+  if (category) {
+    const categoryMatches = filtered.filter(
+      (c) => c.category.toLowerCase() === category.toLowerCase()
+    );
+    if (categoryMatches.length >= count) {
+      return categoryMatches.slice(0, count);
+    }
+    const nonMatches = filtered.filter(
+      (c) => c.category.toLowerCase() !== category.toLowerCase()
+    );
+    return [...categoryMatches, ...nonMatches].slice(0, count);
+  }
+
+  return filtered.slice(0, count);
+}
+
