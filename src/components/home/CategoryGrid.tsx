@@ -5,11 +5,11 @@ import { Landmark, HeartPulse, Binary, HardHat, Layers, ArrowRight } from "lucid
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 export interface CategoryGridProps {
-  activeCategory: string;
-  onSelectCategory: (category: string) => void;
+  activeCategory?: string;
+  onSelectCategory?: (category: string) => void;
 }
 
-export function CategoryGrid({ activeCategory, onSelectCategory }: CategoryGridProps) {
+export function CategoryGrid({ activeCategory = "Home", onSelectCategory }: CategoryGridProps = {}) {
   const categories = [
     {
       id: "Finance",
@@ -63,7 +63,7 @@ export function CategoryGrid({ activeCategory, onSelectCategory }: CategoryGridP
 
         {activeCategory !== "Home" && (
           <button
-            onClick={() => onSelectCategory("Home")}
+            onClick={() => onSelectCategory && onSelectCategory("Home")}
             className="text-xs font-semibold text-sky-400 hover:text-sky-300 underline underline-offset-4"
           >
             Show All
@@ -79,7 +79,7 @@ export function CategoryGrid({ activeCategory, onSelectCategory }: CategoryGridP
           return (
             <Card
               key={cat.id}
-              onClick={() => onSelectCategory(cat.id)}
+              onClick={() => onSelectCategory && onSelectCategory(cat.id)}
               className={`cursor-pointer transition-all duration-200 border rounded-2xl relative overflow-hidden group ${
                 isActive
                   ? `bg-slate-900 ${cat.gradient} ring-2 ring-sky-500/50 shadow-lg`
@@ -115,3 +115,6 @@ export function CategoryGrid({ activeCategory, onSelectCategory }: CategoryGridP
     </section>
   );
 }
+
+export default CategoryGrid;
+

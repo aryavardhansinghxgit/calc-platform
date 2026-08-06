@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Sparkles, Calculator as CalcIcon, ChevronRight } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
@@ -21,16 +21,34 @@ export interface FeaturedItem {
 }
 
 export interface FeaturedCalculatorsProps {
-  featuredList: FeaturedItem[];
-  selectedCalc: string;
-  onSelectCalc: (id: string) => void;
+  featuredList?: FeaturedItem[];
+  selectedCalc?: string;
+  onSelectCalc?: (id: string) => void;
 }
 
+const defaultFeaturedList: FeaturedItem[] = [
+  { id: "mortgage", title: "Mortgage Calculator", desc: "Calculate home loans & interest", cat: "Finance" },
+  { id: "loan", title: "Loan Calculator", desc: "Estimate auto & personal loan payments", cat: "Finance" },
+  { id: "emi", title: "EMI Calculator", desc: "Equated Monthly Installment schedule", cat: "Finance" },
+  { id: "compound-interest", title: "Compound Interest", desc: "Interest growth over time", cat: "Finance" },
+  { id: "bmi", title: "BMI Calculator", desc: "Check Body Mass Index classification", cat: "Health" },
+  { id: "sip", title: "SIP Calculator", desc: "Systematic Investment Plan returns", cat: "Finance" },
+  { id: "percentage", title: "Percentage Calculator", desc: "Quick percent math & % change", cat: "Math" },
+];
+
 export function FeaturedCalculators({
-  featuredList,
+  featuredList = defaultFeaturedList,
   selectedCalc,
   onSelectCalc,
-}: FeaturedCalculatorsProps) {
+}: FeaturedCalculatorsProps = {}) {
+  const [internalSelected, setInternalSelected] = useState("mortgage");
+  const activeCalc = selectedCalc !== undefined ? selectedCalc : internalSelected;
+
+  const handleSelect = (val: string) => {
+    setInternalSelected(val);
+    if (onSelectCalc) onSelectCalc(val);
+  };
+
   return (
     <section className="space-y-6 pt-6 border-t border-slate-800/80">
       {/* Section Header */}
@@ -46,7 +64,7 @@ export function FeaturedCalculators({
       </div>
 
       {/* Calculator Selector & Active View Tabs */}
-      <Tabs value={selectedCalc} onValueChange={onSelectCalc} className="w-full space-y-6">
+      <Tabs value={activeCalc} onValueChange={handleSelect} className="w-full space-y-6">
         {/* Calculator Select Tabs Header */}
         <TabsList className="bg-slate-900 border border-slate-800 p-1.5 rounded-2xl flex flex-wrap h-auto gap-1">
           {featuredList.map((item) => (
@@ -94,3 +112,5 @@ export function FeaturedCalculators({
     </section>
   );
 }
+
+export default FeaturedCalculators;

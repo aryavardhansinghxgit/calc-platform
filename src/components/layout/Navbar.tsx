@@ -131,3 +131,6 @@ export function Navbar({ onSearchChange, activeCategory = "Home", onSelectCatego
     </header>
   );
 }
+
+export default Navbar;
+
