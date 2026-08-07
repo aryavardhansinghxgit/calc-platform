@@ -5,7 +5,6 @@ import { Calculator as CalcIcon } from "lucide-react";
 
 export function QuickCalculator() {
   const [display, setDisplay] = useState("0");
-  const [memory, setMemory] = useState<number | null>(null);
   const [waitingForOperand, setWaitingForOperand] = useState(false);
   const [operator, setOperator] = useState<string | null>(null);
   const [prevValue, setPrevValue] = useState<number | null>(null);
@@ -30,7 +29,6 @@ export function QuickCalculator() {
 
   const clearAll = () => {
     setDisplay("0");
-    setMemory(null);
     setWaitingForOperand(false);
     setOperator(null);
     setPrevValue(null);
@@ -118,58 +116,58 @@ export function QuickCalculator() {
   };
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 shadow-lg max-w-[320px] mx-auto text-slate-100 space-y-2">
+    <div className="bg-card text-card-foreground border border-border rounded-xl p-3 shadow-xs max-w-[310px] w-full mx-auto space-y-2 font-sans transition-colors">
       {/* Header */}
-      <div className="flex items-center justify-between px-1 text-[11px] font-mono text-slate-400">
-        <span className="flex items-center gap-1 font-semibold text-sky-400">
+      <div className="flex items-center justify-between px-1 text-[11px] font-mono text-muted-foreground">
+        <span className="flex items-center gap-1 font-semibold text-primary">
           <CalcIcon className="h-3 w-3" /> Quick Math Calc
         </span>
-        <span>Rad</span>
+        <span className="text-[10px] uppercase font-medium text-muted-foreground/80">Rad</span>
       </div>
 
       {/* Display Screen */}
-      <div className="bg-slate-950 border border-slate-800 rounded-lg p-2 text-right">
-        <div className="text-xl font-mono font-bold text-sky-400 tracking-wider truncate">
+      <div className="bg-background border border-border rounded-lg p-2.5 text-right shadow-inner">
+        <div className="text-xl font-mono font-bold text-primary tracking-wider truncate">
           {display}
         </div>
       </div>
 
       {/* Calculator Buttons Grid */}
-      <div className="grid grid-cols-5 gap-1 text-xs font-mono">
+      <div className="grid grid-cols-5 gap-1.5 text-xs font-mono">
         {/* Row 1 */}
-        <button onClick={() => handleFunction("sin")} className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">sin</button>
-        <button onClick={() => handleFunction("cos")} className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">cos</button>
-        <button onClick={() => handleFunction("tan")} className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">tan</button>
-        <button onClick={() => inputDigit("7")} className="p-1.5 rounded bg-slate-800/90 hover:bg-slate-700 font-bold text-white">7</button>
-        <button onClick={() => inputDigit("8")} className="p-1.5 rounded bg-slate-800/90 hover:bg-slate-700 font-bold text-white">8</button>
+        <button onClick={() => handleFunction("sin")} className="p-1.5 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-medium transition-colors">sin</button>
+        <button onClick={() => handleFunction("cos")} className="p-1.5 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-medium transition-colors">cos</button>
+        <button onClick={() => handleFunction("tan")} className="p-1.5 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-medium transition-colors">tan</button>
+        <button onClick={() => inputDigit("7")} className="p-1.5 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors">7</button>
+        <button onClick={() => inputDigit("8")} className="p-1.5 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors">8</button>
 
         {/* Row 2 */}
-        <button onClick={() => handleFunction("sqrt")} className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">√</button>
-        <button onClick={() => handleFunction("sq")} className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">x²</button>
-        <button onClick={() => handleFunction("%")} className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">%</button>
-        <button onClick={() => inputDigit("9")} className="p-1.5 rounded bg-slate-800/90 hover:bg-slate-700 font-bold text-white">9</button>
-        <button onClick={() => performOperation("÷")} className="p-1.5 rounded bg-sky-600/80 hover:bg-sky-600 font-bold text-white">÷</button>
+        <button onClick={() => handleFunction("sqrt")} className="p-1.5 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-medium transition-colors">√</button>
+        <button onClick={() => handleFunction("sq")} className="p-1.5 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-medium transition-colors">x²</button>
+        <button onClick={() => handleFunction("%")} className="p-1.5 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-medium transition-colors">%</button>
+        <button onClick={() => inputDigit("9")} className="p-1.5 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors">9</button>
+        <button onClick={() => performOperation("÷")} className="p-1.5 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-bold transition-colors">÷</button>
 
         {/* Row 3 */}
-        <button onClick={() => handleFunction("log")} className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">log</button>
-        <button onClick={() => handleFunction("ln")} className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">ln</button>
-        <button onClick={() => handleFunction("+/-")} className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">±</button>
-        <button onClick={() => inputDigit("4")} className="p-1.5 rounded bg-slate-800/90 hover:bg-slate-700 font-bold text-white">4</button>
-        <button onClick={() => inputDigit("5")} className="p-1.5 rounded bg-slate-800/90 hover:bg-slate-700 font-bold text-white">5</button>
+        <button onClick={() => handleFunction("log")} className="p-1.5 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-medium transition-colors">log</button>
+        <button onClick={() => handleFunction("ln")} className="p-1.5 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-medium transition-colors">ln</button>
+        <button onClick={() => handleFunction("+/-")} className="p-1.5 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-medium transition-colors">±</button>
+        <button onClick={() => inputDigit("4")} className="p-1.5 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors">4</button>
+        <button onClick={() => inputDigit("5")} className="p-1.5 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors">5</button>
 
         {/* Row 4 */}
-        <button onClick={() => inputDigit("6")} className="p-1.5 rounded bg-slate-800/90 hover:bg-slate-700 font-bold text-white">6</button>
-        <button onClick={() => performOperation("×")} className="p-1.5 rounded bg-sky-600/80 hover:bg-sky-600 font-bold text-white">×</button>
-        <button onClick={() => inputDigit("1")} className="p-1.5 rounded bg-slate-800/90 hover:bg-slate-700 font-bold text-white">1</button>
-        <button onClick={() => inputDigit("2")} className="p-1.5 rounded bg-slate-800/90 hover:bg-slate-700 font-bold text-white">2</button>
-        <button onClick={() => inputDigit("3")} className="p-1.5 rounded bg-slate-800/90 hover:bg-slate-700 font-bold text-white">3</button>
+        <button onClick={() => inputDigit("6")} className="p-1.5 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors">6</button>
+        <button onClick={() => performOperation("×")} className="p-1.5 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-bold transition-colors">×</button>
+        <button onClick={() => inputDigit("1")} className="p-1.5 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors">1</button>
+        <button onClick={() => inputDigit("2")} className="p-1.5 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors">2</button>
+        <button onClick={() => inputDigit("3")} className="p-1.5 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors">3</button>
 
         {/* Row 5 */}
-        <button onClick={() => performOperation("-")} className="p-1.5 rounded bg-sky-600/80 hover:bg-sky-600 font-bold text-white">-</button>
-        <button onClick={() => inputDigit("0")} className="p-1.5 rounded bg-slate-800/90 hover:bg-slate-700 font-bold text-white">0</button>
-        <button onClick={inputDot} className="p-1.5 rounded bg-slate-800/90 hover:bg-slate-700 font-bold text-white">.</button>
-        <button onClick={clearAll} className="p-1.5 rounded bg-rose-600/80 hover:bg-rose-600 font-bold text-white">AC</button>
-        <button onClick={handleEqual} className="p-1.5 rounded bg-emerald-600/80 hover:bg-emerald-600 font-bold text-white">=</button>
+        <button onClick={() => performOperation("-")} className="p-1.5 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-bold transition-colors">-</button>
+        <button onClick={() => inputDigit("0")} className="p-1.5 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors">0</button>
+        <button onClick={inputDot} className="p-1.5 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors">.</button>
+        <button onClick={clearAll} className="p-1.5 rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 font-bold transition-colors">AC</button>
+        <button onClick={handleEqual} className="p-1.5 rounded-md bg-emerald-600 dark:bg-emerald-500 text-white hover:opacity-90 font-bold transition-colors">=</button>
       </div>
     </div>
   );

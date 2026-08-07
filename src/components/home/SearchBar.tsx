@@ -58,10 +58,10 @@ export function SearchBar({
   }, [query]);
 
   return (
-    <div className="space-y-3 max-w-2xl mx-auto w-full relative">
+    <div className="space-y-3 max-w-2xl w-full relative">
       {/* Search Input Container */}
       <div className="relative">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none z-10" />
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none z-10" />
         <Input
           type="text"
           placeholder="Search 11+ calculators (e.g. Mortgage, EMI, SIP, GST, BMI)..."
@@ -70,13 +70,13 @@ export function SearchBar({
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           onChange={(e) => handleQueryChange(e.target.value)}
           aria-label="Search all calculators"
-          className="pl-10 pr-9 h-11 text-sm bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 rounded-xl shadow-sm focus:border-blue-600 focus:ring-2 focus:ring-blue-500/20 transition-all"
+          className="pl-10 pr-9 h-11 text-sm bg-background border-border text-foreground placeholder:text-muted-foreground rounded-xl shadow-xs focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
         />
         {query && (
           <button
             onClick={() => handleQueryChange("")}
             aria-label="Clear search"
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 rounded-full transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-full transition-colors"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -85,9 +85,9 @@ export function SearchBar({
 
       {/* Live Search Dropdown */}
       {isFocused && query.trim() !== "" && (
-        <div className="absolute top-13 left-0 right-0 z-50 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-xl overflow-hidden max-h-72 overflow-y-auto divide-y divide-zinc-100 dark:divide-zinc-800">
+        <div className="absolute top-13 left-0 right-0 z-50 bg-card border border-border rounded-xl shadow-lg overflow-hidden max-h-72 overflow-y-auto divide-y divide-border">
           {searchResults.length === 0 ? (
-            <div className="p-3.5 text-center text-xs text-zinc-500 dark:text-zinc-400">
+            <div className="p-3.5 text-center text-xs text-muted-foreground">
               No calculators found matching &quot;{query}&quot;
             </div>
           ) : (
@@ -95,29 +95,29 @@ export function SearchBar({
               <Link
                 key={calc.id}
                 href={`/calculators/${calc.slug}`}
-                className="p-3 flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors group cursor-pointer"
+                className="p-3 flex items-center justify-between hover:bg-muted/60 transition-colors group cursor-pointer"
               >
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <span className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
                       {calc.title}
                     </span>
-                    <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
+                    <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-muted text-muted-foreground border border-border">
                       {calc.category}
                     </span>
                   </div>
-                  <p className="text-[11px] text-zinc-500 dark:text-zinc-400 line-clamp-1">{calc.description}</p>
+                  <p className="text-[11px] text-muted-foreground line-clamp-1">{calc.description}</p>
                 </div>
-                <ArrowRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-transform shrink-0" />
+                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-transform shrink-0" />
               </Link>
             ))
           )}
         </div>
       )}
 
-      {/* Quick Launch Pills */}
-      <div className="flex items-center justify-center flex-wrap gap-1.5 pt-0.5">
-        <span className="text-[11px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider flex items-center gap-1 mr-1">
+      {/* Quick Launch Chips */}
+      <div className="flex items-center flex-wrap gap-1.5 pt-0.5">
+        <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1 mr-1">
           <Zap className="h-3 w-3 text-amber-500" /> Quick Launch:
         </span>
         {quickTags.map((tag) => {
@@ -131,10 +131,10 @@ export function SearchBar({
             >
               <button
                 type="button"
-                className={`px-2.5 py-1 text-xs font-medium rounded-lg border transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
+                className={`px-2.5 py-1 text-xs font-medium rounded-lg border transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   isSelected
-                    ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                    : "bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400"
+                    ? "bg-primary text-primary-foreground border-primary shadow-xs"
+                    : "bg-background text-foreground border-border hover:border-primary/50 hover:text-primary"
                 }`}
               >
                 {tag.label}

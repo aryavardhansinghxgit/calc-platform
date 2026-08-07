@@ -11,29 +11,29 @@ export interface HeroProps {
 
 export function Hero() {
   return (
-    <section className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 shadow-sm">
+    <section className="bg-card text-card-foreground border border-border rounded-2xl p-5 shadow-sm transition-colors">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-        {/* Left Column: Embedded Quick Scientific Calculator */}
-        <div className="lg:col-span-5 flex justify-center">
-          <QuickCalculator />
-        </div>
-
-        {/* Right Column: Search & High-Priority Tool Launch */}
+        {/* Left Column (Col 7 - Primary Content Area) */}
         <div className="lg:col-span-7 space-y-4">
           <div>
-            <span className="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 uppercase tracking-wider">
+            <span className="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 uppercase tracking-wider">
               Free Online Calculators
             </span>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 mt-1">
-              Instant Calculations & Precision Solvers
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground mt-1.5 leading-tight">
+              Instant Precision Calculators & Solvers
             </h1>
-            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1 max-w-lg leading-normal">
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl leading-normal">
               High-speed, zero-friction tools for home mortgage schedules, personal loans, fitness metrics, and mathematical formulas.
             </p>
           </div>
 
-          {/* Integrated Search Bar with Quick Launch */}
+          {/* Integrated Search Bar & Quick Launch Chips */}
           <SearchBar />
+        </div>
+
+        {/* Right Column (Col 5 - Secondary Quick Calculator Visual Element on Desktop, Below Content on Mobile) */}
+        <div className="lg:col-span-5 flex justify-center w-full">
+          <QuickCalculator />
         </div>
       </div>
     </section>
