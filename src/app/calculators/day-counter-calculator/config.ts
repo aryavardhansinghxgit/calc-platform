@@ -6,7 +6,7 @@ export const day_counter_calculatorConfig: CalculatorModuleDefinition = {
   id: "day-counter-calculator",
   title: "Day Counter",
   slug: "day-counter-calculator",
-  category: "other",
+  category: "date",
   subcategory: "Date & Time",
   description: "Count exact total calendar days and business days between two dates.",
   iconName: "Calendar",

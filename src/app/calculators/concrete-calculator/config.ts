@@ -6,7 +6,7 @@ export const concrete_calculatorConfig: CalculatorModuleDefinition = {
   id: "concrete-calculator",
   title: "Concrete Calculator",
   slug: "concrete-calculator",
-  category: "other",
+  category: "construction",
   subcategory: "Housing / Building",
   description: "Estimate concrete volume in cubic yards and pre-mixed bag quantities for slabs and footings.",
   iconName: "Hammer",

@@ -6,7 +6,7 @@ export const base64_calculatorConfig: CalculatorModuleDefinition = {
   id: "base64-calculator",
   title: "Base64 Encode / Decode",
   slug: "base64-calculator",
-  category: "other",
+  category: "converters",
   subcategory: "Internet",
   description: "Encode text strings into Base64 format or decode Base64 back to plain text.",
   iconName: "Code",

@@ -6,7 +6,7 @@ export const height_calculatorConfig: CalculatorModuleDefinition = {
   id: "height-calculator",
   title: "Height Calculator",
   slug: "height-calculator",
-  category: "other",
+  category: "converters",
   subcategory: "Measurements & Units",
   description: "Convert height between feet/inches and cm, and predict child adult height.",
   iconName: "Ruler",

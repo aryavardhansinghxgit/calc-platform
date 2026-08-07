@@ -6,7 +6,7 @@ export const roman_numeral_converterConfig: CalculatorModuleDefinition = {
   id: "roman-numeral-converter",
   title: "Roman Numeral Converter",
   slug: "roman-numeral-converter",
-  category: "other",
+  category: "converters",
   subcategory: "Measurements & Units",
   description: "Convert numbers to Roman numerals and convert Roman numerals back to numbers.",
   iconName: "Hash",

@@ -6,7 +6,7 @@ export const day_of_the_week_calculatorConfig: CalculatorModuleDefinition = {
   id: "day-of-the-week-calculator",
   title: "Day of the Week Calculator",
   slug: "day-of-the-week-calculator",
-  category: "other",
+  category: "date",
   subcategory: "Date & Time",
   description: "Determine what day of the week any past or future historical date falls on.",
   iconName: "HelpCircle",

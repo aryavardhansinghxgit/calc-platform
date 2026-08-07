@@ -4,7 +4,7 @@ export function runRoofingCalculatorTests() {
   const defaultInputs = {
   "houseLengthFt": 40,
   "houseWidthFt": 30,
-  "pitch": "1.054"
+  "pitch": "1.118"
 };
   const res1 = calculateRoofingCalculator(defaultInputs);
   if (!res1 || typeof res1 !== "object") throw new Error("Formula failed for default inputs");

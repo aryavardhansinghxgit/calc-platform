@@ -6,7 +6,7 @@ export const time_calculatorConfig: CalculatorModuleDefinition = {
   id: "time-calculator",
   title: "Time Calculator",
   slug: "time-calculator",
-  category: "other",
+  category: "date",
   subcategory: "Date & Time",
   description: "Add and subtract time durations in hours, minutes, and seconds.",
   iconName: "Clock",

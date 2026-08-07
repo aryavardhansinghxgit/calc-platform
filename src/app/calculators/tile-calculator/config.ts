@@ -6,7 +6,7 @@ export const tile_calculatorConfig: CalculatorModuleDefinition = {
   id: "tile-calculator",
   title: "Tile Calculator",
   slug: "tile-calculator",
-  category: "other",
+  category: "construction",
   subcategory: "Housing / Building",
   description: "Calculate number of floor or wall tiles and boxes needed for a room with waste allowance.",
   iconName: "Grid",

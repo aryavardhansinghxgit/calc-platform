@@ -6,7 +6,7 @@ export const date_calculatorConfig: CalculatorModuleDefinition = {
   id: "date-calculator",
   title: "Date Calculator",
   slug: "date-calculator",
-  category: "other",
+  category: "date",
   subcategory: "Date & Time",
   description: "Add or subtract days, weeks, months, or years from any given starting date.",
   iconName: "CalendarDays",

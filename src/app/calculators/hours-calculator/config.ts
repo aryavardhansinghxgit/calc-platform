@@ -6,7 +6,7 @@ export const hours_calculatorConfig: CalculatorModuleDefinition = {
   id: "hours-calculator",
   title: "Hours Calculator",
   slug: "hours-calculator",
-  category: "other",
+  category: "date",
   subcategory: "Date & Time",
   description: "Calculate total hours worked between start and end times minus break time.",
   iconName: "Timer",

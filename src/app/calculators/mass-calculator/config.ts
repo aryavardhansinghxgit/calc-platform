@@ -6,7 +6,7 @@ export const mass_calculatorConfig: CalculatorModuleDefinition = {
   id: "mass-calculator",
   title: "Mass Calculator",
   slug: "mass-calculator",
-  category: "other",
+  category: "converters",
   subcategory: "Measurements & Units",
   description: "Calculate object mass from density and volume, and convert mass units.",
   iconName: "Scale",

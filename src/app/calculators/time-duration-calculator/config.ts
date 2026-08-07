@@ -6,7 +6,7 @@ export const time_duration_calculatorConfig: CalculatorModuleDefinition = {
   id: "time-duration-calculator",
   title: "Time Duration Calculator",
   slug: "time-duration-calculator",
-  category: "other",
+  category: "date",
   subcategory: "Date & Time",
   description: "Calculate exact elapsed duration in days, hours, and minutes between two dates & times.",
   iconName: "Clock",

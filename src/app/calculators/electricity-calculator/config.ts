@@ -6,7 +6,7 @@ export const electricity_calculatorConfig: CalculatorModuleDefinition = {
   id: "electricity-calculator",
   title: "Electricity Calculator",
   slug: "electricity-calculator",
-  category: "other",
+  category: "business",
   subcategory: "Electronics & Circuits",
   description: "Calculate electric appliance energy consumption (kWh) and monthly power bill cost.",
   iconName: "Zap",

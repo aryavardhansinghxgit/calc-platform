@@ -6,7 +6,7 @@ export const weight_calculatorConfig: CalculatorModuleDefinition = {
   id: "weight-calculator",
   title: "Weight Calculator",
   slug: "weight-calculator",
-  category: "other",
+  category: "converters",
   subcategory: "Measurements & Units",
   description: "Calculate weight force W = m × g on Earth, Moon, Mars, and convert weight units.",
   iconName: "Scale",

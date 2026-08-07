@@ -4,7 +4,7 @@ export const roofing_calculatorExamples = [
     inputs: {
   "houseLengthFt": 40,
   "houseWidthFt": 30,
-  "pitch": "1.054"
+  "pitch": "1.118"
 },
     explanation: "Standard reference calculation example."
   }

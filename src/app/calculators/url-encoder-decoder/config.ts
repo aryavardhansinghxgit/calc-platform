@@ -6,7 +6,7 @@ export const url_encoder_decoderConfig: CalculatorModuleDefinition = {
   id: "url-encoder-decoder",
   title: "URL Encode / Decode",
   slug: "url-encoder-decoder",
-  category: "other",
+  category: "converters",
   subcategory: "Internet",
   description: "Encode special characters for web URLs or decode percent-encoded URLs.",
   iconName: "Link",

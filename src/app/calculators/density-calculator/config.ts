@@ -6,7 +6,7 @@ export const density_calculatorConfig: CalculatorModuleDefinition = {
   id: "density-calculator",
   title: "Density Calculator",
   slug: "density-calculator",
-  category: "other",
+  category: "converters",
   subcategory: "Measurements & Units",
   description: "Calculate density (ρ = m / v), mass, or volume for any physical substance.",
   iconName: "Box",

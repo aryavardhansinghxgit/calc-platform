@@ -6,7 +6,7 @@ export const btu_calculatorConfig: CalculatorModuleDefinition = {
   id: "btu-calculator",
   title: "BTU Calculator",
   slug: "btu-calculator",
-  category: "other",
+  category: "construction",
   subcategory: "Housing / Building",
   description: "Calculate required heating and air conditioning cooling BTU output for a room.",
   iconName: "Flame",

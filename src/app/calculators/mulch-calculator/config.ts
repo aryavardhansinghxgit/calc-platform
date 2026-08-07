@@ -6,7 +6,7 @@ export const mulch_calculatorConfig: CalculatorModuleDefinition = {
   id: "mulch-calculator",
   title: "Mulch Calculator",
   slug: "mulch-calculator",
-  category: "other",
+  category: "construction",
   subcategory: "Housing / Building",
   description: "Calculate cubic yards and bag count of garden mulch for landscaping coverage.",
   iconName: "Trees",

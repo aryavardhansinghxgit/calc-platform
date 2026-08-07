@@ -2,11 +2,12 @@ const fs = require("fs");
 const path = require("path");
 
 const calculators = [
-  // 1. DATE & TIME (9)
+  // 1. DATE & TIME (9) -> category: "date"
   {
     slug: "age-calculator",
     id: "age-calculator",
     title: "Age Calculator",
+    category: "date",
     subcategory: "Date & Time",
     iconName: "Calendar",
     description: "Calculate exact age in years, months, days, hours, and minutes from birth date.",
@@ -49,6 +50,7 @@ const calculators = [
     slug: "date-calculator",
     id: "date-calculator",
     title: "Date Calculator",
+    category: "date",
     subcategory: "Date & Time",
     iconName: "CalendarDays",
     description: "Add or subtract days, weeks, months, or years from any given starting date.",
@@ -66,18 +68,24 @@ const calculators = [
       { name: "dayOfWeek", label: "Day of the Week", format: "text" }
     ],
     calcLogic: `
-  const start = new Date(inputs.startDate || "2026-08-07");
-  if (isNaN(start.getTime())) return { resultDate: "Invalid Date", dayOfWeek: "N/A" };
-  const mult = inputs.operation === "sub" ? -1 : 1;
-  const y = Number(inputs.years) || 0;
-  const m = Number(inputs.months) || 0;
-  const d = Number(inputs.days) || 0;
-  const res = new Date(start);
-  res.setFullYear(res.getFullYear() + mult * y);
-  res.setMonth(res.getMonth() + mult * m);
-  res.setDate(res.getDate() + mult * d);
-  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  return { resultDate: res.toISOString().split("T")[0], dayOfWeek: daysOfWeek[res.getDay()] };
+  try {
+    const rawStart = typeof inputs.startDate === "string" ? inputs.startDate : "2026-08-07";
+    const start = new Date(rawStart);
+    if (isNaN(start.getTime())) return { resultDate: "Invalid Date", dayOfWeek: "N/A" };
+    const mult = inputs.operation === "sub" ? -1 : 1;
+    const y = Math.min(1000, Math.max(0, Number(inputs.years) || 0));
+    const m = Math.min(1200, Math.max(0, Number(inputs.months) || 0));
+    const d = Math.min(36500, Math.max(0, Number(inputs.days) || 0));
+    const res = new Date(start);
+    res.setFullYear(res.getFullYear() + mult * y);
+    res.setMonth(res.getMonth() + mult * m);
+    res.setDate(res.getDate() + mult * d);
+    if (isNaN(res.getTime())) return { resultDate: "Invalid Date", dayOfWeek: "N/A" };
+    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    return { resultDate: res.toISOString().split("T")[0], dayOfWeek: daysOfWeek[res.getDay()] || "N/A" };
+  } catch (err) {
+    return { resultDate: "Invalid Date", dayOfWeek: "N/A" };
+  }
 `,
     formulaStr: "Target Date = Start Date ± (Years, Months, Days)",
     faqs: [{ question: "How does the date calculator handle month overflows?", answer: "Next.js date arithmetic automatically adjusts month overflows into the next year." }]
@@ -86,6 +94,7 @@ const calculators = [
     slug: "time-calculator",
     id: "time-calculator",
     title: "Time Calculator",
+    category: "date",
     subcategory: "Date & Time",
     iconName: "Clock",
     description: "Add and subtract time durations in hours, minutes, and seconds.",
@@ -118,6 +127,7 @@ const calculators = [
     slug: "hours-calculator",
     id: "hours-calculator",
     title: "Hours Calculator",
+    category: "date",
     subcategory: "Date & Time",
     iconName: "Timer",
     description: "Calculate total hours worked between start and end times minus break time.",
@@ -154,6 +164,7 @@ const calculators = [
     slug: "time-card-calculator",
     id: "time-card-calculator",
     title: "Time Card Calculator",
+    category: "date",
     subcategory: "Date & Time",
     iconName: "Briefcase",
     description: "Calculate weekly work hours, overtime, regular pay, and gross earnings.",
@@ -189,6 +200,7 @@ const calculators = [
     slug: "time-zone-calculator",
     id: "time-zone-calculator",
     title: "Time Zone Calculator",
+    category: "date",
     subcategory: "Date & Time",
     iconName: "Globe",
     description: "Convert time between UTC/GMT and major global time zones.",
@@ -223,6 +235,7 @@ const calculators = [
     slug: "time-duration-calculator",
     id: "time-duration-calculator",
     title: "Time Duration Calculator",
+    category: "date",
     subcategory: "Date & Time",
     iconName: "Clock",
     description: "Calculate exact elapsed duration in days, hours, and minutes between two dates & times.",
@@ -259,6 +272,7 @@ const calculators = [
     slug: "day-counter-calculator",
     id: "day-counter-calculator",
     title: "Day Counter",
+    category: "date",
     subcategory: "Date & Time",
     iconName: "Calendar",
     description: "Count exact total calendar days and business days between two dates.",
@@ -294,6 +308,7 @@ const calculators = [
     slug: "day-of-the-week-calculator",
     id: "day-of-the-week-calculator",
     title: "Day of the Week Calculator",
+    category: "date",
     subcategory: "Date & Time",
     iconName: "HelpCircle",
     description: "Determine what day of the week any past or future historical date falls on.",
@@ -318,11 +333,12 @@ const calculators = [
     faqs: [{ question: "What day was July 20, 1969?", answer: "Apollo 11 moon landing occurred on a Sunday." }]
   },
 
-  // 2. HOUSING / BUILDING (8)
+  // 2. HOUSING / BUILDING (8) -> category: "construction"
   {
     slug: "concrete-calculator",
     id: "concrete-calculator",
     title: "Concrete Calculator",
+    category: "construction",
     subcategory: "Housing / Building",
     iconName: "Hammer",
     description: "Estimate concrete volume in cubic yards and pre-mixed bag quantities for slabs and footings.",
@@ -355,6 +371,7 @@ const calculators = [
     slug: "btu-calculator",
     id: "btu-calculator",
     title: "BTU Calculator",
+    category: "construction",
     subcategory: "Housing / Building",
     iconName: "Flame",
     description: "Calculate required heating and air conditioning cooling BTU output for a room.",
@@ -389,6 +406,7 @@ const calculators = [
     slug: "square-footage-calculator",
     id: "square-footage-calculator",
     title: "Square Footage Calculator",
+    category: "construction",
     subcategory: "Housing / Building",
     iconName: "Box",
     description: "Calculate total floor, wall, or land square footage and estimated material costs.",
@@ -419,6 +437,7 @@ const calculators = [
     slug: "stair-calculator",
     id: "stair-calculator",
     title: "Stair Calculator",
+    category: "construction",
     subcategory: "Housing / Building",
     iconName: "Layers",
     description: "Calculate stair riser height, tread depth, number of steps, and stringer angle for building code compliance.",
@@ -448,6 +467,7 @@ const calculators = [
     slug: "roofing-calculator",
     id: "roofing-calculator",
     title: "Roofing Calculator",
+    category: "construction",
     subcategory: "Housing / Building",
     iconName: "Home",
     description: "Calculate roof surface area, roofing squares, and asphalt shingle bundle requirements.",
@@ -456,7 +476,7 @@ const calculators = [
     inputs: [
       { name: "houseLengthFt", label: "House Length (ft)", type: "number", defaultValue: 40, min: 1, max: 500, step: 1 },
       { name: "houseWidthFt", label: "House Width (ft)", type: "number", defaultValue: 30, min: 1, max: 500, step: 1 },
-      { name: "pitch", label: "Roof Pitch", type: "select", defaultValue: "1.054", options: [
+      { name: "pitch", label: "Roof Pitch", type: "select", defaultValue: "1.118", options: [
         { label: "Low Pitch (4/12)", value: "1.054" },
         { label: "Medium Pitch (6/12)", value: "1.118" },
         { label: "Steep Pitch (8/12)", value: "1.202" }
@@ -484,6 +504,7 @@ const calculators = [
     slug: "tile-calculator",
     id: "tile-calculator",
     title: "Tile Calculator",
+    category: "construction",
     subcategory: "Housing / Building",
     iconName: "Grid",
     description: "Calculate number of floor or wall tiles and boxes needed for a room with waste allowance.",
@@ -519,6 +540,7 @@ const calculators = [
     slug: "mulch-calculator",
     id: "mulch-calculator",
     title: "Mulch Calculator",
+    category: "construction",
     subcategory: "Housing / Building",
     iconName: "Trees",
     description: "Calculate cubic yards and bag count of garden mulch for landscaping coverage.",
@@ -547,6 +569,7 @@ const calculators = [
     slug: "gravel-calculator",
     id: "gravel-calculator",
     title: "Gravel Calculator",
+    category: "construction",
     subcategory: "Housing / Building",
     iconName: "Layers",
     description: "Calculate weight in tons and volume in cubic yards of crushed stone or gravel.",
@@ -572,11 +595,12 @@ const calculators = [
     faqs: [{ question: "How much does a cubic yard of gravel weigh?", answer: "A cubic yard of crushed gravel weighs approximately 1.4 tons (2,800 lbs)." }]
   },
 
-  // 3. MEASUREMENTS & UNITS (10)
+  // 3. MEASUREMENTS & UNITS (10) -> category: "converters"
   {
     slug: "height-calculator",
     id: "height-calculator",
     title: "Height Calculator",
+    category: "converters",
     subcategory: "Measurements & Units",
     iconName: "Ruler",
     description: "Convert height between feet/inches and cm, and predict child adult height.",
@@ -609,6 +633,7 @@ const calculators = [
     slug: "conversion-calculator",
     id: "conversion-calculator",
     title: "Conversion Calculator",
+    category: "converters",
     subcategory: "Measurements & Units",
     iconName: "ArrowRightLeft",
     description: "Universal unit converter for length, mass, volume, temperature, and speed.",
@@ -649,6 +674,7 @@ const calculators = [
     slug: "gdp-calculator",
     id: "gdp-calculator",
     title: "GDP Calculator",
+    category: "business",
     subcategory: "Measurements & Units",
     iconName: "DollarSign",
     description: "Calculate Gross Domestic Product (GDP) using the expenditure approach (C + I + G + NX).",
@@ -682,6 +708,7 @@ const calculators = [
     slug: "density-calculator",
     id: "density-calculator",
     title: "Density Calculator",
+    category: "converters",
     subcategory: "Measurements & Units",
     iconName: "Box",
     description: "Calculate density (ρ = m / v), mass, or volume for any physical substance.",
@@ -708,6 +735,7 @@ const calculators = [
     slug: "mass-calculator",
     id: "mass-calculator",
     title: "Mass Calculator",
+    category: "converters",
     subcategory: "Measurements & Units",
     iconName: "Scale",
     description: "Calculate object mass from density and volume, and convert mass units.",
@@ -734,6 +762,7 @@ const calculators = [
     slug: "weight-calculator",
     id: "weight-calculator",
     title: "Weight Calculator",
+    category: "converters",
     subcategory: "Measurements & Units",
     iconName: "Scale",
     description: "Calculate weight force W = m × g on Earth, Moon, Mars, and convert weight units.",
@@ -766,6 +795,7 @@ const calculators = [
     slug: "speed-calculator",
     id: "speed-calculator",
     title: "Speed Calculator",
+    category: "converters",
     subcategory: "Measurements & Units",
     iconName: "Zap",
     description: "Calculate speed, distance, or time from velocity equation v = d / t.",
@@ -795,6 +825,7 @@ const calculators = [
     slug: "molarity-calculator",
     id: "molarity-calculator",
     title: "Molarity Calculator",
+    category: "education",
     subcategory: "Measurements & Units",
     iconName: "Droplet",
     description: "Calculate chemical solution molarity (M = moles / L) and required solute mass.",
@@ -824,6 +855,7 @@ const calculators = [
     slug: "molecular-weight-calculator",
     id: "molecular-weight-calculator",
     title: "Molecular Weight Calculator",
+    category: "education",
     subcategory: "Measurements & Units",
     iconName: "Atom",
     description: "Calculate molar mass and molecular weight of common chemical formulas.",
@@ -858,6 +890,7 @@ const calculators = [
     slug: "roman-numeral-converter",
     id: "roman-numeral-converter",
     title: "Roman Numeral Converter",
+    category: "converters",
     subcategory: "Measurements & Units",
     iconName: "Hash",
     description: "Convert numbers to Roman numerals and convert Roman numerals back to numbers.",
@@ -891,11 +924,12 @@ const calculators = [
     faqs: [{ question: "What is the highest number in standard Roman numerals?", answer: "Standard Roman numerals reach up to 3,999 (MMMCMXCIX)." }]
   },
 
-  // 4. ELECTRONICS & CIRCUITS (4)
+  // 4. ELECTRONICS & CIRCUITS (4) -> category: "other"
   {
     slug: "voltage-drop-calculator",
     id: "voltage-drop-calculator",
     title: "Voltage Drop Calculator",
+    category: "other",
     subcategory: "Electronics & Circuits",
     iconName: "Zap",
     description: "Calculate electrical wire voltage drop percentage based on wire gauge, current, and distance.",
@@ -926,7 +960,6 @@ const calculators = [
   if (awg === "14") rPer1000Ft = 3.07;
   else if (awg === "10") rPer1000Ft = 1.21;
   else if (awg === "8") rPer1000Ft = 0.764;
-  const totalDistFeet = 2 * d; // 2-wire single phase
   const vDrop = (2 * d * i * rPer1000Ft) / 1000;
   const pct = (vDrop / v) * 100;
   return { voltageDrop: parseFloat(vDrop.toFixed(2)), voltageDropPct: parseFloat(pct.toFixed(2)), endVoltage: parseFloat((v - vDrop).toFixed(2)) };
@@ -938,6 +971,7 @@ const calculators = [
     slug: "resistor-calculator",
     id: "resistor-calculator",
     title: "Resistor Calculator",
+    category: "other",
     subcategory: "Electronics & Circuits",
     iconName: "Cpu",
     description: "Decode 4-band resistor color codes to calculate resistance value and tolerance.",
@@ -975,6 +1009,7 @@ const calculators = [
     slug: "ohms-law-calculator",
     id: "ohms-law-calculator",
     title: "Ohm's Law Calculator",
+    category: "other",
     subcategory: "Electronics & Circuits",
     iconName: "Zap",
     description: "Calculate Voltage V, Current I, Resistance R, and Electrical Power P.",
@@ -1002,6 +1037,7 @@ const calculators = [
     slug: "electricity-calculator",
     id: "electricity-calculator",
     title: "Electricity Calculator",
+    category: "business",
     subcategory: "Electronics & Circuits",
     iconName: "Zap",
     description: "Calculate electric appliance energy consumption (kWh) and monthly power bill cost.",
@@ -1035,6 +1071,7 @@ const calculators = [
     slug: "ip-subnet-calculator",
     id: "ip-subnet-calculator",
     title: "IP Subnet Calculator",
+    category: "other",
     subcategory: "Internet",
     iconName: "Network",
     description: "Calculate IPv4 subnet mask, network IP, broadcast IP, CIDR prefix, and usable host count.",
@@ -1069,6 +1106,7 @@ const calculators = [
     slug: "password-generator",
     id: "password-generator",
     title: "Password Generator",
+    category: "other",
     subcategory: "Internet",
     iconName: "Lock",
     description: "Generate secure, customizable random passwords with entropy metrics.",
@@ -1098,6 +1136,7 @@ const calculators = [
     slug: "bandwidth-calculator",
     id: "bandwidth-calculator",
     title: "Bandwidth Calculator",
+    category: "business",
     subcategory: "Internet",
     iconName: "Wifi",
     description: "Calculate file download and upload duration based on network bandwidth speed.",
@@ -1127,6 +1166,7 @@ const calculators = [
     slug: "base64-calculator",
     id: "base64-calculator",
     title: "Base64 Encode / Decode",
+    category: "converters",
     subcategory: "Internet",
     iconName: "Code",
     description: "Encode text strings into Base64 format or decode Base64 back to plain text.",
@@ -1158,6 +1198,7 @@ const calculators = [
     slug: "url-encoder-decoder",
     id: "url-encoder-decoder",
     title: "URL Encode / Decode",
+    category: "converters",
     subcategory: "Internet",
     iconName: "Link",
     description: "Encode special characters for web URLs or decode percent-encoded URLs.",
@@ -1191,6 +1232,7 @@ const calculators = [
     slug: "gpa-calculator",
     id: "gpa-calculator",
     title: "GPA Calculator",
+    category: "education",
     subcategory: "Everyday Utility",
     iconName: "GraduationCap",
     description: "Calculate Grade Point Average (GPA) on a 4.0 scale from course grades and credit hours.",
@@ -1223,6 +1265,7 @@ const calculators = [
     slug: "grade-calculator",
     id: "grade-calculator",
     title: "Grade Calculator",
+    category: "education",
     subcategory: "Everyday Utility",
     iconName: "FileCheck",
     description: "Calculate overall class grade and required score on final exam to achieve target grade.",
@@ -1254,6 +1297,7 @@ const calculators = [
     slug: "bra-size-calculator",
     id: "bra-size-calculator",
     title: "Bra Size Calculator",
+    category: "other",
     subcategory: "Everyday Utility",
     iconName: "User",
     description: "Calculate bra band size and cup size based on snug underbust and full bust measurements.",
@@ -1284,6 +1328,7 @@ const calculators = [
     slug: "shoe-size-calculator",
     id: "shoe-size-calculator",
     title: "Shoe Size Conversion Calculator",
+    category: "converters",
     subcategory: "Everyday Utility",
     iconName: "Footprints",
     description: "Convert foot length into international shoe sizes (US, UK, EU, CM).",
@@ -1320,6 +1365,7 @@ const calculators = [
     slug: "tip-calculator",
     id: "tip-calculator",
     title: "Tip Calculator",
+    category: "other",
     subcategory: "Everyday Utility",
     iconName: "DollarSign",
     description: "Calculate tip amount, total restaurant bill, and split bill per person.",
@@ -1351,6 +1397,7 @@ const calculators = [
     slug: "golf-handicap-calculator",
     id: "golf-handicap-calculator",
     title: "Golf Handicap Calculator",
+    category: "other",
     subcategory: "Everyday Utility",
     iconName: "Trophy",
     description: "Calculate World Handicap System (WHS) golf score differentials and handicap index.",
@@ -1379,6 +1426,7 @@ const calculators = [
     slug: "sleep-calculator",
     id: "sleep-calculator",
     title: "Sleep Calculator",
+    category: "other",
     subcategory: "Everyday Utility",
     iconName: "Moon",
     description: "Calculate optimal bedtimes and wake times based on 90-minute natural sleep cycles.",
@@ -1414,6 +1462,7 @@ const calculators = [
     slug: "wind-chill-calculator",
     id: "wind-chill-calculator",
     title: "Wind Chill Calculator",
+    category: "other",
     subcategory: "Weather",
     iconName: "Wind",
     description: "Calculate apparent wind chill temperature based on ambient temperature and wind speed.",
@@ -1441,6 +1490,7 @@ const calculators = [
     slug: "heat-index-calculator",
     id: "heat-index-calculator",
     title: "Heat Index Calculator",
+    category: "other",
     subcategory: "Weather",
     iconName: "Sun",
     description: "Calculate apparent \"feels like\" heat index from air temperature and relative humidity.",
@@ -1471,6 +1521,7 @@ const calculators = [
     slug: "dew-point-calculator",
     id: "dew-point-calculator",
     title: "Dew Point Calculator",
+    category: "other",
     subcategory: "Weather",
     iconName: "Droplets",
     description: "Calculate dew point temperature and relative humidity comfort levels using Magnus formula.",
@@ -1506,6 +1557,7 @@ const calculators = [
     slug: "fuel-cost-calculator",
     id: "fuel-cost-calculator",
     title: "Fuel Cost Calculator",
+    category: "other",
     subcategory: "Transportation",
     iconName: "Fuel",
     description: "Calculate total trip gas cost, gallons needed, and cost per mile for road trips.",
@@ -1537,6 +1589,7 @@ const calculators = [
     slug: "gas-mileage-calculator",
     id: "gas-mileage-calculator",
     title: "Gas Mileage Calculator",
+    category: "other",
     subcategory: "Transportation",
     iconName: "Gauge",
     description: "Calculate vehicle fuel efficiency in MPG, L/100km, and km/L from odometer fill-ups.",
@@ -1567,6 +1620,7 @@ const calculators = [
     slug: "horsepower-calculator",
     id: "horsepower-calculator",
     title: "Horsepower Calculator",
+    category: "other",
     subcategory: "Transportation",
     iconName: "Zap",
     description: "Calculate engine horsepower (HP = Torque × RPM / 5252) and kilowatt equivalent.",
@@ -1594,6 +1648,7 @@ const calculators = [
     slug: "engine-horsepower-calculator",
     id: "engine-horsepower-calculator",
     title: "Engine Horsepower Calculator",
+    category: "other",
     subcategory: "Transportation",
     iconName: "Gauge",
     description: "Calculate drag strip horsepower from vehicle curb weight and quarter-mile trap speed.",
@@ -1621,6 +1676,7 @@ const calculators = [
     slug: "mileage-calculator",
     id: "mileage-calculator",
     title: "Mileage Calculator",
+    category: "other",
     subcategory: "Transportation",
     iconName: "Navigation",
     description: "Calculate business trip mileage reimbursement and travel driving expenses.",
@@ -1647,6 +1703,7 @@ const calculators = [
     slug: "tire-size-calculator",
     id: "tire-size-calculator",
     title: "Tire Size Calculator",
+    category: "other",
     subcategory: "Transportation",
     iconName: "Disc",
     description: "Calculate tire overall diameter, sidewall height, circumference, and speedometer error.",
@@ -1684,6 +1741,7 @@ const calculators = [
     slug: "dice-roller",
     id: "dice-roller",
     title: "Dice Roller",
+    category: "other",
     subcategory: "Entertainment",
     iconName: "Dices",
     description: "Roll virtual polyhedral dice (d4, d6, d8, d10, d12, d20, d100) for tabletop games.",
@@ -1723,6 +1781,7 @@ const calculators = [
     slug: "love-calculator",
     id: "love-calculator",
     title: "Love Calculator",
+    category: "other",
     subcategory: "Entertainment",
     iconName: "Heart",
     description: "Calculate playful love compatibility percentage and match feedback between two names.",
@@ -1843,7 +1902,7 @@ export const ${calc.slug.replace(/-/g, "_")}Config: CalculatorModuleDefinition =
   id: ${JSON.stringify(calc.id)},
   title: ${JSON.stringify(calc.title)},
   slug: ${JSON.stringify(calc.slug)},
-  category: "other",
+  category: ${JSON.stringify(calc.category)},
   subcategory: ${JSON.stringify(calc.subcategory)},
   description: ${JSON.stringify(calc.description)},
   iconName: ${JSON.stringify(calc.iconName)},
@@ -1930,22 +1989,39 @@ export default function ${className}Page() {
   fs.writeFileSync(path.join(targetDir, "tests.ts"), testsContent);
   fs.writeFileSync(path.join(targetDir, "page.tsx"), pageContent);
 
-  console.log(`Generated ${calc.slug}`);
+  console.log(`Generated ${calc.slug} under category: ${calc.category}`);
 });
 
-// Create directory src/calculators/other
-fs.mkdirSync(path.join(__dirname, "..", "src", "calculators", "other"), { recursive: true });
+// Group calculators by category and write index files
+const categories = ["date", "construction", "converters", "education", "business", "other"];
 
-// Write src/calculators/other/index.ts
-const otherIndexContent = `import { CalculatorModuleDefinition } from "../types";
-${calculators.map(c => `import { ${c.slug.replace(/-/g, "_")}Config } from "@/app/calculators/${c.slug}/config";`).join("\n")}
+categories.forEach((cat) => {
+  const catDir = path.join(__dirname, "..", "src", "calculators", cat);
+  fs.mkdirSync(catDir, { recursive: true });
 
-export const OTHER_CALCULATORS: CalculatorModuleDefinition[] = [
-${calculators.map(c => `  ${c.slug.replace(/-/g, "_")}Config,`).join("\n")}
+  const catCalcs = calculators.filter(c => c.category === cat);
+
+  let extraImports = "";
+  let extraSpreads = "";
+  if (cat === "date") {
+    extraImports = `import { AGE_CALCULATOR } from "./age";\n`;
+    extraSpreads = `  AGE_CALCULATOR,\n`;
+  } else if (cat === "business") {
+    extraImports = `import { GST_CALCULATOR } from "./gst";\n`;
+    extraSpreads = `  GST_CALCULATOR,\n`;
+  }
+
+  const varName = `${cat.toUpperCase()}_CALCULATORS`;
+  const indexContent = `import { CalculatorModuleDefinition } from "../types";
+${extraImports}${catCalcs.map(c => `import { ${c.slug.replace(/-/g, "_")}Config } from "@/app/calculators/${c.slug}/config";`).join("\n")}
+
+export const ${varName}: CalculatorModuleDefinition[] = [
+${extraSpreads}${catCalcs.map(c => `  ${c.slug.replace(/-/g, "_")}Config,`).join("\n")}
 ];
 
-export default OTHER_CALCULATORS;
+export default ${varName};
 `;
 
-fs.writeFileSync(path.join(__dirname, "..", "src", "calculators", "other", "index.ts"), otherIndexContent);
-console.log("Updated src/calculators/other/index.ts successfully!");
+  fs.writeFileSync(path.join(catDir, "index.ts"), indexContent);
+  console.log(`Updated src/calculators/${cat}/index.ts (${catCalcs.length} calculators)`);
+});

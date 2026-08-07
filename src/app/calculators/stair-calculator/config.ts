@@ -6,7 +6,7 @@ export const stair_calculatorConfig: CalculatorModuleDefinition = {
   id: "stair-calculator",
   title: "Stair Calculator",
   slug: "stair-calculator",
-  category: "other",
+  category: "construction",
   subcategory: "Housing / Building",
   description: "Calculate stair riser height, tread depth, number of steps, and stringer angle for building code compliance.",
   iconName: "Layers",

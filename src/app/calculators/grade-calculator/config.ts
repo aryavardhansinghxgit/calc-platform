@@ -6,7 +6,7 @@ export const grade_calculatorConfig: CalculatorModuleDefinition = {
   id: "grade-calculator",
   title: "Grade Calculator",
   slug: "grade-calculator",
-  category: "other",
+  category: "education",
   subcategory: "Everyday Utility",
   description: "Calculate overall class grade and required score on final exam to achieve target grade.",
   iconName: "FileCheck",

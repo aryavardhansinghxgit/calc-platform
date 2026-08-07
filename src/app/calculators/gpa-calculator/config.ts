@@ -6,7 +6,7 @@ export const gpa_calculatorConfig: CalculatorModuleDefinition = {
   id: "gpa-calculator",
   title: "GPA Calculator",
   slug: "gpa-calculator",
-  category: "other",
+  category: "education",
   subcategory: "Everyday Utility",
   description: "Calculate Grade Point Average (GPA) on a 4.0 scale from course grades and credit hours.",
   iconName: "GraduationCap",

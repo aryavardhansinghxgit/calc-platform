@@ -6,7 +6,7 @@ export const molecular_weight_calculatorConfig: CalculatorModuleDefinition = {
   id: "molecular-weight-calculator",
   title: "Molecular Weight Calculator",
   slug: "molecular-weight-calculator",
-  category: "other",
+  category: "education",
   subcategory: "Measurements & Units",
   description: "Calculate molar mass and molecular weight of common chemical formulas.",
   iconName: "Atom",

@@ -6,7 +6,7 @@ export const time_card_calculatorConfig: CalculatorModuleDefinition = {
   id: "time-card-calculator",
   title: "Time Card Calculator",
   slug: "time-card-calculator",
-  category: "other",
+  category: "date",
   subcategory: "Date & Time",
   description: "Calculate weekly work hours, overtime, regular pay, and gross earnings.",
   iconName: "Briefcase",

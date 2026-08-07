@@ -6,7 +6,7 @@ export const square_footage_calculatorConfig: CalculatorModuleDefinition = {
   id: "square-footage-calculator",
   title: "Square Footage Calculator",
   slug: "square-footage-calculator",
-  category: "other",
+  category: "construction",
   subcategory: "Housing / Building",
   description: "Calculate total floor, wall, or land square footage and estimated material costs.",
   iconName: "Box",

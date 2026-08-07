@@ -6,7 +6,7 @@ export const gdp_calculatorConfig: CalculatorModuleDefinition = {
   id: "gdp-calculator",
   title: "GDP Calculator",
   slug: "gdp-calculator",
-  category: "other",
+  category: "business",
   subcategory: "Measurements & Units",
   description: "Calculate Gross Domestic Product (GDP) using the expenditure approach (C + I + G + NX).",
   iconName: "DollarSign",

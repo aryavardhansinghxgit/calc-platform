@@ -6,7 +6,7 @@ export const bandwidth_calculatorConfig: CalculatorModuleDefinition = {
   id: "bandwidth-calculator",
   title: "Bandwidth Calculator",
   slug: "bandwidth-calculator",
-  category: "other",
+  category: "business",
   subcategory: "Internet",
   description: "Calculate file download and upload duration based on network bandwidth speed.",
   iconName: "Wifi",

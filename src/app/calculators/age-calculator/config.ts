@@ -6,7 +6,7 @@ export const age_calculatorConfig: CalculatorModuleDefinition = {
   id: "age-calculator",
   title: "Age Calculator",
   slug: "age-calculator",
-  category: "other",
+  category: "date",
   subcategory: "Date & Time",
   description: "Calculate exact age in years, months, days, hours, and minutes from birth date.",
   iconName: "Calendar",

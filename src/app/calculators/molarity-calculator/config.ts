@@ -6,7 +6,7 @@ export const molarity_calculatorConfig: CalculatorModuleDefinition = {
   id: "molarity-calculator",
   title: "Molarity Calculator",
   slug: "molarity-calculator",
-  category: "other",
+  category: "education",
   subcategory: "Measurements & Units",
   description: "Calculate chemical solution molarity (M = moles / L) and required solute mass.",
   iconName: "Droplet",

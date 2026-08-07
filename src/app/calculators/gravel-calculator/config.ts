@@ -6,7 +6,7 @@ export const gravel_calculatorConfig: CalculatorModuleDefinition = {
   id: "gravel-calculator",
   title: "Gravel Calculator",
   slug: "gravel-calculator",
-  category: "other",
+  category: "construction",
   subcategory: "Housing / Building",
   description: "Calculate weight in tons and volume in cubic yards of crushed stone or gravel.",
   iconName: "Layers",

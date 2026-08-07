@@ -6,7 +6,7 @@ export const shoe_size_calculatorConfig: CalculatorModuleDefinition = {
   id: "shoe-size-calculator",
   title: "Shoe Size Conversion Calculator",
   slug: "shoe-size-calculator",
-  category: "other",
+  category: "converters",
   subcategory: "Everyday Utility",
   description: "Convert foot length into international shoe sizes (US, UK, EU, CM).",
   iconName: "Footprints",

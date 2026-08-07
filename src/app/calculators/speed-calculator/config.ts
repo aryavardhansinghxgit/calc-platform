@@ -6,7 +6,7 @@ export const speed_calculatorConfig: CalculatorModuleDefinition = {
   id: "speed-calculator",
   title: "Speed Calculator",
   slug: "speed-calculator",
-  category: "other",
+  category: "converters",
   subcategory: "Measurements & Units",
   description: "Calculate speed, distance, or time from velocity equation v = d / t.",
   iconName: "Zap",

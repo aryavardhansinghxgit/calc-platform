@@ -6,7 +6,7 @@ export const time_zone_calculatorConfig: CalculatorModuleDefinition = {
   id: "time-zone-calculator",
   title: "Time Zone Calculator",
   slug: "time-zone-calculator",
-  category: "other",
+  category: "date",
   subcategory: "Date & Time",
   description: "Convert time between UTC/GMT and major global time zones.",
   iconName: "Globe",

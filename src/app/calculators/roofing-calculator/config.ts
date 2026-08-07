@@ -6,7 +6,7 @@ export const roofing_calculatorConfig: CalculatorModuleDefinition = {
   id: "roofing-calculator",
   title: "Roofing Calculator",
   slug: "roofing-calculator",
-  category: "other",
+  category: "construction",
   subcategory: "Housing / Building",
   description: "Calculate roof surface area, roofing squares, and asphalt shingle bundle requirements.",
   iconName: "Home",
@@ -39,7 +39,7 @@ export const roofing_calculatorConfig: CalculatorModuleDefinition = {
     "name": "pitch",
     "label": "Roof Pitch",
     "type": "select",
-    "defaultValue": "1.054",
+    "defaultValue": "1.118",
     "options": [
       {
         "label": "Low Pitch (4/12)",

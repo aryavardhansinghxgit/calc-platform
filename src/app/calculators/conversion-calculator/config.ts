@@ -6,7 +6,7 @@ export const conversion_calculatorConfig: CalculatorModuleDefinition = {
   id: "conversion-calculator",
   title: "Conversion Calculator",
   slug: "conversion-calculator",
-  category: "other",
+  category: "converters",
   subcategory: "Measurements & Units",
   description: "Universal unit converter for length, mass, volume, temperature, and speed.",
   iconName: "ArrowRightLeft",
