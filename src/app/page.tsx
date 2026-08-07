@@ -2,29 +2,25 @@ import Hero from "@/components/home/Hero";
 import SearchBar from "@/components/home/SearchBar";
 import CategoryGrid from "@/components/home/CategoryGrid";
 import FeaturedCalculators from "@/components/home/FeaturedCalculators";
-import WhyChooseUs from "@/components/home/WhyChooseUs";
 import LatestCalculators from "@/components/home/LatestCalculators";
 
 export default function Home() {
   return (
-    <>
-      {/* 2. Hero */}
+    <div className="space-y-6 pb-6">
+      {/* 1. Compact Command Hero */}
       <Hero />
 
-      {/* 3. Search */}
+      {/* 2. Instant Search & Quick Launch */}
       <SearchBar />
 
-      {/* 4. Categories */}
+      {/* 3. High-Density Category Grid */}
       <CategoryGrid />
 
-      {/* 5. Featured Calculators */}
+      {/* 4. Featured Desktop Calculator Widget */}
       <FeaturedCalculators />
 
-      {/* 6. Why Choose Us */}
-      <WhyChooseUs />
-
-      {/* 7. Latest Calculators */}
+      {/* 5. All Tools Directory */}
       <LatestCalculators />
-    </>
+    </div>
   );
 }

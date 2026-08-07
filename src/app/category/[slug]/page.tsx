@@ -3,8 +3,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Layers, Sparkles } from "lucide-react";
 import { CATEGORIES, getCategoryBySlug } from "@/data/categories";
-import { getCalculatorsByCategory, getAllCalculatorDefinitions } from "@/lib/calculator-engine/registry";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { getCalculatorsByCategory } from "@/calculators";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 interface CategoryPageProps {
@@ -42,69 +41,77 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const registryCalculators = getCalculatorsByCategory(category.slug);
 
   return (
-    <div className="space-y-10 max-w-5xl mx-auto py-2">
-      {/* Category Header */}
-      <div className="space-y-4">
+    <div className="space-y-4 max-w-5xl mx-auto py-2">
+      {/* Compact Breadcrumb & Category Header */}
+      <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-sky-400 transition-colors bg-slate-900/80 px-3.5 py-1.5 rounded-xl border border-slate-800 hover:border-slate-700"
+            className="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors"
           >
-            <ArrowLeft className="h-4 w-4" /> Home
+            <ArrowLeft className="h-3.5 w-3.5" /> All Categories
           </Link>
-          <span className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-3 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">
-            <Sparkles className="h-3.5 w-3.5" /> Category Hub
+          <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+            {registryCalculators.length} Tools
           </span>
         </div>
 
-        <div className="p-8 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900/90 to-slate-950 border border-slate-800 space-y-4">
-          <div className="flex items-center gap-4">
-            <div className="p-3.5 rounded-2xl bg-sky-500/10 border border-sky-500/20 text-sky-400">
-              <CategoryIcon className="h-8 w-8" />
-            </div>
-            <div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-white">
-                {category.name} Calculators
-              </h1>
-              <p className="text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
-                {category.description}
-              </p>
-            </div>
+        <div className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center gap-3">
+          <div className="p-2.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 shrink-0">
+            <CategoryIcon className="h-6 w-6" />
+          </div>
+          <div>
+            <h1 className="text-xl sm:text-2xl font-extrabold text-zinc-900 dark:text-zinc-100">
+              {category.name} Calculators
+            </h1>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-xl leading-normal mt-0.5">
+              {category.description}
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Calculators Grid */}
-      <div className="space-y-4">
-        <h2 className="text-lg font-bold text-white flex items-center gap-2">
-          <Layers className="h-4 w-4 text-sky-400" /> Available {category.name} Tools ({registryCalculators.length})
+      {/* Calculators Compact Responsive Grid (4 columns on lg) */}
+      <div className="space-y-2">
+        <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+          <Layers className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Available Tools
         </h2>
 
         {registryCalculators.length === 0 ? (
-          <Card className="bg-slate-900/60 border-slate-800/80 p-8 text-center space-y-2">
-            <p className="text-sm font-semibold text-slate-300">More {category.name} calculators coming soon!</p>
-            <p className="text-xs text-slate-400">Check back shortly as we launch new tools every week.</p>
-          </Card>
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-6 rounded-xl text-center space-y-1">
+            <p className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">More {category.name} calculators coming soon!</p>
+            <p className="text-[11px] text-zinc-500 dark:text-zinc-400">Check back shortly as we launch new tools every week.</p>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {registryCalculators.map((calc) => (
-              <Link key={calc.id} href={`/calculators/${calc.slug}`}>
-                <Card className="h-full bg-slate-900/80 border-slate-800/80 hover:border-sky-500/40 hover:bg-slate-900 transition-all cursor-pointer group p-5 space-y-3">
-                  <CardHeader className="p-0 space-y-2">
+              <Link key={calc.id} href={`/calculators/${calc.slug}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded-xl">
+                <div className="h-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-sm transition-all cursor-pointer group p-3.5 rounded-xl space-y-2 flex flex-col justify-between">
+                  <div className="space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono font-medium px-2.5 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                      <span className="text-[9px] font-mono font-medium px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                         {calc.category}
                       </span>
-                      <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-sky-400 group-hover:translate-x-1 transition-all" />
+                      <ArrowRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all" />
                     </div>
-                    <CardTitle className="text-base font-bold text-white group-hover:text-sky-300 transition-colors">
+                    <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {calc.title}
-                    </CardTitle>
-                    <CardDescription className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                    </h3>
+                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
                       {calc.description}
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
+                    </p>
+                  </div>
+
+                  {calc.tags && calc.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 pt-1">
+                      {calc.tags.slice(0, 2).map((tag, i) => (
+                        <span key={i} className="text-[9px] text-zinc-400 dark:text-zinc-500 bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </Link>
             ))}
           </div>

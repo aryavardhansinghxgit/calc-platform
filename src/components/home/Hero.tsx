@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sparkles, ShieldCheck, BarChart3, FileSpreadsheet, Zap } from "lucide-react";
+import { Sparkles, Zap, ShieldCheck, FileSpreadsheet, BarChart3 } from "lucide-react";
 
 export interface HeroProps {
   title?: string;
@@ -9,59 +9,26 @@ export interface HeroProps {
 }
 
 export function Hero({
-  title = "Find the Right Calculator",
-  subtitle = "Accurate, instant, easy-to-use tools for personal finance, mortgage schedules, health tracking, and mathematical analysis.",
+  title = "Instant Precision Calculators",
+  subtitle = "High-speed, zero-friction tools for finance, mortgage, health, and math.",
 }: HeroProps) {
-  const highlights = [
-    { icon: Zap, text: "Instant Calculations" },
-    { icon: BarChart3, text: "Interactive Charts" },
-    { icon: FileSpreadsheet, text: "Export PDF & CSV" },
-    { icon: ShieldCheck, text: "100% Private & Free" },
-  ];
-
   return (
-    <section className="text-center space-y-5 max-w-4xl mx-auto pt-6 pb-2">
-      {/* Top Feature Pill */}
-      <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium">
-        <Sparkles className="h-3.5 w-3.5 text-blue-600" />
-        <span>Next-Generation Calculation Platform</span>
+    <section className="text-center space-y-2.5 max-w-3xl mx-auto pt-3 pb-1">
+      {/* Top Pill */}
+      <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-[11px] font-semibold">
+        <Sparkles className="h-3 w-3 text-blue-600 dark:text-blue-400" />
+        <span>Instant Computation Engine</span>
       </div>
 
-      {/* Hero Headline */}
-      <h1 className="text-4xl sm:text-5xl font-semibold tracking-tight text-zinc-900 leading-tight">
-        {title.includes("Calculator") ? (
-          <>
-            {title.split("Calculator")[0]}
-            <span className="text-blue-600">
-              Calculator
-            </span>
-            {title.split("Calculator")[1]}
-          </>
-        ) : (
-          title
-        )}
+      {/* Main Compact Title */}
+      <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+        {title}
       </h1>
 
       {/* Subtitle */}
-      <p className="text-zinc-600 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+      <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto leading-normal">
         {subtitle}
       </p>
-
-      {/* Highlight Features Row */}
-      <div className="pt-2 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-        {highlights.map((item, index) => {
-          const Icon = item.icon;
-          return (
-            <div
-              key={index}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-zinc-200 text-zinc-700 text-xs font-medium shadow-sm"
-            >
-              <Icon className="h-3.5 w-3.5 text-blue-600" />
-              <span>{item.text}</span>
-            </div>
-          );
-        })}
-      </div>
     </section>
   );
 }
