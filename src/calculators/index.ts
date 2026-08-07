@@ -4,6 +4,7 @@ import { MATH_CALCULATORS } from "./math";
 import { BUSINESS_CALCULATORS } from "./business";
 import { HEALTH_CALCULATORS } from "./health";
 import { DATE_CALCULATORS } from "./date";
+import { OTHER_CALCULATORS } from "./other";
 
 export * from "./types";
 
@@ -14,6 +15,7 @@ export const ALL_CALCULATORS: CalculatorModuleDefinition[] = [
   ...BUSINESS_CALCULATORS,
   ...HEALTH_CALCULATORS,
   ...DATE_CALCULATORS,
+  ...OTHER_CALCULATORS,
 ];
 
 // Map lookup table for O(1) slug/id resolution

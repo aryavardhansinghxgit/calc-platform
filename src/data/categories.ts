@@ -8,6 +8,7 @@ import {
   ArrowRightLeft,
   Calendar,
   BarChart3,
+  MoreHorizontal,
   LucideIcon,
 } from "lucide-react";
 import { getCalculatorsByCategory } from "@/calculators";
@@ -50,6 +51,15 @@ const RAW_CATEGORIES: Omit<CategoryData, "count">[] = [
     icon: Calculator,
     featured: true,
     color: "purple",
+  },
+  {
+    id: "other",
+    name: "Other",
+    slug: "other",
+    description: "Everyday utilities, date & time, housing, measurements, electronics, internet, weather, and transport tools.",
+    icon: MoreHorizontal,
+    featured: true,
+    color: "orange",
   },
   {
     id: "construction",
