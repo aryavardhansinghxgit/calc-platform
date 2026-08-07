@@ -2,66 +2,61 @@
 
 import React from "react";
 import Link from "next/link";
-import { Layers, ArrowRight } from "lucide-react";
-import { NAVIGATION_CATEGORIES } from "@/constants/navigation";
+import { ArrowRight, DollarSign, HeartPulse, Calculator as MathIcon, Calendar, Briefcase } from "lucide-react";
+import { CATEGORIES } from "@/data/categories";
+import { getCalculatorsByCategory } from "@/calculators";
 
 export interface CategoryGridProps {
   activeCategory?: string;
   onSelectCategory?: (category: string) => void;
 }
 
-export function CategoryGrid({ activeCategory = "Home" }: CategoryGridProps = {}) {
-  const gridCategories = NAVIGATION_CATEGORIES.filter((cat) => cat.id !== "home");
+export function CategoryGrid() {
+  const mainCategories = CATEGORIES.slice(0, 4);
 
   return (
-    <section id="categories" className="space-y-3 pt-2">
-      <div className="flex items-center justify-between">
-        <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-1.5">
-          <Layers className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Category Hubs
+    <section id="categories" className="space-y-4 pt-2">
+      <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-base font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          Browse All Calculators
         </h2>
         <span className="text-xs text-zinc-400 font-mono">
-          {gridCategories.length} Categories
+          Direct Directory
         </span>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-        {gridCategories.map((cat) => {
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {mainCategories.map((cat) => {
           const Icon = cat.icon;
-          const isActive =
-            activeCategory.toLowerCase() === cat.id.toLowerCase() ||
-            activeCategory.toLowerCase() === cat.name.toLowerCase();
+          const tools = getCalculatorsByCategory(cat.slug);
 
           return (
-            <Link
-              key={cat.id}
-              href={`/category/${cat.slug}`}
-              className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded-xl"
-            >
-              <div
-                className={`p-3.5 rounded-xl border transition-all duration-150 group flex items-center justify-between cursor-pointer ${
-                  isActive
-                    ? "bg-blue-50/70 dark:bg-blue-950/40 border-blue-400 dark:border-blue-600"
-                    : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-blue-300 dark:hover:border-blue-700 hover:bg-zinc-50/80 dark:hover:bg-zinc-800/80"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors shrink-0">
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                      {cat.name}
-                    </h3>
-                    {typeof cat.count === "number" && (
-                      <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-mono">
-                        {cat.count} {cat.count === 1 ? "tool" : "tools"}
-                      </span>
-                    )}
-                  </div>
+            <div key={cat.id} className="space-y-2.5">
+              {/* Category Header Link */}
+              <Link href={`/category/${cat.slug}`} className="group inline-flex items-center gap-2">
+                <div className="p-1.5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800">
+                  <Icon className="h-4 w-4" />
                 </div>
-                <ArrowRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all shrink-0" />
-              </div>
-            </Link>
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  {cat.name} Calculators
+                </h3>
+              </Link>
+
+              {/* Clean Tool Text Link List */}
+              <ul className="space-y-1.5 text-xs">
+                {tools.map((calc) => (
+                  <li key={calc.id}>
+                    <Link
+                      href={`/calculators/${calc.slug}`}
+                      className="text-blue-600 dark:text-blue-400 hover:underline flex items-center justify-between group"
+                    >
+                      <span className="truncate">{calc.title}</span>
+                      <ArrowRight className="h-3 w-3 text-zinc-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           );
         })}
       </div>
