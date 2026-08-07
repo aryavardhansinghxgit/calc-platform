@@ -10,6 +10,7 @@ import {
   BarChart3,
   LucideIcon,
 } from "lucide-react";
+import { getCalculatorsByCategory } from "@/calculators";
 
 export interface CategoryData {
   id: string;
@@ -22,14 +23,13 @@ export interface CategoryData {
   color: string;
 }
 
-export const CATEGORIES: CategoryData[] = [
+const RAW_CATEGORIES: Omit<CategoryData, "count">[] = [
   {
     id: "finance",
     name: "Finance",
     slug: "finance",
     description: "Mortgage, loan EMI, SIP wealth growth, compound interest, and investment return calculators.",
     icon: DollarSign,
-    count: 5,
     featured: true,
     color: "sky",
   },
@@ -39,7 +39,6 @@ export const CATEGORIES: CategoryData[] = [
     slug: "health",
     description: "Body Mass Index (BMI), calorie maintenance, ideal weight, and body composition tools.",
     icon: HeartPulse,
-    count: 2,
     featured: true,
     color: "emerald",
   },
@@ -49,7 +48,6 @@ export const CATEGORIES: CategoryData[] = [
     slug: "math",
     description: "Percentage increase/decrease, fractions, ratios, and scientific mathematical solvers.",
     icon: Calculator,
-    count: 3,
     featured: true,
     color: "purple",
   },
@@ -59,7 +57,6 @@ export const CATEGORIES: CategoryData[] = [
     slug: "construction",
     description: "Concrete volume estimation, brick & tile requirements, and structural dimensions.",
     icon: Hammer,
-    count: 2,
     featured: true,
     color: "amber",
   },
@@ -69,7 +66,6 @@ export const CATEGORIES: CategoryData[] = [
     slug: "education",
     description: "GPA grade point average, final grade target, and academic score conversion tools.",
     icon: GraduationCap,
-    count: 2,
     featured: false,
     color: "blue",
   },
@@ -79,7 +75,6 @@ export const CATEGORIES: CategoryData[] = [
     slug: "business",
     description: "Profit margin, markup percentage, ROI return on investment, and break-even point.",
     icon: Briefcase,
-    count: 4,
     featured: false,
     color: "indigo",
   },
@@ -89,7 +84,6 @@ export const CATEGORIES: CategoryData[] = [
     slug: "converters",
     icon: ArrowRightLeft,
     description: "Unit conversion for length, weight, area, volume, temperature, and currency.",
-    count: 4,
     featured: false,
     color: "teal",
   },
@@ -99,7 +93,6 @@ export const CATEGORIES: CategoryData[] = [
     slug: "date",
     icon: Calendar,
     description: "Age calculator, date difference, working days counter, and countdown duration.",
-    count: 3,
     featured: false,
     color: "rose",
   },
@@ -109,11 +102,15 @@ export const CATEGORIES: CategoryData[] = [
     slug: "statistics",
     description: "Mean, median, mode, standard deviation, probability, and variance analytical solvers.",
     icon: BarChart3,
-    count: 3,
     featured: false,
     color: "violet",
   },
 ];
+
+export const CATEGORIES: CategoryData[] = RAW_CATEGORIES.map((cat) => ({
+  ...cat,
+  count: getCalculatorsByCategory(cat.slug).length,
+}));
 
 export default CATEGORIES;
 

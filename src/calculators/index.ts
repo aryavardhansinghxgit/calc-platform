@@ -1,0 +1,140 @@
+import { CalculatorModuleDefinition } from "./types";
+import { FINANCE_CALCULATORS } from "./finance";
+import { MATH_CALCULATORS } from "./math";
+import { BUSINESS_CALCULATORS } from "./business";
+import { HEALTH_CALCULATORS } from "./health";
+import { DATE_CALCULATORS } from "./date";
+
+export * from "./types";
+
+// Combine all category registries
+export const ALL_CALCULATORS: CalculatorModuleDefinition[] = [
+  ...FINANCE_CALCULATORS,
+  ...MATH_CALCULATORS,
+  ...BUSINESS_CALCULATORS,
+  ...HEALTH_CALCULATORS,
+  ...DATE_CALCULATORS,
+];
+
+// Map lookup table for O(1) slug/id resolution
+const CALCULATOR_REGISTRY: Record<string, CalculatorModuleDefinition> = {};
+
+ALL_CALCULATORS.forEach((calc) => {
+  CALCULATOR_REGISTRY[calc.id.toLowerCase()] = calc;
+  CALCULATOR_REGISTRY[calc.slug.toLowerCase()] = calc;
+});
+
+export function getCalculatorDefinition(idOrSlug: string): CalculatorModuleDefinition | undefined {
+  if (!idOrSlug) return undefined;
+  return CALCULATOR_REGISTRY[idOrSlug.toLowerCase().trim()];
+}
+
+export function getAllCalculatorDefinitions(): CalculatorModuleDefinition[] {
+  return ALL_CALCULATORS;
+}
+
+export function getCalculatorsByCategory(categorySlugOrName: string): CalculatorModuleDefinition[] {
+  if (!categorySlugOrName || categorySlugOrName === "all" || categorySlugOrName === "Home") {
+    return ALL_CALCULATORS;
+  }
+  const target = categorySlugOrName.toLowerCase().trim().replace(/-/g, " ");
+  return ALL_CALCULATORS.filter(
+    (calc) => calc.category.toLowerCase().replace(/-/g, " ") === target
+  );
+}
+
+export function getFeaturedCalculators(): CalculatorModuleDefinition[] {
+  return ALL_CALCULATORS.filter((c) => c.featured);
+}
+
+export function searchCalculators(query: string): CalculatorModuleDefinition[] {
+  if (!query || query.trim() === "") return ALL_CALCULATORS;
+  const q = query.toLowerCase().trim();
+  const tokens = q.split(/\s+/).filter(Boolean);
+
+  const aliases: Record<string, string[]> = {
+    car: ["auto-loan", "loan"],
+    vehicle: ["auto-loan"],
+    auto: ["auto-loan"],
+    house: ["mortgage"],
+    home: ["mortgage"],
+    property: ["mortgage"],
+    tax: ["gst"],
+    vat: ["gst"],
+    investment: ["sip", "compound-interest", "fd", "rd"],
+    deposit: ["fd", "rd", "compound-interest"],
+    returns: ["sip", "compound-interest"],
+    installment: ["emi", "loan", "mortgage"],
+    weight: ["bmi"],
+    fitness: ["bmi"],
+    birthday: ["age"],
+  };
+
+  const expandedTargetIds = new Set<string>();
+  Object.entries(aliases).forEach(([alias, targetIds]) => {
+    if (alias.includes(q) || q.includes(alias)) {
+      targetIds.forEach((id) => expandedTargetIds.add(id));
+    }
+  });
+
+  return ALL_CALCULATORS.filter((calc) => {
+    const title = calc.title.toLowerCase();
+    const desc = calc.description.toLowerCase();
+    const cat = calc.category.toLowerCase();
+    const id = calc.id.toLowerCase();
+    const slug = calc.slug.toLowerCase();
+    const tags = calc.tags ? calc.tags.map((t) => t.toLowerCase()) : [];
+
+    if (
+      title.includes(q) ||
+      desc.includes(q) ||
+      cat.includes(q) ||
+      id.includes(q) ||
+      slug.includes(q) ||
+      tags.some((t) => t.includes(q))
+    ) {
+      return true;
+    }
+
+    if (expandedTargetIds.has(id) || expandedTargetIds.has(slug)) {
+      return true;
+    }
+
+    return tokens.every(
+      (token) =>
+        title.includes(token) ||
+        desc.includes(token) ||
+        cat.includes(token) ||
+        id.includes(token) ||
+        slug.includes(token) ||
+        tags.some((t) => t.includes(token))
+    );
+  });
+}
+
+export function getRelatedCalculators(
+  currentId: string,
+  category?: string,
+  count: number = 3
+): CalculatorModuleDefinition[] {
+  const filtered = ALL_CALCULATORS.filter(
+    (c) =>
+      c.id.toLowerCase() !== currentId.toLowerCase() &&
+      c.slug.toLowerCase() !== currentId.toLowerCase()
+  );
+
+  if (category) {
+    const categoryMatches = filtered.filter(
+      (c) => c.category.toLowerCase() === category.toLowerCase()
+    );
+    if (categoryMatches.length >= count) {
+      return categoryMatches.slice(0, count);
+    }
+    const nonMatches = filtered.filter(
+      (c) => c.category.toLowerCase() !== category.toLowerCase()
+    );
+    return [...categoryMatches, ...nonMatches].slice(0, count);
+  }
+
+  return filtered.slice(0, count);
+}

@@ -1,11 +1,14 @@
 /**
  * SEO & Structured Data (JSON-LD) Helper Module.
+ * Automatically generates Page Title, Meta Description, Canonical URL, OpenGraph,
+ * Twitter Cards, JSON-LD SoftwareApplication, FAQ Schema, and Breadcrumb Schema.
  */
 
 export interface CalculatorSeoProps {
   title: string;
   description: string;
   slug: string;
+  category?: string;
   baseUrl?: string;
   faqs?: Array<{ question: string; answer: string }>;
 }
@@ -50,10 +53,13 @@ export function generateJsonLdSchema({
   title,
   description,
   slug,
+  category = "Calculators",
   baseUrl = "https://calcplatform.example.com",
   faqs = [],
 }: CalculatorSeoProps) {
   const canonicalUrl = `${baseUrl}/calculators/${slug}`;
+  const categorySlug = category.toLowerCase().replace(/\s+/g, "-");
+  const categoryUrl = `${baseUrl}/category/${categorySlug}`;
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -68,8 +74,8 @@ export function generateJsonLdSchema({
       {
         "@type": "ListItem",
         position: 2,
-        name: "Calculators",
-        item: `${baseUrl}/#calculators`,
+        name: `${category} Calculators`,
+        item: categoryUrl,
       },
       {
         "@type": "ListItem",

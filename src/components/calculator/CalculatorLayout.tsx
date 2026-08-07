@@ -4,7 +4,8 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import dynamic from "next/dynamic";
-import { CalculatorDefinition, CalculationResult } from "@/lib/calculator-engine/types";
+import { CalculatorModuleDefinition } from "@/calculators";
+import { CalculationResult } from "@/lib/calculator-engine/types";
 import { CalculatorEngine } from "@/lib/calculator-engine/engine";
 import { CalculatorForm } from "./CalculatorForm";
 import { CalculatorResult } from "./CalculatorResult";
@@ -21,7 +22,7 @@ const BalanceLineChart = dynamic(() => import("./charts/BalanceLineChart").then(
 const AmortizationAreaChart = dynamic(() => import("./charts/AmortizationAreaChart").then((m) => m.AmortizationAreaChart), { ssr: false });
 
 export interface CalculatorLayoutProps {
-  definition: Omit<CalculatorDefinition, "calculate">;
+  definition: Omit<CalculatorModuleDefinition, "calculate">;
   children?: React.ReactNode;
 }
 
@@ -52,6 +53,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   }, [calculationResult]);
 
   const isMortgage = definition.id.toLowerCase().includes("mortgage");
+  const CustomContent = definition.ContentComponent || (isMortgage ? MortgageContentSection : null);
+  const CustomChart = definition.ChartComponent;
 
   return (
     <div className="space-y-4 max-w-5xl mx-auto">
@@ -104,7 +107,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
               />
             </div>
 
-            {isMortgage && calculationResult.data && (
+            {CustomChart && calculationResult.data && (
+              <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3">
+                <CustomChart data={calculationResult.data} inputs={inputs} />
+              </div>
+            )}
+
+            {!CustomChart && isMortgage && calculationResult.data && (
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3">
                 <MortgagePieChart
                   principalAndInterest={Number(calculationResult.data.monthlyPrincipalAndInterest || 0)}
@@ -124,7 +133,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         {/* Charts */}
         {isMortgage && amortizationSchedule.length > 0 && (
           <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none">
+            <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none cursor-pointer">
               Charts — Balance Over Time & Principal vs Interest
             </summary>
             <div className="px-4 pb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -137,7 +146,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         {/* Amortization Table */}
         {isMortgage && amortizationSchedule.length > 0 && (
           <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none">
+            <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none cursor-pointer">
               Amortization Schedule ({amortizationSchedule.length} payments)
             </summary>
             <div className="px-4 pb-4">
@@ -149,7 +158,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         {/* Formula */}
         {definition.formulaDescription && (
           <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none">
+            <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none cursor-pointer">
               Formula & Calculation Method
             </summary>
             <div className="px-4 pb-4">
@@ -162,30 +171,32 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         )}
 
         {/* Educational Content */}
-        {isMortgage && (
+        {CustomContent && (
           <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none">
-              How Mortgages Work — Guide & Examples
+            <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none cursor-pointer">
+              How {definition.title} Works — Guide & Examples
             </summary>
             <div className="px-4 pb-4">
-              <MortgageContentSection />
+              <CustomContent />
             </div>
           </details>
         )}
 
         {/* FAQs */}
-        <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-          <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none">
-            Frequently Asked Questions
-          </summary>
-          <div className="px-4 pb-4">
-            <FAQSection faqs={definition.faqs} />
-          </div>
-        </details>
+        {definition.faqs && definition.faqs.length > 0 && (
+          <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+            <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none cursor-pointer">
+              Frequently Asked Questions
+            </summary>
+            <div className="px-4 pb-4">
+              <FAQSection faqs={definition.faqs} />
+            </div>
+          </details>
+        )}
 
         {/* Related Calculators */}
         <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl" open>
-          <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none">
+          <summary className="px-4 py-3 text-sm font-medium text-zinc-900 dark:text-zinc-200 select-none cursor-pointer">
             Related Calculators
           </summary>
           <div className="px-4 pb-4">
