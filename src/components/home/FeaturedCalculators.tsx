@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ChevronRight } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { CalculatorLayout } from "@/components/calculator/CalculatorLayout";
 import { getFeaturedCalculators, getCalculatorDefinition } from "@/calculators";
@@ -19,7 +19,15 @@ export interface FeaturedCalculatorsProps {
   onSelectCalc?: (id: string) => void;
 }
 
-const defaultFeaturedList: FeaturedItem[] = getFeaturedCalculators().map((c) => ({
+// Select top 8 premier featured tools for clean hero presentation
+const allFeatured = getFeaturedCalculators();
+const premierFeaturedIds = ["mortgage", "auto-loan", "loan", "emi", "sip", "income-tax", "bmi", "budget"];
+
+const defaultFeaturedList: FeaturedItem[] = (
+  allFeatured.filter((c) => premierFeaturedIds.includes(c.id)).length > 0
+    ? allFeatured.filter((c) => premierFeaturedIds.includes(c.id))
+    : allFeatured.slice(0, 8)
+).map((c) => ({
   id: c.id,
   title: c.title,
   desc: c.description,
@@ -41,36 +49,38 @@ export function FeaturedCalculators({
   };
 
   return (
-    <section className="space-y-6 pt-6 border-t border-zinc-200 dark:border-zinc-800">
+    <section className="space-y-4 pt-4 border-t border-border">
       {/* Section Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-400" /> Featured Calculators
+          <h2 className="text-lg sm:text-xl font-extrabold tracking-tight text-foreground flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-primary" /> Premier Interactive Solvers
           </h2>
-          <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
-            Choose a calculator below for instant real-time computation & data breakdown.
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Switch tabs for instant real-time computation & data breakdown.
           </p>
         </div>
       </div>
 
-      {/* Calculator Selector & Active View Tabs */}
-      <Tabs value={activeCalc} onValueChange={handleSelect} className="w-full space-y-6">
-        {/* Calculator Select Tabs Header */}
-        <TabsList className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-1 rounded-xl flex flex-wrap h-auto gap-1">
-          {featuredList.map((item) => (
-            <TabsTrigger
-              key={item.id}
-              value={item.id}
-              className="data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-800 data-[state=active]:text-zinc-900 dark:data-[state=active]:text-zinc-100 data-[state=active]:shadow-sm rounded-lg font-medium text-xs sm:text-sm px-3.5 py-1.5 text-zinc-600 dark:text-zinc-400 transition-all cursor-pointer"
-            >
-              {item.title}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+      {/* Tabs Container */}
+      <Tabs value={activeCalc} onValueChange={handleSelect} className="w-full space-y-4">
+        {/* Horizontal Smooth Scrollable Tab Bar (Single row, non-wrapping, clean alignment) */}
+        <div className="w-full overflow-x-auto pb-1.5 scrollbar-none">
+          <TabsList className="bg-card border border-border p-1 rounded-xl flex items-center gap-1.5 w-max min-w-full">
+            {featuredList.map((item) => (
+              <TabsTrigger
+                key={item.id}
+                value={item.id}
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-xs rounded-lg font-bold text-xs px-3.5 py-2 text-muted-foreground hover:text-foreground whitespace-nowrap transition-all cursor-pointer shrink-0"
+              >
+                {item.title}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </div>
 
-        {/* Dynamic Active Calculator Content Container */}
-        <div className="pt-2">
+        {/* Dynamic Active Calculator View */}
+        <div className="pt-1">
           {featuredList.map((item) => {
             const def = getCalculatorDefinition(item.id);
             if (!def) return null;
