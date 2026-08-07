@@ -19,6 +19,10 @@ import { mileage_calculatorConfig } from "@/app/calculators/mileage-calculator/c
 import { tire_size_calculatorConfig } from "@/app/calculators/tire-size-calculator/config";
 import { dice_rollerConfig } from "@/app/calculators/dice-roller/config";
 import { love_calculatorConfig } from "@/app/calculators/love-calculator/config";
+import { gpa_calculatorConfig } from "@/app/calculators/gpa-calculator/config";
+import { grade_calculatorConfig } from "@/app/calculators/grade-calculator/config";
+import { molarity_calculatorConfig } from "@/app/calculators/molarity-calculator/config";
+import { molecular_weight_calculatorConfig } from "@/app/calculators/molecular-weight-calculator/config";
 
 export const OTHER_CALCULATORS: CalculatorModuleDefinition[] = [
   voltage_drop_calculatorConfig,
@@ -41,6 +45,11 @@ export const OTHER_CALCULATORS: CalculatorModuleDefinition[] = [
   tire_size_calculatorConfig,
   dice_rollerConfig,
   love_calculatorConfig,
+  gpa_calculatorConfig,
+  grade_calculatorConfig,
+  molarity_calculatorConfig,
+  molecular_weight_calculatorConfig,
 ];
 
 export default OTHER_CALCULATORS;
+

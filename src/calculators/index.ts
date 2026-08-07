@@ -5,7 +5,6 @@ import { BUSINESS_CALCULATORS } from "./business";
 import { HEALTH_CALCULATORS } from "./health";
 import { DATE_CALCULATORS } from "./date";
 import { CONSTRUCTION_CALCULATORS } from "./construction";
-import { EDUCATION_CALCULATORS } from "./education";
 import { CONVERTERS_CALCULATORS } from "./converters";
 import { OTHER_CALCULATORS } from "./other";
 
@@ -19,7 +18,6 @@ export const ALL_CALCULATORS: CalculatorModuleDefinition[] = [
   ...HEALTH_CALCULATORS,
   ...DATE_CALCULATORS,
   ...CONSTRUCTION_CALCULATORS,
-  ...EDUCATION_CALCULATORS,
   ...CONVERTERS_CALCULATORS,
   ...OTHER_CALCULATORS,
 ];
