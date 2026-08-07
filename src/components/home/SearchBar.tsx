@@ -64,7 +64,7 @@ export function SearchBar({
         <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none z-10" />
         <Input
           type="text"
-          placeholder="Search 11+ calculators (e.g. Mortgage, EMI, SIP, GST, BMI)..."
+          placeholder="Search 160+ calculators (e.g. Mortgage, EMI, SIP, GST, BMI)..."
           value={query}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
