@@ -6,6 +6,7 @@ export const FD_CALCULATOR: CalculatorModuleDefinition = {
   title: "FD Calculator",
   slug: "fd-calculator",
   category: "Finance",
+  subcategory: "Investment",
   description: "Calculate Fixed Deposit (FD) maturity amount and interest earned.",
   iconName: "Landmark",
   featured: false,

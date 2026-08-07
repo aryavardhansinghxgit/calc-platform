@@ -6,6 +6,7 @@ export const SIP_CALCULATOR: CalculatorModuleDefinition = {
   title: "SIP Calculator",
   slug: "sip-calculator",
   category: "Finance",
+  subcategory: "Investment",
   description: "Estimate Systematic Investment Plan returns, compounding growth, and maturity value.",
   iconName: "TrendingUp",
   featured: true,

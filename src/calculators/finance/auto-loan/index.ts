@@ -6,6 +6,7 @@ export const AUTO_LOAN_CALCULATOR: CalculatorModuleDefinition = {
   title: "Auto Loan Calculator",
   slug: "auto-loan-calculator",
   category: "Finance",
+  subcategory: "Auto",
   description: "Calculate monthly car payments, net loan amount, total interest, sales tax, fees, and total vehicle cost.",
   iconName: "CalcIcon",
   featured: true,

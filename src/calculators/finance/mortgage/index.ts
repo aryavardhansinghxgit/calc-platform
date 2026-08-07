@@ -7,6 +7,7 @@ export const MORTGAGE_CALCULATOR: CalculatorModuleDefinition = {
   title: "Mortgage Calculator",
   slug: "mortgage-calculator",
   category: "Finance",
+  subcategory: "Mortgage & Home",
   description: "Calculate home loan payments, monthly principal & interest breakdown, property taxes, insurance, HOA fees, extra payments, and amortization schedule.",
   iconName: "Home",
   featured: true,

@@ -54,6 +54,10 @@ export interface CalculatorDefinition {
   title: string;
   slug: string;
   category: string;
+  subcategory?: string;
+  priority?: number;
+  keywords?: string[];
+  relatedCalculators?: string[];
   description: string;
   iconName?: string;
   inputs: CalculatorInput[];

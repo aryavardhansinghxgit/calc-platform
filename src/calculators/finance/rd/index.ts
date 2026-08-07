@@ -6,6 +6,7 @@ export const RD_CALCULATOR: CalculatorModuleDefinition = {
   title: "RD Calculator",
   slug: "rd-calculator",
   category: "Finance",
+  subcategory: "Investment",
   description: "Calculate Recurring Deposit (RD) total investment returns and interest maturity value.",
   iconName: "RefreshCw",
   featured: false,

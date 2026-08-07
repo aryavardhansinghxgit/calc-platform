@@ -6,6 +6,7 @@ export const COMPOUND_INTEREST_CALCULATOR: CalculatorModuleDefinition = {
   title: "Compound Interest Calculator",
   slug: "compound-interest-calculator",
   category: "Finance",
+  subcategory: "Investment",
   description: "Calculate compounding growth for savings, fixed deposits, and long-term investments.",
   iconName: "TrendingUp",
   featured: true,
