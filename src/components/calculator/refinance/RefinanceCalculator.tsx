@@ -122,7 +122,6 @@ export function RefinanceCalculator() {
   });
 
   // 7. Advanced Accordion State
-  const [isAdvancedOpen, setIsAdvancedOpen] = useState<boolean>(false);
   const [refinanceType, setRefinanceType] = useState<RefinanceType>("rate-and-term");
 
   // 8. Active Results View Tab: "analytics" vs "amortization"
@@ -147,6 +146,24 @@ export function RefinanceCalculator() {
       console.error(e);
     }
   }, []);
+
+  // Goal Selector Click Handler - Actively updates Goal & presets smart parameters
+  const handleSelectGoal = (goal: RefinanceGoal) => {
+    setRefinanceGoal(goal);
+    if (goal === "shorten-loan") {
+      if (newLoanTermYears >= 20) {
+        setNewLoanTermYears(15);
+      }
+    } else if (goal === "access-equity") {
+      if (cashOutAmount === 0) {
+        setCashOutAmount(30000);
+      }
+    } else if (goal === "reduce-payment") {
+      if (newLoanTermYears < 20) {
+        setNewLoanTermYears(30);
+      }
+    }
+  };
 
   // Debt Consolidation Handlers
   const handleAddDebtItem = () => {
@@ -185,7 +202,7 @@ export function RefinanceCalculator() {
       newInterestRate,
       discountPoints,
       closingCosts,
-      cashOutAmount,
+      cashOutAmount: refinanceGoal === "access-equity" ? cashOutAmount : 0,
       homeMarketValue,
       maxLtvPercent,
       consolidatedDebts: refinanceGoal === "consolidate-debt" ? consolidatedDebts : [],
@@ -237,7 +254,7 @@ export function RefinanceCalculator() {
   };
 
   const handleCopyResults = () => {
-    const text = `Refinance Analysis:\nScore: ${results.refinanceScore}/100 (${results.refinanceRating})\nMonthly Savings: ${formatCurrency(results.monthlySavings)}\nNet Savings: ${formatCurrency(results.netSavings)}\nBreak-Even: ${results.breakEvenMonths} mos\nNew Monthly Payment: ${formatCurrency(results.newMonthlyPayment)}`;
+    const text = `Refinance Analysis:\nGoal: ${refinanceGoal}\nScore: ${results.refinanceScore}/100 (${results.refinanceRating})\nMonthly Savings: ${formatCurrency(results.monthlySavings)}\nNet Savings: ${formatCurrency(results.netSavings)}\nBreak-Even: ${results.breakEvenMonths} mos\nNew Monthly Payment: ${formatCurrency(results.newMonthlyPayment)}`;
     navigator.clipboard.writeText(text);
     setCopySuccessMsg("Refinance summary copied!");
     setTimeout(() => setCopySuccessMsg(""), 2000);
@@ -333,8 +350,8 @@ export function RefinanceCalculator() {
             <button
               key={goal.id}
               type="button"
-              onClick={() => setRefinanceGoal(goal.id as RefinanceGoal)}
-              className={`p-2 rounded-xl text-xs font-bold transition-all text-center border ${
+              onClick={() => handleSelectGoal(goal.id as RefinanceGoal)}
+              className={`p-2.5 rounded-xl text-xs font-bold transition-all text-center border cursor-pointer ${
                 refinanceGoal === goal.id
                   ? "bg-white text-blue-900 border-white shadow-md scale-[1.02]"
                   : "bg-white/10 hover:bg-white/20 border-white/20 text-white"
@@ -352,7 +369,7 @@ export function RefinanceCalculator() {
           <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
             Selected Goal:
           </span>
-          <span className="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-semibold uppercase">
+          <span className="px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase">
             {refinanceGoal.replace("-", " ")}
           </span>
         </div>
@@ -638,7 +655,7 @@ export function RefinanceCalculator() {
                   <button
                     type="button"
                     onClick={() => setIsItemizedModalOpen(true)}
-                    className="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+                    className="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     <Calculator className="h-3 w-3" /> Itemize Fees
                   </button>
@@ -659,7 +676,149 @@ export function RefinanceCalculator() {
             </div>
           </div>
 
-          {/* CASH-OUT REFINANCE MODULE */}
+          {/* DYNAMIC GOAL-SPECIFIC MODULES */}
+
+          {/* GOAL 1: SHORTEN LOAN DURATION MODULE */}
+          {refinanceGoal === "shorten-loan" && (
+            <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/60 space-y-3">
+              <div className="flex items-center justify-between border-b border-blue-200 dark:border-blue-900/60 pb-2">
+                <h4 className="font-extrabold text-xs uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">
+                  <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Shorten Loan Duration Module
+                </h4>
+                <span className="text-[11px] font-semibold text-blue-700 dark:text-blue-300">
+                  Goal: Pay off debt years earlier
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
+                <div>
+                  <Label htmlFor="shortenTermYears" className="text-zinc-700 dark:text-zinc-300 font-medium">
+                    Target New Term (years)
+                  </Label>
+                  <Input
+                    id="shortenTermYears"
+                    type="number"
+                    min={1}
+                    max={50}
+                    value={newLoanTermYears}
+                    onChange={(e) => setNewLoanTermYears(Math.max(1, Number(e.target.value)))}
+                    className="mt-1 bg-white dark:bg-zinc-900 font-mono text-xs"
+                  />
+                </div>
+
+                <div className="sm:col-span-2 flex flex-wrap gap-2 items-center">
+                  <span className="text-xs text-zinc-500 font-medium">Quick Presets:</span>
+                  {[10, 15, 20].map((term) => (
+                    <button
+                      key={`preset-term-${term}`}
+                      type="button"
+                      onClick={() => setNewLoanTermYears(term)}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors border cursor-pointer ${
+                        newLoanTermYears === term
+                          ? "bg-blue-600 text-white border-blue-600 shadow-xs"
+                          : "bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:border-blue-400"
+                      }`}
+                    >
+                      {term} Years
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px] font-mono">
+                <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
+                  <span className="text-zinc-500 block">Current Remaining</span>
+                  <span className="font-bold text-zinc-900 dark:text-zinc-100">
+                    {Math.round(results.currentRemainingMonths / 12)} Yrs ({results.currentRemainingMonths} mos)
+                  </span>
+                </div>
+                <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
+                  <span className="text-zinc-500 block">New Refinanced Term</span>
+                  <span className="font-bold text-blue-600 dark:text-blue-400">
+                    {newLoanTermYears} Yrs ({newLoanTermYears * 12} mos)
+                  </span>
+                </div>
+                <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
+                  <span className="text-zinc-500 block">Time Saved</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                    {Math.max(0, Math.round(results.currentRemainingMonths / 12 - newLoanTermYears))} Yrs ({Math.max(0, results.currentRemainingMonths - newLoanTermYears * 12)} mos)
+                  </span>
+                </div>
+                <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
+                  <span className="text-zinc-500 block">Lifetime Interest Saved</span>
+                  <span className="font-bold text-purple-600 dark:text-purple-400">{formatCurrency(results.interestSaved)}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* GOAL 2: REDUCE MONTHLY PAYMENT MODULE */}
+          {refinanceGoal === "reduce-payment" && (
+            <div className="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/60 space-y-3">
+              <div className="flex items-center justify-between border-b border-emerald-200 dark:border-emerald-900/60 pb-2">
+                <h4 className="font-extrabold text-xs uppercase tracking-wider text-emerald-900 dark:text-emerald-200 flex items-center gap-1.5">
+                  <DollarSign className="h-4 w-4 text-emerald-600 dark:text-emerald-400" /> Reduce Monthly Payment Module
+                </h4>
+                <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">
+                  Goal: Maximize monthly out-of-pocket cash flow
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-mono">
+                <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
+                  <span className="text-zinc-500 block">Current Monthly Payment</span>
+                  <span className="font-bold text-zinc-900 dark:text-zinc-100">{formatCurrency(results.currentMonthlyPayment)}</span>
+                </div>
+                <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
+                  <span className="text-zinc-500 block">New Monthly Payment</span>
+                  <span className="font-bold text-blue-600 dark:text-blue-400">{formatCurrency(results.newMonthlyPayment)}</span>
+                </div>
+                <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
+                  <span className="text-zinc-500 block">Monthly Out-of-Pocket Savings</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">{formatCurrency(results.monthlySavings)} / mo ({results.monthlySavingsPercent}%)</span>
+                </div>
+                <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
+                  <span className="text-zinc-500 block">Annual Cash Saved</span>
+                  <span className="font-bold text-purple-600 dark:text-purple-400">{formatCurrency(results.monthlySavings * 12)} / yr</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* GOAL 3: REDUCE LIFETIME INTEREST MODULE */}
+          {refinanceGoal === "reduce-interest" && (
+            <div className="p-4 rounded-xl bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-900/60 space-y-3">
+              <div className="flex items-center justify-between border-b border-purple-200 dark:border-purple-900/60 pb-2">
+                <h4 className="font-extrabold text-xs uppercase tracking-wider text-purple-900 dark:text-purple-200 flex items-center gap-1.5">
+                  <Percent className="h-4 w-4 text-purple-600 dark:text-purple-400" /> Reduce Lifetime Interest Module
+                </h4>
+                <span className="text-[11px] font-semibold text-purple-700 dark:text-purple-300">
+                  Goal: Minimize total borrowing cost paid to lender
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-mono">
+                <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
+                  <span className="text-zinc-500 block">Current Remaining Interest</span>
+                  <span className="font-bold text-amber-600 dark:text-amber-400">{formatCurrency(results.currentRemainingInterest)}</span>
+                </div>
+                <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
+                  <span className="text-zinc-500 block">New Loan Total Interest</span>
+                  <span className="font-bold text-blue-600 dark:text-blue-400">{formatCurrency(results.newLoanTotalInterest)}</span>
+                </div>
+                <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
+                  <span className="text-zinc-500 block">Total Interest Saved</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">{formatCurrency(results.interestSaved)} ({results.interestReductionPercent}%)</span>
+                </div>
+                <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
+                  <span className="text-zinc-500 block">Net Lifetime Benefit</span>
+                  <span className="font-bold text-purple-600 dark:text-purple-400">{formatCurrency(results.netSavings)}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* GOAL 4: CASH-OUT REFINANCE EQUITY MODULE */}
           {refinanceGoal === "access-equity" && (
             <div className="p-4 rounded-xl bg-purple-50/60 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900/60 space-y-3">
               <h4 className="font-extrabold text-xs uppercase tracking-wider text-purple-900 dark:text-purple-200">
@@ -731,7 +890,7 @@ export function RefinanceCalculator() {
             </div>
           )}
 
-          {/* DEBT CONSOLIDATION MODULE */}
+          {/* GOAL 5: DEBT CONSOLIDATION MODULE */}
           {refinanceGoal === "consolidate-debt" && (
             <div className="p-4 rounded-xl bg-teal-50/60 dark:bg-teal-950/20 border border-teal-200 dark:border-teal-900/60 space-y-3">
               <div className="flex items-center justify-between border-b border-teal-200 dark:border-teal-900/60 pb-2">
@@ -804,7 +963,7 @@ export function RefinanceCalculator() {
               type="button"
               variant="outline"
               onClick={handleReset}
-              className="h-9 text-xs font-semibold border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 bg-white dark:bg-zinc-900"
+              className="h-9 text-xs font-semibold border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 bg-white dark:bg-zinc-900 cursor-pointer"
             >
               <RotateCcw className="h-3.5 w-3.5 mr-1" /> Reset Inputs
             </Button>
@@ -862,7 +1021,7 @@ export function RefinanceCalculator() {
           <button
             type="button"
             onClick={() => setActiveResultsTab("analytics")}
-            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
               activeResultsTab === "analytics"
                 ? "bg-blue-600 text-white shadow-xs"
                 : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
@@ -873,7 +1032,7 @@ export function RefinanceCalculator() {
           <button
             type="button"
             onClick={() => setActiveResultsTab("amortization")}
-            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
               activeResultsTab === "amortization"
                 ? "bg-blue-600 text-white shadow-xs"
                 : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
@@ -1000,7 +1159,7 @@ export function RefinanceCalculator() {
                   <button
                     type="button"
                     onClick={() => setActiveChartTab("payment")}
-                    className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors ${
+                    className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors cursor-pointer ${
                       activeChartTab === "payment"
                         ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
                         : "text-zinc-500"
@@ -1011,7 +1170,7 @@ export function RefinanceCalculator() {
                   <button
                     type="button"
                     onClick={() => setActiveChartTab("interest")}
-                    className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors ${
+                    className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors cursor-pointer ${
                       activeChartTab === "interest"
                         ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
                         : "text-zinc-500"
@@ -1022,7 +1181,7 @@ export function RefinanceCalculator() {
                   <button
                     type="button"
                     onClick={() => setActiveChartTab("breakeven")}
-                    className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors ${
+                    className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors cursor-pointer ${
                       activeChartTab === "breakeven"
                         ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
                         : "text-zinc-500"
@@ -1106,7 +1265,7 @@ export function RefinanceCalculator() {
             <button
               type="button"
               onClick={() => setIsSaveModalOpen(false)}
-              className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+              className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
@@ -1160,11 +1319,11 @@ export function RefinanceCalculator() {
                     type="button"
                     variant="outline"
                     onClick={() => setIsSaveModalOpen(false)}
-                    className="h-8 text-xs"
+                    className="h-8 text-xs cursor-pointer"
                   >
                     Cancel
                   </Button>
-                  <Button type="submit" className="h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white">
+                  <Button type="submit" className="h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
                     Save Setup
                   </Button>
                 </div>
