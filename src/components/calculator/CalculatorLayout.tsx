@@ -19,6 +19,7 @@ import { AmortizationCalculator } from "./amortization/AmortizationCalculator";
 import { LoanCalculator } from "./loan/LoanCalculator";
 import { EmiCalculator } from "./emi/EmiCalculator";
 import { HouseAffordabilityCalculator } from "./house-affordability/HouseAffordabilityCalculator";
+import { RefinanceCalculator } from "./refinance/RefinanceCalculator";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -83,6 +84,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isLoan = definition.id === "loan" || definition.slug === "loan-calculator";
   const isEmi = definition.id === "emi" || definition.slug === "emi-calculator";
   const isHouseAffordability = definition.id === "house-affordability" || definition.slug === "house-affordability-calculator";
+  const isRefinance = definition.id === "refinance" || definition.slug === "refinance-calculator";
   const CustomContent = definition.ContentComponent || (isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
@@ -121,7 +123,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isHouseAffordability ? (
+            {isRefinance ? (
+              <RefinanceCalculator />
+            ) : isHouseAffordability ? (
               <HouseAffordabilityCalculator />
             ) : isEmi ? (
               <EmiCalculator />
