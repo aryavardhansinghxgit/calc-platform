@@ -49,6 +49,7 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
+import { CompoundInterestContent } from "./CompoundInterestContent";
 import {
   CompoundingFrequency,
   convertInterestRate,
@@ -1057,97 +1058,9 @@ export function CompoundInterestCalculator() {
       </div>
 
       {/* ==========================================
-          SECTION 8: EDUCATIONAL CONTENT & FAQS
+          SECTION 8: COMPREHENSIVE EDUCATIONAL GUIDE & 15+ FAQS
          ========================================== */}
-      <div className="bg-white dark:bg-zinc-900 rounded-xl p-6 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-8">
-        {/* Educational Content */}
-        <div className="space-y-6">
-          <h2 className="text-lg font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <BookOpen className="h-5 w-5 text-blue-600" /> Educational Guide: Understanding Compound Interest & Rate Conversions
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-            <div className="space-y-2">
-              <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200">1. What Is Compound Interest?</h3>
-              <p>
-                Compound interest is the interest earned not only on the initial principal deposit but also on the accumulated interest of previous periods. Often described as "interest on interest", compounding accelerates asset growth exponentially over time.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200">2. Simple Interest vs Compound Interest</h3>
-              <p>
-                Simple interest is calculated strictly as a percentage of the principal amount. In contrast, compound interest recalculates interest at each interval based on the updated total balance.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200">3. Different Compounding Frequencies</h3>
-              <p>
-                Interest can compound daily, weekly, monthly, quarterly, semi-annually, or annually. The higher the compounding frequency, the greater the effective annual yield for a given nominal rate.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200">4. APR vs APY</h3>
-              <p>
-                Annual Percentage Rate (APR) represents the nominal annual rate without accounting for intra-year compounding. Annual Percentage Yield (APY) reflects the true effective annual interest earned including compounding effects.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200">5. Effective Annual Rate (EAR)</h3>
-              <p>
-                Effective Annual Rate (EAR) is the standard metric used in financial engineering to compare rates with different compounding intervals.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200">6. Continuous Compounding Formula</h3>
-              <p>
-                As compounding frequency approaches infinity, interest compounds continuously using Euler's constant e ≈ 2.71828.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* FAQs */}
-        <div className="space-y-4 border-t border-zinc-100 dark:border-zinc-800 pt-6">
-          <h2 className="text-lg font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <HelpCircle className="h-5 w-5 text-indigo-600" /> Frequently Asked Questions (FAQ)
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            <div className="p-4 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1">
-              <h4 className="font-bold text-zinc-800 dark:text-zinc-200">What is compound interest?</h4>
-              <p className="text-zinc-600 dark:text-zinc-400">
-                It is interest calculated on the initial principal along with all accumulated interest from prior periods.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1">
-              <h4 className="font-bold text-zinc-800 dark:text-zinc-200">What is APR?</h4>
-              <p className="text-zinc-600 dark:text-zinc-400">
-                Annual Percentage Rate is the annual interest rate expressed without compounding.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1">
-              <h4 className="font-bold text-zinc-800 dark:text-zinc-200">What is APY?</h4>
-              <p className="text-zinc-600 dark:text-zinc-400">
-                Annual Percentage Yield is the real annual rate of return taking compounding into account.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1">
-              <h4 className="font-bold text-zinc-800 dark:text-zinc-200">What is the Rule of 72?</h4>
-              <p className="text-zinc-600 dark:text-zinc-400">
-                A rule of thumb to estimate doubling time by dividing 72 by the annual return rate.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <CompoundInterestContent />
 
       {/* ==========================================
           EXECUTIVE PRINT / PDF REPORT MODAL
