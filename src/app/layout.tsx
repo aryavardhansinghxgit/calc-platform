@@ -42,11 +42,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TooltipProvider>
-            <Navbar />
-            <main className="mx-auto max-w-7xl px-4 sm:px-6 py-4 flex-1 w-full space-y-4">
-              {children}
-            </main>
-            <Footer />
+            <div id="main-web-app" className="no-print-main-app flex flex-col min-h-screen">
+              <Navbar />
+              <main className="mx-auto max-w-7xl px-4 sm:px-6 py-4 flex-1 w-full space-y-4">
+                {children}
+              </main>
+              <Footer />
+            </div>
           </TooltipProvider>
         </ThemeProvider>
       </body>

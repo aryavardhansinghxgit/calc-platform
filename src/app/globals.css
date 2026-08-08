@@ -134,43 +134,84 @@ details[open] > summary::before {
    EXECUTIVE REPORT PRINT & PDF GENERATION RULES
    ------------------------------------------------------------- */
 @media print {
-  /* Hide all website chrome, background, headers, navbars, sidebars, footers, forms, buttons */
-  body * {
-    visibility: hidden !important;
-  }
-
+  /* 1. Completely HIDE the main web app tree */
+  #main-web-app,
+  .no-print-main-app,
   header,
   footer,
   nav,
   aside,
   form,
   button,
-  .no-print,
-  .print-hide {
+  .no-print {
     display: none !important;
   }
 
-  /* Make ONLY the printable report section visible */
-  .printable-report-section,
-  .printable-report-section * {
-    visibility: visible !important;
+  /* 2. Reset document root layout */
+  html, body {
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #000000 !important;
   }
 
-  .printable-report-section {
+  /* 3. Strip modal overlay backdrops & dark containers */
+  .no-print-wrapper {
+    position: static !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* 4. Render ONLY the portal containing the executive report */
+  #printable-report-portal {
+    display: block !important;
     position: absolute !important;
     left: 0 !important;
     top: 0 !important;
     width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .printable-report-section {
+    display: block !important;
+    visibility: visible !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
     background: #ffffff !important;
     color: #000000 !important;
     box-shadow: none !important;
     border: none !important;
+    overflow: visible !important;
+    break-inside: avoid;
+  }
+
+  /* Ensure all descendant elements inside printable report retain text visibility & color */
+  .printable-report-section,
+  .printable-report-section * {
+    visibility: visible !important;
+    color: #000000 !important;
   }
 
   @page {
     size: A4 portrait;
-    margin: 12mm;
+    margin: 8mm;
   }
 }
