@@ -23,6 +23,7 @@ import { RefinanceCalculator } from "./refinance/RefinanceCalculator";
 import { AutoLoanCalculator } from "./auto-loan/AutoLoanCalculator";
 import { AutoLeaseCalculator } from "./auto-lease/AutoLeaseCalculator";
 import { CompoundInterestCalculator } from "./compound-interest/CompoundInterestCalculator";
+import { SimpleInterestCalculator } from "./simple-interest/SimpleInterestCalculator";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -100,6 +101,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isAutoLoan = definition.id === "auto-loan" || definition.slug === "auto-loan-calculator";
   const isAutoLease = definition.id === "auto-lease" || definition.slug === "auto-lease-calculator";
   const isCompoundInterest = definition.id === "compound-interest" || definition.slug === "compound-interest-calculator";
+  const isSimpleInterest = definition.id === "simple-interest" || definition.slug === "simple-interest-calculator";
   const CustomContent = definition.ContentComponent || (isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
@@ -138,7 +140,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isCompoundInterest ? (
+            {isSimpleInterest ? (
+              <SimpleInterestCalculator />
+            ) : isCompoundInterest ? (
               <CompoundInterestCalculator />
             ) : isAutoLease ? (
               <AutoLeaseCalculator />
