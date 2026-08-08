@@ -57,10 +57,55 @@ export function AutoLeaseCalculator() {
   const [amountOwedOnTradeIn, setAmountOwedOnTradeIn] = useState<number>(0);
   const [leaseTermMonths, setLeaseTermMonths] = useState<number>(36);
 
-  // Interest Input Selector: "apr" or "moneyFactor"
-  const [interestInputType, setInterestInputType] = useState<"apr" | "moneyFactor">("apr");
-  const [aprPercent, setAprPercent] = useState<number>(6.0);
-  const [moneyFactor, setMoneyFactor] = useState<number>(0.0025);
+  // Interest Rate Configuration (Two-Way Live Synchronization)
+  const [aprInput, setAprInput] = useState<string>("6.0");
+  const [moneyFactorInput, setMoneyFactorInput] = useState<string>("0.0025");
+  const [aprError, setAprError] = useState<string | null>(null);
+  const [moneyFactorError, setMoneyFactorError] = useState<string | null>(null);
+
+  const aprPercent = useMemo(() => {
+    const p = parseFloat(aprInput);
+    return isNaN(p) || p < 0 ? 0 : p;
+  }, [aprInput]);
+
+  const moneyFactor = useMemo(() => {
+    const mf = parseFloat(moneyFactorInput);
+    return isNaN(mf) || mf < 0 ? 0 : mf;
+  }, [moneyFactorInput]);
+
+  const handleAprChange = (valStr: string) => {
+    setAprInput(valStr);
+    const num = parseFloat(valStr);
+    if (valStr.trim() === "" || isNaN(num)) {
+      setAprError("Please enter a valid APR percentage.");
+      return;
+    }
+    if (num < 0) {
+      setAprError("APR must be greater than or equal to 0.");
+      return;
+    }
+    setAprError(null);
+    setMoneyFactorError(null);
+    const mf = num / 2400;
+    setMoneyFactorInput(Number(mf.toFixed(6)).toString());
+  };
+
+  const handleMoneyFactorChange = (valStr: string) => {
+    setMoneyFactorInput(valStr);
+    const num = parseFloat(valStr);
+    if (valStr.trim() === "" || isNaN(num)) {
+      setMoneyFactorError("Please enter a valid Money Factor.");
+      return;
+    }
+    if (num < 0) {
+      setMoneyFactorError("Money Factor must be greater than or equal to 0.");
+      return;
+    }
+    setMoneyFactorError(null);
+    setAprError(null);
+    const apr = num * 2400;
+    setAprInput(Number(apr.toFixed(4)).toString());
+  };
 
   // Residual Value Selector: "percent" or "amount"
   const [residualInputType, setResidualInputType] = useState<"percent" | "amount">("percent");
@@ -96,17 +141,6 @@ export function AutoLeaseCalculator() {
   const [savedScenarios, setSavedScenarios] = useState<{ name: string; payment: number; date: string }[]>([]);
   const [shareToast, setShareToast] = useState<boolean>(false);
 
-  // Auto-convert APR <-> Money Factor when user types
-  const handleAprChange = (val: number) => {
-    setAprPercent(val);
-    setMoneyFactor(aprToMoneyFactor(val));
-  };
-
-  const handleMoneyFactorChange = (val: number) => {
-    setMoneyFactor(val);
-    setAprPercent(moneyFactorToApr(val));
-  };
-
   // Perform Calculations
   const calculationInputs: ExtendedAutoLeaseInput = useMemo(
     () => ({
@@ -116,7 +150,6 @@ export function AutoLeaseCalculator() {
       tradeInValue,
       amountOwedOnTradeIn,
       leaseTermMonths,
-      interestInputType,
       aprPercent,
       moneyFactor,
       residualInputType,
@@ -143,7 +176,6 @@ export function AutoLeaseCalculator() {
       tradeInValue,
       amountOwedOnTradeIn,
       leaseTermMonths,
-      interestInputType,
       aprPercent,
       moneyFactor,
       residualInputType,
@@ -441,72 +473,72 @@ export function AutoLeaseCalculator() {
                   </div>
                 </div>
 
-                {/* INTEREST INPUT SELECTOR (MONEY FACTOR vs APR CONVERTER) */}
-                <div className="p-3.5 rounded-lg bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">
-                      <Percent className="h-4 w-4 text-blue-600" />
-                      Interest Input Selector & Auto-Converter
-                    </span>
-
-                    {/* Toggle selector */}
-                    <div className="inline-flex items-center p-0.5 rounded bg-white dark:bg-zinc-900 border border-blue-200 dark:border-blue-800">
-                      <button
-                        type="button"
-                        onClick={() => setInterestInputType("apr")}
-                        className={`px-2.5 py-0.5 text-[11px] font-bold rounded transition-colors ${
-                          interestInputType === "apr"
-                            ? "bg-blue-600 text-white"
-                            : "text-zinc-600 dark:text-zinc-400"
-                        }`}
-                      >
-                        Option B: APR %
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setInterestInputType("moneyFactor")}
-                        className={`px-2.5 py-0.5 text-[11px] font-bold rounded transition-colors ${
-                          interestInputType === "moneyFactor"
-                            ? "bg-blue-600 text-white"
-                            : "text-zinc-600 dark:text-zinc-400"
-                        }`}
-                      >
-                        Option A: Money Factor
-                      </button>
+                {/* INTEREST RATE CONFIGURATION CARD */}
+                <div className="p-4 rounded-xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/40 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1 rounded bg-blue-100 dark:bg-blue-900/60 text-blue-600 dark:text-blue-400">
+                      <Percent className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                        Interest Rate Configuration
+                      </h3>
+                      <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
+                        Two-way live synchronization between APR % and Money Factor
+                      </p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] text-zinc-600 dark:text-zinc-400 mb-1">
-                        Equivalent APR (%)
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        APR (%)
                       </label>
                       <Input
                         type="number"
-                        step="0.1"
-                        value={aprPercent}
-                        onChange={(e) => handleAprChange(Math.max(0, Number(e.target.value)))}
-                        className="h-8 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
+                        step="0.01"
+                        value={aprInput}
+                        onChange={(e) => handleAprChange(e.target.value)}
+                        className={`h-9 text-xs font-mono bg-white dark:bg-zinc-900 ${
+                          aprError ? "border-rose-500 focus-visible:ring-rose-500" : "border-zinc-200 dark:border-zinc-800"
+                        }`}
                       />
+                      {aprError && (
+                        <span className="text-[11px] text-rose-500 mt-1 block font-medium">
+                          {aprError}
+                        </span>
+                      )}
                     </div>
 
                     <div>
-                      <label className="block text-[11px] text-zinc-600 dark:text-zinc-400 mb-1">
-                        Money Factor (e.g. 0.0025)
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Money Factor
                       </label>
                       <Input
                         type="number"
                         step="0.0001"
-                        value={moneyFactor}
-                        onChange={(e) => handleMoneyFactorChange(Math.max(0, Number(e.target.value)))}
-                        className="h-8 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
+                        value={moneyFactorInput}
+                        onChange={(e) => handleMoneyFactorChange(e.target.value)}
+                        className={`h-9 text-xs font-mono bg-white dark:bg-zinc-900 ${
+                          moneyFactorError ? "border-rose-500 focus-visible:ring-rose-500" : "border-zinc-200 dark:border-zinc-800"
+                        }`}
                       />
+                      {moneyFactorError && (
+                        <span className="text-[11px] text-rose-500 mt-1 block font-medium">
+                          {moneyFactorError}
+                        </span>
+                      )}
                     </div>
                   </div>
 
-                  <p className="text-[10px] text-blue-700 dark:text-blue-300 font-mono">
-                    Formula: Money Factor = APR / 2400 &nbsp;|&nbsp; APR = Money Factor × 2400
-                  </p>
+                  <div className="pt-2 text-[11px] text-zinc-500 dark:text-zinc-400 space-y-1 border-t border-blue-100/60 dark:border-blue-900/30">
+                    <div className="font-mono font-bold text-blue-700 dark:text-blue-300">
+                      Money Factor = APR ÷ 2400 &nbsp;|&nbsp; APR = Money Factor × 2400
+                    </div>
+                    <p className="text-zinc-600 dark:text-zinc-400">
+                      Money Factor is commonly used by leasing companies while APR is more familiar to consumers.
+                    </p>
+                  </div>
                 </div>
 
                 {/* Residual Value & Sales Tax */}
@@ -711,9 +743,9 @@ export function AutoLeaseCalculator() {
                     </label>
                     <Input
                       type="number"
-                      step="0.1"
-                      value={aprPercent}
-                      onChange={(e) => handleAprChange(Math.max(0, Number(e.target.value)))}
+                      step="0.01"
+                      value={aprInput}
+                      onChange={(e) => handleAprChange(e.target.value)}
                       className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
                     />
                   </div>
