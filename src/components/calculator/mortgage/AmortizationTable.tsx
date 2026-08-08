@@ -4,12 +4,13 @@ import React, { useState, useMemo } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Download, Search, Calendar, Clock } from "lucide-react";
+import { Download, Search, Calendar, Clock, RefreshCw } from "lucide-react";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { formatCurrency } from "@/lib/calculator-engine/formatters";
 
 export interface AmortizationTableProps {
   schedule: AmortizationRow[];
+  biweeklySchedule?: AmortizationRow[];
 }
 
 interface AnnualScheduleRow {
@@ -27,16 +28,16 @@ interface AnnualScheduleRow {
   dateRange: string;
 }
 
-export function AmortizationTable({ schedule }: AmortizationTableProps) {
+export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [viewMode, setViewMode] = useState<"annual" | "monthly">("annual");
+  const [viewMode, setViewMode] = useState<"annual" | "monthly" | "biweekly">("annual");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
   // Aggregate monthly rows into annual rows for Annual Tab
   const annualSchedule = useMemo(() => {
     if (!schedule || schedule.length === 0) return [];
-    
+
     const map = new Map<number, AnnualScheduleRow>();
 
     schedule.forEach((row) => {
@@ -67,7 +68,7 @@ export function AmortizationTable({ schedule }: AmortizationTableProps) {
       item.insurancePaid += row.homeInsurance || 0;
       item.pmiPaid += row.pmi || 0;
       item.otherPaid += (row.hoaFee || 0) + (row.otherCosts || 0);
-      item.remainingBalance = row.remainingBalance; // End of year balance
+      item.remainingBalance = row.remainingBalance;
       item.dateRange = item.dateRange.includes("-")
         ? item.dateRange.split(" - ")[0] + " - " + row.date
         : item.dateRange + " - " + row.date;
@@ -88,6 +89,14 @@ export function AmortizationTable({ schedule }: AmortizationTableProps) {
           r.year.toString().includes(q) ||
           r.dateRange.toLowerCase().includes(q)
       );
+    } else if (viewMode === "biweekly" && biweeklySchedule && biweeklySchedule.length > 0) {
+      if (!q) return biweeklySchedule;
+      return biweeklySchedule.filter(
+        (r) =>
+          r.month.toString().includes(q) ||
+          r.date.toLowerCase().includes(q) ||
+          `period ${r.month}`.includes(q)
+      );
     } else {
       if (!q) return schedule;
       return schedule.filter(
@@ -97,10 +106,10 @@ export function AmortizationTable({ schedule }: AmortizationTableProps) {
           `month ${r.month}`.includes(q)
       );
     }
-  }, [schedule, annualSchedule, viewMode, searchTerm]);
+  }, [schedule, annualSchedule, biweeklySchedule, viewMode, searchTerm]);
 
   const totalPages = Math.ceil(displayedRows.length / itemsPerPage) || 1;
-  
+
   const paginatedRows = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return displayedRows.slice(start, start + itemsPerPage);
@@ -115,6 +124,12 @@ export function AmortizationTable({ schedule }: AmortizationTableProps) {
       csvLines = annualSchedule.map(
         (r) =>
           `${r.year},"${r.dateRange}",${r.totalPayment.toFixed(2)},${(r.principalPaid + r.extraPaid).toFixed(2)},${r.interestPaid.toFixed(2)},${r.extraPaid.toFixed(2)},${r.remainingBalance.toFixed(2)}`
+      );
+    } else if (viewMode === "biweekly" && biweeklySchedule) {
+      headers = "Biweekly Period,Date,Payment,Principal,Interest,Remaining Balance\n";
+      csvLines = biweeklySchedule.map(
+        (r) =>
+          `${r.month},"${r.date}",${r.payment.toFixed(2)},${r.principalPaid.toFixed(2)},${r.interestPaid.toFixed(2)},${r.remainingBalance.toFixed(2)}`
       );
     } else {
       headers = "Month,Date,Payment,Principal,Interest,Extra Paid,Taxes & Fees,Remaining Balance\n";
@@ -170,6 +185,23 @@ export function AmortizationTable({ schedule }: AmortizationTableProps) {
             <Clock className="h-3.5 w-3.5" />
             Monthly Tab
           </button>
+          {biweeklySchedule && biweeklySchedule.length > 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                setViewMode("biweekly");
+                setCurrentPage(1);
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
+                viewMode === "biweekly"
+                  ? "bg-emerald-600 text-white shadow-sm"
+                  : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+              }`}
+            >
+              <RefreshCw className="h-3.5 w-3.5" />
+              Biweekly Tab
+            </button>
+          )}
         </div>
 
         {/* Search & Export */}
@@ -177,7 +209,13 @@ export function AmortizationTable({ schedule }: AmortizationTableProps) {
           <div className="relative flex-1 sm:flex-none">
             <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-400" />
             <Input
-              placeholder={viewMode === "annual" ? "Filter by year or date..." : "Filter by month or date..."}
+              placeholder={
+                viewMode === "annual"
+                  ? "Filter by year or date..."
+                  : viewMode === "biweekly"
+                  ? "Filter by period..."
+                  : "Filter by month..."
+              }
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -205,13 +243,19 @@ export function AmortizationTable({ schedule }: AmortizationTableProps) {
           <TableHeader>
             <TableRow className="border-zinc-200 dark:border-zinc-800 bg-zinc-100/80 dark:bg-zinc-800/80">
               <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
-                {viewMode === "annual" ? "Period (Year)" : "Period (Month)"}
+                {viewMode === "annual"
+                  ? "Period (Year)"
+                  : viewMode === "biweekly"
+                  ? "Biweekly Period"
+                  : "Period (Month)"}
               </TableHead>
               <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Date</TableHead>
               <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Payment</TableHead>
               <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Principal</TableHead>
               <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Interest</TableHead>
-              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Remaining Balance</TableHead>
+              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">
+                Remaining Balance
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -223,7 +267,12 @@ export function AmortizationTable({ schedule }: AmortizationTableProps) {
               </TableRow>
             ) : (
               paginatedRows.map((row: any) => {
-                const periodLabel = viewMode === "annual" ? `Year ${row.year}` : `Month ${row.month}`;
+                const periodLabel =
+                  viewMode === "annual"
+                    ? `Year ${row.year}`
+                    : viewMode === "biweekly"
+                    ? `Period ${row.month}`
+                    : `Month ${row.month}`;
                 const dateLabel = viewMode === "annual" ? row.dateRange : row.date;
                 const paymentAmount = viewMode === "annual" ? row.totalPayment : row.payment;
                 const principalAmount =
@@ -235,7 +284,13 @@ export function AmortizationTable({ schedule }: AmortizationTableProps) {
 
                 return (
                   <TableRow
-                    key={viewMode === "annual" ? `year-${row.year}` : `month-${row.month}`}
+                    key={
+                      viewMode === "annual"
+                        ? `year-${row.year}`
+                        : viewMode === "biweekly"
+                        ? `bw-${row.month}`
+                        : `month-${row.month}`
+                    }
                     className="border-zinc-100 dark:border-zinc-800/60 hover:bg-blue-50/50 dark:hover:bg-blue-950/20 transition-colors"
                   >
                     <TableCell className="text-xs font-bold text-zinc-900 dark:text-zinc-100">

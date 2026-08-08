@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import {
   Card,
@@ -33,13 +33,27 @@ import {
   Sparkles,
   ChevronDown,
   ChevronUp,
+  Bookmark,
+  Trash2,
+  RotateCcw,
+  Check,
+  X,
+  Plus,
+  Minus,
+  RefreshCw,
+  FolderOpen,
 } from "lucide-react";
 import { calculateMortgageModule } from "@/modules/mortgage/formula";
-import { MortgageModuleInput, MortgageModuleOutput } from "@/modules/mortgage/types";
-import { formatCurrency, formatPercent } from "@/lib/calculator-engine/formatters";
+import {
+  MortgageModuleInput,
+  MortgageModuleOutput,
+  OneTimePaymentEntry,
+  SavedMortgageCalculation,
+} from "@/modules/mortgage/types";
+import { formatCurrency } from "@/lib/calculator-engine/formatters";
 import { AmortizationTable } from "./AmortizationTable";
 
-// Lazy load chart components for optimal rendering performance
+// Lazy load chart components
 const MortgagePieChart = dynamic(
   () => import("../charts/MortgagePieChart").then((m) => m.MortgagePieChart),
   {
@@ -77,51 +91,184 @@ const AmortizationAreaChart = dynamic(
 );
 
 export function MortgageCalculator() {
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+
   // Basic Inputs State
   const [homePrice, setHomePrice] = useState<number>(400000);
   const [downPayment, setDownPayment] = useState<number>(80000);
   const [downPaymentType, setDownPaymentType] = useState<"amount" | "percent">("amount");
   const [loanTermYears, setLoanTermYears] = useState<number>(30);
-  const [interestRate, setInterestRate] = useState<number>(6.5);
-  const [startMonth, setStartMonth] = useState<number>(new Date().getMonth() + 1);
-  const [startYear, setStartYear] = useState<number>(new Date().getFullYear());
+  const [interestRate, setInterestRate] = useState<number>(6.706);
+  const [startMonth, setStartMonth] = useState<number>(currentMonth);
+  const [startYear, setStartYear] = useState<number>(currentYear);
 
   // Advanced Section State
-  const [propertyTax, setPropertyTax] = useState<number>(4800);
-  const [propertyTaxType, setPropertyTaxType] = useState<"amount" | "percent">("amount");
+  const [propertyTax, setPropertyTax] = useState<number>(1.2);
+  const [propertyTaxType, setPropertyTaxType] = useState<"amount" | "percent">("percent");
   const [homeInsurance, setHomeInsurance] = useState<number>(1500);
-  const [pmiRate, setPmiRate] = useState<number>(0.5);
-  const [hoaFee, setHoaFee] = useState<number>(0);
-  const [otherCosts, setOtherCosts] = useState<number>(0);
+  const [pmiRate, setPmiRate] = useState<number>(0);
+  const [hoaFee, setHoaFee] = useState<number>(333.33);
+  const [otherCosts, setOtherCosts] = useState<number>(4000);
 
   // Annual Increase Settings State
-  const [propertyTaxIncrease, setPropertyTaxIncrease] = useState<number>(2.0);
-  const [insuranceIncrease, setInsuranceIncrease] = useState<number>(3.0);
-  const [hoaIncrease, setHoaIncrease] = useState<number>(2.5);
-  const [otherCostsIncrease, setOtherCostsIncrease] = useState<number>(2.0);
+  const [propertyTaxIncrease, setPropertyTaxIncrease] = useState<number>(0);
+  const [insuranceIncrease, setInsuranceIncrease] = useState<number>(0);
+  const [hoaIncrease, setHoaIncrease] = useState<number>(0);
+  const [otherCostsIncrease, setOtherCostsIncrease] = useState<number>(0);
 
   // Extra Payments State
   const [extraMonthlyPayment, setExtraMonthlyPayment] = useState<number>(0);
+  const [extraMonthlyStartMonth, setExtraMonthlyStartMonth] = useState<number>(startMonth);
+  const [extraMonthlyStartYear, setExtraMonthlyStartYear] = useState<number>(startYear);
+
   const [extraYearlyPayment, setExtraYearlyPayment] = useState<number>(0);
-  const [extraOneTimePayment, setExtraOneTimePayment] = useState<number>(0);
-  const [extraOneTimeMonth, setExtraOneTimeMonth] = useState<number>(1);
-  const [extraOneTimeYear, setExtraOneTimeYear] = useState<number>(new Date().getFullYear() + 1);
+  const [extraYearlyStartMonth, setExtraYearlyStartMonth] = useState<number>(startMonth);
+  const [extraYearlyStartYear, setExtraYearlyStartYear] = useState<number>(startYear);
+
+  // Multiple One-Time Payments (Default 8 rows as in screenshot)
+  const initialOneTimeRows: OneTimePaymentEntry[] = Array.from({ length: 8 }).map((_, idx) => ({
+    id: `otp-${idx + 1}`,
+    amount: 0,
+    month: startMonth,
+    year: startYear,
+  }));
+  const [extraOneTimePayments, setExtraOneTimePayments] = useState<OneTimePaymentEntry[]>(initialOneTimeRows);
+
+  // Biweekly Toggle
+  const [showBiweekly, setShowBiweekly] = useState<boolean>(false);
 
   // Collapsible section toggles
   const [showAdvanced, setShowAdvanced] = useState<boolean>(true);
-  const [showIncreases, setShowIncreases] = useState<boolean>(false);
-  const [showExtraPayments, setShowExtraPayments] = useState<boolean>(false);
+  const [showIncreases, setShowIncreases] = useState<boolean>(true);
+  const [showExtraPayments, setShowExtraPayments] = useState<boolean>(true);
   const [activeChartTab, setActiveChartTab] = useState<"doughnut" | "balance" | "area">("doughnut");
+
+  // Save Calculation Modal & State
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
+  const [saveName, setSaveName] = useState<string>("");
+  const [saveDescription, setSaveDescription] = useState<string>("");
+  const [savedCalculations, setSavedCalculations] = useState<SavedMortgageCalculation[]>([]);
+  const [saveSuccessMsg, setSaveSuccessMsg] = useState<string>("");
+
+  // Load saved calculations from localStorage on mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("calcplatform_saved_mortgages");
+      if (stored) {
+        setSavedCalculations(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.error("Failed to load saved calculations", e);
+    }
+  }, []);
+
+  // Save calculation handler
+  const handleSaveCalculation = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newSave: SavedMortgageCalculation = {
+      id: `calc-${Date.now()}`,
+      name: saveName.trim() || `Mortgage ($${homePrice.toLocaleString()})`,
+      description: saveDescription.trim() || `${loanTermYears} yrs @ ${interestRate}%`,
+      dateSaved: new Date().toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+      inputs: {
+        homePrice,
+        downPayment,
+        downPaymentType,
+        loanTermYears,
+        interestRate,
+        startMonth,
+        startYear,
+        propertyTax,
+        propertyTaxType,
+        homeInsurance,
+        pmiRate,
+        hoaFee,
+        otherCosts,
+        propertyTaxIncrease,
+        insuranceIncrease,
+        hoaIncrease,
+        otherCostsIncrease,
+        extraMonthlyPayment,
+        extraYearlyPayment,
+        extraOneTimePayments,
+        showBiweekly,
+      },
+      monthlyPayment: results.totalInitialMonthlyPayment,
+    };
+
+    const updated = [newSave, ...savedCalculations].slice(0, 100);
+    setSavedCalculations(updated);
+    try {
+      localStorage.setItem("calcplatform_saved_mortgages", JSON.stringify(updated));
+    } catch (err) {
+      console.error("Error writing to localStorage", err);
+    }
+
+    setSaveSuccessMsg("Calculation saved successfully!");
+    setTimeout(() => {
+      setSaveSuccessMsg("");
+      setIsSaveModalOpen(false);
+      setSaveName("");
+      setSaveDescription("");
+    }, 1200);
+  };
+
+  // Load calculation handler
+  const handleLoadCalculation = (saved: SavedMortgageCalculation) => {
+    const inp = saved.inputs;
+    if (!inp) return;
+
+    setHomePrice(inp.homePrice ?? 400000);
+    setDownPayment(inp.downPayment ?? 80000);
+    setDownPaymentType(inp.downPaymentType ?? "amount");
+    setLoanTermYears(inp.loanTermYears ?? 30);
+    setInterestRate(inp.interestRate ?? 6.5);
+    setStartMonth(inp.startMonth ?? currentMonth);
+    setStartYear(inp.startYear ?? currentYear);
+
+    setPropertyTax(inp.propertyTax ?? 1.2);
+    setPropertyTaxType(inp.propertyTaxType ?? "percent");
+    setHomeInsurance(inp.homeInsurance ?? 1500);
+    setPmiRate(inp.pmiRate ?? 0);
+    setHoaFee(inp.hoaFee ?? 0);
+    setOtherCosts(inp.otherCosts ?? 0);
+
+    setPropertyTaxIncrease(inp.propertyTaxIncrease ?? 0);
+    setInsuranceIncrease(inp.insuranceIncrease ?? 0);
+    setHoaIncrease(inp.hoaIncrease ?? 0);
+    setOtherCostsIncrease(inp.otherCostsIncrease ?? 0);
+
+    setExtraMonthlyPayment(inp.extraMonthlyPayment ?? 0);
+    setExtraYearlyPayment(inp.extraYearlyPayment ?? 0);
+    if (inp.extraOneTimePayments) setExtraOneTimePayments(inp.extraOneTimePayments);
+    setShowBiweekly(!!inp.showBiweekly);
+
+    setIsSaveModalOpen(false);
+  };
+
+  // Delete saved calculation handler
+  const handleDeleteSavedCalculation = (id: string) => {
+    const updated = savedCalculations.filter((c) => c.id !== id);
+    setSavedCalculations(updated);
+    try {
+      localStorage.setItem("calcplatform_saved_mortgages", JSON.stringify(updated));
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // Sync Down Payment when toggling between amount & percentage
   const handleDownPaymentTypeToggle = (newType: "amount" | "percent") => {
     if (newType === downPaymentType) return;
     if (newType === "percent") {
-      // Amount -> Percent
       const pct = homePrice > 0 ? (downPayment / homePrice) * 100 : 0;
       setDownPayment(Number(pct.toFixed(2)));
     } else {
-      // Percent -> Amount
       const amt = (homePrice * downPayment) / 100;
       setDownPayment(Math.round(amt));
     }
@@ -139,6 +286,53 @@ export function MortgageCalculator() {
       setPropertyTax(Math.round(amt));
     }
     setPropertyTaxType(newType);
+  };
+
+  // One-time payment handlers
+  const handleOneTimePaymentChange = (id: string, field: "amount" | "month" | "year", val: number) => {
+    setExtraOneTimePayments((prev) =>
+      prev.map((row) => (row.id === id ? { ...row, [field]: val } : row))
+    );
+  };
+
+  const handleAddOneTimeRow = () => {
+    const newId = `otp-${Date.now()}`;
+    setExtraOneTimePayments((prev) => [
+      ...prev,
+      { id: newId, amount: 0, month: startMonth, year: startYear },
+    ]);
+  };
+
+  const handleRemoveOneTimeRow = (id: string) => {
+    setExtraOneTimePayments((prev) => prev.filter((r) => r.id !== id));
+  };
+
+  // Reset form inputs
+  const handleResetForm = () => {
+    setHomePrice(400000);
+    setDownPayment(80000);
+    setDownPaymentType("amount");
+    setLoanTermYears(30);
+    setInterestRate(6.706);
+    setStartMonth(currentMonth);
+    setStartYear(currentYear);
+
+    setPropertyTax(1.2);
+    setPropertyTaxType("percent");
+    setHomeInsurance(1500);
+    setPmiRate(0);
+    setHoaFee(333.33);
+    setOtherCosts(4000);
+
+    setPropertyTaxIncrease(0);
+    setInsuranceIncrease(0);
+    setHoaIncrease(0);
+    setOtherCostsIncrease(0);
+
+    setExtraMonthlyPayment(0);
+    setExtraYearlyPayment(0);
+    setExtraOneTimePayments(initialOneTimeRows);
+    setShowBiweekly(false);
   };
 
   // Memoized Financial Calculations
@@ -165,10 +359,15 @@ export function MortgageCalculator() {
       otherCostsIncrease,
 
       extraMonthlyPayment,
+      extraMonthlyStartMonth,
+      extraMonthlyStartYear,
+
       extraYearlyPayment,
-      extraOneTimePayment,
-      extraOneTimeMonth,
-      extraOneTimeYear,
+      extraYearlyStartMonth,
+      extraYearlyStartYear,
+
+      extraOneTimePayments,
+      showBiweekly,
     };
 
     return calculateMortgageModule(input);
@@ -191,10 +390,13 @@ export function MortgageCalculator() {
     hoaIncrease,
     otherCostsIncrease,
     extraMonthlyPayment,
+    extraMonthlyStartMonth,
+    extraMonthlyStartYear,
     extraYearlyPayment,
-    extraOneTimePayment,
-    extraOneTimeMonth,
-    extraOneTimeYear,
+    extraYearlyStartMonth,
+    extraYearlyStartYear,
+    extraOneTimePayments,
+    showBiweekly,
   ]);
 
   const monthOptions = [
@@ -214,6 +416,42 @@ export function MortgageCalculator() {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
+      {/* Top Action Bar: Save Calculation & Load Saved Calculations */}
+      <div className="flex items-center justify-between bg-zinc-50 dark:bg-zinc-800/80 p-3 rounded-xl border border-zinc-200 dark:border-zinc-700/80 shadow-xs">
+        <div className="flex items-center gap-2">
+          <Bookmark className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+          <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+            Mortgage Calculation Manager
+          </span>
+          {savedCalculations.length > 0 && (
+            <span className="text-[10px] font-mono bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-semibold">
+              {savedCalculations.length} Saved
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleResetForm}
+            className="h-8 text-xs gap-1 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900"
+          >
+            <RotateCcw className="h-3.5 w-3.5" /> Clear
+          </Button>
+
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => setIsSaveModalOpen(true)}
+            className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
+          >
+            <Bookmark className="h-3.5 w-3.5" /> Save Calculation
+          </Button>
+        </div>
+      </div>
+
       {/* Grid Layout: Left Controls (Col 5) | Right Results & Charts (Col 7) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Inputs Panel (Col 5) */}
@@ -229,7 +467,7 @@ export function MortgageCalculator() {
                     Mortgage Inputs
                   </CardTitle>
                   <CardDescription className="text-xs text-zinc-500">
-                    Customize purchase price, loan term, taxes & extra payments
+                    Modify the values and click the Calculate button to use
                   </CardDescription>
                 </div>
               </div>
@@ -341,7 +579,7 @@ export function MortgageCalculator() {
                     <Input
                       id="interestRate"
                       type="number"
-                      step={0.1}
+                      step={0.001}
                       min={0}
                       max={30}
                       value={interestRate}
@@ -395,7 +633,7 @@ export function MortgageCalculator() {
                   className="w-full flex items-center justify-between text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 hover:text-blue-600 py-1"
                 >
                   <span className="flex items-center gap-1.5">
-                    <Sliders className="h-3.5 w-3.5 text-blue-500" /> Advanced Taxes & Fees
+                    <Sliders className="h-3.5 w-3.5 text-blue-500" /> Include Taxes & Costs Below
                   </span>
                   {showAdvanced ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                 </button>
@@ -406,20 +644,9 @@ export function MortgageCalculator() {
                     <div>
                       <div className="flex items-center justify-between">
                         <Label htmlFor="propertyTax" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                          Property Taxes (Annual)
+                          Property Taxes
                         </Label>
                         <div className="flex items-center bg-zinc-100 dark:bg-zinc-800 rounded-md p-0.5 border border-zinc-200 dark:border-zinc-700">
-                          <button
-                            type="button"
-                            onClick={() => handlePropertyTaxTypeToggle("amount")}
-                            className={`px-1.5 py-0.5 text-[9px] font-bold rounded ${
-                              propertyTaxType === "amount"
-                                ? "bg-white dark:bg-zinc-700 text-blue-600 shadow-xs"
-                                : "text-zinc-500"
-                            }`}
-                          >
-                            $
-                          </button>
                           <button
                             type="button"
                             onClick={() => handlePropertyTaxTypeToggle("percent")}
@@ -430,6 +657,17 @@ export function MortgageCalculator() {
                             }`}
                           >
                             %
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handlePropertyTaxTypeToggle("amount")}
+                            className={`px-1.5 py-0.5 text-[9px] font-bold rounded ${
+                              propertyTaxType === "amount"
+                                ? "bg-white dark:bg-zinc-700 text-blue-600 shadow-xs"
+                                : "text-zinc-500"
+                            }`}
+                          >
+                            $
                           </button>
                         </div>
                       </div>
@@ -462,7 +700,7 @@ export function MortgageCalculator() {
                       </div>
                       <div>
                         <Label htmlFor="pmiRate" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                          PMI Rate (%/yr)
+                          PMI Insurance (%/yr)
                         </Label>
                         <Input
                           id="pmiRate"
@@ -480,7 +718,7 @@ export function MortgageCalculator() {
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <Label htmlFor="hoaFee" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                          HOA Fees ($/mo)
+                          HOA Fee ($/mo)
                         </Label>
                         <Input
                           id="hoaFee"
@@ -494,13 +732,13 @@ export function MortgageCalculator() {
                       </div>
                       <div>
                         <Label htmlFor="otherCosts" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                          Other Costs ($/mo)
+                          Other Costs ($/yr)
                         </Label>
                         <Input
                           id="otherCosts"
                           type="number"
                           min={0}
-                          step={10}
+                          step={100}
                           value={otherCosts}
                           onChange={(e) => setOtherCosts(Math.max(0, Number(e.target.value)))}
                           className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
@@ -511,7 +749,7 @@ export function MortgageCalculator() {
                 )}
               </div>
 
-              {/* Annual Increase Settings Collapsible */}
+              {/* Annual Tax & Cost Increase Collapsible */}
               <div className="border-t border-zinc-100 dark:border-zinc-800 pt-3">
                 <button
                   type="button"
@@ -519,7 +757,7 @@ export function MortgageCalculator() {
                   className="w-full flex items-center justify-between text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 hover:text-blue-600 py-1"
                 >
                   <span className="flex items-center gap-1.5">
-                    <TrendingUp className="h-3.5 w-3.5 text-amber-500" /> Annual Increase Settings (%)
+                    <TrendingUp className="h-3.5 w-3.5 text-amber-500" /> Annual Tax & Cost Increase (%)
                   </span>
                   {showIncreases ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
                 </button>
@@ -528,7 +766,7 @@ export function MortgageCalculator() {
                   <div className="grid grid-cols-2 gap-3 pt-3">
                     <div>
                       <Label htmlFor="propertyTaxIncrease" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                        Tax Increase %
+                        Property Tax Increase %
                       </Label>
                       <Input
                         id="propertyTaxIncrease"
@@ -542,7 +780,7 @@ export function MortgageCalculator() {
                     </div>
                     <div>
                       <Label htmlFor="insuranceIncrease" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                        Insurance Increase %
+                        Home Insurance Increase %
                       </Label>
                       <Input
                         id="insuranceIncrease"
@@ -556,7 +794,7 @@ export function MortgageCalculator() {
                     </div>
                     <div>
                       <Label htmlFor="hoaIncrease" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                        HOA Increase %
+                        HOA Fee Increase %
                       </Label>
                       <Input
                         id="hoaIncrease"
@@ -586,7 +824,7 @@ export function MortgageCalculator() {
                 )}
               </div>
 
-              {/* Extra Payments Collapsible */}
+              {/* Extra Payments Section */}
               <div className="border-t border-zinc-100 dark:border-zinc-800 pt-3">
                 <button
                   type="button"
@@ -601,10 +839,11 @@ export function MortgageCalculator() {
 
                 {showExtraPayments && (
                   <div className="space-y-3 pt-3">
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
+                    {/* Extra Monthly Payment */}
+                    <div className="grid grid-cols-12 gap-2 items-center">
+                      <div className="col-span-5">
                         <Label htmlFor="extraMonthlyPayment" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                          Monthly Extra ($)
+                          Extra Monthly Pay
                         </Label>
                         <Input
                           id="extraMonthlyPayment"
@@ -616,9 +855,33 @@ export function MortgageCalculator() {
                           className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
                         />
                       </div>
-                      <div>
+                      <div className="col-span-7 flex items-center gap-1 mt-4">
+                        <span className="text-[10px] text-zinc-400">from</span>
+                        <select
+                          value={extraMonthlyStartMonth}
+                          onChange={(e) => setExtraMonthlyStartMonth(Number(e.target.value))}
+                          className="h-8 rounded bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[10px] px-1 text-zinc-900 dark:text-zinc-100"
+                        >
+                          {monthOptions.map((m) => (
+                            <option key={m.value} value={m.value}>
+                              {m.label}
+                            </option>
+                          ))}
+                        </select>
+                        <Input
+                          type="number"
+                          value={extraMonthlyStartYear}
+                          onChange={(e) => setExtraMonthlyStartYear(Number(e.target.value))}
+                          className="h-8 w-16 bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 font-mono text-[10px] px-1"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Extra Yearly Payment */}
+                    <div className="grid grid-cols-12 gap-2 items-center pt-2 border-t border-zinc-100 dark:border-zinc-800">
+                      <div className="col-span-5">
                         <Label htmlFor="extraYearlyPayment" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                          Yearly Extra ($)
+                          Extra Yearly Pay
                         </Label>
                         <Input
                           id="extraYearlyPayment"
@@ -630,52 +893,121 @@ export function MortgageCalculator() {
                           className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
                         />
                       </div>
+                      <div className="col-span-7 flex items-center gap-1 mt-4">
+                        <span className="text-[10px] text-zinc-400">from</span>
+                        <select
+                          value={extraYearlyStartMonth}
+                          onChange={(e) => setExtraYearlyStartMonth(Number(e.target.value))}
+                          className="h-8 rounded bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[10px] px-1 text-zinc-900 dark:text-zinc-100"
+                        >
+                          {monthOptions.map((m) => (
+                            <option key={m.value} value={m.value}>
+                              {m.label}
+                            </option>
+                          ))}
+                        </select>
+                        <Input
+                          type="number"
+                          value={extraYearlyStartYear}
+                          onChange={(e) => setExtraYearlyStartYear(Number(e.target.value))}
+                          className="h-8 w-16 bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 font-mono text-[10px] px-1"
+                        />
+                      </div>
                     </div>
 
-                    {/* One Time Payment */}
-                    <div className="space-y-2 pt-1 border-t border-zinc-100 dark:border-zinc-800">
-                      <Label htmlFor="extraOneTimePayment" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                        One-Time Extra Payment ($)
-                      </Label>
-                      <Input
-                        id="extraOneTimePayment"
-                        type="number"
-                        min={0}
-                        step={500}
-                        value={extraOneTimePayment}
-                        onChange={(e) => setExtraOneTimePayment(Math.max(0, Number(e.target.value)))}
-                        className="bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
-                      />
-                      <div className="grid grid-cols-2 gap-3 pt-1">
-                        <div>
-                          <Label className="text-[10px] text-zinc-500">One-Time Month</Label>
-                          <select
-                            value={extraOneTimeMonth}
-                            onChange={(e) => setExtraOneTimeMonth(Number(e.target.value))}
-                            className="mt-0.5 w-full h-8 rounded-md bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 px-2 text-[11px] text-zinc-900 dark:text-zinc-100"
+                    {/* Multiple One-Time Payments List */}
+                    <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <Label className="text-zinc-700 dark:text-zinc-300 font-semibold text-xs">
+                          Extra One-Time Payments
+                        </Label>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleAddOneTimeRow}
+                          className="h-6 text-[10px] px-2 text-blue-600 dark:text-blue-400 gap-1 hover:bg-blue-50 dark:hover:bg-blue-950"
+                        >
+                          <Plus className="h-3 w-3" /> Add Payment Row
+                        </Button>
+                      </div>
+
+                      <div className="space-y-1.5 max-h-60 overflow-y-auto pr-1">
+                        {extraOneTimePayments.map((row, idx) => (
+                          <div
+                            key={row.id}
+                            className="flex items-center gap-1.5 p-1.5 rounded-lg bg-zinc-50/80 dark:bg-zinc-800/50 border border-zinc-200/80 dark:border-zinc-700/80"
                           >
-                            {monthOptions.map((m) => (
-                              <option key={m.value} value={m.value}>
-                                {m.label}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div>
-                          <Label className="text-[10px] text-zinc-500">One-Time Year</Label>
-                          <Input
-                            type="number"
-                            min={2000}
-                            max={2100}
-                            value={extraOneTimeYear}
-                            onChange={(e) => setExtraOneTimeYear(Number(e.target.value))}
-                            className="mt-0.5 h-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-[11px]"
-                          />
-                        </div>
+                            <span className="text-[10px] font-mono text-zinc-400 w-4 text-center">
+                              {idx + 1}.
+                            </span>
+                            <div className="relative flex-1">
+                              <DollarSign className="absolute left-2 top-2 h-3 w-3 text-zinc-400" />
+                              <Input
+                                type="number"
+                                min={0}
+                                step={100}
+                                value={row.amount || ""}
+                                placeholder="0"
+                                onChange={(e) =>
+                                  handleOneTimePaymentChange(row.id, "amount", Number(e.target.value))
+                                }
+                                className="pl-6 h-7 text-xs bg-white dark:bg-zinc-900 font-mono border-zinc-200 dark:border-zinc-700"
+                              />
+                            </div>
+                            <span className="text-[10px] text-zinc-400">in</span>
+                            <select
+                              value={row.month}
+                              onChange={(e) =>
+                                handleOneTimePaymentChange(row.id, "month", Number(e.target.value))
+                              }
+                              className="h-7 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-[10px] px-1 text-zinc-900 dark:text-zinc-100"
+                            >
+                              {monthOptions.map((m) => (
+                                <option key={m.value} value={m.value}>
+                                  {m.label}
+                                </option>
+                              ))}
+                            </select>
+                            <Input
+                              type="number"
+                              value={row.year}
+                              onChange={(e) =>
+                                handleOneTimePaymentChange(row.id, "year", Number(e.target.value))
+                              }
+                              className="h-7 w-16 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-[10px] px-1"
+                            />
+                            {extraOneTimePayments.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveOneTimeRow(row.id)}
+                                className="p-1 text-zinc-400 hover:text-red-500 transition-colors"
+                                title="Remove row"
+                              >
+                                <Minus className="h-3 w-3" />
+                              </button>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
                 )}
+              </div>
+
+              {/* Biweekly Toggle Checkbox */}
+              <div className="border-t border-zinc-100 dark:border-zinc-800 pt-3">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={showBiweekly}
+                    onChange={(e) => setShowBiweekly(e.target.checked)}
+                    className="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                    Show Biweekly Payback Results
+                  </span>
+                </label>
               </div>
             </CardContent>
           </Card>
@@ -691,9 +1023,15 @@ export function MortgageCalculator() {
                   <span className="text-xs uppercase font-bold tracking-wider text-blue-600 dark:text-blue-400">
                     Total Estimated Monthly Payment
                   </span>
-                  <span className="text-[11px] font-medium text-zinc-500 bg-white dark:bg-zinc-800 px-2 py-0.5 rounded-full border border-zinc-200 dark:border-zinc-700">
-                    PITI + Taxes & Dues
-                  </span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsSaveModalOpen(true)}
+                    className="h-6 text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-100/50 dark:hover:bg-blue-950 gap-1 px-2"
+                  >
+                    <Bookmark className="h-3 w-3" /> Save
+                  </Button>
                 </div>
                 <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-mono mt-2 tracking-tight">
                   {formatCurrency(results.totalInitialMonthlyPayment)}
@@ -721,16 +1059,70 @@ export function MortgageCalculator() {
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2 rounded-lg border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">PMI / HOA / Fees</span>
+                  <span className="text-[10px] text-zinc-500 block">Other Costs</span>
                   <span className="text-xs font-bold font-mono text-purple-600 dark:text-purple-400">
                     {formatCurrency(
-                      results.monthlyPmi + results.monthlyHoa + results.monthlyOtherCosts
+                      results.monthlyPmi + results.monthlyHoa + (results.monthlyOtherCosts / 12)
                     )}
                   </span>
                 </div>
               </div>
             </CardContent>
           </Card>
+
+          {/* Biweekly Results Card (Rendered if Show Biweekly is Checked) */}
+          {showBiweekly && (
+            <Card className="border border-emerald-200 dark:border-emerald-900 bg-emerald-50/60 dark:bg-emerald-950/20 shadow-xs">
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-center justify-between border-b border-emerald-200 dark:border-emerald-900/60 pb-2">
+                  <div className="flex items-center gap-2">
+                    <RefreshCw className="h-4 w-4 text-emerald-600 dark:text-emerald-400 animate-spin-slow" />
+                    <span className="text-xs uppercase font-bold text-emerald-900 dark:text-emerald-200">
+                      Biweekly Payback Results Summary
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-300 font-bold bg-emerald-100 dark:bg-emerald-900 px-2 py-0.5 rounded">
+                    26 Pay Periods / Yr
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div>
+                    <span className="text-[10px] text-emerald-800 dark:text-emerald-400 block font-medium">
+                      Biweekly Payment
+                    </span>
+                    <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-mono">
+                      {formatCurrency(results.biweeklyPayment)}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-emerald-800 dark:text-emerald-400 block font-medium">
+                      Biweekly Payoff Date
+                    </span>
+                    <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-mono">
+                      {results.biweeklyPayoffDate}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-emerald-800 dark:text-emerald-400 block font-medium">
+                      Biweekly Total Interest
+                    </span>
+                    <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-mono">
+                      {formatCurrency(results.biweeklyTotalInterest)}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-emerald-800 dark:text-emerald-400 block font-medium">
+                      Interest Savings
+                    </span>
+                    <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
+                      {formatCurrency(results.biweeklyInterestSavings)}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* 2. Summary Statistics Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -826,7 +1218,7 @@ export function MortgageCalculator() {
                   principalAndInterest={results.monthlyPrincipalAndInterest}
                   propertyTax={results.monthlyPropertyTax}
                   insurance={results.monthlyInsurance}
-                  otherCosts={results.monthlyPmi + results.monthlyHoa + results.monthlyOtherCosts}
+                  otherCosts={results.monthlyPmi + results.monthlyHoa + (results.monthlyOtherCosts / 12)}
                   extraPayment={extraMonthlyPayment}
                 />
               )}
@@ -914,9 +1306,149 @@ export function MortgageCalculator() {
           </div>
         </CardHeader>
         <CardContent className="pt-4">
-          <AmortizationTable schedule={results.amortizationSchedule} />
+          <AmortizationTable
+            schedule={results.amortizationSchedule}
+            biweeklySchedule={showBiweekly ? results.biweeklyAmortizationSchedule : undefined}
+          />
         </CardContent>
       </Card>
+
+      {/* Save Calculation Modal Dialog */}
+      {isSaveModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-2xl max-w-lg w-full p-6 space-y-4 relative">
+            <button
+              type="button"
+              onClick={() => setIsSaveModalOpen(false)}
+              className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400">
+                <Bookmark className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                  Save Calculation
+                </h3>
+                <p className="text-xs text-zinc-500">
+                  Please provide a name and description to save it to your account (up to 100 calculations)
+                </p>
+              </div>
+            </div>
+
+            {saveSuccessMsg ? (
+              <div className="p-3 bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 rounded-lg text-xs font-semibold flex items-center gap-2">
+                <Check className="h-4 w-4" /> {saveSuccessMsg}
+              </div>
+            ) : (
+              <form onSubmit={handleSaveCalculation} className="space-y-3 pt-1">
+                <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700/80 text-xs">
+                  <span className="text-zinc-500 block">Current Calculation Summary:</span>
+                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-mono">
+                    Monthly Pay: {formatCurrency(results.totalInitialMonthlyPayment)}
+                  </span>
+                  <span className="text-[11px] text-zinc-500">
+                    ${homePrice.toLocaleString()} home, ${results.loanAmount.toLocaleString()} loan @ {interestRate}% rate
+                  </span>
+                </div>
+
+                <div>
+                  <Label htmlFor="saveName" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                    Name (optional)
+                  </Label>
+                  <Input
+                    id="saveName"
+                    type="text"
+                    placeholder="e.g. Primary Residence 30yr"
+                    value={saveName}
+                    onChange={(e) => setSaveName(e.target.value)}
+                    className="mt-1 text-xs bg-zinc-50 dark:bg-zinc-800"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="saveDescription" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                    Description (optional)
+                  </Label>
+                  <textarea
+                    id="saveDescription"
+                    rows={3}
+                    placeholder="e.g. Comparing 20% down vs 10% down options"
+                    value={saveDescription}
+                    onChange={(e) => setSaveDescription(e.target.value)}
+                    className="mt-1 w-full rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 p-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between pt-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setSaveName("");
+                      setSaveDescription("");
+                    }}
+                    className="h-8 text-xs"
+                  >
+                    Reset
+                  </Button>
+                  <Button type="submit" className="h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white">
+                    Save Calculation
+                  </Button>
+                </div>
+              </form>
+            )}
+
+            {/* Saved Calculations List */}
+            {savedCalculations.length > 0 && (
+              <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
+                <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+                  <FolderOpen className="h-3.5 w-3.5 text-blue-500" /> Saved Calculations ({savedCalculations.length})
+                </span>
+                <div className="max-h-48 overflow-y-auto space-y-2 pr-1">
+                  {savedCalculations.map((item) => (
+                    <div
+                      key={item.id}
+                      className="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 flex items-center justify-between text-xs"
+                    >
+                      <div>
+                        <span className="font-bold text-zinc-900 dark:text-zinc-100 block">
+                          {item.name}
+                        </span>
+                        <span className="text-[10px] text-zinc-400 block font-mono">
+                          {item.description} • {formatCurrency(item.monthlyPayment)}/mo • {item.dateSaved}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleLoadCalculation(item)}
+                          className="h-6 text-[10px] px-2 text-blue-600 dark:text-blue-400"
+                        >
+                          Load
+                        </Button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteSavedCalculation(item.id)}
+                          className="p-1 text-zinc-400 hover:text-red-500"
+                          title="Delete saved calculation"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

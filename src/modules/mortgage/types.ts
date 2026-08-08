@@ -1,3 +1,19 @@
+export interface OneTimePaymentEntry {
+  id: string;
+  amount: number;
+  month: number; // 1-12
+  year: number;
+}
+
+export interface SavedMortgageCalculation {
+  id: string;
+  name: string;
+  description: string;
+  dateSaved: string;
+  inputs: Record<string, any>;
+  monthlyPayment: number;
+}
+
 export interface MortgageModuleInput {
   homePrice: number;
   downPayment: number;
@@ -23,10 +39,17 @@ export interface MortgageModuleInput {
 
   // Extra Payments
   extraMonthlyPayment?: number;
+  extraMonthlyStartMonth?: number;
+  extraMonthlyStartYear?: number;
+
   extraYearlyPayment?: number;
-  extraOneTimePayment?: number;
-  extraOneTimeMonth?: number; // 1-12
-  extraOneTimeYear?: number;
+  extraYearlyStartMonth?: number;
+  extraYearlyStartYear?: number;
+
+  extraOneTimePayments?: OneTimePaymentEntry[];
+
+  // Biweekly Toggle
+  showBiweekly?: boolean;
 }
 
 export interface AmortizationRow {
@@ -82,6 +105,15 @@ export interface MortgageModuleOutput {
 
   payoffDate: string;
   payoffMonths: number;
+
+  // Biweekly Engine Results
+  biweeklyPayment: number;
+  biweeklyPayoffDate: string;
+  biweeklyPayoffMonths: number;
+  biweeklyTotalInterest: number;
+  biweeklyInterestSavings: number;
+  biweeklyMonthsSaved: number;
+  biweeklyAmortizationSchedule: AmortizationRow[];
 
   breakdown: CostBreakdownItem[];
   amortizationSchedule: AmortizationRow[];

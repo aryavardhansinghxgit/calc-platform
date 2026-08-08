@@ -1,4 +1,9 @@
-import { MortgageModuleInput, MortgageModuleOutput, AmortizationRow, CostBreakdownItem } from "./types";
+import {
+  MortgageModuleInput,
+  MortgageModuleOutput,
+  AmortizationRow,
+  CostBreakdownItem,
+} from "./types";
 import { PMT } from "@/lib/finance/financial-math";
 
 export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageModuleOutput {
@@ -24,10 +29,14 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
     otherCostsIncrease = 2.0,
 
     extraMonthlyPayment = 0,
+    extraMonthlyStartMonth = startMonth,
+    extraMonthlyStartYear = startYear,
+
     extraYearlyPayment = 0,
-    extraOneTimePayment = 0,
-    extraOneTimeMonth = 1,
-    extraOneTimeYear = new Date().getFullYear() + 1,
+    extraYearlyStartMonth = startMonth,
+    extraYearlyStartYear = startYear,
+
+    extraOneTimePayments = [],
   } = inputs;
 
   // 1. Down Payment & Loan Amount
@@ -38,7 +47,7 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
     downPaymentAmount = Math.max(0, downPayment);
   }
   downPaymentAmount = Math.min(homePrice, downPaymentAmount);
-  
+
   const loanAmount = Math.max(0, homePrice - downPaymentAmount);
   const downPaymentPercent = homePrice > 0 ? (downPaymentAmount / homePrice) * 100 : 0;
   const totalMonths = Math.max(1, Math.round(loanTermYears * 12));
@@ -58,7 +67,7 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
   const initialAnnualTax = propertyTaxType === "percent" ? (homePrice * propertyTax) / 100 : propertyTax;
   const initialMonthlyTax = initialAnnualTax / 12;
   const initialMonthlyInsurance = homeInsurance / 12;
-  
+
   // PMI rules: Required if initial down payment < 20% (LTV > 80%)
   const requiresPmi = downPaymentPercent < 20;
   const initialAnnualPmi = requiresPmi ? loanAmount * (pmiRate / 100) : 0;
@@ -87,7 +96,7 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
     }
   }
 
-  // 4. Active schedule simulation with inflation and extra payments
+  // 4. Monthly schedule simulation with inflation and extra payments (including multiple one-time payments)
   const schedule: AmortizationRow[] = [];
   let balance = loanAmount;
   let accumulatedInterest = 0;
@@ -101,18 +110,16 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
   const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const fullMonthNames = [
     "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "July", "August", "September", "October", "November", "December",
   ];
 
   let currentMonthIndex = 0;
 
   while (balance > 0.001 && currentMonthIndex < totalMonths) {
     currentMonthIndex++;
-    
-    // Year index relative to start (0-indexed year)
+
     const yearIndex = Math.floor((currentMonthIndex - 1) / 12);
-    
-    // Inflation multipliers based on annual increase settings
+
     const taxMultiplier = Math.pow(1 + propertyTaxIncrease / 100, yearIndex);
     const insuranceMultiplier = Math.pow(1 + insuranceIncrease / 100, yearIndex);
     const hoaMultiplier = Math.pow(1 + hoaIncrease / 100, yearIndex);
@@ -123,31 +130,45 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
     const currentHoa = hoaFee * hoaMultiplier;
     const currentOther = otherCosts * otherMultiplier;
 
-    // PMI applies only if balance is > 80% of original home purchase price
     const pmiThreshold = homePrice * 0.8;
     const currentPmi = requiresPmi && balance > pmiThreshold ? initialMonthlyPmi : 0;
 
-    // Interest & Scheduled Principal
     const interestPaid = balance * monthlyRate;
     let basePrincipalPaid = monthlyPrincipalAndInterest - interestPaid;
     if (basePrincipalPaid < 0) basePrincipalPaid = 0;
 
-    // Calculate current Date (Month / Year)
     const totalMonthOffset = (startMonth - 1) + (currentMonthIndex - 1);
     const mNum = (totalMonthOffset % 12) + 1;
     const yNum = startYear + Math.floor(totalMonthOffset / 12);
     const dateStr = `${monthNames[mNum - 1]} ${yNum}`;
 
-    // Extra payments
-    let extraPaidThisMonth = Math.max(0, extraMonthlyPayment);
-    if (currentMonthIndex % 12 === 0) {
-      extraPaidThisMonth += Math.max(0, extraYearlyPayment);
-    }
-    if (mNum === extraOneTimeMonth && yNum === extraOneTimeYear) {
-      extraPaidThisMonth += Math.max(0, extraOneTimePayment);
+    // Extra payments logic
+    let extraPaidThisMonth = 0;
+
+    // Monthly extra payment check
+    const isMonthlyActive =
+      yNum > extraMonthlyStartYear ||
+      (yNum === extraMonthlyStartYear && mNum >= extraMonthlyStartMonth);
+    if (isMonthlyActive) {
+      extraPaidThisMonth += Math.max(0, extraMonthlyPayment);
     }
 
-    // Principal Cap
+    // Yearly extra payment check
+    const isYearlyActive =
+      mNum === extraYearlyStartMonth && yNum >= extraYearlyStartYear;
+    if (isYearlyActive) {
+      extraPaidThisMonth += Math.max(0, extraYearlyPayment);
+    }
+
+    // Multiple One-Time Payments check
+    if (extraOneTimePayments && extraOneTimePayments.length > 0) {
+      extraOneTimePayments.forEach((otp) => {
+        if (Number(otp.amount) > 0 && Number(otp.month) === mNum && Number(otp.year) === yNum) {
+          extraPaidThisMonth += Number(otp.amount);
+        }
+      });
+    }
+
     let totalPrincipalThisMonth = basePrincipalPaid + extraPaidThisMonth;
     if (totalPrincipalThisMonth > balance) {
       totalPrincipalThisMonth = balance;
@@ -213,6 +234,62 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
   const interestSavings = Math.max(0, baselineInterestPaid - totalInterestPaid);
   const monthsSaved = Math.max(0, totalMonths - payoffMonths);
 
+  // 5. Biweekly Calculation Engine
+  const biweeklyPayment = monthlyPrincipalAndInterest / 2;
+  const biweeklyRate = Math.max(0, interestRate) / 100 / 26;
+  const maxBiweeklyPeriods = loanTermYears * 26;
+
+  let biweeklyBalance = loanAmount;
+  let biweeklyAccumulatedInterest = 0;
+  let biweeklyPeriodCount = 0;
+  const biweeklySchedule: AmortizationRow[] = [];
+
+  while (biweeklyBalance > 0.001 && biweeklyPeriodCount < maxBiweeklyPeriods) {
+    biweeklyPeriodCount++;
+    const periodInterest = biweeklyBalance * biweeklyRate;
+    let periodPrincipal = biweeklyPayment - periodInterest;
+    if (periodPrincipal < 0) periodPrincipal = 0;
+    if (periodPrincipal > biweeklyBalance) periodPrincipal = biweeklyBalance;
+
+    biweeklyBalance -= periodPrincipal;
+    biweeklyAccumulatedInterest += periodInterest;
+
+    // Approximate date for biweekly row (every 2 weeks = ~0.46 months)
+    const monthOffset = Math.floor((biweeklyPeriodCount - 1) * (12 / 26));
+    const totalOffset = (startMonth - 1) + monthOffset;
+    const bM = (totalOffset % 12);
+    const bY = startYear + Math.floor(totalOffset / 12);
+    const bDateStr = `BW ${biweeklyPeriodCount} (${monthNames[bM]} ${bY})`;
+
+    biweeklySchedule.push({
+      month: biweeklyPeriodCount,
+      year: Math.ceil(biweeklyPeriodCount / 26),
+      date: bDateStr,
+      payment: periodPrincipal + periodInterest + (initialMonthlyTax / 2) + (initialMonthlyInsurance / 2),
+      principalPaid: periodPrincipal,
+      interestPaid: periodInterest,
+      extraPaid: 0,
+      propertyTax: initialMonthlyTax / 2,
+      homeInsurance: initialMonthlyInsurance / 2,
+      pmi: 0,
+      hoaFee: hoaFee / 2,
+      otherCosts: otherCosts / 2,
+      remainingBalance: Math.max(0, biweeklyBalance),
+      totalInterestPaid: biweeklyAccumulatedInterest,
+    });
+
+    if (biweeklyBalance <= 0) break;
+  }
+
+  const biweeklyPayoffMonths = Math.ceil((biweeklyPeriodCount * 12) / 26);
+  const bwLastMonthOffset = (startMonth - 1) + (biweeklyPayoffMonths - 1);
+  const bwFinalM = (bwLastMonthOffset % 12);
+  const bwFinalY = startYear + Math.floor(bwLastMonthOffset / 12);
+  const biweeklyPayoffDate = `${fullMonthNames[bwFinalM]} ${bwFinalY}`;
+
+  const biweeklyInterestSavings = Math.max(0, baselineInterestPaid - biweeklyAccumulatedInterest);
+  const biweeklyMonthsSaved = Math.max(0, totalMonths - biweeklyPayoffMonths);
+
   // Breakdown table & Donut visual items
   const totalOtherLifetime = totalPmiPaid + totalHoaPaid + totalOtherCostsPaid;
   const initialOtherMonthly = initialMonthlyPmi + hoaFee + otherCosts;
@@ -223,28 +300,28 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
       monthlyFirstYear: monthlyPrincipalAndInterest,
       totalLifetime: totalPrincipalPaid + totalInterestPaid,
       percentageOfTotal: totalCost > 0 ? ((totalPrincipalPaid + totalInterestPaid) / totalCost) * 100 : 0,
-      color: "#3B82F6", // Blue
+      color: "#3B82F6",
     },
     {
       category: "Property Tax",
       monthlyFirstYear: initialMonthlyTax,
       totalLifetime: totalPropertyTaxPaid,
       percentageOfTotal: totalCost > 0 ? (totalPropertyTaxPaid / totalCost) * 100 : 0,
-      color: "#10B981", // Emerald
+      color: "#10B981",
     },
     {
       category: "Home Insurance",
       monthlyFirstYear: initialMonthlyInsurance,
       totalLifetime: totalInsurancePaid,
       percentageOfTotal: totalCost > 0 ? (totalInsurancePaid / totalCost) * 100 : 0,
-      color: "#F59E0B", // Amber
+      color: "#F59E0B",
     },
     {
       category: "Other Costs (PMI, HOA, Fees)",
       monthlyFirstYear: initialOtherMonthly,
       totalLifetime: totalOtherLifetime,
       percentageOfTotal: totalCost > 0 ? (totalOtherLifetime / totalCost) * 100 : 0,
-      color: "#8B5CF6", // Purple
+      color: "#8B5CF6",
     },
   ];
 
@@ -276,6 +353,14 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
 
     payoffDate,
     payoffMonths,
+
+    biweeklyPayment,
+    biweeklyPayoffDate,
+    biweeklyPayoffMonths,
+    biweeklyTotalInterest: biweeklyAccumulatedInterest,
+    biweeklyInterestSavings,
+    biweeklyMonthsSaved,
+    biweeklyAmortizationSchedule: biweeklySchedule,
 
     breakdown,
     amortizationSchedule: schedule,

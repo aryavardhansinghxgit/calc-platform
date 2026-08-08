@@ -204,9 +204,16 @@ export const MORTGAGE_CALCULATOR: CalculatorModuleDefinition = {
       otherCostsIncrease: Number(inputs.otherCostsIncrease || 2.0),
       extraMonthlyPayment: Number(inputs.extraMonthlyPayment || 0),
       extraYearlyPayment: Number(inputs.extraYearlyPayment || 0),
-      extraOneTimePayment: Number(inputs.extraOneTimePayment || 0),
-      extraOneTimeMonth: Number(inputs.extraOneTimeMonth || 1),
-      extraOneTimeYear: Number(inputs.extraOneTimeYear || new Date().getFullYear() + 1),
+      extraOneTimePayments: inputs.extraOneTimePayment
+        ? [
+            {
+              id: "otp-1",
+              amount: Number(inputs.extraOneTimePayment),
+              month: Number(inputs.extraOneTimeMonth || 1),
+              year: Number(inputs.extraOneTimeYear || new Date().getFullYear() + 1),
+            },
+          ]
+        : [],
     });
   },
 };
