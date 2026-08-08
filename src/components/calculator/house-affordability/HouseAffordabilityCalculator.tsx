@@ -36,6 +36,7 @@ import {
   CheckSquare,
   Square,
   Eye,
+  Download,
 } from "lucide-react";
 import {
   calculateIncomeAffordability,
@@ -252,6 +253,34 @@ export function HouseAffordabilityCalculator() {
   // Print & PDF Export
   const handlePrint = () => {
     setIsReportModalOpen(true);
+  };
+
+  // Export Amortization Schedule CSV
+  const handleExportCsv = () => {
+    const schedule = incomeResults.fullSchedule || [];
+    if (!schedule || schedule.length === 0) return;
+
+    const headers = ["Month", "Date", "Payment", "Principal Paid", "Interest Paid", "Remaining Balance"];
+    const rows = schedule.map((row) => [
+      row.month,
+      `"${row.date}"`,
+      row.payment.toFixed(2),
+      row.principal.toFixed(2),
+      row.interest.toFixed(2),
+      row.balance.toFixed(2),
+    ]);
+
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `house_affordability_amortization_schedule.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleShareUrl = () => {
@@ -739,14 +768,25 @@ export function HouseAffordabilityCalculator() {
                     Monthly principal and interest breakdown
                   </CardDescription>
                 </div>
-                <Button
-                  type="button"
-                  size="sm"
-                  onClick={() => setIsScheduleModalOpen(true)}
-                  className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  <Eye className="h-3.5 w-3.5" /> View Full Amortization
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleExportCsv}
+                    className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1.5 bg-white dark:bg-zinc-900 cursor-pointer"
+                  >
+                    <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Export CSV
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => setIsScheduleModalOpen(true)}
+                    className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+                  >
+                    <Eye className="h-3.5 w-3.5" /> View Full Amortization
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="overflow-x-auto max-h-72 overflow-y-auto">
@@ -1086,13 +1126,24 @@ export function HouseAffordabilityCalculator() {
                   Loan Amount: {formatCurrency(incomeResults.maxLoanAmount)} @ {interestRate1}% interest rate
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => setIsScheduleModalOpen(false)}
-                className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
-              >
-                <X className="h-5 w-5" />
-              </button>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportCsv}
+                  className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1.5 bg-white dark:bg-zinc-900 cursor-pointer"
+                >
+                  <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Export CSV
+                </Button>
+                <button
+                  type="button"
+                  onClick={() => setIsScheduleModalOpen(false)}
+                  className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 p-1"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
             </div>
 
             <div className="overflow-x-auto flex-1 overflow-y-auto rounded-xl border border-zinc-200 dark:border-zinc-800">
@@ -1128,11 +1179,20 @@ export function HouseAffordabilityCalculator() {
               </Table>
             </div>
 
-            <div className="flex items-center justify-end pt-2 border-t border-zinc-100 dark:border-zinc-800">
+            <div className="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleExportCsv}
+                className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1.5 bg-white dark:bg-zinc-900 cursor-pointer"
+              >
+                <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Export CSV
+              </Button>
               <Button
                 type="button"
                 onClick={() => setIsScheduleModalOpen(false)}
-                className="h-8 text-xs bg-blue-600 text-white"
+                className="h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
               >
                 Close Schedule
               </Button>
