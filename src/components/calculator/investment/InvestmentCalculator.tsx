@@ -449,83 +449,363 @@ export function InvestmentCalculator() {
               ))}
             </div>
 
-            {/* Core Inputs */}
+            {/* Core Inputs based on activeMode */}
             <div className="space-y-4 pt-1">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                    Starting Principal Amount
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
-                      {currencySymbol}
-                    </span>
+              {/* MODE 1: FUTURE VALUE */}
+              {activeMode === "future_value" && (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Starting Principal Amount
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                          {currencySymbol}
+                        </span>
+                        <Input
+                          type="number"
+                          value={startingAmountInput}
+                          onChange={(e) => setStartingAmountInput(e.target.value)}
+                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Expected Return Rate (%)
+                      </label>
+                      <Input
+                        type="number"
+                        step="0.1"
+                        value={rateInput}
+                        onChange={(e) => setRateInput(e.target.value)}
+                        className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Additional Contribution ($)
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                          {currencySymbol}
+                        </span>
+                        <Input
+                          type="number"
+                          value={additionalContributionInput}
+                          onChange={(e) => setAdditionalContributionInput(e.target.value)}
+                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Contribution Frequency & Timing
+                      </label>
+                      <div className="flex gap-1.5">
+                        <select
+                          value={contributionFrequency}
+                          onChange={(e) => setContributionFrequency(e.target.value as ContributionFrequency)}
+                          className="h-9 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs px-2 font-medium text-zinc-900 dark:text-zinc-100 flex-1"
+                        >
+                          <option value="month">Monthly</option>
+                          <option value="year">Annually</option>
+                        </select>
+                        <select
+                          value={contributionTiming}
+                          onChange={(e) => setContributionTiming(e.target.value as ContributionTiming)}
+                          className="h-9 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs px-2 font-medium text-zinc-900 dark:text-zinc-100 flex-1"
+                        >
+                          <option value="end">End of Period</option>
+                          <option value="beginning">Beginning of Period</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* MODE 2: CONTRIBUTIONS */}
+              {activeMode === "contributions" && (
+                <>
+                  <div>
+                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                      Target Investment Goal ($)
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        {currencySymbol}
+                      </span>
+                      <Input
+                        type="number"
+                        value={goalInput}
+                        onChange={(e) => setGoalInput(e.target.value)}
+                        className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Starting Principal Amount
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                          {currencySymbol}
+                        </span>
+                        <Input
+                          type="number"
+                          value={startingAmountInput}
+                          onChange={(e) => setStartingAmountInput(e.target.value)}
+                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Expected Return Rate (%)
+                      </label>
+                      <Input
+                        type="number"
+                        step="0.1"
+                        value={rateInput}
+                        onChange={(e) => setRateInput(e.target.value)}
+                        className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* MODE 3: RETURN RATE */}
+              {activeMode === "return_rate" && (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Target Investment Goal ($)
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                          {currencySymbol}
+                        </span>
+                        <Input
+                          type="number"
+                          value={goalInput}
+                          onChange={(e) => setGoalInput(e.target.value)}
+                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Starting Principal Amount
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                          {currencySymbol}
+                        </span>
+                        <Input
+                          type="number"
+                          value={startingAmountInput}
+                          onChange={(e) => setStartingAmountInput(e.target.value)}
+                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                      Additional Contribution ($)
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        {currencySymbol}
+                      </span>
+                      <Input
+                        type="number"
+                        value={additionalContributionInput}
+                        onChange={(e) => setAdditionalContributionInput(e.target.value)}
+                        className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* MODE 4: STARTING AMOUNT */}
+              {activeMode === "starting_amount" && (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Target Investment Goal ($)
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                          {currencySymbol}
+                        </span>
+                        <Input
+                          type="number"
+                          value={goalInput}
+                          onChange={(e) => setGoalInput(e.target.value)}
+                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Expected Return Rate (%)
+                      </label>
+                      <Input
+                        type="number"
+                        step="0.1"
+                        value={rateInput}
+                        onChange={(e) => setRateInput(e.target.value)}
+                        className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                      Additional Contribution ($)
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        {currencySymbol}
+                      </span>
+                      <Input
+                        type="number"
+                        value={additionalContributionInput}
+                        onChange={(e) => setAdditionalContributionInput(e.target.value)}
+                        className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* MODE 5: RETIREMENT */}
+              {activeMode === "retirement" && (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Current Retirement Savings
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                          {currencySymbol}
+                        </span>
+                        <Input
+                          type="number"
+                          value={startingAmountInput}
+                          onChange={(e) => setStartingAmountInput(e.target.value)}
+                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Monthly Contribution ($)
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                          {currencySymbol}
+                        </span>
+                        <Input
+                          type="number"
+                          value={additionalContributionInput}
+                          onChange={(e) => setAdditionalContributionInput(e.target.value)}
+                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                      Expected Annual Return (%)
+                    </label>
                     <Input
                       type="number"
-                      value={startingAmountInput}
-                      onChange={(e) => setStartingAmountInput(e.target.value)}
-                      className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                      step="0.1"
+                      value={rateInput}
+                      onChange={(e) => setRateInput(e.target.value)}
+                      className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
                     />
                   </div>
-                </div>
+                </>
+              )}
 
-                <div>
-                  <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                    Expected Return Rate (%)
-                  </label>
-                  <Input
-                    type="number"
-                    step="0.1"
-                    value={rateInput}
-                    onChange={(e) => setRateInput(e.target.value)}
-                    className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                    Additional Contribution ($)
-                  </label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
-                      {currencySymbol}
-                    </span>
-                    <Input
-                      type="number"
-                      value={additionalContributionInput}
-                      onChange={(e) => setAdditionalContributionInput(e.target.value)}
-                      className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
-                    />
+              {/* MODE 6: FIRE TARGET */}
+              {activeMode === "fire" && (
+                <>
+                  <div>
+                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                      Expected Annual Living Expenses ($)
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        {currencySymbol}
+                      </span>
+                      <Input
+                        type="number"
+                        value={additionalContributionInput}
+                        onChange={(e) => setAdditionalContributionInput(e.target.value)}
+                        className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                    Contribution Frequency & Timing
-                  </label>
-                  <div className="flex gap-1.5">
-                    <select
-                      value={contributionFrequency}
-                      onChange={(e) => setContributionFrequency(e.target.value as ContributionFrequency)}
-                      className="h-9 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs px-2 font-medium text-zinc-900 dark:text-zinc-100 flex-1"
-                    >
-                      <option value="month">Monthly</option>
-                      <option value="year">Annually</option>
-                    </select>
-                    <select
-                      value={contributionTiming}
-                      onChange={(e) => setContributionTiming(e.target.value as ContributionTiming)}
-                      className="h-9 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs px-2 font-medium text-zinc-900 dark:text-zinc-100 flex-1"
-                    >
-                      <option value="end">End of Period</option>
-                      <option value="beginning">Beginning of Period</option>
-                    </select>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Current Savings / Capital ($)
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                          {currencySymbol}
+                        </span>
+                        <Input
+                          type="number"
+                          value={startingAmountInput}
+                          onChange={(e) => setStartingAmountInput(e.target.value)}
+                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                        Expected Annual Return (%)
+                      </label>
+                      <Input
+                        type="number"
+                        step="0.1"
+                        value={rateInput}
+                        onChange={(e) => setRateInput(e.target.value)}
+                        className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                      />
+                    </div>
                   </div>
-                </div>
-              </div>
+                </>
+              )}
 
+              {/* Common Duration & Frequency Controls */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
@@ -646,23 +926,85 @@ export function InvestmentCalculator() {
           <div className="bg-gradient-to-br from-zinc-900 via-slate-900 to-blue-950 text-white rounded-2xl p-6 shadow-xl border border-zinc-800 space-y-5">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <span className="text-xs uppercase font-extrabold tracking-wider text-blue-400">
-                Investment Portfolio Output
+                Investment Portfolio Output ({activeMode.toUpperCase()})
               </span>
               <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-400/30 text-[10px]">
                 {results.growthMultiple.toFixed(2)}x Growth
               </Badge>
             </div>
 
-            {/* Main Result Display */}
-            <div>
-              <span className="text-xs text-zinc-400 block font-medium">Future Portfolio Value</span>
-              <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
-                {currencySymbol}{results.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            {/* DYNAMIC MAIN RESULT DISPLAY PER MODE */}
+            {activeMode === "future_value" && (
+              <div>
+                <span className="text-xs text-zinc-400 block font-medium">Future Portfolio Value</span>
+                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+                  {currencySymbol}{results.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </div>
+                <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
+                  Total Investment Gain: <strong className="text-white">{currencySymbol}{results.totalInterestEarned.toLocaleString()}</strong>
+                </p>
               </div>
-              <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
-                Total Investment Gain: <strong className="text-white">{currencySymbol}{results.totalInterestEarned.toLocaleString()}</strong>
-              </p>
-            </div>
+            )}
+
+            {activeMode === "contributions" && (
+              <div>
+                <span className="text-xs text-zinc-400 block font-medium">Required Monthly Contribution</span>
+                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+                  {currencySymbol}{results.requiredMonthlyContribution.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/mo
+                </div>
+                <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
+                  Annual Equivalent: <strong className="text-white">{currencySymbol}{results.requiredAnnualContribution.toLocaleString()}/yr</strong>
+                </p>
+              </div>
+            )}
+
+            {activeMode === "return_rate" && (
+              <div>
+                <span className="text-xs text-zinc-400 block font-medium">Required Annual Return Rate</span>
+                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+                  {results.requiredReturnRate.toFixed(2)}%
+                </div>
+                <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
+                  To reach goal of <strong className="text-white">{currencySymbol}{parsedGoal.toLocaleString()}</strong>
+                </p>
+              </div>
+            )}
+
+            {activeMode === "starting_amount" && (
+              <div>
+                <span className="text-xs text-zinc-400 block font-medium">Required Starting Principal</span>
+                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+                  {currencySymbol}{results.requiredStartingAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </div>
+                <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
+                  To reach goal of <strong className="text-white">{currencySymbol}{parsedGoal.toLocaleString()}</strong>
+                </p>
+              </div>
+            )}
+
+            {activeMode === "retirement" && (
+              <div>
+                <span className="text-xs text-zinc-400 block font-medium">Retirement Portfolio at Maturity</span>
+                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+                  {currencySymbol}{results.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </div>
+                <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
+                  Est. Safe Passive Income (4% Rule): <strong className="text-white">{currencySymbol}{(results.estimatedPassiveIncomePerYear / 12).toLocaleString(undefined, { maximumFractionDigits: 0 })}/mo</strong>
+                </p>
+              </div>
+            )}
+
+            {activeMode === "fire" && (
+              <div>
+                <span className="text-xs text-zinc-400 block font-medium">FIRE Number Target (25x Expenses)</span>
+                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+                  {currencySymbol}{results.fireNumberTarget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </div>
+                <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
+                  Projected Portfolio: <strong className="text-white">{currencySymbol}{results.endingBalance.toLocaleString()} ({results.goalTracker.currentProgressPercent.toFixed(1)}% Progress)</strong>
+                </p>
+              </div>
+            )}
 
             {/* Metric Cards Grid */}
             <div className="grid grid-cols-2 gap-3 pt-2 border-t border-white/10">
