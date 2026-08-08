@@ -4,7 +4,7 @@ import React, { useState, useMemo } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Download, Search, Printer } from "lucide-react";
+import { Download, Search } from "lucide-react";
 import { AmortizationComparisonRow } from "@/modules/refinance/types";
 import { formatCurrency } from "@/lib/calculator-engine/formatters";
 
@@ -74,15 +74,6 @@ export function RefinanceAmortizationTable({ schedule }: RefinanceAmortizationTa
             className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1 bg-white dark:bg-zinc-900"
           >
             <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Export CSV
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => window.print()}
-            className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1 bg-white dark:bg-zinc-900"
-          >
-            <Printer className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" /> Print
           </Button>
         </div>
       </div>

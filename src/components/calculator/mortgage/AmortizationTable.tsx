@@ -4,7 +4,7 @@ import React, { useState, useMemo } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Download, Search, Calendar, Clock, RefreshCw, Printer } from "lucide-react";
+import { Download, Search, Calendar, Clock, RefreshCw } from "lucide-react";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { formatCurrency } from "@/lib/calculator-engine/formatters";
 
@@ -233,16 +233,6 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
             className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1.5 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
           >
             <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Export CSV
-          </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => window.print()}
-            className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1.5 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
-          >
-            <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
           </Button>
         </div>
       </div>

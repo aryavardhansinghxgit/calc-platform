@@ -4,7 +4,7 @@ import React, { useState, useMemo } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Download, Search, Calendar, Clock, Printer, FileSpreadsheet, ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
+import { Download, Search, Calendar, Clock, FileSpreadsheet, ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
 import { EmiAmortizationRow, AnnualEmiRow } from "@/modules/emi/types";
 import { formatCurrency } from "@/lib/calculator-engine/formatters";
 
@@ -125,10 +125,6 @@ export function EmiScheduleTable({ monthlySchedule, annualSchedule }: EmiSchedul
     handleExportCsv();
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   const renderSortIcon = (field: SortField) => {
     if (sortField !== field) {
       return <ArrowUpDown className="h-3 w-3 opacity-40 ml-1 inline" />;
@@ -210,15 +206,6 @@ export function EmiScheduleTable({ monthlySchedule, annualSchedule }: EmiSchedul
             className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1 bg-white dark:bg-zinc-900"
           >
             <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> Excel
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handlePrint}
-            className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1 bg-white dark:bg-zinc-900"
-          >
-            <Printer className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" /> Print
           </Button>
         </div>
       </div>

@@ -9,7 +9,6 @@ import {
   Search,
   Calendar,
   Clock,
-  Printer,
   FileSpreadsheet,
   FileText,
   ArrowUpDown,
@@ -140,11 +139,6 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
     handleExportCsv(); // Formatted CSV functions as Excel compatible sheet
   };
 
-  // Export PDF / Print
-  const handlePrint = () => {
-    window.print();
-  };
-
   const renderSortIcon = (field: SortField) => {
     if (sortField !== field) {
       return <ArrowUpDown className="h-3 w-3 opacity-40 ml-1 inline" />;
@@ -228,15 +222,6 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
             className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800"
           >
             <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> Excel
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handlePrint}
-            className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-          >
-            <Printer className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" /> PDF / Print
           </Button>
         </div>
       </div>
