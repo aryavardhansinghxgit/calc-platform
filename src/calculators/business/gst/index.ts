@@ -2,9 +2,9 @@ import { CalculatorModuleDefinition } from "../../types";
 import { calculateGstFormula } from "@/lib/calculator-engine/formulas/gst";
 
 export const GST_CALCULATOR: CalculatorModuleDefinition = {
-  id: "gst",
-  title: "GST Calculator",
-  slug: "gst-calculator",
+  id: "business-gst",
+  title: "Business GST Calculator",
+  slug: "business-gst-calculator",
   category: "Business",
   description: "Calculate Goods and Services Tax (GST) inclusive and exclusive amounts.",
   iconName: "Receipt",

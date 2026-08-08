@@ -257,10 +257,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             </div>
 
             <ul className="space-y-1 text-xs">
-              {filteredSidebarCalculators.map((calc) => {
+              {filteredSidebarCalculators.map((calc, idx) => {
                 const isActive = calc.id === definition.id || calc.slug === definition.slug;
                 return (
-                  <li key={calc.id}>
+                  <li key={`${calc.id}-${calc.slug}-${idx}`}>
                     <Link
                       href={`/calculators/${calc.slug}`}
                       className={`flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors group ${
