@@ -1,44 +1,14 @@
 /**
- * Pure Mathematical Logic for Equated Monthly Installment (EMI) Calculation.
+ * Pure Mathematical Logic for EMI Calculator.
+ * Delegated to src/modules/emi/formula.ts for Clean Architecture.
  */
 
-export interface EmiFormulaInput {
-  principal: number;
-  interestRate: number;
-  tenureMonths: number;
-}
+import { calculateEmiModule } from "@/modules/emi/formula";
+import { EmiInput, EmiOutput } from "@/modules/emi/types";
 
-export interface EmiFormulaResult {
-  monthlyEmi: number;
-  totalInterestPayable: number;
-  totalPayment: number;
-}
+export type EmiFormulaInput = EmiInput;
+export type EmiFormulaResult = EmiOutput;
 
-export function calculateEmiFormula({
-  principal,
-  interestRate,
-  tenureMonths,
-}: EmiFormulaInput): EmiFormulaResult {
-  const monthlyRate = interestRate / 100 / 12;
-
-  let monthlyEmi = 0;
-
-  if (principal > 0 && tenureMonths > 0) {
-    if (monthlyRate === 0) {
-      monthlyEmi = principal / tenureMonths;
-    } else {
-      monthlyEmi =
-        (principal * monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) /
-        (Math.pow(1 + monthlyRate, tenureMonths) - 1);
-    }
-  }
-
-  const totalPayment = monthlyEmi * tenureMonths;
-  const totalInterestPayable = Math.max(0, totalPayment - principal);
-
-  return {
-    monthlyEmi,
-    totalInterestPayable,
-    totalPayment,
-  };
+export function calculateEmiFormula(inputs: EmiFormulaInput): EmiFormulaResult {
+  return calculateEmiModule(inputs);
 }
