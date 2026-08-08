@@ -51,6 +51,8 @@ import {
   SavedAffordabilityCalculation,
 } from "@/modules/house-affordability/types";
 import { formatCurrency } from "@/lib/calculator-engine/formatters";
+import ReportModal from "@/components/report/ReportModal";
+import { generateHouseAffordabilityReportData } from "@/lib/report-generator/house-affordability-report";
 
 // Lazy load visual charts
 const HousingCostPieChart = dynamic(
@@ -113,6 +115,7 @@ export function HouseAffordabilityCalculator() {
   // UI State: Full Schedule Modal, Saved Calculations, Messages
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState<boolean>(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
   const [saveName, setSaveName] = useState<string>("");
   const [savedCalculations, setSavedCalculations] = useState<SavedAffordabilityCalculation[]>([]);
   const [copySuccessMsg, setCopySuccessMsg] = useState<string>("");
@@ -232,9 +235,23 @@ export function HouseAffordabilityCalculator() {
     setTimeout(() => setCopySuccessMsg(""), 2000);
   };
 
+  // Executive Report Data
+  const reportData = useMemo(() => {
+    return generateHouseAffordabilityReportData(
+      { annualIncome, monthlyDebt, downPayment: downPayment1 },
+      {
+        maxHomePrice: activeCalc === "income" ? incomeResults.maxHomePrice : budgetResults.maxHomePrice,
+        maxLoanAmount: activeCalc === "income" ? incomeResults.maxLoanAmount : budgetResults.maxLoanAmount,
+        maxMonthlyPayment: activeCalc === "income" ? incomeResults.totalMonthlyHousingCost : budgetResults.totalMonthlyHousingCost,
+        frontEndDti: activeCalc === "income" ? incomeResults.frontEndRatio : 28,
+        backEndDti: activeCalc === "income" ? incomeResults.backEndRatio : 36,
+      }
+    );
+  }, [activeCalc, annualIncome, monthlyDebt, downPayment1, incomeResults, budgetResults]);
+
   // Print & PDF Export
   const handlePrint = () => {
-    window.print();
+    setIsReportModalOpen(true);
   };
 
   const handleShareUrl = () => {
@@ -1234,6 +1251,13 @@ export function HouseAffordabilityCalculator() {
           </div>
         </div>
       )}
+
+      {/* Executive Financial Report Modal */}
+      <ReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        reportData={reportData}
+      />
     </div>
   );
 }

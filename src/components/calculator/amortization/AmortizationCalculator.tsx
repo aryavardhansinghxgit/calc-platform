@@ -40,6 +40,7 @@ import {
   AlertCircle,
   SlidersHorizontal,
   FolderOpen,
+  Printer,
 } from "lucide-react";
 import { calculateAmortizationModule } from "@/modules/amortization/formula";
 import {
@@ -49,6 +50,8 @@ import {
 } from "@/modules/amortization/types";
 import { formatCurrency } from "@/lib/calculator-engine/formatters";
 import AmortizationScheduleTable from "./AmortizationScheduleTable";
+import ReportModal from "@/components/report/ReportModal";
+import { generateLoanReportData } from "@/lib/report-generator/loan-report";
 
 // Lazy load visual chart components
 const AmortizationPieChart = dynamic(
@@ -103,6 +106,7 @@ export function AmortizationCalculator() {
 
   // Save & Share State
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
   const [saveName, setSaveName] = useState<string>("");
   const [savedCalculations, setSavedCalculations] = useState<SavedAmortizationCalculation[]>([]);
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string>("");
@@ -186,6 +190,13 @@ export function AmortizationCalculator() {
     extraStartMonth,
     extraStartYear,
   ]);
+
+  const reportData = useMemo(() => {
+    return generateLoanReportData(
+      { loanAmount, interestRate, loanTermYears, loanTermMonths },
+      { monthlyPayment: results.monthlyPayment, totalInterest: results.totalInterest, totalPayment: results.totalInterest + loanAmount }
+    );
+  }, [loanAmount, interestRate, loanTermYears, loanTermMonths, results]);
 
   // Action: Calculate Button
   const handleCalculate = (e: React.FormEvent) => {
@@ -354,15 +365,24 @@ export function AmortizationCalculator() {
             variant="outline"
             size="sm"
             onClick={handleShareUrl}
-            className="h-8 text-xs gap-1.5 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900"
+            className="h-8 text-xs gap-1.5 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 cursor-pointer"
           >
             <Share2 className="h-3.5 w-3.5 text-blue-500" /> Share Link
           </Button>
           <Button
             type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setIsReportModalOpen(true)}
+            className="h-8 text-xs gap-1.5 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 cursor-pointer"
+          >
+            <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
+          </Button>
+          <Button
+            type="button"
             size="sm"
             onClick={() => setIsSaveModalOpen(true)}
-            className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
+            className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs cursor-pointer"
           >
             <Bookmark className="h-3.5 w-3.5" /> Save Calculation
           </Button>
@@ -941,6 +961,13 @@ export function AmortizationCalculator() {
           </div>
         </div>
       )}
+
+      {/* Executive Report Modal */}
+      <ReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        reportData={reportData}
+      />
     </div>
   );
 }

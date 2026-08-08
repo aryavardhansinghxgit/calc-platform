@@ -23,6 +23,10 @@ import { RefinanceCalculator } from "./refinance/RefinanceCalculator";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Printer } from "lucide-react";
+import ReportModal from "@/components/report/ReportModal";
+import { generateGenericReportData } from "@/lib/report-generator/generic-report";
 
 // Lazy load heavy chart components
 const MortgagePieChart = dynamic(() => import("./charts/MortgagePieChart").then((m) => m.MortgagePieChart), {
@@ -54,6 +58,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
 
   const [inputs, setInputs] = useState<Record<string, any>>(initialInputs);
   const [sidebarQuery, setSidebarQuery] = useState("");
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   const handleInputChange = (key: string, value: any) => {
     setInputs((prev) => ({ ...prev, [key]: value }));
@@ -62,6 +67,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const calculationResult: CalculationResult = useMemo(() => {
     return CalculatorEngine.run(definition.id, inputs);
   }, [definition.id, inputs]);
+
+  const genericReportData = useMemo(() => {
+    return generateGenericReportData(definition, inputs, calculationResult);
+  }, [definition, inputs, calculationResult]);
 
   const amortizationSchedule: AmortizationRow[] = useMemo(() => {
     if (calculationResult.success && calculationResult.data?.amortizationSchedule) {
@@ -153,9 +162,20 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
 
                   {/* Right: Results Panel */}
                   <div className="md:col-span-6 space-y-3">
-                    <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                      Calculated Summary
-                    </h2>
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                        Calculated Summary
+                      </h2>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setIsReportModalOpen(true)}
+                        className="h-7 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer"
+                      >
+                        <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
+                      </Button>
+                    </div>
                     <CalculatorResult
                       definition={definition}
                       result={calculationResult}
@@ -295,6 +315,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
         </aside>
       </div>
+
+      {/* Generic Report Modal */}
+      <ReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        reportData={genericReportData}
+      />
     </div>
   );
 }

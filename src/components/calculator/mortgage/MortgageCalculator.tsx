@@ -42,6 +42,7 @@ import {
   Minus,
   RefreshCw,
   FolderOpen,
+  Printer,
 } from "lucide-react";
 import { calculateMortgageModule } from "@/modules/mortgage/formula";
 import {
@@ -52,6 +53,8 @@ import {
 } from "@/modules/mortgage/types";
 import { formatCurrency } from "@/lib/calculator-engine/formatters";
 import { AmortizationTable } from "./AmortizationTable";
+import ReportModal from "@/components/report/ReportModal";
+import { generateMortgageReportData } from "@/lib/report-generator/mortgage-report";
 
 // Lazy load chart components
 const MortgagePieChart = dynamic(
@@ -146,6 +149,7 @@ export function MortgageCalculator() {
 
   // Save Calculation Modal & State
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
+  const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
   const [saveName, setSaveName] = useState<string>("");
   const [saveDescription, setSaveDescription] = useState<string>("");
   const [savedCalculations, setSavedCalculations] = useState<SavedMortgageCalculation[]>([]);
@@ -399,6 +403,42 @@ export function MortgageCalculator() {
     showBiweekly,
   ]);
 
+  const reportData = useMemo(() => {
+    return generateMortgageReportData(
+      {
+        homePrice,
+        downPayment,
+        downPaymentType,
+        loanTermYears,
+        interestRate,
+        startMonth,
+        startYear,
+        propertyTax,
+        propertyTaxType,
+        homeInsurance,
+        pmiRate,
+        hoaFee,
+        otherCosts,
+      },
+      results
+    );
+  }, [
+    homePrice,
+    downPayment,
+    downPaymentType,
+    loanTermYears,
+    interestRate,
+    startMonth,
+    startYear,
+    propertyTax,
+    propertyTaxType,
+    homeInsurance,
+    pmiRate,
+    hoaFee,
+    otherCosts,
+    results,
+  ]);
+
   const monthOptions = [
     { value: 1, label: "Jan" },
     { value: 2, label: "Feb" },
@@ -436,16 +476,26 @@ export function MortgageCalculator() {
             variant="outline"
             size="sm"
             onClick={handleResetForm}
-            className="h-8 text-xs gap-1 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900"
+            className="h-8 text-xs gap-1 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 cursor-pointer"
           >
             <RotateCcw className="h-3.5 w-3.5" /> Clear
           </Button>
 
           <Button
             type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setIsReportModalOpen(true)}
+            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer"
+          >
+            <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
+          </Button>
+
+          <Button
+            type="button"
             size="sm"
             onClick={() => setIsSaveModalOpen(true)}
-            className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
+            className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs cursor-pointer"
           >
             <Bookmark className="h-3.5 w-3.5" /> Save Calculation
           </Button>
@@ -1449,6 +1499,13 @@ export function MortgageCalculator() {
           </div>
         </div>
       )}
+
+      {/* Executive Financial Report Modal */}
+      <ReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        reportData={reportData}
+      />
     </div>
   );
 }
