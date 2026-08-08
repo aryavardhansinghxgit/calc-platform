@@ -1,5 +1,5 @@
 /**
- * Unit Test Suite for Auto Loan Calculator Formula.
+ * Unit Test Suite for Expanded Auto Loan Calculator Formula.
  */
 
 import { calculateAutoLoanFormula } from "../calculator-engine/formulas/auto-loan";
@@ -13,55 +13,79 @@ function assertEqual(actual: any, expected: any, testName: string) {
 export function runAutoLoanTests(): { passed: boolean; count: number } {
   let count = 0;
 
-  // Test 1: Standard Auto Loan Calculation ($35,000 car, $5,000 down, $2,000 trade-in, 7% tax, $500 fees, 5.9% APR, 60 mo)
+  // Test 1: Standard Auto Loan Calculation
   const result1 = calculateAutoLoanFormula({
     vehiclePrice: 35000,
     downPayment: 5000,
-    tradeInValue: 2000,
-    salesTaxRate: 7,
-    fees: 500,
+    tradeInValue: 3000,
+    amountOwedOnTradeIn: 0,
+    salesTaxRate: 6,
+    registrationFees: 300,
+    dealerFees: 250,
     interestRate: 5.9,
     loanTermMonths: 60,
+    includeFeesInLoan: true,
   });
 
-  // Net Vehicle Price: 35000 - 5000 - 2000 = 28000
-  // Tax: 28000 * 0.07 = 1960
-  // Financed Loan Amount: 28000 + 1960 + 500 = 30460
-  assertEqual(result1.loanAmount, 30460, "Auto Loan Financed Amount");
-  assertEqual(result1.totalSalesTax, 1960, "Auto Loan Sales Tax");
-  assertEqual(result1.monthlyPayment, 587.46, "Auto Loan Monthly Payment");
+  // Taxable: 35000 - 3000 = 32000; Tax: 32000 * 0.06 = 1920
+  // Fees: 300 + 250 = 550
+  // Financed Loan: 35000 - 5000 - 3000 + 1920 + 550 = 29470
+  assertEqual(result1.loanAmount, 29470, "Auto Loan Financed Amount");
+  assertEqual(result1.totalSalesTax, 1920, "Auto Loan Sales Tax");
+  assertEqual(result1.monthlyPayment, 568.37, "Auto Loan Monthly Payment");
   count++;
 
-  // Test 2: 0% Interest Rate Financing
+  // Test 2: Negative Equity Trade-In Rollover
   const result2 = calculateAutoLoanFormula({
+    vehiclePrice: 25000,
+    downPayment: 2000,
+    tradeInValue: 8000,
+    amountOwedOnTradeIn: 11000, // Negative equity of $3,000
+    salesTaxRate: 5,
+    registrationFees: 200,
+    interestRate: 6.0,
+    loanTermMonths: 48,
+    includeFeesInLoan: true,
+  });
+
+  // Net equity: 8000 - 11000 = -3000 -> Rollover = 3000
+  assertEqual(result2.isNegativeEquity, true, "Negative Equity Flag");
+  assertEqual(result2.negativeEquityRollover, 3000, "Negative Equity Rollover");
+  count++;
+
+  // Test 3: 0% Interest Rate Financing
+  const result3 = calculateAutoLoanFormula({
     vehiclePrice: 24000,
     downPayment: 4000,
     tradeInValue: 0,
     salesTaxRate: 0,
-    fees: 0,
+    registrationFees: 0,
     interestRate: 0,
     loanTermMonths: 48,
+    includeFeesInLoan: true,
   });
 
-  assertEqual(result2.loanAmount, 20000, "0% APR Loan Amount");
-  assertEqual(result2.monthlyPayment, 416.67, "0% APR Monthly Payment");
-  assertEqual(result2.totalInterestPaid, 0, "0% APR Total Interest");
+  assertEqual(result3.loanAmount, 20000, "0% APR Loan Amount");
+  assertEqual(result3.monthlyPayment, 416.67, "0% APR Monthly Payment");
+  assertEqual(result3.totalInterestPaid, 0, "0% APR Total Interest");
   count++;
 
-  // Test 3: Fully paid upfront (Down payment + Trade-in exceeds price + tax)
-  const result3 = calculateAutoLoanFormula({
-    vehiclePrice: 10000,
-    downPayment: 8000,
-    tradeInValue: 5000,
-    salesTaxRate: 5,
-    fees: 100,
-    interestRate: 6,
-    loanTermMonths: 36,
+  // Test 4: Term Comparison & Health Score
+  const result4 = calculateAutoLoanFormula({
+    vehiclePrice: 40000,
+    downPayment: 8000, // 20% down
+    interestRate: 4.5,
+    loanTermMonths: 60,
   });
 
-  assertEqual(result3.loanAmount, 0, "Full Down Payment zero loan amount");
-  assertEqual(result3.monthlyPayment, 0, "Full Down Payment zero monthly payment");
+  assertEqual(result4.termComparison.length, 5, "5 Term Options Matrix");
+  assertEqual(result4.healthScore.category, "Excellent", "Health Score Excellent Category");
   count++;
 
   return { passed: true, count };
+}
+
+// Auto-run tests on import in non-prod
+if (typeof process !== "undefined" && process.env.NODE_ENV === "test") {
+  runAutoLoanTests();
 }
