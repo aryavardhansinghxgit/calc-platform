@@ -61,6 +61,10 @@ import RefinanceCostBreakdownModal from "./RefinanceCostBreakdownModal";
 import RefinanceScenarioComparer from "./RefinanceScenarioComparer";
 import RefinanceAiInsightPanel from "./RefinanceAiInsightPanel";
 
+import PrintableReportContainer from "@/components/report/PrintableReportContainer";
+import ReportModal from "@/components/report/ReportModal";
+import { generateRefinanceReportData } from "@/lib/report-generator/refinance-report";
+
 // Lazy load visual charts
 const RefinancePaymentBarChart = dynamic(
   () => import("../charts/RefinancePaymentBarChart").then((m) => m.RefinancePaymentBarChart),
@@ -121,14 +125,17 @@ export function RefinanceCalculator() {
     customFee: 0,
   });
 
-  // 7. Advanced Accordion State
+  // 7. Executive Report Modal State
+  const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
+
+  // 8. Advanced Accordion State
   const [refinanceType, setRefinanceType] = useState<RefinanceType>("rate-and-term");
 
-  // 8. Active Results View Tab: "analytics" vs "amortization"
+  // 9. Active Results View Tab: "analytics" vs "amortization"
   const [activeResultsTab, setActiveResultsTab] = useState<"analytics" | "amortization">("analytics");
   const [activeChartTab, setActiveChartTab] = useState<"payment" | "interest" | "breakeven">("payment");
 
-  // 9. Save & Compare State
+  // 10. Save & Compare State
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [saveName, setSaveName] = useState<string>("");
   const [savedCalculations, setSavedCalculations] = useState<SavedRefinanceCalculation[]>([]);
@@ -233,6 +240,55 @@ export function RefinanceCalculator() {
     refinanceType,
   ]);
 
+  // Executive Report Data Builder
+  const reportData = useMemo(() => {
+    return generateRefinanceReportData(
+      {
+        currentLoanMode,
+        remainingBalance,
+        originalLoanAmount,
+        originalLoanTermYears,
+        yearsPaid,
+        payoffAmount,
+        currentMonthlyPayment,
+        currentInterestRate,
+        newLoanTermYears,
+        newInterestRate,
+        discountPoints,
+        closingCosts,
+        cashOutAmount,
+        homeMarketValue,
+        maxLtvPercent,
+        consolidatedDebts,
+        refinanceGoal,
+        itemizedCosts,
+        refinanceType,
+      },
+      results
+    );
+  }, [
+    currentLoanMode,
+    remainingBalance,
+    originalLoanAmount,
+    originalLoanTermYears,
+    yearsPaid,
+    payoffAmount,
+    currentMonthlyPayment,
+    currentInterestRate,
+    newLoanTermYears,
+    newInterestRate,
+    discountPoints,
+    closingCosts,
+    cashOutAmount,
+    homeMarketValue,
+    maxLtvPercent,
+    consolidatedDebts,
+    refinanceGoal,
+    itemizedCosts,
+    refinanceType,
+    results,
+  ]);
+
   const handleReset = () => {
     setRefinanceGoal("reduce-payment");
     setCurrentLoanMode("remaining-balance");
@@ -258,10 +314,6 @@ export function RefinanceCalculator() {
     navigator.clipboard.writeText(text);
     setCopySuccessMsg("Refinance summary copied!");
     setTimeout(() => setCopySuccessMsg(""), 2000);
-  };
-
-  const handlePrint = () => {
-    window.print();
   };
 
   const handleShareUrl = () => {
@@ -391,7 +443,7 @@ export function RefinanceCalculator() {
             variant="outline"
             size="sm"
             onClick={handleCopyResults}
-            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900"
+            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer"
           >
             <Copy className="h-3.5 w-3.5 text-blue-500" /> Copy
           </Button>
@@ -401,7 +453,7 @@ export function RefinanceCalculator() {
             variant="outline"
             size="sm"
             onClick={handleShareUrl}
-            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900"
+            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer"
           >
             <Share2 className="h-3.5 w-3.5 text-emerald-500" /> Share
           </Button>
@@ -410,8 +462,8 @@ export function RefinanceCalculator() {
             type="button"
             variant="outline"
             size="sm"
-            onClick={handlePrint}
-            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900"
+            onClick={() => setIsReportModalOpen(true)}
+            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer"
           >
             <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
           </Button>
@@ -420,7 +472,7 @@ export function RefinanceCalculator() {
             type="button"
             size="sm"
             onClick={() => setIsSaveModalOpen(true)}
-            className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
+            className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs cursor-pointer"
           >
             <Bookmark className="h-3.5 w-3.5" /> Save
           </Button>
@@ -897,7 +949,7 @@ export function RefinanceCalculator() {
                 <h4 className="font-extrabold text-xs uppercase tracking-wider text-teal-900 dark:text-teal-200">
                   Debt Consolidation Refinance Module
                 </h4>
-                <Button type="button" size="sm" onClick={handleAddDebtItem} className="h-7 text-xs bg-teal-600 text-white gap-1">
+                <Button type="button" size="sm" onClick={handleAddDebtItem} className="h-7 text-xs bg-teal-600 text-white gap-1 font-bold cursor-pointer">
                   <Plus className="h-3 w-3" /> Add Debt
                 </Button>
               </div>
@@ -933,7 +985,7 @@ export function RefinanceCalculator() {
                         onChange={(e) => handleUpdateDebtItem(debt.id, "monthlyPayment", Number(e.target.value))}
                         className="h-8 text-xs font-mono"
                       />
-                      <button type="button" onClick={() => handleDeleteDebtItem(debt.id)} className="text-zinc-400 hover:text-red-500">
+                      <button type="button" onClick={() => handleDeleteDebtItem(debt.id)} className="text-zinc-400 hover:text-red-500 cursor-pointer">
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
@@ -1332,6 +1384,13 @@ export function RefinanceCalculator() {
           </div>
         </div>
       )}
+
+      {/* Executive Report Modal Preview */}
+      <ReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        reportData={reportData}
+      />
     </div>
   );
 }
