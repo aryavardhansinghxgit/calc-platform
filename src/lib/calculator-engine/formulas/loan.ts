@@ -1,45 +1,14 @@
 /**
- * Pure Mathematical Logic for Auto & Personal Loan Calculation.
+ * Pure Mathematical Logic for Loan Calculator.
+ * Delegated to src/modules/loan/formula.ts for Clean Architecture.
  */
 
-export interface LoanFormulaInput {
-  loanAmount: number;
-  interestRate: number;
-  loanTermYears: number;
-}
+import { calculateLoanModule } from "@/modules/loan/formula";
+import { LoanInput, LoanOutput } from "@/modules/loan/types";
 
-export interface LoanFormulaResult {
-  monthlyPayment: number;
-  totalInterestPaid: number;
-  totalPaid: number;
-}
+export type LoanFormulaInput = LoanInput;
+export type LoanFormulaResult = LoanOutput;
 
-export function calculateLoanFormula({
-  loanAmount,
-  interestRate,
-  loanTermYears,
-}: LoanFormulaInput): LoanFormulaResult {
-  const monthlyRate = interestRate / 100 / 12;
-  const totalMonths = loanTermYears * 12;
-
-  let monthlyPayment = 0;
-
-  if (loanAmount > 0 && totalMonths > 0) {
-    if (monthlyRate === 0) {
-      monthlyPayment = loanAmount / totalMonths;
-    } else {
-      monthlyPayment =
-        (loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths))) /
-        (Math.pow(1 + monthlyRate, totalMonths) - 1);
-    }
-  }
-
-  const totalPaid = monthlyPayment * totalMonths;
-  const totalInterestPaid = Math.max(0, totalPaid - loanAmount);
-
-  return {
-    monthlyPayment,
-    totalInterestPaid,
-    totalPaid,
-  };
+export function calculateLoanFormula(inputs: LoanFormulaInput): LoanFormulaResult {
+  return calculateLoanModule(inputs);
 }

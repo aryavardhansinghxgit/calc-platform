@@ -16,6 +16,7 @@ import { AmortizationTable } from "./mortgage/AmortizationTable";
 import { MortgageContentSection } from "./mortgage/MortgageContentSection";
 import { MortgageCalculator } from "./mortgage/MortgageCalculator";
 import { AmortizationCalculator } from "./amortization/AmortizationCalculator";
+import { LoanCalculator } from "./loan/LoanCalculator";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -77,6 +78,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
 
   const isMortgage = definition.id.toLowerCase().includes("mortgage");
   const isAmortization = definition.id.toLowerCase().includes("amortization");
+  const isLoan = definition.id === "loan" || definition.slug === "loan-calculator";
   const CustomContent = definition.ContentComponent || (isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
@@ -115,7 +117,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isAmortization ? (
+            {isLoan ? (
+              <LoanCalculator />
+            ) : isAmortization ? (
               <AmortizationCalculator />
             ) : isMortgage ? (
               <MortgageCalculator />
