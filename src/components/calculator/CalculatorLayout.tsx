@@ -14,6 +14,7 @@ import { FAQSection } from "./FAQSection";
 import { RelatedCalculators } from "./RelatedCalculators";
 import { AmortizationTable } from "./mortgage/AmortizationTable";
 import { MortgageContentSection } from "./mortgage/MortgageContentSection";
+import { MortgageCalculator } from "./mortgage/MortgageCalculator";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -112,87 +113,47 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {/* Desktop Two-Column Main Panel: Left Inputs (6) | Right Results (6) */}
-            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
-                {/* Left: Inputs Panel */}
-                <div className="md:col-span-6 space-y-2 border-b md:border-b-0 md:border-r border-zinc-100 dark:border-zinc-800 pb-4 md:pb-0 md:pr-4">
-                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center justify-between">
-                    <span>Inputs</span>
-                    <span className="text-[10px] font-normal text-zinc-400">Real-time</span>
-                  </h2>
-                  <CalculatorForm
-                    definition={definition}
-                    values={inputs}
-                    onChange={handleInputChange}
-                  />
-                </div>
+            {isMortgage ? (
+              <MortgageCalculator />
+            ) : (
+              <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
+                  {/* Left: Inputs Panel */}
+                  <div className="md:col-span-6 space-y-2 border-b md:border-b-0 md:border-r border-zinc-100 dark:border-zinc-800 pb-4 md:pb-0 md:pr-4">
+                    <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center justify-between">
+                      <span>Inputs</span>
+                      <span className="text-[10px] font-normal text-zinc-400">Real-time</span>
+                    </h2>
+                    <CalculatorForm
+                      definition={definition}
+                      values={inputs}
+                      onChange={handleInputChange}
+                    />
+                  </div>
 
-                {/* Right: Results & Donut Chart Panel */}
-                <div className="md:col-span-6 space-y-3">
-                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                    Calculated Summary
-                  </h2>
-                  <CalculatorResult
-                    definition={definition}
-                    result={calculationResult}
-                  />
+                  {/* Right: Results Panel */}
+                  <div className="md:col-span-6 space-y-3">
+                    <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                      Calculated Summary
+                    </h2>
+                    <CalculatorResult
+                      definition={definition}
+                      result={calculationResult}
+                    />
 
-                  {/* Compact Visualizer Chart */}
-                  {(CustomChart || (isMortgage && calculationResult.data)) && (
-                    <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                      {CustomChart && calculationResult.data ? (
+                    {CustomChart && calculationResult.data && (
+                      <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800">
                         <CustomChart data={calculationResult.data} inputs={inputs} />
-                      ) : (
-                        <MortgagePieChart
-                          principalAndInterest={Number(calculationResult.data.monthlyPrincipalAndInterest || 0)}
-                          propertyTax={Number(calculationResult.data.monthlyPropertyTax || 0)}
-                          insurance={Number(calculationResult.data.monthlyInsurance || 0)}
-                          hoa={Number(calculationResult.data.hoaFeeMonthly || 0)}
-                          extraPayment={Number(inputs.extraMonthlyPayment || 0)}
-                        />
-                      )}
-                    </div>
-                  )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </CalculatorErrorBoundary>
 
           {/* Collapsible Sections Below Main Calculator */}
           <div className="space-y-2 pt-1">
-            {/* Charts: Balance over time */}
-            {isMortgage && amortizationSchedule.length > 0 && (
-              <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden group">
-                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
-                  <span className="flex items-center gap-2">
-                    <BarChart2 className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Amortization Charts (Balance & Interest)
-                  </span>
-                  <span className="text-[10px] text-blue-600 dark:text-blue-400 group-open:hidden font-mono">Expand +</span>
-                  <span className="text-[10px] text-zinc-400 hidden group-open:inline font-mono">Collapse -</span>
-                </summary>
-                <div className="px-4 pb-4 pt-2 border-t border-zinc-100 dark:border-zinc-800 grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <BalanceLineChart schedule={amortizationSchedule} />
-                  <AmortizationAreaChart schedule={amortizationSchedule} />
-                </div>
-              </details>
-            )}
-
-            {/* Amortization Table */}
-            {isMortgage && amortizationSchedule.length > 0 && (
-              <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden group">
-                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
-                  <span className="flex items-center gap-2">
-                    <Table className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Amortization Schedule ({amortizationSchedule.length} payments)
-                  </span>
-                  <span className="text-[10px] text-blue-600 dark:text-blue-400 group-open:hidden font-mono">Expand +</span>
-                  <span className="text-[10px] text-zinc-400 hidden group-open:inline font-mono">Collapse -</span>
-                </summary>
-                <div className="px-4 pb-4 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                  <AmortizationTable schedule={amortizationSchedule} />
-                </div>
-              </details>
-            )}
 
             {/* Formula */}
             {definition.formulaDescription && (
