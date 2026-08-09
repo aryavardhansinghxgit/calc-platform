@@ -1,0 +1,779 @@
+"use client";
+
+import React, { useState, useMemo } from "react";
+import {
+  TrendingUp,
+  Calculator as CalcIcon,
+  PieChart as PieIcon,
+  Clock,
+  Sparkles,
+  Printer,
+  Share2,
+  Bookmark,
+  Award,
+  AlertTriangle,
+  Info,
+  CheckCircle2,
+  Sliders,
+  RotateCcw,
+  ArrowRight,
+  Gauge,
+  Percent,
+  Zap,
+  BookOpen,
+  HelpCircle,
+  BarChart3,
+  Layers,
+  Repeat,
+  Download,
+  Copy,
+  Check,
+  Search,
+  Target,
+  Flame,
+  Umbrella,
+  Activity,
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+  ShieldCheck,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+} from "recharts";
+import ReportModal from "@/components/report/ReportModal";
+import {
+  calculateCagrFormula,
+  CagrType,
+  CagrFormulaInput,
+  CagrFormulaResult,
+} from "@/lib/calculator-engine/formulas/cagr";
+import { generateCagrReportData } from "@/lib/report-generator/cagr-report";
+import { formatCurrency, formatPercent } from "@/lib/calculator-engine/formatters";
+
+export function CagrCalculator() {
+  // Mode Selection State
+  const [activeTab, setActiveTab] = useState<CagrType | "sensitivity">("standard");
+
+  // Core Inputs State
+  const [initialValue, setInitialValue] = useState<number>(10000);
+  const [finalValue, setFinalValue] = useState<number>(25000);
+  const [years, setYears] = useState<number>(5);
+  const [targetCagr, setTargetCagr] = useState<number>(12);
+  const [taxRate, setTaxRate] = useState<number>(15);
+  const [inflationRate, setInflationRate] = useState<number>(4);
+
+  // Schedule Table Controls State
+  const [scheduleView, setScheduleView] = useState<"annual" | "monthly">("annual");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [sortField, setSortField] = useState<string>("year");
+  const [sortAsc, setSortAsc] = useState<boolean>(true);
+
+  // Actions & Report Modal State
+  const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
+  const [copied, setCopied] = useState<boolean>(false);
+  const [shared, setShared] = useState<boolean>(false);
+
+  // Derived calculation results
+  const results: CagrFormulaResult = useMemo(() => {
+    const calcType: CagrType = activeTab === "sensitivity" ? "standard" : activeTab;
+    return calculateCagrFormula({
+      cagrType: calcType,
+      initialValue,
+      finalValue,
+      years,
+      targetCagr,
+      taxRate,
+      inflationRate,
+    });
+  }, [
+    activeTab,
+    initialValue,
+    finalValue,
+    years,
+    targetCagr,
+    taxRate,
+    inflationRate,
+  ]);
+
+  // Report Data
+  const reportData = useMemo(() => {
+    const calcType: CagrType = activeTab === "sensitivity" ? "standard" : activeTab;
+    return generateCagrReportData(
+      {
+        cagrType: calcType,
+        initialValue,
+        finalValue,
+        years,
+        targetCagr,
+        taxRate,
+        inflationRate,
+      },
+      results
+    );
+  }, [
+    activeTab,
+    initialValue,
+    finalValue,
+    years,
+    targetCagr,
+    taxRate,
+    inflationRate,
+    results,
+  ]);
+
+  // Growth Trajectory Area Chart Data
+  const chartData = useMemo(() => {
+    return results.annualSchedule.map((row) => ({
+      year: `Yr ${row.year}`,
+      "Nominal Portfolio Value": row.endingValue,
+      "Real Purchasing Power": row.realEndingValue,
+      "Initial Principal": results.initialValue,
+    }));
+  }, [results]);
+
+  // Handle Copy Summary
+  const handleCopy = () => {
+    const summary = `CalcPlatform CAGR Investment Summary:
+- Compound Annual Growth Rate (CAGR): ${results.cagrPercent}%
+- Total Absolute Return: ${results.absoluteReturnPercent}%
+- Total Dollar Profit: ${formatCurrency(results.totalProfit)}
+- Initial Capital: ${formatCurrency(results.initialValue)}
+- Final Value: ${formatCurrency(results.finalValue)} (${results.years} Years)
+- Inflation-Adjusted Real CAGR: ${results.realCagrPercent}%`;
+    navigator.clipboard.writeText(summary);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Handle Share Link
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setShared(true);
+    setTimeout(() => setShared(false), 2000);
+  };
+
+  // Handle Export CSV / Excel / JSON
+  const handleExportData = (format: "csv" | "excel" | "json") => {
+    if (format === "json") {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(results, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `CAGR_Calculation_Results.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      return;
+    }
+
+    const rows = scheduleView === "annual" ? results.annualSchedule : results.monthlySchedule;
+    if (rows.length === 0) return;
+    const headers = Object.keys(rows[0]).join(",");
+    const csvLines = rows.map((r) => Object.values(r).join(","));
+    const csvContent = "data:text/csv;charset=utf-8," + [headers, ...csvLines].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `CAGR_Schedule_${scheduleView}_${format === "excel" ? "export.xlsx" : "export.csv"}`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Reset Handler
+  const handleReset = () => {
+    setInitialValue(10000);
+    setFinalValue(25000);
+    setYears(5);
+    setTargetCagr(12);
+    setTaxRate(15);
+    setInflationRate(4);
+  };
+
+  // Table filtering and pagination logic
+  const filteredScheduleRows = useMemo(() => {
+    let rows: any[] = scheduleView === "annual" ? [...results.annualSchedule] : [...results.monthlySchedule];
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      rows = rows.filter((r) => {
+        return Object.values(r).some((val) => String(val).toLowerCase().includes(q));
+      });
+    }
+
+    rows.sort((a, b) => {
+      const valA = a[sortField] ?? 0;
+      const valB = b[sortField] ?? 0;
+      if (valA < valB) return sortAsc ? -1 : 1;
+      if (valA > valB) return sortAsc ? 1 : -1;
+      return 0;
+    });
+
+    return rows;
+  }, [results, scheduleView, searchQuery, sortField, sortAsc]);
+
+  const itemsPerPage = 10;
+  const totalPages = Math.max(1, Math.ceil(filteredScheduleRows.length / itemsPerPage));
+  const paginatedScheduleRows = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredScheduleRows.slice(start, start + itemsPerPage);
+  }, [filteredScheduleRows, currentPage]);
+
+  return (
+    <div className="space-y-6">
+      {/* 1. TOP MODE SWITCHER TOOLBAR */}
+      <div className="flex flex-wrap items-center justify-between gap-2.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-2 rounded-xl shadow-xs">
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+          <button
+            onClick={() => { setActiveTab("standard"); setCurrentPage(1); }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              activeTab === "standard"
+                ? "bg-blue-600 text-white shadow-xs"
+                : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            }`}
+          >
+            <TrendingUp className="h-3.5 w-3.5" /> Standard CAGR
+          </button>
+          <button
+            onClick={() => { setActiveTab("future-value"); setCurrentPage(1); }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              activeTab === "future-value"
+                ? "bg-purple-600 text-white shadow-xs"
+                : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            }`}
+          >
+            <Target className="h-3.5 w-3.5 text-purple-200" /> Target Future Value
+          </button>
+          <button
+            onClick={() => { setActiveTab("initial-capital"); setCurrentPage(1); }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              activeTab === "initial-capital"
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            }`}
+          >
+            <Zap className="h-3.5 w-3.5" /> Initial Capital Finder
+          </button>
+          <button
+            onClick={() => { setActiveTab("tenure"); setCurrentPage(1); }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              activeTab === "tenure"
+                ? "bg-amber-600 text-white shadow-xs"
+                : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            }`}
+          >
+            <Clock className="h-3.5 w-3.5" /> Required Tenure
+          </button>
+          <button
+            onClick={() => { setActiveTab("benchmark"); setCurrentPage(1); }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              activeTab === "benchmark"
+                ? "bg-indigo-600 text-white shadow-xs"
+                : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            }`}
+          >
+            <Award className="h-3.5 w-3.5" /> Asset Benchmarks
+          </button>
+          <button
+            onClick={() => { setActiveTab("sensitivity"); setCurrentPage(1); }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+              activeTab === "sensitivity"
+                ? "bg-rose-600 text-white shadow-xs"
+                : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            }`}
+          >
+            <BarChart3 className="h-3.5 w-3.5" /> What-If Matrix
+          </button>
+        </div>
+
+        {/* Global Toolbar Actions */}
+        <div className="flex items-center gap-1.5">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleCopy}
+            className="h-8 text-xs gap-1 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 cursor-pointer"
+          >
+            {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
+            {copied ? "Copied" : "Copy"}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleShare}
+            className="h-8 text-xs gap-1 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 cursor-pointer"
+          >
+            {shared ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Share2 className="h-3.5 w-3.5" />}
+            {shared ? "Shared" : "Share"}
+          </Button>
+          <Button
+            type="button"
+            variant="default"
+            size="sm"
+            onClick={() => setIsReportModalOpen(true)}
+            className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold cursor-pointer"
+          >
+            <Printer className="h-3.5 w-3.5" /> Print / PDF
+          </Button>
+        </div>
+      </div>
+
+      {/* 2. MAIN CALCULATOR LAYOUT GRID */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* LEFT COLUMN: PARAMETER INPUT CONTROLS PANEL (Col 5) */}
+        <div className="lg:col-span-5 space-y-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs">
+          <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
+            <h2 className="text-sm font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+              <Sliders className="h-4 w-4 text-blue-600" />
+              <span>Investment Parameters</span>
+            </h2>
+            <button
+              onClick={handleReset}
+              className="text-xs text-zinc-500 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-1 cursor-pointer transition-colors"
+            >
+              <RotateCcw className="h-3 w-3" /> Reset
+            </button>
+          </div>
+
+          <div className="space-y-4 text-xs">
+            {/* Initial Investment Value (PV) */}
+            <div className="space-y-1.5">
+              <label className="font-medium text-zinc-700 dark:text-zinc-300 flex justify-between">
+                <span>Initial Investment (PV)</span>
+                <span className="font-bold text-blue-600">{formatCurrency(results.initialValue)}</span>
+              </label>
+              <Input
+                type="number"
+                value={initialValue}
+                onChange={(e) => setInitialValue(Number(e.target.value))}
+                className="h-9 text-xs font-mono"
+              />
+              <input
+                type="range"
+                min="500"
+                max="1000000"
+                step="500"
+                value={initialValue}
+                onChange={(e) => setInitialValue(Number(e.target.value))}
+                className="w-full h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              />
+            </div>
+
+            {/* Final Investment Value (FV) - Only for standard, initial-capital, benchmark, sensitivity */}
+            {activeTab !== "future-value" && (
+              <div className="space-y-1.5">
+                <label className="font-medium text-zinc-700 dark:text-zinc-300 flex justify-between">
+                  <span>Final Portfolio Value (FV)</span>
+                  <span className="font-bold text-emerald-600">{formatCurrency(results.finalValue)}</span>
+                </label>
+                <Input
+                  type="number"
+                  value={finalValue}
+                  onChange={(e) => setFinalValue(Number(e.target.value))}
+                  className="h-9 text-xs font-mono"
+                />
+                <input
+                  type="range"
+                  min="500"
+                  max="2000000"
+                  step="1000"
+                  value={finalValue}
+                  onChange={(e) => setFinalValue(Number(e.target.value))}
+                  className="w-full h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+                />
+              </div>
+            )}
+
+            {/* Target CAGR % Input (For Future Value, Initial Capital, Tenure modes) */}
+            {(activeTab === "future-value" || activeTab === "initial-capital" || activeTab === "tenure") && (
+              <div className="space-y-1.5 bg-purple-50/50 dark:bg-purple-950/20 p-3 rounded-xl border border-purple-100 dark:border-purple-950">
+                <label className="font-bold text-purple-900 dark:text-purple-300 flex justify-between">
+                  <span>Target Expected CAGR (%)</span>
+                  <span>{targetCagr}% / yr</span>
+                </label>
+                <Input
+                  type="number"
+                  step="0.5"
+                  value={targetCagr}
+                  onChange={(e) => setTargetCagr(Number(e.target.value))}
+                  className="h-8 text-xs font-mono bg-white dark:bg-zinc-900"
+                />
+              </div>
+            )}
+
+            {/* Time Horizon / Tenure Slider */}
+            {activeTab !== "tenure" && (
+              <div className="space-y-1.5">
+                <div className="flex justify-between font-medium text-zinc-700 dark:text-zinc-300">
+                  <span>Investment Tenure (Years)</span>
+                  <span className="font-bold text-purple-600">{results.years} Years</span>
+                </div>
+                <Input
+                  type="number"
+                  step="0.5"
+                  value={years}
+                  onChange={(e) => setYears(Number(e.target.value))}
+                  className="h-9 text-xs font-mono"
+                />
+                <input
+                  type="range"
+                  min="0.5"
+                  max="30"
+                  step="0.5"
+                  value={years}
+                  onChange={(e) => setYears(Number(e.target.value))}
+                  className="w-full h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-purple-600"
+                />
+              </div>
+            )}
+
+            {/* Advanced Drag Options: Tax & Inflation */}
+            <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="font-medium text-zinc-700 dark:text-zinc-300">Capital Gains Tax (%)</label>
+                <Input
+                  type="number"
+                  step="1"
+                  value={taxRate}
+                  onChange={(e) => setTaxRate(Number(e.target.value))}
+                  className="h-8 text-xs font-mono"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="font-medium text-zinc-700 dark:text-zinc-300">Inflation Rate (%)</label>
+                <Input
+                  type="number"
+                  step="0.5"
+                  value={inflationRate}
+                  onChange={(e) => setInflationRate(Number(e.target.value))}
+                  className="h-8 text-xs font-mono"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: DASHBOARD & RESULTS (Col 7) */}
+        <div className="lg:col-span-7 space-y-6">
+          {/* PRIMARY KPI SUMMARY CARDS */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div className={`p-4 rounded-2xl shadow-sm space-y-1 min-w-0 ${
+              results.cagrPercent >= 0 ? "bg-blue-600 text-white" : "bg-rose-600 text-white"
+            }`}>
+              <span className="text-xs font-semibold text-blue-100 block uppercase tracking-wider leading-tight">
+                Compound Annual Growth Rate
+              </span>
+              <div className="text-xl sm:text-2xl font-black tracking-tight font-mono leading-snug break-words my-0.5">
+                {results.cagrPercent}%
+              </div>
+              <span className="text-[11px] text-blue-200 block leading-tight">Over {results.years} Years</span>
+            </div>
+
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl shadow-xs space-y-1 min-w-0">
+              <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider leading-tight">
+                Total Absolute Return
+              </span>
+              <div className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 tracking-tight font-mono leading-snug break-words my-0.5">
+                {results.absoluteReturnPercent}%
+              </div>
+              <span className="text-[11px] text-zinc-400 block leading-tight">{results.wealthMultiplier}x Wealth Multiplier</span>
+            </div>
+
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl shadow-xs space-y-1 min-w-0">
+              <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider leading-tight">
+                Total Dollar Profit / Gain
+              </span>
+              <div className="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400 tracking-tight font-mono leading-snug break-words my-0.5">
+                {formatCurrency(results.totalProfit)}
+              </div>
+              <span className="text-[11px] text-zinc-400 block leading-tight">Net capital gain</span>
+            </div>
+          </div>
+
+          {/* SECONDARY METRICS BAR */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl border border-zinc-200/60 dark:border-zinc-800 text-xs">
+            <div className="overflow-hidden">
+              <span className="text-zinc-400 text-[10px] block">Inflation-Adjusted Real CAGR</span>
+              <span className="font-bold text-amber-600 dark:text-amber-400 font-mono block">{results.realCagrPercent}%</span>
+            </div>
+            <div className="overflow-hidden">
+              <span className="text-zinc-400 text-[10px] block">Real Purchasing Power</span>
+              <span className="font-bold text-zinc-900 dark:text-zinc-100 font-mono block">{formatCurrency(results.realEndingValue)}</span>
+            </div>
+            <div className="overflow-hidden">
+              <span className="text-zinc-400 text-[10px] block">Post-Tax Final Value</span>
+              <span className="font-bold text-blue-600 font-mono block">{formatCurrency(results.postTaxFinalValue)}</span>
+            </div>
+            <div className="overflow-hidden">
+              <span className="text-zinc-400 text-[10px] block">CAGR Health Rating</span>
+              <span className="font-bold text-emerald-600 block">{results.healthRating} ({results.cagrHealthScore}/100)</span>
+            </div>
+          </div>
+
+          {/* ASSET BENCHMARK TAB PANEL */}
+          {activeTab === "benchmark" && (
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3 text-xs">
+              <h3 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                <Award className="h-4 w-4 text-indigo-600" /> Historical Asset Class CAGR Benchmarks
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse border border-zinc-200 dark:border-zinc-800 text-[11px]">
+                  <thead>
+                    <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">
+                      <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-bold">Asset Class</th>
+                      <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-bold">Historical CAGR</th>
+                      <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-bold text-blue-600">Projected Final Value</th>
+                      <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-bold text-emerald-600">Projected Profit</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+                    {results.benchmarkComparisons.map((b, idx) => (
+                      <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
+                        <td className="p-2 font-sans font-bold text-zinc-900 dark:text-zinc-100">{b.assetClass}</td>
+                        <td className="p-2 text-indigo-600 font-bold">{b.historicalCagr}%</td>
+                        <td className="p-2 text-blue-600 font-bold">{formatCurrency(b.projectedFutureValue)}</td>
+                        <td className="p-2 text-emerald-600 font-bold">{formatCurrency(b.totalProfit)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* SENSITIVITY MATRIX TAB PANEL */}
+          {activeTab === "sensitivity" && (
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3 text-xs">
+              <h3 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                <BarChart3 className="h-4 w-4 text-rose-600" /> What-If Sensitivity Matrix (Growth Rate vs Tenure)
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse border border-zinc-200 dark:border-zinc-800 text-[10px]">
+                  <thead>
+                    <tr className="bg-zinc-100 dark:bg-zinc-800">
+                      <th className="p-2 border border-zinc-200 dark:border-zinc-700">CAGR Rate</th>
+                      <th className="p-2 border border-zinc-200 dark:border-zinc-700">1 Yr</th>
+                      <th className="p-2 border border-zinc-200 dark:border-zinc-700">3 Yrs</th>
+                      <th className="p-2 border border-zinc-200 dark:border-zinc-700">5 Yrs</th>
+                      <th className="p-2 border border-zinc-200 dark:border-zinc-700">7 Yrs</th>
+                      <th className="p-2 border border-zinc-200 dark:border-zinc-700">10 Yrs</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[6, 8, 10, 12, 15, 18, 20].map((r) => (
+                      <tr key={r} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 font-mono">
+                        <td className="p-2 font-bold border border-zinc-200 dark:border-zinc-800">{r}%</td>
+                        {[1, 3, 5, 7, 10].map((t) => {
+                          const cell = results.sensitivityMatrix.find((c) => c.returnRate === r && c.tenureYears === t);
+                          return (
+                            <td key={t} className="p-2 border border-zinc-200 dark:border-zinc-800">
+                              {cell ? formatCurrency(cell.futureValue) : "-"}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* 3. CHARTS SECTION */}
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-4">
+            <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center justify-between">
+              <span>Compounded Growth Trajectory Visualizer</span>
+              <span className="text-[10px] text-zinc-400 font-normal">Real-time simulation</span>
+            </h3>
+
+            <div className="h-60 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData}>
+                  <defs>
+                    <linearGradient id="colorNominal" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorReal" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                  <XAxis dataKey="year" tick={{ fontSize: 10 }} />
+                  <YAxis tickFormatter={(v) => `$${v / 1000}k`} tick={{ fontSize: 10 }} />
+                  <Tooltip formatter={(val: any) => formatCurrency(Number(val))} />
+                  <Area type="monotone" dataKey="Nominal Portfolio Value" stroke="#3b82f6" fillOpacity={1} fill="url(#colorNominal)" />
+                  <Area type="monotone" dataKey="Real Purchasing Power" stroke="#10b981" fillOpacity={1} fill="url(#colorReal)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* 4. INTERACTIVE SCHEDULE BREAKDOWN TABLE */}
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3 text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3">
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Growth Schedule Table</h3>
+                <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg text-[10px]">
+                  <button
+                    onClick={() => { setScheduleView("annual"); setCurrentPage(1); }}
+                    className={`px-2 py-1 rounded-md font-semibold cursor-pointer ${scheduleView === "annual" ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs" : "text-zinc-500"}`}
+                  >
+                    Annual
+                  </button>
+                  <button
+                    onClick={() => { setScheduleView("monthly"); setCurrentPage(1); }}
+                    className={`px-2 py-1 rounded-md font-semibold cursor-pointer ${scheduleView === "monthly" ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs" : "text-zinc-500"}`}
+                  >
+                    Monthly
+                  </button>
+                </div>
+              </div>
+
+              {/* Table Search & Exports */}
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-zinc-400" />
+                  <Input
+                    type="text"
+                    placeholder="Search table..."
+                    value={searchQuery}
+                    onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+                    className="pl-7 h-7 text-[11px] w-36"
+                  />
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleExportData("csv")}
+                  className="h-7 text-[11px] gap-1 cursor-pointer"
+                >
+                  <Download className="h-3 w-3" /> CSV
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleExportData("excel")}
+                  className="h-7 text-[11px] gap-1 cursor-pointer"
+                >
+                  <Download className="h-3 w-3 text-emerald-600" /> Excel
+                </Button>
+              </div>
+            </div>
+
+            {/* Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-[11px]">
+                <thead>
+                  <tr className="bg-zinc-50 dark:bg-zinc-800/60 text-zinc-600 dark:text-zinc-300 font-semibold border-b border-zinc-200 dark:border-zinc-800">
+                    {scheduleView === "annual" ? (
+                      <>
+                        <th className="p-2">Year</th>
+                        <th className="p-2">Starting Capital</th>
+                        <th className="p-2">Annual Growth ($)</th>
+                        <th className="p-2">Nominal Ending Value</th>
+                        <th className="p-2">Real Purchasing Power</th>
+                        <th className="p-2">Cumulative Return</th>
+                      </>
+                    ) : (
+                      <>
+                        <th className="p-2">Month</th>
+                        <th className="p-2">Year</th>
+                        <th className="p-2">Starting Capital</th>
+                        <th className="p-2">Monthly Growth ($)</th>
+                        <th className="p-2">Ending Value</th>
+                      </>
+                    )}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+                  {paginatedScheduleRows.length > 0 ? (
+                    paginatedScheduleRows.map((r: any, idx) => (
+                      <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
+                        {scheduleView === "annual" ? (
+                          <>
+                            <td className="p-2 font-bold text-zinc-900 dark:text-zinc-100">Yr {r.year}</td>
+                            <td className="p-2">{formatCurrency(r.startingValue)}</td>
+                            <td className="p-2 text-emerald-600">{formatCurrency(r.annualGrowth)}</td>
+                            <td className="p-2 font-bold text-blue-600">{formatCurrency(r.endingValue)}</td>
+                            <td className="p-2 text-amber-600">{formatCurrency(r.realEndingValue)}</td>
+                            <td className="p-2 text-purple-600 font-bold">{r.cumulativeReturnPercent}%</td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="p-2 font-bold">M{r.month}</td>
+                            <td className="p-2">Yr {r.year}</td>
+                            <td className="p-2">{formatCurrency(r.startingValue)}</td>
+                            <td className="p-2 text-emerald-600">{formatCurrency(r.monthlyGrowth)}</td>
+                            <td className="p-2 font-bold text-blue-600">{formatCurrency(r.endingValue)}</td>
+                          </>
+                        )}
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6} className="p-4 text-center text-zinc-400 font-sans">
+                        No rows found matching search query.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800 text-[11px] font-sans">
+                <span className="text-zinc-500">
+                  Page {currentPage} of {totalPages} ({filteredScheduleRows.length} total rows)
+                </span>
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    className="h-6 text-[10px] px-2 cursor-pointer"
+                  >
+                    <ChevronLeft className="h-3 w-3" /> Prev
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    className="h-6 text-[10px] px-2 cursor-pointer"
+                  >
+                    Next <ChevronRight className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Report Modal */}
+      <ReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        reportData={reportData}
+      />
+    </div>
+  );
+}
