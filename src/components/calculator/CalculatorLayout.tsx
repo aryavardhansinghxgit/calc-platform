@@ -30,6 +30,8 @@ import { SavingsCalculator } from "./savings/SavingsCalculator";
 import { SavingsContent } from "./savings/SavingsContent";
 import { SipCalculator } from "./sip/SipCalculator";
 import { SipContent } from "./sip/SipContent";
+import { FdCalculator } from "./fd/FdCalculator";
+import { FdContent } from "./fd/FdContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -112,7 +114,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isInvestment = definition.id === "investment" || definition.slug === "investment-calculator";
   const isSavings = definition.id === "savings" || definition.slug === "savings-calculator";
   const isSip = definition.id === "sip" || definition.slug === "sip-calculator";
-  const CustomContent = definition.ContentComponent || (isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
+  const isFd = definition.id === "fd" || definition.slug === "fd-calculator";
+  const CustomContent = definition.ContentComponent || (isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -150,7 +153,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isSip ? (
+            {isFd ? (
+              <FdCalculator />
+            ) : isSip ? (
               <SipCalculator />
             ) : isSavings ? (
               <SavingsCalculator />
