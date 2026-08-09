@@ -26,6 +26,8 @@ import { CompoundInterestCalculator } from "./compound-interest/CompoundInterest
 import { SimpleInterestCalculator } from "./simple-interest/SimpleInterestCalculator";
 import { InterestCalculator } from "./interest/InterestCalculator";
 import { InvestmentCalculator } from "./investment/InvestmentCalculator";
+import { SavingsCalculator } from "./savings/SavingsCalculator";
+import { SavingsContent } from "./savings/SavingsContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -106,7 +108,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isSimpleInterest = definition.id === "simple-interest" || definition.slug === "simple-interest-calculator";
   const isInterest = definition.id === "interest" || definition.slug === "interest-calculator";
   const isInvestment = definition.id === "investment" || definition.slug === "investment-calculator";
-  const CustomContent = definition.ContentComponent || (isMortgage ? MortgageContentSection : null);
+  const isSavings = definition.id === "savings" || definition.slug === "savings-calculator";
+  const CustomContent = definition.ContentComponent || (isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -144,7 +147,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isInvestment ? (
+            {isSavings ? (
+              <SavingsCalculator />
+            ) : isInvestment ? (
               <InvestmentCalculator />
             ) : isInterest ? (
               <InterestCalculator />
