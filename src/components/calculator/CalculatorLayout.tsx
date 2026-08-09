@@ -36,6 +36,8 @@ import { RdCalculator } from "./rd/RdCalculator";
 import { RdContent } from "./rd/RdContent";
 import { CagrCalculator } from "./cagr/CagrCalculator";
 import { CagrContent } from "./cagr/CagrContent";
+import { RoiCalculator } from "./roi/RoiCalculator";
+import { RoiContent } from "./roi/RoiContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -121,7 +123,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isFd = definition.id === "fd" || definition.slug === "fd-calculator";
   const isRd = definition.id === "rd" || definition.slug === "rd-calculator";
   const isCagr = definition.id === "cagr" || definition.slug === "cagr-calculator";
-  const CustomContent = definition.ContentComponent || (isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
+  const isRoi = definition.id === "roi" || definition.slug === "roi-calculator";
+  const CustomContent = definition.ContentComponent || (isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -159,7 +162,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isCagr ? (
+            {isRoi ? (
+              <RoiCalculator />
+            ) : isCagr ? (
               <CagrCalculator />
             ) : isRd ? (
               <RdCalculator />
