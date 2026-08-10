@@ -449,6 +449,44 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
               ))}
             </div>
 
+            {/* Strategy Selection Section */}
+            <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
+              <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300 block">Payoff Strategy Method</label>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setStrategy("avalanche")}
+                  className={`p-2.5 rounded-lg border text-left cursor-pointer transition-all ${
+                    strategy === "avalanche"
+                      ? "border-blue-600 bg-blue-50 dark:bg-blue-950/40 text-blue-900 dark:text-blue-200 font-bold"
+                      : "border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400"
+                  }`}
+                >
+                  <div className="flex items-center gap-1 mb-0.5">
+                    <TrendingDown className="h-3.5 w-3.5 text-blue-600" />
+                    <span>Debt Avalanche</span>
+                  </div>
+                  <div className="text-[10px] opacity-75 font-normal">Highest APR First (Minimizes Interest)</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setStrategy("snowball")}
+                  className={`p-2.5 rounded-lg border text-left cursor-pointer transition-all ${
+                    strategy === "snowball"
+                      ? "border-purple-600 bg-purple-50 dark:bg-purple-950/40 text-purple-900 dark:text-purple-200 font-bold"
+                      : "border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400"
+                  }`}
+                >
+                  <div className="flex items-center gap-1 mb-0.5">
+                    <Zap className="h-3.5 w-3.5 text-purple-600" />
+                    <span>Debt Snowball</span>
+                  </div>
+                  <div className="text-[10px] opacity-75 font-normal">Lowest Balance First (Fastest Wins)</div>
+                </button>
+              </div>
+            </div>
+
             {/* Extra Payments Controls */}
             <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 space-y-3">
               <h4 className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Extra Payment Contributions</h4>
@@ -539,12 +577,28 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
                 {results.monthsToPayoff} Months <span className="text-xl font-normal text-zinc-300">({results.yearsToPayoff} Yrs)</span>
               </div>
 
-              <div className="text-xs text-white/90 font-medium flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-emerald-400" /> Debt Free Date: <span className="font-bold text-emerald-300">{results.payoffDate}</span>
+              <div className="flex flex-wrap items-center gap-3 text-xs text-white/90 font-medium mb-3">
+                <span className="flex items-center gap-1.5"><Calendar className="h-4 w-4 text-emerald-400" /> Debt Free: <span className="font-bold text-emerald-300">{results.payoffDate}</span></span>
+                <span className="bg-white/10 px-2.5 py-0.5 rounded-full text-[11px] font-bold text-blue-300">
+                  ⚡ {strategy === "avalanche" ? "Debt Avalanche" : "Debt Snowball"} Active
+                </span>
+              </div>
+
+              {/* Active Strategy Insight Callout */}
+              <div className="bg-white/10 p-3 rounded-xl text-xs space-y-1 backdrop-blur-sm border border-white/10">
+                <div className="flex justify-between font-bold">
+                  <span className="text-blue-300">🎯 First Account Paid Off:</span>
+                  <span className="text-emerald-300">{results.firstDebtEliminatedName} (Month {results.firstDebtEliminatedMonth})</span>
+                </div>
+                <div className="text-[11px] text-zinc-300">
+                  {strategy === "avalanche"
+                    ? "Avalanche prioritizes your highest interest rate accounts first to maximize money saved."
+                    : "Snowball prioritizes your smallest balance accounts first for rapid psychological wins."}
+                </div>
               </div>
 
               {/* Secondary Grid */}
-              <div className="grid grid-cols-3 gap-3 mt-6 pt-4 border-t border-white/10 text-xs">
+              <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Initial Total Debt</div>
                   <div className="font-bold font-mono text-white text-sm">{fmt(results.initialTotalBalance)}</div>

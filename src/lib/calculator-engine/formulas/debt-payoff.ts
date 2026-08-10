@@ -43,6 +43,8 @@ export interface DebtPayoffResult {
   strategyUsed: string;
   initialTotalBalance: number;
   initialTotalMinPayment: number;
+  firstDebtEliminatedName?: string;
+  firstDebtEliminatedMonth?: number;
   schedule: DebtScheduleMonth[];
   warningMessage?: string;
 }
@@ -78,6 +80,13 @@ export function calculateDebtPayoff(input: DebtPayoffInput): DebtPayoffResult {
       rate: Number(d.apr) / 100 / 12,
     }));
 
+  // Initial priority sort according to strategy
+  if (strategy === "avalanche") {
+    activeDebts.sort((a, b) => b.apr - a.apr);
+  } else if (strategy === "snowball") {
+    activeDebts.sort((a, b) => a.balance - b.balance);
+  }
+
   if (activeDebts.length === 0) {
     return {
       monthsToPayoff: 0,
@@ -88,6 +97,8 @@ export function calculateDebtPayoff(input: DebtPayoffInput): DebtPayoffResult {
       strategyUsed: strategy,
       initialTotalBalance: 0,
       initialTotalMinPayment: 0,
+      firstDebtEliminatedName: "N/A",
+      firstDebtEliminatedMonth: 0,
       schedule: [],
     };
   }
@@ -107,6 +118,8 @@ export function calculateDebtPayoff(input: DebtPayoffInput): DebtPayoffResult {
       strategyUsed: strategy,
       initialTotalBalance,
       initialTotalMinPayment,
+      firstDebtEliminatedName: "None",
+      firstDebtEliminatedMonth: 0,
       schedule: [],
       warningMessage: "Warning: Your total monthly payment is less than monthly interest accrued. Debt will grow indefinitely!",
     };
@@ -116,6 +129,8 @@ export function calculateDebtPayoff(input: DebtPayoffInput): DebtPayoffResult {
   let month = 0;
   let cumInterest = 0;
   let cumPaid = 0;
+  let firstDebtEliminatedName = "";
+  let firstDebtEliminatedMonth = 0;
 
   // Base monthly budget allocated to debt payoff
   let totalMonthlyBudget = initialTotalMinPayment + extraMonthly;
@@ -203,6 +218,11 @@ export function calculateDebtPayoff(input: DebtPayoffInput): DebtPayoffResult {
     const monthTotalPmt = startTotBal - endTotBal;
     cumPaid += monthTotalPmt;
 
+    if (!firstDebtEliminatedName && debtsEliminatedThisMonth.length > 0) {
+      firstDebtEliminatedName = debtsEliminatedThisMonth[0];
+      firstDebtEliminatedMonth = month;
+    }
+
     schedule.push({
       month,
       totalStartingBalance: Number(startTotBal.toFixed(2)),
@@ -229,6 +249,8 @@ export function calculateDebtPayoff(input: DebtPayoffInput): DebtPayoffResult {
     strategyUsed: strategy === "avalanche" ? "Debt Avalanche (Highest APR First)" : "Debt Snowball (Lowest Balance First)",
     initialTotalBalance: Number(initialTotalBalance.toFixed(2)),
     initialTotalMinPayment: Number(initialTotalMinPayment.toFixed(2)),
+    firstDebtEliminatedName: firstDebtEliminatedName || "None",
+    firstDebtEliminatedMonth: firstDebtEliminatedMonth || 0,
     schedule,
   };
 }
