@@ -638,6 +638,113 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
         </div>
       )}
 
+      {/* TAB 4: VAT vs. SALES TAX COMPARISON TOOL */}
+      {activeTab === "compare" && (
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
+            <div>
+              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-amber-500" /> Interactive VAT vs. Sales Tax Side-by-Side Comparison
+              </h3>
+              <p className="text-xs text-zinc-500">
+                Compare multi-stage Value-Added Tax (with Input Tax Credit) against single-stage Retail Sales Tax across supply chain tiers.
+              </p>
+            </div>
+          </div>
+
+          {/* Side-by-Side Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* VAT Card */}
+            <div className="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-xl p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-sm text-blue-900 dark:text-blue-200">Value-Added Tax (VAT)</span>
+                <Badge className="bg-blue-600 text-white text-[10px]">Multi-Stage</Badge>
+              </div>
+              <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-300">
+                <li className="flex items-start gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-blue-600 shrink-0 mt-0.5" />
+                  <span><strong>Collected incrementally:</strong> Tax paid at every production &amp; distribution stage.</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-blue-600 shrink-0 mt-0.5" />
+                  <span><strong>Input Tax Credit (ITC):</strong> Businesses deduct tax paid on purchases, preventing double taxation.</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-blue-600 shrink-0 mt-0.5" />
+                  <span><strong>Global Adoption:</strong> Used in over 160 countries including UK, EU, Australia, Japan, UAE.</span>
+                </li>
+              </ul>
+              <div className="pt-3 border-t border-blue-200/60 dark:border-blue-800/60 flex justify-between items-center text-xs font-mono">
+                <span className="text-zinc-500">Effective Tax Burden on Consumer</span>
+                <span className="font-bold text-blue-700 dark:text-blue-300 text-sm">{results.vatRate}%</span>
+              </div>
+            </div>
+
+            {/* Sales Tax Card */}
+            <div className="bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-xl p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-sm text-amber-900 dark:text-amber-200">Retail Sales Tax</span>
+                <Badge className="bg-amber-600 text-white text-[10px]">Single-Stage</Badge>
+              </div>
+              <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-300">
+                <li className="flex items-start gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-amber-600 shrink-0 mt-0.5" />
+                  <span><strong>Collected at Retail:</strong> Tax is charged only at the final point of purchase by end consumers.</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-amber-600 shrink-0 mt-0.5" />
+                  <span><strong>Resale Certificates:</strong> B2B purchases are tax-exempt using reseller exemption certificates.</span>
+                </li>
+                <li className="flex items-start gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-amber-600 shrink-0 mt-0.5" />
+                  <span><strong>Primary Adoption:</strong> Standard system used across United States (state/city level).</span>
+                </li>
+              </ul>
+              <div className="pt-3 border-t border-amber-200/60 dark:border-amber-800/60 flex justify-between items-center text-xs font-mono">
+                <span className="text-zinc-500">Typical US Sales Tax Range</span>
+                <span className="font-bold text-amber-700 dark:text-amber-300 text-sm">4.00% &ndash; 9.50%</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Key Feature Differences Matrix */}
+          <div className="overflow-x-auto">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-3">Feature Comparison Matrix</h4>
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-semibold">
+                  <th className="p-2.5">Feature / Mechanism</th>
+                  <th className="p-2.5">Value-Added Tax (VAT)</th>
+                  <th className="p-2.5">Retail Sales Tax</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px]">
+                <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
+                  <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">Point of Collection</td>
+                  <td className="p-2.5 text-blue-600 font-semibold">All stages (Raw material &rarr; Retail)</td>
+                  <td className="p-2.5 text-amber-600 font-semibold">Final retail sale to end consumer only</td>
+                </tr>
+                <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
+                  <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">Input Tax Offset Mechanism</td>
+                  <td className="p-2.5 text-emerald-600 font-semibold">Yes (Input Tax Credit / Reclaim)</td>
+                  <td className="p-2.5 text-zinc-400">No (Uses Resale Exemption Certificate)</td>
+                </tr>
+                <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
+                  <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">Double Taxation Risk</td>
+                  <td className="p-2.5 text-emerald-600 font-semibold">None (Prevented by ITC offset)</td>
+                  <td className="p-2.5 text-amber-600 font-semibold">High if exemption certificate missing</td>
+                </tr>
+                <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
+                  <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">Audit &amp; Compliance Trail</td>
+                  <td className="p-2.5 text-blue-600 font-semibold">Self-enforcing cross-matching invoices</td>
+                  <td className="p-2.5 text-zinc-500">Relies on retail store reporting</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
