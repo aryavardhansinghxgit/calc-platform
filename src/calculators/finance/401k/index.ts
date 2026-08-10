@@ -1,63 +1,77 @@
 import { CalculatorModuleDefinition } from "../../types";
+import { calculate401kGrowth } from "@/lib/calculator-engine/formulas/401k";
 
-export const FOUR_OH_ONE_K_CALCULATOR: CalculatorModuleDefinition = {
+export const FOUR_ZERO_ONE_K_CALCULATOR: CalculatorModuleDefinition = {
   id: "401k",
-  title: "401(k) Calculator",
+  title: "401(k) Calculator – Wealth & Retirement Suite",
   slug: "401k-calculator",
   category: "Finance",
-  subcategory: "Retirement",
-  description: "Calculate your 401(k) retirement balance growth incorporating salary increases and employer matching contributions.",
-  iconName: "Shield",
+  subcategory: "Retirement & Investing",
+  description:
+    "Free 401(k) Calculator. Calculate gross 401(k) retirement balance, purchasing power in today's dollars, employer match maximization, early withdrawal penalty costs, and 2025/2026 IRS contribution caps.",
+  iconName: "TrendingUp",
   featured: true,
-  tags: ["401k", "employer match", "retirement plan", "salary contribution"],
-  formulaDescription: "Projects annual employee contributions + employer match compounding over career span.",
+  tags: [
+    "401k calculator",
+    "401k match calculator",
+    "401k growth calculator",
+    "401k early withdrawal penalty",
+    "roth 401k calculator",
+    "retirement savings calculator",
+  ],
+  formulaDescription:
+    "Applies annual employee salary deferrals up to IRS caps ($23,500/$24,500), adds employer matching free money, and compounds annual investment growth with purchasing power inflation adjustments.",
   faqs: [
     {
-      question: "What is employer match in a 401(k)?",
-      answer: "Employer match is free money contributed by your employer (e.g. 50% match up to 6% of salary) to incentivize retirement savings.",
+      question: "What is the 2025 and 2026 IRS 401(k) contribution limit?",
+      answer:
+        "For 2025, the IRS 401(k) employee elective deferral limit is $23,500 ($24,500 for 2026). Individuals aged 50 and older can make an additional catch-up contribution of $7,500.",
+    },
+    {
+      question: "What is an Employer 401(k) Match?",
+      answer:
+        "An employer match is additional money contributed by your employer based on your contributions (e.g. matching 50% up to 6% of salary).",
     },
   ],
   inputs: [
-    { name: "currentSalary", label: "Annual Salary", type: "currency", defaultValue: 75000, unit: "$", min: 10000, max: 1000000, step: 2500 },
-    { name: "employeeContributionPercent", label: "Your Contribution Rate", type: "percentage", defaultValue: 6, unit: "%", min: 0, max: 50, step: 0.5 },
-    { name: "employerMatchPercent", label: "Employer Match (e.g. 50%)", type: "percentage", defaultValue: 50, unit: "%", min: 0, max: 100, step: 5 },
-    { name: "employerMatchLimit", label: "Match Cap (% of Salary)", type: "percentage", defaultValue: 6, unit: "%", min: 0, max: 15, step: 0.5 },
-    { name: "currentBalance", label: "Current 401(k) Balance", type: "currency", defaultValue: 25000, unit: "$", min: 0, max: 5000000, step: 2500 },
-    { name: "yearsToRetirement", label: "Years Until Retirement", type: "slider", defaultValue: 30, unit: "years", min: 1, max: 45, step: 1 },
-    { name: "expectedReturn", label: "Expected Annual Return", type: "percentage", defaultValue: 7.5, unit: "%", min: 1, max: 15, step: 0.5 },
+    { name: "currentAge", label: "Current Age", type: "number", defaultValue: 30, unit: "yrs", min: 18, max: 100, step: 1 },
+    { name: "currentSalary", label: "Current Annual Salary ($)", type: "currency", defaultValue: 75000, unit: "$", min: 0, max: 10000000, step: 5000 },
+    { name: "currentBalance", label: "Current 401(k) Balance ($)", type: "currency", defaultValue: 35000, unit: "$", min: 0, max: 10000000, step: 5000 },
+    { name: "contributionPercent", label: "Your Deferral (% salary)", type: "percentage", defaultValue: 10, unit: "%", min: 0, max: 100, step: 1 },
+    { name: "employerMatchPercent", label: "Employer Match (%)", type: "percentage", defaultValue: 50, unit: "%", min: 0, max: 100, step: 5 },
+    { name: "employerMatchLimitPercent", label: "Match Limit (% salary)", type: "percentage", defaultValue: 6, unit: "%", min: 0, max: 100, step: 1 },
   ],
   outputs: [
-    { name: "final401kBalance", label: "Projected 401(k) Balance", format: "currency", highlight: true },
-    { name: "totalEmployeeContribution", label: "Total Employee Contribution", format: "currency" },
-    { name: "totalEmployerMatch", label: "Total Employer Match Added", format: "currency", highlight: true },
+    { name: "balanceAtRetirement", label: "Gross Balance at Retirement", format: "currency", highlight: true },
+    { name: "purchasingPowerAtRetirement", label: "Purchasing Power (Today's $)", format: "currency", highlight: true },
+    { name: "totalEmployeeContributions", label: "Total Employee Contributions", format: "currency" },
+    { name: "totalEmployerMatch", label: "Total Employer Match Free Money", format: "currency" },
+    { name: "monthlyWithdrawalFixedPurchasingPower", label: "Monthly Withdrawal Capacity", format: "currency" },
   ],
   calculate: (inputs) => {
-    const salary = Number(inputs.currentSalary || 75000);
-    const empRate = Number(inputs.employeeContributionPercent || 6) / 100;
-    const matchRate = Number(inputs.employerMatchPercent || 50) / 100;
-    const matchCap = Number(inputs.employerMatchLimit || 6) / 100;
-    const P = Number(inputs.currentBalance || 25000);
-    const years = Number(inputs.yearsToRetirement || 30);
-    const r = Number(inputs.expectedReturn || 7.5) / 100;
-
-    const empAnnual = salary * empRate;
-    const matchableSalary = Math.min(empRate, matchCap);
-    const matchAnnual = salary * matchableSalary * matchRate;
-    const totalAnnualContribution = empAnnual + matchAnnual;
-
-    const fvPrincipal = P * Math.pow(1 + r, years);
-    const fvAnnuity = totalAnnualContribution * ((Math.pow(1 + r, years) - 1) / r);
-    const finalBalance = fvPrincipal + fvAnnuity;
-
-    const totalEmp = empAnnual * years + P;
-    const totalMatch = matchAnnual * years;
+    const res = calculate401kGrowth({
+      currentAge: Number(inputs.currentAge || 30),
+      currentSalary: Number(inputs.currentSalary || 75000),
+      currentBalance: Number(inputs.currentBalance || 35000),
+      contributionPercent: Number(inputs.contributionPercent || 10),
+      employerMatchPercent: Number(inputs.employerMatchPercent || 50),
+      employerMatchLimitPercent: Number(inputs.employerMatchLimitPercent || 6),
+      retirementAge: 65,
+      lifeExpectancy: 85,
+      salaryIncreaseRate: 3,
+      investmentReturn: 6,
+      inflationRate: 3,
+    });
 
     return {
-      final401kBalance: Number(finalBalance.toFixed(2)),
-      totalEmployeeContribution: Number(totalEmp.toFixed(2)),
-      totalEmployerMatch: Number(totalMatch.toFixed(2)),
+      balanceAtRetirement: res.balanceAtRetirement,
+      purchasingPowerAtRetirement: res.purchasingPowerAtRetirement,
+      totalEmployeeContributions: res.totalEmployeeContributions,
+      totalEmployerMatch: res.totalEmployerMatch,
+      monthlyWithdrawalFixedPurchasingPower: res.monthlyWithdrawalFixedPurchasingPower,
     };
   },
 };
 
-export default FOUR_OH_ONE_K_CALCULATOR;
+export const FOUR_OH_ONE_K_CALCULATOR = FOUR_ZERO_ONE_K_CALCULATOR;
+export default FOUR_ZERO_ONE_K_CALCULATOR;
