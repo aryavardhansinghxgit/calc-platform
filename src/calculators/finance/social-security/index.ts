@@ -1,59 +1,82 @@
 import { CalculatorModuleDefinition } from "../../types";
+import { calculateSocialSecuritySuite } from "@/lib/calculator-engine/formulas/social-security";
 
 export const SOCIAL_SECURITY_CALCULATOR: CalculatorModuleDefinition = {
   id: "social-security",
-  title: "Social Security Calculator",
+  title: "Social Security Calculator – Ideal Claiming Age & Benefits Suite",
   slug: "social-security-calculator",
   category: "Finance",
   subcategory: "Retirement",
-  description: "Estimate Social Security retirement benefits based on Primary Insurance Amount (PIA) and retirement age.",
+  description:
+    "Free Social Security Benefits Calculator. Determine your ideal claiming age (62 vs FRA vs 70), compare two application ages, calculate Full Retirement Age (FRA) credits, estimate spousal/survivor benefits, and optimize taxation.",
   iconName: "Shield",
   featured: true,
-  tags: ["social security", "ssi", "retirement benefits", "claiming age"],
-  formulaDescription: "Adjusts Full Retirement Age (FRA) baseline benefit down for early claim (age 62) or up for delayed credits (age 70).",
+  tags: [
+    "social security",
+    "social security calculator",
+    "claiming age calculator",
+    "fra calculator",
+    "spousal benefits",
+    "survivor benefits",
+    "social security taxability",
+  ],
+  formulaDescription:
+    "Calculates Primary Insurance Amount (PIA) reductions for early claiming at age 62 (up to 30%) or delayed credits up to age 70 (+8%/yr), incorporating compounding COLA and combined income tax thresholds.",
   faqs: [
     {
-      question: "How does claiming Social Security early or late impact my monthly check?",
-      answer: "Claiming early at age 62 permanently reduces your monthly check by up to 30%. Delaying past Full Retirement Age until age 70 increases your monthly check by 8% per year.",
+      question: "What is my Full Retirement Age (FRA)?",
+      answer:
+        "Full Retirement Age (FRA) is the age at which you are entitled to 100% of your unreduced Social Security primary insurance amount. For anyone born in 1960 or later, your FRA is 67. For those born between 1943 and 1954, FRA is 66.",
+    },
+    {
+      question: "How much does claiming early at age 62 reduce my monthly check?",
+      answer:
+        "Claiming benefits at the earliest age of 62 permanently reduces your monthly check by 25% to 30% compared to your Full Retirement Age benefit, depending on your birth year.",
     },
   ],
   inputs: [
-    { name: "monthlyFraBenefit", label: "Estimated Benefit at Full Retirement Age (67)", type: "currency", defaultValue: 2200, unit: "$", min: 500, max: 4873, step: 50 },
-    {
-      name: "claimingAge",
-      label: "Claiming Age",
-      type: "select",
-      defaultValue: 67,
-      options: [
-        { label: "Age 62 (Early - 30% reduction)", value: 62 },
-        { label: "Age 65 (Early - 13.3% reduction)", value: 65 },
-        { label: "Age 67 (Full Retirement Age)", value: 67 },
-        { label: "Age 70 (Delayed - 24% boost)", value: 70 },
-      ],
-    },
+    { name: "birthYear", label: "Your Year of Birth", type: "number", defaultValue: 1970, min: 1930, max: 2010, step: 1 },
+    { name: "lifeExpectancy", label: "Your Life Expectancy", type: "number", defaultValue: 83, min: 65, max: 105, step: 1 },
+    { name: "estimatedFraMonthlyBenefit", label: "Est. Monthly Benefit at FRA ($)", type: "currency", defaultValue: 2200, unit: "$", min: 500, max: 4873, step: 50 },
+    { name: "investmentReturnPercent", label: "Expected Return (%)", type: "number", defaultValue: 5.0, min: 0, max: 20, step: 0.25 },
+    { name: "colaPercent", label: "COLA Adjustment (%/yr)", type: "number", defaultValue: 3.0, min: 0, max: 15, step: 0.25 },
   ],
   outputs: [
-    { name: "monthlyBenefit", label: "Estimated Monthly Benefit", format: "currency", highlight: true },
-    { name: "annualBenefit", label: "Estimated Annual Benefit", format: "currency", highlight: true },
-    { name: "benefitMultiplier", label: "Adjustment Factor", format: "percentage" },
+    { name: "recommendedAge", label: "Recommended Claim Age", format: "number", highlight: true },
+    { name: "recommendedMonthlyBenefit", label: "Recommended Monthly Benefit", format: "currency", highlight: true },
+    { name: "delayedClaimingAdvantage", label: "Delayed Claiming Advantage", format: "currency" },
+    { name: "breakevenAgeVs62", label: "Breakeven Crossover Age", format: "number" },
   ],
   calculate: (inputs) => {
-    const baseline = Number(inputs.monthlyFraBenefit || 2200);
-    const age = Number(inputs.claimingAge || 67);
-
-    let factor = 1.0;
-    if (age === 62) factor = 0.70;
-    else if (age === 65) factor = 0.867;
-    else if (age === 67) factor = 1.0;
-    else if (age === 70) factor = 1.24;
-
-    const monthly = baseline * factor;
-    const annual = monthly * 12;
+    const res = calculateSocialSecuritySuite(
+      {
+        birthYear: Number(inputs.birthYear || 1970),
+        lifeExpectancy: Number(inputs.lifeExpectancy || 83),
+        estimatedFraMonthlyBenefit: Number(inputs.estimatedFraMonthlyBenefit || 2200),
+        investmentReturnPercent: Number(inputs.investmentReturnPercent || 5.0),
+        colaPercent: Number(inputs.colaPercent || 3.0),
+      },
+      {
+        optionAAge: 62,
+        optionAMonthly: 1600,
+        optionBAge: 70,
+        optionBMonthly: 2810,
+        investmentReturnPercent: Number(inputs.investmentReturnPercent || 5.0),
+        colaPercent: Number(inputs.colaPercent || 3.0),
+      },
+      {
+        workerFraBenefit: Number(inputs.estimatedFraMonthlyBenefit || 2200),
+        spouseClaimingAge: 67,
+        filingStatus: "single",
+        otherIncomeAnnual: 30000,
+      }
+    );
 
     return {
-      monthlyBenefit: Number(monthly.toFixed(2)),
-      annualBenefit: Number(annual.toFixed(2)),
-      benefitMultiplier: `${(factor * 100).toFixed(1)}%`,
+      recommendedAge: res.idealClaimAge.recommendedAge,
+      recommendedMonthlyBenefit: res.idealClaimAge.recommendedMonthlyBenefit,
+      delayedClaimingAdvantage: res.idealClaimAge.delayedClaimingAdvantage,
+      breakevenAgeVs62: res.idealClaimAge.breakevenAgeVs62,
     };
   },
 };

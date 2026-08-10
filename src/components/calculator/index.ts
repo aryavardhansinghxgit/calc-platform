@@ -6,7 +6,9 @@ export { CompoundInterestCalculator } from "./compound-interest/CompoundInterest
 export { BmiCalculator } from "./bmi/BmiCalculator";
 export { RmdCalculator } from "./rmd/RmdCalculator";
 export { PensionCalculator } from "./pension/PensionCalculator";
-export { PensionContent } from "./pension/PensionContent";
+export { SocialSecurityCalculator } from "./social-security/SocialSecurityCalculator";
+export { SocialSecurityContent } from "./social-security/SocialSecurityContent";
+
 
 
 

@@ -53,6 +53,7 @@ import { IraCalculator } from "./ira/IraCalculator";
 import { RothIraCalculator } from "./roth-ira/RothIraCalculator";
 import { RmdCalculator } from "./rmd/RmdCalculator";
 import { PensionCalculator } from "./pension/PensionCalculator";
+import { SocialSecurityCalculator } from "./social-security/SocialSecurityCalculator";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -153,6 +154,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isRothIra = definition.id === "roth-ira" || definition.slug === "roth-ira-calculator";
   const isRmd = definition.id === "rmd" || definition.slug === "rmd-calculator";
   const isPension = definition.id === "pension" || definition.slug === "pension-calculator";
+  const isSocialSecurity = definition.id === "social-security" || definition.slug === "social-security-calculator";
   const isIra =
     definition.id === "ira" ||
     definition.slug === "ira-calculator" ||
@@ -196,7 +198,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isPension ? (
+            {isSocialSecurity ? (
+              <SocialSecurityCalculator />
+            ) : isPension ? (
               <PensionCalculator />
             ) : isRmd ? (
               <RmdCalculator />
