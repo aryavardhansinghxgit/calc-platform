@@ -16,6 +16,9 @@ export { MarginCalculator } from "./margin/MarginCalculator";
 export { MarginContent } from "./margin/MarginContent";
 export { DiscountCalculator } from "./discount/DiscountCalculator";
 export { DiscountContent } from "./discount/DiscountContent";
+export { CommissionCalculator } from "./commission/CommissionCalculator";
+export { CommissionContent } from "./commission/CommissionContent";
+
 
 
 
