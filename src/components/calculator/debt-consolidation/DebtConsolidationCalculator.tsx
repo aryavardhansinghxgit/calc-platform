@@ -245,55 +245,50 @@ Recommendation: ${results.recommendation}`;
         <button
           type="button"
           onClick={() => setActiveTab("evaluator")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
-            activeTab === "evaluator"
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${activeTab === "evaluator"
               ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
               : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
-          }`}
+            }`}
         >
           <Landmark className="h-4 w-4" /> Consolidation Evaluator
         </button>
         <button
           type="button"
           onClick={() => setActiveTab("realApr")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
-            activeTab === "realApr"
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${activeTab === "realApr"
               ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
               : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
-          }`}
+            }`}
         >
           <Percent className="h-4 w-4 text-emerald-500" /> Real APR &amp; Fee Threshold
         </button>
         <button
           type="button"
           onClick={() => setActiveTab("balTransfer")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
-            activeTab === "balTransfer"
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${activeTab === "balTransfer"
               ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
               : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
-          }`}
+            }`}
         >
           <Zap className="h-4 w-4 text-amber-500" /> 0% Balance Transfer Card
         </button>
         <button
           type="button"
           onClick={() => setActiveTab("charts")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
-            activeTab === "charts"
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${activeTab === "charts"
               ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
               : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
-          }`}
+            }`}
         >
           <BarChart3 className="h-4 w-4 text-blue-500" /> Cost Breakdown &amp; Charts
         </button>
         <button
           type="button"
           onClick={() => setActiveTab("schedule")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
-            activeTab === "schedule"
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${activeTab === "schedule"
               ? "border-indigo-600 text-indigo-600 dark:text-indigo-400"
               : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
-          }`}
+            }`}
         >
           <FileSpreadsheet className="h-4 w-4 text-purple-500" /> Amortization Comparison
         </button>
@@ -470,9 +465,8 @@ Recommendation: ${results.recommendation}`;
             )}
 
             {/* Main Hero Result Card */}
-            <div className={`rounded-2xl p-6 shadow-md text-white relative overflow-hidden bg-gradient-to-br ${
-              results.netTotalSavings >= 0 ? "from-slate-900 via-indigo-950 to-blue-950" : "from-slate-900 via-rose-950 to-red-950"
-            }`}>
+            <div className={`rounded-2xl p-6 shadow-md text-white relative overflow-hidden bg-gradient-to-br ${results.netTotalSavings >= 0 ? "from-slate-900 via-indigo-950 to-blue-950" : "from-slate-900 via-rose-950 to-red-950"
+              }`}>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs uppercase tracking-wider font-bold text-white/80">
                   NET TOTAL REFINANCE SAVINGS
