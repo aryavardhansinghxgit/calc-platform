@@ -61,6 +61,7 @@ import { DiscountCalculator } from "./discount/DiscountCalculator";
 import { CommissionCalculator } from "./commission/CommissionCalculator";
 import { PersonalLoanCalculator } from "./personal-loan/PersonalLoanCalculator";
 import { BusinessLoanCalculator } from "./business-loan/BusinessLoanCalculator";
+import { StudentLoanCalculator } from "./student-loan/StudentLoanCalculator";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -169,6 +170,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isCommission = definition.id === "commission" || definition.slug === "commission-calculator";
   const isPersonalLoan = definition.id === "personal-loan" || definition.slug === "personal-loan-calculator";
   const isBusinessLoan = definition.id === "business-loan" || definition.slug === "business-loan-calculator";
+  const isStudentLoan = definition.id === "student-loan" || definition.slug === "student-loan-calculator";
   const isIra =
     definition.id === "ira" ||
     definition.slug === "ira-calculator" ||
@@ -212,7 +214,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isBusinessLoan ? (
+            {isStudentLoan ? (
+              <StudentLoanCalculator />
+            ) : isBusinessLoan ? (
               <BusinessLoanCalculator />
             ) : isPersonalLoan ? (
               <PersonalLoanCalculator />

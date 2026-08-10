@@ -1,48 +1,60 @@
 import { CalculatorModuleDefinition } from "../../types";
-import { safePmt } from "@/lib/calculator-engine/formulas/safety";
+import { calculateSimpleStudentLoan } from "@/lib/calculator-engine/formulas/student-loan";
 
 export const STUDENT_LOAN_CALCULATOR: CalculatorModuleDefinition = {
   id: "student-loan",
-  title: "Student Loan Calculator",
+  title: "Student Loan Calculator – Repayment & Projection Suite",
   slug: "student-loan-calculator",
   category: "Finance",
   subcategory: "Personal",
-  description: "Calculate monthly student loan payments, total interest accrued during school, and total repayment cost.",
+  description:
+    "Free Student Loan Calculator. Calculate monthly student loan repayments, 4-way missing solvers, extra payment payoff acceleration, in-school debt projections, federal repayment plans, and refinancing savings.",
   iconName: "GraduationCap",
-  featured: false,
-  tags: ["student loan", "college loan", "education loan", "student debt"],
-  formulaDescription: "PMT = [Principal × r × (1 + r)^n] / [(1 + r)^n - 1]",
+  featured: true,
+  tags: [
+    "student loan",
+    "student loan calculator",
+    "college loan",
+    "education loan",
+    "student loan repayment",
+    "pslf forgiveness",
+    "student loan projection",
+  ],
+  formulaDescription:
+    "PMT = [Principal × r × (1 + r)^n] / [(1 + r)^n - 1]. Accelerated Payoff = PMT_base + Extra_Monthly.",
   faqs: [
     {
       question: "How does interest accrue while in school?",
-      answer: "Unsubsidized student loans accrue interest while you are enrolled in school, which is added (capitalized) into your principal balance upon graduation.",
+      answer:
+        "Direct Unsubsidized Loans and PLUS Loans accrue interest from the date funds are disbursed. If not paid while enrolled, accrued interest is capitalized (added to principal) upon graduation, increasing monthly payments.",
+    },
+    {
+      question: "How much interest can I save by making extra monthly payments?",
+      answer:
+        "Making extra monthly principal payments directly reduces your loan balance, shortening repayment duration and saving thousands of dollars in cumulative interest.",
     },
   ],
   inputs: [
-    { name: "loanBalance", label: "Student Loan Balance", type: "currency", defaultValue: 35000, unit: "$", min: 1000, max: 300000, step: 1000 },
-    { name: "interestRate", label: "Interest Rate (p.a.)", type: "percentage", defaultValue: 5.8, unit: "%", min: 1, max: 20, step: 0.1 },
-    { name: "repaymentTermYears", label: "Repayment Term", type: "slider", defaultValue: 10, unit: "years", min: 5, max: 25, step: 1 },
+    { name: "loanBalance", label: "Student Loan Balance ($)", type: "currency", defaultValue: 30000, unit: "$", min: 1000, max: 500000, step: 1000 },
+    { name: "interestRate", label: "Interest Rate (%)", type: "percentage", defaultValue: 6.8, unit: "%", min: 1, max: 20, step: 0.1 },
+    { name: "remainingTermYears", label: "Remaining Term (Years)", type: "slider", defaultValue: 10, unit: "years", min: 1, max: 30, step: 1 },
   ],
   outputs: [
     { name: "monthlyPayment", label: "Monthly Repayment", format: "currency", highlight: true },
     { name: "totalInterestPaid", label: "Total Interest Paid", format: "currency", highlight: true },
-    { name: "totalRepaymentCost", label: "Total Repayment Cost", format: "currency" },
+    { name: "totalPayments", label: "Total Repayment Cost", format: "currency" },
   ],
   calculate: (inputs) => {
-    const P = Math.max(0, Number(inputs.loanBalance || 35000));
-    const r = Math.min(100, Math.max(0, Number(inputs.interestRate || 5.8))) / 100 / 12;
-    const n = Math.max(1, Number(inputs.repaymentTermYears || 10)) * 12;
-
-    if (P <= 0 || n <= 0) return { monthlyPayment: 0, totalInterestPaid: 0, totalRepaymentCost: 0 };
-
-    const pmt = safePmt(P, r, n);
-    const totalCost = pmt * n;
-    const totalInterest = Math.max(0, totalCost - P);
+    const res = calculateSimpleStudentLoan({
+      loanBalance: Number(inputs.loanBalance || 30000),
+      interestRate: Number(inputs.interestRate || 6.8),
+      remainingTermYears: Number(inputs.remainingTermYears || 10),
+    });
 
     return {
-      monthlyPayment: Number(pmt.toFixed(2)),
-      totalInterestPaid: Number(totalInterest.toFixed(2)),
-      totalRepaymentCost: Number(totalCost.toFixed(2)),
+      monthlyPayment: res.monthlyPayment,
+      totalInterestPaid: res.totalInterestPaid,
+      totalPayments: res.totalPayments,
     };
   },
 };
