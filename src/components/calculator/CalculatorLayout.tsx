@@ -50,6 +50,7 @@ import { DebtConsolidationCalculator } from "./debt-consolidation/DebtConsolidat
 import { RetirementCalculator } from "./retirement/RetirementCalculator";
 import { FourZeroOneKCalculator } from "./401k/FourZeroOneKCalculator";
 import { IraCalculator } from "./ira/IraCalculator";
+import { RothIraCalculator } from "./roth-ira/RothIraCalculator";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -147,7 +148,12 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isDebtConsolidation = definition.id === "debt-consolidation" || definition.slug === "debt-consolidation-calculator";
   const isRetirement = definition.id === "retirement" || definition.slug === "retirement-calculator";
   const isFourZeroOneK = definition.id === "401k" || definition.slug === "401k-calculator";
-  const isIra = definition.id === "ira" || definition.slug === "ira-calculator";
+  const isRothIra = definition.id === "roth-ira" || definition.slug === "roth-ira-calculator";
+  const isIra =
+    definition.id === "ira" ||
+    definition.slug === "ira-calculator" ||
+    definition.id === "traditional-ira" ||
+    definition.slug === "traditional-ira-calculator";
   const CustomContent = definition.ContentComponent || (isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
@@ -186,7 +192,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isIra ? (
+            {isRothIra ? (
+              <RothIraCalculator />
+            ) : isIra ? (
               <IraCalculator />
             ) : isFourZeroOneK ? (
               <FourZeroOneKCalculator />
