@@ -14,6 +14,9 @@ export { AnnuityPayoutCalculator } from "./annuity-payout/AnnuityPayoutCalculato
 export { AnnuityPayoutContent } from "./annuity-payout/AnnuityPayoutContent";
 export { MarginCalculator } from "./margin/MarginCalculator";
 export { MarginContent } from "./margin/MarginContent";
+export { DiscountCalculator } from "./discount/DiscountCalculator";
+export { DiscountContent } from "./discount/DiscountContent";
+
 
 
 

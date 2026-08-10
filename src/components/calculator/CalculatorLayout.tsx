@@ -57,6 +57,7 @@ import { SocialSecurityCalculator } from "./social-security/SocialSecurityCalcul
 import { AnnuityCalculator } from "./annuity/AnnuityCalculator";
 import { AnnuityPayoutCalculator } from "./annuity-payout/AnnuityPayoutCalculator";
 import { MarginCalculator } from "./margin/MarginCalculator";
+import { DiscountCalculator } from "./discount/DiscountCalculator";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -161,6 +162,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isAnnuity = definition.id === "annuity" || definition.slug === "annuity-calculator";
   const isAnnuityPayout = definition.id === "annuity-payout" || definition.slug === "annuity-payout-calculator";
   const isMargin = definition.id === "margin" || definition.slug === "margin-calculator";
+  const isDiscount = definition.id === "discount" || definition.slug === "discount-calculator";
   const isIra =
     definition.id === "ira" ||
     definition.slug === "ira-calculator" ||
@@ -204,7 +206,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isMargin ? (
+            {isDiscount ? (
+              <DiscountCalculator />
+            ) : isMargin ? (
               <MarginCalculator />
             ) : isAnnuityPayout ? (
               <AnnuityPayoutCalculator />
