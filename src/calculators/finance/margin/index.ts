@@ -1,45 +1,58 @@
 import { CalculatorModuleDefinition } from "../../types";
+import { calculateProfitMargin } from "@/lib/calculator-engine/formulas/margin";
 
 export const MARGIN_CALCULATOR: CalculatorModuleDefinition = {
   id: "margin",
-  title: "Margin Calculator",
+  title: "Margin Calculator – Profit, Stock & Forex Leverage Suite",
   slug: "margin-calculator",
   category: "Finance",
   subcategory: "Business",
-  description: "Calculate gross profit margin percentage, markup percentage, and total gross profit.",
+  description:
+    "Free Margin Calculator. Calculate gross profit margin, markup percentage, stock trading margin requirements, margin call trigger prices, and forex leverage requirements.",
   iconName: "PieChart",
   featured: true,
-  tags: ["margin", "profit margin", "markup", "gross profit", "business margin"],
-  formulaDescription: "Gross Margin % = [(Revenue - Cost) / Revenue] × 100. Markup % = [(Revenue - Cost) / Cost] × 100.",
+  tags: [
+    "margin",
+    "profit margin",
+    "markup",
+    "stock margin",
+    "margin call",
+    "forex margin",
+    "leverage calculator",
+  ],
+  formulaDescription:
+    "Profit Margin % = [(Revenue - Cost) / Revenue] × 100. Markup % = [(Revenue - Cost) / Cost] × 100. Margin Call Price = Loan / [Shares × (1 - Maintenance%)].",
   faqs: [
     {
       question: "What is the difference between Margin and Markup?",
-      answer: "Gross Margin measures profit relative to selling price (revenue), while Markup measures profit relative to item cost.",
+      answer:
+        "Gross Profit Margin measures profit as a percentage of selling price (revenue), whereas Markup measures profit as a percentage of item cost.",
+    },
+    {
+      question: "How is a Stock Margin Call trigger price calculated?",
+      answer:
+        "A margin call occurs when portfolio equity falls below the broker's maintenance margin requirement. The trigger price equals: Loan Amount / [Shares × (1 - Maintenance Margin %)].",
     },
   ],
   inputs: [
-    { name: "costOfGoods", label: "Item Cost of Goods (COGS)", type: "currency", defaultValue: 60, unit: "$", min: 0.01, max: 1000000, step: 5 },
-    { name: "sellingPrice", label: "Selling Price (Revenue)", type: "currency", defaultValue: 100, unit: "$", min: 0.01, max: 1000000, step: 5 },
+    { name: "costOfGoods", label: "Item Cost ($)", type: "currency", defaultValue: 120, unit: "$", min: 0, max: 1000000, step: 5 },
+    { name: "sellingPrice", label: "Revenue / Selling Price ($)", type: "currency", defaultValue: 160, unit: "$", min: 0, max: 1000000, step: 5 },
   ],
   outputs: [
-    { name: "grossMarginPercent", label: "Gross Profit Margin", format: "percentage", highlight: true },
-    { name: "grossProfit", label: "Gross Dollar Profit", format: "currency", highlight: true },
+    { name: "grossMarginPercent", label: "Profit Margin", format: "percentage", highlight: true },
+    { name: "grossProfit", label: "Dollar Profit", format: "currency", highlight: true },
     { name: "markupPercent", label: "Markup Percentage", format: "percentage" },
   ],
   calculate: (inputs) => {
-    const cost = Number(inputs.costOfGoods || 60);
-    const rev = Number(inputs.sellingPrice || 100);
-
-    if (rev <= 0 || cost <= 0) return { grossMarginPercent: "0%", grossProfit: 0, markupPercent: "0%" };
-
-    const profit = rev - cost;
-    const margin = (profit / rev) * 100;
-    const markup = (profit / cost) * 100;
+    const res = calculateProfitMargin({
+      cost: Number(inputs.costOfGoods || 120),
+      revenue: Number(inputs.sellingPrice || 160),
+    });
 
     return {
-      grossMarginPercent: `${margin.toFixed(2)}%`,
-      grossProfit: Number(profit.toFixed(2)),
-      markupPercent: `${markup.toFixed(2)}%`,
+      grossMarginPercent: `${res.marginPercent}%`,
+      grossProfit: res.profit,
+      markupPercent: `${res.markupPercent}%`,
     };
   },
 };
