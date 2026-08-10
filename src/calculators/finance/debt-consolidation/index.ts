@@ -1,72 +1,73 @@
 import { CalculatorModuleDefinition } from "../../types";
-import { safePmt } from "@/lib/calculator-engine/formulas/safety";
+import { calculateDebtConsolidation } from "@/lib/calculator-engine/formulas/debt-consolidation";
 
 export const DEBT_CONSOLIDATION_CALCULATOR: CalculatorModuleDefinition = {
   id: "debt-consolidation",
-  title: "Debt Consolidation Calculator",
+  title: "Debt Consolidation Calculator – Real APR & Refinance Suite",
   slug: "debt-consolidation-calculator",
   category: "Finance",
   subcategory: "Credit & Debt",
-  description: "Calculate how much money and time you can save by consolidating high-interest debts into a single lower-rate loan.",
-  iconName: "TrendingDown",
-  featured: false,
-  tags: ["debt consolidation", "combine debt", "lower interest", "refinance debt"],
-  formulaDescription: "Compares cumulative existing debt payments against a consolidated loan payment schedule.",
+  description:
+    "Calculate whether consolidating your credit cards and loans into a single lower-rate loan saves money. Solves Real Effective APR accounting for upfront origination fees, fee sensitivity thresholds, and 0% balance transfer card options.",
+  iconName: "Landmark",
+  featured: true,
+  tags: [
+    "debt consolidation calculator",
+    "real apr calculator",
+    "effective apr calculator",
+    "credit card consolidation calculator",
+    "personal loan refinance",
+    "0 balance transfer calculator",
+    "origination fee impact",
+  ],
+  formulaDescription:
+    "Solves Real Effective APR including upfront origination fees using Newton-Raphson method; compares current multi-debt schedule vs consolidation loan amortization schedule.",
   faqs: [
     {
-      question: "How does debt consolidation save money?",
-      answer: "By replacing multiple high-interest debts (like credit cards at 22%) with a single lower-rate personal loan (like 10%), more of your monthly payment goes directly toward paying down principal.",
+      question: "What is Real APR (Effective APR) vs. Nominal APR?",
+      answer:
+        "Nominal APR is the advertised interest rate on the loan. Real APR (Effective APR) includes upfront origination fees or points amortized over the loan term, giving you the true total borrowing cost.",
+    },
+    {
+      question: "Will consolidating my debt hurt my credit score?",
+      answer:
+        "Applying for a consolidation loan causes a temporary 3 to 5 point drop from a hard inquiry. However, paying off revolving credit cards lowers your credit utilization ratio (30% of FICO score), often raising your score by 30 to 80+ points within 60 days.",
     },
   ],
   inputs: [
-    { name: "totalDebtAmount", label: "Total Debt to Consolidate", type: "currency", defaultValue: 30000, unit: "$", min: 1000, max: 500000, step: 1000 },
-    { name: "currentAvgInterestRate", label: "Current Avg Interest Rate", type: "percentage", defaultValue: 21.0, unit: "%", min: 1, max: 40, step: 0.5 },
-    { name: "currentTotalMonthlyPmt", label: "Current Combined Monthly Payment", type: "currency", defaultValue: 900, unit: "$", min: 100, max: 10000, step: 50 },
-    { name: "newConsolidationRate", label: "New Consolidation Loan Rate", type: "percentage", defaultValue: 11.5, unit: "%", min: 1, max: 30, step: 0.5 },
-    { name: "newLoanTermYears", label: "New Loan Term", type: "slider", defaultValue: 4, unit: "years", min: 1, max: 10, step: 1 },
+    { name: "balance1", label: "Credit Card #1 Balance ($)", type: "currency", defaultValue: 10000, unit: "$", min: 0, max: 1000000, step: 500 },
+    { name: "balance2", label: "Credit Card #2 Balance ($)", type: "currency", defaultValue: 7500, unit: "$", min: 0, max: 1000000, step: 500 },
+    { name: "consolidationApr", label: "Consolidation Loan APR (%)", type: "percentage", defaultValue: 10.99, unit: "%", min: 0, max: 100, step: 0.25 },
+    { name: "termYears", label: "Loan Term (Years)", type: "number", defaultValue: 5, unit: "yrs", min: 1, max: 30, step: 1 },
+    { name: "feePercent", label: "Origination Fee (%)", type: "percentage", defaultValue: 5, unit: "%", min: 0, max: 20, step: 0.5 },
   ],
   outputs: [
-    { name: "newMonthlyPayment", label: "New Consolidated Monthly Payment", format: "currency", highlight: true },
-    { name: "monthlyPaymentSavings", label: "Monthly Payment Savings", format: "currency" },
-    { name: "totalInterestSavings", label: "Total Lifetime Interest Savings", format: "currency", highlight: true },
+    { name: "netTotalSavings", label: "Net Total Savings", format: "currency", highlight: true },
+    { name: "monthlySavings", label: "Monthly Payment Savings", format: "currency" },
+    { name: "consolidationMonthlyPayment", label: "New Monthly Payment", format: "currency" },
+    { name: "realApr", label: "Real Effective APR", format: "percentage", highlight: true },
+    { name: "maxFeeThresholdPercent", label: "Max Fee Threshold %", format: "percentage" },
   ],
   calculate: (inputs) => {
-    const bal = Math.max(0, Number(inputs.totalDebtAmount || 30000));
-    const r1 = Math.min(100, Math.max(0, Number(inputs.currentAvgInterestRate || 21.0))) / 100 / 12;
-    const pmt1 = Math.max(0, Number(inputs.currentTotalMonthlyPmt || 900));
-    const r2 = Math.min(100, Math.max(0, Number(inputs.newConsolidationRate || 11.5))) / 100 / 12;
-    const n2 = Math.max(1, Number(inputs.newLoanTermYears || 4)) * 12;
+    const defaultDebts = [
+      { id: "1", name: "Credit Card 1", balance: Number(inputs.balance1 || 10000), minPayment: 260, apr: 17.99 },
+      { id: "2", name: "Credit Card 2", balance: Number(inputs.balance2 || 7500), minPayment: 190, apr: 19.99 },
+    ];
 
-    if (bal <= 0 || n2 <= 0) {
-      return { newMonthlyPayment: 0, monthlyPaymentSavings: 0, totalInterestSavings: 0 };
-    }
-
-    let currentBal = bal;
-    let currentMonths = 0;
-    let currentTotalInterest = 0;
-
-    if (pmt1 > currentBal * r1) {
-      while (currentBal > 0 && currentMonths < 600) {
-        currentMonths++;
-        const interest = currentBal * r1;
-        let principal = pmt1 - interest;
-        if (principal > currentBal) principal = currentBal;
-        if (principal <= 0) break;
-        currentTotalInterest += interest;
-        currentBal -= principal;
-      }
-    }
-
-    const pmt2 = safePmt(bal, r2, n2);
-    const newTotalInterest = (pmt2 * n2) - bal;
-
-    const monthlySavings = pmt1 - pmt2;
-    const interestSavings = Math.max(0, currentTotalInterest - newTotalInterest);
+    const res = calculateDebtConsolidation({
+      debts: defaultDebts,
+      consolidationApr: Number(inputs.consolidationApr || 10.99),
+      termMonths: Number(inputs.termYears || 5) * 12,
+      feeType: "percent",
+      feeValue: Number(inputs.feePercent || 5),
+    });
 
     return {
-      newMonthlyPayment: Number(pmt2.toFixed(2)),
-      monthlyPaymentSavings: Number(monthlySavings.toFixed(2)),
-      totalInterestSavings: Number(interestSavings.toFixed(2)),
+      netTotalSavings: res.netTotalSavings,
+      monthlySavings: res.monthlySavings,
+      consolidationMonthlyPayment: res.consolidationMonthlyPayment,
+      realApr: res.realApr,
+      maxFeeThresholdPercent: res.maxFeeThresholdPercent,
     };
   },
 };
