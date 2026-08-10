@@ -400,48 +400,49 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
 
             {/* Dynamic Debts Table */}
             <div className="space-y-2">
-              <div className="grid grid-cols-12 gap-2 text-[10px] font-bold text-zinc-500 uppercase px-1">
+              <div className="grid grid-cols-12 gap-1.5 text-[10px] font-bold text-zinc-500 uppercase px-1">
                 <span className="col-span-4">Debt Name</span>
                 <span className="col-span-3">Balance ($)</span>
-                <span className="col-span-3">Min Pmt ($)</span>
+                <span className="col-span-2">Min Pmt ($)</span>
                 <span className="col-span-2">APR %</span>
+                <span className="col-span-1 text-center"></span>
               </div>
 
               {debts.map((d) => (
-                <div key={d.id} className="grid grid-cols-12 gap-2 items-center bg-zinc-50 dark:bg-zinc-800/40 p-2 rounded-lg border border-zinc-200/60 dark:border-zinc-700">
+                <div key={d.id} className="grid grid-cols-12 gap-1.5 items-center bg-zinc-50 dark:bg-zinc-800/40 p-2 rounded-lg border border-zinc-200/60 dark:border-zinc-700">
                   <Input
                     type="text"
                     value={d.name}
                     onChange={(e) => updateDebtRow(d.id, "name", e.target.value)}
-                    className="col-span-4 h-7 text-xs font-medium"
+                    className="col-span-4 h-8 text-xs font-medium px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800"
                   />
                   <Input
                     type="number"
                     min="0"
-                    value={d.balance}
+                    value={d.balance || ""}
                     onChange={(e) => updateDebtRow(d.id, "balance", Number(e.target.value))}
-                    className="col-span-3 h-7 text-xs font-mono"
+                    className="col-span-3 h-8 text-xs font-mono px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                   <Input
                     type="number"
                     min="0"
-                    value={d.minPayment}
+                    value={d.minPayment || ""}
                     onChange={(e) => updateDebtRow(d.id, "minPayment", Number(e.target.value))}
-                    className="col-span-3 h-7 text-xs font-mono"
+                    className="col-span-2 h-8 text-xs font-mono px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
-                  <div className="col-span-2 flex items-center gap-1">
-                    <Input
-                      type="number"
-                      min="0"
-                      max="100"
-                      step="0.1"
-                      value={d.apr}
-                      onChange={(e) => updateDebtRow(d.id, "apr", Number(e.target.value))}
-                      className="h-7 text-xs font-mono px-1"
-                    />
+                  <Input
+                    type="number"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    value={d.apr || ""}
+                    onChange={(e) => updateDebtRow(d.id, "apr", Number(e.target.value))}
+                    className="col-span-2 h-8 text-xs font-mono px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                  <div className="col-span-1 flex justify-center">
                     {debts.length > 1 && (
-                      <button type="button" onClick={() => removeDebtRow(d.id)} className="text-red-500 hover:text-red-700 p-0.5 cursor-pointer">
-                        <Trash2 className="h-3.5 w-3.5" />
+                      <button type="button" onClick={() => removeDebtRow(d.id)} className="text-red-500 hover:text-red-700 p-1 cursor-pointer transition-colors" title="Delete Debt">
+                        <Trash2 className="h-4 w-4" />
                       </button>
                     )}
                   </div>
