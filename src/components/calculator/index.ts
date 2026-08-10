@@ -8,6 +8,9 @@ export { RmdCalculator } from "./rmd/RmdCalculator";
 export { PensionCalculator } from "./pension/PensionCalculator";
 export { SocialSecurityCalculator } from "./social-security/SocialSecurityCalculator";
 export { SocialSecurityContent } from "./social-security/SocialSecurityContent";
+export { AnnuityCalculator } from "./annuity/AnnuityCalculator";
+export { AnnuityContent } from "./annuity/AnnuityContent";
+
 
 
 

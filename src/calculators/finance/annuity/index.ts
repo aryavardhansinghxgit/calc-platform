@@ -1,49 +1,80 @@
 import { CalculatorModuleDefinition } from "../../types";
+import { calculateAnnuity } from "@/lib/calculator-engine/formulas/annuity";
 
 export const ANNUITY_CALCULATOR: CalculatorModuleDefinition = {
   id: "annuity",
-  title: "Annuity Calculator",
+  title: "Annuity Calculator – Growth, Accumulation & Target Planner",
   slug: "annuity-calculator",
   category: "Finance",
   subcategory: "Retirement",
-  description: "Calculate future annuity accumulation balance based on initial investment, recurring deposits, and growth rate.",
+  description:
+    "Free Annuity Calculator. Calculate accumulation growth for Ordinary Annuities and Annuities Due. Features compounding frequencies, Target Balance Planner, 4-plan scenario comparison, Recharts dashboards, and downloadable annual/monthly schedules.",
   iconName: "Shield",
-  featured: false,
-  tags: ["annuity", "fixed annuity", "annuity accumulation", "guaranteed growth"],
-  formulaDescription: "FV = P × (1 + r)^n + PMT × [((1 + r)^n - 1) / r]",
+  featured: true,
+  tags: [
+    "annuity",
+    "annuity calculator",
+    "fixed annuity",
+    "annuity due",
+    "ordinary annuity",
+    "target balance planner",
+    "accumulation schedule",
+  ],
+  formulaDescription:
+    "Annuity Due: FV = P(1+r)^n + PMT × [((1+r)^n - 1) / r] × (1+r). Ordinary Annuity: FV = P(1+r)^n + PMT × [((1+r)^n - 1) / r].",
   faqs: [
     {
-      question: "What is an annuity accumulation phase?",
-      answer: "The accumulation phase is the period when you make payments into an annuity contract to accumulate tax-deferred investment growth prior to retirement payouts.",
+      question: "What is the difference between an Ordinary Annuity and an Annuity Due?",
+      answer:
+        "In an Ordinary Annuity, contributions are made at the end of each period, so the first deposit earns no interest in the first period. In an Annuity Due, contributions are made at the beginning of each period, earning interest for the entire period and producing a higher final balance.",
+    },
+    {
+      question: "How does compounding frequency impact annuity growth?",
+      answer:
+        "More frequent compounding (such as daily or monthly instead of annual) allows earned interest to generate its own returns faster, accelerating exponential compound growth over long time horizons.",
     },
   ],
   inputs: [
-    { name: "initialDeposit", label: "Initial Premium Deposit", type: "currency", defaultValue: 50000, unit: "$", min: 1000, max: 2000000, step: 5000 },
-    { name: "monthlyDeposit", label: "Monthly Contribution", type: "currency", defaultValue: 400, unit: "$", min: 0, max: 10000, step: 50 },
-    { name: "interestRate", label: "Guaranteed Interest Rate", type: "percentage", defaultValue: 5.5, unit: "%", min: 0.1, max: 15, step: 0.1 },
-    { name: "yearsToAccumulate", label: "Accumulation Term", type: "slider", defaultValue: 20, unit: "years", min: 1, max: 40, step: 1 },
+    { name: "startingPrincipal", label: "Starting Principal ($)", type: "currency", defaultValue: 20000, unit: "$", min: 0, max: 10000000, step: 5000 },
+    { name: "annualContribution", label: "Annual Contribution ($)", type: "currency", defaultValue: 10000, unit: "$", min: 0, max: 500000, step: 1000 },
+    { name: "monthlyContribution", label: "Monthly Contribution ($)", type: "currency", defaultValue: 0, unit: "$", min: 0, max: 50000, step: 100 },
+    {
+      name: "timing",
+      label: "Contribution Timing",
+      type: "select",
+      defaultValue: "beginning",
+      options: [
+        { label: "Beginning of period (Annuity Due)", value: "beginning" },
+        { label: "End of period (Ordinary Annuity)", value: "end" },
+      ],
+    },
+    { name: "growthRatePercent", label: "Annual Growth Rate (%)", type: "number", defaultValue: 6.0, min: 0, max: 25, step: 0.25 },
+    { name: "years", label: "Duration (Years)", type: "number", defaultValue: 10, min: 1, max: 50, step: 1 },
   ],
   outputs: [
-    { name: "futureAnnuityValue", label: "Future Annuity Value", format: "currency", highlight: true },
-    { name: "totalInterestEarned", label: "Total Interest Growth", format: "currency", highlight: true },
-    { name: "totalPremiumsPaid", label: "Total Premiums Paid", format: "currency" },
+    { name: "endBalance", label: "Ending Balance", format: "currency", highlight: true },
+    { name: "totalContributions", label: "Total Contributions", format: "currency" },
+    { name: "totalInterestEarned", label: "Total Interest Earned", format: "currency", highlight: true },
+    { name: "inflationAdjustedRealValue", label: "Inflation-Adjusted Real Value", format: "currency" },
   ],
   calculate: (inputs) => {
-    const P = Number(inputs.initialDeposit || 50000);
-    const pmt = Number(inputs.monthlyDeposit || 400);
-    const r = Number(inputs.interestRate || 5.5) / 100 / 12;
-    const n = Number(inputs.yearsToAccumulate || 20) * 12;
-
-    const fvPrincipal = P * Math.pow(1 + r, n);
-    const fvAnnuity = r > 0 ? pmt * ((Math.pow(1 + r, n) - 1) / r) : pmt * n;
-    const totalFV = fvPrincipal + fvAnnuity;
-    const totalPremiums = P + (pmt * n);
-    const interest = totalFV - totalPremiums;
+    const res = calculateAnnuity({
+      startingPrincipal: Number(inputs.startingPrincipal || 20000),
+      annualContribution: Number(inputs.annualContribution || 10000),
+      monthlyContribution: Number(inputs.monthlyContribution || 0),
+      timing: (inputs.timing as any) || "beginning",
+      growthRatePercent: Number(inputs.growthRatePercent || 6.0),
+      years: Number(inputs.years || 10),
+      months: 0,
+      inflationRatePercent: 2.5,
+      taxRatePercent: 20,
+    });
 
     return {
-      futureAnnuityValue: Number(totalFV.toFixed(2)),
-      totalInterestEarned: Number(interest.toFixed(2)),
-      totalPremiumsPaid: Number(totalPremiums.toFixed(2)),
+      endBalance: res.endBalance,
+      totalContributions: res.totalContributions,
+      totalInterestEarned: res.totalInterestEarned,
+      inflationAdjustedRealValue: res.inflationAdjustedRealValue,
     };
   },
 };
