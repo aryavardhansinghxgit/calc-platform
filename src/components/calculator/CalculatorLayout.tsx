@@ -38,6 +38,7 @@ import { CagrCalculator } from "./cagr/CagrCalculator";
 import { CagrContent } from "./cagr/CagrContent";
 import { RoiCalculator } from "./roi/RoiCalculator";
 import { RoiContent } from "./roi/RoiContent";
+import { FutureValueCalculator } from "./future-value/FutureValueCalculator";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -124,6 +125,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isRd = definition.id === "rd" || definition.slug === "rd-calculator";
   const isCagr = definition.id === "cagr" || definition.slug === "cagr-calculator";
   const isRoi = definition.id === "roi" || definition.slug === "roi-calculator";
+  const isFutureValue = definition.id === "future-value" || definition.slug === "future-value-calculator";
   const CustomContent = definition.ContentComponent || (isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
@@ -162,7 +164,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isRoi ? (
+            {isFutureValue ? (
+              <FutureValueCalculator />
+            ) : isRoi ? (
               <RoiCalculator />
             ) : isCagr ? (
               <CagrCalculator />
