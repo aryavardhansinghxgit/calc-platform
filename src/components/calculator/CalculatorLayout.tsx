@@ -49,6 +49,7 @@ import { DebtPayoffCalculator } from "./debt-payoff/DebtPayoffCalculator";
 import { DebtConsolidationCalculator } from "./debt-consolidation/DebtConsolidationCalculator";
 import { RetirementCalculator } from "./retirement/RetirementCalculator";
 import { FourZeroOneKCalculator } from "./401k/FourZeroOneKCalculator";
+import { IraCalculator } from "./ira/IraCalculator";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -146,6 +147,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isDebtConsolidation = definition.id === "debt-consolidation" || definition.slug === "debt-consolidation-calculator";
   const isRetirement = definition.id === "retirement" || definition.slug === "retirement-calculator";
   const isFourZeroOneK = definition.id === "401k" || definition.slug === "401k-calculator";
+  const isIra = definition.id === "ira" || definition.slug === "ira-calculator";
   const CustomContent = definition.ContentComponent || (isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
@@ -184,7 +186,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isFourZeroOneK ? (
+            {isIra ? (
+              <IraCalculator />
+            ) : isFourZeroOneK ? (
               <FourZeroOneKCalculator />
             ) : isRetirement ? (
               <RetirementCalculator />
