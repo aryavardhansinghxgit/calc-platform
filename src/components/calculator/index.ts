@@ -20,6 +20,9 @@ export { CommissionCalculator } from "./commission/CommissionCalculator";
 export { CommissionContent } from "./commission/CommissionContent";
 export { PersonalLoanCalculator } from "./personal-loan/PersonalLoanCalculator";
 export { PersonalLoanContent } from "./personal-loan/PersonalLoanContent";
+export { BusinessLoanCalculator } from "./business-loan/BusinessLoanCalculator";
+export { BusinessLoanContent } from "./business-loan/BusinessLoanContent";
+
 
 
 
