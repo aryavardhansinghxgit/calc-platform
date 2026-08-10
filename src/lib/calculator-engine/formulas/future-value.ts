@@ -500,8 +500,8 @@ export function solveGoalParameter(
 
 /**
  * Monte Carlo Simulation to calculate probability of reaching target wealth under market volatility
+ * Uses a deterministic seeded PRNG to ensure identical calculation on SSR and Client hydration.
  */
-
 function runMonteCarloSimulation(
   pv: number,
   pmt: number,
@@ -515,12 +515,21 @@ function runMonteCarloSimulation(
   const stdDevAnnual = 0.15; // 15% annual market volatility assumption
   let successCount = 0;
 
+  // Seeded PRNG for SSR/Hydration consistency
+  let seed = 123456789;
+  const nextRandom = () => {
+    let t = (seed += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+
   for (let i = 0; i < iterations; i++) {
     let balance = pv;
     for (let y = 1; y <= years; y++) {
       // Box-Muller transformation for normal distribution random return
-      const u1 = Math.max(1e-10, Math.random());
-      const u2 = Math.random();
+      const u1 = Math.max(1e-10, nextRandom());
+      const u2 = nextRandom();
       const z = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
       const annualReturn = meanAnnual + z * stdDevAnnual;
       const rPeriod = Math.pow(1 + Math.max(-0.9, annualReturn), 1 / pContrib) - 1;
