@@ -22,6 +22,7 @@ export interface IncomeTaxInput {
   localTaxWithheld?: number; // Box 19
 
   // Self-Employment & Additional Income
+  hasBusinessIncome?: boolean;
   selfEmploymentIncome?: number; // Schedule C
   socialSecurityIncome?: number; // SSA-1099
   interestIncome?: number; // 1099-INT
@@ -33,7 +34,10 @@ export interface IncomeTaxInput {
   otherIncome?: number; // Unemployment, 1099-R
   stateLocalTaxRate?: number; // %
 
-  // Above-the-Line (ATL) Deductions
+  // Above-the-Line (ATL) & Special Provisions
+  tipsIncome?: number; // Max $25,000 deduction (2025-2028 rules)
+  overtimeIncome?: number; // Max $12,500 Single / $25,000 Joint deduction
+  carLoanInterest?: number; // Max $10,000 deduction for qualified vehicle
   iraContributions?: number;
   studentLoanInterest?: number; // Max $2,500
   educatorExpenses?: number; // Max $300
@@ -47,7 +51,11 @@ export interface IncomeTaxInput {
   otherDeductions?: number;
 
   // Credits
-  childCareExpenses?: number;
+  childCareExpenses?: number; // Child & dependent care expense (Max $3k/1 child, $6k/2+ children)
+  student1College?: number;
+  student2College?: number;
+  student3College?: number;
+  student4College?: number;
   collegeEducationExpenses?: number;
   energyPropertyCredits?: number;
   saversCredit?: number;
@@ -289,15 +297,23 @@ export function calculateIncomeTax(input: IncomeTaxInput): IncomeTaxCalculationR
     (Number(longTermCapitalGains) || 0) +
     (Number(otherIncome) || 0);
 
-  // 3. Above-the-Line (ATL) Deductions
+  // 3. Above-the-Line (ATL) Deductions & Special 2025-2028 Provisions
   const cappedStudentLoan = Math.min(2500, Math.max(0, Number(studentLoanInterest) || 0));
   const cappedEducator = Math.min(300, Math.max(0, Number(educatorExpenses) || 0));
+  const cappedTips = Math.min(25000, Math.max(0, Number(input.tipsIncome) || 0));
+  const maxOvertimeCap = filingStatus === 'joint' ? 25000 : 12500;
+  const cappedOvertime = Math.min(maxOvertimeCap, Math.max(0, Number(input.overtimeIncome) || 0));
+  const cappedCarInterest = Math.min(10000, Math.max(0, Number(input.carLoanInterest) || 0));
+
   const aboveTheLineDeductions =
     halfSETaxDeduction +
     Math.max(0, Number(iraContributions) || 0) +
     cappedStudentLoan +
     cappedEducator +
-    Math.max(0, Number(hsaContributions) || 0);
+    Math.max(0, Number(hsaContributions) || 0) +
+    cappedTips +
+    cappedOvertime +
+    cappedCarInterest;
 
   // Adjusted Gross Income (AGI)
   const adjustedGrossIncome = Math.max(0, totalGrossIncome - aboveTheLineDeductions);
@@ -386,10 +402,26 @@ export function calculateIncomeTax(input: IncomeTaxInput): IncomeTaxCalculationR
   // 8. Tax Credits Calculation
   const childTaxCredit = Math.max(0, (Number(youngDependents) || 0) * 2200);
   const otherDependentCredit = Math.max(0, (Number(otherDependents) || 0) * 500);
+
+  // Child & Dependent Care Credit (20% of up to $3k for 1, $6k for 2+)
+  const childCareCap = (youngDependents + otherDependents) >= 2 ? 6000 : 3000;
+  const childCareCredit = Math.min(childCareCap, Math.max(0, Number(childCareExpenses) || 0)) * 0.20;
+
+  // College Education Expenses (Students 1-4 AOTC Credit)
+  const totalCollegeExpenses =
+    (Number(input.student1College) || 0) +
+    (Number(input.student2College) || 0) +
+    (Number(input.student3College) || 0) +
+    (Number(input.student4College) || 0) +
+    (Number(collegeEducationExpenses) || 0);
+
+  const collegeCredit = Math.min(10000, totalCollegeExpenses * 0.25);
+
   const addlCredits =
+    childCareCredit +
+    collegeCredit +
     Math.max(0, Number(energyPropertyCredits) || 0) +
-    Math.max(0, Number(saversCredit) || 0) +
-    Math.min(2500, Math.max(0, Number(collegeEducationExpenses) || 0));
+    Math.max(0, Number(saversCredit) || 0);
 
   const totalTaxCredits = childTaxCredit + otherDependentCredit + addlCredits;
   const totalTaxLiability = Math.max(0, totalTaxBeforeCredits - totalTaxCredits);

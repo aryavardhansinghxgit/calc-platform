@@ -74,7 +74,8 @@ export function IncomeTaxCalculator() {
   const [stateTaxWithheld, setStateTaxWithheld] = useState<number>(2500);
   const [localTaxWithheld, setLocalTaxWithheld] = useState<number>(0);
 
-  // Self Employment & Other Income
+  // Self Employment & Business Toggle
+  const [hasBusinessIncome, setHasBusinessIncome] = useState<boolean>(false);
   const [selfEmploymentIncome, setSelfEmploymentIncome] = useState<number>(0);
   const [socialSecurityIncome, setSocialSecurityIncome] = useState<number>(0);
   const [interestIncome, setInterestIncome] = useState<number>(0);
@@ -83,8 +84,12 @@ export function IncomeTaxCalculator() {
   const [shortTermCapitalGains, setShortTermCapitalGains] = useState<number>(0);
   const [longTermCapitalGains, setLongTermCapitalGains] = useState<number>(0);
   const [otherIncome, setOtherIncome] = useState<number>(0);
+  const [stateLocalTaxRate, setStateLocalTaxRate] = useState<number>(0);
 
-  // Deductions (ATL & Itemized)
+  // Deductions (ATL & Itemized & 2025-2028 Tax Bill Provisions)
+  const [tipsIncome, setTipsIncome] = useState<number>(0);
+  const [overtimeIncome, setOvertimeIncome] = useState<number>(0);
+  const [carLoanInterest, setCarLoanInterest] = useState<number>(0);
   const [iraContributions, setIraContributions] = useState<number>(0);
   const [studentLoanInterest, setStudentLoanInterest] = useState<number>(0);
   const [hsaContributions, setHsaContributions] = useState<number>(0);
@@ -93,14 +98,60 @@ export function IncomeTaxCalculator() {
   const [realEstateTax, setRealEstateTax] = useState<number>(0);
   const [charitableDonations, setCharitableDonations] = useState<number>(0);
   const [medicalExpenses, setMedicalExpenses] = useState<number>(0);
+  const [otherDeductions, setOtherDeductions] = useState<number>(0);
 
-  // Credits
+  // Credits & College Students 1-4
+  const [childCareExpenses, setChildCareExpenses] = useState<number>(0);
+  const [student1College, setStudent1College] = useState<number>(0);
+  const [student2College, setStudent2College] = useState<number>(0);
+  const [student3College, setStudent3College] = useState<number>(0);
+  const [student4College, setStudent4College] = useState<number>(0);
   const [energyPropertyCredits, setEnergyPropertyCredits] = useState<number>(0);
 
   // Table Search & Modal State
   const [tableSearch, setTableSearch] = useState("");
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [copyNotification, setCopyNotification] = useState(false);
+
+  // Clear / Reset All Inputs
+  const handleReset = () => {
+    setTaxYear("2026");
+    setFilingStatus("single");
+    setYoungDependents(0);
+    setOtherDependents(0);
+    setAge(30);
+    setWagesW2(0);
+    setFedTaxWithheld(0);
+    setStateTaxWithheld(0);
+    setLocalTaxWithheld(0);
+    setHasBusinessIncome(false);
+    setSelfEmploymentIncome(0);
+    setSocialSecurityIncome(0);
+    setInterestIncome(0);
+    setOrdinaryDividends(0);
+    setQualifiedDividends(0);
+    setShortTermCapitalGains(0);
+    setLongTermCapitalGains(0);
+    setOtherIncome(0);
+    setStateLocalTaxRate(0);
+    setTipsIncome(0);
+    setOvertimeIncome(0);
+    setCarLoanInterest(0);
+    setIraContributions(0);
+    setStudentLoanInterest(0);
+    setHsaContributions(0);
+    setMortgageInterest(0);
+    setRealEstateTax(0);
+    setCharitableDonations(0);
+    setMedicalExpenses(0);
+    setOtherDeductions(0);
+    setChildCareExpenses(0);
+    setStudent1College(0);
+    setStudent2College(0);
+    setStudent3College(0);
+    setStudent4College(0);
+    setEnergyPropertyCredits(0);
+  };
 
   // Presets
   const applyPreset = (preset: "entry" | "median" | "freelancer" | "high") => {
@@ -148,6 +199,7 @@ export function IncomeTaxCalculator() {
       fedTaxWithheld,
       stateTaxWithheld,
       localTaxWithheld,
+      hasBusinessIncome,
       selfEmploymentIncome,
       socialSecurityIncome,
       interestIncome,
@@ -156,6 +208,10 @@ export function IncomeTaxCalculator() {
       shortTermCapitalGains,
       longTermCapitalGains,
       otherIncome,
+      stateLocalTaxRate,
+      tipsIncome,
+      overtimeIncome,
+      carLoanInterest,
       iraContributions,
       studentLoanInterest,
       hsaContributions,
@@ -163,6 +219,12 @@ export function IncomeTaxCalculator() {
       realEstateTax,
       charitableDonations,
       medicalExpenses,
+      otherDeductions,
+      childCareExpenses,
+      student1College,
+      student2College,
+      student3College,
+      student4College,
       energyPropertyCredits,
     }),
     [
@@ -175,6 +237,7 @@ export function IncomeTaxCalculator() {
       fedTaxWithheld,
       stateTaxWithheld,
       localTaxWithheld,
+      hasBusinessIncome,
       selfEmploymentIncome,
       socialSecurityIncome,
       interestIncome,
@@ -183,6 +246,10 @@ export function IncomeTaxCalculator() {
       shortTermCapitalGains,
       longTermCapitalGains,
       otherIncome,
+      stateLocalTaxRate,
+      tipsIncome,
+      overtimeIncome,
+      carLoanInterest,
       iraContributions,
       studentLoanInterest,
       hsaContributions,
@@ -190,6 +257,12 @@ export function IncomeTaxCalculator() {
       realEstateTax,
       charitableDonations,
       medicalExpenses,
+      otherDeductions,
+      childCareExpenses,
+      student1College,
+      student2College,
+      student3College,
+      student4College,
       energyPropertyCredits,
     ]
   );
@@ -509,10 +582,32 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
                 className="text-xs font-mono"
               />
             </div>
+
+            {/* Action Buttons: Calculate & Clear */}
+            <div className="flex gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+              <Button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById("tax-results-dashboard");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="flex-1 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+              >
+                Calculate Tax
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleReset}
+                className="text-xs font-medium border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+              >
+                <RotateCcw className="h-3.5 w-3.5 mr-1" /> Clear
+              </Button>
+            </div>
           </div>
 
           {/* Right Results Dashboard (7 Cols) */}
-          <div className="lg:col-span-7 space-y-4">
+          <div id="tax-results-dashboard" className="lg:col-span-7 space-y-4">
             {/* Primary Highlight Card (Refund vs Owed) */}
             <div
               className={`rounded-2xl p-6 shadow-md text-white relative overflow-hidden transition-all ${
@@ -631,26 +726,94 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
       {/* TAB 2: DETAILED W-2, 1099 & DEDUCTIONS */}
       {activeTab === "detailed" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
-            <Sliders className="h-6 w-6 text-emerald-500" />
-            <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                Detailed W-2, 1099, & Deductions Input Panel
-              </h3>
-              <p className="text-xs text-zinc-500">
-                Enter all W-2 box figures, 1099 self-employment profits, capital gains, above-the-line adjustments, and itemized deductions.
-              </p>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
+            <div className="flex items-center gap-3">
+              <Sliders className="h-6 w-6 text-emerald-500" />
+              <div>
+                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                  Comprehensive W-2, 1099 & Schedule A/C Input Panel
+                </h3>
+                <p className="text-xs text-zinc-500">
+                  Enter every W-2 box figure, self-employment profit, capital gains, 2025–2028 special provisions, and itemized deductions.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById("tax-results-dashboard");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+              >
+                Calculate Tax
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleReset}
+                className="text-xs font-medium border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+              >
+                <RotateCcw className="h-3.5 w-3.5 mr-1" /> Clear
+              </Button>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
-            {/* Column 1: Additional Incomes */}
+            {/* Column 1: Additional Income & W-2 Boxes */}
             <div className="space-y-3 bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700">
-              <span className="font-bold text-zinc-900 dark:text-zinc-100 block border-b pb-1">Additional Income Streams</span>
+              <span className="font-bold text-zinc-900 dark:text-zinc-100 block border-b pb-1">W-2 Boxes & Additional Income</span>
               
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-zinc-600">Self-Employment Net Profit (1099)</label>
-                <Input type="number" value={selfEmploymentIncome} onChange={(e) => setSelfEmploymentIncome(Number(e.target.value))} className="text-xs font-mono" />
+                <label className="text-[11px] font-semibold text-zinc-600">State Tax Withheld (W-2 Box 17)</label>
+                <Input type="number" value={stateTaxWithheld} onChange={(e) => setStateTaxWithheld(Number(e.target.value))} className="text-xs font-mono" />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold text-zinc-600">Local Tax Withheld (W-2 Box 19)</label>
+                <Input type="number" value={localTaxWithheld} onChange={(e) => setLocalTaxWithheld(Number(e.target.value))} className="text-xs font-mono" />
+              </div>
+
+              {/* Business Income Toggle */}
+              <div className="space-y-1 pt-1 border-t">
+                <label className="text-[11px] font-semibold text-zinc-700 dark:text-zinc-300 block">Has Business or Self-Employment Income?</label>
+                <div className="flex items-center gap-3">
+                  <label className="flex items-center gap-1 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="hasBusiness"
+                      checked={hasBusinessIncome}
+                      onChange={() => setHasBusinessIncome(true)}
+                    />
+                    <span>Yes</span>
+                  </label>
+                  <label className="flex items-center gap-1 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="hasBusiness"
+                      checked={!hasBusinessIncome}
+                      onChange={() => {
+                        setHasBusinessIncome(false);
+                        setSelfEmploymentIncome(0);
+                      }}
+                    />
+                    <span>No</span>
+                  </label>
+                </div>
+              </div>
+
+              {hasBusinessIncome && (
+                <div className="space-y-1">
+                  <label className="text-[11px] font-semibold text-zinc-600">Self-Employment Net Profit (1099)</label>
+                  <Input type="number" value={selfEmploymentIncome} onChange={(e) => setSelfEmploymentIncome(Number(e.target.value))} className="text-xs font-mono" />
+                </div>
+              )}
+
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold text-zinc-600">Social Security Income (SSA-1099)</label>
+                <Input type="number" value={socialSecurityIncome} onChange={(e) => setSocialSecurityIncome(Number(e.target.value))} className="text-xs font-mono" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Interest Income (1099-INT)</label>
@@ -661,25 +824,45 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
                 <Input type="number" value={ordinaryDividends} onChange={(e) => setOrdinaryDividends(Number(e.target.value))} className="text-xs font-mono" />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-zinc-600">Qualified Dividends (Preferential)</label>
+                <label className="text-[11px] font-semibold text-zinc-600">Qualified Dividends (1099-DIV)</label>
                 <Input type="number" value={qualifiedDividends} onChange={(e) => setQualifiedDividends(Number(e.target.value))} className="text-xs font-mono" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold text-zinc-600">Short-Term Capital Gains</label>
+                <Input type="number" value={shortTermCapitalGains} onChange={(e) => setShortTermCapitalGains(Number(e.target.value))} className="text-xs font-mono" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Long-Term Capital Gains</label>
                 <Input type="number" value={longTermCapitalGains} onChange={(e) => setLongTermCapitalGains(Number(e.target.value))} className="text-xs font-mono" />
               </div>
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold text-zinc-600">Other Income (1099-G / 1099-R)</label>
+                <Input type="number" value={otherIncome} onChange={(e) => setOtherIncome(Number(e.target.value))} className="text-xs font-mono" />
+              </div>
             </div>
 
-            {/* Column 2: Above-the-line Deductions */}
+            {/* Column 2: Above-the-line & 2025-2028 Provisions */}
             <div className="space-y-3 bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700">
-              <span className="font-bold text-zinc-900 dark:text-zinc-100 block border-b pb-1">Above-The-Line Adjustments</span>
+              <span className="font-bold text-zinc-900 dark:text-zinc-100 block border-b pb-1">Above-The-Line & Special Provisions</span>
               
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold text-zinc-600">Tips Income (Deductible up to $25k)</label>
+                <Input type="number" value={tipsIncome} onChange={(e) => setTipsIncome(Number(e.target.value))} className="text-xs font-mono" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold text-zinc-600">Overtime Income (Deductible up to $12.5k/$25k)</label>
+                <Input type="number" value={overtimeIncome} onChange={(e) => setOvertimeIncome(Number(e.target.value))} className="text-xs font-mono" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold text-zinc-600">Car Loan Interest (Max $10k qualified vehicle)</label>
+                <Input type="number" value={carLoanInterest} onChange={(e) => setCarLoanInterest(Number(e.target.value))} className="text-xs font-mono" />
+              </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Traditional IRA Contributions</label>
                 <Input type="number" value={iraContributions} onChange={(e) => setIraContributions(Number(e.target.value))} className="text-xs font-mono" />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-zinc-600">Student Loan Interest (Max $2.5k)</label>
+                <label className="text-[11px] font-semibold text-zinc-600">Student Loan Interest (Max $2,500/Person)</label>
                 <Input type="number" value={studentLoanInterest} onChange={(e) => setStudentLoanInterest(Number(e.target.value))} className="text-xs font-mono" />
               </div>
               <div className="space-y-1">
@@ -688,9 +871,9 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
               </div>
             </div>
 
-            {/* Column 3: Schedule A Itemized Deductions */}
+            {/* Column 3: Itemized Deductions & Credits */}
             <div className="space-y-3 bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700">
-              <span className="font-bold text-zinc-900 dark:text-zinc-100 block border-b pb-1">Itemized Deductions (Schedule A)</span>
+              <span className="font-bold text-zinc-900 dark:text-zinc-100 block border-b pb-1">Itemized Deductions & Credits</span>
               
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Mortgage Interest Paid</label>
@@ -707,6 +890,26 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Medical Expenses (&gt;7.5% AGI)</label>
                 <Input type="number" value={medicalExpenses} onChange={(e) => setMedicalExpenses(Number(e.target.value))} className="text-xs font-mono" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[11px] font-semibold text-zinc-600">Other Deductions</label>
+                <Input type="number" value={otherDeductions} onChange={(e) => setOtherDeductions(Number(e.target.value))} className="text-xs font-mono" />
+              </div>
+
+              {/* Dependent Care & College Expenses */}
+              <div className="space-y-1 pt-2 border-t">
+                <label className="text-[11px] font-semibold text-zinc-600">Child & Dependent Care Expenses (Max $3k/1, $6k/2+)</label>
+                <Input type="number" value={childCareExpenses} onChange={(e) => setChildCareExpenses(Number(e.target.value))} className="text-xs font-mono" />
+              </div>
+
+              <div className="space-y-1.5 pt-1">
+                <label className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 block">College Education Expenses (Students 1-4)</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <Input type="number" placeholder="Student 1" value={student1College || ""} onChange={(e) => setStudent1College(Number(e.target.value))} className="text-xs font-mono" />
+                  <Input type="number" placeholder="Student 2" value={student2College || ""} onChange={(e) => setStudent2College(Number(e.target.value))} className="text-xs font-mono" />
+                  <Input type="number" placeholder="Student 3" value={student3College || ""} onChange={(e) => setStudent3College(Number(e.target.value))} className="text-xs font-mono" />
+                  <Input type="number" placeholder="Student 4" value={student4College || ""} onChange={(e) => setStudent4College(Number(e.target.value))} className="text-xs font-mono" />
+                </div>
               </div>
             </div>
           </div>
