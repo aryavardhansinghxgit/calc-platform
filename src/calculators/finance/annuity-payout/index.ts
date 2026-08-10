@@ -1,47 +1,74 @@
 import { CalculatorModuleDefinition } from "../../types";
-import { safePmt } from "@/lib/calculator-engine/formulas/safety";
+import { calculateFixedLengthPayout } from "@/lib/calculator-engine/formulas/annuity-payout";
 
 export const ANNUITY_PAYOUT_CALCULATOR: CalculatorModuleDefinition = {
   id: "annuity-payout",
-  title: "Annuity Payout Calculator",
+  title: "Annuity Payout Calculator – Guaranteed Retirement Income Suite",
   slug: "annuity-payout-calculator",
   category: "Finance",
   subcategory: "Retirement",
-  description: "Calculate guaranteed monthly income payments generated from a lump sum annuity balance.",
+  description:
+    "Free Annuity Payout Calculator. Calculate guaranteed monthly income payouts for fixed length terms, fixed payments, single/joint life expectancy, inflation adjustments, and immediate vs deferred comparisons.",
   iconName: "Shield",
-  featured: false,
-  tags: ["annuity payout", "payout phase", "guaranteed income", "annuitization"],
-  formulaDescription: "Monthly Payout PMT = [Principal × r × (1 + r)^n] / [(1 + r)^n - 1]",
+  featured: true,
+  tags: [
+    "annuity payout",
+    "annuity payout calculator",
+    "guaranteed income",
+    "annuitization",
+    "fixed length payout",
+    "joint life annuity",
+  ],
+  formulaDescription:
+    "Fixed Length Payout: PMT = [P × r × (1+r)^n] / [(1+r)^n - 1]. Fixed Payment Depletion: n = ln(PMT / (PMT - P×r)) / ln(1+r).",
   faqs: [
     {
-      question: "What is annuitization?",
-      answer: "Annuitization converts your accumulated lump sum balance into a series of guaranteed periodic income payouts for a fixed number of years or life.",
+      question: "What is the difference between a Fixed Length Payout and a Fixed Payment Payout?",
+      answer:
+        "A Fixed Length Payout guarantees monthly payments for a specific period of time (e.g. 10 or 20 years), automatically calculating the monthly amount. A Fixed Payment Payout lets you choose your desired monthly check (e.g. $5,000/mo) and calculates how long your funds will last.",
+    },
+    {
+      question: "What is the 1035 Exchange rule for annuities?",
+      answer:
+        "A 1035 Exchange allows policyholders to transfer funds tax-free from an existing annuity to a new annuity contract without incurring immediate income taxes on accumulated gains.",
     },
   ],
   inputs: [
-    { name: "annuityBalance", label: "Annuity Lump Sum Balance", type: "currency", defaultValue: 300000, unit: "$", min: 10000, max: 10000000, step: 10000 },
-    { name: "payoutRate", label: "Annual Payout Interest Rate", type: "percentage", defaultValue: 5.0, unit: "%", min: 0.1, max: 15, step: 0.1 },
-    { name: "payoutTermYears", label: "Payout Duration", type: "slider", defaultValue: 20, unit: "years", min: 5, max: 35, step: 1 },
+    { name: "startingPrincipal", label: "Starting Principal ($)", type: "currency", defaultValue: 500000, unit: "$", min: 10000, max: 10000000, step: 25000 },
+    { name: "interestRatePercent", label: "Annual Interest/Return Rate (%)", type: "number", defaultValue: 6.0, min: 0.1, max: 20, step: 0.25 },
+    { name: "yearsToPayout", label: "Years to Payout", type: "number", defaultValue: 10, min: 1, max: 50, step: 1 },
+    {
+      name: "payoutFrequency",
+      label: "Payout Frequency",
+      type: "select",
+      defaultValue: "monthly",
+      options: [
+        { label: "Monthly", value: "monthly" },
+        { label: "Quarterly", value: "quarterly" },
+        { label: "Semi-Annual", value: "semiannual" },
+        { label: "Annual", value: "annual" },
+      ],
+    },
   ],
   outputs: [
-    { name: "monthlyPayout", label: "Guaranteed Monthly Payout", format: "currency", highlight: true },
-    { name: "annualPayout", label: "Guaranteed Annual Payout", format: "currency", highlight: true },
-    { name: "totalPayouts", label: "Total Lifetime Payouts Received", format: "currency" },
+    { name: "monthlyWithdrawal", label: "Guaranteed Monthly Payout", format: "currency", highlight: true },
+    { name: "annualWithdrawal", label: "Guaranteed Annual Payout", format: "currency", highlight: true },
+    { name: "totalAmountWithdrawn", label: "Total Amount Withdrawn", format: "currency" },
+    { name: "totalInterestEarned", label: "Total Interest Earned", format: "currency", highlight: true },
   ],
   calculate: (inputs) => {
-    const P = Math.max(0, Number(inputs.annuityBalance || 300000));
-    const r = Math.min(100, Math.max(0, Number(inputs.payoutRate || 5.0))) / 100 / 12;
-    const n = Math.max(1, Number(inputs.payoutTermYears || 20)) * 12;
-
-    if (P <= 0 || n <= 0) return { monthlyPayout: 0, annualPayout: 0, totalPayouts: 0 };
-
-    const pmt = safePmt(P, r, n);
-    const total = pmt * n;
+    const res = calculateFixedLengthPayout({
+      startingPrincipal: Number(inputs.startingPrincipal || 500000),
+      interestRatePercent: Number(inputs.interestRatePercent || 6.0),
+      yearsToPayout: Number(inputs.yearsToPayout || 10),
+      payoutFrequency: (inputs.payoutFrequency as any) || "monthly",
+    });
 
     return {
-      monthlyPayout: Number(pmt.toFixed(2)),
-      annualPayout: Number((pmt * 12).toFixed(2)),
-      totalPayouts: Number(total.toFixed(2)),
+      monthlyWithdrawal: res.monthlyWithdrawal,
+      annualWithdrawal: res.annualWithdrawal,
+      totalAmountWithdrawn: res.totalAmountWithdrawn,
+      totalInterestEarned: res.totalInterestEarned,
     };
   },
 };

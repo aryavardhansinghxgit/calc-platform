@@ -10,6 +10,9 @@ export { SocialSecurityCalculator } from "./social-security/SocialSecurityCalcul
 export { SocialSecurityContent } from "./social-security/SocialSecurityContent";
 export { AnnuityCalculator } from "./annuity/AnnuityCalculator";
 export { AnnuityContent } from "./annuity/AnnuityContent";
+export { AnnuityPayoutCalculator } from "./annuity-payout/AnnuityPayoutCalculator";
+export { AnnuityPayoutContent } from "./annuity-payout/AnnuityPayoutContent";
+
 
 
 
