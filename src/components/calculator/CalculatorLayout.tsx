@@ -45,6 +45,7 @@ import { GstCalculator } from "./gst/GstCalculator";
 import { VatCalculator } from "./vat/VatCalculator";
 import { SalesTaxCalculator } from "./sales-tax/SalesTaxCalculator";
 import { CreditCardCalculator } from "./credit-card/CreditCardCalculator";
+import { DebtPayoffCalculator } from "./debt-payoff/DebtPayoffCalculator";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -138,6 +139,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isVat = definition.id === "vat" || definition.slug === "vat-calculator";
   const isSalesTax = definition.id === "sales-tax" || definition.slug === "sales-tax-calculator";
   const isCreditCard = definition.id === "credit-card" || definition.slug === "credit-card-calculator";
+  const isDebtPayoff = definition.id === "debt-payoff" || definition.slug === "debt-payoff-calculator";
   const CustomContent = definition.ContentComponent || (isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
@@ -176,7 +178,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isCreditCard ? (
+            {isDebtPayoff ? (
+              <DebtPayoffCalculator />
+            ) : isCreditCard ? (
               <CreditCardCalculator />
             ) : isSalesTax ? (
               <SalesTaxCalculator />
