@@ -1,52 +1,82 @@
 import { CalculatorModuleDefinition } from "../../types";
+import { calculateRmd } from "@/lib/calculator-engine/formulas/rmd";
 
 export const RMD_CALCULATOR: CalculatorModuleDefinition = {
   id: "rmd",
-  title: "RMD Calculator",
+  title: "RMD Calculator – IRS Required Minimum Distribution Estimator",
   slug: "rmd-calculator",
   category: "Finance",
   subcategory: "Retirement",
-  description: "Calculate Required Minimum Distributions (RMD) from traditional IRAs and 401(k) accounts starting at age 73.",
+  description:
+    "Calculate IRS Required Minimum Distributions (RMD) from Traditional IRAs, 401(k)s, and 403(b)s. Updated for SECURE Act 2.0 starting ages (73 & 75) with Pub 590-B tables, QCD tax savings, penalty calculators, and lifetime projection schedules.",
   iconName: "Shield",
-  featured: false,
-  tags: ["rmd", "required minimum distribution", "ira distribution", "irs rmd"],
-  formulaDescription: "RMD = Prior Year-End Account Balance / IRS Distribution Period Factor based on age.",
+  featured: true,
+  tags: [
+    "rmd",
+    "required minimum distribution",
+    "ira distribution",
+    "irs rmd",
+    "secure act 2.0",
+    "qcd calculator",
+    "publication 590-b",
+    "401k rmd",
+  ],
+  formulaDescription:
+    "RMD = Prior Year-End Account Balance / IRS Distribution Period Factor (Uniform Lifetime Table III or Joint Life Table II).",
   faqs: [
     {
-      question: "What is an RMD?",
-      answer: "A Required Minimum Distribution (RMD) is the mandatory minimum amount you must withdraw from tax-deferred retirement accounts annually beginning at age 73.",
+      question: "What is a Required Minimum Distribution (RMD)?",
+      answer:
+        "A Required Minimum Distribution (RMD) is the mandatory annual withdrawal that account owners must make from tax-deferred retirement accounts—such as Traditional IRAs, 401(k)s, 403(b)s, and SEP IRAs—once reaching the IRS mandated starting age (age 73 under SECURE Act 2.0).",
+    },
+    {
+      question: "What age do RMDs start under SECURE Act 2.0?",
+      answer:
+        "Under SECURE Act 2.0, if you turn 72 in 2023 or later, your RMD starting age is 73. If you were born in 1960 or later, your RMD starting age increases to 75 (effective 2033).",
     },
   ],
   inputs: [
-    { name: "currentAge", label: "Your Current Age", type: "number", defaultValue: 73, min: 73, max: 100, step: 1 },
-    { name: "priorYearEndBalance", label: "Prior Dec 31 Total Balance", type: "currency", defaultValue: 500000, unit: "$", min: 1000, max: 10000000, step: 10000 },
+    { name: "birthYear", label: "Your Year of Birth", type: "number", defaultValue: 1951, min: 1920, max: 2010, step: 1 },
+    { name: "rmdYear", label: "Year of RMD", type: "number", defaultValue: 2026, min: 2020, max: 2075, step: 1 },
+    { name: "priorYearBalance", label: "Account Balance as of Dec 31 (Prior Year)", type: "currency", defaultValue: 300000, unit: "$", min: 0, max: 50000000, step: 5000 },
+    {
+      name: "isSpouseSoleBeneficiary",
+      label: "Is Spouse Sole Beneficiary & >10 Yrs Younger?",
+      type: "select",
+      defaultValue: "no",
+      options: [
+        { label: "Yes", value: "yes" },
+        { label: "No", value: "no" },
+      ],
+    },
+    { name: "spouseBirthYear", label: "Spouse Year of Birth", type: "number", defaultValue: 1965, min: 1920, max: 2010, step: 1 },
+    { name: "growthRatePercent", label: "Estimated Annual Return (%)", type: "number", defaultValue: 5.0, min: -20, max: 30, step: 0.5 },
   ],
   outputs: [
-    { name: "rmdAmount", label: "Required Minimum Distribution (RMD)", format: "currency", highlight: true },
+    { name: "annualRmd", label: "Required Minimum Distribution (RMD)", format: "currency", highlight: true },
     { name: "monthlyRmd", label: "Equivalent Monthly Withdrawal", format: "currency" },
-    { name: "remainingBalance", label: "Remaining Account Balance", format: "currency" },
+    { name: "distributionPeriod", label: "IRS Distribution Period Factor", format: "number" },
+    { name: "taxableRmd", label: "Taxable RMD Amount", format: "currency" },
+    { name: "estimatedTaxPaid", label: "Estimated Federal + State Income Tax", format: "currency" },
+    { name: "netAfterTaxRmd", label: "Net After-Tax Income", format: "currency" },
   ],
   calculate: (inputs) => {
-    const age = Math.max(73, Number(inputs.currentAge || 73));
-    const bal = Number(inputs.priorYearEndBalance || 500000);
-
-    // Uniform Lifetime Table distribution factors (sample IRS factors)
-    const factorMap: Record<number, number> = {
-      73: 26.5, 74: 25.5, 75: 24.6, 76: 23.7, 77: 22.9,
-      78: 22.0, 79: 21.1, 80: 20.2, 81: 19.4, 82: 18.5,
-      83: 17.7, 84: 16.8, 85: 16.0, 86: 15.2, 87: 14.4,
-      88: 13.7, 89: 12.9, 90: 12.2, 91: 11.5, 92: 10.8,
-    };
-
-    const factor = factorMap[age] || Math.max(5.0, 26.5 - (age - 73) * 0.8);
-    const rmd = bal / factor;
-    const monthly = rmd / 12;
-    const remaining = bal - rmd;
+    const res = calculateRmd({
+      birthYear: Number(inputs.birthYear || 1951),
+      rmdYear: Number(inputs.rmdYear || 2026),
+      priorYearBalance: Number(inputs.priorYearBalance || 300000),
+      isSpouseSoleBeneficiary: inputs.isSpouseSoleBeneficiary === "yes" || inputs.isSpouseSoleBeneficiary === true,
+      spouseBirthYear: Number(inputs.spouseBirthYear || 1965),
+      growthRatePercent: Number(inputs.growthRatePercent || 5.0),
+    });
 
     return {
-      rmdAmount: Number(rmd.toFixed(2)),
-      monthlyRmd: Number(monthly.toFixed(2)),
-      remainingBalance: Number(remaining.toFixed(2)),
+      annualRmd: res.annualRmd,
+      monthlyRmd: res.monthlyRmd,
+      distributionPeriod: res.distributionPeriod,
+      taxableRmd: res.taxableRmd,
+      estimatedTaxPaid: res.estimatedTaxPaid,
+      netAfterTaxRmd: res.netAfterTaxRmd,
     };
   },
 };

@@ -4,7 +4,9 @@ export { EmiCalculator } from "./emi/EmiCalculator";
 export { SipCalculator } from "./sip/SipCalculator";
 export { CompoundInterestCalculator } from "./compound-interest/CompoundInterestCalculator";
 export { BmiCalculator } from "./bmi/BmiCalculator";
-export { PercentageCalculator } from "./percentage/PercentageCalculator";
+export { RmdCalculator } from "./rmd/RmdCalculator";
+export { RmdContent } from "./rmd/RmdContent";
+
 
 export { InputField } from "./InputField";
 export { SliderField } from "./SliderField";
