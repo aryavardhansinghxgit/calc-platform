@@ -5,7 +5,9 @@ export { SipCalculator } from "./sip/SipCalculator";
 export { CompoundInterestCalculator } from "./compound-interest/CompoundInterestCalculator";
 export { BmiCalculator } from "./bmi/BmiCalculator";
 export { RmdCalculator } from "./rmd/RmdCalculator";
-export { RmdContent } from "./rmd/RmdContent";
+export { PensionCalculator } from "./pension/PensionCalculator";
+export { PensionContent } from "./pension/PensionContent";
+
 
 
 export { InputField } from "./InputField";
