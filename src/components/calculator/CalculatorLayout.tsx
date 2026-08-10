@@ -62,6 +62,8 @@ import { CommissionCalculator } from "./commission/CommissionCalculator";
 import { PersonalLoanCalculator } from "./personal-loan/PersonalLoanCalculator";
 import { BusinessLoanCalculator } from "./business-loan/BusinessLoanCalculator";
 import { StudentLoanCalculator } from "./student-loan/StudentLoanCalculator";
+import { BudgetCalculator } from "./budget/BudgetCalculator";
+import { BudgetContent } from "./budget/BudgetContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -171,12 +173,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isPersonalLoan = definition.id === "personal-loan" || definition.slug === "personal-loan-calculator";
   const isBusinessLoan = definition.id === "business-loan" || definition.slug === "business-loan-calculator";
   const isStudentLoan = definition.id === "student-loan" || definition.slug === "student-loan-calculator";
+  const isBudget = definition.id === "budget" || definition.slug === "budget-calculator";
   const isIra =
     definition.id === "ira" ||
     definition.slug === "ira-calculator" ||
     definition.id === "traditional-ira" ||
     definition.slug === "traditional-ira-calculator";
-  const CustomContent = definition.ContentComponent || (isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
+  const CustomContent = definition.ContentComponent || (isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -214,7 +217,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isStudentLoan ? (
+            {isBudget ? (
+              <BudgetCalculator />
+            ) : isStudentLoan ? (
               <StudentLoanCalculator />
             ) : isBusinessLoan ? (
               <BusinessLoanCalculator />
@@ -453,11 +458,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                   <li key={`${calc.id}-${calc.slug}-${idx}`}>
                     <Link
                       href={`/calculators/${calc.slug}`}
-                      className={`flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors group ${
-                        isActive
+                      className={`flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors group ${isActive
                           ? "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-bold"
                           : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/60"
-                      }`}
+                        }`}
                     >
                       <span className="truncate">{calc.title}</span>
                       <ArrowRight className={`h-3 w-3 transition-transform ${isActive ? "text-blue-600" : "text-zinc-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"}`} />

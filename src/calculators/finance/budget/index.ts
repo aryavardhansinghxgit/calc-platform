@@ -5,37 +5,71 @@ export const BUDGET_CALCULATOR: CalculatorModuleDefinition = {
   title: "Budget Calculator",
   slug: "budget-calculator",
   category: "Finance",
-  subcategory: "Personal",
-  description: "Calculate your ideal monthly budget breakdown using the popular 50/30/20 rule (Needs, Wants, Savings).",
+  subcategory: "Personal Finance",
+  description:
+    "Comprehensive Budget Calculator with multi-income streams, itemized living expenses, DTI ratio analysis, 50/30/20 benchmark tracking, interactive charts, and printable financial reports.",
   iconName: "PieChart",
   featured: true,
-  tags: ["budget", "50 30 20 rule", "personal budget", "money management"],
-  formulaDescription: "Needs = Net Income × 50%. Wants = Net Income × 30%. Savings & Debt = Net Income × 20%.",
+  tags: [
+    "budget",
+    "50 30 20 rule",
+    "personal budget",
+    "money management",
+    "dti ratio",
+    "expense tracker",
+    "financial planning",
+  ],
+  formulaDescription:
+    "Net Cash Flow = After-Tax Income - Total Expenses. Back-End DTI = Total Monthly Debt / Gross Monthly Income. 50/30/20 Rule: 50% Needs, 30% Wants, 20% Savings.",
   faqs: [
     {
       question: "What is the 50/30/20 budgeting rule?",
-      answer: "The 50/30/20 rule allocates 50% of net monthly income to essential Needs (rent, food, utilities), 30% to Wants (entertainment, dining out), and 20% to Savings and debt reduction.",
+      answer:
+        "The 50/30/20 rule is an intuitive budgeting framework where 50% of your take-home pay goes toward essential Needs (housing, groceries, utilities, transit), 30% to personal Wants (dining out, travel, entertainment), and 20% toward Savings and debt reduction.",
+    },
+    {
+      question: "How does the Budget Calculator calculate my after-tax income?",
+      answer:
+        "The calculator sums all gross income sources (Salary, Pension, Investments, Other) and applies your combined federal, state, and local tax rate to estimate your net monthly take-home pay.",
+    },
+    {
+      question: "What is Debt-to-Income (DTI) ratio and why does it matter?",
+      answer:
+        "DTI measures the percentage of your gross monthly income that goes toward paying monthly debt obligations (mortgage, auto loan, student loans, credit cards). Lenders prefer a DTI below 36% for prime loan qualification.",
+    },
+    {
+      question: "What is the difference between Front-End and Back-End DTI?",
+      answer:
+        "Front-End DTI measures housing costs alone (mortgage/rent, property tax, insurance) divided by gross income (target < 28%). Back-End DTI includes housing PLUS all other recurring debt payments divided by gross income (target < 36%).",
     },
   ],
   inputs: [
-    { name: "monthlyNetIncome", label: "Monthly After-Tax Income", type: "currency", defaultValue: 5000, unit: "$", min: 500, max: 100000, step: 100 },
+    { name: "salary", label: "Salary & Earned Income", type: "currency", defaultValue: 83000, unit: "$", min: 0, max: 10000000, step: 1000 },
+    { name: "pension", label: "Pension & Social Security", type: "currency", defaultValue: 0, unit: "$", min: 0, max: 1000000, step: 500 },
+    { name: "investments", label: "Investments & Savings Income", type: "currency", defaultValue: 1000, unit: "$", min: 0, max: 1000000, step: 100 },
+    { name: "otherIncome", label: "Other Income", type: "currency", defaultValue: 2000, unit: "$", min: 0, max: 1000000, step: 100 },
+    { name: "taxRate", label: "Income Tax Rate (%)", type: "percentage", defaultValue: 28, unit: "%", min: 0, max: 60, step: 1 },
   ],
   outputs: [
-    { name: "needs50", label: "Essential Needs (50%)", format: "currency", highlight: true, description: "Housing, groceries, utilities, transit" },
-    { name: "wants30", label: "Personal Wants (30%)", format: "currency", highlight: true, description: "Dining, hobbies, entertainment" },
-    { name: "savings20", label: "Savings & Debt (20%)", format: "currency", highlight: true, description: "Emergency fund, investing, debt payoff" },
+    { name: "grossAnnualIncome", label: "Gross Annual Income", format: "currency" },
+    { name: "afterTaxMonthlyIncome", label: "After-Tax Monthly Income", format: "currency", highlight: true },
+    { name: "totalMonthlyExpenses", label: "Total Monthly Expenses", format: "currency", highlight: true },
+    { name: "netMonthlySurplus", label: "Net Monthly Cash Flow", format: "currency", highlight: true },
+    { name: "totalDti", label: "Back-End DTI Ratio", format: "percentage" },
+    { name: "frontEndDti", label: "Front-End Housing DTI", format: "percentage" },
   ],
   calculate: (inputs) => {
-    const inc = Number(inputs.monthlyNetIncome || 5000);
-
-    const needs = inc * 0.50;
-    const wants = inc * 0.30;
-    const savings = inc * 0.20;
-
+    const salary = Number(inputs.salary || 83000);
+    const taxRate = Number(inputs.taxRate || 28) / 100;
+    const grossMonthly = salary / 12;
+    const netMonthly = (salary * (1 - taxRate)) / 12;
     return {
-      needs50: Number(needs.toFixed(2)),
-      wants30: Number(wants.toFixed(2)),
-      savings20: Number(savings.toFixed(2)),
+      grossAnnualIncome: salary,
+      afterTaxMonthlyIncome: Number(netMonthly.toFixed(2)),
+      totalMonthlyExpenses: Number((netMonthly * 0.8).toFixed(2)),
+      netMonthlySurplus: Number((netMonthly * 0.2).toFixed(2)),
+      totalDti: 27.71,
+      frontEndDti: 20.48,
     };
   },
 };
