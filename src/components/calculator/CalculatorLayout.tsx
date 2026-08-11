@@ -66,6 +66,10 @@ import { BudgetCalculator } from "./budget/BudgetCalculator";
 import { BudgetContent } from "./budget/BudgetContent";
 import { BmiCalculator } from "./bmi/BmiCalculator";
 import { BmiContent } from "./bmi/BmiContent";
+import { CalorieCalculator } from "./calorie/CalorieCalculator";
+import { CalorieContent } from "./calorie/CalorieContent";
+import { BodyFatCalculator } from "./body-fat/BodyFatCalculator";
+import { BodyFatContent } from "./body-fat/BodyFatContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -177,12 +181,14 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isStudentLoan = definition.id === "student-loan" || definition.slug === "student-loan-calculator";
   const isBudget = definition.id === "budget" || definition.slug === "budget-calculator";
   const isBmi = definition.id === "bmi" || definition.slug === "bmi-calculator";
+  const isCalorie = definition.id === "calorie" || definition.slug === "calorie-calculator";
+  const isBodyFat = definition.id === "body-fat" || definition.slug === "body-fat-calculator";
   const isIra =
     definition.id === "ira" ||
     definition.slug === "ira-calculator" ||
     definition.id === "traditional-ira" ||
     definition.slug === "traditional-ira-calculator";
-  const CustomContent = definition.ContentComponent || (isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
+  const CustomContent = definition.ContentComponent || (isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -220,7 +226,11 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isBmi ? (
+            {isBodyFat ? (
+              <BodyFatCalculator />
+            ) : isCalorie ? (
+              <CalorieCalculator />
+            ) : isBmi ? (
               <BmiCalculator />
             ) : isBudget ? (
               <BudgetCalculator />
