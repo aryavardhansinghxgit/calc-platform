@@ -1,6 +1,7 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculatePregnancyWeightGainCalculator } from "./calculator";
 import { pregnancy_weight_gain_calculatorFaqs } from "./faq";
+import { PregnancyWeightGainContent } from "@/components/calculator/pregnancy-weight-gain/PregnancyWeightGainContent";
 
 export const pregnancy_weight_gain_calculatorConfig: CalculatorModuleDefinition = {
   id: "pregnancy-weight-gain-calculator",
@@ -8,61 +9,160 @@ export const pregnancy_weight_gain_calculatorConfig: CalculatorModuleDefinition 
   slug: "pregnancy-weight-gain-calculator",
   category: "Health",
   subcategory: "Pregnancy",
-  description: "Calculate healthy weight gain targets by week of pregnancy based on Institute of Medicine (IOM) guidelines.",
+  description:
+    "Calculate personalized, healthy weight gain targets by week of pregnancy based on Institute of Medicine (IOM) & ACOG clinical guidelines. Features week-by-week weight schedule, 40-week trajectory chart, physiological weight distribution breakdown, and nutritional guidelines.",
   iconName: "TrendingUp",
   featured: true,
-  keywords: ["pregnancy weight gain","maternal weight","iom guidelines","pregnancy bmi"],
+  keywords: [
+    "pregnancy weight gain calculator",
+    "pregnancy weight gain target",
+    "maternal weight gain iom guidelines",
+    "pregnancy bmi calculator",
+    "twin pregnancy weight gain",
+    "weight gain by week of pregnancy",
+    "pregnancy calorie calculator",
+  ],
   priority: 1,
-  relatedCalculators: ["pregnancy-calculator","bmi-calculator"],
-  formulaDescription: "Based on Institute of Medicine (IOM) pre-pregnancy BMI weight gain targets.",
+  relatedCalculators: [
+    "pregnancy-calculator",
+    "pregnancy-conception-calculator",
+    "due-date-calculator",
+    "ovulation-calculator",
+    "bmi-calculator",
+    "calorie-calculator",
+  ],
+  formulaDescription:
+    "Calculates maternal body mass index (BMI = kg/m²) and applies 2009 Institute of Medicine (IOM) and ACOG gestational weight gain ranges for singleton and twin pregnancies across all 40 weeks.",
   faqs: pregnancy_weight_gain_calculatorFaqs,
+  ContentComponent: PregnancyWeightGainContent,
   inputs: [
-  {
-    "name": "preWeightKg",
-    "label": "Pre-Pregnancy Weight (kg)",
-    "type": "number",
-    "defaultValue": 62,
-    "min": 30,
-    "max": 200,
-    "step": 0.5
-  },
-  {
-    "name": "heightCm",
-    "label": "Height (cm)",
-    "type": "number",
-    "defaultValue": 165,
-    "min": 120,
-    "max": 220,
-    "step": 1
-  },
-  {
-    "name": "week",
-    "label": "Current Pregnancy Week",
-    "type": "number",
-    "defaultValue": 20,
-    "min": 1,
-    "max": 40,
-    "step": 1
-  }
-],
+    {
+      name: "unitSystem",
+      label: "Unit System",
+      type: "select",
+      defaultValue: "us",
+      options: [
+        { label: "US Units (lbs, ft/in)", value: "us" },
+        { label: "Metric Units (kg, cm)", value: "metric" },
+      ],
+    },
+    {
+      name: "pregnancyType",
+      label: "Pregnancy Type",
+      type: "select",
+      defaultValue: "single",
+      options: [
+        { label: "Single Baby", value: "single" },
+        { label: "Twins / Multiples", value: "twins" },
+      ],
+    },
+    {
+      name: "week",
+      label: "Current Pregnancy Stage (Week 1 – 40)",
+      type: "number",
+      defaultValue: 20,
+      min: 1,
+      max: 40,
+      step: 1,
+    },
+    {
+      name: "heightFeet",
+      label: "Height (Feet)",
+      type: "number",
+      defaultValue: 5,
+      min: 3,
+      max: 7,
+      step: 1,
+    },
+    {
+      name: "heightInches",
+      label: "Height (Inches)",
+      type: "number",
+      defaultValue: 6,
+      min: 0,
+      max: 11,
+      step: 1,
+    },
+    {
+      name: "heightCm",
+      label: "Height (cm)",
+      type: "number",
+      defaultValue: 168,
+      min: 100,
+      max: 230,
+      step: 1,
+    },
+    {
+      name: "preWeightLbs",
+      label: "Pre-Pregnancy Weight (lbs)",
+      type: "number",
+      defaultValue: 130,
+      min: 66,
+      max: 550,
+      step: 0.5,
+    },
+    {
+      name: "preWeightKg",
+      label: "Pre-Pregnancy Weight (kg)",
+      type: "number",
+      defaultValue: 59,
+      min: 30,
+      max: 250,
+      step: 0.5,
+    },
+    {
+      name: "currentWeightLbs",
+      label: "Current Weight (lbs)",
+      type: "number",
+      defaultValue: 142,
+      min: 66,
+      max: 550,
+      step: 0.5,
+    },
+    {
+      name: "currentWeightKg",
+      label: "Current Weight (kg)",
+      type: "number",
+      defaultValue: 64.5,
+      min: 30,
+      max: 250,
+      step: 0.5,
+    },
+  ],
   outputs: [
-  {
-    "name": "preBmi",
-    "label": "Pre-Pregnancy BMI",
-    "format": "number"
-  },
-  {
-    "name": "recommendedGainTotal",
-    "label": "Recommended Total Weight Gain",
-    "format": "text",
-    "highlight": true
-  },
-  {
-    "name": "targetGainWeek",
-    "label": "Target Gain for Current Week",
-    "format": "text"
-  }
-],
+    {
+      name: "preBmi",
+      label: "Pre-Pregnancy BMI",
+      format: "number",
+    },
+    {
+      name: "bmiCategory",
+      label: "BMI Category",
+      format: "text",
+    },
+    {
+      name: "recommendedGainTotalFormatted",
+      label: "Total Recommended Weight Gain",
+      format: "text",
+      highlight: true,
+    },
+    {
+      name: "targetGainWeekFormatted",
+      label: "Target Weight Gain for Current Week",
+      format: "text",
+      highlight: true,
+    },
+    {
+      name: "statusLabel",
+      label: "Clinical Weight Status",
+      format: "text",
+    },
+    {
+      name: "weeklyRateFormatted",
+      label: "Recommended Weekly Pace (T2 & T3)",
+      format: "text",
+    },
+  ],
   calculate: calculatePregnancyWeightGainCalculator,
 };
 
