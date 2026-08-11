@@ -72,6 +72,8 @@ import { BodyFatCalculator } from "./body-fat/BodyFatCalculator";
 import { BodyFatContent } from "./body-fat/BodyFatContent";
 import { BmrCalculator } from "./bmr/BmrCalculator";
 import { BmrContent } from "./bmr/BmrContent";
+import { IdealWeightCalculator } from "./ideal-weight/IdealWeightCalculator";
+import { IdealWeightContent } from "./ideal-weight/IdealWeightContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -186,12 +188,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isCalorie = definition.id === "calorie" || definition.slug === "calorie-calculator";
   const isBodyFat = definition.id === "body-fat" || definition.slug === "body-fat-calculator";
   const isBmr = definition.id === "bmr" || definition.slug === "bmr-calculator";
+  const isIdealWeight = definition.id === "ideal-weight" || definition.slug === "ideal-weight-calculator";
   const isIra =
     definition.id === "ira" ||
     definition.slug === "ira-calculator" ||
     definition.id === "traditional-ira" ||
     definition.slug === "traditional-ira-calculator";
-  const CustomContent = definition.ContentComponent || (isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
+  const CustomContent = definition.ContentComponent || (isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -229,7 +232,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isBmr ? (
+            {isIdealWeight ? (
+              <IdealWeightCalculator />
+            ) : isBmr ? (
               <BmrCalculator />
             ) : isBodyFat ? (
               <BodyFatCalculator />
