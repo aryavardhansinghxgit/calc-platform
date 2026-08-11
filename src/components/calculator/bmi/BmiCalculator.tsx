@@ -226,33 +226,41 @@ export function BmiCalculator() {
               </div>
 
               <div>
-                <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
-                  Biological Gender
-                </Label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                    Biological Gender
+                  </Label>
+                  <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                    {gender === "male" ? "♂ Male Selected" : "♀ Female Selected"}
+                  </span>
+                </div>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setGender("male")}
-                    className={`py-2 px-3 rounded-lg text-xs font-bold transition-all border ${
+                    className={`py-2 px-3 rounded-lg text-xs font-black transition-all border flex items-center justify-center gap-1.5 cursor-pointer ${
                       gender === "male"
-                        ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-300 dark:border-blue-800 shadow-sm"
-                        : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-200"
+                        ? "bg-blue-600 text-white border-blue-600 shadow-md ring-2 ring-blue-500/30"
+                        : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-200"
                     }`}
                   >
-                    Male
+                    <span>♂</span> Male
                   </button>
                   <button
                     type="button"
                     onClick={() => setGender("female")}
-                    className={`py-2 px-3 rounded-lg text-xs font-bold transition-all border ${
+                    className={`py-2 px-3 rounded-lg text-xs font-black transition-all border flex items-center justify-center gap-1.5 cursor-pointer ${
                       gender === "female"
-                        ? "bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-300 dark:border-rose-800 shadow-sm"
-                        : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-200"
+                        ? "bg-rose-600 text-white border-rose-600 shadow-md ring-2 ring-rose-500/30"
+                        : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-200"
                     }`}
                   >
-                    Female
+                    <span>♀</span> Female
                   </button>
                 </div>
+                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-1 block">
+                  Affects Ideal Weight, Body Fat %, BMR &amp; Calories
+                </span>
               </div>
             </div>
 

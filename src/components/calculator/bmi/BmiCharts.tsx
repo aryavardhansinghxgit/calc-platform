@@ -72,25 +72,34 @@ export function BmiArchGauge({ result }: BmiChartsProps) {
           })}
 
           {/* Center needle pivot */}
-          <circle cx="100" cy="110" r="8" className="fill-zinc-900 dark:fill-zinc-100 stroke-white dark:stroke-zinc-900" strokeWidth="3" />
+          <circle cx="100" cy="110" r="4" className="fill-zinc-400 dark:fill-zinc-600" />
 
-          {/* Needle */}
+          {/* Needle Pointer (Starts at y=70 to y=38, leaving center y=70..110 clear) */}
           <g transform={`rotate(${angle}, 100, 110)`} className="transition-transform duration-700 ease-out">
-            <line x1="100" y1="110" x2="100" y2="40" className="stroke-zinc-900 dark:stroke-zinc-100" strokeWidth="4" strokeLinecap="round" />
-            <polygon points="96,50 100,32 104,50" className="fill-zinc-900 dark:fill-zinc-100" />
+            <line x1="100" y1="72" x2="100" y2="38" className="stroke-zinc-900 dark:stroke-zinc-100" strokeWidth="3.5" strokeLinecap="round" />
+            <polygon points="96,44 100,28 104,44" className="fill-zinc-900 dark:fill-zinc-100" />
           </g>
 
           {/* Major labels */}
-          <text x="30" y="128" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">18.5</text>
-          <text x="88" y="24" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">25</text>
-          <text x="135" y="45" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">30</text>
-          <text x="160" y="128" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">40</text>
+          <text x="24" y="132" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">18.5</text>
+          <text x="88" y="20" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">25</text>
+          <text x="138" y="42" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">30</text>
+          <text x="164" y="132" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">40</text>
         </svg>
 
-        {/* Center overlay readout */}
-        <div className="absolute bottom-1 flex flex-col items-center">
-          <span className="text-3xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight">{result.bmi}</span>
-          <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full mt-0.5" style={{ backgroundColor: `${result.categoryColor}18`, color: result.categoryColor }}>
+        {/* Center overlay readout with solid background badge so needle never overlaps */}
+        <div className="absolute bottom-0 flex flex-col items-center bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md px-4 py-1 rounded-xl border border-zinc-200/90 dark:border-zinc-800 shadow-md">
+          <span className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight leading-none">
+            {result.bmi}
+          </span>
+          <span
+            className="text-[11px] font-bold px-2 py-0.5 rounded-full mt-1 border"
+            style={{
+              backgroundColor: `${result.categoryColor}15`,
+              color: result.categoryColor,
+              borderColor: `${result.categoryColor}40`,
+            }}
+          >
             {result.category}
           </span>
         </div>
@@ -226,13 +235,19 @@ export function AdultBmiHeightWeightChart({ result }: BmiChartsProps) {
   const userHeightIn = result.heightInches;
   const userWeightLb = result.weightLbs;
 
-  const minH = 57;
-  const maxH = 78;
-  const minW = 80;
-  const maxW = 260;
+  // Chart domain limits
+  const minH = 57; // 4'9"
+  const maxH = 78; // 6'6"
+  const minW = 80;  // 80 lbs
+  const maxW = 260; // 260 lbs
 
-  const pointX = Math.max(0, Math.min(100, ((userWeightLb - minW) / (maxW - minW)) * 100));
-  const pointY = Math.max(0, Math.min(100, ((maxH - userHeightIn) / (maxH - minH)) * 100));
+  // SVG viewport bounds: X from 40 to 385 (width 345), Y from 15 to 165 (height 150)
+  const normX = Math.max(0, Math.min(1, (userWeightLb - minW) / (maxW - minW)));
+  const normY = Math.max(0, Math.min(1, (maxH - userHeightIn) / (maxH - minH)));
+
+  // Clamped SVG coordinates inside chart area [48, 375] and [25, 155]
+  const svgX = Math.max(48, Math.min(375, 40 + normX * 345));
+  const svgY = Math.max(25, Math.min(155, 15 + normY * 150));
 
   return (
     <div className="w-full space-y-3 p-4 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
@@ -249,45 +264,62 @@ export function AdultBmiHeightWeightChart({ result }: BmiChartsProps) {
         </div>
       </div>
 
-      <div className="relative w-full h-56 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 p-2 overflow-hidden">
+      <div className="relative w-full h-64 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 p-2 overflow-hidden">
         <svg viewBox="0 0 400 200" className="w-full h-full">
+          {/* Outer Chart Frame */}
+          <rect x="40" y="15" width="345" height="150" fill="none" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="1" />
+
           {/* Underweight zone (<18.5) */}
-          <polygon points="0,0 80,0 120,200 0,200" fill="#0284c7" fillOpacity="0.2" />
+          <polygon points="40,15 110,15 150,165 40,165" fill="#38bdf8" fillOpacity="0.45" stroke="#0284c7" strokeWidth="0.75" />
           {/* Normal weight zone (18.5 - 25) */}
-          <polygon points="80,0 160,0 230,200 120,200" fill="#10b981" fillOpacity="0.25" />
+          <polygon points="110,15 185,15 245,165 150,165" fill="#34d399" fillOpacity="0.50" stroke="#10b981" strokeWidth="0.75" />
           {/* Overweight zone (25 - 30) */}
-          <polygon points="160,0 220,0 300,200 230,200" fill="#eab308" fillOpacity="0.25" />
+          <polygon points="185,15 240,15 310,165 245,165" fill="#facc15" fillOpacity="0.55" stroke="#eab308" strokeWidth="0.75" />
           {/* Obese Class I (30 - 35) */}
-          <polygon points="220,0 280,0 360,200 300,200" fill="#f97316" fillOpacity="0.3" />
+          <polygon points="240,15 295,15 365,165 310,165" fill="#fb923c" fillOpacity="0.60" stroke="#f97316" strokeWidth="0.75" />
           {/* Obese Class II & III (35+) */}
-          <polygon points="280,0 400,0 400,200 360,200" fill="#ef4444" fillOpacity="0.3" />
+          <polygon points="295,15 385,15 385,165 365,165" fill="#f87171" fillOpacity="0.65" stroke="#ef4444" strokeWidth="0.75" />
 
-          {/* Grid lines */}
-          <line x1="0" y1="50" x2="400" y2="50" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
-          <line x1="0" y1="100" x2="400" y2="100" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
-          <line x1="0" y1="150" x2="400" y2="150" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
+          {/* Horizontal Grid lines (Heights) */}
+          <line x1="40" y1="52.5" x2="385" y2="52.5" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
+          <line x1="40" y1="90" x2="385" y2="90" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
+          <line x1="40" y1="127.5" x2="385" y2="127.5" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
 
-          <line x1="100" y1="0" x2="100" y2="200" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
-          <line x1="200" y1="0" x2="200" y2="200" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
-          <line x1="300" y1="0" x2="300" y2="200" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
+          {/* Vertical Grid lines (Weights) */}
+          <line x1="126" y1="15" x2="126" y2="165" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
+          <line x1="212" y1="15" x2="212" y2="165" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
+          <line x1="298" y1="15" x2="298" y2="165" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
 
-          {/* Contour Lines Labels */}
-          <text x="95" y="190" className="fill-zinc-500 dark:fill-zinc-400" fontSize="9" fontWeight="bold">BMI 18.5</text>
-          <text x="180" y="190" className="fill-zinc-500 dark:fill-zinc-400" fontSize="9" fontWeight="bold">BMI 25</text>
-          <text x="250" y="190" className="fill-zinc-500 dark:fill-zinc-400" fontSize="9" fontWeight="bold">BMI 30</text>
-          <text x="320" y="190" className="fill-zinc-500 dark:fill-zinc-400" fontSize="9" fontWeight="bold">BMI 35</text>
+          {/* Y-Axis Height Labels (Left) */}
+          <text x="35" y="18" textAnchor="end" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">6&apos;6&quot;</text>
+          <text x="35" y="55.5" textAnchor="end" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">6&apos;0&quot;</text>
+          <text x="35" y="93" textAnchor="end" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">5&apos;6&quot;</text>
+          <text x="35" y="130.5" textAnchor="end" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">5&apos;0&quot;</text>
+          <text x="35" y="168" textAnchor="end" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">4&apos;9&quot;</text>
+
+          {/* X-Axis Weight Labels (Bottom) */}
+          <text x="40" y="182" textAnchor="middle" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">80 lbs</text>
+          <text x="126" y="182" textAnchor="middle" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">125 lbs</text>
+          <text x="212" y="182" textAnchor="middle" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">170 lbs</text>
+          <text x="298" y="182" textAnchor="middle" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">215 lbs</text>
+          <text x="385" y="182" textAnchor="middle" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">260 lbs</text>
+
+          {/* Contour BMI Threshold Labels */}
+          <text x="120" y="156" className="fill-zinc-600 dark:fill-zinc-400" fontSize="8" fontWeight="bold">BMI 18.5</text>
+          <text x="180" y="156" className="fill-zinc-600 dark:fill-zinc-400" fontSize="8" fontWeight="bold">BMI 25</text>
+          <text x="255" y="156" className="fill-zinc-600 dark:fill-zinc-400" fontSize="8" fontWeight="bold">BMI 30</text>
+          <text x="315" y="156" className="fill-zinc-600 dark:fill-zinc-400" fontSize="8" fontWeight="bold">BMI 35</text>
+
+          {/* Pure SVG User Projection Badge (Clamped within inner SVG canvas [48..375, 25..155]) */}
+          <g transform={`translate(${svgX}, ${svgY})`}>
+            {/* Outer halo */}
+            <circle r="12" fill={result.categoryColor} fillOpacity="0.25" />
+            {/* Main badge circle */}
+            <circle r="8" fill={result.categoryColor} stroke="#ffffff" strokeWidth="1.5" />
+            {/* YOU label */}
+            <text y="3" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="black">YOU</text>
+          </g>
         </svg>
-
-        {/* User position marker */}
-        <div
-          className="absolute w-5 h-5 -translate-x-1/2 -translate-y-1/2 transition-all duration-700 pointer-events-none"
-          style={{ left: `${pointX}%`, top: `${pointY}%` }}
-        >
-          <span className="absolute inset-0 rounded-full animate-ping opacity-75" style={{ backgroundColor: result.categoryColor }} />
-          <span className="relative flex items-center justify-center w-5 h-5 rounded-full border-2 border-white text-[9px] font-bold text-white shadow-lg" style={{ backgroundColor: result.categoryColor }}>
-            YOU
-          </span>
-        </div>
       </div>
     </div>
   );
