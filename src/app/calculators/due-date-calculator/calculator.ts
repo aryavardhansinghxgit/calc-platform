@@ -16,7 +16,8 @@ export function calculateDueDateCalculator(
   const cycleLength = Math.max(20, Math.min(45, Number(inputs.cycleLength) || 28));
   const lutealPhaseLength = Math.max(9, Math.min(18, Number(inputs.lutealPhaseLength) || 14));
   const motherAge = Math.max(18, Math.min(50, Number(inputs.motherAge) || 28));
-  const isFirstPregnancy = Boolean(inputs.isFirstPregnancy);
+  const rawFirstVal = inputs.isFirstPregnancy as any;
+  const isFirstPregnancy = rawFirstVal === true || rawFirstVal === "true" || rawFirstVal === 1 || rawFirstVal === "1";
 
   // Helper date functions
   const formatDate = (d: Date): string => {
@@ -359,6 +360,7 @@ export function calculateDueDateCalculator(
     calculationMode: mode,
     estimatedDueDate: formatIso(estimatedDueDate),
     estimatedDueDateFormatted: formatDate(estimatedDueDate),
+    adjustedMittendorfDueDateFormatted: formatDate(adjustedMittendorfDueDate),
     earlyTermStartFormatted: formatDate(earlyTermStart),
     fullTermStartFormatted: formatDate(fullTermStart),
     lateTermStartFormatted: formatDate(lateTermStart),

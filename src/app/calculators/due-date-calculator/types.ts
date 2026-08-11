@@ -52,6 +52,7 @@ export interface DueDateCalculatorOutputs {
   calculationMode: DueDateCalculationMode;
   estimatedDueDate: string;
   estimatedDueDateFormatted: string;
+  adjustedMittendorfDueDateFormatted: string;
   earlyTermStartFormatted: string;
   fullTermStartFormatted: string;
   lateTermStartFormatted: string;

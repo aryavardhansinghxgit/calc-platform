@@ -476,9 +476,12 @@ Calculated on CalcPlatform Due Date Engine.`;
 
           {/* First Pregnancy Toggle */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
-              First Pregnancy? (Statistical Tuning)
-            </label>
+            <div className="flex items-center justify-between text-xs font-medium text-zinc-700 dark:text-zinc-300">
+              <span>First Pregnancy? (Statistical Tuning)</span>
+              <span className="text-[11px] font-bold text-pink-600 dark:text-pink-400">
+                {isFirstPregnancy ? "First Baby (+3d)" : "Subsequent (-1d)"}
+              </span>
+            </div>
             <div className="flex items-center gap-2 p-1 bg-zinc-100 dark:bg-zinc-800/60 rounded-xl">
               <button
                 type="button"
@@ -503,6 +506,9 @@ Calculated on CalcPlatform Due Date Engine.`;
                 No (Subsequent)
               </button>
             </div>
+            <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block">
+              Statistical Avg: <strong className="text-pink-600 dark:text-pink-400">{results.adjustedMittendorfDueDateFormatted}</strong> (Mittendorf-Williams Rule)
+            </span>
           </div>
         </div>
       </div>
@@ -548,11 +554,17 @@ Calculated on CalcPlatform Due Date Engine.`;
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs pt-1">
           <div className="p-3 rounded-xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800 space-y-0.5">
             <span className="text-zinc-500 dark:text-zinc-400">Countdown to Delivery</span>
             <p className="font-bold text-pink-600 dark:text-pink-400 text-sm">
               {results.daysRemaining} Days ({results.weeksRemaining} Weeks)
+            </p>
+          </div>
+          <div className="p-3 rounded-xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800 space-y-0.5">
+            <span className="text-zinc-500 dark:text-zinc-400">Statistical Avg ({isFirstPregnancy ? "First Baby" : "Subsequent"})</span>
+            <p className="font-bold text-amber-600 dark:text-amber-400 text-sm">
+              {results.adjustedMittendorfDueDateFormatted}
             </p>
           </div>
           <div className="p-3 rounded-xl bg-white/70 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800 space-y-0.5">

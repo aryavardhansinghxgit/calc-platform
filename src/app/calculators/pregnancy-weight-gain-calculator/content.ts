@@ -18,7 +18,7 @@ Target weight gain is determined primarily by pre-pregnancy Body Mass Index (BMI
 * **Overweight (BMI 25.0 – 29.9)**: 15 to 25 lbs (7.0 to 11.5 kg) total gain; ~0.5 to 0.7 lbs/week in T2/T3.
 * **Obese (BMI ≥ 30.0)**: 11 to 20 lbs (5.0 to 9.0 kg) total gain; ~0.4 to 0.6 lbs/week in T2/T3.
 
-For **Twin Gestations**:
+For **Twin Gestations**::
 * **Normal Weight**: 37 to 54 lbs (16.8 to 24.5 kg).
 * **Overweight**: 31 to 50 lbs (14.1 to 22.7 kg).
 * **Obese**: 25 to 42 lbs (11.3 to 19.1 kg).
