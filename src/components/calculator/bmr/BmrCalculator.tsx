@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import {
   Activity,
-  Award,
+  Flame,
   Scale,
   Bookmark,
   Share2,
@@ -14,8 +14,9 @@ import {
   Info,
   Calendar,
   Target,
+  Droplet,
   ShieldCheck,
-  User,
+  Zap,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -24,20 +25,24 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import {
-  calculateBodyFat,
+  calculateBmr,
   UnitSystem,
   Gender,
-  BodyFatResult,
-} from "@/lib/formulas/bodyFat";
+  BmrFormula,
+  ActivityLevel,
+  SmartGoal,
+  BmrResult,
+} from "@/lib/formulas/bmr";
 
 import {
-  BodyFatArchGauge,
-  BodyCompositionBar,
-} from "./BodyFatCharts";
+  BmrArchGauge,
+  BmrActivityBarChart,
+  SmartGoalMacroChart,
+} from "./BmrCharts";
 
-import { BodyFatTables } from "./BodyFatTables";
+import { BmrTables } from "./BmrTables";
 
-export function BodyFatCalculator() {
+export function BmrCalculator() {
   // Input states
   const [unitSystem, setUnitSystem] = useState<UnitSystem>("us");
   const [gender, setGender] = useState<Gender>("male");
@@ -45,25 +50,26 @@ export function BodyFatCalculator() {
 
   // US Inputs
   const [heightFeet, setHeightFeet] = useState<number>(5);
-  const [heightInches, setHeightInches] = useState<number>(10.5);
-  const [weightLbs, setWeightLbs] = useState<number>(152);
-  const [neckInches, setNeckInches] = useState<number>(15);
-  const [waistInches, setWaistInches] = useState<number>(31.5);
-  const [hipInches, setHipInches] = useState<number>(38);
+  const [heightInches, setHeightInches] = useState<number>(10);
+  const [weightLbs, setWeightLbs] = useState<number>(160);
 
   // Metric Inputs
   const [heightCm, setHeightCm] = useState<number>(178);
-  const [weightKg, setWeightKg] = useState<number>(69);
-  const [neckCm, setNeckCm] = useState<number>(38);
-  const [waistCm, setWaistCm] = useState<number>(80);
-  const [hipCm, setHipCm] = useState<number>(96);
+  const [weightKg, setWeightKg] = useState<number>(72.5);
 
-  // Target BFP Goal state
-  const [targetBfpGoal, setTargetBfpGoal] = useState<string>("");
+  // Formula & Activity Level & Goal
+  const [bmrFormula, setBmrFormula] = useState<BmrFormula>("mifflin");
+  const [bodyFatPercentage, setBodyFatPercentage] = useState<string>("");
+  const [activityLevel, setActivityLevel] = useState<ActivityLevel>("moderate");
+  const [selectedGoal, setSelectedGoal] = useState<SmartGoal>("maintain");
+
+  // Scenario Comparison Inputs
+  const [scenarioGoalWeightLbs, setScenarioGoalWeightLbs] = useState<number>(150);
+  const [scenarioGoalActivity, setScenarioGoalActivity] = useState<ActivityLevel>("moderate");
 
   // Saved calculations
   const [savedCalculations, setSavedCalculations] = useState<
-    Array<{ id: string; timestamp: string; title: string; bfp: number; category: string }>
+    Array<{ id: string; timestamp: string; title: string; bmr: number; tdee: number }>
   >([]);
   const [copied, setCopied] = useState(false);
 
@@ -73,22 +79,13 @@ export function BodyFatCalculator() {
     if (newSystem === "metric") {
       const cm = Math.round((heightFeet * 12 + heightInches) * 2.54);
       const kg = parseFloat((weightLbs * 0.45359237).toFixed(1));
-      const nCm = parseFloat((neckInches * 2.54).toFixed(1));
-      const wCm = parseFloat((waistInches * 2.54).toFixed(1));
-      const hCm = parseFloat((hipInches * 2.54).toFixed(1));
       setHeightCm(cm);
       setWeightKg(kg);
-      setNeckCm(nCm);
-      setWaistCm(wCm);
-      setHipCm(hCm);
     } else if (newSystem === "us") {
       const totalInches = Math.round(heightCm / 2.54);
       setHeightFeet(Math.floor(totalInches / 12));
       setHeightInches(parseFloat((totalInches % 12).toFixed(1)));
       setWeightLbs(Math.round(weightKg / 0.45359237));
-      setNeckInches(parseFloat((neckCm / 2.54).toFixed(1)));
-      setWaistInches(parseFloat((waistCm / 2.54).toFixed(1)));
-      setHipInches(parseFloat((hipCm / 2.54).toFixed(1)));
     }
   };
 
@@ -97,38 +94,36 @@ export function BodyFatCalculator() {
     setGender("male");
     setAge(25);
     setHeightFeet(5);
-    setHeightInches(10.5);
-    setWeightLbs(152);
-    setNeckInches(15);
-    setWaistInches(31.5);
-    setHipInches(38);
+    setHeightInches(10);
+    setWeightLbs(160);
     setHeightCm(178);
-    setWeightKg(69);
-    setNeckCm(38);
-    setWaistCm(80);
-    setHipCm(96);
-    setTargetBfpGoal("");
+    setWeightKg(72.5);
+    setBmrFormula("mifflin");
+    setBodyFatPercentage("");
+    setActivityLevel("moderate");
+    setSelectedGoal("maintain");
+    setScenarioGoalWeightLbs(150);
+    setScenarioGoalActivity("moderate");
   };
 
   // Calculation Engine Call
-  const result: BodyFatResult = useMemo(() => {
-    const targetBfpNum = targetBfpGoal !== "" ? Number(targetBfpGoal) : undefined;
-    return calculateBodyFat({
+  const result: BmrResult = useMemo(() => {
+    const bfNum = bodyFatPercentage !== "" ? Number(bodyFatPercentage) : undefined;
+    return calculateBmr({
       unitSystem,
       gender,
       age,
       heightFeet,
       heightInches,
       weightLbs,
-      neckInches,
-      waistInches,
-      hipInches,
       heightCm,
       weightKg,
-      neckCm,
-      waistCm,
-      hipCm,
-      targetBfpGoal: targetBfpNum,
+      bmrFormula,
+      bodyFatPercentage: bfNum,
+      activityLevel,
+      selectedGoal,
+      scenarioGoalWeightLbs,
+      scenarioGoalActivity,
     });
   }, [
     unitSystem,
@@ -137,37 +132,36 @@ export function BodyFatCalculator() {
     heightFeet,
     heightInches,
     weightLbs,
-    neckInches,
-    waistInches,
-    hipInches,
     heightCm,
     weightKg,
-    neckCm,
-    waistCm,
-    hipCm,
-    targetBfpGoal,
+    bmrFormula,
+    bodyFatPercentage,
+    activityLevel,
+    selectedGoal,
+    scenarioGoalWeightLbs,
+    scenarioGoalActivity,
   ]);
 
   const handleSaveCalculation = () => {
     const newItem = {
       id: Date.now().toString(),
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      title: `${age}y/o ${gender === "male" ? "Male" : "Female"} (${result.navyBfp}%)`,
-      bfp: result.navyBfp,
-      category: result.categoryInfo.category,
+      title: `${age}y/o ${gender === "male" ? "Male" : "Female"} (${result.selectedBmr} BMR / ${result.tdee} TDEE)`,
+      bmr: result.selectedBmr,
+      tdee: result.tdee,
     };
     setSavedCalculations([newItem, ...savedCalculations]);
   };
 
   const handleCopySummary = () => {
-    const summary = `Body Fat Assessment Report (${new Date().toLocaleDateString()})
+    const summary = `BMR & TDEE Metabolic Assessment Report (${new Date().toLocaleDateString()})
 Age: ${age} | Gender: ${gender} | Height: ${result.heightCm} cm | Weight: ${result.weightLbs} lbs (${result.weightKg} kg)
-U.S. Navy Body Fat: ${result.navyBfp}% (${result.categoryInfo.category})
-BMI Method Body Fat: ${result.bmiBfp}%
-Fat Mass: ${result.fatMassLbs} lbs (${result.fatMassKg} kg)
-Lean Body Mass: ${result.leanMassLbs} lbs (${result.leanMassKg} kg)
-FFMI: ${result.ffmi} (Normalized: ${result.ffmiNormalized})
-Jackson & Pollock Ideal BFP for Age: ${result.idealBfpJacksonPollock}%
+Selected Formula: ${result.formulaUsedName}
+Basal Metabolic Rate (BMR): ${result.selectedBmr} kcal/day
+Total Daily Energy Expenditure (TDEE): ${result.tdee} kcal/day (${result.activityMultiplier}× multiplier)
+Smart Goal (${result.smartGoalInfo.label}): ${result.smartGoalInfo.targetCalories} kcal/day
+Protein: ${result.smartGoalInfo.proteinGrams}g | Carbs: ${result.smartGoalInfo.carbsGrams}g | Fat: ${result.smartGoalInfo.fatGrams}g
+Hydration Target: ${result.hydration.waterLiters} L / ${result.hydration.waterCups} cups per day
 Calculated via CalcPlatform Health Engine`;
 
     navigator.clipboard.writeText(summary);
@@ -179,8 +173,8 @@ Calculated via CalcPlatform Health Engine`;
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "My Body Fat Assessment",
-          text: `My Body Fat is ${result.navyBfp}% (${result.categoryInfo.category}). Calculate your body fat percentage:`,
+          title: "My BMR & TDEE Metabolic Assessment",
+          text: `My Basal Metabolic Rate (BMR) is ${result.selectedBmr} kcal/day and TDEE is ${result.tdee} kcal/day. Calculate yours:`,
           url: window.location.href,
         });
       } catch {
@@ -191,9 +185,9 @@ Calculated via CalcPlatform Health Engine`;
     }
   };
 
-  // Dedicated Print Engine
+  // Dedicated Standalone Popup Print Engine
   const handlePrint = () => {
-    const reportEl = document.getElementById("body-fat-print-report");
+    const reportEl = document.getElementById("bmr-print-report");
     if (!reportEl) {
       window.print();
       return;
@@ -209,7 +203,7 @@ Calculated via CalcPlatform Health Engine`;
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Clinical Body Fat Assessment Report - CalcPlatform</title>
+          <title>Clinical BMR & Metabolic Assessment Report - CalcPlatform</title>
           <style>
             *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
             body {
@@ -311,10 +305,10 @@ Calculated via CalcPlatform Health Engine`;
             background: white !important;
             color: black !important;
           }
-          .body-fat-calculator-main-ui, nav, header, footer, sidebar {
+          .bmr-calculator-main-ui, nav, header, footer, sidebar {
             display: none !important;
           }
-          #body-fat-print-report {
+          #bmr-print-report {
             display: block !important;
             visibility: visible !important;
             position: static !important;
@@ -327,18 +321,18 @@ Calculated via CalcPlatform Health Engine`;
         }
       `}</style>
 
-      <div className="body-fat-calculator-main-ui space-y-6">
+      <div className="bmr-calculator-main-ui space-y-6">
         {/* Main Interactive Calculator Card */}
         <Card className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm">
           <CardHeader className="border-b border-zinc-100 dark:border-zinc-800/80 pb-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <CardTitle className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                  <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                  Body Fat Calculator
+                  <Flame className="w-6 h-6 text-rose-600 dark:text-rose-400" />
+                  BMR (Basal Metabolic Rate) Calculator
                 </CardTitle>
                 <CardDescription className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm mt-1">
-                  U.S. Navy Method &amp; Deurenberg BMI body fat assessment with ACE clinical classification
+                  Mifflin-St Jeor, Revised Harris-Benedict &amp; Katch-McArdle clinical metabolic formulas
                 </CardDescription>
               </div>
 
@@ -369,18 +363,18 @@ Calculated via CalcPlatform Health Engine`;
                 </TabsTrigger>
               </TabsList>
 
-              {/* Global Demographics: Age & Gender */}
+              {/* Demographics: Age & Gender */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5 p-4 bg-zinc-50 dark:bg-zinc-950/60 rounded-xl border border-zinc-200 dark:border-zinc-800/80">
                 <div>
                   <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
-                    Age (ages 2 – 120)
+                    Age (ages 15 – 120)
                   </Label>
                   <Input
                     type="number"
-                    min={2}
+                    min={15}
                     max={120}
                     value={age}
-                    onChange={(e) => setAge(Math.max(2, Math.min(120, Number(e.target.value) || 25)))}
+                    onChange={(e) => setAge(Math.max(15, Math.min(120, Number(e.target.value) || 25)))}
                     className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-semibold"
                   />
                 </div>
@@ -423,7 +417,7 @@ Calculated via CalcPlatform Health Engine`;
 
               {/* US UNITS INPUTS */}
               <TabsContent value="us" className="space-y-4 m-0">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Height</Label>
                     <div className="grid grid-cols-2 gap-2">
@@ -445,44 +439,12 @@ Calculated via CalcPlatform Health Engine`;
                       <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">lbs</span>
                     </div>
                   </div>
-
-                  <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Neck Circumference</Label>
-                    <div className="relative">
-                      <Input type="number" step={0.25} min={8} max={30} value={neckInches} onChange={(e) => setNeckInches(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
-                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">in</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
-                      Waist Circumference (at navel)
-                    </Label>
-                    <div className="relative">
-                      <Input type="number" step={0.25} min={15} max={80} value={waistInches} onChange={(e) => setWaistInches(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
-                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">in</span>
-                    </div>
-                  </div>
-
-                  {gender === "female" && (
-                    <div>
-                      <Label className="text-xs font-semibold text-rose-700 dark:text-rose-400 mb-1.5 block">
-                        Hip Circumference (widest point - Required for Women)
-                      </Label>
-                      <div className="relative">
-                        <Input type="number" step={0.25} min={20} max={90} value={hipInches} onChange={(e) => setHipInches(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-rose-300 dark:border-rose-800 text-xs font-semibold" />
-                        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">in</span>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </TabsContent>
 
               {/* METRIC UNITS INPUTS */}
               <TabsContent value="metric" className="space-y-4 m-0">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Height (cm)</Label>
                     <div className="relative">
@@ -498,60 +460,90 @@ Calculated via CalcPlatform Health Engine`;
                       <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">kg</span>
                     </div>
                   </div>
-
-                  <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Neck (cm)</Label>
-                    <div className="relative">
-                      <Input type="number" step={0.5} min={20} max={80} value={neckCm} onChange={(e) => setNeckCm(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
-                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">cm</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Waist (cm)</Label>
-                    <div className="relative">
-                      <Input type="number" step={0.5} min={40} max={200} value={waistCm} onChange={(e) => setWaistCm(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
-                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">cm</span>
-                    </div>
-                  </div>
-
-                  {gender === "female" && (
-                    <div>
-                      <Label className="text-xs font-semibold text-rose-700 dark:text-rose-400 mb-1.5 block">Hip (cm - Required for Women)</Label>
-                      <div className="relative">
-                        <Input type="number" step={0.5} min={40} max={200} value={hipCm} onChange={(e) => setHipCm(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-rose-300 dark:border-rose-800 text-xs font-semibold" />
-                        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">cm</span>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </TabsContent>
             </Tabs>
 
-            {/* Target BFP Scenario Planner Bar */}
-            <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex-1">
-                <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
-                  Custom Goal Target BFP % (Optional Scenario Planner)
+            {/* Formula & Activity Selectors */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+              <div>
+                <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                  BMR Equation Formula
                 </Label>
-                <div className="relative max-w-xs">
+                <select
+                  value={bmrFormula}
+                  onChange={(e) => setBmrFormula(e.target.value as BmrFormula)}
+                  className="w-full h-10 px-3 rounded-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100"
+                >
+                  <option value="mifflin">Mifflin-St Jeor (Clinical Standard)</option>
+                  <option value="harris">Revised Harris-Benedict (1984)</option>
+                  <option value="katch">Katch-McArdle (Lean Mass Based)</option>
+                </select>
+              </div>
+
+              <div>
+                <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                  Physical Activity Level
+                </Label>
+                <select
+                  value={activityLevel}
+                  onChange={(e) => setActivityLevel(e.target.value as ActivityLevel)}
+                  className="w-full h-10 px-3 rounded-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100"
+                >
+                  <option value="sedentary">Sedentary (little or no exercise)</option>
+                  <option value="light">Lightly Active (1–3 days/wk)</option>
+                  <option value="moderate">Moderately Active (4–5 days/wk)</option>
+                  <option value="active">Very Active (daily or intense 3-4x/wk)</option>
+                  <option value="very_active">Athlete / Intense (6–7 days/wk)</option>
+                  <option value="extra_active">Extra Active (physical job/training)</option>
+                </select>
+              </div>
+
+              <div>
+                <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                  Body Fat % (Optional for Katch-McArdle)
+                </Label>
+                <div className="relative">
                   <Input
                     type="number"
                     step={0.5}
-                    placeholder={`Ideal for Age: ${result.idealBfpJacksonPollock}%`}
-                    value={targetBfpGoal}
-                    onChange={(e) => setTargetBfpGoal(e.target.value)}
+                    placeholder={`Estimated: ${result.estimatedBfp}%`}
+                    value={bodyFatPercentage}
+                    onChange={(e) => setBodyFatPercentage(e.target.value)}
                     className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-400">%</span>
+                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">%</span>
                 </div>
               </div>
+            </div>
 
-              <div className="text-xs text-zinc-500 dark:text-zinc-400">
-                <span>Jackson &amp; Pollock Ideal BFP: </span>
-                <strong className="text-emerald-600 dark:text-emerald-400 font-bold">{result.idealBfpJacksonPollock}%</strong>
+            {/* Smart Goal Selector Bar */}
+            <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
+              <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block">
+                Smart Goals System Selector
+              </Label>
+              <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
+                {[
+                  { key: "aggressive_cut", label: "Aggressive Cut" },
+                  { key: "slow_cut", label: "Slow Cut" },
+                  { key: "maintain", label: "Maintain" },
+                  { key: "slow_bulk", label: "Slow Bulk" },
+                  { key: "aggressive_bulk", label: "Aggressive Bulk" },
+                  { key: "performance", label: "Performance" },
+                ].map((g) => (
+                  <button
+                    key={g.key}
+                    type="button"
+                    onClick={() => setSelectedGoal(g.key as SmartGoal)}
+                    className={`py-2 px-2 rounded-lg text-xs font-bold transition-all border text-center cursor-pointer ${
+                      selectedGoal === g.key
+                        ? "bg-emerald-600 text-white border-emerald-600 shadow-md"
+                        : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                    }`}
+                  >
+                    {g.label}
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -587,8 +579,8 @@ Calculated via CalcPlatform Health Engine`;
         {/* Results Dashboard */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1 space-y-6">
-            <BodyFatArchGauge result={result} />
-            <BodyCompositionBar result={result} />
+            <BmrArchGauge result={result} />
+            <SmartGoalMacroChart result={result} />
           </div>
 
           {/* Result Cards & Method Comparison */}
@@ -596,117 +588,113 @@ Calculated via CalcPlatform Health Engine`;
             <div className="p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4">
               <div className="flex justify-between items-center">
                 <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
-                  Body Composition &amp; Assessment Summary
+                  Metabolic Expenditure &amp; Body Composition Summary
                 </h4>
-                <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-800">
-                  {result.categoryInfo.category}
+                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
+                  {result.formulaUsedName}
                 </span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] block font-semibold">U.S. Navy Body Fat</span>
-                  <strong className="text-xl font-black text-blue-600 dark:text-blue-400 block mt-0.5">{result.navyBfp}%</strong>
+                  <span className="text-zinc-500 text-[10px] block font-semibold">Basal Metabolic Rate (BMR)</span>
+                  <strong className="text-xl font-black text-sky-600 dark:text-sky-400 block mt-0.5">{result.selectedBmr} kcal</strong>
                 </div>
 
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] block font-semibold">BMI Method Fat</span>
-                  <strong className="text-xl font-black text-sky-600 dark:text-sky-400 block mt-0.5">{result.bmiBfp}%</strong>
+                  <span className="text-zinc-500 text-[10px] block font-semibold">Maintenance TDEE</span>
+                  <strong className="text-xl font-black text-emerald-600 dark:text-emerald-400 block mt-0.5">{result.tdee} kcal</strong>
                 </div>
 
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] block font-semibold">Fat-Free Mass Index</span>
-                  <strong className="text-xl font-black text-purple-600 dark:text-purple-400 block mt-0.5">{result.ffmi}</strong>
-                  <span className="text-[9px] text-zinc-400 block mt-0.5">Norm: {result.ffmiNormalized}</span>
+                  <span className="text-zinc-500 text-[10px] block font-semibold">Goal Target Calories</span>
+                  <strong className="text-xl font-black text-purple-600 dark:text-purple-400 block mt-0.5">{result.smartGoalInfo.targetCalories} kcal</strong>
                 </div>
 
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] block font-semibold">Ideal BFP (Age {age})</span>
-                  <strong className="text-xl font-black text-emerald-600 dark:text-emerald-400 block mt-0.5">{result.idealBfpJacksonPollock}%</strong>
+                  <span className="text-zinc-500 text-[10px] block font-semibold">Lean Body Mass</span>
+                  <strong className="text-xl font-black text-rose-600 dark:text-rose-400 block mt-0.5">{result.leanMassLbs} lbs</strong>
+                  <span className="text-[9px] text-zinc-400 block mt-0.5">FFMI: {result.ffmi}</span>
                 </div>
               </div>
 
-              {/* Interpretation Note */}
-              <div className="p-3 bg-blue-50/60 dark:bg-blue-950/20 rounded-xl border border-blue-200 dark:border-blue-900/40 text-xs text-zinc-700 dark:text-zinc-300">
-                <strong className="text-blue-900 dark:text-blue-200 font-bold block mb-1">Clinical Interpretation:</strong>
-                {result.categoryInfo.description}. Based on the Jackson &amp; Pollock age standards, your ideal body fat target is <strong>{result.idealBfpJacksonPollock}%</strong> (ideal target weight: <strong>{result.targetWeightForIdealLbs} lbs</strong>).
-              </div>
+              <BmrActivityBarChart result={result} />
             </div>
 
             {/* Auxiliary Tables */}
-            <BodyFatTables result={result} />
+            <BmrTables result={result} />
           </div>
         </div>
       </div>
 
       {/* Standalone Printable PDF Report Section */}
-      <div id="body-fat-print-report" className="hidden">
+      <div id="bmr-print-report" className="hidden">
         <div className="p-8 max-w-4xl mx-auto space-y-6 bg-white text-zinc-900 font-sans">
           <div className="border-b-2 border-blue-600 pb-4 flex justify-between items-start">
             <div>
               <div className="text-xs font-black tracking-widest text-blue-700 uppercase">
-                CalcPlatform Clinical Health &amp; Anthropometrics Lab
+                CalcPlatform Clinical Health &amp; Metabolism Lab
               </div>
               <h1 className="text-2xl font-black text-zinc-900 mt-1">
-                Clinical Body Fat &amp; Composition Assessment Report
+                Clinical BMR &amp; Metabolic Assessment Report
               </h1>
               <p className="text-xs text-zinc-500 mt-0.5">
-                U.S. Navy Method, BMI Equations, FFMI &amp; ACE Category Classification
+                Mifflin-St Jeor, Harris-Benedict &amp; Katch-McArdle Energy Expenditure Analysis
               </p>
             </div>
             <div className="text-right text-xs text-zinc-500">
               <p className="font-bold text-zinc-800" suppressHydrationWarning>Date: {new Date().toLocaleDateString()}</p>
               <p suppressHydrationWarning>Time: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
-              <p className="font-mono text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #BF-{Date.now().toString().slice(-6)}</p>
+              <p className="font-mono text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #BMR-{Date.now().toString().slice(-6)}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-4 gap-3 bg-zinc-50 p-4 rounded-xl border border-zinc-200 text-center">
             <div className="p-2 border-r border-zinc-200">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase block">U.S. Navy Body Fat</span>
-              <strong className="text-xl font-black text-blue-700 block mt-1">{result.navyBfp}%</strong>
-              <span className="text-[9px] text-zinc-500 block">{result.categoryInfo.category}</span>
+              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Selected BMR</span>
+              <strong className="text-xl font-black text-blue-700 block mt-1">{result.selectedBmr} kcal</strong>
+              <span className="text-[9px] text-zinc-500 block">{result.formulaUsedName}</span>
             </div>
             <div className="p-2 border-r border-zinc-200">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Fat Mass</span>
-              <strong className="text-xl font-black text-rose-700 block mt-1">{result.fatMassLbs} lbs</strong>
-              <span className="text-[9px] text-zinc-500 block">{result.fatMassKg} kg</span>
+              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Maintenance TDEE</span>
+              <strong className="text-xl font-black text-emerald-700 block mt-1">{result.tdee} kcal</strong>
+              <span className="text-[9px] text-zinc-500 block">{result.activityMultiplier}× Multiplier</span>
             </div>
             <div className="p-2 border-r border-zinc-200">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Lean Mass</span>
-              <strong className="text-xl font-black text-emerald-700 block mt-1">{result.leanMassLbs} lbs</strong>
-              <span className="text-[9px] text-zinc-500 block">{result.leanMassKg} kg</span>
+              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Smart Goal Target</span>
+              <strong className="text-xl font-black text-purple-700 block mt-1">{result.smartGoalInfo.targetCalories} kcal</strong>
+              <span className="text-[9px] text-zinc-500 block">{result.smartGoalInfo.label}</span>
             </div>
             <div className="p-2">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase block">FFMI Index</span>
-              <strong className="text-xl font-black text-purple-700 block mt-1">{result.ffmi}</strong>
-              <span className="text-[9px] text-zinc-500 block">Norm: {result.ffmiNormalized}</span>
+              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Lean Body Mass</span>
+              <strong className="text-xl font-black text-rose-700 block mt-1">{result.leanMassLbs} lbs</strong>
+              <span className="text-[9px] text-zinc-500 block">FFMI: {result.ffmi}</span>
             </div>
           </div>
 
           <div className="space-y-2">
             <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider border-b border-zinc-300 pb-1">
-              1. Subject Physical Measurements
+              1. Subject Demographics &amp; Parameters
             </h3>
             <table className="w-full text-xs text-left border border-zinc-200 border-collapse">
               <tbody>
                 <tr className="border-b border-zinc-200 bg-zinc-50">
                   <td className="p-2 font-bold w-1/4">Age &amp; Gender:</td>
                   <td className="p-2 w-1/4">{age} years ({gender})</td>
-                  <td className="p-2 font-bold w-1/4">Neck Circumference:</td>
-                  <td className="p-2 w-1/4">{neckInches} in ({neckCm} cm)</td>
+                  <td className="p-2 font-bold w-1/4">Selected BMR Equation:</td>
+                  <td className="p-2 w-1/4">{result.formulaUsedName}</td>
                 </tr>
                 <tr className="border-b border-zinc-200">
                   <td className="p-2 font-bold">Height:</td>
                   <td className="p-2">{result.heightCm} cm ({result.heightInches} in)</td>
-                  <td className="p-2 font-bold">Waist Circumference:</td>
-                  <td className="p-2">{waistInches} in ({waistCm} cm)</td>
+                  <td className="p-2 font-bold">Daily Water Intake Target:</td>
+                  <td className="p-2">{result.hydration.waterLiters} L ({result.hydration.waterCups} cups)</td>
                 </tr>
                 <tr className="bg-zinc-50">
                   <td className="p-2 font-bold">Weight:</td>
                   <td className="p-2">{result.weightLbs} lbs ({result.weightKg} kg)</td>
-                  <td className="p-2 font-bold">Hip Circumference:</td>
-                  <td className="p-2">{gender === "female" ? `${hipInches} in (${hipCm} cm)` : "N/A (Male)"}</td>
+                  <td className="p-2 font-bold">Estimated Body Fat:</td>
+                  <td className="p-2">{result.estimatedBfp}%</td>
                 </tr>
               </tbody>
             </table>
@@ -715,7 +703,7 @@ Calculated via CalcPlatform Health Engine`;
           <div className="border-t border-zinc-300 pt-4 text-[10px] text-zinc-500 space-y-1">
             <p className="font-bold text-zinc-700">Clinical &amp; Medical Disclaimer:</p>
             <p>
-              This report is generated based on standard Navy circumference equations (Hodgdon &amp; Beckett 1984) and Deurenberg BMI formulas. Individual muscle density and bone mass variations may alter estimates. Consult a medical professional before starting any body composition modification program.
+              This report is generated based on standard predictive equations (Mifflin-St Jeor 1990, Roza &amp; Shizgal 1984, Katch-McArdle). Individual metabolic efficiency and endocrine factors may vary. Consult a registered dietitian or medical professional before starting any extreme diet or training protocol.
             </p>
             <p className="text-zinc-400">© CalcPlatform Anthropometrics Lab • All Rights Reserved</p>
           </div>

@@ -970,9 +970,9 @@ Calculated via CalcPlatform Calorie Engine`;
               </p>
             </div>
             <div className="text-right text-xs text-zinc-500">
-              <p className="font-bold text-zinc-800">Date: {new Date().toLocaleDateString()}</p>
-              <p>Time: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
-              <p className="font-mono text-[10px] text-zinc-400 mt-1">Ref ID: #CALC-{Date.now().toString().slice(-6)}</p>
+              <p className="font-bold text-zinc-800" suppressHydrationWarning>Date: {new Date().toLocaleDateString()}</p>
+              <p suppressHydrationWarning>Time: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
+              <p className="font-mono text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #CALC-{Date.now().toString().slice(-6)}</p>
             </div>
           </div>
 

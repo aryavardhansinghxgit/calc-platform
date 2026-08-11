@@ -73,25 +73,25 @@ export function BodyFatTables({ result }: BodyFatTablesProps) {
                 <td className="py-2 px-3 font-semibold">0.5 lb / week (Conservative)</td>
                 <td className="py-2 px-3 font-mono">-250 kcal/day</td>
                 <td className="py-2 px-3 font-mono font-bold text-sky-600">{Math.ceil(fatToLose / 0.5)} weeks</td>
-                <td className="py-2 px-3">{new Date(Date.now() + (fatToLose / 0.5) * 7 * 86400000).toLocaleDateString()}</td>
+                <td className="py-2 px-3" suppressHydrationWarning>{new Date(Date.now() + (fatToLose / 0.5) * 7 * 86400000).toLocaleDateString()}</td>
               </tr>
               <tr className="bg-emerald-50/40 dark:bg-emerald-950/20 font-semibold">
                 <td className="py-2 px-3 text-emerald-800 dark:text-emerald-300 font-bold">1.0 lb / week (Standard)</td>
                 <td className="py-2 px-3 font-mono text-emerald-700">-500 kcal/day</td>
                 <td className="py-2 px-3 font-mono font-bold text-emerald-700">{Math.ceil(fatToLose)} weeks</td>
-                <td className="py-2 px-3 text-emerald-700">{new Date(Date.now() + fatToLose * 7 * 86400000).toLocaleDateString()}</td>
+                <td className="py-2 px-3 text-emerald-700" suppressHydrationWarning>{new Date(Date.now() + fatToLose * 7 * 86400000).toLocaleDateString()}</td>
               </tr>
               <tr>
                 <td className="py-2 px-3 font-semibold">1.5 lbs / week (Aggressive)</td>
                 <td className="py-2 px-3 font-mono">-750 kcal/day</td>
                 <td className="py-2 px-3 font-mono font-bold text-purple-600">{Math.ceil(fatToLose / 1.5)} weeks</td>
-                <td className="py-2 px-3">{new Date(Date.now() + (fatToLose / 1.5) * 7 * 86400000).toLocaleDateString()}</td>
+                <td className="py-2 px-3" suppressHydrationWarning>{new Date(Date.now() + (fatToLose / 1.5) * 7 * 86400000).toLocaleDateString()}</td>
               </tr>
               <tr>
                 <td className="py-2 px-3 font-semibold">2.0 lbs / week (Maximum)</td>
                 <td className="py-2 px-3 font-mono">-1000 kcal/day</td>
                 <td className="py-2 px-3 font-mono font-bold text-rose-600">{Math.ceil(fatToLose / 2.0)} weeks</td>
-                <td className="py-2 px-3">{new Date(Date.now() + (fatToLose / 2.0) * 7 * 86400000).toLocaleDateString()}</td>
+                <td className="py-2 px-3" suppressHydrationWarning>{new Date(Date.now() + (fatToLose / 2.0) * 7 * 86400000).toLocaleDateString()}</td>
               </tr>
             </tbody>
           </table>
