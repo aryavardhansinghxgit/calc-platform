@@ -92,6 +92,8 @@ import { PregnancyCalculator } from "./pregnancy/PregnancyCalculator";
 import { PregnancyContent } from "./pregnancy/PregnancyContent";
 import { PregnancyWeightGainCalculator } from "./pregnancy-weight-gain/PregnancyWeightGainCalculator";
 import { PregnancyWeightGainContent } from "./pregnancy-weight-gain/PregnancyWeightGainContent";
+import { PregnancyConceptionCalculator } from "./pregnancy-conception/PregnancyConceptionCalculator";
+import { PregnancyConceptionContent } from "./pregnancy-conception/PregnancyConceptionContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -214,19 +216,24 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isCaloriesBurned = definition.id === "calories-burned" || definition.slug === "calories-burned-calculator";
   const isOneRepMax = definition.id === "one-rep-max" || definition.slug === "one-rep-max-calculator";
   const isTargetHeartRate = definition.id === "target-heart-rate" || definition.slug === "target-heart-rate-calculator";
+  const isPregnancyConception =
+    definition.id === "pregnancy-conception" ||
+    definition.id === "pregnancy-conception-calculator" ||
+    definition.slug === "pregnancy-conception-calculator";
   const isPregnancyWeightGain =
     definition.id === "pregnancy-weight-gain" ||
     definition.id === "pregnancy-weight-gain-calculator" ||
     definition.slug === "pregnancy-weight-gain-calculator";
   const isPregnancy =
     !isPregnancyWeightGain &&
+    !isPregnancyConception &&
     (definition.id === "pregnancy" || definition.id === "pregnancy-calculator" || definition.slug === "pregnancy-calculator");
   const isIra =
     definition.id === "ira" ||
     definition.slug === "ira-calculator" ||
     definition.id === "traditional-ira" ||
     definition.slug === "traditional-ira-calculator";
-  const CustomContent = definition.ContentComponent || (isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
+  const CustomContent = definition.ContentComponent || (isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -264,7 +271,11 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isPregnancyWeightGain ? (
+            {isPregnancyConception ? (
+              <PregnancyConceptionCalculator />
+            ) : isPregnancyWeightGain ? (
+              <PregnancyWeightGainCalculator />
+            ) : isPregnancy ? (
               <PregnancyWeightGainCalculator />
             ) : isPregnancy ? (
               <PregnancyCalculator />
