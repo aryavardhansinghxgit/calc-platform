@@ -1,33 +1,48 @@
 import { calculateDueDateCalculator } from "./calculator";
 
 export function runDueDateCalculatorTests() {
-  const defaultInputs = {
-  "lmpDate": "2026-01-01",
-  "cycleLength": 28
-};
-  const res1 = calculateDueDateCalculator(defaultInputs);
-  if (!res1 || typeof res1 !== "object") throw new Error("Formula failed for default inputs");
+  // Test 1: Standard LMP Mode
+  const res1 = calculateDueDateCalculator({
+    calculationMode: "lmp",
+    lmpDate: "2026-01-01",
+    cycleLength: 28,
+  });
+  if (!res1 || typeof res1 !== "object") throw new Error("Formula failed for LMP mode");
+  if (!res1.estimatedDueDateFormatted) throw new Error("Missing estimatedDueDateFormatted in res1");
+  if (!res1.timelineMilestones || res1.timelineMilestones.length < 5) throw new Error("Missing timelineMilestones in res1");
 
-  const zeroInputs = {
-  "lmpDate": 0,
-  "cycleLength": 0
-};
-  const res2 = calculateDueDateCalculator(zeroInputs);
-  if (!res2) throw new Error("Formula failed for zero inputs");
+  // Test 2: Ultrasound Mode
+  const res2 = calculateDueDateCalculator({
+    calculationMode: "ultrasound",
+    ultrasoundDate: "2026-03-01",
+    ultrasoundWeeks: 10,
+    ultrasoundDays: 2,
+  });
+  if (!res2 || res2.calculationMode !== "ultrasound") throw new Error("Formula failed for Ultrasound mode");
 
-  const negInputs = {
-  "lmpDate": -50,
-  "cycleLength": -50
-};
-  const res3 = calculateDueDateCalculator(negInputs);
-  if (!res3) throw new Error("Formula failed for negative inputs");
+  // Test 3: Conception Date Mode
+  const res3 = calculateDueDateCalculator({
+    calculationMode: "conception-date",
+    conceptionDate: "2026-01-15",
+  });
+  if (!res3 || !res3.estimatedDueDate) throw new Error("Formula failed for Conception Date mode");
 
-  const nanInputs = {
-  "lmpDate": null,
-  "cycleLength": null
-};
-  const res4 = calculateDueDateCalculator(nanInputs);
-  if (!res4) throw new Error("Formula failed for NaN inputs");
+  // Test 4: IVF Mode (Day 5 blastocyst)
+  const res4 = calculateDueDateCalculator({
+    calculationMode: "ivf",
+    ivfTransferDate: "2026-04-15",
+    ivfEmbryoType: "day5",
+  });
+  if (!res4 || !res4.confidenceRangeLabel.includes("Clinical Precision")) throw new Error("Formula failed for IVF mode");
+
+  // Test 5: Fallback for empty/null inputs
+  const res5 = calculateDueDateCalculator({
+    calculationMode: null,
+    lmpDate: null,
+  });
+  if (!res5 || !res5.estimatedDueDate) throw new Error("Formula failed for empty fallback inputs");
 
   return true;
 }
+
+export default runDueDateCalculatorTests;
