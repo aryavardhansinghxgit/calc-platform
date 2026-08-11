@@ -8,7 +8,9 @@ export const metadata: Metadata = bmi_calculatorMetadata;
 
 export default function BMICalculatorPage() {
   const { calculate, ...serializableDef } = bmi_calculatorConfig;
-  const schemas = generateJsonLdSchema({
+
+  // Basic schemas generated from platform helpers
+  const baseSchemas = generateJsonLdSchema({
     title: bmi_calculatorConfig.title,
     description: bmi_calculatorConfig.description,
     slug: bmi_calculatorConfig.slug,
@@ -16,9 +18,25 @@ export default function BMICalculatorPage() {
     faqs: bmi_calculatorConfig.faqs,
   });
 
+  // Additional Article & Medical WebPage Schema
+  const medicalArticleSchema = {
+    "@context": "https://schema.org",
+    "@type": "MedicalWebPage",
+    "name": "Body Mass Index (BMI) Clinical & Pediatric Assessment Suite",
+    "description": "Comprehensive clinical resource for calculating adult and pediatric Body Mass Index, WHO categories, CDC percentiles, BMI Prime, and ideal body weight.",
+    "url": "https://calculator-platform.com/calculators/bmi-calculator",
+    "aspect": ["Overview", "Calculation", "Diagnosis", "Risks"],
+    "medicalAudience": {
+      "@type": "MedicalAudience",
+      "audienceType": "General Public & Healthcare Professionals"
+    }
+  };
+
+  const allSchemas = [...baseSchemas, medicalArticleSchema];
+
   return (
     <>
-      {schemas.map((schema, i) => (
+      {allSchemas.map((schema, i) => (
         <script
           key={i}
           type="application/ld+json"

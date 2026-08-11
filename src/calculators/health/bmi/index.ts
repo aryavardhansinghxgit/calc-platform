@@ -1,44 +1,73 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateBmi } from "@/lib/formulas/bmi";
+import { bmi_calculatorFaqs } from "@/app/calculators/bmi-calculator/faq";
 
 export const BMI_CALCULATOR: CalculatorModuleDefinition = {
   id: "bmi",
-  title: "BMI Calculator",
+  title: "BMI Calculator – Clinical Body Mass Index Suite",
   slug: "bmi-calculator",
   category: "Health",
-  description: "Check Body Mass Index classification, ideal weight range, and body metrics.",
+  subcategory: "Fitness",
+  description: "Calculate Body Mass Index (BMI), WHO weight classification, BMI Prime, Ponderal Index, Ideal Weight range, estimated Body Fat %, BMR, and TDEE calories.",
   iconName: "HeartPulse",
   featured: true,
-  tags: ["bmi", "health", "weight", "fitness", "body mass index"],
-  formulaDescription: "BMI = Weight (kg) / [Height (m)]²",
-  faqs: [
-    {
-      question: "What is a healthy BMI range?",
-      answer: "A BMI between 18.5 and 24.9 is generally considered normal/healthy weight for adults according to WHO guidelines.",
-    },
-    {
-      question: "Is BMI accurate for athletes?",
-      answer: "BMI does not distinguish between muscle mass and fat mass, so athletic individuals with high muscle volume may have a higher BMI despite low body fat.",
-    },
-  ],
+  tags: ["bmi", "health", "weight", "fitness", "body mass index", "bmi prime", "ponderal index"],
+  formulaDescription: "BMI = Weight (kg) / [Height (m)]² | Imperial: 703 × Weight (lbs) / [Height (in)]²",
+  faqs: bmi_calculatorFaqs,
   inputs: [
     {
-      name: "weightKg",
-      label: "Weight (kg)",
+      name: "unitSystem",
+      label: "Unit System",
+      type: "select",
+      defaultValue: "us",
+      options: [
+        { label: "US Units (ft/in, lbs)", value: "us" },
+        { label: "Metric Units (cm, kg)", value: "metric" },
+        { label: "Other Units (m, in, ft)", value: "other" }
+      ]
+    },
+    {
+      name: "age",
+      label: "Age (years)",
       type: "number",
-      defaultValue: 70,
-      min: 20,
-      max: 300,
+      defaultValue: 25,
+      min: 2,
+      max: 120,
       step: 1,
     },
     {
-      name: "heightCm",
-      label: "Height (cm)",
+      name: "gender",
+      label: "Gender",
+      type: "select",
+      defaultValue: "male",
+      options: [
+        { label: "Male", value: "male" },
+        { label: "Female", value: "female" }
+      ]
+    },
+    {
+      name: "weightLbs",
+      label: "Weight (lbs)",
       type: "number",
-      defaultValue: 175,
-      min: 50,
-      max: 250,
-      step: 1,
+      defaultValue: 160,
+      min: 30,
+      max: 800,
+    },
+    {
+      name: "heightFeet",
+      label: "Height (Feet)",
+      type: "number",
+      defaultValue: 5,
+      min: 1,
+      max: 8,
+    },
+    {
+      name: "heightInches",
+      label: "Height (Inches)",
+      type: "number",
+      defaultValue: 10,
+      min: 0,
+      max: 11,
     },
   ],
   outputs: [
@@ -55,19 +84,31 @@ export const BMI_CALCULATOR: CalculatorModuleDefinition = {
     },
     {
       name: "healthyWeightRange",
-      label: "Ideal Weight Range",
+      label: "Healthy Weight Range",
       format: "text",
+    },
+    {
+      name: "primeIndex",
+      label: "BMI Prime",
+      format: "number",
     },
   ],
   calculate: (inputs) => {
     const res = calculateBmi({
-      weightKg: Number(inputs.weightKg || 70),
-      heightCm: Number(inputs.heightCm || 175),
+      unitSystem: inputs.unitSystem || "us",
+      age: Number(inputs.age) || 25,
+      gender: inputs.gender || "male",
+      heightFeet: Number(inputs.heightFeet) || 5,
+      heightInches: Number(inputs.heightInches) || 10,
+      weightLbs: Number(inputs.weightLbs) || 160,
+      heightCm: Number(inputs.heightCm) || 178,
+      weightKg: Number(inputs.weightKg) || 72.5,
     });
     return {
       bmi: res.bmi,
       category: res.category,
-      healthyWeightRange: `${res.healthyWeightRange[0]} kg – ${res.healthyWeightRange[1]} kg`,
+      healthyWeightRange: `${res.healthyWeightRangeLbs[0]} - ${res.healthyWeightRangeLbs[1]} lbs (${res.healthyWeightRangeKg[0]} - ${res.healthyWeightRangeKg[1]} kg)`,
+      primeIndex: res.bmiPrime,
     };
   },
 };

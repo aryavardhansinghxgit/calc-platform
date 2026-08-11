@@ -64,6 +64,8 @@ import { BusinessLoanCalculator } from "./business-loan/BusinessLoanCalculator";
 import { StudentLoanCalculator } from "./student-loan/StudentLoanCalculator";
 import { BudgetCalculator } from "./budget/BudgetCalculator";
 import { BudgetContent } from "./budget/BudgetContent";
+import { BmiCalculator } from "./bmi/BmiCalculator";
+import { BmiContent } from "./bmi/BmiContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -174,12 +176,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isBusinessLoan = definition.id === "business-loan" || definition.slug === "business-loan-calculator";
   const isStudentLoan = definition.id === "student-loan" || definition.slug === "student-loan-calculator";
   const isBudget = definition.id === "budget" || definition.slug === "budget-calculator";
+  const isBmi = definition.id === "bmi" || definition.slug === "bmi-calculator";
   const isIra =
     definition.id === "ira" ||
     definition.slug === "ira-calculator" ||
     definition.id === "traditional-ira" ||
     definition.slug === "traditional-ira-calculator";
-  const CustomContent = definition.ContentComponent || (isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
+  const CustomContent = definition.ContentComponent || (isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -217,7 +220,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isBudget ? (
+            {isBmi ? (
+              <BmiCalculator />
+            ) : isBudget ? (
               <BudgetCalculator />
             ) : isStudentLoan ? (
               <StudentLoanCalculator />
