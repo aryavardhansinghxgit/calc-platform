@@ -519,8 +519,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                     <Link
                       href={`/calculators/${calc.slug}`}
                       className={`flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors group ${isActive
-                          ? "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-bold"
-                          : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/60"
+                        ? "bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-bold"
+                        : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/60"
                         }`}
                     >
                       <span className="truncate">{calc.title}</span>
