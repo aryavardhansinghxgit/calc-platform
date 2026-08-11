@@ -80,6 +80,8 @@ import { ArmyBodyFatCalculator } from "./army-body-fat/ArmyBodyFatCalculator";
 import { ArmyBodyFatContent } from "./army-body-fat/ArmyBodyFatContent";
 import { LeanBodyMassCalculator } from "./lean-body-mass/LeanBodyMassCalculator";
 import { LeanBodyMassContent } from "./lean-body-mass/LeanBodyMassContent";
+import { HealthyWeightCalculator } from "./healthy-weight/HealthyWeightCalculator";
+import { HealthyWeightContent } from "./healthy-weight/HealthyWeightContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -198,12 +200,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isPace = definition.id === "pace" || definition.slug === "pace-calculator";
   const isArmyBodyFat = definition.id === "army-body-fat" || definition.slug === "army-body-fat-calculator";
   const isLeanBodyMass = definition.id === "lean-body-mass" || definition.slug === "lean-body-mass-calculator";
+  const isHealthyWeight = definition.id === "healthy-weight" || definition.slug === "healthy-weight-calculator";
   const isIra =
     definition.id === "ira" ||
     definition.slug === "ira-calculator" ||
     definition.id === "traditional-ira" ||
     definition.slug === "traditional-ira-calculator";
-  const CustomContent = definition.ContentComponent || (isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
+  const CustomContent = definition.ContentComponent || (isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -241,7 +244,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isLeanBodyMass ? (
+            {isHealthyWeight ? (
+              <HealthyWeightCalculator />
+            ) : isLeanBodyMass ? (
               <LeanBodyMassCalculator />
             ) : isArmyBodyFat ? (
               <ArmyBodyFatCalculator />
