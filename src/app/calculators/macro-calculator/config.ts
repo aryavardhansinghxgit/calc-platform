@@ -1,5 +1,5 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
-import { calculateMacroCalculator } from "./calculator";
+import { calculateMacroOutputs } from "./calculator";
 import { macro_calculatorFaqs } from "./faq";
 
 export const macro_calculatorConfig: CalculatorModuleDefinition = {
@@ -7,72 +7,167 @@ export const macro_calculatorConfig: CalculatorModuleDefinition = {
   title: "Macro Calculator",
   slug: "macro-calculator",
   category: "Health",
-  subcategory: "Nutrition & Body",
-  description: "Calculate optimal daily macronutrient split (Protein, Carbs, Fats) based on fitness goals and diet style.",
+  subcategory: "Fitness",
+  description:
+    "Calculate your exact daily macronutrients (protein, carbs, fats) and calorie targets across 10 modes and 6 BMR formulas. Features searchable food database and body composition analysis.",
   iconName: "PieChart",
   featured: true,
-  keywords: ["macros","macronutrients","protein","carbs","fats","flexible dieting"],
+  keywords: [
+    "macro",
+    "macro calculator",
+    "macronutrient calculator",
+    "protein calculator",
+    "carb calculator",
+    "fat calculator",
+    "tdee calculator",
+  ],
   priority: 1,
-  relatedCalculators: ["protein-calculator","carbohydrate-calculator","fat-intake-calculator","tdee-calculator"],
-  formulaDescription: "Protein (4 kcal/g), Carbs (4 kcal/g), Fats (9 kcal/g)",
+  relatedCalculators: [
+    "calorie-calculator",
+    "bmr-calculator",
+    "bmi-calculator",
+    "body-fat-calculator",
+    "ideal-weight-calculator",
+    "protein-calculator",
+    "carbohydrate-calculator",
+    "fat-intake-calculator",
+    "tdee-calculator",
+  ],
+  formulaDescription:
+    "Target Calories = TDEE + Goal Adjustment. Protein (4 kcal/g), Carbs (4 kcal/g), Fat (9 kcal/g).",
   faqs: macro_calculatorFaqs,
   inputs: [
-  {
-    "name": "dailyCalories",
-    "label": "Daily Calorie Target (kcal)",
-    "type": "number",
-    "defaultValue": 2000,
-    "min": 800,
-    "max": 10000,
-    "step": 50
-  },
-  {
-    "name": "dietRatio",
-    "label": "Diet Ratio Style",
-    "type": "select",
-    "defaultValue": "balanced",
-    "options": [
-      {
-        "label": "Balanced (50% C / 25% P / 25% F)",
-        "value": "balanced"
-      },
-      {
-        "label": "High Protein (35% C / 40% P / 25% F)",
-        "value": "high_protein"
-      },
-      {
-        "label": "Low Carb (20% C / 40% P / 40% F)",
-        "value": "low_carb"
-      },
-      {
-        "label": "Keto (5% C / 25% P / 70% F)",
-        "value": "keto"
-      }
-    ]
-  }
-],
+    {
+      name: "unitSystem",
+      label: "Unit System",
+      type: "select",
+      defaultValue: "us",
+      options: [
+        { label: "US Units (feet, inches, lbs)", value: "us" },
+        { label: "Metric Units (cm, kg)", value: "metric" },
+      ],
+    },
+    {
+      name: "calculationMode",
+      label: "Calculation Mode",
+      type: "select",
+      defaultValue: "standard",
+      options: [
+        { label: "Standard Macro Calculator", value: "standard" },
+        { label: "Calorie Calculator", value: "calories" },
+        { label: "Cutting / Weight Loss", value: "cutting" },
+        { label: "Bulking / Muscle Gain", value: "bulking" },
+        { label: "Maintenance", value: "maintenance" },
+        { label: "Body Recomposition", value: "recomp" },
+        { label: "Athlete Macro Planner", value: "athlete" },
+        { label: "Ketogenic Macro Calculator", value: "keto" },
+        { label: "High Protein Calculator", value: "high-protein" },
+        { label: "Custom Macro Builder", value: "custom" },
+      ],
+    },
+    {
+      name: "age",
+      label: "Age (Years)",
+      type: "number",
+      defaultValue: 25,
+      min: 15,
+      max: 80,
+    },
+    {
+      name: "gender",
+      label: "Gender",
+      type: "select",
+      defaultValue: "male",
+      options: [
+        { label: "Male", value: "male" },
+        { label: "Female", value: "female" },
+      ],
+    },
+    {
+      name: "activityLevel",
+      label: "Activity Level",
+      type: "select",
+      defaultValue: "moderate",
+      options: [
+        { label: "Sedentary: little or no exercise", value: "sedentary" },
+        { label: "Light: exercise 1-3 times/week", value: "light" },
+        { label: "Moderate: exercise 4-5 times/week", value: "moderate" },
+        { label: "Active: daily exercise or intense 3-4 times/week", value: "active" },
+        { label: "Very Active: intense exercise 6-7 times/week", value: "very-active" },
+      ],
+    },
+    {
+      name: "goal",
+      label: "Fitness Goal",
+      type: "select",
+      defaultValue: "maintain",
+      options: [
+        { label: "Maintain Weight", value: "maintain" },
+        { label: "Mild Weight Loss (-0.5 lb/week)", value: "mild-loss" },
+        { label: "Weight Loss (-1.0 lb/week)", value: "loss" },
+        { label: "Extreme Weight Loss (-2.0 lb/week)", value: "extreme-loss" },
+        { label: "Mild Weight Gain (+0.5 lb/week)", value: "mild-gain" },
+        { label: "Weight Gain (+1.0 lb/week)", value: "gain" },
+        { label: "Fast Weight Gain (+2.0 lb/week)", value: "extreme-gain" },
+        { label: "Body Recomposition", value: "recomp" },
+      ],
+    },
+    {
+      name: "bmrFormula",
+      label: "BMR Estimation Formula",
+      type: "select",
+      defaultValue: "mifflin",
+      options: [
+        { label: "Mifflin-St Jeor (Standard)", value: "mifflin" },
+        { label: "Katch-McArdle (Requires Body Fat %)", value: "katch" },
+        { label: "Original Harris-Benedict", value: "harris" },
+        { label: "Revised Harris-Benedict", value: "revised-harris" },
+        { label: "Cunningham (Athletic LBM)", value: "cunningham" },
+        { label: "Schofield Equation", value: "schofield" },
+      ],
+    },
+  ],
   outputs: [
-  {
-    "name": "proteinGrams",
-    "label": "Protein Target",
-    "format": "number",
-    "highlight": true,
-    "unit": "g"
-  },
-  {
-    "name": "carbsGrams",
-    "label": "Carbohydrates Target",
-    "format": "number",
-    "unit": "g"
-  },
-  {
-    "name": "fatGrams",
-    "label": "Fat Target",
-    "format": "number",
-    "unit": "g"
-  }
-],
-  calculate: calculateMacroCalculator,
+    {
+      name: "targetCalories",
+      label: "Daily Calorie Target",
+      format: "number",
+      suffix: " kcal",
+      highlight: true,
+    },
+    {
+      name: "proteinGrams",
+      label: "Protein Target",
+      format: "number",
+      suffix: " g",
+      highlight: true,
+    },
+    {
+      name: "carbsGrams",
+      label: "Carbohydrate Target",
+      format: "number",
+      suffix: " g",
+    },
+    {
+      name: "fatGrams",
+      label: "Fat Target",
+      format: "number",
+      suffix: " g",
+    },
+    {
+      name: "tdee",
+      label: "Total Daily Energy Expenditure (TDEE)",
+      format: "number",
+      suffix: " kcal",
+    },
+    {
+      name: "bmr",
+      label: "Basal Metabolic Rate (BMR)",
+      format: "number",
+      suffix: " kcal",
+    },
+  ],
+  calculate: calculateMacroOutputs,
 };
 
 export default macro_calculatorConfig;
