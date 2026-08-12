@@ -23,7 +23,8 @@ export { PersonalLoanContent } from "./personal-loan/PersonalLoanContent";
 export { BusinessLoanCalculator } from "./business-loan/BusinessLoanCalculator";
 export { BusinessLoanContent } from "./business-loan/BusinessLoanContent";
 export { StudentLoanCalculator } from "./student-loan/StudentLoanCalculator";
-export { StudentLoanContent } from "./student-loan/StudentLoanContent";
+export { ScientificCalculator } from "./scientific/ScientificCalculator";
+export { ScientificCalculatorContent } from "./scientific/ScientificCalculatorContent";
 
 
 

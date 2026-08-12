@@ -120,6 +120,7 @@ import { BsaCalculator } from "./bsa/BsaCalculator";
 import { BsaContent } from "./bsa/BsaContent";
 import { BacCalculator } from "./bac/BacCalculator";
 import { BacContent } from "./bac/BacContent";
+import { ScientificCalculator } from "./scientific/ScientificCalculator";
 import { ScientificCalculatorContent } from "./scientific/ScientificCalculatorContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
@@ -322,7 +323,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isBac ? (
+            {isScientific ? (
+              <ScientificCalculator />
+            ) : isBac ? (
               <BacCalculator />
             ) : isBsa ? (
               <BsaCalculator />
