@@ -96,6 +96,29 @@ export function GfrCalculator() {
     }
   };
 
+  // Synchronized Mode Selection Handler
+  const handleModeSelect = (mId: GfrCalculationMode) => {
+    setCalculationMode(mId);
+    if (mId === "pediatric-schwartz") {
+      setPatientType("child");
+      if (age >= 18) setAge(10);
+      setActiveTab("ckd-stage");
+    } else {
+      setPatientType("adult");
+      if (age < 18) setAge(50);
+    }
+
+    if (mId === "kdigo-risk") {
+      setActiveTab("kdigo-matrix");
+    } else if (mId === "comparison") {
+      setActiveTab("formula-comp");
+    } else if (mId === "custom") {
+      setActiveTab("action-plan");
+    } else {
+      setActiveTab("ckd-stage");
+    }
+  };
+
   // Results Calculation Memo
   const results = useMemo(() => {
     return calculateGfrCalculator({
@@ -136,15 +159,15 @@ export function GfrCalculator() {
   // Modes Configuration
   const modesList: { id: GfrCalculationMode; label: string; icon: any; desc: string }[] = [
     { id: "adult-ckdepi2021", label: "CKD-EPI 2021", icon: Activity, desc: "NKF-ASN Race-Free standard" },
-    { id: "adult-ckdepi2009", label: "CKD-EPI 2009", icon: Layers, desc: "Original race-adjusted equation" },
-    { id: "mdrd", label: "MDRD Study", icon: Sliders, desc: "IDMS-traceable renal equation" },
-    { id: "mayo", label: "Mayo Quadratic", icon: Sparkles, desc: "Preserved function & living donors" },
+    { id: "adult-ckdepi2009", label: "CKD-EPI 2009", icon: Layers, desc: "Race-adjusted equation" },
+    { id: "mdrd", label: "MDRD Study", icon: Sliders, desc: "IDMS-traceable equation" },
+    { id: "mayo", label: "Mayo Quadratic", icon: Sparkles, desc: "Preserved function / donors" },
     { id: "cockcroft-gault", label: "Cockcroft-Gault", icon: Scale, desc: "Creatinine clearance (CrCl)" },
     { id: "pediatric-schwartz", label: "Bedside Schwartz", icon: User, desc: "Pediatric formula (<18 yrs)" },
-    { id: "cystatin-c", label: "Cystatin C Combo", icon: Award, desc: "Creatinine + Cystatin C combined" },
-    { id: "kdigo-risk", label: "KDIGO 2024 Grid", icon: ShieldAlert, desc: "Prognosis risk matrix (eGFR+uACR)" },
-    { id: "comparison", label: "Multi-Formula", icon: BarChart2, desc: "Side-by-side formula comparison" },
-    { id: "custom", label: "Custom Renal", icon: Heart, desc: "Custom clinical evaluation" },
+    { id: "cystatin-c", label: "Cystatin C Combo", icon: Award, desc: "Creatinine + Cystatin C" },
+    { id: "kdigo-risk", label: "KDIGO 2024 Grid", icon: ShieldAlert, desc: "Prognosis risk matrix" },
+    { id: "comparison", label: "Multi-Formula", icon: BarChart2, desc: "Side-by-side comparison" },
+    { id: "custom", label: "Custom Renal", icon: Heart, desc: "Custom evaluation" },
   ];
 
   // Formula Comparison Bar Data
@@ -288,36 +311,34 @@ export function GfrCalculator() {
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-8 print:p-0 font-sans">
-      {/* Light Theme Mode Selector Bar */}
-      <div className="bg-white/90 backdrop-blur-md p-2.5 rounded-2xl border border-slate-200 shadow-sm print:hidden">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+      {/* Light Theme Mode Selector Bar (Responsive Grid) */}
+      <div className="bg-white/90 backdrop-blur-md p-3 rounded-2xl border border-slate-200 shadow-sm print:hidden">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
           {modesList.map((m) => {
             const Icon = m.icon;
             const isSelected = calculationMode === m.id;
             return (
               <button
                 key={m.id}
-                onClick={() => {
-                  setCalculationMode(m.id);
-                  if (m.id === "pediatric-schwartz") setPatientType("child");
-                  else setPatientType("adult");
-                }}
-                className={`flex items-center gap-2.5 p-2.5 rounded-xl transition-all duration-200 text-left ${
+                onClick={() => handleModeSelect(m.id)}
+                className={`flex items-center gap-2 p-2.5 rounded-xl transition-all duration-200 text-left ${
                   isSelected
                     ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-md shadow-cyan-500/20 font-semibold scale-[1.01]"
                     : "bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-slate-900 border border-slate-200/80"
                 }`}
               >
                 <div
-                  className={`p-1.5 rounded-lg ${
+                  className={`p-1.5 rounded-lg shrink-0 ${
                     isSelected ? "bg-white/20 text-white" : "bg-cyan-50 text-cyan-600"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
                 </div>
-                <div className="overflow-hidden">
-                  <div className="text-xs font-semibold truncate">{m.label}</div>
-                  <div className="text-[10px] opacity-80 truncate hidden lg:block">
+                <div className="min-w-0 flex-1">
+                  <div className="text-xs font-bold leading-tight truncate" style={{ color: isSelected ? "#ffffff" : undefined }}>
+                    {m.label}
+                  </div>
+                  <div className="text-[10px] opacity-80 leading-tight truncate hidden sm:block">
                     {m.desc}
                   </div>
                 </div>
@@ -331,18 +352,21 @@ export function GfrCalculator() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Inputs Form */}
         <div className="lg:col-span-5 space-y-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm print:hidden">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Sliders className="w-5 h-5 text-cyan-600" />
-              Patient Lab Parameters
-            </h2>
+          {/* Card Header with Clean Sub-Row Toggles */}
+          <div className="border-b border-slate-100 pb-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <Sliders className="w-5 h-5 text-cyan-600" />
+                Patient Lab Parameters
+              </h2>
+            </div>
 
-            {/* Patient Type & Creatinine Unit Toggles */}
-            <div className="flex items-center gap-2">
-              <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
+            {/* Sub-row for Patient Type & Creatinine Unit Toggles */}
+            <div className="flex items-center justify-between gap-3 pt-1">
+              <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs w-1/2">
                 <button
                   onClick={() => handlePatientTypeChange("adult")}
-                  className={`px-2 py-1 rounded-lg font-bold transition-all ${
+                  className={`w-1/2 py-1 rounded-lg font-bold text-center transition-all ${
                     patientType === "adult"
                       ? "bg-white text-cyan-700 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
@@ -352,7 +376,7 @@ export function GfrCalculator() {
                 </button>
                 <button
                   onClick={() => handlePatientTypeChange("child")}
-                  className={`px-2 py-1 rounded-lg font-bold transition-all ${
+                  className={`w-1/2 py-1 rounded-lg font-bold text-center transition-all ${
                     patientType === "child"
                       ? "bg-white text-cyan-700 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
@@ -362,10 +386,10 @@ export function GfrCalculator() {
                 </button>
               </div>
 
-              <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
+              <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs w-1/2">
                 <button
                   onClick={() => setCreatinineUnit("mg/dL")}
-                  className={`px-2 py-1 rounded-lg font-bold transition-all ${
+                  className={`w-1/2 py-1 rounded-lg font-bold text-center transition-all ${
                     creatinineUnit === "mg/dL"
                       ? "bg-white text-emerald-700 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
@@ -375,7 +399,7 @@ export function GfrCalculator() {
                 </button>
                 <button
                   onClick={() => setCreatinineUnit("umol/L")}
-                  className={`px-2 py-1 rounded-lg font-bold transition-all ${
+                  className={`w-1/2 py-1 rounded-lg font-bold text-center transition-all ${
                     creatinineUnit === "umol/L"
                       ? "bg-white text-emerald-700 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
@@ -857,23 +881,6 @@ export function GfrCalculator() {
                 </div>
               </div>
             )}
-          </div>
-
-          {/* Smart Insights & Personalized Recommendations */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 print:hidden">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              Smart Clinical Recommendations
-            </h3>
-
-            <div className="space-y-2.5">
-              {results.recommendations.map((rec, idx) => (
-                <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200/80">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-600 shrink-0 mt-0.5" />
-                  <span className="leading-relaxed">{rec}</span>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>
