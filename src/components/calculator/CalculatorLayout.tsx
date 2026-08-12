@@ -96,6 +96,8 @@ import { PregnancyConceptionCalculator } from "./pregnancy-conception/PregnancyC
 import { PregnancyConceptionContent } from "./pregnancy-conception/PregnancyConceptionContent";
 import { DueDateCalculator } from "./due-date/DueDateCalculator";
 import { DueDateContent } from "./due-date/DueDateContent";
+import { GfrCalculator } from "./gfr/GfrCalculator";
+import { GfrContent } from "./gfr/GfrContent";
 import { TdeeCalculator } from "./tdee/TdeeCalculator";
 import { TdeeContent } from "./tdee/TdeeContent";
 import { FatIntakeCalculator } from "./fat-intake/FatIntakeCalculator";
@@ -180,8 +182,11 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
     return searchCalculators(sidebarQuery);
   }, [sidebarQuery, categoryCalculators]);
 
-  const isMortgage = definition.id.toLowerCase().includes("mortgage");
-  const isAmortization = definition.id.toLowerCase().includes("amortization");
+  const idLower = (definition?.id || "").toLowerCase();
+  const slugLower = (definition?.slug || "").toLowerCase();
+
+  const isMortgage = idLower.includes("mortgage");
+  const isAmortization = idLower.includes("amortization");
   const isLoan = definition.id === "loan" || definition.slug === "loan-calculator";
   const isEmi = definition.id === "emi" || definition.slug === "emi-calculator";
   const isHouseAffordability = definition.id === "house-affordability" || definition.slug === "house-affordability-calculator";
@@ -255,9 +260,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
     !isPregnancyWeightGain &&
     !isPregnancyConception &&
     (definition.id === "pregnancy" || definition.id === "pregnancy-calculator" || definition.slug === "pregnancy-calculator");
-  const idLower = (definition.id || "").toLowerCase();
-  const slugLower = (definition.slug || "").toLowerCase();
-
+  const isGfr = idLower === "gfr" || idLower === "gfr-calculator" || slugLower === "gfr-calculator";
   const isTdee = idLower === "tdee" || idLower === "tdee-calculator" || slugLower === "tdee-calculator";
   const isFatIntake = idLower === "fat-intake" || idLower === "fat-intake-calculator" || slugLower === "fat-intake-calculator";
   const isProtein = idLower === "protein" || idLower === "protein-calculator" || slugLower === "protein-calculator";
@@ -270,7 +273,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
     definition.slug === "ira-calculator" ||
     definition.id === "traditional-ira" ||
     definition.slug === "traditional-ira-calculator";
-  const CustomContent = definition.ContentComponent || (isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
+  const CustomContent = definition.ContentComponent || (isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -308,7 +311,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isTdee ? (
+            {isGfr ? (
+              <GfrCalculator />
+            ) : isTdee ? (
               <TdeeCalculator />
             ) : isFatIntake ? (
               <FatIntakeCalculator />
