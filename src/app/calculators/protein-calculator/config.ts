@@ -1,5 +1,5 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
-import { calculateProteinCalculator } from "./calculator";
+import { calculateProteinOutputs } from "./calculator";
 import { protein_calculatorFaqs } from "./faq";
 
 export const protein_calculatorConfig: CalculatorModuleDefinition = {
@@ -7,66 +7,172 @@ export const protein_calculatorConfig: CalculatorModuleDefinition = {
   title: "Protein Calculator",
   slug: "protein-calculator",
   category: "Health",
-  subcategory: "Nutrition & Body",
-  description: "Calculate daily protein requirements for muscle building, fat loss, or endurance training.",
-  iconName: "Beef",
+  subcategory: "Fitness",
+  description:
+    "Calculate your exact daily protein requirements, per-meal targets, leucine trigger, and essential amino acid breakdown across 10 modes and 5 BMR formulas. Features searchable high-protein food database.",
+  iconName: "Dumbbell",
   featured: true,
-  keywords: ["protein calculator","daily protein","muscle building","protein intake"],
-  priority: 1,
-  relatedCalculators: ["macro-calculator","calorie-calculator"],
-  formulaDescription: "Daily Protein = Weight (kg) × Recommended Ratio (g/kg)",
+  keywords: [
+    "protein calculator",
+    "protein intake calculator",
+    "daily protein calculator",
+    "muscle building protein calculator",
+    "protein calculator cutting",
+    "vegan protein calculator",
+  ],
+  priority: 2,
+  relatedCalculators: [
+    "calorie-calculator",
+    "macro-calculator",
+    "carbohydrate-calculator",
+    "fat-intake-calculator",
+    "tdee-calculator",
+    "bmr-calculator",
+    "bmi-calculator",
+    "body-fat-calculator",
+  ],
+  formulaDescription:
+    "Protein Target = Weight (kg) × Recommended Ratio (g/kg) + Pregnancy/Lactation Addition. Protein = 4 kcal/g.",
   faqs: protein_calculatorFaqs,
   inputs: [
-  {
-    "name": "weightKg",
-    "label": "Body Weight (kg)",
-    "type": "number",
-    "defaultValue": 70,
-    "min": 30,
-    "max": 250,
-    "step": 1
-  },
-  {
-    "name": "goal",
-    "label": "Training Goal",
-    "type": "select",
-    "defaultValue": "strength",
-    "options": [
-      {
-        "label": "Sedentary / General Health (0.8 g/kg)",
-        "value": "0.8"
-      },
-      {
-        "label": "Endurance Athlete (1.4 g/kg)",
-        "value": "1.4"
-      },
-      {
-        "label": "Muscle Gain / Strength (1.8 g/kg)",
-        "value": "1.8"
-      },
-      {
-        "label": "Fat Loss & Preservation (2.2 g/kg)",
-        "value": "2.2"
-      }
-    ]
-  }
-],
+    {
+      name: "unitSystem",
+      label: "Unit System",
+      type: "select",
+      defaultValue: "us",
+      options: [
+        { label: "US Units (feet, inches, lbs)", value: "us" },
+        { label: "Metric Units (cm, kg)", value: "metric" },
+      ],
+    },
+    {
+      name: "calculationMode",
+      label: "Calculation Mode",
+      type: "select",
+      defaultValue: "daily",
+      options: [
+        { label: "Daily Protein Target (RDA & Fitness Baseline)", value: "daily" },
+        { label: "Muscle Building / Hypertrophy (2.0g/kg)", value: "hypertrophy" },
+        { label: "Fat Loss / Cutting (2.4g/kg)", value: "cutting" },
+        { label: "Maintenance Protein Target (1.4g/kg)", value: "maintenance" },
+        { label: "Pregnancy & Lactation Mode", value: "pregnancy" },
+        { label: "Senior / Healthy Aging Mode (1.4g/kg)", value: "senior" },
+        { label: "Endurance Athlete Mode (1.6g/kg)", value: "endurance" },
+        { label: "Strength & Power Athlete Mode (2.2g/kg)", value: "strength" },
+        { label: "Plant-Based / Vegan Mode (+10% buffer)", value: "vegan" },
+        { label: "Custom Protein Target Builder", value: "custom" },
+      ],
+    },
+    {
+      name: "age",
+      label: "Age (Years)",
+      type: "number",
+      defaultValue: 25,
+      min: 15,
+      max: 80,
+    },
+    {
+      name: "gender",
+      label: "Gender",
+      type: "select",
+      defaultValue: "male",
+      options: [
+        { label: "Male", value: "male" },
+        { label: "Female", value: "female" },
+      ],
+    },
+    {
+      name: "activityLevel",
+      label: "Activity Level",
+      type: "select",
+      defaultValue: "light",
+      options: [
+        { label: "Sedentary: desk job, little exercise", value: "sedentary" },
+        { label: "Light: exercise 1-3 times/week", value: "light" },
+        { label: "Moderate: exercise 4-5 times/week", value: "moderate" },
+        { label: "Active: intense exercise 6-7 times/week", value: "active" },
+        { label: "Very Active: 2+ hrs intense exercise daily", value: "very-active" },
+      ],
+    },
+    {
+      name: "goal",
+      label: "Fitness Goal",
+      type: "select",
+      defaultValue: "maintain",
+      options: [
+        { label: "Maintain Weight", value: "maintain" },
+        { label: "Mild Weight Loss (-0.5 lb/week)", value: "mild-loss" },
+        { label: "Weight Loss (-1.0 lb/week)", value: "loss" },
+        { label: "Extreme Weight Loss (-2.0 lb/week)", value: "extreme-loss" },
+        { label: "Mild Weight Gain (+0.5 lb/week)", value: "mild-gain" },
+        { label: "Weight Gain (+1.0 lb/week)", value: "gain" },
+        { label: "Fast Muscle Gain (+2.0 lb/week)", value: "extreme-gain" },
+        { label: "Body Recomposition", value: "recomp" },
+      ],
+    },
+    {
+      name: "bmrFormula",
+      label: "BMR Formula",
+      type: "select",
+      defaultValue: "mifflin",
+      options: [
+        { label: "Mifflin-St Jeor (Standard)", value: "mifflin" },
+        { label: "Katch-McArdle (Requires Body Fat %)", value: "katch" },
+        { label: "Original Harris-Benedict", value: "harris" },
+        { label: "Revised Harris-Benedict", value: "revised-harris" },
+        { label: "Cunningham (Athletic LBM)", value: "cunningham" },
+      ],
+    },
+    {
+      name: "pregnancyStatus",
+      label: "Pregnancy & Lactation Addition",
+      type: "select",
+      defaultValue: "none",
+      options: [
+        { label: "Not Applicable", value: "none" },
+        { label: "Pregnancy Trimester 1 (+1g/day)", value: "t1" },
+        { label: "Pregnancy Trimester 2 (+10g/day)", value: "t2" },
+        { label: "Pregnancy Trimester 3 (+31g/day)", value: "t3" },
+        { label: "Lactation 0-6 Months (+19g/day)", value: "lactation-1" },
+        { label: "Lactation After 6 Months (+13g/day)", value: "lactation-2" },
+      ],
+    },
+  ],
   outputs: [
-  {
-    "name": "proteinGrams",
-    "label": "Recommended Protein",
-    "format": "number",
-    "highlight": true,
-    "unit": "g"
-  },
-  {
-    "name": "proteinCalories",
-    "label": "Protein Calories",
-    "format": "number",
-    "unit": "kcal"
-  }
-],
-  calculate: calculateProteinCalculator,
+    {
+      name: "proteinTargetGrams",
+      label: "Daily Protein Target",
+      format: "number",
+      suffix: " g",
+      highlight: true,
+    },
+    {
+      name: "perMealProteinGrams",
+      label: "Per-Meal Target",
+      format: "number",
+      suffix: " g/meal",
+      highlight: true,
+    },
+    {
+      name: "proteinGramsPerLb",
+      label: "Protein Ratio",
+      format: "number",
+      suffix: " g/lb",
+    },
+    {
+      name: "targetCalories",
+      label: "Daily Calorie Target",
+      format: "number",
+      suffix: " kcal",
+    },
+    {
+      name: "tdee",
+      label: "Total Energy Expenditure (TDEE)",
+      format: "number",
+      suffix: " kcal",
+    },
+  ],
+  calculate: calculateProteinOutputs,
 };
 
 export default protein_calculatorConfig;
