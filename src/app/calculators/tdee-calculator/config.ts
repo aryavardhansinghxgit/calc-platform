@@ -1,5 +1,5 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
-import { calculateTDEECalculator } from "./calculator";
+import { calculateTdeeOutputs } from "./calculator";
 import { tdee_calculatorFaqs } from "./faq";
 
 export const tdee_calculatorConfig: CalculatorModuleDefinition = {
@@ -7,106 +7,180 @@ export const tdee_calculatorConfig: CalculatorModuleDefinition = {
   title: "TDEE Calculator",
   slug: "tdee-calculator",
   category: "Health",
-  subcategory: "Nutrition & Body",
-  description: "Calculate Total Daily Energy Expenditure (TDEE) and target calories for cutting or bulking.",
-  iconName: "Flame",
+  subcategory: "Fitness",
+  description:
+    "Calculate your Total Daily Energy Expenditure (TDEE), BMR, maintenance calories, and deficit/surplus targets across 10 modes and 7 clinical BMR formulas. Features step count analyzer and 12-week weight projections.",
+  iconName: "Activity",
   featured: true,
-  keywords: ["tdee","total daily energy expenditure","calories","bmr","cutting","bulking"],
+  keywords: [
+    "tdee calculator",
+    "total daily energy expenditure calculator",
+    "maintenance calorie calculator",
+    "calorie needs calculator",
+    "bmr calculator",
+    "weight loss calorie calculator",
+  ],
   priority: 1,
-  relatedCalculators: ["calorie-calculator","bmr-calculator","macro-calculator"],
-  formulaDescription: "TDEE = BMR × Activity Multiplier",
+  relatedCalculators: [
+    "calorie-calculator",
+    "bmr-calculator",
+    "bmi-calculator",
+    "body-fat-calculator",
+    "macro-calculator",
+    "protein-calculator",
+    "carbohydrate-calculator",
+    "fat-intake-calculator",
+    "ideal-weight-calculator",
+  ],
+  formulaDescription:
+    "TDEE = BMR × Activity Multiplier + Step Count Bonus. BMR calculated via Mifflin-St Jeor, Katch-McArdle, or 5 other equations.",
   faqs: tdee_calculatorFaqs,
   inputs: [
-  {
-    "name": "age",
-    "label": "Age",
-    "type": "number",
-    "defaultValue": 25,
-    "min": 15,
-    "max": 100,
-    "step": 1
-  },
-  {
-    "name": "gender",
-    "label": "Gender",
-    "type": "select",
-    "defaultValue": "male",
-    "options": [
-      {
-        "label": "Male",
-        "value": "male"
-      },
-      {
-        "label": "Female",
-        "value": "female"
-      }
-    ]
-  },
-  {
-    "name": "weightKg",
-    "label": "Weight (kg)",
-    "type": "number",
-    "defaultValue": 70,
-    "min": 30,
-    "max": 250,
-    "step": 1
-  },
-  {
-    "name": "heightCm",
-    "label": "Height (cm)",
-    "type": "number",
-    "defaultValue": 175,
-    "min": 100,
-    "max": 230,
-    "step": 1
-  },
-  {
-    "name": "activityLevel",
-    "label": "Activity Level",
-    "type": "select",
-    "defaultValue": "1.55",
-    "options": [
-      {
-        "label": "Sedentary (1.2)",
-        "value": "1.2"
-      },
-      {
-        "label": "Lightly Active (1.375)",
-        "value": "1.375"
-      },
-      {
-        "label": "Moderately Active (1.55)",
-        "value": "1.55"
-      },
-      {
-        "label": "Very Active (1.725)",
-        "value": "1.725"
-      }
-    ]
-  }
-],
+    {
+      name: "unitSystem",
+      label: "Unit System",
+      type: "select",
+      defaultValue: "us",
+      options: [
+        { label: "US Units (feet, inches, lbs)", value: "us" },
+        { label: "Metric Units (cm, kg)", value: "metric" },
+      ],
+    },
+    {
+      name: "energyUnit",
+      label: "Energy Unit",
+      type: "select",
+      defaultValue: "kcal",
+      options: [
+        { label: "Calories (kcal)", value: "kcal" },
+        { label: "Kilojoules (kJ)", value: "kj" },
+      ],
+    },
+    {
+      name: "calculationMode",
+      label: "Calculation Mode",
+      type: "select",
+      defaultValue: "tdee",
+      options: [
+        { label: "TDEE Calculator (Standard Expenditure)", value: "tdee" },
+        { label: "Maintenance Calories Calculator", value: "maintenance" },
+        { label: "Weight Loss Calories (-500 kcal)", value: "loss" },
+        { label: "Weight Gain Calories (+500 kcal)", value: "gain" },
+        { label: "Lean Bulk Calculator (+250 kcal)", value: "lean-bulk" },
+        { label: "Cutting Calculator (-500 kcal Fat Loss)", value: "cutting" },
+        { label: "Body Recomposition (-200 kcal)", value: "recomp" },
+        { label: "Athlete TDEE Calculator (+300 kcal)", value: "athlete" },
+        { label: "Advanced Metabolism Breakdown (BMR/NEAT/EAT/TEF)", value: "metabolism" },
+        { label: "Custom Calorie Target Builder", value: "custom" },
+      ],
+    },
+    {
+      name: "age",
+      label: "Age (Years)",
+      type: "number",
+      defaultValue: 25,
+      min: 15,
+      max: 80,
+    },
+    {
+      name: "gender",
+      label: "Gender",
+      type: "select",
+      defaultValue: "male",
+      options: [
+        { label: "Male", value: "male" },
+        { label: "Female", value: "female" },
+      ],
+    },
+    {
+      name: "activityLevel",
+      label: "Activity Level",
+      type: "select",
+      defaultValue: "moderate",
+      options: [
+        { label: "Sedentary: desk job, little exercise", value: "sedentary" },
+        { label: "Light: exercise 1-3 times/week", value: "light" },
+        { label: "Moderate: exercise 4-5 times/week", value: "moderate" },
+        { label: "Active: intense exercise 6-7 times/week", value: "active" },
+        { label: "Very Active: 2+ hrs intense exercise daily", value: "very-active" },
+        { label: "Competitive Athlete: 2+ sessions/day", value: "athlete" },
+      ],
+    },
+    {
+      name: "goal",
+      label: "Fitness Goal",
+      type: "select",
+      defaultValue: "maintain",
+      options: [
+        { label: "Maintain Weight", value: "maintain" },
+        { label: "Mild Weight Loss (-0.5 lb/week)", value: "mild-loss" },
+        { label: "Weight Loss (-1.0 lb/week)", value: "loss" },
+        { label: "Extreme Weight Loss (-2.0 lb/week)", value: "extreme-loss" },
+        { label: "Mild Weight Gain (+0.5 lb/week)", value: "mild-gain" },
+        { label: "Weight Gain (+1.0 lb/week)", value: "gain" },
+        { label: "Fast Muscle Gain (+2.0 lb/week)", value: "extreme-gain" },
+        { label: "Body Recomposition (-200 kcal)", value: "recomp" },
+      ],
+    },
+    {
+      name: "bmrFormula",
+      label: "BMR Formula",
+      type: "select",
+      defaultValue: "mifflin",
+      options: [
+        { label: "Mifflin-St Jeor (Standard Clinical Default)", value: "mifflin" },
+        { label: "Katch-McArdle (Requires Body Fat %)", value: "katch" },
+        { label: "Original Harris-Benedict (1919)", value: "harris" },
+        { label: "Revised Harris-Benedict (1984)", value: "revised-harris" },
+        { label: "Cunningham (Athletic LBM)", value: "cunningham" },
+        { label: "Schofield (WHO Equation)", value: "schofield" },
+        { label: "Owen (Lean Mass Equation)", value: "owen" },
+      ],
+    },
+    {
+      name: "dailySteps",
+      label: "Average Daily Steps",
+      type: "number",
+      defaultValue: 7500,
+      min: 1000,
+      max: 30000,
+    },
+  ],
   outputs: [
-  {
-    "name": "tdee",
-    "label": "TDEE (Maintenance)",
-    "format": "number",
-    "highlight": true,
-    "unit": "kcal/day"
-  },
-  {
-    "name": "cuttingCalories",
-    "label": "Cutting Target (-500 kcal)",
-    "format": "number",
-    "unit": "kcal/day"
-  },
-  {
-    "name": "bulkingCalories",
-    "label": "Bulking Target (+500 kcal)",
-    "format": "number",
-    "unit": "kcal/day"
-  }
-],
-  calculate: calculateTDEECalculator,
+    {
+      name: "tdee",
+      label: "Total Daily Energy Expenditure (TDEE)",
+      format: "number",
+      suffix: " kcal",
+      highlight: true,
+    },
+    {
+      name: "targetCalories",
+      label: "Target Calorie Goal",
+      format: "number",
+      suffix: " kcal",
+      highlight: true,
+    },
+    {
+      name: "bmr",
+      label: "Basal Metabolic Rate (BMR)",
+      format: "number",
+      suffix: " kcal",
+    },
+    {
+      name: "neatCalories",
+      label: "NEAT Movement Calories",
+      format: "number",
+      suffix: " kcal",
+    },
+    {
+      name: "tefCalories",
+      label: "TEF Digestion Calories",
+      format: "number",
+      suffix: " kcal",
+    },
+  ],
+  calculate: calculateTdeeOutputs,
 };
 
 export default tdee_calculatorConfig;

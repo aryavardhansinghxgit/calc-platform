@@ -96,6 +96,8 @@ import { PregnancyConceptionCalculator } from "./pregnancy-conception/PregnancyC
 import { PregnancyConceptionContent } from "./pregnancy-conception/PregnancyConceptionContent";
 import { DueDateCalculator } from "./due-date/DueDateCalculator";
 import { DueDateContent } from "./due-date/DueDateContent";
+import { TdeeCalculator } from "./tdee/TdeeCalculator";
+import { TdeeContent } from "./tdee/TdeeContent";
 import { FatIntakeCalculator } from "./fat-intake/FatIntakeCalculator";
 import { FatIntakeContent } from "./fat-intake/FatIntakeContent";
 import { ProteinCalculator } from "./protein/ProteinCalculator";
@@ -253,38 +255,22 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
     !isPregnancyWeightGain &&
     !isPregnancyConception &&
     (definition.id === "pregnancy" || definition.id === "pregnancy-calculator" || definition.slug === "pregnancy-calculator");
-  const isFatIntake =
-    definition.id === "fat-intake" ||
-    definition.id === "fat-intake-calculator" ||
-    definition.slug === "fat-intake-calculator";
-  const isProtein =
-    definition.id === "protein" ||
-    definition.id === "protein-calculator" ||
-    definition.slug === "protein-calculator";
-  const isCarbohydrate =
-    definition.id === "carbohydrate" ||
-    definition.id === "carbohydrate-calculator" ||
-    definition.slug === "carbohydrate-calculator" ||
-    definition.slug === "carb-calculator";
-  const isMacro =
-    definition.id === "macro" ||
-    definition.id === "macro-calculator" ||
-    definition.slug === "macro-calculator";
-  const isPeriod =
-    definition.id === "period" ||
-    definition.id === "period-calculator" ||
-    definition.slug === "period-calculator";
-  const isConception =
-    !isPregnancyConception &&
-    (definition.id === "conception" ||
-      definition.id === "conception-calculator" ||
-      definition.slug === "conception-calculator");
+  const idLower = (definition.id || "").toLowerCase();
+  const slugLower = (definition.slug || "").toLowerCase();
+
+  const isTdee = idLower === "tdee" || idLower === "tdee-calculator" || slugLower === "tdee-calculator";
+  const isFatIntake = idLower === "fat-intake" || idLower === "fat-intake-calculator" || slugLower === "fat-intake-calculator";
+  const isProtein = idLower === "protein" || idLower === "protein-calculator" || slugLower === "protein-calculator";
+  const isCarbohydrate = idLower === "carbohydrate" || idLower === "carbohydrate-calculator" || slugLower === "carbohydrate-calculator" || slugLower === "carb-calculator";
+  const isMacro = idLower === "macro" || idLower === "macro-calculator" || slugLower === "macro-calculator";
+  const isPeriod = idLower === "period" || idLower === "period-calculator" || slugLower === "period-calculator";
+  const isConception = !isPregnancyConception && (idLower === "conception" || idLower === "conception-calculator" || slugLower === "conception-calculator");
   const isIra =
     definition.id === "ira" ||
     definition.slug === "ira-calculator" ||
     definition.id === "traditional-ira" ||
     definition.slug === "traditional-ira-calculator";
-  const CustomContent = definition.ContentComponent || (isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
+  const CustomContent = definition.ContentComponent || (isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -322,7 +308,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isFatIntake ? (
+            {isTdee ? (
+              <TdeeCalculator />
+            ) : isFatIntake ? (
               <FatIntakeCalculator />
             ) : isProtein ? (
               <ProteinCalculator />
@@ -341,8 +329,6 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             ) : isPregnancyConception ? (
               <PregnancyConceptionCalculator />
             ) : isPregnancyWeightGain ? (
-              <PregnancyWeightGainCalculator />
-            ) : isPregnancy ? (
               <PregnancyWeightGainCalculator />
             ) : isPregnancy ? (
               <PregnancyCalculator />
