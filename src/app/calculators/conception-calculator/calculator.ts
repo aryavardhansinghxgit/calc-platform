@@ -36,7 +36,7 @@ function formatDisplayDate(dateStr: string): string {
   });
 }
 
-function parseDate(dateStr?: string, defaultFallback: Date = new Date()): Date {
+function parseDate(dateStr?: string, defaultFallback: Date = new Date("2026-01-01T00:00:00")): Date {
   if (!dateStr) return defaultFallback;
   const parsed = new Date(dateStr);
   return isNaN(parsed.getTime()) ? defaultFallback : parsed;
@@ -59,7 +59,7 @@ export function calculateConceptionCalculator(
   let conceptionDateObj: Date;
   let dueDateObj: Date;
 
-  const today = new Date();
+  const today = new Date("2026-01-01T00:00:00");
 
   // Mode calculations
   switch (mode) {

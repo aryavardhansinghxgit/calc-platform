@@ -39,9 +39,6 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
-  BarChart,
-  Bar,
-  Cell,
 } from "recharts";
 import { calculateConceptionCalculator } from "@/app/calculators/conception-calculator/calculator";
 import {
@@ -281,9 +278,9 @@ export function ConceptionCalculator() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-8 print:p-0">
-      {/* Mode Selector Tabs */}
-      <div className="bg-slate-900/80 backdrop-blur-md p-3 rounded-2xl border border-slate-800 shadow-xl print:hidden">
+    <div className="w-full max-w-7xl mx-auto space-y-8 print:p-0 font-sans">
+      {/* Light Theme Mode Selector Bar */}
+      <div className="bg-white/90 backdrop-blur-md p-2.5 rounded-2xl border border-slate-200 shadow-sm print:hidden">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {modesList.map((m) => {
             const Icon = m.icon;
@@ -294,20 +291,20 @@ export function ConceptionCalculator() {
                 onClick={() => setCalculationMode(m.id)}
                 className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left ${
                   isSelected
-                    ? "bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-lg shadow-rose-600/30 font-semibold scale-[1.02]"
-                    : "bg-slate-800/60 hover:bg-slate-800 text-slate-300 hover:text-white"
+                    ? "bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-md shadow-rose-500/20 font-semibold scale-[1.01]"
+                    : "bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-slate-900 border border-slate-200/80"
                 }`}
               >
                 <div
                   className={`p-2 rounded-lg ${
-                    isSelected ? "bg-white/20" : "bg-slate-700/50 text-rose-400"
+                    isSelected ? "bg-white/20 text-white" : "bg-rose-50 text-rose-600"
                   }`}
                 >
                   <Icon className="w-5 h-5" />
                 </div>
                 <div className="overflow-hidden">
-                  <div className="text-sm truncate">{m.label}</div>
-                  <div className="text-[11px] opacity-75 truncate hidden lg:block">
+                  <div className="text-sm font-semibold truncate">{m.label}</div>
+                  <div className="text-[11px] opacity-80 truncate hidden lg:block">
                     {m.desc}
                   </div>
                 </div>
@@ -317,59 +314,59 @@ export function ConceptionCalculator() {
         </div>
       </div>
 
-      {/* Main Calculation & Input Grid */}
+      {/* Main Calculation & Inputs Grid (Light Theme) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Inputs Form */}
-        <div className="lg:col-span-5 space-y-6 bg-slate-900/90 backdrop-blur-md p-6 rounded-2xl border border-slate-800 shadow-xl print:hidden">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <Sliders className="w-5 h-5 text-rose-500" />
+        <div className="lg:col-span-5 space-y-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm print:hidden">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <Sliders className="w-5 h-5 text-rose-600" />
               Calculation Inputs
             </h2>
-            <span className="text-xs px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-medium">
-              Mode: {calculationMode.toUpperCase()}
+            <span className="text-xs px-3 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 font-bold uppercase tracking-wider">
+              {calculationMode}
             </span>
           </div>
 
           {/* Mode-Specific Input Fields */}
           {calculationMode === "lmp" && (
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
-                First Day of Last Menstrual Period (LMP)
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+                First Day of Last Period (LMP)
               </label>
               <input
                 type="date"
                 value={lmpDate}
                 onChange={(e) => setLmpDate(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all"
               />
             </div>
           )}
 
           {calculationMode === "ovulation" && (
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                 Estimated Ovulation Date
               </label>
               <input
                 type="date"
                 value={ovulationDate}
                 onChange={(e) => setOvulationDate(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all"
               />
             </div>
           )}
 
           {calculationMode === "due-date" && (
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                 Estimated Due Date
               </label>
               <input
                 type="date"
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all"
               />
             </div>
           )}
@@ -377,19 +374,19 @@ export function ConceptionCalculator() {
           {calculationMode === "ultrasound" && (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                   Ultrasound Scan Date
                 </label>
                 <input
                   type="date"
                   value={ultrasoundDate}
                   onChange={(e) => setUltrasoundDate(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">
+                  <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                     Gestational Weeks
                   </label>
                   <input
@@ -398,11 +395,11 @@ export function ConceptionCalculator() {
                     max={40}
                     value={ultrasoundWeeks}
                     onChange={(e) => setUltrasoundWeeks(Number(e.target.value))}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1">
+                  <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                     Gestational Days
                   </label>
                   <input
@@ -411,7 +408,7 @@ export function ConceptionCalculator() {
                     max={6}
                     value={ultrasoundDays}
                     onChange={(e) => setUltrasoundDays(Number(e.target.value))}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all"
                   />
                 </div>
               </div>
@@ -421,24 +418,24 @@ export function ConceptionCalculator() {
           {calculationMode === "ivf" && (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                   IVF Embryo Transfer Date
                 </label>
                 <input
                   type="date"
                   value={ivfTransferDate}
                   onChange={(e) => setIvfTransferDate(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                   Embryo Stage / Age
                 </label>
                 <select
                   value={ivfEmbryoType}
                   onChange={(e) => setIvfEmbryoType(e.target.value as IvfEmbryoType)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all"
                 >
                   <option value="day3">Day 3 Embryo Transfer</option>
                   <option value="day5">Day 5 Blastocyst Transfer</option>
@@ -450,29 +447,29 @@ export function ConceptionCalculator() {
 
           {calculationMode === "reverse" && (
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5">
                 Known Sex / Intercourse Date
               </label>
               <input
                 type="date"
                 value={conceptionDate}
                 onChange={(e) => setConceptionDate(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition-all"
               />
             </div>
           )}
 
-          {/* General Cycle Adjustments */}
-          <div className="border-t border-slate-800 pt-4 space-y-4">
-            <h3 className="text-sm font-semibold text-slate-300 flex items-center gap-2">
-              <Activity className="w-4 h-4 text-purple-400" />
+          {/* Menstrual Cycle Parameters */}
+          <div className="border-t border-slate-100 pt-4 space-y-4">
+            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+              <Activity className="w-4 h-4 text-purple-600" />
               Menstrual Cycle Parameters
             </h3>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1">
-                  Cycle Length (Days): <span className="text-white font-semibold">{cycleLength}</span>
+                <label className="block text-xs font-medium text-slate-600 mb-1">
+                  Cycle Length: <span className="text-rose-600 font-bold">{cycleLength} days</span>
                 </label>
                 <input
                   type="range"
@@ -480,13 +477,13 @@ export function ConceptionCalculator() {
                   max={45}
                   value={cycleLength}
                   onChange={(e) => setCycleLength(Number(e.target.value))}
-                  className="w-full accent-rose-500 cursor-pointer"
+                  className="w-full accent-rose-600 cursor-pointer"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1">
-                  Period Duration (Days): <span className="text-white font-semibold">{periodLength}</span>
+                <label className="block text-xs font-medium text-slate-600 mb-1">
+                  Period Duration: <span className="text-rose-600 font-bold">{periodLength} days</span>
                 </label>
                 <input
                   type="range"
@@ -494,15 +491,15 @@ export function ConceptionCalculator() {
                   max={10}
                   value={periodLength}
                   onChange={(e) => setPeriodLength(Number(e.target.value))}
-                  className="w-full accent-rose-500 cursor-pointer"
+                  className="w-full accent-rose-600 cursor-pointer"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1">
-                  Luteal Phase (Days): <span className="text-white font-semibold">{lutealPhaseLength}</span>
+                <label className="block text-xs font-medium text-slate-600 mb-1">
+                  Luteal Phase: <span className="text-rose-600 font-bold">{lutealPhaseLength} days</span>
                 </label>
                 <input
                   type="range"
@@ -510,13 +507,13 @@ export function ConceptionCalculator() {
                   max={16}
                   value={lutealPhaseLength}
                   onChange={(e) => setLutealPhaseLength(Number(e.target.value))}
-                  className="w-full accent-rose-500 cursor-pointer"
+                  className="w-full accent-rose-600 cursor-pointer"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1">
-                  Maternal Age: <span className="text-white font-semibold">{motherAge} yrs</span>
+                <label className="block text-xs font-medium text-slate-600 mb-1">
+                  Maternal Age: <span className="text-rose-600 font-bold">{motherAge} yrs</span>
                 </label>
                 <input
                   type="range"
@@ -524,27 +521,27 @@ export function ConceptionCalculator() {
                   max={50}
                   value={motherAge}
                   onChange={(e) => setMotherAge(Number(e.target.value))}
-                  className="w-full accent-rose-500 cursor-pointer"
+                  className="w-full accent-rose-600 cursor-pointer"
                 />
               </div>
             </div>
           </div>
 
-          {/* Biomarkers Tracking Module */}
-          <div className="border-t border-slate-800 pt-4 space-y-4">
-            <h3 className="text-sm font-semibold text-slate-300 flex items-center gap-2">
-              <Droplet className="w-4 h-4 text-cyan-400" />
+          {/* Fertility Biomarkers Tracker */}
+          <div className="border-t border-slate-100 pt-4 space-y-4">
+            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+              <Droplet className="w-4 h-4 text-cyan-600" />
               Fertility Biomarkers Tracker
             </h3>
 
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1">
+              <label className="block text-xs font-medium text-slate-600 mb-1">
                 Cervical Mucus Quality
               </label>
               <select
                 value={cervicalMucus}
                 onChange={(e) => setCervicalMucus(e.target.value as CervicalMucusType)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white"
               >
                 <option value="dry">Dry / Minimal (Low Fertility)</option>
                 <option value="sticky">Sticky / Tacky (Low Fertility)</option>
@@ -556,13 +553,13 @@ export function ConceptionCalculator() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1">
+                <label className="block text-xs font-medium text-slate-600 mb-1">
                   Ovulation Test (OPK)
                 </label>
                 <select
                   value={opkResult}
                   onChange={(e) => setOpkResult(e.target.value as OpkResultType)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white"
                 >
                   <option value="none">Not Tested</option>
                   <option value="negative">Negative</option>
@@ -572,7 +569,7 @@ export function ConceptionCalculator() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1">
+                <label className="block text-xs font-medium text-slate-600 mb-1">
                   Morning BBT (°F)
                 </label>
                 <input
@@ -582,7 +579,7 @@ export function ConceptionCalculator() {
                   max={100.0}
                   value={bbtValue}
                   onChange={(e) => setBbtValue(Number(e.target.value))}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white"
                 />
               </div>
             </div>
@@ -591,151 +588,145 @@ export function ConceptionCalculator() {
 
         {/* Right Column: Sticky Results & Interactive Visualizations */}
         <div className="lg:col-span-7 space-y-6">
-          {/* Key Metric Highlights Grid */}
-          <div className="bg-gradient-to-br from-rose-950/80 via-slate-900 to-purple-950/80 p-6 rounded-2xl border border-rose-500/30 shadow-2xl space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-rose-500/20 pb-4">
+          {/* Key Metric Highlights Card (Gradient Light/Vibrant Header) */}
+          <div className="bg-gradient-to-br from-rose-500 via-pink-600 to-purple-600 p-6 rounded-2xl text-white shadow-xl shadow-rose-500/10 space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/20 pb-4">
               <div>
-                <div className="text-xs uppercase tracking-wider text-rose-300 font-bold flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+                <div className="text-xs uppercase tracking-wider text-rose-100 font-bold flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
                   Estimated Conception Date
                 </div>
                 <div className="text-3xl lg:text-4xl font-extrabold text-white mt-1">
                   {results.conceptionDate}
                 </div>
-                <div className="text-xs text-slate-300 mt-1">
-                  Most Likely Fertilization Window: <span className="text-rose-300 font-medium">{results.conceptionWindow.start}</span> to <span className="text-rose-300 font-medium">{results.conceptionWindow.end}</span>
+                <div className="text-xs text-rose-100 mt-1">
+                  Most Likely Fertilization Window: <span className="text-white font-semibold">{results.conceptionWindow.start}</span> to <span className="text-white font-semibold">{results.conceptionWindow.end}</span>
                 </div>
               </div>
 
               <div className="text-right">
                 <span
-                  className={`inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg ${
-                    results.fertilityStatus === "Peak"
-                      ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
-                      : results.fertilityStatus === "High"
-                      ? "bg-purple-500/20 text-purple-300 border border-purple-500/40"
-                      : "bg-amber-500/20 text-amber-300 border border-amber-500/40"
-                  }`}
+                  className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white/20 backdrop-blur-md text-white border border-white/30 shadow-sm"
                 >
                   Fertility Score: {results.overallFertilityScore}% ({results.fertilityStatus})
                 </span>
               </div>
             </div>
 
-            {/* Sub-Metrics Cards Grid */}
+            {/* Sub-Metrics Cards Grid (Frosted White Cards) */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
-                <div className="text-[11px] text-slate-400 flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+              <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20">
+                <div className="text-[11px] text-rose-100 flex items-center gap-1 font-medium">
+                  <Calendar className="w-3.5 h-3.5 text-amber-300" />
                   Peak Fertile Window
                 </div>
-                <div className="text-sm font-bold text-emerald-400 mt-1 truncate">
+                <div className="text-sm font-bold text-white mt-1 truncate">
                   {results.fertileWindow.start} – {results.fertileWindow.end}
                 </div>
               </div>
 
-              <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
-                <div className="text-[11px] text-slate-400 flex items-center gap-1">
-                  <Flame className="w-3.5 h-3.5 text-rose-400" />
+              <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20">
+                <div className="text-[11px] text-rose-100 flex items-center gap-1 font-medium">
+                  <Flame className="w-3.5 h-3.5 text-amber-300" />
                   Ovulation Date
                 </div>
-                <div className="text-sm font-bold text-rose-400 mt-1 truncate">
+                <div className="text-sm font-bold text-white mt-1 truncate">
                   {results.ovulationDate}
                 </div>
               </div>
 
-              <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
-                <div className="text-[11px] text-slate-400 flex items-center gap-1">
-                  <Baby className="w-3.5 h-3.5 text-purple-400" />
+              <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20">
+                <div className="text-[11px] text-rose-100 flex items-center gap-1 font-medium">
+                  <Baby className="w-3.5 h-3.5 text-amber-300" />
                   Estimated Due Date
                 </div>
-                <div className="text-sm font-bold text-purple-300 mt-1 truncate">
+                <div className="text-sm font-bold text-white mt-1 truncate">
                   {results.estimatedDueDate}
                 </div>
               </div>
 
-              <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
-                <div className="text-[11px] text-slate-400 flex items-center gap-1">
-                  <Layers className="w-3.5 h-3.5 text-cyan-400" />
+              <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20">
+                <div className="text-[11px] text-rose-100 flex items-center gap-1 font-medium">
+                  <Layers className="w-3.5 h-3.5 text-amber-300" />
                   Implantation Window
                 </div>
-                <div className="text-sm font-bold text-cyan-300 mt-1 truncate">
+                <div className="text-sm font-bold text-white mt-1 truncate">
                   {results.implantationWindow.start} – {results.implantationWindow.end}
                 </div>
               </div>
 
-              <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
-                <div className="text-[11px] text-slate-400 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
+              <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20">
+                <div className="text-[11px] text-rose-100 flex items-center gap-1 font-medium">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-amber-300" />
                   Earliest Test (10 DPO)
                 </div>
-                <div className="text-sm font-bold text-amber-300 mt-1 truncate">
+                <div className="text-sm font-bold text-white mt-1 truncate">
                   {results.earliestTestDate.sensitive10Dpo}
                 </div>
               </div>
 
-              <div className="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800">
-                <div className="text-[11px] text-slate-400 flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-indigo-400" />
+              <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20">
+                <div className="text-[11px] text-rose-100 flex items-center gap-1 font-medium">
+                  <Clock className="w-3.5 h-3.5 text-amber-300" />
                   Gestational Age
                 </div>
-                <div className="text-sm font-bold text-indigo-300 mt-1 truncate">
+                <div className="text-sm font-bold text-white mt-1 truncate">
                   {results.gestationalAge.formatted}
                 </div>
               </div>
             </div>
 
             {/* Action Export Toolbar */}
-            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-rose-500/20 pt-4 print:hidden">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/20 pt-4 print:hidden">
               <button
                 onClick={() => setIsReportOpen(true)}
-                className="flex items-center gap-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-lg shadow-rose-600/20 transition-all"
+                className="flex items-center gap-2 bg-white text-rose-700 hover:bg-rose-50 px-4 py-2 rounded-xl text-xs font-bold shadow-md transition-all"
               >
-                <Download className="w-4 h-4" />
+                <Download className="w-4 h-4 text-rose-600" />
                 Generate PDF Report
               </button>
 
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleExportCSV}
-                  className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-xl text-xs font-medium transition-all"
+                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
                   title="Export CSV Data"
                 >
-                  <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
+                  <FileSpreadsheet className="w-4 h-4" />
                   CSV
                 </button>
 
                 <button
                   onClick={handleCopy}
-                  className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-xl text-xs font-medium transition-all"
+                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
                   title="Copy Summary"
                 >
-                  <Copy className="w-4 h-4 text-cyan-400" />
+                  <Copy className="w-4 h-4" />
                   {copied ? "Copied!" : "Copy"}
                 </button>
 
                 <button
                   onClick={handlePrint}
-                  className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-xl text-xs font-medium transition-all"
+                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
                   title="Print Report"
                 >
-                  <Printer className="w-4 h-4 text-purple-400" />
+                  <Printer className="w-4 h-4" />
                   Print
                 </button>
               </div>
             </div>
           </div>
 
-          {/* Interactive Visualizations Container */}
-          <div className="bg-slate-900/90 backdrop-blur-md p-6 rounded-2xl border border-slate-800 shadow-xl space-y-6 print:hidden">
+          {/* Interactive Visualizations Container (Light Theme) */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6 print:hidden">
             {/* View Switcher Tabs */}
-            <div className="flex items-center gap-1 bg-slate-800/80 p-1.5 rounded-xl overflow-x-auto text-xs">
+            <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl overflow-x-auto text-xs">
               <button
                 onClick={() => setActiveTab("probability")}
-                className={`px-3 py-2 rounded-lg font-medium whitespace-nowrap transition-all ${
+                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
                   activeTab === "probability"
-                    ? "bg-rose-600 text-white shadow-md"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-white text-rose-600 shadow-sm"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 Probability Curve
@@ -743,10 +734,10 @@ export function ConceptionCalculator() {
 
               <button
                 onClick={() => setActiveTab("calendar")}
-                className={`px-3 py-2 rounded-lg font-medium whitespace-nowrap transition-all ${
+                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
                   activeTab === "calendar"
-                    ? "bg-rose-600 text-white shadow-md"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-white text-rose-600 shadow-sm"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 Cycle Phases
@@ -754,10 +745,10 @@ export function ConceptionCalculator() {
 
               <button
                 onClick={() => setActiveTab("timeline")}
-                className={`px-3 py-2 rounded-lg font-medium whitespace-nowrap transition-all ${
+                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
                   activeTab === "timeline"
-                    ? "bg-rose-600 text-white shadow-md"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-white text-rose-600 shadow-sm"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 Pregnancy Timeline
@@ -765,10 +756,10 @@ export function ConceptionCalculator() {
 
               <button
                 onClick={() => setActiveTab("implantation")}
-                className={`px-3 py-2 rounded-lg font-medium whitespace-nowrap transition-all ${
+                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
                   activeTab === "implantation"
-                    ? "bg-rose-600 text-white shadow-md"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-white text-rose-600 shadow-sm"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 Implantation Map
@@ -776,10 +767,10 @@ export function ConceptionCalculator() {
 
               <button
                 onClick={() => setActiveTab("bbt")}
-                className={`px-3 py-2 rounded-lg font-medium whitespace-nowrap transition-all ${
+                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
                   activeTab === "bbt"
-                    ? "bg-rose-600 text-white shadow-md"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-white text-rose-600 shadow-sm"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 BBT Shift Chart
@@ -787,10 +778,10 @@ export function ConceptionCalculator() {
 
               <button
                 onClick={() => setActiveTab("forecast")}
-                className={`px-3 py-2 rounded-lg font-medium whitespace-nowrap transition-all ${
+                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
                   activeTab === "forecast"
-                    ? "bg-rose-600 text-white shadow-md"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-white text-rose-600 shadow-sm"
+                    : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 6-Month Forecast
@@ -801,41 +792,42 @@ export function ConceptionCalculator() {
             {activeTab === "probability" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-emerald-400" />
+                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-emerald-600" />
                     Daily Conception Probability Curve
                   </h3>
-                  <span className="text-xs text-slate-400">Peak Window: -2 to 0 DPO</span>
+                  <span className="text-xs text-slate-500 font-medium">Peak Window: -2 to 0 DPO</span>
                 </div>
 
                 <div className="h-64 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={results.probabilities}>
                       <defs>
-                        <linearGradient id="probGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.8} />
+                        <linearGradient id="probGradientLight" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
                           <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                      <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} />
-                      <YAxis stroke="#94a3b8" fontSize={11} unit="%" domain={[0, 50]} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                      <XAxis dataKey="date" stroke="#64748b" fontSize={11} />
+                      <YAxis stroke="#64748b" fontSize={11} unit="%" domain={[0, 50]} />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: "#0f172a",
-                          borderColor: "#334155",
+                          backgroundColor: "#ffffff",
+                          borderColor: "#cbd5e1",
                           borderRadius: "12px",
-                          color: "#fff",
+                          color: "#0f172a",
+                          boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
                         }}
                         formatter={(val: any) => [`${val}%`, "Conception Probability"]}
                       />
                       <Area
                         type="monotone"
                         dataKey="probability"
-                        stroke="#10b981"
+                        stroke="#059669"
                         strokeWidth={3}
                         fillOpacity={1}
-                        fill="url(#probGradient)"
+                        fill="url(#probGradientLight)"
                       />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -848,17 +840,17 @@ export function ConceptionCalculator() {
                       key={p.dayOffset}
                       className={`p-2.5 rounded-xl border text-center transition-all ${
                         p.status === "Peak"
-                          ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-300 font-bold scale-[1.03]"
+                          ? "bg-emerald-50 border-emerald-300 text-emerald-900 font-bold scale-[1.03] shadow-xs"
                           : p.status === "High"
-                          ? "bg-purple-500/15 border-purple-500/30 text-purple-300"
+                          ? "bg-purple-50 border-purple-200 text-purple-900 font-semibold"
                           : p.status === "Moderate"
-                          ? "bg-blue-500/10 border-blue-500/20 text-blue-300"
-                          : "bg-slate-800/40 border-slate-800 text-slate-400"
+                          ? "bg-blue-50 border-blue-200 text-blue-900"
+                          : "bg-slate-50 border-slate-200 text-slate-600"
                       }`}
                     >
-                      <div className="text-[10px] uppercase font-semibold">{p.dayOffset === 0 ? "OVULATION" : `${p.dayOffset} D`}</div>
+                      <div className="text-[10px] uppercase font-bold">{p.dayOffset === 0 ? "OVULATION" : `${p.dayOffset} D`}</div>
                       <div className="text-sm font-extrabold mt-0.5">{p.probability}%</div>
-                      <div className="text-[9px] opacity-75 truncate">{p.status}</div>
+                      <div className="text-[9px] opacity-80 truncate">{p.status}</div>
                     </div>
                   ))}
                 </div>
@@ -868,8 +860,8 @@ export function ConceptionCalculator() {
             {/* TAB 2: Cycle Phases */}
             {activeTab === "calendar" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-rose-400" />
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-rose-600" />
                   28-Day Menstrual Cycle Phase Breakdown
                 </h3>
 
@@ -877,7 +869,7 @@ export function ConceptionCalculator() {
                   {results.cyclePhases.map((cp, idx) => (
                     <div
                       key={idx}
-                      className="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 flex flex-col md:flex-row items-start md:items-center justify-between gap-3"
+                      className="p-4 rounded-xl bg-slate-50/80 border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-3"
                     >
                       <div className="flex items-center gap-3">
                         <div
@@ -885,14 +877,14 @@ export function ConceptionCalculator() {
                           style={{ backgroundColor: cp.color }}
                         />
                         <div>
-                          <div className="text-sm font-bold text-white">{cp.phaseName}</div>
-                          <div className="text-xs text-slate-300 mt-0.5">{cp.description}</div>
+                          <div className="text-sm font-bold text-slate-900">{cp.phaseName}</div>
+                          <div className="text-xs text-slate-600 mt-0.5">{cp.description}</div>
                         </div>
                       </div>
 
                       <div className="text-right text-xs">
-                        <div className="font-semibold text-rose-300">{cp.startDate} to {cp.endDate}</div>
-                        <div className="text-slate-400 mt-0.5">{cp.durationDays} Days Duration</div>
+                        <div className="font-bold text-rose-700">{cp.startDate} to {cp.endDate}</div>
+                        <div className="text-slate-500 mt-0.5 font-medium">{cp.durationDays} Days Duration</div>
                       </div>
                     </div>
                   ))}
@@ -903,24 +895,24 @@ export function ConceptionCalculator() {
             {/* TAB 3: Pregnancy Timeline */}
             {activeTab === "timeline" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Baby className="w-4 h-4 text-purple-400" />
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <Baby className="w-4 h-4 text-purple-600" />
                   Clinical 40-Week Pregnancy Milestones
                 </h3>
 
-                <div className="relative border-l-2 border-slate-800 ml-3 space-y-6 pl-6 pt-2">
+                <div className="relative border-l-2 border-slate-200 ml-3 space-y-4 pl-6 pt-2">
                   {results.milestones.map((ms, idx) => (
                     <div key={idx} className="relative group">
-                      <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-rose-500 border-4 border-slate-900 group-hover:scale-125 transition-all" />
-                      <div className="bg-slate-800/40 p-3.5 rounded-xl border border-slate-800 hover:border-slate-700 transition-all">
+                      <div className="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-rose-500 border-4 border-white shadow-xs group-hover:scale-125 transition-all" />
+                      <div className="bg-slate-50/80 p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 transition-all">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-xs font-bold text-rose-400">{ms.title}</span>
-                          <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-700 text-slate-300 font-medium">
+                          <span className="text-xs font-bold text-rose-700">{ms.title}</span>
+                          <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-semibold">
                             {ms.gestationalAge}
                           </span>
                         </div>
-                        <div className="text-xs font-semibold text-white mt-1">{ms.date}</div>
-                        <p className="text-xs text-slate-300 mt-1">{ms.description}</p>
+                        <div className="text-xs font-semibold text-slate-900 mt-1">{ms.date}</div>
+                        <p className="text-xs text-slate-600 mt-1">{ms.description}</p>
                       </div>
                     </div>
                   ))}
@@ -931,28 +923,28 @@ export function ConceptionCalculator() {
             {/* TAB 4: Implantation Map */}
             {activeTab === "implantation" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-cyan-400" />
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-cyan-600" />
                   Embryo Implantation & Early hCG Window
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-slate-800/50 p-4 rounded-xl border border-cyan-500/30">
-                    <div className="text-xs text-slate-400">Earliest Implantation</div>
-                    <div className="text-lg font-bold text-cyan-400 mt-1">{results.implantationWindow.start}</div>
-                    <div className="text-xs text-slate-300 mt-1">6 Days Post-Ovulation (6 DPO)</div>
+                  <div className="bg-cyan-50/60 p-4 rounded-xl border border-cyan-200">
+                    <div className="text-xs text-cyan-800 font-semibold">Earliest Implantation</div>
+                    <div className="text-lg font-bold text-cyan-900 mt-1">{results.implantationWindow.start}</div>
+                    <div className="text-xs text-cyan-700 mt-1">6 Days Post-Ovulation (6 DPO)</div>
                   </div>
 
-                  <div className="bg-slate-800/50 p-4 rounded-xl border border-emerald-500/30">
-                    <div className="text-xs text-slate-400">Peak Implantation Window</div>
-                    <div className="text-lg font-bold text-emerald-400 mt-1">{results.implantationWindow.peakDate}</div>
-                    <div className="text-xs text-slate-300 mt-1">8 to 10 DPO (Highest frequency)</div>
+                  <div className="bg-emerald-50/60 p-4 rounded-xl border border-emerald-200">
+                    <div className="text-xs text-emerald-800 font-semibold">Peak Implantation Window</div>
+                    <div className="text-lg font-bold text-emerald-900 mt-1">{results.implantationWindow.peakDate}</div>
+                    <div className="text-xs text-emerald-700 mt-1">8 to 10 DPO (Highest frequency)</div>
                   </div>
 
-                  <div className="bg-slate-800/50 p-4 rounded-xl border border-amber-500/30">
-                    <div className="text-xs text-slate-400">Earliest Positive Test</div>
-                    <div className="text-lg font-bold text-amber-400 mt-1">{results.earliestTestDate.sensitive10Dpo}</div>
-                    <div className="text-xs text-slate-300 mt-1">10 DPO Sensitive (10 mIU/mL)</div>
+                  <div className="bg-amber-50/60 p-4 rounded-xl border border-amber-200">
+                    <div className="text-xs text-amber-800 font-semibold">Earliest Positive Test</div>
+                    <div className="text-lg font-bold text-amber-900 mt-1">{results.earliestTestDate.sensitive10Dpo}</div>
+                    <div className="text-xs text-amber-700 mt-1">10 DPO Sensitive (10 mIU/mL)</div>
                   </div>
                 </div>
               </div>
@@ -962,34 +954,35 @@ export function ConceptionCalculator() {
             {activeTab === "bbt" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                    <Thermometer className="w-4 h-4 text-rose-400" />
+                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <Thermometer className="w-4 h-4 text-rose-600" />
                     Basal Body Temperature (BBT) Thermal Shift Chart
                   </h3>
-                  <span className="text-xs text-slate-400">Post-Ovulation Rise: +0.5°F to +1.0°F</span>
+                  <span className="text-xs text-slate-500 font-medium">Post-Ovulation Rise: +0.5°F to +1.0°F</span>
                 </div>
 
                 <div className="h-60 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={results.sampleBBTData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                      <XAxis dataKey="day" stroke="#94a3b8" fontSize={11} label={{ value: 'Cycle Day', position: 'insideBottom', offset: -2 }} />
-                      <YAxis stroke="#94a3b8" fontSize={11} domain={[97.0, 98.8]} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                      <XAxis dataKey="day" stroke="#64748b" fontSize={11} label={{ value: 'Cycle Day', position: 'insideBottom', offset: -2 }} />
+                      <YAxis stroke="#64748b" fontSize={11} domain={[97.0, 98.8]} />
                       <Tooltip
                         contentStyle={{
-                          backgroundColor: "#0f172a",
-                          borderColor: "#334155",
+                          backgroundColor: "#ffffff",
+                          borderColor: "#cbd5e1",
                           borderRadius: "12px",
-                          color: "#fff",
+                          color: "#0f172a",
+                          boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
                         }}
                         formatter={(val: any) => [`${val} °F`, "BBT Reading"]}
                       />
                       <Line
                         type="monotone"
                         dataKey="temperature"
-                        stroke="#f43f5e"
+                        stroke="#e11d48"
                         strokeWidth={2.5}
-                        dot={{ fill: "#f43f5e", r: 3 }}
+                        dot={{ fill: "#e11d48", r: 3 }}
                       />
                     </LineChart>
                   </ResponsiveContainer>
@@ -1000,14 +993,14 @@ export function ConceptionCalculator() {
             {/* TAB 6: 6-Month Forecast */}
             {activeTab === "forecast" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <CalendarDays className="w-4 h-4 text-purple-400" />
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <CalendarDays className="w-4 h-4 text-purple-600" />
                   6-Month Projected Fertility & Ovulation Calendar
                 </h3>
 
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs text-left text-slate-300">
-                    <thead className="bg-slate-800 text-slate-200 uppercase font-semibold">
+                <div className="overflow-x-auto border border-slate-200 rounded-xl">
+                  <table className="w-full text-xs text-left text-slate-700">
+                    <thead className="bg-slate-100 text-slate-900 uppercase font-bold">
                       <tr>
                         <th className="p-3">Cycle #</th>
                         <th className="p-3">Period Start</th>
@@ -1016,14 +1009,14 @@ export function ConceptionCalculator() {
                         <th className="p-3">Estimated Due Date</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800">
+                    <tbody className="divide-y divide-slate-200">
                       {results.forecast.map((fc) => (
-                        <tr key={fc.cycleNumber} className="hover:bg-slate-800/40">
-                          <td className="p-3 font-bold text-rose-400">Cycle {fc.cycleNumber}</td>
+                        <tr key={fc.cycleNumber} className="hover:bg-rose-50/50">
+                          <td className="p-3 font-bold text-rose-600">Cycle {fc.cycleNumber}</td>
                           <td className="p-3">{fc.periodStartDate}</td>
-                          <td className="p-3 font-semibold text-emerald-400">{fc.ovulationDate}</td>
-                          <td className="p-3">{fc.fertileWindowStart} to {fc.fertileWindowEnd}</td>
-                          <td className="p-3 text-purple-300">{fc.dueDateIfConceived}</td>
+                          <td className="p-3 font-bold text-emerald-700">{fc.ovulationDate}</td>
+                          <td className="p-3 font-medium">{fc.fertileWindowStart} to {fc.fertileWindowEnd}</td>
+                          <td className="p-3 text-purple-700 font-semibold">{fc.dueDateIfConceived}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1034,17 +1027,17 @@ export function ConceptionCalculator() {
           </div>
 
           {/* Smart Insights & Personalized Recommendations */}
-          <div className="bg-slate-900/90 backdrop-blur-md p-6 rounded-2xl border border-slate-800 shadow-xl space-y-4 print:hidden">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Zap className="w-4 h-4 text-amber-400" />
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 print:hidden">
+            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <Zap className="w-4 h-4 text-amber-500" />
               Smart Insights & Clinical Recommendations
             </h3>
 
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {results.insights.map((ins, idx) => (
-                <div key={idx} className="flex items-start gap-2 text-xs text-slate-300 bg-slate-800/40 p-3 rounded-xl border border-slate-800">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>{ins}</span>
+                <div key={idx} className="flex items-start gap-2.5 text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200/80">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span className="leading-relaxed">{ins}</span>
                 </div>
               ))}
             </div>
