@@ -96,6 +96,8 @@ import { PregnancyConceptionCalculator } from "./pregnancy-conception/PregnancyC
 import { PregnancyConceptionContent } from "./pregnancy-conception/PregnancyConceptionContent";
 import { DueDateCalculator } from "./due-date/DueDateCalculator";
 import { DueDateContent } from "./due-date/DueDateContent";
+import { PeriodCalculator } from "./period/PeriodCalculator";
+import { PeriodContent } from "./period/PeriodContent";
 import { ConceptionCalculator } from "./conception/ConceptionCalculator";
 import { ConceptionContent } from "./conception/ConceptionContent";
 import { OvulationCalculator } from "./ovulation/OvulationCalculator";
@@ -243,6 +245,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
     !isPregnancyWeightGain &&
     !isPregnancyConception &&
     (definition.id === "pregnancy" || definition.id === "pregnancy-calculator" || definition.slug === "pregnancy-calculator");
+  const isPeriod =
+    definition.id === "period" ||
+    definition.id === "period-calculator" ||
+    definition.slug === "period-calculator";
   const isConception =
     !isPregnancyConception &&
     (definition.id === "conception" ||
@@ -253,7 +259,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
     definition.slug === "ira-calculator" ||
     definition.id === "traditional-ira" ||
     definition.slug === "traditional-ira-calculator";
-  const CustomContent = definition.ContentComponent || (isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
+  const CustomContent = definition.ContentComponent || (isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -291,7 +297,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isConception ? (
+            {isPeriod ? (
+              <PeriodCalculator />
+            ) : isConception ? (
               <ConceptionCalculator />
             ) : isOvulation ? (
               <OvulationCalculator />
