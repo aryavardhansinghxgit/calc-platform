@@ -17,7 +17,8 @@ import {
 } from "lucide-react";
 
 // ==========================================
-// MATHEMATICAL ENGINE (Tokenizer + Shunting Yard + RPN Evaluator)
+// ADVANCED MATHEMATICAL ENGINE
+// Tokenizer + Multi-Arg Shunting Yard + RPN Evaluator
 // ==========================================
 
 function toRad(val: number, mode: "deg" | "rad" | "grad"): number {
@@ -135,7 +136,45 @@ function primeFactors(n: number): string {
   return factors.join(" × ");
 }
 
-// Token Definitions
+// Statistical Functions
+function calcMean(arr: number[]): number {
+  if (arr.length === 0) return 0;
+  return arr.reduce((a, b) => a + b, 0) / arr.length;
+}
+
+function calcMedian(arr: number[]): number {
+  if (arr.length === 0) return 0;
+  const sorted = [...arr].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+function calcMode(arr: number[]): number {
+  if (arr.length === 0) return 0;
+  const counts: Record<number, number> = {};
+  let maxCount = 0;
+  let modeVal = arr[0];
+  for (const n of arr) {
+    counts[n] = (counts[n] || 0) + 1;
+    if (counts[n] > maxCount) {
+      maxCount = counts[n];
+      modeVal = n;
+    }
+  }
+  return modeVal;
+}
+
+function calcVariance(arr: number[]): number {
+  if (arr.length <= 1) return 0;
+  const mean = calcMean(arr);
+  return arr.reduce((sum, x) => sum + Math.pow(x - mean, 2), 0) / (arr.length - 1);
+}
+
+function calcStdDev(arr: number[]): number {
+  return Math.sqrt(calcVariance(arr));
+}
+
+// Token Types
 type TokenType =
   | "NUMBER"
   | "OPERATOR"
@@ -151,14 +190,16 @@ interface Token {
   type: TokenType;
   value: string;
   num?: number;
+  argCount?: number;
 }
 
 const FUNCTIONS = new Set([
   "sin", "cos", "tan", "asin", "acos", "atan",
   "sinh", "cosh", "tanh", "csc", "sec", "cot",
-  "ln", "log", "log10", "log2", "sqrt", "cbrt",
+  "ln", "log", "log10", "log2", "sqrt", "cbrt", "yroot",
   "abs", "floor", "ceil", "round", "trunc", "frac",
-  "sgn", "gamma", "nPr", "nCr", "gcd", "lcm", "hypot"
+  "sgn", "gamma", "npr", "ncr", "gcd", "lcm", "hypot",
+  "sum", "prod", "sumsq", "sumcube", "mean", "median", "mode", "stddev", "variance"
 ]);
 
 const CONSTANTS: Record<string, number> = {
@@ -167,7 +208,7 @@ const CONSTANTS: Record<string, number> = {
   "e": Math.E,
   "ϕ": 1.618033988749895,
   "phi": 1.618033988749895,
-  "i": 1, // Imaginary unit fallback representation
+  "i": 1,
 };
 
 function tokenize(input: string, ansVal: number): Token[] {
@@ -218,16 +259,23 @@ function tokenize(input: string, ansVal: number): Token[] {
         i++;
       }
 
+      const lowerId = id.toLowerCase();
       if (id === "Ans") {
         tokens.push({ type: "NUMBER", value: "Ans", num: ansVal });
       } else if (CONSTANTS[id] !== undefined) {
         tokens.push({ type: "CONST", value: id, num: CONSTANTS[id] });
-      } else if (FUNCTIONS.has(id.toLowerCase())) {
-        tokens.push({ type: "FUNCTION", value: id.toLowerCase() });
-      } else if (id === "mod") {
+      } else if (lowerId === "npr") {
+        tokens.push({ type: "OPERATOR", value: "npr" });
+      } else if (lowerId === "ncr") {
+        tokens.push({ type: "OPERATOR", value: "ncr" });
+      } else if (lowerId === "yroot") {
+        tokens.push({ type: "OPERATOR", value: "yroot" });
+      } else if (lowerId === "mod") {
         tokens.push({ type: "OPERATOR", value: "%" });
+      } else if (FUNCTIONS.has(lowerId)) {
+        tokens.push({ type: "FUNCTION", value: lowerId, argCount: 1 });
       } else {
-        tokens.push({ type: "FUNCTION", value: id.toLowerCase() });
+        tokens.push({ type: "FUNCTION", value: lowerId, argCount: 1 });
       }
       continue;
     }
@@ -275,7 +323,6 @@ function tokenize(input: string, ansVal: number): Token[] {
 
     // Operators
     if (["+", "-", "*", "/", "^"].includes(ch)) {
-      // Unary minus check
       if (ch === "-") {
         const prevToken = tokens[tokens.length - 1];
         if (
@@ -297,7 +344,7 @@ function tokenize(input: string, ansVal: number): Token[] {
     i++;
   }
 
-  // Insert Implicit Multiplications: e.g. 2(3) -> 2*(3), 3sin(30) -> 3*sin(30), 2π -> 2*π
+  // Implicit Multiplication Insertion: 2(3) -> 2*(3), 3sin(30) -> 3*sin(30), 2π -> 2*π
   const resultTokens: Token[] = [];
   for (let j = 0; j < tokens.length; j++) {
     const curr = tokens[j];
@@ -325,7 +372,6 @@ function tokenize(input: string, ansVal: number): Token[] {
   return resultTokens;
 }
 
-// Operator Precedence & Associativity
 const PRECEDENCE: Record<string, number> = {
   ",": 0,
   "+": 1,
@@ -335,20 +381,25 @@ const PRECEDENCE: Record<string, number> = {
   "*": 2,
   "/": 2,
   "%": 2,
-  "^": 3,
-  "neg": 4,
-  "!": 5,
+  "npr": 3,
+  "ncr": 3,
+  "yroot": 3,
+  "^": 4,
+  "neg": 5,
+  "!": 6,
 };
 
 function shuntingYard(tokens: Token[]): Token[] {
   const outputQueue: Token[] = [];
   const operatorStack: Token[] = [];
+  const argCountStack: number[] = [];
 
   for (const token of tokens) {
     if (token.type === "NUMBER" || token.type === "CONST") {
       outputQueue.push(token);
     } else if (token.type === "FUNCTION") {
       operatorStack.push(token);
+      argCountStack.push(1);
     } else if (token.type === "OPERATOR" || token.type === "UNARY_MINUS") {
       while (operatorStack.length > 0) {
         const top = operatorStack[operatorStack.length - 1];
@@ -357,11 +408,12 @@ function shuntingYard(tokens: Token[]): Token[] {
           top.type === "UNARY_MINUS" ||
           top.type === "FUNCTION"
         ) {
-          const pTop = PRECEDENCE[top.value] || (top.type === "FUNCTION" ? 6 : 0);
+          const pTop = PRECEDENCE[top.value] || (top.type === "FUNCTION" ? 7 : 0);
           const pCurr = PRECEDENCE[token.value] || 0;
 
           if (top.type === "FUNCTION" || pTop > pCurr || (pTop === pCurr && token.value !== "^")) {
             outputQueue.push(operatorStack.pop()!);
+            if (top.type === "FUNCTION") argCountStack.pop();
           } else {
             break;
           }
@@ -379,6 +431,9 @@ function shuntingYard(tokens: Token[]): Token[] {
       ) {
         outputQueue.push(operatorStack.pop()!);
       }
+      if (argCountStack.length > 0) {
+        argCountStack[argCountStack.length - 1] += 1;
+      }
     } else if (token.type === "LPAREN") {
       operatorStack.push(token);
     } else if (token.type === "RPAREN") {
@@ -389,16 +444,25 @@ function shuntingYard(tokens: Token[]): Token[] {
         outputQueue.push(operatorStack.pop()!);
       }
       if (operatorStack.length > 0 && operatorStack[operatorStack.length - 1].type === "LPAREN") {
-        operatorStack.pop(); // Discard LPAREN
+        operatorStack.pop(); // Pop LPAREN
       }
       if (operatorStack.length > 0 && operatorStack[operatorStack.length - 1].type === "FUNCTION") {
-        outputQueue.push(operatorStack.pop()!);
+        const fnToken = operatorStack.pop()!;
+        const argsCount = argCountStack.pop() || 1;
+        fnToken.argCount = argsCount;
+        outputQueue.push(fnToken);
       }
     }
   }
 
   while (operatorStack.length > 0) {
-    outputQueue.push(operatorStack.pop()!);
+    const top = operatorStack.pop()!;
+    if (top.type !== "LPAREN") {
+      if (top.type === "FUNCTION") {
+        top.argCount = argCountStack.pop() || 1;
+      }
+      outputQueue.push(top);
+    }
   }
 
   return outputQueue;
@@ -435,59 +499,101 @@ function evaluateRPN(
         case "%+": stack.push(a * (1 + b / 100)); break;
         case "%-": stack.push(a * (1 - b / 100)); break;
         case "^": stack.push(Math.pow(a, b)); break;
+        case "npr": stack.push(nPr(a, b)); break;
+        case "ncr": stack.push(nCr(a, b)); break;
+        case "yroot":
+          if (b === 0) throw new Error("Root index cannot be zero");
+          stack.push(Math.pow(a, 1 / b));
+          break;
       }
     } else if (token.type === "FUNCTION") {
       const fn = token.value;
-      if (["npr", "ncr", "gcd", "lcm", "hypot"].includes(fn)) {
-        const b = stack.pop() ?? 0;
-        const a = stack.pop() ?? 0;
-        if (fn === "npr") stack.push(nPr(a, b));
-        else if (fn === "ncr") stack.push(nCr(a, b));
-        else if (fn === "gcd") stack.push(gcd(a, b));
-        else if (fn === "lcm") stack.push(lcm(a, b));
-        else if (fn === "hypot") stack.push(Math.hypot(a, b));
-      } else {
-        const a = stack.pop() ?? 0;
-        switch (fn) {
-          case "sin": stack.push(Math.sin(toRad(a, angleMode))); break;
-          case "cos": stack.push(Math.cos(toRad(a, angleMode))); break;
-          case "tan": stack.push(Math.tan(toRad(a, angleMode))); break;
-          case "asin": stack.push(fromRad(Math.asin(a), angleMode)); break;
-          case "acos": stack.push(fromRad(Math.acos(a), angleMode)); break;
-          case "atan": stack.push(fromRad(Math.atan(a), angleMode)); break;
-          case "sinh": stack.push(Math.sinh(a)); break;
-          case "cosh": stack.push(Math.cosh(a)); break;
-          case "tanh": stack.push(Math.tanh(a)); break;
-          case "csc": stack.push(1 / Math.sin(toRad(a, angleMode))); break;
-          case "sec": stack.push(1 / Math.cos(toRad(a, angleMode))); break;
-          case "cot": stack.push(1 / Math.tan(toRad(a, angleMode))); break;
-          case "ln":
-            if (a <= 0) throw new Error("Domain Error: ln(x) for x <= 0");
-            stack.push(Math.log(a));
-            break;
-          case "log":
-          case "log10":
+      const k = token.argCount || 1;
+      const args: number[] = [];
+      for (let i = 0; i < k; i++) {
+        args.unshift(stack.pop() ?? 0);
+      }
+
+      const a = args[0] ?? 0;
+      const b = args[1] ?? 0;
+
+      switch (fn) {
+        // Trigonometry
+        case "sin": stack.push(Math.sin(toRad(a, angleMode))); break;
+        case "cos": stack.push(Math.cos(toRad(a, angleMode))); break;
+        case "tan": stack.push(Math.tan(toRad(a, angleMode))); break;
+        case "asin": stack.push(fromRad(Math.asin(a), angleMode)); break;
+        case "acos": stack.push(fromRad(Math.acos(a), angleMode)); break;
+        case "atan": stack.push(fromRad(Math.atan(a), angleMode)); break;
+        case "sinh": stack.push(Math.sinh(a)); break;
+        case "cosh": stack.push(Math.cosh(a)); break;
+        case "tanh": stack.push(Math.tanh(a)); break;
+        case "csc": stack.push(1 / Math.sin(toRad(a, angleMode))); break;
+        case "sec": stack.push(1 / Math.cos(toRad(a, angleMode))); break;
+        case "cot": stack.push(1 / Math.tan(toRad(a, angleMode))); break;
+
+        // Logarithms & Exponents
+        case "ln":
+          if (a <= 0) throw new Error("Domain Error: ln(x) for x <= 0");
+          stack.push(Math.log(a));
+          break;
+        case "log":
+        case "log10":
+          if (k === 2) {
+            if (a <= 0 || b <= 0 || b === 1) throw new Error("Domain Error in log(x, base)");
+            stack.push(Math.log(a) / Math.log(b));
+          } else {
             if (a <= 0) throw new Error("Domain Error: log10(x) for x <= 0");
             stack.push(Math.log10(a));
-            break;
-          case "log2":
-            if (a <= 0) throw new Error("Domain Error: log2(x) for x <= 0");
-            stack.push(Math.log2(a));
-            break;
-          case "sqrt":
-            if (a < 0) throw new Error("Domain Error: sqrt(x) for x < 0");
-            stack.push(Math.sqrt(a));
-            break;
-          case "cbrt": stack.push(Math.cbrt(a)); break;
-          case "abs": stack.push(Math.abs(a)); break;
-          case "floor": stack.push(Math.floor(a)); break;
-          case "ceil": stack.push(Math.ceil(a)); break;
-          case "round": stack.push(Math.round(a)); break;
-          case "trunc": stack.push(Math.trunc(a)); break;
-          case "frac": stack.push(a - Math.trunc(a)); break;
-          case "sgn": stack.push(Math.sign(a)); break;
-          case "gamma": stack.push(gamma(a)); break;
-        }
+          }
+          break;
+        case "log2":
+          if (a <= 0) throw new Error("Domain Error: log2(x) for x <= 0");
+          stack.push(Math.log2(a));
+          break;
+
+        // Roots & Powers
+        case "sqrt":
+          if (a < 0) throw new Error("Domain Error: sqrt(x) for x < 0");
+          stack.push(Math.sqrt(a));
+          break;
+        case "cbrt": stack.push(Math.cbrt(a)); break;
+        case "yroot":
+          if (b === 0) throw new Error("Root index cannot be zero");
+          stack.push(Math.pow(a, 1 / b));
+          break;
+
+        // Combinatorics
+        case "npr": stack.push(nPr(a, b)); break;
+        case "ncr": stack.push(nCr(a, b)); break;
+        case "gcd": stack.push(gcd(a, b)); break;
+        case "lcm": stack.push(lcm(a, b)); break;
+        case "hypot": stack.push(Math.hypot(a, b)); break;
+
+        // Utility
+        case "abs": stack.push(Math.abs(a)); break;
+        case "floor": stack.push(Math.floor(a)); break;
+        case "ceil": stack.push(Math.ceil(a)); break;
+        case "round": stack.push(Math.round(a)); break;
+        case "trunc": stack.push(Math.trunc(a)); break;
+        case "frac": stack.push(a - Math.trunc(a)); break;
+        case "sgn": stack.push(Math.sign(a)); break;
+        case "gamma": stack.push(gamma(a)); break;
+
+        // Dataset / Statistical
+        case "sum": stack.push(args.reduce((x, y) => x + y, 0)); break;
+        case "prod": stack.push(args.reduce((x, y) => x * y, 1)); break;
+        case "sumsq": stack.push(args.reduce((x, y) => x + y * y, 0)); break;
+        case "sumcube": stack.push(args.reduce((x, y) => x + Math.pow(y, 3), 0)); break;
+        case "mean": stack.push(calcMean(args)); break;
+        case "median": stack.push(calcMedian(args)); break;
+        case "mode": stack.push(calcMode(args)); break;
+        case "stddev": stack.push(calcStdDev(args)); break;
+        case "variance": stack.push(calcVariance(args)); break;
+
+        default:
+          stack.push(a);
+          break;
       }
     }
   }
@@ -511,7 +617,6 @@ function calculateMath(
     if (isNaN(result)) return { num: NaN, str: "Math Error", error: "Math Error" };
     if (!isFinite(result)) return { num: Infinity, str: "Infinity", error: "Overflow" };
 
-    // Precision cleaning
     const cleanNum = parseFloat(result.toFixed(10));
     return { num: cleanNum, str: String(cleanNum) };
   } catch (err: any) {
@@ -536,7 +641,7 @@ export function ScientificCalculator() {
   const [copied, setCopied] = useState<boolean>(false);
   const [hasEvaluated, setHasEvaluated] = useState<boolean>(false);
 
-  // Live preview update
+  // Live real-time preview
   useEffect(() => {
     if (!expression.trim()) {
       setDisplayValue("0");
@@ -748,7 +853,7 @@ export function ScientificCalculator() {
       case "ʸ√x":
       case "ⁿ√x":
       case "y_√x":
-        handleInput("^(1/");
+        handleInput("yroot(");
         break;
       case "³√x": handleInput("cbrt("); break;
       case "1/x": handleInput("1/("); break;
@@ -760,6 +865,19 @@ export function ScientificCalculator() {
       case "LCM": handleInput("lcm("); break;
       case "Exp": case "EXP": case "EEX": handleInput("*10^("); break;
       case "Rnd": case "Rand": handleInput(String(parseFloat(Math.random().toFixed(4)))); break;
+
+      // Dataset & Statistical Buttons
+      case "Mean": handleInput("mean("); break;
+      case "Median": handleInput("median("); break;
+      case "Mode": handleInput("mode("); break;
+      case "Std Dev": handleInput("stddev("); break;
+      case "Var": handleInput("variance("); break;
+      case "Σx": handleInput("sum("); break;
+      case "Πx": handleInput("prod("); break;
+      case "Σx²": handleInput("sumsq("); break;
+      case "Σx³": handleInput("sumcube("); break;
+      case "hyp": handleInput("hypot("); break;
+      case "RandInt": handleInput(String(Math.floor(Math.random() * 100) + 1)); break;
 
       // Conversions
       case "HEX":
