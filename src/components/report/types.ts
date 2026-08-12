@@ -21,7 +21,7 @@ export interface ReportMetricCardData {
   label: string;
   value: string;
   subtitle?: string;
-  colorTheme?: "blue" | "emerald" | "purple" | "amber" | "rose";
+  colorTheme?: "blue" | "emerald" | "purple" | "amber" | "rose" | "cyan" | "indigo" | "teal";
 }
 
 export interface ReportTableHeader {

@@ -4,6 +4,8 @@ import { CalculatorDefinition as BaseCalculatorDefinition } from "@/lib/calculat
 export interface CalculatorModuleDefinition extends BaseCalculatorDefinition {
   featured?: boolean;
   tags?: string[];
+  icon?: any;
+  modes?: { id: string; name: string; description?: string }[];
   ContentComponent?: React.ComponentType<any>;
   ChartComponent?: React.ComponentType<{ data: Record<string, any>; inputs: Record<string, any> }>;
 }

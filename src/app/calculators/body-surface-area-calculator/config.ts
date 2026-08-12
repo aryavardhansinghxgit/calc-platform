@@ -1,5 +1,5 @@
-import { CalculatorModuleDefinition } from "@/types/calculator";
-import { Activity } from "lucide-react";
+import { CalculatorModuleDefinition } from "@/calculators/types";
+import { calculateBsaCalculator } from "./calculator";
 
 export const body_surface_area_calculatorConfig: CalculatorModuleDefinition = {
   id: "body-surface-area-calculator",
@@ -9,7 +9,7 @@ export const body_surface_area_calculatorConfig: CalculatorModuleDefinition = {
     "Clinical Body Surface Area (BSA) suite supporting Mosteller, Du Bois, Haycock, Schlich 3D, Chemotherapy dosing, Cardiac Index, GFR normalization, and 9-formula comparison.",
   category: "health",
   subcategory: "clinical",
-  icon: Activity,
+  iconName: "Activity",
   tags: [
     "bsa",
     "body surface area",
@@ -35,6 +35,7 @@ export const body_surface_area_calculatorConfig: CalculatorModuleDefinition = {
   inputs: [
     {
       id: "gender",
+      name: "gender",
       label: "Gender",
       type: "select",
       defaultValue: "male",
@@ -45,6 +46,7 @@ export const body_surface_area_calculatorConfig: CalculatorModuleDefinition = {
     },
     {
       id: "heightCm",
+      name: "heightCm",
       label: "Height (cm)",
       type: "number",
       defaultValue: 170,
@@ -54,6 +56,7 @@ export const body_surface_area_calculatorConfig: CalculatorModuleDefinition = {
     },
     {
       id: "weightKg",
+      name: "weightKg",
       label: "Weight (kg)",
       type: "number",
       defaultValue: 70,
@@ -63,9 +66,10 @@ export const body_surface_area_calculatorConfig: CalculatorModuleDefinition = {
     },
   ],
   outputs: [
-    { id: "primaryBsaM2", label: "Body Surface Area (m²)", type: "number" },
-    { id: "primaryBsaFt2", label: "Body Surface Area (ft²)", type: "number" },
-    { id: "bmi", label: "Body Mass Index (BMI)", type: "number" },
-    { id: "idealBodyWeightKg", label: "Ideal Body Weight (kg)", type: "number" },
+    { id: "primaryBsaM2", name: "primaryBsaM2", label: "Body Surface Area (m²)", type: "number" },
+    { id: "primaryBsaFt2", name: "primaryBsaFt2", label: "Body Surface Area (ft²)", type: "number" },
+    { id: "bmi", name: "bmi", label: "Body Mass Index (BMI)", type: "number" },
+    { id: "idealBodyWeightKg", name: "idealBodyWeightKg", label: "Ideal Body Weight (kg)", type: "number" },
   ],
+  calculate: (inputs: Record<string, any>) => calculateBsaCalculator(inputs as any) as any,
 };

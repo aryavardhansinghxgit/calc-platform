@@ -20,10 +20,11 @@ export interface CalculatorInputOption {
 }
 
 export interface CalculatorInput {
+  id?: string;
   name: string;
   label: string;
   type: InputType;
-  defaultValue: number | string;
+  defaultValue?: number | string;
   unit?: string;
   min?: number;
   max?: number;
@@ -36,10 +37,13 @@ export interface CalculatorInput {
 export type OutputFormat = "currency" | "percentage" | "number" | "text" | "duration";
 
 export interface CalculatorOutput {
+  id?: string;
   name: string;
   label: string;
-  format: OutputFormat;
+  format?: OutputFormat;
+  type?: string;
   unit?: string;
+  suffix?: string;
   description?: string;
   highlight?: boolean;
 }

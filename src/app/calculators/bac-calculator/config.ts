@@ -1,86 +1,75 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
-import { calculateBACCalculator } from "./calculator";
-import { bac_calculatorFaqs } from "./faq";
+import { calculateBacCalculator } from "./calculator";
 
 export const bac_calculatorConfig: CalculatorModuleDefinition = {
   id: "bac-calculator",
-  title: "BAC Calculator",
   slug: "bac-calculator",
-  category: "Health",
-  subcategory: "Nutrition & Body",
-  description: "Estimate Blood Alcohol Concentration (BAC %) and time required to reach sobriety using Widmark formula.",
-  iconName: "Wine",
-  featured: true,
-  keywords: ["bac","blood alcohol concentration","widmark formula","sobriety","alcohol level"],
-  priority: 1,
-  relatedCalculators: ["calorie-calculator"],
-  formulaDescription: "Widmark Formula: BAC = [Alcohol(g) / (Weight(g) × r)] × 100 - (0.015 × Hours)",
-  faqs: bac_calculatorFaqs,
+  title: "Blood Alcohol Concentration (BAC) Calculator",
+  description:
+    "Professional Blood Alcohol Concentration (BAC) suite supporting Widmark & Seidl equations, hour-by-hour elimination schedule, legal DUI limits, and alcohol calories.",
+  category: "health",
+  subcategory: "toxicology",
+  iconName: "Activity",
+  tags: [
+    "bac",
+    "blood alcohol",
+    "widmark",
+    "sobriety",
+    "dui limit",
+    "alcohol elimination",
+    "alcohol calories",
+    "drinking calculator",
+  ],
+  modes: [
+    { id: "widmark-standard", name: "Widmark Standard", description: "Classic Widmark BAC & elimination formula" },
+    { id: "driving-sobriety", name: "Driving Sobriety", description: "Legal DUI limits & time to 0.08% / 0.05%" },
+    { id: "drink-counter", name: "Session Drink Logger", description: "Multi-drink alcohol mass & peak BAC timing" },
+    { id: "elimination-timeline", name: "Elimination Curve", description: "Hour-by-hour sobriety timeline & chart" },
+    { id: "gender-weight-matrix", name: "Gender & Weight Matrix", description: "Body weight alcohol sensitivity matrix" },
+    { id: "seidl-anthropometric", name: "Seidl Anthropometric", description: "Height & weight adjusted distribution (Seidl 1990)" },
+    { id: "watson-tbw", name: "Watson TBW Formula", description: "Total body water clinical distribution equation" },
+    { id: "calories-metabolism", name: "Alcohol Calories", description: "Alcohol calorie & carb metabolism counter" },
+    { id: "drink-comparison", name: "Drink Type Comparison", description: "Standard drinks vs craft beer, wine, & shots" },
+    { id: "custom-toxicology", name: "Custom Evaluation", description: "Custom elimination rate (beta) assessment" },
+  ],
   inputs: [
-  {
-    "name": "gender",
-    "label": "Gender",
-    "type": "select",
-    "defaultValue": "male",
-    "options": [
-      {
-        "label": "Male",
-        "value": "male"
-      },
-      {
-        "label": "Female",
-        "value": "female"
-      }
-    ]
-  },
-  {
-    "name": "weightKg",
-    "label": "Body Weight (kg)",
-    "type": "number",
-    "defaultValue": 75,
-    "min": 30,
-    "max": 250,
-    "step": 1
-  },
-  {
-    "name": "drinksCount",
-    "label": "Standard Drinks Consumed",
-    "type": "number",
-    "defaultValue": 3,
-    "min": 1,
-    "max": 30,
-    "step": 1
-  },
-  {
-    "name": "hoursSinceFirst",
-    "label": "Hours Since First Drink",
-    "type": "number",
-    "defaultValue": 2,
-    "min": 0.5,
-    "max": 24,
-    "step": 0.5
-  }
-],
+    {
+      id: "gender",
+      name: "gender",
+      label: "Gender",
+      type: "select",
+      defaultValue: "male",
+      options: [
+        { label: "Male", value: "male" },
+        { label: "Female", value: "female" },
+      ],
+    },
+    {
+      id: "weightLbs",
+      name: "weightLbs",
+      label: "Body Weight (lbs)",
+      type: "number",
+      defaultValue: 165,
+      min: 50,
+      max: 500,
+      step: 1,
+    },
+    {
+      id: "timeSinceFirstDrinkHours",
+      name: "timeSinceFirstDrinkHours",
+      label: "Time Since First Drink (Hours)",
+      type: "number",
+      defaultValue: 2,
+      min: 0,
+      max: 48,
+      step: 0.5,
+    },
+  ],
   outputs: [
-  {
-    "name": "bac",
-    "label": "Estimated BAC",
-    "format": "percentage",
-    "highlight": true
-  },
-  {
-    "name": "sobrietyHours",
-    "label": "Hours to 0.00% Sobriety",
-    "format": "number",
-    "unit": "hours"
-  },
-  {
-    "name": "status",
-    "label": "Impairment Level",
-    "format": "text"
-  }
-],
-  calculate: calculateBACCalculator,
+    { id: "currentBacPercent", name: "currentBacPercent", label: "Estimated BAC (%)", type: "number" },
+    { id: "peakBacPercent", name: "peakBacPercent", label: "Peak BAC (%)", type: "number" },
+    { id: "hoursUntilSober000", name: "hoursUntilSober000", label: "Hours to Sobriety (0.00%)", type: "number" },
+    { id: "hoursUntilLegalLimit008", name: "hoursUntilLegalLimit008", label: "Hours to 0.08% Limit", type: "number" },
+  ],
+  calculate: (inputs: Record<string, any>) => calculateBacCalculator(inputs as any) as any,
 };
-
-export default bac_calculatorConfig;

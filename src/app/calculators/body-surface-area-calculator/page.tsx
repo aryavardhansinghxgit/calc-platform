@@ -7,10 +7,7 @@ import { CalculatorLayout } from "@/components/calculator/CalculatorLayout";
 export const metadata = bsaMetadata;
 
 export default function BodySurfaceAreaCalculatorPage() {
-  const serializableDef = {
-    ...body_surface_area_calculatorConfig,
-    icon: undefined,
-  };
+  const { calculate, icon, ...serializableDef } = body_surface_area_calculatorConfig;
 
   const faqSchema = {
     "@context": "https://schema.org",

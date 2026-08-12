@@ -13,17 +13,19 @@ import ReportFooter from "./ReportFooter";
 export interface ReportModalProps {
   isOpen: boolean;
   onClose: () => void;
-  reportData: CalculatorReportData;
+  reportData?: CalculatorReportData;
+  data?: CalculatorReportData;
 }
 
-export function ReportModal({ isOpen, onClose, reportData }: ReportModalProps) {
+export function ReportModal({ isOpen, onClose, reportData, data }: ReportModalProps) {
   const [mounted, setMounted] = useState(false);
+  const actualData = reportData || data;
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  if (!isOpen || !reportData || !mounted) return null;
+  if (!isOpen || !actualData || !mounted) return null;
 
   const handlePrint = () => {
     window.print();
@@ -77,24 +79,24 @@ export function ReportModal({ isOpen, onClose, reportData }: ReportModalProps) {
           {/* Scrollable Report Content Area */}
           <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-zinc-100 dark:bg-zinc-950 no-print-wrapper">
             <div className="printable-report-section bg-white text-zinc-900 p-6 rounded-xl shadow-xl max-w-3xl mx-auto space-y-4">
-              <ReportHeader meta={reportData.meta} />
+              <ReportHeader meta={actualData.meta} />
 
               <ReportSummaryGrid
-                metrics={reportData.keyMetrics}
-                sections={reportData.sections}
+                metrics={actualData.keyMetrics}
+                sections={actualData.sections}
               />
 
-              {reportData.recommendation && (
-                <ReportRecommendation recommendation={reportData.recommendation} />
+              {actualData.recommendation && (
+                <ReportRecommendation recommendation={actualData.recommendation} />
               )}
 
-              {reportData.table && <ReportTable table={reportData.table} />}
+              {actualData.table && <ReportTable table={actualData.table} />}
 
-              {reportData.notes && reportData.notes.length > 0 && (
+              {actualData.notes && actualData.notes.length > 0 && (
                 <div className="border border-zinc-200 rounded-md p-2.5 bg-zinc-50 space-y-0.5 text-[10px] text-zinc-600">
                   <span className="font-bold text-zinc-900 block">Analysis Notes & Assumptions:</span>
                   <ul className="list-disc pl-3.5 space-y-0.5">
-                    {reportData.notes.map((n: string, i: number) => (
+                    {actualData.notes.map((n: string, i: number) => (
                       <li key={`rnote-${i}`}>{n}</li>
                     ))}
                   </ul>

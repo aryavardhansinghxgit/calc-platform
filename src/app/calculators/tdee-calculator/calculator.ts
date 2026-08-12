@@ -324,3 +324,6 @@ export function calculateTdeeOutputs(inputs: Record<string, any>): TdeeCalculato
     tefCalories: res.components.tefCalories,
   };
 }
+
+export const calculateTDEECalculator = calculateTdeeCalculator;
+

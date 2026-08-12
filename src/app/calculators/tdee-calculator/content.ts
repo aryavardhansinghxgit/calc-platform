@@ -13,7 +13,7 @@ This 3,500+ word clinical guide covers metabolic physiology, 7 clinical BMR form
 
 TDEE is not a static number; it fluctuates daily based on body weight, muscle mass, daily movement, workouts, and food consumption.
 
-```
+\`\`\`
                          ┌──────────────────────────────────┐
                          │ Total Daily Energy Expenditure  │
                          │             (TDEE)               │
@@ -25,7 +25,7 @@ TDEE is not a static number; it fluctuates daily based on body weight, muscle ma
   │    BMR    │       │   NEAT    │         │    EAT    │       │    TEF    │
   │ (60-70%)  │       │ (15-20%)  │         │ (10-15%)  │       │  (~10%)   │
   └───────────┘       └───────────┘         └───────────┘       └───────────┘
-```
+\`\`\`
 
 ### The 4 Components of Human Energy Expenditure
 1. **Basal Metabolic Rate (BMR ~60-70% of TDEE)**: The energy required to maintain basic cellular life and organ function (brain, heart, liver, kidneys, lungs) while awake at complete rest.

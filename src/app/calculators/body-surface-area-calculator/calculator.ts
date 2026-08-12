@@ -442,3 +442,6 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
     actionPlan,
   };
 }
+
+export const calculateBodySurfaceAreaCalculator = calculateBsaCalculator;
+

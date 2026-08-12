@@ -9,7 +9,7 @@ This 3,500+ word comprehensive guide explores female and male body shape algorit
 
 ## 1–3. What Is Body Type & Why Does Anatomical Shape Matter?
 
-```
+\`\`\`
                       ┌──────────────────────────────────────┐
                       │    Skeletal Frame & Genetic Bone Structure │
                       └──────────────────┬───────────────────┘
@@ -25,7 +25,7 @@ This 3,500+ word comprehensive guide explores female and male body shape algorit
 │     Female Fashion Shapes (NCSU)      │               │     Metabolic Risk Metrics (WHR/WHtR) │
 │ (Hourglass, Pear, Apple, Spoon, Rect) │               │   (WHO Cardiovascular Biomarkers)     │
 └───────────────────────────────────────┘               └───────────────────────────────────────┘
-```
+\`\`\`
 
 While weight and Body Mass Index (BMI) measure total body mass, they fail to account for *where* fat and muscle are distributed on the frame. Two individuals of identical height and weight can possess completely different health risk profiles depending on whether adipose tissue is stored subcutaneously on the hips and thighs (gynoid/pear shape) or viscerally around internal abdominal organs (android/apple shape).
 

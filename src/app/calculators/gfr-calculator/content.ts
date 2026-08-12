@@ -11,7 +11,7 @@ This 3,500+ word clinical guide covers renal physiology, 7 validated GFR equatio
 
 ## 1–3. What Is GFR & Why Does It Matter?
 
-```
+\`\`\`
                         ┌─────────────────────────────────────┐
                         │      Renal Blood Perfusion          │
                         └──────────────────┬──────────────────┘
@@ -27,7 +27,7 @@ This 3,500+ word clinical guide covers renal physiology, 7 validated GFR equatio
 ┌───────────────────────────────────┐                     ┌───────────────────────────────────┐
 │     Filtered Blood (Clean)        │                     │   Ultrafiltrate (Urine Formation) │
 └───────────────────────────────────┘                     └───────────────────────────────────┘
-```
+\`\`\`
 
 The human kidneys contain approximately 2 million functioning nephrons that collectively filter ~180 liters of blood plasma every day. When renal tissue suffers chronic inflammatory, vascular, or metabolic damage (e.g. from hypertension, type 2 diabetes, or glomerulonephritis), nephrons are progressively lost.
 
@@ -88,7 +88,7 @@ $$\text{eGFR} = 135 \times \min(S_{\text{cr}}/\kappa, 1)^{\alpha} \times \max(S_
 
 Evaluating eGFR alone is insufficient to predict kidney disease progression. KDIGO recommends combining eGFR categories ($\text{G1–G5}$) with urine albumin-to-creatinine ratio ($\text{uACR}$ categories $\text{A1–A3}$):
 
-```
+\`\`\`
                         ┌───────────────────────────────────────────────────────────┐
                         │             Albuminuria Categories (uACR mg/g)            │
                         ├─────────────────────┬─────────────────────┬───────────────┤
@@ -102,7 +102,7 @@ Evaluating eGFR alone is insufficient to predict kidney disease progression. KDI
 │ G4 (15-29) Severe     │   Very High Risk    │    Very High Risk   │Very High Risk │
 │ G5 (<15) Failure      │   Very High Risk    │    Very High Risk   │Very High Risk │
 └───────────────────────┴─────────────────────┴─────────────────────┴───────────────┘
-```
+\`\`\`
 
 ---
 

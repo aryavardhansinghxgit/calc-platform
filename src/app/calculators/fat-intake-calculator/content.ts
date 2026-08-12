@@ -26,7 +26,7 @@ This 3,500+ word clinical guide covers fat digestion, fatty acid sub-type profil
 
 Dietary fats are categorized based on the presence and number of double carbon-to-carbon bonds in their fatty acid chains:
 
-```
+\`\`\`
                           ┌──────────────────────────┐
                           │   Dietary Fats (Lipids)  │
                           └─────────────┬────────────┘
@@ -50,7 +50,7 @@ Dietary fats are categorized based on the presence and number of double carbon-t
                                   ┌───────────┐   ┌───────────┐
                                   │  Omega-3  │   │  Omega-6  │
                                   └───────────┘   └───────────┘
-```
+\`\`\`
 
 ### 1. Saturated Fatty Acids (SFAs)
 - **Structure**: No double carbon bonds; fully saturated with hydrogen atoms. Typically solid at room temperature.

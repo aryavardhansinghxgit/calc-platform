@@ -355,3 +355,6 @@ export function calculateGfrCalculator(inputs: GfrInputParameters): GfrOutputRes
     insights,
   };
 }
+
+export const calculateGFRCalculator = calculateGfrCalculator;
+
