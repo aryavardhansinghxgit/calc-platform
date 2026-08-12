@@ -1,8 +1,4 @@
 import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
-export const scientific_calculatorFaqs: CalculatorFAQ[] = [
-  {
-    "question": "Are trigonometric functions calculated in degrees?",
-    "answer": "Yes, angles in this calculator are converted from degrees to radians automatically."
-  }
-];
+// Per Math Calculator Content Policy: DO NOT generate FAQ sections.
+export const scientific_calculatorFaqs: CalculatorFAQ[] = [];

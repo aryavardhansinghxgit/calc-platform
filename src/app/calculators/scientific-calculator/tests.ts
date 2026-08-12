@@ -1,33 +1,47 @@
 import { calculateScientificCalculator } from "./calculator";
 
 export function runScientificCalculatorTests() {
-  const defaultInputs = {
-    "value1": 45,
-    "operation": "sin"
-  };
-  const res1 = calculateScientificCalculator(defaultInputs);
-  if (!res1 || typeof res1 !== "object") throw new Error("Formula failed for default inputs");
+  // Test 1: Trigonometric Sine (45 deg)
+  const res1 = calculateScientificCalculator({ value1: 45, operation: "sin", angleUnit: "deg" });
+  if (!res1 || typeof res1.result !== "number" || Math.abs(res1.result - 0.70710678) > 0.0001) {
+    throw new Error("Sin 45° test failed");
+  }
 
-  const zeroInputs = {
-    "value1": 0,
-    "operation": 0
-  };
-  const res2 = calculateScientificCalculator(zeroInputs);
-  if (!res2) throw new Error("Formula failed for zero inputs");
+  // Test 2: Angle in Radians (sin pi/2)
+  const resRad = calculateScientificCalculator({ value1: Math.PI / 2, operation: "sin", angleUnit: "rad" });
+  if (resRad.result !== 1) {
+    throw new Error("Sin (π/2 rad) test failed");
+  }
 
-  const negInputs = {
-    "value1": -50,
-    "operation": -50
-  };
-  const res3 = calculateScientificCalculator(negInputs);
-  if (!res3) throw new Error("Formula failed for negative inputs");
+  // Test 3: Natural Logarithm (ln e)
+  const resLn = calculateScientificCalculator({ value1: Math.E, operation: "ln" });
+  if (resLn.result !== 1) {
+    throw new Error("ln(e) test failed");
+  }
 
-  const nanInputs = {
-    "value1": null,
-    "operation": null
-  };
-  const res4 = calculateScientificCalculator(nanInputs);
-  if (!res4) throw new Error("Formula failed for NaN inputs");
+  // Test 4: Factorial (5!)
+  const resFact = calculateScientificCalculator({ value1: 5, operation: "factorial" });
+  if (resFact.result !== 120) {
+    throw new Error("Factorial 5! test failed");
+  }
+
+  // Test 5: Power X^Y (2^10)
+  const resPow = calculateScientificCalculator({ value1: 2, value2: 10, operation: "pow" });
+  if (resPow.result !== 1024) {
+    throw new Error("Power 2^10 test failed");
+  }
+
+  // Test 6: Log Domain Boundary (ln 0)
+  const resDomain = calculateScientificCalculator({ value1: 0, operation: "ln" });
+  if (resDomain.result !== "Undefined") {
+    throw new Error("Log domain boundary test failed");
+  }
+
+  // Test 7: Factorial Overflow (171!)
+  const resOverflow = calculateScientificCalculator({ value1: 171, operation: "factorial" });
+  if (resOverflow.result !== "Infinity (Overflow)") {
+    throw new Error("Factorial overflow test failed");
+  }
 
   return true;
 }
