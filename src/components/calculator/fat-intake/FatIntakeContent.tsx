@@ -1,0 +1,329 @@
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import {
+  ChevronDown,
+  ChevronUp,
+  HelpCircle,
+  ShieldAlert,
+  ArrowRight,
+  BookOpen,
+  Sparkles,
+  Activity,
+  Apple,
+  Flame,
+  PieChart,
+} from "lucide-react";
+import { fat_intake_calculatorFaqs } from "@/app/calculators/fat-intake-calculator/faq";
+
+export function FatIntakeContent() {
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
+
+  return (
+    <div className="w-full max-w-5xl mx-auto mt-16 space-y-12 text-slate-800 font-sans">
+      {/* Educational Content Sections */}
+      <section className="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm space-y-10">
+        <div className="border-b border-slate-100 pb-6 flex items-center gap-3">
+          <div className="p-3 bg-rose-50 text-rose-600 rounded-2xl border border-rose-100">
+            <BookOpen className="w-6 h-6" />
+          </div>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+              The Comprehensive Guide to Dietary Fat Intake, Fatty Acid Sub-Types & Cardiovascular Health
+            </h2>
+            <p className="text-sm text-slate-500 mt-1">
+              Medically reviewed fat digestion biochemistry, saturated fat safety limits, monounsaturated/polyunsaturated fatty acids, Omega-3 targets, and age guidelines.
+            </p>
+          </div>
+        </div>
+
+        {/* Section 1 & 2 */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span className="text-rose-600">1–2.</span> What Is Dietary Fat & Why Is It Essential?
+          </h3>
+          <p className="text-slate-700 leading-relaxed text-sm md:text-base">
+            <strong className="text-slate-900">Dietary fat</strong> (lipids) is an obligate macronutrient yielding 9 calories per gram. Fats form cellular membranes, synthesize endocrine hormones (testosterone and estrogen), absorb fat-soluble vitamins (A, D, E, K), and insulate neural axons.
+          </p>
+        </div>
+
+        {/* Fatty Acid Types Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          <div className="bg-emerald-50/80 p-6 rounded-2xl border border-emerald-200/80 space-y-3">
+            <h4 className="font-bold text-emerald-950 text-base flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-emerald-600" />
+              Monounsaturated (MUFA)
+            </h4>
+            <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
+              Found in extra virgin olive oil and avocados. Lowers harmful LDL cholesterol while preserving protective HDL cholesterol.
+            </p>
+          </div>
+
+          <div className="bg-cyan-50/80 p-6 rounded-2xl border border-cyan-200/80 space-y-3">
+            <h4 className="font-bold text-cyan-950 text-base flex items-center gap-2">
+              <Activity className="w-5 h-5 text-cyan-600" />
+              Polyunsaturated (PUFA) & Omega-3
+            </h4>
+            <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
+              EPA and DHA from wild salmon reduce triglycerides, decrease systemic inflammation, and support brain cell membrane fluidity.
+            </p>
+          </div>
+
+          <div className="bg-rose-50/80 p-6 rounded-2xl border border-rose-200/80 space-y-3">
+            <h4 className="font-bold text-rose-950 text-base flex items-center gap-2">
+              <Flame className="w-5 h-5 text-rose-600" />
+              Saturated Fat Limits
+            </h4>
+            <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
+              Limit saturated fat to &lt;10% of daily calories (&lt;7% according to the AHA for cardiovascular risk reduction).
+            </p>
+          </div>
+        </div>
+
+        {/* Section 18 & 19: Fat Intake by Age Table (Reference from PDF) */}
+        <div className="space-y-4 pt-4">
+          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span className="text-rose-600">18–19.</span> Fat Intake Guidelines by Age Bracket
+          </h3>
+          <p className="text-slate-700 leading-relaxed text-sm md:text-base">
+            Reference guidelines for daily fat intake percentages extracted from clinical literature:
+          </p>
+
+          <div className="overflow-x-auto border border-slate-200 rounded-2xl">
+            <table className="w-full text-left text-xs md:text-sm text-slate-700">
+              <thead className="bg-slate-100 text-slate-900 font-bold">
+                <tr>
+                  <th className="p-3.5">Age Group</th>
+                  <th className="p-3.5">Suggested Fat Intake Limit (% of Total Calories)</th>
+                  <th className="p-3.5">Clinical Focus</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                <tr className="hover:bg-rose-50/40">
+                  <td className="p-3.5 font-bold text-slate-900">Age 2 – 3 Years</td>
+                  <td className="p-3.5 font-bold text-rose-700">30% to 40% of Total Calories</td>
+                  <td className="p-3.5">Critical nervous system & neural sheath myelination</td>
+                </tr>
+                <tr className="hover:bg-rose-50/40">
+                  <td className="p-3.5 font-bold text-slate-900">Age 4 – 18 Years</td>
+                  <td className="p-3.5 font-bold text-rose-700">25% to 35% of Total Calories</td>
+                  <td className="p-3.5">Pediatric growth & endocrine hormone maturation</td>
+                </tr>
+                <tr className="hover:bg-rose-50/40">
+                  <td className="p-3.5 font-bold text-slate-900">Age 19+ Years (Adults)</td>
+                  <td className="p-3.5 font-bold text-rose-700">20% to 35% of Total Calories</td>
+                  <td className="p-3.5">Standard AMDR adult energy balance & lipid control</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Section 25: Healthy Fat Food Reference Table */}
+        <div className="space-y-4 pt-4">
+          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <span className="text-rose-600">25.</span> Healthy Fat Food Reference Values
+          </h3>
+          <p className="text-slate-700 leading-relaxed text-sm md:text-base">
+            Fatty acid profiles for healthy food sources:
+          </p>
+
+          <div className="overflow-x-auto border border-slate-200 rounded-2xl">
+            <table className="w-full text-left text-xs md:text-sm text-slate-700">
+              <thead className="bg-slate-100 text-slate-900 font-bold">
+                <tr>
+                  <th className="p-3">Food Item</th>
+                  <th className="p-3">Serving Size</th>
+                  <th className="p-3">Total Fat</th>
+                  <th className="p-3">Saturated Fat</th>
+                  <th className="p-3">MUFA</th>
+                  <th className="p-3">Calories</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                <tr className="hover:bg-rose-50/40">
+                  <td className="p-3 font-bold text-slate-900">Extra Virgin Olive Oil</td>
+                  <td className="p-3">1 tbsp (14g)</td>
+                  <td className="p-3 font-bold text-rose-700">14.0 g</td>
+                  <td className="p-3 text-amber-700 font-bold">1.9 g</td>
+                  <td className="p-3 text-emerald-700 font-bold">9.9 g</td>
+                  <td className="p-3 text-slate-900">119 kcal</td>
+                </tr>
+                <tr className="hover:bg-rose-50/40">
+                  <td className="p-3 font-bold text-slate-900">Avocado</td>
+                  <td className="p-3">1 medium (150g)</td>
+                  <td className="p-3 font-bold text-rose-700">21.0 g</td>
+                  <td className="p-3 text-amber-700 font-bold">3.1 g</td>
+                  <td className="p-3 text-emerald-700 font-bold">14.7 g</td>
+                  <td className="p-3 text-slate-900">240 kcal</td>
+                </tr>
+                <tr className="hover:bg-rose-50/40">
+                  <td className="p-3 font-bold text-slate-900">Wild Salmon, cooked</td>
+                  <td className="p-3">3 oz (85g)</td>
+                  <td className="p-3 font-bold text-rose-700">11.0 g</td>
+                  <td className="p-3 text-amber-700 font-bold">2.1 g</td>
+                  <td className="p-3 text-emerald-700 font-bold">3.8 g</td>
+                  <td className="p-3 text-slate-900">175 kcal</td>
+                </tr>
+                <tr className="hover:bg-rose-50/40">
+                  <td className="p-3 font-bold text-slate-900">Walnuts</td>
+                  <td className="p-3">1 oz (28g)</td>
+                  <td className="p-3 font-bold text-rose-700">18.5 g</td>
+                  <td className="p-3 text-amber-700 font-bold">1.7 g</td>
+                  <td className="p-3 text-emerald-700 font-bold">2.5 g</td>
+                  <td className="p-3 text-slate-900">185 kcal</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* 40 Interactive FAQs Accordion */}
+      <section className="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm space-y-8">
+        <div className="flex items-center gap-3 border-b border-slate-100 pb-6">
+          <div className="p-3 bg-purple-50 text-purple-600 rounded-2xl border border-purple-100">
+            <HelpCircle className="w-6 h-6" />
+          </div>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+              Frequently Asked Questions (40 Clinical Answers)
+            </h2>
+            <p className="text-sm text-slate-500 mt-1">
+              Comprehensive responses to common questions about dietary fat intake, saturated fat limits, trans fats, omega-3 targets, and keto diet ratios.
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {fat_intake_calculatorFaqs.map((faq, idx) => {
+            const isOpen = openFaqIndex === idx;
+            return (
+              <div
+                key={idx}
+                className="bg-slate-50/80 border border-slate-200 rounded-2xl overflow-hidden transition-all"
+              >
+                <button
+                  onClick={() => toggleFaq(idx)}
+                  className="w-full p-5 text-left font-semibold text-slate-900 flex items-center justify-between gap-4 hover:bg-slate-100/80 transition-colors"
+                >
+                  <span className="text-sm md:text-base flex items-center gap-2">
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 font-bold">
+                      Q{idx + 1}
+                    </span>
+                    {faq.question}
+                  </span>
+                  {isOpen ? (
+                    <ChevronUp className="w-5 h-5 text-rose-600 shrink-0" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-slate-400 shrink-0" />
+                  )}
+                </button>
+
+                {isOpen && (
+                  <div className="p-5 pt-0 text-slate-700 text-xs md:text-sm leading-relaxed border-t border-slate-200 bg-white">
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Cross-linking Related Calculators */}
+      <section className="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+        <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+          <PieChart className="w-6 h-6 text-rose-600" />
+          <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+            Related Fitness & Nutrition Calculators
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <Link
+            href="/calculators/macro-calculator"
+            className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-rose-400 hover:bg-rose-50/30 transition-all group"
+          >
+            <div className="font-bold text-slate-900 group-hover:text-rose-600 transition-colors flex items-center justify-between">
+              Macro Calculator
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-rose-600" />
+            </div>
+            <p className="text-xs text-slate-500 mt-1">Full macronutrient suite.</p>
+          </Link>
+
+          <Link
+            href="/calculators/carbohydrate-calculator"
+            className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-cyan-400 hover:bg-cyan-50/30 transition-all group"
+          >
+            <div className="font-bold text-slate-900 group-hover:text-cyan-600 transition-colors flex items-center justify-between">
+              Carbohydrate Calculator
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-600" />
+            </div>
+            <p className="text-xs text-slate-500 mt-1">Net carbs & glycemic load.</p>
+          </Link>
+
+          <Link
+            href="/calculators/protein-calculator"
+            className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/30 transition-all group"
+          >
+            <div className="font-bold text-slate-900 group-hover:text-emerald-600 transition-colors flex items-center justify-between">
+              Protein Calculator
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600" />
+            </div>
+            <p className="text-xs text-slate-500 mt-1">Muscle building & leucine targets.</p>
+          </Link>
+
+          <Link
+            href="/calculators/calorie-calculator"
+            className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-purple-400 hover:bg-purple-50/30 transition-all group"
+          >
+            <div className="font-bold text-slate-900 group-hover:text-purple-600 transition-colors flex items-center justify-between">
+              Calorie Calculator
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-purple-600" />
+            </div>
+            <p className="text-xs text-slate-500 mt-1">Daily energy expenditure.</p>
+          </Link>
+
+          <Link
+            href="/calculators/tdee-calculator"
+            className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-amber-400 hover:bg-amber-50/30 transition-all group"
+          >
+            <div className="font-bold text-slate-900 group-hover:text-amber-600 transition-colors flex items-center justify-between">
+              TDEE Calculator
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600" />
+            </div>
+            <p className="text-xs text-slate-500 mt-1">Total daily energy expenditure.</p>
+          </Link>
+
+          <Link
+            href="/calculators/bmr-calculator"
+            className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-blue-400 hover:bg-blue-50/30 transition-all group"
+          >
+            <div className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+              BMR Calculator
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600" />
+            </div>
+            <p className="text-xs text-slate-500 mt-1">Basal metabolic rate.</p>
+          </Link>
+        </div>
+      </section>
+
+      {/* Medical Disclaimer */}
+      <section className="bg-amber-50 border border-amber-200 p-6 rounded-2xl flex items-start gap-4 text-xs md:text-sm text-amber-900">
+        <ShieldAlert className="w-6 h-6 text-amber-600 shrink-0 mt-0.5" />
+        <div>
+          <strong className="text-amber-950 font-bold block mb-1">Nutritional & Cardiovascular Disclaimer</strong>
+          This fat intake calculator and educational content are intended for informational purposes only. They do not constitute clinical diagnosis or medical nutrition therapy. Individuals with familial hypercholesterolemia, coronary artery disease, or cardiovascular risk factors should consult a board-certified cardiologist or registered dietitian (RD) regarding lipid targets.
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export default FatIntakeContent;
