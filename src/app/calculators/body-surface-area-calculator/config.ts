@@ -1,63 +1,71 @@
-import { CalculatorModuleDefinition } from "@/calculators/types";
-import { calculateBodySurfaceAreaCalculator } from "./calculator";
-import { body_surface_area_calculatorFaqs } from "./faq";
+import { CalculatorModuleDefinition } from "@/types/calculator";
+import { Activity } from "lucide-react";
 
 export const body_surface_area_calculatorConfig: CalculatorModuleDefinition = {
   id: "body-surface-area-calculator",
-  title: "Body Surface Area Calculator",
   slug: "body-surface-area-calculator",
-  category: "Health",
-  subcategory: "Nutrition & Body",
-  description: "Calculate Body Surface Area (BSA) in square meters using Mosteller, Du Bois, and Haycock formulas.",
-  iconName: "Maximize",
-  featured: true,
-  keywords: ["bsa","body surface area","mosteller","du bois"],
-  priority: 1,
-  relatedCalculators: ["bmi-calculator","gfr-calculator"],
-  formulaDescription: "Mosteller BSA = √[ Weight (kg) × Height (cm) / 3600 ]",
-  faqs: body_surface_area_calculatorFaqs,
+  title: "Body Surface Area (BSA) Calculator",
+  description:
+    "Clinical Body Surface Area (BSA) suite supporting Mosteller, Du Bois, Haycock, Schlich 3D, Chemotherapy dosing, Cardiac Index, GFR normalization, and 9-formula comparison.",
+  category: "health",
+  subcategory: "clinical",
+  icon: Activity,
+  tags: [
+    "bsa",
+    "body surface area",
+    "mosteller",
+    "dubois",
+    "chemotherapy dosing",
+    "cardiac index",
+    "gfr normalization",
+    "haycock",
+  ],
+  modes: [
+    { id: "mosteller-clinical", name: "Mosteller Clinical Standard", description: "Gold standard oncology & clinical equation" },
+    { id: "dubois-classic", name: "Du Bois & Du Bois", description: "Classic historical metabolic equation (1916)" },
+    { id: "haycock-pediatric", name: "Haycock Pediatric", description: "Pediatric & infant precise equation (1978)" },
+    { id: "schlich-gender", name: "Schlich 3D Scan", description: "Gender-differentiated 3D laser scan formula" },
+    { id: "chemo-dosing", name: "Chemotherapy Dosing", description: "Target mg/m2 & ASCO obese capping calculator" },
+    { id: "cardiac-index", name: "Cardiac Index", description: "Hemodynamic CI (L/min/m2) & Stroke Volume Index" },
+    { id: "gfr-normalization", name: "GFR Normalization", description: "Renal clearance surface area normalization" },
+    { id: "pediatric-bsa", name: "Pediatric BSA", description: "Infant & children surface estimation" },
+    { id: "formula-comparison", name: "9-Formula Comparison", description: "Side-by-side variance analysis across all formulas" },
+    { id: "custom-oncology", name: "Custom Clinical Eval", description: "Comprehensive multi-variable evaluation" },
+  ],
   inputs: [
-  {
-    "name": "weightKg",
-    "label": "Weight (kg)",
-    "type": "number",
-    "defaultValue": 70,
-    "min": 10,
-    "max": 300,
-    "step": 1
-  },
-  {
-    "name": "heightCm",
-    "label": "Height (cm)",
-    "type": "number",
-    "defaultValue": 175,
-    "min": 50,
-    "max": 250,
-    "step": 1
-  }
-],
+    {
+      id: "gender",
+      label: "Gender",
+      type: "select",
+      defaultValue: "male",
+      options: [
+        { label: "Male", value: "male" },
+        { label: "Female", value: "female" },
+      ],
+    },
+    {
+      id: "heightCm",
+      label: "Height (cm)",
+      type: "number",
+      defaultValue: 170,
+      min: 30,
+      max: 250,
+      step: 0.5,
+    },
+    {
+      id: "weightKg",
+      label: "Weight (kg)",
+      type: "number",
+      defaultValue: 70,
+      min: 1,
+      max: 350,
+      step: 0.5,
+    },
+  ],
   outputs: [
-  {
-    "name": "mostellerBsa",
-    "label": "Mosteller BSA",
-    "format": "number",
-    "highlight": true,
-    "unit": "m²"
-  },
-  {
-    "name": "duBoisBsa",
-    "label": "Du Bois BSA",
-    "format": "number",
-    "unit": "m²"
-  },
-  {
-    "name": "haycockBsa",
-    "label": "Haycock BSA",
-    "format": "number",
-    "unit": "m²"
-  }
-],
-  calculate: calculateBodySurfaceAreaCalculator,
+    { id: "primaryBsaM2", label: "Body Surface Area (m²)", type: "number" },
+    { id: "primaryBsaFt2", label: "Body Surface Area (ft²)", type: "number" },
+    { id: "bmi", label: "Body Mass Index (BMI)", type: "number" },
+    { id: "idealBodyWeightKg", label: "Ideal Body Weight (kg)", type: "number" },
+  ],
 };
-
-export default body_surface_area_calculatorConfig;

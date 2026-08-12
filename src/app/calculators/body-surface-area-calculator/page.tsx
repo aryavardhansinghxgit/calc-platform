@@ -1,30 +1,82 @@
-import { Metadata } from "next";
-import { body_surface_area_calculatorMetadata } from "./metadata";
+import React from "react";
 import { body_surface_area_calculatorConfig } from "./config";
+import { bsaMetadata } from "./metadata";
+import { bsaFaqs } from "./faq";
 import { CalculatorLayout } from "@/components/calculator/CalculatorLayout";
-import { generateJsonLdSchema } from "@/lib/seo-helpers";
 
-export const metadata: Metadata = body_surface_area_calculatorMetadata;
+export const metadata = bsaMetadata;
 
 export default function BodySurfaceAreaCalculatorPage() {
-  const { calculate, ...serializableDef } = body_surface_area_calculatorConfig;
-  const schemas = generateJsonLdSchema({
-    title: body_surface_area_calculatorConfig.title,
-    description: body_surface_area_calculatorConfig.description,
-    slug: body_surface_area_calculatorConfig.slug,
-    category: body_surface_area_calculatorConfig.category,
-    faqs: body_surface_area_calculatorConfig.faqs,
-  });
+  const serializableDef = {
+    ...body_surface_area_calculatorConfig,
+    icon: undefined,
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: bsaFaqs.slice(0, 25).map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "MedicalWebPage",
+    name: "Body Surface Area (BSA) Calculator & Clinical Dosing Suite",
+    description:
+      "Clinical Body Surface Area (BSA) calculator supporting Mosteller, Du Bois, Haycock, Schlich 3D, Chemotherapy dosing, Cardiac Index, and GFR normalization.",
+    url: "https://calculator-platform.com/calculators/body-surface-area-calculator",
+    audience: {
+      "@type": "MedicalAudience",
+      audienceType: "Clinicians, Oncologists, Nephrologists, Pediatricians, Patients",
+    },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://calculator-platform.com",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Health Calculators",
+        item: "https://calculator-platform.com/category/health",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Body Surface Area Calculator",
+        item: "https://calculator-platform.com/calculators/body-surface-area-calculator",
+      },
+    ],
+  };
 
   return (
     <>
-      {schemas.map((schema, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <CalculatorLayout definition={serializableDef} />
     </>
   );
