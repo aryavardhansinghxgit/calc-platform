@@ -101,7 +101,7 @@ export function decimalToFrac(decStr: string): Fraction {
 export function recurringDecimalToFrac(nonRepeat: string, repeat: string): Fraction {
   const dNon = BigInt(nonRepeat.length);
   const dRep = BigInt(repeat.length);
-  
+
   const fullStr = nonRepeat + repeat;
   const valFull = BigInt(fullStr || "0");
   const valNon = BigInt(nonRepeat || "0");

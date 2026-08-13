@@ -169,7 +169,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       if (stored) {
         setSavedItems(JSON.parse(stored));
       }
-    } catch (e) {}
+    } catch (e) { }
   }, [definition.id]);
 
   const handleSaveCalculation = () => {
@@ -187,7 +187,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
     setSavedItems(updated);
     try {
       localStorage.setItem(`saved_calc_${definition.id}`, JSON.stringify(updated));
-    } catch (e) {}
+    } catch (e) { }
 
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
@@ -198,7 +198,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
     setSavedItems(updated);
     try {
       localStorage.setItem(`saved_calc_${definition.id}`, JSON.stringify(updated));
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const handleInputChange = (key: string, value: any) => {

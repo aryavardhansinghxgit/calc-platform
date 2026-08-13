@@ -122,11 +122,11 @@ export function FractionCalculator() {
     const newItem: SavedCalculationItem = {
       id: Date.now().toString(),
       title: activeTab.toUpperCase().replace("-", " "),
-      expression: activeTab === "fraction-ops" || activeTab === "big-int" 
-        ? `${num1}/${den1} ${op} ${num2}/${den2}` 
-        : activeTab === "mixed-ops" 
-        ? `${w1} ${num1}/${den1} ${op} ${w2} ${num2}/${den2}` 
-        : activeTab === "dec-to-frac" ? decVal : `${num1}/${den1}`,
+      expression: activeTab === "fraction-ops" || activeTab === "big-int"
+        ? `${num1}/${den1} ${op} ${num2}/${den2}`
+        : activeTab === "mixed-ops"
+          ? `${w1} ${num1}/${den1} ${op} ${w2} ${num2}/${den2}`
+          : activeTab === "dec-to-frac" ? decVal : `${num1}/${den1}`,
       result: calculationResult.simplifiedFraction,
       decimal: calculationResult.decimal,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -136,7 +136,7 @@ export function FractionCalculator() {
     setSavedItems(updated);
     try {
       localStorage.setItem("saved_fraction_calculations", JSON.stringify(updated));
-    } catch (e) {}
+    } catch (e) { }
 
     setJustSaved(true);
     setTimeout(() => setJustSaved(false), 2000);
@@ -147,7 +147,7 @@ export function FractionCalculator() {
     setSavedItems(updated);
     try {
       localStorage.setItem("saved_fraction_calculations", JSON.stringify(updated));
-    } catch (e) {}
+    } catch (e) { }
   };
 
   const handleCopy = () => {
@@ -181,11 +181,10 @@ export function FractionCalculator() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-3 py-1.5 rounded-lg font-bold whitespace-nowrap transition-all cursor-pointer ${
-              activeTab === tab.id
+            className={`px-3 py-1.5 rounded-lg font-bold whitespace-nowrap transition-all cursor-pointer ${activeTab === tab.id
                 ? "bg-blue-600 text-white shadow-xs"
                 : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200"
-            }`}
+              }`}
           >
             {tab.label}
           </button>

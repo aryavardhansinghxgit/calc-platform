@@ -28,7 +28,7 @@ export interface PercentageCalculationResult {
 export function solvePercentageOf(p: number, v1: number): PercentageCalculationResult {
   const result = (p / 100) * v1;
   const dec = p / 100;
-  
+
   return {
     primaryResult: result.toLocaleString(undefined, { maximumFractionDigits: 6 }),
     primaryLabel: `${p}% of ${v1}`,
