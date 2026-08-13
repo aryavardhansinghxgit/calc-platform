@@ -1,6 +1,7 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateFractionCalculator } from "./calculator";
-import { fraction_calculatorFaqs } from "./faq";
+import { FractionCalculator } from "@/components/calculator/fraction/FractionCalculator";
+import { FractionContent } from "@/components/calculator/fraction/FractionContent";
 
 export const fraction_calculatorConfig: CalculatorModuleDefinition = {
   id: "fraction-calculator",
@@ -8,14 +9,15 @@ export const fraction_calculatorConfig: CalculatorModuleDefinition = {
   slug: "fraction-calculator",
   category: "Math",
   subcategory: "General Math",
-  description: "Add, subtract, multiply, and divide fractions with step-by-step reduction to simplest form.",
+  description: "Add, subtract, multiply, and divide fractions with step-by-step reduction, mixed numbers, SVG visualizers, and BigInt precision.",
   iconName: "Divide",
   featured: true,
-  keywords: ["fraction calculator","fractions","add fractions","simplify fraction","mixed numbers"],
+  keywords: ["fraction calculator","fractions","add fractions","simplify fraction","mixed numbers","decimal to fraction","big number fraction"],
   priority: 1,
-  relatedCalculators: ["ratio-calculator","percentage-calculator"],
+  relatedCalculators: ["ratio-calculator","percentage-calculator","scientific-calculator"],
   formulaDescription: "a/b ± c/d = (ad ± bc) / bd; simplified via Greatest Common Divisor.",
-  faqs: fraction_calculatorFaqs,
+  ContentComponent: FractionContent,
+  CustomComponent: FractionCalculator,
   inputs: [
   {
     "name": "num1",

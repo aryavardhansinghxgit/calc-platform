@@ -323,7 +323,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-            {isScientific ? (
+            {(definition as any).CustomComponent ? (
+              React.createElement((definition as any).CustomComponent)
+            ) : isScientific ? (
               <ScientificCalculator />
             ) : isBac ? (
               <BacCalculator />
