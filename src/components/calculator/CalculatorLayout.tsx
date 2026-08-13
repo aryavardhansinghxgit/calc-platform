@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, ChevronRight, BarChart2, Table, BookOpen, HelpCircle, Calculator as CalcIcon, Search, ArrowRight } from "lucide-react";
+import { ArrowLeft, ChevronRight, BarChart2, Table, BookOpen, HelpCircle, Calculator as CalcIcon, Search, ArrowRight, Printer, Bookmark, Check, Trash2, History } from "lucide-react";
 import dynamic from "next/dynamic";
 import { CalculatorModuleDefinition, getCalculatorsByCategory, searchCalculators } from "@/calculators";
 import { CalculationResult } from "@/lib/calculator-engine/types";
@@ -126,7 +126,6 @@ import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Printer } from "lucide-react";
 import ReportModal from "@/components/report/ReportModal";
 import { generateGenericReportData } from "@/lib/report-generator/generic-report";
 
@@ -161,6 +160,46 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const [inputs, setInputs] = useState<Record<string, any>>(initialInputs);
   const [sidebarQuery, setSidebarQuery] = useState("");
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [savedItems, setSavedItems] = useState<Array<{ id: string; title: string; primaryResult: string; timestamp: string }>>([]);
+  const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(`saved_calc_${definition.id}`);
+      if (stored) {
+        setSavedItems(JSON.parse(stored));
+      }
+    } catch (e) {}
+  }, [definition.id]);
+
+  const handleSaveCalculation = () => {
+    if (!calculationResult.success) return;
+    const firstOutput = definition.outputs[0];
+    const primaryResult = firstOutput ? `${firstOutput.label}: ${calculationResult.formatted[firstOutput.name] || calculationResult.outputs[firstOutput.name]}` : "Calculated Result";
+    const newItem = {
+      id: Date.now().toString(),
+      title: definition.title,
+      primaryResult,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+
+    const updated = [newItem, ...savedItems.filter(i => i.primaryResult !== newItem.primaryResult)].slice(0, 15);
+    setSavedItems(updated);
+    try {
+      localStorage.setItem(`saved_calc_${definition.id}`, JSON.stringify(updated));
+    } catch (e) {}
+
+    setIsSaved(true);
+    setTimeout(() => setIsSaved(false), 2000);
+  };
+
+  const handleDeleteSavedItem = (id: string) => {
+    const updated = savedItems.filter(i => i.id !== id);
+    setSavedItems(updated);
+    try {
+      localStorage.setItem(`saved_calc_${definition.id}`, JSON.stringify(updated));
+    } catch (e) {}
+  };
 
   const handleInputChange = (key: string, value: any) => {
     setInputs((prev) => ({ ...prev, [key]: value }));
@@ -491,20 +530,62 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                       <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
                         Calculated Summary
                       </h2>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setIsReportModalOpen(true)}
-                        className="h-7 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer"
-                      >
-                        <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
-                      </Button>
+                      <div className="flex items-center gap-1.5">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={handleSaveCalculation}
+                          className="h-7 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer hover:bg-zinc-50"
+                        >
+                          {isSaved ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Bookmark className="h-3.5 w-3.5 text-blue-500" />}
+                          {isSaved ? "Saved!" : "Save"}
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => window.print()}
+                          className="h-7 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer hover:bg-zinc-50 no-print"
+                        >
+                          <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
+                        </Button>
+                      </div>
                     </div>
                     <CalculatorResult
                       definition={definition}
                       result={calculationResult}
                     />
+
+                    {/* SAVED CALCULATIONS LIST */}
+                    {savedItems.length > 0 && (
+                      <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
+                        <div className="flex items-center justify-between pb-1 border-b border-zinc-200 dark:border-zinc-800">
+                          <span className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1">
+                            <History className="w-3 h-3 text-blue-500" /> Saved Calculations ({savedItems.length})
+                          </span>
+                          <button
+                            onClick={() => {
+                              setSavedItems([]);
+                              localStorage.removeItem(`saved_calc_${definition.id}`);
+                            }}
+                            className="text-[10px] text-zinc-400 hover:text-red-500 font-medium cursor-pointer"
+                          >
+                            Clear
+                          </button>
+                        </div>
+                        <div className="space-y-1.5 max-h-36 overflow-y-auto">
+                          {savedItems.map((item) => (
+                            <div key={item.id} className="p-2 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-mono">
+                              <span className="font-bold text-zinc-800 dark:text-zinc-200 truncate">{item.primaryResult}</span>
+                              <button onClick={() => handleDeleteSavedItem(item.id)} className="text-zinc-400 hover:text-red-500 p-0.5" title="Delete">
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     {CustomChart && calculationResult.data && (
                       <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800">

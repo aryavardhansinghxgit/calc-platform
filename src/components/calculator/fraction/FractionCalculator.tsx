@@ -1,9 +1,18 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import { Copy, Check, Share2, Calculator, ArrowRight, RefreshCw } from "lucide-react";
+import React, { useState, useMemo, useEffect } from "react";
+import { Copy, Check, Calculator, ArrowRight, RefreshCw, Bookmark, Trash2, History, Printer } from "lucide-react";
 import { calculateFractionOperation, gcdBigInt, lcmBigInt, simplifyFrac, toMixed, decimalToFrac, recurringDecimalToFrac, approximateFraction } from "@/lib/calculator-engine/formulas/fraction";
 import { FractionVisualizer } from "./FractionVisualizer";
+
+export interface SavedCalculationItem {
+  id: string;
+  title: string;
+  expression: string;
+  result: string;
+  decimal: string;
+  timestamp: string;
+}
 
 export function FractionCalculator() {
   const [activeTab, setActiveTab] = useState<string>("fraction-ops");
@@ -30,7 +39,19 @@ export function FractionCalculator() {
   const [orderingInput, setOrderingInput] = useState<string>("3/4, 1/2, 5/8, 2/3");
 
   const [copied, setCopied] = useState(false);
-  const [shared, setShared] = useState(false);
+  const [savedItems, setSavedItems] = useState<SavedCalculationItem[]>([]);
+  const [justSaved, setJustSaved] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("saved_fraction_calculations");
+      if (stored) {
+        setSavedItems(JSON.parse(stored));
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, []);
 
   // Compute calculation output
   const calculationResult = useMemo(() => {
@@ -96,19 +117,45 @@ export function FractionCalculator() {
     }
   }, [activeTab, num1, den1, op, num2, den2, w1, w2, decVal, nonRepeatStr, repeatStr]);
 
+  const handleSave = () => {
+    if (!calculationResult) return;
+    const newItem: SavedCalculationItem = {
+      id: Date.now().toString(),
+      title: activeTab.toUpperCase().replace("-", " "),
+      expression: activeTab === "fraction-ops" || activeTab === "big-int" 
+        ? `${num1}/${den1} ${op} ${num2}/${den2}` 
+        : activeTab === "mixed-ops" 
+        ? `${w1} ${num1}/${den1} ${op} ${w2} ${num2}/${den2}` 
+        : activeTab === "dec-to-frac" ? decVal : `${num1}/${den1}`,
+      result: calculationResult.simplifiedFraction,
+      decimal: calculationResult.decimal,
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+
+    const updated = [newItem, ...savedItems.filter(i => i.expression !== newItem.expression)].slice(0, 20);
+    setSavedItems(updated);
+    try {
+      localStorage.setItem("saved_fraction_calculations", JSON.stringify(updated));
+    } catch (e) {}
+
+    setJustSaved(true);
+    setTimeout(() => setJustSaved(false), 2000);
+  };
+
+  const handleDeleteSaved = (id: string) => {
+    const updated = savedItems.filter(i => i.id !== id);
+    setSavedItems(updated);
+    try {
+      localStorage.setItem("saved_fraction_calculations", JSON.stringify(updated));
+    } catch (e) {}
+  };
+
   const handleCopy = () => {
     if (!calculationResult) return;
     const text = `Result: ${calculationResult.simplifiedFraction} (${calculationResult.mixedNumber}) | Decimal: ${calculationResult.decimal}`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleShare = () => {
-    const url = window.location.href;
-    navigator.clipboard.writeText(url);
-    setShared(true);
-    setTimeout(() => setShared(false), 2000);
   };
 
   // Primary fraction for live visualizer
@@ -322,18 +369,27 @@ export function FractionCalculator() {
               </span>
               <div className="flex items-center gap-2">
                 <button
+                  onClick={handleSave}
+                  className="text-xs text-slate-300 hover:text-white flex items-center gap-1 font-semibold px-2 py-0.5 bg-slate-800 hover:bg-slate-700 rounded transition-colors"
+                  title="Save this calculation"
+                >
+                  {justSaved ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Bookmark className="w-3.5 h-3.5 text-blue-400" />}
+                  {justSaved ? "Saved!" : "Save"}
+                </button>
+                <button
                   onClick={handleCopy}
-                  className="text-xs text-slate-300 hover:text-white flex items-center gap-1 font-semibold"
+                  className="text-xs text-slate-300 hover:text-white flex items-center gap-1 font-semibold no-print"
                 >
                   {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                   {copied ? "Copied" : "Copy"}
                 </button>
                 <button
-                  onClick={handleShare}
-                  className="text-xs text-slate-300 hover:text-white flex items-center gap-1 font-semibold"
+                  onClick={() => window.print()}
+                  className="text-xs text-slate-300 hover:text-white flex items-center gap-1 font-semibold px-2 py-0.5 bg-slate-800 hover:bg-slate-700 rounded transition-colors no-print"
+                  title="Print or export to PDF"
                 >
-                  {shared ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
-                  {shared ? "Shared" : "Share"}
+                  <Printer className="w-3.5 h-3.5 text-purple-400" />
+                  Print / PDF
                 </button>
               </div>
             </div>
@@ -382,6 +438,48 @@ export function FractionCalculator() {
               </div>
             )}
           </div>
+
+          {/* SAVED CALCULATIONS HISTORY CARD */}
+          {savedItems.length > 0 && (
+            <div className="p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-3">
+              <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+                  <History className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                  <span>Saved Calculations ({savedItems.length})</span>
+                </h4>
+                <button
+                  onClick={() => {
+                    setSavedItems([]);
+                    localStorage.removeItem("saved_fraction_calculations");
+                  }}
+                  className="text-[10px] text-zinc-400 hover:text-red-500 font-medium cursor-pointer"
+                >
+                  Clear All
+                </button>
+              </div>
+
+              <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                {savedItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-2 text-xs font-mono"
+                  >
+                    <div className="truncate">
+                      <div className="text-[10px] font-sans font-bold text-blue-600 dark:text-blue-400">{item.title}</div>
+                      <div className="text-zinc-700 dark:text-zinc-300 font-bold">{item.expression} = <span className="text-emerald-600 dark:text-emerald-400">{item.result}</span></div>
+                    </div>
+                    <button
+                      onClick={() => handleDeleteSaved(item.id)}
+                      className="p-1 text-zinc-400 hover:text-red-500 rounded transition-colors"
+                      title="Remove"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* 5-STEP MATHEMATICAL SOLUTION ENGINE */}
           {calculationResult && calculationResult.steps && (
