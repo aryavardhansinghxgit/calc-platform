@@ -1016,19 +1016,42 @@ export function ResistorCalculator() {
                   </div>
                 )}
 
-                {/* Print Share Action bar */}
-                <div className="flex items-center justify-between pt-1 border-t border-slate-800 no-print">
+                {/* UNIFIED ACTION BAR: Copy, Save, Share, Print */}
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800 no-print">
                   <button
-                    onClick={handleShare}
-                    className="text-xs text-slate-300 hover:text-white flex items-center gap-1.5 font-bold cursor-pointer"
+                    type="button"
+                    onClick={handleCopy}
+                    className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
-                    <Share2 className="w-4 h-4 text-blue-400" /> Share Config
+                    {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-slate-400" />}
+                    <span>{copied ? "Copied!" : "Copy Result"}</span>
                   </button>
+
                   <button
-                    onClick={handlePrint}
-                    className="text-xs text-slate-300 hover:text-white flex items-center gap-1.5 font-bold cursor-pointer"
+                    type="button"
+                    onClick={handleSave}
+                    className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
-                    <Printer className="w-4 h-4 text-purple-400" /> Print Report
+                    {isSaved ? <Check className="w-4 h-4 text-emerald-400" /> : <Bookmark className="w-4 h-4 text-amber-400" />}
+                    <span>{isSaved ? "Saved!" : "Save"}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleShare}
+                    className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Share2 className="w-4 h-4 text-blue-400" />
+                    <span>Share Link</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handlePrint}
+                    className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Printer className="w-4 h-4 text-purple-400" />
+                    <span>Print Report</span>
                   </button>
                 </div>
               </div>

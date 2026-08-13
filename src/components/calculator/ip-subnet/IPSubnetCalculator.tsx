@@ -765,38 +765,45 @@ export function IPSubnetCalculator() {
             </div>
           )}
 
-          {/* ACTION BUTTONS BAR */}
-          <div className="flex flex-wrap gap-2.5">
+          {/* UNIFIED ACTION BAR: Copy, Save, Share, Print */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-zinc-200 dark:border-zinc-800 no-print">
             <button
-              onClick={handleSave}
-              disabled={!result || !!result.error}
-              className="flex-1 min-w-[100px] h-9 bg-zinc-900 dark:bg-zinc-800 text-white rounded-lg text-xs font-bold hover:bg-zinc-800 dark:hover:bg-zinc-700 transition-all flex items-center justify-center gap-1.5 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-            >
-              <Save className="w-3.5 h-3.5" />
-              <span>{justSaved ? "Saved!" : "Save"}</span>
-            </button>
-            <button
+              type="button"
               onClick={handleCopy}
               disabled={!result || !!result.error}
-              className="flex-1 min-w-[100px] h-9 bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg text-xs font-bold hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all flex items-center justify-center gap-1.5 shadow-xs disabled:opacity-40 cursor-pointer"
+              className="text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-40"
             >
-              <Copy className="w-3.5 h-3.5" />
-              <span>{copied ? "Copied!" : "Copy"}</span>
+              {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-zinc-400 dark:text-zinc-500" />}
+              <span>{copied ? "Copied!" : "Copy Result"}</span>
             </button>
+
             <button
+              type="button"
+              onClick={handleSave}
+              disabled={!result || !!result.error}
+              className="text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-40"
+            >
+              {justSaved ? <Check className="w-4 h-4 text-emerald-500" /> : <Bookmark className="w-4 h-4 text-amber-500" />}
+              <span>{justSaved ? "Saved!" : "Save"}</span>
+            </button>
+
+            <button
+              type="button"
               onClick={handleShare}
               disabled={!result || !!result.error}
-              className="w-9 h-9 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg flex items-center justify-center hover:bg-zinc-50 dark:hover:bg-zinc-800 cursor-pointer"
-              title="Share URL link"
+              className="text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-40"
             >
-              <Share2 className="w-4 h-4" />
+              <Share2 className="w-4 h-4 text-blue-500" />
+              <span>Share Link</span>
             </button>
+
             <button
+              type="button"
               onClick={handlePrint}
-              className="w-9 h-9 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg flex items-center justify-center hover:bg-zinc-50 dark:hover:bg-zinc-800 cursor-pointer"
-              title="Print Subnet Report"
+              className="text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
             >
-              <Printer className="w-4 h-4" />
+              <Printer className="w-4 h-4 text-purple-500" />
+              <span>Print Report</span>
             </button>
           </div>
 
