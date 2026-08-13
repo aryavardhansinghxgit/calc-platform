@@ -47,7 +47,7 @@ export function RandomCalculator() {
       if (stored) {
         setSavedItems(JSON.parse(stored));
       }
-    } catch (e) {}
+    } catch (e) { }
   }, []);
 
   // Compute calculation output
@@ -116,7 +116,7 @@ export function RandomCalculator() {
     setSavedItems(updated);
     try {
       localStorage.setItem("saved_random_calculations", JSON.stringify(updated));
-    } catch (e) {}
+    } catch (e) { }
 
     setJustSaved(true);
     setTimeout(() => setJustSaved(false), 2000);
@@ -127,7 +127,7 @@ export function RandomCalculator() {
     setSavedItems(updated);
     try {
       localStorage.setItem("saved_random_calculations", JSON.stringify(updated));
-    } catch (e) {}
+    } catch (e) { }
   };
 
   return (
@@ -146,11 +146,10 @@ export function RandomCalculator() {
               if (tab.id === "crypto") setUseCrypto(true);
               else setUseCrypto(false);
             }}
-            className={`px-3 py-1.5 rounded-lg font-bold whitespace-nowrap transition-all cursor-pointer ${
-              activeTab === tab.id
+            className={`px-3 py-1.5 rounded-lg font-bold whitespace-nowrap transition-all cursor-pointer ${activeTab === tab.id
                 ? "bg-blue-600 text-white shadow-xs"
                 : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200"
-            }`}
+              }`}
           >
             {tab.label}
           </button>
@@ -310,9 +309,8 @@ export function RandomCalculator() {
                       <button
                         key={fmt}
                         onClick={() => setOutputFormat(fmt)}
-                        className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold cursor-pointer ${
-                          outputFormat === fmt ? "bg-blue-600 text-white" : "bg-slate-800 text-slate-300"
-                        }`}
+                        className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold cursor-pointer ${outputFormat === fmt ? "bg-blue-600 text-white" : "bg-slate-800 text-slate-300"
+                          }`}
                       >
                         {fmt}
                       </button>
