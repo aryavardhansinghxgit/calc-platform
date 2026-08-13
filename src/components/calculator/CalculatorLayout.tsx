@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, ChevronRight, BarChart2, Table, BookOpen, HelpCircle, Calculator as CalcIcon, Search, ArrowRight, Printer, Bookmark, Check, Trash2, History } from "lucide-react";
+import { ArrowLeft, ChevronRight, BarChart2, Table, BookOpen, HelpCircle, Calculator as CalcIcon, Search, ArrowRight, Printer, Bookmark, Check, Trash2, History, Copy } from "lucide-react";
 import dynamic from "next/dynamic";
 import { CalculatorModuleDefinition, getCalculatorsByCategory, searchCalculators } from "@/calculators";
 import { CalculationResult } from "@/lib/calculator-engine/types";
