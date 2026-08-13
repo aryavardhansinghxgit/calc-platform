@@ -297,22 +297,6 @@ export function RandomCalculator() {
                   {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                   {copied ? "Copied" : "Copy"}
                 </button>
-                <button
-                  onClick={handleDownload}
-                  className="text-xs text-slate-300 hover:text-white flex items-center gap-1 font-semibold no-print"
-                  title="Download .txt file"
-                >
-                  <Download className="w-3.5 h-3.5 text-sky-400" />
-                  Download
-                </button>
-                <button
-                  onClick={() => window.print()}
-                  className="text-xs text-slate-300 hover:text-white flex items-center gap-1 font-semibold px-2 py-0.5 bg-slate-800 hover:bg-slate-700 rounded transition-colors no-print"
-                  title="Print or export to PDF"
-                >
-                  <Printer className="w-3.5 h-3.5 text-purple-400" />
-                  Print / PDF
-                </button>
               </div>
             </div>
 

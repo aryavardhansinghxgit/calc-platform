@@ -545,10 +545,15 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                           type="button"
                           variant="outline"
                           size="sm"
-                          onClick={() => window.print()}
+                          onClick={() => {
+                            if (calculationResult.success) {
+                              const summary = definition.outputs.map(o => `${o.label}: ${calculationResult.formatted[o.name] || calculationResult.outputs[o.name]}`).join(" | ");
+                              navigator.clipboard.writeText(summary);
+                            }
+                          }}
                           className="h-7 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer hover:bg-zinc-50 no-print"
                         >
-                          <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
+                          <Copy className="h-3.5 w-3.5 text-zinc-500" /> Copy
                         </Button>
                       </div>
                     </div>
