@@ -1,6 +1,7 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculatePercentageCalculator } from "./calculator";
-import { percentage_calculatorFaqs } from "./faq";
+import { PercentageCalculator } from "@/components/calculator/percentage/PercentageCalculator";
+import { PercentageContent } from "@/components/calculator/percentage/PercentageContent";
 
 export const percentage_calculatorConfig: CalculatorModuleDefinition = {
   id: "percentage-calculator",
@@ -8,14 +9,15 @@ export const percentage_calculatorConfig: CalculatorModuleDefinition = {
   slug: "percentage-calculator",
   category: "Math",
   subcategory: "General Math",
-  description: "Calculate percentage values, percentage changes, increases, decreases, and proportions.",
+  description: "Calculate percentage values, 3-way solvers, percentage changes, percentage differences, discounts, and proportions.",
   iconName: "Percent",
   featured: true,
-  keywords: ["percentage","percent change","percent increase","discount","proportion"],
+  keywords: ["percentage","percent change","percent increase","discount","proportion","percentage difference","3-way percentage"],
   priority: 1,
-  relatedCalculators: ["percent-error-calculator","fraction-calculator","ratio-calculator"],
+  relatedCalculators: ["percent-error-calculator","fraction-calculator","ratio-calculator","scientific-calculator"],
   formulaDescription: "Percentage = (Part / Whole) × 100",
-  faqs: percentage_calculatorFaqs,
+  ContentComponent: PercentageContent,
+  CustomComponent: PercentageCalculator,
   inputs: [
   {
     "name": "calcType",

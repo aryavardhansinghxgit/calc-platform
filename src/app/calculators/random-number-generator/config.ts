@@ -1,6 +1,7 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateRandomNumberGenerator } from "./calculator";
-import { random_number_generatorFaqs } from "./faq";
+import { RandomCalculator } from "@/components/calculator/random-number-generator/RandomCalculator";
+import { RandomContent } from "@/components/calculator/random-number-generator/RandomContent";
 
 export const random_number_generatorConfig: CalculatorModuleDefinition = {
   id: "random-number-generator",
@@ -8,14 +9,15 @@ export const random_number_generatorConfig: CalculatorModuleDefinition = {
   slug: "random-number-generator",
   category: "Math",
   subcategory: "General Math",
-  description: "Generate bounded pseudo-random integers or floating point numbers instantly.",
+  description: "Generate bounded pseudo-random integers, decimals, hardware WebCrypto CSPRNG, unique lottery samples, and CSV/JSON downloads.",
   iconName: "Shuffle",
   featured: true,
-  keywords: ["random number","rng","random generator","dice roll","probability"],
+  keywords: ["random number","rng","random generator","dice roll","probability","webcrypto","prng","lottery generator"],
   priority: 1,
-  relatedCalculators: ["probability-calculator","statistics-calculator"],
+  relatedCalculators: ["probability-calculator","statistics-calculator","standard-deviation-calculator"],
   formulaDescription: "Random Integer = Math.floor(Math.random() × (Max - Min + 1)) + Min",
-  faqs: random_number_generatorFaqs,
+  ContentComponent: RandomContent,
+  CustomComponent: RandomCalculator,
   inputs: [
   {
     "name": "min",
