@@ -640,6 +640,12 @@ export function ScientificCalculator() {
   const [showAdditional, setShowAdditional] = useState<boolean>(true);
   const [copied, setCopied] = useState<boolean>(false);
   const [hasEvaluated, setHasEvaluated] = useState<boolean>(false);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+
+  const triggerStatus = (msg: string) => {
+    setStatusMessage(msg);
+    setTimeout(() => setStatusMessage(null), 3000);
+  };
 
   // Live real-time preview
   useEffect(() => {
@@ -703,28 +709,35 @@ export function ScientificCalculator() {
     setHistory((prev) => [{ expr: expression, result: finalStr, time }, ...prev.slice(0, 14)]);
   }, [expression, angleMode, lastAns, displayFormat]);
 
-  // Memory Operations
+  // Memory Operations with Visual Feedback
   const handleMemoryAdd = () => {
     const val = parseFloat(displayValue) || 0;
-    setMemory((prev) => prev + val);
+    const nextMem = memory + val;
+    setMemory(nextMem);
+    triggerStatus(`M+ (${val}) → M = ${nextMem}`);
   };
 
   const handleMemorySub = () => {
     const val = parseFloat(displayValue) || 0;
-    setMemory((prev) => prev - val);
+    const nextMem = memory - val;
+    setMemory(nextMem);
+    triggerStatus(`M- (${val}) → M = ${nextMem}`);
   };
 
   const handleMemoryRecall = () => {
     handleInput(String(memory));
+    triggerStatus(`Recalled M = ${memory}`);
   };
 
   const handleMemoryClear = () => {
     setMemory(0);
+    triggerStatus("Memory Cleared (M = 0)");
   };
 
   const handleMemoryStore = () => {
     const val = parseFloat(displayValue) || 0;
     setMemory(val);
+    triggerStatus(`Stored ${val} in Memory`);
   };
 
   // Physical Keyboard Listener
@@ -805,10 +818,16 @@ export function ScientificCalculator() {
         setExpression((prev) => (prev.startsWith("-") ? prev.slice(1) : "-" + prev));
         break;
       case "History":
-        setShowHistory((prev) => !prev);
+        setShowHistory((prev) => {
+          const next = !prev;
+          triggerStatus(next ? "History Drawer Opened" : "History Drawer Closed");
+          return next;
+        });
         break;
       case "Clear Hist":
         setHistory([]);
+        setShowHistory(true);
+        triggerStatus("Calculation History Cleared");
         break;
 
       // Function Triggers
@@ -1046,7 +1065,7 @@ export function ScientificCalculator() {
       { label: "DRG►", action: "DRG►", className: "font-bold text-indigo-600 dark:text-indigo-400" },
       { label: ",", action: ",", className: "font-bold text-zinc-700 dark:text-zinc-300" },
       { label: "←", action: "←", className: "font-bold text-zinc-700 dark:text-zinc-300" },
-      { label: "History", action: "History", className: "font-bold text-purple-600 dark:text-purple-400" },
+      { label: "History", action: "History", className: showHistory ? "font-bold text-white bg-purple-600 border-purple-700 shadow-xs" : "font-bold text-purple-600 dark:text-purple-400" },
       { label: "Clear Hist", action: "Clear Hist", className: "font-bold text-purple-600 dark:text-purple-400" },
     ],
   ];
@@ -1112,16 +1131,36 @@ export function ScientificCalculator() {
           <CardContent className="p-4 sm:p-5 space-y-3">
             {/* 1. LCD / DISPLAY BOX */}
             <div className="bg-emerald-950/10 dark:bg-emerald-950/40 border border-emerald-900/30 dark:border-emerald-800/40 rounded-xl p-3 sm:p-4 text-right font-mono space-y-1 shadow-inner relative">
+              {/* LCD Top Status Bar */}
+              <div className="flex items-center justify-between text-[11px] font-sans border-b border-emerald-900/20 dark:border-emerald-800/30 pb-1 mb-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 px-1.5 py-0.2 rounded">
+                    {angleMode.toUpperCase()}
+                  </span>
+                  {memory !== 0 && (
+                    <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 border border-amber-500/30 px-1.5 py-0.2 rounded flex items-center gap-1">
+                      M = {memory}
+                    </span>
+                  )}
+                </div>
+                {statusMessage ? (
+                  <span className="text-[10px] font-semibold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/60 px-2 py-0.5 rounded-full animate-pulse">
+                    {statusMessage}
+                  </span>
+                ) : (
+                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-mono">
+                    {displayFormat.toUpperCase()}
+                  </span>
+                )}
+              </div>
+
               {/* Top Expression Row */}
               <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 min-h-[1.25rem] truncate font-sans">
                 {expression || " "}
               </div>
 
               {/* Bottom Main Output Row */}
-              <div className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-emerald-300 tracking-wider truncate flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 font-sans border border-emerald-500/30 px-1.5 py-0.5 rounded">
-                  {angleMode.toUpperCase()}
-                </span>
+              <div className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-emerald-300 tracking-wider truncate flex items-center justify-end">
                 <span>{displayValue}</span>
               </div>
             </div>
@@ -1188,6 +1227,23 @@ export function ScientificCalculator() {
                 </label>
               </div>
 
+              {/* History Toggle Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  setShowHistory((prev) => !prev);
+                  triggerStatus(!showHistory ? "History Drawer Opened" : "History Drawer Closed");
+                }}
+                className={`text-[11px] px-2 py-0.5 rounded-md border font-semibold flex items-center gap-1 transition-colors ${
+                  showHistory
+                    ? "bg-purple-600 text-white border-purple-600"
+                    : "bg-zinc-100 dark:bg-zinc-800 text-purple-700 dark:text-purple-300 border-zinc-200 dark:border-zinc-700 hover:bg-purple-50"
+                }`}
+              >
+                <HistoryIcon className="w-3 h-3" />
+                History {history.length > 0 && `(${history.length})`}
+              </button>
+
               {/* Copy Result Button */}
               <button
                 onClick={handleCopy}
@@ -1198,7 +1254,67 @@ export function ScientificCalculator() {
               </button>
             </div>
 
-            {/* 3. MAIN BUTTON GRID (8 columns x 10 rows) */}
+            {/* 3. CALCULATION HISTORY DRAWER (PROMINENT TOP POSITION) */}
+            {showHistory && (
+              <div className="p-3 bg-purple-50/50 dark:bg-zinc-950 rounded-xl border border-purple-200 dark:border-purple-900/40 space-y-2 animate-in fade-in slide-in-from-top-1 duration-150">
+                <div className="flex items-center justify-between text-xs font-bold text-purple-950 dark:text-purple-200 border-b border-purple-100 dark:border-zinc-800 pb-2">
+                  <span className="flex items-center gap-1.5">
+                    <HistoryIcon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                    Calculation History ({history.length})
+                  </span>
+                  <div className="flex items-center gap-2">
+                    {history.length > 0 && (
+                      <button
+                        onClick={() => {
+                          setHistory([]);
+                          triggerStatus("Calculation History Cleared");
+                        }}
+                        className="text-rose-600 dark:text-rose-400 hover:underline text-[11px] flex items-center gap-1 font-semibold"
+                      >
+                        <Trash2 className="w-3 h-3" /> Clear History
+                      </button>
+                    )}
+                    <button
+                      onClick={() => setShowHistory(false)}
+                      className="text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 text-xs px-1"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+
+                {history.length === 0 ? (
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center py-3">
+                    No past calculations saved yet. Evaluate expressions with <strong className="font-mono text-blue-600">=</strong> or <strong className="font-mono text-blue-600">Enter</strong> to populate history.
+                  </p>
+                ) : (
+                  <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1 text-xs">
+                    {history.map((item, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() => {
+                          setExpression(item.expr);
+                          setDisplayValue(item.result);
+                          setHasEvaluated(true);
+                          triggerStatus(`Loaded: ${item.expr} = ${item.result}`);
+                        }}
+                        className="p-2 bg-white dark:bg-zinc-900 rounded-lg border border-purple-100 dark:border-zinc-800/80 flex items-center justify-between cursor-pointer hover:bg-purple-100/50 dark:hover:bg-zinc-800 transition-colors group"
+                      >
+                        <div className="flex flex-col">
+                          <span className="font-mono text-zinc-600 dark:text-zinc-400">{item.expr}</span>
+                          <span className="text-[10px] text-zinc-400">{item.time}</span>
+                        </div>
+                        <strong className="font-mono text-zinc-900 dark:text-zinc-100 text-sm group-hover:text-purple-600 dark:group-hover:text-purple-400">
+                          = {item.result}
+                        </strong>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 4. MAIN BUTTON GRID (8 columns x 10 rows) */}
             <div className="space-y-1.5 pt-1">
               {mainPadRows.map((row, rIdx) => (
                 <div key={rIdx} className="grid grid-cols-8 gap-1 sm:gap-1.5">
@@ -1219,7 +1335,7 @@ export function ScientificCalculator() {
               ))}
             </div>
 
-            {/* 4. ADDITIONAL FUNCTIONS ACCORDION SECTION */}
+            {/* 5. ADDITIONAL FUNCTIONS ACCORDION SECTION */}
             <div className="pt-2">
               <button
                 type="button"
@@ -1252,44 +1368,6 @@ export function ScientificCalculator() {
                 </div>
               )}
             </div>
-
-            {/* 5. CALCULATION HISTORY DRAWER */}
-            {showHistory && (
-              <div className="p-3 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2 mt-3">
-                <div className="flex items-center justify-between text-xs font-bold text-zinc-800 dark:text-zinc-200 border-b border-zinc-100 dark:border-zinc-800 pb-2">
-                  <span className="flex items-center gap-1.5">
-                    <HistoryIcon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                    Calculation History
-                  </span>
-                  <button
-                    onClick={() => setHistory([])}
-                    className="text-rose-600 dark:text-rose-400 hover:underline text-[11px] flex items-center gap-1"
-                  >
-                    <Trash2 className="w-3 h-3" /> Clear
-                  </button>
-                </div>
-
-                {history.length === 0 ? (
-                  <p className="text-xs text-zinc-400 text-center py-2">No past calculations in history.</p>
-                ) : (
-                  <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1 text-xs">
-                    {history.map((item, idx) => (
-                      <div
-                        key={idx}
-                        onClick={() => {
-                          setExpression(item.expr);
-                          setDisplayValue(item.result);
-                        }}
-                        className="p-2 bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between cursor-pointer hover:bg-blue-50/50 dark:hover:bg-zinc-850"
-                      >
-                        <span className="font-mono text-zinc-600 dark:text-zinc-400">{item.expr}</span>
-                        <strong className="font-mono text-zinc-900 dark:text-zinc-100">= {item.result}</strong>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
           </CardContent>
         </Card>
       </div>
