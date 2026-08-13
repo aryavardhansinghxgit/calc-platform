@@ -7,6 +7,7 @@ export interface CalculatorModuleDefinition extends BaseCalculatorDefinition {
   icon?: any;
   modes?: { id: string; name: string; description?: string }[];
   ContentComponent?: React.ComponentType<any>;
+  CustomComponent?: React.ComponentType<any>;
   ChartComponent?: React.ComponentType<{ data: Record<string, any>; inputs: Record<string, any> }>;
 }
 
