@@ -630,6 +630,7 @@ function calculateMath(
 
 export function ScientificCalculator() {
   const [expression, setExpression] = useState<string>("");
+  const [cursorPos, setCursorPos] = useState<number>(0);
   const [displayValue, setDisplayValue] = useState<string>("0");
   const [angleMode, setAngleMode] = useState<"deg" | "rad" | "grad">("deg");
   const [displayFormat, setDisplayFormat] = useState<"fix" | "sci">("fix");
@@ -665,27 +666,60 @@ export function ScientificCalculator() {
     }
   }, [expression, angleMode, lastAns, displayFormat, hasEvaluated]);
 
+  // Insert text at current cursor position
   const handleInput = useCallback((text: string) => {
     setExpression((prev) => {
+      let current = prev;
+      let pos = cursorPos;
       if (hasEvaluated && !["+", "-", "×", "÷", "^", "%", "*", "/"].includes(text)) {
-        setHasEvaluated(false);
-        return text;
+        current = "";
+        pos = 0;
       }
+      pos = Math.min(Math.max(0, pos), current.length);
+      const newExpr = current.slice(0, pos) + text + current.slice(pos);
+      setCursorPos(pos + text.length);
       setHasEvaluated(false);
-      return prev + text;
+      return newExpr;
     });
-  }, [hasEvaluated]);
+  }, [hasEvaluated, cursorPos]);
 
   const handleClear = () => {
     setExpression("");
     setDisplayValue("0");
+    setCursorPos(0);
     setHasEvaluated(false);
   };
 
+  // Backspace at current cursor position
   const handleBackspace = () => {
-    setExpression((prev) => prev.slice(0, -1));
+    setExpression((prev) => {
+      const pos = Math.min(Math.max(0, cursorPos), prev.length);
+      if (pos <= 0) return prev;
+      const newExpr = prev.slice(0, pos - 1) + prev.slice(pos);
+      setCursorPos(pos - 1);
+      return newExpr;
+    });
     setHasEvaluated(false);
   };
+
+  // Navigation Handlers
+  const moveCursorLeft = useCallback(() => {
+    setCursorPos((prev) => Math.max(0, prev - 1));
+  }, []);
+
+  const moveCursorRight = useCallback(() => {
+    setCursorPos((prev) => Math.min(expression.length, prev + 1));
+  }, [expression.length]);
+
+  const moveCursorUp = useCallback(() => {
+    setCursorPos(0);
+    triggerStatus("Cursor: Start of Equation");
+  }, []);
+
+  const moveCursorDown = useCallback(() => {
+    setCursorPos(expression.length);
+    triggerStatus("Cursor: End of Equation");
+  }, [expression.length]);
 
   const handleCalculate = useCallback(() => {
     if (!expression.trim()) return;
@@ -704,6 +738,7 @@ export function ScientificCalculator() {
     setDisplayValue(finalStr);
     setLastAns(res.num);
     setHasEvaluated(true);
+    setCursorPos(expression.length);
 
     const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     setHistory((prev) => [{ expr: expression, result: finalStr, time }, ...prev.slice(0, 14)]);
@@ -740,7 +775,7 @@ export function ScientificCalculator() {
     triggerStatus(`Stored ${val} in Memory`);
   };
 
-  // Physical Keyboard Listener
+  // Physical Keyboard Listener (including Arrow Keys)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
@@ -755,7 +790,25 @@ export function ScientificCalculator() {
       else if (e.key === "^") handleInput("^");
       else if (e.key === "%") handleInput("%");
       else if (e.key === ",") handleInput(",");
-      else if (e.key === "Enter" || e.key === "=") {
+      else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        moveCursorLeft();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        moveCursorRight();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        moveCursorUp();
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        moveCursorDown();
+      } else if (e.key === "Home") {
+        e.preventDefault();
+        setCursorPos(0);
+      } else if (e.key === "End") {
+        e.preventDefault();
+        setCursorPos(expression.length);
+      } else if (e.key === "Enter" || e.key === "=") {
         e.preventDefault();
         handleCalculate();
       } else if (e.key === "Backspace") {
@@ -768,7 +821,7 @@ export function ScientificCalculator() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [handleInput, handleCalculate]);
+  }, [handleInput, handleCalculate, moveCursorLeft, moveCursorRight, moveCursorUp, moveCursorDown, expression.length]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(displayValue);
@@ -786,6 +839,22 @@ export function ScientificCalculator() {
       case "⌫":
       case "←":
         handleBackspace();
+        break;
+      case "◀":
+      case "Left":
+        moveCursorLeft();
+        break;
+      case "▶":
+      case "Right":
+        moveCursorRight();
+        break;
+      case "▲":
+      case "Up":
+        moveCursorUp();
+        break;
+      case "▼":
+      case "Down":
+        moveCursorDown();
         break;
       case "=":
         handleCalculate();
@@ -1022,50 +1091,50 @@ export function ScientificCalculator() {
       { label: "Rnd", action: "Rnd" },
       { label: "±", action: "±" },
       { label: "⌫", action: "⌫", className: "font-bold text-zinc-700 dark:text-zinc-300" },
-      { label: "AC", action: "AC", className: "font-black text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100" },
+      { label: "AC", action: "AC", className: "font-black text-white bg-rose-600 border-rose-500 border-b-2 border-b-rose-800 hover:bg-rose-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
     ],
     // Row 7
     [
-      { label: "7", action: "7", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800" },
-      { label: "8", action: "8", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800" },
-      { label: "9", action: "9", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800" },
-      { label: "÷", action: "÷", className: "font-bold text-blue-600 dark:text-blue-400 text-base" },
+      { label: "7", action: "7", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "8", action: "8", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "9", action: "9", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "÷", action: "÷", className: "font-black text-white text-base bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
       { label: "Back", action: "Back", className: "text-xs text-zinc-700 dark:text-zinc-300" },
       { label: "Ans", action: "Ans", className: "font-bold text-blue-600 dark:text-blue-400" },
-      { label: "M+", action: "M+", className: "font-bold text-blue-600 dark:text-blue-400" },
-      { label: "MR", action: "MR", className: "font-bold text-blue-600 dark:text-blue-400" },
+      { label: "M+", action: "M+", className: "font-bold text-purple-600 dark:text-purple-400" },
+      { label: "MR", action: "MR", className: "font-bold text-purple-600 dark:text-purple-400" },
     ],
     // Row 8
     [
-      { label: "4", action: "4", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800" },
-      { label: "5", action: "5", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800" },
-      { label: "6", action: "6", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800" },
-      { label: "×", action: "×", className: "font-bold text-blue-600 dark:text-blue-400 text-base" },
+      { label: "4", action: "4", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "5", action: "5", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "6", action: "6", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "×", action: "×", className: "font-black text-white text-base bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
       { label: "(-)", action: "-", className: "font-bold text-zinc-700 dark:text-zinc-300" },
       { label: "EEX", action: "EEX", className: "font-bold text-emerald-600 dark:text-emerald-400" },
-      { label: "M-", action: "M-", className: "font-bold text-blue-600 dark:text-blue-400" },
-      { label: "MC", action: "MC", className: "font-bold text-blue-600 dark:text-blue-400" },
+      { label: "M-", action: "M-", className: "font-bold text-purple-600 dark:text-purple-400" },
+      { label: "MC", action: "MC", className: "font-bold text-purple-600 dark:text-purple-400" },
     ],
     // Row 9
     [
-      { label: "1", action: "1", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800" },
-      { label: "2", action: "2", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800" },
-      { label: "3", action: "3", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800" },
-      { label: "-", action: "-", className: "font-bold text-blue-600 dark:text-blue-400 text-base" },
-      { label: "+", action: "+", className: "font-bold text-blue-600 dark:text-blue-400 text-base" },
-      { label: "=", action: "=", className: "font-black text-white bg-blue-600 hover:bg-blue-700 text-base shadow-sm" },
+      { label: "1", action: "1", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "2", action: "2", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "3", action: "3", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "-", action: "-", className: "font-black text-white text-base bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "+", action: "+", className: "font-black text-white text-base bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "=", action: "=", className: "font-black text-white text-base bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
       { label: "Store", action: "Store", className: "font-bold text-purple-600 dark:text-purple-400" },
       { label: "Recall", action: "Recall", className: "font-bold text-purple-600 dark:text-purple-400" },
     ],
     // Row 10
     [
-      { label: "0", action: "0", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800" },
-      { label: ".", action: ".", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800" },
+      { label: "0", action: "0", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: ".", action: ".", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
       { label: "EXP", action: "EXP", className: "font-bold text-zinc-700 dark:text-zinc-300" },
       { label: "DRG►", action: "DRG►", className: "font-bold text-indigo-600 dark:text-indigo-400" },
       { label: ",", action: ",", className: "font-bold text-zinc-700 dark:text-zinc-300" },
       { label: "←", action: "←", className: "font-bold text-zinc-700 dark:text-zinc-300" },
-      { label: "History", action: "History", className: showHistory ? "font-bold text-white bg-purple-600 border-purple-700 shadow-xs" : "font-bold text-purple-600 dark:text-purple-400" },
+      { label: "History", action: "History", className: showHistory ? "font-bold text-white bg-purple-600 border-purple-500 border-b-2 border-b-purple-700 shadow-xs" : "font-bold text-purple-600 dark:text-purple-400" },
       { label: "Clear Hist", action: "Clear Hist", className: "font-bold text-purple-600 dark:text-purple-400" },
     ],
   ];
@@ -1123,53 +1192,66 @@ export function ScientificCalculator() {
     "ln(e) + log(10)",
   ];
 
+  const safeCursorPos = Math.min(Math.max(0, cursorPos), expression.length);
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       {/* LEFT COLUMN: Main Calculator Frame (Col 8) */}
       <div className="lg:col-span-8 space-y-4">
-        <Card className="bg-zinc-50/80 dark:bg-zinc-900/90 border-zinc-300 dark:border-zinc-800 shadow-md rounded-2xl overflow-hidden">
+        <Card className="bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-700 border-b-4 border-b-zinc-350 dark:border-b-zinc-800 shadow-xl rounded-2xl overflow-hidden">
           <CardContent className="p-4 sm:p-5 space-y-3">
             {/* 1. LCD / DISPLAY BOX */}
-            <div className="bg-emerald-950/10 dark:bg-emerald-950/40 border border-emerald-900/30 dark:border-emerald-800/40 rounded-xl p-3 sm:p-4 text-right font-mono space-y-1 shadow-inner relative">
+            <div className="bg-emerald-950 border-2 border-emerald-800/80 rounded-xl p-3 sm:p-4 text-right font-mono space-y-1 shadow-inner relative">
               {/* LCD Top Status Bar */}
-              <div className="flex items-center justify-between text-[11px] font-sans border-b border-emerald-900/20 dark:border-emerald-800/30 pb-1 mb-1">
+              <div className="flex items-center justify-between text-[11px] font-sans border-b border-emerald-800/50 pb-1 mb-1">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 px-1.5 py-0.2 rounded">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 border border-emerald-600/40 px-1.5 py-0.2 rounded bg-emerald-900/40">
                     {angleMode.toUpperCase()}
                   </span>
                   {memory !== 0 && (
-                    <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 border border-amber-500/30 px-1.5 py-0.2 rounded flex items-center gap-1">
+                    <span className="text-[10px] font-bold text-amber-300 bg-amber-950/80 border border-amber-500/40 px-1.5 py-0.2 rounded flex items-center gap-1">
                       M = {memory}
                     </span>
                   )}
                 </div>
                 {statusMessage ? (
-                  <span className="text-[10px] font-semibold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/60 px-2 py-0.5 rounded-full animate-pulse">
+                  <span className="text-[10px] font-semibold text-purple-300 bg-purple-950/80 border border-purple-700 px-2 py-0.5 rounded-full animate-pulse">
                     {statusMessage}
                   </span>
                 ) : (
-                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-mono">
+                  <span className="text-[10px] text-emerald-400/80 font-mono">
                     {displayFormat.toUpperCase()}
                   </span>
                 )}
               </div>
 
-              {/* Top Expression Row */}
-              <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 min-h-[1.25rem] truncate font-sans">
-                {expression || " "}
+              {/* Top Expression Row with Blinking Cursor */}
+              <div className="text-xs sm:text-sm text-emerald-300/80 min-h-[1.5rem] truncate font-mono flex items-center justify-end font-semibold select-none">
+                {expression.length === 0 ? (
+                  <span className="text-emerald-500/60 font-sans italic flex items-center gap-0.5">
+                    0
+                    <span className="inline-block w-0.5 h-4 bg-emerald-400 animate-pulse ml-0.5 rounded-full" />
+                  </span>
+                ) : (
+                  <span className="font-mono tracking-wide flex items-center justify-end">
+                    <span>{expression.slice(0, safeCursorPos)}</span>
+                    <span className="inline-block w-0.5 h-4 bg-emerald-400 animate-pulse mx-[0.5px] rounded-full shadow-sm" />
+                    <span>{expression.slice(safeCursorPos)}</span>
+                  </span>
+                )}
               </div>
 
               {/* Bottom Main Output Row */}
-              <div className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-emerald-300 tracking-wider truncate flex items-center justify-end">
+              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-300 tracking-wider truncate flex items-center justify-end">
                 <span>{displayValue}</span>
               </div>
             </div>
 
             {/* 2. MODE SWITCHER BAR */}
-            <div className="flex flex-wrap items-center justify-between gap-2 py-1.5 px-3 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300">
+            <div className="flex flex-wrap items-center justify-between gap-2 py-1.5 px-3 bg-zinc-200/80 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-xl text-xs font-medium text-zinc-800 dark:text-zinc-300 shadow-xs">
               {/* Angle Mode Radio Group */}
               <div className="flex items-center gap-3">
-                <label className="flex items-center gap-1 cursor-pointer">
+                <label className="flex items-center gap-1 cursor-pointer hover:text-blue-600">
                   <input
                     type="radio"
                     name="angleMode"
@@ -1179,7 +1261,7 @@ export function ScientificCalculator() {
                   />
                   <span>Deg</span>
                 </label>
-                <label className="flex items-center gap-1 cursor-pointer">
+                <label className="flex items-center gap-1 cursor-pointer hover:text-blue-600">
                   <input
                     type="radio"
                     name="angleMode"
@@ -1189,7 +1271,7 @@ export function ScientificCalculator() {
                   />
                   <span>Rad</span>
                 </label>
-                <label className="flex items-center gap-1 cursor-pointer">
+                <label className="flex items-center gap-1 cursor-pointer hover:text-blue-600">
                   <input
                     type="radio"
                     name="angleMode"
@@ -1201,11 +1283,11 @@ export function ScientificCalculator() {
                 </label>
               </div>
 
-              <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800 hidden sm:block" />
+              <div className="h-4 w-px bg-zinc-300 dark:bg-zinc-800 hidden sm:block" />
 
               {/* Display Format Radio Group */}
               <div className="flex items-center gap-3">
-                <label className="flex items-center gap-1 cursor-pointer">
+                <label className="flex items-center gap-1 cursor-pointer hover:text-blue-600">
                   <input
                     type="radio"
                     name="displayFormat"
@@ -1215,7 +1297,7 @@ export function ScientificCalculator() {
                   />
                   <span>Fix</span>
                 </label>
-                <label className="flex items-center gap-1 cursor-pointer">
+                <label className="flex items-center gap-1 cursor-pointer hover:text-blue-600">
                   <input
                     type="radio"
                     name="displayFormat"
@@ -1234,10 +1316,10 @@ export function ScientificCalculator() {
                   setShowHistory((prev) => !prev);
                   triggerStatus(!showHistory ? "History Drawer Opened" : "History Drawer Closed");
                 }}
-                className={`text-[11px] px-2 py-0.5 rounded-md border font-semibold flex items-center gap-1 transition-colors ${
+                className={`text-[11px] px-2 py-0.5 rounded-md border font-semibold flex items-center gap-1 transition-all ${
                   showHistory
-                    ? "bg-purple-600 text-white border-purple-600"
-                    : "bg-zinc-100 dark:bg-zinc-800 text-purple-700 dark:text-purple-300 border-zinc-200 dark:border-zinc-700 hover:bg-purple-50"
+                    ? "bg-purple-600 text-white border-purple-500 border-b-2 border-b-purple-700"
+                    : "bg-white dark:bg-zinc-800 text-purple-700 dark:text-purple-300 border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 hover:bg-purple-50 active:translate-y-0.5 active:border-b-0"
                 }`}
               >
                 <HistoryIcon className="w-3 h-3" />
@@ -1254,10 +1336,10 @@ export function ScientificCalculator() {
               </button>
             </div>
 
-            {/* 3. CALCULATION HISTORY DRAWER (PROMINENT TOP POSITION) */}
+            {/* 3. CALCULATION HISTORY DRAWER */}
             {showHistory && (
-              <div className="p-3 bg-purple-50/50 dark:bg-zinc-950 rounded-xl border border-purple-200 dark:border-purple-900/40 space-y-2 animate-in fade-in slide-in-from-top-1 duration-150">
-                <div className="flex items-center justify-between text-xs font-bold text-purple-950 dark:text-purple-200 border-b border-purple-100 dark:border-zinc-800 pb-2">
+              <div className="p-3 bg-white dark:bg-zinc-950 rounded-xl border border-purple-200 dark:border-purple-900/60 shadow-md space-y-2 animate-in fade-in slide-in-from-top-1 duration-150">
+                <div className="flex items-center justify-between text-xs font-bold text-purple-950 dark:text-purple-200 border-b border-zinc-100 dark:border-zinc-800 pb-2">
                   <span className="flex items-center gap-1.5">
                     <HistoryIcon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                     Calculation History ({history.length})
@@ -1276,7 +1358,7 @@ export function ScientificCalculator() {
                     )}
                     <button
                       onClick={() => setShowHistory(false)}
-                      className="text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 text-xs px-1"
+                      className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 text-xs px-1"
                     >
                       ✕
                     </button>
@@ -1295,13 +1377,14 @@ export function ScientificCalculator() {
                         onClick={() => {
                           setExpression(item.expr);
                           setDisplayValue(item.result);
+                          setCursorPos(item.expr.length);
                           setHasEvaluated(true);
                           triggerStatus(`Loaded: ${item.expr} = ${item.result}`);
                         }}
-                        className="p-2 bg-white dark:bg-zinc-900 rounded-lg border border-purple-100 dark:border-zinc-800/80 flex items-center justify-between cursor-pointer hover:bg-purple-100/50 dark:hover:bg-zinc-800 transition-colors group"
+                        className="p-2 bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between cursor-pointer hover:bg-purple-50 dark:hover:bg-zinc-800 transition-colors group"
                       >
                         <div className="flex flex-col">
-                          <span className="font-mono text-zinc-600 dark:text-zinc-400">{item.expr}</span>
+                          <span className="font-mono text-zinc-700 dark:text-zinc-300">{item.expr}</span>
                           <span className="text-[10px] text-zinc-400">{item.time}</span>
                         </div>
                         <strong className="font-mono text-zinc-900 dark:text-zinc-100 text-sm group-hover:text-purple-600 dark:group-hover:text-purple-400">
@@ -1314,7 +1397,61 @@ export function ScientificCalculator() {
               </div>
             )}
 
-            {/* 4. MAIN BUTTON GRID (8 columns x 10 rows) */}
+            {/* 4. DIRECTIONAL ARROW KEY CONTROLLER (3D Tactile Buttons) */}
+            <div className="flex flex-col items-center justify-center p-2.5 rounded-xl bg-zinc-200/70 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 shadow-xs my-1">
+              <div className="flex flex-col items-center gap-1">
+                {/* ROW 1: UP (▲) */}
+                <button
+                  type="button"
+                  onClick={moveCursorUp}
+                  title="Jump to Start of Equation (Up Arrow ▲)"
+                  className="w-11 h-9 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-sm font-black shadow-xs transition-all cursor-pointer"
+                >
+                  ▲
+                </button>
+
+                {/* ROW 2: LEFT (◀), CURSOR POSITION BADGE, RIGHT (▶) */}
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={moveCursorLeft}
+                    title="Move Cursor Left 1 Character (Left Arrow ◀)"
+                    className="w-11 h-9 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-sm font-black shadow-xs transition-all cursor-pointer"
+                  >
+                    ◀
+                  </button>
+
+                  <div
+                    onClick={() => triggerStatus(`Cursor Position: ${safeCursorPos} / ${expression.length}`)}
+                    className="h-9 px-2 text-[9px] font-mono font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/80 rounded-lg flex items-center justify-center cursor-pointer select-none shadow-xs"
+                    title="Current Cursor Position"
+                  >
+                    {safeCursorPos}/{expression.length}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={moveCursorRight}
+                    title="Move Cursor Right 1 Character (Right Arrow ▶)"
+                    className="w-11 h-9 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-sm font-black shadow-xs transition-all cursor-pointer"
+                  >
+                    ▶
+                  </button>
+                </div>
+
+                {/* ROW 3: DOWN (▼) */}
+                <button
+                  type="button"
+                  onClick={moveCursorDown}
+                  title="Jump to End of Equation (Down Arrow ▼)"
+                  className="w-11 h-9 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-sm font-black shadow-xs transition-all cursor-pointer"
+                >
+                  ▼
+                </button>
+              </div>
+            </div>
+
+            {/* 5. MAIN BUTTON GRID (8 columns x 10 rows with 3D Keycaps) */}
             <div className="space-y-1.5 pt-1">
               {mainPadRows.map((row, rIdx) => (
                 <div key={rIdx} className="grid grid-cols-8 gap-1 sm:gap-1.5">
@@ -1323,9 +1460,9 @@ export function ScientificCalculator() {
                       key={cIdx}
                       type="button"
                       onClick={() => onBtnClick(btn.action)}
-                      className={`h-9 sm:h-10 rounded-lg text-xs font-semibold border transition-all duration-150 active:scale-95 flex items-center justify-center cursor-pointer select-none shadow-xs ${
+                      className={`h-9 sm:h-10 rounded-lg text-xs font-semibold border transition-all duration-100 active:translate-y-0.5 active:border-b-0 flex items-center justify-center cursor-pointer select-none shadow-xs ${
                         btn.className ||
-                        "bg-white dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                        "bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-300 dark:border-b-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-750"
                       }`}
                     >
                       {btn.label}
