@@ -147,8 +147,8 @@ export function RandomCalculator() {
               else setUseCrypto(false);
             }}
             className={`px-3 py-1.5 rounded-lg font-bold whitespace-nowrap transition-all cursor-pointer ${activeTab === tab.id
-                ? "bg-blue-600 text-white shadow-xs"
-                : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200"
+              ? "bg-blue-600 text-white shadow-xs"
+              : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200"
               }`}
           >
             {tab.label}
