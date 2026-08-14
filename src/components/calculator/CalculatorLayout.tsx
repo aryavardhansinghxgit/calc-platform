@@ -144,6 +144,8 @@ import { TireSizeCalculator } from "./tire-size/TireSizeCalculator";
 import { TireSizeContent } from "./tire-size/TireSizeContent";
 import { DiceRollerCalculator } from "./dice-roller/DiceRollerCalculator";
 import { DiceRollerContent } from "./dice-roller/DiceRollerContent";
+import { LoveCalculator } from "./love/LoveCalculator";
+import { LoveContent } from "./love/LoveContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -357,8 +359,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isMileage = idLower === "mileage-calculator" || slugLower === "mileage-calculator";
   const isTireSize = idLower === "tire-size-calculator" || slugLower === "tire-size-calculator";
   const isDiceRoller = idLower === "dice-roller" || slugLower === "dice-roller" || idLower === "dice-roller-calculator" || slugLower === "dice-roller-calculator";
+  const isLove = idLower === "love-calculator" || slugLower === "love-calculator";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isLove ? LoveContent :
     isDiceRoller ? DiceRollerContent :
     isTireSize ? TireSizeContent :
     isMileage ? MileageContent :
@@ -411,6 +415,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
             {(definition as any).CustomComponent ? (
               React.createElement((definition as any).CustomComponent)
+            ) : isLove ? (
+              <LoveCalculator />
             ) : isDiceRoller ? (
               <DiceRollerCalculator />
             ) : isTireSize ? (
