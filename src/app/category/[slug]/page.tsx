@@ -62,9 +62,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         >
           <ArrowLeft className="h-3.5 w-3.5" /> All Categories
         </Link>
-        <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-          {registryCalculators.length} Tools
-        </span>
       </div>
 
       <header className="border-b border-blue-200 dark:border-blue-900/60 pb-3">
@@ -125,21 +122,17 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <ul className="space-y-1 text-xs">
               {CATEGORIES.map((catItem) => {
                 const isActive = catItem.slug === category.slug;
-                const Icon = catItem.icon;
                 return (
                   <li key={catItem.id}>
                     <Link
                       href={`/category/${catItem.slug}`}
                       className={`flex items-center justify-between px-2.5 py-2 rounded-lg transition-colors group ${
                         isActive
-                          ? "bg-primary/10 text-primary font-bold"
-                          : "text-foreground hover:bg-muted"
+                          ? "bg-blue-600 text-white font-semibold shadow-sm"
+                          : "text-foreground hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-950/40 dark:hover:text-blue-300"
                       }`}
                     >
-                      <span className="flex items-center gap-2">
-                        <Icon className={`h-3.5 w-3.5 ${isActive ? "text-primary" : "text-muted-foreground"}`} />
-                        {catItem.name}
-                      </span>
+                      {catItem.name}
                       <span className="text-[10px] font-mono text-muted-foreground">
                         {catItem.count}
                       </span>

@@ -96,7 +96,6 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
           {/* Desktop Categories Navigation */}
           <nav className="hidden xl:ml-2 xl:flex items-center gap-1" aria-label="Main Categories Navigation">
             {categories.map((cat) => {
-              const Icon = cat.icon;
               const isActive = selectedCategory === cat.name;
               const href = cat.slug === "home" || cat.id === "home" ? "/" : `/category/${cat.slug}`;
               return (
@@ -110,7 +109,6 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
                       : "text-blue-50 hover:text-white hover:bg-blue-500/70"
                   }`}
                 >
-                  <Icon className={`h-3.5 w-3.5 ${isActive ? "text-blue-700" : "text-blue-100"}`} />
                   {cat.name}
                 </Link>
               );
@@ -188,7 +186,6 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
       {mobileMenuOpen && (
         <div className="xl:hidden border-t border-blue-500 bg-blue-600 px-4 py-2 space-y-1">
           {categories.map((cat) => {
-            const Icon = cat.icon;
             const isActive = selectedCategory === cat.name;
             const href = cat.slug === "home" || cat.id === "home" ? "/" : `/category/${cat.slug}`;
             return (
@@ -203,7 +200,6 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
                     : "text-blue-50 hover:bg-blue-500/70 hover:text-white"
                 }`}
               >
-                <Icon className={`h-4 w-4 ${isActive ? "text-blue-700" : "text-blue-100"}`} />
                 {cat.name}
               </Link>
             );
