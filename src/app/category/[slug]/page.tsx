@@ -67,9 +67,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </span>
       </div>
 
+      <header className="border-b border-blue-200 dark:border-blue-900/60 pb-3">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight text-blue-600 dark:text-blue-400">
+          {category.name} Calculators
+        </h1>
+      </header>
+
       {/* Main Grid: Left Category Content (Col 8) | Right Categories Sidebar (Col 4) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Category Info & Subcategory Grouped Tools List */}
+        {/* Left Column: Subcategory Grouped Tools List */}
         <div className="lg:col-span-8 space-y-4">
           {/* Subcategory Grouped Calculators */}
           {registryCalculators.length === 0 ? (
@@ -82,7 +88,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 const tools = subcategoryMap[subName];
                 return (
                   <div key={subName} className="bg-card text-card-foreground border border-border rounded-xl p-4 space-y-3">
-                    <h2 className="text-xs font-bold uppercase tracking-wider text-primary border-b border-border pb-2">
+                    <h2 className="text-sm sm:text-base font-bold tracking-tight text-blue-600 dark:text-blue-400 border-b border-blue-100 dark:border-blue-900/60 pb-2">
                       {subName}
                     </h2>
 
