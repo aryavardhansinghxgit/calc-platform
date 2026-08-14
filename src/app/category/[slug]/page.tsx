@@ -133,7 +133,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                       }`}
                     >
                       {catItem.name}
-                      <span className="text-[10px] font-mono text-muted-foreground">
+                      <span className="text-[10px] font-mono text-current">
                         {catItem.count}
                       </span>
                     </Link>
