@@ -138,6 +138,8 @@ import { SleepCalculator } from "./sleep/SleepCalculator";
 import { SleepContent } from "./sleep/SleepContent";
 import { EngineHorsepowerCalculator } from "./engine-horsepower/EngineHorsepowerCalculator";
 import { EngineHorsepowerContent } from "./engine-horsepower/EngineHorsepowerContent";
+import { MileageCalculator } from "./mileage/MileageCalculator";
+import { MileageContent } from "./mileage/MileageContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -348,8 +350,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isWindChill = idLower === "wind-chill-calculator" || slugLower === "wind-chill-calculator";
   const isSleep = idLower === "sleep-calculator" || slugLower === "sleep-calculator";
   const isEngineHorsepower = idLower === "engine-horsepower-calculator" || slugLower === "engine-horsepower-calculator";
+  const isMileage = idLower === "mileage-calculator" || slugLower === "mileage-calculator";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isMileage ? MileageContent :
     isEngineHorsepower ? EngineHorsepowerContent :
     isHorsepower ? HorsepowerContent :
     isGasMileage ? GasMileageContent :
@@ -399,6 +403,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
             {(definition as any).CustomComponent ? (
               React.createElement((definition as any).CustomComponent)
+            ) : isMileage ? (
+              <MileageCalculator />
             ) : isEngineHorsepower ? (
               <EngineHorsepowerCalculator />
             ) : isHorsepower ? (
