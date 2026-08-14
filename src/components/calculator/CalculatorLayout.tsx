@@ -148,6 +148,8 @@ import { LoveCalculator } from "./love/LoveCalculator";
 import { LoveContent } from "./love/LoveContent";
 import { GPACalculator } from "./gpa/GPACalculator";
 import { GPAContent } from "./gpa/GPAContent";
+import { GradeCalculator } from "./grade/GradeCalculator";
+import { GradeContent } from "./grade/GradeContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -363,8 +365,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isDiceRoller = idLower === "dice-roller" || slugLower === "dice-roller" || idLower === "dice-roller-calculator" || slugLower === "dice-roller-calculator";
   const isLove = idLower === "love-calculator" || slugLower === "love-calculator";
   const isGPA = idLower === "gpa-calculator" || slugLower === "gpa-calculator";
+  const isGrade = idLower === "grade-calculator" || slugLower === "grade-calculator";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isGrade ? GradeContent :
     isGPA ? GPAContent :
     isLove ? LoveContent :
     isDiceRoller ? DiceRollerContent :
@@ -419,6 +423,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
             {(definition as any).CustomComponent ? (
               React.createElement((definition as any).CustomComponent)
+            ) : isGrade ? (
+              <GradeCalculator />
             ) : isGPA ? (
               <GPACalculator />
             ) : isLove ? (
