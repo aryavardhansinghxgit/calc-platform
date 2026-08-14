@@ -17,7 +17,7 @@ export function EngineHorsepowerContent() {
           The unit was originally coined in the late 18th century by Scottish inventor <strong>James Watt</strong> to evaluate the performance of his improved steam engine against draft horses. Watt determined experimentally that a heavy pit pony could lift an average of 22,000 foot-pounds of coal per minute. He conservatively scaled this figure by 50% for standard draft horses, establishing the universal engineering definition:
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-mono text-sm text-center">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
           {"1 Mechanical Horsepower (HP) = 33,000 foot-pounds of work per minute = 550 ft-lb/sec = 745.7 Watts"}
         </div>
 
@@ -25,7 +25,7 @@ export function EngineHorsepowerContent() {
           Fundamentally, mechanical power is derived from basic Newtonian work and time principles:
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-mono text-sm text-center">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
           {"Power = Work / Time = (Force × Distance) / Time = Force × Velocity"}
         </div>
       </section>
@@ -44,7 +44,7 @@ export function EngineHorsepowerContent() {
           First derived by performance researchers Fox and Hale, this formula computes horsepower based on total vehicle race weight (W, in pounds) and quarter-mile sprint duration (ET, in seconds):
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-mono text-sm text-center">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
           {"Horsepower = Weight (lbs) / (ET / 5.825)³"}
         </div>
 
@@ -53,7 +53,7 @@ export function EngineHorsepowerContent() {
           Because quarter-mile elapsed time is heavily influenced by tire spin, launch traction, and driver reaction times, <strong>finish-line trap speed</strong> offers a significantly more reliable reflection of raw engine horsepower:
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-mono text-sm text-center">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
           {"Horsepower = Weight (lbs) × (Trap Speed (mph) / 234)³"}
         </div>
 
@@ -62,7 +62,7 @@ export function EngineHorsepowerContent() {
           Internal combustion engines produce rotational torque (force around an axis). To convert rotational torque (T, in lb-ft) at a specific crankshaft engine speed (N, in RPM) into linear horsepower:
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-mono text-sm text-center">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
           {"Horsepower = (Torque (lb-ft) × RPM) / 5,252.11"}
         </div>
 
@@ -70,7 +70,7 @@ export function EngineHorsepowerContent() {
           The 5,252 constant is derived directly from James Watt&apos;s original standard (33,000 ft-lbs/min) divided by 2π radians per revolution:
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-mono text-sm text-center">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
           {"Constant = (33,000 ft-lbs/min) / (2π rad/rev) = 33,000 / 6.2831853 = 5,252.113"}
         </div>
       </section>

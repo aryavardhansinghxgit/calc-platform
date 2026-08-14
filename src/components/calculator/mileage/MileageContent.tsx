@@ -35,15 +35,15 @@ export function MileageContent() {
           To compute fuel economy manually from trip distance and fuel volume added at the pump:
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-mono text-sm text-center">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
           {"US MPG = Distance Traveled (Miles) / Fuel Added (Gallons)"}
         </div>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-mono text-sm text-center">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
           {"L/100km = (Fuel Consumed (Liters) × 100) / Distance Traveled (Kilometers)"}
         </div>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-mono text-sm text-center">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
           {"Cost Per Mile ($/mi) = Fuel Price per Gallon ($/gal) / US MPG"}
         </div>
 
@@ -86,7 +86,7 @@ export function MileageContent() {
         </p>
 
         <h3 className="text-xl font-bold text-slate-900 dark:text-white">C. Global Unit Conversion Formula Constants</h3>
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-mono text-sm text-center">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
           {"L/100km = 235.215 / US MPG = 282.481 / UK MPG"}
         </div>
       </section>
@@ -143,7 +143,7 @@ export function MileageContent() {
           Tax authorities (such as the Internal Revenue Service in the US) allow self-employed individuals, independent contractors, and business owners to deduct vehicle operating expenses using the <strong>Standard Mileage Rate</strong> ($0.67 per mile for business travel):
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-mono text-sm text-center">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
           {"Tax Reimbursement Claim ($) = Qualifying Business Miles Driven × Standard Allowance Rate ($/mi)"}
         </div>
       </section>

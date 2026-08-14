@@ -1,5 +1,5 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
-import { calculateTireSizeCalculator } from "./calculator";
+import { calculateTireSizeFromInputs } from "./calculator";
 import { tire_size_calculatorFaqs } from "./faq";
 
 export const tire_size_calculatorConfig: CalculatorModuleDefinition = {
@@ -8,65 +8,67 @@ export const tire_size_calculatorConfig: CalculatorModuleDefinition = {
   slug: "tire-size-calculator",
   category: "other",
   subcategory: "Transportation",
-  description: "Calculate tire overall diameter, sidewall height, circumference, and speedometer error.",
+  description: "Calculate tire overall diameter, sidewall height, circumference, speedometer error, wheel offset clearance, and gear ratio impact.",
   iconName: "Disc",
   featured: true,
-  keywords: ["tire size calculator","tire diameter","speedometer error","wheel size"],
+  keywords: [
+    "tire size calculator",
+    "tire diameter calculator",
+    "speedometer error calculator",
+    "wheel offset calculator",
+    "tire size comparison",
+    "flotation tire size",
+    "gear ratio tire calculator"
+  ],
   priority: 1,
-  relatedCalculators: ["gas-mileage-calculator","horsepower-calculator"],
-  formulaDescription: "Tire Diameter = Rim Diameter + 2 × [ (Width × Aspect Ratio) / 25.4 ]",
+  relatedCalculators: ["gas-mileage-calculator", "mileage-calculator", "horsepower-calculator"],
+  formulaDescription: "Overall Tire Diameter = Rim Diameter + 2 × [ (Section Width × Aspect Ratio) / 25.4 ]",
   faqs: tire_size_calculatorFaqs,
   inputs: [
-  {
-    "name": "widthMm",
-    "label": "Tire Section Width (mm)",
-    "type": "number",
-    "defaultValue": 225,
-    "min": 125,
-    "max": 355,
-    "step": 5
-  },
-  {
-    "name": "aspectRatio",
-    "label": "Aspect Ratio (%)",
-    "type": "number",
-    "defaultValue": 45,
-    "min": 25,
-    "max": 85,
-    "step": 5
-  },
-  {
-    "name": "rimDiameterInches",
-    "label": "Wheel Rim Diameter (inches)",
-    "type": "number",
-    "defaultValue": 17,
-    "min": 10,
-    "max": 30,
-    "step": 1
-  }
-],
+    {
+      name: "widthMm",
+      label: "Stock Tire Width (mm)",
+      type: "number",
+      defaultValue: 225,
+      min: 125,
+      max: 355,
+      step: 5
+    },
+    {
+      name: "aspectRatio",
+      label: "Stock Aspect Ratio (%)",
+      type: "number",
+      defaultValue: 50,
+      min: 25,
+      max: 85,
+      step: 5
+    },
+    {
+      name: "rimDiameterInches",
+      label: "Stock Rim Diameter (in)",
+      type: "number",
+      defaultValue: 17,
+      min: 10,
+      max: 30,
+      step: 1
+    }
+  ],
   outputs: [
-  {
-    "name": "tireDiameterInches",
-    "label": "Overall Tire Diameter",
-    "format": "number",
-    "highlight": true,
-    "unit": "in"
-  },
-  {
-    "name": "sidewallHeightInches",
-    "label": "Sidewall Height",
-    "format": "number",
-    "unit": "in"
-  },
-  {
-    "name": "circumferenceInches",
-    "label": "Tire Circumference",
-    "format": "number",
-    "unit": "in"
-  }
-],
-  calculate: calculateTireSizeCalculator,
+    {
+      name: "diameterDiffIn",
+      label: "Diameter Difference",
+      format: "number",
+      highlight: true,
+      unit: "in"
+    },
+    {
+      name: "speedAt65Mph",
+      label: "Actual Speed @ 65 mph",
+      format: "number",
+      unit: "mph"
+    }
+  ],
+  calculate: calculateTireSizeFromInputs,
 };
 
 export default tire_size_calculatorConfig;
