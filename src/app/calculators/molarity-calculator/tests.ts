@@ -1,37 +1,41 @@
-import { calculateMolarityCalculator } from "./calculator";
+import {
+  solveMolarityMass,
+  solveStockDilution,
+  solveMassPercent,
+  solvePPMToMolarity,
+  calculateMolarityCalculator,
+} from "./calculator";
 
 export function runMolarityCalculatorTests() {
-  const defaultInputs = {
-  "massGrams": 58.44,
-  "molarMass": 58.44,
-  "volumeLiters": 1
-};
-  const res1 = calculateMolarityCalculator(defaultInputs);
-  if (!res1 || typeof res1 !== "object") throw new Error("Formula failed for default inputs");
+  // Test 1: Solute mass solver (NaCl 1.0 M, 1.0 L, 58.44 g/mol => 58.44 g)
+  const massRes = solveMolarityMass("mass", 0, 1.0, 1.0, 58.44);
+  if (Math.abs(massRes.solvedValue - 58.44) > 0.01) {
+    throw new Error("Solute mass calculation failed");
+  }
 
-  const zeroInputs = {
-  "massGrams": 0,
-  "molarMass": 0,
-  "volumeLiters": 0
-};
-  const res2 = calculateMolarityCalculator(zeroInputs);
-  if (!res2) throw new Error("Formula failed for zero inputs");
+  // Test 2: Molarity solver (58.44 g NaCl in 1.0 L => 1.0 M)
+  const molRes = solveMolarityMass("molarity", 58.44, 0, 1.0, 58.44);
+  if (Math.abs(molRes.solvedValue - 1.0) > 0.001) {
+    throw new Error("Molarity calculation failed");
+  }
 
-  const negInputs = {
-  "massGrams": -50,
-  "molarMass": -50,
-  "volumeLiters": -50
-};
-  const res3 = calculateMolarityCalculator(negInputs);
-  if (!res3) throw new Error("Formula failed for negative inputs");
+  // Test 3: Dilution C1V1 = C2V2 (C1=10M, C2=1M, V2=100mL => V1=10mL)
+  const dilRes = solveStockDilution(10, 0, 1, 100, "v1");
+  if (Math.abs(dilRes.v1 - 10) > 0.01) {
+    throw new Error("Stock dilution calculation failed");
+  }
 
-  const nanInputs = {
-  "massGrams": null,
-  "molarMass": null,
-  "volumeLiters": null
-};
-  const res4 = calculateMolarityCalculator(nanInputs);
-  if (!res4) throw new Error("Formula failed for NaN inputs");
+  // Test 4: Mass Percent & Density (37% HCl, density 1.19 g/mL, MW 36.46 => ~12.08 M)
+  const mpRes = solveMassPercent(37, 1.19, 36.46, 1);
+  if (Math.abs(mpRes.molarityM - 12.08) > 0.1) {
+    throw new Error("Mass percent to molarity conversion failed");
+  }
+
+  // Test 5: Synthesizer default run
+  const synthRes = calculateMolarityCalculator({ mode: "mass_solver" });
+  if (!synthRes.benchProtocol || synthRes.benchProtocol.length === 0) {
+    throw new Error("Molarity synthesizer failed to produce bench protocol");
+  }
 
   return true;
 }

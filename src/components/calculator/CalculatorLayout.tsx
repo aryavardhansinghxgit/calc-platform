@@ -122,6 +122,38 @@ import { BacCalculator } from "./bac/BacCalculator";
 import { BacContent } from "./bac/BacContent";
 import { ScientificCalculator } from "./scientific/ScientificCalculator";
 import { ScientificCalculatorContent } from "./scientific/ScientificCalculatorContent";
+import { HorsepowerCalculator } from "./horsepower/HorsepowerCalculator";
+import { HorsepowerContent } from "./horsepower/HorsepowerContent";
+import { GasMileageCalculator } from "./gas-mileage/GasMileageCalculator";
+import { GasMileageContent } from "./gas-mileage/GasMileageContent";
+import { FuelCostCalculator } from "./fuel-cost/FuelCostCalculator";
+import { FuelCostContent } from "./fuel-cost/FuelCostContent";
+import { DewPointCalculator } from "./dew-point/DewPointCalculator";
+import { DewPointContent } from "./dew-point/DewPointContent";
+import { HeatIndexCalculator } from "./heat-index/HeatIndexCalculator";
+import { HeatIndexContent } from "./heat-index/HeatIndexContent";
+import { WindChillCalculator } from "./wind-chill/WindChillCalculator";
+import { WindChillContent } from "./wind-chill/WindChillContent";
+import { SleepCalculator } from "./sleep/SleepCalculator";
+import { SleepContent } from "./sleep/SleepContent";
+import { EngineHorsepowerCalculator } from "./engine-horsepower/EngineHorsepowerCalculator";
+import { EngineHorsepowerContent } from "./engine-horsepower/EngineHorsepowerContent";
+import { MileageCalculator } from "./mileage/MileageCalculator";
+import { MileageContent } from "./mileage/MileageContent";
+import { TireSizeCalculator } from "./tire-size/TireSizeCalculator";
+import { TireSizeContent } from "./tire-size/TireSizeContent";
+import { DiceRollerCalculator } from "./dice-roller/DiceRollerCalculator";
+import { DiceRollerContent } from "./dice-roller/DiceRollerContent";
+import { LoveCalculator } from "./love/LoveCalculator";
+import { LoveContent } from "./love/LoveContent";
+import { GPACalculator } from "./gpa/GPACalculator";
+import { GPAContent } from "./gpa/GPAContent";
+import { GradeCalculator } from "./grade/GradeCalculator";
+import { GradeContent } from "./grade/GradeContent";
+import { MolarityCalculator } from "./molarity/MolarityCalculator";
+import { MolarityContent } from "./molarity/MolarityContent";
+import { MolecularWeightCalculator } from "./molecular-weight/MolecularWeightCalculator";
+import { MolecularWeightContent } from "./molecular-weight/MolecularWeightContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -324,7 +356,42 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
     definition.id === "traditional-ira" ||
     definition.slug === "traditional-ira-calculator";
   const isScientific = idLower === "scientific-calculator" || slugLower === "scientific-calculator";
-  const CustomContent = definition.ContentComponent || (isScientific ? ScientificCalculatorContent : isBac ? BacContent : isBsa ? BsaContent : isBodyType ? BodyTypeContent : isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null);
+  const isHorsepower = idLower === "horsepower-calculator" || slugLower === "horsepower-calculator";
+  const isGasMileage = idLower === "gas-mileage-calculator" || slugLower === "gas-mileage-calculator";
+  const isFuelCost = idLower === "fuel-cost-calculator" || slugLower === "fuel-cost-calculator";
+  const isDewPoint = idLower === "dew-point-calculator" || slugLower === "dew-point-calculator";
+  const isHeatIndex = idLower === "heat-index-calculator" || slugLower === "heat-index-calculator";
+  const isWindChill = idLower === "wind-chill-calculator" || slugLower === "wind-chill-calculator";
+  const isSleep = idLower === "sleep-calculator" || slugLower === "sleep-calculator";
+  const isEngineHorsepower = idLower === "engine-horsepower-calculator" || slugLower === "engine-horsepower-calculator";
+  const isMileage = idLower === "mileage-calculator" || slugLower === "mileage-calculator";
+  const isTireSize = idLower === "tire-size-calculator" || slugLower === "tire-size-calculator";
+  const isDiceRoller = idLower === "dice-roller" || slugLower === "dice-roller" || idLower === "dice-roller-calculator" || slugLower === "dice-roller-calculator";
+  const isLove = idLower === "love-calculator" || slugLower === "love-calculator";
+  const isGPA = idLower === "gpa-calculator" || slugLower === "gpa-calculator";
+  const isGrade = idLower === "grade-calculator" || slugLower === "grade-calculator";
+  const isMolarity = idLower === "molarity-calculator" || slugLower === "molarity-calculator";
+  const isMolecularWeight = idLower === "molecular-weight-calculator" || slugLower === "molecular-weight-calculator";
+
+  const CustomContent = (definition as any).ContentComponent || (
+    isMolecularWeight ? MolecularWeightContent :
+    isMolarity ? MolarityContent :
+    isGrade ? GradeContent :
+    isGPA ? GPAContent :
+    isLove ? LoveContent :
+    isDiceRoller ? DiceRollerContent :
+    isTireSize ? TireSizeContent :
+    isMileage ? MileageContent :
+    isEngineHorsepower ? EngineHorsepowerContent :
+    isHorsepower ? HorsepowerContent :
+    isGasMileage ? GasMileageContent :
+    isFuelCost ? FuelCostContent :
+    isDewPoint ? DewPointContent :
+    isHeatIndex ? HeatIndexContent :
+    isWindChill ? WindChillContent :
+    isSleep ? SleepContent :
+    isScientific ? ScientificCalculatorContent : isBac ? BacContent : isBsa ? BsaContent : isBodyType ? BodyTypeContent : isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null
+  );
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -364,6 +431,38 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
             {(definition as any).CustomComponent ? (
               React.createElement((definition as any).CustomComponent)
+            ) : isMolecularWeight ? (
+              <MolecularWeightCalculator />
+            ) : isMolarity ? (
+              <MolarityCalculator />
+            ) : isGrade ? (
+              <GradeCalculator />
+            ) : isGPA ? (
+              <GPACalculator />
+            ) : isLove ? (
+              <LoveCalculator />
+            ) : isDiceRoller ? (
+              <DiceRollerCalculator />
+            ) : isTireSize ? (
+              <TireSizeCalculator />
+            ) : isMileage ? (
+              <MileageCalculator />
+            ) : isEngineHorsepower ? (
+              <EngineHorsepowerCalculator />
+            ) : isHorsepower ? (
+              <HorsepowerCalculator />
+            ) : isGasMileage ? (
+              <GasMileageCalculator />
+            ) : isFuelCost ? (
+              <FuelCostCalculator />
+            ) : isDewPoint ? (
+              <DewPointCalculator />
+            ) : isHeatIndex ? (
+              <HeatIndexCalculator />
+            ) : isWindChill ? (
+              <WindChillCalculator />
+            ) : isSleep ? (
+              <SleepCalculator />
             ) : isScientific ? (
               <ScientificCalculator />
             ) : isBac ? (

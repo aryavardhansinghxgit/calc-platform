@@ -4,60 +4,96 @@ import { molarity_calculatorFaqs } from "./faq";
 
 export const molarity_calculatorConfig: CalculatorModuleDefinition = {
   id: "molarity-calculator",
-  title: "Molarity Calculator",
+  title: "Molarity Calculator & Dilution Solver",
   slug: "molarity-calculator",
   category: "other",
   subcategory: "Academic & Education",
-  description: "Calculate chemical solution molarity (M = moles / L) and required solute mass.",
-  iconName: "Droplet",
+  description: "Next-Gen Molarity Calculator. Calculate mass, volume, concentration, C1V1=C2V2 stock dilution, mass percent to molarity, PPM converter, and generate lab bench protocols.",
+  iconName: "FlaskConical",
   featured: true,
-  keywords: ["molarity calculator","chemistry molarity","moles per liter","solute mass"],
+  keywords: [
+    "molarity calculator",
+    "solution preparation calculator",
+    "c1v1=c2v2 dilution calculator",
+    "mass to molarity calculator",
+    "molar mass solver",
+    "mass percent to molarity",
+    "ppm to molarity converter",
+    "normality calculator",
+    "hydrate molar mass calculator",
+    "chemistry solution calculator"
+  ],
   priority: 1,
-  relatedCalculators: ["molecular-weight-calculator","density-calculator"],
-  formulaDescription: "Molarity M = (Mass / Molar Mass) / Volume (L)",
+  relatedCalculators: ["molecular-weight-calculator", "molarity-calculator", "percentage-calculator"],
+  formulaDescription: "Molarity (M) = Mass (g) / [Molar Mass (g/mol) × Volume (L)] | Dilution: C1V1 = C2V2",
   faqs: molarity_calculatorFaqs,
   inputs: [
-  {
-    "name": "massGrams",
-    "label": "Solute Mass (g)",
-    "type": "number",
-    "defaultValue": 58.44,
-    "min": 0.001,
-    "max": 10000,
-    "step": 0.1
-  },
-  {
-    "name": "molarMass",
-    "label": "Molar Mass (g/mol)",
-    "type": "number",
-    "defaultValue": 58.44,
-    "min": 0.001,
-    "max": 1000,
-    "step": 0.1
-  },
-  {
-    "name": "volumeLiters",
-    "label": "Solution Volume (Liters)",
-    "type": "number",
-    "defaultValue": 1,
-    "min": 0.001,
-    "max": 100,
-    "step": 0.1
-  }
-],
+    {
+      name: "mode",
+      label: "Calculation Mode",
+      type: "select",
+      defaultValue: "mass_solver",
+      options: [
+        { label: "Molarity & Mass Solver (Standard Prep)", value: "mass_solver" },
+        { label: "Stock Dilution Calculator (C1V1 = C2V2)", value: "dilution" },
+        { label: "Mass Percent & Density to Molarity", value: "mass_percent" },
+        { label: "PPM / PPB to Molarity & Molality", value: "ppm_converter" },
+      ],
+    },
+    {
+      name: "solveVariable",
+      label: "Solve For",
+      type: "select",
+      defaultValue: "molarity",
+      options: [
+        { label: "Molarity / Concentration (M)", value: "molarity" },
+        { label: "Solute Mass (g)", value: "mass" },
+        { label: "Solution Volume (L)", value: "volume" },
+        { label: "Molar Mass / Formula Weight (g/mol)", value: "molar_mass" },
+      ],
+    },
+    {
+      name: "massGrams",
+      label: "Solute Mass (g)",
+      type: "number",
+      defaultValue: 58.44,
+      min: 0,
+    },
+    {
+      name: "molarityM",
+      label: "Molarity / Concentration (M)",
+      type: "number",
+      defaultValue: 1.0,
+      min: 0,
+    },
+    {
+      name: "volumeLiters",
+      label: "Solution Volume (L)",
+      type: "number",
+      defaultValue: 1.0,
+      min: 0,
+    },
+    {
+      name: "molarMass",
+      label: "Molar Mass (g/mol)",
+      type: "number",
+      defaultValue: 58.44,
+      min: 0.001,
+    },
+  ],
   outputs: [
-  {
-    "name": "molarityM",
-    "label": "Molarity (M = mol/L)",
-    "format": "number",
-    "highlight": true
-  },
-  {
-    "name": "moles",
-    "label": "Total Moles Solute",
-    "format": "number"
-  }
-],
+    {
+      name: "formattedSolvedValue",
+      label: "Calculated Value",
+      format: "text",
+      highlight: true,
+    },
+    {
+      name: "molarityM",
+      label: "Molarity (M)",
+      format: "number",
+    },
+  ],
   calculate: calculateMolarityCalculator,
 };
 

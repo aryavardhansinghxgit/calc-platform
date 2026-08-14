@@ -1,5 +1,5 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
-import { calculateDewPointCalculator } from "./calculator";
+import { calculateDewPointFromInputs } from "./calculator";
 import { dew_point_calculatorFaqs } from "./faq";
 
 export const dew_point_calculatorConfig: CalculatorModuleDefinition = {
@@ -7,50 +7,53 @@ export const dew_point_calculatorConfig: CalculatorModuleDefinition = {
   title: "Dew Point Calculator",
   slug: "dew-point-calculator",
   category: "other",
-  subcategory: "Weather",
-  description: "Calculate dew point temperature and relative humidity comfort levels using Magnus formula.",
+  subcategory: "Weather & Science Calculators",
+  description: "Free online Dew Point Calculator. Calculate dew point, relative humidity, air temp, wet-bulb, frost point, absolute humidity, Muggy Index comfort & ISO 8502-4 painting safety.",
   iconName: "Droplets",
   featured: true,
-  keywords: ["dew point","humidity","comfort level","weather dew point"],
+  keywords: [
+    "dew point calculator",
+    "alduchov eskridge formula",
+    "wet bulb calculator",
+    "frost point calculator",
+    "relative humidity to dew point",
+    "muggy index",
+    "iso 8502 4 painting rule"
+  ],
   priority: 1,
-  relatedCalculators: ["heat-index-calculator","wind-chill-calculator"],
-  formulaDescription: "Magnus Formula: Dew Point = (b × α) / (a - α)",
+  relatedCalculators: ["heat-index-calculator", "wind-chill-calculator"],
+  formulaDescription: "Alduchov & Eskridge (1996) Improved Magnus Equation",
   faqs: dew_point_calculatorFaqs,
   inputs: [
-  {
-    "name": "tempC",
-    "label": "Air Temperature (°C)",
-    "type": "number",
-    "defaultValue": 25,
-    "min": -20,
-    "max": 50,
-    "step": 1
-  },
-  {
-    "name": "humidityPct",
-    "label": "Relative Humidity (%)",
-    "type": "number",
-    "defaultValue": 60,
-    "min": 1,
-    "max": 100,
-    "step": 5
-  }
-],
+    {
+      name: "airTemp",
+      label: "Air Temperature (°F)",
+      type: "number",
+      defaultValue: 70,
+      min: -20,
+      max: 120,
+      step: 1
+    },
+    {
+      name: "relativeHumidity",
+      label: "Relative Humidity (%)",
+      type: "number",
+      defaultValue: 65,
+      min: 1,
+      max: 100,
+      step: 1
+    }
+  ],
   outputs: [
-  {
-    "name": "dewPointC",
-    "label": "Dew Point (°C)",
-    "format": "number",
-    "highlight": true,
-    "unit": "°C"
-  },
-  {
-    "name": "comfortLevel",
-    "label": "Humidity Comfort Assessment",
-    "format": "text"
-  }
-],
-  calculate: calculateDewPointCalculator,
-};
+    {
+      name: "dewPointF",
+      label: "Calculated Dew Point (°F)",
+      format: "number",
+      highlight: true,
+      unit: "°F"
+    }
+  ],
+  calculate: calculateDewPointFromInputs,
+} as any;
 
 export default dew_point_calculatorConfig;

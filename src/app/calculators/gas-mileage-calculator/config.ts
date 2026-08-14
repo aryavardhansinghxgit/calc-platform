@@ -1,5 +1,5 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
-import { calculateGasMileageCalculator } from "./calculator";
+import { calculateGasMileageFromInputs } from "./calculator";
 import { gas_mileage_calculatorFaqs } from "./faq";
 
 export const gas_mileage_calculatorConfig: CalculatorModuleDefinition = {
@@ -7,58 +7,61 @@ export const gas_mileage_calculatorConfig: CalculatorModuleDefinition = {
   title: "Gas Mileage Calculator",
   slug: "gas-mileage-calculator",
   category: "other",
-  subcategory: "Transportation",
-  description: "Calculate vehicle fuel efficiency in MPG, L/100km, and km/L from odometer fill-ups.",
+  subcategory: "Auto Calculators",
+  description: "Free online Gas Mileage Calculator. Calculate US/UK MPG, L/100km, multi-tank rolling averages, annual fuel spending, carbon footprint & MPGe benchmarks.",
   iconName: "Gauge",
   featured: true,
-  keywords: ["gas mileage","mpg calculator","fuel economy","l/100km"],
+  keywords: [
+    "gas mileage calculator",
+    "mpg calculator",
+    "fuel economy calculator",
+    "l/100km to mpg",
+    "multi tank rolling average",
+    "tank range planner",
+    "mpge calculator"
+  ],
   priority: 1,
-  relatedCalculators: ["fuel-cost-calculator","mileage-calculator"],
-  formulaDescription: "MPG = (End Odometer - Start Odometer) / Gallons Filled",
+  relatedCalculators: ["fuel-cost-calculator", "mileage-calculator"],
+  formulaDescription: "MPG = Miles Driven / Gallons Consumed",
   faqs: gas_mileage_calculatorFaqs,
   inputs: [
-  {
-    "name": "startOdometer",
-    "label": "Starting Odometer",
-    "type": "number",
-    "defaultValue": 45000,
-    "min": 0,
-    "max": 1000000,
-    "step": 10
-  },
-  {
-    "name": "endOdometer",
-    "label": "Ending Odometer",
-    "type": "number",
-    "defaultValue": 45350,
-    "min": 0,
-    "max": 1000000,
-    "step": 10
-  },
-  {
-    "name": "gallonsFilled",
-    "label": "Gallons Filled",
-    "type": "number",
-    "defaultValue": 12.5,
-    "min": 0.1,
-    "max": 100,
-    "step": 0.1
-  }
-],
+    {
+      name: "startOdometer",
+      label: "Starting Odometer",
+      type: "number",
+      defaultValue: 12000,
+      min: 0,
+      max: 1000000,
+      step: 10
+    },
+    {
+      name: "endOdometer",
+      label: "Ending Odometer",
+      type: "number",
+      defaultValue: 12360,
+      min: 0,
+      max: 1000000,
+      step: 10
+    },
+    {
+      name: "fuelAdded",
+      label: "Fuel Volume Added",
+      type: "number",
+      defaultValue: 12,
+      min: 0.1,
+      max: 100,
+      step: 0.1
+    }
+  ],
   outputs: [
-  {
-    "name": "mpg",
-    "label": "Fuel Economy (MPG)",
-    "format": "number",
-    "highlight": true
-  },
-  {
-    "name": "l100km",
-    "label": "Metric (L/100km)",
-    "format": "number"
-  }
-],
-  calculate: calculateGasMileageCalculator,
-};
+    {
+      name: "usMPG",
+      label: "Fuel Economy (MPG)",
+      format: "number",
+      highlight: true
+    }
+  ],
+  calculate: calculateGasMileageFromInputs,
+} as any;
 
 export default gas_mileage_calculatorConfig;

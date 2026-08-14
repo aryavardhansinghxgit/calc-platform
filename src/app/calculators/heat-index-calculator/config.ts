@@ -1,5 +1,5 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
-import { calculateHeatIndexCalculator } from "./calculator";
+import { calculateHeatIndexFromInputs } from "./calculator";
 import { heat_index_calculatorFaqs } from "./faq";
 
 export const heat_index_calculatorConfig: CalculatorModuleDefinition = {
@@ -7,50 +7,53 @@ export const heat_index_calculatorConfig: CalculatorModuleDefinition = {
   title: "Heat Index Calculator",
   slug: "heat-index-calculator",
   category: "other",
-  subcategory: "Weather",
-  description: "Calculate apparent \"feels like\" heat index from air temperature and relative humidity.",
+  subcategory: "Weather & Science Calculators",
+  description: "Free online NWS Heat Index Calculator. Calculate feels-like heat index with NOAA Rothfusz regression, Dew Point dual mode, direct sunshine +15°F toggle, and OSHA work/rest schedules.",
   iconName: "Sun",
   featured: true,
-  keywords: ["heat index","feels like","humidity heat","weather calculator"],
+  keywords: [
+    "heat index calculator",
+    "nws rothfusz formula",
+    "feels like temperature",
+    "dew point to heat index",
+    "osha work rest schedule",
+    "wbgt estimator",
+    "heat hazard safety"
+  ],
   priority: 1,
-  relatedCalculators: ["wind-chill-calculator","dew-point-calculator"],
-  formulaDescription: "NWS Rothfusz Heat Index Regression Equation",
+  relatedCalculators: ["wind-chill-calculator", "dew-point-calculator"],
+  formulaDescription: "NOAA Rothfusz 9-Term Regression Algorithm",
   faqs: heat_index_calculatorFaqs,
   inputs: [
-  {
-    "name": "tempF",
-    "label": "Air Temperature (°F)",
-    "type": "number",
-    "defaultValue": 90,
-    "min": 80,
-    "max": 120,
-    "step": 1
-  },
-  {
-    "name": "humidityPct",
-    "label": "Relative Humidity (%)",
-    "type": "number",
-    "defaultValue": 65,
-    "min": 10,
-    "max": 100,
-    "step": 5
-  }
-],
+    {
+      name: "temperature",
+      label: "Air Temperature (°F)",
+      type: "number",
+      defaultValue: 85,
+      min: 70,
+      max: 120,
+      step: 1
+    },
+    {
+      name: "relativeHumidity",
+      label: "Relative Humidity (%)",
+      type: "number",
+      defaultValue: 70,
+      min: 10,
+      max: 100,
+      step: 1
+    }
+  ],
   outputs: [
-  {
-    "name": "heatIndexF",
-    "label": "Feels Like Heat Index (°F)",
-    "format": "number",
-    "highlight": true,
-    "unit": "°F"
-  },
-  {
-    "name": "dangerLevel",
-    "label": "NWS Caution Level",
-    "format": "text"
-  }
-],
-  calculate: calculateHeatIndexCalculator,
-};
+    {
+      name: "heatIndexF",
+      label: "Calculated Heat Index (°F)",
+      format: "number",
+      highlight: true,
+      unit: "°F"
+    }
+  ],
+  calculate: calculateHeatIndexFromInputs,
+} as any;
 
 export default heat_index_calculatorConfig;

@@ -34,6 +34,31 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var ethVal = window.ethereum;
+                  Object.defineProperty(window, 'ethereum', {
+                    configurable: true,
+                    enumerable: true,
+                    get: function() { return ethVal; },
+                    set: function(v) { ethVal = v; }
+                  });
+                } catch(e) {}
+                window.addEventListener('error', function(event) {
+                  if (event && event.message && (event.message.indexOf('ethereum') !== -1 || event.message.indexOf('evmAsk') !== -1)) {
+                    event.preventDefault();
+                    if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+                  }
+                }, true);
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-zinc-50 text-zinc-900 font-sans selection:bg-blue-600 selection:text-white">
         <ThemeProvider
           attribute="class"

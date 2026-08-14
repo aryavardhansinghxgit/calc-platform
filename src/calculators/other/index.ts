@@ -3,6 +3,9 @@ import { voltage_drop_calculatorConfig } from "@/app/calculators/voltage-drop-ca
 import { resistor_calculatorConfig } from "@/app/calculators/resistor-calculator/config";
 import { ohms_law_calculatorConfig } from "@/app/calculators/ohms-law-calculator/config";
 import { ip_subnet_calculatorConfig } from "@/app/calculators/ip-subnet-calculator/config";
+import { bandwidth_calculatorConfig } from "@/app/calculators/bandwidth-calculator/config";
+import { base64_calculatorConfig } from "@/app/calculators/base64-calculator/config";
+import { url_encoder_decoderConfig } from "@/app/calculators/url-encoder-decoder/config";
 import { password_generatorConfig } from "@/app/calculators/password-generator/config";
 import { bra_size_calculatorConfig } from "@/app/calculators/bra-size-calculator/config";
 import { tip_calculatorConfig } from "@/app/calculators/tip-calculator/config";
@@ -29,6 +32,9 @@ export const OTHER_CALCULATORS: CalculatorModuleDefinition[] = [
   resistor_calculatorConfig,
   ohms_law_calculatorConfig,
   ip_subnet_calculatorConfig,
+  bandwidth_calculatorConfig,
+  base64_calculatorConfig,
+  url_encoder_decoderConfig,
   password_generatorConfig,
   bra_size_calculatorConfig,
   tip_calculatorConfig,
@@ -52,4 +58,3 @@ export const OTHER_CALCULATORS: CalculatorModuleDefinition[] = [
 ];
 
 export default OTHER_CALCULATORS;
-

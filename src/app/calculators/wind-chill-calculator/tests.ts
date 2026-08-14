@@ -1,32 +1,32 @@
-import { calculateWindChillCalculator } from "./calculator";
+import { calculateWindChillFromInputs } from "./calculator";
 
 export function runWindChillCalculatorTests() {
   const defaultInputs = {
-  "tempF": 30,
-  "windMph": 15
-};
-  const res1 = calculateWindChillCalculator(defaultInputs);
+    temperature: 30,
+    windSpeed: 15,
+  };
+  const res1 = calculateWindChillFromInputs(defaultInputs);
   if (!res1 || typeof res1 !== "object") throw new Error("Formula failed for default inputs");
 
   const zeroInputs = {
-  "tempF": 0,
-  "windMph": 0
-};
-  const res2 = calculateWindChillCalculator(zeroInputs);
+    temperature: 0,
+    windSpeed: 0,
+  };
+  const res2 = calculateWindChillFromInputs(zeroInputs);
   if (!res2) throw new Error("Formula failed for zero inputs");
 
   const negInputs = {
-  "tempF": -50,
-  "windMph": -50
-};
-  const res3 = calculateWindChillCalculator(negInputs);
+    temperature: -50,
+    windSpeed: -50,
+  };
+  const res3 = calculateWindChillFromInputs(negInputs);
   if (!res3) throw new Error("Formula failed for negative inputs");
 
   const nanInputs = {
-  "tempF": null,
-  "windMph": null
-};
-  const res4 = calculateWindChillCalculator(nanInputs);
+    temperature: null,
+    windSpeed: null,
+  };
+  const res4 = calculateWindChillFromInputs(nanInputs);
   if (!res4) throw new Error("Formula failed for NaN inputs");
 
   return true;

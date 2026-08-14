@@ -1,6 +1,6 @@
-import { URLEncodeDecodeOutputs } from "./types";
+import { UrlEncoderDecoderOutputs } from "./types";
 
-export function calculateURLEncodeDecode(inputs: Record<string, any>): URLEncodeDecodeOutputs {
+export function calculateUrlEncoderDecoder(inputs: Record<string, any>): UrlEncoderDecoderOutputs {
   const txt = String(inputs.text || "https://calcplatform.com/search?q=math & health");
   const isEnc = inputs.mode !== "decode";
   let res = "";
