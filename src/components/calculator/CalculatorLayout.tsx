@@ -150,6 +150,8 @@ import { GPACalculator } from "./gpa/GPACalculator";
 import { GPAContent } from "./gpa/GPAContent";
 import { GradeCalculator } from "./grade/GradeCalculator";
 import { GradeContent } from "./grade/GradeContent";
+import { MolarityCalculator } from "./molarity/MolarityCalculator";
+import { MolarityContent } from "./molarity/MolarityContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -366,8 +368,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isLove = idLower === "love-calculator" || slugLower === "love-calculator";
   const isGPA = idLower === "gpa-calculator" || slugLower === "gpa-calculator";
   const isGrade = idLower === "grade-calculator" || slugLower === "grade-calculator";
+  const isMolarity = idLower === "molarity-calculator" || slugLower === "molarity-calculator";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isMolarity ? MolarityContent :
     isGrade ? GradeContent :
     isGPA ? GPAContent :
     isLove ? LoveContent :
@@ -423,6 +427,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
             {(definition as any).CustomComponent ? (
               React.createElement((definition as any).CustomComponent)
+            ) : isMolarity ? (
+              <MolarityCalculator />
             ) : isGrade ? (
               <GradeCalculator />
             ) : isGPA ? (
