@@ -1,6 +1,8 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
-import { calculateTipCalculator } from "./calculator";
+import { calculateTipFromInputs } from "./calculator";
 import { tip_calculatorFaqs } from "./faq";
+import { TipCalculator } from "@/components/calculator/tip/TipCalculator";
+import { TipContent } from "@/components/calculator/tip/TipContent";
 
 export const tip_calculatorConfig: CalculatorModuleDefinition = {
   id: "tip-calculator",
@@ -8,62 +10,61 @@ export const tip_calculatorConfig: CalculatorModuleDefinition = {
   slug: "tip-calculator",
   category: "other",
   subcategory: "Everyday Utility",
-  description: "Calculate tip amount, total restaurant bill, and split bill per person.",
+  description: "Free online tip calculator. Calculate tips pre-tax or post-tax, split restaurant bills, apply smart rounding, and split itemized group checks.",
   iconName: "DollarSign",
   featured: true,
-  keywords: ["tip calculator","split bill","gratuity","restaurant tip"],
+  keywords: [
+    "tip calculator",
+    "split bill calculator",
+    "gratuity calculator",
+    "restaurant tip calculator",
+    "pre tax tip calculator",
+    "itemized bill splitter"
+  ],
   priority: 1,
   relatedCalculators: ["percentage-calculator"],
-  formulaDescription: "Tip = Bill × Tip%; Grand Total = Bill + Tip",
+  formulaDescription: "Tip = Subtotal × (Tip% / 100); Total Bill = Subtotal + Tax + Tip",
   faqs: tip_calculatorFaqs,
+  CustomComponent: TipCalculator,
+  ContentComponent: TipContent,
   inputs: [
-  {
-    "name": "billAmount",
-    "label": "Bill Subtotal ($)",
-    "type": "number",
-    "defaultValue": 85,
-    "min": 1,
-    "max": 10000,
-    "step": 5
-  },
-  {
-    "name": "tipPct",
-    "label": "Tip Percentage (%)",
-    "type": "number",
-    "defaultValue": 18,
-    "min": 0,
-    "max": 50,
-    "step": 1
-  },
-  {
-    "name": "peopleCount",
-    "label": "Split Between (People)",
-    "type": "number",
-    "defaultValue": 3,
-    "min": 1,
-    "max": 50,
-    "step": 1
-  }
-],
+    {
+      name: "billAmount",
+      label: "Bill Subtotal ($)",
+      type: "number",
+      defaultValue: 50,
+      min: 1,
+      max: 10000,
+      step: 5
+    },
+    {
+      name: "tipPct",
+      label: "Tip Percentage (%)",
+      type: "number",
+      defaultValue: 18,
+      min: 0,
+      max: 50,
+      step: 1
+    },
+    {
+      name: "peopleCount",
+      label: "Split Between (People)",
+      type: "number",
+      defaultValue: 2,
+      min: 1,
+      max: 50,
+      step: 1
+    }
+  ],
   outputs: [
-  {
-    "name": "tipTotal",
-    "label": "Total Tip Amount",
-    "format": "currency",
-    "highlight": true
-  },
-  {
-    "name": "grandTotal",
-    "label": "Grand Total Bill",
-    "format": "currency"
-  },
-  {
-    "name": "perPersonTotal",
-    "label": "Cost Per Person",
-    "format": "currency"
-  }
-],
-  calculate: calculateTipCalculator,
-};
+    {
+      name: "tipAmount",
+      label: "Total Tip Amount",
+      format: "currency",
+      highlight: true
+    }
+  ],
+  calculate: calculateTipFromInputs,
+} as any;
 
 export default tip_calculatorConfig;
