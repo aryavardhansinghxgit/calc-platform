@@ -20,7 +20,7 @@ export function Hero() {
               Free Online Calculators
             </span>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground mt-1.5 leading-tight">
-              Instant Precision Calculators & Solvers
+              CALCULATE ANYTHING IN SECONDS
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl leading-normal">
               High-speed, zero-friction tools for home mortgage schedules, personal loans, fitness metrics, and mathematical formulas.

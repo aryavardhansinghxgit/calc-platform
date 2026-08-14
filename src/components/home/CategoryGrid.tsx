@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, DollarSign, HeartPulse, Calculator as MathIcon, Calendar, Briefcase } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { CATEGORIES } from "@/data/categories";
 import { getCalculatorsByCategory } from "@/calculators";
 import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
@@ -28,16 +28,12 @@ export function CategoryGrid() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {mainCategories.map((cat) => {
-          const Icon = cat.icon;
           const tools = getCalculatorsByCategory(cat.slug);
 
           return (
             <div key={cat.id} className="min-w-0 space-y-2.5">
               {/* Category Header Link */}
-              <Link href={`/category/${cat.slug}`} className="group inline-flex min-w-0 max-w-full items-center gap-2">
-                <div className="p-1.5 rounded-md bg-primary/10 text-primary border border-primary/20">
-                  <Icon className="h-4 w-4" />
-                </div>
+              <Link href={`/category/${cat.slug}`} className="group inline-flex min-w-0 max-w-full items-center">
                 <h3 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
                   {cat.name} Calculators
                 </h3>

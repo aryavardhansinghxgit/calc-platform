@@ -1,6 +1,5 @@
 import Hero from "@/components/home/Hero";
 import CategoryGrid from "@/components/home/CategoryGrid";
-import FeaturedCalculators from "@/components/home/FeaturedCalculators";
 import LatestCalculators from "@/components/home/LatestCalculators";
 
 export default function Home() {
@@ -12,10 +11,7 @@ export default function Home() {
       {/* 2. 4-Column Directory (High Density Links matching Calculator.net) */}
       <CategoryGrid />
 
-      {/* 3. Featured Calculator Tabs */}
-      <FeaturedCalculators />
-
-      {/* 4. Latest Tools Index */}
+      {/* 3. Latest Tools Index */}
       <LatestCalculators />
     </div>
   );
