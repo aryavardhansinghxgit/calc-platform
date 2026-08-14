@@ -42,7 +42,7 @@ export function FuelCostCalculator() {
   // Trip Mode Inputs
   const [distance, setDistance] = useState<number>(300);
   const [isRoundTrip, setIsRoundTrip] = useState<boolean>(false);
-  const [efficiency, setEfficiency] = useState<number>(25); // MPG or L/100km
+  const [efficiency, setEfficiency] = useState<number>(25);
   const [fuelPrice, setFuelPrice] = useState<number>(3.5);
   const [passengers, setPassengers] = useState<number>(1);
   const [tolls, setTolls] = useState<number>(0);
@@ -190,110 +190,137 @@ export function FuelCostCalculator() {
   }, [result, currencySymbol, passengers, isRoundTrip, fuelPrice, unitSystem, mode, workDays]);
 
   return (
-    <div className="space-y-6">
-      {/* 1. TOP TOOLBAR BAR */}
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl shadow-xs flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Mode Selector */}
-          <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg text-xs font-bold">
-            <button
-              onClick={() => setMode("trip")}
-              className={`px-3 py-1 rounded-md cursor-pointer ${
-                mode === "trip" ? "bg-white dark:bg-zinc-900 text-emerald-600 shadow-xs" : "text-zinc-500"
-              }`}
-            >
-              Road Trip
-            </button>
-            <button
-              onClick={() => setMode("commute")}
-              className={`px-3 py-1 rounded-md cursor-pointer ${
-                mode === "commute" ? "bg-white dark:bg-zinc-900 text-emerald-600 shadow-xs" : "text-zinc-500"
-              }`}
-            >
-              Commute Planner
-            </button>
-            <button
-              onClick={() => setMode("mpg_solver")}
-              className={`px-3 py-1 rounded-md cursor-pointer ${
-                mode === "mpg_solver" ? "bg-white dark:bg-zinc-900 text-emerald-600 shadow-xs" : "text-zinc-500"
-              }`}
-            >
-              MPG Solver
-            </button>
-            <button
-              onClick={() => setMode("ev_compare")}
-              className={`px-3 py-1 rounded-md cursor-pointer ${
-                mode === "ev_compare" ? "bg-white dark:bg-zinc-900 text-emerald-600 shadow-xs" : "text-zinc-500"
-              }`}
-            >
-              EV vs. Gas
-            </button>
+    <div className="space-y-4">
+      {/* 1. TOP TOOLBAR BAR - LIGHT HARMONIOUS THEME */}
+      <div className="bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-4 rounded-2xl shadow-xs space-y-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+          {/* Mode Selector (Col 7) */}
+          <div className="md:col-span-7 space-y-1">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-zinc-400 block">
+              Trip Calculation Mode
+            </span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-xs">
+              <button
+                onClick={() => setMode("trip")}
+                className={`py-1.5 px-2.5 rounded-lg text-center cursor-pointer transition-all ${
+                  mode === "trip"
+                    ? "bg-emerald-600 text-white font-extrabold shadow-md shadow-emerald-600/30 border-b-2 border-emerald-800 active:translate-y-0.5"
+                    : "bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 font-bold border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-700 border-b-2 border-b-slate-300 dark:border-b-zinc-950"
+                }`}
+              >
+                Road Trip
+              </button>
+              <button
+                onClick={() => setMode("commute")}
+                className={`py-1.5 px-2.5 rounded-lg text-center cursor-pointer transition-all ${
+                  mode === "commute"
+                    ? "bg-emerald-600 text-white font-extrabold shadow-md shadow-emerald-600/30 border-b-2 border-emerald-800 active:translate-y-0.5"
+                    : "bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 font-bold border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-700 border-b-2 border-b-slate-300 dark:border-b-zinc-950"
+                }`}
+              >
+                Commute
+              </button>
+              <button
+                onClick={() => setMode("mpg_solver")}
+                className={`py-1.5 px-2.5 rounded-lg text-center cursor-pointer transition-all ${
+                  mode === "mpg_solver"
+                    ? "bg-emerald-600 text-white font-extrabold shadow-md shadow-emerald-600/30 border-b-2 border-emerald-800 active:translate-y-0.5"
+                    : "bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 font-bold border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-700 border-b-2 border-b-slate-300 dark:border-b-zinc-950"
+                }`}
+              >
+                MPG Solver
+              </button>
+              <button
+                onClick={() => setMode("ev_compare")}
+                className={`py-1.5 px-2.5 rounded-lg text-center cursor-pointer transition-all ${
+                  mode === "ev_compare"
+                    ? "bg-emerald-600 text-white font-extrabold shadow-md shadow-emerald-600/30 border-b-2 border-emerald-800 active:translate-y-0.5"
+                    : "bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 font-bold border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-700 border-b-2 border-b-slate-300 dark:border-b-zinc-950"
+                }`}
+              >
+                EV vs. Gas
+              </button>
+            </div>
           </div>
 
-          {/* Unit System Switch */}
-          <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg text-xs font-bold">
-            <button
-              onClick={() => setUnitSystem("imperial")}
-              className={`px-2.5 py-1 rounded-md cursor-pointer ${
-                unitSystem === "imperial" ? "bg-white dark:bg-zinc-900 text-emerald-600 shadow-xs" : "text-zinc-500"
-              }`}
-            >
-              Miles / MPG
-            </button>
-            <button
-              onClick={() => setUnitSystem("metric")}
-              className={`px-2.5 py-1 rounded-md cursor-pointer ${
-                unitSystem === "metric" ? "bg-white dark:bg-zinc-900 text-emerald-600 shadow-xs" : "text-zinc-500"
-              }`}
-            >
-              KM / L/100km
-            </button>
+          {/* Actions & Currency (Col 5) */}
+          <div className="md:col-span-5 space-y-1">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-zinc-400 block">
+              Currency &amp; Export Tools
+            </span>
+            <div className="flex items-center gap-2">
+              <select
+                value={currencySymbol}
+                onChange={(e) => setCurrencySymbol(e.target.value)}
+                className="h-8 text-xs font-bold px-2 bg-white dark:bg-zinc-800 text-slate-800 dark:text-zinc-100 border border-slate-200 dark:border-zinc-700 rounded-lg cursor-pointer flex-1"
+              >
+                <option value="$">$ (USD)</option>
+                <option value="€">€ (EUR)</option>
+                <option value="£">£ (GBP)</option>
+                <option value="₹">₹ (INR)</option>
+                <option value="CA$">CA$ (CAD)</option>
+                <option value="A$">A$ (AUD)</option>
+              </select>
+
+              <Button
+                onClick={handleCopySummary}
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs font-bold gap-1 cursor-pointer bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-700 border-b-2 border-b-slate-300 dark:border-b-zinc-950"
+              >
+                {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5" />}
+                {copied ? "Copied" : "Copy"}
+              </Button>
+
+              <Button
+                onClick={() => setShowReportModal(true)}
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs font-bold gap-1 cursor-pointer bg-emerald-600 hover:bg-emerald-500 text-white border-b-2 border-emerald-800 shadow-md shadow-emerald-600/20"
+              >
+                <Printer className="h-3.5 w-3.5" /> PDF Receipt
+              </Button>
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          {/* Currency Selector */}
-          <select
-            value={currencySymbol}
-            onChange={(e) => setCurrencySymbol(e.target.value)}
-            className="h-8 text-xs font-bold px-2 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg cursor-pointer"
-          >
-            <option value="$">$ (USD)</option>
-            <option value="€">€ (EUR)</option>
-            <option value="£">£ (GBP)</option>
-            <option value="₹">₹ (INR)</option>
-            <option value="CA$">CA$ (CAD)</option>
-            <option value="A$">A$ (AUD)</option>
-          </select>
-
-          <Button
-            onClick={handleCopySummary}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer"
-          >
-            {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5" />}
-            {copied ? "Copied" : "Copy Group Cost"}
-          </Button>
-
-          <Button
-            onClick={() => setShowReportModal(true)}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 border-emerald-200"
-          >
-            <Printer className="h-3.5 w-3.5" /> PDF Trip Receipt
-          </Button>
+        {/* Row 2: Unit System Switcher */}
+        <div className="pt-2.5 border-t border-slate-200 dark:border-zinc-800 space-y-1">
+          <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-zinc-400 block">
+            Distance &amp; Consumption Units
+          </span>
+          <div className="grid grid-cols-2 gap-2 text-xs max-w-md">
+            <button
+              onClick={() => setUnitSystem("imperial")}
+              className={`py-1.5 px-3 rounded-lg text-center cursor-pointer transition-all ${
+                unitSystem === "imperial"
+                  ? "bg-teal-600 text-white font-extrabold shadow-md shadow-teal-600/30 border-b-2 border-teal-800 active:translate-y-0.5"
+                  : "bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 font-bold border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-700 border-b-2 border-b-slate-300 dark:border-b-zinc-950"
+              }`}
+            >
+              Miles / MPG (Imperial)
+            </button>
+            <button
+              onClick={() => setUnitSystem("metric")}
+              className={`py-1.5 px-3 rounded-lg text-center cursor-pointer transition-all ${
+                unitSystem === "metric"
+                  ? "bg-teal-600 text-white font-extrabold shadow-md shadow-teal-600/30 border-b-2 border-teal-800 active:translate-y-0.5"
+                  : "bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 font-bold border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-700 border-b-2 border-b-slate-300 dark:border-b-zinc-950"
+              }`}
+            >
+              Kilometers / L/100km (Metric)
+            </button>
+          </div>
         </div>
       </div>
 
       {/* 2. SPLIT PANE INTERFACE */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         {/* LEFT INPUT PANE (Col 7) */}
-        <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-5">
+        <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl shadow-xs space-y-4">
           {/* Trip Distance & Round Trip */}
           {mode !== "mpg_solver" ? (
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-extrabold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
                   <Car className="h-4 w-4 text-emerald-600" />{" "}
@@ -319,7 +346,7 @@ export function FuelCostCalculator() {
                   type="number"
                   value={distance}
                   onChange={(e) => setDistance(Number(e.target.value))}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200 w-32"
+                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200 w-32"
                 />
                 <input
                   type="range"
@@ -341,7 +368,7 @@ export function FuelCostCalculator() {
                   type="number"
                   value={startOdo}
                   onChange={(e) => setStartOdo(Number(e.target.value))}
-                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-8 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
               <div className="space-y-1">
@@ -350,7 +377,7 @@ export function FuelCostCalculator() {
                   type="number"
                   value={endOdo}
                   onChange={(e) => setEndOdo(Number(e.target.value))}
-                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-8 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
               <div className="space-y-1">
@@ -359,7 +386,7 @@ export function FuelCostCalculator() {
                   type="number"
                   value={fuelAdded}
                   onChange={(e) => setFuelAdded(Number(e.target.value))}
-                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-8 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
             </div>
@@ -367,8 +394,8 @@ export function FuelCostCalculator() {
 
           {/* Efficiency & Price Inputs */}
           {mode !== "ev_compare" && mode !== "mpg_solver" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-zinc-100 dark:border-zinc-800">
-              <div className="space-y-1.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+              <div className="space-y-1">
                 <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
                   Fuel Efficiency ({unitSystem === "imperial" ? "MPG" : "L/100km"})
                 </label>
@@ -376,11 +403,11 @@ export function FuelCostCalculator() {
                   type="number"
                   value={efficiency}
                   onChange={(e) => setEfficiency(Number(e.target.value))}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
                   Fuel Price ({currencySymbol} per {unitSystem === "imperial" ? "Gallon" : "Liter"})
                 </label>
@@ -389,7 +416,7 @@ export function FuelCostCalculator() {
                   step="0.01"
                   value={fuelPrice}
                   onChange={(e) => setFuelPrice(Number(e.target.value))}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
             </div>
@@ -397,8 +424,8 @@ export function FuelCostCalculator() {
 
           {/* EV Comparison Specific Inputs */}
           {mode === "ev_compare" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-zinc-100 dark:border-zinc-800 text-xs">
-              <div className="space-y-1.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-zinc-100 dark:border-zinc-800 text-xs">
+              <div className="space-y-1">
                 <label className="font-bold text-zinc-700 dark:text-zinc-300">Gas Vehicle MPG / Fuel Price</label>
                 <div className="flex gap-2">
                   <Input
@@ -406,7 +433,7 @@ export function FuelCostCalculator() {
                     value={efficiency}
                     onChange={(e) => setEfficiency(Number(e.target.value))}
                     placeholder="MPG"
-                    className="h-9 text-xs font-mono"
+                    className="h-8 text-xs font-mono"
                   />
                   <Input
                     type="number"
@@ -414,12 +441,12 @@ export function FuelCostCalculator() {
                     value={fuelPrice}
                     onChange={(e) => setFuelPrice(Number(e.target.value))}
                     placeholder="$/gal"
-                    className="h-9 text-xs font-mono"
+                    className="h-8 text-xs font-mono"
                   />
                 </div>
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <label className="font-bold text-zinc-700 dark:text-zinc-300">EV Rate (kWh/100mi &amp; $/kWh)</label>
                 <div className="flex gap-2">
                   <Input
@@ -427,7 +454,7 @@ export function FuelCostCalculator() {
                     value={evKwhPer100}
                     onChange={(e) => setEvKwhPer100(Number(e.target.value))}
                     placeholder="kWh/100mi"
-                    className="h-9 text-xs font-mono"
+                    className="h-8 text-xs font-mono"
                   />
                   <Input
                     type="number"
@@ -435,7 +462,7 @@ export function FuelCostCalculator() {
                     value={electricityRate}
                     onChange={(e) => setElectricityRate(Number(e.target.value))}
                     placeholder="$/kWh"
-                    className="h-9 text-xs font-mono"
+                    className="h-8 text-xs font-mono"
                   />
                 </div>
               </div>
@@ -443,9 +470,9 @@ export function FuelCostCalculator() {
           )}
 
           {/* Passengers & Commute Days */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-zinc-100 dark:border-zinc-800 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-zinc-100 dark:border-zinc-800 text-xs">
             {mode === "trip" && (
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <label className="font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1">
                   <Users className="h-3.5 w-3.5 text-emerald-600" /> Passenger Group Split ({passengers} people)
                 </label>
@@ -454,18 +481,18 @@ export function FuelCostCalculator() {
                     onClick={() => setPassengers(Math.max(1, passengers - 1))}
                     variant="outline"
                     size="sm"
-                    className="h-8 w-8 text-xs font-bold cursor-pointer"
+                    className="h-7 w-7 text-xs font-bold cursor-pointer"
                   >
                     -
                   </Button>
-                  <span className="font-mono font-bold text-sm text-zinc-800 dark:text-zinc-200 px-3">
+                  <span className="font-mono font-bold text-xs text-zinc-800 dark:text-zinc-200 px-2">
                     {passengers}
                   </span>
                   <Button
                     onClick={() => setPassengers(passengers + 1)}
                     variant="outline"
                     size="sm"
-                    className="h-8 w-8 text-xs font-bold cursor-pointer"
+                    className="h-7 w-7 text-xs font-bold cursor-pointer"
                   >
                     +
                   </Button>
@@ -474,20 +501,20 @@ export function FuelCostCalculator() {
             )}
 
             {mode === "commute" && (
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <label className="font-bold text-zinc-700 dark:text-zinc-300">Work Days Per Month</label>
                 <Input
                   type="number"
                   value={workDays}
                   onChange={(e) => setWorkDays(Number(e.target.value))}
-                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-8 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
             )}
           </div>
 
           {/* EXPANDABLE ACCORDION: REAL-WORLD PENALTIES & EXPENSES */}
-          <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 space-y-3">
+          <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
             <button
               onClick={() => setShowAdvanced(!showAdvanced)}
               className="flex items-center justify-between w-full text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:text-emerald-600 cursor-pointer"
@@ -499,9 +526,9 @@ export function FuelCostCalculator() {
             </button>
 
             {showAdvanced && (
-              <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl space-y-3 text-xs">
-                <div className="space-y-2">
-                  <span className="font-bold text-zinc-700 dark:text-zinc-300 block">Efficiency Penalty Toggles</span>
+              <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl space-y-2 text-xs">
+                <div className="space-y-1">
+                  <span className="font-bold text-zinc-700 dark:text-zinc-300 block text-[11px]">Efficiency Penalty Toggles</span>
                   <div className="grid grid-cols-2 gap-2 text-zinc-600 dark:text-zinc-300">
                     <label className="flex items-center gap-1.5 cursor-pointer">
                       <input
@@ -510,7 +537,7 @@ export function FuelCostCalculator() {
                         onChange={(e) => setPenalties({ ...penalties, roofRack: e.target.checked })}
                         className="rounded text-emerald-600 accent-emerald-600 cursor-pointer"
                       />
-                      Roof Cargo / Rack (-15%)
+                      Roof Cargo (-15%)
                     </label>
                     <label className="flex items-center gap-1.5 cursor-pointer">
                       <input
@@ -528,7 +555,7 @@ export function FuelCostCalculator() {
                         onChange={(e) => setPenalties({ ...penalties, towing: e.target.checked })}
                         className="rounded text-emerald-600 accent-emerald-600 cursor-pointer"
                       />
-                      Towing / Heavy Payload (-25%)
+                      Towing (-25%)
                     </label>
                     <label className="flex items-center gap-1.5 cursor-pointer">
                       <input
@@ -537,28 +564,28 @@ export function FuelCostCalculator() {
                         onChange={(e) => setPenalties({ ...penalties, winterCold: e.target.checked })}
                         className="rounded text-emerald-600 accent-emerald-600 cursor-pointer"
                       />
-                      Winter / Cold Start (-10%)
+                      Winter (-10%)
                     </label>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 pt-2 border-t border-zinc-200/60 dark:border-zinc-700">
                   <div className="space-y-1">
-                    <label className="font-bold text-zinc-700 dark:text-zinc-300">Highway Tolls ({currencySymbol})</label>
+                    <label className="font-bold text-zinc-700 dark:text-zinc-300">Tolls ({currencySymbol})</label>
                     <Input
                       type="number"
                       value={tolls}
                       onChange={(e) => setTolls(Number(e.target.value))}
-                      className="h-8 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200"
+                      className="h-7 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="font-bold text-zinc-700 dark:text-zinc-300">Parking Fees ({currencySymbol})</label>
+                    <label className="font-bold text-zinc-700 dark:text-zinc-300">Parking ({currencySymbol})</label>
                     <Input
                       type="number"
                       value={parking}
                       onChange={(e) => setParking(Number(e.target.value))}
-                      className="h-8 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200"
+                      className="h-7 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200"
                     />
                   </div>
                 </div>
@@ -567,112 +594,110 @@ export function FuelCostCalculator() {
           </div>
         </div>
 
-        {/* RIGHT DASHBOARD (Col 5) */}
-        <div className="lg:col-span-5 bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900 text-white p-6 rounded-2xl shadow-md space-y-6">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-white/20 pb-3">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-100 flex items-center gap-1.5">
-                <Fuel className="h-4 w-4 text-white" /> Financial &amp; Logistics Summary
-              </span>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 text-white">
+        {/* RIGHT DASHBOARD (Col 5) - SLEEK COMPACT DESIGN */}
+        <div className="lg:col-span-5 bg-gradient-to-br from-emerald-600 via-teal-700 to-slate-900 text-white p-4 rounded-2xl shadow-md space-y-3.5">
+          <div className="flex items-center justify-between border-b border-white/20 pb-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-100 flex items-center gap-1.5">
+              <Fuel className="h-3.5 w-3.5 text-white" /> Financial &amp; Logistics Summary
+            </span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/20 text-white">
+              {mode === "commute"
+                ? "Commute"
+                : mode === "mpg_solver"
+                ? "MPG Solver"
+                : mode === "ev_compare"
+                ? "EV Compare"
+                : isRoundTrip
+                ? "Round Trip"
+                : "One-Way"}
+            </span>
+          </div>
+
+          {/* Primary Result Card */}
+          {mode !== "mpg_solver" ? (
+            <div className="space-y-0.5">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-200 block">
                 {mode === "commute"
-                  ? "Commute Planner"
-                  : mode === "mpg_solver"
-                  ? "MPG Solver"
-                  : mode === "ev_compare"
-                  ? "EV Comparison"
+                  ? "Monthly Commute Fuel Cost"
                   : isRoundTrip
-                  ? "Round Trip"
-                  : "One-Way Trip"}
+                  ? "Total Round-Trip Expense"
+                  : "Total Trip Expense"}
               </span>
+              <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-white">
+                {currencySymbol}{mode === "commute" ? result.monthlyCommuteCost : result.totalCost}
+              </div>
+              <p className="text-[11px] text-emerald-100 font-medium">
+                {result.distanceFormatted} ({isRoundTrip ? "Round-Trip" : "One-Way"}) | Fuel: {result.fuelVolumeNeeded} {result.fuelVolumeUnit}
+              </p>
             </div>
+          ) : (
+            <div className="space-y-0.5">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-200 block">
+                Calculated Fuel Economy
+              </span>
+              <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-white">
+                {result.calculatedMPG} MPG
+              </div>
+              <p className="text-[11px] text-emerald-100 font-medium">
+                Equivalent to {result.calculatedL100km} L/100km
+              </p>
+            </div>
+          )}
 
-            {/* Primary Result Card */}
-            {mode !== "mpg_solver" ? (
-              <div className="space-y-1">
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-200 block">
-                  {mode === "commute"
-                    ? "Monthly Commute Fuel Cost"
-                    : isRoundTrip
-                    ? "Total Round-Trip Expense"
-                    : "Total Trip Expense"}
-                </span>
-                <div className="text-6xl font-black font-mono tracking-tight text-white">
-                  {currencySymbol}{mode === "commute" ? result.monthlyCommuteCost : result.totalCost}
-                </div>
-                <p className="text-xs text-emerald-100 font-medium">
-                  {result.distanceFormatted} ({isRoundTrip ? "Round-Trip" : "One-Way"}) | Fuel: {result.fuelVolumeNeeded} {result.fuelVolumeUnit}
-                </p>
+          {/* Passenger Cost Card */}
+          {mode === "trip" && passengers > 1 && (
+            <div className="p-2.5 bg-white/10 backdrop-blur-xs rounded-xl border border-white/20 space-y-0.5">
+              <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-200 flex items-center gap-1">
+                <Users className="h-3 w-3" /> Group Passenger Split
+              </span>
+              <div className="text-2xl font-black font-mono text-white">
+                {currencySymbol}{result.costPerPerson}
               </div>
-            ) : (
-              <div className="space-y-1">
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-200 block">
-                  Calculated Fuel Economy
-                </span>
-                <div className="text-6xl font-black font-mono tracking-tight text-white">
-                  {result.calculatedMPG} MPG
-                </div>
-                <p className="text-xs text-emerald-100 font-medium">
-                  Equivalent to {result.calculatedL100km} L/100km
-                </p>
-              </div>
-            )}
+              <p className="text-[10px] text-emerald-100">Per person share across {passengers} passengers</p>
+            </div>
+          )}
 
-            {/* Passenger Cost Card (If passengers > 1) */}
-            {mode === "trip" && passengers > 1 && (
-              <div className="p-3.5 bg-white/10 backdrop-blur-xs rounded-xl border border-white/20 space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-200 flex items-center gap-1">
-                  <Users className="h-3.5 w-3.5" /> Group Passenger Split
-                </span>
-                <div className="text-3xl font-black font-mono text-white">
-                  {currencySymbol}{result.costPerPerson}
-                </div>
-                <p className="text-[11px] text-emerald-100">Per person share across {passengers} passengers</p>
+          {/* Commute Budget Outlook */}
+          {mode === "commute" && (
+            <div className="grid grid-cols-2 gap-1.5 text-xs">
+              <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
+                <span className="text-[9px] uppercase font-bold text-emerald-200 block">Weekly Cost</span>
+                <span className="font-mono font-bold text-xs text-white">{currencySymbol}{result.weeklyCommuteCost}</span>
               </div>
-            )}
+              <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
+                <span className="text-[9px] uppercase font-bold text-emerald-200 block">Annual Cost</span>
+                <span className="font-mono font-bold text-xs text-white">{currencySymbol}{result.annualCommuteCost}</span>
+              </div>
+            </div>
+          )}
 
-            {/* Commute Budget Outlook (If mode === 'commute') */}
-            {mode === "commute" && (
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="bg-white/10 backdrop-blur-xs p-2.5 rounded-xl border border-white/20">
-                  <span className="text-[10px] uppercase font-bold text-emerald-200 block">Weekly Cost</span>
-                  <span className="font-mono font-bold text-sm text-white">{currencySymbol}{result.weeklyCommuteCost}</span>
-                </div>
-                <div className="bg-white/10 backdrop-blur-xs p-2.5 rounded-xl border border-white/20">
-                  <span className="text-[10px] uppercase font-bold text-emerald-200 block">Annual Cost</span>
-                  <span className="font-mono font-bold text-sm text-white">{currencySymbol}{result.annualCommuteCost}</span>
-                </div>
+          {/* EV Comparison Card */}
+          {mode === "ev_compare" && (
+            <div className="p-2.5 bg-white/10 backdrop-blur-xs rounded-xl border border-white/20 space-y-1.5 text-xs">
+              <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-200 flex items-center gap-1">
+                <Zap className="h-3 w-3 fill-yellow-400 text-yellow-400" /> EV vs. Gas Savings
+              </span>
+              <div className="flex justify-between font-mono text-[11px]">
+                <span>Gasoline: {currencySymbol}{result.gasTripCost}</span>
+                <span className="font-bold text-yellow-300">EV: {currencySymbol}{result.evTripCost}</span>
               </div>
-            )}
+              <div className="p-1.5 bg-emerald-500/30 rounded-lg border border-emerald-300/40 text-center font-bold text-white text-xs">
+                EV Savings: {currencySymbol}{result.evSavings} per trip!
+              </div>
+            </div>
+          )}
 
-            {/* EV Comparison Card (If mode === 'ev_compare') */}
-            {mode === "ev_compare" && (
-              <div className="p-3.5 bg-white/10 backdrop-blur-xs rounded-xl border border-white/20 space-y-2 text-xs">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-200 flex items-center gap-1">
-                  <Zap className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" /> EV vs. Gas Savings
-                </span>
-                <div className="flex justify-between font-mono">
-                  <span>Gasoline Trip: {currencySymbol}{result.gasTripCost}</span>
-                  <span className="font-bold text-yellow-300">EV Trip: {currencySymbol}{result.evTripCost}</span>
-                </div>
-                <div className="p-2 bg-emerald-500/30 rounded-lg border border-emerald-300/40 text-center font-bold text-white">
-                  EV Savings: {currencySymbol}{result.evSavings} per trip!
-                </div>
-              </div>
-            )}
-
-            {/* Side-by-side Mini Metrics */}
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="bg-white/10 backdrop-blur-xs p-2.5 rounded-xl border border-white/20">
-                <span className="text-[10px] uppercase font-bold text-emerald-200 block">Cost Per {result.distanceUnitName}</span>
-                <span className="font-mono font-bold text-sm text-white">{currencySymbol}{result.costPerDistanceUnit}</span>
-              </div>
-              <div className="bg-white/10 backdrop-blur-xs p-2.5 rounded-xl border border-white/20">
-                <span className="text-[10px] uppercase font-bold text-emerald-200 block flex items-center gap-1">
-                  <Leaf className="h-3.5 w-3.5 text-emerald-300" /> CO2 Emissions
-                </span>
-                <span className="font-mono font-bold text-sm text-white">{result.carbonFootprintKg} kg CO2</span>
-              </div>
+          {/* Side-by-side Mini Metrics */}
+          <div className="grid grid-cols-2 gap-1.5 text-xs">
+            <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
+              <span className="text-[9px] uppercase font-bold text-emerald-200 block">Cost Per {result.distanceUnitName}</span>
+              <span className="font-mono font-bold text-xs text-white">{currencySymbol}{result.costPerDistanceUnit}</span>
+            </div>
+            <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
+              <span className="text-[9px] uppercase font-bold text-emerald-200 block flex items-center gap-1">
+                <Leaf className="h-3 w-3 text-emerald-300" /> CO2 Emissions
+              </span>
+              <span className="font-mono font-bold text-xs text-white">{result.carbonFootprintKg} kg CO2</span>
             </div>
           </div>
         </div>
