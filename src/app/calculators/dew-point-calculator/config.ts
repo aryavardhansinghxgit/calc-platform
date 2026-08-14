@@ -1,8 +1,6 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateDewPointFromInputs } from "./calculator";
 import { dew_point_calculatorFaqs } from "./faq";
-import { DewPointCalculator } from "@/components/calculator/dew-point/DewPointCalculator";
-import { DewPointContent } from "@/components/calculator/dew-point/DewPointContent";
 
 export const dew_point_calculatorConfig: CalculatorModuleDefinition = {
   id: "dew-point-calculator",
@@ -26,8 +24,6 @@ export const dew_point_calculatorConfig: CalculatorModuleDefinition = {
   relatedCalculators: ["heat-index-calculator", "wind-chill-calculator"],
   formulaDescription: "Alduchov & Eskridge (1996) Improved Magnus Equation",
   faqs: dew_point_calculatorFaqs,
-  CustomComponent: DewPointCalculator,
-  ContentComponent: DewPointContent,
   inputs: [
     {
       name: "airTemp",

@@ -1,8 +1,6 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateGasMileageFromInputs } from "./calculator";
 import { gas_mileage_calculatorFaqs } from "./faq";
-import { GasMileageCalculator } from "@/components/calculator/gas-mileage/GasMileageCalculator";
-import { GasMileageContent } from "@/components/calculator/gas-mileage/GasMileageContent";
 
 export const gas_mileage_calculatorConfig: CalculatorModuleDefinition = {
   id: "gas-mileage-calculator",
@@ -26,8 +24,6 @@ export const gas_mileage_calculatorConfig: CalculatorModuleDefinition = {
   relatedCalculators: ["fuel-cost-calculator", "mileage-calculator"],
   formulaDescription: "MPG = Miles Driven / Gallons Consumed",
   faqs: gas_mileage_calculatorFaqs,
-  CustomComponent: GasMileageCalculator,
-  ContentComponent: GasMileageContent,
   inputs: [
     {
       name: "startOdometer",

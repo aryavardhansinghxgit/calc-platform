@@ -1,8 +1,6 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateFuelCostFromInputs } from "./calculator";
 import { fuel_cost_calculatorFaqs } from "./faq";
-import { FuelCostCalculator } from "@/components/calculator/fuel-cost/FuelCostCalculator";
-import { FuelCostContent } from "@/components/calculator/fuel-cost/FuelCostContent";
 
 export const fuel_cost_calculatorConfig: CalculatorModuleDefinition = {
   id: "fuel-cost-calculator",
@@ -26,8 +24,6 @@ export const fuel_cost_calculatorConfig: CalculatorModuleDefinition = {
   relatedCalculators: ["gas-mileage-calculator", "mileage-calculator"],
   formulaDescription: "Total Fuel Cost = (Distance / MPG) × Fuel Price + Tolls",
   faqs: fuel_cost_calculatorFaqs,
-  CustomComponent: FuelCostCalculator,
-  ContentComponent: FuelCostContent,
   inputs: [
     {
       name: "distance",

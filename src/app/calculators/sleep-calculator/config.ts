@@ -1,8 +1,6 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateSleepFromInputs } from "./calculator";
 import { sleep_calculatorFaqs } from "./faq";
-import { SleepCalculator } from "@/components/calculator/sleep/SleepCalculator";
-import { SleepContent } from "@/components/calculator/sleep/SleepContent";
 
 export const sleep_calculatorConfig: CalculatorModuleDefinition = {
   id: "sleep-calculator",
@@ -26,8 +24,6 @@ export const sleep_calculatorConfig: CalculatorModuleDefinition = {
   relatedCalculators: ["time-calculator"],
   formulaDescription: "Target Time ± (N × 90 min Sleep Cycles) ± Sleep Latency Buffer",
   faqs: sleep_calculatorFaqs,
-  CustomComponent: SleepCalculator,
-  ContentComponent: SleepContent,
   inputs: [
     {
       name: "targetTime",

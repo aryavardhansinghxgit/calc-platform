@@ -1,8 +1,6 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateHeatIndexFromInputs } from "./calculator";
 import { heat_index_calculatorFaqs } from "./faq";
-import { HeatIndexCalculator } from "@/components/calculator/heat-index/HeatIndexCalculator";
-import { HeatIndexContent } from "@/components/calculator/heat-index/HeatIndexContent";
 
 export const heat_index_calculatorConfig: CalculatorModuleDefinition = {
   id: "heat-index-calculator",
@@ -26,8 +24,6 @@ export const heat_index_calculatorConfig: CalculatorModuleDefinition = {
   relatedCalculators: ["wind-chill-calculator", "dew-point-calculator"],
   formulaDescription: "NOAA Rothfusz 9-Term Regression Algorithm",
   faqs: heat_index_calculatorFaqs,
-  CustomComponent: HeatIndexCalculator,
-  ContentComponent: HeatIndexContent,
   inputs: [
     {
       name: "temperature",

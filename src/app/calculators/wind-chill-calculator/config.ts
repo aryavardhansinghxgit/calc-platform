@@ -1,8 +1,6 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateWindChillFromInputs } from "./calculator";
 import { wind_chill_calculatorFaqs } from "./faq";
-import { WindChillCalculator } from "@/components/calculator/wind-chill/WindChillCalculator";
-import { WindChillContent } from "@/components/calculator/wind-chill/WindChillContent";
 
 export const wind_chill_calculatorConfig: CalculatorModuleDefinition = {
   id: "wind-chill-calculator",
@@ -25,8 +23,6 @@ export const wind_chill_calculatorConfig: CalculatorModuleDefinition = {
   relatedCalculators: ["heat-index-calculator", "dew-point-calculator"],
   formulaDescription: "Wind Chill (°F) = 35.74 + 0.6215T - 35.75V^0.16 + 0.4275T V^0.16",
   faqs: wind_chill_calculatorFaqs,
-  CustomComponent: WindChillCalculator,
-  ContentComponent: WindChillContent,
   inputs: [
     {
       name: "temperature",
