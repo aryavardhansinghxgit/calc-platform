@@ -7,7 +7,7 @@ export const LOAN_CALCULATOR: CalculatorModuleDefinition = {
   title: "Loan Calculator",
   slug: "loan-calculator",
   category: "Finance",
-  subcategory: "Mortgage & Home",
+  subcategory: "Mortgage & House",
   description: "Calculate monthly loan payments, maximum loan affordability, loan term, and estimated interest rates with detailed amortization schedules and charts.",
   iconName: "CalcIcon",
   featured: true,
