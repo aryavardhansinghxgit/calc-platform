@@ -760,8 +760,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
 
         {/* Right Sidebar: Quick Navigation & Search Index (Col 4 matching Screen 2, 3 & 5) */}
         <aside className="min-w-0 lg:col-span-4 space-y-4">
-          {/* Quick Search Card */}
-          <div className="bg-card text-card-foreground border border-border rounded-xl p-3.5 shadow-xs space-y-2">
+          {/* Quick Search and Category Index */}
+          <div className="bg-card text-card-foreground border border-border rounded-xl p-3.5 shadow-xs space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Quick Search
             </h3>
@@ -775,50 +775,49 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                 className="pl-8 bg-background border-border h-8 text-xs rounded-lg"
               />
             </div>
-          </div>
 
-          {/* Category Quick Index Box */}
-          <div className="bg-card text-card-foreground border border-border rounded-xl p-3.5 shadow-xs space-y-2.5">
-            <div className="flex items-center justify-between border-b border-border pb-2">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                {definition.category} Calculators
-              </h3>
-              <span className="text-[10px] font-mono text-current bg-muted px-1.5 py-0.5 rounded">
-                {filteredSidebarCalculators.length}
-              </span>
+            <div className="border-t border-border pt-3 space-y-2.5">
+              <div className="flex items-center justify-between border-b border-border pb-2">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  {definition.category} Calculators
+                </h3>
+                <span className="text-[10px] font-mono text-current bg-muted px-1.5 py-0.5 rounded">
+                  {filteredSidebarCalculators.length}
+                </span>
+              </div>
+
+              <ul className="space-y-1 text-xs">
+                {visibleSidebarCalculators.map((calc, idx) => {
+                  const isActive = calc.id === definition.id || calc.slug === definition.slug;
+                  return (
+                    <li key={`${calc.id}-${calc.slug}-${idx}`}>
+                      <Link
+                        href={`/calculators/${calc.slug}`}
+                        className={`flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors group ${isActive
+                          ? "bg-blue-600 text-white font-semibold shadow-sm"
+                          : "text-foreground hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-950/40 dark:hover:text-blue-300"
+                          }`}
+                      >
+                        <span className="truncate">{getCalculatorDisplayTitle(calc.title)}</span>
+                        <ArrowRight className={`h-3 w-3 transition-transform ${isActive ? "text-white" : "text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"}`} />
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+
+              {filteredSidebarCalculators.length === 0 && (
+                <p className="px-2 py-1 text-xs text-muted-foreground">No calculators found.</p>
+              )}
+
+              <Link
+                href={categoryHref}
+                className="flex items-center justify-between border-t border-border pt-2 text-xs font-semibold text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+              >
+                See all {definition.category} calculators
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
-
-            <ul className="space-y-1 text-xs">
-              {visibleSidebarCalculators.map((calc, idx) => {
-                const isActive = calc.id === definition.id || calc.slug === definition.slug;
-                return (
-                  <li key={`${calc.id}-${calc.slug}-${idx}`}>
-                    <Link
-                      href={`/calculators/${calc.slug}`}
-                      className={`flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors group ${isActive
-                        ? "bg-blue-600 text-white font-semibold shadow-sm"
-                        : "text-foreground hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-950/40 dark:hover:text-blue-300"
-                        }`}
-                    >
-                       <span className="truncate">{getCalculatorDisplayTitle(calc.title)}</span>
-                      <ArrowRight className={`h-3 w-3 transition-transform ${isActive ? "text-white" : "text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"}`} />
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-
-            {filteredSidebarCalculators.length === 0 && (
-              <p className="px-2 py-1 text-xs text-muted-foreground">No calculators found.</p>
-            )}
-
-            <Link
-              href={categoryHref}
-              className="flex items-center justify-between border-t border-border pt-2 text-xs font-semibold text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-            >
-              See all {definition.category} calculators
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
           </div>
         </aside>
       </div>
