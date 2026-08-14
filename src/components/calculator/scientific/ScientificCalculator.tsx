@@ -1198,7 +1198,7 @@ export function ScientificCalculator() {
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       {/* LEFT COLUMN: Main Calculator Frame (Col 8) */}
       <div className="lg:col-span-8 space-y-4">
-        <Card className="bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-700 border-b-4 border-b-zinc-350 dark:border-b-zinc-800 shadow-xl rounded-2xl overflow-hidden">
+        <Card className="bg-sky-50 dark:bg-sky-950/40 text-zinc-900 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-700 border-b-4 border-b-zinc-350 dark:border-b-zinc-800 shadow-xl rounded-2xl overflow-hidden">
           <CardContent className="p-4 sm:p-5 space-y-3">
             {/* 1. LCD / DISPLAY BOX */}
             <div className="bg-emerald-950 border-2 border-emerald-800/80 rounded-xl p-3 sm:p-4 text-right font-mono space-y-1 shadow-inner relative">
