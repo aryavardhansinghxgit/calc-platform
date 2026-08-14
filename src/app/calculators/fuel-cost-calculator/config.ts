@@ -1,70 +1,71 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
-import { calculateFuelCostCalculator } from "./calculator";
+import { calculateFuelCostFromInputs } from "./calculator";
 import { fuel_cost_calculatorFaqs } from "./faq";
+import { FuelCostCalculator } from "@/components/calculator/fuel-cost/FuelCostCalculator";
+import { FuelCostContent } from "@/components/calculator/fuel-cost/FuelCostContent";
 
 export const fuel_cost_calculatorConfig: CalculatorModuleDefinition = {
   id: "fuel-cost-calculator",
   title: "Fuel Cost Calculator",
   slug: "fuel-cost-calculator",
   category: "other",
-  subcategory: "Transportation",
-  description: "Calculate total trip gas cost, gallons needed, and cost per mile for road trips.",
+  subcategory: "Transportation Calculators",
+  description: "Free online Fuel Cost Calculator. Calculate road trip gas cost, commute monthly budget, EV vs gas savings, passenger split, and carbon footprint.",
   iconName: "Fuel",
   featured: true,
-  keywords: ["fuel cost","gas cost calculator","road trip cost","gasoline expense"],
+  keywords: [
+    "fuel cost calculator",
+    "road trip gas calculator",
+    "trip fuel cost",
+    "mpg cost per mile",
+    "carpool cost splitter",
+    "ev vs gas cost calculator",
+    "commute fuel budget"
+  ],
   priority: 1,
-  relatedCalculators: ["gas-mileage-calculator","mileage-calculator"],
-  formulaDescription: "Trip Cost = (Distance / MPG) × Gas Price",
+  relatedCalculators: ["gas-mileage-calculator", "mileage-calculator"],
+  formulaDescription: "Total Fuel Cost = (Distance / MPG) × Fuel Price + Tolls",
   faqs: fuel_cost_calculatorFaqs,
+  CustomComponent: FuelCostCalculator,
+  ContentComponent: FuelCostContent,
   inputs: [
-  {
-    "name": "distanceMiles",
-    "label": "Trip Distance (miles)",
-    "type": "number",
-    "defaultValue": 300,
-    "min": 1,
-    "max": 10000,
-    "step": 10
-  },
-  {
-    "name": "mpg",
-    "label": "Vehicle Fuel Economy (MPG)",
-    "type": "number",
-    "defaultValue": 28,
-    "min": 5,
-    "max": 100,
-    "step": 1
-  },
-  {
-    "name": "gasPrice",
-    "label": "Gas Price per Gallon ($)",
-    "type": "number",
-    "defaultValue": 3.5,
-    "min": 1,
-    "max": 10,
-    "step": 0.1
-  }
-],
+    {
+      name: "distance",
+      label: "Trip Distance (miles)",
+      type: "number",
+      defaultValue: 300,
+      min: 1,
+      max: 10000,
+      step: 10
+    },
+    {
+      name: "efficiency",
+      label: "Vehicle Efficiency (MPG)",
+      type: "number",
+      defaultValue: 25,
+      min: 5,
+      max: 100,
+      step: 1
+    },
+    {
+      name: "fuelPrice",
+      label: "Fuel Price per Gallon ($)",
+      type: "number",
+      defaultValue: 3.5,
+      min: 0.5,
+      max: 20,
+      step: 0.05
+    }
+  ],
   outputs: [
-  {
-    "name": "totalFuelCost",
-    "label": "Total Trip Fuel Cost",
-    "format": "currency",
-    "highlight": true
-  },
-  {
-    "name": "gallonsNeeded",
-    "label": "Gallons Required",
-    "format": "number",
-    "unit": "gal"
-  },
-  {
-    "name": "costPerMile",
-    "label": "Cost Per Mile",
-    "format": "currency"
-  }
-],
-  calculate: calculateFuelCostCalculator,
-};
+    {
+      name: "totalCost",
+      label: "Total Trip Expense",
+      format: "currency",
+      highlight: true
+    }
+  ],
+  calculate: calculateFuelCostFromInputs,
+} as any;
 
 export default fuel_cost_calculatorConfig;

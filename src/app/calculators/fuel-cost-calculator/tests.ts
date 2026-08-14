@@ -1,36 +1,36 @@
-import { calculateFuelCostCalculator } from "./calculator";
+import { calculateFuelCostFromInputs } from "./calculator";
 
 export function runFuelCostCalculatorTests() {
   const defaultInputs = {
-  "distanceMiles": 300,
-  "mpg": 28,
-  "gasPrice": 3.5
-};
-  const res1 = calculateFuelCostCalculator(defaultInputs);
+    distance: 300,
+    efficiency: 25,
+    fuelPrice: 3.5,
+  };
+  const res1 = calculateFuelCostFromInputs(defaultInputs);
   if (!res1 || typeof res1 !== "object") throw new Error("Formula failed for default inputs");
 
   const zeroInputs = {
-  "distanceMiles": 0,
-  "mpg": 0,
-  "gasPrice": 0
-};
-  const res2 = calculateFuelCostCalculator(zeroInputs);
+    distance: 0,
+    efficiency: 0,
+    fuelPrice: 0,
+  };
+  const res2 = calculateFuelCostFromInputs(zeroInputs);
   if (!res2) throw new Error("Formula failed for zero inputs");
 
   const negInputs = {
-  "distanceMiles": -50,
-  "mpg": -50,
-  "gasPrice": -50
-};
-  const res3 = calculateFuelCostCalculator(negInputs);
+    distance: -50,
+    efficiency: -50,
+    fuelPrice: -50,
+  };
+  const res3 = calculateFuelCostFromInputs(negInputs);
   if (!res3) throw new Error("Formula failed for negative inputs");
 
   const nanInputs = {
-  "distanceMiles": null,
-  "mpg": null,
-  "gasPrice": null
-};
-  const res4 = calculateFuelCostCalculator(nanInputs);
+    distance: null,
+    efficiency: null,
+    fuelPrice: null,
+  };
+  const res4 = calculateFuelCostFromInputs(nanInputs);
   if (!res4) throw new Error("Formula failed for NaN inputs");
 
   return true;
