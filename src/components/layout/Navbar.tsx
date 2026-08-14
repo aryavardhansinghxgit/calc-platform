@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { NAVIGATION_CATEGORIES } from "@/constants/navigation";
 import { getCalculatorDefinition, searchCalculators } from "@/calculators";
+import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
 
 export interface NavbarProps {
   onSearchChange?: (term: string) => void;
@@ -71,29 +72,29 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
 
   return (
     <header className="sticky top-0 z-50 border-b border-blue-500 bg-blue-600 text-white shadow-md shadow-blue-950/20 transition-colors">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-3 sm:px-6 h-14">
+      <div className="mx-auto flex min-w-0 max-w-7xl items-center justify-between gap-2 px-3 sm:px-6 h-14">
         {/* Brand Logo */}
-        <div className="flex items-center gap-6">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-6 xl:shrink-0">
           <Link
             href="/"
-            className="flex items-center gap-2 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-lg p-1"
+            className="flex min-w-0 items-center gap-2 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white rounded-lg p-1 xl:shrink-0 xl:whitespace-nowrap"
             aria-label="CalcPlatform Home"
           >
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-blue-600 font-bold group-hover:bg-blue-50 transition-colors shadow-sm">
               <Calculator className="h-4.5 w-4.5" />
             </div>
-            <div className="flex items-center gap-1.5">
+            <div className="flex min-w-0 items-center gap-1.5">
               <span className="text-base font-bold tracking-tight text-white">
                 Calc<span className="text-blue-100">Platform</span>
               </span>
-              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-white/15 text-white border border-white/30">
+              <span className="hidden sm:inline text-[10px] font-semibold px-1.5 py-0.5 rounded bg-white/15 text-white border border-white/30">
                 Pro
               </span>
             </div>
           </Link>
 
           {/* Desktop Categories Navigation */}
-          <nav className="hidden lg:flex items-center gap-1" aria-label="Main Categories Navigation">
+          <nav className="hidden xl:ml-2 xl:flex items-center gap-1" aria-label="Main Categories Navigation">
             {categories.map((cat) => {
               const Icon = cat.icon;
               const isActive = selectedCategory === cat.name;
@@ -118,8 +119,8 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
         </div>
 
         {/* Global Compact Search Bar */}
-        <div className="flex items-center gap-2">
-          <div className="relative w-44 sm:w-72">
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-2 sm:flex-none">
+          <div className="relative w-0 min-w-0 flex-1 sm:w-72 sm:flex-none">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-blue-100 z-10 pointer-events-none" />
             <Input
               ref={searchInputRef}
@@ -148,12 +149,12 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
                     <Link
                       key={calc.id}
                       href={`/calculators/${calc.slug}`}
-                      className="p-2.5 flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors group cursor-pointer"
+                      className="p-2.5 flex min-w-0 items-center justify-between gap-2 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors group cursor-pointer"
                     >
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                            {calc.title}
+                      <div className="min-w-0 space-y-0.5">
+                        <div className="flex min-w-0 items-center gap-1.5">
+                          <span className="min-w-0 truncate text-xs font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            {getCalculatorDisplayTitle(calc.title)}
                           </span>
                           <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
                             {calc.category}
@@ -176,7 +177,7 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
             aria-expanded={mobileMenuOpen}
-            className="lg:hidden text-white hover:bg-white/15 h-8 w-8 p-0"
+            className="xl:hidden text-white hover:bg-white/15 h-8 w-8 p-0"
           >
             {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </Button>
@@ -185,7 +186,7 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
 
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-blue-500 bg-blue-600 px-4 py-2 space-y-1">
+        <div className="xl:hidden border-t border-blue-500 bg-blue-600 px-4 py-2 space-y-1">
           {categories.map((cat) => {
             const Icon = cat.icon;
             const isActive = selectedCategory === cat.name;

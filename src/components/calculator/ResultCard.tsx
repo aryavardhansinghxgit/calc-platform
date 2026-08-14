@@ -23,7 +23,7 @@ export function ResultCard({
   return (
     <div
       className={cn(
-        "px-3 py-2 rounded-lg",
+        "min-w-0 px-3 py-2 rounded-lg",
         highlight
           ? "bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800"
           : "bg-zinc-50 dark:bg-zinc-800/50",
@@ -34,16 +34,16 @@ export function ResultCard({
       <p className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide leading-none mb-1">
         {label}
       </p>
-      <div className="flex items-baseline gap-0.5">
+      <div className="flex min-w-0 items-baseline gap-0.5">
         <span
           className={cn(
-            "font-semibold tracking-tight font-mono",
+            "min-w-0 break-all font-semibold tracking-tight font-mono",
             highlight ? "text-xl text-blue-600 dark:text-blue-400" : "text-lg text-zinc-900 dark:text-zinc-100"
           )}
         >
           {value}
         </span>
-        {unit && <span className="text-[10px] text-zinc-400 font-mono">{unit}</span>}
+        {unit && <span className="shrink-0 text-[10px] text-zinc-400 font-mono">{unit}</span>}
       </div>
     </div>
   );

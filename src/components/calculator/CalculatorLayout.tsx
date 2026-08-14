@@ -2,15 +2,15 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, ChevronRight, BarChart2, Table, BookOpen, HelpCircle, Calculator as CalcIcon, Search, ArrowRight, Printer, Bookmark, Check, Trash2, History, Copy } from "lucide-react";
+import { ArrowLeft, ChevronRight, BarChart2, Table, BookOpen, Calculator as CalcIcon, Search, ArrowRight, Printer, Bookmark, Check, Trash2, History, Copy } from "lucide-react";
 import dynamic from "next/dynamic";
 import { CalculatorModuleDefinition, getCalculatorsByCategory, searchCalculators } from "@/calculators";
 import { CalculationResult } from "@/lib/calculator-engine/types";
 import { CalculatorEngine } from "@/lib/calculator-engine/engine";
+import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
 import { CalculatorForm } from "./CalculatorForm";
 import { CalculatorResult } from "./CalculatorResult";
 import { FormulaSection } from "./FormulaSection";
-import { FAQSection } from "./FAQSection";
 import { RelatedCalculators } from "./RelatedCalculators";
 import { AmortizationTable } from "./mortgage/AmortizationTable";
 import { MortgageContentSection } from "./mortgage/MortgageContentSection";
@@ -349,9 +349,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       </nav>
 
       {/* 2. Page Header & Quick Layout Grid (Col-8 Main | Col-4 Sidebar matching Screen 2) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         {/* Main Interactive Calculator Area (Col 8) */}
-        <div className="lg:col-span-8 space-y-4">
+        <div className="min-w-0 lg:col-span-8 space-y-4">
           <div>
             <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
               {definition.title}
@@ -510,9 +510,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
               <MortgageCalculator />
             ) : (
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
+                <div className="grid min-w-0 grid-cols-1 md:grid-cols-12 gap-5 items-start">
                   {/* Left: Inputs Panel */}
-                  <div className="md:col-span-6 space-y-2 border-b md:border-b-0 md:border-r border-zinc-100 dark:border-zinc-800 pb-4 md:pb-0 md:pr-4">
+                  <div className="min-w-0 md:col-span-6 space-y-2 border-b md:border-b-0 md:border-r border-zinc-100 dark:border-zinc-800 pb-4 md:pb-0 md:pr-4">
                     <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center justify-between">
                       <span>Inputs</span>
                       <span className="text-[10px] font-normal text-zinc-400">Real-time</span>
@@ -525,12 +525,12 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                   </div>
 
                   {/* Right: Results Panel */}
-                  <div className="md:col-span-6 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                  <div className="min-w-0 md:col-span-6 space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <h2 className="min-w-0 text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
                         Calculated Summary
                       </h2>
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex flex-wrap items-center justify-end gap-1.5">
                         <Button
                           type="button"
                           variant="outline"
@@ -609,8 +609,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             {/* Formula */}
             {definition.formulaDescription && (
               <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden group">
-                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
-                  <span className="flex items-center gap-2">
+                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between gap-2 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
+                  <span className="min-w-0 flex flex-1 items-center gap-2">
                     <CalcIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Formula & Calculation Method
                   </span>
                   <span className="text-[10px] text-blue-600 dark:text-blue-400 group-open:hidden font-mono">Expand +</span>
@@ -628,8 +628,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             {/* Educational Content */}
             {CustomContent && (
               <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden group">
-                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
-                  <span className="flex items-center gap-2">
+                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between gap-2 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
+                  <span className="min-w-0 flex flex-1 items-center gap-2">
                     <BookOpen className="h-4 w-4 text-blue-600 dark:text-blue-400" /> How {definition.title} Works — Guide & Examples
                   </span>
                   <span className="text-[10px] text-blue-600 dark:text-blue-400 group-open:hidden font-mono">Expand +</span>
@@ -641,26 +641,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
               </details>
             )}
 
-            {/* FAQs */}
-            {definition.faqs && definition.faqs.length > 0 && (
-              <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden group">
-                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
-                  <span className="flex items-center gap-2">
-                    <HelpCircle className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Frequently Asked Questions (FAQ)
-                  </span>
-                  <span className="text-[10px] text-blue-600 dark:text-blue-400 group-open:hidden font-mono">Expand +</span>
-                  <span className="text-[10px] text-zinc-400 hidden group-open:inline font-mono">Collapse -</span>
-                </summary>
-                <div className="px-4 pb-4 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                  <FAQSection faqs={definition.faqs} />
-                </div>
-              </details>
-            )}
-
             {/* Related Calculators */}
             <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden group">
-              <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
-                <span className="flex items-center gap-2">
+                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between gap-2 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
+                  <span className="min-w-0 flex flex-1 items-center gap-2">
                   <CalcIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Related Calculators
                 </span>
                 <span className="text-[10px] text-blue-600 dark:text-blue-400 group-open:hidden font-mono">Expand +</span>
@@ -674,7 +658,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         </div>
 
         {/* Right Sidebar: Quick Navigation & Search Index (Col 4 matching Screen 2, 3 & 5) */}
-        <aside className="lg:col-span-4 space-y-4">
+        <aside className="min-w-0 lg:col-span-4 space-y-4">
           {/* Quick Search Card */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm space-y-2">
             <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
@@ -715,7 +699,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                         : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/60"
                         }`}
                     >
-                      <span className="truncate">{calc.title}</span>
+                       <span className="truncate">{getCalculatorDisplayTitle(calc.title)}</span>
                       <ArrowRight className={`h-3 w-3 transition-transform ${isActive ? "text-blue-600" : "text-zinc-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"}`} />
                     </Link>
                   </li>

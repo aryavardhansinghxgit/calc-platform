@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, Clock } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { CALCULATORS, CalculatorItem } from "@/data/calculators";
+import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
 
 export interface LatestCalculatorsProps {
   title?: string;
@@ -34,7 +35,7 @@ export function LatestCalculators({
         {latestList.map((calc) => {
           const Icon = calc.icon;
           return (
-            <Link key={calc.id} href={`/calculators/${calc.slug}`}>
+            <Link key={calc.id} href={`/calculators/${calc.slug}`} className="min-w-0">
               <Card className="h-full bg-white border-zinc-200 hover:border-zinc-300 hover:shadow-sm transition-all cursor-pointer group rounded-xl">
                 <CardHeader className="p-5 space-y-3">
                   <div className="flex items-center justify-between">
@@ -47,8 +48,8 @@ export function LatestCalculators({
                   </div>
 
                   <div className="space-y-1">
-                    <CardTitle className="text-base font-semibold text-zinc-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                      <span>{calc.title}</span>
+                    <CardTitle className="min-w-0 text-base font-semibold text-zinc-900 group-hover:text-blue-600 transition-colors flex items-center justify-between gap-2">
+                      <span className="min-w-0 truncate">{getCalculatorDisplayTitle(calc.title)}</span>
                       <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-blue-600" />
                     </CardTitle>
                     <CardDescription className="text-xs text-zinc-500 line-clamp-2 leading-relaxed">

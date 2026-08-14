@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Layers, Search } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CATEGORIES, getCategoryBySlug } from "@/data/categories";
 import { getCalculatorsByCategory } from "@/calculators";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
+import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>;
@@ -37,7 +38,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  const CategoryIcon = category.icon;
   const registryCalculators = getCalculatorsByCategory(category.slug);
 
   // Group calculators by subcategory if present
@@ -71,20 +71,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Category Info & Subcategory Grouped Tools List */}
         <div className="lg:col-span-8 space-y-4">
-          <div className="p-4 rounded-xl bg-card text-card-foreground border border-border flex items-center gap-3">
-            <div className="p-2.5 rounded-lg bg-primary/10 border border-primary/20 text-primary shrink-0">
-              <CategoryIcon className="h-6 w-6" />
-            </div>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-extrabold text-foreground">
-                {category.name} Calculators
-              </h1>
-              <p className="text-xs text-muted-foreground max-w-xl leading-normal mt-0.5">
-                {category.description}
-              </p>
-            </div>
-          </div>
-
           {/* Subcategory Grouped Calculators */}
           {registryCalculators.length === 0 ? (
             <div className="bg-card text-card-foreground border border-border rounded-xl p-6 text-center text-xs text-muted-foreground">
@@ -96,8 +82,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 const tools = subcategoryMap[subName];
                 return (
                   <div key={subName} className="bg-card text-card-foreground border border-border rounded-xl p-4 space-y-3">
-                    <h2 className="text-xs font-bold uppercase tracking-wider text-primary flex items-center gap-1.5 border-b border-border pb-2">
-                      <Layers className="h-3.5 w-3.5" /> {subName} ({tools.length})
+                    <h2 className="text-xs font-bold uppercase tracking-wider text-primary border-b border-border pb-2">
+                      {subName}
                     </h2>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
@@ -107,14 +93,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                           href={`/calculators/${calc.slug}`}
                           className="p-2.5 rounded-lg border border-border bg-background hover:border-primary/50 hover:bg-muted/50 transition-all group flex items-start justify-between"
                         >
-                          <div className="space-y-0.5">
-                            <div className="font-bold text-foreground group-hover:text-primary transition-colors">
-                              {calc.title}
-                            </div>
-                            <p className="text-[11px] text-muted-foreground line-clamp-1">
-                              {calc.description}
-                            </p>
-                          </div>
+                           <div>
+                             <div className="font-bold text-foreground group-hover:text-primary transition-colors">
+                               {getCalculatorDisplayTitle(calc.title)}
+                             </div>
+                           </div>
                           <ArrowRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0 ml-2 mt-0.5" />
                         </Link>
                       ))}

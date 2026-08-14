@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Search, X, Zap, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { searchCalculators } from "@/calculators";
+import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
 
 export interface QuickTag {
   id: string;
@@ -100,7 +101,7 @@ export function SearchBar({
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {calc.title}
+                      {getCalculatorDisplayTitle(calc.title)}
                     </span>
                     <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-muted text-muted-foreground border border-border">
                       {calc.category}

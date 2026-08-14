@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, DollarSign, HeartPulse, Calculator as MathIcon, Calendar, Briefcase } from "lucide-react";
 import { CATEGORIES } from "@/data/categories";
 import { getCalculatorsByCategory } from "@/calculators";
+import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
 
 export interface CategoryGridProps {
   activeCategory?: string;
@@ -31,9 +32,9 @@ export function CategoryGrid() {
           const tools = getCalculatorsByCategory(cat.slug);
 
           return (
-            <div key={cat.id} className="space-y-2.5">
+            <div key={cat.id} className="min-w-0 space-y-2.5">
               {/* Category Header Link */}
-              <Link href={`/category/${cat.slug}`} className="group inline-flex items-center gap-2">
+              <Link href={`/category/${cat.slug}`} className="group inline-flex min-w-0 max-w-full items-center gap-2">
                 <div className="p-1.5 rounded-md bg-primary/10 text-primary border border-primary/20">
                   <Icon className="h-4 w-4" />
                 </div>
@@ -48,9 +49,9 @@ export function CategoryGrid() {
                   <li key={calc.id}>
                     <Link
                       href={`/calculators/${calc.slug}`}
-                      className="text-primary hover:underline flex items-center justify-between group"
+                      className="text-primary hover:underline flex min-w-0 items-center justify-between gap-1 group"
                     >
-                      <span className="truncate">{calc.title}</span>
+                      <span className="min-w-0 truncate">{getCalculatorDisplayTitle(calc.title)}</span>
                       <ArrowRight className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
                     </Link>
                   </li>
