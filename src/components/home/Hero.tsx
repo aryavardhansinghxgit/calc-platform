@@ -17,13 +17,13 @@ export function Hero() {
         <div className="min-w-0 lg:col-span-7 space-y-4">
           <div>
             <span className="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 uppercase tracking-wider">
-              Free Online Calculators
+              Free 160+ Calculators
             </span>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground mt-1.5 leading-tight">
               CALCULATE ANYTHING IN SECONDS
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl leading-normal">
-              High-speed, zero-friction tools for home mortgage schedules, personal loans, fitness metrics, and mathematical formulas.
+              Professional calculators for Finance, Health, Education, and Business decisions.
             </p>
           </div>
 

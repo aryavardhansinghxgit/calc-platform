@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, X, Zap, ArrowRight } from "lucide-react";
+import { Search, X, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { searchCalculators } from "@/calculators";
 import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
@@ -127,8 +127,8 @@ export function SearchBar({
 
       {/* Quick Launch Chips */}
       <div className="flex items-center flex-wrap gap-1.5 pt-0.5">
-        <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1 mr-1">
-          <Zap className="h-3 w-3 text-amber-500" /> Quick Launch:
+        <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mr-1">
+          Quick Launch:
         </span>
         {quickTags.map((tag) => {
           const slug = tag.id.endsWith("-calculator") ? tag.id : `${tag.id}-calculator`;
