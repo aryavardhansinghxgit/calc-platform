@@ -1,12 +1,15 @@
 import { GreatestCommonFactorGCFCalculatorOutputs } from "./types";
+import { calculateGCF, calculateLCM } from "./gcf-logic";
 
 export function calculateGreatestCommonFactorGCFCalculator(inputs: Record<string, any>): GreatestCommonFactorGCFCalculatorOutputs {
-  const a = Math.max(1, Math.floor(Number(inputs.num1) || 36));
-  const b = Math.max(1, Math.floor(Number(inputs.num2) || 60));
-  const c = Math.max(1, Math.floor(Number(inputs.num3) || 96));
-  const gcd2 = (x: number, y: number): number => (y === 0 ? x : gcd2(y, x % y));
-  const lcm2 = (x: number, y: number): number => (x * y) / gcd2(x, y);
-  const gcfRes = gcd2(gcd2(a, b), c);
-  const lcmRes = lcm2(lcm2(a, b), c);
+  const nums: number[] = [];
+  if (inputs.num1 != null && !Number.isNaN(Number(inputs.num1))) nums.push(Math.max(1, Math.floor(Number(inputs.num1))));
+  if (inputs.num2 != null && !Number.isNaN(Number(inputs.num2))) nums.push(Math.max(1, Math.floor(Number(inputs.num2))));
+  if (inputs.num3 != null && !Number.isNaN(Number(inputs.num3))) nums.push(Math.max(1, Math.floor(Number(inputs.num3))));
+
+  const validNums = nums.length > 0 ? nums : [36, 54, 90];
+  const gcfRes = calculateGCF(validNums);
+  const lcmRes = calculateLCM(validNums);
+
   return { gcf: gcfRes, lcm: lcmRes };
 }
