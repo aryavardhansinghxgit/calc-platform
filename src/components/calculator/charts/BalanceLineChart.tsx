@@ -22,7 +22,7 @@ export function BalanceLineChart({ schedule }: BalanceLineChartProps) {
         <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
           Loan Balance Over Time
         </h3>
-        <span className="text-[10px] font-mono text-blue-600 dark:text-blue-400">
+        <span className="text-[10px] font-sans tabular-nums text-blue-600 dark:text-blue-400">
           Payoff in {schedule.length} months
         </span>
       </div>

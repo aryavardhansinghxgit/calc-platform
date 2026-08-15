@@ -42,7 +42,7 @@ export function LatestCalculators({
                     <div className="p-2 rounded-lg bg-zinc-50 border border-zinc-200 text-blue-600 group-hover:text-blue-700 transition-colors">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200">
+                    <span className="text-[11px] font-sans tabular-nums font-medium px-2 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200">
                       {calc.category}
                     </span>
                   </div>

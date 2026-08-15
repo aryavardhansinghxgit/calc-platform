@@ -267,7 +267,7 @@ export function AutoLoanAmortizationTable({ monthlySchedule, annualSchedule }: A
                 paginatedMonthlyRows.map((r) => (
                   <TableRow
                     key={`m-${r.month}`}
-                    className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 border-zinc-100 dark:border-zinc-800/60 font-mono text-xs"
+                    className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 border-zinc-100 dark:border-zinc-800/60 font-sans tabular-nums text-xs"
                   >
                     <TableCell className="font-semibold text-zinc-900 dark:text-zinc-100 py-2">
                       Mo {r.month}
@@ -314,7 +314,7 @@ export function AutoLoanAmortizationTable({ monthlySchedule, annualSchedule }: A
               {annualSchedule.map((yr) => (
                 <TableRow
                   key={`yr-${yr.year}`}
-                  className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 border-zinc-100 dark:border-zinc-800/60 font-mono text-xs"
+                  className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 border-zinc-100 dark:border-zinc-800/60 font-sans tabular-nums text-xs"
                 >
                   <TableCell className="font-semibold text-zinc-900 dark:text-zinc-100 py-2.5">
                     Year {yr.year}

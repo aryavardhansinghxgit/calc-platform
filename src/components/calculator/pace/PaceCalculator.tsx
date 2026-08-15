@@ -310,7 +310,7 @@ Calculated via CalcPlatform Health Engine`;
             .font-bold { font-weight: 700; }
             .font-semibold { font-weight: 600; }
             .font-black { font-weight: 900; }
-            .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+            .font-sans tabular-nums { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
             .text-zinc-900 { color: #18181b; }
             .text-zinc-800 { color: #27272a; }
             .text-zinc-700 { color: #3f3f46; }
@@ -485,9 +485,9 @@ Calculated via CalcPlatform Health Engine`;
                   <div className={`p-3 rounded-xl border ${calcMode === "calculate_time" ? "bg-blue-50/50 border-blue-200" : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"}`}>
                     <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1.5 block">Time (hh:mm:ss)</Label>
                     <div className="grid grid-cols-3 gap-1.5">
-                      <Input type="number" min={0} placeholder="hh" value={timeHours} onChange={(e) => setTimeHours(Number(e.target.value))} className="text-xs font-mono font-bold" readOnly={calcMode === "calculate_time"} />
-                      <Input type="number" min={0} max={59} placeholder="mm" value={timeMinutes} onChange={(e) => setTimeMinutes(Number(e.target.value))} className="text-xs font-mono font-bold" readOnly={calcMode === "calculate_time"} />
-                      <Input type="number" min={0} max={59} placeholder="ss" value={timeSeconds} onChange={(e) => setTimeSeconds(Number(e.target.value))} className="text-xs font-mono font-bold" readOnly={calcMode === "calculate_time"} />
+                      <Input type="number" min={0} placeholder="hh" value={timeHours} onChange={(e) => setTimeHours(Number(e.target.value))} className="text-xs font-sans tabular-nums font-bold" readOnly={calcMode === "calculate_time"} />
+                      <Input type="number" min={0} max={59} placeholder="mm" value={timeMinutes} onChange={(e) => setTimeMinutes(Number(e.target.value))} className="text-xs font-sans tabular-nums font-bold" readOnly={calcMode === "calculate_time"} />
+                      <Input type="number" min={0} max={59} placeholder="ss" value={timeSeconds} onChange={(e) => setTimeSeconds(Number(e.target.value))} className="text-xs font-sans tabular-nums font-bold" readOnly={calcMode === "calculate_time"} />
                     </div>
                   </div>
 
@@ -504,7 +504,7 @@ Calculated via CalcPlatform Health Engine`;
                           setDistanceValue(Number(e.target.value));
                           setPresetEvent("custom");
                         }}
-                        className="text-xs font-mono font-bold"
+                        className="text-xs font-sans tabular-nums font-bold"
                         readOnly={calcMode === "calculate_distance"}
                       />
                       <select
@@ -524,8 +524,8 @@ Calculated via CalcPlatform Health Engine`;
                   <div className={`p-3 rounded-xl border ${calcMode === "calculate_pace" ? "bg-blue-50/50 border-blue-200" : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"}`}>
                     <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1.5 block">Pace (mm:ss)</Label>
                     <div className="grid grid-cols-3 gap-1.5">
-                      <Input type="number" min={0} placeholder="mm" value={paceMinutes} onChange={(e) => setPaceMinutes(Number(e.target.value))} className="text-xs font-mono font-bold" readOnly={calcMode === "calculate_pace"} />
-                      <Input type="number" min={0} max={59} placeholder="ss" value={paceSeconds} onChange={(e) => setPaceSeconds(Number(e.target.value))} className="text-xs font-mono font-bold" readOnly={calcMode === "calculate_pace"} />
+                      <Input type="number" min={0} placeholder="mm" value={paceMinutes} onChange={(e) => setPaceMinutes(Number(e.target.value))} className="text-xs font-sans tabular-nums font-bold" readOnly={calcMode === "calculate_pace"} />
+                      <Input type="number" min={0} max={59} placeholder="ss" value={paceSeconds} onChange={(e) => setPaceSeconds(Number(e.target.value))} className="text-xs font-sans tabular-nums font-bold" readOnly={calcMode === "calculate_pace"} />
                       <select value={paceUnit} onChange={(e) => setPaceUnit(e.target.value as PaceUnit)} className="h-10 px-1 rounded-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[11px] font-semibold" disabled={calcMode === "calculate_pace"}>
                         <option value="min_km">/ km</option>
                         <option value="min_mile">/ mile</option>
@@ -553,7 +553,7 @@ Calculated via CalcPlatform Health Engine`;
                       <span className="sm:col-span-1 font-bold text-zinc-500">Leg #{idx + 1}</span>
 
                       <div className="sm:col-span-4 flex items-center gap-1">
-                        <Input type="number" step={0.1} min={0.1} value={s.distanceValue} onChange={(e) => handleUpdateSegment(s.id, "distanceValue", Number(e.target.value))} className="h-8 text-xs font-mono font-bold bg-white dark:bg-zinc-900" />
+                        <Input type="number" step={0.1} min={0.1} value={s.distanceValue} onChange={(e) => handleUpdateSegment(s.id, "distanceValue", Number(e.target.value))} className="h-8 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900" />
                         <select value={s.distanceUnit} onChange={(e) => handleUpdateSegment(s.id, "distanceUnit", e.target.value)} className="h-8 px-2 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs">
                           <option value="km">km</option>
                           <option value="miles">mi</option>
@@ -562,11 +562,11 @@ Calculated via CalcPlatform Health Engine`;
                       </div>
 
                       <div className="sm:col-span-5 flex items-center gap-1">
-                        <Input type="number" min={0} placeholder="hh" value={s.timeHours} onChange={(e) => handleUpdateSegment(s.id, "timeHours", Number(e.target.value))} className="h-8 text-xs font-mono bg-white dark:bg-zinc-900" />
+                        <Input type="number" min={0} placeholder="hh" value={s.timeHours} onChange={(e) => handleUpdateSegment(s.id, "timeHours", Number(e.target.value))} className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900" />
                         <span>:</span>
-                        <Input type="number" min={0} max={59} placeholder="mm" value={s.timeMinutes} onChange={(e) => handleUpdateSegment(s.id, "timeMinutes", Number(e.target.value))} className="h-8 text-xs font-mono bg-white dark:bg-zinc-900" />
+                        <Input type="number" min={0} max={59} placeholder="mm" value={s.timeMinutes} onChange={(e) => handleUpdateSegment(s.id, "timeMinutes", Number(e.target.value))} className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900" />
                         <span>:</span>
-                        <Input type="number" min={0} max={59} placeholder="ss" value={s.timeSeconds} onChange={(e) => handleUpdateSegment(s.id, "timeSeconds", Number(e.target.value))} className="h-8 text-xs font-mono bg-white dark:bg-zinc-900" />
+                        <Input type="number" min={0} max={59} placeholder="ss" value={s.timeSeconds} onChange={(e) => handleUpdateSegment(s.id, "timeSeconds", Number(e.target.value))} className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900" />
                       </div>
 
                       <div className="sm:col-span-2 flex justify-end">
@@ -585,7 +585,7 @@ Calculated via CalcPlatform Health Engine`;
                   </div>
                   <div className="text-right">
                     <span className="text-emerald-800 dark:text-emerald-300 font-bold block">Average Pace:</span>
-                    <span className="font-mono text-emerald-700 dark:text-emerald-400 font-bold">{multipointResult.overallAveragePacePerKmFormatted} /km ({multipointResult.overallAveragePacePerMileFormatted} /mi)</span>
+                    <span className="font-sans tabular-nums text-emerald-700 dark:text-emerald-400 font-bold">{multipointResult.overallAveragePacePerKmFormatted} /km ({multipointResult.overallAveragePacePerMileFormatted} /mi)</span>
                   </div>
                 </div>
 
@@ -649,7 +649,7 @@ Calculated via CalcPlatform Health Engine`;
                   <div>
                     <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase">Peter Riegel's Race Finish Time Predictor</h4>
                     <p className="text-zinc-500 mt-0.5">
-                      Predicts finish times across standard race distances using Riegel's formula: <code className="font-mono text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-1.5 py-0.5 rounded border border-blue-200 dark:border-blue-800">T₂ = T₁ × (D₂ / D₁)^1.06</code> based on baseline ({result.totalDistanceKm} km in {result.totalTimeFormatted}):
+                      Predicts finish times across standard race distances using Riegel's formula: <code className="font-sans tabular-nums text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-1.5 py-0.5 rounded border border-blue-200 dark:border-blue-800">T₂ = T₁ × (D₂ / D₁)^1.06</code> based on baseline ({result.totalDistanceKm} km in {result.totalTimeFormatted}):
                     </p>
                   </div>
 
@@ -664,8 +664,8 @@ Calculated via CalcPlatform Health Engine`;
                           {r.predictedTimeFormatted}
                         </strong>
                         <div className="pt-1 border-t border-zinc-100 dark:border-zinc-800/80 text-[10px] text-zinc-500 space-y-0.5">
-                          <div>Req. Pace: <span className="font-mono font-bold text-zinc-700 dark:text-zinc-300">{r.predictedPacePerMileFormatted} /mi</span></div>
-                          <div>Req. Pace: <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{r.predictedPacePerKmFormatted} /km</span></div>
+                          <div>Req. Pace: <span className="font-sans tabular-nums font-bold text-zinc-700 dark:text-zinc-300">{r.predictedPacePerMileFormatted} /mi</span></div>
+                          <div>Req. Pace: <span className="font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">{r.predictedPacePerKmFormatted} /km</span></div>
                         </div>
                       </div>
                     ))}
@@ -683,7 +683,7 @@ Calculated via CalcPlatform Health Engine`;
                     </div>
                     <div className="flex items-center gap-2">
                       <Label className="text-xs font-semibold">Subject Age:</Label>
-                      <Input type="number" min={10} max={90} value={age} onChange={(e) => setAge(Math.max(10, Math.min(90, Number(e.target.value) || 30)))} className="w-16 h-8 text-xs font-mono font-bold bg-white dark:bg-zinc-900" />
+                      <Input type="number" min={10} max={90} value={age} onChange={(e) => setAge(Math.max(10, Math.min(90, Number(e.target.value) || 30)))} className="w-16 h-8 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900" />
                     </div>
                   </div>
 
@@ -796,7 +796,7 @@ Calculated via CalcPlatform Health Engine`;
             <div className="text-right text-xs text-zinc-500">
               <p className="font-bold text-zinc-800" suppressHydrationWarning>Date: {new Date().toLocaleDateString()}</p>
               <p suppressHydrationWarning>Time: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
-              <p className="font-mono text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #PACE-{Date.now().toString().slice(-6)}</p>
+              <p className="font-sans tabular-nums text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #PACE-{Date.now().toString().slice(-6)}</p>
             </div>
           </div>
 

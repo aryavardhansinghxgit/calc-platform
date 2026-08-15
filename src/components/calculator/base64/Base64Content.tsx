@@ -41,7 +41,7 @@ export function Base64Content() {
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700" colSpan={3}>Byte 3 ('n')</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans font-bold">1. ASCII Character</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 text-center" colSpan={3}>M</td>
@@ -106,7 +106,7 @@ export function Base64Content() {
           The standard Base64 character set maps indices 0 to 63 to printable ASCII characters:
         </p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-sans tabular-nums">
           <div className="bg-zinc-50 dark:bg-zinc-800/60 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700">
             <div className="font-bold text-blue-600 border-b pb-1 mb-1">Index 0 – 15</div>
             <div>0: A &nbsp; 4: E &nbsp; 8: I &nbsp; 12: M</div>
@@ -203,7 +203,7 @@ export function Base64Content() {
 
         <div className="space-y-3 text-xs">
           {/* JavaScript Browser */}
-          <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1 font-mono">
+          <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1 font-sans tabular-nums">
             <div className="text-zinc-400 text-[10px] uppercase font-bold">// JavaScript Browser (UTF-8 Compatible)</div>
             <pre className="text-emerald-400 overflow-x-auto">
 {`// Encode Unicode text to Base64
@@ -215,7 +215,7 @@ const decodeUtf8 = (b64) => decodeURIComponent(Array.from(atob(b64), c => '%' + 
           </div>
 
           {/* Node.js */}
-          <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1 font-mono">
+          <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1 font-sans tabular-nums">
             <div className="text-zinc-400 text-[10px] uppercase font-bold">// Node.js (Buffer API)</div>
             <pre className="text-blue-400 overflow-x-auto">
 {`const encoded = Buffer.from("Hello CalcPlatform 🚀", "utf-8").toString("base64");
@@ -224,7 +224,7 @@ const decoded = Buffer.from(encoded, "base64").toString("utf-8");`}
           </div>
 
           {/* Python */}
-          <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1 font-mono">
+          <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1 font-sans tabular-nums">
             <div className="text-zinc-400 text-[10px] uppercase font-bold"># Python 3</div>
             <pre className="text-purple-400 overflow-x-auto">
 {`import base64

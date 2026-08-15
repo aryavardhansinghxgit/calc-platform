@@ -74,13 +74,13 @@ export function ShoeSizeContent() {
             <p className="text-zinc-600 dark:text-zinc-400">
               Traditional Anglo-American shoe sizing is based on the <em>barleycorn</em> unit (exactly <strong>1/3 of an inch</strong> or 8.46 mm):
             </p>
-            <div className="p-2 bg-white dark:bg-zinc-900 font-mono text-[11px] rounded border border-zinc-200 dark:border-zinc-700 text-center my-1">
+            <div className="p-2 bg-white dark:bg-zinc-900 font-sans tabular-nums text-[11px] rounded border border-zinc-200 dark:border-zinc-700 text-center my-1">
               UK Size = 3 × Last Length (inches) - 25
             </div>
-            <div className="p-2 bg-white dark:bg-zinc-900 font-mono text-[11px] rounded border border-zinc-200 dark:border-zinc-700 text-center my-1">
+            <div className="p-2 bg-white dark:bg-zinc-900 font-sans tabular-nums text-[11px] rounded border border-zinc-200 dark:border-zinc-700 text-center my-1">
               US Men's Size = UK Size + 1 = 3 × Last Length (inches) - 22
             </div>
-            <div className="p-2 bg-white dark:bg-zinc-900 font-mono text-[11px] rounded border border-zinc-200 dark:border-zinc-700 text-center my-1">
+            <div className="p-2 bg-white dark:bg-zinc-900 font-sans tabular-nums text-[11px] rounded border border-zinc-200 dark:border-zinc-700 text-center my-1">
               US Women's Size = US Men's Size + 1.5
             </div>
           </div>
@@ -90,7 +90,7 @@ export function ShoeSizeContent() {
             <p className="text-zinc-600 dark:text-zinc-400">
               Continental European sizing uses the <em>Paris Point</em> (Point de Paris), equal to <strong>2/3 of a centimeter</strong> (6.67 mm):
             </p>
-            <div className="p-2 bg-white dark:bg-zinc-900 font-mono text-[11px] rounded border border-zinc-200 dark:border-zinc-700 text-center my-1">
+            <div className="p-2 bg-white dark:bg-zinc-900 font-sans tabular-nums text-[11px] rounded border border-zinc-200 dark:border-zinc-700 text-center my-1">
               EU Size = 1.5 × Last Length (cm) = 3/2 × (Foot Length + 1.5 cm Allowance)
             </div>
           </div>
@@ -123,7 +123,7 @@ export function ShoeSizeContent() {
                 <th className="p-2.5 border border-zinc-200 dark:border-zinc-700">Japan (cm)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">9.25 in</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">23.5 cm</td>

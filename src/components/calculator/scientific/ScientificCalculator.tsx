@@ -1201,7 +1201,7 @@ export function ScientificCalculator() {
         <Card className="bg-sky-50 dark:bg-sky-950/40 text-zinc-900 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-700 border-b-4 border-b-zinc-350 dark:border-b-zinc-800 shadow-xl rounded-2xl overflow-hidden">
           <CardContent className="p-4 sm:p-5 space-y-3">
             {/* 1. LCD / DISPLAY BOX */}
-            <div className="bg-emerald-950 border-2 border-emerald-800/80 rounded-xl p-3 sm:p-4 text-right font-mono space-y-1 shadow-inner relative">
+            <div className="bg-emerald-950 border-2 border-emerald-800/80 rounded-xl p-3 sm:p-4 text-right font-sans tabular-nums space-y-1 shadow-inner relative">
               {/* LCD Top Status Bar */}
               <div className="flex items-center justify-between text-[11px] font-sans border-b border-emerald-800/50 pb-1 mb-1">
                 <div className="flex items-center gap-1.5">
@@ -1219,21 +1219,21 @@ export function ScientificCalculator() {
                     {statusMessage}
                   </span>
                 ) : (
-                  <span className="text-[10px] text-emerald-400/80 font-mono">
+                  <span className="text-[10px] text-emerald-400/80 font-sans tabular-nums">
                     {displayFormat.toUpperCase()}
                   </span>
                 )}
               </div>
 
               {/* Top Expression Row with Blinking Cursor */}
-              <div className="text-xs sm:text-sm text-emerald-300/80 min-h-[1.5rem] truncate font-mono flex items-center justify-end font-semibold select-none">
+              <div className="text-xs sm:text-sm text-emerald-300/80 min-h-[1.5rem] truncate font-sans tabular-nums flex items-center justify-end font-semibold select-none">
                 {expression.length === 0 ? (
                   <span className="text-emerald-500/60 font-sans italic flex items-center gap-0.5">
                     0
                     <span className="inline-block w-0.5 h-4 bg-emerald-400 animate-pulse ml-0.5 rounded-full" />
                   </span>
                 ) : (
-                  <span className="font-mono tracking-wide flex items-center justify-end">
+                  <span className="font-sans tabular-nums tracking-wide flex items-center justify-end">
                     <span>{expression.slice(0, safeCursorPos)}</span>
                     <span className="inline-block w-0.5 h-4 bg-emerald-400 animate-pulse mx-[0.5px] rounded-full shadow-sm" />
                     <span>{expression.slice(safeCursorPos)}</span>
@@ -1367,7 +1367,7 @@ export function ScientificCalculator() {
 
                 {history.length === 0 ? (
                   <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center py-3">
-                    No past calculations saved yet. Evaluate expressions with <strong className="font-mono text-blue-600">=</strong> or <strong className="font-mono text-blue-600">Enter</strong> to populate history.
+                    No past calculations saved yet. Evaluate expressions with <strong className="font-sans tabular-nums text-blue-600">=</strong> or <strong className="font-sans tabular-nums text-blue-600">Enter</strong> to populate history.
                   </p>
                 ) : (
                   <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1 text-xs">
@@ -1384,10 +1384,10 @@ export function ScientificCalculator() {
                         className="p-2 bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between cursor-pointer hover:bg-purple-50 dark:hover:bg-zinc-800 transition-colors group"
                       >
                         <div className="flex flex-col">
-                          <span className="font-mono text-zinc-700 dark:text-zinc-300">{item.expr}</span>
+                          <span className="font-sans tabular-nums text-zinc-700 dark:text-zinc-300">{item.expr}</span>
                           <span className="text-[10px] text-zinc-400">{item.time}</span>
                         </div>
-                        <strong className="font-mono text-zinc-900 dark:text-zinc-100 text-sm group-hover:text-purple-600 dark:group-hover:text-purple-400">
+                        <strong className="font-sans tabular-nums text-zinc-900 dark:text-zinc-100 text-sm group-hover:text-purple-600 dark:group-hover:text-purple-400">
                           = {item.result}
                         </strong>
                       </div>
@@ -1423,7 +1423,7 @@ export function ScientificCalculator() {
 
                   <div
                     onClick={() => triggerStatus(`Cursor Position: ${safeCursorPos} / ${expression.length}`)}
-                    className="h-9 px-2 text-[9px] font-mono font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/80 rounded-lg flex items-center justify-center cursor-pointer select-none shadow-xs"
+                    className="h-9 px-2 text-[9px] font-sans tabular-nums font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/80 rounded-lg flex items-center justify-center cursor-pointer select-none shadow-xs"
                     title="Current Cursor Position"
                   >
                     {safeCursorPos}/{expression.length}
@@ -1592,7 +1592,7 @@ export function ScientificCalculator() {
           </h3>
           <p className="text-xs text-zinc-500 dark:text-zinc-400">Click any example to load it into the calculator:</p>
 
-          <div className="space-y-1.5 font-mono text-xs">
+          <div className="space-y-1.5 font-sans tabular-nums text-xs">
             {sampleExamples.map((ex, idx) => (
               <button
                 key={idx}

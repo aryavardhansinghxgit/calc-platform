@@ -187,7 +187,7 @@ Calculated via CalcPlatform Clinical Strength Engine`;
             .font-bold { font-weight: 700; }
             .font-semibold { font-weight: 600; }
             .font-black { font-weight: 900; }
-            .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+            .font-sans tabular-nums { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
             .text-zinc-900 { color: #18181b; }
             .text-zinc-800 { color: #27272a; }
             .text-zinc-700 { color: #3f3f46; }
@@ -332,7 +332,7 @@ Calculated via CalcPlatform Clinical Strength Engine`;
                   max={1500}
                   value={weightLifted}
                   onChange={(e) => setWeightLifted(Number(e.target.value))}
-                  className="text-xs font-mono font-bold"
+                  className="text-xs font-sans tabular-nums font-bold"
                 />
               </div>
 
@@ -345,7 +345,7 @@ Calculated via CalcPlatform Clinical Strength Engine`;
                   max={15}
                   value={reps}
                   onChange={(e) => setReps(Number(e.target.value))}
-                  className="text-xs font-mono font-bold"
+                  className="text-xs font-sans tabular-nums font-bold"
                 />
               </div>
             </div>
@@ -449,7 +449,7 @@ Calculated via CalcPlatform Clinical Strength Engine`;
             <div className="text-right text-xs text-zinc-500">
               <p className="font-bold text-zinc-800" suppressHydrationWarning>Date: {new Date().toLocaleDateString()}</p>
               <p suppressHydrationWarning>Time: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
-              <p className="font-mono text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #1RM-{Date.now().toString().slice(-6)}</p>
+              <p className="font-sans tabular-nums text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #1RM-{Date.now().toString().slice(-6)}</p>
             </div>
           </div>
 

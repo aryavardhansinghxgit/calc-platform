@@ -142,7 +142,7 @@ export function PensionContent() {
           Traditional pensions calculate your annual payout using a standardized actuarial formula based on service tenure and salary history.
         </p>
 
-        <div className="bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl text-xs space-y-3 font-mono">
+        <div className="bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl text-xs space-y-3 font-sans tabular-nums">
           <div className="text-indigo-900 dark:text-indigo-200 font-bold text-sm font-sans">
             Standard DB Pension Formula:
           </div>
@@ -152,7 +152,7 @@ export function PensionContent() {
           <div className="text-zinc-600 dark:text-zinc-400 font-sans text-xs">
             Example: If your highest 3-year average salary is $90,000, with 30 years of service and a 2.0% multiplier:
             <br />
-            <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
+            <span className="font-sans tabular-nums font-bold text-indigo-600 dark:text-indigo-400">
               Annual Pension = $90,000 × 30 × 2.0% = $54,000/year ($4,500/month)
             </span>
           </div>
@@ -223,7 +223,7 @@ export function PensionContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold shrink-0">
+                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}

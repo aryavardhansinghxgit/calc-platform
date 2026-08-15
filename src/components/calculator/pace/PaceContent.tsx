@@ -112,7 +112,7 @@ export function PaceContent() {
         <div className="space-y-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. Pace and Speed Core Formulas</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-blue-700 dark:text-blue-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-700 dark:text-blue-400">
               Pace (min/mi) = Total Time in Minutes / Total Distance in Miles<br/>
               Speed (mph) = 60 / Pace (min/mi)<br/>
               Speed (km/h) = Speed (mph) × 1.609344
@@ -121,7 +121,7 @@ export function PaceContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. Peter Riegel Race Prediction Equation (1977)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-emerald-700 dark:text-emerald-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">
               T2 = T1 × (D2 / D1)^1.06<br/>
               (Where T1 = current race time, D1 = current distance, D2 = target race distance, 1.06 = fatigue exponent)
             </code>

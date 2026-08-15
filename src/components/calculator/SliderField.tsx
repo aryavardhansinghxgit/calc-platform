@@ -44,9 +44,9 @@ export function SliderField({
             aria-valuemin={min}
             aria-valuemax={max}
             aria-label={label}
-            className="w-14 h-5 p-0 bg-transparent border-0 text-right font-mono font-semibold text-blue-600 dark:text-blue-400 text-xs focus-visible:ring-0"
+            className="w-14 h-5 p-0 bg-transparent border-0 text-right font-sans tabular-nums font-semibold text-blue-600 dark:text-blue-400 text-xs focus-visible:ring-0"
           />
-          {unit && <span className="text-[10px] text-zinc-400 font-mono">{unit}</span>}
+          {unit && <span className="text-[10px] text-zinc-400 font-sans tabular-nums">{unit}</span>}
         </div>
       </div>
 

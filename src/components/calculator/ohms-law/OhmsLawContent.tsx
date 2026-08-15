@@ -65,7 +65,7 @@ export function OhmsLawContent() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Voltage (V)</h4>
-            <ul className="list-disc pl-4 text-xs font-mono space-y-1">
+            <ul className="list-disc pl-4 text-xs font-sans tabular-nums space-y-1">
               <li>V = I × R</li>
               <li>V = P / I</li>
               <li>V = √(P × R)</li>
@@ -74,7 +74,7 @@ export function OhmsLawContent() {
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Current (I)</h4>
-            <ul className="list-disc pl-4 text-xs font-mono space-y-1">
+            <ul className="list-disc pl-4 text-xs font-sans tabular-nums space-y-1">
               <li>I = V / R</li>
               <li>I = P / V</li>
               <li>I = √(P / R)</li>
@@ -83,7 +83,7 @@ export function OhmsLawContent() {
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Resistance (R)</h4>
-            <ul className="list-disc pl-4 text-xs font-mono space-y-1">
+            <ul className="list-disc pl-4 text-xs font-sans tabular-nums space-y-1">
               <li>R = V / I</li>
               <li>R = V² / P</li>
               <li>R = P / I²</li>
@@ -92,7 +92,7 @@ export function OhmsLawContent() {
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Power (P)</h4>
-            <ul className="list-disc pl-4 text-xs font-mono space-y-1">
+            <ul className="list-disc pl-4 text-xs font-sans tabular-nums space-y-1">
               <li>P = V × I</li>
               <li>P = V² / R</li>
               <li>P = I² × R</li>
@@ -140,7 +140,7 @@ export function OhmsLawContent() {
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
               Calculate current and power for a 12V automotive circuit connected to a 6 Ω load.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Identify inputs:</strong> V = 12 V, R = 6 Ω</div>
               <div><strong>2. Calculate Current:</strong></div>
               <div>I = V / R = 12 / 6 = 2 A</div>
@@ -159,7 +159,7 @@ export function OhmsLawContent() {
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
               Find the series resistor needed to power a standard Red LED (forward voltage Vf = 2.0V, recommended forward current If = 20 mA) from a 9V battery source.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Identify parameters and normalize units:</strong></div>
               <div>V_source = 9 V</div>
               <div>V_forward = 2.0 V</div>

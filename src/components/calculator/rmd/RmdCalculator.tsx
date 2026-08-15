@@ -310,7 +310,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Starting RMD Age:</span>
-          <span className="text-indigo-600 dark:text-indigo-400 font-mono text-sm">
+          <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-sm">
             Age {results.rmdStartingAge}
           </span>
         </div>
@@ -394,7 +394,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                     max="2010"
                     value={birthYearInput}
                     onChange={(e) => setBirthYearInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800"
                   />
                   <span className="text-[10px] text-zinc-400">Determines starting age (73/75)</span>
                 </div>
@@ -407,7 +407,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                     max="2075"
                     value={rmdYearInput}
                     onChange={(e) => setRmdYearInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800"
                   />
                   <span className="text-[10px] text-zinc-400">Calculated age: {results.currentAge}</span>
                 </div>
@@ -423,7 +423,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                   step="1000"
                   value={balanceInput}
                   onChange={(e) => setBalanceInput(e.target.value)}
-                  className="text-xs font-mono h-9 px-3 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800"
+                  className="text-xs font-sans tabular-nums h-9 px-3 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800"
                 />
               </div>
 
@@ -466,7 +466,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                       max="2010"
                       value={spouseBirthYearInput}
                       onChange={(e) => setSpouseBirthYearInput(e.target.value)}
-                      className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800"
+                      className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800"
                     />
                     <span className="text-[10px] text-indigo-600 dark:text-indigo-400">
                       Triggers IRS Table II (Joint Life Expectancy)
@@ -486,7 +486,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                     step="0.5"
                     value={growthRateInput}
                     onChange={(e) => setGrowthRateInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
 
@@ -499,7 +499,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                     step="1"
                     value={taxRateInput}
                     onChange={(e) => setTaxRateInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
               </div>
@@ -546,7 +546,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-mono text-white mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-sans tabular-nums text-white mb-2">
                 {fmt(results.annualRmd)}
               </div>
 
@@ -560,7 +560,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
               </div>
 
               {/* Dynamic Formula Display Card */}
-              <div className="bg-white/10 p-3 rounded-xl text-xs backdrop-blur-sm border border-white/10 font-mono">
+              <div className="bg-white/10 p-3 rounded-xl text-xs backdrop-blur-sm border border-white/10 font-sans tabular-nums">
                 <strong>Formula:</strong> RMD = {fmt(results.priorYearBalance)} / {results.distributionPeriod > 0 ? results.distributionPeriod : "N/A"} = {fmt(results.annualRmd)}
               </div>
 
@@ -572,11 +572,11 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Est. Tax Paid ({taxRateInput}%)</div>
-                  <div className="font-bold font-mono text-rose-300 text-sm">{fmt(results.estimatedTaxPaid)}</div>
+                  <div className="font-bold font-sans tabular-nums text-rose-300 text-sm">{fmt(results.estimatedTaxPaid)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Net After-Tax</div>
-                  <div className="font-bold font-mono text-emerald-300 text-sm">{fmt(results.netAfterTaxRmd)}</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-300 text-sm">{fmt(results.netAfterTaxRmd)}</div>
                 </div>
               </div>
             </div>
@@ -586,7 +586,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
               <h4 className="font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
                 <AlertTriangle className="h-4 w-4 text-amber-500" /> SECURE 2.0 Late Withdrawal Excise Penalty Risk
               </h4>
-              <div className="grid grid-cols-2 gap-3 font-mono">
+              <div className="grid grid-cols-2 gap-3 font-sans tabular-nums">
                 <div className="bg-amber-50 dark:bg-amber-950/30 p-3 rounded-lg border border-amber-200 dark:border-amber-800">
                   <span className="font-sans text-[11px] text-zinc-500 block">Standard Penalty (25%)</span>
                   <span className="text-lg font-bold text-amber-700 dark:text-amber-300">{fmt(results.penalty25Percent)}</span>
@@ -654,7 +654,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                   value={acc.balance || ""}
                   onChange={(e) => updateAccountRow(acc.id, "balance", Number(e.target.value))}
                   placeholder="Dec 31 Balance ($)"
-                  className="col-span-3 h-9 text-xs font-mono px-2.5 bg-white dark:bg-zinc-800"
+                  className="col-span-3 h-9 text-xs font-sans tabular-nums px-2.5 bg-white dark:bg-zinc-800"
                 />
                 <div className="col-span-1 flex justify-center">
                   {accounts.length > 1 && (
@@ -689,7 +689,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                     <th className="p-2.5">IRS Withdrawal Rule</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-mono">
+                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-sans tabular-nums">
                   {results.accountBreakdown.map((item) => (
                     <tr key={item.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                       <td className="p-2.5 font-bold font-sans text-zinc-900 dark:text-zinc-100">{item.name}</td>
@@ -741,7 +741,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                   step="1000"
                   value={qcdInput}
                   onChange={(e) => setQcdInput(e.target.value)}
-                  className="text-xs font-mono h-9 px-3"
+                  className="text-xs font-sans tabular-nums h-9 px-3"
                 />
               </div>
 
@@ -755,7 +755,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
               </div>
             </div>
 
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-5 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-3 font-mono">
+            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-5 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-3 font-sans tabular-nums">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 text-sm block border-b pb-1">
                 QCD Tax Savings Breakdown
               </span>
@@ -840,7 +840,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                   <th className="p-2.5 text-right text-blue-600">End Balance</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-sans tabular-nums">
                 {filteredSchedule.slice(0, 45).map((row) => (
                   <tr key={row.year} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2.5 font-bold font-sans text-zinc-800 dark:text-zinc-200">{row.year}</td>

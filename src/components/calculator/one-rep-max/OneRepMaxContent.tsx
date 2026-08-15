@@ -132,14 +132,14 @@ export function OneRepMaxContent() {
         <div className="space-y-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. Epley Equation (1985)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-purple-700 dark:text-purple-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-purple-700 dark:text-purple-400">
               1RM = Weight Lifted × (1 + Repetitions / 30)
             </code>
           </div>
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. Brzycki Equation (1993)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-blue-700 dark:text-blue-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-700 dark:text-blue-400">
               1RM = Weight Lifted × [ 36 / (37 - Repetitions) ]
             </code>
           </div>

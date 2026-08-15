@@ -36,7 +36,7 @@ export function HeatIndexContent() {
           In 1990, Lans P. Rothfusz of the National Weather Service derived a 9-parameter polynomial regression equation to approximate Dr. Robert G. Steadman's 1979 biometeorological model:
         </p>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-mono text-xs my-2 text-center text-amber-700 dark:text-amber-300 font-bold overflow-x-auto">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-amber-700 dark:text-amber-300 font-bold overflow-x-auto">
           HI = -42.379 + 2.04901523×T + 10.14333127×R - 0.22475541×T×R - 0.00683783×T² - 0.05481717×R² + 0.00122874×T²×R + 0.00085282×T×R² - 0.00000199×T²×R²
         </div>
 

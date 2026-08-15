@@ -32,8 +32,8 @@ export function HealthyWeightTables({ result }: HealthyWeightTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Method / Formula</th>
-                <th className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">Ideal Weight (lbs / kg)</th>
-                <th className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">Difference from Current</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">Ideal Weight (lbs / kg)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">Difference from Current</th>
                 <th className="py-2.5 px-3">Status</th>
                 <th className="py-2.5 px-3 text-zinc-500">Method Description</th>
               </tr>
@@ -42,8 +42,8 @@ export function HealthyWeightTables({ result }: HealthyWeightTablesProps) {
               {result.methods.map((m, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2.5 px-3 font-bold text-zinc-900 dark:text-zinc-100">{m.methodName}</td>
-                  <td className="py-2.5 px-3 font-mono font-bold text-blue-700 dark:text-blue-400">{m.idealWeightLbs} lbs ({m.idealWeightKg} kg)</td>
-                  <td className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">
+                  <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-blue-700 dark:text-blue-400">{m.idealWeightLbs} lbs ({m.idealWeightKg} kg)</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">
                     {m.differenceLbs > 0 ? `+${m.differenceLbs} lbs` : `${m.differenceLbs} lbs`}
                   </td>
                   <td className="py-2.5 px-3">
@@ -97,16 +97,16 @@ export function HealthyWeightTables({ result }: HealthyWeightTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Height</th>
-                <th className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400">WHO Healthy Weight Range (BMI 18.5–24.9)</th>
-                <th className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">Prime Target Healthy Weight (BMI 21.7)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">WHO Healthy Weight Range (BMI 18.5–24.9)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">Prime Target Healthy Weight (BMI 21.7)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               {heightMatrix.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2.5 px-3 font-bold text-zinc-900 dark:text-zinc-100">{row.height}</td>
-                  <td className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400">{row.healthyRange}</td>
-                  <td className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">{row.target}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">{row.healthyRange}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">{row.target}</td>
                 </tr>
               ))}
             </tbody>

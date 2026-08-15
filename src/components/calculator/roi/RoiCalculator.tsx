@@ -396,7 +396,7 @@ export function RoiCalculator() {
                 type="number"
                 value={amountInvested}
                 onChange={(e) => setAmountInvested(Number(e.target.value))}
-                className="h-9 text-xs font-mono"
+                className="h-9 text-xs font-sans tabular-nums"
               />
               <input
                 type="range"
@@ -420,7 +420,7 @@ export function RoiCalculator() {
                   type="number"
                   value={amountReturned}
                   onChange={(e) => setAmountReturned(Number(e.target.value))}
-                  className="h-9 text-xs font-mono"
+                  className="h-9 text-xs font-sans tabular-nums"
                 />
                 <input
                   type="range"
@@ -446,7 +446,7 @@ export function RoiCalculator() {
                   step="5"
                   value={targetRoi}
                   onChange={(e) => setTargetRoi(Number(e.target.value))}
-                  className="h-8 text-xs font-mono bg-white dark:bg-zinc-900"
+                  className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
                 />
               </div>
             )}
@@ -486,7 +486,7 @@ export function RoiCalculator() {
                     step="0.1"
                     value={years}
                     onChange={(e) => setYears(Number(e.target.value))}
-                    className="h-8 text-xs font-mono"
+                    className="h-8 text-xs font-sans tabular-nums"
                   />
                   <input
                     type="range"
@@ -506,7 +506,7 @@ export function RoiCalculator() {
                       type="date"
                       value={fromDate}
                       onChange={(e) => setFromDate(e.target.value)}
-                      className="h-8 text-xs font-mono"
+                      className="h-8 text-xs font-sans tabular-nums"
                     />
                   </div>
                   <div className="space-y-1">
@@ -515,7 +515,7 @@ export function RoiCalculator() {
                       type="date"
                       value={toDate}
                       onChange={(e) => setToDate(e.target.value)}
-                      className="h-8 text-xs font-mono"
+                      className="h-8 text-xs font-sans tabular-nums"
                     />
                   </div>
                 </div>
@@ -558,7 +558,7 @@ export function RoiCalculator() {
                   step="1"
                   value={taxRate}
                   onChange={(e) => setTaxRate(Number(e.target.value))}
-                  className="h-8 text-xs font-mono"
+                  className="h-8 text-xs font-sans tabular-nums"
                 />
               </div>
               <div className="space-y-1">
@@ -568,7 +568,7 @@ export function RoiCalculator() {
                   step="0.5"
                   value={inflationRate}
                   onChange={(e) => setInflationRate(Number(e.target.value))}
-                  className="h-8 text-xs font-mono"
+                  className="h-8 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -585,7 +585,7 @@ export function RoiCalculator() {
               <span className="text-xs font-semibold text-blue-100 block uppercase tracking-wider leading-tight">
                 Total ROI Percentage
               </span>
-              <div className="text-xl sm:text-2xl font-black tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-xl sm:text-2xl font-black tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {results.roiPercent}%
               </div>
               <span className="text-[11px] text-blue-200 block leading-tight">Total net return</span>
@@ -595,7 +595,7 @@ export function RoiCalculator() {
               <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider leading-tight">
                 Annualized ROI
               </span>
-              <div className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {results.annualizedRoiPercent}%
               </div>
               <span className="text-[11px] text-zinc-400 block leading-tight">{results.years} Years tenure</span>
@@ -605,7 +605,7 @@ export function RoiCalculator() {
               <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider leading-tight">
                 Net Dollar Gain / Profit
               </span>
-              <div className={`text-base sm:text-lg font-black tracking-tight font-mono leading-snug break-words my-0.5 ${
+              <div className={`text-base sm:text-lg font-black tracking-tight font-sans tabular-nums leading-snug break-words my-0.5 ${
                 results.netProfit >= 0 ? "text-purple-600 dark:text-purple-400" : "text-rose-600"
               }`}>
                 {formatCurrency(results.netProfit)}
@@ -618,15 +618,15 @@ export function RoiCalculator() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl border border-zinc-200/60 dark:border-zinc-800 text-xs">
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Real Annualized ROI</span>
-              <span className="font-bold text-amber-600 dark:text-amber-400 font-mono block">{results.realAnnualizedRoiPercent}%</span>
+              <span className="font-bold text-amber-600 dark:text-amber-400 font-sans tabular-nums block">{results.realAnnualizedRoiPercent}%</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Real Purchasing Power</span>
-              <span className="font-bold text-zinc-900 dark:text-zinc-100 font-mono block">{formatCurrency(results.realEndingValue)}</span>
+              <span className="font-bold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums block">{formatCurrency(results.realEndingValue)}</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Post-Tax Final Value</span>
-              <span className="font-bold text-blue-600 font-mono block">{formatCurrency(results.postTaxFinalValue)}</span>
+              <span className="font-bold text-blue-600 font-sans tabular-nums block">{formatCurrency(results.postTaxFinalValue)}</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">ROI Health Rating</span>
@@ -675,7 +675,7 @@ export function RoiCalculator() {
                       <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-bold text-emerald-600">Net Profit</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+                  <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
                     {results.benchmarkComparisons.map((b, idx) => (
                       <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                         <td className="p-2 font-sans font-bold text-zinc-900 dark:text-zinc-100">{b.assetClass}</td>
@@ -710,7 +710,7 @@ export function RoiCalculator() {
                   </thead>
                   <tbody>
                     {[5, 10, 15, 20, 25, 50, 100].map((r) => (
-                      <tr key={r} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 font-mono">
+                      <tr key={r} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 font-sans tabular-nums">
                         <td className="p-2 font-bold border border-zinc-200 dark:border-zinc-800">{r}%</td>
                         {[1, 2, 3, 5, 10].map((t) => {
                           const cell = results.sensitivityMatrix.find((c) => c.returnRate === r && c.tenureYears === t);
@@ -859,7 +859,7 @@ export function RoiCalculator() {
                     )}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
                   {paginatedScheduleRows.length > 0 ? (
                     paginatedScheduleRows.map((r: any, idx) => (
                       <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">

@@ -74,7 +74,7 @@ export function RefinanceCostBreakdownModal({
                 min={0}
                 value={costs.applicationFee ?? 300}
                 onChange={(e) => handleChange("applicationFee", Number(e.target.value))}
-                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-mono text-xs"
+                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-sans tabular-nums text-xs"
               />
             </div>
             <div>
@@ -84,7 +84,7 @@ export function RefinanceCostBreakdownModal({
                 min={0}
                 value={costs.appraisalFee ?? 450}
                 onChange={(e) => handleChange("appraisalFee", Number(e.target.value))}
-                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-mono text-xs"
+                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-sans tabular-nums text-xs"
               />
             </div>
             <div>
@@ -94,7 +94,7 @@ export function RefinanceCostBreakdownModal({
                 min={0}
                 value={costs.originationFee ?? 750}
                 onChange={(e) => handleChange("originationFee", Number(e.target.value))}
-                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-mono text-xs"
+                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-sans tabular-nums text-xs"
               />
             </div>
             <div>
@@ -104,7 +104,7 @@ export function RefinanceCostBreakdownModal({
                 min={0}
                 value={costs.titleFee ?? 800}
                 onChange={(e) => handleChange("titleFee", Number(e.target.value))}
-                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-mono text-xs"
+                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-sans tabular-nums text-xs"
               />
             </div>
             <div>
@@ -114,7 +114,7 @@ export function RefinanceCostBreakdownModal({
                 min={0}
                 value={costs.recordingFee ?? 150}
                 onChange={(e) => handleChange("recordingFee", Number(e.target.value))}
-                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-mono text-xs"
+                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-sans tabular-nums text-xs"
               />
             </div>
             <div>
@@ -124,7 +124,7 @@ export function RefinanceCostBreakdownModal({
                 min={0}
                 value={costs.inspectionFee ?? 200}
                 onChange={(e) => handleChange("inspectionFee", Number(e.target.value))}
-                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-mono text-xs"
+                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-sans tabular-nums text-xs"
               />
             </div>
             <div>
@@ -134,7 +134,7 @@ export function RefinanceCostBreakdownModal({
                 min={0}
                 value={costs.surveyFee ?? 250}
                 onChange={(e) => handleChange("surveyFee", Number(e.target.value))}
-                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-mono text-xs"
+                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-sans tabular-nums text-xs"
               />
             </div>
             <div>
@@ -144,14 +144,14 @@ export function RefinanceCostBreakdownModal({
                 min={0}
                 value={costs.customFee ?? 0}
                 onChange={(e) => handleChange("customFee", Number(e.target.value))}
-                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-mono text-xs"
+                className="mt-1 bg-zinc-50 dark:bg-zinc-800 font-sans tabular-nums text-xs"
               />
             </div>
           </div>
 
           <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 flex items-center justify-between text-xs font-bold">
             <span className="text-blue-900 dark:text-blue-200">Total Itemized Closing Costs:</span>
-            <span className="text-sm font-mono text-blue-600 dark:text-blue-400">
+            <span className="text-sm font-sans tabular-nums text-blue-600 dark:text-blue-400">
               {formatCurrency(totalItemized)}
             </span>
           </div>

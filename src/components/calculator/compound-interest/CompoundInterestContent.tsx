@@ -70,7 +70,7 @@ export function CompoundInterestContent() {
         </ul>
 
         {/* Standard Formula Box */}
-        <div className="p-5 rounded-xl bg-zinc-900 text-white font-mono space-y-3 shadow-md my-4">
+        <div className="p-5 rounded-xl bg-zinc-900 text-white font-sans tabular-nums space-y-3 shadow-md my-4">
           <span className="text-xs text-indigo-400 font-bold uppercase tracking-wider block">Standard Compound Interest Formula</span>
           <div className="text-xl sm:text-2xl font-black text-emerald-400">
             A = P &times; (1 + r / n)<sup>(n &times; t)</sup>
@@ -89,7 +89,7 @@ export function CompoundInterestContent() {
           <p>
             Suppose you deposit <strong>$1,000</strong> in a certificate of deposit paying <strong>6% annual interest</strong> compounded <strong>semi-annually (n = 2)</strong> for <strong>2 years (t = 2)</strong>.
           </p>
-          <div className="font-mono text-indigo-600 dark:text-indigo-400 font-semibold">
+          <div className="font-sans tabular-nums text-indigo-600 dark:text-indigo-400 font-semibold">
             A = 1,000 &times; (1 + 0.06 / 2)<sup>(2 &times; 2)</sup> = 1,000 &times; (1.03)<sup>4</sup> = 1,000 &times; 1.125508 = $1,125.51
           </div>
           <p className="text-zinc-500">
@@ -128,7 +128,7 @@ export function CompoundInterestContent() {
                 <th className="p-3">Cumulative Growth (%)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
                 <td className="p-3 font-bold font-sans">Year 1</td>
                 <td className="p-3">$10,000.00</td>
@@ -223,7 +223,7 @@ export function CompoundInterestContent() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
           <div className="p-4 rounded-xl bg-purple-50/70 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-900/40 space-y-2">
             <span className="text-xs font-bold text-purple-900 dark:text-purple-300 block">1. Future Value Formula (FV)</span>
-            <div className="font-mono text-sm font-black text-purple-700 dark:text-purple-300">
+            <div className="font-sans tabular-nums text-sm font-black text-purple-700 dark:text-purple-300">
               FV = P &times; (1 + r/n)<sup>nt</sup>
             </div>
             <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
@@ -233,7 +233,7 @@ export function CompoundInterestContent() {
 
           <div className="p-4 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/40 space-y-2">
             <span className="text-xs font-bold text-indigo-900 dark:text-indigo-300 block">2. Present Value Formula (PV)</span>
-            <div className="font-mono text-sm font-black text-indigo-700 dark:text-indigo-300">
+            <div className="font-sans tabular-nums text-sm font-black text-indigo-700 dark:text-indigo-300">
               PV = FV / (1 + r/n)<sup>nt</sup>
             </div>
             <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
@@ -243,7 +243,7 @@ export function CompoundInterestContent() {
 
           <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 space-y-2">
             <span className="text-xs font-bold text-blue-900 dark:text-blue-300 block">3. CAGR / Required Return Rate</span>
-            <div className="font-mono text-sm font-black text-blue-700 dark:text-blue-300">
+            <div className="font-sans tabular-nums text-sm font-black text-blue-700 dark:text-blue-300">
               r = n &times; [(FV/P)<sup>1/(nt)</sup> &minus; 1]
             </div>
             <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
@@ -303,8 +303,8 @@ export function CompoundInterestContent() {
               </tr>
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
                 <td className="p-3 font-bold">Mathematical Complexity</td>
-                <td className="p-3 font-mono text-zinc-600">I = P &times; r &times; t</td>
-                <td className="p-3 font-mono text-emerald-600 font-bold">A = P &times; (1 + r/n)<sup>nt</sup></td>
+                <td className="p-3 font-sans tabular-nums text-zinc-600">I = P &times; r &times; t</td>
+                <td className="p-3 font-sans tabular-nums text-emerald-600 font-bold">A = P &times; (1 + r/n)<sup>nt</sup></td>
               </tr>
             </tbody>
           </table>
@@ -316,13 +316,13 @@ export function CompoundInterestContent() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
             <div className="p-3 rounded-lg bg-white dark:bg-zinc-900 border border-emerald-100 dark:border-emerald-900">
               <span className="font-bold block text-zinc-700 dark:text-zinc-300">Simple Interest Result (Linear)</span>
-              <div className="font-mono text-base font-bold text-zinc-800 dark:text-zinc-200 mt-1">$26,000.00</div>
+              <div className="font-sans tabular-nums text-base font-bold text-zinc-800 dark:text-zinc-200 mt-1">$26,000.00</div>
               <span className="text-[11px] text-zinc-500 block">$10,000 principal + $16,000 simple interest ($800/yr &times; 20)</span>
             </div>
 
             <div className="p-3 rounded-lg bg-white dark:bg-zinc-900 border border-emerald-300 dark:border-emerald-700">
               <span className="font-bold block text-emerald-600 dark:text-emerald-400">Compound Interest Result (Monthly n=12)</span>
-              <div className="font-mono text-base font-black text-emerald-600 dark:text-emerald-400 mt-1">$49,268.03</div>
+              <div className="font-sans tabular-nums text-base font-black text-emerald-600 dark:text-emerald-400 mt-1">$49,268.03</div>
               <span className="text-[11px] text-emerald-700 dark:text-emerald-300 block">$10,000 principal + $39,268.03 compound interest!</span>
             </div>
           </div>
@@ -356,7 +356,7 @@ export function CompoundInterestContent() {
                 <th className="p-3">Effective Annual Yield (APY)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
                 <td className="p-3 font-sans font-medium">Annual</td>
                 <td className="p-3">1</td>
@@ -432,7 +432,7 @@ export function CompoundInterestContent() {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-zinc-900 text-white font-mono space-y-2 text-xs">
+        <div className="p-4 rounded-xl bg-zinc-900 text-white font-sans tabular-nums space-y-2 text-xs">
           <span className="text-indigo-400 font-bold">APY Conversion Formula:</span>
           <div className="text-base font-bold text-emerald-400">
             APY = (1 + APR / n)<sup>n</sup> &minus; 1
@@ -468,7 +468,7 @@ export function CompoundInterestContent() {
                 <th className="p-3">Effective Yield Increase</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-3 font-sans">10.00%</td>
                 <td className="p-3 font-sans">Annual (n = 1)</td>
@@ -534,7 +534,7 @@ export function CompoundInterestContent() {
                 <th className="p-3">Growth Multiplier</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-3 font-bold font-sans">5 Years</td>
                 <td className="p-3">$5,000.00</td>
@@ -592,7 +592,7 @@ export function CompoundInterestContent() {
           <p className="text-zinc-700 dark:text-zinc-300">
             If an investor contributes <strong>$300 per month</strong> into a low-cost index fund earning an average <strong>8% annual return</strong> over 40 years:
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono pt-1">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-sans tabular-nums pt-1">
             <div className="p-2 rounded bg-white dark:bg-zinc-900">
               <span className="text-[10px] text-zinc-500 block">Total Out-of-Pocket:</span>
               <span className="font-bold">$144,000</span>

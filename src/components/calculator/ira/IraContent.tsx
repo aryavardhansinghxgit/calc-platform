@@ -110,25 +110,25 @@ export function IraContent() {
               <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
                 <tr>
                   <td className="p-3 font-semibold text-blue-600">Traditional IRA</td>
-                  <td className="p-3 font-mono">$7,000 ($8,000 age 50+)</td>
+                  <td className="p-3 font-sans tabular-nums">$7,000 ($8,000 age 50+)</td>
                   <td className="p-3">Pre-tax tax deductible</td>
                   <td className="p-3 text-amber-600 font-semibold">Taxed as ordinary income</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-emerald-600">Roth IRA</td>
-                  <td className="p-3 font-mono">$7,000 ($8,000 age 50+)</td>
+                  <td className="p-3 font-sans tabular-nums">$7,000 ($8,000 age 50+)</td>
                   <td className="p-3">After-tax dollars</td>
                   <td className="p-3 font-bold text-emerald-600">100% Tax-Free</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-indigo-600">SEP IRA</td>
-                  <td className="p-3 font-mono">Up to $70,000 (25% net income)</td>
+                  <td className="p-3 font-sans tabular-nums">Up to $70,000 (25% net income)</td>
                   <td className="p-3">Pre-tax tax deductible</td>
                   <td className="p-3 text-amber-600 font-semibold">Taxed as ordinary income</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-purple-600">SIMPLE IRA</td>
-                  <td className="p-3 font-mono">$16,500 ($19,500 age 50+)</td>
+                  <td className="p-3 font-sans tabular-nums">$16,500 ($19,500 age 50+)</td>
                   <td className="p-3">Pre-tax tax deductible</td>
                   <td className="p-3 text-amber-600 font-semibold">Taxed as ordinary income</td>
                 </tr>

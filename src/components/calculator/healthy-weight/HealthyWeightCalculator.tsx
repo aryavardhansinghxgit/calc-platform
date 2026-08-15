@@ -221,7 +221,7 @@ Calculated via CalcPlatform Clinical Health Engine`;
             .font-bold { font-weight: 700; }
             .font-semibold { font-weight: 600; }
             .font-black { font-weight: 900; }
-            .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+            .font-sans tabular-nums { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
             .text-zinc-900 { color: #18181b; }
             .text-zinc-800 { color: #27272a; }
             .text-zinc-700 { color: #3f3f46; }
@@ -398,7 +398,7 @@ Calculated via CalcPlatform Clinical Health Engine`;
                   max={110}
                   value={age}
                   onChange={(e) => setAge(Number(e.target.value))}
-                  className="text-xs font-mono font-bold"
+                  className="text-xs font-sans tabular-nums font-bold"
                 />
               </div>
 
@@ -407,11 +407,11 @@ Calculated via CalcPlatform Clinical Health Engine`;
                 <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">Height</Label>
                 {unitSystem === "imperial" ? (
                   <div className="grid grid-cols-2 gap-1.5">
-                    <Input type="number" min={3} max={8} value={heightFeet} onChange={(e) => setHeightFeet(Number(e.target.value))} placeholder="ft" className="text-xs font-mono font-bold" />
-                    <Input type="number" min={0} max={11} value={heightInches} onChange={(e) => setHeightInches(Number(e.target.value))} placeholder="in" className="text-xs font-mono font-bold" />
+                    <Input type="number" min={3} max={8} value={heightFeet} onChange={(e) => setHeightFeet(Number(e.target.value))} placeholder="ft" className="text-xs font-sans tabular-nums font-bold" />
+                    <Input type="number" min={0} max={11} value={heightInches} onChange={(e) => setHeightInches(Number(e.target.value))} placeholder="in" className="text-xs font-sans tabular-nums font-bold" />
                   </div>
                 ) : (
-                  <Input type="number" step={0.1} min={100} max={250} value={heightCm} onChange={(e) => setHeightCm(Number(e.target.value))} className="text-xs font-mono font-bold" />
+                  <Input type="number" step={0.1} min={100} max={250} value={heightCm} onChange={(e) => setHeightCm(Number(e.target.value))} className="text-xs font-sans tabular-nums font-bold" />
                 )}
               </div>
 
@@ -429,7 +429,7 @@ Calculated via CalcPlatform Clinical Health Engine`;
                     if (unitSystem === "imperial") setWeightLbs(val);
                     else setWeightKg(val);
                   }}
-                  className="text-xs font-mono font-bold"
+                  className="text-xs font-sans tabular-nums font-bold"
                 />
               </div>
             </div>
@@ -542,7 +542,7 @@ Calculated via CalcPlatform Clinical Health Engine`;
             <div className="text-right text-xs text-zinc-500">
               <p className="font-bold text-zinc-800" suppressHydrationWarning>Date: {new Date().toLocaleDateString()}</p>
               <p suppressHydrationWarning>Time: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
-              <p className="font-mono text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #HW-{Date.now().toString().slice(-6)}</p>
+              <p className="font-sans tabular-nums text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #HW-{Date.now().toString().slice(-6)}</p>
             </div>
           </div>
 

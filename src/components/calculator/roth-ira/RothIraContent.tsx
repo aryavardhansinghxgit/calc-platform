@@ -133,7 +133,7 @@ export function RothIraContent() {
                   <th className="p-3 border border-zinc-200 dark:border-zinc-700">Married Joint MAGI Phase-Out</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
                 <tr>
                   <td className="p-3 font-bold text-blue-600">2025 Tax Year</td>
                   <td className="p-3">$7,000</td>

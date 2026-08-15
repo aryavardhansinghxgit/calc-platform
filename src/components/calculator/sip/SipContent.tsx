@@ -76,7 +76,7 @@ export function SipContent() {
           The future maturity value of a standard Systematic Investment Plan is calculated using the Future Value of an Annuity Due formula:
         </p>
 
-        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl space-y-2 text-center font-mono text-xs">
+        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl space-y-2 text-center font-sans tabular-nums text-xs">
           <div className="font-bold text-blue-600 dark:text-blue-400 text-sm">
             M = P × [((1 + i)^n - 1) / i] × (1 + i)
           </div>
@@ -95,7 +95,7 @@ export function SipContent() {
         <p className="text-zinc-600 dark:text-zinc-400">
           When an investor increases their monthly SIP by an annual percentage (S%) each year to match income raises, the maturity value is calculated as the sum of yearly compounding series:
         </p>
-        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-xl font-mono text-[11px] text-center text-purple-600 dark:text-purple-400">
+        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-xl font-sans tabular-nums text-[11px] text-center text-purple-600 dark:text-purple-400">
           M_StepUp = Σ [ P × (1 + S)^(y-1) × (((1+i)^12 - 1) / i) × (1+i) × (1+r_annual)^(Y-y) ]
         </div>
       </section>
@@ -119,7 +119,7 @@ export function SipContent() {
           </ul>
 
           <div className="font-bold text-blue-900 dark:text-blue-200 pt-2">Formula Evaluation:</div>
-          <div className="font-mono text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-blue-100 dark:border-blue-950">
+          <div className="font-sans tabular-nums text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-blue-100 dark:border-blue-950">
             <div>1. Base Compounding Factor: (1 + 0.01)^120 = (1.01)^120 ≈ 3.30038</div>
             <div>2. Accumulated Annuity Growth: (3.30038 - 1) / 0.01 = 230.038</div>
             <div>3. Beginning-of-Period Adjustment: 230.038 × 1.01 = 232.338</div>

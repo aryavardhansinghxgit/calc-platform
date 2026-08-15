@@ -23,27 +23,27 @@ export function ResultCard({
   return (
     <div
       className={cn(
-        "min-w-0 px-3 py-2 rounded-lg",
+        "min-w-0 p-3.5 rounded-xl border transition-all",
         highlight
-          ? "bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800"
-          : "bg-zinc-50 dark:bg-zinc-800/50",
+          ? "bg-gradient-to-br from-blue-50/80 to-indigo-50/40 dark:from-slate-900 dark:to-blue-950/40 border-blue-200 dark:border-slate-800 shadow-sm"
+          : "bg-white/90 dark:bg-slate-800/80 border-slate-200/80 dark:border-slate-700/60 shadow-2xs",
         className
       )}
       title={description}
     >
-      <p className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide leading-none mb-1">
+      <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
         {label}
       </p>
-      <div className="flex min-w-0 items-baseline gap-0.5">
+      <div className="flex min-w-0 items-baseline gap-1">
         <span
           className={cn(
-            "min-w-0 break-all font-semibold tracking-tight font-sans tabular-nums",
-            highlight ? "text-xl text-blue-600 dark:text-blue-400" : "text-lg text-zinc-900 dark:text-zinc-100"
+            "min-w-0 break-all font-extrabold tracking-tight font-sans tabular-nums",
+            highlight ? "text-2xl sm:text-3xl text-blue-700 dark:text-blue-400" : "text-xl text-slate-900 dark:text-slate-100"
           )}
         >
           {value}
         </span>
-        {unit && <span className="shrink-0 text-[10px] text-zinc-400 font-medium">{unit}</span>}
+        {unit && <span className="shrink-0 text-xs text-slate-400 font-medium">{unit}</span>}
       </div>
     </div>
   );

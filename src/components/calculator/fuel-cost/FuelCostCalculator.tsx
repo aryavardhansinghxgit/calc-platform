@@ -346,7 +346,7 @@ export function FuelCostCalculator() {
                   type="number"
                   value={distance}
                   onChange={(e) => setDistance(Number(e.target.value))}
-                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200 w-32"
+                  className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200 w-32"
                 />
                 <input
                   type="range"
@@ -368,7 +368,7 @@ export function FuelCostCalculator() {
                   type="number"
                   value={startOdo}
                   onChange={(e) => setStartOdo(Number(e.target.value))}
-                  className="h-8 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-8 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
               <div className="space-y-1">
@@ -377,7 +377,7 @@ export function FuelCostCalculator() {
                   type="number"
                   value={endOdo}
                   onChange={(e) => setEndOdo(Number(e.target.value))}
-                  className="h-8 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-8 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
               <div className="space-y-1">
@@ -386,7 +386,7 @@ export function FuelCostCalculator() {
                   type="number"
                   value={fuelAdded}
                   onChange={(e) => setFuelAdded(Number(e.target.value))}
-                  className="h-8 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-8 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
             </div>
@@ -403,7 +403,7 @@ export function FuelCostCalculator() {
                   type="number"
                   value={efficiency}
                   onChange={(e) => setEfficiency(Number(e.target.value))}
-                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
 
@@ -416,7 +416,7 @@ export function FuelCostCalculator() {
                   step="0.01"
                   value={fuelPrice}
                   onChange={(e) => setFuelPrice(Number(e.target.value))}
-                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
             </div>
@@ -433,7 +433,7 @@ export function FuelCostCalculator() {
                     value={efficiency}
                     onChange={(e) => setEfficiency(Number(e.target.value))}
                     placeholder="MPG"
-                    className="h-8 text-xs font-mono"
+                    className="h-8 text-xs font-sans tabular-nums"
                   />
                   <Input
                     type="number"
@@ -441,7 +441,7 @@ export function FuelCostCalculator() {
                     value={fuelPrice}
                     onChange={(e) => setFuelPrice(Number(e.target.value))}
                     placeholder="$/gal"
-                    className="h-8 text-xs font-mono"
+                    className="h-8 text-xs font-sans tabular-nums"
                   />
                 </div>
               </div>
@@ -454,7 +454,7 @@ export function FuelCostCalculator() {
                     value={evKwhPer100}
                     onChange={(e) => setEvKwhPer100(Number(e.target.value))}
                     placeholder="kWh/100mi"
-                    className="h-8 text-xs font-mono"
+                    className="h-8 text-xs font-sans tabular-nums"
                   />
                   <Input
                     type="number"
@@ -462,7 +462,7 @@ export function FuelCostCalculator() {
                     value={electricityRate}
                     onChange={(e) => setElectricityRate(Number(e.target.value))}
                     placeholder="$/kWh"
-                    className="h-8 text-xs font-mono"
+                    className="h-8 text-xs font-sans tabular-nums"
                   />
                 </div>
               </div>
@@ -485,7 +485,7 @@ export function FuelCostCalculator() {
                   >
                     -
                   </Button>
-                  <span className="font-mono font-bold text-xs text-zinc-800 dark:text-zinc-200 px-2">
+                  <span className="font-sans tabular-nums font-bold text-xs text-zinc-800 dark:text-zinc-200 px-2">
                     {passengers}
                   </span>
                   <Button
@@ -507,7 +507,7 @@ export function FuelCostCalculator() {
                   type="number"
                   value={workDays}
                   onChange={(e) => setWorkDays(Number(e.target.value))}
-                  className="h-8 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-8 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
             )}
@@ -576,7 +576,7 @@ export function FuelCostCalculator() {
                       type="number"
                       value={tolls}
                       onChange={(e) => setTolls(Number(e.target.value))}
-                      className="h-7 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200"
+                      className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 border-zinc-200"
                     />
                   </div>
                   <div className="space-y-1">
@@ -585,7 +585,7 @@ export function FuelCostCalculator() {
                       type="number"
                       value={parking}
                       onChange={(e) => setParking(Number(e.target.value))}
-                      className="h-7 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200"
+                      className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 border-zinc-200"
                     />
                   </div>
                 </div>
@@ -623,7 +623,7 @@ export function FuelCostCalculator() {
                   ? "Total Round-Trip Expense"
                   : "Total Trip Expense"}
               </span>
-              <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-white">
+              <div className="text-3xl sm:text-4xl font-black font-sans tabular-nums tracking-tight text-white">
                 {currencySymbol}{mode === "commute" ? result.monthlyCommuteCost : result.totalCost}
               </div>
               <p className="text-[11px] text-emerald-100 font-medium">
@@ -635,7 +635,7 @@ export function FuelCostCalculator() {
               <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-200 block">
                 Calculated Fuel Economy
               </span>
-              <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-white">
+              <div className="text-3xl sm:text-4xl font-black font-sans tabular-nums tracking-tight text-white">
                 {result.calculatedMPG} MPG
               </div>
               <p className="text-[11px] text-emerald-100 font-medium">
@@ -650,7 +650,7 @@ export function FuelCostCalculator() {
               <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-200 flex items-center gap-1">
                 <Users className="h-3 w-3" /> Group Passenger Split
               </span>
-              <div className="text-2xl font-black font-mono text-white">
+              <div className="text-2xl font-black font-sans tabular-nums text-white">
                 {currencySymbol}{result.costPerPerson}
               </div>
               <p className="text-[10px] text-emerald-100">Per person share across {passengers} passengers</p>
@@ -662,11 +662,11 @@ export function FuelCostCalculator() {
             <div className="grid grid-cols-2 gap-1.5 text-xs">
               <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
                 <span className="text-[9px] uppercase font-bold text-emerald-200 block">Weekly Cost</span>
-                <span className="font-mono font-bold text-xs text-white">{currencySymbol}{result.weeklyCommuteCost}</span>
+                <span className="font-sans tabular-nums font-bold text-xs text-white">{currencySymbol}{result.weeklyCommuteCost}</span>
               </div>
               <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
                 <span className="text-[9px] uppercase font-bold text-emerald-200 block">Annual Cost</span>
-                <span className="font-mono font-bold text-xs text-white">{currencySymbol}{result.annualCommuteCost}</span>
+                <span className="font-sans tabular-nums font-bold text-xs text-white">{currencySymbol}{result.annualCommuteCost}</span>
               </div>
             </div>
           )}
@@ -677,7 +677,7 @@ export function FuelCostCalculator() {
               <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-200 flex items-center gap-1">
                 <Zap className="h-3 w-3 fill-yellow-400 text-yellow-400" /> EV vs. Gas Savings
               </span>
-              <div className="flex justify-between font-mono text-[11px]">
+              <div className="flex justify-between font-sans tabular-nums text-[11px]">
                 <span>Gasoline: {currencySymbol}{result.gasTripCost}</span>
                 <span className="font-bold text-yellow-300">EV: {currencySymbol}{result.evTripCost}</span>
               </div>
@@ -691,13 +691,13 @@ export function FuelCostCalculator() {
           <div className="grid grid-cols-2 gap-1.5 text-xs">
             <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
               <span className="text-[9px] uppercase font-bold text-emerald-200 block">Cost Per {result.distanceUnitName}</span>
-              <span className="font-mono font-bold text-xs text-white">{currencySymbol}{result.costPerDistanceUnit}</span>
+              <span className="font-sans tabular-nums font-bold text-xs text-white">{currencySymbol}{result.costPerDistanceUnit}</span>
             </div>
             <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
               <span className="text-[9px] uppercase font-bold text-emerald-200 block flex items-center gap-1">
                 <Leaf className="h-3 w-3 text-emerald-300" /> CO2 Emissions
               </span>
-              <span className="font-mono font-bold text-xs text-white">{result.carbonFootprintKg} kg CO2</span>
+              <span className="font-sans tabular-nums font-bold text-xs text-white">{result.carbonFootprintKg} kg CO2</span>
             </div>
           </div>
         </div>

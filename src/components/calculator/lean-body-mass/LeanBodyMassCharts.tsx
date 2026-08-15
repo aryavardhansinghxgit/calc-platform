@@ -106,7 +106,7 @@ export function FormulaComparisonBarChart({ result }: LeanBodyMassChartsProps) {
           <h4 className="font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Clinical LBM Formula Comparison</h4>
           <p className="text-[11px] text-zinc-500">Boer vs James vs Hume vs Janmahasatian</p>
         </div>
-        <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">Mean: {result.consensusLbmLbs} lbs</span>
+        <span className="font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Mean: {result.consensusLbmLbs} lbs</span>
       </div>
 
       <div className="space-y-2 pt-1 text-xs">
@@ -116,7 +116,7 @@ export function FormulaComparisonBarChart({ result }: LeanBodyMassChartsProps) {
             <div key={idx} className="space-y-1">
               <div className="flex justify-between items-center text-[11px]">
                 <span className="font-semibold text-zinc-800 dark:text-zinc-200">{f.formulaName}</span>
-                <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{f.lbmLbs} lbs ({f.lbmPercentage}%)</span>
+                <span className="font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">{f.lbmLbs} lbs ({f.lbmPercentage}%)</span>
               </div>
               <div className="h-3 w-full bg-zinc-100 dark:bg-zinc-950 rounded-full overflow-hidden border border-zinc-200 dark:border-zinc-800">
                 <div

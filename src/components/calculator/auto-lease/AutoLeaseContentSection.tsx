@@ -42,7 +42,7 @@ export function AutoLeaseContentSection() {
         </div>
 
         {/* Input Scenario Parameters */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-black/30 p-3.5 rounded-lg border border-white/10 font-mono">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-black/30 p-3.5 rounded-lg border border-white/10 font-sans tabular-nums">
           <div>
             <span className="text-blue-300 block text-[10px]">Auto Price</span>
             <span className="font-bold text-white">$50,000</span>
@@ -79,26 +79,26 @@ export function AutoLeaseContentSection() {
 
         {/* Step-by-Step Mathematical Walkthrough */}
         <div className="space-y-3 text-xs leading-relaxed text-blue-100/90 pt-1">
-          <div className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-1 font-mono">
+          <div className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-1 font-sans tabular-nums">
             <span className="font-bold text-blue-300 block font-sans">Step 1: Calculate Net Capitalized Cost</span>
             <p>Net Cap Cost = Auto Price - Down Payment - Trade-In Value</p>
             <p className="text-white font-bold">$50,000 - $8,000 - $5,000 = $37,000</p>
           </div>
 
-          <div className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-1 font-mono">
+          <div className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-1 font-sans tabular-nums">
             <span className="font-bold text-blue-300 block font-sans">Step 2: Calculate Monthly Depreciation Charge</span>
             <p>Monthly Depreciation = (Net Cap Cost - Residual Value) ÷ Lease Term</p>
             <p className="text-white font-bold">($37,000 - $25,000) ÷ 36 = $12,000 ÷ 36 = $333.33 / month</p>
           </div>
 
-          <div className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-1 font-mono">
+          <div className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-1 font-sans tabular-nums">
             <span className="font-bold text-blue-300 block font-sans">Step 3: Convert APR to Money Factor & Calculate Rent Charge</span>
             <p>Money Factor = 6.0% ÷ 2400 = 0.0025</p>
             <p>Monthly Finance Charge = (Net Cap Cost + Residual Value) × Money Factor</p>
             <p className="text-white font-bold">($37,000 + $25,000) × 0.0025 = $62,000 × 0.0025 = $155.00 / month</p>
           </div>
 
-          <div className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-1 font-mono">
+          <div className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-1 font-sans tabular-nums">
             <span className="font-bold text-blue-300 block font-sans">Step 4: Calculate Monthly Sales Tax & Final Payment</span>
             <p>Subtotal = $333.33 + $155.00 = $488.33</p>
             <p>Monthly Tax = $488.33 × 6.0% = $29.30</p>
@@ -146,7 +146,7 @@ export function AutoLeaseContentSection() {
             <p className="text-zinc-600 dark:text-zinc-300">
               The Money Factor (also called the rent charge or lease factor) represents the interest rate charged on a lease. Unlike standard loans expressed as annual percentage rates (APR), money factor is expressed as a small decimal value like 0.00250.
             </p>
-            <div className="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-lg border border-blue-100 dark:border-blue-900/50 mt-2 text-xs text-blue-900 dark:text-blue-200 font-mono">
+            <div className="bg-blue-50 dark:bg-blue-950/40 p-3 rounded-lg border border-blue-100 dark:border-blue-900/50 mt-2 text-xs text-blue-900 dark:text-blue-200 font-sans tabular-nums">
               Money Factor = APR ÷ 2400 &nbsp;|&nbsp; APR = Money Factor × 2400
             </div>
           </div>

@@ -209,7 +209,7 @@ Shape Guidance: ${result.shapeAdvice}`;
                   <span className="w-4 h-4 bg-rose-100 dark:bg-rose-950 text-rose-600 rounded-full text-[10px] flex items-center justify-center font-bold">1</span>
                   <span>Underbust (Band Size)</span>
                 </label>
-                <span className="text-[11px] font-mono text-zinc-400">
+                <span className="text-[11px] font-sans tabular-nums text-zinc-400">
                   {unit === "in" ? `${underbust} in` : `${underbust} cm`}
                 </span>
               </div>
@@ -220,7 +220,7 @@ Shape Guidance: ${result.shapeAdvice}`;
                 step={unit === "in" ? 0.5 : 1}
                 min={unit === "in" ? 22 : 55}
                 max={unit === "in" ? 60 : 150}
-                className="h-10 text-sm font-mono font-bold bg-white dark:bg-zinc-900 border-zinc-200"
+                className="h-10 text-sm font-sans tabular-nums font-bold bg-white dark:bg-zinc-900 border-zinc-200"
               />
               <p className="text-[10px] text-zinc-500 leading-tight">
                 Measure snugly around your ribcage directly underneath your breasts.
@@ -234,7 +234,7 @@ Shape Guidance: ${result.shapeAdvice}`;
                   <span className="w-4 h-4 bg-rose-100 dark:bg-rose-950 text-rose-600 rounded-full text-[10px] flex items-center justify-center font-bold">2</span>
                   <span>Bust (Overbust)</span>
                 </label>
-                <span className="text-[11px] font-mono text-zinc-400">
+                <span className="text-[11px] font-sans tabular-nums text-zinc-400">
                   {unit === "in" ? `${bust} in` : `${bust} cm`}
                 </span>
               </div>
@@ -245,7 +245,7 @@ Shape Guidance: ${result.shapeAdvice}`;
                 step={unit === "in" ? 0.5 : 1}
                 min={unit === "in" ? 24 : 60}
                 max={unit === "in" ? 70 : 180}
-                className="h-10 text-sm font-mono font-bold bg-white dark:bg-zinc-900 border-zinc-200 text-rose-600 dark:text-rose-400"
+                className="h-10 text-sm font-sans tabular-nums font-bold bg-white dark:bg-zinc-900 border-zinc-200 text-rose-600 dark:text-rose-400"
               />
               <p className="text-[10px] text-zinc-500 leading-tight">
                 Measure gently around the fullest part of your bust while standing straight.
@@ -326,7 +326,7 @@ Shape Guidance: ${result.shapeAdvice}`;
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse font-mono">
+            <table className="w-full text-left text-xs border-collapse font-sans tabular-nums">
               <thead>
                 <tr className="bg-zinc-50 dark:bg-zinc-800/60 font-bold text-zinc-600 dark:text-zinc-400 border-b border-zinc-200 dark:border-zinc-700">
                   <th className="p-2.5 font-sans">Region</th>
@@ -383,7 +383,7 @@ Shape Guidance: ${result.shapeAdvice}`;
             <span className="text-xs font-bold uppercase tracking-wider text-rose-100 flex items-center gap-1.5">
               <Heart className="h-4 w-4 fill-white" /> Calculated Bra Size ({region})
             </span>
-            <div className="text-5xl font-black tracking-tight font-mono">
+            <div className="text-5xl font-black tracking-tight font-sans tabular-nums">
               {result.primarySize}
             </div>
             <p className="text-xs text-rose-100 leading-relaxed pt-1">
@@ -440,7 +440,7 @@ Shape Guidance: ${result.shapeAdvice}`;
               className="p-4 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-2"
             >
               <div className="flex items-center justify-between">
-                <span className="text-base font-black font-mono text-purple-600 dark:text-purple-400">
+                <span className="text-base font-black font-sans tabular-nums text-purple-600 dark:text-purple-400">
                   Sister Size: {sister.size}
                 </span>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300">

@@ -112,7 +112,7 @@ export function LeanBodyMassContent() {
         <div className="space-y-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. Boer Formula (1984)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-blue-700 dark:text-blue-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-700 dark:text-blue-400">
               Male LBM (kg) = 0.407 × Weight(kg) + 0.267 × Height(cm) - 19.2<br/>
               Female LBM (kg) = 0.252 × Weight(kg) + 0.473 × Height(cm) - 48.3
             </code>
@@ -120,7 +120,7 @@ export function LeanBodyMassContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. Peters Pediatric Formula (2011) — Children ≤ 14</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-emerald-700 dark:text-emerald-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">
               eECV = 0.0215 × Weight(kg)^0.6469 × Height(cm)^0.7236<br/>
               eLBM (kg) = 3.8 × eECV
             </code>

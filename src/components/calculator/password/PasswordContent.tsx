@@ -71,7 +71,7 @@ export function PasswordContent() {
         <p>
           Password entropy quantifies the strength of a password-generation process, measured in bits of entropy. It is calculated using Shannon&apos;s formula:
         </p>
-        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-xl font-mono text-xs">
+        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-xl font-sans tabular-nums text-xs">
           Entropy (H) = Length (L) × log2(Pool Size N)
         </div>
         <p>
@@ -128,7 +128,7 @@ export function PasswordContent() {
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
               Determine the entropy and combination space of a 16-character password generated using lowercase, uppercase, digits, and symbols.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Define Pool Size (N):</strong> 26 + 26 + 10 + 32 = 94 characters</div>
               <div><strong>2. Calculate Search Space (Combinations):</strong></div>
               <div>Combinations = 94^16 ≈ 3.71 × 10^31 possible passwords</div>
@@ -147,7 +147,7 @@ export function PasswordContent() {
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
               Calculate the entropy of a 4-word passphrase chosen from a curated list of 96 words.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Define pool size (N):</strong> 96 words</div>
               <div><strong>2. Calculate Combinations:</strong></div>
               <div>Combinations = 96^4 ≈ 8.49 × 10^7 possible phrases</div>

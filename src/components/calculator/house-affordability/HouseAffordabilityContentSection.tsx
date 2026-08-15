@@ -210,7 +210,7 @@ export function HouseAffordabilityContentSection() {
         <p className="text-sm leading-relaxed">
           The <strong>Front-End Ratio</strong> calculates the percentage of your gross monthly income that goes toward housing expenses alone (including mortgage principal & interest, property taxes, home insurance, and HOA fees).
         </p>
-        <div className="p-4 rounded-xl bg-zinc-900 text-zinc-100 dark:bg-zinc-950 font-mono text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
+        <div className="p-4 rounded-xl bg-zinc-900 text-zinc-100 dark:bg-zinc-950 font-sans tabular-nums text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
           Front-End Ratio = ( Monthly Housing Costs / Monthly Gross Income ) × 100
         </div>
       </section>
@@ -224,7 +224,7 @@ export function HouseAffordabilityContentSection() {
         <p className="text-sm leading-relaxed">
           The <strong>Back-End Ratio</strong> calculates the percentage of your gross monthly income required to cover housing expenses plus all other recurring debt payments (car loans, student loans, minimum credit card payments).
         </p>
-        <div className="p-4 rounded-xl bg-zinc-900 text-zinc-100 dark:bg-zinc-950 font-mono text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
+        <div className="p-4 rounded-xl bg-zinc-900 text-zinc-100 dark:bg-zinc-950 font-sans tabular-nums text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
           Back-End Ratio = [ ( Housing Costs + Other Monthly Debts ) / Monthly Gross Income ] × 100
         </div>
       </section>

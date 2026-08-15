@@ -113,7 +113,7 @@ export function BmrActivityBarChart({ result }: BmrChartsProps) {
             <div key={idx} className="space-y-1">
               <div className="flex justify-between items-center text-[11px]">
                 <span className="font-semibold text-zinc-800 dark:text-zinc-200">{row.label} ({row.multiplier}×)</span>
-                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{row.tdee} kcal</span>
+                <span className="font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">{row.tdee} kcal</span>
               </div>
               <div className="h-3 w-full bg-zinc-100 dark:bg-zinc-950 rounded-full overflow-hidden border border-zinc-200 dark:border-zinc-800">
                 <div

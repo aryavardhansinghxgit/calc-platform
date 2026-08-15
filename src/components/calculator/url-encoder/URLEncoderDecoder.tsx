@@ -481,7 +481,7 @@ export function URLEncoderDecoder() {
                 <FileText className="h-3.5 w-3.5 text-blue-600" />
                 <span>{opMode === "encode" ? "Raw Input URL / String" : "Encoded Percent-String Input"}</span>
               </label>
-              <span className="text-[10px] font-mono text-zinc-400">
+              <span className="text-[10px] font-sans tabular-nums text-zinc-400">
                 {analytics.inputChars} chars | {analytics.inputBytes} B
               </span>
             </div>
@@ -499,7 +499,7 @@ export function URLEncoderDecoder() {
                   : "Paste percent-encoded URL (e.g., https%3A%2F%2F...) here..."
               }
               rows={9}
-              className="w-full flex-1 p-3 text-xs font-mono bg-zinc-50/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-600 resize-y"
+              className="w-full flex-1 p-3 text-xs font-sans tabular-nums bg-zinc-50/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-600 resize-y"
             />
           </div>
 
@@ -519,7 +519,7 @@ export function URLEncoderDecoder() {
                     : "Form Data (+ space)"}
                 </span>
               </label>
-              <span className="text-[10px] font-mono text-zinc-400">
+              <span className="text-[10px] font-sans tabular-nums text-zinc-400">
                 {analytics.outputChars} chars | {analytics.outputBytes} B
               </span>
             </div>
@@ -539,7 +539,7 @@ export function URLEncoderDecoder() {
                 value={textResult.output}
                 placeholder="Transformed URL will appear here dynamically..."
                 rows={9}
-                className="w-full flex-1 p-3 text-xs font-mono bg-zinc-50/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none resize-y text-emerald-700 dark:text-emerald-400"
+                className="w-full flex-1 p-3 text-xs font-sans tabular-nums bg-zinc-50/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none resize-y text-emerald-700 dark:text-emerald-400"
               />
             )}
 
@@ -659,7 +659,7 @@ export function URLEncoderDecoder() {
                       <Input
                         value={param.key}
                         onChange={(e) => handleParamChange(param.id, "key", e.target.value)}
-                        className="h-7 text-xs font-mono bg-white dark:bg-zinc-900"
+                        className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
                         placeholder="param_name"
                       />
                     </td>
@@ -667,7 +667,7 @@ export function URLEncoderDecoder() {
                       <Input
                         value={param.value}
                         onChange={(e) => handleParamChange(param.id, "value", e.target.value)}
-                        className="h-7 text-xs font-mono bg-white dark:bg-zinc-900 text-blue-600 dark:text-blue-400"
+                        className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 text-blue-600 dark:text-blue-400"
                         placeholder="param_value"
                       />
                     </td>
@@ -698,7 +698,7 @@ export function URLEncoderDecoder() {
             </h3>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs font-mono">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs font-sans tabular-nums">
             <div className="bg-zinc-50 dark:bg-zinc-800/60 p-2.5 rounded-xl border border-zinc-200/80 dark:border-zinc-700">
               <span className="text-[10px] text-zinc-400 font-bold block uppercase font-sans">Protocol</span>
               <span className="font-bold text-blue-600 block truncate">{breakdown.protocol}</span>
@@ -731,7 +731,7 @@ export function URLEncoderDecoder() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
           <span className="text-[10px] text-zinc-400 font-bold block uppercase">Input Size</span>
-          <span className="text-base font-black font-mono text-zinc-900 dark:text-zinc-100 block">
+          <span className="text-base font-black font-sans tabular-nums text-zinc-900 dark:text-zinc-100 block">
             {analytics.inputBytes} Bytes
           </span>
           <span className="text-[10px] text-zinc-400">{analytics.inputChars} characters</span>
@@ -739,7 +739,7 @@ export function URLEncoderDecoder() {
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
           <span className="text-[10px] text-zinc-400 font-bold block uppercase">Output Size</span>
-          <span className="text-base font-black font-mono text-blue-600 block">
+          <span className="text-base font-black font-sans tabular-nums text-blue-600 block">
             {analytics.outputBytes} Bytes
           </span>
           <span className="text-[10px] text-zinc-400">{analytics.outputChars} characters</span>
@@ -747,7 +747,7 @@ export function URLEncoderDecoder() {
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
           <span className="text-[10px] text-zinc-400 font-bold block uppercase">Expansion Ratio</span>
-          <span className={`text-base font-black font-mono block ${analytics.expansionRatio >= 0 ? "text-amber-600" : "text-emerald-600"}`}>
+          <span className={`text-base font-black font-sans tabular-nums block ${analytics.expansionRatio >= 0 ? "text-amber-600" : "text-emerald-600"}`}>
             {analytics.expansionRatio >= 0 ? `+${analytics.expansionRatio}%` : `${analytics.expansionRatio}%`}
           </span>
           <span className="text-[10px] text-zinc-400">Percent-encoding growth</span>
@@ -755,7 +755,7 @@ export function URLEncoderDecoder() {
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
           <span className="text-[10px] text-zinc-400 font-bold block uppercase">Line Count</span>
-          <span className="text-base font-black font-mono text-purple-600 block">
+          <span className="text-base font-black font-sans tabular-nums text-purple-600 block">
             {analytics.lineCount} {analytics.lineCount === 1 ? "Line" : "Lines"}
           </span>
           <span className="text-[10px] text-zinc-400">{lineByLine ? "Batch line-by-line" : "Single URL stream"}</span>

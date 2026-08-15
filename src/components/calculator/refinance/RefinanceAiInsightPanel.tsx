@@ -29,7 +29,7 @@ export function RefinanceAiInsightPanel({ insights, score, rating }: RefinanceAi
               AI Refinance Advisor Insights
             </CardTitle>
           </div>
-          <span className="text-xs font-mono font-bold text-purple-700 dark:text-purple-300">
+          <span className="text-xs font-sans tabular-nums font-bold text-purple-700 dark:text-purple-300">
             Rating: {rating} ({score}/100)
           </span>
         </div>

@@ -138,7 +138,7 @@ export function VatContent() {
             <p>
               Whether billing clients or calculating store shelf prices, use these mathematical identities:
             </p>
-            <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-400 font-mono bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
+            <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-400 font-sans tabular-nums bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
               <li>• <strong>VAT Exclusive:</strong> Gross Price = Net Price × (1 + VAT Rate % / 100)</li>
               <li>• <strong>VAT Inclusive:</strong> Net Price = Gross Price / (1 + VAT Rate % / 100)</li>
               <li>• <strong>Tax Amount:</strong> VAT Amount = Gross Price - Net Price</li>
@@ -183,43 +183,43 @@ export function VatContent() {
                 <tr>
                   <td className="p-3 font-semibold">🇬🇧 United Kingdom</td>
                   <td className="p-3">VAT</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">20%</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">20%</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">5% (Energy) / 0% (Food, Books)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">🇩🇪 Germany</td>
                   <td className="p-3">MwSt (Umsatzsteuer)</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">19%</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">19%</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">7% (Food, Books, Cultural events)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">🇫🇷 France</td>
                   <td className="p-3">TVA</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">20%</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">20%</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">10% / 5.5% / 2.1%</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">🇪🇸 Spain</td>
                   <td className="p-3">IVA</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">21%</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">21%</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">10% / 4% (Super-reduced)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">🇦🇺 Australia</td>
                   <td className="p-3">GST</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">10%</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">10%</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">0% (Fresh food, Health, Education)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">🇦🇪 UAE</td>
                   <td className="p-3">VAT</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">5%</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">5%</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">0% (Exports, Healthcare, Education)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">🇺🇸 United States</td>
                   <td className="p-3">State Sales Tax (No Federal VAT)</td>
-                  <td className="p-3 font-mono font-bold text-amber-600">0% - 9.5%</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-amber-600">0% - 9.5%</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">Varies by State / County / City</td>
                 </tr>
               </tbody>

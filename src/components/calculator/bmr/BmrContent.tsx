@@ -137,7 +137,7 @@ export function BmrContent() {
         <div className="space-y-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. Mifflin-St Jeor Equation (1990) — Clinical Benchmark</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-emerald-700 dark:text-emerald-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">
               Male: BMR = (10 × W_kg) + (6.25 × H_cm) - (5 × Age) + 5<br/>
               Female: BMR = (10 × W_kg) + (6.25 × H_cm) - (5 × Age) - 161
             </code>
@@ -145,7 +145,7 @@ export function BmrContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. Revised Harris-Benedict Equation (Roza &amp; Shizgal 1984)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-purple-700 dark:text-purple-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-purple-700 dark:text-purple-400">
               Male: BMR = 88.362 + (13.397 × W_kg) + (4.799 × H_cm) - (5.677 × Age)<br/>
               Female: BMR = 447.593 + (9.247 × W_kg) + (3.098 × H_cm) - (4.330 × Age)
             </code>
@@ -153,7 +153,7 @@ export function BmrContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">C. Katch-McArdle Equation (Lean Mass Based)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-sky-700 dark:text-sky-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-sky-700 dark:text-sky-400">
               BMR = 370 + (21.6 × Lean Body Mass in kg)
             </code>
           </div>

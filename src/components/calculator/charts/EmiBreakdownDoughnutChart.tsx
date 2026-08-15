@@ -73,7 +73,7 @@ export function EmiBreakdownDoughnutChart({
           <span className="text-[10px] uppercase font-semibold tracking-wider text-zinc-400 dark:text-zinc-500">
             Total Outflow
           </span>
-          <span className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100 font-mono">
+          <span className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums">
             {formatCurrency(total)}
           </span>
         </div>

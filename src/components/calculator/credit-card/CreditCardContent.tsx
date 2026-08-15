@@ -139,7 +139,7 @@ export function CreditCardContent() {
             <p>
               Credit card interest is compounded daily using the <strong>Average Daily Balance (ADB)</strong> method:
             </p>
-            <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-400 font-mono bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
+            <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-400 font-sans tabular-nums bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
               <li>• <strong>Daily Periodic Rate (DPR):</strong> DPR = APR / 365</li>
               <li>• <strong>Average Daily Balance (ADB):</strong> Sum of Daily Balances / Days in Cycle</li>
               <li>• <strong>Monthly Interest Charged:</strong> Interest = DPR × ADB × Days in Billing Cycle</li>
@@ -179,25 +179,25 @@ export function CreditCardContent() {
               <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
                 <tr>
                   <td className="p-3 font-semibold text-blue-600">Balance Transfer Card</td>
-                  <td className="p-3 font-mono">0% Intro APR (12–21 mos), then 18%–28%</td>
+                  <td className="p-3 font-sans tabular-nums">0% Intro APR (12–21 mos), then 18%–28%</td>
                   <td className="p-3">0% interest period; 3%–5% transfer fee</td>
                   <td className="p-3 font-medium">Consolidating high-interest debt</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-indigo-600">Cashback Rewards Card</td>
-                  <td className="p-3 font-mono">18% – 26%</td>
+                  <td className="p-3 font-sans tabular-nums">18% – 26%</td>
                   <td className="p-3">1.5% to 5% cash rebates on purchases</td>
                   <td className="p-3 font-medium">Cardholders who pay balance in full monthly</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-emerald-600">Secured Credit Card</td>
-                  <td className="p-3 font-mono">22% – 29%</td>
+                  <td className="p-3 font-sans tabular-nums">22% – 29%</td>
                   <td className="p-3">Requires cash deposit equal to credit limit</td>
                   <td className="p-3 font-medium">Rebuilding bad credit or zero credit history</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-amber-600">Travel Rewards Card</td>
-                  <td className="p-3 font-mono">20% – 28%</td>
+                  <td className="p-3 font-sans tabular-nums">20% – 28%</td>
                   <td className="p-3">Airline miles, hotel upgrades, lounge access</td>
                   <td className="p-3 font-medium">Frequent travelers who pay monthly in full</td>
                 </tr>

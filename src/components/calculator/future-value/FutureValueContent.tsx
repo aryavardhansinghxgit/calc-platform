@@ -152,7 +152,7 @@ export function FutureValueContent() {
             <p>
               The basic formula for lump sum Future Value is expressed mathematically as:
             </p>
-            <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-lg font-mono text-xs text-center border border-zinc-200 dark:border-zinc-700">
+            <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-lg font-sans tabular-nums text-xs text-center border border-zinc-200 dark:border-zinc-700">
               FV = PV × (1 + r / n)^(n × t)
             </div>
             <ul className="text-xs space-y-1 text-zinc-600 dark:text-zinc-400">
@@ -210,19 +210,19 @@ export function FutureValueContent() {
                 <tr>
                   <td className="p-3 font-semibold">Lump Sum</td>
                   <td className="p-3">Single initial deposit at t=0</td>
-                  <td className="p-3 font-mono text-[11px]">FV = PV × (1+r/n)^(nt)</td>
+                  <td className="p-3 font-sans tabular-nums text-[11px]">FV = PV × (1+r/n)^(nt)</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">Baseline growth on capital</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Ordinary Annuity</td>
                   <td className="p-3">Deposits at end of each period</td>
-                  <td className="p-3 font-mono text-[11px]">FV = PMT × [((1+i)^n - 1) / i]</td>
+                  <td className="p-3 font-sans tabular-nums text-[11px]">FV = PMT × [((1+i)^n - 1) / i]</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">Standard recurring savings model</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Annuity Due</td>
                   <td className="p-3">Deposits at start of each period</td>
-                  <td className="p-3 font-mono text-[11px]">FV = FV_ordinary × (1+i)</td>
+                  <td className="p-3 font-sans tabular-nums text-[11px]">FV = FV_ordinary × (1+i)</td>
                   <td className="p-3 text-emerald-600 font-bold">+1 Extra period of interest per deposit</td>
                 </tr>
               </tbody>

@@ -33,8 +33,8 @@ export function TargetHeartRateTables({ result }: TargetHeartRateTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Training Zone</th>
-                <th className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400">Intensity Range</th>
-                <th className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">Target BPM Range</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">Intensity Range</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">Target BPM Range</th>
                 <th className="py-2.5 px-3 font-semibold text-purple-700 dark:text-purple-400">Primary Benefit</th>
                 <th className="py-2.5 px-3 text-zinc-500">Physiological Adaptation</th>
               </tr>
@@ -46,8 +46,8 @@ export function TargetHeartRateTables({ result }: TargetHeartRateTablesProps) {
                     <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: z.colorHex }} />
                     {z.zoneName}
                   </td>
-                  <td className="py-2.5 px-3 font-mono font-bold text-emerald-700 dark:text-emerald-400">{z.percentageRange}</td>
-                  <td className="py-2.5 px-3 font-mono font-bold text-blue-700 dark:text-blue-400">{z.minBpm} – {z.maxBpm} BPM</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-emerald-700 dark:text-emerald-400">{z.percentageRange}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-blue-700 dark:text-blue-400">{z.minBpm} – {z.maxBpm} BPM</td>
                   <td className="py-2.5 px-3 font-semibold text-purple-700 dark:text-purple-400">{z.benefit}</td>
                   <td className="py-2.5 px-3 text-zinc-500">{z.description}</td>
                 </tr>
@@ -68,19 +68,19 @@ export function TargetHeartRateTables({ result }: TargetHeartRateTablesProps) {
           <table className="w-full text-left text-xs">
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
-                <th className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">Borg Rating (6-20)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">Borg Rating (6-20)</th>
                 <th className="py-2.5 px-3">Subjective Exertion Level</th>
-                <th className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400">% HRR Equivalent</th>
-                <th className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">Calculated Target BPM</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">% HRR Equivalent</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">Calculated Target BPM</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               {borg620Matrix.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
-                  <td className="py-2 px-3 font-mono font-bold text-purple-700 dark:text-purple-400">Rating {row.rating}</td>
+                  <td className="py-2 px-3 font-sans tabular-nums font-bold text-purple-700 dark:text-purple-400">Rating {row.rating}</td>
                   <td className="py-2 px-3 font-bold text-zinc-900 dark:text-zinc-100">{row.intensity}</td>
-                  <td className="py-2 px-3 font-mono text-emerald-700 dark:text-emerald-400">{row.pct}</td>
-                  <td className="py-2 px-3 font-mono font-bold text-blue-700 dark:text-blue-400">{row.bpm} BPM</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">{row.pct}</td>
+                  <td className="py-2 px-3 font-sans tabular-nums font-bold text-blue-700 dark:text-blue-400">{row.bpm} BPM</td>
                 </tr>
               ))}
             </tbody>
@@ -100,7 +100,7 @@ export function TargetHeartRateTables({ result }: TargetHeartRateTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Formula Model</th>
-                <th className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400">Calculated MHR (BPM)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">Calculated MHR (BPM)</th>
                 <th className="py-2.5 px-3 text-zinc-500">Clinical Background &amp; Target Population</th>
               </tr>
             </thead>
@@ -108,7 +108,7 @@ export function TargetHeartRateTables({ result }: TargetHeartRateTablesProps) {
               {result.formulaComparison.map((f, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2.5 px-3 font-bold text-zinc-900 dark:text-zinc-100">{f.formulaName}</td>
-                  <td className="py-2.5 px-3 font-mono font-bold text-emerald-700 dark:text-emerald-400">{f.mhrBpm} BPM</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-emerald-700 dark:text-emerald-400">{f.mhrBpm} BPM</td>
                   <td className="py-2.5 px-3 text-zinc-500">{f.description}</td>
                 </tr>
               ))}

@@ -31,7 +31,7 @@ export function SummaryCard({ title = "Summary", metrics }: SummaryCardProps) {
             <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">
               {m.label}
             </span>
-            <span className="text-xl font-extrabold font-mono mt-1 block">
+            <span className="text-xl font-extrabold font-sans tabular-nums mt-1 block">
               {m.value}
             </span>
           </div>

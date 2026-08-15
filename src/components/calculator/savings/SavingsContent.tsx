@@ -102,7 +102,7 @@ export function SavingsContent() {
         <p>
           Savings growth is driven by three interconnected variables: <strong>Time ($t$)</strong>, <strong>Contributions ($PMT$)</strong>, and <strong>Rate of Return ($r$)</strong>. When funds are deposited into a compound interest-bearing account, growth follows an exponential curve rather than a linear line.
         </p>
-        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 font-mono text-xs text-blue-600 dark:text-blue-400">
+        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400">
           {"A = P(1 + r/n)^(nt) + PMT × [((1 + r/n)^(nt) - 1) / (r/n)]"}
         </div>
         <p>
@@ -214,7 +214,7 @@ export function SavingsContent() {
         <p>
           The Effective Annual Rate (EAR) formula allows investors to accurately compare accounts with different compounding schedules:
         </p>
-        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl font-mono text-xs text-purple-600 dark:text-purple-400">
+        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl font-sans tabular-nums text-xs text-purple-600 dark:text-purple-400">
           {"EAR = (1 + r/n)^n - 1"}
         </div>
       </section>
@@ -283,7 +283,7 @@ export function SavingsContent() {
         <p>
           Divide 72 by your annual interest rate to determine the doubling period:
         </p>
-        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl font-mono text-xs text-emerald-600 dark:text-emerald-400">
+        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl font-sans tabular-nums text-xs text-emerald-600 dark:text-emerald-400">
           {"Years to Double = 72 / Interest Rate (%)"}
         </div>
       </section>

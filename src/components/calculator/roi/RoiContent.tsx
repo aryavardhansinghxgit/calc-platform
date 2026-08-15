@@ -78,7 +78,7 @@ export function RoiContent() {
           The basic ROI formula measures total percentage profit relative to the initial cost of investment:
         </p>
 
-        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl space-y-2 text-center font-mono text-xs">
+        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl space-y-2 text-center font-sans tabular-nums text-xs">
           <div className="font-bold text-blue-600 dark:text-blue-400 text-sm">
             ROI = [ ( Amount Returned - Amount Invested ) / Amount Invested ] × 100
           </div>
@@ -96,7 +96,7 @@ export function RoiContent() {
         <p className="text-zinc-600 dark:text-zinc-400">
           Simple ROI ignores time. An ROI of 100% over 1 year is extraordinary, while 100% over 50 years is modest. Annualized ROI solves this by normalizing returns on a geometric annual compounding basis:
         </p>
-        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-xl font-mono text-[11px] text-center text-purple-600 dark:text-purple-400">
+        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-xl font-sans tabular-nums text-[11px] text-center text-purple-600 dark:text-purple-400">
           Annualized ROI = [ ( Amount Returned / Amount Invested )^( 1 / Years ) - 1 ] × 100
         </div>
       </section>
@@ -118,7 +118,7 @@ export function RoiContent() {
           </ul>
 
           <div className="font-bold text-blue-900 dark:text-blue-200 pt-2">Step-by-Step Evaluation:</div>
-          <div className="font-mono text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-blue-100 dark:border-blue-950">
+          <div className="font-sans tabular-nums text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-blue-100 dark:border-blue-950">
             <div>1. Net Dollar Profit: $2,000,000 - $1,000,000 = $1,000,000</div>
             <div>2. Total ROI: ($1,000,000 / $1,000,000) × 100 = 100.00%</div>
             <div>3. Value Ratio: $2,000,000 / $1,000,000 = 2.00</div>
@@ -136,7 +136,7 @@ export function RoiContent() {
             <li>Holding Period = 2 Years</li>
           </ul>
 
-          <div className="font-mono text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-rose-100 dark:border-rose-950 text-rose-600 font-bold">
+          <div className="font-sans tabular-nums text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-rose-100 dark:border-rose-950 text-rose-600 font-bold">
             <div>1. Net Dollar Loss: $30,000 - $50,000 = -$20,000</div>
             <div>2. Total ROI: (-$20,000 / $50,000) × 100 = -40.00%</div>
             <div>3. Annualized Loss: [(30,000 / 50,000)^(0.50) - 1] × 100 = -22.54% per annum</div>

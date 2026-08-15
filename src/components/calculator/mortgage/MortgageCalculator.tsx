@@ -62,7 +62,7 @@ const MortgagePieChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-mono">
+      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
         Loading doughnut chart...
       </div>
     ),
@@ -74,7 +74,7 @@ const BalanceLineChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-mono">
+      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
         Loading line chart...
       </div>
     ),
@@ -86,7 +86,7 @@ const AmortizationAreaChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-mono">
+      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
         Loading area chart...
       </div>
     ),
@@ -457,48 +457,44 @@ export function MortgageCalculator() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Top Action Bar: Save Calculation & Load Saved Calculations */}
-      <div className="flex items-center justify-between bg-zinc-50 dark:bg-zinc-800/80 p-3 rounded-xl border border-zinc-200 dark:border-zinc-700/80 shadow-xs">
+      {/* Top Action Bar: Save Calculation & Load Saved Calculations */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
         <div className="flex items-center gap-2">
           <Bookmark className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-          <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+          <span className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
             Mortgage Calculation Manager
           </span>
           {savedCalculations.length > 0 && (
-            <span className="text-[10px] font-mono bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-semibold">
+            <span className="text-xs font-semibold bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-2.5 py-0.5 rounded-full">
               {savedCalculations.length} Saved
             </span>
           )}
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
+        <div className="flex items-center gap-2.5">
+          <button
             type="button"
-            variant="outline"
-            size="sm"
             onClick={handleResetForm}
-            className="h-8 text-xs gap-1 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 cursor-pointer"
+            className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-3.5 py-2 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <RotateCcw className="h-3.5 w-3.5" /> Clear
-          </Button>
+          </button>
 
-          <Button
+          <button
             type="button"
-            variant="outline"
-            size="sm"
             onClick={() => setIsReportModalOpen(true)}
-            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer"
+            className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-3.5 py-2 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
-          </Button>
+          </button>
 
-          <Button
+          <button
             type="button"
-            size="sm"
             onClick={() => setIsSaveModalOpen(true)}
-            className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs cursor-pointer"
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl px-4 py-2 text-xs shadow-md shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <Bookmark className="h-3.5 w-3.5" /> Save Calculation
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -506,28 +502,23 @@ export function MortgageCalculator() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Inputs Panel (Col 5) */}
         <div className="lg:col-span-5 space-y-4">
-          <Card className="border border-zinc-200 dark:border-zinc-800 shadow-xs bg-white dark:bg-zinc-900">
-            <CardHeader className="pb-3">
-              <div className="flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400">
-                  <Home className="h-5 w-5" />
-                </div>
-                <div>
-                  <CardTitle className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                    Mortgage Inputs
-                  </CardTitle>
-                  <CardDescription className="text-xs text-zinc-500">
-                    Modify the values and click the Calculate button to use
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4 text-xs">
-              {/* Basic Inputs */}
-              <div className="space-y-3">
-                <h3 className="font-bold uppercase tracking-wider text-[11px] text-zinc-400 dark:text-zinc-500">
+          <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-xs p-5 sm:p-6 space-y-5">
+            <div>
+              <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
+                Mortgage Inputs
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Modify values to recalculate payments instantly
+              </p>
+            </div>
+
+            {/* Basic Inputs */}
+            <div className="space-y-4">
+              <div className="border-b border-slate-200/80 dark:border-slate-800 pb-2">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   Basic Loan Details
-                </h3>
+                </h4>
+              </div>
 
                 {/* Home Price */}
                 <div>
@@ -551,17 +542,17 @@ export function MortgageCalculator() {
                 {/* Down Payment with Amount / % Toggle */}
                 <div>
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="downPayment" className="text-zinc-700 dark:text-zinc-300 font-medium">
+                    <Label htmlFor="downPayment" className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                       Down Payment
                     </Label>
-                    <div className="flex items-center bg-zinc-100 dark:bg-zinc-800 rounded-md p-0.5 border border-zinc-200 dark:border-zinc-700">
+                    <div className="inline-flex rounded-lg p-0.5 bg-slate-200 dark:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300">
                       <button
                         type="button"
                         onClick={() => handleDownPaymentTypeToggle("amount")}
-                        className={`px-2 py-0.5 text-[10px] font-bold rounded ${
+                        className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-all ${
                           downPaymentType === "amount"
-                            ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
-                            : "text-zinc-500"
+                            ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
+                            : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
                         }`}
                       >
                         $ Amount
@@ -569,10 +560,10 @@ export function MortgageCalculator() {
                       <button
                         type="button"
                         onClick={() => handleDownPaymentTypeToggle("percent")}
-                        className={`px-2 py-0.5 text-[10px] font-bold rounded ${
+                        className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-all ${
                           downPaymentType === "percent"
-                            ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
-                            : "text-zinc-500"
+                            ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
+                            : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
                         }`}
                       >
                         % Percent
@@ -676,16 +667,14 @@ export function MortgageCalculator() {
               </div>
 
               {/* Advanced Section Collapsible */}
-              <div className="border-t border-zinc-100 dark:border-zinc-800 pt-3">
+              <div className="border-t border-slate-200/80 dark:border-slate-800 pt-4">
                 <button
                   type="button"
                   onClick={() => setShowAdvanced(!showAdvanced)}
-                  className="w-full flex items-center justify-between text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 hover:text-blue-600 py-1"
+                  className="w-full flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 hover:text-blue-600 py-1 cursor-pointer"
                 >
-                  <span className="flex items-center gap-1.5">
-                    <Sliders className="h-3.5 w-3.5 text-blue-500" /> Include Taxes & Costs Below
-                  </span>
-                  {showAdvanced ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+                  <span>Include Taxes & Fees</span>
+                  {showAdvanced ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
 
                 {showAdvanced && (
@@ -696,14 +685,14 @@ export function MortgageCalculator() {
                         <Label htmlFor="propertyTax" className="text-zinc-700 dark:text-zinc-300 font-medium">
                           Property Taxes
                         </Label>
-                        <div className="flex items-center bg-zinc-100 dark:bg-zinc-800 rounded-md p-0.5 border border-zinc-200 dark:border-zinc-700">
+                        <div className="inline-flex rounded-lg p-0.5 bg-slate-200 dark:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300">
                           <button
                             type="button"
                             onClick={() => handlePropertyTaxTypeToggle("percent")}
-                            className={`px-1.5 py-0.5 text-[9px] font-bold rounded ${
+                            className={`px-2 py-0.5 text-xs font-semibold rounded-md transition-all ${
                               propertyTaxType === "percent"
-                                ? "bg-white dark:bg-zinc-700 text-blue-600 shadow-xs"
-                                : "text-zinc-500"
+                                ? "bg-white dark:bg-slate-700 text-blue-700 shadow-xs"
+                                : "text-slate-600"
                             }`}
                           >
                             %
@@ -711,10 +700,10 @@ export function MortgageCalculator() {
                           <button
                             type="button"
                             onClick={() => handlePropertyTaxTypeToggle("amount")}
-                            className={`px-1.5 py-0.5 text-[9px] font-bold rounded ${
+                            className={`px-2 py-0.5 text-xs font-semibold rounded-md transition-all ${
                               propertyTaxType === "amount"
-                                ? "bg-white dark:bg-zinc-700 text-blue-600 shadow-xs"
-                                : "text-zinc-500"
+                                ? "bg-white dark:bg-slate-700 text-blue-700 shadow-xs"
+                                : "text-slate-600"
                             }`}
                           >
                             $
@@ -800,16 +789,14 @@ export function MortgageCalculator() {
               </div>
 
               {/* Annual Tax & Cost Increase Collapsible */}
-              <div className="border-t border-zinc-100 dark:border-zinc-800 pt-3">
+              <div className="border-t border-slate-200/80 dark:border-slate-800 pt-4">
                 <button
                   type="button"
                   onClick={() => setShowIncreases(!showIncreases)}
-                  className="w-full flex items-center justify-between text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 hover:text-blue-600 py-1"
+                  className="w-full flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 hover:text-blue-600 py-1 cursor-pointer"
                 >
-                  <span className="flex items-center gap-1.5">
-                    <TrendingUp className="h-3.5 w-3.5 text-amber-500" /> Annual Tax & Cost Increase (%)
-                  </span>
-                  {showIncreases ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+                  <span>Annual Tax & Cost Increase (%)</span>
+                  {showIncreases ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
 
                 {showIncreases && (
@@ -875,16 +862,14 @@ export function MortgageCalculator() {
               </div>
 
               {/* Extra Payments Section */}
-              <div className="border-t border-zinc-100 dark:border-zinc-800 pt-3">
+              <div className="border-t border-slate-200/80 dark:border-slate-800 pt-4">
                 <button
                   type="button"
                   onClick={() => setShowExtraPayments(!showExtraPayments)}
-                  className="w-full flex items-center justify-between text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400 hover:text-blue-600 py-1"
+                  className="w-full flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 hover:text-blue-600 py-1 cursor-pointer"
                 >
-                  <span className="flex items-center gap-1.5">
-                    <PlusCircle className="h-3.5 w-3.5 text-emerald-500" /> Extra Principal Payments
-                  </span>
-                  {showExtraPayments ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+                  <span>Extra Principal Payments</span>
+                  {showExtraPayments ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
 
                 {showExtraPayments && (
@@ -902,7 +887,7 @@ export function MortgageCalculator() {
                           step={50}
                           value={extraMonthlyPayment}
                           onChange={(e) => setExtraMonthlyPayment(Math.max(0, Number(e.target.value)))}
-                          className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                          className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                         />
                       </div>
                       <div className="col-span-7 flex items-center gap-1 mt-4">
@@ -940,7 +925,7 @@ export function MortgageCalculator() {
                           step={100}
                           value={extraYearlyPayment}
                           onChange={(e) => setExtraYearlyPayment(Math.max(0, Number(e.target.value)))}
-                          className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                          className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                         />
                       </div>
                       <div className="col-span-7 flex items-center gap-1 mt-4">
@@ -982,13 +967,13 @@ export function MortgageCalculator() {
                         </Button>
                       </div>
 
-                      <div className="space-y-1.5 max-h-60 overflow-y-auto pr-1">
+                      <div className="space-y-2">
                         {extraOneTimePayments.map((row, idx) => (
                           <div
                             key={row.id}
                             className="flex items-center gap-1.5 p-1.5 rounded-lg bg-zinc-50/80 dark:bg-zinc-800/50 border border-zinc-200/80 dark:border-zinc-700/80"
                           >
-                            <span className="text-[10px] font-mono text-zinc-400 w-4 text-center">
+                            <span className="text-[10px] font-sans tabular-nums text-zinc-400 w-4 text-center">
                               {idx + 1}.
                             </span>
                             <div className="relative flex-1">
@@ -1025,7 +1010,7 @@ export function MortgageCalculator() {
                               onChange={(e) =>
                                 handleOneTimePaymentChange(row.id, "year", Number(e.target.value))
                               }
-                              className="h-7 w-16 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-[10px] px-1"
+                              className="h-7 w-16 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-[10px] px-1"
                             />
                             {extraOneTimePayments.length > 1 && (
                               <button
@@ -1046,132 +1031,122 @@ export function MortgageCalculator() {
               </div>
 
               {/* Biweekly Toggle Checkbox */}
-              <div className="border-t border-zinc-100 dark:border-zinc-800 pt-3">
+              <div className="border-t border-slate-200/80 dark:border-slate-800 pt-4">
                 <label className="flex items-center gap-2 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={showBiweekly}
                     onChange={(e) => setShowBiweekly(e.target.checked)}
-                    className="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
+                    className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                   />
-                  <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                  <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
                     Show Biweekly Payback Results
                   </span>
                 </label>
               </div>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          </div>
 
         {/* Right Results Panel (Col 7) */}
         <div className="lg:col-span-7 space-y-5">
-          {/* 1. Large Monthly Payment Card */}
-          <Card className="border border-blue-100 dark:border-blue-900/50 bg-gradient-to-br from-blue-50/70 via-white to-indigo-50/50 dark:from-zinc-900 dark:via-zinc-900 dark:to-blue-950/30 shadow-md">
-            <CardContent className="p-6 space-y-4">
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs uppercase font-bold tracking-wider text-blue-600 dark:text-blue-400">
-                    Total Estimated Monthly Payment
-                  </span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsSaveModalOpen(true)}
-                    className="h-6 text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-100/50 dark:hover:bg-blue-950 gap-1 px-2"
-                  >
-                    <Bookmark className="h-3 w-3" /> Save
-                  </Button>
-                </div>
-                <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums mt-2 tracking-tight">
-                  {formatCurrency(results.totalInitialMonthlyPayment)}
-                </div>
+          {/* 1. Large Monthly Payment Hero Card */}
+          <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/40 dark:from-slate-900 dark:to-blue-950/40 border border-blue-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs space-y-4">
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs uppercase font-bold tracking-wider text-blue-700 dark:text-blue-400">
+                  Total Estimated Monthly Payment
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setIsSaveModalOpen(true)}
+                  className="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
+                >
+                  <Bookmark className="h-3.5 w-3.5" /> Save
+                </button>
               </div>
+              <div className="text-4xl sm:text-5xl font-extrabold text-blue-700 dark:text-blue-400 font-sans tabular-nums mt-2 tracking-tight">
+                {formatCurrency(results.totalInitialMonthlyPayment)}
+              </div>
+            </div>
 
-              {/* Monthly Breakdown Badges */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-blue-100 dark:border-zinc-800">
-                <div className="bg-white/80 dark:bg-zinc-800/80 p-2 rounded-lg border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">P&I Base</span>
-                  <span className="text-xs font-bold font-sans tabular-nums text-blue-600 dark:text-blue-400">
-                    {formatCurrency(results.monthlyPrincipalAndInterest)}
-                  </span>
-                </div>
-                <div className="bg-white/80 dark:bg-zinc-800/80 p-2 rounded-lg border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Property Tax</span>
-                  <span className="text-xs font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
-                    {formatCurrency(results.monthlyPropertyTax)}
-                  </span>
-                </div>
-                <div className="bg-white/80 dark:bg-zinc-800/80 p-2 rounded-lg border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Home Insurance</span>
-                  <span className="text-xs font-bold font-sans tabular-nums text-amber-600 dark:text-amber-400">
-                    {formatCurrency(results.monthlyInsurance)}
-                  </span>
-                </div>
-                <div className="bg-white/80 dark:bg-zinc-800/80 p-2 rounded-lg border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Other Costs</span>
-                  <span className="text-xs font-bold font-sans tabular-nums text-purple-600 dark:text-purple-400">
-                    {formatCurrency(
-                      results.monthlyPmi + results.monthlyHoa + (results.monthlyOtherCosts / 12)
-                    )}
-                  </span>
-                </div>
+            {/* Monthly Breakdown Sub-Metric Chips */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-blue-100 dark:border-slate-800">
+              <div className="bg-white/90 dark:bg-slate-800/80 p-3 rounded-xl border border-blue-100 dark:border-slate-700/60 shadow-2xs">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-0.5">P&I Base</span>
+                <span className="text-sm font-extrabold font-sans tabular-nums text-blue-700 dark:text-blue-400">
+                  {formatCurrency(results.monthlyPrincipalAndInterest)}
+                </span>
               </div>
-            </CardContent>
-          </Card>
+              <div className="bg-white/90 dark:bg-slate-800/80 p-3 rounded-xl border border-emerald-100 dark:border-slate-700/60 shadow-2xs">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-0.5">Property Tax</span>
+                <span className="text-sm font-extrabold font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
+                  {formatCurrency(results.monthlyPropertyTax)}
+                </span>
+              </div>
+              <div className="bg-white/90 dark:bg-slate-800/80 p-3 rounded-xl border border-amber-100 dark:border-slate-700/60 shadow-2xs">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-0.5">Home Insurance</span>
+                <span className="text-sm font-extrabold font-sans tabular-nums text-amber-600 dark:text-amber-400">
+                  {formatCurrency(results.monthlyInsurance)}
+                </span>
+              </div>
+              <div className="bg-white/90 dark:bg-slate-800/80 p-3 rounded-xl border border-purple-100 dark:border-slate-700/60 shadow-2xs">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-0.5">Other Costs</span>
+                <span className="text-sm font-extrabold font-sans tabular-nums text-purple-600 dark:text-purple-400">
+                  {formatCurrency(
+                    results.monthlyPmi + results.monthlyHoa + (results.monthlyOtherCosts / 12)
+                  )}
+                </span>
+              </div>
+            </div>
+          </div>
 
           {/* Biweekly Results Card (Rendered if Show Biweekly is Checked) */}
           {showBiweekly && (
-            <Card className="border border-emerald-200 dark:border-emerald-900 bg-emerald-50/60 dark:bg-emerald-950/20 shadow-xs">
-              <CardContent className="p-4 space-y-3">
-                <div className="flex items-center justify-between border-b border-emerald-200 dark:border-emerald-900/60 pb-2">
-                  <div className="flex items-center gap-2">
-                    <RefreshCw className="h-4 w-4 text-emerald-600 dark:text-emerald-400 animate-spin-slow" />
-                    <span className="text-xs uppercase font-bold text-emerald-900 dark:text-emerald-200">
-                      Biweekly Payback Results Summary
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-sans tabular-nums text-emerald-700 dark:text-emerald-300 font-bold bg-emerald-100 dark:bg-emerald-900 px-2 py-0.5 rounded">
-                    26 Pay Periods / Yr
+            <div className="bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 rounded-2xl p-5 shadow-xs space-y-3">
+              <div className="flex items-center justify-between border-b border-emerald-200 dark:border-emerald-900/60 pb-2.5">
+                <span className="text-xs uppercase font-bold text-emerald-900 dark:text-emerald-200 tracking-wider">
+                  Biweekly Payback Results Summary
+                </span>
+                <span className="text-xs font-sans tabular-nums text-emerald-700 dark:text-emerald-300 font-bold bg-emerald-100 dark:bg-emerald-900 px-2.5 py-0.5 rounded-full">
+                  26 Pay Periods / Yr
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div>
+                  <span className="text-xs text-emerald-800 dark:text-emerald-400 block font-medium">
+                    Biweekly Payment
+                  </span>
+                  <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-sans tabular-nums">
+                    {formatCurrency(results.biweeklyPayment)}
                   </span>
                 </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <div>
-                    <span className="text-[10px] text-emerald-800 dark:text-emerald-400 block font-medium">
-                      Biweekly Payment
-                    </span>
-                    <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-sans tabular-nums">
-                      {formatCurrency(results.biweeklyPayment)}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-emerald-800 dark:text-emerald-400 block font-medium">
-                      Biweekly Payoff Date
-                    </span>
-                    <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-sans tabular-nums">
-                      {results.biweeklyPayoffDate}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-emerald-800 dark:text-emerald-400 block font-medium">
-                      Biweekly Total Interest
-                    </span>
-                    <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-sans tabular-nums">
-                      {formatCurrency(results.biweeklyTotalInterest)}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-emerald-800 dark:text-emerald-400 block font-medium">
-                      Interest Savings
-                    </span>
-                    <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-sans tabular-nums">
-                      {formatCurrency(results.biweeklyInterestSavings)}
-                    </span>
-                  </div>
+                <div>
+                  <span className="text-xs text-emerald-800 dark:text-emerald-400 block font-medium">
+                    Biweekly Payoff Date
+                  </span>
+                  <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-sans tabular-nums">
+                    {results.biweeklyPayoffDate}
+                  </span>
                 </div>
-              </CardContent>
-            </Card>
+                <div>
+                  <span className="text-xs text-emerald-800 dark:text-emerald-400 block font-medium">
+                    Biweekly Total Interest
+                  </span>
+                  <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-sans tabular-nums">
+                    {formatCurrency(results.biweeklyTotalInterest)}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-xs text-emerald-800 dark:text-emerald-400 block font-medium">
+                    Interest Savings
+                  </span>
+                  <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-sans tabular-nums">
+                    {formatCurrency(results.biweeklyInterestSavings)}
+                  </span>
+                </div>
+              </div>
+            </div>
           )}
 
           {/* 2. Summary Statistics Cards */}
@@ -1220,44 +1195,44 @@ export function MortgageCalculator() {
           )}
 
           {/* 3. Visual Charts & Donut Section with Tab Switcher */}
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-xs space-y-3">
-            <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
                 Visual Analytics & Charts
               </h3>
-              <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-zinc-200 dark:border-zinc-700">
+              <div className="inline-flex p-1 bg-slate-200/80 dark:bg-slate-800 rounded-xl">
                 <button
                   type="button"
                   onClick={() => setActiveChartTab("doughnut")}
-                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors ${
+                  className={`px-4 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                     activeChartTab === "doughnut"
-                      ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
-                      : "text-zinc-500"
+                      ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
                   }`}
                 >
-                  <PieIcon className="h-3 w-3" /> Doughnut
+                  Doughnut
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveChartTab("balance")}
-                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors ${
+                  className={`px-4 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                     activeChartTab === "balance"
-                      ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
-                      : "text-zinc-500"
+                      ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
                   }`}
                 >
-                  <BarChart2 className="h-3 w-3" /> Balance Line
+                  Balance Line
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveChartTab("area")}
-                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors ${
+                  className={`px-4 py-1.5 text-xs font-semibold rounded-lg transition-all ${
                     activeChartTab === "area"
-                      ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
-                      : "text-zinc-500"
+                      ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
                   }`}
                 >
-                  <TrendingUp className="h-3 w-3" /> Principal vs Interest
+                  Principal vs Interest
                 </button>
               </div>
             </div>
@@ -1311,26 +1286,26 @@ export function MortgageCalculator() {
                         <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: item.color }} />
                         {item.category}
                       </TableCell>
-                      <TableCell className="text-xs font-mono font-medium text-right text-zinc-800 dark:text-zinc-200">
+                      <TableCell className="text-xs font-sans tabular-nums font-medium text-right text-zinc-800 dark:text-zinc-200">
                         {formatCurrency(item.monthlyFirstYear)}
                       </TableCell>
-                      <TableCell className="text-xs font-mono font-semibold text-right text-zinc-900 dark:text-zinc-100">
+                      <TableCell className="text-xs font-sans tabular-nums font-semibold text-right text-zinc-900 dark:text-zinc-100">
                         {formatCurrency(item.totalLifetime)}
                       </TableCell>
-                      <TableCell className="text-xs font-mono text-right text-zinc-500">
+                      <TableCell className="text-xs font-sans tabular-nums text-right text-zinc-500">
                         {item.percentageOfTotal.toFixed(1)}%
                       </TableCell>
                     </TableRow>
                   ))}
                   <TableRow className="border-t-2 border-zinc-200 dark:border-zinc-700 bg-zinc-50/80 dark:bg-zinc-800/80 font-bold">
                     <TableCell className="text-xs text-zinc-900 dark:text-zinc-100">Total Out of Pocket</TableCell>
-                    <TableCell className="text-xs font-mono text-right text-blue-600 dark:text-blue-400">
+                    <TableCell className="text-xs font-sans tabular-nums text-right text-blue-600 dark:text-blue-400">
                       {formatCurrency(results.totalInitialMonthlyPayment)}
                     </TableCell>
-                    <TableCell className="text-xs font-mono text-right text-blue-600 dark:text-blue-400">
+                    <TableCell className="text-xs font-sans tabular-nums text-right text-blue-600 dark:text-blue-400">
                       {formatCurrency(results.totalCost)}
                     </TableCell>
-                    <TableCell className="text-xs font-mono text-right text-blue-600 dark:text-blue-400">
+                    <TableCell className="text-xs font-sans tabular-nums text-right text-blue-600 dark:text-blue-400">
                       100.0%
                     </TableCell>
                   </TableRow>
@@ -1397,7 +1372,7 @@ export function MortgageCalculator() {
               <form onSubmit={handleSaveCalculation} className="space-y-3 pt-1">
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700/80 text-xs">
                   <span className="text-zinc-500 block">Current Calculation Summary:</span>
-                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-mono">
+                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-sans tabular-nums">
                     Monthly Pay: {formatCurrency(results.totalInitialMonthlyPayment)}
                   </span>
                   <span className="text-[11px] text-zinc-500">
@@ -1468,7 +1443,7 @@ export function MortgageCalculator() {
                         <span className="font-bold text-zinc-900 dark:text-zinc-100 block">
                           {item.name}
                         </span>
-                        <span className="text-[10px] text-zinc-400 block font-mono">
+                        <span className="text-[10px] text-zinc-400 block font-sans tabular-nums">
                           {item.description} • {formatCurrency(item.monthlyPayment)}/mo • {item.dateSaved}
                         </span>
                       </div>

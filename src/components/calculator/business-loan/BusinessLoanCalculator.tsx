@@ -274,7 +274,7 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Real APR:</span>
-          <span className="text-indigo-600 dark:text-indigo-400 font-mono text-sm">
+          <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-sm">
             {loanResults.realAprPercent}%
           </span>
         </div>
@@ -357,7 +357,7 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
                     value={loanAmountInput}
                     onChange={(e) => setLoanAmountInput(e.target.value)}
                     placeholder="e.g. 10000"
-                    className="text-xs font-mono h-9 px-3"
+                    className="text-xs font-sans tabular-nums h-9 px-3"
                   />
                 </div>
 
@@ -369,7 +369,7 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
                       value={interestRateInput}
                       onChange={(e) => setInterestRateInput(e.target.value)}
                       placeholder="e.g. 10.0"
-                      className="text-xs font-mono h-9 px-3"
+                      className="text-xs font-sans tabular-nums h-9 px-3"
                     />
                   </div>
                   <div className="space-y-1">
@@ -378,7 +378,7 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
                       type="number"
                       value={loanTermYearsInput}
                       onChange={(e) => setLoanTermYearsInput(e.target.value)}
-                      className="text-xs font-mono h-9 px-3"
+                      className="text-xs font-sans tabular-nums h-9 px-3"
                     />
                   </div>
                 </div>
@@ -393,7 +393,7 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
                         type="number"
                         value={originationFeeInput}
                         onChange={(e) => setOriginationFeeInput(e.target.value)}
-                        className="h-7 text-xs font-mono px-2"
+                        className="h-7 text-xs font-sans tabular-nums px-2"
                       />
                     </div>
                     <div>
@@ -402,7 +402,7 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
                         type="number"
                         value={documentationFeeInput}
                         onChange={(e) => setDocumentationFeeInput(e.target.value)}
-                        className="h-7 text-xs font-mono px-2"
+                        className="h-7 text-xs font-sans tabular-nums px-2"
                       />
                     </div>
                     <div>
@@ -411,7 +411,7 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
                         type="number"
                         value={otherFeesInput}
                         onChange={(e) => setOtherFeesInput(e.target.value)}
-                        className="h-7 text-xs font-mono px-2"
+                        className="h-7 text-xs font-sans tabular-nums px-2"
                       />
                     </div>
                   </div>
@@ -448,7 +448,7 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-mono mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-sans tabular-nums mb-2">
                 {fmt(loanResults.paybackAmount)}
               </div>
 
@@ -507,7 +507,7 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
           </div>
 
           <div className="overflow-x-auto max-h-96">
-            <table className="w-full text-left text-xs font-mono">
+            <table className="w-full text-left text-xs font-sans tabular-nums">
               <thead className="bg-zinc-50 dark:bg-zinc-800/60 sticky top-0 font-sans font-bold text-zinc-700 dark:text-zinc-300">
                 <tr>
                   <th className="p-2.5">Month</th>
@@ -568,23 +568,23 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
 
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">SBA Loan Amount ($)</label>
-                <Input type="number" value={sbaAmountInput} onChange={(e) => setSbaAmountInput(e.target.value)} className="text-xs font-mono h-9 px-3" />
+                <Input type="number" value={sbaAmountInput} onChange={(e) => setSbaAmountInput(e.target.value)} className="text-xs font-sans tabular-nums h-9 px-3" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">Interest Rate (%)</label>
-                  <Input type="number" value={sbaRateInput} onChange={(e) => setSbaRateInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                  <Input type="number" value={sbaRateInput} onChange={(e) => setSbaRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">Term (Years)</label>
-                  <Input type="number" value={sbaTermInput} onChange={(e) => setSbaTermInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                  <Input type="number" value={sbaTermInput} onChange={(e) => setSbaTermInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-amber-900 dark:text-amber-200 text-sm block border-b pb-1">
                 SBA Program Estimated Costs
@@ -599,7 +599,7 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
               </div>
               <div className="flex justify-between font-sans text-zinc-600 dark:text-zinc-400">
                 <span>Total SBA Loan Cost:</span>
-                <span className="font-bold font-mono">{fmt(sbaResults.totalCostOfSbaLoan)}</span>
+                <span className="font-bold font-sans tabular-nums">{fmt(sbaResults.totalCostOfSbaLoan)}</span>
               </div>
             </div>
           </div>
@@ -617,23 +617,23 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
             <div className="space-y-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Annual Net Operating Income (NOI $)</label>
-                <Input type="number" value={dscrNoiInput} onChange={(e) => setDscrNoiInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={dscrNoiInput} onChange={(e) => setDscrNoiInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">Current Debt ($/yr)</label>
-                  <Input type="number" value={dscrCurrentDebtInput} onChange={(e) => setDscrCurrentDebtInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                  <Input type="number" value={dscrCurrentDebtInput} onChange={(e) => setDscrCurrentDebtInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">New Loan Debt ($/yr)</label>
-                  <Input type="number" value={dscrNewDebtInput} onChange={(e) => setDscrNewDebtInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                  <Input type="number" value={dscrNewDebtInput} onChange={(e) => setDscrNewDebtInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-indigo-900 dark:text-indigo-200 text-sm block border-b pb-1">
                 DSCR Commercial Underwriting Result

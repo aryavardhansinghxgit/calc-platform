@@ -13,7 +13,7 @@ export function DiceRollerContent() {
           For any single $n$-sided die (denoted as $1dn$), the probability $P(X = k)$ of rolling any specific face value $k$ is strictly uniform:
         </p>
 
-        <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 font-mono text-sm text-center font-bold shadow-xs">
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs">
           {"P(X = k) = 1 / n,   for k ∈ {1, 2, ..., n}"}
         </div>
 
@@ -25,7 +25,7 @@ export function DiceRollerContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
             <h4 className="font-extrabold text-blue-700 dark:text-blue-400 text-xs uppercase tracking-wider">Expected Value (Mean μ) Formula</h4>
-            <div className="text-center font-mono font-extrabold text-slate-900 dark:text-zinc-100 py-1">
+            <div className="text-center font-sans tabular-nums font-extrabold text-slate-900 dark:text-zinc-100 py-1">
               {"E[X] = (n + 1) / 2"}
             </div>
             <p className="text-xs text-slate-600 dark:text-zinc-400">
@@ -35,7 +35,7 @@ export function DiceRollerContent() {
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
             <h4 className="font-extrabold text-blue-700 dark:text-blue-400 text-xs uppercase tracking-wider">Theoretical Variance (σ²) Formula</h4>
-            <div className="text-center font-mono font-extrabold text-slate-900 dark:text-zinc-100 py-1">
+            <div className="text-center font-sans tabular-nums font-extrabold text-slate-900 dark:text-zinc-100 py-1">
               {"Var(X) = (n² - 1) / 12"}
             </div>
             <p className="text-xs text-slate-600 dark:text-zinc-400">
@@ -55,7 +55,7 @@ export function DiceRollerContent() {
           Mathematically, the exact number of combinations yielding a specific sum $S$ when rolling $m$ dice with $n$ sides is determined by expanding the polynomial generating function $G(x)$:
         </p>
 
-        <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs">
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs">
           {"G(x) = [(x + x² + ... + xⁿ) / n]ᵐ = [xᵐ (1 - xⁿ)ᵐ] / [nᵐ (1 - x)ᵐ]"}
         </div>
 
@@ -75,40 +75,40 @@ export function DiceRollerContent() {
             </thead>
             <tbody>
               <tr>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono font-bold">2 or 12</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">1 / 36</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">(1+1) or (6+6)</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">2.78%</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-bold">2 or 12</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">1 / 36</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">(1+1) or (6+6)</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">2.78%</td>
               </tr>
               <tr>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono font-bold">3 or 11</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">2 / 36</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">(1+2, 2+1) or (5+6, 6+5)</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">5.56%</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-bold">3 or 11</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">2 / 36</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">(1+2, 2+1) or (5+6, 6+5)</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">5.56%</td>
               </tr>
               <tr>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono font-bold">4 or 10</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">3 / 36</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">(1+3, 2+2, 3+1) or (4+6, 5+5, 6+4)</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">8.33%</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-bold">4 or 10</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">3 / 36</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">(1+3, 2+2, 3+1) or (4+6, 5+5, 6+4)</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">8.33%</td>
               </tr>
               <tr>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono font-bold">5 or 9</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">4 / 36</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">(1+4, 2+3, 3+2, 4+1) etc.</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">11.11%</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-bold">5 or 9</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">4 / 36</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">(1+4, 2+3, 3+2, 4+1) etc.</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">11.11%</td>
               </tr>
               <tr>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono font-bold">6 or 8</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">5 / 36</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">(1+5, 2+4, 3+3, 4+2, 5+1) etc.</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">13.89%</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-bold">6 or 8</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">5 / 36</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">(1+5, 2+4, 3+3, 4+2, 5+1) etc.</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">13.89%</td>
               </tr>
               <tr className="bg-emerald-50/50 dark:bg-emerald-950/30">
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono font-extrabold text-emerald-700 dark:text-emerald-300">7 (Peak)</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono font-extrabold text-emerald-700 dark:text-emerald-300">6 / 36</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono font-bold text-emerald-700 dark:text-emerald-300">(1+6, 2+5, 3+4, 4+3, 5+2, 6+1)</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono font-extrabold text-emerald-700 dark:text-emerald-300">16.67%</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-extrabold text-emerald-700 dark:text-emerald-300">7 (Peak)</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-extrabold text-emerald-700 dark:text-emerald-300">6 / 36</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-bold text-emerald-700 dark:text-emerald-300">(1+6, 2+5, 3+4, 4+3, 5+2, 6+1)</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-extrabold text-emerald-700 dark:text-emerald-300">16.67%</td>
               </tr>
             </tbody>
           </table>
@@ -159,7 +159,7 @@ export function DiceRollerContent() {
             <p className="leading-relaxed">
               When rolling with Advantage in D&amp;D 5e (rolling 2d20 and keeping the higher value), the cumulative probability of rolling at least target $k$ (from 1 to 20) is governed by:
             </p>
-            <div className="p-2.5 bg-white dark:bg-zinc-800 rounded border border-slate-200 dark:border-zinc-700 font-mono text-center font-bold text-blue-700 dark:text-blue-300">
+            <div className="p-2.5 bg-white dark:bg-zinc-800 rounded border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-center font-bold text-blue-700 dark:text-blue-300">
               {"P(Advantage ≥ k) = 1 - [(k - 1) / 20]²"}
             </div>
             <p className="leading-relaxed">
@@ -182,15 +182,15 @@ export function DiceRollerContent() {
           4. Cryptographic PRNG vs. Standard Pseudo-Random Number Generators
         </h3>
         <p className="leading-relaxed">
-          Traditional web applications rely on standard programming environment functions like Javascript's <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 font-mono text-xs">Math.random()</code>. 
-          Most browser engines implement <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 font-mono text-xs">Math.random()</code> using algorithm families such as xorshift128+ or Linear Congruential Generators (LCG). 
+          Traditional web applications rely on standard programming environment functions like Javascript's <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 font-sans tabular-nums text-xs">Math.random()</code>. 
+          Most browser engines implement <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 font-sans tabular-nums text-xs">Math.random()</code> using algorithm families such as xorshift128+ or Linear Congruential Generators (LCG). 
           While fast, these pseudo-random algorithms are deterministic and can exhibit subtle statistical periodicities or seed predictability over long sequences.
         </p>
 
         <div className="p-4 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 space-y-2 text-xs">
           <h4 className="font-extrabold text-emerald-900 dark:text-emerald-200 text-sm">How Our CSPRNG Guarantees True Fairness</h4>
           <p className="leading-relaxed">
-            Our Dice Station engine utilizes the OS-level <strong>Cryptographically Secure Pseudo-Random Number Generator (CSPRNG)</strong> accessed via <code className="px-1.5 py-0.5 rounded bg-white dark:bg-zinc-800 font-mono font-bold">window.crypto.getRandomValues()</code>. 
+            Our Dice Station engine utilizes the OS-level <strong>Cryptographically Secure Pseudo-Random Number Generator (CSPRNG)</strong> accessed via <code className="px-1.5 py-0.5 rounded bg-white dark:bg-zinc-800 font-sans tabular-nums font-bold">window.crypto.getRandomValues()</code>. 
             CSPRNG engines continuously sample hardware entropy pools (such as CPU clock phase jitters, interrupt timing, and thermal ambient noise). 
             This guarantees zero statistical bias, uniform modulo scaling without bias, and absolute non-predictability for every die face rolled.
           </p>

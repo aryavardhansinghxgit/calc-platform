@@ -111,7 +111,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
                   <span className="text-[10px] uppercase font-bold text-blue-600 tracking-wider">
                     Monthly Lease Payment
                   </span>
-                  <div className="text-xl font-black text-blue-900 font-mono mt-0.5">
+                  <div className="text-xl font-black text-blue-900 font-sans tabular-nums mt-0.5">
                     {formatCurrency(results.monthlyLeasePayment)}
                   </div>
                   <span className="text-[10px] text-blue-700 font-medium">
@@ -123,7 +123,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
                   <span className="text-[10px] uppercase font-bold text-emerald-600 tracking-wider">
                     Total Out-of-Pocket Lease
                   </span>
-                  <div className="text-xl font-black text-emerald-900 font-mono mt-0.5">
+                  <div className="text-xl font-black text-emerald-900 font-sans tabular-nums mt-0.5">
                     {formatCurrency(results.totalLeaseCost)}
                   </div>
                   <span className="text-[10px] text-emerald-700 font-medium">
@@ -135,7 +135,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
                   <span className="text-[10px] uppercase font-bold text-purple-600 tracking-wider">
                     Residual Buyout Price
                   </span>
-                  <div className="text-xl font-black text-purple-900 font-mono mt-0.5">
+                  <div className="text-xl font-black text-purple-900 font-sans tabular-nums mt-0.5">
                     {formatCurrency(results.residualValue)}
                   </div>
                   <span className="text-[10px] text-purple-700 font-bold">
@@ -151,7 +151,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
                   <h3 className="font-bold text-zinc-900 uppercase text-[11px] border-b border-zinc-200 pb-1.5">
                     Lease Parameters
                   </h3>
-                  <div className="space-y-1.5 font-mono text-[11px]">
+                  <div className="space-y-1.5 font-sans tabular-nums text-[11px]">
                     <div className="flex justify-between">
                       <span className="text-zinc-500 font-sans">Vehicle Negotiated Price:</span>
                       <span className="font-bold text-zinc-900">{formatCurrency(Number(inputs.autoPrice || 0))}</span>
@@ -188,7 +188,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
                   <h3 className="font-bold text-zinc-900 uppercase text-[11px] border-b border-zinc-200 pb-1.5">
                     Monthly Payment Breakdown
                   </h3>
-                  <div className="space-y-1.5 font-mono text-[11px]">
+                  <div className="space-y-1.5 font-sans tabular-nums text-[11px]">
                     <div className="flex justify-between">
                       <span className="text-zinc-500 font-sans">Monthly Depreciation:</span>
                       <span className="font-bold text-zinc-900">{formatCurrency(results.monthlyDepreciation)}</span>
@@ -228,7 +228,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
               </div>
 
               {/* Formula Reference */}
-              <div className="border border-zinc-200 rounded-xl p-3.5 bg-zinc-50/50 text-[10px] text-zinc-500 space-y-1 font-mono">
+              <div className="border border-zinc-200 rounded-xl p-3.5 bg-zinc-50/50 text-[10px] text-zinc-500 space-y-1 font-sans tabular-nums">
                 <span className="font-bold text-zinc-900 block font-sans text-xs">Applied Mathematical Formulas:</span>
                 <p>• Monthly Depreciation = (Adjusted Cap Cost - Residual Value) ÷ Lease Term</p>
                 <p>• Monthly Rent Charge = (Adjusted Cap Cost + Residual Value) × Money Factor</p>

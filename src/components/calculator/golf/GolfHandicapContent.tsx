@@ -43,7 +43,7 @@ export function GolfHandicapContent() {
           Every round posted generates a <strong>Score Differential</strong>, which measures how well you played relative to the difficulty of the course and tees:
         </p>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-mono text-xs my-2 text-center text-emerald-700 dark:text-emerald-300 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-emerald-700 dark:text-emerald-300 font-bold">
           Score Differential = (113 / Slope Rating) × (Adjusted Gross Score - Course Rating - PCC)
         </div>
 
@@ -61,7 +61,7 @@ export function GolfHandicapContent() {
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Adjustment / Calculation Rule</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans font-bold">3 Rounds</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">Lowest 1</td>

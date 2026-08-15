@@ -164,15 +164,15 @@ import { generateGenericReportData } from "@/lib/report-generator/generic-report
 // Lazy load heavy chart components
 const MortgagePieChart = dynamic(() => import("./charts/MortgagePieChart").then((m) => m.MortgagePieChart), {
   ssr: false,
-  loading: () => <div className="h-40 flex items-center justify-center text-xs text-zinc-400 font-mono">Loading chart...</div>,
+  loading: () => <div className="h-40 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">Loading chart...</div>,
 });
 const BalanceLineChart = dynamic(() => import("./charts/BalanceLineChart").then((m) => m.BalanceLineChart), {
   ssr: false,
-  loading: () => <div className="h-40 flex items-center justify-center text-xs text-zinc-400 font-mono">Loading line chart...</div>,
+  loading: () => <div className="h-40 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">Loading line chart...</div>,
 });
 const AmortizationAreaChart = dynamic(() => import("./charts/AmortizationAreaChart").then((m) => m.AmortizationAreaChart), {
   ssr: false,
-  loading: () => <div className="h-40 flex items-center justify-center text-xs text-zinc-400 font-mono">Loading area chart...</div>,
+  loading: () => <div className="h-40 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">Loading area chart...</div>,
 });
 
 export interface CalculatorLayoutProps {
@@ -397,7 +397,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const CustomChart = definition.ChartComponent;
 
   return (
-    <div className="space-y-3 max-w-[1536px] w-full mx-auto py-1">
+    <div className="space-y-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1">
       {/* 1. Accessible Breadcrumbs Navigation */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
         <Link
@@ -417,10 +417,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         <span className="font-medium text-zinc-800 dark:text-zinc-200 truncate">{definition.title}</span>
       </nav>
 
-      {/* 2. Page Header & Quick Layout Grid (Col-8 Main | Col-4 Sidebar matching Screen 2) */}
+      {/* 2. Page Header & Quick Layout Grid (Col-9 Main | Col-3 Sidebar) */}
       <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Main Interactive Calculator Area (Col 8 / 9 on 2xl) */}
-        <div className="min-w-0 lg:col-span-8 2xl:col-span-9 space-y-4">
+        {/* Main Interactive Calculator Area (Col 9) */}
+        <div className="min-w-0 lg:col-span-9 space-y-4">
           <div>
             <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
               {definition.title}
@@ -703,63 +703,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
               </div>
             )}
           </CalculatorErrorBoundary>
-
-          {/* Collapsible Sections Below Main Calculator */}
-          <div className="space-y-2 pt-1">
-
-            {/* Formula */}
-            {definition.formulaDescription && (
-              <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden group">
-                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between gap-2 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
-                  <span className="min-w-0 flex flex-1 items-center gap-2">
-                    <CalcIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Formula & Calculation Method
-                  </span>
-                  <span className="text-[10px] text-blue-600 dark:text-blue-400 group-open:hidden font-mono">Expand +</span>
-                  <span className="text-[10px] text-zinc-400 hidden group-open:inline font-mono">Collapse -</span>
-                </summary>
-                <div className="px-4 pb-4 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                  <FormulaSection
-                    formula={definition.formulaDescription}
-                    explanation={`How ${definition.title} calculations work.`}
-                  />
-                </div>
-              </details>
-            )}
-
-            {/* Educational Content */}
-            {CustomContent && (
-              <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden group">
-                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between gap-2 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
-                  <span className="min-w-0 flex flex-1 items-center gap-2">
-                    <BookOpen className="h-4 w-4 text-blue-600 dark:text-blue-400" /> How {definition.title} Works — Guide & Examples
-                  </span>
-                  <span className="text-[10px] text-blue-600 dark:text-blue-400 group-open:hidden font-mono">Expand +</span>
-                  <span className="text-[10px] text-zinc-400 hidden group-open:inline font-mono">Collapse -</span>
-                </summary>
-                <div className="px-4 pb-4 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                  <CustomContent />
-                </div>
-              </details>
-            )}
-
-            {/* Related Calculators */}
-            <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden group">
-                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between gap-2 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
-                  <span className="min-w-0 flex flex-1 items-center gap-2">
-                  <CalcIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Related Calculators
-                </span>
-                <span className="text-[10px] text-blue-600 dark:text-blue-400 group-open:hidden font-mono">Expand +</span>
-                <span className="text-[10px] text-zinc-400 hidden group-open:inline font-mono">Collapse -</span>
-              </summary>
-              <div className="px-4 pb-4 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                <RelatedCalculators currentId={definition.id} category={definition.category} />
-              </div>
-            </details>
-          </div>
         </div>
 
-        {/* Right Sidebar: Quick Navigation & Search Index */}
-        <aside className="min-w-0 lg:col-span-4 2xl:col-span-3 space-y-4">
+        {/* Right Sidebar: Quick Navigation & Search Index (Sticky Top 20) */}
+        <aside className="min-w-0 lg:col-span-3 sticky top-20 space-y-4">
           {/* Quick Search and Category Index */}
           <div className="bg-card text-card-foreground border border-border rounded-xl p-3.5 shadow-xs space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
@@ -781,7 +728,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                 <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   {definition.category} Calculators
                 </h3>
-                <span className="text-[10px] font-mono text-current bg-muted px-1.5 py-0.5 rounded">
+                <span className="text-[10px] font-sans tabular-nums text-current bg-muted px-1.5 py-0.5 rounded">
                   {filteredSidebarCalculators.length}
                 </span>
               </div>
@@ -820,6 +767,42 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             </div>
           </div>
         </aside>
+      </div>
+
+      {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs text-slate-900 dark:text-slate-100">
+        {/* Formula & Calculation Method */}
+        {definition.formulaDescription && (
+          <div className="space-y-2">
+            <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              Formula & Calculation Method
+            </h3>
+            <FormulaSection
+              formula={definition.formulaDescription}
+              explanation={`How ${definition.title} calculations work.`}
+            />
+          </div>
+        )}
+
+        {/* Educational Content & Examples */}
+        {CustomContent && (
+          <div className="space-y-3 text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
+            <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              How {definition.title} Works — Guide & Examples
+            </h3>
+            <div className="prose prose-slate dark:prose-invert max-w-none text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
+              <CustomContent />
+            </div>
+          </div>
+        )}
+
+        {/* Related Calculators */}
+        <div className="space-y-2">
+          <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+            Related Calculators
+          </h3>
+          <RelatedCalculators currentId={definition.id} category={definition.category} />
+        </div>
       </div>
 
       {/* Generic Report Modal */}

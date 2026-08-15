@@ -649,7 +649,7 @@ export function BmiCalculator() {
                         <strong className="text-zinc-900 dark:text-zinc-100">{item.bmi} BMI</strong> ({item.category})
                         <span className="text-zinc-500 block text-[10px]">{item.timestamp}</span>
                       </div>
-                      <span className="font-mono text-zinc-600 dark:text-zinc-400">{item.weight}</span>
+                      <span className="font-sans tabular-nums text-zinc-600 dark:text-zinc-400">{item.weight}</span>
                     </div>
                   ))}
                 </div>

@@ -35,15 +35,15 @@ export function MileageContent() {
           To compute fuel economy manually from trip distance and fuel volume added at the pump:
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs rounded-xl">
           {"US MPG = Distance Traveled (Miles) / Fuel Added (Gallons)"}
         </div>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs rounded-xl">
           {"L/100km = (Fuel Consumed (Liters) × 100) / Distance Traveled (Kilometers)"}
         </div>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs rounded-xl">
           {"Cost Per Mile ($/mi) = Fuel Price per Gallon ($/gal) / US MPG"}
         </div>
 
@@ -64,18 +64,18 @@ export function MileageContent() {
             <tbody>
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-blue-600">15 MPG → 20 MPG (+5 MPG)</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">666.7 gal → 500.0 gal</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono font-bold text-emerald-600">166.7 Gallons Saved</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">666.7 gal → 500.0 gal</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-bold text-emerald-600">166.7 Gallons Saved</td>
               </tr>
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">30 MPG → 35 MPG (+5 MPG)</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">333.3 gal → 285.7 gal</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">47.6 Gallons Saved</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">333.3 gal → 285.7 gal</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">47.6 Gallons Saved</td>
               </tr>
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">40 MPG → 50 MPG (+10 MPG)</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">250.0 gal → 200.0 gal</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">50.0 Gallons Saved</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">250.0 gal → 200.0 gal</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">50.0 Gallons Saved</td>
               </tr>
             </tbody>
           </table>
@@ -86,7 +86,7 @@ export function MileageContent() {
         </p>
 
         <h3 className="text-xl font-bold text-slate-900 dark:text-white">C. Global Unit Conversion Formula Constants</h3>
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs rounded-xl">
           {"L/100km = 235.215 / US MPG = 282.481 / UK MPG"}
         </div>
       </section>
@@ -143,7 +143,7 @@ export function MileageContent() {
           Tax authorities (such as the Internal Revenue Service in the US) allow self-employed individuals, independent contractors, and business owners to deduct vehicle operating expenses using the <strong>Standard Mileage Rate</strong> ($0.67 per mile for business travel):
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs rounded-xl">
           {"Tax Reimbursement Claim ($) = Qualifying Business Miles Driven × Standard Allowance Rate ($/mi)"}
         </div>
       </section>
@@ -157,7 +157,7 @@ export function MileageContent() {
           To compare electric vehicles (EVs) with traditional gas-powered cars, the Environmental Protection Agency (EPA) established <strong>Miles Per Gallon Equivalent (MPGe)</strong> based on thermal energy equivalency:
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-mono text-sm text-center">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-sans tabular-nums text-sm text-center">
           {"1 Gallon of Gasoline Thermal Energy = 33.7 Kilowatt-Hours (kWh) of Electricity"}
         </div>
       </section>

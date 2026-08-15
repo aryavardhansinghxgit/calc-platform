@@ -26,7 +26,7 @@ export function RandomContent() {
         <p>
           In a true uniform random distribution over an interval [a, b], every single number in the range has an equal probability density function:
         </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
           {"f(x) = 1 / (b - a)   for a ≤ x ≤ b"}
         </div>
       </section>
@@ -61,7 +61,7 @@ export function RandomContent() {
         <p>
           To map a uniform random proportion r ∈ [0, 1) into an arbitrary range [Min, Max]:
         </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
           {"Random Value = Min + [r × (Max - Min)]"}
         </div>
         <p>
@@ -97,7 +97,7 @@ export function RandomContent() {
               <li>Random float r = 0.7321.</li>
               <li>Scale range: 1 + Math.floor(0.7321 × 6) = 1 + Math.floor(4.3926) = 1 + 4 = 5.</li>
             </ol>
-            <div className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">Result: 5</div>
+            <div className="text-xs font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Result: 5</div>
           </div>
 
           {/* INTERMEDIATE EXAMPLE */}
@@ -107,7 +107,7 @@ export function RandomContent() {
               <li>Initialize set = {"{}"}. Repeatedly sample integers between 1 and 49.</li>
               <li>Generated sample values: 7, 14, 23, 38, 42. No duplicate entries.</li>
             </ol>
-            <div className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">Result: 7, 14, 23, 38, 42</div>
+            <div className="text-xs font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Result: 7, 14, 23, 38, 42</div>
           </div>
 
           {/* ADVANCED EXAMPLE */}
@@ -118,7 +118,7 @@ export function RandomContent() {
               <li>Transform: Z = √(-2 ln 0.45) × cos(2π × 0.82) = 1.2636 × 0.3812 = +0.4817.</li>
               <li>Scale by desired mean (100) and std dev (15): 100 + (0.4817 × 15) = 107.23.</li>
             </ol>
-            <div className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">Result: 107.23 (Gaussian IQ Sample)</div>
+            <div className="text-xs font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Result: 107.23 (Gaussian IQ Sample)</div>
           </div>
         </div>
       </section>

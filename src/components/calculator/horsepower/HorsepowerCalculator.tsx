@@ -319,7 +319,7 @@ export function HorsepowerCalculator() {
                     type="number"
                     value={torqueInput}
                     onChange={(e) => setTorqueInput(Number(e.target.value))}
-                    className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -330,7 +330,7 @@ export function HorsepowerCalculator() {
                     step="100"
                     value={rpmInput}
                     onChange={(e) => setRpmInput(Number(e.target.value))}
-                    className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -379,7 +379,7 @@ export function HorsepowerCalculator() {
                     type="number"
                     value={vehicleWeight}
                     onChange={(e) => setVehicleWeight(Number(e.target.value))}
-                    className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -399,14 +399,14 @@ export function HorsepowerCalculator() {
                       step="0.1"
                       value={quarterMileET}
                       onChange={(e) => setQuarterMileET(Number(e.target.value))}
-                      className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                      className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                     />
                   ) : (
                     <Input
                       type="number"
                       value={trapSpeedMph}
                       onChange={(e) => setTrapSpeedMph(Number(e.target.value))}
-                      className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                      className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                     />
                   )}
                 </div>
@@ -428,7 +428,7 @@ export function HorsepowerCalculator() {
                     type="number"
                     value={vehicleWeight}
                     onChange={(e) => setVehicleWeight(Number(e.target.value))}
-                    className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -439,7 +439,7 @@ export function HorsepowerCalculator() {
                     step="0.1"
                     value={targetZeroSixty}
                     onChange={(e) => setTargetZeroSixty(Number(e.target.value))}
-                    className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -460,7 +460,7 @@ export function HorsepowerCalculator() {
                     type="number"
                     value={fromValue}
                     onChange={(e) => setFromValue(Number(e.target.value))}
-                    className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
                 <div className="space-y-1">
@@ -533,7 +533,7 @@ export function HorsepowerCalculator() {
                         type="number"
                         value={atmosphere.tempF}
                         onChange={(e) => setAtmosphere({ ...atmosphere, tempF: Number(e.target.value) })}
-                        className="h-8 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200"
+                        className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 border-zinc-200"
                       />
                     </div>
                     <div className="space-y-1">
@@ -543,7 +543,7 @@ export function HorsepowerCalculator() {
                         step="0.01"
                         value={atmosphere.pressureInHg}
                         onChange={(e) => setAtmosphere({ ...atmosphere, pressureInHg: Number(e.target.value) })}
-                        className="h-8 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200"
+                        className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 border-zinc-200"
                       />
                     </div>
                   </div>
@@ -570,7 +570,7 @@ export function HorsepowerCalculator() {
               <span className="text-[10px] font-bold uppercase tracking-wider text-amber-200 block">
                 Crankshaft Power Output
               </span>
-              <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-white">
+              <div className="text-3xl sm:text-4xl font-black font-sans tabular-nums tracking-tight text-white">
                 {result.crankBHP} BHP
               </div>
               <p className="text-[11px] text-amber-100 font-medium">
@@ -582,7 +582,7 @@ export function HorsepowerCalculator() {
               <span className="text-[10px] font-bold uppercase tracking-wider text-amber-200 block">
                 Converted Power Output
               </span>
-              <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-white">
+              <div className="text-3xl sm:text-4xl font-black font-sans tabular-nums tracking-tight text-white">
                 {result.convertedValue}
               </div>
               <p className="text-[11px] text-amber-100 font-medium">
@@ -595,7 +595,7 @@ export function HorsepowerCalculator() {
           <div className="bg-black/40 backdrop-blur-xs p-3 rounded-xl border border-white/20 space-y-2 text-xs">
             <div className="flex justify-between items-center text-[10px] font-bold text-amber-200">
               <span className="flex items-center gap-1"><Flame className="h-3 w-3 text-rose-400" /> Torque: {result.torqueLbFt} lb-ft</span>
-              <span className="text-amber-300 font-mono text-[9px] bg-amber-500/20 px-1.5 py-0.5 rounded border border-amber-400/40">
+              <span className="text-amber-300 font-sans tabular-nums text-[9px] bg-amber-500/20 px-1.5 py-0.5 rounded border border-amber-400/40">
                 5,252 RPM Crossing
               </span>
               <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-sky-400" /> Power: {result.crankBHP} HP</span>
@@ -695,11 +695,11 @@ export function HorsepowerCalculator() {
           <div className="grid grid-cols-2 gap-1.5 text-xs">
             <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
               <span className="text-[9px] uppercase font-bold text-amber-200 block">Power-to-Weight</span>
-              <span className="font-mono font-bold text-xs text-white">{result.hpPerTon} HP/ton ({result.lbPerHp} lb/HP)</span>
+              <span className="font-sans tabular-nums font-bold text-xs text-white">{result.hpPerTon} HP/ton ({result.lbPerHp} lb/HP)</span>
             </div>
             <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
               <span className="text-[9px] uppercase font-bold text-amber-200 block">Est 1/4-Mile ET</span>
-              <span className="font-mono font-bold text-xs text-white">{result.estimatedET}s @ {result.estimatedTrapSpeedMph} mph</span>
+              <span className="font-sans tabular-nums font-bold text-xs text-white">{result.estimatedET}s @ {result.estimatedTrapSpeedMph} mph</span>
             </div>
           </div>
         </div>

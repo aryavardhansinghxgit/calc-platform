@@ -319,7 +319,7 @@ export function TipCalculator() {
                     Bill Subtotal ({sym.trim()})
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-2.5 text-xs font-mono font-bold text-zinc-400">
+                    <span className="absolute left-3 top-2.5 text-xs font-sans tabular-nums font-bold text-zinc-400">
                       {sym.trim()}
                     </span>
                     <Input
@@ -328,7 +328,7 @@ export function TipCalculator() {
                       onChange={(e) => setSubtotal(Number(e.target.value))}
                       step={0.5}
                       min={0}
-                      className="pl-8 h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                      className="pl-8 h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                     />
                   </div>
                 </div>
@@ -343,7 +343,7 @@ export function TipCalculator() {
                     onChange={(e) => setTaxRatePct(Number(e.target.value))}
                     step={0.1}
                     min={0}
-                    className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                    className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                   />
                 </div>
               </div>
@@ -433,7 +433,7 @@ export function TipCalculator() {
                     >
                       -
                     </button>
-                    <span className="flex-1 text-center font-mono font-bold text-sm text-zinc-900 dark:text-zinc-100">
+                    <span className="flex-1 text-center font-sans tabular-nums font-bold text-sm text-zinc-900 dark:text-zinc-100">
                       {partySize} {partySize === 1 ? "Person" : "People"}
                     </span>
                     <button
@@ -493,7 +493,7 @@ export function TipCalculator() {
                   onChange={(e) => setSharedAppetizers(Number(e.target.value))}
                   step={0.5}
                   min={0}
-                  className="h-9 text-xs font-mono font-bold bg-white dark:bg-zinc-900 border-amber-300"
+                  className="h-9 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900 border-amber-300"
                 />
               </div>
 
@@ -536,7 +536,7 @@ export function TipCalculator() {
                             className="h-7 text-xs flex-1 bg-white dark:bg-zinc-900"
                           />
                           <div className="relative w-24">
-                            <span className="absolute left-2 top-1.5 text-[10px] font-mono text-zinc-400">
+                            <span className="absolute left-2 top-1.5 text-[10px] font-sans tabular-nums text-zinc-400">
                               {sym.trim()}
                             </span>
                             <Input
@@ -544,7 +544,7 @@ export function TipCalculator() {
                               placeholder="Price"
                               value={item.price}
                               onChange={(e) => handleUpdateItem(diner.id, item.id, "price", e.target.value)}
-                              className="pl-5 h-7 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                              className="pl-5 h-7 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                             />
                           </div>
                         </div>
@@ -582,7 +582,7 @@ export function TipCalculator() {
                 <span className="text-[11px] uppercase tracking-wider text-emerald-100 font-bold">
                   Total Tip ({currentResult.tipPct}%)
                 </span>
-                <div className="text-3xl font-black font-mono tracking-tight">
+                <div className="text-3xl font-black font-sans tabular-nums tracking-tight">
                   {sym}{currentResult.tipAmount.toFixed(2)}
                 </div>
               </div>
@@ -591,7 +591,7 @@ export function TipCalculator() {
                 <span className="text-[11px] uppercase tracking-wider text-emerald-100 font-bold">
                   Grand Total Bill
                 </span>
-                <div className="text-3xl font-black font-mono tracking-tight text-amber-200">
+                <div className="text-3xl font-black font-sans tabular-nums tracking-tight text-amber-200">
                   {sym}{currentResult.totalAmount.toFixed(2)}
                 </div>
               </div>
@@ -601,13 +601,13 @@ export function TipCalculator() {
             <div className="bg-white/10 backdrop-blur-xs p-4 rounded-xl border border-white/20 space-y-2">
               <div className="flex items-center justify-between border-b border-white/15 pb-2 text-xs">
                 <span className="text-emerald-100 font-medium">Tip Per Person ({currentResult.partySize} guests)</span>
-                <span className="font-mono font-bold text-sm text-white">
+                <span className="font-sans tabular-nums font-bold text-sm text-white">
                   {sym}{currentResult.tipPerPerson.toFixed(2)}
                 </span>
               </div>
               <div className="flex items-center justify-between text-xs">
                 <span className="text-emerald-100 font-bold">Total Per Person</span>
-                <span className="font-mono font-black text-base text-amber-200">
+                <span className="font-sans tabular-nums font-black text-base text-amber-200">
                   {sym}{currentResult.totalPerPerson.toFixed(2)}
                 </span>
               </div>
@@ -626,7 +626,7 @@ export function TipCalculator() {
                       className="flex items-center justify-between text-xs bg-white/10 px-2.5 py-1.5 rounded-lg border border-white/10"
                     >
                       <span className="font-bold text-white">{d.name}</span>
-                      <span className="font-mono font-bold text-amber-200">
+                      <span className="font-sans tabular-nums font-bold text-amber-200">
                         {sym}{d.total.toFixed(2)}
                       </span>
                     </div>

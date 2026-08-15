@@ -79,7 +79,7 @@ export function IPSubnetContent() {
         <p>
           **CIDR** replaced classful networking in 1993. It uses a slash followed by a prefix length (e.g., `/26`) indicating the exact number of bits allocated to the network portion of the address. The remaining bits are allocated to the host portion:
         </p>
-        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-xl font-mono text-xs">
+        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-xl font-sans tabular-nums text-xs">
           Prefix: 192.168.1.0/26 {"\u2192"} Network Bits = 26 | Host Bits = 6 (32 - 26)
           Total Addresses = 2^6 = 64 | Usable Host IPs = 64 - 2 = 62
         </div>
@@ -138,7 +138,7 @@ export function IPSubnetContent() {
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
               Calculate boundaries for 192.168.1.70/26.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Prefix /26 Subnet Mask:</strong> 255.255.255.192</div>
               <div><strong>2. Binary Address:</strong> 11000000.10101000.00000001.01|000110 (IP value = 70)</div>
               <div><strong>3. Network IP:</strong> 11000000.10101000.00000001.01|000000 {"\u2192"} 192.168.1.64</div>
@@ -156,7 +156,7 @@ export function IPSubnetContent() {
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
               Divide network 192.168.10.0/24 into smaller subnets with a /26 prefix.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Calculate Borrowed bits:</strong> 26 - 24 = 2 bits</div>
               <div><strong>2. Calculate Subnets count:</strong> 2² = 4 subnets</div>
               <div><strong>3. Enumerate Subnets:</strong></div>
@@ -176,7 +176,7 @@ export function IPSubnetContent() {
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
               Expand and compress the IPv6 loopback address.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Input IPv6:</strong> ::1</div>
               <div><strong>2. Fully Expanded:</strong> 0000:0000:0000:0000:0000:0000:0000:0001</div>
               <div><strong>3. Compressed Canonical form:</strong> ::1</div>

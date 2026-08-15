@@ -268,14 +268,14 @@ export function DewPointCalculator() {
           <div className={`space-y-2 ${targetVar === "air_temp" ? "opacity-50 pointer-events-none" : ""}`}>
             <div className="flex items-center justify-between text-xs">
               <label className="font-bold text-zinc-700 dark:text-zinc-300">Air Temperature ({unit})</label>
-              <span className="font-mono font-bold text-sky-600">{airTemp}°{unit}</span>
+              <span className="font-sans tabular-nums font-bold text-sky-600">{airTemp}°{unit}</span>
             </div>
             <div className="flex items-center gap-3">
               <Input
                 type="number"
                 value={airTemp}
                 onChange={(e) => setAirTemp(Number(e.target.value))}
-                className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200 w-28"
+                className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200 w-28"
               />
               <input
                 type="range"
@@ -292,7 +292,7 @@ export function DewPointCalculator() {
           <div className={`space-y-2 ${targetVar === "relative_humidity" ? "opacity-50 pointer-events-none" : ""}`}>
             <div className="flex items-center justify-between text-xs">
               <label className="font-bold text-zinc-700 dark:text-zinc-300">Relative Humidity (%)</label>
-              <span className="font-mono font-bold text-sky-600">{rh}% RH</span>
+              <span className="font-sans tabular-nums font-bold text-sky-600">{rh}% RH</span>
             </div>
             <input
               type="range"
@@ -312,7 +312,7 @@ export function DewPointCalculator() {
                 type="number"
                 value={dewPointInput}
                 onChange={(e) => setDewPointInput(Number(e.target.value))}
-                className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
               />
             </div>
           )}
@@ -353,7 +353,7 @@ export function DewPointCalculator() {
                     type="number"
                     value={surfaceTemp}
                     onChange={(e) => setSurfaceTemp(Number(e.target.value))}
-                    className="h-8 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200"
+                    className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 border-zinc-200"
                   />
                 </div>
               </div>
@@ -378,7 +378,7 @@ export function DewPointCalculator() {
               <span className="text-xs font-bold uppercase tracking-wider text-sky-200 block">
                 {targetVar === "dew_point" ? "Calculated Dew Point" : targetVar === "relative_humidity" ? "Calculated Relative Humidity" : "Calculated Air Temp"}
               </span>
-              <div className="text-6xl font-black font-mono tracking-tight text-white">
+              <div className="text-6xl font-black font-sans tabular-nums tracking-tight text-white">
                 {targetVar === "dew_point"
                   ? `${result.dewPointF}°F`
                   : targetVar === "relative_humidity"
@@ -403,19 +403,19 @@ export function DewPointCalculator() {
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="bg-white/10 backdrop-blur-xs p-2.5 rounded-xl border border-white/20">
                 <span className="text-[10px] uppercase font-bold text-sky-200 block">Wet-Bulb (Tw)</span>
-                <span className="font-mono font-bold text-sm text-white">{result.wetBulbF}°F ({result.wetBulbC}°C)</span>
+                <span className="font-sans tabular-nums font-bold text-sm text-white">{result.wetBulbF}°F ({result.wetBulbC}°C)</span>
               </div>
               <div className="bg-white/10 backdrop-blur-xs p-2.5 rounded-xl border border-white/20">
                 <span className="text-[10px] uppercase font-bold text-sky-200 block">Absolute Humidity</span>
-                <span className="font-mono font-bold text-sm text-white">{result.absoluteHumidityGM3} g/m³</span>
+                <span className="font-sans tabular-nums font-bold text-sm text-white">{result.absoluteHumidityGM3} g/m³</span>
               </div>
               <div className="bg-white/10 backdrop-blur-xs p-2.5 rounded-xl border border-white/20">
                 <span className="text-[10px] uppercase font-bold text-sky-200 block">Actual Vapor Press</span>
-                <span className="font-mono font-bold text-sm text-white">{result.actualVaporPressureHpa} hPa</span>
+                <span className="font-sans tabular-nums font-bold text-sm text-white">{result.actualVaporPressureHpa} hPa</span>
               </div>
               <div className="bg-white/10 backdrop-blur-xs p-2.5 rounded-xl border border-white/20">
                 <span className="text-[10px] uppercase font-bold text-sky-200 block">Cloud Base</span>
-                <span className="font-mono font-bold text-sm text-white">{result.cloudBaseFt.toLocaleString()} ft</span>
+                <span className="font-sans tabular-nums font-bold text-sm text-white">{result.cloudBaseFt.toLocaleString()} ft</span>
               </div>
             </div>
 
@@ -428,7 +428,7 @@ export function DewPointCalculator() {
               <div className="flex items-center gap-1 text-[11px] font-bold uppercase">
                 <Paintbrush className="h-3.5 w-3.5" /> ISO 8502-4 Painting Advisory
               </div>
-              <div className="font-mono text-xs">{result.paintingRisk.statusText} (Margin: {result.paintingRisk.marginF}°F)</div>
+              <div className="font-sans tabular-nums text-xs">{result.paintingRisk.statusText} (Margin: {result.paintingRisk.marginF}°F)</div>
               <p className="text-[10px] opacity-90 font-medium">{result.paintingRisk.recommendation}</p>
             </div>
           </div>
@@ -449,7 +449,7 @@ export function DewPointCalculator() {
 
         {showChart && (
           <div className="p-4 border-t border-zinc-100 dark:border-zinc-800 overflow-x-auto text-xs">
-            <table className="w-full text-center border-collapse font-mono text-[11px]">
+            <table className="w-full text-center border-collapse font-sans tabular-nums text-[11px]">
               <thead>
                 <tr className="bg-zinc-100 dark:bg-zinc-800 font-bold text-zinc-900 dark:text-zinc-100">
                   <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-sans">Relative Humidity \ Temp</th>

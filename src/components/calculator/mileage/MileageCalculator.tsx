@@ -463,7 +463,7 @@ export function MileageCalculator() {
                             type="number"
                             value={startOdometer}
                             onChange={(e) => setStartOdometer(Number(e.target.value))}
-                            className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                            className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                           />
                         </div>
                         <div className="space-y-1">
@@ -472,7 +472,7 @@ export function MileageCalculator() {
                             type="number"
                             value={endOdometer}
                             onChange={(e) => setEndOdometer(Number(e.target.value))}
-                            className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                            className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                           />
                         </div>
                       </div>
@@ -483,7 +483,7 @@ export function MileageCalculator() {
                           type="number"
                           value={distanceInput}
                           onChange={(e) => setDistanceInput(Number(e.target.value))}
-                          className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                          className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                         />
                       </div>
                     )}
@@ -496,7 +496,7 @@ export function MileageCalculator() {
                           step="0.1"
                           value={fuelInput}
                           onChange={(e) => setFuelInput(Number(e.target.value))}
-                          className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                          className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                         />
                       </div>
                       <div className="space-y-1">
@@ -506,7 +506,7 @@ export function MileageCalculator() {
                           step="0.05"
                           value={fuelPriceInput}
                           onChange={(e) => setFuelPriceInput(Number(e.target.value))}
-                          className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                          className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                         />
                       </div>
                     </div>
@@ -530,7 +530,7 @@ export function MileageCalculator() {
                     type="number"
                     value={businessMiles}
                     onChange={(e) => setBusinessMiles(Number(e.target.value))}
-                    className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -555,7 +555,7 @@ export function MileageCalculator() {
                   step="0.01"
                   value={customRate}
                   onChange={(e) => setCustomRate(Number(e.target.value))}
-                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
             </div>
@@ -599,7 +599,7 @@ export function MileageCalculator() {
                         placeholder="Dist (mi/km)"
                         value={leg.distance}
                         onChange={(e) => handleUpdateLeg(leg.id, "distance", Number(e.target.value))}
-                        className="h-8 text-xs font-mono bg-white dark:bg-zinc-900"
+                        className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
                       />
                       <Input
                         type="number"
@@ -607,7 +607,7 @@ export function MileageCalculator() {
                         placeholder="Fuel (gal/L)"
                         value={leg.fuel}
                         onChange={(e) => handleUpdateLeg(leg.id, "fuel", Number(e.target.value))}
-                        className="h-8 text-xs font-mono bg-white dark:bg-zinc-900"
+                        className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
                       />
                       <Input
                         type="number"
@@ -615,7 +615,7 @@ export function MileageCalculator() {
                         placeholder="Price ($/unit)"
                         value={leg.pricePerUnit}
                         onChange={(e) => handleUpdateLeg(leg.id, "pricePerUnit", Number(e.target.value))}
-                        className="h-8 text-xs font-mono bg-white dark:bg-zinc-900"
+                        className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
                       />
                     </div>
                   </div>
@@ -638,7 +638,7 @@ export function MileageCalculator() {
                     type="number"
                     value={evDistance}
                     onChange={(e) => setEvDistance(Number(e.target.value))}
-                    className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
                 <div className="space-y-1">
@@ -648,7 +648,7 @@ export function MileageCalculator() {
                     step="0.5"
                     value={evKWhConsumed}
                     onChange={(e) => setEvKWhConsumed(Number(e.target.value))}
-                    className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -660,7 +660,7 @@ export function MileageCalculator() {
                   step="0.01"
                   value={electricityCost}
                   onChange={(e) => setElectricityCost(Number(e.target.value))}
-                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
             </div>
@@ -739,7 +739,7 @@ export function MileageCalculator() {
             <span className="text-[10px] font-bold uppercase tracking-wider text-blue-200 block">
               {result.primaryLabel}
             </span>
-            <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-white">
+            <div className="text-3xl sm:text-4xl font-black font-sans tabular-nums tracking-tight text-white">
               {mode === "tax_reimbursement" ? `$${result.primaryValue}` : `${result.primaryValue} ${result.primaryUnit}`}
             </div>
             <p className="text-[11px] text-blue-100 font-medium">
@@ -810,11 +810,11 @@ export function MileageCalculator() {
           <div className="grid grid-cols-2 gap-1.5 text-xs">
             <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
               <span className="text-[9px] uppercase font-bold text-blue-200 block">Cost Per Distance</span>
-              <span className="font-mono font-bold text-xs text-white">${result.costPerDistance} / {result.distanceUnit}</span>
+              <span className="font-sans tabular-nums font-bold text-xs text-white">${result.costPerDistance} / {result.distanceUnit}</span>
             </div>
             <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
               <span className="text-[9px] uppercase font-bold text-blue-200 block">Distance Per Dollar</span>
-              <span className="font-mono font-bold text-xs text-white">{result.distancePerDollar} {result.distanceUnit} / $</span>
+              <span className="font-sans tabular-nums font-bold text-xs text-white">{result.distancePerDollar} {result.distanceUnit} / $</span>
             </div>
           </div>
         </div>

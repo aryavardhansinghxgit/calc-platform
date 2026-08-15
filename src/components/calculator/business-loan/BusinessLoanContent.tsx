@@ -128,11 +128,11 @@ export function BusinessLoanContent() {
         <section className="space-y-4">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Business Loan &amp; Real APR Formulas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Monthly Payback Formula</span>
               <div>PMT = [ Principal × r × (1 + r)^n ] / [ (1 + r)^n - 1 ]</div>
             </div>
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Real Rate (APR) Formula</span>
               <div>Real APR = Interest Rate % + [ (Total Fees / Principal / Term Yrs) × 100 ]</div>
             </div>
@@ -144,7 +144,7 @@ export function BusinessLoanContent() {
           <p>
             For a $10,000 business loan at 10.0% APR over 5 years (60 monthly payments) with a 5% origination fee ($500) and a $750 documentation fee ($1,250 total fees):
           </p>
-          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
             <div>• Payback Every Month: $212.47</div>
             <div>• Total of 60 Loan Payments: $12,748.23</div>
             <div>• Total Interest Paid: $2,748.23</div>
@@ -206,7 +206,7 @@ export function BusinessLoanContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold shrink-0">
+                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}

@@ -270,7 +270,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Target Nest Egg:</span>
-          <span className="text-blue-600 dark:text-blue-400 font-mono text-sm">{fmt(results.targetNestEggAtRetirement)}</span>
+          <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-sm">{fmt(results.targetNestEggAtRetirement)}</span>
         </div>
       </div>
 
@@ -352,7 +352,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                     max="100"
                     value={currentAgeInput}
                     onChange={(e) => setCurrentAgeInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -363,7 +363,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                     max="100"
                     value={retirementAgeInput}
                     onChange={(e) => setRetirementAgeInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -377,7 +377,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                     max="120"
                     value={lifeExpectancyInput}
                     onChange={(e) => setLifeExpectancyInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -387,7 +387,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                     min="0"
                     value={currentIncomeInput}
                     onChange={(e) => setCurrentIncomeInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -408,7 +408,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                     step="0.5"
                     value={incomeIncreaseRateInput}
                     onChange={(e) => setIncomeIncreaseRateInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -419,7 +419,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                     max="150"
                     value={incomeReplacementInput}
                     onChange={(e) => setIncomeReplacementInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -433,7 +433,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                     step="0.5"
                     value={investmentReturnInput}
                     onChange={(e) => setInvestmentReturnInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -444,7 +444,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                     step="0.5"
                     value={inflationRateInput}
                     onChange={(e) => setInflationRateInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -464,7 +464,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                     min="0"
                     value={currentSavingsInput}
                     onChange={(e) => setCurrentSavingsInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
 
@@ -476,7 +476,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                     max="100"
                     value={futureSavingsPercentInput}
                     onChange={(e) => setFutureSavingsPercentInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
 
@@ -488,7 +488,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                     placeholder="Social Security..."
                     value={otherIncomeMonthlyInput}
                     onChange={(e) => setOtherIncomeMonthlyInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -526,7 +526,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-mono text-white mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-sans tabular-nums text-white mb-2">
                 {fmt(results.targetNestEggAtRetirement)}
               </div>
 
@@ -548,15 +548,15 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
               <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Monthly Need</div>
-                  <div className="font-bold font-mono text-white text-sm">{fmt(results.monthlyIncomeNeededAtRetirement)}</div>
+                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.monthlyIncomeNeededAtRetirement)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">4% Trinity Rule</div>
-                  <div className="font-bold font-mono text-emerald-300 text-sm">{fmt(results.fourPercentRuleAnnualIncome)}/yr</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-300 text-sm">{fmt(results.fourPercentRuleAnnualIncome)}/yr</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Years to Retire</div>
-                  <div className="font-bold font-mono text-blue-300 text-sm">{results.yearsToRetirement} Yrs</div>
+                  <div className="font-bold font-sans tabular-nums text-blue-300 text-sm">{results.yearsToRetirement} Yrs</div>
                 </div>
               </div>
             </div>
@@ -599,18 +599,18 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Amount Needed at Retirement ($)</label>
-              <Input type="number" min="0" value={targetNestEggInputMode2} onChange={(e) => setTargetNestEggInputMode2(e.target.value)} className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <Input type="number" min="0" value={targetNestEggInputMode2} onChange={(e) => setTargetNestEggInputMode2(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Retirement Savings Now ($)</label>
-              <Input type="number" min="0" value={currentSavingsInput} onChange={(e) => setCurrentSavingsInput(e.target.value)} className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <Input type="number" min="0" value={currentSavingsInput} onChange={(e) => setCurrentSavingsInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
           </div>
 
-          <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 p-6 rounded-xl space-y-3 font-mono text-xs">
+          <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 p-6 rounded-xl space-y-3 font-sans tabular-nums text-xs">
             <div className="flex justify-between items-center text-sm font-sans font-bold text-emerald-900 dark:text-emerald-200 border-b pb-2">
               <span>Required Monthly Contribution:</span>
-              <span className="text-2xl font-extrabold font-mono text-emerald-600">{fmt(results.requiredMonthlyContribution || 0)}/mo</span>
+              <span className="text-2xl font-extrabold font-sans tabular-nums text-emerald-600">{fmt(results.requiredMonthlyContribution || 0)}/mo</span>
             </div>
             <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
               <span>Required Annual Contribution:</span>
@@ -638,18 +638,18 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
           <div className="grid grid-cols-2 gap-4 text-xs">
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Monthly Contribution ($/mo)</label>
-              <Input type="number" min="0" value={monthlyContribInputMode3} onChange={(e) => setMonthlyContribInputMode3(e.target.value)} className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <Input type="number" min="0" value={monthlyContribInputMode3} onChange={(e) => setMonthlyContribInputMode3(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Annual Contribution ($/yr)</label>
-              <Input type="number" min="0" value={annualContribInputMode3} onChange={(e) => setAnnualContribInputMode3(e.target.value)} className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <Input type="number" min="0" value={annualContribInputMode3} onChange={(e) => setAnnualContribInputMode3(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
           </div>
 
-          <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-6 rounded-xl space-y-3 font-mono text-xs">
+          <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-6 rounded-xl space-y-3 font-sans tabular-nums text-xs">
             <div className="flex justify-between items-center text-sm font-sans font-bold text-purple-900 dark:text-purple-200 border-b pb-2">
               <span>Maximum Safe Monthly Withdrawal:</span>
-              <span className="text-2xl font-extrabold font-mono text-purple-600">{fmt(results.maxMonthlyWithdrawalInRetirement || 0)}/mo</span>
+              <span className="text-2xl font-extrabold font-sans tabular-nums text-purple-600">{fmt(results.maxMonthlyWithdrawalInRetirement || 0)}/mo</span>
             </div>
             <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
               <span>Maximum Safe Annual Withdrawal:</span>
@@ -677,18 +677,18 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
           <div className="grid grid-cols-2 gap-4 text-xs">
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Nest Egg Amount ($)</label>
-              <Input type="number" min="0" value={nestEggInputMode4} onChange={(e) => setNestEggInputMode4(e.target.value)} className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <Input type="number" min="0" value={nestEggInputMode4} onChange={(e) => setNestEggInputMode4(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Planned Monthly Withdrawal ($/mo)</label>
-              <Input type="number" min="0" value={monthlyWithdrawalInputMode4} onChange={(e) => setMonthlyWithdrawalInputMode4(e.target.value)} className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <Input type="number" min="0" value={monthlyWithdrawalInputMode4} onChange={(e) => setMonthlyWithdrawalInputMode4(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
           </div>
 
-          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-6 rounded-xl space-y-3 font-mono text-xs">
+          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-6 rounded-xl space-y-3 font-sans tabular-nums text-xs">
             <div className="flex justify-between items-center text-sm font-sans font-bold text-amber-900 dark:text-amber-200 border-b pb-2">
               <span>Nest Egg Longevity Duration:</span>
-              <span className="text-2xl font-extrabold font-mono text-amber-600">
+              <span className="text-2xl font-extrabold font-sans tabular-nums text-amber-600">
                 {results.nestEggLongevityYears} Yrs {results.nestEggLongevityMonths} Mos
               </span>
             </div>
@@ -726,7 +726,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                   <th className="p-2.5 text-right">Ending Bal</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-sans tabular-nums">
                 {results.schedule.map((r) => (
                   <tr key={r.age} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">

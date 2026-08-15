@@ -27,7 +27,7 @@ export function HorsepowerContent() {
         <p className="leading-relaxed">
           In physics, power is defined mathematically as the rate of energy transfer or work performed per unit time:
         </p>
-        <div className="p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-center rounded-xl text-sm font-bold shadow-xs">
+        <div className="p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-center rounded-xl text-sm font-bold shadow-xs">
           Power = Work / Time = (Force × Distance) / Time = Force × Velocity
         </div>
       </section>
@@ -47,13 +47,13 @@ export function HorsepowerContent() {
         <p className="leading-relaxed">
           When using Imperial measurement units (lb-ft for torque), the primary governing formula is:
         </p>
-        <div className="p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-center rounded-xl text-sm font-bold shadow-xs">
+        <div className="p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-center rounded-xl text-sm font-bold shadow-xs">
           Horsepower (HP) = (Torque in lb-ft × RPM) / 5252.11
         </div>
         <p className="leading-relaxed">
           When working in metric units where torque is expressed in Newton-meters (N-m), the formula converts to:
         </p>
-        <div className="p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-center rounded-xl text-sm font-bold shadow-xs">
+        <div className="p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-center rounded-xl text-sm font-bold shadow-xs">
           Horsepower (HP) = (Torque in N-m × RPM) / 7127.00
         </div>
 
@@ -63,7 +63,7 @@ export function HorsepowerContent() {
         <p className="leading-relaxed">
           The constant 5,252 is derived directly from James Watt’s definition of one horsepower (33,000 ft-lb/min) divided by the angular distance in radians of one full engine revolution (2π radians):
         </p>
-        <div className="p-4 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl font-mono text-xs text-center font-bold">
+        <div className="p-4 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl font-sans tabular-nums text-xs text-center font-bold">
           Constant = (33,000 ft-lbs/min) / (2π radians/rev) = 33,000 / 6.2831853 ≈ 5,252.113
         </div>
         <p className="leading-relaxed">
@@ -167,22 +167,22 @@ export function HorsepowerContent() {
               <tr>
                 <td className="p-2 font-bold">Front-Wheel Drive (FWD) Manual</td>
                 <td className="p-2 text-amber-600 font-bold">10% – 12%</td>
-                <td className="p-2 font-mono">352 – 360 WHP</td>
+                <td className="p-2 font-sans tabular-nums">352 – 360 WHP</td>
               </tr>
               <tr>
                 <td className="p-2 font-bold">Rear-Wheel Drive (RWD) Manual</td>
                 <td className="p-2 text-amber-600 font-bold">13% – 15%</td>
-                <td className="p-2 font-mono">340 – 348 WHP</td>
+                <td className="p-2 font-sans tabular-nums">340 – 348 WHP</td>
               </tr>
               <tr>
                 <td className="p-2 font-bold">Rear-Wheel Drive (RWD) Automatic</td>
                 <td className="p-2 text-amber-600 font-bold">16% – 19%</td>
-                <td className="p-2 font-mono">324 – 336 WHP</td>
+                <td className="p-2 font-sans tabular-nums">324 – 336 WHP</td>
               </tr>
               <tr>
                 <td className="p-2 font-bold">All-Wheel Drive (AWD / 4WD)</td>
                 <td className="p-2 text-amber-600 font-bold">20% – 25%</td>
-                <td className="p-2 font-mono">300 – 320 WHP</td>
+                <td className="p-2 font-sans tabular-nums">300 – 320 WHP</td>
               </tr>
             </tbody>
           </table>

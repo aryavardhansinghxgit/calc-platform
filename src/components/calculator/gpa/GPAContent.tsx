@@ -41,21 +41,21 @@ export function GPAContent() {
 
         {/* Math Formula Cards */}
         <div className="space-y-3 my-4">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-mono text-xs space-y-1">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
             <span className="text-slate-500 font-bold block text-[10px] uppercase">1. Quality Points Formula:</span>
             <div className="text-blue-600 dark:text-blue-400 font-extrabold text-sm">
               Quality Points = Grade Point Value × Credit Hours
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-mono text-xs space-y-1">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
             <span className="text-slate-500 font-bold block text-[10px] uppercase">2. Semester GPA Formula:</span>
             <div className="text-purple-600 dark:text-purple-400 font-extrabold text-sm">
               Semester GPA = Total Quality Points in Semester / Total Graded Credit Hours
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-mono text-xs space-y-1">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
             <span className="text-slate-500 font-bold block text-[10px] uppercase">3. Cumulative GPA Formula:</span>
             <div className="text-emerald-600 dark:text-emerald-400 font-extrabold text-sm">
               Cumulative GPA = (Prior Quality Points + Term Quality Points) / (Prior Credits + Term Credits)
@@ -81,7 +81,7 @@ export function GPAContent() {
                 <th className="p-2 border border-slate-200 dark:border-zinc-800">Quality Points</th>
               </tr>
             </thead>
-            <tbody className="font-mono">
+            <tbody className="font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">Calculus I</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-emerald-600">A</td>
@@ -146,7 +146,7 @@ export function GPAContent() {
                 <th className="p-2 border border-slate-200 dark:border-zinc-800">Percentage Range</th>
               </tr>
             </thead>
-            <tbody className="font-mono">
+            <tbody className="font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold">A+</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">4.0 / 4.33</td>

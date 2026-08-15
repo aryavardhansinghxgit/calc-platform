@@ -16,14 +16,14 @@ export function MolarityContent() {
           <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-1">
             <h4 className="font-extrabold text-emerald-600 dark:text-emerald-400 text-sm">Solute</h4>
             <p className="leading-relaxed">
-              The chemical substance that is dissolved (e.g., solid <span className="font-mono">NaCl</span> salt or pure acetic acid).
+              The chemical substance that is dissolved (e.g., solid <span className="font-sans tabular-nums">NaCl</span> salt or pure acetic acid).
             </p>
           </div>
 
           <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-1">
             <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">Solvent</h4>
             <p className="leading-relaxed">
-              The liquid medium in which the solute dissolves (most commonly deionized water, <span className="font-mono">H₂O</span>).
+              The liquid medium in which the solute dissolves (most commonly deionized water, <span className="font-sans tabular-nums">H₂O</span>).
             </p>
           </div>
 
@@ -37,7 +37,7 @@ export function MolarityContent() {
 
         <p className="leading-relaxed text-xs">
           <strong>The Mole &amp; Avogadro&apos;s Number:</strong> A mole is the fundamental SI unit for the amount of substance, defined as exactly <strong>6.02214076 × 10²³</strong> elementary entities (atoms, molecules, or ions). 
-          <strong> Molarity (M)</strong> measures the number of moles of solute contained in exactly one liter (1.0 L) of final solution (<span className="font-mono">mol/L</span>).
+          <strong> Molarity (M)</strong> measures the number of moles of solute contained in exactly one liter (1.0 L) of final solution (<span className="font-sans tabular-nums">mol/L</span>).
         </p>
       </section>
 
@@ -52,28 +52,28 @@ export function MolarityContent() {
 
         {/* Math Formula Cards */}
         <div className="space-y-3 my-4">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-mono text-xs space-y-1">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
             <span className="text-slate-500 font-bold block text-[10px] uppercase">1. Primary Molarity Equation:</span>
             <div className="text-emerald-600 dark:text-emerald-400 font-extrabold text-sm">
               Molarity (M) = Moles of Solute (n) / Volume of Solution in Liters (V)
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-mono text-xs space-y-1">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
             <span className="text-slate-500 font-bold block text-[10px] uppercase">2. Solute Mass Preparation Equation:</span>
             <div className="text-blue-600 dark:text-blue-400 font-extrabold text-sm">
               Mass (g) = Molarity (M) × Volume (L) × Molar Mass (g/mol)
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-mono text-xs space-y-1">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
             <span className="text-slate-500 font-bold block text-[10px] uppercase">3. Stock Dilution Law Equation:</span>
             <div className="text-purple-600 dark:text-purple-400 font-extrabold text-sm">
               C₁ · V₁ = C₂ · V₂   or   M₁ · V₁ = M₂ · V₂
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-mono text-xs space-y-1">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
             <span className="text-slate-500 font-bold block text-[10px] uppercase">4. Mass Percentage to Molarity Conversion:</span>
             <div className="text-amber-600 dark:text-amber-400 font-extrabold text-sm">
               Molarity (M) = [Mass % × Density (g/mL) × 10] / Molar Mass (g/mol)
@@ -85,10 +85,10 @@ export function MolarityContent() {
           Step-by-Step Solute Mass Calculation Example
         </h3>
         <p className="leading-relaxed text-xs">
-          Suppose you need to prepare <strong>500 mL (0.500 L)</strong> of a <strong>0.250 M</strong> Sodium Chloride solution (<span className="font-mono">NaCl</span>, formula weight <strong>58.44 g/mol</strong>):
+          Suppose you need to prepare <strong>500 mL (0.500 L)</strong> of a <strong>0.250 M</strong> Sodium Chloride solution (<span className="font-sans tabular-nums">NaCl</span>, formula weight <strong>58.44 g/mol</strong>):
         </p>
 
-        <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-mono text-xs space-y-2">
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-2">
           <p className="text-slate-700 dark:text-zinc-300">
             Solute Mass (g) = Molarity (mol/L) × Volume (L) × Molar Mass (g/mol)
           </p>
@@ -120,7 +120,7 @@ export function MolarityContent() {
                 <th className="p-2 border border-slate-200 dark:border-zinc-800">Temperature Dependent?</th>
               </tr>
             </thead>
-            <tbody className="font-mono">
+            <tbody className="font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-emerald-600">Molarity</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">M</td>
@@ -192,7 +192,7 @@ export function MolarityContent() {
         </p>
 
         <div className="overflow-x-auto my-4">
-          <table className="w-full text-xs text-left border-collapse border border-slate-200 dark:border-zinc-800 font-mono">
+          <table className="w-full text-xs text-left border-collapse border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">
             <thead className="bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-white font-bold">
               <tr>
                 <th className="p-2 border border-slate-200 dark:border-zinc-800">Commercial Reagent Acid</th>

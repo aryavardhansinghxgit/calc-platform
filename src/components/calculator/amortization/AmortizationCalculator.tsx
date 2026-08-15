@@ -59,7 +59,7 @@ const AmortizationPieChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-mono">
+      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
         Loading pie chart...
       </div>
     ),
@@ -71,7 +71,7 @@ const AmortizationProgressChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-mono">
+      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
         Loading progress chart...
       </div>
     ),
@@ -348,7 +348,7 @@ export function AmortizationCalculator() {
             Amortization Manager
           </span>
           {savedCalculations.length > 0 && (
-            <span className="text-[10px] font-mono bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-semibold">
+            <span className="text-[10px] font-sans tabular-nums bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-semibold">
               {savedCalculations.length} Saved
             </span>
           )}
@@ -435,7 +435,7 @@ export function AmortizationCalculator() {
                         setLoanAmount(Math.max(0, Number(e.target.value)));
                         setValidationError("");
                       }}
-                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       aria-label="Loan Amount"
                     />
                   </div>
@@ -457,7 +457,7 @@ export function AmortizationCalculator() {
                         setLoanTermYears(Math.max(0, Number(e.target.value)));
                         setValidationError("");
                       }}
-                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       aria-label="Loan Term Years"
                     />
                   </div>
@@ -475,7 +475,7 @@ export function AmortizationCalculator() {
                         setLoanTermMonths(Math.max(0, Number(e.target.value)));
                         setValidationError("");
                       }}
-                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       aria-label="Loan Term Months"
                     />
                   </div>
@@ -499,7 +499,7 @@ export function AmortizationCalculator() {
                         setInterestRate(Math.max(0, Number(e.target.value)));
                         setValidationError("");
                       }}
-                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       aria-label="Interest Rate"
                     />
                   </div>
@@ -535,7 +535,7 @@ export function AmortizationCalculator() {
                       max={2100}
                       value={startYear}
                       onChange={(e) => setStartYear(Number(e.target.value))}
-                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -569,7 +569,7 @@ export function AmortizationCalculator() {
                         step={50}
                         value={extraMonthlyPayment}
                         onChange={(e) => setExtraMonthlyPayment(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
 
@@ -584,7 +584,7 @@ export function AmortizationCalculator() {
                         step={100}
                         value={extraYearlyPayment}
                         onChange={(e) => setExtraYearlyPayment(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
 
@@ -599,7 +599,7 @@ export function AmortizationCalculator() {
                         step={500}
                         value={extraOneTimePayment}
                         onChange={(e) => setExtraOneTimePayment(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
 
@@ -626,7 +626,7 @@ export function AmortizationCalculator() {
                           max={2100}
                           value={extraStartYear}
                           onChange={(e) => setExtraStartYear(Number(e.target.value))}
-                          className="mt-0.5 h-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-[11px]"
+                          className="mt-0.5 h-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-[11px]"
                         />
                       </div>
                     </div>
@@ -675,7 +675,7 @@ export function AmortizationCalculator() {
                     <Bookmark className="h-3 w-3" /> Save
                   </Button>
                 </div>
-                <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-mono mt-2 tracking-tight">
+                <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums mt-2 tracking-tight">
                   {formatCurrency(results.monthlyPayment)}
                 </div>
               </div>
@@ -684,37 +684,37 @@ export function AmortizationCalculator() {
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-3 border-t border-blue-100 dark:border-zinc-800">
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Total Payments</span>
-                  <span className="text-sm font-bold font-mono text-zinc-900 dark:text-zinc-100">
+                  <span className="text-sm font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
                     {results.totalPaymentsCount} payments
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Total Principal</span>
-                  <span className="text-sm font-bold font-mono text-blue-600 dark:text-blue-400">
+                  <span className="text-sm font-bold font-sans tabular-nums text-blue-600 dark:text-blue-400">
                     {formatCurrency(results.totalPrincipal)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Total Interest</span>
-                  <span className="text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                  <span className="text-sm font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
                     {formatCurrency(results.totalInterest)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Total Amount Paid</span>
-                  <span className="text-sm font-bold font-mono text-zinc-900 dark:text-zinc-100">
+                  <span className="text-sm font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
                     {formatCurrency(results.totalAmountPaid)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Loan Payoff Date</span>
-                  <span className="text-sm font-bold font-mono text-amber-600 dark:text-amber-400 truncate block">
+                  <span className="text-sm font-bold font-sans tabular-nums text-amber-600 dark:text-amber-400 truncate block">
                     {results.loanPayoffDate}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Interest Saved</span>
-                  <span className="text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                  <span className="text-sm font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
                     {formatCurrency(results.interestSaved)}
                   </span>
                 </div>
@@ -740,7 +740,7 @@ export function AmortizationCalculator() {
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300 block">
                       Original Interest vs. New Interest
                     </span>
-                    <div className="flex items-center justify-between font-mono">
+                    <div className="flex items-center justify-between font-sans tabular-nums">
                       <span className="text-zinc-500 line-through">
                         {formatCurrency(results.baselineTotalInterest)}
                       </span>
@@ -757,7 +757,7 @@ export function AmortizationCalculator() {
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300 block">
                       Original Payoff Date vs. New Payoff Date
                     </span>
-                    <div className="flex items-center justify-between font-mono">
+                    <div className="flex items-center justify-between font-sans tabular-nums">
                       <span className="text-zinc-500 line-through">
                         {results.baselinePayoffDate}
                       </span>
@@ -876,7 +876,7 @@ export function AmortizationCalculator() {
               <form onSubmit={handleSaveCalculation} className="space-y-3 pt-1">
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700/80 text-xs">
                   <span className="text-zinc-500 block">Calculation Summary:</span>
-                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-mono">
+                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-sans tabular-nums">
                     Monthly Pay: {formatCurrency(results.monthlyPayment)}
                   </span>
                   <span className="text-[11px] text-zinc-500">
@@ -930,7 +930,7 @@ export function AmortizationCalculator() {
                         <span className="font-bold text-zinc-900 dark:text-zinc-100 block">
                           {item.name}
                         </span>
-                        <span className="text-[10px] text-zinc-400 block font-mono">
+                        <span className="text-[10px] text-zinc-400 block font-sans tabular-nums">
                           {formatCurrency(item.monthlyPayment)}/mo • {item.dateSaved}
                         </span>
                       </div>

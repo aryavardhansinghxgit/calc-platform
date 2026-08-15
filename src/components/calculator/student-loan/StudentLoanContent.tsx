@@ -204,7 +204,7 @@ export function StudentLoanContent() {
 
         <section className="space-y-2">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Baseline Calculation Examples</h2>
-          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
             <div className="font-bold font-sans text-indigo-600">Section A Baseline ($30,000 @ 6.8% 10 Yrs):</div>
             <div>Monthly Repayment = $345.24/mo | Total Interest = $11,428.92 | Total Payments = $41,428.92</div>
             <div className="font-bold font-sans text-indigo-600 pt-2">Section B Baseline Extra Payments ($350/mo + $150 extra):</div>
@@ -238,7 +238,7 @@ export function StudentLoanContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold shrink-0">
+                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}

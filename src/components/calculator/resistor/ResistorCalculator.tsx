@@ -547,7 +547,7 @@ export function ResistorCalculator() {
                         type="number"
                         value={targetResistance}
                         onChange={(e) => setTargetResistance(e.target.value)}
-                        className="font-mono flex-1 rounded-r-none border-r-0"
+                        className="font-sans tabular-nums flex-1 rounded-r-none border-r-0"
                       />
                       <select
                         value={targetResistanceUnit}
@@ -655,7 +655,7 @@ export function ResistorCalculator() {
                   onChange={(e) => setResistorValuesString(e.target.value)}
                   placeholder="e.g. 100, 220, 4.7k, 1M, 2.2k@1"
                   rows={3}
-                  className="w-full p-2.5 text-xs font-mono border border-zinc-200 dark:border-zinc-800 rounded-lg outline-none focus:ring-1 focus:ring-blue-500 bg-white dark:bg-zinc-900"
+                  className="w-full p-2.5 text-xs font-sans tabular-nums border border-zinc-200 dark:border-zinc-800 rounded-lg outline-none focus:ring-1 focus:ring-blue-500 bg-white dark:bg-zinc-900"
                 />
                 <span className="text-[10px] text-zinc-400 mt-1 block">
                   Add custom tolerance via &apos;@&apos;, e.g. `2.2k@1` specifies 2.2 kΩ with ±1% tolerance.
@@ -671,7 +671,7 @@ export function ResistorCalculator() {
                   value={supplyVoltage}
                   onChange={(e) => setSupplyVoltage(e.target.value)}
                   placeholder="e.g. 12"
-                  className="font-mono text-xs"
+                  className="font-sans tabular-nums text-xs"
                 />
               </div>
             </div>
@@ -716,7 +716,7 @@ export function ResistorCalculator() {
                       type="number"
                       value={conductorLength}
                       onChange={(e) => setConductorLength(e.target.value)}
-                      className="font-mono flex-1 rounded-r-none border-r-0 text-xs"
+                      className="font-sans tabular-nums flex-1 rounded-r-none border-r-0 text-xs"
                     />
                     <select
                       value={conductorLengthUnit}
@@ -765,7 +765,7 @@ export function ResistorCalculator() {
                         type="number"
                         value={conductorDiameter}
                         onChange={(e) => setConductorDiameter(e.target.value)}
-                        className="font-mono flex-1 rounded-r-none border-r-0 text-xs"
+                        className="font-sans tabular-nums flex-1 rounded-r-none border-r-0 text-xs"
                       />
                       <select
                         value={conductorDiameterUnit}
@@ -786,7 +786,7 @@ export function ResistorCalculator() {
                         type="number"
                         value={conductorArea}
                         onChange={(e) => setConductorArea(e.target.value)}
-                        className="font-mono flex-1 rounded-r-none border-r-0 text-xs"
+                        className="font-sans tabular-nums flex-1 rounded-r-none border-r-0 text-xs"
                       />
                       <select
                         value={conductorAreaUnit}
@@ -810,7 +810,7 @@ export function ResistorCalculator() {
                     type="number"
                     value={conductorTemp}
                     onChange={(e) => setConductorTemp(e.target.value)}
-                    className="font-mono text-xs"
+                    className="font-sans tabular-nums text-xs"
                   />
                 </div>
               </div>
@@ -832,7 +832,7 @@ export function ResistorCalculator() {
                   value={smdCode}
                   onChange={(e) => setSmdCode(e.target.value)}
                   placeholder="e.g. 103, 4R7, 1002, 01A"
-                  className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 uppercase"
+                  className="font-sans tabular-nums text-xs font-bold text-blue-600 dark:text-blue-400 uppercase"
                 />
                 <span className="text-[10px] text-zinc-400 mt-1 block">
                   Supports 3-digit codes (e.g. `103`), 4-digit codes (e.g. `1002`), decimal codes (e.g. `4R7`), and EIA-96 codes (e.g. `01A`).
@@ -857,7 +857,7 @@ export function ResistorCalculator() {
                       type="number"
                       value={finderTargetResistance}
                       onChange={(e) => setFinderTargetResistance(e.target.value)}
-                      className="font-mono flex-1 rounded-r-none border-r-0 text-xs"
+                      className="font-sans tabular-nums flex-1 rounded-r-none border-r-0 text-xs"
                     />
                     <select
                       value={finderTargetUnit}
@@ -988,7 +988,7 @@ export function ResistorCalculator() {
                 <div className="grid grid-cols-1 gap-3">
                   <div className="p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-center">
                     <div className="text-[10px] text-slate-400 font-semibold uppercase">Calculated Resistance</div>
-                    <div className="text-3xl font-mono font-black text-emerald-300 mt-1">
+                    <div className="text-3xl font-sans tabular-nums font-black text-emerald-300 mt-1">
                       {result.formattedValue}
                     </div>
                   </div>
@@ -996,7 +996,7 @@ export function ResistorCalculator() {
 
                 {/* Nominal and tolerance details */}
                 {result.minOhms !== undefined && result.maxOhms !== undefined && (
-                  <div className="p-3 bg-slate-800/50 rounded-xl border border-slate-800 text-xs font-mono space-y-1 text-slate-300">
+                  <div className="p-3 bg-slate-800/50 rounded-xl border border-slate-800 text-xs font-sans tabular-nums space-y-1 text-slate-300">
                     <div className="flex justify-between">
                       <span className="text-slate-400">Nominal resistance:</span>
                       <span>{result.resistanceOhms} Ω</span>
@@ -1081,7 +1081,7 @@ export function ResistorCalculator() {
               </div>
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                 {savedItems.map((item) => (
-                  <div key={item.id} className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-mono">
+                  <div key={item.id} className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-sans tabular-nums">
                     <button
                       onClick={() => {
                         // Restore saved inputs
@@ -1144,11 +1144,11 @@ export function ResistorCalculator() {
             <details className="p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-3 group outline-none">
               <summary className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 cursor-pointer flex items-center justify-between select-none">
                 <span>📘 Show Calculation Breakdown</span>
-                <span className="text-[10px] font-mono group-open:hidden">Expand +</span>
-                <span className="text-[10px] font-mono hidden group-open:inline">Collapse -</span>
+                <span className="text-[10px] font-sans tabular-nums group-open:hidden">Expand +</span>
+                <span className="text-[10px] font-sans tabular-nums hidden group-open:inline">Collapse -</span>
               </summary>
               <div className="pt-2.5 border-t border-zinc-100 dark:border-zinc-800 mt-2">
-                <pre className="p-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl font-mono text-[11px] text-zinc-800 dark:text-zinc-300 overflow-x-auto leading-normal whitespace-pre-wrap">
+                <pre className="p-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl font-sans tabular-nums text-[11px] text-zinc-800 dark:text-zinc-300 overflow-x-auto leading-normal whitespace-pre-wrap">
                   {result.calculationSteps}
                 </pre>
               </div>

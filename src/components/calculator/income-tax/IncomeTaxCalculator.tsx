@@ -510,7 +510,7 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>W-2 Wages & Salary (Box 1)</span>
-                <span className="font-mono text-blue-600">{fmt(wagesW2)}</span>
+                <span className="font-sans tabular-nums text-blue-600">{fmt(wagesW2)}</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-bold">$</span>
@@ -520,7 +520,7 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
                   step="1000"
                   value={wagesW2}
                   onChange={(e) => setWagesW2(Math.max(0, Number(e.target.value)))}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -529,7 +529,7 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Federal Tax Withheld (Box 2)</span>
-                <span className="font-mono text-emerald-600">{fmt(fedTaxWithheld)}</span>
+                <span className="font-sans tabular-nums text-emerald-600">{fmt(fedTaxWithheld)}</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-bold">$</span>
@@ -539,7 +539,7 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
                   step="500"
                   value={fedTaxWithheld}
                   onChange={(e) => setFedTaxWithheld(Math.max(0, Number(e.target.value)))}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -554,7 +554,7 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
                   max="10"
                   value={youngDependents}
                   onChange={(e) => setYoungDependents(Math.max(0, Number(e.target.value)))}
-                  className="text-xs font-mono"
+                  className="text-xs font-sans tabular-nums"
                 />
               </div>
               <div className="space-y-1">
@@ -565,7 +565,7 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
                   max="10"
                   value={otherDependents}
                   onChange={(e) => setOtherDependents(Math.max(0, Number(e.target.value)))}
-                  className="text-xs font-mono"
+                  className="text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -579,7 +579,7 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
                 max="100"
                 value={age}
                 onChange={(e) => setAge(Number(e.target.value))}
-                className="text-xs font-mono"
+                className="text-xs font-sans tabular-nums"
               />
             </div>
 
@@ -641,7 +641,7 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-mono text-white mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-sans tabular-nums text-white mb-2">
                 {fmt(Math.abs(results.netTaxRefundOrOwed))}
               </div>
 
@@ -655,19 +655,19 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Gross Income</div>
-                  <div className="font-bold font-mono text-white text-sm">{fmt(results.totalGrossIncome)}</div>
+                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.totalGrossIncome)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Taxable Income</div>
-                  <div className="font-bold font-mono text-emerald-300 text-sm">{fmt(results.totalTaxableIncome)}</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-300 text-sm">{fmt(results.totalTaxableIncome)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Federal Tax Liability</div>
-                  <div className="font-bold font-mono text-purple-300 text-sm">{fmt(results.totalTaxLiability)}</div>
+                  <div className="font-bold font-sans tabular-nums text-purple-300 text-sm">{fmt(results.totalTaxLiability)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Tax Withheld</div>
-                  <div className="font-bold font-mono text-amber-300 text-sm">{fmt(results.totalTaxWithheld)}</div>
+                  <div className="font-bold font-sans tabular-nums text-amber-300 text-sm">{fmt(results.totalTaxWithheld)}</div>
                 </div>
               </div>
             </div>
@@ -676,25 +676,25 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
                 <div className="text-[10px] text-zinc-500 uppercase font-semibold">Effective Tax Rate</div>
-                <div className="text-base font-extrabold text-blue-600 dark:text-blue-400 font-mono mt-0.5">
+                <div className="text-base font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums mt-0.5">
                   {results.effectiveTaxRate}%
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
                 <div className="text-[10px] text-zinc-500 uppercase font-semibold">Top Bracket</div>
-                <div className="text-base font-extrabold text-purple-600 dark:text-purple-400 font-mono mt-0.5">
+                <div className="text-base font-extrabold text-purple-600 dark:text-purple-400 font-sans tabular-nums mt-0.5">
                   {results.marginalTaxBracketLabel}
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
                 <div className="text-[10px] text-zinc-500 uppercase font-semibold">Deduction Saved</div>
-                <div className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">
+                <div className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-sans tabular-nums mt-0.5">
                   {fmt(results.effectiveDeduction)}
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
                 <div className="text-[10px] text-zinc-500 uppercase font-semibold">Estimated Take-Home</div>
-                <div className="text-base font-extrabold text-teal-600 dark:text-teal-400 font-mono mt-0.5">
+                <div className="text-base font-extrabold text-teal-600 dark:text-teal-400 font-sans tabular-nums mt-0.5">
                   {fmt(results.takeHomePay)}
                 </div>
               </div>
@@ -768,12 +768,12 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
               
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">State Tax Withheld (W-2 Box 17)</label>
-                <Input type="number" value={stateTaxWithheld} onChange={(e) => setStateTaxWithheld(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={stateTaxWithheld} onChange={(e) => setStateTaxWithheld(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
 
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Local Tax Withheld (W-2 Box 19)</label>
-                <Input type="number" value={localTaxWithheld} onChange={(e) => setLocalTaxWithheld(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={localTaxWithheld} onChange={(e) => setLocalTaxWithheld(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
 
               {/* Business Income Toggle */}
@@ -807,37 +807,37 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
               {hasBusinessIncome && (
                 <div className="space-y-1">
                   <label className="text-[11px] font-semibold text-zinc-600">Self-Employment Net Profit (1099)</label>
-                  <Input type="number" value={selfEmploymentIncome} onChange={(e) => setSelfEmploymentIncome(Number(e.target.value))} className="text-xs font-mono" />
+                  <Input type="number" value={selfEmploymentIncome} onChange={(e) => setSelfEmploymentIncome(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
                 </div>
               )}
 
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Social Security Income (SSA-1099)</label>
-                <Input type="number" value={socialSecurityIncome} onChange={(e) => setSocialSecurityIncome(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={socialSecurityIncome} onChange={(e) => setSocialSecurityIncome(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Interest Income (1099-INT)</label>
-                <Input type="number" value={interestIncome} onChange={(e) => setInterestIncome(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={interestIncome} onChange={(e) => setInterestIncome(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Ordinary Dividends</label>
-                <Input type="number" value={ordinaryDividends} onChange={(e) => setOrdinaryDividends(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={ordinaryDividends} onChange={(e) => setOrdinaryDividends(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Qualified Dividends (1099-DIV)</label>
-                <Input type="number" value={qualifiedDividends} onChange={(e) => setQualifiedDividends(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={qualifiedDividends} onChange={(e) => setQualifiedDividends(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Short-Term Capital Gains</label>
-                <Input type="number" value={shortTermCapitalGains} onChange={(e) => setShortTermCapitalGains(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={shortTermCapitalGains} onChange={(e) => setShortTermCapitalGains(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Long-Term Capital Gains</label>
-                <Input type="number" value={longTermCapitalGains} onChange={(e) => setLongTermCapitalGains(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={longTermCapitalGains} onChange={(e) => setLongTermCapitalGains(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Other Income (1099-G / 1099-R)</label>
-                <Input type="number" value={otherIncome} onChange={(e) => setOtherIncome(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={otherIncome} onChange={(e) => setOtherIncome(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
             </div>
 
@@ -847,27 +847,27 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
               
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Tips Income (Deductible up to $25k)</label>
-                <Input type="number" value={tipsIncome} onChange={(e) => setTipsIncome(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={tipsIncome} onChange={(e) => setTipsIncome(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Overtime Income (Deductible up to $12.5k/$25k)</label>
-                <Input type="number" value={overtimeIncome} onChange={(e) => setOvertimeIncome(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={overtimeIncome} onChange={(e) => setOvertimeIncome(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Car Loan Interest (Max $10k qualified vehicle)</label>
-                <Input type="number" value={carLoanInterest} onChange={(e) => setCarLoanInterest(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={carLoanInterest} onChange={(e) => setCarLoanInterest(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Traditional IRA Contributions</label>
-                <Input type="number" value={iraContributions} onChange={(e) => setIraContributions(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={iraContributions} onChange={(e) => setIraContributions(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Student Loan Interest (Max $2,500/Person)</label>
-                <Input type="number" value={studentLoanInterest} onChange={(e) => setStudentLoanInterest(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={studentLoanInterest} onChange={(e) => setStudentLoanInterest(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">HSA Contributions</label>
-                <Input type="number" value={hsaContributions} onChange={(e) => setHsaContributions(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={hsaContributions} onChange={(e) => setHsaContributions(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
             </div>
 
@@ -877,38 +877,38 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
               
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Mortgage Interest Paid</label>
-                <Input type="number" value={mortgageInterest} onChange={(e) => setMortgageInterest(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={mortgageInterest} onChange={(e) => setMortgageInterest(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Real Estate Property Tax</label>
-                <Input type="number" value={realEstateTax} onChange={(e) => setRealEstateTax(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={realEstateTax} onChange={(e) => setRealEstateTax(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Charitable Donations</label>
-                <Input type="number" value={charitableDonations} onChange={(e) => setCharitableDonations(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={charitableDonations} onChange={(e) => setCharitableDonations(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Medical Expenses (&gt;7.5% AGI)</label>
-                <Input type="number" value={medicalExpenses} onChange={(e) => setMedicalExpenses(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={medicalExpenses} onChange={(e) => setMedicalExpenses(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-semibold text-zinc-600">Other Deductions</label>
-                <Input type="number" value={otherDeductions} onChange={(e) => setOtherDeductions(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={otherDeductions} onChange={(e) => setOtherDeductions(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
 
               {/* Dependent Care & College Expenses */}
               <div className="space-y-1 pt-2 border-t">
                 <label className="text-[11px] font-semibold text-zinc-600">Child & Dependent Care Expenses (Max $3k/1, $6k/2+)</label>
-                <Input type="number" value={childCareExpenses} onChange={(e) => setChildCareExpenses(Number(e.target.value))} className="text-xs font-mono" />
+                <Input type="number" value={childCareExpenses} onChange={(e) => setChildCareExpenses(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
               </div>
 
               <div className="space-y-1.5 pt-1">
                 <label className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 block">College Education Expenses (Students 1-4)</label>
                 <div className="grid grid-cols-2 gap-2">
-                  <Input type="number" placeholder="Student 1" value={student1College || ""} onChange={(e) => setStudent1College(Number(e.target.value))} className="text-xs font-mono" />
-                  <Input type="number" placeholder="Student 2" value={student2College || ""} onChange={(e) => setStudent2College(Number(e.target.value))} className="text-xs font-mono" />
-                  <Input type="number" placeholder="Student 3" value={student3College || ""} onChange={(e) => setStudent3College(Number(e.target.value))} className="text-xs font-mono" />
-                  <Input type="number" placeholder="Student 4" value={student4College || ""} onChange={(e) => setStudent4College(Number(e.target.value))} className="text-xs font-mono" />
+                  <Input type="number" placeholder="Student 1" value={student1College || ""} onChange={(e) => setStudent1College(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
+                  <Input type="number" placeholder="Student 2" value={student2College || ""} onChange={(e) => setStudent2College(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
+                  <Input type="number" placeholder="Student 3" value={student3College || ""} onChange={(e) => setStudent3College(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
+                  <Input type="number" placeholder="Student 4" value={student4College || ""} onChange={(e) => setStudent4College(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
                 </div>
               </div>
             </div>
@@ -945,16 +945,16 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
                   <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">{item.statusLabel}</span>
                   {item.status === filingStatus && <Badge className="bg-blue-600 text-white text-[10px]">Selected</Badge>}
                 </div>
-                <div className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 font-mono">
+                <div className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums">
                   {fmt(item.federalTax)}
                 </div>
                 <div className="text-xs space-y-1 text-zinc-600 dark:text-zinc-400">
-                  <div className="flex justify-between"><span>Deduction:</span> <span className="font-mono">{fmt(item.standardDeduction)}</span></div>
-                  <div className="flex justify-between"><span>Taxable:</span> <span className="font-mono">{fmt(item.taxableIncome)}</span></div>
-                  <div className="flex justify-between"><span>Effective Rate:</span> <span className="font-mono text-purple-600">{item.effectiveTaxRate}%</span></div>
+                  <div className="flex justify-between"><span>Deduction:</span> <span className="font-sans tabular-nums">{fmt(item.standardDeduction)}</span></div>
+                  <div className="flex justify-between"><span>Taxable:</span> <span className="font-sans tabular-nums">{fmt(item.taxableIncome)}</span></div>
+                  <div className="flex justify-between"><span>Effective Rate:</span> <span className="font-sans tabular-nums text-purple-600">{item.effectiveTaxRate}%</span></div>
                   <div className="flex justify-between font-bold pt-1 border-t">
                     <span>{item.refundOrOwed >= 0 ? "Refund:" : "Owed:"}</span>
-                    <span className={`font-mono ${item.refundOrOwed >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+                    <span className={`font-sans tabular-nums ${item.refundOrOwed >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
                       {fmt(Math.abs(item.refundOrOwed))}
                     </span>
                   </div>
@@ -998,7 +998,7 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
                 <th className="p-2.5 border-b border-zinc-200 dark:border-zinc-700 text-right">Amount ($)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono text-[11px]">
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums text-[11px]">
               {filteredForm1040.map((row, idx) => (
                 <tr
                   key={idx}

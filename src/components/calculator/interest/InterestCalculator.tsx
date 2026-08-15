@@ -298,7 +298,7 @@ export function InterestCalculator() {
                 key={cur}
                 type="button"
                 onClick={() => setCurrencySymbol(cur)}
-                className={`px-2 py-0.5 rounded font-mono font-bold text-xs transition-colors ${
+                className={`px-2 py-0.5 rounded font-sans tabular-nums font-bold text-xs transition-colors ${
                   currencySymbol === cur
                     ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
                     : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
@@ -358,14 +358,14 @@ export function InterestCalculator() {
                 Initial Investment Amount
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                   {currencySymbol}
                 </span>
                 <Input
                   type="number"
                   value={initialInvestmentInput}
                   onChange={(e) => setInitialInvestmentInput(e.target.value)}
-                  className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                  className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                 />
               </div>
             </div>
@@ -379,7 +379,7 @@ export function InterestCalculator() {
                 step="0.1"
                 value={rateInput}
                 onChange={(e) => setRateInput(e.target.value)}
-                className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
               />
             </div>
 
@@ -388,14 +388,14 @@ export function InterestCalculator() {
                 Annual Contribution ($)
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                   {currencySymbol}
                 </span>
                 <Input
                   type="number"
                   value={annualContributionInput}
                   onChange={(e) => setAnnualContributionInput(e.target.value)}
-                  className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                  className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                 />
               </div>
             </div>
@@ -405,14 +405,14 @@ export function InterestCalculator() {
                 Monthly Contribution ($)
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                   {currencySymbol}
                 </span>
                 <Input
                   type="number"
                   value={monthlyContributionInput}
                   onChange={(e) => setMonthlyContributionInput(e.target.value)}
-                  className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                  className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                 />
               </div>
             </div>
@@ -476,14 +476,14 @@ export function InterestCalculator() {
                   placeholder="Years"
                   value={yearsInput}
                   onChange={(e) => setYearsInput(e.target.value)}
-                  className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 flex-1"
+                  className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 flex-1"
                 />
                 <Input
                   type="number"
                   placeholder="Months"
                   value={monthsInput}
                   onChange={(e) => setMonthsInput(e.target.value)}
-                  className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 flex-1"
+                  className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 flex-1"
                 />
               </div>
             </div>
@@ -498,7 +498,7 @@ export function InterestCalculator() {
                   step="0.1"
                   value={taxRateInput}
                   onChange={(e) => setTaxRateInput(e.target.value)}
-                  className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                  className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                 />
               </div>
 
@@ -511,7 +511,7 @@ export function InterestCalculator() {
                   step="0.1"
                   value={inflationRateInput}
                   onChange={(e) => setInflationRateInput(e.target.value)}
-                  className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                  className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                 />
               </div>
             </div>
@@ -533,7 +533,7 @@ export function InterestCalculator() {
             {/* Main Result Display */}
             <div>
               <span className="text-xs text-zinc-400 block font-medium">Ending Balance</span>
-              <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+              <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
                 {currencySymbol}{results.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
               <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
@@ -545,34 +545,34 @@ export function InterestCalculator() {
             <div className="grid grid-cols-2 gap-3 pt-2 border-t border-white/10">
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Total Principal</span>
-                <span className="text-base font-bold text-white font-mono">
+                <span className="text-base font-bold text-white font-sans tabular-nums">
                   {currencySymbol}{results.totalPrincipal.toLocaleString()}
                 </span>
               </div>
 
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Total Contributions</span>
-                <span className="text-base font-bold text-purple-300 font-mono">
+                <span className="text-base font-bold text-purple-300 font-sans tabular-nums">
                   {currencySymbol}{results.totalContributions.toLocaleString()}
                 </span>
               </div>
 
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Interest from Initial</span>
-                <span className="text-base font-bold text-emerald-300 font-mono">
+                <span className="text-base font-bold text-emerald-300 font-sans tabular-nums">
                   {currencySymbol}{results.interestFromInitial.toLocaleString()}
                 </span>
               </div>
 
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Interest from Contrib.</span>
-                <span className="text-base font-bold text-emerald-300 font-mono">
+                <span className="text-base font-bold text-emerald-300 font-sans tabular-nums">
                   {currencySymbol}{results.interestFromContributions.toLocaleString()}
                 </span>
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-500/30 text-xs text-amber-100 flex items-center justify-between font-mono">
+            <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-500/30 text-xs text-amber-100 flex items-center justify-between font-sans tabular-nums">
               <span>Inflation-Adjusted Value:</span>
               <span className="font-bold text-amber-300">
                 {currencySymbol}{results.inflationAdjustedFutureValue.toLocaleString()}
@@ -594,13 +594,13 @@ export function InterestCalculator() {
           <div className="p-3.5 rounded-lg bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 space-y-2 text-xs">
             <div className="flex justify-between items-center">
               <span className="text-zinc-600 dark:text-zinc-400">Rule of 72 Estimate:</span>
-              <span className="font-bold font-mono text-amber-700 dark:text-amber-400 text-sm">
+              <span className="font-bold font-sans tabular-nums text-amber-700 dark:text-amber-400 text-sm">
                 {results.ruleOf72YearsApprox} Years
               </span>
             </div>
             <div className="flex justify-between items-center border-t border-amber-200/60 dark:border-amber-900/40 pt-1.5">
               <span className="text-zinc-600 dark:text-zinc-400">Exact Logarithmic Doubling:</span>
-              <span className="font-bold font-mono text-zinc-900 dark:text-zinc-100 text-sm">
+              <span className="font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100 text-sm">
                 {results.ruleOf72YearsExact} Years
               </span>
             </div>
@@ -624,10 +624,10 @@ export function InterestCalculator() {
                 type="number"
                 value={targetWealthInput}
                 onChange={(e) => setTargetWealthInput(e.target.value)}
-                className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
               />
             </div>
-            <div className="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1 font-mono">
+            <div className="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1 font-sans tabular-nums">
               <div className="flex justify-between text-zinc-700 dark:text-zinc-300">
                 <span>Req. Monthly Contribution:</span>
                 <span className="font-bold text-emerald-600 dark:text-emerald-400">
@@ -668,7 +668,7 @@ export function InterestCalculator() {
                 <th className="p-3">Difference vs Annual ({currencySymbol})</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
               {results.frequencyComparison.map((item) => (
                 <tr key={item.frequencyKey} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
                   <td className="p-3 font-bold font-sans">{item.frequencyLabel}</td>
@@ -800,7 +800,7 @@ export function InterestCalculator() {
                   <th className="p-3">Ending Balance ({currencySymbol})</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
                 {results.annualSchedule.map((row) => (
                   <tr key={row.year} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
                     <td className="p-3 font-bold font-sans">Year {row.year}</td>
@@ -831,7 +831,7 @@ export function InterestCalculator() {
                   <th className="p-3">Ending Balance ({currencySymbol})</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
                 {results.monthlySchedule.map((row) => (
                   <tr key={row.month} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
                     <td className="p-3 font-bold font-sans">Month {row.month}</td>

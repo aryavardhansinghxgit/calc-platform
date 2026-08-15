@@ -65,7 +65,7 @@ export function VoltageDropContent() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Direct Current (DC)</h4>
-            <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               {"V_d = (2 × I × L × R) / 1000"}
             </div>
             <p className="text-[11px] text-zinc-500">For 2-wire circuits where loop distance is double the one-way run (2 × L).</p>
@@ -73,7 +73,7 @@ export function VoltageDropContent() {
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Single-Phase AC</h4>
-            <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               {"V_d = (2 × I × L × Z_eff) / 1000"}
             </div>
             <p className="text-[11px] text-zinc-500">Combines AC resistance and inductive reactance: Z_eff = R × cos(θ) + X × sin(θ).</p>
@@ -81,7 +81,7 @@ export function VoltageDropContent() {
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Three-Phase AC</h4>
-            <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               {"V_d = (√3 × I × L × Z_eff) / 1000"}
             </div>
             <p className="text-[11px] text-zinc-500">Calculates line-to-line voltage drop utilizing a factor of √3 ≈ 1.732.</p>
@@ -154,7 +154,7 @@ export function VoltageDropContent() {
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
               Calculate the voltage drop of a 240V, 100A, single-phase circuit running through PVC conduit for a one-way distance of 150 feet. Conductor size is 1 AWG copper with a power factor of 0.90.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Look up 1 AWG copper in PVC conduit (Table 9):</strong></div>
               <div>AC Resistance (R) = 0.15 Ω/1000 ft</div>
               <div>Reactance (X) = 0.046 Ω/1000 ft</div>
@@ -179,7 +179,7 @@ export function VoltageDropContent() {
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
               Calculate the line-to-line voltage drop for a 480V, three-phase, 120A induction motor running through steel conduit for a one-way distance of 400 feet. Conductor size is 3/0 AWG copper with a power factor of 0.85.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Look up 3/0 AWG copper in Steel conduit (Table 9):</strong></div>
               <div>AC Resistance (R) = 0.079 Ω/1000 ft</div>
               <div>Reactance (X) = 0.052 Ω/1000 ft</div>

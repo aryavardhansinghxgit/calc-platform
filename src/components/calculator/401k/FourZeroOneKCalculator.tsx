@@ -255,7 +255,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Gross 401(k) at Age {results.retirementAge}:</span>
-          <span className="text-blue-600 dark:text-blue-400 font-mono text-sm">{fmt(results.balanceAtRetirement)}</span>
+          <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-sm">{fmt(results.balanceAtRetirement)}</span>
         </div>
       </div>
 
@@ -326,7 +326,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
                     max="100"
                     value={currentAgeInput}
                     onChange={(e) => setCurrentAgeInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -337,7 +337,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
                     max="100"
                     value={retirementAgeInput}
                     onChange={(e) => setRetirementAgeInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -350,7 +350,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
                     min="0"
                     value={currentSalaryInput}
                     onChange={(e) => setCurrentSalaryInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -360,7 +360,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
                     min="0"
                     value={currentBalanceInput}
                     onChange={(e) => setCurrentBalanceInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -381,7 +381,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
                     max="100"
                     value={contributionPercentInput}
                     onChange={(e) => setContributionPercentInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
 
@@ -394,7 +394,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
                     placeholder="e.g. 50%..."
                     value={employerMatchPercentInput}
                     onChange={(e) => setEmployerMatchPercentInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
 
@@ -407,7 +407,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
                     placeholder="up to 6%..."
                     value={employerMatchLimitPercentInput}
                     onChange={(e) => setEmployerMatchLimitPercentInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -428,7 +428,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
                     step="0.5"
                     value={salaryIncreaseRateInput}
                     onChange={(e) => setSalaryIncreaseRateInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
 
@@ -440,7 +440,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
                     step="0.5"
                     value={investmentReturnInput}
                     onChange={(e) => setInvestmentReturnInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
 
@@ -452,7 +452,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
                     step="0.5"
                     value={inflationRateInput}
                     onChange={(e) => setInflationRateInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -488,7 +488,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-mono text-white mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-sans tabular-nums text-white mb-2">
                 {fmt(results.balanceAtRetirement)}
               </div>
 
@@ -505,15 +505,15 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
               <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Employee Contrib</div>
-                  <div className="font-bold font-mono text-white text-sm">{fmt(results.totalEmployeeContributions)}</div>
+                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.totalEmployeeContributions)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Employer Match</div>
-                  <div className="font-bold font-mono text-emerald-300 text-sm">{fmt(results.totalEmployerMatch)}</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-300 text-sm">{fmt(results.totalEmployerMatch)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Investment Growth</div>
-                  <div className="font-bold font-mono text-blue-300 text-sm">{fmt(results.totalInvestmentReturns)}</div>
+                  <div className="font-bold font-sans tabular-nums text-blue-300 text-sm">{fmt(results.totalInvestmentReturns)}</div>
                 </div>
               </div>
             </div>
@@ -557,29 +557,29 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
           <div className="grid grid-cols-2 gap-4 text-xs">
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Early Withdrawal Amount ($)</label>
-              <Input type="number" min="0" value={earlyWithdrawalAmountInput} onChange={(e) => setEarlyWithdrawalAmountInput(e.target.value)} className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <Input type="number" min="0" value={earlyWithdrawalAmountInput} onChange={(e) => setEarlyWithdrawalAmountInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Federal Tax Bracket (%)</label>
-              <Input type="number" min="0" max="50" value={federalTaxRateInput} onChange={(e) => setFederalTaxRateInput(e.target.value)} className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <Input type="number" min="0" max="50" value={federalTaxRateInput} onChange={(e) => setFederalTaxRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 text-xs">
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">State Tax Rate (%)</label>
-              <Input type="number" min="0" max="25" value={stateTaxRateInput} onChange={(e) => setStateTaxRateInput(e.target.value)} className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <Input type="number" min="0" max="25" value={stateTaxRateInput} onChange={(e) => setStateTaxRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Local / City Tax Rate (%)</label>
-              <Input type="number" min="0" max="10" value={localTaxRateInput} onChange={(e) => setLocalTaxRateInput(e.target.value)} className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <Input type="number" min="0" max="10" value={localTaxRateInput} onChange={(e) => setLocalTaxRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
           </div>
 
-          <div className="bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-6 rounded-xl space-y-3 font-mono text-xs">
+          <div className="bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-6 rounded-xl space-y-3 font-sans tabular-nums text-xs">
             <div className="flex justify-between items-center text-sm font-sans font-bold text-rose-900 dark:text-rose-200 border-b pb-2">
               <span>Net Cash Received:</span>
-              <span className="text-2xl font-extrabold font-mono text-emerald-600">{fmt(results.netCashReceived || 0)}</span>
+              <span className="text-2xl font-extrabold font-sans tabular-nums text-emerald-600">{fmt(results.netCashReceived || 0)}</span>
             </div>
             <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
               <span>IRS 10% Early Penalty Fee:</span>
@@ -608,10 +608,10 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
             </p>
           </div>
 
-          <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 p-6 rounded-xl space-y-3 font-mono text-xs">
+          <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 p-6 rounded-xl space-y-3 font-sans tabular-nums text-xs">
             <div className="flex justify-between items-center text-sm font-sans font-bold text-emerald-900 dark:text-emerald-200 border-b pb-2">
               <span>Optimal Contribution Deferral Rate:</span>
-              <span className="text-2xl font-extrabold font-mono text-emerald-600">{results.optimalContributionPercent}% of Salary</span>
+              <span className="text-2xl font-extrabold font-sans tabular-nums text-emerald-600">{results.optimalContributionPercent}% of Salary</span>
             </div>
             <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
               <span>Maximum Employer Match Dollars:</span>
@@ -652,7 +652,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
                   <th className="p-2.5 text-right">Purchasing Power ($)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-sans tabular-nums">
                 {results.schedule.map((r) => (
                   <tr key={r.age} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">

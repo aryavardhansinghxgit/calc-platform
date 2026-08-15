@@ -322,22 +322,22 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
                   <TableCell className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
                     {row.paymentNumber}
                   </TableCell>
-                  <TableCell className="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+                  <TableCell className="text-xs text-zinc-500 dark:text-zinc-400 font-sans tabular-nums">
                     {row.paymentDate}
                   </TableCell>
-                  <TableCell className="text-xs font-mono text-zinc-600 dark:text-zinc-400 text-right">
+                  <TableCell className="text-xs font-sans tabular-nums text-zinc-600 dark:text-zinc-400 text-right">
                     {formatCurrency(row.beginningBalance)}
                   </TableCell>
-                  <TableCell className="text-xs font-mono font-semibold text-zinc-900 dark:text-zinc-100 text-right">
+                  <TableCell className="text-xs font-sans tabular-nums font-semibold text-zinc-900 dark:text-zinc-100 text-right">
                     {formatCurrency(row.paymentAmount)}
                   </TableCell>
-                  <TableCell className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-medium text-right">
+                  <TableCell className="text-xs font-sans tabular-nums text-emerald-600 dark:text-emerald-400 font-medium text-right">
                     {formatCurrency(row.principalPaid)}
                   </TableCell>
-                  <TableCell className="text-xs font-mono text-amber-600 dark:text-amber-400 font-medium text-right">
+                  <TableCell className="text-xs font-sans tabular-nums text-amber-600 dark:text-amber-400 font-medium text-right">
                     {formatCurrency(row.interestPaid)}
                   </TableCell>
-                  <TableCell className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400 text-right">
+                  <TableCell className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400 text-right">
                     {formatCurrency(row.endingBalance)}
                   </TableCell>
                 </TableRow>
@@ -351,13 +351,13 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
                   <TableCell className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
                     Year {row.year}
                   </TableCell>
-                  <TableCell className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-medium text-right">
+                  <TableCell className="text-xs font-sans tabular-nums text-emerald-600 dark:text-emerald-400 font-medium text-right">
                     {formatCurrency(row.principalPaid)}
                   </TableCell>
-                  <TableCell className="text-xs font-mono text-amber-600 dark:text-amber-400 font-medium text-right">
+                  <TableCell className="text-xs font-sans tabular-nums text-amber-600 dark:text-amber-400 font-medium text-right">
                     {formatCurrency(row.interestPaid)}
                   </TableCell>
-                  <TableCell className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400 text-right">
+                  <TableCell className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400 text-right">
                     {formatCurrency(row.endingBalance)}
                   </TableCell>
                 </TableRow>
@@ -388,7 +388,7 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
 
         {itemsPerPage !== -1 && totalPages > 1 && (
           <div className="flex items-center gap-3">
-            <span className="text-xs text-zinc-500 font-mono">
+            <span className="text-xs text-zinc-500 font-sans tabular-nums">
               Page {currentPage} of {totalPages} ({processedRows.length} total entries)
             </span>
             <div className="flex items-center gap-1.5">

@@ -128,12 +128,12 @@ export function CommissionContent() {
         <section className="space-y-4">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Simple &amp; Graduated Tiered Commission Formulas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Simple Commission Formula</span>
               <div>Commission Amount = Sales Price × (Commission Rate / 100)</div>
               <div>Company Net Revenue = Sales Price - Commission Amount</div>
             </div>
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Graduated Tiered Commission Formula</span>
               <div>Total Commission = ∑ [ (Tier Sales) × (Tier Rate / 100) ]</div>
               <div>Total Compensation = Base Salary + Total Commission</div>
@@ -146,7 +146,7 @@ export function CommissionContent() {
           <p>
             For a salesperson generating $27,000 in monthly sales with the following tiered bracket structure:
           </p>
-          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
             <div>• Tier 1 ($0 to $20,000 @ 3%): $20,000 × 0.03 = $600.00</div>
             <div>• Tier 2 ($20,000 to $25,000 @ 5%): $5,000 × 0.05 = $250.00</div>
             <div>• Tier 3 ($25,000+ @ 10%): $2,000 × 0.10 = $200.00</div>
@@ -207,7 +207,7 @@ export function CommissionContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold shrink-0">
+                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}

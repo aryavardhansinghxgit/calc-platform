@@ -132,14 +132,14 @@ export function CaloriesBurnedContent() {
         <div className="space-y-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. ACSM Standard MET Calorie Equation</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-amber-600 dark:text-amber-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-amber-600 dark:text-amber-400">
               Calories Burned (kcal) = [ Duration (minutes) × MET × Weight (kg) ] / 200
             </code>
           </div>
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. Oxygen Consumption ($V_O2$) Equivalent</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-blue-600 dark:text-blue-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               1 MET = 3.5 mL O₂ / kg / min ≈ 5.0 kcal / L O₂ consumed
             </code>
           </div>

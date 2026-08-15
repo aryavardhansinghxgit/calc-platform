@@ -128,7 +128,7 @@ export function PersonalLoanContent() {
 
         <section className="space-y-4">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Personal Loan Payment Formula</h2>
-          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
             <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Monthly Payment Formula</span>
             <div>PMT = [ Principal × r × (1 + r)^n ] / [ (1 + r)^n - 1 ]</div>
             <div>Where: r = Monthly Interest Rate (APR / 12), n = Total Months (Years × 12)</div>
@@ -140,7 +140,7 @@ export function PersonalLoanContent() {
           <p>
             For a $20,000 personal loan at 10.0% APR over 5 years (60 monthly payments):
           </p>
-          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
             <div>• Monthly Payment: $424.94</div>
             <div>• Total Payments (60 months): $25,496.45</div>
             <div>• Total Interest Paid: $5,496.45</div>
@@ -204,7 +204,7 @@ export function PersonalLoanContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold shrink-0">
+                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}

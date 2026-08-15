@@ -360,7 +360,7 @@ export function CagrCalculator() {
                 type="number"
                 value={initialValue}
                 onChange={(e) => setInitialValue(Number(e.target.value))}
-                className="h-9 text-xs font-mono"
+                className="h-9 text-xs font-sans tabular-nums"
               />
               <input
                 type="range"
@@ -384,7 +384,7 @@ export function CagrCalculator() {
                   type="number"
                   value={finalValue}
                   onChange={(e) => setFinalValue(Number(e.target.value))}
-                  className="h-9 text-xs font-mono"
+                  className="h-9 text-xs font-sans tabular-nums"
                 />
                 <input
                   type="range"
@@ -410,7 +410,7 @@ export function CagrCalculator() {
                   step="0.5"
                   value={targetCagr}
                   onChange={(e) => setTargetCagr(Number(e.target.value))}
-                  className="h-8 text-xs font-mono bg-white dark:bg-zinc-900"
+                  className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
                 />
               </div>
             )}
@@ -427,7 +427,7 @@ export function CagrCalculator() {
                   step="0.5"
                   value={years}
                   onChange={(e) => setYears(Number(e.target.value))}
-                  className="h-9 text-xs font-mono"
+                  className="h-9 text-xs font-sans tabular-nums"
                 />
                 <input
                   type="range"
@@ -450,7 +450,7 @@ export function CagrCalculator() {
                   step="1"
                   value={taxRate}
                   onChange={(e) => setTaxRate(Number(e.target.value))}
-                  className="h-8 text-xs font-mono"
+                  className="h-8 text-xs font-sans tabular-nums"
                 />
               </div>
               <div className="space-y-1">
@@ -460,7 +460,7 @@ export function CagrCalculator() {
                   step="0.5"
                   value={inflationRate}
                   onChange={(e) => setInflationRate(Number(e.target.value))}
-                  className="h-8 text-xs font-mono"
+                  className="h-8 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -477,7 +477,7 @@ export function CagrCalculator() {
               <span className="text-xs font-semibold text-blue-100 block uppercase tracking-wider leading-tight">
                 Compound Annual Growth Rate
               </span>
-              <div className="text-xl sm:text-2xl font-black tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-xl sm:text-2xl font-black tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {results.cagrPercent}%
               </div>
               <span className="text-[11px] text-blue-200 block leading-tight">Over {results.years} Years</span>
@@ -487,7 +487,7 @@ export function CagrCalculator() {
               <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider leading-tight">
                 Total Absolute Return
               </span>
-              <div className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {results.absoluteReturnPercent}%
               </div>
               <span className="text-[11px] text-zinc-400 block leading-tight">{results.wealthMultiplier}x Wealth Multiplier</span>
@@ -497,7 +497,7 @@ export function CagrCalculator() {
               <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider leading-tight">
                 Total Dollar Profit / Gain
               </span>
-              <div className="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400 tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400 tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {formatCurrency(results.totalProfit)}
               </div>
               <span className="text-[11px] text-zinc-400 block leading-tight">Net capital gain</span>
@@ -508,15 +508,15 @@ export function CagrCalculator() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl border border-zinc-200/60 dark:border-zinc-800 text-xs">
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Inflation-Adjusted Real CAGR</span>
-              <span className="font-bold text-amber-600 dark:text-amber-400 font-mono block">{results.realCagrPercent}%</span>
+              <span className="font-bold text-amber-600 dark:text-amber-400 font-sans tabular-nums block">{results.realCagrPercent}%</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Real Purchasing Power</span>
-              <span className="font-bold text-zinc-900 dark:text-zinc-100 font-mono block">{formatCurrency(results.realEndingValue)}</span>
+              <span className="font-bold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums block">{formatCurrency(results.realEndingValue)}</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Post-Tax Final Value</span>
-              <span className="font-bold text-blue-600 font-mono block">{formatCurrency(results.postTaxFinalValue)}</span>
+              <span className="font-bold text-blue-600 font-sans tabular-nums block">{formatCurrency(results.postTaxFinalValue)}</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">CAGR Health Rating</span>
@@ -540,7 +540,7 @@ export function CagrCalculator() {
                       <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-bold text-emerald-600">Projected Profit</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+                  <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
                     {results.benchmarkComparisons.map((b, idx) => (
                       <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                         <td className="p-2 font-sans font-bold text-zinc-900 dark:text-zinc-100">{b.assetClass}</td>
@@ -575,7 +575,7 @@ export function CagrCalculator() {
                   </thead>
                   <tbody>
                     {[6, 8, 10, 12, 15, 18, 20].map((r) => (
-                      <tr key={r} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 font-mono">
+                      <tr key={r} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 font-sans tabular-nums">
                         <td className="p-2 font-bold border border-zinc-200 dark:border-zinc-800">{r}%</td>
                         {[1, 3, 5, 7, 10].map((t) => {
                           const cell = results.sensitivityMatrix.find((c) => c.returnRate === r && c.tenureYears === t);
@@ -701,7 +701,7 @@ export function CagrCalculator() {
                     )}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
                   {paginatedScheduleRows.length > 0 ? (
                     paginatedScheduleRows.map((r: any, idx) => (
                       <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">

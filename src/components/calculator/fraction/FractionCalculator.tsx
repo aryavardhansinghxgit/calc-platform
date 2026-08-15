@@ -200,7 +200,7 @@ export function FractionCalculator() {
                 <Calculator className="w-4 h-4 text-blue-600" />
                 <span>Fraction Input Controls</span>
               </h3>
-              <span className="text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-800">
+              <span className="text-[10px] font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-800">
                 REAL-TIME SOLVER
               </span>
             </div>
@@ -215,7 +215,7 @@ export function FractionCalculator() {
                     value={num1}
                     onChange={(e) => setNum1(e.target.value)}
                     placeholder="Num 1"
-                    className="w-24 text-center py-1.5 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+                    className="w-24 text-center py-1.5 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
                   />
                   <div className="w-24 h-0.5 bg-zinc-900 dark:bg-zinc-100 my-0.5" />
                   <input
@@ -223,7 +223,7 @@ export function FractionCalculator() {
                     value={den1}
                     onChange={(e) => setDen1(e.target.value)}
                     placeholder="Den 1"
-                    className="w-24 text-center py-1.5 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+                    className="w-24 text-center py-1.5 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
                   />
                 </div>
 
@@ -231,7 +231,7 @@ export function FractionCalculator() {
                 <select
                   value={op}
                   onChange={(e: any) => setOp(e.target.value)}
-                  className="px-3 py-2 font-mono font-black text-base bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-300 dark:border-blue-800 rounded-xl cursor-pointer"
+                  className="px-3 py-2 font-sans tabular-nums font-black text-base bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-300 dark:border-blue-800 rounded-xl cursor-pointer"
                 >
                   <option value="+">+</option>
                   <option value="-">−</option>
@@ -246,7 +246,7 @@ export function FractionCalculator() {
                     value={num2}
                     onChange={(e) => setNum2(e.target.value)}
                     placeholder="Num 2"
-                    className="w-24 text-center py-1.5 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+                    className="w-24 text-center py-1.5 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
                   />
                   <div className="w-24 h-0.5 bg-zinc-900 dark:bg-zinc-100 my-0.5" />
                   <input
@@ -254,7 +254,7 @@ export function FractionCalculator() {
                     value={den2}
                     onChange={(e) => setDen2(e.target.value)}
                     placeholder="Den 2"
-                    className="w-24 text-center py-1.5 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+                    className="w-24 text-center py-1.5 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
                   />
                 </div>
               </div>
@@ -267,21 +267,21 @@ export function FractionCalculator() {
                     value={w1}
                     onChange={(e) => setW1(e.target.value)}
                     placeholder="Whole 1"
-                    className="w-16 text-center py-3 font-mono font-bold text-base bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+                    className="w-16 text-center py-3 font-sans tabular-nums font-bold text-base bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
                   />
                   <div className="flex flex-col items-center gap-1">
                     <input
                       type="number"
                       value={num1}
                       onChange={(e) => setNum1(e.target.value)}
-                      className="w-16 text-center py-1 font-mono font-bold text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg"
+                      className="w-16 text-center py-1 font-sans tabular-nums font-bold text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg"
                     />
                     <div className="w-16 h-0.5 bg-zinc-900 dark:bg-zinc-100" />
                     <input
                       type="number"
                       value={den1}
                       onChange={(e) => setDen1(e.target.value)}
-                      className="w-16 text-center py-1 font-mono font-bold text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg"
+                      className="w-16 text-center py-1 font-sans tabular-nums font-bold text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg"
                     />
                   </div>
                 </div>
@@ -289,7 +289,7 @@ export function FractionCalculator() {
                 <select
                   value={op}
                   onChange={(e: any) => setOp(e.target.value)}
-                  className="px-3 py-2 font-mono font-black text-base bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-300 dark:border-blue-800 rounded-xl cursor-pointer"
+                  className="px-3 py-2 font-sans tabular-nums font-black text-base bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-300 dark:border-blue-800 rounded-xl cursor-pointer"
                 >
                   <option value="+">+</option>
                   <option value="-">−</option>
@@ -304,21 +304,21 @@ export function FractionCalculator() {
                     value={w2}
                     onChange={(e) => setW2(e.target.value)}
                     placeholder="Whole 2"
-                    className="w-16 text-center py-3 font-mono font-bold text-base bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+                    className="w-16 text-center py-3 font-sans tabular-nums font-bold text-base bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
                   />
                   <div className="flex flex-col items-center gap-1">
                     <input
                       type="number"
                       value={num2}
                       onChange={(e) => setNum2(e.target.value)}
-                      className="w-16 text-center py-1 font-mono font-bold text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg"
+                      className="w-16 text-center py-1 font-sans tabular-nums font-bold text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg"
                     />
                     <div className="w-16 h-0.5 bg-zinc-900 dark:bg-zinc-100" />
                     <input
                       type="number"
                       value={den2}
                       onChange={(e) => setDen2(e.target.value)}
-                      className="w-16 text-center py-1 font-mono font-bold text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg"
+                      className="w-16 text-center py-1 font-sans tabular-nums font-bold text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg"
                     />
                   </div>
                 </div>
@@ -331,7 +331,7 @@ export function FractionCalculator() {
                   value={decVal}
                   onChange={(e) => setDecVal(e.target.value)}
                   placeholder="e.g. 1.375 or 0.142857"
-                  className="w-full px-4 py-2.5 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
+                  className="w-full px-4 py-2.5 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
                 />
               </div>
             ) : (
@@ -341,7 +341,7 @@ export function FractionCalculator() {
                   value={num1}
                   onChange={(e) => setNum1(e.target.value)}
                   placeholder="Numerator"
-                  className="w-32 text-center py-2 font-mono font-bold text-base bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+                  className="w-32 text-center py-2 font-sans tabular-nums font-bold text-base bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
                 />
                 <div className="w-32 h-0.5 bg-zinc-900 dark:bg-zinc-100 my-1" />
                 <input
@@ -349,7 +349,7 @@ export function FractionCalculator() {
                   value={den1}
                   onChange={(e) => setDen1(e.target.value)}
                   placeholder="Denominator"
-                  className="w-32 text-center py-2 font-mono font-bold text-base bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
+                  className="w-32 text-center py-2 font-sans tabular-nums font-bold text-base bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none"
                 />
               </div>
             )}
@@ -390,13 +390,13 @@ export function FractionCalculator() {
                 {/* Main Highlighted Simplified Result */}
                 <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-400">Simplified Form</span>
-                  <span className="text-2xl font-mono font-black text-emerald-300">
+                  <span className="text-2xl font-sans tabular-nums font-black text-emerald-300">
                     {calculationResult.simplifiedFraction}
                   </span>
                 </div>
 
                 {/* Secondary Results Grid */}
-                <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                <div className="grid grid-cols-2 gap-2 text-xs font-sans tabular-nums">
                   <div className="p-2.5 bg-slate-800/80 rounded-lg border border-slate-700">
                     <div className="text-[10px] text-slate-400 font-sans">Mixed Number</div>
                     <div className="font-bold text-slate-100">{calculationResult.mixedNumber}</div>
@@ -418,7 +418,7 @@ export function FractionCalculator() {
                 {/* Equivalent Fractions List */}
                 <div className="p-2.5 bg-slate-950/80 rounded-lg border border-slate-800 space-y-1">
                   <span className="text-[10px] font-sans font-bold text-slate-400 uppercase tracking-wider">Equivalent Ratios</span>
-                  <div className="text-xs font-mono text-emerald-400 truncate">
+                  <div className="text-xs font-sans tabular-nums text-emerald-400 truncate">
                     {calculationResult.equivalentFractions.join(" = ")}
                   </div>
                 </div>
@@ -453,7 +453,7 @@ export function FractionCalculator() {
                 {savedItems.map((item) => (
                   <div
                     key={item.id}
-                    className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-2 text-xs font-mono"
+                    className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-2 text-xs font-sans tabular-nums"
                   >
                     <div className="truncate">
                       <div className="text-[10px] font-sans font-bold text-blue-600 dark:text-blue-400">{item.title}</div>
@@ -485,7 +485,7 @@ export function FractionCalculator() {
                     <div className="flex items-center justify-between text-xs font-bold text-zinc-900 dark:text-zinc-100">
                       <span>Step {st.stepNumber}: {st.title}</span>
                     </div>
-                    <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold py-1">
+                    <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold py-1">
                       {st.latex}
                     </div>
                     <p className="text-[11px] text-zinc-600 dark:text-zinc-400">

@@ -433,7 +433,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
         </div>
         <div className="flex items-center gap-1.5 w-full sm:w-auto">
           <div className="relative flex-1 sm:w-32">
-            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400 font-mono">
+            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400 font-sans tabular-nums">
               $
             </span>
             <Input
@@ -444,7 +444,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
               onChange={(e) =>
                 setState({ ...state, value: Math.max(0, Number(e.target.value) || 0) })
               }
-              className="pl-6 text-xs font-mono h-8 bg-zinc-50 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700"
+              className="pl-6 text-xs font-sans tabular-nums h-8 bg-zinc-50 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700"
             />
           </div>
           <select
@@ -555,9 +555,9 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
                       step={1}
                       value={taxRate}
                       onChange={(e) => setTaxRate(Math.max(0, Math.min(60, Number(e.target.value) || 0)))}
-                      className="pr-6 text-xs font-mono h-8 bg-zinc-50 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700"
+                      className="pr-6 text-xs font-sans tabular-nums h-8 bg-zinc-50 dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700"
                     />
-                    <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400 font-mono">
+                    <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400 font-sans tabular-nums">
                       %
                     </span>
                   </div>
@@ -817,7 +817,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
                     {results.netMonthlySurplus >= 0 ? "Positive Flow" : "Over Budget"}
                   </Badge>
                 </div>
-                <div className="text-2xl sm:text-3xl font-extrabold font-mono mt-1">
+                <div className="text-2xl sm:text-3xl font-extrabold font-sans tabular-nums mt-1">
                   ${Math.abs(results.netMonthlySurplus).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   <span className="text-xs font-normal ml-1 opacity-80">/ month</span>
                 </div>
@@ -841,7 +841,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
                       <th className="p-2.5 text-right">Monthly</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+                  <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
                     <tr>
                       <td className="p-2.5 font-sans font-medium text-zinc-800 dark:text-zinc-200">
                         Total Before Tax Income
@@ -913,14 +913,14 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
                 <div className="grid grid-cols-2 gap-3 text-xs">
                   <div className="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700">
                     <span className="text-[11px] text-zinc-500 dark:text-zinc-400 block">Total DTI Ratio</span>
-                    <span className="text-lg font-bold font-mono text-zinc-900 dark:text-zinc-100">
+                    <span className="text-lg font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
                       {results.totalDti.toFixed(2)}%
                     </span>
                     <span className="text-[10px] text-zinc-400 block mt-0.5">Target &lt; 36%</span>
                   </div>
                   <div className="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700">
                     <span className="text-[11px] text-zinc-500 dark:text-zinc-400 block">Front-End Housing</span>
-                    <span className="text-lg font-bold font-mono text-zinc-900 dark:text-zinc-100">
+                    <span className="text-lg font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
                       {results.frontEndDti.toFixed(2)}%
                     </span>
                     <span className="text-[10px] text-zinc-400 block mt-0.5">Housing / Gross</span>
@@ -940,7 +940,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
                   <div>
                     <div className="flex justify-between text-[11px] mb-1">
                       <span className="font-semibold text-zinc-700 dark:text-zinc-300">Needs (Target 50%)</span>
-                      <span className="font-mono">
+                      <span className="font-sans tabular-nums">
                         ${results.rule503020.needs.actual.toFixed(0)}/mo ({results.rule503020.needs.pctActual.toFixed(1)}%)
                       </span>
                     </div>
@@ -958,7 +958,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
                   <div>
                     <div className="flex justify-between text-[11px] mb-1">
                       <span className="font-semibold text-zinc-700 dark:text-zinc-300">Wants (Target 30%)</span>
-                      <span className="font-mono">
+                      <span className="font-sans tabular-nums">
                         ${results.rule503020.wants.actual.toFixed(0)}/mo ({results.rule503020.wants.pctActual.toFixed(1)}%)
                       </span>
                     </div>
@@ -976,7 +976,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
                   <div>
                     <div className="flex justify-between text-[11px] mb-1">
                       <span className="font-semibold text-zinc-700 dark:text-zinc-300">Savings & Debt (Target 20%)</span>
-                      <span className="font-mono">
+                      <span className="font-sans tabular-nums">
                         ${results.rule503020.savings.actual.toFixed(0)}/mo ({results.rule503020.savings.pctActual.toFixed(1)}%)
                       </span>
                     </div>
@@ -1100,7 +1100,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
                       <th className="p-2 text-right">% Income</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+                  <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
                     {filteredItemizedBreakdown
                       .filter((item) => item.annual > 0)
                       .map((item) => (
@@ -1143,7 +1143,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
               <div className="space-y-1.5 p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/60">
                 <div className="flex justify-between font-semibold">
                   <span>Income Reduction Shock</span>
-                  <span className="font-mono text-rose-500">-{incomeDropPct}%</span>
+                  <span className="font-sans tabular-nums text-rose-500">-{incomeDropPct}%</span>
                 </div>
                 <input
                   type="range"
@@ -1163,7 +1163,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
               <div className="space-y-1.5 p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/60">
                 <div className="flex justify-between font-semibold">
                   <span>Expense Inflation Surge</span>
-                  <span className="font-mono text-amber-500">+{inflationPct}%</span>
+                  <span className="font-sans tabular-nums text-amber-500">+{inflationPct}%</span>
                 </div>
                 <input
                   type="range"
@@ -1184,7 +1184,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
                 <span className="text-[10px] text-slate-400 font-semibold uppercase">
                   Stressed Net Monthly Surplus
                 </span>
-                <div className="text-xl font-extrabold font-mono">
+                <div className="text-xl font-extrabold font-sans tabular-nums">
                   ${results.netMonthlySurplus.toLocaleString("en-US", { maximumFractionDigits: 2 })}
                   <span className="text-xs font-normal text-slate-400">/mo</span>
                 </div>

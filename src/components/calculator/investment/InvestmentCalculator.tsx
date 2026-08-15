@@ -373,7 +373,7 @@ export function InvestmentCalculator() {
                 key={cur}
                 type="button"
                 onClick={() => setCurrencySymbol(cur)}
-                className={`px-2 py-0.5 rounded font-mono font-bold text-xs transition-colors ${
+                className={`px-2 py-0.5 rounded font-sans tabular-nums font-bold text-xs transition-colors ${
                   currencySymbol === cur
                     ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
                     : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
@@ -460,14 +460,14 @@ export function InvestmentCalculator() {
                         Starting Principal Amount
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                           {currencySymbol}
                         </span>
                         <Input
                           type="number"
                           value={startingAmountInput}
                           onChange={(e) => setStartingAmountInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                         />
                       </div>
                     </div>
@@ -481,7 +481,7 @@ export function InvestmentCalculator() {
                         step="0.1"
                         value={rateInput}
                         onChange={(e) => setRateInput(e.target.value)}
-                        className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
                   </div>
@@ -492,14 +492,14 @@ export function InvestmentCalculator() {
                         Additional Contribution ($)
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                           {currencySymbol}
                         </span>
                         <Input
                           type="number"
                           value={additionalContributionInput}
                           onChange={(e) => setAdditionalContributionInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                         />
                       </div>
                     </div>
@@ -539,14 +539,14 @@ export function InvestmentCalculator() {
                       Target Investment Goal ($)
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                         {currencySymbol}
                       </span>
                       <Input
                         type="number"
                         value={goalInput}
                         onChange={(e) => setGoalInput(e.target.value)}
-                        className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
                   </div>
@@ -557,14 +557,14 @@ export function InvestmentCalculator() {
                         Starting Principal Amount
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                           {currencySymbol}
                         </span>
                         <Input
                           type="number"
                           value={startingAmountInput}
                           onChange={(e) => setStartingAmountInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                         />
                       </div>
                     </div>
@@ -578,7 +578,7 @@ export function InvestmentCalculator() {
                         step="0.1"
                         value={rateInput}
                         onChange={(e) => setRateInput(e.target.value)}
-                        className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
                   </div>
@@ -594,14 +594,14 @@ export function InvestmentCalculator() {
                         Target Investment Goal ($)
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                           {currencySymbol}
                         </span>
                         <Input
                           type="number"
                           value={goalInput}
                           onChange={(e) => setGoalInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                         />
                       </div>
                     </div>
@@ -611,14 +611,14 @@ export function InvestmentCalculator() {
                         Starting Principal Amount
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                           {currencySymbol}
                         </span>
                         <Input
                           type="number"
                           value={startingAmountInput}
                           onChange={(e) => setStartingAmountInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                         />
                       </div>
                     </div>
@@ -629,14 +629,14 @@ export function InvestmentCalculator() {
                       Additional Contribution ($)
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                         {currencySymbol}
                       </span>
                       <Input
                         type="number"
                         value={additionalContributionInput}
                         onChange={(e) => setAdditionalContributionInput(e.target.value)}
-                        className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
                   </div>
@@ -652,14 +652,14 @@ export function InvestmentCalculator() {
                         Target Investment Goal ($)
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                           {currencySymbol}
                         </span>
                         <Input
                           type="number"
                           value={goalInput}
                           onChange={(e) => setGoalInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                         />
                       </div>
                     </div>
@@ -673,7 +673,7 @@ export function InvestmentCalculator() {
                         step="0.1"
                         value={rateInput}
                         onChange={(e) => setRateInput(e.target.value)}
-                        className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
                   </div>
@@ -683,14 +683,14 @@ export function InvestmentCalculator() {
                       Additional Contribution ($)
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                         {currencySymbol}
                       </span>
                       <Input
                         type="number"
                         value={additionalContributionInput}
                         onChange={(e) => setAdditionalContributionInput(e.target.value)}
-                        className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
                   </div>
@@ -706,14 +706,14 @@ export function InvestmentCalculator() {
                         Current Retirement Savings
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                           {currencySymbol}
                         </span>
                         <Input
                           type="number"
                           value={startingAmountInput}
                           onChange={(e) => setStartingAmountInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                         />
                       </div>
                     </div>
@@ -723,14 +723,14 @@ export function InvestmentCalculator() {
                         Monthly Contribution ($)
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                           {currencySymbol}
                         </span>
                         <Input
                           type="number"
                           value={additionalContributionInput}
                           onChange={(e) => setAdditionalContributionInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                         />
                       </div>
                     </div>
@@ -745,7 +745,7 @@ export function InvestmentCalculator() {
                       step="0.1"
                       value={rateInput}
                       onChange={(e) => setRateInput(e.target.value)}
-                      className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                     />
                   </div>
                 </>
@@ -759,14 +759,14 @@ export function InvestmentCalculator() {
                       Expected Annual Living Expenses ($)
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                         {currencySymbol}
                       </span>
                       <Input
                         type="number"
                         value={additionalContributionInput}
                         onChange={(e) => setAdditionalContributionInput(e.target.value)}
-                        className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
                   </div>
@@ -777,14 +777,14 @@ export function InvestmentCalculator() {
                         Current Savings / Capital ($)
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                           {currencySymbol}
                         </span>
                         <Input
                           type="number"
                           value={startingAmountInput}
                           onChange={(e) => setStartingAmountInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                         />
                       </div>
                     </div>
@@ -798,7 +798,7 @@ export function InvestmentCalculator() {
                         step="0.1"
                         value={rateInput}
                         onChange={(e) => setRateInput(e.target.value)}
-                        className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
                   </div>
@@ -816,7 +816,7 @@ export function InvestmentCalculator() {
                       type="number"
                       value={durationValInput}
                       onChange={(e) => setDurationValInput(e.target.value)}
-                      className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 flex-1"
+                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 flex-1"
                     />
                     <select
                       value={durationUnit}
@@ -872,7 +872,7 @@ export function InvestmentCalculator() {
                         step="0.5"
                         value={stepUpInput}
                         onChange={(e) => setStepUpInput(e.target.value)}
-                        className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
 
@@ -885,7 +885,7 @@ export function InvestmentCalculator() {
                         step="0.1"
                         value={inflationInput}
                         onChange={(e) => setInflationInput(e.target.value)}
-                        className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
 
@@ -898,7 +898,7 @@ export function InvestmentCalculator() {
                         step="0.5"
                         value={taxRateInput}
                         onChange={(e) => setTaxRateInput(e.target.value)}
-                        className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
 
@@ -911,7 +911,7 @@ export function InvestmentCalculator() {
                         step="0.05"
                         value={expenseRatioInput}
                         onChange={(e) => setExpenseRatioInput(e.target.value)}
-                        className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
                   </div>
@@ -937,7 +937,7 @@ export function InvestmentCalculator() {
             {activeMode === "future_value" && (
               <div>
                 <span className="text-xs text-zinc-400 block font-medium">Future Portfolio Value</span>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
                   {currencySymbol}{results.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
                 <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
@@ -949,7 +949,7 @@ export function InvestmentCalculator() {
             {activeMode === "contributions" && (
               <div>
                 <span className="text-xs text-zinc-400 block font-medium">Required Monthly Contribution</span>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
                   {currencySymbol}{results.requiredMonthlyContribution.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/mo
                 </div>
                 <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
@@ -961,7 +961,7 @@ export function InvestmentCalculator() {
             {activeMode === "return_rate" && (
               <div>
                 <span className="text-xs text-zinc-400 block font-medium">Required Annual Return Rate</span>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
                   {results.requiredReturnRate.toFixed(2)}%
                 </div>
                 <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
@@ -973,7 +973,7 @@ export function InvestmentCalculator() {
             {activeMode === "starting_amount" && (
               <div>
                 <span className="text-xs text-zinc-400 block font-medium">Required Starting Principal</span>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
                   {currencySymbol}{results.requiredStartingAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
                 <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
@@ -985,7 +985,7 @@ export function InvestmentCalculator() {
             {activeMode === "retirement" && (
               <div>
                 <span className="text-xs text-zinc-400 block font-medium">Retirement Portfolio at Maturity</span>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
                   {currencySymbol}{results.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
                 <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
@@ -997,7 +997,7 @@ export function InvestmentCalculator() {
             {activeMode === "fire" && (
               <div>
                 <span className="text-xs text-zinc-400 block font-medium">FIRE Number Target (25x Expenses)</span>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
                   {currencySymbol}{results.fireNumberTarget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
                 <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
@@ -1010,34 +1010,34 @@ export function InvestmentCalculator() {
             <div className="grid grid-cols-2 gap-3 pt-2 border-t border-white/10">
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Starting Principal</span>
-                <span className="text-base font-bold text-white font-mono">
+                <span className="text-base font-bold text-white font-sans tabular-nums">
                   {currencySymbol}{results.startingAmount.toLocaleString()}
                 </span>
               </div>
 
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Total Contributions</span>
-                <span className="text-base font-bold text-purple-300 font-mono">
+                <span className="text-base font-bold text-purple-300 font-sans tabular-nums">
                   {currencySymbol}{results.totalContributions.toLocaleString()}
                 </span>
               </div>
 
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Effective APY</span>
-                <span className="text-base font-bold text-emerald-300 font-mono">
+                <span className="text-base font-bold text-emerald-300 font-sans tabular-nums">
                   {results.effectiveAnnualReturnPercent.toFixed(2)}%
                 </span>
               </div>
 
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Est. Passive Income</span>
-                <span className="text-base font-bold text-emerald-300 font-mono">
+                <span className="text-base font-bold text-emerald-300 font-sans tabular-nums">
                   {currencySymbol}{results.estimatedPassiveIncomePerYear.toLocaleString()}/yr
                 </span>
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-500/30 text-xs text-amber-100 flex items-center justify-between font-mono">
+            <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-500/30 text-xs text-amber-100 flex items-center justify-between font-sans tabular-nums">
               <span>Inflation-Adjusted Purchasing Power:</span>
               <span className="font-bold text-amber-300">
                 {currencySymbol}{results.inflationAdjustedFutureValue.toLocaleString()}
@@ -1073,7 +1073,7 @@ export function InvestmentCalculator() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 text-xs font-mono">
+          <div className="grid grid-cols-3 gap-2 text-xs font-sans tabular-nums">
             <div className="p-3 rounded-lg bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/40">
               <span className="text-[10px] text-rose-600 block font-sans font-bold">10th % (Worst Case)</span>
               <span className="font-bold text-rose-700 dark:text-rose-400">
@@ -1096,7 +1096,7 @@ export function InvestmentCalculator() {
             </div>
           </div>
 
-          <div className="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-xs flex items-center justify-between font-mono">
+          <div className="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-xs flex items-center justify-between font-sans tabular-nums">
             <span className="font-sans text-zinc-600 dark:text-zinc-400">Probability of Achieving Target Goal:</span>
             <span className="font-bold text-emerald-600 dark:text-emerald-400 text-sm">
               {results.monteCarlo.successProbabilityPercent.toFixed(1)}% Success Rate
@@ -1119,7 +1119,7 @@ export function InvestmentCalculator() {
                 type="number"
                 value={goalInput}
                 onChange={(e) => setGoalInput(e.target.value)}
-                className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
               />
             </div>
 
@@ -1136,7 +1136,7 @@ export function InvestmentCalculator() {
               </div>
             </div>
 
-            <div className="p-3 rounded-lg bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/40 space-y-1 font-mono text-[11px]">
+            <div className="p-3 rounded-lg bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/40 space-y-1 font-sans tabular-nums text-[11px]">
               <div className="flex justify-between text-zinc-700 dark:text-zinc-300">
                 <span>Req. Monthly Savings to Hit Goal:</span>
                 <span className="font-bold text-indigo-600 dark:text-indigo-400">
@@ -1179,11 +1179,11 @@ export function InvestmentCalculator() {
                   step="0.5"
                   value={scenarioBRate}
                   onChange={(e) => setScenarioBRate(e.target.value)}
-                  className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                  className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                 />
               </div>
 
-              <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-2 text-xs font-mono">
+              <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-2 text-xs font-sans tabular-nums">
                 <div className="flex justify-between">
                   <span>Scenario A ({parsedRate}%):</span>
                   <span className="font-bold text-zinc-900 dark:text-zinc-100">
@@ -1351,7 +1351,7 @@ export function InvestmentCalculator() {
                   <th className="p-3">Ending Balance ({currencySymbol})</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
                 {results.annualSchedule.map((row) => (
                   <tr key={row.year} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
                     <td className="p-3 font-bold font-sans">Year {row.year}</td>
@@ -1382,7 +1382,7 @@ export function InvestmentCalculator() {
                   <th className="p-3">Ending Balance ({currencySymbol})</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
                 {results.monthlySchedule.map((row) => (
                   <tr key={row.month} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
                     <td className="p-3 font-bold font-sans">Month {row.month}</td>

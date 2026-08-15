@@ -27,7 +27,7 @@ export function ReportHeader({ meta }: ReportHeaderProps) {
         </p>
       </div>
 
-      <div className="text-right space-y-1 text-xs font-mono">
+      <div className="text-right space-y-1 text-xs font-sans tabular-nums">
         <div className="font-bold text-zinc-900">{meta.calculatorName.toUpperCase()}</div>
         <div className="text-zinc-500">
           <span className="font-semibold text-zinc-700">Date:</span> {meta.generatedDate}

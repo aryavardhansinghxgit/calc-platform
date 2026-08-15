@@ -515,7 +515,7 @@ export function BandwidthCalculator() {
               <div className="space-y-1.5">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                   <span>File or Data Package Size</span>
-                  <span className="font-mono text-blue-600 font-bold">{fileSize} {fileSizeUnit}</span>
+                  <span className="font-sans tabular-nums text-blue-600 font-bold">{fileSize} {fileSizeUnit}</span>
                 </label>
                 <div className="flex gap-2">
                   <Input
@@ -524,7 +524,7 @@ export function BandwidthCalculator() {
                     step="any"
                     value={fileSize}
                     onChange={(e) => setFileSize(Math.max(0, Number(e.target.value)))}
-                    className="h-9 text-xs font-mono flex-1"
+                    className="h-9 text-xs font-sans tabular-nums flex-1"
                   />
                   <select
                     value={fileSizeUnit}
@@ -542,7 +542,7 @@ export function BandwidthCalculator() {
               <div className="space-y-1.5">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                   <span>Network Bandwidth Speed</span>
-                  <span className="font-mono text-emerald-600 font-bold">{speed} {speedUnit}</span>
+                  <span className="font-sans tabular-nums text-emerald-600 font-bold">{speed} {speedUnit}</span>
                 </label>
                 <div className="flex gap-2">
                   <Input
@@ -551,7 +551,7 @@ export function BandwidthCalculator() {
                     step="any"
                     value={speed}
                     onChange={(e) => setSpeed(Math.max(0, Number(e.target.value)))}
-                    className="h-9 text-xs font-mono flex-1"
+                    className="h-9 text-xs font-sans tabular-nums flex-1"
                   />
                   <select
                     value={speedUnit}
@@ -571,7 +571,7 @@ export function BandwidthCalculator() {
                   <span className="flex items-center gap-1">
                     <Activity className="h-3.5 w-3.5 text-blue-500" /> Protocol Overhead Loss
                   </span>
-                  <span className="font-mono font-bold text-blue-600">{overheadPercent}%</span>
+                  <span className="font-sans tabular-nums font-bold text-blue-600">{overheadPercent}%</span>
                 </div>
                 <input
                   type="range"
@@ -616,7 +616,7 @@ export function BandwidthCalculator() {
                   <span className="flex items-center gap-1">
                     <Gauge className="h-3.5 w-3.5 text-emerald-500" /> Measured ISP Speed Ratio
                   </span>
-                  <span className="font-mono font-bold text-emerald-600">{ispEfficiency}% of Plan</span>
+                  <span className="font-sans tabular-nums font-bold text-emerald-600">{ispEfficiency}% of Plan</span>
                 </div>
                 <input
                   type="range"
@@ -642,7 +642,7 @@ export function BandwidthCalculator() {
                 <span className="text-[11px] font-semibold text-blue-100 uppercase tracking-wider block">
                   Realistic Transfer Time
                 </span>
-                <div className="text-2xl font-black font-mono tracking-tight my-1">
+                <div className="text-2xl font-black font-sans tabular-nums tracking-tight my-1">
                   {transferResults.realisticFormatted}
                 </div>
                 <span className="text-[10px] text-blue-200 block">
@@ -654,7 +654,7 @@ export function BandwidthCalculator() {
                 <span className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider block">
                   Theoretical Best Time
                 </span>
-                <div className="text-2xl font-black font-mono tracking-tight text-zinc-900 dark:text-zinc-100 my-1">
+                <div className="text-2xl font-black font-sans tabular-nums tracking-tight text-zinc-900 dark:text-zinc-100 my-1">
                   {transferResults.theoreticalFormatted}
                 </div>
                 <span className="text-[10px] text-emerald-600 font-bold block">
@@ -669,12 +669,12 @@ export function BandwidthCalculator() {
                 <span className="flex items-center gap-1.5">
                   <Download className="h-4 w-4 text-blue-500 animate-bounce" /> Live Download Visualizer
                 </span>
-                <span className="font-mono text-zinc-500">{fileSize} {fileSizeUnit} @ {transferResults.effectiveMBps} MB/s</span>
+                <span className="font-sans tabular-nums text-zinc-500">{fileSize} {fileSizeUnit} @ {transferResults.effectiveMBps} MB/s</span>
               </div>
               <div className="w-full bg-zinc-100 dark:bg-zinc-800 h-3 rounded-full overflow-hidden relative">
                 <div className="bg-gradient-to-r from-blue-600 to-emerald-500 h-full w-3/4 rounded-full animate-pulse"></div>
               </div>
-              <div className="flex justify-between text-[11px] font-mono text-zinc-400">
+              <div className="flex justify-between text-[11px] font-sans tabular-nums text-zinc-400">
                 <span>0 %</span>
                 <span>Estimated completion: {transferResults.realisticFormatted}</span>
                 <span>100 %</span>
@@ -687,13 +687,13 @@ export function BandwidthCalculator() {
                 <span className="flex items-center gap-1.5">
                   <ShieldAlert className="h-4 w-4 text-amber-600" /> Monthly Data Cap Predictor
                 </span>
-                <div className="flex items-center gap-1 font-mono text-xs">
+                <div className="flex items-center gap-1 font-sans tabular-nums text-xs">
                   <span>Cap:</span>
                   <input
                     type="number"
                     value={dataCapTb}
                     onChange={(e) => setDataCapTb(Math.max(0.1, Number(e.target.value)))}
-                    className="w-16 h-6 text-center bg-white dark:bg-zinc-900 border border-amber-300 rounded font-mono"
+                    className="w-16 h-6 text-center bg-white dark:bg-zinc-900 border border-amber-300 rounded font-sans tabular-nums"
                   />
                   <span>TB</span>
                 </div>
@@ -701,12 +701,12 @@ export function BandwidthCalculator() {
               <p className="text-zinc-700 dark:text-zinc-300 text-[11px]">
                 Downloading continuously at <strong>{speed} {speedUnit}</strong> will exhaust a <strong>{dataCapTb} TB</strong> monthly data cap in:
               </p>
-              <div className="text-base font-black font-mono text-amber-700 dark:text-amber-400">
+              <div className="text-base font-black font-sans tabular-nums text-amber-700 dark:text-amber-400">
                 {dataCapResults.formattedExhaustTime}
               </div>
               <div className="text-[10px] text-zinc-500 flex justify-between border-t border-amber-200 dark:border-amber-900/40 pt-1.5">
                 <span>Recommended max daily download limit:</span>
-                <span className="font-bold font-mono text-amber-800 dark:text-amber-300">{dataCapResults.dailyAllowanceGb} GB/day</span>
+                <span className="font-bold font-sans tabular-nums text-amber-800 dark:text-amber-300">{dataCapResults.dailyAllowanceGb} GB/day</span>
               </div>
             </div>
           </div>
@@ -727,7 +727,7 @@ export function BandwidthCalculator() {
                 type="number"
                 value={convertVal}
                 onChange={(e) => setConvertVal(Number(e.target.value))}
-                className="h-10 text-sm font-mono flex-1"
+                className="h-10 text-sm font-sans tabular-nums flex-1"
               />
               <select
                 value={convertUnit}
@@ -755,22 +755,22 @@ export function BandwidthCalculator() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
               <span className="text-[10px] text-zinc-400 font-bold block uppercase">Megabits per sec</span>
-              <span className="text-lg font-black font-mono text-blue-600 block">{conversionResults.Mbps.toFixed(2)} Mbps</span>
+              <span className="text-lg font-black font-sans tabular-nums text-blue-600 block">{conversionResults.Mbps.toFixed(2)} Mbps</span>
               <span className="text-[10px] text-zinc-400">Standard ISP speed metric</span>
             </div>
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
               <span className="text-[10px] text-zinc-400 font-bold block uppercase">Megabytes per sec</span>
-              <span className="text-lg font-black font-mono text-emerald-600 block">{conversionResults["MB/s"].toFixed(2)} MB/s</span>
+              <span className="text-lg font-black font-sans tabular-nums text-emerald-600 block">{conversionResults["MB/s"].toFixed(2)} MB/s</span>
               <span className="text-[10px] text-zinc-400">Actual file download rate</span>
             </div>
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
               <span className="text-[10px] text-zinc-400 font-bold block uppercase">Gigabits per sec</span>
-              <span className="text-lg font-black font-mono text-purple-600 block">{conversionResults.Gbps.toFixed(4)} Gbps</span>
+              <span className="text-lg font-black font-sans tabular-nums text-purple-600 block">{conversionResults.Gbps.toFixed(4)} Gbps</span>
               <span className="text-[10px] text-zinc-400">Fiber broadband rate</span>
             </div>
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
               <span className="text-[10px] text-zinc-400 font-bold block uppercase">Monthly Data Volume</span>
-              <span className="text-lg font-black font-mono text-amber-600 block">{conversionResults.gbPerMonth.toFixed(1)} GB/mo</span>
+              <span className="text-lg font-black font-sans tabular-nums text-amber-600 block">{conversionResults.gbPerMonth.toFixed(1)} GB/mo</span>
               <span className="text-[10px] text-zinc-400">Continuous 24/7 transfer</span>
             </div>
           </div>
@@ -790,7 +790,7 @@ export function BandwidthCalculator() {
             <div className="space-y-1.5">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Traffic Volume (Page Views)</span>
-                <span className="font-mono font-bold text-blue-600">{pageViews.toLocaleString()} views</span>
+                <span className="font-sans tabular-nums font-bold text-blue-600">{pageViews.toLocaleString()} views</span>
               </label>
               <div className="flex gap-2">
                 <Input
@@ -798,7 +798,7 @@ export function BandwidthCalculator() {
                   min="1"
                   value={pageViews}
                   onChange={(e) => setPageViews(Math.max(1, Number(e.target.value)))}
-                  className="h-9 text-xs font-mono flex-1"
+                  className="h-9 text-xs font-sans tabular-nums flex-1"
                 />
                 <select
                   value={viewsPeriod}
@@ -816,7 +816,7 @@ export function BandwidthCalculator() {
             <div className="space-y-1.5">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Average Page / Asset Payload Size</span>
-                <span className="font-mono font-bold text-emerald-600">{avgPageSize} {pageSizeUnit}</span>
+                <span className="font-sans tabular-nums font-bold text-emerald-600">{avgPageSize} {pageSizeUnit}</span>
               </label>
               <div className="flex gap-2">
                 <Input
@@ -825,7 +825,7 @@ export function BandwidthCalculator() {
                   min="0.01"
                   value={avgPageSize}
                   onChange={(e) => setAvgPageSize(Math.max(0.01, Number(e.target.value)))}
-                  className="h-9 text-xs font-mono flex-1"
+                  className="h-9 text-xs font-sans tabular-nums flex-1"
                 />
                 <select
                   value={pageSizeUnit}
@@ -843,7 +843,7 @@ export function BandwidthCalculator() {
             <div className="space-y-2 pt-2 border-t border-zinc-100 dark:border-zinc-800">
               <div className="flex justify-between items-center font-semibold text-zinc-700 dark:text-zinc-300">
                 <span>Peak Traffic Surge Multiplier (Redundancy)</span>
-                <span className="font-mono font-bold text-purple-600">{redundancyFactor}x Surge</span>
+                <span className="font-sans tabular-nums font-bold text-purple-600">{redundancyFactor}x Surge</span>
               </div>
               <input
                 type="range"
@@ -860,7 +860,7 @@ export function BandwidthCalculator() {
             <div className="space-y-2 pt-2 border-t border-zinc-100 dark:border-zinc-800">
               <div className="flex justify-between items-center font-semibold text-zinc-700 dark:text-zinc-300">
                 <span>Bot & Search Crawler Overhead</span>
-                <span className="font-mono font-bold text-amber-600">{botOverheadPercent}% extra</span>
+                <span className="font-sans tabular-nums font-bold text-amber-600">{botOverheadPercent}% extra</span>
               </div>
               <input
                 type="range"
@@ -880,7 +880,7 @@ export function BandwidthCalculator() {
               <span className="text-[11px] font-semibold text-blue-100 uppercase tracking-wider block">
                 Estimated Monthly Hosting Transfer
               </span>
-              <div className="text-3xl font-black font-mono tracking-tight my-1">
+              <div className="text-3xl font-black font-sans tabular-nums tracking-tight my-1">
                 {hostingResults.monthlyTransferTb} TB / month
               </div>
               <span className="text-[10px] text-blue-200 block">
@@ -891,12 +891,12 @@ export function BandwidthCalculator() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-1">
                 <span className="text-[10px] font-bold text-zinc-400 uppercase">Average Port Bandwidth</span>
-                <span className="text-xl font-black font-mono text-zinc-900 dark:text-zinc-100 block">{hostingResults.avgMbps} Mbps</span>
+                <span className="text-xl font-black font-sans tabular-nums text-zinc-900 dark:text-zinc-100 block">{hostingResults.avgMbps} Mbps</span>
               </div>
 
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-1">
                 <span className="text-[10px] font-bold text-zinc-400 uppercase">Peak Surge Port Speed</span>
-                <span className="text-xl font-black font-mono text-purple-600 block">{hostingResults.peakMbps} Mbps</span>
+                <span className="text-xl font-black font-sans tabular-nums text-purple-600 block">{hostingResults.peakMbps} Mbps</span>
               </div>
             </div>
 
@@ -922,7 +922,7 @@ export function BandwidthCalculator() {
                 <Users className="h-4 w-4 text-purple-600" />
                 <span>Simultaneous Device & Activity Profile Planner</span>
               </span>
-              <span className="text-[10px] text-purple-600 font-mono">Real-time simulator</span>
+              <span className="text-[10px] text-purple-600 font-sans tabular-nums">Real-time simulator</span>
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -948,7 +948,7 @@ export function BandwidthCalculator() {
                       >
                         -
                       </button>
-                      <span className="font-mono font-bold w-5 text-center">{(concurrencyItems as any)[p.key]}</span>
+                      <span className="font-sans tabular-nums font-bold w-5 text-center">{(concurrencyItems as any)[p.key]}</span>
                       <button
                         onClick={() =>
                           setConcurrencyItems((prev) => ({
@@ -969,7 +969,7 @@ export function BandwidthCalculator() {
             <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 space-y-1.5">
               <div className="flex justify-between font-semibold">
                 <span>Network Headroom Safety Margin</span>
-                <span className="font-mono text-purple-600">{headroomPercent}% cushion</span>
+                <span className="font-sans tabular-nums text-purple-600">{headroomPercent}% cushion</span>
               </div>
               <input
                 type="range"
@@ -989,7 +989,7 @@ export function BandwidthCalculator() {
               <span className="text-[10px] font-bold text-purple-200 uppercase tracking-wider block">
                 Total Recommended Household / Office Bandwidth
               </span>
-              <div className="text-3xl font-black font-mono tracking-tight">
+              <div className="text-3xl font-black font-sans tabular-nums tracking-tight">
                 {concurrencyResults.recommendedTotalMbps} Mbps
               </div>
               <span className="text-[11px] text-purple-100 block">

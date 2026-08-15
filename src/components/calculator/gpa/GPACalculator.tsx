@@ -264,7 +264,7 @@ export function GPACalculator() {
                   max="4.0"
                   value={priorGpa}
                   onChange={(e) => setPriorGpa(parseFloat(e.target.value) || 0)}
-                  className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                  className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                 />
               </div>
 
@@ -278,7 +278,7 @@ export function GPACalculator() {
                   min="0"
                   value={priorCredits}
                   onChange={(e) => setPriorCredits(parseInt(e.target.value, 10) || 0)}
-                  className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                  className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                 />
               </div>
             </div>
@@ -304,7 +304,7 @@ export function GPACalculator() {
                     max="4.0"
                     value={targetGpa}
                     onChange={(e) => setTargetGpa(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -318,7 +318,7 @@ export function GPACalculator() {
                     min="1"
                     value={additionalCredits}
                     onChange={(e) => setAdditionalCredits(parseInt(e.target.value, 10) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -403,7 +403,7 @@ export function GPACalculator() {
                       max="12"
                       value={course.credits}
                       onChange={(e) => handleUpdateCourse(course.id, "credits", parseInt(e.target.value, 10) || 0)}
-                      className="h-8 text-xs font-mono text-center bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-700"
+                      className="h-8 text-xs font-sans tabular-nums text-center bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-700"
                     />
                   </div>
 
@@ -467,7 +467,7 @@ export function GPACalculator() {
               <span className="text-[10px] font-extrabold uppercase text-slate-500 dark:text-zinc-400 tracking-wider">
                 Semester GPA
               </span>
-              <div className="text-3xl font-black font-mono text-blue-600 dark:text-blue-400">
+              <div className="text-3xl font-black font-sans tabular-nums text-blue-600 dark:text-blue-400">
                 {result.semesterGpa.toFixed(2)}
               </div>
             </div>
@@ -477,7 +477,7 @@ export function GPACalculator() {
               <span className="text-[10px] font-extrabold uppercase text-slate-500 dark:text-zinc-400 tracking-wider">
                 Cumulative CGPA
               </span>
-              <div className="text-3xl font-black font-mono text-purple-600 dark:text-purple-400">
+              <div className="text-3xl font-black font-sans tabular-nums text-purple-600 dark:text-purple-400">
                 {result.cumulativeGpa.toFixed(2)}
               </div>
             </div>
@@ -489,7 +489,7 @@ export function GPACalculator() {
               <span className="text-[10px] font-extrabold uppercase text-purple-600 dark:text-purple-300 tracking-wider">
                 High School Weighted GPA (5.0 Scale)
               </span>
-              <div className="text-2xl font-black font-mono text-purple-700 dark:text-purple-300">
+              <div className="text-2xl font-black font-sans tabular-nums text-purple-700 dark:text-purple-300">
                 {result.weightedGpa.toFixed(2)}
               </div>
             </div>
@@ -509,14 +509,14 @@ export function GPACalculator() {
           <div className="grid grid-cols-2 gap-3 text-xs">
             <div className="p-3 rounded-xl bg-slate-50 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700">
               <span className="text-slate-500 dark:text-zinc-400 block text-[10px] font-bold">Total Quality Points:</span>
-              <span className="text-sm font-extrabold font-mono text-slate-900 dark:text-zinc-100">
+              <span className="text-sm font-extrabold font-sans tabular-nums text-slate-900 dark:text-zinc-100">
                 {result.totalQualityPoints.toFixed(1)}
               </span>
             </div>
 
             <div className="p-3 rounded-xl bg-slate-50 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700">
               <span className="text-slate-500 dark:text-zinc-400 block text-[10px] font-bold">Graded Credit Hours:</span>
-              <span className="text-sm font-extrabold font-mono text-slate-900 dark:text-zinc-100">
+              <span className="text-sm font-extrabold font-sans tabular-nums text-slate-900 dark:text-zinc-100">
                 {result.totalGradedCredits}
               </span>
             </div>
@@ -530,7 +530,7 @@ export function GPACalculator() {
               </span>
               <div className="flex justify-between font-bold">
                 <span>Required Future Term GPA:</span>
-                <span className="font-mono text-sm text-blue-600 dark:text-blue-400 font-extrabold">
+                <span className="font-sans tabular-nums text-sm text-blue-600 dark:text-blue-400 font-extrabold">
                   {result.targetResult.requiredGpa.toFixed(2)}
                 </span>
               </div>
@@ -547,7 +547,7 @@ export function GPACalculator() {
                 International Grading System Equivalent
               </span>
 
-              <div className="space-y-1.5 font-mono text-[11px]">
+              <div className="space-y-1.5 font-sans tabular-nums text-[11px]">
                 <div className="flex justify-between">
                   <span className="text-slate-500">MIT 5.0 Scale:</span>
                   <span className="font-bold">{result.internationalResult.mitScale5} / 5.0</span>

@@ -303,7 +303,7 @@ export function AutoLoanCalculator() {
         <div className="bg-zinc-50 dark:bg-zinc-950 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 flex items-center gap-3 overflow-x-auto text-xs">
           <span className="font-bold text-zinc-500 shrink-0">Saved Scenarios:</span>
           {savedScenarios.map((s, i) => (
-            <Badge key={`sc-${i}`} variant="outline" className="bg-white dark:bg-zinc-900 shrink-0 font-mono">
+            <Badge key={`sc-${i}`} variant="outline" className="bg-white dark:bg-zinc-900 shrink-0 font-sans tabular-nums">
               {s.name}: {formatCurrency(s.payment)}/mo
             </Badge>
           ))}
@@ -331,15 +331,15 @@ export function AutoLoanCalculator() {
                 <div>
                   <div className="flex justify-between text-xs mb-1 font-semibold text-zinc-700 dark:text-zinc-300">
                     <label>Vehicle Sticker Price</label>
-                    <span className="font-mono text-blue-600 dark:text-blue-400 font-bold">{formatCurrency(vehiclePrice)}</span>
+                    <span className="font-sans tabular-nums text-blue-600 dark:text-blue-400 font-bold">{formatCurrency(vehiclePrice)}</span>
                   </div>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">$</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">$</span>
                     <Input
                       type="number"
                       value={vehiclePrice}
                       onChange={(e) => setVehiclePrice(Math.max(0, Number(e.target.value)))}
-                      className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                      className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                     />
                   </div>
                 </div>
@@ -348,17 +348,17 @@ export function AutoLoanCalculator() {
                 <div>
                   <div className="flex justify-between text-xs mb-1 font-semibold text-zinc-700 dark:text-zinc-300">
                     <label>Cash Down Payment</label>
-                    <span className="font-mono text-zinc-500">
+                    <span className="font-sans tabular-nums text-zinc-500">
                       {vehiclePrice > 0 ? ((downPayment / vehiclePrice) * 100).toFixed(1) : 0}% of price
                     </span>
                   </div>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">$</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">$</span>
                     <Input
                       type="number"
                       value={downPayment}
                       onChange={(e) => setDownPayment(Math.max(0, Number(e.target.value)))}
-                      className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                      className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                     />
                   </div>
                 </div>
@@ -370,12 +370,12 @@ export function AutoLoanCalculator() {
                       Trade-In Value
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">$</span>
                       <Input
                         type="number"
                         value={tradeInValue}
                         onChange={(e) => setTradeInValue(Math.max(0, Number(e.target.value)))}
-                        className="pl-7 h-8 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
+                        className="pl-7 h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
                       />
                     </div>
                   </div>
@@ -385,12 +385,12 @@ export function AutoLoanCalculator() {
                       Amount Owed on Trade
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">$</span>
                       <Input
                         type="number"
                         value={amountOwedOnTradeIn}
                         onChange={(e) => setAmountOwedOnTradeIn(Math.max(0, Number(e.target.value)))}
-                        className="pl-7 h-8 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
+                        className="pl-7 h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
                       />
                     </div>
                   </div>
@@ -407,7 +407,7 @@ export function AutoLoanCalculator() {
                       step="0.1"
                       value={interestRate}
                       onChange={(e) => setInterestRate(Math.max(0, Number(e.target.value)))}
-                      className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                     />
                   </div>
 
@@ -418,7 +418,7 @@ export function AutoLoanCalculator() {
                     <select
                       value={loanTermMonths}
                       onChange={(e) => setLoanTermMonths(Number(e.target.value))}
-                      className="w-full h-9 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs px-3 font-mono text-zinc-900 dark:text-zinc-100"
+                      className="w-full h-9 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs px-3 font-sans tabular-nums text-zinc-900 dark:text-zinc-100"
                     >
                       <option value={24}>24 Months (2 Years)</option>
                       <option value={36}>36 Months (3 Years)</option>
@@ -448,7 +448,7 @@ export function AutoLoanCalculator() {
                       <select
                         value={stateCode}
                         onChange={(e) => handleStateChange(e.target.value)}
-                        className="w-full h-8 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs px-2 font-mono"
+                        className="w-full h-8 rounded-md border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs px-2 font-sans tabular-nums"
                       >
                         {Object.values(US_STATE_TAXES).map((st) => (
                           <option key={st.code} value={st.code}>
@@ -465,7 +465,7 @@ export function AutoLoanCalculator() {
                         step="0.1"
                         value={salesTaxRate}
                         onChange={(e) => setSalesTaxRate(Math.max(0, Number(e.target.value)))}
-                        className="h-8 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
+                        className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
                       />
                     </div>
                   </div>
@@ -484,7 +484,7 @@ export function AutoLoanCalculator() {
                         type="number"
                         value={registrationFees}
                         onChange={(e) => setRegistrationFees(Math.max(0, Number(e.target.value)))}
-                        className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                        className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                       />
                     </div>
                     <div>
@@ -493,7 +493,7 @@ export function AutoLoanCalculator() {
                         type="number"
                         value={dealerFees}
                         onChange={(e) => setDealerFees(Math.max(0, Number(e.target.value)))}
-                        className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                        className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                       />
                     </div>
                     <div>
@@ -502,7 +502,7 @@ export function AutoLoanCalculator() {
                         type="number"
                         value={docFees}
                         onChange={(e) => setDocFees(Math.max(0, Number(e.target.value)))}
-                        className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                        className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                       />
                     </div>
                     <div>
@@ -511,7 +511,7 @@ export function AutoLoanCalculator() {
                         type="number"
                         value={extendedWarranty}
                         onChange={(e) => setExtendedWarranty(Math.max(0, Number(e.target.value)))}
-                        className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                        className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                       />
                     </div>
                   </div>
@@ -549,7 +549,7 @@ export function AutoLoanCalculator() {
                     type="number"
                     value={desiredMonthlyPayment}
                     onChange={(e) => setDesiredMonthlyPayment(Math.max(0, Number(e.target.value)))}
-                    className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                   />
                 </div>
 
@@ -563,7 +563,7 @@ export function AutoLoanCalculator() {
                       step="0.1"
                       value={interestRate}
                       onChange={(e) => setInterestRate(Math.max(0, Number(e.target.value)))}
-                      className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                     />
                   </div>
                   <div>
@@ -574,7 +574,7 @@ export function AutoLoanCalculator() {
                       type="number"
                       value={loanTermMonths}
                       onChange={(e) => setLoanTermMonths(Math.max(1, Number(e.target.value)))}
-                      className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                     />
                   </div>
                 </div>
@@ -588,7 +588,7 @@ export function AutoLoanCalculator() {
                       type="number"
                       value={downPayment}
                       onChange={(e) => setDownPayment(Math.max(0, Number(e.target.value)))}
-                      className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                     />
                   </div>
                   <div>
@@ -599,7 +599,7 @@ export function AutoLoanCalculator() {
                       type="number"
                       value={tradeInValue}
                       onChange={(e) => setTradeInValue(Math.max(0, Number(e.target.value)))}
-                      className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                     />
                   </div>
                 </div>
@@ -609,7 +609,7 @@ export function AutoLoanCalculator() {
                     <span className="text-xs uppercase font-bold text-emerald-700 dark:text-emerald-400 tracking-wider">
                       Reverse Affordability Output
                     </span>
-                    <div className="text-2xl font-black text-emerald-900 dark:text-emerald-100 font-mono">
+                    <div className="text-2xl font-black text-emerald-900 dark:text-emerald-100 font-sans tabular-nums">
                       {formatCurrency(results.affordableResult.maxVehiclePrice)}
                     </div>
                     <p className="text-xs text-emerald-800 dark:text-emerald-300">
@@ -638,7 +638,7 @@ export function AutoLoanCalculator() {
                       type="number"
                       value={vehiclePrice}
                       onChange={(e) => setVehiclePrice(Number(e.target.value))}
-                      className="h-8 text-xs font-mono"
+                      className="h-8 text-xs font-sans tabular-nums"
                     />
                   </div>
                   <div>
@@ -648,7 +648,7 @@ export function AutoLoanCalculator() {
                       step="0.1"
                       value={interestRate}
                       onChange={(e) => setInterestRate(Number(e.target.value))}
-                      className="h-8 text-xs font-mono"
+                      className="h-8 text-xs font-sans tabular-nums"
                     />
                   </div>
                   <div>
@@ -657,7 +657,7 @@ export function AutoLoanCalculator() {
                       type="number"
                       value={loanTermMonths}
                       onChange={(e) => setLoanTermMonths(Number(e.target.value))}
-                      className="h-8 text-xs font-mono"
+                      className="h-8 text-xs font-sans tabular-nums"
                     />
                   </div>
                 </div>
@@ -671,7 +671,7 @@ export function AutoLoanCalculator() {
                       type="number"
                       value={scenarioBPrice}
                       onChange={(e) => setScenarioBPrice(Number(e.target.value))}
-                      className="h-8 text-xs font-mono"
+                      className="h-8 text-xs font-sans tabular-nums"
                     />
                   </div>
                   <div>
@@ -681,7 +681,7 @@ export function AutoLoanCalculator() {
                       step="0.1"
                       value={scenarioBRate}
                       onChange={(e) => setScenarioBRate(Number(e.target.value))}
-                      className="h-8 text-xs font-mono"
+                      className="h-8 text-xs font-sans tabular-nums"
                     />
                   </div>
                   <div>
@@ -690,7 +690,7 @@ export function AutoLoanCalculator() {
                       type="number"
                       value={scenarioBTerm}
                       onChange={(e) => setScenarioBTerm(Number(e.target.value))}
-                      className="h-8 text-xs font-mono"
+                      className="h-8 text-xs font-sans tabular-nums"
                     />
                   </div>
                 </div>
@@ -751,7 +751,7 @@ export function AutoLoanCalculator() {
                   type="number"
                   value={grossMonthlyIncome}
                   onChange={(e) => setGrossMonthlyIncome(Math.max(0, Number(e.target.value)))}
-                  className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                  className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                 />
               </div>
 
@@ -761,7 +761,7 @@ export function AutoLoanCalculator() {
                   type="number"
                   value={existingMonthlyDebt}
                   onChange={(e) => setExistingMonthlyDebt(Math.max(0, Number(e.target.value)))}
-                  className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                  className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                 />
               </div>
             </div>
@@ -791,13 +791,13 @@ export function AutoLoanCalculator() {
             <div>
               <div className="flex justify-between text-xs mb-1 font-semibold text-zinc-700 dark:text-zinc-300">
                 <label>Extra Monthly Principal Payment</label>
-                <span className="font-mono text-purple-600 dark:text-purple-400 font-bold">{formatCurrency(extraMonthlyPayment)}</span>
+                <span className="font-sans tabular-nums text-purple-600 dark:text-purple-400 font-bold">{formatCurrency(extraMonthlyPayment)}</span>
               </div>
               <Input
                 type="number"
                 value={extraMonthlyPayment}
                 onChange={(e) => setExtraMonthlyPayment(Math.max(0, Number(e.target.value)))}
-                className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
               />
             </div>
 
@@ -829,7 +829,7 @@ export function AutoLoanCalculator() {
               </Badge>
             </div>
 
-            <div className="text-4xl sm:text-5xl font-black text-white font-mono tracking-tight">
+            <div className="text-4xl sm:text-5xl font-black text-white font-sans tabular-nums tracking-tight">
               {formatCurrency(results.monthlyPayment)}
               <span className="text-sm font-normal text-zinc-400 font-sans ml-1">/month</span>
             </div>
@@ -838,27 +838,27 @@ export function AutoLoanCalculator() {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2">
               <div className="p-2.5 rounded-lg bg-zinc-900/80 border border-zinc-800">
                 <span className="text-[10px] text-zinc-400 block">Total Financed</span>
-                <span className="text-sm font-bold text-zinc-100 font-mono">{formatCurrency(results.loanAmount)}</span>
+                <span className="text-sm font-bold text-zinc-100 font-sans tabular-nums">{formatCurrency(results.loanAmount)}</span>
               </div>
               <div className="p-2.5 rounded-lg bg-zinc-900/80 border border-zinc-800">
                 <span className="text-[10px] text-zinc-400 block">Total Interest</span>
-                <span className="text-sm font-bold text-emerald-400 font-mono">{formatCurrency(results.totalInterestPaid)}</span>
+                <span className="text-sm font-bold text-emerald-400 font-sans tabular-nums">{formatCurrency(results.totalInterestPaid)}</span>
               </div>
               <div className="p-2.5 rounded-lg bg-zinc-900/80 border border-zinc-800">
                 <span className="text-[10px] text-zinc-400 block">Sales Tax</span>
-                <span className="text-sm font-bold text-amber-400 font-mono">{formatCurrency(results.totalSalesTax)}</span>
+                <span className="text-sm font-bold text-amber-400 font-sans tabular-nums">{formatCurrency(results.totalSalesTax)}</span>
               </div>
               <div className="p-2.5 rounded-lg bg-zinc-900/80 border border-zinc-800">
                 <span className="text-[10px] text-zinc-400 block">Title & Fees</span>
-                <span className="text-sm font-bold text-purple-400 font-mono">{formatCurrency(results.totalFees)}</span>
+                <span className="text-sm font-bold text-purple-400 font-sans tabular-nums">{formatCurrency(results.totalFees)}</span>
               </div>
               <div className="p-2.5 rounded-lg bg-zinc-900/80 border border-zinc-800">
                 <span className="text-[10px] text-zinc-400 block">Down Payment %</span>
-                <span className="text-sm font-bold text-blue-400 font-mono">{results.downPaymentPercentage}%</span>
+                <span className="text-sm font-bold text-blue-400 font-sans tabular-nums">{results.downPaymentPercentage}%</span>
               </div>
               <div className="p-2.5 rounded-lg bg-zinc-900/80 border border-zinc-800">
                 <span className="text-[10px] text-zinc-400 block">Total Vehicle Cost</span>
-                <span className="text-sm font-bold text-zinc-100 font-mono">{formatCurrency(results.totalOutofPocketCost)}</span>
+                <span className="text-sm font-bold text-zinc-100 font-sans tabular-nums">{formatCurrency(results.totalOutofPocketCost)}</span>
               </div>
             </div>
           </div>
@@ -888,7 +888,7 @@ export function AutoLoanCalculator() {
               {results.healthScore.factors.map((fac, idx) => (
                 <div key={`hf-${idx}`} className="flex items-center justify-between text-xs border-b border-zinc-100 dark:border-zinc-800/60 pb-1.5">
                   <span className="font-semibold text-zinc-700 dark:text-zinc-300">{fac.label}</span>
-                  <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">{fac.detail}</span>
+                  <span className="text-[11px] text-zinc-500 dark:text-zinc-400 font-sans tabular-nums">{fac.detail}</span>
                 </div>
               ))}
             </div>
@@ -967,7 +967,7 @@ export function AutoLoanCalculator() {
                       </span>
                     )}
                   </div>
-                  <div className="text-right font-mono">
+                  <div className="text-right font-sans tabular-nums">
                     <span className="font-bold text-zinc-900 dark:text-zinc-100">{formatCurrency(termOpt.monthlyPayment)}/mo</span>
                     <span className="text-[10px] text-zinc-400 block">Int: {formatCurrency(termOpt.totalInterest)}</span>
                   </div>

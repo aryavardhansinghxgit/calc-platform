@@ -50,7 +50,7 @@ const LoanBreakdownDoughnutChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-mono">
+      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
         Loading doughnut chart...
       </div>
     ),
@@ -62,7 +62,7 @@ const LoanBalanceLineChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-mono">
+      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
         Loading balance chart...
       </div>
     ),
@@ -74,7 +74,7 @@ const LoanPrincipalInterestChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-mono">
+      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
         Loading principal vs interest chart...
       </div>
     ),
@@ -298,74 +298,57 @@ export function LoanCalculator() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Top Action Bar & Quick Preset Scenarios */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-zinc-50 dark:bg-zinc-800/80 p-3 rounded-xl border border-zinc-200 dark:border-zinc-700/80 shadow-xs">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
         {/* Quick Loan Scenarios */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1">
-            <Zap className="h-3.5 w-3.5 text-amber-500" /> Quick Scenarios:
+          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+            Quick Scenarios:
           </span>
-          <Button
+          <button
             type="button"
-            variant="outline"
-            size="sm"
             onClick={() => handleApplyPreset("personal")}
-            className="h-7 text-xs px-2.5 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 hover:border-blue-500"
+            className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all cursor-pointer"
           >
             $10,000 Personal Loan
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
-            variant="outline"
-            size="sm"
             onClick={() => handleApplyPreset("auto")}
-            className="h-7 text-xs px-2.5 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 hover:border-blue-500"
+            className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all cursor-pointer"
           >
             $50,000 Auto Loan
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
-            variant="outline"
-            size="sm"
             onClick={() => handleApplyPreset("mortgage")}
-            className="h-7 text-xs px-2.5 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 hover:border-blue-500"
+            className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all cursor-pointer"
           >
-            $250,000 Mortgage
-          </Button>
+            $300,000 Mortgage
+          </button>
         </div>
 
-        {/* Action Controls */}
         <div className="flex items-center gap-2">
-          {shareSuccessMsg && (
-            <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 animate-pulse">
-              {shareSuccessMsg}
-            </span>
-          )}
-          <Button
+          <button
             type="button"
-            variant="outline"
-            size="sm"
             onClick={handleShareUrl}
-            className="h-8 text-xs gap-1.5 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 cursor-pointer"
+            className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
-            <Share2 className="h-3.5 w-3.5 text-blue-500" /> Share Link
-          </Button>
-          <Button
+            <Share2 className="h-3.5 w-3.5" /> Share
+          </button>
+          <button
             type="button"
-            variant="outline"
-            size="sm"
             onClick={() => setIsReportModalOpen(true)}
-            className="h-8 text-xs gap-1.5 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 cursor-pointer"
+            className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
-            size="sm"
             onClick={() => setIsSaveModalOpen(true)}
-            className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs cursor-pointer"
+            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl px-4 py-1.5 text-xs shadow-md shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <Bookmark className="h-3.5 w-3.5" /> Save Setup
-          </Button>
+          </button>
         </div>
       </div>
 
@@ -373,17 +356,17 @@ export function LoanCalculator() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Inputs Panel (Col 5) */}
         <div className="lg:col-span-5 space-y-4">
-          <Card className="border border-zinc-200 dark:border-zinc-800 shadow-xs bg-white dark:bg-zinc-900">
+          <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-xs p-5 sm:p-6 space-y-5">
             {/* 4 Mode Tabs Header */}
-            <div className="p-2 border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-800/50 rounded-t-xl">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1">
+            <div className="inline-flex w-full p-1 bg-slate-200/80 dark:bg-slate-800 rounded-xl">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 w-full">
                 <button
                   type="button"
                   onClick={() => setMode("monthly-payment")}
-                  className={`py-1.5 px-2 text-[11px] font-bold rounded-lg transition-all ${
+                  className={`py-1.5 px-2 text-xs font-semibold rounded-lg transition-all ${
                     mode === "monthly-payment"
-                      ? "bg-blue-600 text-white shadow-xs"
-                      : "text-zinc-600 dark:text-zinc-400 hover:bg-white dark:hover:bg-zinc-800"
+                      ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
                   }`}
                 >
                   Payment
@@ -391,10 +374,10 @@ export function LoanCalculator() {
                 <button
                   type="button"
                   onClick={() => setMode("loan-amount")}
-                  className={`py-1.5 px-2 text-[11px] font-bold rounded-lg transition-all ${
+                  className={`py-1.5 px-2 text-xs font-semibold rounded-lg transition-all ${
                     mode === "loan-amount"
-                      ? "bg-blue-600 text-white shadow-xs"
-                      : "text-zinc-600 dark:text-zinc-400 hover:bg-white dark:hover:bg-zinc-800"
+                      ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
                   }`}
                 >
                   Loan Amount
@@ -402,10 +385,10 @@ export function LoanCalculator() {
                 <button
                   type="button"
                   onClick={() => setMode("loan-term")}
-                  className={`py-1.5 px-2 text-[11px] font-bold rounded-lg transition-all ${
+                  className={`py-1.5 px-2 text-xs font-semibold rounded-lg transition-all ${
                     mode === "loan-term"
-                      ? "bg-blue-600 text-white shadow-xs"
-                      : "text-zinc-600 dark:text-zinc-400 hover:bg-white dark:hover:bg-zinc-800"
+                      ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
                   }`}
                 >
                   Loan Term
@@ -413,10 +396,10 @@ export function LoanCalculator() {
                 <button
                   type="button"
                   onClick={() => setMode("interest-rate")}
-                  className={`py-1.5 px-2 text-[11px] font-bold rounded-lg transition-all ${
+                  className={`py-1.5 px-2 text-xs font-semibold rounded-lg transition-all ${
                     mode === "interest-rate"
-                      ? "bg-blue-600 text-white shadow-xs"
-                      : "text-zinc-600 dark:text-zinc-400 hover:bg-white dark:hover:bg-zinc-800"
+                      ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
                   }`}
                 >
                   Interest Rate
@@ -424,7 +407,7 @@ export function LoanCalculator() {
               </div>
             </div>
 
-            <CardContent className="p-4 space-y-4 text-xs">
+            <div className="space-y-4 text-xs">
               {validationError && (
                 <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
                   <AlertCircle className="h-4 w-4 text-rose-500 shrink-0" />
@@ -449,7 +432,7 @@ export function LoanCalculator() {
                         step={1000}
                         value={loanAmount}
                         onChange={(e) => setLoanAmount(Math.max(0, Number(e.target.value)))}
-                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                   </div>
@@ -470,7 +453,7 @@ export function LoanCalculator() {
                         step={50}
                         value={desiredPayment}
                         onChange={(e) => setDesiredPayment(Math.max(0, Number(e.target.value)))}
-                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                   </div>
@@ -492,7 +475,7 @@ export function LoanCalculator() {
                         max={100}
                         value={interestRate}
                         onChange={(e) => setInterestRate(Math.max(0, Number(e.target.value)))}
-                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                   </div>
@@ -512,7 +495,7 @@ export function LoanCalculator() {
                         max={50}
                         value={loanTermYears}
                         onChange={(e) => setLoanTermYears(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                     <div>
@@ -526,7 +509,7 @@ export function LoanCalculator() {
                         max={11}
                         value={loanTermMonths}
                         onChange={(e) => setLoanTermMonths(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                   </div>
@@ -563,7 +546,7 @@ export function LoanCalculator() {
                       step={50}
                       value={extraMonthlyPayment}
                       onChange={(e) => setExtraMonthlyPayment(Math.max(0, Number(e.target.value)))}
-                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -580,8 +563,8 @@ export function LoanCalculator() {
                   </Button>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
 
         {/* Right Results Panel (Col 7) */}
@@ -611,7 +594,7 @@ export function LoanCalculator() {
                   </Button>
                 </div>
 
-                <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-mono mt-2 tracking-tight">
+                <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums mt-2 tracking-tight">
                   {mode === "loan-amount"
                     ? formatCurrency(results.maxLoanAmount)
                     : mode === "loan-term"
@@ -626,37 +609,37 @@ export function LoanCalculator() {
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-3 border-t border-blue-100 dark:border-zinc-800">
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Total Repayment</span>
-                  <span className="text-sm font-bold font-mono text-zinc-900 dark:text-zinc-100">
+                  <span className="text-sm font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
                     {formatCurrency(results.totalRepayment)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Total Interest</span>
-                  <span className="text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                  <span className="text-sm font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
                     {formatCurrency(results.totalInterest)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Interest Share</span>
-                  <span className="text-sm font-bold font-mono text-amber-600 dark:text-amber-400">
+                  <span className="text-sm font-bold font-sans tabular-nums text-amber-600 dark:text-amber-400">
                     {results.interestPercentage}%
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Number of Payments</span>
-                  <span className="text-sm font-bold font-mono text-zinc-900 dark:text-zinc-100">
+                  <span className="text-sm font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
                     {results.totalPaymentsCount}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Payoff Date</span>
-                  <span className="text-sm font-bold font-mono text-blue-600 dark:text-blue-400 truncate block">
+                  <span className="text-sm font-bold font-sans tabular-nums text-blue-600 dark:text-blue-400 truncate block">
                     {results.payoffDate}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Estimated APR</span>
-                  <span className="text-sm font-bold font-mono text-purple-600 dark:text-purple-400">
+                  <span className="text-sm font-bold font-sans tabular-nums text-purple-600 dark:text-purple-400">
                     {results.estimatedApr}%
                   </span>
                 </div>
@@ -682,7 +665,7 @@ export function LoanCalculator() {
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300 block">
                       Total Interest Comparison
                     </span>
-                    <div className="flex items-center justify-between font-mono">
+                    <div className="flex items-center justify-between font-sans tabular-nums">
                       <span className="text-zinc-500 line-through">
                         {formatCurrency(results.baselineTotalInterest)}
                       </span>
@@ -699,7 +682,7 @@ export function LoanCalculator() {
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300 block">
                       Loan Payoff Date Comparison
                     </span>
-                    <div className="flex items-center justify-between font-mono">
+                    <div className="flex items-center justify-between font-sans tabular-nums">
                       <span className="text-zinc-500 line-through">
                         {results.baselinePayoffDate}
                       </span>
@@ -828,7 +811,7 @@ export function LoanCalculator() {
               <form onSubmit={handleSaveCalculation} className="space-y-3 pt-1">
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700/80 text-xs">
                   <span className="text-zinc-500 block">Calculation Summary:</span>
-                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-mono">
+                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-sans tabular-nums">
                     Payment: {formatCurrency(results.periodicPayment)} / {paymentFrequency}
                   </span>
                   <span className="text-[11px] text-zinc-500">
@@ -882,7 +865,7 @@ export function LoanCalculator() {
                         <span className="font-bold text-zinc-900 dark:text-zinc-100 block">
                           {item.name}
                         </span>
-                        <span className="text-[10px] text-zinc-400 block font-mono">
+                        <span className="text-[10px] text-zinc-400 block font-sans tabular-nums">
                           {formatCurrency(item.periodicPayment)} • {item.dateSaved}
                         </span>
                       </div>

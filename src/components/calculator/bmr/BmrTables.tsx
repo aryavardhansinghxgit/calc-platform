@@ -32,20 +32,20 @@ export function BmrTables({ result }: BmrTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Activity Level</th>
-                <th className="py-2.5 px-3 font-mono text-center">Multiplier</th>
-                <th className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400">Maintenance TDEE</th>
-                <th className="py-2.5 px-3 font-mono text-sky-700 dark:text-sky-400">Weight Loss (-500 kcal)</th>
-                <th className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">Weight Gain (+500 kcal)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-center">Multiplier</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">Maintenance TDEE</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-sky-700 dark:text-sky-400">Weight Loss (-500 kcal)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">Weight Gain (+500 kcal)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               {result.activityTiers.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2.5 px-3 font-semibold text-zinc-900 dark:text-zinc-100">{row.label}</td>
-                  <td className="py-2.5 px-3 font-mono text-center font-bold text-zinc-500">{row.multiplier}×</td>
-                  <td className="py-2.5 px-3 font-mono font-bold text-emerald-700 dark:text-emerald-400">{row.tdee} kcal</td>
-                  <td className="py-2.5 px-3 font-mono font-bold text-sky-700 dark:text-sky-400">{row.weightLossCals} kcal</td>
-                  <td className="py-2.5 px-3 font-mono font-bold text-purple-700 dark:text-purple-400">{row.weightGainCals} kcal</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums text-center font-bold text-zinc-500">{row.multiplier}×</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-emerald-700 dark:text-emerald-400">{row.tdee} kcal</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-sky-700 dark:text-sky-400">{row.weightLossCals} kcal</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-purple-700 dark:text-purple-400">{row.weightGainCals} kcal</td>
                 </tr>
               ))}
             </tbody>
@@ -65,8 +65,8 @@ export function BmrTables({ result }: BmrTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Organ / Tissue Systems</th>
-                <th className="py-2.5 px-3 font-mono text-rose-700 dark:text-rose-400">Share of BMR</th>
-                <th className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400">Estimated Daily Burn</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-rose-700 dark:text-rose-400">Share of BMR</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">Estimated Daily Burn</th>
                 <th className="py-2.5 px-3">Physiological Role</th>
               </tr>
             </thead>
@@ -74,8 +74,8 @@ export function BmrTables({ result }: BmrTablesProps) {
               {organBurnTable.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2 px-3 font-bold text-zinc-900 dark:text-zinc-100">{row.organ}</td>
-                  <td className="py-2 px-3 font-mono font-bold text-rose-600 dark:text-rose-400">{row.percent}</td>
-                  <td className="py-2 px-3 font-mono font-bold text-emerald-600 dark:text-emerald-400">{row.kcal} kcal/day</td>
+                  <td className="py-2 px-3 font-sans tabular-nums font-bold text-rose-600 dark:text-rose-400">{row.percent}</td>
+                  <td className="py-2 px-3 font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">{row.kcal} kcal/day</td>
                   <td className="py-2 px-3 text-zinc-500">{row.description}</td>
                 </tr>
               ))}

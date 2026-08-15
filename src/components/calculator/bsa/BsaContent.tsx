@@ -112,7 +112,7 @@ export function BsaContent() {
             }
             if (trimmed.includes("BSA (m²) =") || trimmed.includes("Women BSA") || trimmed.includes("Men BSA")) {
               return (
-                <div key={idx} className="bg-slate-50 border border-cyan-200 p-3.5 rounded-xl font-mono text-cyan-900 font-bold text-xs sm:text-sm text-center my-3 shadow-xs">
+                <div key={idx} className="bg-slate-50 border border-cyan-200 p-3.5 rounded-xl font-sans tabular-nums text-cyan-900 font-bold text-xs sm:text-sm text-center my-3 shadow-xs">
                   {trimmed}
                 </div>
               );

@@ -33,7 +33,7 @@ export function URLEncoderContent() {
             <p className="text-zinc-600 dark:text-zinc-400">
               Unreserved characters hold no structural meaning in URIs and must <strong>never</strong> be percent-encoded:
             </p>
-            <ul className="list-disc pl-5 font-mono space-y-0.5">
+            <ul className="list-disc pl-5 font-sans tabular-nums space-y-0.5">
               <li>Uppercase: <code>A–Z</code></li>
               <li>Lowercase: <code>a–z</code></li>
               <li>Digits: <code>0–9</code></li>
@@ -46,7 +46,7 @@ export function URLEncoderContent() {
             <p className="text-zinc-600 dark:text-zinc-400">
               Reserved characters act as structural delimiters. If used inside key/value data, they <strong>must</strong> be encoded:
             </p>
-            <ul className="list-disc pl-5 font-mono space-y-0.5">
+            <ul className="list-disc pl-5 font-sans tabular-nums space-y-0.5">
               <li>Gen-Delims: <code>: / ? # [ ] @</code></li>
               <li>Sub-Delims: <code>! $ &amp; ' ( ) * + , ; =</code></li>
             </ul>
@@ -63,13 +63,13 @@ export function URLEncoderContent() {
               <tr className="bg-zinc-100 dark:bg-zinc-800 font-bold text-zinc-900 dark:text-zinc-100">
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Character</th>
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Description</th>
-                <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-mono">% Hex Code</th>
+                <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-sans tabular-nums">% Hex Code</th>
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Character</th>
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Description</th>
-                <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-mono">% Hex Code</th>
+                <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-sans tabular-nums">% Hex Code</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold">(space)</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans">Space character</td>
@@ -152,7 +152,7 @@ export function URLEncoderContent() {
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Example Output</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-blue-600">encodeURI()</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans">Full web address / page URL</td>
@@ -194,7 +194,7 @@ export function URLEncoderContent() {
           6. Code Snippets Across Languages
         </h2>
 
-        <div className="space-y-3 text-xs font-mono">
+        <div className="space-y-3 text-xs font-sans tabular-nums">
           {/* JavaScript */}
           <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1">
             <div className="text-zinc-400 text-[10px] uppercase font-bold">// JavaScript (Browser & Node.js)</div>

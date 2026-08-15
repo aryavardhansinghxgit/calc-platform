@@ -31,7 +31,7 @@ export function CurrencyInput({
         {label}
       </Label>
       <div className="relative flex items-center">
-        <span className="absolute left-3 text-xs font-bold text-slate-400 font-mono">
+        <span className="absolute left-3 text-xs font-bold text-slate-400 font-sans tabular-nums">
           {currencySymbol}
         </span>
         <Input
@@ -42,7 +42,7 @@ export function CurrencyInput({
           min={min}
           max={max}
           step={step}
-          className="h-10 pl-7 bg-slate-950/80 border-slate-800 text-slate-100 text-sm font-mono rounded-[12px] focus:border-sky-500"
+          className="h-10 pl-7 bg-slate-950/80 border-slate-800 text-slate-100 text-sm font-sans tabular-nums rounded-[12px] focus:border-sky-500"
         />
       </div>
     </div>

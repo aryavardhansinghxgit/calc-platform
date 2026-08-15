@@ -152,23 +152,22 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
   return (
     <div className="space-y-4">
       {/* Tab Controls & Filter Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-zinc-50 dark:bg-zinc-800/60 p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700/80">
-        {/* Tab switch */}
-        <div className="flex items-center gap-1 bg-white dark:bg-zinc-900 p-1 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-900/50 p-3 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
+        {/* Segmented Pill Tab Switcher */}
+        <div className="inline-flex p-1 bg-slate-200/80 dark:bg-slate-800 rounded-xl">
           <button
             type="button"
             onClick={() => {
               setViewMode("annual");
               setCurrentPage(1);
             }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
+            className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
               viewMode === "annual"
-                ? "bg-blue-600 text-white shadow-sm"
-                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
             }`}
           >
-            <Calendar className="h-3.5 w-3.5" />
-            Annual Tab
+            Annual Schedule
           </button>
           <button
             type="button"
@@ -176,14 +175,13 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
               setViewMode("monthly");
               setCurrentPage(1);
             }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
+            className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
               viewMode === "monthly"
-                ? "bg-blue-600 text-white shadow-sm"
-                : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
             }`}
           >
-            <Clock className="h-3.5 w-3.5" />
-            Monthly Tab
+            Monthly Schedule
           </button>
           {biweeklySchedule && biweeklySchedule.length > 0 && (
             <button
@@ -192,26 +190,25 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
                 setViewMode("biweekly");
                 setCurrentPage(1);
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
+              className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
                 viewMode === "biweekly"
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                  ? "bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-400 shadow-xs"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
               }`}
             >
-              <RefreshCw className="h-3.5 w-3.5" />
-              Biweekly Tab
+              Biweekly Schedule
             </button>
           )}
         </div>
 
         {/* Search & Export */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <div className="relative flex-1 sm:flex-none">
-            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-400" />
+            <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
             <Input
               placeholder={
                 viewMode === "annual"
-                  ? "Filter by year or date..."
+                  ? "Filter by year..."
                   : viewMode === "biweekly"
                   ? "Filter by period..."
                   : "Filter by month..."
@@ -221,24 +218,22 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="pl-8 h-8 w-full sm:w-48 text-xs bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700"
+              className="pl-8 h-9 w-full sm:w-48 text-xs bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 rounded-xl"
             />
           </div>
 
-          <Button
+          <button
             type="button"
-            variant="outline"
-            size="sm"
             onClick={handleDownloadCsv}
-            className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1.5 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
+            className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-4 py-2 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Export CSV
-          </Button>
+          </button>
         </div>
       </div>
 
-      {/* Amortization Table */}
-      <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-xs">
+      {/* Amortization Table Container */}
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs">
         <Table>
           <TableHeader>
             <TableRow className="border-zinc-200 dark:border-zinc-800 bg-zinc-100/80 dark:bg-zinc-800/80">

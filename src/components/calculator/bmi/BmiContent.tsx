@@ -137,21 +137,21 @@ export function BmiContent() {
           <div className="p-5 bg-zinc-50 dark:bg-zinc-900/80 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2 shadow-sm">
             <h3 className="font-bold text-emerald-700 dark:text-emerald-400 text-base">SI Metric Formula</h3>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">Used internationally in medical and clinical settings:</p>
-            <div className="p-3 bg-white dark:bg-zinc-950 rounded-lg text-center font-mono text-emerald-700 dark:text-emerald-300 font-bold text-sm border border-zinc-200 dark:border-zinc-800">
+            <div className="p-3 bg-white dark:bg-zinc-950 rounded-lg text-center font-sans tabular-nums text-emerald-700 dark:text-emerald-300 font-bold text-sm border border-zinc-200 dark:border-zinc-800">
               BMI = Weight (kg) / [Height (m)]²
             </div>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">Example: Weight = 70 kg, Height = 1.75 m</p>
-            <p className="text-xs font-mono text-zinc-800 dark:text-zinc-200">BMI = 70 / (1.75)² = 70 / 3.0625 = 22.86 kg/m²</p>
+            <p className="text-xs font-sans tabular-nums text-zinc-800 dark:text-zinc-200">BMI = 70 / (1.75)² = 70 / 3.0625 = 22.86 kg/m²</p>
           </div>
 
           <div className="p-5 bg-zinc-50 dark:bg-zinc-900/80 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2 shadow-sm">
             <h3 className="font-bold text-blue-700 dark:text-sky-400 text-base">US Imperial Formula</h3>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">Used primarily in the United States and territories:</p>
-            <div className="p-3 bg-white dark:bg-zinc-950 rounded-lg text-center font-mono text-blue-700 dark:text-sky-300 font-bold text-sm border border-zinc-200 dark:border-zinc-800">
+            <div className="p-3 bg-white dark:bg-zinc-950 rounded-lg text-center font-sans tabular-nums text-blue-700 dark:text-sky-300 font-bold text-sm border border-zinc-200 dark:border-zinc-800">
               BMI = 703 × Weight (lbs) / [Height (inches)]²
             </div>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">Example: Weight = 160 lbs, Height = 5&apos;10&quot; (70 in)</p>
-            <p className="text-xs font-mono text-zinc-800 dark:text-zinc-200">BMI = 703 × 160 / (70)² = 703 × 160 / 4900 = 22.95 kg/m²</p>
+            <p className="text-xs font-sans tabular-nums text-zinc-800 dark:text-zinc-200">BMI = 703 × 160 / (70)² = 703 × 160 / 4900 = 22.95 kg/m²</p>
           </div>
         </div>
       </section>
@@ -179,50 +179,50 @@ export function BmiContent() {
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/30">
                 <td className="py-3 px-4 font-semibold text-sky-700 dark:text-blue-400">Severe Thinness</td>
-                <td className="py-3 px-4 font-mono">&lt; 16.0</td>
-                <td className="py-3 px-4 font-mono">&lt; 0.64</td>
+                <td className="py-3 px-4 font-sans tabular-nums">&lt; 16.0</td>
+                <td className="py-3 px-4 font-sans tabular-nums">&lt; 0.64</td>
                 <td className="py-3 px-4 text-sky-800 dark:text-blue-300">Extremely High (Underweight Risk)</td>
               </tr>
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/30">
                 <td className="py-3 px-4 font-semibold text-cyan-700 dark:text-cyan-400">Moderate Thinness</td>
-                <td className="py-3 px-4 font-mono">16.0 – 16.9</td>
-                <td className="py-3 px-4 font-mono">0.64 – 0.68</td>
+                <td className="py-3 px-4 font-sans tabular-nums">16.0 – 16.9</td>
+                <td className="py-3 px-4 font-sans tabular-nums">0.64 – 0.68</td>
                 <td className="py-3 px-4 text-cyan-800 dark:text-cyan-300">High Risk (Nutritional Deficits)</td>
               </tr>
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/30">
                 <td className="py-3 px-4 font-semibold text-sky-600 dark:text-sky-400">Mild Thinness</td>
-                <td className="py-3 px-4 font-mono">17.0 – 18.4</td>
-                <td className="py-3 px-4 font-mono">0.68 – 0.74</td>
+                <td className="py-3 px-4 font-sans tabular-nums">17.0 – 18.4</td>
+                <td className="py-3 px-4 font-sans tabular-nums">0.68 – 0.74</td>
                 <td className="py-3 px-4 text-sky-700 dark:text-sky-300">Moderate Risk</td>
               </tr>
               <tr className="bg-emerald-50 dark:bg-emerald-950/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 font-medium">
                 <td className="py-3 px-4 font-bold text-emerald-700 dark:text-emerald-400">Normal Weight</td>
-                <td className="py-3 px-4 font-mono font-bold text-emerald-800 dark:text-emerald-300">18.5 – 24.9</td>
-                <td className="py-3 px-4 font-mono font-bold text-emerald-800 dark:text-emerald-300">0.74 – 1.00</td>
+                <td className="py-3 px-4 font-sans tabular-nums font-bold text-emerald-800 dark:text-emerald-300">18.5 – 24.9</td>
+                <td className="py-3 px-4 font-sans tabular-nums font-bold text-emerald-800 dark:text-emerald-300">0.74 – 1.00</td>
                 <td className="py-3 px-4 text-emerald-800 dark:text-emerald-400 font-bold">Lowest Health Risk (Baseline)</td>
               </tr>
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/30">
                 <td className="py-3 px-4 font-semibold text-yellow-700 dark:text-yellow-400">Overweight</td>
-                <td className="py-3 px-4 font-mono">25.0 – 29.9</td>
-                <td className="py-3 px-4 font-mono">1.00 – 1.20</td>
+                <td className="py-3 px-4 font-sans tabular-nums">25.0 – 29.9</td>
+                <td className="py-3 px-4 font-sans tabular-nums">1.00 – 1.20</td>
                 <td className="py-3 px-4 text-yellow-800 dark:text-yellow-300">Increased Risk</td>
               </tr>
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/30">
                 <td className="py-3 px-4 font-semibold text-orange-700 dark:text-orange-400">Obese Class I</td>
-                <td className="py-3 px-4 font-mono">30.0 – 34.9</td>
-                <td className="py-3 px-4 font-mono">1.20 – 1.40</td>
+                <td className="py-3 px-4 font-sans tabular-nums">30.0 – 34.9</td>
+                <td className="py-3 px-4 font-sans tabular-nums">1.20 – 1.40</td>
                 <td className="py-3 px-4 text-orange-800 dark:text-orange-300">High Risk (Metabolic Strain)</td>
               </tr>
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/30">
                 <td className="py-3 px-4 font-semibold text-rose-700 dark:text-rose-400">Obese Class II</td>
-                <td className="py-3 px-4 font-mono">35.0 – 39.9</td>
-                <td className="py-3 px-4 font-mono">1.40 – 1.60</td>
+                <td className="py-3 px-4 font-sans tabular-nums">35.0 – 39.9</td>
+                <td className="py-3 px-4 font-sans tabular-nums">1.40 – 1.60</td>
                 <td className="py-3 px-4 text-rose-800 dark:text-rose-300">Very High Risk</td>
               </tr>
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/30">
                 <td className="py-3 px-4 font-semibold text-rose-800 dark:text-rose-300">Obese Class III</td>
-                <td className="py-3 px-4 font-mono">&ge; 40.0</td>
-                <td className="py-3 px-4 font-mono">&gt; 1.60</td>
+                <td className="py-3 px-4 font-sans tabular-nums">&ge; 40.0</td>
+                <td className="py-3 px-4 font-sans tabular-nums">&gt; 1.60</td>
                 <td className="py-3 px-4 text-rose-900 dark:text-rose-400 font-bold">Extremely High Risk</td>
               </tr>
             </tbody>
@@ -274,22 +274,22 @@ export function BmiContent() {
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               <tr>
                 <td className="py-3 px-4 font-semibold text-blue-600 dark:text-blue-400">Underweight</td>
-                <td className="py-3 px-4 font-mono">&lt; 5th percentile</td>
+                <td className="py-3 px-4 font-sans tabular-nums">&lt; 5th percentile</td>
                 <td className="py-3 px-4">Evaluate for nutrient absorption or inadequate caloric intake.</td>
               </tr>
               <tr className="bg-emerald-50 dark:bg-emerald-950/20">
                 <td className="py-3 px-4 font-bold text-emerald-700 dark:text-emerald-400">Healthy Weight</td>
-                <td className="py-3 px-4 font-mono font-bold text-emerald-800 dark:text-emerald-300">5th to 85th percentile</td>
+                <td className="py-3 px-4 font-sans tabular-nums font-bold text-emerald-800 dark:text-emerald-300">5th to 85th percentile</td>
                 <td className="py-3 px-4">Optimal pediatric development trajectory.</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 font-semibold text-yellow-700 dark:text-yellow-400">At Risk of Overweight</td>
-                <td className="py-3 px-4 font-mono">85th to 95th percentile</td>
+                <td className="py-3 px-4 font-sans tabular-nums">85th to 95th percentile</td>
                 <td className="py-3 px-4">Promote active play and balanced whole food dietary patterns.</td>
               </tr>
               <tr>
                 <td className="py-3 px-4 font-semibold text-rose-700 dark:text-rose-400">Overweight / Obese</td>
-                <td className="py-3 px-4 font-mono">&gt; 95th percentile</td>
+                <td className="py-3 px-4 font-sans tabular-nums">&gt; 95th percentile</td>
                 <td className="py-3 px-4">Comprehensive clinical lifestyle and metabolic evaluation.</td>
               </tr>
             </tbody>
@@ -314,7 +314,7 @@ export function BmiContent() {
           <p>
             BMI Prime normalizes an individual&apos;s calculated BMI against the upper WHO healthy limit of 25.0 kg/m²:
           </p>
-          <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-lg text-center font-mono text-purple-700 dark:text-purple-300 font-bold text-sm max-w-md mx-auto border border-zinc-200 dark:border-zinc-800">
+          <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-lg text-center font-sans tabular-nums text-purple-700 dark:text-purple-300 font-bold text-sm max-w-md mx-auto border border-zinc-200 dark:border-zinc-800">
             BMI Prime = BMI / 25
           </div>
           <p>
@@ -325,7 +325,7 @@ export function BmiContent() {
           <p>
             While BMI divides weight by height squared (m²), the Ponderal Index (PI) divides weight by height cubed (m³):
           </p>
-          <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-lg text-center font-mono text-indigo-700 dark:text-indigo-300 font-bold text-sm max-w-md mx-auto border border-zinc-200 dark:border-zinc-800">
+          <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-lg text-center font-sans tabular-nums text-indigo-700 dark:text-indigo-300 font-bold text-sm max-w-md mx-auto border border-zinc-200 dark:border-zinc-800">
             Ponderal Index = Weight (kg) / [Height (m)]³
           </div>
           <p>

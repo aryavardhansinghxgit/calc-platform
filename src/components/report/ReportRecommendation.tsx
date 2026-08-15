@@ -17,7 +17,7 @@ export function ReportRecommendation({ recommendation }: ReportRecommendationPro
           {recommendation.title || "EXECUTIVE FINANCIAL RECOMMENDATION"}
         </h3>
         {recommendation.rating && (
-          <span className="text-[10px] font-mono font-extrabold uppercase px-2 py-0.5 rounded bg-zinc-900 text-white">
+          <span className="text-[10px] font-sans tabular-nums font-extrabold uppercase px-2 py-0.5 rounded bg-zinc-900 text-white">
             {recommendation.rating} ({recommendation.score ?? 80}/100)
           </span>
         )}

@@ -142,7 +142,7 @@ export function RmdContent() {
           Calculating your annual RMD requires two primary numbers: your account balance as of December 31st of the previous calendar year, and your life expectancy distribution factor from IRS Publication 590-B.
         </p>
 
-        <div className="bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl text-xs space-y-3 font-mono">
+        <div className="bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl text-xs space-y-3 font-sans tabular-nums">
           <div className="text-indigo-900 dark:text-indigo-200 font-bold text-sm font-sans">
             Primary RMD Equation:
           </div>
@@ -152,7 +152,7 @@ export function RmdContent() {
           <div className="text-zinc-600 dark:text-zinc-400 font-sans text-xs">
             Example: If your Traditional IRA balance on Dec 31, 2025 was $300,000 and you turn 75 in 2026, your IRS Table III factor is 24.6.
             <br />
-            <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
+            <span className="font-sans tabular-nums font-bold text-indigo-600 dark:text-indigo-400">
               RMD = $300,000 / 24.6 = $12,195.12
             </span>
           </div>
@@ -278,7 +278,7 @@ export function RmdContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold shrink-0">
+                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}

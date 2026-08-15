@@ -152,7 +152,7 @@ export function PresentValueContent() {
             <p>
               The basic formula for lump sum Present Value is expressed as:
             </p>
-            <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-lg font-mono text-xs text-center border border-zinc-200 dark:border-zinc-700">
+            <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-lg font-sans tabular-nums text-xs text-center border border-zinc-200 dark:border-zinc-700">
               PV = FV / (1 + r / n)^(n × t)
             </div>
             <ul className="text-xs space-y-1 text-zinc-600 dark:text-zinc-400">
@@ -206,25 +206,25 @@ export function PresentValueContent() {
                 <tr>
                   <td className="p-3 font-semibold">Lump Sum</td>
                   <td className="p-3">Single payment at end of term</td>
-                  <td className="p-3 font-mono text-[11px]">PV = FV / (1+r)^t</td>
+                  <td className="p-3 font-sans tabular-nums text-[11px]">PV = FV / (1+r)^t</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">Zero-coupon bonds, single target payouts</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Ordinary Annuity</td>
                   <td className="p-3">Equal deposits at period end</td>
-                  <td className="p-3 font-mono text-[11px]">PV = PMT × [1 - (1+r)^-t] / r</td>
+                  <td className="p-3 font-sans tabular-nums text-[11px]">PV = PMT × [1 - (1+r)^-t] / r</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">Mortgages, fixed loan repayments</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Annuity Due</td>
                   <td className="p-3">Equal deposits at period start</td>
-                  <td className="p-3 font-mono text-[11px]">PV = PV_ordinary × (1+r)</td>
+                  <td className="p-3 font-sans tabular-nums text-[11px]">PV = PV_ordinary × (1+r)</td>
                   <td className="p-3 text-emerald-600 font-bold">Lease payments, rent prepayments</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Growing Annuity</td>
                   <td className="p-3">Cash flows growing at rate g</td>
-                  <td className="p-3 font-mono text-[11px]">PV = PMT / (r-g) × [1 - ((1+g)/(1+r))^t]</td>
+                  <td className="p-3 font-sans tabular-nums text-[11px]">PV = PMT / (r-g) × [1 - ((1+g)/(1+r))^t]</td>
                   <td className="p-3 text-purple-600 font-bold">Inflation-indexed pensions, dividend growth</td>
                 </tr>
               </tbody>

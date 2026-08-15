@@ -24,7 +24,7 @@ export function BreakdownCard({ title = "Payment Breakdown", items }: BreakdownC
           <div key={idx} className="space-y-1">
             <div className="flex items-center justify-between text-xs">
               <span className="text-slate-300 font-medium">{item.label}</span>
-              <span className="font-mono font-bold text-white">{item.amount}</span>
+              <span className="font-sans tabular-nums font-bold text-white">{item.amount}</span>
             </div>
             {item.percentage !== undefined && (
               <div className="h-1.5 w-full bg-slate-950 rounded-full overflow-hidden">

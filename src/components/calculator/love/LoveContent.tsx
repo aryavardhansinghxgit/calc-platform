@@ -92,7 +92,7 @@ export function LoveContent() {
                 <th className="p-2 border border-slate-200 dark:border-zinc-800">9</th>
               </tr>
             </thead>
-            <tbody className="font-mono">
+            <tbody className="font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold">A, J, S</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold">B, K, T</td>

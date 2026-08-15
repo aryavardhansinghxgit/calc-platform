@@ -298,13 +298,13 @@ export function GolfHandicapCalculator() {
                   setLowIndexAnchor(e.target.value ? Number(e.target.value) : undefined)
                 }
                 step={0.1}
-                className="h-8 w-28 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                className="h-8 w-28 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
               />
             </div>
 
             {/* Dynamic Rounds Table */}
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse font-mono">
+              <table className="w-full text-left text-xs border-collapse font-sans tabular-nums">
                 <thead>
                   <tr className="bg-zinc-50 dark:bg-zinc-800/60 font-bold text-zinc-600 dark:text-zinc-400 border-b border-zinc-200 dark:border-zinc-700">
                     <th className="p-2 font-sans">#</th>
@@ -331,7 +331,7 @@ export function GolfHandicapCalculator() {
                             type="number"
                             value={roundObj.score}
                             onChange={(e) => handleUpdateRound(roundObj.id, "score", e.target.value)}
-                            className="h-7 w-16 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                            className="h-7 w-16 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                           />
                         </td>
                         <td className="p-2">
@@ -340,7 +340,7 @@ export function GolfHandicapCalculator() {
                             value={roundObj.courseRating}
                             onChange={(e) => handleUpdateRound(roundObj.id, "courseRating", e.target.value)}
                             step={0.1}
-                            className="h-7 w-16 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                            className="h-7 w-16 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                           />
                         </td>
                         <td className="p-2">
@@ -348,7 +348,7 @@ export function GolfHandicapCalculator() {
                             type="number"
                             value={roundObj.slopeRating}
                             onChange={(e) => handleUpdateRound(roundObj.id, "slopeRating", e.target.value)}
-                            className="h-7 w-16 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                            className="h-7 w-16 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                           />
                         </td>
                         <td className="p-2">
@@ -356,7 +356,7 @@ export function GolfHandicapCalculator() {
                             type="number"
                             value={roundObj.pcc || 0}
                             onChange={(e) => handleUpdateRound(roundObj.id, "pcc", e.target.value)}
-                            className="h-7 w-14 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                            className="h-7 w-14 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                           />
                         </td>
                         <td className="p-2 font-bold text-emerald-600 dark:text-emerald-400">
@@ -403,7 +403,7 @@ export function GolfHandicapCalculator() {
               </div>
 
               <div className="space-y-1">
-                <div className="text-6xl font-black font-mono tracking-tight text-white">
+                <div className="text-6xl font-black font-sans tabular-nums tracking-tight text-white">
                   {whsResult.finalHandicapIndex}
                 </div>
                 <p className="text-xs text-emerald-100 font-medium">
@@ -459,7 +459,7 @@ export function GolfHandicapCalculator() {
                   value={targetIndex}
                   onChange={(e) => setTargetIndex(Number(e.target.value))}
                   step={0.1}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
 
@@ -471,7 +471,7 @@ export function GolfHandicapCalculator() {
                   type="number"
                   value={targetSlope}
                   onChange={(e) => setTargetSlope(Number(e.target.value))}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
 
@@ -484,7 +484,7 @@ export function GolfHandicapCalculator() {
                   value={targetRating}
                   onChange={(e) => setTargetRating(Number(e.target.value))}
                   step={0.1}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
 
@@ -496,7 +496,7 @@ export function GolfHandicapCalculator() {
                   type="number"
                   value={targetPar}
                   onChange={(e) => setTargetPar(Number(e.target.value))}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
             </div>
@@ -528,14 +528,14 @@ export function GolfHandicapCalculator() {
 
               <div className="space-y-2">
                 <span className="text-xs text-emerald-100 font-medium">Target Course Handicap</span>
-                <div className="text-5xl font-black font-mono tracking-tight text-white">
+                <div className="text-5xl font-black font-sans tabular-nums tracking-tight text-white">
                   {courseResult.courseHandicap} <span className="text-sm font-sans font-normal">Strokes</span>
                 </div>
               </div>
 
               <div className="space-y-2 pt-2 border-t border-white/20">
                 <span className="text-xs text-emerald-100 font-medium">Final Playing Handicap ({courseResult.allowancePct}%)</span>
-                <div className="text-5xl font-black font-mono tracking-tight text-amber-200">
+                <div className="text-5xl font-black font-sans tabular-nums tracking-tight text-amber-200">
                   {courseResult.playingHandicap} <span className="text-sm font-sans font-normal text-white">Strokes</span>
                 </div>
               </div>
@@ -559,7 +559,7 @@ export function GolfHandicapCalculator() {
                   type="number"
                   value={sScore}
                   onChange={(e) => setSScore(Number(e.target.value))}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
 
@@ -570,7 +570,7 @@ export function GolfHandicapCalculator() {
                   value={sRating}
                   onChange={(e) => setSRating(Number(e.target.value))}
                   step={0.1}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
 
@@ -580,7 +580,7 @@ export function GolfHandicapCalculator() {
                   type="number"
                   value={sSlope}
                   onChange={(e) => setSSlope(Number(e.target.value))}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
 
@@ -590,7 +590,7 @@ export function GolfHandicapCalculator() {
                   type="number"
                   value={sPcc}
                   onChange={(e) => setSPcc(Number(e.target.value))}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
             </div>
@@ -600,7 +600,7 @@ export function GolfHandicapCalculator() {
             <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-100 border-b border-white/20 pb-2">
               Calculated Score Differential
             </h4>
-            <div className="text-6xl font-black font-mono tracking-tight text-white">
+            <div className="text-6xl font-black font-sans tabular-nums tracking-tight text-white">
               {singleDiff}
             </div>
             <p className="text-xs text-emerald-100">

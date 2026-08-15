@@ -307,7 +307,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Monthly Check:</span>
-          <span className="text-emerald-600 dark:text-emerald-400 font-mono text-sm">
+          <span className="text-emerald-600 dark:text-emerald-400 font-sans tabular-nums text-sm">
             {fmt(mode1Results.monthlyWithdrawal)}/mo
           </span>
         </div>
@@ -412,7 +412,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
                   step="25000"
                   value={principalInput}
                   onChange={(e) => setPrincipalInput(e.target.value)}
-                  className="text-xs font-mono h-9 px-3"
+                  className="text-xs font-sans tabular-nums h-9 px-3"
                 />
               </div>
 
@@ -426,7 +426,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
                     step="0.25"
                     value={rateInput}
                     onChange={(e) => setRateInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
 
@@ -438,7 +438,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
                     max="50"
                     value={yearsInput}
                     onChange={(e) => setYearsInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
               </div>
@@ -487,7 +487,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-mono mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-sans tabular-nums mb-2">
                 {fmt(mode1Results.monthlyWithdrawal)}/mo
               </div>
 
@@ -500,7 +500,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-white/10 text-xs font-mono">
+              <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-white/10 text-xs font-sans tabular-nums">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Withdrawal Rate</div>
                   <div className="font-bold text-white text-sm">{mode1Results.withdrawalRatePercent}% ({mode1Results.sustainabilityScore})</div>
@@ -553,22 +553,22 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
 
             <div className="space-y-1 text-xs">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Starting Principal ($)</label>
-              <Input type="number" value={principalInput} onChange={(e) => setPrincipalInput(e.target.value)} className="text-xs font-mono h-9 px-3" />
+              <Input type="number" value={principalInput} onChange={(e) => setPrincipalInput(e.target.value)} className="text-xs font-sans tabular-nums h-9 px-3" />
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Interest Rate (%)</label>
-                <Input type="number" value={rateInput} onChange={(e) => setRateInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={rateInput} onChange={(e) => setRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Desired Monthly Check ($)</label>
-                <Input type="number" value={desiredPaymentInput} onChange={(e) => setDesiredPaymentInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={desiredPaymentInput} onChange={(e) => setDesiredPaymentInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-emerald-900 dark:text-emerald-200 text-sm block border-b pb-1">
                 Funds Depletion Schedule
@@ -583,10 +583,10 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
                     {mode2Results.yearsUntilDepleted} Years ({mode2Results.monthsUntilDepleted} Months)
                   </div>
                   <div className="font-sans text-zinc-600 dark:text-zinc-400">
-                    Total Amount Withdrawn: <span className="font-bold text-zinc-900 dark:text-zinc-100 font-mono">{fmt(mode2Results.totalAmountWithdrawn)}</span>
+                    Total Amount Withdrawn: <span className="font-bold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums">{fmt(mode2Results.totalAmountWithdrawn)}</span>
                   </div>
                   <div className="font-sans text-zinc-600 dark:text-zinc-400">
-                    Total Interest Earned: <span className="font-bold text-indigo-600 font-mono">{fmt(mode2Results.totalInterestEarned)}</span>
+                    Total Interest Earned: <span className="font-bold text-indigo-600 font-sans tabular-nums">{fmt(mode2Results.totalInterestEarned)}</span>
                   </div>
                 </>
               )}
@@ -609,7 +609,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">Your Current Age</label>
-                  <Input type="number" min="50" max="95" value={currentAgeInput} onChange={(e) => setCurrentAgeInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                  <Input type="number" min="50" max="95" value={currentAgeInput} onChange={(e) => setCurrentAgeInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">Gender</label>
@@ -627,16 +627,16 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">Expected Return (%)</label>
-                  <Input type="number" value={rateInput} onChange={(e) => setRateInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                  <Input type="number" value={rateInput} onChange={(e) => setRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">Inflation Rate (%)</label>
-                  <Input type="number" value={inflationInput} onChange={(e) => setInflationInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                  <Input type="number" value={inflationInput} onChange={(e) => setInflationInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
               </div>
             </div>
 
-            <div className="bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-5 rounded-xl space-y-3 font-mono">
+            <div className="bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-5 rounded-xl space-y-3 font-sans tabular-nums">
               <span className="font-sans font-bold text-rose-900 dark:text-rose-200 text-sm block border-b pb-1">
                 Lifetime Sustainable Payout
               </span>
@@ -671,16 +671,16 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">Primary Age</label>
-                  <Input type="number" value={currentAgeInput} onChange={(e) => setCurrentAgeInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                  <Input type="number" value={currentAgeInput} onChange={(e) => setCurrentAgeInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">Spouse Age</label>
-                  <Input type="number" value={spouseAgeInput} onChange={(e) => setSpouseAgeInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                  <Input type="number" value={spouseAgeInput} onChange={(e) => setSpouseAgeInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
               </div>
             </div>
 
-            <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-5 rounded-xl space-y-3 font-mono">
+            <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-5 rounded-xl space-y-3 font-sans tabular-nums">
               <span className="font-sans font-bold text-purple-900 dark:text-purple-200 text-sm block border-b pb-1">
                 Joint Survival Payout
               </span>
@@ -706,7 +706,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
             </h3>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+          <div className="grid grid-cols-2 gap-4 text-xs font-sans tabular-nums">
             <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block text-sm">Immediate Annuity (Start Now)</span>
               <div className="mt-2 text-xl font-extrabold text-indigo-600">{fmt(mode6Results.immediateMonthlyIncome)}/mo</div>
@@ -770,7 +770,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
                   <th className="p-2.5 text-right text-indigo-600">Ending Balance</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-sans tabular-nums">
                 {mode1Results.schedule.map((row) => (
                   <tr key={row.period} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2.5 font-bold font-sans text-zinc-800 dark:text-zinc-200">{row.label}</td>

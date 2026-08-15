@@ -30,7 +30,7 @@ export function AmortizationProgressChart({ schedule }: AmortizationProgressChar
         <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
           Loan Progress Over Time
         </h3>
-        <span className="text-[10px] font-mono text-blue-600 dark:text-blue-400">
+        <span className="text-[10px] font-sans tabular-nums text-blue-600 dark:text-blue-400">
           {schedule.length} Months Payoff
         </span>
       </div>

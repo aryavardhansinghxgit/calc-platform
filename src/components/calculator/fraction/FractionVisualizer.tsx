@@ -74,7 +74,7 @@ export function FractionVisualizer({ num, den }: FractionVisualizerProps) {
         <h4 className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>📐</span> Live Interactive Visualizer ({safeNum}/{safeDen})
         </h4>
-        <span className="text-[10px] font-mono font-semibold px-2 py-0.5 bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 rounded-full">
+        <span className="text-[10px] font-sans tabular-nums font-semibold px-2 py-0.5 bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 rounded-full">
           {((safeNum / safeDen) * 100).toFixed(1)}%
         </span>
       </div>
@@ -86,7 +86,7 @@ export function FractionVisualizer({ num, den }: FractionVisualizerProps) {
           <svg width="160" height="160" viewBox="0 0 160 160" className="drop-shadow-xs">
             {createPieSlices()}
           </svg>
-          <span className="text-xs font-mono font-bold text-zinc-700 dark:text-zinc-300 mt-1">
+          <span className="text-xs font-sans tabular-nums font-bold text-zinc-700 dark:text-zinc-300 mt-1">
             {safeNum} of {safeDen} Slices
           </span>
         </div>
@@ -104,7 +104,7 @@ export function FractionVisualizer({ num, den }: FractionVisualizerProps) {
               />
             ))}
           </div>
-          <span className="text-xs font-mono font-bold text-zinc-700 dark:text-zinc-300">
+          <span className="text-xs font-sans tabular-nums font-bold text-zinc-700 dark:text-zinc-300">
             {filledBlocks} / {maxBlocks} Segment Blocks
           </span>
         </div>
@@ -132,7 +132,7 @@ export function FractionVisualizer({ num, den }: FractionVisualizerProps) {
               {safeNum}/{safeDen}
             </text>
           </svg>
-          <span className="text-xs font-mono font-bold text-zinc-700 dark:text-zinc-300">
+          <span className="text-xs font-sans tabular-nums font-bold text-zinc-700 dark:text-zinc-300">
             Position: {(safeNum / safeDen).toFixed(3)}
           </span>
         </div>

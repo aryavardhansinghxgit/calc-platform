@@ -105,7 +105,7 @@ export function FormulaComparisonBarChart({ result }: OneRepMaxChartsProps) {
           <h4 className="font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Clinical 1RM Formula Comparison</h4>
           <p className="text-[11px] text-zinc-500">Epley vs Brzycki vs Lombardi vs Mayhew vs O'Conner vs Wathan vs Lander</p>
         </div>
-        <span className="font-mono font-bold text-purple-600 dark:text-purple-400">Mean: {result.consensusOneRepMax} {result.unitLabel}</span>
+        <span className="font-sans tabular-nums font-bold text-purple-600 dark:text-purple-400">Mean: {result.consensusOneRepMax} {result.unitLabel}</span>
       </div>
 
       <div className="space-y-2 pt-1 text-xs">
@@ -115,7 +115,7 @@ export function FormulaComparisonBarChart({ result }: OneRepMaxChartsProps) {
             <div key={idx} className="space-y-1">
               <div className="flex justify-between items-center text-[11px]">
                 <span className="font-semibold text-zinc-800 dark:text-zinc-200">{f.formulaName}</span>
-                <span className="font-mono font-bold text-purple-600 dark:text-purple-400">{f.oneRepMax} {result.unitLabel}</span>
+                <span className="font-sans tabular-nums font-bold text-purple-600 dark:text-purple-400">{f.oneRepMax} {result.unitLabel}</span>
               </div>
               <div className="h-3 w-full bg-zinc-100 dark:bg-zinc-950 rounded-full overflow-hidden border border-zinc-200 dark:border-zinc-800">
                 <div

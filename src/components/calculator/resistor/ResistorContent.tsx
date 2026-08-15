@@ -68,7 +68,7 @@ export function ResistorContent() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Series Resistance</h4>
-            <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               R_total = R_1 + R_2 + ... + R_n
             </div>
             <p className="text-[11px] text-zinc-500">For series resistors, the equivalent resistance is simply the sum of individual values.</p>
@@ -76,7 +76,7 @@ export function ResistorContent() {
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Parallel Resistance</h4>
-            <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               1 / R_total = Σ (1 / R_i)
             </div>
             <p className="text-[11px] text-zinc-500">The reciprocal equivalent resistance is the sum of the reciprocals of branch resistances.</p>
@@ -84,7 +84,7 @@ export function ResistorContent() {
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Conductor Resistance</h4>
-            <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               R = ρ × L / A
             </div>
             <p className="text-[11px] text-zinc-500">Resistance equals material resistivity times length divided by cross-sectional area.</p>
@@ -143,7 +143,7 @@ export function ResistorContent() {
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
               Decode the following bands in order: Orange, Blue, Black, Red, Brown.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Identify digits from first three bands:</strong></div>
               <div>Band 1 (Orange) = 3</div>
               <div>Band 2 (Blue) = 6</div>
@@ -169,7 +169,7 @@ export function ResistorContent() {
             <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
               Find the total equivalent resistance of three resistors connected in parallel: R1 = 100 Ω (±5%), R2 = 220 Ω (±5%), R3 = 470 Ω (±5%) with a supply voltage of 12V.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Formula for parallel equivalent resistance:</strong></div>
               <div>1/R_total = 1/100 + 1/220 + 1/470 = 0.01 + 0.004545 + 0.002128 = 0.016673 S</div>
               <div>R_total = 1 / 0.016673 = 59.98 Ω</div>

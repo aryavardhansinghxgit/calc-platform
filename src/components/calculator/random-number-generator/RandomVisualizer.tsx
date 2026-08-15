@@ -21,7 +21,7 @@ export function RandomVisualizer({ numbers, histogramBins, mean, stdDev, min, ma
         <h4 className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>📊</span> Random Frequency Distribution ({numbers.length} Samples)
         </h4>
-        <span className="text-[10px] font-mono font-bold px-2 py-0.5 bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 rounded-full">
+        <span className="text-[10px] font-sans tabular-nums font-bold px-2 py-0.5 bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 rounded-full">
           Mean: {mean} | σ: {stdDev}
         </span>
       </div>
@@ -35,14 +35,14 @@ export function RandomVisualizer({ numbers, histogramBins, mean, stdDev, min, ma
               const heightPct = (bin.count / maxBinCount) * 80;
               return (
                 <div key={idx} className="flex-1 flex flex-col items-center gap-1 h-full justify-end group">
-                  <span className="text-[9px] font-mono font-bold text-blue-600 dark:text-blue-400 opacity-80">
+                  <span className="text-[9px] font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400 opacity-80">
                     {bin.count}
                   </span>
                   <div
                     className="w-full bg-blue-600 dark:bg-blue-500 rounded-t-md transition-all duration-300 group-hover:bg-blue-700"
                     style={{ height: `${Math.max(4, heightPct)}px` }}
                   />
-                  <span className="text-[8px] font-mono text-zinc-500 truncate w-full text-center">
+                  <span className="text-[8px] font-sans tabular-nums text-zinc-500 truncate w-full text-center">
                     {bin.binLabel}
                   </span>
                 </div>
@@ -75,7 +75,7 @@ export function RandomVisualizer({ numbers, histogramBins, mean, stdDev, min, ma
               );
             })}
           </svg>
-          <div className="flex justify-between text-[9px] font-mono text-zinc-500">
+          <div className="flex justify-between text-[9px] font-sans tabular-nums text-zinc-500">
             <span>Min: {min}</span>
             <span>Max: {max}</span>
           </div>

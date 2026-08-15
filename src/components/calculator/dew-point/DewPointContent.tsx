@@ -36,11 +36,11 @@ export function DewPointContent() {
           The standard high-precision formulation for saturation vapor pressure e_s(T) and dew point T_d (precision ±0.01°C):
         </p>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-mono text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold overflow-x-auto">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold overflow-x-auto">
           gamma(T, RH) = ln(RH / 100) + (17.625 × T) / (243.04 + T)
         </div>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-mono text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold overflow-x-auto">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold overflow-x-auto">
           Td = (243.04 × gamma) / (17.625 - gamma)
         </div>
 
@@ -52,7 +52,7 @@ export function DewPointContent() {
         <p className="text-xs">
           For relative humidity values above 50%, the dew point can be estimated quickly without logarithms using:
         </p>
-        <div className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg font-mono text-xs text-center text-sky-700 dark:text-sky-300 font-bold">
+        <div className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg font-sans tabular-nums text-xs text-center text-sky-700 dark:text-sky-300 font-bold">
           Td ≈ T - [ (100 - RH) / 5 ]
         </div>
       </section>

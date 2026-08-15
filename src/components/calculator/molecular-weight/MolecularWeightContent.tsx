@@ -91,23 +91,23 @@ function ModernPeriodicTable() {
         <div className="bg-gradient-to-br from-emerald-50 via-teal-50/60 to-slate-50 dark:from-zinc-800 dark:to-zinc-900 text-slate-900 dark:text-zinc-100 p-4 rounded-2xl shadow-xs border border-emerald-200/80 dark:border-zinc-700 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-xl bg-white dark:bg-zinc-800 border border-emerald-300 dark:border-zinc-700 shadow-xs flex flex-col items-center justify-center shrink-0">
-              <span className="text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400">{selectedElement.symbol}</span>
-              <span className="text-[9px] font-mono text-slate-500 dark:text-zinc-400">#{selectedElement.number}</span>
+              <span className="text-2xl font-black font-sans tabular-nums text-emerald-600 dark:text-emerald-400">{selectedElement.symbol}</span>
+              <span className="text-[9px] font-sans tabular-nums text-slate-500 dark:text-zinc-400">#{selectedElement.number}</span>
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h4 className="text-lg font-black text-slate-900 dark:text-zinc-100">{selectedElement.name}</h4>
-                <span className="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[10px] font-mono font-bold uppercase">
+                <span className="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[10px] font-sans tabular-nums font-bold uppercase">
                   {CATEGORY_MAP[selectedElement.category]?.label || selectedElement.category}
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-zinc-400 font-mono mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-zinc-400 font-sans tabular-nums mt-0.5">
                 Period {selectedElement.period} • Group {selectedElement.group}
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 text-xs font-mono border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-zinc-700 pt-3 sm:pt-0 sm:pl-6 w-full sm:w-auto">
+          <div className="grid grid-cols-2 gap-4 text-xs font-sans tabular-nums border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-zinc-700 pt-3 sm:pt-0 sm:pl-6 w-full sm:w-auto">
             <div>
               <span className="text-[10px] text-slate-500 dark:text-zinc-400 uppercase tracking-wider block font-bold">Standard Atomic Weight</span>
               <span className="text-sm font-black text-emerald-600 dark:text-emerald-400">{selectedElement.atomicWeight} g/mol</span>
@@ -151,11 +151,11 @@ function ModernPeriodicTable() {
                         } ${isSelected ? "ring-2 ring-emerald-500 font-bold scale-105" : ""}`}
                         title={`${el.name} (#${el.number}): ${el.atomicWeight} g/mol`}
                       >
-                        <div className="w-full flex items-center justify-between px-0.5 text-[8px] font-mono opacity-80">
+                        <div className="w-full flex items-center justify-between px-0.5 text-[8px] font-sans tabular-nums opacity-80">
                           <span>{el.number}</span>
                         </div>
-                        <span className="text-xs font-black font-mono leading-none">{el.symbol}</span>
-                        <span className="text-[7.5px] font-mono opacity-90 truncate w-full px-0.5">
+                        <span className="text-xs font-black font-sans tabular-nums leading-none">{el.symbol}</span>
+                        <span className="text-[7.5px] font-sans tabular-nums opacity-90 truncate w-full px-0.5">
                           {el.atomicWeight}
                         </span>
                       </button>
@@ -170,7 +170,7 @@ function ModernPeriodicTable() {
           <div className="pt-4 border-t border-slate-100 dark:border-zinc-800 space-y-1.5">
             {/* Lanthanides */}
             <div className="flex items-center gap-1">
-              <span className="w-20 text-[10px] font-extrabold uppercase text-pink-600 dark:text-pink-400 shrink-0 font-mono">
+              <span className="w-20 text-[10px] font-extrabold uppercase text-pink-600 dark:text-pink-400 shrink-0 font-sans tabular-nums">
                 Lanthanides
               </span>
               <div className="grid grid-cols-15 gap-1 flex-1">
@@ -188,9 +188,9 @@ function ModernPeriodicTable() {
                       } ${isSelected ? "ring-2 ring-pink-500 font-bold" : ""}`}
                       title={`${el.name} (#${el.number}): ${el.atomicWeight} g/mol`}
                     >
-                      <span className="text-[7.5px] font-mono opacity-80">{el.number}</span>
-                      <span className="text-xs font-black font-mono leading-none">{el.symbol}</span>
-                      <span className="text-[7px] font-mono opacity-90 truncate w-full">{el.atomicWeight}</span>
+                      <span className="text-[7.5px] font-sans tabular-nums opacity-80">{el.number}</span>
+                      <span className="text-xs font-black font-sans tabular-nums leading-none">{el.symbol}</span>
+                      <span className="text-[7px] font-sans tabular-nums opacity-90 truncate w-full">{el.atomicWeight}</span>
                     </button>
                   );
                 })}
@@ -199,7 +199,7 @@ function ModernPeriodicTable() {
 
             {/* Actinides */}
             <div className="flex items-center gap-1">
-              <span className="w-20 text-[10px] font-extrabold uppercase text-orange-600 dark:text-orange-400 shrink-0 font-mono">
+              <span className="w-20 text-[10px] font-extrabold uppercase text-orange-600 dark:text-orange-400 shrink-0 font-sans tabular-nums">
                 Actinides
               </span>
               <div className="grid grid-cols-15 gap-1 flex-1">
@@ -217,9 +217,9 @@ function ModernPeriodicTable() {
                       } ${isSelected ? "ring-2 ring-orange-500 font-bold" : ""}`}
                       title={`${el.name} (#${el.number}): ${el.atomicWeight} g/mol`}
                     >
-                      <span className="text-[7.5px] font-mono opacity-80">{el.number}</span>
-                      <span className="text-xs font-black font-mono leading-none">{el.symbol}</span>
-                      <span className="text-[7px] font-mono opacity-90 truncate w-full">{el.atomicWeight}</span>
+                      <span className="text-[7.5px] font-sans tabular-nums opacity-80">{el.number}</span>
+                      <span className="text-xs font-black font-sans tabular-nums leading-none">{el.symbol}</span>
+                      <span className="text-[7px] font-sans tabular-nums opacity-90 truncate w-full">{el.atomicWeight}</span>
                     </button>
                   );
                 })}
@@ -256,7 +256,7 @@ export function MolecularWeightContent() {
           <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-1">
             <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">Molecular Weight (MW)</h4>
             <p className="leading-relaxed">
-              The relative dimensionless ratio or mass of a single discrete molecule in unified atomic mass units (<span className="font-mono">amu</span>).
+              The relative dimensionless ratio or mass of a single discrete molecule in unified atomic mass units (<span className="font-sans tabular-nums">amu</span>).
             </p>
           </div>
 
@@ -269,7 +269,7 @@ export function MolecularWeightContent() {
         </div>
 
         <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-xs leading-relaxed">
-          <strong className="text-slate-900 dark:text-zinc-100">Unit Equivalence Principle:</strong> Because 1 mole of atomic mass units (1 g = 6.022 × 10²³ Da) cancels Avogadro&apos;s number, 1 molecule of Water (<span className="font-mono">H₂O</span>) weighs <strong>18.015 Da</strong>, while 1 mole of Water weighs exactly <strong>18.015 g/mol</strong>.
+          <strong className="text-slate-900 dark:text-zinc-100">Unit Equivalence Principle:</strong> Because 1 mole of atomic mass units (1 g = 6.022 × 10²³ Da) cancels Avogadro&apos;s number, 1 molecule of Water (<span className="font-sans tabular-nums">H₂O</span>) weighs <strong>18.015 Da</strong>, while 1 mole of Water weighs exactly <strong>18.015 g/mol</strong>.
         </div>
       </section>
 
@@ -284,21 +284,21 @@ export function MolecularWeightContent() {
 
         {/* Math Formula Cards */}
         <div className="space-y-3 my-4">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-mono text-xs space-y-1">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
             <span className="text-slate-500 font-bold block text-[10px] uppercase">1. Primary Molar Mass Formula:</span>
             <div className="text-emerald-600 dark:text-emerald-400 font-extrabold text-sm">
               M = Σ(Nᵢ × Aᵢ) = (N₁ · A₁) + (N₂ · A₂) + ... + (Nₖ · Aₖ)
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-mono text-xs space-y-1">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
             <span className="text-slate-500 font-bold block text-[10px] uppercase">2. Elemental Mass Percentage Formula:</span>
             <div className="text-blue-600 dark:text-blue-400 font-extrabold text-sm">
               Mass % of Element i = [(Nᵢ × Aᵢ) / M_total] × 100
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-mono text-xs space-y-1">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
             <span className="text-slate-500 font-bold block text-[10px] uppercase">3. Mole-Mass-Molecule Conversions:</span>
             <div className="text-purple-600 dark:text-purple-400 font-extrabold text-sm">
               n = m / M,   m = n × M,   N = n × N_A (N_A = 6.022 × 10²³)
@@ -310,7 +310,7 @@ export function MolecularWeightContent() {
           Step-by-Step Worked Example: Hydrated Copper Sulfate (CuSO₄·5H₂O)
         </h3>
 
-        <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-mono text-xs space-y-2">
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-2">
           <p className="text-slate-700 dark:text-zinc-300">• Copper (Cu): 1 × 63.546 g/mol = 63.546 g/mol</p>
           <p className="text-slate-700 dark:text-zinc-300">• Sulfur (S): 1 × 32.060 g/mol = 32.060 g/mol</p>
           <p className="text-slate-700 dark:text-zinc-300">• Anhydrous Oxygen (O): 4 × 15.999 g/mol = 63.996 g/mol</p>
@@ -331,9 +331,9 @@ export function MolecularWeightContent() {
         </p>
 
         <ul className="list-disc pl-6 space-y-2 text-xs">
-          <li><strong>Empirical Formula:</strong> Represents the simplest reduced whole-number integer ratio of atoms (e.g., <span className="font-mono">CH₂O</span> for glucose).</li>
-          <li><strong>Molecular Formula:</strong> Represents the actual integer count of atoms present in one molecule (e.g., <span className="font-mono">C₆H₁₂O₆</span>).</li>
-          <li><strong>Integer Multiplier:</strong> Calculated by dividing target molar mass by empirical formula mass (<span className="font-mono">k = M_molecular / M_empirical</span>).</li>
+          <li><strong>Empirical Formula:</strong> Represents the simplest reduced whole-number integer ratio of atoms (e.g., <span className="font-sans tabular-nums">CH₂O</span> for glucose).</li>
+          <li><strong>Molecular Formula:</strong> Represents the actual integer count of atoms present in one molecule (e.g., <span className="font-sans tabular-nums">C₆H₁₂O₆</span>).</li>
+          <li><strong>Integer Multiplier:</strong> Calculated by dividing target molar mass by empirical formula mass (<span className="font-sans tabular-nums">k = M_molecular / M_empirical</span>).</li>
         </ul>
       </section>
 
@@ -355,7 +355,7 @@ export function MolecularWeightContent() {
           Applications in Stoichiometry, Pharmacology &amp; Industry
         </h2>
         <p className="leading-relaxed text-xs">
-          Molar mass calculations underpin stoichiometric theoretical yields in chemical synthesis, active pharmaceutical ingredient (API) dosing formulations (e.g., accounting for hydrochloride salt weight ratios), and solution prep (<span className="font-mono">M = mass / (MW × V)</span>).
+          Molar mass calculations underpin stoichiometric theoretical yields in chemical synthesis, active pharmaceutical ingredient (API) dosing formulations (e.g., accounting for hydrochloride salt weight ratios), and solution prep (<span className="font-sans tabular-nums">M = mass / (MW × V)</span>).
         </p>
       </section>
 
@@ -368,14 +368,14 @@ export function MolecularWeightContent() {
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
             <h4 className="font-extrabold text-amber-600 dark:text-amber-400 text-sm">Case Sensitivity Errors</h4>
             <p className="leading-relaxed">
-              Entering <span className="font-mono">co</span> instead of <span className="font-mono">Co</span> causes Cobalt (58.93 g/mol) to be misparsed as Carbon Monoxide (28.01 g/mol). Always capitalize element symbols correctly!
+              Entering <span className="font-sans tabular-nums">co</span> instead of <span className="font-sans tabular-nums">Co</span> causes Cobalt (58.93 g/mol) to be misparsed as Carbon Monoxide (28.01 g/mol). Always capitalize element symbols correctly!
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
             <h4 className="font-extrabold text-rose-600 dark:text-rose-400 text-sm">Neglecting Crystallization Waters</h4>
             <p className="leading-relaxed">
-              Weighing anhydrous salt mass when using hydrated reagents (e.g. <span className="font-mono">CuSO₄·5H₂O</span>) causes a massive 36% under-dosing error in solution concentration.
+              Weighing anhydrous salt mass when using hydrated reagents (e.g. <span className="font-sans tabular-nums">CuSO₄·5H₂O</span>) causes a massive 36% under-dosing error in solution concentration.
             </p>
           </div>
         </div>

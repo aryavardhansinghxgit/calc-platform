@@ -26,7 +26,7 @@ export function PercentageContent() {
         <p>
           At its core, a percentage is simply a dimensionless ratio with a constant denominator of 100. Any fraction {"a / b"} can be converted to a percentage by multiplying the ratio by 100:
         </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
           {"Percentage P = (Part / Whole) × 100%"}
         </div>
       </section>
@@ -37,7 +37,7 @@ export function PercentageContent() {
           <span>3.</span> Fundamental Percentage Formulas
         </h2>
         <p>There are three core algebraic variations of the percentage equation:</p>
-        <ul className="list-disc pl-6 space-y-2 font-mono text-xs">
+        <ul className="list-disc pl-6 space-y-2 font-sans tabular-nums text-xs">
           <li>
             <strong>1. Finding the Part (V2):</strong> {"V2 = (P / 100) × V1"} (e.g. What is 15% of 200? ➔ 30)
           </li>
@@ -64,14 +64,14 @@ export function PercentageContent() {
             <p className="text-[11px]">
               Measures relative change from an initial starting value V1 to a final value V2.
             </p>
-            <div className="font-mono text-xs text-emerald-600 font-bold">{"% Change = [(V2 - V1) / V1] × 100%"}</div>
+            <div className="font-sans tabular-nums text-xs text-emerald-600 font-bold">{"% Change = [(V2 - V1) / V1] × 100%"}</div>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-1">
             <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">Percentage Difference (Un-directional Comparison)</h3>
             <p className="text-[11px]">
               Measures relative difference between two values compared against their average baseline.
             </p>
-            <div className="font-mono text-xs text-emerald-600 font-bold">{"% Difference = [|V1 - V2| / ((V1 + V2)/2)] × 100%"}</div>
+            <div className="font-sans tabular-nums text-xs text-emerald-600 font-bold">{"% Difference = [|V1 - V2| / ((V1 + V2)/2)] × 100%"}</div>
           </div>
         </div>
       </section>
@@ -103,7 +103,7 @@ export function PercentageContent() {
               <li>Convert 20% to decimal: 20 ÷ 100 = 0.20.</li>
               <li>Multiply decimal by base value: 0.20 × 450 = 90.</li>
             </ol>
-            <div className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">Final Result: $90</div>
+            <div className="text-xs font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Final Result: $90</div>
           </div>
 
           {/* INTERMEDIATE EXAMPLE */}
@@ -114,7 +114,7 @@ export function PercentageContent() {
               <li>Divide net increase by original starting price: 20 ÷ 80 = 0.25.</li>
               <li>Convert to percentage: 0.25 × 100% = +25%.</li>
             </ol>
-            <div className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">Final Result: +25% Increase</div>
+            <div className="text-xs font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Final Result: +25% Increase</div>
           </div>
 
           {/* ADVANCED EXAMPLE */}
@@ -125,7 +125,7 @@ export function PercentageContent() {
               <li>Decrease 110 by 10%: 110 × (1 - 0.10) = 110 × 0.90 = 99.</li>
               <li>Compare final 99 with initial 100: (99 - 100) / 100 = -1%.</li>
             </ol>
-            <div className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">Final Result: Net -1% Decrease (Not 0%)</div>
+            <div className="text-xs font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Final Result: Net -1% Decrease (Not 0%)</div>
           </div>
         </div>
       </section>

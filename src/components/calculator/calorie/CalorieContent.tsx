@@ -155,7 +155,7 @@ export function CalorieContent() {
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. Mifflin-St Jeor Equation (Clinical Standard)</h4>
             <p>Validated in 1990 as the most reliable formula for modern sedentary lifestyles:</p>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-emerald-700 dark:text-emerald-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">
               Male: BMR = (10 × W_kg) + (6.25 × H_cm) - (5 × Age) + 5<br/>
               Female: BMR = (10 × W_kg) + (6.25 × H_cm) - (5 × Age) - 161
             </code>
@@ -164,7 +164,7 @@ export function CalorieContent() {
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. Revised Harris-Benedict Equation (Roza &amp; Shizgal 1984)</h4>
             <p>Refined version of the classic 1919 study, suitable for active individuals:</p>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-sky-700 dark:text-sky-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-sky-700 dark:text-sky-400">
               Male: BMR = 88.362 + (13.397 × W_kg) + (4.799 × H_cm) - (5.677 × Age)<br/>
               Female: BMR = 447.593 + (9.247 × W_kg) + (3.098 × H_cm) - (4.330 × Age)
             </code>
@@ -173,7 +173,7 @@ export function CalorieContent() {
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">C. Katch-McArdle Formula (Lean Mass Based)</h4>
             <p>Calculates BMR directly from Lean Body Mass (LBM), making it ideal for athletes:</p>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-purple-700 dark:text-purple-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-purple-700 dark:text-purple-400">
               LBM = Weight_kg × (1 - BodyFat%/100)<br/>
               BMR = 370 + (21.6 × LBM)
             </code>

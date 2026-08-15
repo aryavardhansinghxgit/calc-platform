@@ -29,7 +29,7 @@ export function TireSizeContent() {
         </h3>
         <p className="leading-relaxed">
           Automotive tire manufacturers format tire specifications on the outer sidewall using standardized international alphanumeric codes. 
-          A typical metric tire code string reads: <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 font-mono text-sm">P225/50R17 98H</code>. 
+          A typical metric tire code string reads: <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 font-sans tabular-nums text-sm">P225/50R17 98H</code>. 
           Each segment represents a specific physical parameter:
         </p>
 
@@ -61,7 +61,7 @@ export function TireSizeContent() {
             Following the rim size, the service description consists of a two- or three-digit <strong>Load Index</strong> and a letter <strong>Speed Rating</strong>. 
             The Load Index maps to the maximum load-carrying capacity per tire (e.g., index 98 = 1,653 lbs / 750 kg). The Speed Rating indicates the maximum certified top speed:
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono pt-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-sans tabular-nums pt-2">
             <div className="bg-white dark:bg-zinc-800 p-2 rounded border border-slate-200 dark:border-zinc-700 text-center">
               <span className="font-bold block text-blue-600">S Rating</span> 112 mph (180 km/h)
             </div>
@@ -97,10 +97,10 @@ export function TireSizeContent() {
           with rim diameter. The foundational equations powering our calculation engine are detailed below:
         </p>
 
-        <div className="space-y-4 my-4 font-mono text-sm">
+        <div className="space-y-4 my-4 font-sans tabular-nums text-sm">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 shadow-xs space-y-2">
             <span className="text-blue-600 dark:text-blue-400 font-sans font-extrabold block text-xs uppercase tracking-wider">1. Sidewall Height Formula</span>
-            <div className="text-center py-2 text-base font-extrabold text-blue-900 dark:text-blue-200 font-mono">
+            <div className="text-center py-2 text-base font-extrabold text-blue-900 dark:text-blue-200 font-sans tabular-nums">
               {"Sidewall Height (mm) = Section Width (mm) × (Aspect Ratio / 100)"}
             </div>
             <div className="text-center text-xs text-slate-600 dark:text-zinc-400">
@@ -110,7 +110,7 @@ export function TireSizeContent() {
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 shadow-xs space-y-2">
             <span className="text-blue-600 dark:text-blue-400 font-sans font-extrabold block text-xs uppercase tracking-wider">2. Overall Tire Diameter Formula</span>
-            <div className="text-center py-2 text-base font-extrabold text-blue-900 dark:text-blue-200 font-mono">
+            <div className="text-center py-2 text-base font-extrabold text-blue-900 dark:text-blue-200 font-sans tabular-nums">
               {"Overall Diameter (inches) = (2 × Sidewall Height (in)) + Wheel Rim Diameter (in)"}
             </div>
             <div className="text-center text-xs text-slate-600 dark:text-zinc-400">
@@ -157,7 +157,7 @@ export function TireSizeContent() {
             Increasing tire size effectively acts as an engine gearing tall-shift. Larger tires effectively lower your differential gear ratio (e.g., a stock 3.73 axle ratio with 10% larger tires effectively performs like a 3.39 ratio). 
             This raises top-end highway cruise efficiency but reduces low-end torque acceleration, off-the-line responsiveness, and heavy trailering capacity.
           </p>
-          <div className="p-3 bg-white dark:bg-zinc-800 rounded font-mono text-center font-bold text-amber-800 dark:text-amber-300">
+          <div className="p-3 bg-white dark:bg-zinc-800 rounded font-sans tabular-nums text-center font-bold text-amber-800 dark:text-amber-300">
             {"Effective Gear Ratio = Stock Axle Ratio × (Stock Tire Diameter / New Tire Diameter)"}
           </div>
         </div>
@@ -224,7 +224,7 @@ export function TireSizeContent() {
         </p>
 
         <div className="p-4 rounded-xl bg-slate-100 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700 space-y-2 text-xs">
-          <div className="font-mono font-bold text-sm text-blue-600">Example: DOT MAL9 ABCD 1326</div>
+          <div className="font-sans tabular-nums font-bold text-sm text-blue-600">Example: DOT MAL9 ABCD 1326</div>
           <p className="text-slate-600 dark:text-zinc-300">
             The code <strong>"1326"</strong> indicates the tire was produced during the <strong>13th week of the year 2026</strong>. 
             Automotive safety organizations recommend replacing all tires after 6 to 10 years of age regardless of remaining tread depth due to rubber compound oxidation and internal belt degradation.

@@ -16,7 +16,7 @@ export function ReportTable({ table }: ReportTableProps) {
         {table.title}
       </h3>
 
-      <div className="border border-zinc-300 rounded-lg overflow-hidden text-[11px] font-mono">
+      <div className="border border-zinc-300 rounded-lg overflow-hidden text-[11px] font-sans tabular-nums">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-zinc-100 border-b border-zinc-300 font-bold uppercase text-[10px] text-zinc-700">
@@ -65,7 +65,7 @@ export function ReportTable({ table }: ReportTableProps) {
       </div>
 
       {table.footerSummary && (
-        <p className="text-[10px] text-zinc-500 italic font-mono text-right">
+        <p className="text-[10px] text-zinc-500 italic font-sans tabular-nums text-right">
           {table.footerSummary}
         </p>
       )}

@@ -262,7 +262,7 @@ export function MolarityCalculator() {
                 <Search className="h-3.5 w-3.5 text-emerald-500" /> Chemical Compound Database
               </span>
               {selectedCompound && (
-                <span className="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                <span className="text-[10px] font-sans tabular-nums font-extrabold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                   {selectedCompound.formula} ({selectedCompound.molarMass} g/mol)
                 </span>
               )}
@@ -307,7 +307,7 @@ export function MolarityCalculator() {
                       className="w-full px-3 py-1.5 rounded-lg text-xs text-left flex items-center justify-between hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
                     >
                       <span className="font-bold text-slate-900 dark:text-zinc-100">{comp.name}</span>
-                      <span className="font-mono text-emerald-600 dark:text-emerald-400">
+                      <span className="font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
                         {comp.formula} ({comp.molarMass} g/mol)
                       </span>
                     </button>
@@ -328,7 +328,7 @@ export function MolarityCalculator() {
                   step="0.001"
                   value={molarMassInput}
                   onChange={(e) => setMolarMassInput(parseFloat(e.target.value) || 0)}
-                  className="h-8 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                  className="h-8 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                 />
               </div>
 
@@ -398,7 +398,7 @@ export function MolarityCalculator() {
                       disabled={solveVariable === "molarity"}
                       value={molarityValue}
                       onChange={(e) => setMolarityValue(parseFloat(e.target.value) || 0)}
-                      className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                      className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                     />
                     <select
                       value={molarityUnit}
@@ -424,7 +424,7 @@ export function MolarityCalculator() {
                       disabled={solveVariable === "mass"}
                       value={massValue}
                       onChange={(e) => setMassValue(parseFloat(e.target.value) || 0)}
-                      className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                      className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                     />
                     <select
                       value={massUnit}
@@ -451,7 +451,7 @@ export function MolarityCalculator() {
                       disabled={solveVariable === "volume"}
                       value={volumeValue}
                       onChange={(e) => setVolumeValue(parseFloat(e.target.value) || 0)}
-                      className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                      className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                     />
                     <select
                       value={volumeUnit}
@@ -509,7 +509,7 @@ export function MolarityCalculator() {
                     disabled={solveDilutionTarget === "c1"}
                     value={c1}
                     onChange={(e) => setC1(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -523,7 +523,7 @@ export function MolarityCalculator() {
                     disabled={solveDilutionTarget === "v1"}
                     value={v1}
                     onChange={(e) => setV1(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -537,7 +537,7 @@ export function MolarityCalculator() {
                     disabled={solveDilutionTarget === "c2"}
                     value={c2}
                     onChange={(e) => setC2(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -551,7 +551,7 @@ export function MolarityCalculator() {
                     disabled={solveDilutionTarget === "v2"}
                     value={v2}
                     onChange={(e) => setV2(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -575,7 +575,7 @@ export function MolarityCalculator() {
                     type="number"
                     value={massPercent}
                     onChange={(e) => setMassPercent(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -589,7 +589,7 @@ export function MolarityCalculator() {
                     step="0.01"
                     value={density}
                     onChange={(e) => setDensity(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -602,7 +602,7 @@ export function MolarityCalculator() {
                     type="number"
                     value={valence}
                     onChange={(e) => setValence(parseInt(e.target.value, 10) || 1)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -626,7 +626,7 @@ export function MolarityCalculator() {
                     type="number"
                     value={ppmValue}
                     onChange={(e) => setPpmValue(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -640,7 +640,7 @@ export function MolarityCalculator() {
                     step="0.01"
                     value={density}
                     onChange={(e) => setDensity(parseFloat(e.target.value) || 1.0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -672,7 +672,7 @@ export function MolarityCalculator() {
                 : "Calculated PPM Molarity"}
             </span>
 
-            <div className="text-3xl font-black font-mono text-emerald-600 dark:text-emerald-400">
+            <div className="text-3xl font-black font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
               {mode === "mass_solver" && (
                 <>
                   {result.formattedSolvedValue}{" "}
@@ -721,7 +721,7 @@ export function MolarityCalculator() {
                 Bench Preparation Protocol Recipe
               </span>
 
-              <div className="space-y-1.5 font-mono text-[11px] leading-relaxed text-slate-800 dark:text-zinc-200">
+              <div className="space-y-1.5 font-sans tabular-nums text-[11px] leading-relaxed text-slate-800 dark:text-zinc-200">
                 {result.benchProtocol.map((step, idx) => (
                   <p key={idx} className={idx === 0 ? "font-bold text-emerald-600 dark:text-emerald-400" : ""}>
                     {step}

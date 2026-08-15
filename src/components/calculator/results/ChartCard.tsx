@@ -71,7 +71,7 @@ export function ChartCard({
               {centerLabel}
             </span>
             {centerValue && (
-              <span className="text-xs font-bold text-white font-mono">{centerValue}</span>
+              <span className="text-xs font-bold text-white font-sans tabular-nums">{centerValue}</span>
             )}
           </div>
         </div>
@@ -86,7 +86,7 @@ export function ChartCard({
                   <span className="h-3 w-3 rounded-full shrink-0" style={{ backgroundColor: seg.color }} />
                   <span className="text-slate-300 font-medium">{seg.label}</span>
                 </div>
-                <div className="flex items-center gap-2 font-mono">
+                <div className="flex items-center gap-2 font-sans tabular-nums">
                   <span className="font-bold text-white">
                     {seg.formattedValue || `$${seg.value.toLocaleString()}`}
                   </span>

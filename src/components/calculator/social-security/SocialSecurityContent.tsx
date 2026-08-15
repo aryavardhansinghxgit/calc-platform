@@ -178,25 +178,25 @@ export function SocialSecurityContent() {
                 <td className="p-3 font-semibold text-rose-600 border">Age 62</td>
                 <td className="p-3 border">Earliest Eligibility</td>
                 <td className="p-3 font-bold text-rose-600 border">70.0% (-30.0%)</td>
-                <td className="p-3 font-mono border">$1,540 / month</td>
+                <td className="p-3 font-sans tabular-nums border">$1,540 / month</td>
               </tr>
               <tr>
                 <td className="p-3 font-semibold border">Age 65</td>
                 <td className="p-3 border">Early Claiming</td>
                 <td className="p-3 font-bold text-amber-600 border">86.7% (-13.3%)</td>
-                <td className="p-3 font-mono border">$1,907 / month</td>
+                <td className="p-3 font-sans tabular-nums border">$1,907 / month</td>
               </tr>
               <tr>
                 <td className="p-3 font-semibold text-indigo-600 border">Age 67</td>
                 <td className="p-3 font-bold border">Full Retirement Age (FRA)</td>
                 <td className="p-3 font-bold text-indigo-600 border">100.0% (Baseline)</td>
-                <td className="p-3 font-mono font-bold border">$2,200 / month</td>
+                <td className="p-3 font-sans tabular-nums font-bold border">$2,200 / month</td>
               </tr>
               <tr>
                 <td className="p-3 font-semibold text-emerald-600 border">Age 70</td>
                 <td className="p-3 border">Maximum Delayed Credits</td>
                 <td className="p-3 font-bold text-emerald-600 border">124.0% (+24.0%)</td>
-                <td className="p-3 font-mono font-bold text-emerald-600 border">$2,728 / month</td>
+                <td className="p-3 font-sans tabular-nums font-bold text-emerald-600 border">$2,728 / month</td>
               </tr>
             </tbody>
           </table>
@@ -226,7 +226,7 @@ export function SocialSecurityContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold shrink-0">
+                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}

@@ -453,7 +453,7 @@ export function PasswordGenerator() {
       {activeTab !== "strength_checker" && (
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-zinc-900 dark:to-zinc-950 p-6 rounded-2xl border border-blue-100 dark:border-zinc-800 shadow-sm relative overflow-hidden">
           
-          <div className="absolute top-0 right-0 p-2 font-mono text-[9px] text-zinc-400 uppercase tracking-widest pointer-events-none select-none">
+          <div className="absolute top-0 right-0 p-2 font-sans tabular-nums text-[9px] text-zinc-400 uppercase tracking-widest pointer-events-none select-none">
             CSPRNG Source
           </div>
 
@@ -464,7 +464,7 @@ export function PasswordGenerator() {
 
             {bulkCount > 1 ? (
               <div className="space-y-2 mt-2">
-                <div className="max-h-40 overflow-y-auto bg-white dark:bg-zinc-900/50 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 font-mono text-xs text-zinc-800 dark:text-zinc-200 space-y-1">
+                <div className="max-h-40 overflow-y-auto bg-white dark:bg-zinc-900/50 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-xs text-zinc-800 dark:text-zinc-200 space-y-1">
                   {bulkGeneratedList.map((pwd, i) => (
                     <div key={i} className="flex justify-between border-b dark:border-zinc-800 py-1">
                       <span>{pwd}</span>
@@ -501,7 +501,7 @@ export function PasswordGenerator() {
                     type={showPassword ? "text" : "password"}
                     value={outputs.generatedPassword || ""}
                     readOnly
-                    className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 px-4 py-3 rounded-xl font-mono text-base tracking-wide text-zinc-900 dark:text-zinc-100 shadow-inner focus:outline-none pr-10"
+                    className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 px-4 py-3 rounded-xl font-sans tabular-nums text-base tracking-wide text-zinc-900 dark:text-zinc-100 shadow-inner focus:outline-none pr-10"
                   />
                   <button
                     type="button"
@@ -555,7 +555,7 @@ export function PasswordGenerator() {
                 </div>
               </div>
 
-              <div className="flex gap-4 text-xs font-mono">
+              <div className="flex gap-4 text-xs font-sans tabular-nums">
                 <div className="bg-white dark:bg-zinc-900/40 px-3 py-1.5 rounded-lg border dark:border-zinc-800">
                   <span className="text-zinc-400">Entropy:</span>{" "}
                   <strong className="text-zinc-800 dark:text-zinc-200">{outputs.entropyBits} bits</strong>
@@ -723,7 +723,7 @@ export function PasswordGenerator() {
               <div className="space-y-2">
                 <div className="flex justify-between text-xs font-bold">
                   <span className="text-zinc-700 dark:text-zinc-300">Password Length:</span>
-                  <span className="text-blue-600 dark:text-blue-400 font-mono text-sm">{length} characters</span>
+                  <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-sm">{length} characters</span>
                 </div>
                 <input
                   type="range"
@@ -738,7 +738,7 @@ export function PasswordGenerator() {
               <div className="space-y-2">
                 <div className="flex justify-between text-xs font-bold">
                   <span className="text-zinc-700 dark:text-zinc-300">Generate Multiple (Bulk):</span>
-                  <span className="text-blue-600 dark:text-blue-400 font-mono text-sm">{bulkCount} passwords</span>
+                  <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-sm">{bulkCount} passwords</span>
                 </div>
                 <input
                   type="range"
@@ -765,7 +765,7 @@ export function PasswordGenerator() {
                   />
                   <div>
                     <div className="text-xs font-bold">Lowercase</div>
-                    <div className="text-[10px] text-zinc-400 font-mono">a-z</div>
+                    <div className="text-[10px] text-zinc-400 font-sans tabular-nums">a-z</div>
                   </div>
                 </label>
 
@@ -778,7 +778,7 @@ export function PasswordGenerator() {
                   />
                   <div>
                     <div className="text-xs font-bold">Uppercase</div>
-                    <div className="text-[10px] text-zinc-400 font-mono">A-Z</div>
+                    <div className="text-[10px] text-zinc-400 font-sans tabular-nums">A-Z</div>
                   </div>
                 </label>
 
@@ -791,7 +791,7 @@ export function PasswordGenerator() {
                   />
                   <div>
                     <div className="text-xs font-bold">Numbers</div>
-                    <div className="text-[10px] text-zinc-400 font-mono">0-9</div>
+                    <div className="text-[10px] text-zinc-400 font-sans tabular-nums">0-9</div>
                   </div>
                 </label>
 
@@ -804,7 +804,7 @@ export function PasswordGenerator() {
                   />
                   <div>
                     <div className="text-xs font-bold">Symbols</div>
-                    <div className="text-[10px] text-zinc-400 font-mono">Special</div>
+                    <div className="text-[10px] text-zinc-400 font-sans tabular-nums">Special</div>
                   </div>
                 </label>
               </div>
@@ -817,7 +817,7 @@ export function PasswordGenerator() {
                 <Input
                   value={customSymbols}
                   onChange={(e) => setCustomSymbols(e.target.value)}
-                  className="font-mono text-sm"
+                  className="font-sans tabular-nums text-sm"
                 />
               </div>
             )}
@@ -837,7 +837,7 @@ export function PasswordGenerator() {
                   />
                   <div>
                     <div className="text-xs font-bold">Exclude Ambiguous</div>
-                    <div className="text-[9px] text-rose-500 font-mono">Excludes i,l,1,o,0,O,I</div>
+                    <div className="text-[9px] text-rose-500 font-sans tabular-nums">Excludes i,l,1,o,0,O,I</div>
                   </div>
                 </label>
 
@@ -850,7 +850,7 @@ export function PasswordGenerator() {
                   />
                   <div>
                     <div className="text-xs font-bold">Exclude Brackets</div>
-                    <div className="text-[9px] text-rose-500 font-mono">() [] {"{}"} &lt;&gt;</div>
+                    <div className="text-[9px] text-rose-500 font-sans tabular-nums">() [] {"{}"} &lt;&gt;</div>
                   </div>
                 </label>
 
@@ -863,7 +863,7 @@ export function PasswordGenerator() {
                   />
                   <div>
                     <div className="text-xs font-bold">No Repeated Characters</div>
-                    <div className="text-[9px] text-amber-600 font-mono">Unique characters only</div>
+                    <div className="text-[9px] text-amber-600 font-sans tabular-nums">Unique characters only</div>
                   </div>
                 </label>
 
@@ -876,7 +876,7 @@ export function PasswordGenerator() {
                     value={customExclusions}
                     onChange={(e) => setCustomExclusions(e.target.value)}
                     placeholder='Example: " \ &apos; ` /'
-                    className="font-mono text-sm"
+                    className="font-sans tabular-nums text-sm"
                   />
                 </div>
 
@@ -928,7 +928,7 @@ export function PasswordGenerator() {
               <div className="space-y-2">
                 <div className="flex justify-between text-xs font-bold">
                   <span className="text-zinc-700 dark:text-zinc-300">Number of Words:</span>
-                  <span className="text-blue-600 dark:text-blue-400 font-mono text-sm">{wordCount} words</span>
+                  <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-sm">{wordCount} words</span>
                 </div>
                 <input
                   type="range"
@@ -946,7 +946,7 @@ export function PasswordGenerator() {
                   value={separator}
                   onChange={(e) => setSeparator(e.target.value)}
                   placeholder="e.g. -, _, . or blank"
-                  className="font-mono text-sm"
+                  className="font-sans tabular-nums text-sm"
                 />
               </div>
 
@@ -963,7 +963,7 @@ export function PasswordGenerator() {
                 />
                 <div>
                   <div className="text-xs font-bold">Capitalize Words</div>
-                  <div className="text-[9px] text-zinc-400 font-mono">Example: River-Cobalt</div>
+                  <div className="text-[9px] text-zinc-400 font-sans tabular-nums">Example: River-Cobalt</div>
                 </div>
               </label>
 
@@ -976,7 +976,7 @@ export function PasswordGenerator() {
                 />
                 <div>
                   <div className="text-xs font-bold">Append Random Number</div>
-                  <div className="text-[9px] text-zinc-400 font-mono">Example: -7</div>
+                  <div className="text-[9px] text-zinc-400 font-sans tabular-nums">Example: -7</div>
                 </div>
               </label>
 
@@ -989,7 +989,7 @@ export function PasswordGenerator() {
                 />
                 <div>
                   <div className="text-xs font-bold">Append Random Symbol</div>
-                  <div className="text-[9px] text-zinc-400 font-mono">Example: -#</div>
+                  <div className="text-[9px] text-zinc-400 font-sans tabular-nums">Example: -#</div>
                 </div>
               </label>
 
@@ -1031,7 +1031,7 @@ export function PasswordGenerator() {
             <div className="space-y-2">
               <div className="flex justify-between text-xs font-bold">
                 <span className="text-zinc-700 dark:text-zinc-300">PIN Code Length (Digits):</span>
-                <span className="text-blue-600 dark:text-blue-400 font-mono text-sm">{pinLength} digits</span>
+                <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-sm">{pinLength} digits</span>
               </div>
               <input
                 type="range"
@@ -1075,7 +1075,7 @@ export function PasswordGenerator() {
                   value={checkPassword}
                   onChange={(e) => setCheckPassword(e.target.value)}
                   placeholder="Type a password..."
-                  className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 px-4 py-3 rounded-xl font-mono text-base tracking-wide text-zinc-900 dark:text-zinc-100 shadow-inner focus:outline-none"
+                  className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 px-4 py-3 rounded-xl font-sans tabular-nums text-base tracking-wide text-zinc-900 dark:text-zinc-100 shadow-inner focus:outline-none"
                 />
                 <button
                   type="button"
@@ -1125,26 +1125,26 @@ export function PasswordGenerator() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   <div className="bg-zinc-50 dark:bg-zinc-900/50 p-3 rounded-lg border dark:border-zinc-800 text-center">
                     <div className="text-[10px] text-zinc-400 uppercase">Length</div>
-                    <div className="text-base font-mono font-bold mt-1">{checkPassword.length}</div>
+                    <div className="text-base font-sans tabular-nums font-bold mt-1">{checkPassword.length}</div>
                   </div>
                   <div className="bg-zinc-50 dark:bg-zinc-900/50 p-3 rounded-lg border dark:border-zinc-800 text-center">
                     <div className="text-[10px] text-zinc-400 uppercase">Unique Characters</div>
-                    <div className="text-base font-mono font-bold mt-1">{outputs.uniqueCount}</div>
+                    <div className="text-base font-sans tabular-nums font-bold mt-1">{outputs.uniqueCount}</div>
                   </div>
                   <div className="bg-zinc-50 dark:bg-zinc-900/50 p-3 rounded-lg border dark:border-zinc-800 text-center">
                     <div className="text-[10px] text-zinc-400 uppercase">Entropy (Estimate)</div>
-                    <div className="text-base font-mono font-bold mt-1">{outputs.entropyBits} bits</div>
+                    <div className="text-base font-sans tabular-nums font-bold mt-1">{outputs.entropyBits} bits</div>
                   </div>
                   <div className="bg-zinc-50 dark:bg-zinc-900/50 p-3 rounded-lg border dark:border-zinc-800 text-center">
                     <div className="text-[10px] text-zinc-400 uppercase">Search Pool Size</div>
-                    <div className="text-base font-mono font-bold mt-1">{outputs.poolSize}</div>
+                    <div className="text-base font-sans tabular-nums font-bold mt-1">{outputs.poolSize}</div>
                   </div>
                 </div>
 
                 {/* Character categories counts list */}
                 <div className="p-4 border dark:border-zinc-800 rounded-xl space-y-2">
                   <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300 block">Character Group Distribution:</span>
-                  <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                  <div className="grid grid-cols-2 gap-2 text-xs font-sans tabular-nums">
                     <div className="flex justify-between border-b dark:border-zinc-800 pb-1">
                       <span className="text-zinc-400">Lowercase letters:</span>
                       <span>{outputs.lowercaseCount}</span>
@@ -1196,7 +1196,7 @@ export function PasswordGenerator() {
                   <th className="py-2 text-right">Standard Size</th>
                 </tr>
               </thead>
-              <tbody className="divide-y dark:divide-zinc-800 font-mono text-zinc-600 dark:text-zinc-400">
+              <tbody className="divide-y dark:divide-zinc-800 font-sans tabular-nums text-zinc-600 dark:text-zinc-400">
                 <tr>
                   <td className="py-2 font-sans font-bold">Lowercase</td>
                   <td className="py-2">a-z (abcdefghijklmnopqrstuvwxyz)</td>
@@ -1247,7 +1247,7 @@ export function PasswordGenerator() {
             {savedRecords.map((rec) => (
               <div key={rec.id} className="py-3 flex justify-between items-center text-xs">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2 font-mono">
+                  <div className="flex items-center gap-2 font-sans tabular-nums">
                     <span className="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-[10px]">
                       {rec.mode}
                     </span>
@@ -1284,7 +1284,7 @@ export function PasswordGenerator() {
       {/* 7. PRINTABLE HIDDEN/REVEALED LAYOUT STYLES */}
       <div className="hidden print:block space-y-4">
         <h2 className="text-xl font-bold border-b pb-2">Password Generator Configuration Summary Report</h2>
-        <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+        <div className="grid grid-cols-2 gap-4 text-xs font-sans tabular-nums">
           <div><strong>Generation Timestamp:</strong> <span suppressHydrationWarning>{isMounted ? new Date().toLocaleString() : ""}</span></div>
           <div><strong>Active Mode Selected:</strong> {activeTab}</div>
           {activeTab === "random" && (
@@ -1299,7 +1299,7 @@ export function PasswordGenerator() {
 
         <div className="p-4 border bg-zinc-50 rounded-xl mt-4">
           <div className="text-xs font-bold text-zinc-500 uppercase">Generated Secure Password:</div>
-          <div className="text-lg font-mono font-bold mt-2 select-all">
+          <div className="text-lg font-sans tabular-nums font-bold mt-2 select-all">
             {revealForPrint ? outputs.generatedPassword : "•••••••••••••••• (Plaintext hidden for print security)"}
           </div>
           {!revealForPrint && (

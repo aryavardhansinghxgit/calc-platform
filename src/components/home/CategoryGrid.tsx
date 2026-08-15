@@ -21,7 +21,7 @@ export function CategoryGrid() {
         <h2 className="text-base font-extrabold text-foreground tracking-tight">
           Browse All Calculators
         </h2>
-        <span className="text-xs text-muted-foreground font-mono">
+        <span className="text-xs text-muted-foreground font-sans tabular-nums">
           Direct Directory
         </span>
       </div>

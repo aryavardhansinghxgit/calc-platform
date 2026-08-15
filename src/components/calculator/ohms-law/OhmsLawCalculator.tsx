@@ -437,7 +437,7 @@ export function OhmsLawCalculator() {
                       value={voltage}
                       disabled={!knownVoltage}
                       onChange={(e) => setVoltage(e.target.value)}
-                      className="w-32 h-8 font-mono text-xs font-bold"
+                      className="w-32 h-8 font-sans tabular-nums text-xs font-bold"
                     />
                     <select
                       value={voltageUnit}
@@ -472,7 +472,7 @@ export function OhmsLawCalculator() {
                       value={current}
                       disabled={!knownCurrent}
                       onChange={(e) => setCurrent(e.target.value)}
-                      className="w-32 h-8 font-mono text-xs font-bold"
+                      className="w-32 h-8 font-sans tabular-nums text-xs font-bold"
                     />
                     <select
                       value={currentUnit}
@@ -507,7 +507,7 @@ export function OhmsLawCalculator() {
                       value={resistance}
                       disabled={!knownResistance}
                       onChange={(e) => setResistance(e.target.value)}
-                      className="w-32 h-8 font-mono text-xs font-bold"
+                      className="w-32 h-8 font-sans tabular-nums text-xs font-bold"
                     />
                     <select
                       value={resistanceUnit}
@@ -542,7 +542,7 @@ export function OhmsLawCalculator() {
                       value={power}
                       disabled={!knownPower}
                       onChange={(e) => setPower(e.target.value)}
-                      className="w-32 h-8 font-mono text-xs font-bold"
+                      className="w-32 h-8 font-sans tabular-nums text-xs font-bold"
                     />
                     <select
                       value={powerUnit}
@@ -566,7 +566,7 @@ export function OhmsLawCalculator() {
                     value={resistorRating}
                     placeholder="e.g. 0.25, 0.5, 1"
                     onChange={(e) => setResistorRating(e.target.value)}
-                    className="h-8 text-xs font-mono"
+                    className="h-8 text-xs font-sans tabular-nums"
                   />
                 </div>
                 <div>
@@ -597,19 +597,19 @@ export function OhmsLawCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Input Voltage Vin (Volts)</label>
-                  <Input type="number" value={dividerVin} onChange={(e) => setDividerVin(e.target.value)} className="font-mono text-xs font-bold" />
+                  <Input type="number" value={dividerVin} onChange={(e) => setDividerVin(e.target.value)} className="font-sans tabular-nums text-xs font-bold" />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Resistor R1 (Ohms)</label>
-                  <Input type="number" value={dividerR1} onChange={(e) => setDividerR1(e.target.value)} className="font-mono text-xs font-bold" />
+                  <Input type="number" value={dividerR1} onChange={(e) => setDividerR1(e.target.value)} className="font-sans tabular-nums text-xs font-bold" />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Resistor R2 (Ohms)</label>
-                  <Input type="number" value={dividerR2} onChange={(e) => setDividerR2(e.target.value)} className="font-mono text-xs font-bold" />
+                  <Input type="number" value={dividerR2} onChange={(e) => setDividerR2(e.target.value)} className="font-sans tabular-nums text-xs font-bold" />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Load Resistor R_L (Ohms, Optional)</label>
-                  <Input type="number" placeholder="Open Circuit" value={dividerRl} onChange={(e) => setDividerRl(e.target.value)} className="font-mono text-xs" />
+                  <Input type="number" placeholder="Open Circuit" value={dividerRl} onChange={(e) => setDividerRl(e.target.value)} className="font-sans tabular-nums text-xs" />
                 </div>
               </div>
             </div>
@@ -625,19 +625,19 @@ export function OhmsLawCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Total Current Itotal (Amperes)</label>
-                  <Input type="number" value={dividerItotal} onChange={(e) => setDividerItotal(e.target.value)} className="font-mono text-xs font-bold" />
+                  <Input type="number" value={dividerItotal} onChange={(e) => setDividerItotal(e.target.value)} className="font-sans tabular-nums text-xs font-bold" />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Branch 1 Resistor R1 (Ohms)</label>
-                  <Input type="number" value={dividerBranchR1} onChange={(e) => setDividerBranchR1(e.target.value)} className="font-mono text-xs font-bold" />
+                  <Input type="number" value={dividerBranchR1} onChange={(e) => setDividerBranchR1(e.target.value)} className="font-sans tabular-nums text-xs font-bold" />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Branch 2 Resistor R2 (Ohms)</label>
-                  <Input type="number" value={dividerBranchR2} onChange={(e) => setDividerBranchR2(e.target.value)} className="font-mono text-xs font-bold" />
+                  <Input type="number" value={dividerBranchR2} onChange={(e) => setDividerBranchR2(e.target.value)} className="font-sans tabular-nums text-xs font-bold" />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Branch 3 Resistor R3 (Ohms, Optional)</label>
-                  <Input type="number" placeholder="None" value={dividerBranchR3} onChange={(e) => setDividerBranchR3(e.target.value)} className="font-mono text-xs" />
+                  <Input type="number" placeholder="None" value={dividerBranchR3} onChange={(e) => setDividerBranchR3(e.target.value)} className="font-sans tabular-nums text-xs" />
                 </div>
               </div>
             </div>
@@ -653,15 +653,15 @@ export function OhmsLawCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Supply Voltage (V)</label>
-                  <Input type="number" value={ledVsource} onChange={(e) => setLedVsource(e.target.value)} className="font-mono text-xs font-bold" />
+                  <Input type="number" value={ledVsource} onChange={(e) => setLedVsource(e.target.value)} className="font-sans tabular-nums text-xs font-bold" />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">LED Forward Voltage (V)</label>
-                  <Input type="number" value={ledVforward} onChange={(e) => setLedVforward(e.target.value)} className="font-mono text-xs font-bold" />
+                  <Input type="number" value={ledVforward} onChange={(e) => setLedVforward(e.target.value)} className="font-sans tabular-nums text-xs font-bold" />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Desired Current (mA)</label>
-                  <Input type="number" value={ledIforward} onChange={(e) => setLedIforward(e.target.value)} className="font-mono text-xs font-bold" />
+                  <Input type="number" value={ledIforward} onChange={(e) => setLedIforward(e.target.value)} className="font-sans tabular-nums text-xs font-bold" />
                 </div>
               </div>
             </div>
@@ -770,7 +770,7 @@ export function OhmsLawCalculator() {
                     <AlertTriangle className="w-4 h-4 shrink-0" />
                     <span>⚠️ Warning: Inputs disagree with Ohm&apos;s Law</span>
                   </div>
-                  <pre className="text-[10px] font-mono whitespace-pre-wrap text-zinc-600 dark:text-zinc-400 pl-5 leading-normal">
+                  <pre className="text-[10px] font-sans tabular-nums whitespace-pre-wrap text-zinc-600 dark:text-zinc-400 pl-5 leading-normal">
                     {result.inconsistencyMessage}
                   </pre>
                 </div>
@@ -799,7 +799,7 @@ export function OhmsLawCalculator() {
                   <span className="text-[11px] font-black uppercase text-zinc-400 dark:text-zinc-500 tracking-wider block mb-2">
                     Step-by-Step Calculation Formula
                   </span>
-                  <pre className="text-[11px] font-mono text-zinc-700 dark:text-zinc-300 whitespace-pre-wrap leading-relaxed">
+                  <pre className="text-[11px] font-sans tabular-nums text-zinc-700 dark:text-zinc-300 whitespace-pre-wrap leading-relaxed">
                     {result.calculationSteps}
                   </pre>
                 </div>
@@ -858,7 +858,7 @@ export function OhmsLawCalculator() {
               </span>
               <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
                 {savedItems.map(item => (
-                  <div key={item.id} className="flex items-center justify-between p-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-xs font-mono shadow-xs">
+                  <div key={item.id} className="flex items-center justify-between p-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-xs font-sans tabular-nums shadow-xs">
                     <span className="truncate pr-4 text-zinc-700 dark:text-zinc-300 font-bold">{item.title}</span>
                     <button
                       onClick={() => handleDeleteSaved(item.id)}
@@ -948,7 +948,7 @@ export function OhmsLawCalculator() {
               </span>
               <div className="grid grid-cols-3 gap-1.5">
                 {getFormulaWheelData(wheelFocus).map((f, i) => (
-                  <div key={i} className="p-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-lg text-xs font-mono font-bold text-zinc-800 dark:text-zinc-200">
+                  <div key={i} className="p-1.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-700 rounded-lg text-xs font-sans tabular-nums font-bold text-zinc-800 dark:text-zinc-200">
                     {f}
                   </div>
                 ))}

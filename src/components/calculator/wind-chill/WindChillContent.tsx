@@ -36,11 +36,11 @@ export function WindChillContent() {
           In 2001, the National Weather Service (NWS) and Environment Canada updated the wind chill index using clinical facial skin heat-transfer models developed by the Joint Action Group for Temperature Indices (JAG/TI):
         </p>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-mono text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold">
           Wind Chill (°F) = 35.74 + 0.6215 × T - 35.75 × (V^0.16) + 0.4275 × T × (V^0.16)
         </div>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-mono text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold">
           Wind Chill (°C) = 13.12 + 0.6215 × T - 11.37 × (V^0.16) + 0.3965 × T × (V^0.16)
         </div>
 

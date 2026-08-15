@@ -111,7 +111,7 @@ export function AutoLoanReportModal({ isOpen, onClose, inputs, results }: AutoLo
                   <span className="text-[10px] uppercase font-bold text-blue-600 tracking-wider">
                     Monthly Payment
                   </span>
-                  <div className="text-xl font-black text-blue-900 font-mono mt-0.5">
+                  <div className="text-xl font-black text-blue-900 font-sans tabular-nums mt-0.5">
                     {formatCurrency(results.monthlyPayment)}
                   </div>
                   <span className="text-[10px] text-blue-700 font-medium">
@@ -123,7 +123,7 @@ export function AutoLoanReportModal({ isOpen, onClose, inputs, results }: AutoLo
                   <span className="text-[10px] uppercase font-bold text-emerald-600 tracking-wider">
                     Net Financed Amount
                   </span>
-                  <div className="text-xl font-black text-emerald-900 font-mono mt-0.5">
+                  <div className="text-xl font-black text-emerald-900 font-sans tabular-nums mt-0.5">
                     {formatCurrency(results.loanAmount)}
                   </div>
                   <span className="text-[10px] text-emerald-700 font-medium">
@@ -135,7 +135,7 @@ export function AutoLoanReportModal({ isOpen, onClose, inputs, results }: AutoLo
                   <span className="text-[10px] uppercase font-bold text-purple-600 tracking-wider">
                     Loan Health Score
                   </span>
-                  <div className="text-xl font-black text-purple-900 font-mono mt-0.5">
+                  <div className="text-xl font-black text-purple-900 font-sans tabular-nums mt-0.5">
                     {results.healthScore.score} / 100
                   </div>
                   <span className="text-[10px] text-purple-700 font-bold uppercase">
@@ -151,7 +151,7 @@ export function AutoLoanReportModal({ isOpen, onClose, inputs, results }: AutoLo
                   <h3 className="font-bold text-zinc-900 uppercase text-[11px] border-b border-zinc-200 pb-1.5">
                     Loan Input Parameters
                   </h3>
-                  <div className="space-y-1.5 font-mono text-[11px]">
+                  <div className="space-y-1.5 font-sans tabular-nums text-[11px]">
                     <div className="flex justify-between">
                       <span className="text-zinc-500 font-sans">Vehicle Price:</span>
                       <span className="font-bold text-zinc-900">{formatCurrency(Number(inputs.vehiclePrice || 0))}</span>
@@ -188,7 +188,7 @@ export function AutoLoanReportModal({ isOpen, onClose, inputs, results }: AutoLo
                   <h3 className="font-bold text-zinc-900 uppercase text-[11px] border-b border-zinc-200 pb-1.5">
                     Financial Cost Breakdown
                   </h3>
-                  <div className="space-y-1.5 font-mono text-[11px]">
+                  <div className="space-y-1.5 font-sans tabular-nums text-[11px]">
                     <div className="flex justify-between">
                       <span className="text-zinc-500 font-sans">Total Financed Loan:</span>
                       <span className="font-bold text-zinc-900">{formatCurrency(results.loanAmount)}</span>
@@ -236,7 +236,7 @@ export function AutoLoanReportModal({ isOpen, onClose, inputs, results }: AutoLo
 
                   <div>
                     <span className="font-bold text-zinc-700 block">Loan-to-Value (LTV) Ratio:</span>
-                    <p className="font-mono text-zinc-900 font-bold text-[11px]">
+                    <p className="font-sans tabular-nums text-zinc-900 font-bold text-[11px]">
                       {results.loanToValueRatio}% LTV (Initial Borrowing Base)
                     </p>
                   </div>

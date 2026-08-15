@@ -158,7 +158,7 @@ export function PercentageCalculator() {
                 <Calculator className="w-4 h-4 text-blue-600" />
                 <span>Percentage Input Controls</span>
               </h3>
-              <span className="text-[10px] font-mono font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-800">
+              <span className="text-[10px] font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-800">
                 REAL-TIME SOLVER
               </span>
             </div>
@@ -172,7 +172,7 @@ export function PercentageCalculator() {
                     <button
                       key={tgt}
                       onClick={() => setSolveTarget(tgt)}
-                      className={`px-2.5 py-1 rounded-md text-xs font-mono font-bold cursor-pointer transition-all ${
+                      className={`px-2.5 py-1 rounded-md text-xs font-sans tabular-nums font-bold cursor-pointer transition-all ${
                         solveTarget === tgt
                           ? "bg-blue-600 text-white"
                           : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300"
@@ -191,7 +191,7 @@ export function PercentageCalculator() {
                       value={inputP}
                       disabled={solveTarget === "P"}
                       onChange={(e) => setInputP(e.target.value)}
-                      className="w-full px-3 py-2 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none disabled:opacity-50"
+                      className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none disabled:opacity-50"
                     />
                   </div>
                   <div>
@@ -201,7 +201,7 @@ export function PercentageCalculator() {
                       value={inputV1}
                       disabled={solveTarget === "V1"}
                       onChange={(e) => setInputV1(e.target.value)}
-                      className="w-full px-3 py-2 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none disabled:opacity-50"
+                      className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none disabled:opacity-50"
                     />
                   </div>
                   <div>
@@ -211,7 +211,7 @@ export function PercentageCalculator() {
                       value={inputV2}
                       disabled={solveTarget === "V2"}
                       onChange={(e) => setInputV2(e.target.value)}
-                      className="w-full px-3 py-2 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none disabled:opacity-50"
+                      className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none disabled:opacity-50"
                     />
                   </div>
                 </div>
@@ -231,7 +231,7 @@ export function PercentageCalculator() {
                       setInputP(e.target.value);
                       setSolveTarget("V2");
                     }}
-                    className="w-20 px-2 py-1 bg-white dark:bg-zinc-900 border rounded font-mono text-center"
+                    className="w-20 px-2 py-1 bg-white dark:bg-zinc-900 border rounded font-sans tabular-nums text-center"
                   />
                   <span>% of</span>
                   <input
@@ -241,7 +241,7 @@ export function PercentageCalculator() {
                       setInputV1(e.target.value);
                       setSolveTarget("V2");
                     }}
-                    className="w-24 px-2 py-1 bg-white dark:bg-zinc-900 border rounded font-mono text-center"
+                    className="w-24 px-2 py-1 bg-white dark:bg-zinc-900 border rounded font-sans tabular-nums text-center"
                   />
                   <span>?</span>
                 </div>
@@ -255,7 +255,7 @@ export function PercentageCalculator() {
                       setInputV2(e.target.value);
                       setSolveTarget("P");
                     }}
-                    className="w-20 px-2 py-1 bg-white dark:bg-zinc-900 border rounded font-mono text-center"
+                    className="w-20 px-2 py-1 bg-white dark:bg-zinc-900 border rounded font-sans tabular-nums text-center"
                   />
                   <span>is what % of</span>
                   <input
@@ -265,7 +265,7 @@ export function PercentageCalculator() {
                       setInputV1(e.target.value);
                       setSolveTarget("P");
                     }}
-                    className="w-24 px-2 py-1 bg-white dark:bg-zinc-900 border rounded font-mono text-center"
+                    className="w-24 px-2 py-1 bg-white dark:bg-zinc-900 border rounded font-sans tabular-nums text-center"
                   />
                   <span>?</span>
                 </div>
@@ -281,7 +281,7 @@ export function PercentageCalculator() {
                     type="number"
                     value={diffV1}
                     onChange={(e) => setDiffV1(e.target.value)}
-                    className="w-full px-3 py-2 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
+                    className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
                   />
                 </div>
                 <div>
@@ -290,7 +290,7 @@ export function PercentageCalculator() {
                     type="number"
                     value={diffV2}
                     onChange={(e) => setDiffV2(e.target.value)}
-                    className="w-full px-3 py-2 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
+                    className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
                   />
                 </div>
               </div>
@@ -305,7 +305,7 @@ export function PercentageCalculator() {
                     type="number"
                     value={changeV1}
                     onChange={(e) => setChangeV1(e.target.value)}
-                    className="w-full px-3 py-2 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
+                    className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
                   />
                 </div>
                 <div>
@@ -314,7 +314,7 @@ export function PercentageCalculator() {
                     type="number"
                     value={changeV2}
                     onChange={(e) => setChangeV2(e.target.value)}
-                    className="w-full px-3 py-2 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
+                    className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
                   />
                 </div>
               </div>
@@ -355,12 +355,12 @@ export function PercentageCalculator() {
               <div className="space-y-3">
                 <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-400">{calcResult.primaryLabel}</span>
-                  <span className="text-2xl font-mono font-black text-emerald-300">
+                  <span className="text-2xl font-sans tabular-nums font-black text-emerald-300">
                     {calcResult.primaryResult}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                <div className="grid grid-cols-2 gap-2 text-xs font-sans tabular-nums">
                   <div className="p-2.5 bg-slate-800/80 rounded-lg border border-slate-700">
                     <div className="text-[10px] text-slate-400 font-sans">Fraction Form</div>
                     <div className="font-bold text-slate-100">{calcResult.fractionForm}</div>
@@ -409,7 +409,7 @@ export function PercentageCalculator() {
                 {savedItems.map((item) => (
                   <div
                     key={item.id}
-                    className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-2 text-xs font-mono"
+                    className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-2 text-xs font-sans tabular-nums"
                   >
                     <div className="truncate">
                       <div className="text-[10px] font-sans font-bold text-blue-600 dark:text-blue-400">{item.title}</div>
@@ -441,7 +441,7 @@ export function PercentageCalculator() {
                     <div className="flex items-center justify-between text-xs font-bold text-zinc-900 dark:text-zinc-100">
                       <span>Step {st.stepNumber}: {st.title}</span>
                     </div>
-                    <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold py-1">
+                    <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold py-1">
                       {st.latex}
                     </div>
                     <p className="text-[11px] text-zinc-600 dark:text-zinc-400">

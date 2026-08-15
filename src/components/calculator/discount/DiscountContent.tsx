@@ -126,12 +126,12 @@ export function DiscountContent() {
         <section className="space-y-4">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Percentage &amp; Fixed Amount Discount Formulas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Percentage Discount Formula</span>
               <div>Savings = Original Price × (Discount % / 100)</div>
               <div>Final Price = Original Price - Savings</div>
             </div>
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Fixed Amount Discount Formula</span>
               <div>Savings = Fixed Discount Amount</div>
               <div>Final Price = Original Price - Fixed Discount</div>
@@ -144,7 +144,7 @@ export function DiscountContent() {
           <p>
             When a store advertises "20% off clearance plus an extra 10% off at register", the discounts compound sequentially:
           </p>
-          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
             <div>Final Price = Original Price × (1 - D1) × (1 - D2)</div>
             <div>Example: $100 × (1 - 0.20) × (1 - 0.10) = $100 × 0.80 × 0.90 = $72.00</div>
             <div>Effective Combined Discount = 28% (Not 30%)</div>
@@ -207,7 +207,7 @@ export function DiscountContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold shrink-0">
+                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}

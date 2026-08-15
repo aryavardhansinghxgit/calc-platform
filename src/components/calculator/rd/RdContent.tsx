@@ -78,7 +78,7 @@ export function RdContent() {
           Commercial bank RDs compound interest on a quarterly basis ($n = 4$). Since monthly deposits enter at different times, each installment ($k$) compounds for its remaining tenure:
         </p>
 
-        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl space-y-2 text-center font-mono text-xs">
+        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl space-y-2 text-center font-sans tabular-nums text-xs">
           <div className="font-bold text-blue-600 dark:text-blue-400 text-sm">
             A = Σ [ P × (1 + R / 400)^(4 × (N - k + 1) / 12) ]
           </div>
@@ -95,7 +95,7 @@ export function RdContent() {
         </div>
 
         <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 pt-2">2. Simple Interest RD Approximation Formula</h4>
-        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-xl font-mono text-[11px] text-center text-purple-600 dark:text-purple-400">
+        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-xl font-sans tabular-nums text-[11px] text-center text-purple-600 dark:text-purple-400">
           Interest = P × [ N × (N + 1) / 2 ] × (R / 1200)
         </div>
       </section>
@@ -118,7 +118,7 @@ export function RdContent() {
           </ul>
 
           <div className="font-bold text-blue-900 dark:text-blue-200 pt-2">Formula Evaluation:</div>
-          <div className="font-mono text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-blue-100 dark:border-blue-950">
+          <div className="font-sans tabular-nums text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-blue-100 dark:border-blue-950">
             <div>1. Total Principal Deposited: 5,000 × 12 = $60,000</div>
             <div>2. Total Month-Product Factor: N(N+1)/2 = (12 × 13) / 2 = 78 month-units</div>
             <div>3. Estimated Interest Earned: 5,000 × 78 × (0.0825 / 12) = $2,681.25</div>

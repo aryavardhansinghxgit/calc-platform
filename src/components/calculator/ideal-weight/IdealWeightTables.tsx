@@ -46,9 +46,9 @@ export function IdealWeightTables({ result }: IdealWeightTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-3 px-3">Formula Name</th>
-                <th className="py-3 px-3 font-mono text-center">Year</th>
-                <th className="py-3 px-3 font-mono text-blue-700 dark:text-blue-400">Ideal Weight (lbs)</th>
-                <th className="py-3 px-3 font-mono text-emerald-700 dark:text-emerald-400">Ideal Weight (kg)</th>
+                <th className="py-3 px-3 font-sans tabular-nums text-center">Year</th>
+                <th className="py-3 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">Ideal Weight (lbs)</th>
+                <th className="py-3 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">Ideal Weight (kg)</th>
                 <th className="py-3 px-3">Historical / Clinical Context</th>
               </tr>
             </thead>
@@ -56,17 +56,17 @@ export function IdealWeightTables({ result }: IdealWeightTablesProps) {
               {formulaTable.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className={`py-2.5 px-3 font-bold ${row.color}`}>{row.name}</td>
-                  <td className="py-2.5 px-3 font-mono text-center text-zinc-400">{row.year}</td>
-                  <td className="py-2.5 px-3 font-mono font-bold text-zinc-900 dark:text-zinc-100">{row.weightLbs} lbs</td>
-                  <td className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400">{row.weightKg} kg</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums text-center text-zinc-400">{row.year}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-zinc-900 dark:text-zinc-100">{row.weightLbs} lbs</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">{row.weightKg} kg</td>
                   <td className="py-2.5 px-3 text-zinc-500">{row.description}</td>
                 </tr>
               ))}
               <tr className="bg-blue-50/50 dark:bg-blue-950/20 font-bold">
                 <td className="py-3 px-3 text-blue-900 dark:text-blue-200">Consensus Formula Average</td>
                 <td className="py-3 px-3 text-center text-blue-500">—</td>
-                <td className="py-3 px-3 font-mono text-blue-800 dark:text-blue-300">{result.consensusLbs} lbs</td>
-                <td className="py-3 px-3 font-mono text-blue-800 dark:text-blue-300">{result.consensusKg} kg</td>
+                <td className="py-3 px-3 font-sans tabular-nums text-blue-800 dark:text-blue-300">{result.consensusLbs} lbs</td>
+                <td className="py-3 px-3 font-sans tabular-nums text-blue-800 dark:text-blue-300">{result.consensusKg} kg</td>
                 <td className="py-3 px-3 text-blue-700 dark:text-blue-300">Equally weighted mean across all 5 clinical equations</td>
               </tr>
             </tbody>
@@ -95,26 +95,26 @@ export function IdealWeightTables({ result }: IdealWeightTablesProps) {
               <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
                 <tr>
                   <td className="py-2 px-3 font-semibold">0.5 lb / week (Conservative)</td>
-                  <td className="py-2 px-3 font-mono">±250 kcal/day</td>
-                  <td className="py-2 px-3 font-mono font-bold text-sky-600">{result.weeksAtHalfLbPerWk} weeks</td>
+                  <td className="py-2 px-3 font-sans tabular-nums">±250 kcal/day</td>
+                  <td className="py-2 px-3 font-sans tabular-nums font-bold text-sky-600">{result.weeksAtHalfLbPerWk} weeks</td>
                   <td className="py-2 px-3" suppressHydrationWarning>{new Date(Date.now() + result.weeksAtHalfLbPerWk * 7 * 86400000).toLocaleDateString()}</td>
                 </tr>
                 <tr className="bg-emerald-50/40 dark:bg-emerald-950/20 font-semibold">
                   <td className="py-2 px-3 text-emerald-800 dark:text-emerald-300 font-bold">1.0 lb / week (Standard)</td>
-                  <td className="py-2 px-3 font-mono text-emerald-700">±500 kcal/day</td>
-                  <td className="py-2 px-3 font-mono font-bold text-emerald-700">{result.weeksAtOneLbPerWk} weeks</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-emerald-700">±500 kcal/day</td>
+                  <td className="py-2 px-3 font-sans tabular-nums font-bold text-emerald-700">{result.weeksAtOneLbPerWk} weeks</td>
                   <td className="py-2 px-3 text-emerald-700" suppressHydrationWarning>{new Date(Date.now() + result.weeksAtOneLbPerWk * 7 * 86400000).toLocaleDateString()}</td>
                 </tr>
                 <tr>
                   <td className="py-2 px-3 font-semibold">1.5 lbs / week (Aggressive)</td>
-                  <td className="py-2 px-3 font-mono">±750 kcal/day</td>
-                  <td className="py-2 px-3 font-mono font-bold text-purple-600">{result.weeksAtOneAndHalfLbPerWk} weeks</td>
+                  <td className="py-2 px-3 font-sans tabular-nums">±750 kcal/day</td>
+                  <td className="py-2 px-3 font-sans tabular-nums font-bold text-purple-600">{result.weeksAtOneAndHalfLbPerWk} weeks</td>
                   <td className="py-2 px-3" suppressHydrationWarning>{new Date(Date.now() + result.weeksAtOneAndHalfLbPerWk * 7 * 86400000).toLocaleDateString()}</td>
                 </tr>
                 <tr>
                   <td className="py-2 px-3 font-semibold">2.0 lbs / week (Maximum)</td>
-                  <td className="py-2 px-3 font-mono">±1000 kcal/day</td>
-                  <td className="py-2 px-3 font-mono font-bold text-rose-600">{result.weeksAtTwoLbsPerWk} weeks</td>
+                  <td className="py-2 px-3 font-sans tabular-nums">±1000 kcal/day</td>
+                  <td className="py-2 px-3 font-sans tabular-nums font-bold text-rose-600">{result.weeksAtTwoLbsPerWk} weeks</td>
                   <td className="py-2 px-3" suppressHydrationWarning>{new Date(Date.now() + result.weeksAtTwoLbsPerWk * 7 * 86400000).toLocaleDateString()}</td>
                 </tr>
               </tbody>
@@ -135,18 +135,18 @@ export function IdealWeightTables({ result }: IdealWeightTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Height</th>
-                <th className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">Women IBW Range</th>
-                <th className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">Men IBW Range</th>
-                <th className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400">WHO Healthy BMI Range</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">Women IBW Range</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">Men IBW Range</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">WHO Healthy BMI Range</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               {heightReferenceTable.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2 px-3 font-bold text-zinc-900 dark:text-zinc-100">{row.height}</td>
-                  <td className="py-2 px-3 font-mono text-purple-700 dark:text-purple-400">{row.female}</td>
-                  <td className="py-2 px-3 font-mono text-blue-700 dark:text-blue-400">{row.male}</td>
-                  <td className="py-2 px-3 font-mono text-emerald-700 dark:text-emerald-400">{row.bmiRange}</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">{row.female}</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">{row.male}</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">{row.bmiRange}</td>
                 </tr>
               ))}
             </tbody>

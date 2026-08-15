@@ -242,7 +242,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Monthly Repayment:</span>
-          <span className="text-indigo-600 dark:text-indigo-400 font-mono text-sm">
+          <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-sm">
             {fmt(simpleResults.monthlyPayment)}/mo
           </span>
         </div>
@@ -328,7 +328,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
                     value={simpleBalInput}
                     onChange={(e) => setSimpleBalInput(e.target.value)}
                     placeholder="e.g. 30000"
-                    className="text-xs font-mono h-9 px-3"
+                    className="text-xs font-sans tabular-nums h-9 px-3"
                   />
                 </div>
                 <div className="space-y-1">
@@ -338,7 +338,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
                     value={simpleTermInput}
                     onChange={(e) => setSimpleTermInput(e.target.value)}
                     placeholder="e.g. 10"
-                    className="text-xs font-mono h-9 px-3"
+                    className="text-xs font-sans tabular-nums h-9 px-3"
                   />
                 </div>
               </div>
@@ -351,7 +351,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
                     value={simpleRateInput}
                     onChange={(e) => setSimpleRateInput(e.target.value)}
                     placeholder="e.g. 6.8"
-                    className="text-xs font-mono h-9 px-3"
+                    className="text-xs font-sans tabular-nums h-9 px-3"
                   />
                 </div>
                 <div className="space-y-1">
@@ -361,7 +361,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
                     value={simplePmtInput}
                     onChange={(e) => setSimplePmtInput(e.target.value)}
                     placeholder="Auto calculated"
-                    className="text-xs font-mono h-9 px-3"
+                    className="text-xs font-sans tabular-nums h-9 px-3"
                   />
                 </div>
               </div>
@@ -396,7 +396,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-mono mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-sans tabular-nums mb-2">
                 {fmt(simpleResults.monthlyPayment)}/month
               </div>
 
@@ -444,15 +444,15 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
             <div className="grid grid-cols-3 gap-2 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Loan Balance ($)</label>
-                <Input type="number" value={repayBalInput} onChange={(e) => setRepayBalInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={repayBalInput} onChange={(e) => setRepayBalInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Monthly ($/mo)</label>
-                <Input type="number" value={repayPmtInput} onChange={(e) => setRepayPmtInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={repayPmtInput} onChange={(e) => setRepayPmtInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Rate (%)</label>
-                <Input type="number" value={repayRateInput} onChange={(e) => setRepayRateInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={repayRateInput} onChange={(e) => setRepayRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
 
@@ -466,7 +466,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
                 {repayOption === "extra" && (
                   <div className="pl-6 space-y-1">
                     <label className="text-[10px] text-zinc-500">Extra Payment Amount ($/month)</label>
-                    <Input type="number" value={extraMoInput} onChange={(e) => setExtraMoInput(e.target.value)} className="h-7 text-xs font-mono w-32 px-2" />
+                    <Input type="number" value={extraMoInput} onChange={(e) => setExtraMoInput(e.target.value)} className="h-7 text-xs font-sans tabular-nums w-32 px-2" />
                   </div>
                 )}
                 <label className="flex items-center gap-2 cursor-pointer">
@@ -477,7 +477,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-purple-900 dark:text-purple-200 text-sm block border-b pb-1">
                 Payoff Comparison (6 yrs 2 mos Match!)
@@ -490,7 +490,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
               <div className="space-y-2 pt-1 font-sans">
                 <div className="border-b pb-1 font-bold text-emerald-600">
                   If Pay Extra ${extraMoInput} per month:
-                  <div className="font-mono text-xs text-zinc-800 dark:text-zinc-200 font-normal">
+                  <div className="font-sans tabular-nums text-xs text-zinc-800 dark:text-zinc-200 font-normal">
                     <div>Remaining Term: {repayResults.acceleratedSchedule.termYearsMonthsStr}</div>
                     <div>Total Payments: {fmt(repayResults.acceleratedSchedule.totalPayments)}</div>
                     <div>Total Interest: {fmt(repayResults.acceleratedSchedule.totalInterest)}</div>
@@ -499,7 +499,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
 
                 <div className="font-bold text-zinc-600">
                   Original Payoff Schedule:
-                  <div className="font-mono text-xs text-zinc-600 dark:text-zinc-400 font-normal">
+                  <div className="font-sans tabular-nums text-xs text-zinc-600 dark:text-zinc-400 font-normal">
                     <div>Remaining Term: {repayResults.originalSchedule.termYearsMonthsStr}</div>
                     <div>Total Payments: {fmt(repayResults.originalSchedule.totalPayments)}</div>
                     <div>Total Interest: {fmt(repayResults.originalSchedule.totalInterest)}</div>
@@ -522,33 +522,33 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">To Graduate In (Years)</label>
-                <Input type="number" value={projGradYrsInput} onChange={(e) => setProjGradYrsInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={projGradYrsInput} onChange={(e) => setProjGradYrsInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Estimated Annual Borrowing ($)</label>
-                <Input type="number" value={projAnnualBorrowInput} onChange={(e) => setProjAnnualBorrowInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={projAnnualBorrowInput} onChange={(e) => setProjAnnualBorrowInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Current Balance ($)</label>
-                <Input type="number" value={projCurrentBalInput} onChange={(e) => setProjCurrentBalInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={projCurrentBalInput} onChange={(e) => setProjCurrentBalInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Loan Term (Years)</label>
-                <Input type="number" value={projTermInput} onChange={(e) => setProjTermInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={projTermInput} onChange={(e) => setProjTermInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Grace Period (Months)</label>
-                <Input type="number" value={projGraceInput} onChange={(e) => setProjGraceInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={projGraceInput} onChange={(e) => setProjGraceInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Interest Rate (%)</label>
-                <Input type="number" value={projRateInput} onChange={(e) => setProjRateInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={projRateInput} onChange={(e) => setProjRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
 
@@ -560,14 +560,14 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-amber-900 dark:text-amber-200 text-sm block border-b pb-1">
                 Projection Results ($45,790.44 Match!)
               </span>
               <div className="flex justify-between text-base border-b pb-1 font-extrabold text-amber-600 font-sans">
                 <span>Repayment:</span>
-                <span className="font-mono">{fmt(projResults.monthlyPayment)}/month</span>
+                <span className="font-sans tabular-nums">{fmt(projResults.monthlyPayment)}/month</span>
               </div>
               <div className="flex justify-between">
                 <span>Amount Borrowed:</span>
@@ -583,7 +583,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
               </div>
               <div className="flex justify-between border-t pt-1 font-sans text-zinc-600 dark:text-zinc-400">
                 <span>Total Interest Paid:</span>
-                <span className="font-bold font-mono text-rose-600">{fmt(projResults.totalInterestPaid)}</span>
+                <span className="font-bold font-sans tabular-nums text-rose-600">{fmt(projResults.totalInterestPaid)}</span>
               </div>
             </div>
           </div>
@@ -597,7 +597,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
             <Landmark className="h-5 w-5 text-indigo-500" /> Federal Repayment Options &amp; Refinance Simulator
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-sans tabular-nums">
             <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border space-y-1">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Standard (10 Yrs)</span>
               <div>Monthly: {fmt(simpleResults.monthlyPayment)}</div>

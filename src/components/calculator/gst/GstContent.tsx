@@ -138,7 +138,7 @@ export function GstContent() {
             <p>
               Understanding whether a price includes or excludes GST determines your exact invoice billing structure:
             </p>
-            <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-400 font-mono bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
+            <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-400 font-sans tabular-nums bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
               <li>• <strong>GST Exclusive:</strong> GST Amount = Base Price × (GST Rate % / 100)</li>
               <li>• <strong>GST Inclusive:</strong> Base Price = Total Amount / (1 + GST Rate % / 100)</li>
               <li>• <strong>Reverse GST:</strong> Base Price = GST Amount × (100 / GST Rate %)</li>
@@ -178,37 +178,37 @@ export function GstContent() {
                 <tr>
                   <td className="p-3 font-semibold text-emerald-600">0% (NIL Rate)</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">Fresh milk, vegetables, food grains, salt, curd, books</td>
-                  <td className="p-3 font-mono">0% / 0%</td>
+                  <td className="p-3 font-sans tabular-nums">0% / 0%</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-blue-600">0.25%</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">Rough precious stones & cut/polished diamonds</td>
-                  <td className="p-3 font-mono">0.125% / 0.125%</td>
+                  <td className="p-3 font-sans tabular-nums">0.125% / 0.125%</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-amber-600">3%</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">Gold, silver, platinum, jewelry</td>
-                  <td className="p-3 font-mono">1.5% / 1.5%</td>
+                  <td className="p-3 font-sans tabular-nums">1.5% / 1.5%</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-indigo-600">5%</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">Sugar, tea, coffee, edible oil, apparel &lt; ₹1,000, medicines</td>
-                  <td className="p-3 font-mono">2.5% / 2.5%</td>
+                  <td className="p-3 font-sans tabular-nums">2.5% / 2.5%</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-purple-600">12%</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">Computers, processed foods, fruit juice, apparel &gt; ₹1,000</td>
-                  <td className="p-3 font-mono">6% / 6%</td>
+                  <td className="p-3 font-sans tabular-nums">6% / 6%</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-blue-700">18% (Standard)</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">IT services, software, freelancing, telecom, restaurants, cosmetics</td>
-                  <td className="p-3 font-mono">9% / 9%</td>
+                  <td className="p-3 font-sans tabular-nums">9% / 9%</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-rose-600">28% (Peak)</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">Automobiles, motorcycles, sin goods, tobacco, aerated drinks (+ Cess)</td>
-                  <td className="p-3 font-mono">14% / 14%</td>
+                  <td className="p-3 font-sans tabular-nums">14% / 14%</td>
                 </tr>
               </tbody>
             </table>

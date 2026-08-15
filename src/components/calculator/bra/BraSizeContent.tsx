@@ -77,7 +77,7 @@ export function BraSizeContent() {
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Larger Band / Smaller Cup</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans font-bold">Group A</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">30D</td>
@@ -121,7 +121,7 @@ export function BraSizeContent() {
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Australia (AU/NZ)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold">32D</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">32D</td>

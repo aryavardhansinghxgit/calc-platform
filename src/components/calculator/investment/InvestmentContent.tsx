@@ -77,7 +77,7 @@ export function InvestmentContent() {
         </p>
 
         {/* Formula Card */}
-        <div className="p-5 rounded-xl bg-zinc-900 text-white font-mono space-y-3 shadow-md my-4">
+        <div className="p-5 rounded-xl bg-zinc-900 text-white font-sans tabular-nums space-y-3 shadow-md my-4">
           <span className="text-xs text-emerald-400 font-bold uppercase tracking-wider block">Investment Future Value Formula</span>
           <div className="text-lg sm:text-xl font-black text-blue-400">
             FV = PV &times; (1 + r/n)<sup>n &times; t</sup> + PMT &times; [((1 + r/n)<sup>n &times; t</sup> - 1) / (r/n)]

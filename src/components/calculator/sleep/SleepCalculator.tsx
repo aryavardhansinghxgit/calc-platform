@@ -295,7 +295,7 @@ export function SleepCalculator() {
                   value={targetTime}
                   onChange={(e) => setTargetTime(e.target.value)}
                   placeholder="e.g. 07:00 AM"
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
             )}
@@ -306,7 +306,7 @@ export function SleepCalculator() {
                 <label className="font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
                   <Sliders className="h-3.5 w-3.5 text-indigo-600" /> Sleep Latency Buffer (Time to fall asleep)
                 </label>
-                <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
+                <span className="font-sans tabular-nums font-bold text-indigo-600 dark:text-indigo-400">
                   {latency} Mins
                 </span>
               </div>
@@ -360,7 +360,7 @@ export function SleepCalculator() {
                     <span className="text-[10px] font-bold uppercase tracking-wider block opacity-80">
                       {cycle.cycles} Ultradian Cycles ({cycle.totalSleepHours} Hours)
                     </span>
-                    <div className="text-3xl font-black font-mono tracking-tight">
+                    <div className="text-3xl font-black font-sans tabular-nums tracking-tight">
                       {cycle.timeFormatted}
                     </div>
                     <p className="text-xs font-medium">{cycle.note}</p>
@@ -412,7 +412,7 @@ export function SleepCalculator() {
 
                 <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
                   <span className="text-xs text-zinc-400">Wake Up At:</span>
-                  <span className="text-lg font-black font-mono text-indigo-600 dark:text-indigo-400">
+                  <span className="text-lg font-black font-sans tabular-nums text-indigo-600 dark:text-indigo-400">
                     {nap.wakeTimeFormatted}
                   </span>
                 </div>
@@ -440,7 +440,7 @@ export function SleepCalculator() {
                   value={dailyTargetHours}
                   onChange={(e) => setDailyTargetHours(Number(e.target.value))}
                   step={0.5}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
 
@@ -453,7 +453,7 @@ export function SleepCalculator() {
                   value={actualWeeklyHours}
                   onChange={(e) => setActualWeeklyHours(Number(e.target.value))}
                   step={1}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
             </div>
@@ -464,7 +464,7 @@ export function SleepCalculator() {
               <h4 className="text-xs font-bold uppercase tracking-wider text-indigo-200 border-b border-white/20 pb-2">
                 Sleep Debt Analysis & Recovery Plan
               </h4>
-              <div className="text-5xl font-black font-mono tracking-tight text-white">
+              <div className="text-5xl font-black font-sans tabular-nums tracking-tight text-white">
                 {debtResult.totalDebtHours} <span className="text-base font-sans font-normal">Hours Debt</span>
               </div>
               <p className="text-xs text-indigo-100 leading-relaxed bg-white/10 p-3 rounded-xl border border-white/20">
@@ -536,7 +536,7 @@ export function SleepCalculator() {
               <p className="text-xs text-indigo-100">{chronotypeResult.description}</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-2 border-t border-white/20">
+            <div className="grid grid-cols-2 gap-2 text-xs font-sans tabular-nums pt-2 border-t border-white/20">
               <div className="p-2 bg-white/10 rounded-lg">
                 <span className="text-[10px] text-indigo-200 font-sans block">Ideal Bedtime</span>
                 <span className="font-bold">{chronotypeResult.idealBedtimeWindow}</span>

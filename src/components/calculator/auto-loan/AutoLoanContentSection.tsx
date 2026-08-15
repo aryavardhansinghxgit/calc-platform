@@ -157,26 +157,26 @@ export function AutoLoanContentSection() {
                   <tr>
                     <td className="p-2 font-semibold text-emerald-600">Super Prime</td>
                     <td className="p-2">781 - 850</td>
-                    <td className="p-2 font-mono">5.25%</td>
-                    <td className="p-2 font-mono">6.75%</td>
+                    <td className="p-2 font-sans tabular-nums">5.25%</td>
+                    <td className="p-2 font-sans tabular-nums">6.75%</td>
                   </tr>
                   <tr>
                     <td className="p-2 font-semibold text-blue-600">Prime</td>
                     <td className="p-2">661 - 780</td>
-                    <td className="p-2 font-mono">6.45%</td>
-                    <td className="p-2 font-mono">8.75%</td>
+                    <td className="p-2 font-sans tabular-nums">6.45%</td>
+                    <td className="p-2 font-sans tabular-nums">8.75%</td>
                   </tr>
                   <tr>
                     <td className="p-2 font-semibold text-amber-600">Non-Prime</td>
                     <td className="p-2">601 - 660</td>
-                    <td className="p-2 font-mono">9.60%</td>
-                    <td className="p-2 font-mono">13.25%</td>
+                    <td className="p-2 font-sans tabular-nums">9.60%</td>
+                    <td className="p-2 font-sans tabular-nums">13.25%</td>
                   </tr>
                   <tr>
                     <td className="p-2 font-semibold text-rose-600">Subprime</td>
                     <td className="p-2">300 - 600</td>
-                    <td className="p-2 font-mono">14.50%+</td>
-                    <td className="p-2 font-mono">21.00%+</td>
+                    <td className="p-2 font-sans tabular-nums">14.50%+</td>
+                    <td className="p-2 font-sans tabular-nums">21.00%+</td>
                   </tr>
                 </tbody>
               </table>

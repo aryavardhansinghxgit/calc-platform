@@ -73,7 +73,7 @@ export function FdContent() {
           In standard bank FDs, interest compounds quarterly ($n = 4$). The total maturity value is calculated using:
         </p>
 
-        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl space-y-2 text-center font-mono text-xs">
+        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl space-y-2 text-center font-sans tabular-nums text-xs">
           <div className="font-bold text-blue-600 dark:text-blue-400 text-sm">
             A = P × (1 + r / n)^(n × t)
           </div>
@@ -90,7 +90,7 @@ export function FdContent() {
         </div>
 
         <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 pt-2">2. Simple Interest Formula</h4>
-        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-xl font-mono text-[11px] text-center text-purple-600 dark:text-purple-400">
+        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-xl font-sans tabular-nums text-[11px] text-center text-purple-600 dark:text-purple-400">
           M = P + (P × r × t / 100)
         </div>
       </section>
@@ -114,7 +114,7 @@ export function FdContent() {
           </ul>
 
           <div className="font-bold text-blue-900 dark:text-blue-200 pt-2">Formula Evaluation:</div>
-          <div className="font-mono text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-blue-100 dark:border-blue-950">
+          <div className="font-sans tabular-nums text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-blue-100 dark:border-blue-950">
             <div>1. Quarterly Interest Rate: r / n = 0.075 / 4 = 0.01875 (1.875% per quarter)</div>
             <div>2. Total Compounding Periods: n × t = 4 × 5 = 20 quarters</div>
             <div>3. Compounding Factor: (1 + 0.01875)^20 = (1.01875)^20 ≈ 1.449948</div>

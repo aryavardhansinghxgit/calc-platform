@@ -225,7 +225,7 @@ export function EmiContentSection() {
         <p className="text-sm leading-relaxed">
           The monthly EMI payment is calculated using the universal compounding annuity formula:
         </p>
-        <div className="p-4 rounded-xl bg-zinc-900 text-zinc-100 dark:bg-zinc-950 font-mono text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
+        <div className="p-4 rounded-xl bg-zinc-900 text-zinc-100 dark:bg-zinc-950 font-sans tabular-nums text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
           EMI = P × r × [ (1 + r)ⁿ ] / [ (1 + r)ⁿ - 1 ]
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">

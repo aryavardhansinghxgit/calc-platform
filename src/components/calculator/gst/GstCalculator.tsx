@@ -393,7 +393,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                     ? "GST Tax Amount Paid"
                     : "Amount without GST (Net Base)"}
                 </span>
-                <span className="font-mono text-blue-600">{fmt(amountInput)}</span>
+                <span className="font-sans tabular-nums text-blue-600">{fmt(amountInput)}</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-bold">₹</span>
@@ -403,7 +403,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                   step="500"
                   value={amountInput}
                   onChange={(e) => setAmountInput(Math.max(0, Number(e.target.value)))}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -412,7 +412,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
             <div className="space-y-1">
               <div className="flex justify-between text-xs font-semibold text-zinc-700 dark:text-zinc-300">
                 <span>GST Tax Rate (%)</span>
-                <span className="font-mono text-emerald-600">{gstRate}%</span>
+                <span className="font-sans tabular-nums text-emerald-600">{gstRate}%</span>
               </div>
               <input
                 type="range"
@@ -430,7 +430,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                 step="0.1"
                 value={gstRate}
                 onChange={(e) => setGstRate(Math.max(0, Number(e.target.value)))}
-                className="text-xs font-mono mt-1"
+                className="text-xs font-sans tabular-nums mt-1"
               />
             </div>
 
@@ -457,7 +457,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                 step="1"
                 value={cessRate}
                 onChange={(e) => setCessRate(Math.max(0, Number(e.target.value)))}
-                className="text-xs font-mono"
+                className="text-xs font-sans tabular-nums"
                 placeholder="0% (For sin/luxury goods)"
               />
             </div>
@@ -514,7 +514,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-mono text-white mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-sans tabular-nums text-white mb-2">
                 {fmt(singleResults.grandTotalWithCess)}
               </div>
 
@@ -526,27 +526,27 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Net Taxable Base</div>
-                  <div className="font-bold font-mono text-white text-sm">{fmt(singleResults.netAmount)}</div>
+                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(singleResults.netAmount)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Total GST Tax</div>
-                  <div className="font-bold font-mono text-emerald-300 text-sm">{fmt(singleResults.gstAmount)}</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-300 text-sm">{fmt(singleResults.gstAmount)}</div>
                 </div>
                 {supplyType === "intra_state" ? (
                   <>
                     <div>
                       <div className="text-zinc-400 text-[11px]">CGST ({singleResults.cgstRate}%)</div>
-                      <div className="font-bold font-mono text-purple-300 text-sm">{fmt(singleResults.cgstAmount)}</div>
+                      <div className="font-bold font-sans tabular-nums text-purple-300 text-sm">{fmt(singleResults.cgstAmount)}</div>
                     </div>
                     <div>
                       <div className="text-zinc-400 text-[11px]">SGST ({singleResults.sgstRate}%)</div>
-                      <div className="font-bold font-mono text-amber-300 text-sm">{fmt(singleResults.sgstAmount)}</div>
+                      <div className="font-bold font-sans tabular-nums text-amber-300 text-sm">{fmt(singleResults.sgstAmount)}</div>
                     </div>
                   </>
                 ) : (
                   <div className="col-span-2">
                     <div className="text-zinc-400 text-[11px]">IGST ({singleResults.igstRate}%)</div>
-                    <div className="font-bold font-mono text-blue-300 text-sm">{fmt(singleResults.igstAmount)}</div>
+                    <div className="font-bold font-sans tabular-nums text-blue-300 text-sm">{fmt(singleResults.igstAmount)}</div>
                   </div>
                 )}
               </div>
@@ -633,7 +633,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                   <th className="p-2.5 w-12 text-center">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono text-[11px]">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums text-[11px]">
                 {multiInvoiceResults.items.map((item) => (
                   <tr key={item.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2">
@@ -650,7 +650,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                         min="1"
                         value={item.quantity}
                         onChange={(e) => updateInvoiceItem(item.id, "quantity", Math.max(1, Number(e.target.value)))}
-                        className="text-xs font-mono"
+                        className="text-xs font-sans tabular-nums"
                       />
                     </td>
                     <td className="p-2">
@@ -659,7 +659,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                         min="0"
                         value={item.unitPrice}
                         onChange={(e) => updateInvoiceItem(item.id, "unitPrice", Math.max(0, Number(e.target.value)))}
-                        className="text-xs font-mono"
+                        className="text-xs font-sans tabular-nums"
                       />
                     </td>
                     <td className="p-2 font-sans">
@@ -696,7 +696,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
           </div>
 
           {/* Invoice Summary Totals */}
-          <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-wrap justify-between items-center gap-4 text-xs font-mono">
+          <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-wrap justify-between items-center gap-4 text-xs font-sans tabular-nums">
             <div>
               <span className="text-zinc-500 block text-[10px] uppercase font-semibold">Subtotal Base Amount</span>
               <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{fmt(multiInvoiceResults.totalNetBase)}</span>
@@ -745,7 +745,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
               <p className="text-xs text-zinc-600 dark:text-zinc-400">
                 Tax is divided equally into Central GST (CGST) and State GST (SGST):
               </p>
-              <div className="space-y-2 pt-2 border-t font-mono text-xs">
+              <div className="space-y-2 pt-2 border-t font-sans tabular-nums text-xs">
                 <div className="flex justify-between">
                   <span>CGST ({singleResults.cgstRate}%):</span>
                   <span className="font-bold text-purple-600">{fmt(singleResults.cgstAmount)}</span>
@@ -769,7 +769,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
               <p className="text-xs text-zinc-600 dark:text-zinc-400">
                 Full tax is collected as Integrated GST (IGST) by Central Government:
               </p>
-              <div className="space-y-2 pt-2 border-t font-mono text-xs">
+              <div className="space-y-2 pt-2 border-t font-sans tabular-nums text-xs">
                 <div className="flex justify-between">
                   <span>IGST ({singleResults.effectiveGstRate}%):</span>
                   <span className="font-bold text-blue-600">{fmt(singleResults.gstAmount)}</span>
@@ -810,7 +810,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                   step="100000"
                   value={annualTurnover}
                   onChange={(e) => setAnnualTurnover(Math.max(0, Number(e.target.value)))}
-                  className="font-mono text-xs"
+                  className="font-sans tabular-nums text-xs"
                 />
               </div>
 
@@ -836,7 +836,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                   step="100000"
                   value={totalPurchases}
                   onChange={(e) => setTotalPurchases(Math.max(0, Number(e.target.value)))}
-                  className="font-mono text-xs"
+                  className="font-sans tabular-nums text-xs"
                 />
               </div>
             </div>
@@ -847,7 +847,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                 Recommended: {compositionResults.recommendedScheme.toUpperCase()} SCHEME
               </Badge>
 
-              <div className="space-y-2 font-mono text-xs border-b pb-3">
+              <div className="space-y-2 font-sans tabular-nums text-xs border-b pb-3">
                 <div className="flex justify-between">
                   <span>Composition Flat Tax ({compositionResults.compositionTaxRate}%):</span>
                   <span className="font-bold text-amber-600">{fmt(compositionResults.compositionTaxPayable)}</span>
@@ -860,7 +860,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
 
               <div className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex justify-between">
                 <span>Tax Savings Under Composition:</span>
-                <span className="text-emerald-600 font-mono">{fmt(compositionResults.taxSavingsUnderComposition)}</span>
+                <span className="text-emerald-600 font-sans tabular-nums">{fmt(compositionResults.taxSavingsUnderComposition)}</span>
               </div>
             </div>
           </div>

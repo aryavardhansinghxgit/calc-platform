@@ -120,7 +120,7 @@ export function BacContent() {
             }
             if (trimmed.includes("BAC (%) =") || trimmed.includes("r =")) {
               return (
-                <div key={idx} className="bg-slate-50 border border-rose-200 p-3.5 rounded-xl font-mono text-rose-900 font-bold text-xs sm:text-sm text-center my-3 shadow-xs">
+                <div key={idx} className="bg-slate-50 border border-rose-200 p-3.5 rounded-xl font-sans tabular-nums text-rose-900 font-bold text-xs sm:text-sm text-center my-3 shadow-xs">
                   {trimmed}
                 </div>
               );

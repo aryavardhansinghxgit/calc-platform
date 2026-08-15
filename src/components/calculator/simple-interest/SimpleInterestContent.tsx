@@ -73,7 +73,7 @@ export function SimpleInterestContent() {
         </p>
 
         {/* Formula Box */}
-        <div className="p-5 rounded-xl bg-zinc-900 text-white font-mono space-y-3 shadow-md my-4">
+        <div className="p-5 rounded-xl bg-zinc-900 text-white font-sans tabular-nums space-y-3 shadow-md my-4">
           <span className="text-xs text-indigo-400 font-bold uppercase tracking-wider block">1. Total Simple Interest Formula</span>
           <div className="text-xl sm:text-2xl font-black text-emerald-400">
             I = P &times; r &times; t
@@ -106,7 +106,7 @@ export function SimpleInterestContent() {
           Consider a <strong>$20,000 principal loan</strong> at a <strong>3% annual simple interest rate</strong> over <strong>10 years</strong>:
         </p>
 
-        <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 font-mono text-xs space-y-2">
+        <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-xs space-y-2">
           <div className="font-bold text-zinc-900 dark:text-zinc-100">Step 1: Calculate Total Interest</div>
           <div className="text-indigo-600 dark:text-indigo-400">
             I = $20,000 &times; 0.03 &times; 10 = $6,000
@@ -134,7 +134,7 @@ export function SimpleInterestContent() {
           When loan durations or deposit terms are expressed in months, weeks, or days, convert the time term into fractional years before applying I = P &times; r &times; t, or use I = P &times; r_period &times; n:
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono my-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans tabular-nums my-3">
           <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1">
             <span className="font-bold font-sans text-zinc-800 dark:text-zinc-200 block">1. Monthly Term (m months)</span>
             <div className="text-indigo-600 dark:text-indigo-400 font-bold">t = m / 12</div>
@@ -169,7 +169,7 @@ export function SimpleInterestContent() {
             <p className="text-zinc-600 dark:text-zinc-400">
               You invest $5,000 into a 9-month simple interest deposit paying 4.5% per annum.
             </p>
-            <div className="font-mono text-indigo-600 dark:text-indigo-400 pt-1 font-semibold">
+            <div className="font-sans tabular-nums text-indigo-600 dark:text-indigo-400 pt-1 font-semibold">
               I = $5,000 &times; 0.045 &times; (9/12) = $168.75 Interest | Total = $5,168.75
             </div>
           </div>
@@ -179,7 +179,7 @@ export function SimpleInterestContent() {
             <p className="text-zinc-600 dark:text-zinc-400">
               You borrow $15,000 for a simple interest car loan at 6% annual rate over 5 years.
             </p>
-            <div className="font-mono text-emerald-600 dark:text-emerald-400 pt-1 font-semibold">
+            <div className="font-sans tabular-nums text-emerald-600 dark:text-emerald-400 pt-1 font-semibold">
               I = $15,000 &times; 0.06 &times; 5 = $4,500 Total Interest | Total Repaid = $19,500
             </div>
           </div>
@@ -222,8 +222,8 @@ export function SimpleInterestContent() {
             <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
                 <td className="p-3 font-bold">Mathematical Formula</td>
-                <td className="p-3 font-mono">I = P &times; r &times; t</td>
-                <td className="p-3 font-mono text-indigo-600 font-bold">A = P &times; (1 + r/n)<sup>nt</sup></td>
+                <td className="p-3 font-sans tabular-nums">I = P &times; r &times; t</td>
+                <td className="p-3 font-sans tabular-nums text-indigo-600 font-bold">A = P &times; (1 + r/n)<sup>nt</sup></td>
               </tr>
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
                 <td className="p-3 font-bold">Growth Pattern</td>

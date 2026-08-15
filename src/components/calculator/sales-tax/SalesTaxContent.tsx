@@ -139,7 +139,7 @@ export function SalesTaxContent() {
             <p>
               Depending on which variables you possess, use these exact algebraic relationships:
             </p>
-            <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-400 font-mono bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
+            <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-400 font-sans tabular-nums bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
               <li>• <strong>Mode A (Pre-Tax + Rate):</strong> Tax = Price × (Rate / 100)</li>
               <li>• <strong>Mode B (Final + Rate):</strong> Pre-Tax = Final / (1 + Rate / 100)</li>
               <li>• <strong>Mode C (Pre-Tax + Final):</strong> Rate = ((Final - Pre-Tax) / Pre-Tax) × 100</li>
@@ -187,37 +187,37 @@ export function SalesTaxContent() {
               <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
                 <tr>
                   <td className="p-3 font-semibold">California</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">7.25%</td>
-                  <td className="p-3 font-mono text-zinc-500">1.60%</td>
-                  <td className="p-3 font-mono">10.75%</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">7.25%</td>
+                  <td className="p-3 font-sans tabular-nums text-zinc-500">1.60%</td>
+                  <td className="p-3 font-sans tabular-nums">10.75%</td>
                   <td className="p-3 text-emerald-600 font-bold">Yes (Exempt)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Texas</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">6.25%</td>
-                  <td className="p-3 font-mono text-zinc-500">1.94%</td>
-                  <td className="p-3 font-mono">8.25%</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">6.25%</td>
+                  <td className="p-3 font-sans tabular-nums text-zinc-500">1.94%</td>
+                  <td className="p-3 font-sans tabular-nums">8.25%</td>
                   <td className="p-3 text-emerald-600 font-bold">Yes (Exempt)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Florida</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">6.00%</td>
-                  <td className="p-3 font-mono text-zinc-500">1.05%</td>
-                  <td className="p-3 font-mono">8.00%</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">6.00%</td>
+                  <td className="p-3 font-sans tabular-nums text-zinc-500">1.05%</td>
+                  <td className="p-3 font-sans tabular-nums">8.00%</td>
                   <td className="p-3 text-emerald-600 font-bold">Yes (Exempt)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">New York</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">4.00%</td>
-                  <td className="p-3 font-mono text-zinc-500">4.52%</td>
-                  <td className="p-3 font-mono">8.88%</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">4.00%</td>
+                  <td className="p-3 font-sans tabular-nums text-zinc-500">4.52%</td>
+                  <td className="p-3 font-sans tabular-nums">8.88%</td>
                   <td className="p-3 text-emerald-600 font-bold">Yes (Exempt)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Oregon / Delaware / Montana / NH / AK</td>
-                  <td className="p-3 font-mono font-bold text-emerald-600">0.00% (No Tax)</td>
-                  <td className="p-3 font-mono text-zinc-500">0.00%</td>
-                  <td className="p-3 font-mono">0.00%</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-emerald-600">0.00% (No Tax)</td>
+                  <td className="p-3 font-sans tabular-nums text-zinc-500">0.00%</td>
+                  <td className="p-3 font-sans tabular-nums">0.00%</td>
                   <td className="p-3 text-emerald-600 font-bold">Yes (Exempt)</td>
                 </tr>
               </tbody>

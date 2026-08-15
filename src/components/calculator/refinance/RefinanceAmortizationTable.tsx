@@ -103,7 +103,7 @@ export function RefinanceAmortizationTable({ schedule }: RefinanceAmortizationTa
               <TableHead className="py-1 text-right">Balance</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody className="text-xs font-mono">
+          <TableBody className="text-xs font-sans tabular-nums">
             {paginatedRows.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={9} className="text-center text-xs text-zinc-500 py-8">
@@ -150,7 +150,7 @@ export function RefinanceAmortizationTable({ schedule }: RefinanceAmortizationTa
 
         {itemsPerPage !== -1 && totalPages > 1 && (
           <div className="flex items-center gap-3">
-            <span className="text-xs text-zinc-500 font-mono">
+            <span className="text-xs text-zinc-500 font-sans tabular-nums">
               Page {currentPage} of {totalPages} ({filteredRows.length} total months)
             </span>
             <div className="flex items-center gap-1.5">

@@ -283,7 +283,7 @@ Stock Deposit Required (100 shares @ $18.30 @ 30% margin): ${fmt(stockResults.re
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Gross Margin:</span>
-          <span className="text-emerald-600 dark:text-emerald-400 font-mono text-sm">
+          <span className="text-emerald-600 dark:text-emerald-400 font-sans tabular-nums text-sm">
             {profitResults.marginPercent}%
           </span>
         </div>
@@ -369,7 +369,7 @@ Stock Deposit Required (100 shares @ $18.30 @ 30% margin): ${fmt(stockResults.re
                     value={costInput}
                     onChange={(e) => setCostInput(e.target.value)}
                     placeholder="e.g. 120"
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
                 <div className="space-y-1">
@@ -379,7 +379,7 @@ Stock Deposit Required (100 shares @ $18.30 @ 30% margin): ${fmt(stockResults.re
                     value={revenueInput}
                     onChange={(e) => setRevenueInput(e.target.value)}
                     placeholder="e.g. 160"
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
               </div>
@@ -392,7 +392,7 @@ Stock Deposit Required (100 shares @ $18.30 @ 30% margin): ${fmt(stockResults.re
                     value={marginPctInput}
                     onChange={(e) => setMarginPctInput(e.target.value)}
                     placeholder="e.g. 25"
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
                 <div className="space-y-1">
@@ -402,7 +402,7 @@ Stock Deposit Required (100 shares @ $18.30 @ 30% margin): ${fmt(stockResults.re
                     value={profitInput}
                     onChange={(e) => setProfitInput(e.target.value)}
                     placeholder="e.g. 40"
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
               </div>
@@ -437,7 +437,7 @@ Stock Deposit Required (100 shares @ $18.30 @ 30% margin): ${fmt(stockResults.re
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-mono mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-sans tabular-nums mb-2">
                 {profitResults.marginPercent}%
               </div>
 
@@ -493,27 +493,27 @@ Stock Deposit Required (100 shares @ $18.30 @ 30% margin): ${fmt(stockResults.re
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Stock Price ($)</label>
-                <Input type="number" value={stockPriceInput} onChange={(e) => setStockPriceInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={stockPriceInput} onChange={(e) => setStockPriceInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Number of Shares</label>
-                <Input type="number" value={sharesInput} onChange={(e) => setSharesInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={sharesInput} onChange={(e) => setSharesInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Margin Requirement (%)</label>
-                <Input type="number" value={initMarginInput} onChange={(e) => setInitMarginInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={initMarginInput} onChange={(e) => setInitMarginInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Maintenance Margin (%)</label>
-                <Input type="number" value={maintMarginInput} onChange={(e) => setMaintMarginInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={maintMarginInput} onChange={(e) => setMaintMarginInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-indigo-900 dark:text-indigo-200 text-sm block border-b pb-1">
                 Stock Margin Requirements
@@ -550,7 +550,7 @@ Stock Deposit Required (100 shares @ $18.30 @ 30% margin): ${fmt(stockResults.re
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Exchange Rate</label>
-                <Input type="number" step="0.01" value={forexRateInput} onChange={(e) => setForexRateInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" step="0.01" value={forexRateInput} onChange={(e) => setForexRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Margin Ratio</label>
@@ -570,11 +570,11 @@ Stock Deposit Required (100 shares @ $18.30 @ 30% margin): ${fmt(stockResults.re
 
             <div className="space-y-1 text-xs">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Units</label>
-              <Input type="number" value={forexUnitsInput} onChange={(e) => setForexUnitsInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+              <Input type="number" value={forexUnitsInput} onChange={(e) => setForexUnitsInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-purple-900 dark:text-purple-200 text-sm block border-b pb-1">
                 Forex Deposit Requirements
@@ -606,16 +606,16 @@ Stock Deposit Required (100 shares @ $18.30 @ 30% margin): ${fmt(stockResults.re
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">Stock Purchase Price ($)</label>
-                  <Input type="number" value={stockPriceInput} onChange={(e) => setStockPriceInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                  <Input type="number" value={stockPriceInput} onChange={(e) => setStockPriceInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">Shares Purchased</label>
-                  <Input type="number" value={sharesInput} onChange={(e) => setSharesInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                  <Input type="number" value={sharesInput} onChange={(e) => setSharesInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
               </div>
             </div>
 
-            <div className="bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-5 rounded-xl space-y-3 font-mono">
+            <div className="bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-5 rounded-xl space-y-3 font-sans tabular-nums">
               <span className="font-sans font-bold text-rose-900 dark:text-rose-200 text-sm block border-b pb-1">
                 Margin Call Price Risk Threshold
               </span>
@@ -657,7 +657,7 @@ Stock Deposit Required (100 shares @ $18.30 @ 30% margin): ${fmt(stockResults.re
                   <th className="p-2.5 text-right text-purple-600">Markup (%)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-sans tabular-nums">
                 {sensitivityMatrix.map((row, idx) => (
                   <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2.5 font-bold font-sans text-zinc-800 dark:text-zinc-200">{row.scenarioLabel}</td>

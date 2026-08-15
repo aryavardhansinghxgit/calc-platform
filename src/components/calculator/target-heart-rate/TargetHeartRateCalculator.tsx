@@ -192,7 +192,7 @@ Calculated via CalcPlatform Clinical Cardiovascular Engine`;
             .font-bold { font-weight: 700; }
             .font-semibold { font-weight: 600; }
             .font-black { font-weight: 900; }
-            .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+            .font-sans tabular-nums { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
             .text-zinc-900 { color: #18181b; }
             .text-zinc-800 { color: #27272a; }
             .text-zinc-700 { color: #3f3f46; }
@@ -318,7 +318,7 @@ Calculated via CalcPlatform Clinical Cardiovascular Engine`;
                     max={110}
                     value={age}
                     onChange={(e) => setAge(Number(e.target.value))}
-                    className="text-xs font-mono font-bold"
+                    className="text-xs font-sans tabular-nums font-bold"
                   />
                 </div>
               ) : (
@@ -330,7 +330,7 @@ Calculated via CalcPlatform Clinical Cardiovascular Engine`;
                     max={250}
                     value={manualMhr}
                     onChange={(e) => setManualMhr(Number(e.target.value))}
-                    className="text-xs font-mono font-bold"
+                    className="text-xs font-sans tabular-nums font-bold"
                   />
                 </div>
               )}
@@ -344,7 +344,7 @@ Calculated via CalcPlatform Clinical Cardiovascular Engine`;
                   max={120}
                   value={rhr}
                   onChange={(e) => setRhr(Number(e.target.value))}
-                  className="text-xs font-mono font-bold"
+                  className="text-xs font-sans tabular-nums font-bold"
                 />
               </div>
 
@@ -522,7 +522,7 @@ Calculated via CalcPlatform Clinical Cardiovascular Engine`;
             <div className="text-right text-xs text-zinc-500">
               <p className="font-bold text-zinc-800" suppressHydrationWarning>Date: {new Date().toLocaleDateString()}</p>
               <p suppressHydrationWarning>Time: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
-              <p className="font-mono text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #THR-{Date.now().toString().slice(-6)}</p>
+              <p className="font-sans tabular-nums text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #THR-{Date.now().toString().slice(-6)}</p>
             </div>
           </div>
 
@@ -566,8 +566,8 @@ Calculated via CalcPlatform Clinical Cardiovascular Engine`;
                 {result.zones.map((z) => (
                   <tr key={z.zoneNumber} className="border-b border-zinc-200">
                     <td className="p-2 font-bold">{z.zoneName}</td>
-                    <td className="p-2 font-mono font-bold text-emerald-700">{z.percentageRange}</td>
-                    <td className="p-2 font-mono font-bold text-blue-700">{z.minBpm} – {z.maxBpm} BPM</td>
+                    <td className="p-2 font-sans tabular-nums font-bold text-emerald-700">{z.percentageRange}</td>
+                    <td className="p-2 font-sans tabular-nums font-bold text-blue-700">{z.minBpm} – {z.maxBpm} BPM</td>
                     <td className="p-2 text-zinc-600">{z.benefit}</td>
                   </tr>
                 ))}

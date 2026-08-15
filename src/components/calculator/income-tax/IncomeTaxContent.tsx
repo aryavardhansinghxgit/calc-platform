@@ -183,17 +183,17 @@ export function IncomeTaxContent() {
               <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
                 <tr>
                   <td className="p-3 font-semibold">Single</td>
-                  <td className="p-3 font-mono text-blue-600 font-bold">$15,000</td>
+                  <td className="p-3 font-sans tabular-nums text-blue-600 font-bold">$15,000</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">Mortgage Interest ($750k cap)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Married Filing Jointly</td>
-                  <td className="p-3 font-mono text-blue-600 font-bold">$30,000</td>
+                  <td className="p-3 font-sans tabular-nums text-blue-600 font-bold">$30,000</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">SALT Cap ($10,000 max state/property tax)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Head of Household</td>
-                  <td className="p-3 font-mono text-blue-600 font-bold">$22,500</td>
+                  <td className="p-3 font-sans tabular-nums text-blue-600 font-bold">$22,500</td>
                   <td className="p-3 text-zinc-600 dark:text-zinc-400">Charitable Donations &amp; Medical (&gt;7.5% AGI)</td>
                 </tr>
               </tbody>

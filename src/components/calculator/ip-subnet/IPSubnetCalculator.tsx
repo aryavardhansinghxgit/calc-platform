@@ -430,7 +430,7 @@ export function IPSubnetCalculator() {
                     type="text" 
                     value={ipAddress} 
                     onChange={(e) => setIpAddress(e.target.value)} 
-                    className="font-mono text-xs font-bold"
+                    className="font-sans tabular-nums text-xs font-bold"
                   />
                 </div>
                 <div>
@@ -477,7 +477,7 @@ export function IPSubnetCalculator() {
                     type="text" 
                     value={ipv6Address} 
                     onChange={(e) => setIpv6Address(e.target.value)} 
-                    className="font-mono text-xs font-bold"
+                    className="font-sans tabular-nums text-xs font-bold"
                   />
                 </div>
                 <div>
@@ -506,15 +506,15 @@ export function IPSubnetCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Base Network IP</label>
-                  <Input type="text" value={splitterBaseIp} onChange={(e) => setSplitterBaseIp(e.target.value)} className="font-mono text-xs font-bold" />
+                  <Input type="text" value={splitterBaseIp} onChange={(e) => setSplitterBaseIp(e.target.value)} className="font-sans tabular-nums text-xs font-bold" />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Base Prefix CIDR</label>
-                  <Input type="number" min="0" max="32" value={splitterBaseCidr} onChange={(e) => setSplitterBaseCidr(e.target.value)} className="font-mono text-xs" />
+                  <Input type="number" min="0" max="32" value={splitterBaseCidr} onChange={(e) => setSplitterBaseCidr(e.target.value)} className="font-sans tabular-nums text-xs" />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Target Split CIDR</label>
-                  <Input type="number" min="0" max="32" value={splitterTargetCidr} onChange={(e) => setSplitterTargetCidr(e.target.value)} className="font-mono text-xs font-bold" />
+                  <Input type="number" min="0" max="32" value={splitterTargetCidr} onChange={(e) => setSplitterTargetCidr(e.target.value)} className="font-sans tabular-nums text-xs font-bold" />
                 </div>
               </div>
             </div>
@@ -530,11 +530,11 @@ export function IPSubnetCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Base Network Allocation</label>
-                  <Input type="text" value={plannerBaseIp} onChange={(e) => setPlannerBaseIp(e.target.value)} className="font-mono text-xs font-bold" />
+                  <Input type="text" value={plannerBaseIp} onChange={(e) => setPlannerBaseIp(e.target.value)} className="font-sans tabular-nums text-xs font-bold" />
                 </div>
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">Required Hosts Capacity</label>
-                  <Input type="number" min="1" value={plannerRequiredHosts} onChange={(e) => setPlannerRequiredHosts(e.target.value)} className="font-mono text-xs font-bold" />
+                  <Input type="number" min="1" value={plannerRequiredHosts} onChange={(e) => setPlannerRequiredHosts(e.target.value)} className="font-sans tabular-nums text-xs font-bold" />
                 </div>
               </div>
             </div>
@@ -555,7 +555,7 @@ export function IPSubnetCalculator() {
                   rows={4}
                   value={summarizerNetworksString}
                   onChange={(e) => setSummarizerNetworksString(e.target.value)}
-                  className="w-full p-2.5 border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 rounded-xl font-mono text-xs focus:ring-1 focus:ring-blue-500 outline-none"
+                  className="w-full p-2.5 border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs focus:ring-1 focus:ring-blue-500 outline-none"
                   placeholder="e.g.&#10;192.168.0.0/24&#10;192.168.1.0/24"
                 />
               </div>
@@ -607,11 +607,11 @@ export function IPSubnetCalculator() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-0.5 sm:col-span-2">
                       <span className="text-[10px] text-blue-100 font-bold block">COMPRESSED ADDRESS</span>
-                      <span className="text-base font-black font-mono break-all">{result.ipv6Compressed}</span>
+                      <span className="text-base font-black font-sans tabular-nums break-all">{result.ipv6Compressed}</span>
                     </div>
                     <div className="space-y-0.5 sm:col-span-2">
                       <span className="text-[10px] text-blue-100 font-bold block">NETWORK PREFIX</span>
-                      <span className="text-base font-black font-mono break-all">{result.ipv6NetworkPrefix}</span>
+                      <span className="text-base font-black font-sans tabular-nums break-all">{result.ipv6NetworkPrefix}</span>
                     </div>
                     <div className="space-y-0.5">
                       <span className="text-[10px] text-blue-100 font-bold block">ADDRESSES IN PREFIX</span>
@@ -647,7 +647,7 @@ export function IPSubnetCalculator() {
                 ) : (
                   <div className="space-y-0.5">
                     <span className="text-[10px] text-blue-100 font-bold block">SUMMARIZED SUPERNET BLOCK</span>
-                    <span className="text-lg font-black font-mono">{result.summarizedBlock}</span>
+                    <span className="text-lg font-black font-sans tabular-nums">{result.summarizedBlock}</span>
                   </div>
                 )}
               </div>
@@ -661,15 +661,15 @@ export function IPSubnetCalculator() {
                       <tbody>
                         <tr className="border-b border-zinc-200 dark:border-zinc-800">
                           <td className="py-2 text-zinc-500 font-bold">Dotted Netmask</td>
-                          <td className="py-2 font-mono font-bold text-zinc-800 dark:text-zinc-200">{result.subnetMask}</td>
+                          <td className="py-2 font-sans tabular-nums font-bold text-zinc-800 dark:text-zinc-200">{result.subnetMask}</td>
                         </tr>
                         <tr className="border-b border-zinc-200 dark:border-zinc-800">
                           <td className="py-2 text-zinc-500 font-bold">Wildcard Mask</td>
-                          <td className="py-2 font-mono text-zinc-800 dark:text-zinc-200">{result.wildcardMask}</td>
+                          <td className="py-2 font-sans tabular-nums text-zinc-800 dark:text-zinc-200">{result.wildcardMask}</td>
                         </tr>
                         <tr className="border-b border-zinc-200 dark:border-zinc-800">
                           <td className="py-2 text-zinc-500 font-bold">Binary Mask</td>
-                          <td className="py-2 font-mono text-[10px] text-zinc-800 dark:text-zinc-200 break-all">{result.binaryMask}</td>
+                          <td className="py-2 font-sans tabular-nums text-[10px] text-zinc-800 dark:text-zinc-200 break-all">{result.binaryMask}</td>
                         </tr>
                         <tr className="border-b border-zinc-200 dark:border-zinc-800">
                           <td className="py-2 text-zinc-500 font-bold">Classification Type</td>
@@ -704,7 +704,7 @@ export function IPSubnetCalculator() {
                   <span className="text-[10px] font-black uppercase text-zinc-400 dark:text-zinc-500 tracking-wider">
                     Binary IP breakdown (Network portion | Host portion)
                   </span>
-                  <div className="p-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl font-mono text-xs leading-relaxed space-y-1 shadow-inner">
+                  <div className="p-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl font-sans tabular-nums text-xs leading-relaxed space-y-1 shadow-inner">
                     <div className="flex justify-between border-b dark:border-zinc-800 pb-1">
                       <span className="text-zinc-400 font-bold">IP Bin:</span>
                       <span className="text-zinc-800 dark:text-zinc-200 font-black">{result.binaryAddress}</span>
@@ -725,7 +725,7 @@ export function IPSubnetCalculator() {
                   </span>
                   <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
                     {result.subnetList.map(sub => (
-                      <div key={sub.subnetIndex} className="p-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl text-[11px] font-mono shadow-xs space-y-1">
+                      <div key={sub.subnetIndex} className="p-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-850 rounded-xl text-[11px] font-sans tabular-nums shadow-xs space-y-1">
                         <div className="flex justify-between font-bold border-b dark:border-zinc-800 pb-1">
                           <span className="text-blue-600">Subnet #{sub.subnetIndex}: {sub.networkAddress}/{sub.cidr}</span>
                           <span className="text-zinc-400">Hosts: {sub.usableHosts.toLocaleString()}</span>
@@ -758,7 +758,7 @@ export function IPSubnetCalculator() {
                   <span className="text-[11px] font-black uppercase text-zinc-400 dark:text-zinc-500 tracking-wider block mb-2">
                     Calculation Engine Steps
                   </span>
-                  <pre className="text-[11px] font-mono text-zinc-700 dark:text-zinc-300 whitespace-pre-wrap leading-relaxed">
+                  <pre className="text-[11px] font-sans tabular-nums text-zinc-700 dark:text-zinc-300 whitespace-pre-wrap leading-relaxed">
                     {result.calculationSteps}
                   </pre>
                 </div>
@@ -816,7 +816,7 @@ export function IPSubnetCalculator() {
               </span>
               <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
                 {savedItems.map(item => (
-                  <div key={item.id} className="flex items-center justify-between p-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-xs font-mono shadow-xs">
+                  <div key={item.id} className="flex items-center justify-between p-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-xs font-sans tabular-nums shadow-xs">
                     <span className="truncate pr-4 text-zinc-700 dark:text-zinc-300 font-bold">{item.title}</span>
                     <button
                       onClick={() => handleDeleteSaved(item.id)}
@@ -866,9 +866,9 @@ export function IPSubnetCalculator() {
                       onClick={() => handleRowClick(row.prefix)}
                       className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 cursor-pointer transition-colors"
                     >
-                      <td className="py-1.5 pr-2 font-mono font-bold text-blue-600 dark:text-blue-400">/{row.prefix}</td>
-                      <td className="py-1.5 font-mono text-zinc-700 dark:text-zinc-300">{row.mask}</td>
-                      <td className="py-1.5 text-right font-mono text-zinc-600 dark:text-zinc-400">{row.usableHosts}</td>
+                      <td className="py-1.5 pr-2 font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">/{row.prefix}</td>
+                      <td className="py-1.5 font-sans tabular-nums text-zinc-700 dark:text-zinc-300">{row.mask}</td>
+                      <td className="py-1.5 text-right font-sans tabular-nums text-zinc-600 dark:text-zinc-400">{row.usableHosts}</td>
                     </tr>
                   ))}
                   {filteredRows.length === 0 && (

@@ -164,7 +164,7 @@ export function BmiScaleMeter({ result }: BmiChartsProps) {
         </div>
       </div>
 
-      <div className="flex justify-between text-[10px] text-zinc-500 dark:text-zinc-400 font-mono px-0.5">
+      <div className="flex justify-between text-[10px] text-zinc-500 dark:text-zinc-400 font-sans tabular-nums px-0.5">
         <span>12</span>
         <span>18.5</span>
         <span>25.0</span>

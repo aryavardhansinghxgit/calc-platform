@@ -103,7 +103,7 @@ function ElementalDonutChart({ elements }: { elements: ParsedElement[] }) {
           </svg>
 
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-xs font-black font-mono text-slate-900 dark:text-zinc-100">
+            <span className="text-xs font-black font-sans tabular-nums text-slate-900 dark:text-zinc-100">
               {totalMass.toFixed(1)}
             </span>
             <span className="text-[8px] font-extrabold uppercase text-slate-400 tracking-wider">
@@ -115,7 +115,7 @@ function ElementalDonutChart({ elements }: { elements: ParsedElement[] }) {
         {/* Legend */}
         <div className="space-y-1.5 flex-1 min-w-0 text-xs w-full">
           {slices.map((slice, idx) => (
-            <div key={idx} className="flex items-center justify-between gap-2 text-[11px] font-mono">
+            <div key={idx} className="flex items-center justify-between gap-2 text-[11px] font-sans tabular-nums">
               <div className="flex items-center gap-1.5 min-w-0">
                 <span
                   className="w-2.5 h-2.5 rounded-full shrink-0"
@@ -302,7 +302,7 @@ export function MolecularWeightCalculator() {
                     value={formula}
                     onChange={(e) => setFormula(e.target.value)}
                     placeholder="e.g. C6H12O6, [Co(NH3)5(CO3)]NO3, CuSO4*5H2O..."
-                    className="h-10 text-sm font-mono font-bold bg-slate-50 dark:bg-zinc-800 border-slate-300 dark:border-zinc-700 tracking-wide"
+                    className="h-10 text-sm font-sans tabular-nums font-bold bg-slate-50 dark:bg-zinc-800 border-slate-300 dark:border-zinc-700 tracking-wide"
                   />
                 </div>
 
@@ -324,7 +324,7 @@ export function MolecularWeightCalculator() {
                       key={btn}
                       type="button"
                       onClick={() => handleInsertFormulaSymbol(btn)}
-                      className="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 text-xs font-mono font-bold text-slate-800 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700 cursor-pointer transition-all"
+                      className="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 text-xs font-sans tabular-nums font-bold text-slate-800 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700 cursor-pointer transition-all"
                     >
                       {btn}
                     </button>
@@ -377,7 +377,7 @@ export function MolecularWeightCalculator() {
                     type="number"
                     value={percentC}
                     onChange={(e) => setPercentC(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -390,7 +390,7 @@ export function MolecularWeightCalculator() {
                     type="number"
                     value={percentH}
                     onChange={(e) => setPercentH(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -403,7 +403,7 @@ export function MolecularWeightCalculator() {
                     type="number"
                     value={percentO}
                     onChange={(e) => setPercentO(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -416,7 +416,7 @@ export function MolecularWeightCalculator() {
                     type="number"
                     value={targetMolarMass}
                     onChange={(e) => setTargetMolarMass(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -440,7 +440,7 @@ export function MolecularWeightCalculator() {
                     type="text"
                     value={formula}
                     onChange={(e) => setFormula(e.target.value)}
-                    className="h-9 text-xs font-mono font-bold bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -453,7 +453,7 @@ export function MolecularWeightCalculator() {
                     type="number"
                     value={inputGrams}
                     onChange={(e) => setInputGrams(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -489,21 +489,21 @@ export function MolecularWeightCalculator() {
               {isMonoisotopicMode ? "Monoisotopic Mass (Exact Iso)" : "Total Average Molar Mass"}
             </span>
 
-            <div className="text-3xl font-black font-mono text-emerald-600 dark:text-emerald-400">
+            <div className="text-3xl font-black font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
               {isMonoisotopicMode ? result.totalMonoisotopicMass : result.totalMolarMass}{" "}
               <span className="text-lg font-bold text-slate-700 dark:text-zinc-300">
                 {isMonoisotopicMode ? "Da" : "g/mol"}
               </span>
             </div>
 
-            <span className="text-xs font-extrabold text-slate-600 dark:text-zinc-400 block font-mono">
+            <span className="text-xs font-extrabold text-slate-600 dark:text-zinc-400 block font-sans tabular-nums">
               Formula: {result.formula}
             </span>
           </div>
 
           {/* MODE 2: EMPIRICAL SOLVER RESULTS */}
           {mode === "empirical_solver" && result.empiricalResult && (
-            <div className="bg-slate-50 dark:bg-zinc-800/60 p-4 rounded-xl border border-slate-200 dark:border-zinc-700 space-y-2 text-xs font-mono">
+            <div className="bg-slate-50 dark:bg-zinc-800/60 p-4 rounded-xl border border-slate-200 dark:border-zinc-700 space-y-2 text-xs font-sans tabular-nums">
               <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-700 dark:text-zinc-300 block border-b border-slate-200 dark:border-zinc-700 pb-1">
                 Empirical &amp; Molecular Results
               </span>
@@ -515,7 +515,7 @@ export function MolecularWeightCalculator() {
 
           {/* MODE 3: CONVERTER RESULTS */}
           {mode === "mass_converter" && result.converterResult && (
-            <div className="bg-slate-50 dark:bg-zinc-800/60 p-4 rounded-xl border border-slate-200 dark:border-zinc-700 space-y-2 text-xs font-mono">
+            <div className="bg-slate-50 dark:bg-zinc-800/60 p-4 rounded-xl border border-slate-200 dark:border-zinc-700 space-y-2 text-xs font-sans tabular-nums">
               <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-700 dark:text-zinc-300 block border-b border-slate-200 dark:border-zinc-700 pb-1">
                 Sample Quantity Conversion
               </span>
@@ -538,7 +538,7 @@ export function MolecularWeightCalculator() {
               </span>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left font-mono text-[11px] border-collapse">
+                <table className="w-full text-left font-sans tabular-nums text-[11px] border-collapse">
                   <thead>
                     <tr className="border-b border-slate-200 dark:border-zinc-700 text-slate-500 dark:text-zinc-400">
                       <th className="py-1">Elem</th>

@@ -74,7 +74,7 @@ export function FractionContent() {
         <p>
           To convert a mixed number {"w a/b"} to an improper fraction:
         </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
           {"Improper Fraction = [(Whole × Denominator) + Numerator] / Denominator"}
         </div>
       </section>
@@ -87,7 +87,7 @@ export function FractionContent() {
         <p>
           <strong>Equivalent fractions</strong> are different fractions that name the exact same numerical value. Multiplying or dividing both the numerator and denominator by the same non-zero integer generates an equivalent fraction.
         </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
           {"a / b = (a × k) / (b × k)   for any k ≠ 0"}
         </div>
         <p>For example: 1/2 = 2/4 = 3/6 = 4/8 = 5/10 = 0.5.</p>
@@ -101,7 +101,7 @@ export function FractionContent() {
         <p>
           Simplifying a fraction (reducing it to lowest terms) means dividing both the numerator and denominator by their <strong>Greatest Common Divisor (GCD)</strong> until no integer other than 1 can divide both numbers evenly.
         </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
           {"Simplified Fraction = [Numerator ÷ GCD] / [Denominator ÷ GCD]"}
         </div>
       </section>
@@ -114,7 +114,7 @@ export function FractionContent() {
         <p>
           To add two fractions with different denominators, you must first convert them to equivalent fractions sharing a <strong>Least Common Denominator (LCD)</strong>:
         </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
           {"a/b + c/d = (a·d + b·c) / (b·d)"}
         </div>
       </section>
@@ -127,7 +127,7 @@ export function FractionContent() {
         <p>
           Fraction subtraction follows the exact same LCD principles as addition:
         </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
           {"a/b - c/d = (a·d - b·c) / (b·d)"}
         </div>
       </section>
@@ -140,7 +140,7 @@ export function FractionContent() {
         <p>
           Unlike addition, fraction multiplication does NOT require a common denominator. Simply multiply top times top and bottom times bottom:
         </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
           {"(a/b) × (c/d) = (a × c) / (b × d)"}
         </div>
       </section>
@@ -153,7 +153,7 @@ export function FractionContent() {
         <p>
           To divide by a fraction, multiply by its <strong>reciprocal</strong> (flip the second fraction):
         </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
           {"(a/b) ÷ (c/d) = (a/b) × (d/c) = (a × d) / (b × c)"}
         </div>
       </section>
@@ -186,7 +186,7 @@ export function FractionContent() {
         <p>
           A percentage is simply a fraction with a denominator of 100. To convert a fraction a/b to a percentage, multiply by 100%:
         </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
           {"Percentage = (a / b) × 100%"}
         </div>
       </section>
@@ -244,7 +244,7 @@ export function FractionContent() {
               <li>Convert to equivalent fractions: (3 × 3)/(4 × 3) = 9/12 and (1 × 2)/(6 × 2) = 2/12.</li>
               <li>Add numerators: (9 + 2)/12 = 11/12.</li>
             </ol>
-            <div className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">Final Answer: 11/12</div>
+            <div className="text-xs font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Final Answer: 11/12</div>
           </div>
 
           {/* INTERMEDIATE EXAMPLE */}
@@ -255,7 +255,7 @@ export function FractionContent() {
               <li>Multiply by reciprocal: (7/3) × (2/3) = 14/9.</li>
               <li>Convert to mixed number: 14 ÷ 9 = 1 remainder 5 ➔ 1 5/9.</li>
             </ol>
-            <div className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">Final Answer: 1 5/9</div>
+            <div className="text-xs font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Final Answer: 1 5/9</div>
           </div>
 
           {/* ADVANCED EXAMPLE */}
@@ -267,7 +267,7 @@ export function FractionContent() {
               <li>Subtract: 999999x = 142857 ➔ x = 142857 / 999999.</li>
               <li>Simplify by GCD 142857: (142857 ÷ 142857) / (999999 ÷ 142857) = 1/7.</li>
             </ol>
-            <div className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">Final Answer: 1/7</div>
+            <div className="text-xs font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Final Answer: 1/7</div>
           </div>
         </div>
       </section>

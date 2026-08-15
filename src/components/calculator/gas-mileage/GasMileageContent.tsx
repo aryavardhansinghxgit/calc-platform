@@ -14,19 +14,19 @@ export function GasMileageContent() {
           Calculating vehicle fuel economy measures how efficiently your vehicle converts liquid fuel into distance traveled:
         </p>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-mono text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold overflow-x-auto">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold overflow-x-auto">
           US MPG = Miles Driven / Gallons Consumed
         </div>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-mono text-xs my-2 text-center text-teal-700 dark:text-teal-300 font-bold overflow-x-auto">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-teal-700 dark:text-teal-300 font-bold overflow-x-auto">
           L/100km = (Liters Consumed × 100) / Kilometers Driven
         </div>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-mono text-xs my-2 text-center text-amber-700 dark:text-amber-300 font-bold overflow-x-auto">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-amber-700 dark:text-amber-300 font-bold overflow-x-auto">
           Cost Per Mile ($/mi) = Gas Price Per Gallon / Vehicle MPG
         </div>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-mono text-xs my-2 text-center text-purple-700 dark:text-purple-300 font-bold overflow-x-auto">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-purple-700 dark:text-purple-300 font-bold overflow-x-auto">
           Distance Per Dollar = Miles Driven / Total Fuel Cost
         </div>
       </section>
@@ -45,7 +45,7 @@ export function GasMileageContent() {
 
         <div className="p-3.5 bg-sky-50/60 dark:bg-sky-950/20 border border-sky-200 dark:border-sky-900 rounded-xl space-y-1 text-xs">
           <h3 className="font-bold text-sky-900 dark:text-sky-200">Exact Conversion Constants</h3>
-          <p className="font-mono text-sky-700 dark:text-sky-300 font-bold">
+          <p className="font-sans tabular-nums text-sky-700 dark:text-sky-300 font-bold">
             L/100km = 235.215 / US MPG &nbsp;|&nbsp; L/100km = 282.481 / UK Imperial MPG
           </p>
         </div>

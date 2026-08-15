@@ -69,7 +69,7 @@ export function ScientificCalculatorContent() {
 
         <div className="space-y-2">
           <h3 className="font-semibold text-zinc-900 dark:text-zinc-100">Fundamental Principles & Identities</h3>
-          <div className="p-4 bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-2 font-mono text-xs">
+          <div className="p-4 bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-2 font-sans tabular-nums text-xs">
             <div>• <strong>Pythagorean Trigonometric Identity:</strong> sin²(&theta;) + cos²(&theta;) = 1</div>
             <div>• <strong>Euler&apos;s Identity:</strong> e^(i&pi;) + 1 = 0</div>
             <div>• <strong>Logarithmic Base Change:</strong> log<sub>b</sub>(x) = ln(x) / ln(b)</div>
@@ -92,7 +92,7 @@ export function ScientificCalculatorContent() {
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs uppercase tracking-wider">
               Trigonometric Taylor Series
             </h3>
-            <div className="font-mono text-xs text-blue-600 dark:text-blue-400 space-y-1">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 space-y-1">
               <p>sin(x) = x - x³/3! + x⁵/5! - x⁷/7! + ...</p>
               <p>cos(x) = 1 - x²/2! + x⁴/4! - x⁶/6! + ...</p>
               <p>tan(x) = sin(x) / cos(x)</p>
@@ -104,7 +104,7 @@ export function ScientificCalculatorContent() {
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs uppercase tracking-wider">
               Exponential & Logarithmic Series
             </h3>
-            <div className="font-mono text-xs text-indigo-600 dark:text-indigo-400 space-y-1">
+            <div className="font-sans tabular-nums text-xs text-indigo-600 dark:text-indigo-400 space-y-1">
               <p>e^x = 1 + x + x²/2! + x³/3! + ...</p>
               <p>ln(x) = &int;₁ⁿ (1/t) dt   (for x &gt; 0)</p>
               <p>log₁₀(x) = ln(x) / ln(10)</p>
@@ -117,7 +117,7 @@ export function ScientificCalculatorContent() {
           <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs uppercase tracking-wider">
             Factorial & Power Definitions
           </h3>
-          <div className="font-mono text-xs text-emerald-600 dark:text-emerald-400 space-y-1">
+          <div className="font-sans tabular-nums text-xs text-emerald-600 dark:text-emerald-400 space-y-1">
             <p>Factorial: n! = n × (n-1) × (n-2) × ... × 1   (where 0! = 1)</p>
             <p>General Power: x^y = e^(y · ln(x))</p>
             <p>General Root: ⁿ√x = x^(1/n)</p>
@@ -182,7 +182,7 @@ export function ScientificCalculatorContent() {
           <h3 className="font-bold text-zinc-900 dark:text-zinc-100">
             Evaluating Trigonometric Ratio: sin(30°)
           </h3>
-          <div className="text-xs space-y-1 font-mono">
+          <div className="text-xs space-y-1 font-sans tabular-nums">
             <p><strong>Step 1 (Unit Conversion):</strong> Convert 30° to radians: &theta; = 30 × (&pi; / 180) = &pi; / 6 &approx; 0.52359877 rad.</p>
             <p><strong>Step 2 (Function Evaluation):</strong> Apply sine series: sin(&pi;/6) = 0.5.</p>
             <p><strong>Result:</strong> 0.5</p>
@@ -197,7 +197,7 @@ export function ScientificCalculatorContent() {
           <h3 className="font-bold text-zinc-900 dark:text-zinc-100">
             Logarithmic Change of Base & Exponentiation: log₁₀(500) + 2⁵
           </h3>
-          <div className="text-xs space-y-1 font-mono">
+          <div className="text-xs space-y-1 font-sans tabular-nums">
             <p><strong>Step 1 (Base-10 Log):</strong> log₁₀(500) = ln(500) / ln(10) = 6.2146081 / 2.3025851 &approx; 2.6989700.</p>
             <p><strong>Step 2 (Power Evaluation):</strong> 2⁵ = 2 × 2 × 2 × 2 × 2 = 32.</p>
             <p><strong>Step 3 (Addition):</strong> 2.6989700 + 32 = 34.6989700.</p>
@@ -216,7 +216,7 @@ export function ScientificCalculatorContent() {
           <p className="text-xs text-zinc-600 dark:text-zinc-400">
             Problem: Initial mass N<sub>0</sub> = 100 g, remaining mass N(t) = 25 g, decay constant &lambda; = 0.05 day<sup>-1</sup>. Find time t.
           </p>
-          <div className="text-xs space-y-1 font-mono">
+          <div className="text-xs space-y-1 font-sans tabular-nums">
             <p><strong>Step 1 (Ratio setup):</strong> N(t) / N₀ = 25 / 100 = 0.25.</p>
             <p><strong>Step 2 (Exponential equation):</strong> e^(-0.05t) = 0.25.</p>
             <p><strong>Step 3 (Take Natural Log):</strong> ln(e^(-0.05t)) = ln(0.25) &rArr; -0.05t = -1.38629436.</p>
@@ -248,39 +248,39 @@ export function ScientificCalculatorContent() {
             </thead>
             <tbody>
               <tr className="border-b border-zinc-200 dark:border-zinc-800">
-                <td className="p-2 border font-mono">sin(x), cos(x)</td>
-                <td className="p-2 border font-mono">(-&infin;, +&infin;)</td>
-                <td className="p-2 border font-mono">[-1, 1]</td>
+                <td className="p-2 border font-sans tabular-nums">sin(x), cos(x)</td>
+                <td className="p-2 border font-sans tabular-nums">(-&infin;, +&infin;)</td>
+                <td className="p-2 border font-sans tabular-nums">[-1, 1]</td>
                 <td className="p-2 border">Periodic (2&pi;), continuous everywhere</td>
               </tr>
               <tr className="border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40">
-                <td className="p-2 border font-mono">tan(x)</td>
-                <td className="p-2 border font-mono">x &ne; &pi;/2 + k&pi;</td>
-                <td className="p-2 border font-mono">(-&infin;, +&infin;)</td>
+                <td className="p-2 border font-sans tabular-nums">tan(x)</td>
+                <td className="p-2 border font-sans tabular-nums">x &ne; &pi;/2 + k&pi;</td>
+                <td className="p-2 border font-sans tabular-nums">(-&infin;, +&infin;)</td>
                 <td className="p-2 border">Vertical asymptotes at odd multiples of &pi;/2</td>
               </tr>
               <tr className="border-b border-zinc-200 dark:border-zinc-800">
-                <td className="p-2 border font-mono">arcsin(x), arccos(x)</td>
-                <td className="p-2 border font-mono">[-1, 1]</td>
-                <td className="p-2 border font-mono">[-&pi;/2, &pi;/2] / [0, &pi;]</td>
+                <td className="p-2 border font-sans tabular-nums">arcsin(x), arccos(x)</td>
+                <td className="p-2 border font-sans tabular-nums">[-1, 1]</td>
+                <td className="p-2 border font-sans tabular-nums">[-&pi;/2, &pi;/2] / [0, &pi;]</td>
                 <td className="p-2 border">Inverse functions bounded by principal branches</td>
               </tr>
               <tr className="border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40">
-                <td className="p-2 border font-mono">ln(x), log₁₀(x)</td>
-                <td className="p-2 border font-mono">(0, +&infin;)</td>
-                <td className="p-2 border font-mono">(-&infin;, +&infin;)</td>
+                <td className="p-2 border font-sans tabular-nums">ln(x), log₁₀(x)</td>
+                <td className="p-2 border font-sans tabular-nums">(0, +&infin;)</td>
+                <td className="p-2 border font-sans tabular-nums">(-&infin;, +&infin;)</td>
                 <td className="p-2 border">Vertical asymptote at x = 0, ln(1) = 0</td>
               </tr>
               <tr className="border-b border-zinc-200 dark:border-zinc-800">
-                <td className="p-2 border font-mono">e^x</td>
-                <td className="p-2 border font-mono">(-&infin;, +&infin;)</td>
-                <td className="p-2 border font-mono">(0, +&infin;)</td>
+                <td className="p-2 border font-sans tabular-nums">e^x</td>
+                <td className="p-2 border font-sans tabular-nums">(-&infin;, +&infin;)</td>
+                <td className="p-2 border font-sans tabular-nums">(0, +&infin;)</td>
                 <td className="p-2 border">Horizontal asymptote at y = 0, e⁰ = 1</td>
               </tr>
               <tr className="border-b border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40">
-                <td className="p-2 border font-mono">x! (Factorial)</td>
-                <td className="p-2 border font-mono">Non-negative integers &#123;0, 1, 2, ...&#125;</td>
-                <td className="p-2 border font-mono">[1, +&infin;)</td>
+                <td className="p-2 border font-sans tabular-nums">x! (Factorial)</td>
+                <td className="p-2 border font-sans tabular-nums">Non-negative integers &#123;0, 1, 2, ...&#125;</td>
+                <td className="p-2 border font-sans tabular-nums">[1, +&infin;)</td>
                 <td className="p-2 border">Super-exponential growth (171! &gt; 10<sup>308</sup>)</td>
               </tr>
             </tbody>

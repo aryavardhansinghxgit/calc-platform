@@ -56,7 +56,7 @@ export function SleepContent() {
         <p>
           Sleep inertia occurs when an alarm interrupts your sleep during <strong>NREM Stage 3 deep slow-wave sleep</strong>. During N3 sleep, high levels of delta waves predominate in the cerebral cortex. Waking up suddenly forces your prefrontal cortex to transition from slow delta waves to fast beta waves instantaneously, leaving high levels of residual <strong>adenosine</strong> bound to neural receptors.
         </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-mono text-xs my-2 text-center text-indigo-700 dark:text-indigo-300 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-indigo-700 dark:text-indigo-300 font-bold">
           Optimal Wake Time = Target Bedtime + Sleep Latency Buffer (15m) + (N × 90m Cycles)
         </div>
       </section>
@@ -83,50 +83,50 @@ export function SleepContent() {
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
               <tr>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-bold">Newborns (0–3 months)</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono text-indigo-600 font-bold">14 – 17 Hours</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono">9 – 11 Cycles</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-indigo-600 font-bold">14 – 17 Hours</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums">9 – 11 Cycles</td>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800">Polyphasic sleep pattern without established circadian rhythm.</td>
               </tr>
               <tr>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-bold">Infants (4–11 months)</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono text-indigo-600 font-bold">12 – 15 Hours</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono">8 – 10 Cycles</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-indigo-600 font-bold">12 – 15 Hours</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums">8 – 10 Cycles</td>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800">Circadian melatonin rhythms begin establishing around 4 months.</td>
               </tr>
               <tr>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-bold">Toddlers (1–2 years)</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono text-indigo-600 font-bold">11 – 14 Hours</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono">7 – 9 Cycles</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-indigo-600 font-bold">11 – 14 Hours</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums">7 – 9 Cycles</td>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800">Includes 1 to 2 daytime naps.</td>
               </tr>
               <tr>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-bold">Preschoolers (3–5 years)</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono text-indigo-600 font-bold">10 – 13 Hours</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono">7 – 8.5 Cycles</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-indigo-600 font-bold">10 – 13 Hours</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums">7 – 8.5 Cycles</td>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800">Growth hormone release during deep N3 sleep supports bone growth.</td>
               </tr>
               <tr>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-bold">School Age (6–13 years)</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono text-indigo-600 font-bold">9 – 11 Hours</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono">6 – 7.5 Cycles</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-indigo-600 font-bold">9 – 11 Hours</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums">6 – 7.5 Cycles</td>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800">Critical for memory consolidation and academic performance.</td>
               </tr>
               <tr>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-bold">Teens (14–17 years)</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono text-indigo-600 font-bold">8 – 10 Hours</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono">5.5 – 6.5 Cycles</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-indigo-600 font-bold">8 – 10 Hours</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums">5.5 – 6.5 Cycles</td>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800">Pubertal circadian phase delay pushes natural bedtime 2 hours later.</td>
               </tr>
               <tr>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-bold text-emerald-600">Adults (18–64 years)</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono text-emerald-600 font-bold">7 – 9 Hours</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono font-bold">5 – 6 Cycles</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-emerald-600 font-bold">7 – 9 Hours</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums font-bold">5 – 6 Cycles</td>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800">Optimal baseline for cardiovascular health and cognitive clarity.</td>
               </tr>
               <tr>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-bold">Older Adults (65+ years)</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono text-indigo-600 font-bold">7 – 8 Hours</td>
-                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-mono">4.5 – 5.5 Cycles</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-indigo-600 font-bold">7 – 8 Hours</td>
+                <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums">4.5 – 5.5 Cycles</td>
                 <td className="p-2.5 border border-zinc-200 dark:border-zinc-800">N3 deep sleep duration naturally decreases with age.</td>
               </tr>
             </tbody>

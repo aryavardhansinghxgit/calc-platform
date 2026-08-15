@@ -74,7 +74,7 @@ export function InterestContent() {
           <strong>Simple interest</strong> is calculated strictly on the original principal sum for the entire duration of the loan or investment. Accumulated interest is never added back into the principal base.
         </p>
 
-        <div className="p-5 rounded-xl bg-zinc-900 text-white font-mono space-y-2 shadow-md my-4">
+        <div className="p-5 rounded-xl bg-zinc-900 text-white font-sans tabular-nums space-y-2 shadow-md my-4">
           <span className="text-xs text-indigo-400 font-bold uppercase tracking-wider block">Simple Interest Formula</span>
           <div className="text-xl sm:text-2xl font-black text-emerald-400">
             I = P &times; r &times; t
@@ -104,7 +104,7 @@ export function InterestContent() {
           <strong>Compound interest</strong> (often called "interest on interest") occurs when earned interest is periodically added back to the principal base, allowing subsequent interest to be calculated on a continuously growing total balance.
         </p>
 
-        <div className="p-5 rounded-xl bg-zinc-900 text-white font-mono space-y-3 shadow-md my-4">
+        <div className="p-5 rounded-xl bg-zinc-900 text-white font-sans tabular-nums space-y-3 shadow-md my-4">
           <span className="text-xs text-emerald-400 font-bold uppercase tracking-wider block">Compound Interest Formulas</span>
           <div className="text-lg sm:text-xl font-black text-blue-400">
             Discrete: A = P &times; (1 + r / n)<sup>n &times; t</sup>
@@ -139,8 +139,8 @@ export function InterestContent() {
             <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
                 <td className="p-3 font-bold">Formula</td>
-                <td className="p-3 font-mono">I = P &times; r &times; t</td>
-                <td className="p-3 font-mono text-indigo-600 font-bold">A = P &times; (1 + r/n)<sup>nt</sup></td>
+                <td className="p-3 font-sans tabular-nums">I = P &times; r &times; t</td>
+                <td className="p-3 font-sans tabular-nums text-indigo-600 font-bold">A = P &times; (1 + r/n)<sup>nt</sup></td>
               </tr>
               <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
                 <td className="p-3 font-bold">Growth Pattern</td>
@@ -219,7 +219,7 @@ export function InterestContent() {
           The <strong>Rule of 72</strong> is a quick mental shortcut used to estimate the number of years required for an investment to double in value at a fixed annual interest rate.
         </p>
 
-        <div className="p-4 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-xs font-mono space-y-1">
+        <div className="p-4 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 text-xs font-sans tabular-nums space-y-1">
           <div className="font-bold text-amber-900 dark:text-amber-300 text-sm">Years to Double &approx; 72 / Interest Rate (%)</div>
           <div className="text-zinc-600 dark:text-zinc-400 font-sans pt-1">
             Example: At an 8% annual return, your money doubles in approximately <strong>72 / 8 = 9 years</strong>.
@@ -239,7 +239,7 @@ export function InterestContent() {
           Nominal interest rates reflect dollar gains without accounting for rising consumer prices. <strong>Real rate of return</strong> calculates your true purchasing power after discounting inflation:
         </p>
 
-        <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-xs font-mono">
+        <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-xs font-sans tabular-nums">
           <span className="font-bold text-zinc-800 dark:text-zinc-200">Fisher Equation: Real Return &approx; Nominal Rate - Inflation Rate</span>
         </div>
       </section>

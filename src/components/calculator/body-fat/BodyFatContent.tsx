@@ -134,7 +134,7 @@ export function BodyFatContent() {
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. U.S. Navy Method Equations (Hodgdon &amp; Beckett 1984)</h4>
             <p>Calculates BFP from anatomical tape circumferences (in inches):</p>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-emerald-700 dark:text-emerald-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">
               Male: BFP = 86.010 × log10(Waist - Neck) - 70.041 × log10(Height) + 36.76<br/>
               Female: BFP = 163.205 × log10(Waist + Hip - Neck) - 97.684 × log10(Height) - 78.387
             </code>
@@ -143,7 +143,7 @@ export function BodyFatContent() {
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. Deurenberg BMI Body Fat Formula</h4>
             <p>Estimates BFP when tape measurements are unavailable:</p>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-sky-700 dark:text-sky-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-sky-700 dark:text-sky-400">
               Adult Male: BFP = (1.20 × BMI) + (0.23 × Age) - 16.2<br/>
               Adult Female: BFP = (1.20 × BMI) + (0.23 × Age) - 5.4
             </code>

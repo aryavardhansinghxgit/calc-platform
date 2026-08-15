@@ -181,7 +181,7 @@ export function RandomCalculator() {
                   type="number"
                   value={minVal}
                   onChange={(e) => setMinVal(e.target.value)}
-                  className="w-full px-3 py-2 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
+                  className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
                 />
               </div>
               <div>
@@ -190,7 +190,7 @@ export function RandomCalculator() {
                   type="number"
                   value={maxVal}
                   onChange={(e) => setMaxVal(e.target.value)}
-                  className="w-full px-3 py-2 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
+                  className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
                 />
               </div>
             </div>
@@ -207,7 +207,7 @@ export function RandomCalculator() {
                       max="10000"
                       value={genCount}
                       onChange={(e) => setGenCount(e.target.value)}
-                      className="w-full px-3 py-2 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
+                      className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
                     />
                   </div>
                   <div>
@@ -215,7 +215,7 @@ export function RandomCalculator() {
                     <select
                       value={numType}
                       onChange={(e: any) => setNumType(e.target.value)}
-                      className="w-full px-3 py-2 font-mono font-bold text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl outline-none cursor-pointer"
+                      className="w-full px-3 py-2 font-sans tabular-nums font-bold text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl outline-none cursor-pointer"
                     >
                       <option value="integer">Integer</option>
                       <option value="decimal">Decimal</option>
@@ -230,7 +230,7 @@ export function RandomCalculator() {
                         max="10"
                         value={precision}
                         onChange={(e) => setPrecision(e.target.value)}
-                        className="w-full px-3 py-2 font-mono font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl outline-none"
+                        className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl outline-none"
                       />
                     </div>
                   )}
@@ -302,7 +302,7 @@ export function RandomCalculator() {
             {genOutput ? (
               <div className="space-y-3">
                 {/* Format Selector */}
-                <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <div className="flex items-center justify-between text-[11px] font-sans tabular-nums text-slate-400">
                   <span>Format:</span>
                   <div className="flex gap-1">
                     {(["comma", "space", "newline", "json"] as const).map((fmt) => (
@@ -319,12 +319,12 @@ export function RandomCalculator() {
                 </div>
 
                 {/* Primary Large Output Display Box */}
-                <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl font-mono text-lg font-bold text-emerald-300 max-h-48 overflow-y-auto break-all">
+                <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl font-sans tabular-nums text-lg font-bold text-emerald-300 max-h-48 overflow-y-auto break-all">
                   {formattedResults}
                 </div>
 
                 {/* Secondary Statistical Metrics */}
-                <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                <div className="grid grid-cols-2 gap-2 text-xs font-sans tabular-nums">
                   <div className="p-2.5 bg-slate-800/80 rounded-lg border border-slate-700">
                     <div className="text-[10px] text-slate-400 font-sans">Sample Mean (μ)</div>
                     <div className="font-bold text-slate-100">{genOutput.mean}</div>
@@ -373,7 +373,7 @@ export function RandomCalculator() {
                 {savedItems.map((item) => (
                   <div
                     key={item.id}
-                    className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-2 text-xs font-mono"
+                    className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-2 text-xs font-sans tabular-nums"
                   >
                     <div className="truncate">
                       <div className="text-[10px] font-sans font-bold text-blue-600 dark:text-blue-400">{item.title}</div>
@@ -405,7 +405,7 @@ export function RandomCalculator() {
                     <div className="flex items-center justify-between text-xs font-bold text-zinc-900 dark:text-zinc-100">
                       <span>Step {st.stepNumber}: {st.title}</span>
                     </div>
-                    <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold py-1">
+                    <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold py-1">
                       {st.latex}
                     </div>
                     <p className="text-[11px] text-zinc-600 dark:text-zinc-400">

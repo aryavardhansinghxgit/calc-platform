@@ -112,7 +112,7 @@ export function IdealWeightContent() {
         <div className="space-y-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. G. J. Hamwi Formula (1964)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-blue-700 dark:text-blue-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-700 dark:text-blue-400">
               Male: 48.0 kg + 2.7 kg per inch over 5 feet<br/>
               Female: 45.5 kg + 2.2 kg per inch over 5 feet
             </code>
@@ -120,7 +120,7 @@ export function IdealWeightContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. B. J. Devine Formula (1974) — Clinical Gold Standard</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-sky-700 dark:text-sky-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-sky-700 dark:text-sky-400">
               Male: 50.0 kg + 2.3 kg per inch over 5 feet<br/>
               Female: 45.5 kg + 2.3 kg per inch over 5 feet
             </code>
@@ -128,7 +128,7 @@ export function IdealWeightContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">C. J. D. Robinson Formula (1983)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-indigo-700 dark:text-indigo-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-indigo-700 dark:text-indigo-400">
               Male: 52.0 kg + 1.9 kg per inch over 5 feet<br/>
               Female: 49.0 kg + 1.7 kg per inch over 5 feet
             </code>
@@ -136,7 +136,7 @@ export function IdealWeightContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">D. D. R. Miller Formula (1983)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-purple-700 dark:text-purple-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-purple-700 dark:text-purple-400">
               Male: 56.2 kg + 1.41 kg per inch over 5 feet<br/>
               Female: 53.1 kg + 1.36 kg per inch over 5 feet
             </code>
@@ -144,7 +144,7 @@ export function IdealWeightContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">E. H. J. Lemmens Formula (2005)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-emerald-700 dark:text-emerald-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">
               IBW = 22.0 × Height(meters)²
             </code>
           </div>

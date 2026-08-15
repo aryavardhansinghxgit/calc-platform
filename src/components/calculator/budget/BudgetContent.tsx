@@ -66,7 +66,7 @@ export function BudgetContent() {
             <p className="text-zinc-600 dark:text-zinc-400">
               Every single dollar of income is assigned a specific job (expense, investment, debt payoff, or savings) before the month begins, ensuring:
             </p>
-            <div className="font-mono bg-zinc-100 dark:bg-zinc-800 p-2 rounded text-center text-zinc-800 dark:text-zinc-200 font-bold">
+            <div className="font-sans tabular-nums bg-zinc-100 dark:bg-zinc-800 p-2 rounded text-center text-zinc-800 dark:text-zinc-200 font-bold">
               Income - Expenses = $0
             </div>
             <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 block">
@@ -103,7 +103,7 @@ export function BudgetContent() {
             <p className="text-zinc-600 dark:text-zinc-400">
               Net income converts gross income streams to after-tax monthly purchasing power:
             </p>
-            <div className="bg-white dark:bg-zinc-800 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 font-mono text-zinc-800 dark:text-zinc-200">
+            <div className="bg-white dark:bg-zinc-800 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-zinc-800 dark:text-zinc-200">
               Net Monthly Income = [ (Salary + Pension + Investments + Other) × (1 - Effective Tax Rate) ] / 12
             </div>
           </div>
@@ -113,14 +113,14 @@ export function BudgetContent() {
             <p className="text-zinc-600 dark:text-zinc-400">
               DTI evaluates debt burden relative to gross earnings. Mortgage underwriters enforce strict thresholds (typically &lt; 36% for prime approval):
             </p>
-            <div className="bg-white dark:bg-zinc-800 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 font-mono text-zinc-800 dark:text-zinc-200">
+            <div className="bg-white dark:bg-zinc-800 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-zinc-800 dark:text-zinc-200">
               Total DTI (%) = [ (Housing Costs + Auto Loans + Credit Cards + Student Loans) / Gross Monthly Income ] × 100
             </div>
           </div>
 
           <div className="space-y-1">
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">3. Net Cash Flow Surplus / Deficit</h3>
-            <div className="bg-white dark:bg-zinc-800 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 font-mono text-zinc-800 dark:text-zinc-200">
+            <div className="bg-white dark:bg-zinc-800 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-zinc-800 dark:text-zinc-200">
               Net Monthly Cash Flow = After-Tax Monthly Income - Total Monthly Expenses
             </div>
           </div>
@@ -304,7 +304,7 @@ export function BudgetContent() {
           ].map((faq, idx) => (
             <div key={idx} className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-1.5">
               <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs flex items-start gap-1.5">
-                <span className="text-blue-500 font-mono font-extrabold">Q:</span>
+                <span className="text-blue-500 font-sans tabular-nums font-extrabold">Q:</span>
                 {faq.q}
               </h3>
               <p className="text-zinc-600 dark:text-zinc-400 pl-4">

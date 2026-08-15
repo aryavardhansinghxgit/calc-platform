@@ -78,7 +78,7 @@ export function CagrContent() {
           The standard CAGR formula isolates the annualized growth rate from the basic compound interest equation $FV = PV \times (1 + r)^N$:
         </p>
 
-        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl space-y-2 text-center font-mono text-xs">
+        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-xl space-y-2 text-center font-sans tabular-nums text-xs">
           <div className="font-bold text-blue-600 dark:text-blue-400 text-sm">
             CAGR = [ ( FV / PV )^( 1 / N ) - 1 ] × 100
           </div>
@@ -97,7 +97,7 @@ export function CagrContent() {
         <p className="text-zinc-600 dark:text-zinc-400">
           To measure actual purchasing power expansion, nominal CAGR must be adjusted using the Fisher Equation:
         </p>
-        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-xl font-mono text-[11px] text-center text-purple-600 dark:text-purple-400">
+        <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3 rounded-xl font-sans tabular-nums text-[11px] text-center text-purple-600 dark:text-purple-400">
           Real CAGR = [ ( 1 + Nominal CAGR ) / ( 1 + Inflation Rate ) - 1 ] × 100
         </div>
       </section>
@@ -119,7 +119,7 @@ export function CagrContent() {
           </ul>
 
           <div className="font-bold text-blue-900 dark:text-blue-200 pt-2">Step-by-Step Evaluation:</div>
-          <div className="font-mono text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-blue-100 dark:border-blue-950">
+          <div className="font-sans tabular-nums text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-blue-100 dark:border-blue-950">
             <div>1. Value Ratio: FV / PV = 25,000 / 10,000 = 2.50</div>
             <div>2. Exponent Power: 1 / N = 1 / 5 = 0.20</div>
             <div>3. Compound Growth Factor: (2.50)^0.20 = 1.2011</div>
@@ -137,7 +137,7 @@ export function CagrContent() {
             <li>Tenure (N) = 5 Years</li>
           </ul>
 
-          <div className="font-mono text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-rose-100 dark:border-rose-950 text-rose-600 font-bold">
+          <div className="font-sans tabular-nums text-[11px] space-y-1 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-rose-100 dark:border-rose-950 text-rose-600 font-bold">
             CAGR = [ (691,214 / 2,365,714)^(0.20) - 1 ] × 100 = -21.81% per annum
           </div>
         </div>
