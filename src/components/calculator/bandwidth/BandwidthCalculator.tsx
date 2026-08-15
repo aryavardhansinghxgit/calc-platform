@@ -422,41 +422,37 @@ export function BandwidthCalculator() {
         <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
           <button
             onClick={() => setActiveTab("transfer")}
-            className={`px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-              activeTab === "transfer"
+            className={`px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${activeTab === "transfer"
                 ? "bg-blue-600 text-white shadow-xs"
                 : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-            }`}
+              }`}
           >
             <Clock className="h-4 w-4" /> Data Transfer Time
           </button>
           <button
             onClick={() => setActiveTab("conversion")}
-            className={`px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-              activeTab === "conversion"
+            className={`px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${activeTab === "conversion"
                 ? "bg-blue-600 text-white shadow-xs"
                 : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-            }`}
+              }`}
           >
             <ArrowRightLeft className="h-4 w-4" /> Bandwidth Conversion
           </button>
           <button
             onClick={() => setActiveTab("hosting")}
-            className={`px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-              activeTab === "hosting"
+            className={`px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${activeTab === "hosting"
                 ? "bg-blue-600 text-white shadow-xs"
                 : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-            }`}
+              }`}
           >
             <Server className="h-4 w-4" /> Website & Hosting
           </button>
           <button
             onClick={() => setActiveTab("concurrency")}
-            className={`px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
-              activeTab === "concurrency"
+            className={`px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${activeTab === "concurrency"
                 ? "bg-purple-600 text-white shadow-xs"
                 : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-            }`}
+              }`}
           >
             <Users className="h-4 w-4" /> Concurrency Planner
           </button>
