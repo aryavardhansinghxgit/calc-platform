@@ -298,12 +298,8 @@ export function InterestCalculator() {
                 key={cur}
                 type="button"
                 onClick={() => setCurrencySymbol(cur)}
-<<<<<<< HEAD
                 className={`px-2 py-0.5 rounded font-sans tabular-nums font-bold text-xs transition-colors ${
                   currencySymbol === cur
-=======
-                className={`px-2 py-0.5 rounded font-mono font-bold text-xs transition-colors ${currencySymbol === cur
->>>>>>> 0202f4f2f651556941f00d44ecadd2b97dc027fd
                     ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
                     : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
                   }`}
