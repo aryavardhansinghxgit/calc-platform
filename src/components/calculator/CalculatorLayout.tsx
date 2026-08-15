@@ -434,15 +434,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Main Interactive Calculator Area (Col 9) */}
         <div className="min-w-0 lg:col-span-9 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 dark:bg-slate-900/50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
-            <div>
-              <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
-                {definition.title}
-              </h1>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 max-w-xl leading-normal font-medium">
-                {definition.description}
-              </p>
-            </div>
+          <div className="bg-slate-50 dark:bg-slate-900/50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
+            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
+              {definition.title}
+            </h1>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 max-w-xl leading-normal font-medium">
+              {definition.description}
+            </p>
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>

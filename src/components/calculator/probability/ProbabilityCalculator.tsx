@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   computeTwoEventProbability,
   solveTwoEvents,
@@ -11,6 +11,13 @@ import {
   SeriesEventsResult,
   NormalDistributionResult
 } from "@/app/calculators/probability-calculator/probability-logic";
+
+interface SavedItem {
+  id: string;
+  title: string;
+  summary: string;
+  timestamp: string;
+}
 
 // Helper SVG Venn diagram icon component matching Calculator.net icons
 function VennIcon({ type }: { type: string }) {
@@ -147,21 +154,51 @@ function NormalCurveSVG({ mean, stdDev, leftBound, rightBound }: { mean: number;
 }
 
 export function ProbabilityCalculator() {
+  const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
   const [savedSection, setSavedSection] = useState<string | null>(null);
 
-  const handleSaveResult = (sectionId: string, sectionTitle: string, summaryText: string) => {
+  useEffect(() => {
     try {
-      const existing = JSON.parse(localStorage.getItem("saved_calc_probability-calculator") || "[]");
-      const newItem = {
-        id: Date.now().toString(),
-        title: `Probability - ${sectionTitle}`,
-        primaryResult: summaryText,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      const updated = [newItem, ...existing.filter((item: any) => item.primaryResult !== summaryText)].slice(0, 15);
-      localStorage.setItem("saved_calc_probability-calculator", JSON.stringify(updated));
-      setSavedSection(sectionId);
-      setTimeout(() => setSavedSection(null), 2000);
+      const stored = localStorage.getItem("saved_probability_calculations");
+      if (stored) {
+        setSavedItems(JSON.parse(stored));
+      }
+    } catch (e) {}
+  }, []);
+
+  const handleSaveResult = (e: React.MouseEvent, sectionId: string, sectionTitle: string, summaryText: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const newItem: SavedItem = {
+      id: Date.now().toString(),
+      title: sectionTitle,
+      summary: summaryText,
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+    };
+
+    const updated = [newItem, ...savedItems.filter(item => item.summary !== summaryText)].slice(0, 15);
+    setSavedItems(updated);
+    try {
+      localStorage.setItem("saved_probability_calculations", JSON.stringify(updated));
+    } catch (err) {}
+
+    setSavedSection(sectionId);
+    setTimeout(() => setSavedSection(null), 2000);
+  };
+
+  const handleDeleteSaved = (id: string) => {
+    const updated = savedItems.filter(item => item.id !== id);
+    setSavedItems(updated);
+    try {
+      localStorage.setItem("saved_probability_calculations", JSON.stringify(updated));
+    } catch (e) {}
+  };
+
+  const handleClearAllSaved = () => {
+    setSavedItems([]);
+    try {
+      localStorage.removeItem("saved_probability_calculations");
     } catch (e) {}
   };
 
@@ -347,7 +384,7 @@ export function ProbabilityCalculator() {
                 <span>Result</span>
                 <button
                   type="button"
-                  onClick={() => handleSaveResult("s1", "Two Events", `P(A)=${s1Result.pA}, P(B)=${s1Result.pB}, P(A∩B)=${s1Result.pIntersection.toFixed(4)}, P(A∪B)=${s1Result.pUnion.toFixed(4)}`)}
+                  onClick={(e) => handleSaveResult(e, "s1", "Two Events", `P(A)=${s1Result.pA}, P(B)=${s1Result.pB}, P(A∩B)=${s1Result.pIntersection.toFixed(4)}, P(A∪B)=${s1Result.pUnion.toFixed(4)}`)}
                   className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
                 >
                   {savedSection === "s1" ? (
@@ -611,7 +648,7 @@ export function ProbabilityCalculator() {
               <span>Result</span>
               <button
                 type="button"
-                onClick={() => handleSaveResult("s1sol", "Two Events Solver", `Solver: P(A)=${s1SolResult.result?.pA}, P(B)=${s1SolResult.result?.pB}`)}
+                onClick={(e) => handleSaveResult(e, "s1sol", "Two Events Solver", `Solver: P(A)=${s1SolResult.result?.pA}, P(B)=${s1SolResult.result?.pB}`)}
                 className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
               >
                 {savedSection === "s1sol" ? (
@@ -725,7 +762,7 @@ export function ProbabilityCalculator() {
               <span>Result</span>
               <button
                 type="button"
-                onClick={() => handleSaveResult("s2", "Series of Events", `Series A: P=${s2PA}^${s2RepeatA}=${s2Result.pAAll.toFixed(4)}, Series B: P=${s2PB}^${s2RepeatB}=${s2Result.pBAll.toFixed(4)}`)}
+                onClick={(e) => handleSaveResult(e, "s2", "Series of Events", `Series A: P=${s2PA}^${s2RepeatA}=${s2Result.pAAll.toFixed(4)}, Series B: P=${s2PB}^${s2RepeatB}=${s2Result.pBAll.toFixed(4)}`)}
                 className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
               >
                 {savedSection === "s2" ? (
@@ -863,7 +900,7 @@ export function ProbabilityCalculator() {
                 <span>Result</span>
                 <button
                   type="button"
-                  onClick={() => handleSaveResult("s3", "Normal Distribution", `Normal Dist: μ=${s3Result.norm.mean}, σ=${s3Result.norm.stdDev}, Area P=${s3Result.norm.probBetween.toFixed(5)}`)}
+                  onClick={(e) => handleSaveResult(e, "s3", "Normal Distribution", `Normal Dist: μ=${s3Result.norm.mean}, σ=${s3Result.norm.stdDev}, Area P=${s3Result.norm.probBetween.toFixed(5)}`)}
                   className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
                 >
                   {savedSection === "s3" ? (
@@ -916,6 +953,53 @@ export function ProbabilityCalculator() {
           </div>
         )}
       </section>
+
+      {/* ========================================================================= */}
+      {/* SAVED CALCULATIONS HISTORY SECTION */}
+      {/* ========================================================================= */}
+      {savedItems.length > 0 && (
+        <section className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg p-5 shadow-xs space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+              <span>Saved Calculations ({savedItems.length})</span>
+            </h3>
+            <button
+              type="button"
+              onClick={handleClearAllSaved}
+              className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer"
+            >
+              Clear All
+            </button>
+          </div>
+
+          <div className="space-y-2">
+            {savedItems.map((item) => (
+              <div
+                key={item.id}
+                className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/60 p-3 rounded border border-slate-200 dark:border-slate-700 text-xs font-sans"
+              >
+                <div className="space-y-0.5 min-w-0 pr-3">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-slate-900 dark:text-slate-100">{item.title}</span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400">{item.timestamp}</span>
+                  </div>
+                  <p className="text-slate-600 dark:text-slate-300 truncate font-sans tabular-nums">{item.summary}</p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleDeleteSaved(item.id)}
+                  className="text-slate-400 hover:text-red-600 p-1 transition-colors cursor-pointer shrink-0"
+                  title="Delete calculation"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
     </div>
   );
