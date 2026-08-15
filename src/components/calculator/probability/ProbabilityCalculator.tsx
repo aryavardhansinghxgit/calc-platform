@@ -19,14 +19,14 @@ function VennIcon({ type }: { type: string }) {
       <rect width="28" height="20" fill="#f8fafc" stroke="#94a3b8" strokeWidth="1" rx="2" />
       {type === "notA" && (
         <>
-          <circle cx="18" cy="10" r="6" fill="#ef4444" opacity="0.8" />
+          <circle cx="18" cy="10" r="6" fill="#2563eb" opacity="0.8" />
           <circle cx="10" cy="10" r="6" fill="#ffffff" stroke="#334155" strokeWidth="1" />
           <circle cx="18" cy="10" r="6" fill="none" stroke="#334155" strokeWidth="1" />
         </>
       )}
       {type === "notB" && (
         <>
-          <circle cx="10" cy="10" r="6" fill="#ef4444" opacity="0.8" />
+          <circle cx="10" cy="10" r="6" fill="#2563eb" opacity="0.8" />
           <circle cx="18" cy="10" r="6" fill="#ffffff" stroke="#334155" strokeWidth="1" />
           <circle cx="10" cy="10" r="6" fill="none" stroke="#334155" strokeWidth="1" />
         </>
@@ -35,39 +35,39 @@ function VennIcon({ type }: { type: string }) {
         <g>
           <circle cx="10" cy="10" r="6" fill="#ffffff" stroke="#334155" strokeWidth="1" />
           <circle cx="18" cy="10" r="6" fill="#ffffff" stroke="#334155" strokeWidth="1" />
-          <path d="M 14 5.2 A 6 6 0 0 1 14 14.8 A 6 6 0 0 1 14 5.2 Z" fill="#ef4444" />
+          <path d="M 14 5.2 A 6 6 0 0 1 14 14.8 A 6 6 0 0 1 14 5.2 Z" fill="#2563eb" />
         </g>
       )}
       {type === "union" && (
         <>
-          <circle cx="10" cy="10" r="6" fill="#ef4444" opacity="0.8" stroke="#334155" strokeWidth="1" />
-          <circle cx="18" cy="10" r="6" fill="#ef4444" opacity="0.8" stroke="#334155" strokeWidth="1" />
+          <circle cx="10" cy="10" r="6" fill="#2563eb" opacity="0.8" stroke="#334155" strokeWidth="1" />
+          <circle cx="18" cy="10" r="6" fill="#2563eb" opacity="0.8" stroke="#334155" strokeWidth="1" />
         </>
       )}
       {type === "xor" && (
         <g>
-          <circle cx="10" cy="10" r="6" fill="#ef4444" opacity="0.8" stroke="#334155" strokeWidth="1" />
-          <circle cx="18" cy="10" r="6" fill="#ef4444" opacity="0.8" stroke="#334155" strokeWidth="1" />
+          <circle cx="10" cy="10" r="6" fill="#2563eb" opacity="0.8" stroke="#334155" strokeWidth="1" />
+          <circle cx="18" cy="10" r="6" fill="#2563eb" opacity="0.8" stroke="#334155" strokeWidth="1" />
           <path d="M 14 5.2 A 6 6 0 0 1 14 14.8 A 6 6 0 0 1 14 5.2 Z" fill="#ffffff" stroke="#334155" strokeWidth="0.5" />
         </g>
       )}
       {type === "neither" && (
         <>
-          <rect width="28" height="20" fill="#ef4444" opacity="0.7" rx="2" />
+          <rect width="28" height="20" fill="#2563eb" opacity="0.7" rx="2" />
           <circle cx="10" cy="10" r="6" fill="#ffffff" stroke="#334155" strokeWidth="1" />
           <circle cx="18" cy="10" r="6" fill="#ffffff" stroke="#334155" strokeWidth="1" />
         </>
       )}
       {type === "aNotB" && (
         <g>
-          <circle cx="10" cy="10" r="6" fill="#ef4444" opacity="0.8" stroke="#334155" strokeWidth="1" />
+          <circle cx="10" cy="10" r="6" fill="#2563eb" opacity="0.8" stroke="#334155" strokeWidth="1" />
           <circle cx="18" cy="10" r="6" fill="#ffffff" stroke="#334155" strokeWidth="1" />
         </g>
       )}
       {type === "bNotA" && (
         <g>
           <circle cx="10" cy="10" r="6" fill="#ffffff" stroke="#334155" strokeWidth="1" />
-          <circle cx="18" cy="10" r="6" fill="#ef4444" opacity="0.8" stroke="#334155" strokeWidth="1" />
+          <circle cx="18" cy="10" r="6" fill="#2563eb" opacity="0.8" stroke="#334155" strokeWidth="1" />
         </g>
       )}
     </svg>
@@ -118,22 +118,22 @@ function NormalCurveSVG({ mean, stdDev, leftBound, rightBound }: { mean: number;
   return (
     <div className="flex flex-col items-center">
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="overflow-visible">
-        {shadedPath && <path d={shadedPath} fill="#86efac" opacity="0.7" />}
+        {shadedPath && <path d={shadedPath} fill="#93c5fd" opacity="0.7" />}
         <line x1="5" y1={height - 20} x2={width - 5} y2={height - 20} stroke="#334155" strokeWidth="1.5" />
-        <path d={curvePath} fill="none" stroke="#16a34a" strokeWidth="2" />
-        <line x1={meanX} y1={getSvgY(mean)} x2={meanX} y2={height - 20} stroke="#16a34a" strokeDasharray="3 3" strokeWidth="1.5" />
+        <path d={curvePath} fill="none" stroke="#2563eb" strokeWidth="2" />
+        <line x1={meanX} y1={getSvgY(mean)} x2={meanX} y2={height - 20} stroke="#2563eb" strokeDasharray="3 3" strokeWidth="1.5" />
         <text x={meanX} y={height - 5} textAnchor="middle" className="text-[11px] font-serif font-bold fill-slate-800">μ</text>
 
         {leftBound !== -Infinity && (
           <g>
-            <line x1={lbX} y1={getSvgY(leftBound)} x2={lbX} y2={height - 20} stroke="#16a34a" strokeWidth="1.5" />
+            <line x1={lbX} y1={getSvgY(leftBound)} x2={lbX} y2={height - 20} stroke="#2563eb" strokeWidth="1.5" />
             <text x={lbX} y={height - 5} textAnchor="middle" className="text-[10px] font-sans font-bold fill-slate-700">Lb</text>
           </g>
         )}
 
         {rightBound !== Infinity && (
           <g>
-            <line x1={rbX} y1={getSvgY(rightBound)} x2={rbX} y2={height - 20} stroke="#16a34a" strokeWidth="1.5" />
+            <line x1={rbX} y1={getSvgY(rightBound)} x2={rbX} y2={height - 20} stroke="#2563eb" strokeWidth="1.5" />
             <text x={rbX} y={height - 5} textAnchor="middle" className="text-[10px] font-sans font-bold fill-slate-700">Rb</text>
           </g>
         )}
@@ -281,7 +281,7 @@ export function ProbabilityCalculator() {
               type="text"
               value={s1PA}
               onChange={(e) => setS1PA(e.target.value)}
-              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-green-600 outline-none"
+              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-blue-600 outline-none"
             />
           </div>
 
@@ -293,15 +293,15 @@ export function ProbabilityCalculator() {
               type="text"
               value={s1PB}
               onChange={(e) => setS1PB(e.target.value)}
-              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-green-600 outline-none"
+              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-blue-600 outline-none"
             />
           </div>
 
-          {/* Green Calculate & Gray Clear Buttons */}
+          {/* Calculate & Clear Buttons */}
           <div className="flex items-center gap-3 pt-2">
             <button
               type="submit"
-              className="bg-[#5c940d] hover:bg-[#4d7d0a] text-white font-bold text-xs rounded px-4 py-1.5 shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <span className="inline-block w-0 h-0 border-y-[4px] border-y-transparent border-l-[7px] border-l-white"></span>
               <span>Calculate</span>
@@ -324,9 +324,9 @@ export function ProbabilityCalculator() {
         {/* Output Section 1 */}
         {s1Result && (
           <div className="space-y-4 pt-2">
-            {/* Green Header Result Box */}
-            <div className="border border-green-600 rounded overflow-hidden max-w-xl">
-              <div className="bg-[#5c940d] text-white font-bold text-xs px-3 py-1.5">
+            {/* Header Result Box */}
+            <div className="border border-blue-600 rounded overflow-hidden max-w-xl">
+              <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5">
                 Result
               </div>
               <div className="bg-white dark:bg-slate-900 p-3 text-xs space-y-2 font-sans">
@@ -473,7 +473,7 @@ export function ProbabilityCalculator() {
               type="text"
               value={s1SolInputs.pA}
               onChange={(e) => handleS1SolInputChange("pA", e.target.value)}
-              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-green-600 outline-none"
+              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-blue-600 outline-none"
             />
           </div>
 
@@ -483,7 +483,7 @@ export function ProbabilityCalculator() {
               type="text"
               value={s1SolInputs.pB}
               onChange={(e) => handleS1SolInputChange("pB", e.target.value)}
-              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-green-600 outline-none"
+              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-blue-600 outline-none"
             />
           </div>
 
@@ -493,7 +493,7 @@ export function ProbabilityCalculator() {
               type="text"
               value={s1SolInputs.pNotA}
               onChange={(e) => handleS1SolInputChange("pNotA", e.target.value)}
-              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-green-600 outline-none"
+              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-blue-600 outline-none"
             />
           </div>
 
@@ -503,7 +503,7 @@ export function ProbabilityCalculator() {
               type="text"
               value={s1SolInputs.pNotB}
               onChange={(e) => handleS1SolInputChange("pNotB", e.target.value)}
-              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-green-600 outline-none"
+              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-blue-600 outline-none"
             />
           </div>
 
@@ -513,7 +513,7 @@ export function ProbabilityCalculator() {
               type="text"
               value={s1SolInputs.pAandB}
               onChange={(e) => handleS1SolInputChange("pAandB", e.target.value)}
-              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-green-600 outline-none"
+              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-blue-600 outline-none"
             />
           </div>
 
@@ -523,7 +523,7 @@ export function ProbabilityCalculator() {
               type="text"
               value={s1SolInputs.pAorB}
               onChange={(e) => handleS1SolInputChange("pAorB", e.target.value)}
-              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-green-600 outline-none"
+              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-blue-600 outline-none"
             />
           </div>
 
@@ -533,7 +533,7 @@ export function ProbabilityCalculator() {
               type="text"
               value={s1SolInputs.pAxorB}
               onChange={(e) => handleS1SolInputChange("pAxorB", e.target.value)}
-              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-green-600 outline-none"
+              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-blue-600 outline-none"
             />
           </div>
 
@@ -543,7 +543,7 @@ export function ProbabilityCalculator() {
               type="text"
               value={s1SolInputs.pNeither}
               onChange={(e) => handleS1SolInputChange("pNeither", e.target.value)}
-              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-green-600 outline-none"
+              className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold focus:ring-1 focus:ring-blue-600 outline-none"
             />
           </div>
 
@@ -551,7 +551,7 @@ export function ProbabilityCalculator() {
           <div className="flex items-center gap-3 pt-2">
             <button
               type="submit"
-              className="bg-[#5c940d] hover:bg-[#4d7d0a] text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <span className="inline-block w-0 h-0 border-y-[4px] border-y-transparent border-l-[7px] border-l-white"></span>
               <span>Calculate</span>
@@ -573,8 +573,8 @@ export function ProbabilityCalculator() {
 
         {/* Solver Results */}
         {s1SolResult && s1SolResult.result && (
-          <div className="border border-green-600 rounded overflow-hidden max-w-md pt-2">
-            <div className="bg-[#5c940d] text-white font-bold text-xs px-3 py-1.5">
+          <div className="border border-blue-600 rounded overflow-hidden max-w-md pt-2">
+            <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5">
               Result
             </div>
             <div className="bg-white dark:bg-slate-900 p-4 text-xs font-sans tabular-nums space-y-2">
@@ -615,7 +615,7 @@ export function ProbabilityCalculator() {
                     type="text"
                     value={s2PA}
                     onChange={(e) => setS2PA(e.target.value)}
-                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 font-sans tabular-nums text-center outline-none focus:ring-1 focus:ring-green-600 font-semibold"
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 font-sans tabular-nums text-center outline-none focus:ring-1 focus:ring-blue-600 font-semibold"
                   />
                 </td>
                 <td className="p-1.5">
@@ -623,7 +623,7 @@ export function ProbabilityCalculator() {
                     type="text"
                     value={s2RepeatA}
                     onChange={(e) => setS2RepeatA(e.target.value)}
-                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 font-sans tabular-nums text-center outline-none focus:ring-1 focus:ring-green-600 font-semibold"
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 font-sans tabular-nums text-center outline-none focus:ring-1 focus:ring-blue-600 font-semibold"
                   />
                 </td>
               </tr>
@@ -634,7 +634,7 @@ export function ProbabilityCalculator() {
                     type="text"
                     value={s2PB}
                     onChange={(e) => setS2PB(e.target.value)}
-                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 font-sans tabular-nums text-center outline-none focus:ring-1 focus:ring-green-600 font-semibold"
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 font-sans tabular-nums text-center outline-none focus:ring-1 focus:ring-blue-600 font-semibold"
                   />
                 </td>
                 <td className="p-1.5">
@@ -642,7 +642,7 @@ export function ProbabilityCalculator() {
                     type="text"
                     value={s2RepeatB}
                     onChange={(e) => setS2RepeatB(e.target.value)}
-                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 font-sans tabular-nums text-center outline-none focus:ring-1 focus:ring-green-600 font-semibold"
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 font-sans tabular-nums text-center outline-none focus:ring-1 focus:ring-blue-600 font-semibold"
                   />
                 </td>
               </tr>
@@ -653,7 +653,7 @@ export function ProbabilityCalculator() {
           <div className="flex items-center gap-3 pt-2">
             <button
               type="submit"
-              className="bg-[#5c940d] hover:bg-[#4d7d0a] text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <span className="inline-block w-0 h-0 border-y-[4px] border-y-transparent border-l-[7px] border-l-white"></span>
               <span>Calculate</span>
@@ -671,8 +671,8 @@ export function ProbabilityCalculator() {
 
         {/* Section 2 Results */}
         {s2Result && (
-          <div className="border border-green-600 rounded overflow-hidden max-w-xl">
-            <div className="bg-[#5c940d] text-white font-bold text-xs px-3 py-1.5">
+          <div className="border border-blue-600 rounded overflow-hidden max-w-xl">
+            <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5">
               Result
             </div>
             <div className="bg-white dark:bg-slate-900 p-4 text-xs font-sans tabular-nums space-y-2">
@@ -715,7 +715,7 @@ export function ProbabilityCalculator() {
                 type="text"
                 value={s3Mean}
                 onChange={(e) => setS3Mean(e.target.value)}
-                className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-green-600"
+                className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600"
               />
             </div>
 
@@ -725,7 +725,7 @@ export function ProbabilityCalculator() {
                 type="text"
                 value={s3StdDev}
                 onChange={(e) => setS3StdDev(e.target.value)}
-                className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-green-600"
+                className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600"
               />
             </div>
 
@@ -738,7 +738,7 @@ export function ProbabilityCalculator() {
                   type="text"
                   value={s3LeftBound}
                   onChange={(e) => setS3LeftBound(e.target.value)}
-                  className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-green-600"
+                  className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600"
                 />
                 <span className="text-[10px] text-slate-500 shrink-0">For negative infinite, use -inf</span>
               </div>
@@ -753,7 +753,7 @@ export function ProbabilityCalculator() {
                   type="text"
                   value={s3RightBound}
                   onChange={(e) => setS3RightBound(e.target.value)}
-                  className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-green-600"
+                  className="w-32 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600"
                 />
                 <span className="text-[10px] text-slate-500 shrink-0">For positive infinite, use inf</span>
               </div>
@@ -763,7 +763,7 @@ export function ProbabilityCalculator() {
             <div className="flex items-center gap-3 pt-2">
               <button
                 type="submit"
-                className="bg-[#5c940d] hover:bg-[#4d7d0a] text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center gap-1.5 cursor-pointer"
               >
                 <span className="inline-block w-0 h-0 border-y-[4px] border-y-transparent border-l-[7px] border-l-white"></span>
                 <span>Calculate</span>
@@ -793,12 +793,12 @@ export function ProbabilityCalculator() {
         {/* Section 3 Results */}
         {s3Result && (
           <div className="space-y-4 pt-2">
-            <div className="border border-green-600 rounded overflow-hidden max-w-xl">
-              <div className="bg-[#5c940d] text-white font-bold text-xs px-3 py-1.5">
+            <div className="border border-blue-600 rounded overflow-hidden max-w-xl">
+              <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5">
                 Result
               </div>
               <div className="bg-white dark:bg-slate-900 p-4 text-xs font-sans space-y-2">
-                <p>The probability between {s3Result.norm.leftBoundStr} and {s3Result.norm.rightBoundStr} is <strong className="text-green-700 dark:text-green-400 font-sans tabular-nums font-bold">{s3Result.norm.probBetween.toFixed(5)}</strong></p>
+                <p>The probability between {s3Result.norm.leftBoundStr} and {s3Result.norm.rightBoundStr} is <strong className="text-blue-700 dark:text-blue-400 font-sans tabular-nums font-bold">{s3Result.norm.probBetween.toFixed(5)}</strong></p>
                 <p>The probability outside of {s3Result.norm.leftBoundStr} and {s3Result.norm.rightBoundStr} is 1 - {s3Result.norm.probBetween.toFixed(5)} = <strong className="font-sans tabular-nums font-bold">{s3Result.norm.probOutside.toFixed(5)}</strong></p>
                 <p>The probability of {s3Result.norm.leftBoundStr} or less (≤{s3Result.norm.leftBoundStr}) is <strong className="font-sans tabular-nums font-bold">{s3Result.norm.probLessEqualLeft.toFixed(5)}</strong></p>
                 <p>The probability of {s3Result.norm.rightBoundStr} or more (≥{s3Result.norm.rightBoundStr}) is <strong className="font-sans tabular-nums font-bold">{s3Result.norm.probGreaterEqualRight.toFixed(5)}</strong></p>
