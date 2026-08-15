@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useState } from "react";
 import {
   BarChart3,
   Bookmark,
@@ -82,16 +82,20 @@ export function PercentErrorCalculator() {
   const [observed, setObserved] = useState(DEFAULT_OBSERVED);
   const [trueValue, setTrueValue] = useState(DEFAULT_TRUE);
   const [mode, setMode] = useState<ErrorMode>("absolute");
-  const [savedRuns, setSavedRuns] = useState<SavedRun[]>(() => {
-    if (typeof window === "undefined") return [];
+  const [savedRuns, setSavedRuns] = useState<SavedRun[]>([]);
+
+  useEffect(() => {
     try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      const parsed = stored ? JSON.parse(stored) : [];
-      return Array.isArray(parsed) ? parsed : [];
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        if (Array.isArray(parsed)) setSavedRuns(parsed);
+      }
     } catch {
-      return [];
+      // localStorage unavailable
     }
-  });
+  }, []);
   const [batchText, setBatchText] = useState("56.891,62.327\n9.5,9.8\n100,98");
   const [copied, setCopied] = useState(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
