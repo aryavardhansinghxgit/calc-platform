@@ -2,9 +2,10 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, X, Zap, ArrowRight } from "lucide-react";
+import { Search, X, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { searchCalculators } from "@/calculators";
+import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
 
 export interface QuickTag {
   id: string;
@@ -70,7 +71,7 @@ export function SearchBar({
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           onChange={(e) => handleQueryChange(e.target.value)}
           aria-label="Search all calculators"
-          className="pl-10 pr-9 h-11 text-sm bg-background border-border text-foreground placeholder:text-muted-foreground rounded-xl shadow-xs focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+          className="pl-10 pr-9 h-11 text-sm bg-background border-blue-200 dark:border-blue-900/70 text-foreground placeholder:text-muted-foreground rounded-xl shadow-sm focus:border-primary focus:ring-4 focus:ring-primary/15 transition-all"
         />
         {query && (
           <button
@@ -85,9 +86,19 @@ export function SearchBar({
 
       {/* Live Search Dropdown */}
       {isFocused && query.trim() !== "" && (
-        <div className="absolute top-13 left-0 right-0 z-50 bg-card border border-border rounded-xl shadow-lg overflow-hidden max-h-72 overflow-y-auto divide-y divide-border">
+        <div className="absolute top-13 left-0 right-0 z-50 bg-card border border-blue-200 dark:border-blue-900/70 rounded-2xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto">
+          <div className="flex items-center justify-between px-3.5 py-2.5 border-b border-blue-100 dark:border-blue-900/60 bg-blue-50/70 dark:bg-blue-950/30">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300">
+              Calculator suggestions
+            </span>
+            {searchResults.length > 0 && (
+              <span className="text-[10px] font-mono font-semibold text-blue-600 dark:text-blue-400">
+                {searchResults.length} matches
+              </span>
+            )}
+          </div>
           {searchResults.length === 0 ? (
-            <div className="p-3.5 text-center text-xs text-muted-foreground">
+            <div className="p-4 text-center text-xs text-muted-foreground">
               No calculators found matching &quot;{query}&quot;
             </div>
           ) : (
@@ -95,20 +106,19 @@ export function SearchBar({
               <Link
                 key={calc.id}
                 href={`/calculators/${calc.slug}`}
-                className="p-3 flex items-center justify-between hover:bg-muted/60 transition-colors group cursor-pointer"
+                className="p-3 flex min-w-0 items-center gap-3 border-b border-blue-50 last:border-b-0 dark:border-blue-950/40 hover:bg-blue-50/70 dark:hover:bg-blue-950/30 transition-colors group cursor-pointer"
               >
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {calc.title}
+                <div className="min-w-0 flex-1 space-y-0.5">
+                  <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+                    <span className="min-w-0 truncate text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                      {getCalculatorDisplayTitle(calc.title)}
                     </span>
-                    <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-muted text-muted-foreground border border-border">
+                    <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                       {calc.category}
                     </span>
                   </div>
-                  <p className="text-[11px] text-muted-foreground line-clamp-1">{calc.description}</p>
                 </div>
-                <ArrowRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-transform shrink-0" />
+                <ArrowRight className="h-7 w-7 shrink-0 rounded-full bg-blue-50 p-1.5 text-blue-600 transition-all group-hover:bg-blue-600 group-hover:text-white group-hover:translate-x-0.5" />
               </Link>
             ))
           )}
@@ -117,8 +127,8 @@ export function SearchBar({
 
       {/* Quick Launch Chips */}
       <div className="flex items-center flex-wrap gap-1.5 pt-0.5">
-        <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1 mr-1">
-          <Zap className="h-3 w-3 text-amber-500" /> Quick Launch:
+        <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mr-1">
+          Quick Launch:
         </span>
         {quickTags.map((tag) => {
           const slug = tag.id.endsWith("-calculator") ? tag.id : `${tag.id}-calculator`;

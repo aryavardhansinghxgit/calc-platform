@@ -5,6 +5,7 @@ import { Sparkles, ChevronRight } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { CalculatorLayout } from "@/components/calculator/CalculatorLayout";
 import { getFeaturedCalculators, getCalculatorDefinition } from "@/calculators";
+import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
 
 export interface FeaturedItem {
   id: string;
@@ -73,7 +74,7 @@ export function FeaturedCalculators({
                 value={item.id}
                 className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-xs rounded-lg font-bold text-xs px-3.5 py-2 text-muted-foreground hover:text-foreground whitespace-nowrap transition-all cursor-pointer shrink-0"
               >
-                {item.title}
+                {getCalculatorDisplayTitle(item.title)}
               </TabsTrigger>
             ))}
           </TabsList>
@@ -87,7 +88,7 @@ export function FeaturedCalculators({
             const { calculate, ...serializableDef } = def;
 
             return (
-              <TabsContent key={item.id} value={item.id} className="m-0 focus-visible:outline-none">
+              <TabsContent key={item.id} value={item.id} className="m-0 min-w-0 focus-visible:outline-none">
                 <CalculatorLayout definition={serializableDef} />
               </TabsContent>
             );

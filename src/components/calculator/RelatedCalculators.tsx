@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import Link from "next/link";
 import { ArrowRight, Calculator } from "lucide-react";
 import { getRelatedCalculators } from "@/lib/calculator-engine/registry";
+import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
 
 export interface RelatedCalculatorsProps {
   currentId?: string;
@@ -28,7 +29,7 @@ export function RelatedCalculators({ currentId = "", category = "Finance" }: Rel
           <div className="flex items-center gap-2 mb-1">
             <Calculator className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
             <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
-              {calc.title}
+              {getCalculatorDisplayTitle(calc.title)}
             </span>
             <ArrowRight className="h-3 w-3 text-zinc-400 ml-auto shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>

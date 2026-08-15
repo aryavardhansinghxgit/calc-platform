@@ -38,7 +38,7 @@ export function CalculatorResult({ definition, result }: CalculatorResultProps) 
 
       {/* Secondary metrics — compact grid */}
       {secondaryOutputs.length > 0 && (
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid min-w-0 grid-cols-1 sm:grid-cols-2 gap-2">
           {secondaryOutputs.map((outDef) => (
             <ResultCard
               key={outDef.name}

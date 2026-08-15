@@ -1195,10 +1195,10 @@ export function ScientificCalculator() {
   const safeCursorPos = Math.min(Math.max(0, cursorPos), expression.length);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       {/* LEFT COLUMN: Main Calculator Frame (Col 8) */}
-      <div className="lg:col-span-8 space-y-4">
-        <Card className="bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-700 border-b-4 border-b-zinc-350 dark:border-b-zinc-800 shadow-xl rounded-2xl overflow-hidden">
+      <div className="min-w-0 lg:col-span-8 space-y-4">
+        <Card className="bg-sky-50 dark:bg-sky-950/40 text-zinc-900 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-700 border-b-4 border-b-zinc-350 dark:border-b-zinc-800 shadow-xl rounded-2xl overflow-hidden">
           <CardContent className="p-4 sm:p-5 space-y-3">
             {/* 1. LCD / DISPLAY BOX */}
             <div className="bg-emerald-950 border-2 border-emerald-800/80 rounded-xl p-3 sm:p-4 text-right font-mono space-y-1 shadow-inner relative">
@@ -1454,7 +1454,7 @@ export function ScientificCalculator() {
             {/* 5. MAIN BUTTON GRID (8 columns x 10 rows with 3D Keycaps) */}
             <div className="space-y-1.5 pt-1">
               {mainPadRows.map((row, rIdx) => (
-                <div key={rIdx} className="grid grid-cols-8 gap-1 sm:gap-1.5">
+                <div key={rIdx} className="grid grid-cols-4 sm:grid-cols-8 gap-1 sm:gap-1.5">
                   {row.map((btn, cIdx) => (
                     <button
                       key={cIdx}
@@ -1489,7 +1489,7 @@ export function ScientificCalculator() {
               {showAdditional && (
                 <div className="space-y-1.5 pt-2.5">
                   {additionalRows.map((row, rIdx) => (
-                    <div key={rIdx} className="grid grid-cols-8 gap-1 sm:gap-1.5">
+                    <div key={rIdx} className="grid grid-cols-4 sm:grid-cols-8 gap-1 sm:gap-1.5">
                       {row.map((btn, cIdx) => (
                         <button
                           key={cIdx}
@@ -1510,7 +1510,7 @@ export function ScientificCalculator() {
       </div>
 
       {/* RIGHT COLUMN: Sidebar (Features, Instructions & Quick Examples) (Col 4) */}
-      <div className="lg:col-span-4 space-y-4">
+      <div className="min-w-0 lg:col-span-4 space-y-4">
         {/* Math Calculators Links */}
         <Card className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-sm p-4 space-y-3">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">

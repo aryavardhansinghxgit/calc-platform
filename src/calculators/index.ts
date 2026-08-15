@@ -83,7 +83,7 @@ export function searchCalculators(query: string): CalculatorModuleDefinition[] {
     }
   });
 
-  return ALL_CALCULATORS.filter((calc) => {
+  const matches = ALL_CALCULATORS.filter((calc) => {
     const title = calc.title.toLowerCase();
     const desc = calc.description.toLowerCase();
     const cat = calc.category.toLowerCase();
@@ -115,6 +115,30 @@ export function searchCalculators(query: string): CalculatorModuleDefinition[] {
         slug.includes(token) ||
         tags.some((t) => t.includes(token))
     );
+  });
+
+  return matches.sort((a, b) => {
+    const getScore = (calc: CalculatorModuleDefinition) => {
+      const title = calc.title.toLowerCase();
+      const slug = calc.slug.toLowerCase();
+      const id = calc.id.toLowerCase();
+      const category = calc.category.toLowerCase();
+      const titleWords = title.split(/\s+/);
+
+      if (title === q || slug === q || id === q) return 0;
+      if (title.startsWith(q)) return 1;
+      if (titleWords.some((word) => word.startsWith(q))) return 2;
+      if (slug.startsWith(q) || id.startsWith(q)) return 3;
+      if (category.startsWith(q)) return 4;
+      if (title.includes(q)) return 5;
+      if (slug.includes(q) || id.includes(q) || category.includes(q)) return 6;
+      return 7;
+    };
+
+    const scoreDifference = getScore(a) - getScore(b);
+    if (scoreDifference !== 0) return scoreDifference;
+
+    return a.title.localeCompare(b.title, undefined, { sensitivity: "base" });
   });
 }
 

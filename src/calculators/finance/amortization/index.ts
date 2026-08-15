@@ -7,7 +7,7 @@ export const AMORTIZATION_CALCULATOR: CalculatorModuleDefinition = {
   title: "Amortization Calculator",
   slug: "amortization-calculator",
   category: "Finance",
-  subcategory: "Mortgage & Home",
+  subcategory: "Mortgage & House",
   description: "Generate a complete loan amortization schedule with monthly & annual principal, interest, extra payment, and comparison metrics.",
   iconName: "Table",
   featured: true,
