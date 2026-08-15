@@ -166,8 +166,7 @@ export function SalesTaxContent() {
 
         {/* Section 3: 50 State Sales Tax Summary */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Globe className="h-5 w-5 text-blue-600" /> 3. U.S. State Sales Tax Rates &amp; Exemption Overview
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. U.S. State Sales Tax Rates &amp; Exemption Overview
           </h3>
           <p className="text-xs text-slate-900 dark:text-slate-100">
             Below is a summary of baseline state sales tax rates, average local tax additions, and grocery/clothing exemption policies across major states:
@@ -227,8 +226,7 @@ export function SalesTaxContent() {
 
         {/* Section 4: History & IRS Deduction */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-blue-600" /> U.S. Sales Tax History &amp; IRS Income Tax Deductions
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">U.S. Sales Tax History &amp; IRS Income Tax Deductions
           </h3>
           <p className="text-xs text-slate-900 dark:text-slate-100">
             <strong>Historical Context:</strong> Taxation on goods played a pivotal role in American independence, starting with the 1773 Boston Tea Party protesting British tea taxes. 
@@ -245,7 +243,7 @@ export function SalesTaxContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (FAQ)
           </h3>
         </div>

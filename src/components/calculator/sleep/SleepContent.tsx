@@ -7,7 +7,7 @@ export function SleepContent() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: THE BIOLOGY OF HUMAN SLEEP ARCHITECTURE */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. The Biology of Human Sleep Architecture
         </h2>
         <p>
@@ -47,7 +47,7 @@ export function SleepContent() {
 
       {/* SECTION 2: WHY WAKING UP MID-CYCLE CAUSES "SLEEP INERTIA" */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. Why Waking Up Mid-Cycle Causes "Sleep Inertia"
         </h2>
         <p>
@@ -63,7 +63,7 @@ export function SleepContent() {
 
       {/* SECTION 3: SLEEP REQUIREMENT BENCHMARKS BY AGE TABLE */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. Sleep Requirement Benchmarks by Age Table
         </h2>
         <p>
@@ -136,14 +136,14 @@ export function SleepContent() {
 
       {/* SECTION 4: CIRCADIAN RHYTHMS & CHRONOBIOLOGY */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. Circadian Rhythms & Chronobiology
         </h2>
         <p>
           Your body's 24-hour master biological clock resides in the <strong>Suprachiasmatic Nucleus (SCN)</strong> within the hypothalamus. The SCN regulates body temperature, cortisol secretion, and the release of <strong>melatonin</strong> from the pineal gland.
         </p>
         
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">The 4 Primary Chronotypes</h3>
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">The 4 Primary Chronotypes</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100">Lion (Early Lark)</h4>
@@ -166,7 +166,7 @@ export function SleepContent() {
 
       {/* SECTION 5: THE SCIENCE OF NAPPING */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. The Science of Napping (The Power Nap Blueprint)
         </h2>
         <ul className="list-disc pl-5 space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300">
@@ -178,7 +178,7 @@ export function SleepContent() {
 
       {/* SECTION 6: EVIDENCE-BASED SLEEP HYGIENE */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           6. Evidence-Based Sleep Hygiene Optimization Guide
         </h2>
         <ul className="list-disc pl-5 space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300">

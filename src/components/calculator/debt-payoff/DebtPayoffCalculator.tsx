@@ -643,8 +643,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-amber-500" /> Debt Avalanche vs. Debt Snowball Side-by-Side Strategy Comparison
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Debt Avalanche vs. Debt Snowball Side-by-Side Strategy Comparison
               </h3>
               <p className="text-xs text-zinc-500">
                 Compare mathematical interest minimization (Avalanche) against psychological win momentum (Snowball).
@@ -696,8 +695,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Zap className="h-5 w-5 text-emerald-500" /> Snowball Payment Rollover Reallocation Impact
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Snowball Payment Rollover Reallocation Impact
               </h3>
               <p className="text-xs text-zinc-500">
                 Visualize the power of keeping your monthly payment budget constant vs letting payments shrink as debts are eliminated.
@@ -737,8 +735,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Landmark className="h-5 w-5 text-indigo-500" /> Single Debt Consolidation Loan Evaluator
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Single Debt Consolidation Loan Evaluator
               </h3>
               <p className="text-xs text-zinc-500">
                 Compare combining your debts into a single fixed-rate consolidation loan against your current multi-debt schedule.
@@ -785,8 +782,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
       {activeTab === "schedule" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-purple-500" /> Multi-Debt Combined Amortization Schedule
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Multi-Debt Combined Amortization Schedule
             </h3>
 
             <div className="flex items-center gap-2">

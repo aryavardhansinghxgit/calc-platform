@@ -6,7 +6,7 @@ export function ScientificCalculatorContent() {
       
       {/* 1. Introduction */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100  dark:border-zinc-800 pb-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400  dark:border-zinc-800 pb-2">
           1. Introduction
         </h2>
         <p>
@@ -42,7 +42,7 @@ export function ScientificCalculatorContent() {
 
       {/* 2. Mathematical Concept */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100  dark:border-zinc-800 pb-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400  dark:border-zinc-800 pb-2">
           2. Mathematical Concept & Theoretical Foundation
         </h2>
         <p>
@@ -50,7 +50,7 @@ export function ScientificCalculatorContent() {
         </p>
 
         <div className="space-y-3">
-          <h3 className="font-semibold text-zinc-900 dark:text-zinc-100">Core Definitions</h3>
+          <h3 className="font-semibold text-blue-600 dark:text-blue-400">Core Definitions</h3>
           <ul className="list-disc pl-5 space-y-2">
             <li>
               <strong>Transcendental Functions:</strong> Functions that cannot be expressed as a finite sequence of algebraic operations (e.g., sin(x), cos(x), ln(x), e<sup>x</sup>).
@@ -68,7 +68,7 @@ export function ScientificCalculatorContent() {
         </div>
 
         <div className="space-y-2">
-          <h3 className="font-semibold text-zinc-900 dark:text-zinc-100">Fundamental Principles & Identities</h3>
+          <h3 className="font-semibold text-blue-600 dark:text-blue-400">Fundamental Principles & Identities</h3>
           <div className="p-4 bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-2 font-sans tabular-nums text-xs">
             <div>• <strong>Pythagorean Trigonometric Identity:</strong> sin²(&theta;) + cos²(&theta;) = 1</div>
             <div>• <strong>Euler&apos;s Identity:</strong> e^(i&pi;) + 1 = 0</div>
@@ -80,7 +80,7 @@ export function ScientificCalculatorContent() {
 
       {/* 3. Formula Section */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100  dark:border-zinc-800 pb-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400  dark:border-zinc-800 pb-2">
           3. Formulas & Series Expansions
         </h2>
         <p>
@@ -89,7 +89,7 @@ export function ScientificCalculatorContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-2">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs uppercase tracking-wider">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-xs uppercase tracking-wider">
               Trigonometric Taylor Series
             </h3>
             <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 space-y-1">
@@ -101,7 +101,7 @@ export function ScientificCalculatorContent() {
           </div>
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-2">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs uppercase tracking-wider">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-xs uppercase tracking-wider">
               Exponential & Logarithmic Series
             </h3>
             <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 space-y-1">
@@ -114,7 +114,7 @@ export function ScientificCalculatorContent() {
         </div>
 
         <div className="p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-2">
-          <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs uppercase tracking-wider">
+          <h3 className="font-bold text-blue-600 dark:text-blue-400 text-xs uppercase tracking-wider">
             Factorial & Power Definitions
           </h3>
           <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 space-y-1">
@@ -127,7 +127,7 @@ export function ScientificCalculatorContent() {
 
       {/* 4. How the Calculation Works */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100  dark:border-zinc-800 pb-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400  dark:border-zinc-800 pb-2">
           4. How the Calculation Works (Step-by-Step Algorithm)
         </h2>
         <p>
@@ -170,7 +170,7 @@ export function ScientificCalculatorContent() {
 
       {/* 5. Worked Examples */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100  dark:border-zinc-800 pb-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400  dark:border-zinc-800 pb-2">
           5. Worked Examples
         </h2>
         
@@ -179,7 +179,7 @@ export function ScientificCalculatorContent() {
           <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100 dark:bg-blue-950 dark:text-blue-300 rounded">
             Basic Example
           </span>
-          <h3 className="font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="font-bold text-blue-600 dark:text-blue-400">
             Evaluating Trigonometric Ratio: sin(30°)
           </h3>
           <div className="text-xs space-y-1 font-sans tabular-nums">
@@ -194,7 +194,7 @@ export function ScientificCalculatorContent() {
           <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 dark:bg-blue-50 dark:text-blue-400 rounded">
             Intermediate Example
           </span>
-          <h3 className="font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="font-bold text-blue-600 dark:text-blue-400">
             Logarithmic Change of Base & Exponentiation: log₁₀(500) + 2⁵
           </h3>
           <div className="text-xs space-y-1 font-sans tabular-nums">
@@ -210,7 +210,7 @@ export function ScientificCalculatorContent() {
           <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 dark:bg-blue-50 dark:text-blue-400 rounded">
             Advanced Example
           </span>
-          <h3 className="font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="font-bold text-blue-600 dark:text-blue-400">
             Radioactive Decay Half-Life Equation: N(t) = N₀ · e^(-λt)
           </h3>
           <p className="text-xs text-slate-900 dark:text-slate-100">
@@ -228,7 +228,7 @@ export function ScientificCalculatorContent() {
 
       {/* 6. Visual Understanding */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100  dark:border-zinc-800 pb-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400  dark:border-zinc-800 pb-2">
           6. Visual Understanding & Reference Tables
         </h2>
         <p>
@@ -290,7 +290,7 @@ export function ScientificCalculatorContent() {
 
       {/* 7. Common Mistakes */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100  dark:border-zinc-800 pb-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400  dark:border-zinc-800 pb-2">
           7. Common Mistakes & Edge Cases
         </h2>
 
@@ -335,33 +335,33 @@ export function ScientificCalculatorContent() {
 
       {/* 8. Practical Applications */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100  dark:border-zinc-800 pb-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400  dark:border-zinc-800 pb-2">
           8. Practical Applications
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">School Mathematics & Physics</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">School Mathematics & Physics</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Solving right-triangle trigonometry, projectile motion trajectories, wave amplitude analysis, and calculus integration.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Electrical Engineering</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Electrical Engineering</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Calculating AC circuit impedance Z = R + jX, phase angles &theta; = arctan(X/R), and Fourier signal frequency decompositions.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Chemistry & Biology</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Chemistry & Biology</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Calculating pH concentration (pH = -log₁₀[H⁺]), bacterial population growth models (N(t) = N₀ 2<sup>t/d</sup>), and enzyme kinetics.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Finance & Data Science</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Finance & Data Science</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Continuous compound interest (A = P e<sup>rt</sup>), log-transformations for normalizing skewed statistical distributions, and machine learning logistic activations.
             </p>
@@ -371,12 +371,12 @@ export function ScientificCalculatorContent() {
 
       {/* 9. Related Mathematical Concepts */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100  dark:border-zinc-800 pb-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400  dark:border-zinc-800 pb-2">
           9. Related Mathematical Concepts
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           <div className="p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Prerequisites</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Prerequisites</h3>
             <ul className="list-disc pl-4 text-slate-900 dark:text-slate-100 space-y-1">
               <li>Algebraic Manipulation</li>
               <li>Exponent & Power Rules</li>
@@ -385,7 +385,7 @@ export function ScientificCalculatorContent() {
           </div>
 
           <div className="p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Advanced Topics</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Advanced Topics</h3>
             <ul className="list-disc pl-4 text-slate-900 dark:text-slate-100 space-y-1">
               <li>Complex Numbers (i = &radic;-1)</li>
               <li>Euler&apos;s Formula (e<sup>ix</sup> = cos x + i sin x)</li>
@@ -394,7 +394,7 @@ export function ScientificCalculatorContent() {
           </div>
 
           <div className="p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Related Calculators</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Related Calculators</h3>
             <ul className="list-disc pl-4 text-slate-900 dark:text-slate-100 space-y-1">
               <li>Exponent Calculator</li>
               <li>Logarithm Calculator</li>

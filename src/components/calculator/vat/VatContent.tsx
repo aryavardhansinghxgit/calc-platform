@@ -165,8 +165,7 @@ export function VatContent() {
 
         {/* Section 3: Global VAT Rates Comparison Table */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Layers className="h-5 w-5 text-blue-600" /> 3. Standard VAT Rates Around the World
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Standard VAT Rates Around the World
           </h3>
           
           <div className="overflow-x-auto">
@@ -229,8 +228,7 @@ export function VatContent() {
 
         {/* Real-World Use Cases */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-blue-600" /> Key Differences: VAT vs. Retail Sales Tax
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Key Differences: VAT vs. Retail Sales Tax
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="space-y-2 p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-lg border border-zinc-200 dark:border-zinc-700">
@@ -253,7 +251,7 @@ export function VatContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (FAQ)
           </h3>
         </div>

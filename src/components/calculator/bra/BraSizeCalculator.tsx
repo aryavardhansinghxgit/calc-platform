@@ -140,7 +140,7 @@ Shape Guidance: ${result.shapeAdvice}`;
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
           <div className="flex items-center gap-2">
             <Ruler className="h-5 w-5 text-rose-500" />
-            <h2 className="text-base font-extrabold text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-base font-extrabold text-blue-600 dark:text-blue-400">
               Interactive Bra Fit & Measurement Dashboard
             </h2>
           </div>
@@ -320,7 +320,7 @@ Shape Guidance: ${result.shapeAdvice}`;
         <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4 flex flex-col justify-between">
           <div className="flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">
             <Globe className="h-4 w-4 text-blue-600" />
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
               International Bra Size Conversion Matrix
             </h3>
           </div>
@@ -428,7 +428,7 @@ Shape Guidance: ${result.shapeAdvice}`;
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4">
         <div className="flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">
           <Layers className="h-4 w-4 text-purple-600" />
-          <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
             Sister Size Finder (Equivalent Cup Volume Alternatives)
           </h3>
         </div>
@@ -462,7 +462,7 @@ Shape Guidance: ${result.shapeAdvice}`;
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4">
         <div className="flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">
           <Sparkles className="h-4 w-4 text-amber-500" />
-          <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
             Recommended Bra Style Cuts for Your Profile
           </h3>
         </div>
@@ -501,7 +501,7 @@ Shape Guidance: ${result.shapeAdvice}`;
 
             <div className="flex items-center gap-2 text-rose-600">
               <Ruler className="h-5 w-5" />
-              <h3 className="text-base font-extrabold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-base font-extrabold text-blue-600 dark:text-blue-400">
                 Visual Bra Measurement Guide
               </h3>
             </div>

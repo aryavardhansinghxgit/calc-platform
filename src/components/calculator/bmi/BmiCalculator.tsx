@@ -630,9 +630,7 @@ export function BmiCalculator() {
             {savedHistory.length > 0 && (
               <div className="p-4 bg-zinc-50 dark:bg-zinc-950/70 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-3">
                 <div className="flex justify-between items-center">
-                  <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider flex items-center gap-1.5">
-                    <Bookmark className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    Saved Calculation History
+                  <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider flex items-center gap-1.5">Saved Calculation History
                   </h4>
                   <button
                     onClick={handleClearHistory}

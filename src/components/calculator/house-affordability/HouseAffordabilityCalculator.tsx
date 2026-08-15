@@ -1119,7 +1119,7 @@ export function HouseAffordabilityCalculator() {
           <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-2xl max-w-4xl w-full p-6 space-y-4 relative max-h-[90vh] flex flex-col">
             <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
               <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                   Full Mortgage Amortization Schedule ({loanTermYears1} Years)
                 </h3>
                 <p className="text-xs text-zinc-500">
@@ -1218,7 +1218,7 @@ export function HouseAffordabilityCalculator() {
                 <Bookmark className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                   Save House Affordability Calculation
                 </h3>
                 <p className="text-xs text-zinc-500">

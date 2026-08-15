@@ -43,7 +43,7 @@ function ModernPeriodicTable() {
               <Atom className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-black text-slate-900 dark:text-zinc-100">
+              <h3 className="text-base font-black text-blue-600 dark:text-blue-400">
                 Interactive IUPAC Periodic Table of Elements
               </h3>
               <p className="text-xs text-slate-900 dark:text-slate-100">
@@ -237,7 +237,7 @@ export function MolecularWeightContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-zinc-300">
       {/* 1. FUNDAMENTAL DEFINITIONS */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Fundamental Definitions &amp; Chemical Distinctions
         </h2>
         <p className="leading-relaxed">
@@ -275,7 +275,7 @@ export function MolecularWeightContent() {
 
       {/* 2. CORE MATHEMATICAL FORMULAS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           The Core Mathematical Formulas for Molar Mass Calculation
         </h2>
         <p className="leading-relaxed">
@@ -306,7 +306,7 @@ export function MolecularWeightContent() {
           </div>
         </div>
 
-        <h3 className="text-xl font-extrabold text-slate-900 dark:text-zinc-100 pt-2">
+        <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 pt-2">
           Step-by-Step Worked Example: Hydrated Copper Sulfate (CuSO₄·5H₂O)
         </h3>
 
@@ -323,7 +323,7 @@ export function MolecularWeightContent() {
 
       {/* 3. EMPIRICAL VS MOLECULAR FORMULAS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Empirical vs. Molecular Formula Determination
         </h2>
         <p className="leading-relaxed">
@@ -339,7 +339,7 @@ export function MolecularWeightContent() {
 
       {/* 4. ISOTOPIC ABUNDANCES */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Standard Atomic Weights &amp; Natural Isotopic Abundances
         </h2>
         <p className="leading-relaxed text-xs">
@@ -351,7 +351,7 @@ export function MolecularWeightContent() {
 
       {/* 5. APPLICATIONS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Applications in Stoichiometry, Pharmacology &amp; Industry
         </h2>
         <p className="leading-relaxed text-xs">
@@ -361,7 +361,7 @@ export function MolecularWeightContent() {
 
       {/* 6. COMMON ERRORS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Common Errors in Molecular Weight Calculations
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs my-4">
@@ -383,7 +383,7 @@ export function MolecularWeightContent() {
 
       {/* FULL MODERN INTERACTIVE PERIODIC TABLE BELOW EDUCATIONAL SECTION */}
       <section className=" dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100 mb-2">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400 mb-2">
           Full Modern Periodic Table of Elements
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed mb-4">

@@ -305,12 +305,12 @@ export function BmiContent() {
         </div>
 
         <div className="space-y-3">
-          <h3 className="font-bold text-zinc-900 dark:text-zinc-200 text-base">Optimal BMI Range for Seniors (Age 65+)</h3>
+          <h3 className="font-bold text-blue-600 dark:text-blue-400 text-base">Optimal BMI Range for Seniors (Age 65+)</h3>
           <p>
             Epidemiological research reveals a phenomenon known as the <em>obesity paradox</em> in elderly cohorts. For adults aged 65 and older, a slightly higher BMI of <strong>23.0 to 29.0 kg/m²</strong> is associated with lower overall mortality rates. This moderate metabolic cushion protects against sarcopenia (age-related muscle loss), osteoporosis, and involuntary weight decline during acute medical events.
           </p>
 
-          <h3 className="font-bold text-zinc-900 dark:text-zinc-200 text-base">BMI Prime Explained</h3>
+          <h3 className="font-bold text-blue-600 dark:text-blue-400 text-base">BMI Prime Explained</h3>
           <p>
             BMI Prime normalizes an individual&apos;s calculated BMI against the upper WHO healthy limit of 25.0 kg/m²:
           </p>
@@ -321,7 +321,7 @@ export function BmiContent() {
             A BMI Prime of 1.0 represents the exact upper boundary of normal weight. Values below 0.74 indicate underweight, while values above 1.0 indicate excess mass.
           </p>
 
-          <h3 className="font-bold text-zinc-900 dark:text-zinc-200 text-base">Ponderal Index (Corpulence Index) Explained</h3>
+          <h3 className="font-bold text-blue-600 dark:text-blue-400 text-base">Ponderal Index (Corpulence Index) Explained</h3>
           <p>
             While BMI divides weight by height squared (m²), the Ponderal Index (PI) divides weight by height cubed (m³):
           </p>

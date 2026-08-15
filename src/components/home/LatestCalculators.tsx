@@ -24,8 +24,7 @@ export function LatestCalculators({
     <section className="space-y-6 pt-8 border-t border-zinc-200">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
-          <h2 className="text-xl font-semibold tracking-tight text-zinc-900 flex items-center gap-2">
-            <Clock className="h-5 w-5 text-blue-600" /> {title}
+          <h2 className="text-xl font-semibold tracking-tight text-blue-600 flex items-center gap-2">{title}
           </h2>
           <p className="text-xs sm:text-sm text-zinc-500 mt-0.5">{subtitle}</p>
         </div>

@@ -5,7 +5,7 @@ export function GPAContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-zinc-300">
       {/* 1. WHAT IS GPA */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           What is Grade Point Average (GPA)?
         </h2>
         <p className="leading-relaxed">
@@ -32,7 +32,7 @@ export function GPAContent() {
 
       {/* 2. CORE MATHEMATICAL FORMULAS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           The Core Mathematical Formulas for GPA Calculation
         </h2>
         <p className="leading-relaxed">
@@ -63,7 +63,7 @@ export function GPAContent() {
           </div>
         </div>
 
-        <h3 className="text-xl font-extrabold text-slate-900 dark:text-zinc-100 pt-2">
+        <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 pt-2">
           Step-by-Step Multi-Course Worked Example
         </h3>
         <p className="leading-relaxed">
@@ -128,7 +128,7 @@ export function GPAContent() {
 
       {/* 3. CONVERSION TABLE */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Standard 4.0 Grade Point Conversion Table
         </h2>
         <p className="leading-relaxed">
@@ -231,7 +231,7 @@ export function GPAContent() {
 
       {/* 4. WEIGHTED VS UNWEIGHTED */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Weighted vs. Unweighted High School GPA
         </h2>
         <p className="leading-relaxed">
@@ -257,7 +257,7 @@ export function GPAContent() {
 
       {/* 5. INTERNATIONAL CONVERSIONS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           International Grading System Conversions
         </h2>
         <p className="leading-relaxed">
@@ -275,7 +275,7 @@ export function GPAContent() {
 
       {/* 6. STRATEGIES TO RAISE GPA */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Evidence-Based Strategies to Raise Your GPA
         </h2>
         <p className="leading-relaxed">

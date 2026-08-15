@@ -26,7 +26,7 @@ export function DueDateContent() {
             <BookOpen className="h-6 w-6" />
           </div>
           <div>
-            <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 m-0">
+            <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 m-0">
               Complete Medical Guide to Pregnancy Due Date Calculation
             </h2>
             <p className="text-xs text-pink-600 dark:text-pink-400 font-semibold m-0 mt-0.5">
@@ -41,9 +41,7 @@ export function DueDateContent() {
 
       {/* 2. Gestational Age vs. Fetal Age */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Clock className="h-5 w-5 text-pink-500" />
-          1. Understanding Gestational Age vs. Conceptional Age
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">1. Understanding Gestational Age vs. Conceptional Age
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           A common source of confusion for expectant parents is the difference between <strong>gestational age</strong> (menstrual age) and <strong>fetal age</strong> (conceptional age):
@@ -72,9 +70,7 @@ export function DueDateContent() {
 
       {/* 3. Mathematical Formulas Explained */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Sparkles className="h-5 w-5 text-pink-500" />
-          2. Clinical Formulas: Naegele's, Mittendorf-Williams & Parikh's
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">2. Clinical Formulas: Naegele's, Mittendorf-Williams & Parikh's
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           Several mathematical methods are used in obstetrics to calculate the due date depending on cycle regularity and clinical history:
@@ -106,9 +102,7 @@ export function DueDateContent() {
 
       {/* 4. Delivery Term Categorization Table */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Calendar className="h-5 w-5 text-pink-500" />
-          3. ACOG Delivery Term Categories & Statistical Timing
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">3. ACOG Delivery Term Categories & Statistical Timing
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           The American College of Obstetricians and Gynecologists (ACOG) replaces vague terms like "term" with precise clinical categories to optimize neonatal outcomes:
@@ -162,9 +156,7 @@ export function DueDateContent() {
 
       {/* 5. Ultrasound Dating Precision */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Activity className="h-5 w-5 text-pink-500" />
-          4. Ultrasound Dating: Crown-Rump Length (CRL) vs. Late Scans
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">4. Ultrasound Dating: Crown-Rump Length (CRL) vs. Late Scans
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           When clinical dates derived from LMP differ from ultrasound measurements, ACOG guidelines specify when to redate the pregnancy based on scan accuracy:

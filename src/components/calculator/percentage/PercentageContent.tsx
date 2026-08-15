@@ -7,7 +7,7 @@ export function PercentageContent() {
     <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed pt-6  dark:border-zinc-800">
       {/* 1. INTRODUCTION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>1.</span> What Is A Percentage?
         </h2>
         <p>
@@ -20,7 +20,7 @@ export function PercentageContent() {
 
       {/* 2. CORE CONCEPT */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>2.</span> Core Mathematical Concept
         </h2>
         <p>
@@ -33,7 +33,7 @@ export function PercentageContent() {
 
       {/* 3. FORMULA EXPLANATION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>3.</span> Fundamental Percentage Formulas
         </h2>
         <p>There are three core algebraic variations of the percentage equation:</p>
@@ -52,7 +52,7 @@ export function PercentageContent() {
 
       {/* 4. FORMULA BREAKDOWN */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>4.</span> Percentage Difference vs Percentage Change
         </h2>
         <p>
@@ -78,7 +78,7 @@ export function PercentageContent() {
 
       {/* 5. HOW CALCULATION WORKS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>5.</span> Step-by-Step Calculation Process
         </h2>
         <ol className="list-decimal pl-6 space-y-1">
@@ -91,7 +91,7 @@ export function PercentageContent() {
 
       {/* 6. WORKED EXAMPLES */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>6.</span> Worked Mathematical Examples
         </h2>
 
@@ -132,7 +132,7 @@ export function PercentageContent() {
 
       {/* 7. VISUAL UNDERSTANDING */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>7.</span> Visual Understanding & Proportions
         </h2>
         <p>
@@ -142,7 +142,7 @@ export function PercentageContent() {
 
       {/* 8. COMMON MISTAKES */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>8.</span> Common Percentage Mistakes
         </h2>
         <ul className="list-disc pl-6 space-y-2">
@@ -160,7 +160,7 @@ export function PercentageContent() {
 
       {/* 9. REAL-WORLD APPLICATIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>9.</span> Practical Applications
         </h2>
         <p>
@@ -170,7 +170,7 @@ export function PercentageContent() {
 
       {/* 10. ADVANCED CONCEPTS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>10.</span> Advanced Concepts: Basis Points & Elasticity
         </h2>
         <p>
@@ -184,7 +184,7 @@ export function PercentageContent() {
 
       {/* 11. RELATED CONCEPTS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>11.</span> Related Mathematical Concepts
         </h2>
         <p>

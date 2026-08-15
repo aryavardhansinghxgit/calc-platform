@@ -26,7 +26,7 @@ export function PregnancyConceptionContent() {
             <BookOpen className="h-6 w-6" />
           </div>
           <div>
-            <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 m-0">
+            <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 m-0">
               Complete Medical Guide to Pregnancy Conception & Fertility
             </h2>
             <p className="text-xs text-pink-600 dark:text-pink-400 font-semibold m-0 mt-0.5">
@@ -41,9 +41,7 @@ export function PregnancyConceptionContent() {
 
       {/* 2. Core Concepts: Fertilization vs. Conception */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Heart className="h-5 w-5 text-pink-500" />
-          1. What Is Conception & Fertilization?
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">1. What Is Conception & Fertilization?
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           In medical and scientific terminology, <strong>fertilization</strong> and <strong>conception</strong> refer to distinct physiological stages in early human reproduction:
@@ -72,9 +70,7 @@ export function PregnancyConceptionContent() {
 
       {/* 3. The Biological Reproduction Process */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Activity className="h-5 w-5 text-pink-500" />
-          2. The Female Reproductive Cycle & Ovulation Mechanics
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">2. The Female Reproductive Cycle & Ovulation Mechanics
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           The female menstrual cycle is governed by a tightly regulated hormonal feedback loop between the hypothalamus, anterior pituitary gland, and ovaries (the HPO axis):
@@ -106,9 +102,7 @@ export function PregnancyConceptionContent() {
 
       {/* 4. Fertile Window & Lifespan Table */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Calendar className="h-5 w-5 text-pink-500" />
-          3. Fertile Window, Egg Viability & Sperm Lifespan
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">3. Fertile Window, Egg Viability & Sperm Lifespan
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           The <strong>fertile window</strong> spans a 6-day period ending on the day of ovulation. Although an ovulated egg remains viable for only 12 to 24 hours, sperm can survive up to 5 days inside fertile cervical mucus:
@@ -174,9 +168,7 @@ export function PregnancyConceptionContent() {
 
       {/* 5. Calculation Methods Explained */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Sparkles className="h-5 w-5 text-pink-500" />
-          4. How Pregnancy Conception Is Calculated
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">4. How Pregnancy Conception Is Calculated
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
@@ -211,9 +203,7 @@ export function PregnancyConceptionContent() {
 
       {/* 6. Implantation Timeline & Early Signs */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Layers className="h-5 w-5 text-pink-500" />
-          5. Implantation Physiology & Detection Timeline
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">5. Implantation Physiology & Detection Timeline
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           Following fertilization in the Fallopian tube, the zygote undergoes rapid cleavage divisions while traveling toward the uterus over 3 to 5 days. Upon reaching the uterine cavity as a 100-cell blastocyst, it sheds its outer layer and burrows into the endometrial stroma:

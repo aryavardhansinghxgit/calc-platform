@@ -5,7 +5,7 @@ export function LoveContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-zinc-300">
       {/* 1. PSYCHOLOGY & BIOLOGICAL CHEMISTRY OF ATTRACTION */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           The Psychology &amp; Biological Chemistry of Attraction
         </h2>
         <p className="leading-relaxed">
@@ -43,7 +43,7 @@ export function LoveContent() {
           </div>
         </div>
 
-        <h3 className="text-xl font-extrabold text-slate-900 dark:text-zinc-100 pt-2">
+        <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 pt-2">
           Helen Fisher&apos;s 3 Stages of Romantic Love
         </h3>
         <p className="leading-relaxed">
@@ -69,7 +69,7 @@ export function LoveContent() {
 
       {/* 2. NUMEROLOGY SYSTEMS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           The Systems Behind Name Matching &amp; Numerology
         </h2>
         <p className="leading-relaxed">
@@ -124,7 +124,7 @@ export function LoveContent() {
           </div>
         </div>
 
-        <h3 className="text-xl font-extrabold text-slate-900 dark:text-zinc-100 pt-2">
+        <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 pt-2">
           Life Path Number Calculation
         </h3>
         <p className="leading-relaxed">
@@ -135,7 +135,7 @@ export function LoveContent() {
 
       {/* 3. ASTROLOGICAL & ZODIAC FRAMEWORKS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Astrological &amp; Zodiac Compatibility Frameworks
         </h2>
         <p className="leading-relaxed">
@@ -144,28 +144,28 @@ export function LoveContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs my-4">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">🔥 Fire Signs (Aries, Leo, Sagittarius)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">� Fire Signs (Aries, Leo, Sagittarius)</h4>
             <p className="leading-relaxed">
               Passionate, dynamic, energetic, and spontaneous. Highly compatible with Air signs (who fuel their ideas) and fellow Fire signs.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">🌿 Earth Signs (Taurus, Virgo, Capricorn)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">� Earth Signs (Taurus, Virgo, Capricorn)</h4>
             <p className="leading-relaxed">
               Grounded, practical, loyal, and security-focused. Deeply compatible with Water signs (who nurture emotional growth) and Earth signs.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">💨 Air Signs (Gemini, Libra, Aquarius)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">� Air Signs (Gemini, Libra, Aquarius)</h4>
             <p className="leading-relaxed">
               Intellectual, communicative, social, and analytical. Harmonize best with Fire and Air signs.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">🌊 Water Signs (Cancer, Scorpio, Pisces)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">� Water Signs (Cancer, Scorpio, Pisces)</h4>
             <p className="leading-relaxed">
               Intuitive, empathetic, emotional, and protective. Flourish when paired with Earth and Water signs.
             </p>
@@ -175,7 +175,7 @@ export function LoveContent() {
 
       {/* 4. 90S FLAMES GAME EXPLAINED */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           The 90s Classic &quot;FLAMES&quot; Game Explained
         </h2>
         <p className="leading-relaxed">
@@ -202,7 +202,7 @@ export function LoveContent() {
 
       {/* 5. SCIENCE OF LONG-TERM SUCCESS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           The Science of Long-Term Relationship Success
         </h2>
         <p className="leading-relaxed">
@@ -231,7 +231,7 @@ export function LoveContent() {
 
       {/* 6. HEALTHY HABITS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Healthy Communication &amp; Relationship Building Habits
         </h2>
         <p className="leading-relaxed">

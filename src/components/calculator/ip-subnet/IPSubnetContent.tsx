@@ -7,9 +7,7 @@ export function IPSubnetContent() {
   return (
     <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10  dark:border-zinc-800 pt-8">
       <header>
-        <h2 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
-          <BookOpen className="h-6 w-6 text-blue-600" />
-          The Network Engineering Reference to IP Subnetting, CIDR, and Route Summarization
+        <h2 className="text-2xl font-black text-blue-600 dark:text-blue-400 tracking-tight flex items-center gap-2">The Network Engineering Reference to IP Subnetting, CIDR, and Route Summarization
         </h2>
         <p className="text-slate-900 dark:text-slate-100 text-xs">
           An authoritative educational handbook on address structures, subnet splits, route aggregations, and IPv6 address compression.
@@ -18,7 +16,7 @@ export function IPSubnetContent() {
 
       {/* SECTION 1: INTRODUCTION */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>1.</span> Introduction to IP Subnetting
         </h3>
         <p>
@@ -31,7 +29,7 @@ export function IPSubnetContent() {
 
       {/* SECTION 2: WHAT IS AN IP ADDRESS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>2.</span> What is an IP Address?
         </h3>
         <p>
@@ -49,7 +47,7 @@ export function IPSubnetContent() {
 
       {/* SECTION 3: WHAT IS SUB-NETTING */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>3.</span> What is a Subnet and Why Do We Subnet?
         </h3>
         <p>
@@ -70,7 +68,7 @@ export function IPSubnetContent() {
 
       {/* SECTION 4: CIDR NOTATION */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>4.</span> Understanding Classless Inter-Domain Routing (CIDR)
         </h3>
         <p>
@@ -87,7 +85,7 @@ export function IPSubnetContent() {
 
       {/* SECTION 5: HOW THE CALCULATION WORKS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>5.</span> How the Calculations Work (Bitwise Operations)
         </h3>
         <p>
@@ -124,16 +122,14 @@ export function IPSubnetContent() {
 
       {/* SECTION 6: WORKED EXAMPLES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>6.</span> Worked Subnetting Examples
         </h3>
         <div className="space-y-4">
           
           {/* Example 1 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Network className="w-3.5 h-3.5 text-blue-600" />
-              Example A: Standard Classless Division (/26 Subnet)
+            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">Example A: Standard Classless Division (/26 Subnet)
             </h4>
             <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Calculate boundaries for 192.168.1.70/26.
@@ -149,9 +145,7 @@ export function IPSubnetContent() {
 
           {/* Example 2 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Network className="w-3.5 h-3.5 text-blue-600" />
-              Example B: Subnet Splitter
+            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">Example B: Subnet Splitter
             </h4>
             <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Divide network 192.168.10.0/24 into smaller subnets with a /26 prefix.
@@ -169,9 +163,7 @@ export function IPSubnetContent() {
 
           {/* Example 3 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Network className="w-3.5 h-3.5 text-blue-600" />
-              Example C: IPv6 Compression and Address Spaces
+            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">Example C: IPv6 Compression and Address Spaces
             </h4>
             <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Expand and compress the IPv6 loopback address.
@@ -189,7 +181,7 @@ export function IPSubnetContent() {
 
       {/* SECTION 7: COMMON MISTAKES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>7.</span> Common Subnetting Mistakes
         </h3>
         <div className="p-4 border border-amber-200 dark:border-amber-900/60 bg-blue-50/50 dark:bg-blue-50/20 rounded-2xl space-y-2">
@@ -212,8 +204,7 @@ export function IPSubnetContent() {
 
       {/* SECTION 8: ENGINEERING DISCLAIMER */}
       <section className="space-y-3 bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <h3 className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-          <CheckCircle className="w-4 h-4" /> Technical Disclaimer
+        <h3 className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Technical Disclaimer
         </h3>
         <p className="text-xs mt-1">
           This IP Subnet calculator performs logical network calculations. While it handles standard RFC exceptions (such as /31 point-to-point subnets under RFC 3021), physical network interface configurations depend on your operating system, hypervisor, or cloud provider routing policies. Always check router configuration policies before deploying production subnets.

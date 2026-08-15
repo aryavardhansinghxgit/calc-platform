@@ -546,8 +546,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
       {activeTab === "early" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-amber-500" /> Mode 2: 401(k) Early Withdrawal Costs &amp; IRS Penalty Solver
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Mode 2: 401(k) Early Withdrawal Costs &amp; IRS Penalty Solver
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Calculate exact IRS 10% early withdrawal penalty fees, federal/state/local tax withholding, and net cash received.
@@ -600,8 +599,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
       {activeTab === "match" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Award className="h-5 w-5 text-emerald-500" /> Mode 3: Maximize Employer 401(k) Match Calculator
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Mode 3: Maximize Employer 401(k) Match Calculator
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Find the exact optimal contribution rate to capture 100% of your employer's matching free money.
@@ -628,8 +626,7 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
       {activeTab === "schedule" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-indigo-500" /> Age-by-Age 401(k) Schedule Table
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Age-by-Age 401(k) Schedule Table
             </h3>
 
             <div className="flex items-center gap-2">

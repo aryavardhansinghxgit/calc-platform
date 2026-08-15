@@ -511,8 +511,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
       {activeTab === "backdoor" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Zap className="h-5 w-5 text-amber-500" /> Mode 2: Backdoor Roth IRA Conversion Calculator
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Mode 2: Backdoor Roth IRA Conversion Calculator
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Calculate the upfront tax cost of converting traditional IRA pre-tax dollars into a Roth IRA and project your net long-term tax-free gain.
@@ -550,8 +549,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
       {activeTab === "magi" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-purple-500" /> Mode 3: MAGI Income Eligibility &amp; Saver's Credit Checker
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Mode 3: MAGI Income Eligibility &amp; Saver's Credit Checker
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Check 2025/2026 Modified Adjusted Gross Income (MAGI) phase-outs and IRS Form 8880 tax credit eligibility.
@@ -581,8 +579,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
       {activeTab === "schedule" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-indigo-500" /> Annual Schedule (Principal vs. Roth IRA vs. Taxable Account)
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Annual Schedule (Principal vs. Roth IRA vs. Taxable Account)
             </h3>
 
             <div className="flex items-center gap-2">

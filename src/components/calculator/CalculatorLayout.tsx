@@ -422,7 +422,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         {/* Main Interactive Calculator Area (Col 9) */}
         <div className="min-w-0 lg:col-span-9 space-y-4">
           <div>
-            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
               {definition.title}
             </h1>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 max-w-2xl leading-normal">

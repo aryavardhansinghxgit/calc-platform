@@ -29,8 +29,7 @@ export function CompoundInterestContent() {
           H2 1: WHAT IS COMPOUND INTEREST?
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <TrendingUp className="h-6 w-6 text-blue-600" /> What Is Compound Interest?
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">What Is Compound Interest?
         </h2>
 
         <p className="text-base font-medium text-zinc-800 dark:text-zinc-200 leading-relaxed">
@@ -43,8 +42,7 @@ export function CompoundInterestContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
           <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 space-y-2">
-            <h3 className="text-sm font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-blue-600" /> Earning Compound Interest (Wealth Generation)
+            <h3 className="text-sm font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">Earning Compound Interest (Wealth Generation)
             </h3>
             <p className="text-xs text-slate-900 dark:text-slate-100">
               When you invest or save, compounding works continuously in your favor. Reinvesting your yield turns small regular contributions into large fortunes over multi-decade horizons in vehicles like 401(k)s, IRAs, and mutual funds.
@@ -52,8 +50,7 @@ export function CompoundInterestContent() {
           </div>
 
           <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-50/30 border border-rose-100 dark:border-rose-900/40 space-y-2">
-            <h3 className="text-sm font-bold text-rose-900 dark:text-blue-400 flex items-center gap-1.5">
-              <AlertTriangle className="h-4 w-4 text-blue-600" /> Paying Compound Interest (Debt Snowball)
+            <h3 className="text-sm font-bold text-rose-900 dark:text-blue-400 flex items-center gap-1.5">Paying Compound Interest (Debt Snowball)
             </h3>
             <p className="text-xs text-slate-900 dark:text-slate-100">
               When you borrow money (e.g., credit cards or revolving lines of credit), compound interest works against you. Unpaid interest is added to your principal balance, causing debt to escalate rapidly if minimum payments are missed.
@@ -61,7 +58,7 @@ export function CompoundInterestContent() {
           </div>
         </div>
 
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 pt-2">Real-World Examples of Compounding Vehicles</h3>
+        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 pt-2">Real-World Examples of Compounding Vehicles</h3>
         <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-900 dark:text-slate-100">
           <li><strong>Savings Accounts & CDs:</strong> Banks pay monthly or daily compounding interest on cash deposits. Explore our <Link href="/category/finance" className="text-blue-600 font-semibold hover:underline">Savings Calculator</Link> to project high-yield savings growth.</li>
           <li><strong>Mutual Funds & ETFs:</strong> Reinvested dividends purchase additional shares, expanding your underlying asset base automatically. Use our <Link href="/calculators/investment-calculator" className="text-blue-600 font-semibold hover:underline">Investment Calculator</Link> for equity portfolio projections.</li>
@@ -70,7 +67,7 @@ export function CompoundInterestContent() {
         </ul>
 
         {/* Standard Formula Box */}
-        <div className="p-5 rounded-xl bg-zinc-900 text-white font-sans tabular-nums space-y-3 shadow-md my-4">
+        <div className="p-5 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 font-sans tabular-nums space-y-3 shadow-md my-4">
           <span className="text-xs text-blue-400 font-bold uppercase tracking-wider block">Standard Compound Interest Formula</span>
           <div className="text-xl sm:text-2xl font-black text-blue-400">
             A = P &times; (1 + r / n)<sup>(n &times; t)</sup>
@@ -102,8 +99,7 @@ export function CompoundInterestContent() {
           H2 2: HOW COMPOUND INTEREST WORKS
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Clock className="h-6 w-6 text-blue-600" /> How Compound Interest Works: Step-by-Step Breakdown
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">How Compound Interest Works: Step-by-Step Breakdown
         </h2>
 
         <p>
@@ -212,8 +208,7 @@ export function CompoundInterestContent() {
           H2 3: COMPOUND INTEREST FORMULA EXPLAINED
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Percent className="h-6 w-6 text-blue-600" /> Compound Interest Formulas & Mathematical Mechanics
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Compound Interest Formulas & Mathematical Mechanics
         </h2>
 
         <p>
@@ -257,8 +252,7 @@ export function CompoundInterestContent() {
           H2 4: SIMPLE INTEREST VS COMPOUND INTEREST
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Scale className="h-6 w-6 text-blue-600" /> Simple Interest vs Compound Interest: Detailed Comparison
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Simple Interest vs Compound Interest: Detailed Comparison
         </h2>
 
         <p>
@@ -336,8 +330,7 @@ export function CompoundInterestContent() {
           H2 5: DIFFERENT COMPOUNDING FREQUENCIES
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Layers className="h-6 w-6 text-blue-600" /> Impact of Compounding Frequencies
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Impact of Compounding Frequencies
         </h2>
 
         <p>
@@ -408,8 +401,7 @@ export function CompoundInterestContent() {
           H2 6: APR VS APY
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Percent className="h-6 w-6 text-blue-600" /> APR vs. APY: Knowing the Crucial Difference
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">APR vs. APY: Knowing the Crucial Difference
         </h2>
 
         <p>
@@ -432,7 +424,7 @@ export function CompoundInterestContent() {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-zinc-900 text-white font-sans tabular-nums space-y-2 text-xs">
+        <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 font-sans tabular-nums space-y-2 text-xs">
           <span className="text-blue-400 font-bold">APY Conversion Formula:</span>
           <div className="text-base font-bold text-blue-400">
             APY = (1 + APR / n)<sup>n</sup> &minus; 1
@@ -449,8 +441,7 @@ export function CompoundInterestContent() {
           H2 7: EFFECTIVE ANNUAL RATE (EAR)
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Award className="h-6 w-6 text-blue-600" /> Effective Annual Rate (EAR)
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Effective Annual Rate (EAR)
         </h2>
 
         <p>
@@ -514,8 +505,7 @@ export function CompoundInterestContent() {
           H2 8: THE POWER OF COMPOUND INTEREST OVER TIME
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Clock className="h-6 w-6 text-blue-600" /> Time Horizon: The Single Most Dominant Factor
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Time Horizon: The Single Most Dominant Factor
         </h2>
 
         <p>
@@ -579,8 +569,7 @@ export function CompoundInterestContent() {
           H2 9: RETIREMENT PLANNING
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <ShieldCheck className="h-6 w-6 text-blue-600" /> Compound Interest & Retirement Planning
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Compound Interest & Retirement Planning
         </h2>
 
         <p>
@@ -616,15 +605,14 @@ export function CompoundInterestContent() {
           H2 10: COMPOUND INTEREST IN LOANS & DEBT
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <AlertTriangle className="h-6 w-6 text-blue-600" /> The Dark Side: Compound Interest in Loans & Debt
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">The Dark Side: Compound Interest in Loans & Debt
         </h2>
 
         <p>
           While compounding is an investor's greatest ally, it is a borrower's heaviest burden. Credit cards compound interest <strong>daily</strong> on revolving balances. If you make only minimum monthly payments, your payment primarily covers daily interest charges, leaving the principal balance virtually untouched.
         </p>
 
-        <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Strategies to Prevent Debt Compounding:</h3>
+        <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">Strategies to Prevent Debt Compounding:</h3>
         <ul className="list-disc pl-5 space-y-1 text-xs text-slate-900 dark:text-slate-100">
           <li><strong>Pay Credit Card Balances in Full:</strong> Avoid revolving balances to prevent daily compound interest charges.</li>
           <li><strong>Use the Debt Avalanche Method:</strong> Target extra payments toward loans with the highest APY first.</li>
@@ -636,8 +624,7 @@ export function CompoundInterestContent() {
           H2 11: FACTORS THAT AFFECT COMPOUND GROWTH
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Sliders className="h-6 w-6 text-blue-600" /> 5 Key Factors Affecting Compound Growth
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">5 Key Factors Affecting Compound Growth
         </h2>
 
         <ol className="list-decimal pl-5 space-y-2 text-xs">
@@ -653,8 +640,7 @@ export function CompoundInterestContent() {
           H2 12: COMMON MISTAKES INVESTORS MAKE
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <AlertTriangle className="h-6 w-6 text-blue-600" /> 6 Common Mistakes That Severely Undermine Compounding
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">6 Common Mistakes That Severely Undermine Compounding
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
@@ -684,8 +670,7 @@ export function CompoundInterestContent() {
           H2 13: TIPS TO MAXIMIZE COMPOUND GROWTH
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Award className="h-6 w-6 text-blue-600" /> Actionable Strategies to Maximize Compound Growth
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Actionable Strategies to Maximize Compound Growth
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -715,111 +700,110 @@ export function CompoundInterestContent() {
           H2 14: FREQUENTLY ASKED QUESTIONS (FAQ)
          ========================================== */}
       <section className="space-y-6 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <HelpCircle className="h-6 w-6 text-blue-600" /> Frequently Asked Questions (15+ Comprehensive FAQs)
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Frequently Asked Questions (15+ Comprehensive FAQs)
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">1. What is compound interest?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">1. What is compound interest?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Compound interest is interest calculated on both the initial principal deposit and all cumulative interest earned from prior periods.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">2. How is compound interest calculated?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">2. How is compound interest calculated?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               It is calculated using the formula A = P(1 + r/n)^(nt), where P is principal, r is rate, n is compounding frequency, and t is time in years.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">3. What is the difference between APR and APY?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">3. What is the difference between APR and APY?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               APR is the stated nominal rate without compounding, while APY reflects the true effective annual rate including intra-year compounding.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">4. What compounding frequency is best for investors?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">4. What compounding frequency is best for investors?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Higher compounding frequencies (such as daily or continuous) maximize returns because earnings are reinvested earlier.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">5. Can compound interest make you rich?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">5. Can compound interest make you rich?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Yes. Consistent monthly deposits combined with 20 to 40 years of compound growth are responsible for building self-made retirement millionaires.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">6. How does compound interest affect debt and loans?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">6. How does compound interest affect debt and loans?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               On loans like credit cards, unpaid interest compounds daily, causing total balances to multiply rapidly if only minimum payments are made.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">7. What is Effective Annual Rate (EAR)?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">7. What is Effective Annual Rate (EAR)?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               EAR is the standardized annual return metric that accounts for intra-year compounding, allowing fair comparisons across different compounding frequencies.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">8. How does inflation affect compound interest growth?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">8. How does inflation affect compound interest growth?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Inflation reduces real purchasing power. Real return equals nominal compound return minus the inflation rate.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">9. What is continuous compounding?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">9. What is continuous compounding?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Continuous compounding assumes interest is calculated and added constantly at every infinitely small instant using A = Pe^(rt).
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">10. How much can $10,000 grow in 20 years at 8%?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">10. How much can $10,000 grow in 20 years at 8%?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               $10,000 grows to $46,609 under annual compounding and $49,268 under monthly compounding at 8% over 20 years.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">11. What is the Rule of 72?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">11. What is the Rule of 72?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               A quick mental rule to estimate how many years it takes to double your money by dividing 72 by the annual return percentage (72 / r).
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">12. Do savings accounts compound daily or monthly?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">12. Do savings accounts compound daily or monthly?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Most high-yield savings accounts compound interest daily and credit it to your account on the last day of each month.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">13. Is simple interest ever better than compound interest?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">13. Is simple interest ever better than compound interest?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               For borrowers, simple interest is vastly superior because debt does not snowball. For investors, compound interest is always better.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">14. What is the difference between nominal and effective rate?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">14. What is the difference between nominal and effective rate?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               The nominal rate is the stated annual percentage without intra-year compounding, while the effective rate is the actual rate earned including compounding.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">15. How do taxes affect compound interest returns?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">15. How do taxes affect compound interest returns?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Taxes on annual interest payments reduce the compounding base each year unless funds are held in tax-deferred or tax-free accounts like 401(k)s or Roth IRAs.
             </p>

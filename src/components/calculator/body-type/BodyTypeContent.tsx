@@ -32,7 +32,7 @@ export function BodyTypeContent() {
             <BookOpen className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               The Definitive Guide to Body Types, Somatotypes & Morphological Health
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -43,7 +43,7 @@ export function BodyTypeContent() {
 
         {/* Section 1 & 2 */}
         <div className="space-y-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">1–3.</span> What Is Body Type & Why Does Shape Matter?
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -53,7 +53,7 @@ export function BodyTypeContent() {
 
         {/* Female Body Shapes Table */}
         <div className="space-y-4 pt-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">4–7.</span> Mathematical Criteria for the 7 Female Body Shapes
           </h3>
 
@@ -111,7 +111,7 @@ export function BodyTypeContent() {
             <HelpCircle className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               Frequently Asked Questions (40 Detailed Answers)
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -160,7 +160,7 @@ export function BodyTypeContent() {
       <section className="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         <div className="flex items-center gap-3  pb-4">
           <Activity className="w-6 h-6 text-blue-600" />
-          <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+          <h2 className="text-xl md:text-2xl font-bold text-blue-600">
             Related Fitness & Body Composition Tools
           </h2>
         </div>

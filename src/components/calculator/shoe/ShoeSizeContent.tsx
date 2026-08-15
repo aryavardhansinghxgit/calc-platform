@@ -7,7 +7,7 @@ export function ShoeSizeContent() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: THE ANATOMY & BIOMECHANICS OF SHOE SIZING */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. The Anatomy & Biomechanics of Shoe Sizing
         </h2>
         <p>
@@ -28,7 +28,7 @@ export function ShoeSizeContent() {
 
       {/* SECTION 2: STEP-BY-STEP GUIDE TO MEASURING YOUR FEET AT HOME */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. Step-by-Step Guide to Measuring Your Feet at Home
         </h2>
         <p>
@@ -61,7 +61,7 @@ export function ShoeSizeContent() {
 
       {/* SECTION 3: GLOBAL SIZING SYSTEMS & MATHEMATICAL FORMULAS EXPLAINED */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. Global Sizing Systems & Mathematical Formulas Explained
         </h2>
         <p>
@@ -70,7 +70,7 @@ export function ShoeSizeContent() {
 
         <div className="space-y-3 text-xs">
           <div className="p-3.5 bg-zinc-100 dark:bg-zinc-800 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">1. US & UK Barleycorn System (1/3 Inch Steps)</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">1. US & UK Barleycorn System (1/3 Inch Steps)</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Traditional Anglo-American shoe sizing is based on the <em>barleycorn</em> unit (exactly <strong>1/3 of an inch</strong> or 8.46 mm):
             </p>
@@ -86,7 +86,7 @@ export function ShoeSizeContent() {
           </div>
 
           <div className="p-3.5 bg-zinc-100 dark:bg-zinc-800 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">2. European Paris Point System (2/3 CM Steps)</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">2. European Paris Point System (2/3 CM Steps)</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Continental European sizing uses the <em>Paris Point</em> (Point de Paris), equal to <strong>2/3 of a centimeter</strong> (6.67 mm):
             </p>
@@ -96,7 +96,7 @@ export function ShoeSizeContent() {
           </div>
 
           <div className="p-3.5 bg-zinc-100 dark:bg-zinc-800 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">3. Mondopoint System (ISO 9407)</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">3. Mondopoint System (ISO 9407)</h3>
             <p className="text-slate-900 dark:text-slate-100">
               The international ISO 9407 standard used in Japan, East Asia, and military applications specifies foot length and width directly in <strong>millimeters (mm)</strong> (e.g., 270/100).
             </p>
@@ -106,7 +106,7 @@ export function ShoeSizeContent() {
 
       {/* SECTION 4: COMPLETE INTERNATIONAL SIZING CONVERSION TABLES */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. Complete International Sizing Conversion Tables
         </h2>
 
@@ -176,7 +176,7 @@ export function ShoeSizeContent() {
 
       {/* SECTION 5: UNDERSTANDING SHOE WIDTHS & LETTER CODES */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. Understanding Shoe Widths & Letter Codes
         </h2>
         <p>
@@ -192,7 +192,7 @@ export function ShoeSizeContent() {
 
       {/* SECTION 6: SPECIALTY FOOTWEAR FIT NUANCES */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           6. Specialty Footwear Fit Nuances
         </h2>
         <ul className="list-disc pl-5 space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300">

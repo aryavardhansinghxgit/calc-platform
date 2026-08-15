@@ -12,7 +12,7 @@ export function ReportTable({ table }: ReportTableProps) {
 
   return (
     <div className="space-y-2 mt-4">
-      <h3 className="text-xs font-extrabold uppercase tracking-wider text-zinc-900 border-b border-zinc-900 pb-1">
+      <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 border-b border-zinc-900 pb-1">
         {table.title}
       </h3>
 

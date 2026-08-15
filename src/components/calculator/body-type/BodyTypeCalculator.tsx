@@ -446,9 +446,7 @@ export function BodyTypeCalculator() {
           {/* Card Header with Clean Sub-Row Toggles */}
           <div className="border-b border-slate-100 pb-4 space-y-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <Sliders className="w-5 h-5 text-cyan-600" />
-                Body Measurements
+              <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">Body Measurements
               </h2>
             </div>
 
@@ -851,9 +849,7 @@ export function BodyTypeCalculator() {
             {activeTab === "shape-ratios" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <BarChart2 className="w-4 h-4 text-cyan-600" />
-                    Body Measurement Comparison ({unitSystem === "us" ? "Inches" : "cm"})
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Body Measurement Comparison ({unitSystem === "us" ? "Inches" : "cm"})
                   </h3>
                 </div>
 
@@ -891,9 +887,7 @@ export function BodyTypeCalculator() {
             {activeTab === "somatotype-radar" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Award className="w-4 h-4 text-purple-600" />
-                    Heath-Carter Somatotype Score Breakdown (1 to 7 Scale)
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Heath-Carter Somatotype Score Breakdown (1 to 7 Scale)
                   </h3>
                 </div>
 
@@ -934,9 +928,7 @@ export function BodyTypeCalculator() {
             {/* TAB 3: Health Risk Meters */}
             {activeTab === "whr-spectrum" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Heart className="w-4 h-4 text-rose-600" />
-                  WHO Waist-to-Hip & Waist-to-Height Metabolic Risk Spectrum
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">WHO Waist-to-Hip & Waist-to-Height Metabolic Risk Spectrum
                 </h3>
 
                 <div className="p-4 rounded-2xl border text-xs space-y-3 bg-slate-50 border-slate-200">
@@ -956,9 +948,7 @@ export function BodyTypeCalculator() {
             {/* TAB 4: Wardrobe & Clothing Styling Advice */}
             {activeTab === "wardrobe-grid" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Shirt className="w-4 h-4 text-cyan-600" />
-                  Tailored Wardrobe & Styling Advice for {results.primaryShape}
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Tailored Wardrobe & Styling Advice for {results.primaryShape}
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -983,9 +973,7 @@ export function BodyTypeCalculator() {
             {/* TAB 5: Fitness Guidance */}
             {activeTab === "action-plan" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-emerald-600" />
-                  Fitness & Body Shaping Recommendations
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Fitness & Body Shaping Recommendations
                 </h3>
 
                 <div className="space-y-2.5">

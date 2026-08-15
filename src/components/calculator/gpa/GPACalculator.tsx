@@ -191,7 +191,7 @@ export function GPACalculator() {
             <GraduationCap className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           </div>
           <div>
-            <h3 className="text-sm font-extrabold text-slate-900 dark:text-zinc-100">
+            <h3 className="text-sm font-extrabold text-blue-600 dark:text-blue-400">
               Next-Gen GPA Calculator &amp; Academic Standing Planner
             </h3>
             <p className="text-[10px] text-slate-500 dark:text-zinc-400">

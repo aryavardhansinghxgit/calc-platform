@@ -366,7 +366,7 @@ export function AutoLeaseCalculator() {
           {/* TAB 1: TOTAL PRICE METHOD INPUTS */}
           {activeTab === "total" && (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
-              <h2 className="text-sm font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
+              <h2 className="text-sm font-extrabold tracking-tight text-blue-600 dark:text-blue-400 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
                 <span>Lease Contract Inputs</span>
                 <span className="text-[11px] font-normal text-zinc-400">Real-time Calculation</span>
               </h2>
@@ -480,7 +480,7 @@ export function AutoLeaseCalculator() {
                       <Percent className="h-4 w-4" />
                     </div>
                     <div>
-                      <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                      <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
                         Interest Rate Configuration
                       </h3>
                       <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
@@ -708,7 +708,7 @@ export function AutoLeaseCalculator() {
           {/* TAB 2: MONTHLY PAYMENT TARGET REVERSE SOLVER */}
           {activeTab === "target" && (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
-              <h2 className="text-sm font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
+              <h2 className="text-sm font-extrabold tracking-tight text-blue-600 dark:text-blue-400 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
                 Monthly Payment Target Reverse Lease Solver
               </h2>
 
@@ -771,9 +771,7 @@ export function AutoLeaseCalculator() {
           {/* SECTION 8: MILEAGE ANALYSIS MODULE */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-                <Gauge className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                Mileage Excess Penalty Analysis
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Mileage Excess Penalty Analysis
               </h3>
               <Badge
                 variant="outline"
@@ -814,9 +812,7 @@ export function AutoLeaseCalculator() {
           {/* SECTION 7: LEASE VS BUY DECISION ENGINE */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-                <ShieldCheck className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                Lease vs Buy Decision Engine
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Lease vs Buy Decision Engine
               </h3>
               <Badge className="bg-purple-600 text-white font-bold text-xs">
                 {results.leaseVsBuy.recommendation}
@@ -899,9 +895,7 @@ export function AutoLeaseCalculator() {
 
           {/* SECTION 5: ADVANCED BREAKDOWN TABLE */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-              <Sliders className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              Itemized Capitalized Cost Breakdown
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Itemized Capitalized Cost Breakdown
             </h3>
 
             <div className="divide-y divide-zinc-100 dark:divide-zinc-800 text-xs font-sans tabular-nums">
@@ -916,9 +910,7 @@ export function AutoLeaseCalculator() {
 
           {/* SECTION 6: VISUALIZATIONS MODULE */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-              <PieIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              Lease Charts & Visualizers
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Lease Charts & Visualizers
             </h3>
 
             {/* Chart 1: Doughnut */}
@@ -957,9 +949,7 @@ export function AutoLeaseCalculator() {
 
           {/* SECTION 9: SENSITIVITY ANALYSIS MATRIX */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-              <TrendingDown className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              Sensitivity Matrix (APR & Residual vs Payment)
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Sensitivity Matrix (APR & Residual vs Payment)
             </h3>
 
             <div className="space-y-3 text-xs">

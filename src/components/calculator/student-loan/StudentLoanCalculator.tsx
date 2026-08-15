@@ -593,8 +593,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
       {/* TAB 4: FEDERAL PLANS & REFINANCE */}
       {activeTab === "plans" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Landmark className="h-5 w-5 text-indigo-500" /> Federal Repayment Options &amp; Refinance Simulator
+          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Federal Repayment Options &amp; Refinance Simulator
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-sans tabular-nums">
@@ -620,8 +619,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
       {/* TAB 5: VISUAL DASHBOARDS */}
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-blue-500" /> Student Loan Principal vs. Total Cost Comparison
+          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Student Loan Principal vs. Total Cost Comparison
           </h3>
 
           <div className="h-64 w-full">

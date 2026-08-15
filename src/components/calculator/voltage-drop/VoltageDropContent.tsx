@@ -7,9 +7,7 @@ export function VoltageDropContent() {
   return (
     <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10  dark:border-zinc-800 pt-8">
       <header>
-        <h2 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
-          <BookOpen className="h-6 w-6 text-blue-600" />
-          Comprehensive Electrical Guide: Conductor Impedance & Voltage Drop
+        <h2 className="text-2xl font-black text-blue-600 dark:text-blue-400 tracking-tight flex items-center gap-2">Comprehensive Electrical Guide: Conductor Impedance & Voltage Drop
         </h2>
         <p className="text-slate-900 dark:text-slate-100 text-xs">
           An authoritative reference on mathematical formulations, physical wire properties, and National Electrical Code (NEC) guidelines.
@@ -18,7 +16,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 1: INTRODUCTION */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>1.</span> Introduction
         </h3>
         <p>
@@ -31,7 +29,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 2: MATHEMATICAL CONCEPT */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>2.</span> Underlying Mathematical & Physical Principles
         </h3>
         <p>
@@ -55,7 +53,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 3: FORMULA SECTION */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>3.</span> The Mathematical Formulas
         </h3>
         <p>
@@ -103,7 +101,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 4: HOW CALCULATION WORKS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>4.</span> Step-by-Step Calculation Process
         </h3>
         <p>
@@ -141,15 +139,13 @@ export function VoltageDropContent() {
 
       {/* SECTION 5: WORKED EXAMPLES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>5.</span> Realistic Worked Engineering Examples
         </h3>
         <div className="space-y-4">
           {/* Example 1 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-blue-600" />
-              Example A: Residential Subpanel Run (Single-Phase AC)
+            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">Example A: Residential Subpanel Run (Single-Phase AC)
             </h4>
             <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Calculate the voltage drop of a 240V, 100A, single-phase circuit running through PVC conduit for a one-way distance of 150 feet. Conductor size is 1 AWG copper with a power factor of 0.90.
@@ -172,9 +168,7 @@ export function VoltageDropContent() {
 
           {/* Example 2 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-blue-600" />
-              Example B: Industrial Motor Feed (Three-Phase AC)
+            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">Example B: Industrial Motor Feed (Three-Phase AC)
             </h4>
             <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Calculate the line-to-line voltage drop for a 480V, three-phase, 120A induction motor running through steel conduit for a one-way distance of 400 feet. Conductor size is 3/0 AWG copper with a power factor of 0.85.
@@ -199,7 +193,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 6: VISUAL UNDERSTANDING TABLES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>6.</span> AWG Conductor Physical & Electrical Reference
         </h3>
         <p>
@@ -289,7 +283,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 7: COMMON MISTAKES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>7.</span> Common Engineering Mistakes & Pitfalls
         </h3>
         <div className="p-4 border border-amber-200 dark:border-amber-900/60 bg-blue-50/50 dark:bg-blue-50/20 rounded-2xl space-y-2">
@@ -315,7 +309,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 8: PRACTICAL APPLICATIONS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>8.</span> Practical Engineering Applications
         </h3>
         <p>
@@ -336,7 +330,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 9: RELATED TOPICS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>9.</span> Related Mathematical & Electrical Concepts
         </h3>
         <p>
@@ -352,8 +346,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 10: SUMMARY */}
       <section className="space-y-3 bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <h3 className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-          <CheckCircle className="w-4 h-4" /> Educational Summary
+        <h3 className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Educational Summary
         </h3>
         <p className="text-xs mt-1">
           Voltage drop is a physical reality in all electrical wiring systems. Minimizing it requires choosing the correct conductor material, increasing the wire size (AWG or metric cross-section), or keeping distance runs short. Proper calculations combining AC resistance and inductive reactance keep electrical systems compliant, safe, and operating at peak energy efficiency.

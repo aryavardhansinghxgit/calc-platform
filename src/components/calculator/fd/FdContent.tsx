@@ -8,9 +8,7 @@ export function FdContent() {
     <article className="prose prose-zinc dark:prose-invert max-w-none space-y-8 text-xs leading-relaxed">
       {/* 1. INTRODUCTION */}
       <section className="space-y-3">
-        <h2 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Landmark className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          What is a Fixed Deposit (FD) & How Does It Work?
+        <h2 className="text-lg font-bold tracking-tight text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">What is a Fixed Deposit (FD) & How Does It Work?
         </h2>
         <p className="text-slate-900 dark:text-slate-100">
           A <strong>Fixed Deposit (FD)</strong> is a low-risk financial instrument offered by commercial banks, non-banking financial companies (NBFCs), and post offices that guarantees a fixed rate of interest over a predetermined tenure ranging from 7 days up to 10 years. Unlike equity or mutual fund investments subject to daily market volatility, Fixed Deposits guarantee 100% principal safety along with predictable, assured returns.
@@ -22,9 +20,7 @@ export function FdContent() {
 
       {/* 2. CUMULATIVE VS NON-CUMULATIVE COMPARISON TABLE */}
       <section className="space-y-3">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Layers className="h-4 w-4 text-blue-600" />
-          Cumulative FD vs. Non-Cumulative FD Comparison
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Cumulative FD vs. Non-Cumulative FD Comparison
         </h3>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse border border-zinc-200 dark:border-zinc-800 text-[11px]">
@@ -63,9 +59,7 @@ export function FdContent() {
 
       {/* 3. MATHEMATICAL FORMULAS & DERIVATIONS */}
       <section className="space-y-4">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Calculator className="h-4 w-4 text-blue-600" />
-          Mathematical Fixed Deposit Formulas & Compounding Mechanics
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Mathematical Fixed Deposit Formulas & Compounding Mechanics
         </h3>
 
         <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">1. Cumulative Compound Interest Formula</h4>
@@ -97,9 +91,7 @@ export function FdContent() {
 
       {/* 4. WORKED STEP-BY-STEP EXAMPLE */}
       <section className="space-y-3">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Zap className="h-4 w-4 text-blue-600" />
-          Step-by-Step Worked Calculation Example
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Step-by-Step Worked Calculation Example
         </h3>
         <p className="text-slate-900 dark:text-slate-100">
           Let us calculate the maturity value for a 5-year bank Fixed Deposit:
@@ -127,22 +119,18 @@ export function FdContent() {
 
       {/* 5. SENIOR CITIZENS & TAX SAVING FDS */}
       <section className="space-y-3">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Award className="h-4 w-4 text-blue-600" />
-          Senior Citizen Privileges & Tax-Saving FDs
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Senior Citizen Privileges & Tax-Saving FDs
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
           <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1.5">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 text-xs">
-              <Award className="h-3.5 w-3.5 text-blue-600" /> Senior Citizen Rate Boost (+0.50%)
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 text-xs">Senior Citizen Rate Boost (+0.50%)
             </h4>
             <p className="text-slate-900 dark:text-slate-100 text-[11px]">
               Most commercial banks offer an additional <strong>+0.50% to +0.75% per annum</strong> premium on FD rates for senior citizens (age 60+). Over a $100,000 deposit over 5 years, an extra 0.50% yields an extra <strong>$3,500+</strong> in risk-free interest earnings.
             </p>
           </div>
           <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1.5">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 text-xs">
-              <ShieldCheck className="h-3.5 w-3.5 text-blue-500" /> Tax-Saving FDs (5-Year Lock-In)
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 text-xs">Tax-Saving FDs (5-Year Lock-In)
             </h4>
             <p className="text-slate-900 dark:text-slate-100 text-[11px]">
               5-Year Tax Saving Fixed Deposits quality for tax deduction up to $1,500 / ₹1,50,000 under Section 80C. Note that premature withdrawals and loan facilities against Tax Saving FDs are strictly prohibited during the 5-year lock-in period.
@@ -153,9 +141,7 @@ export function FdContent() {
 
       {/* 6. TAX DEDUCTED AT SOURCE (TDS) RULES */}
       <section className="space-y-3">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <PieChart className="h-4 w-4 text-blue-600" />
-          Tax Deducted at Source (TDS) & Form 15G / 15H Guidance
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Tax Deducted at Source (TDS) & Form 15G / 15H Guidance
         </h3>
         <p className="text-slate-900 dark:text-slate-100">
           Interest income earned from Fixed Deposits is fully taxable as per your income tax slab rates under "Income from Other Sources".
@@ -169,9 +155,7 @@ export function FdContent() {
 
       {/* 7. TOP MISTAKES TO AVOID */}
       <section className="space-y-3">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <AlertTriangle className="h-4 w-4 text-blue-600" />
-          Top FD Investing Mistakes to Avoid
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Top FD Investing Mistakes to Avoid
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-slate-900 dark:text-slate-100">
           <div className="p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-1">

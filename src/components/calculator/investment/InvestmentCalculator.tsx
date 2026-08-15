@@ -1054,8 +1054,7 @@ export function InvestmentCalculator() {
         {/* MONTE CARLO STOCHASTIC SIMULATOR (COL 7) */}
         <div className="md:col-span-7 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2">
-            <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Zap className="h-4 w-4 text-emerald-600" /> Monte Carlo Stochastic Risk Simulation ({simCount.toLocaleString()} Runs)
+            <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Monte Carlo Stochastic Risk Simulation ({simCount.toLocaleString()} Runs)
             </h3>
             <div className="flex gap-1">
               {[1000, 5000].map((cnt) => (
@@ -1106,8 +1105,7 @@ export function InvestmentCalculator() {
 
         {/* GOAL TRACKER TIMELINE (COL 5) */}
         <div className="md:col-span-5 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">
-            <Target className="h-4 w-4 text-indigo-600" /> Target Investment Goal Tracker
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">Target Investment Goal Tracker
           </h3>
 
           <div className="space-y-3 text-xs">
@@ -1153,8 +1151,7 @@ export function InvestmentCalculator() {
          ========================================== */}
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-          <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Scale className="h-5 w-5 text-purple-600" /> Investment Scenario Comparison Tool
+          <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Investment Scenario Comparison Tool
           </h2>
           <Button
             type="button"
@@ -1232,7 +1229,7 @@ export function InvestmentCalculator() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
         {/* PORTFOLIO GROWTH AREA CHART (COL 7) */}
         <div className="md:col-span-7 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
             Portfolio Accumulation & Inflation-Adjusted Purchasing Power
           </h3>
           <div className="h-64 w-full">
@@ -1251,7 +1248,7 @@ export function InvestmentCalculator() {
 
         {/* DOUGHNUT BREAKDOWN CHART (COL 5) */}
         <div className="md:col-span-5 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
             Final Portfolio Composition
           </h3>
           <div className="h-64 w-full">
@@ -1297,8 +1294,7 @@ export function InvestmentCalculator() {
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
           <div className="flex items-center gap-3">
-            <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-blue-600" /> Accumulation Schedule Table
+            <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Accumulation Schedule Table
             </h2>
 
             <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg text-xs">

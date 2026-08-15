@@ -373,9 +373,7 @@ export function SipCalculator() {
         {/* LEFT COLUMN: PARAMETER INPUT CONTROLS PANEL (Col 5) */}
         <div className="lg:col-span-5 space-y-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h2 className="text-sm font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Sliders className="h-4 w-4 text-blue-600" />
-              <span>Investment Parameters</span>
+            <h2 className="text-sm font-bold tracking-tight text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Investment Parameters</span>
             </h2>
             <button
               onClick={handleReset}
@@ -613,8 +611,7 @@ export function SipCalculator() {
           {/* MODE SPECIFIC SPECIALIZED DASHBOARD PANELS */}
           {activeTab === "goal" && (
             <div className="bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 p-4 rounded-2xl space-y-3">
-              <h3 className="text-xs font-bold text-emerald-900 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Target className="h-4 w-4 text-emerald-600 shrink-0" /> Target Goal Requirement Analysis
+              <h3 className="text-xs font-bold text-emerald-900 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">Target Goal Requirement Analysis
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-center text-xs">
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900 overflow-hidden">
@@ -637,8 +634,7 @@ export function SipCalculator() {
 
           {activeTab === "swp" && (
             <div className="bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 p-4 rounded-2xl space-y-3">
-              <h3 className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Umbrella className="h-4 w-4 text-amber-600 shrink-0" /> Systematic Withdrawal Plan (SWP) Results
+              <h3 className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">Systematic Withdrawal Plan (SWP) Results
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-center text-xs">
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-amber-100 dark:border-amber-900 overflow-hidden">
@@ -661,7 +657,7 @@ export function SipCalculator() {
 
           {/* 3. CHARTS SECTION */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-4">
-            <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center justify-between">
+            <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center justify-between">
               <span>SIP Growth Visualizer</span>
               <span className="text-[10px] text-zinc-400 font-normal">Real-time simulation</span>
             </h3>
@@ -716,8 +712,7 @@ export function SipCalculator() {
           {/* SENSITIVITY MATRIX TAB PANEL */}
           {activeTab === "sensitivity" && (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3 text-xs">
-              <h3 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                <BarChart3 className="h-4 w-4 text-indigo-600" /> What-If Sensitivity Matrix (Return % vs Tenure)
+              <h3 className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">What-If Sensitivity Matrix (Return % vs Tenure)
               </h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse border border-zinc-200 dark:border-zinc-800 text-[10px]">
@@ -756,7 +751,7 @@ export function SipCalculator() {
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3 text-xs">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3">
               <div className="flex items-center gap-2">
-                <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Schedule Breakdown Table</h3>
+                <h3 className="font-bold text-blue-600 dark:text-blue-400">Schedule Breakdown Table</h3>
                 <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg text-[10px]">
                   <button
                     onClick={() => { setScheduleView("annual"); setCurrentPage(1); }}

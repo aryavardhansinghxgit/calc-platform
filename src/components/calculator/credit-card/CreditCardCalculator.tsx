@@ -570,8 +570,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Zap className="h-5 w-5 text-emerald-500" /> Extra Payment &amp; One-Time Lump Sum Simulator
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Extra Payment &amp; One-Time Lump Sum Simulator
               </h3>
               <p className="text-xs text-zinc-500">
                 Simulate how adding extra monthly payments or paying a lump sum today accelerates debt payoff.
@@ -626,8 +625,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <RefreshCw className="h-5 w-5 text-indigo-500" /> 0% Intro APR Balance Transfer Analyzer
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">0% Intro APR Balance Transfer Analyzer
               </h3>
               <p className="text-xs text-zinc-500">
                 Evaluate moving debt to a 0% introductory APR card including transfer fee trade-offs.
@@ -675,8 +673,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-amber-500" /> Debt Avalanche vs. Debt Snowball Strategy Comparison
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Debt Avalanche vs. Debt Snowball Strategy Comparison
               </h3>
               <p className="text-xs text-zinc-500">
                 Compare standard monthly payments against aggressive payoff strategies.
@@ -715,8 +712,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
       {activeTab === "schedule" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-purple-500" /> Monthly Credit Card Amortization Schedule
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Monthly Credit Card Amortization Schedule
             </h3>
 
             <div className="flex items-center gap-2">

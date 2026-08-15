@@ -321,7 +321,7 @@ export function AutoLoanCalculator() {
           {/* TAB 1: AUTO LOAN PAYMENT INPUTS */}
           {activeTab === "payment" && (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
-              <h2 className="text-sm font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
+              <h2 className="text-sm font-extrabold tracking-tight text-blue-600 dark:text-blue-400 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
                 <span>Vehicle & Financing Inputs</span>
                 <span className="text-[11px] font-normal text-zinc-400">Real-time Analysis</span>
               </h2>
@@ -536,7 +536,7 @@ export function AutoLoanCalculator() {
           {/* TAB 2: AFFORDABLE VEHICLE PRICE INPUTS */}
           {activeTab === "affordable" && (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
-              <h2 className="text-sm font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
+              <h2 className="text-sm font-extrabold tracking-tight text-blue-600 dark:text-blue-400 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
                 Affordable Vehicle Price Reverse Calculator
               </h2>
 
@@ -624,7 +624,7 @@ export function AutoLoanCalculator() {
           {/* TAB 3: LOAN SCENARIO COMPARISON */}
           {activeTab === "comparison" && (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
-              <h2 className="text-sm font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
+              <h2 className="text-sm font-extrabold tracking-tight text-blue-600 dark:text-blue-400 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
                 Scenario A vs Scenario B Comparison
               </h2>
 
@@ -711,9 +711,7 @@ export function AutoLoanCalculator() {
 
           {/* TRADE-IN ANALYSIS MODULE */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-              <Car className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              Trade-In Equity Analysis
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Trade-In Equity Analysis
             </h3>
 
             {results.isNegativeEquity ? (
@@ -739,9 +737,7 @@ export function AutoLoanCalculator() {
 
           {/* AFFORDABILITY ANALYZER (20/4/10 RULE) */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-              <DollarSign className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-              Income & Vehicle Affordability Analyzer (20/4/10 Rule)
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Income & Vehicle Affordability Analyzer (20/4/10 Rule)
             </h3>
 
             <div className="grid grid-cols-2 gap-3">
@@ -783,9 +779,7 @@ export function AutoLoanCalculator() {
 
           {/* EARLY PAYOFF ANALYZER */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-              <TrendingDown className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-              Early Payoff Extra Payment Analyzer
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Early Payoff Extra Payment Analyzer
             </h3>
 
             <div>
@@ -866,9 +860,7 @@ export function AutoLoanCalculator() {
           {/* LOAN HEALTH SCORE CARD */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-                <Award className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                Loan Health Score
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Loan Health Score
               </h3>
               <Badge
                 variant="outline"
@@ -914,9 +906,7 @@ export function AutoLoanCalculator() {
 
           {/* 4. VISUAL CHARTS MODULE */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-              <PieIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              Loan Breakdown Visualizers
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Loan Breakdown Visualizers
             </h3>
 
             {/* Chart 1: Cost Breakdown */}
@@ -951,9 +941,7 @@ export function AutoLoanCalculator() {
 
           {/* TERM COMPARISON ENGINE (36 TO 84 MONTHS) */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              Loan Term Comparison Engine
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Loan Term Comparison Engine
             </h3>
 
             <div className="divide-y divide-zinc-100 dark:divide-zinc-800 text-xs">

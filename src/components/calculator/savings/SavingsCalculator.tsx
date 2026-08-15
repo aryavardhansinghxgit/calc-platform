@@ -366,9 +366,7 @@ export function SavingsCalculator() {
         {/* LEFT COLUMN: INPUT CONTROLS PANEL (Col 5) */}
         <div className="lg:col-span-5 space-y-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h2 className="text-sm font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Sliders className="h-4 w-4 text-blue-600" />
-              <span>Savings Parameters</span>
+            <h2 className="text-sm font-bold tracking-tight text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Savings Parameters</span>
             </h2>
             <button
               onClick={handleReset}
@@ -632,8 +630,7 @@ export function SavingsCalculator() {
           {/* SPECIAL TAB MODE SPECIFIC PANELS */}
           {activeTab === "goal" && (
             <div className="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 p-4 rounded-2xl space-y-3">
-              <h3 className="text-xs font-bold text-blue-900 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Target className="h-4 w-4 text-blue-600 shrink-0" /> Goal Seeking Requirements for {formatCurrency(targetGoalAmount)}
+              <h3 className="text-xs font-bold text-blue-900 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1.5">Goal Seeking Requirements for {formatCurrency(targetGoalAmount)}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center text-xs">
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-blue-100 dark:border-blue-900 overflow-hidden">
@@ -654,8 +651,7 @@ export function SavingsCalculator() {
 
           {activeTab === "retirement" && (
             <div className="bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 p-4 rounded-2xl space-y-3">
-              <h3 className="text-xs font-bold text-emerald-900 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Umbrella className="h-4 w-4 text-emerald-600 shrink-0" /> Estimated Retirement Nest Egg at Age {retirementAge}
+              <h3 className="text-xs font-bold text-emerald-900 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">Estimated Retirement Nest Egg at Age {retirementAge}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div className="bg-white dark:bg-zinc-900 p-3.5 rounded-xl border border-emerald-100 dark:border-emerald-900 overflow-hidden">
@@ -672,8 +668,7 @@ export function SavingsCalculator() {
 
           {activeTab === "fire" && (
             <div className="bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 p-4 rounded-2xl space-y-3">
-              <h3 className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Flame className="h-4 w-4 text-amber-600 shrink-0" /> FIRE Financial Independence Projections
+              <h3 className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">FIRE Financial Independence Projections
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-center text-xs">
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-amber-100 dark:border-amber-900 overflow-hidden">
@@ -699,7 +694,7 @@ export function SavingsCalculator() {
 
           {/* 3. CHARTS SECTION */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-4">
-            <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center justify-between">
+            <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center justify-between">
               <span>Savings Growth Visualizer</span>
               <span className="text-[10px] text-zinc-400 font-normal">Real-time simulation</span>
             </h3>
@@ -779,8 +774,7 @@ export function SavingsCalculator() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Scenario Comparisons */}
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3 text-xs">
-              <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                <Layers className="h-4 w-4 text-blue-600" /> Return Scenarios Side-by-Side
+              <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">Return Scenarios Side-by-Side
               </h4>
               <div className="space-y-2">
                 {results.scenarios.map((scen, i) => (
@@ -822,8 +816,7 @@ export function SavingsCalculator() {
 
           {/* 5. CONTRIBUTION IMPACT ANALYZER */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3">
-            <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">
-              <Zap className="h-4 w-4 text-amber-500" /> What Happens If You Save Slightly More?
+            <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">What Happens If You Save Slightly More?
             </h4>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
               {results.contributionImpacts.map((item, idx) => (
@@ -844,8 +837,7 @@ export function SavingsCalculator() {
 
       {/* 6. MILESTONE TRACKER */}
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-3">
-        <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-2">
-          <Award className="h-4 w-4 text-amber-500" /> Savings Milestone Achievements
+        <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center gap-2">Savings Milestone Achievements
         </h3>
         <div className="grid grid-cols-3 sm:grid-cols-9 gap-2">
           {results.milestones.map((m, idx) => (
@@ -870,7 +862,7 @@ export function SavingsCalculator() {
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Accumulation Schedule Table</h3>
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">Accumulation Schedule Table</h3>
             <div className="flex bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg text-xs">
               <button
                 onClick={() => setScheduleView("annual")}

@@ -7,7 +7,7 @@ export function RandomContent() {
     <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed pt-6  dark:border-zinc-800">
       {/* 1. INTRODUCTION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>1.</span> What Is A Random Number Generator?
         </h2>
         <p>
@@ -20,7 +20,7 @@ export function RandomContent() {
 
       {/* 2. CORE CONCEPT */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>2.</span> Core Mathematical Concept
         </h2>
         <p>
@@ -33,7 +33,7 @@ export function RandomContent() {
 
       {/* 3. ALGORITHMIC EXPLANATION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>3.</span> PRNG vs TRNG & WebCrypto
         </h2>
         <p>Random number generators fall into two primary architectural classifications:</p>
@@ -55,7 +55,7 @@ export function RandomContent() {
 
       {/* 4. FORMULA BREAKDOWN */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>4.</span> Range Scaling Formula
         </h2>
         <p>
@@ -71,7 +71,7 @@ export function RandomContent() {
 
       {/* 5. HOW CALCULATION WORKS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>5.</span> Step-by-Step Generation Process
         </h2>
         <ol className="list-decimal pl-6 space-y-1">
@@ -85,7 +85,7 @@ export function RandomContent() {
 
       {/* 6. WORKED EXAMPLES */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>6.</span> Worked Mathematical Examples
         </h2>
 
@@ -125,7 +125,7 @@ export function RandomContent() {
 
       {/* 7. VISUAL UNDERSTANDING */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>7.</span> Visualizing Random Frequency Histograms
         </h2>
         <p>
@@ -135,7 +135,7 @@ export function RandomContent() {
 
       {/* 8. COMMON MISTAKES */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>8.</span> Common Fallacies & Misconceptions
         </h2>
         <ul className="list-disc pl-6 space-y-2">
@@ -153,7 +153,7 @@ export function RandomContent() {
 
       {/* 9. REAL-WORLD APPLICATIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>9.</span> Practical Applications
         </h2>
         <p>
@@ -163,7 +163,7 @@ export function RandomContent() {
 
       {/* 10. ADVANCED CONCEPTS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>10.</span> Advanced Statistical Tests: Kolmogorov-Smirnov Test
         </h2>
         <p>
@@ -173,7 +173,7 @@ export function RandomContent() {
 
       {/* 11. RELATED CONCEPTS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>11.</span> Related Mathematical Topics
         </h2>
         <p>

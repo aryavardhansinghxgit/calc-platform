@@ -161,9 +161,7 @@ export function RandomCalculator() {
         <div className="lg:col-span-7 space-y-5">
           <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Calculator className="w-4 h-4 text-blue-600" />
-                <span>Random Generator Settings</span>
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Random Generator Settings</span>
               </h3>
               <button
                 onClick={() => setRefreshTrigger((prev) => prev + 1)}
@@ -354,9 +352,7 @@ export function RandomCalculator() {
           {savedItems.length > 0 && (
             <div className="p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-3">
               <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                  <History className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                  <span>Saved Calculations ({savedItems.length})</span>
+                <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5"><span>Saved Calculations ({savedItems.length})</span>
                 </h4>
                 <button
                   onClick={() => {

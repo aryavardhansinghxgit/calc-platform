@@ -93,8 +93,7 @@ export function RothIraContent() {
       <div className="space-y-8 text-sm leading-relaxed">
         {/* Section 1: History & Core Mechanics */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-blue-600" /> 1. What Is a Roth IRA &amp; How It Works
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">1. What Is a Roth IRA &amp; How It Works
           </h3>
           <p>
             Unlike Traditional IRAs or 401(k)s where contributions are tax-deductible up front but taxable upon withdrawal, a Roth IRA operates in reverse. 
@@ -118,8 +117,7 @@ export function RothIraContent() {
 
         {/* Section 2: 2025/2026 Contribution & MAGI Income Limits */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <ShieldCheck className="h-5 w-5 text-blue-600" /> 2. 2025 &amp; 2026 Contribution &amp; MAGI Income Thresholds
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">2. 2025 &amp; 2026 Contribution &amp; MAGI Income Thresholds
           </h3>
           
           <div className="overflow-x-auto">
@@ -155,8 +153,7 @@ export function RothIraContent() {
 
         {/* Section 3: Backdoor Roth Conversions */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Zap className="h-5 w-5 text-blue-600" /> 3. Backdoor Roth IRA Strategy for High Income Earners
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Backdoor Roth IRA Strategy for High Income Earners
           </h3>
           <p>
             Taxpayers whose income exceeds IRS MAGI phase-out limits ($161k single / $240k married in 2025) cannot make direct Roth IRA contributions. 
@@ -175,7 +172,7 @@ export function RothIraContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (10 Essential Roth IRA FAQs)
           </h3>
         </div>

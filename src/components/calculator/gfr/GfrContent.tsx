@@ -31,7 +31,7 @@ export function GfrContent() {
             <BookOpen className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               The Definitive Guide to Glomerular Filtration Rate (eGFR), CKD Staging & Kidney Health
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -42,7 +42,7 @@ export function GfrContent() {
 
         {/* Section 1 & 2 */}
         <div className="space-y-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">1–2.</span> What Is Glomerular Filtration Rate (eGFR)?
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -52,7 +52,7 @@ export function GfrContent() {
 
         {/* CKD Staging Spectrum Table */}
         <div className="space-y-4 pt-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">4–7.</span> Chronic Kidney Disease (CKD) Stages 1 through 5
           </h3>
 
@@ -116,7 +116,7 @@ export function GfrContent() {
             <HelpCircle className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               Frequently Asked Questions (40 Clinical Answers)
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -165,7 +165,7 @@ export function GfrContent() {
       <section className="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         <div className="flex items-center gap-3  pb-4">
           <Activity className="w-6 h-6 text-blue-600" />
-          <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+          <h2 className="text-xl md:text-2xl font-bold text-blue-600">
             Related Health & Body Calculators
           </h2>
         </div>

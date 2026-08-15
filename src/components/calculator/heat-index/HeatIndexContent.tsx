@@ -7,7 +7,7 @@ export function HeatIndexContent() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: THE PHYSIOLOGY OF HEAT STRESS & EVAPORATIVE COOLING */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. The Physiology of Heat Stress & Evaporative Cooling
         </h2>
         <p>
@@ -27,11 +27,11 @@ export function HeatIndexContent() {
 
       {/* SECTION 2: MATHEMATICAL FORMULAS BEHIND HEAT INDEX */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. Mathematical Formulas Behind Heat Index
         </h2>
         
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">1. The 9-Term NOAA/NWS Rothfusz Regression Equation</h3>
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">1. The 9-Term NOAA/NWS Rothfusz Regression Equation</h3>
         <p>
           In 1990, Lans P. Rothfusz of the National Weather Service derived a 9-parameter polynomial regression equation to approximate Dr. Robert G. Steadman's 1979 biometeorological model:
         </p>
@@ -44,7 +44,7 @@ export function HeatIndexContent() {
           Where T is air temperature in °F and R is relative humidity (0–100%).
         </p>
 
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">2. Low and High Humidity Corrections</h3>
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">2. Low and High Humidity Corrections</h3>
         <ul className="list-disc pl-5 space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300">
           <li><strong>Low Humidity Adjustment (RH &lt; 13% &amp; 80°F ≤ T ≤ 112°F):</strong> Subtract [ (13 - RH) / 4 ] × √[ (17 - |T - 95|) / 17 ].</li>
           <li><strong>High Humidity Adjustment (RH &gt; 85% &amp; 80°F ≤ T ≤ 87°F):</strong> Add [ (RH - 85) / 10 ] × [ (87 - T) / 5 ].</li>
@@ -53,7 +53,7 @@ export function HeatIndexContent() {
 
       {/* SECTION 3: HEAT INDEX VS. WBGT VS. WIND CHILL */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. Heat Index vs. Wet-Bulb Globe Temperature (WBGT) vs. Wind Chill
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
@@ -76,7 +76,7 @@ export function HeatIndexContent() {
 
       {/* SECTION 4: HEAT-RELATED ILLNESSES & CLINICAL SYMPTOMS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. Heat-Related Illnesses & Clinical Symptoms
         </h2>
         <p>
@@ -92,7 +92,7 @@ export function HeatIndexContent() {
 
       {/* SECTION 5: HIGH-RISK DEMOGRAPHICS & OCCUPATIONAL HEAT SAFETY */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. High-Risk Demographics & Occupational Heat Safety
         </h2>
         <p>

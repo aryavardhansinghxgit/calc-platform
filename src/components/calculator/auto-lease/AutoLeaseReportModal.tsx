@@ -37,7 +37,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
   return (
     <div id="printable-report-portal" className="no-print-wrapper">
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4 sm:p-6 overflow-y-auto no-print-wrapper">
-        <div className="bg-zinc-900 text-white rounded-2xl border border-zinc-800 shadow-2xl max-w-4xl w-full flex flex-col max-h-[92vh] overflow-hidden no-print-wrapper">
+        <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 rounded-2xl border border-zinc-800 shadow-2xl max-w-4xl w-full flex flex-col max-h-[92vh] overflow-hidden no-print-wrapper">
           
           {/* Modal Header Toolbar (Hidden during browser printing) */}
           <div className="flex items-center justify-between p-3.5 border-b border-zinc-800 bg-zinc-950 no-print">
@@ -89,7 +89,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
                 <div>
                   <div className="flex items-center gap-2">
                     <Car className="h-6 w-6 text-blue-600" />
-                    <h1 className="text-xl font-extrabold tracking-tight text-zinc-900">
+                    <h1 className="text-xl font-extrabold tracking-tight text-blue-600">
                       Auto Lease Financial Executive Report
                     </h1>
                   </div>
@@ -148,7 +148,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
               <div className="grid grid-cols-2 gap-4 text-xs">
                 {/* Inputs Summary */}
                 <div className="border border-zinc-200 rounded-xl p-4 bg-zinc-50/50 space-y-2">
-                  <h3 className="font-bold text-zinc-900 uppercase text-[11px] border-b border-zinc-200 pb-1.5">
+                  <h3 className="font-bold text-blue-600 uppercase text-[11px] border-b border-zinc-200 pb-1.5">
                     Lease Parameters
                   </h3>
                   <div className="space-y-1.5 font-sans tabular-nums text-[11px]">
@@ -185,7 +185,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
 
                 {/* Detailed Payment Breakdown */}
                 <div className="border border-zinc-200 rounded-xl p-4 bg-zinc-50/50 space-y-2">
-                  <h3 className="font-bold text-zinc-900 uppercase text-[11px] border-b border-zinc-200 pb-1.5">
+                  <h3 className="font-bold text-blue-600 uppercase text-[11px] border-b border-zinc-200 pb-1.5">
                     Monthly Payment Breakdown
                   </h3>
                   <div className="space-y-1.5 font-sans tabular-nums text-[11px]">
@@ -215,9 +215,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
 
               {/* Lease vs Buy Decision Summary */}
               <div className="border border-zinc-200 rounded-xl p-4 space-y-2 bg-zinc-50/30 text-xs">
-                <h3 className="font-bold text-zinc-900 uppercase text-[11px] flex items-center gap-1.5">
-                  <ShieldCheck className="h-4 w-4 text-purple-600" />
-                  Lease vs Buy Recommendation Analysis
+                <h3 className="font-bold text-blue-600 uppercase text-[11px] flex items-center gap-1.5">Lease vs Buy Recommendation Analysis
                 </h3>
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">

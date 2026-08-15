@@ -76,7 +76,7 @@ export function BacContent() {
             <BookOpen className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2 className="text-2xl font-bold text-blue-600">
               Clinical Guide to Blood Alcohol Concentration (BAC) & Sobriety Analytics
             </h2>
             <p className="text-xs text-slate-900 mt-0.5">
@@ -93,14 +93,14 @@ export function BacContent() {
 
             if (trimmed.startsWith("# ")) {
               return (
-                <h1 key={idx} className="text-2xl font-bold text-slate-900  pb-2 mt-6">
+                <h1 key={idx} className="text-2xl font-bold text-blue-600  pb-2 mt-6">
                   {trimmed.replace("# ", "")}
                 </h1>
               );
             }
             if (trimmed.startsWith("## ")) {
               return (
-                <h2 key={idx} className="text-lg font-bold text-slate-900 mt-6 text-rose-800 border-l-4 border-rose-500 pl-3">
+                <h2 key={idx} className="text-lg font-bold text-blue-600 mt-6 text-rose-800 border-l-4 border-rose-500 pl-3">
                   {trimmed.replace("## ", "")}
                 </h2>
               );
@@ -111,7 +111,7 @@ export function BacContent() {
               const rest = lines.slice(1).join("\n");
               return (
                 <div key={idx} className="space-y-2 mt-4">
-                  <h3 className="text-base font-bold text-slate-900 text-blue-600">
+                  <h3 className="text-base font-bold text-blue-600 text-blue-600">
                     {title}
                   </h3>
                   {rest && <p className="text-slate-700 leading-relaxed">{rest}</p>}
@@ -180,7 +180,7 @@ export function BacContent() {
               <HelpCircle className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-slate-900">
+              <h2 className="text-2xl font-bold text-blue-600">
                 Frequently Asked Questions ({bacFaqs.length}+ FAQs)
               </h2>
               <p className="text-xs text-slate-900 mt-0.5">

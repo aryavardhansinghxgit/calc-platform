@@ -894,9 +894,7 @@ Calculated via CalcPlatform Calorie Engine`;
         <TabsContent value="converter" className="space-y-6">
           <div className="p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-5">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Zap className="w-5 h-5 text-amber-500" />
-                Food Energy Unit Converter
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Food Energy Unit Converter
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
                 Convert dietary Calories (kcal) into International System energy units (kJ, Joules, Megajoules, Watt-hours)
@@ -962,7 +960,7 @@ Calculated via CalcPlatform Calorie Engine`;
               <div className="text-xs font-black tracking-widest text-emerald-700 uppercase">
                 CalcPlatform Metabolic &amp; Clinical Nutrition Labs
               </div>
-              <h1 className="text-2xl font-black text-zinc-900 mt-1">
+              <h1 className="text-2xl font-black text-blue-600 mt-1">
                 Clinical Caloric Expenditure &amp; TDEE Assessment Report
               </h1>
               <p className="text-xs text-zinc-500 mt-0.5">
@@ -1002,7 +1000,7 @@ Calculated via CalcPlatform Calorie Engine`;
 
           {/* Section 1: Subject Profile & Physical Demographics */}
           <div className="space-y-2">
-            <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider border-b border-zinc-300 pb-1">
+            <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
               1. Subject Physical Demographics &amp; Metabolic Baseline
             </h3>
             <table className="w-full text-xs text-left border border-zinc-200 border-collapse">
@@ -1031,7 +1029,7 @@ Calculated via CalcPlatform Calorie Engine`;
 
           {/* Section 2: Caloric Goal Targets */}
           <div className="space-y-2">
-            <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider border-b border-zinc-300 pb-1">
+            <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
               2. Target Daily Calorie Intake Tiers
             </h3>
             <table className="w-full text-xs text-left border border-zinc-200 border-collapse">
@@ -1080,7 +1078,7 @@ Calculated via CalcPlatform Calorie Engine`;
 
           {/* Section 3: 7-Day Zigzag Calorie Cycling Schedule */}
           <div className="space-y-2">
-            <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider border-b border-zinc-300 pb-1">
+            <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
               3. 7-Day Zigzag Calorie Cycling Schedule (Weight Loss Goal)
             </h3>
             <table className="w-full text-xs text-left border border-zinc-200 border-collapse">
@@ -1105,7 +1103,7 @@ Calculated via CalcPlatform Calorie Engine`;
 
           {/* Section 4: Macronutrient Distribution Ratios */}
           <div className="space-y-2">
-            <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider border-b border-zinc-300 pb-1">
+            <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
               4. Daily Macronutrient Breakdown Options ({result.tiers.weightLoss.caloriesPerDay} kcal Target)
             </h3>
             <table className="w-full text-xs text-left border border-zinc-200 border-collapse">

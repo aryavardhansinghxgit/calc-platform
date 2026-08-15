@@ -32,7 +32,7 @@ export function TdeeContent() {
             <BookOpen className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               The Definitive Guide to Total Daily Energy Expenditure (TDEE) & Metabolism
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -43,7 +43,7 @@ export function TdeeContent() {
 
         {/* Section 1 & 2 */}
         <div className="space-y-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">1–2.</span> What Is TDEE & Why Does It Matter?
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -54,9 +54,7 @@ export function TdeeContent() {
         {/* 4 Metabolic Components Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2">
           <div className="bg-blue-50/80 p-5 rounded-2xl border border-cyan-200/80 space-y-2">
-            <h4 className="font-bold text-cyan-950 text-sm flex items-center gap-1.5">
-              <Activity className="w-4 h-4 text-blue-600" />
-              BMR (~60-70%)
+            <h4 className="font-bold text-cyan-950 text-sm flex items-center gap-1.5">BMR (~60-70%)
             </h4>
             <p className="text-xs text-slate-900 leading-relaxed">
               Basal Metabolic Rate required for organ function at rest.
@@ -64,9 +62,7 @@ export function TdeeContent() {
           </div>
 
           <div className="bg-blue-50/80 p-5 rounded-2xl border border-emerald-200/80 space-y-2">
-            <h4 className="font-bold text-emerald-950 text-sm flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-blue-600" />
-              NEAT (~15-20%)
+            <h4 className="font-bold text-emerald-950 text-sm flex items-center gap-1.5">NEAT (~15-20%)
             </h4>
             <p className="text-xs text-slate-900 leading-relaxed">
               Non-exercise movement like walking, standing, and daily steps.
@@ -74,9 +70,7 @@ export function TdeeContent() {
           </div>
 
           <div className="bg-blue-50/80 p-5 rounded-2xl border border-amber-200/80 space-y-2">
-            <h4 className="font-bold text-amber-950 text-sm flex items-center gap-1.5">
-              <Flame className="w-4 h-4 text-blue-600" />
-              EAT (~10-15%)
+            <h4 className="font-bold text-amber-950 text-sm flex items-center gap-1.5">EAT (~10-15%)
             </h4>
             <p className="text-xs text-slate-900 leading-relaxed">
               Deliberate workout exercise (gym, running, cycling).
@@ -84,9 +78,7 @@ export function TdeeContent() {
           </div>
 
           <div className="bg-blue-50/80 p-5 rounded-2xl border border-purple-200/80 space-y-2">
-            <h4 className="font-bold text-purple-950 text-sm flex items-center gap-1.5">
-              <BookOpen className="w-4 h-4 text-blue-600" />
-              TEF (~10%)
+            <h4 className="font-bold text-purple-950 text-sm flex items-center gap-1.5">TEF (~10%)
             </h4>
             <p className="text-xs text-slate-900 leading-relaxed">
               Thermic Effect of Food required to digest macronutrients.
@@ -96,7 +88,7 @@ export function TdeeContent() {
 
         {/* Section 8 & 9: Activity Multiplier Reference Table */}
         <div className="space-y-4 pt-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">8–9.</span> Physical Activity Level (PAL) Multipliers
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -151,7 +143,7 @@ export function TdeeContent() {
             <HelpCircle className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               Frequently Asked Questions (40 Clinical Answers)
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -200,7 +192,7 @@ export function TdeeContent() {
       <section className="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         <div className="flex items-center gap-3  pb-4">
           <PieChart className="w-6 h-6 text-blue-600" />
-          <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+          <h2 className="text-xl md:text-2xl font-bold text-blue-600">
             Related Fitness & Metabolism Calculators
           </h2>
         </div>

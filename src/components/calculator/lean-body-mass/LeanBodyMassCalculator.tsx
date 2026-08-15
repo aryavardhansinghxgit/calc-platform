@@ -512,7 +512,7 @@ Calculated via CalcPlatform Clinical Health Engine`;
               <div className="text-xs font-black tracking-widest text-blue-700 uppercase">
                 CalcPlatform Clinical Human Physiology &amp; Pharmacokinetics Lab
               </div>
-              <h1 className="text-2xl font-black text-zinc-900 mt-1">
+              <h1 className="text-2xl font-black text-blue-600 mt-1">
                 Clinical Lean Body Mass &amp; Body Composition Assessment
               </h1>
               <p className="text-xs text-zinc-500 mt-0.5">
@@ -550,7 +550,7 @@ Calculated via CalcPlatform Clinical Health Engine`;
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider border-b border-zinc-300 pb-1">
+            <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
               1. Anthropometric Parameters &amp; Clinical Formula Breakdown
             </h3>
             <table className="w-full text-xs text-left border border-zinc-200 border-collapse">

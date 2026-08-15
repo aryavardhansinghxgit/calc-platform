@@ -116,7 +116,7 @@ export function SocialSecurityContent() {
         <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Authoritative Social Security Administration (SSA) Guide
         </div>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400">
           Complete Guide to Social Security Benefits, FRA &amp; Claiming Strategies
         </h2>
         <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
@@ -156,8 +156,7 @@ export function SocialSecurityContent() {
 
       {/* Deep-Dive Section 1: Early vs. Delayed Claiming Comparison */}
       <section className="space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <TrendingUp className="h-5 w-5 text-blue-600" /> Benefit Multiplier Scale: Age 62 vs. FRA (67) vs. Age 70
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Benefit Multiplier Scale: Age 62 vs. FRA (67) vs. Age 70
         </h3>
         <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
           The table below illustrates how your Primary Insurance Amount (PIA) adjusts depending on the exact age you file your application.
@@ -207,7 +206,7 @@ export function SocialSecurityContent() {
       <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
           <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          <h3 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
             Frequently Asked Questions (20 Key Social Security Insights)
           </h3>
         </div>

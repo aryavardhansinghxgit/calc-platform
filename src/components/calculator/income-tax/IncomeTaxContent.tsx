@@ -164,8 +164,7 @@ export function IncomeTaxContent() {
 
         {/* Section 3 & 4: Deductions */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Layers className="h-5 w-5 text-blue-600" /> 3. Standard Deduction vs. Itemized Deductions (Schedule A)
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Standard Deduction vs. Itemized Deductions (Schedule A)
           </h3>
           <p>
             Taxpayers must choose between taking the fixed IRS <strong>Standard Deduction</strong> or itemizing specific qualifying expenses on <strong>Schedule A</strong>.
@@ -204,8 +203,7 @@ export function IncomeTaxContent() {
         {/* Section 5, 6 & 7: Deductions vs Credits */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <PieIcon className="h-4 w-4 text-blue-500" /> Tax Deductions
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">Tax Deductions
             </h4>
             <p className="text-xs">
               Deductions reduce taxable income before tax is calculated. A $1,000 deduction in the 22% bracket saves you <strong>$220</strong> in taxes.
@@ -213,8 +211,7 @@ export function IncomeTaxContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <AlertTriangle className="h-4 w-4 text-blue-600" /> Tax Credits
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">Tax Credits
             </h4>
             <p className="text-xs">
               Tax credits reduce final tax bill dollar-for-dollar. A $1,000 tax credit saves you exactly <strong>$1,000</strong> in taxes.
@@ -222,8 +219,7 @@ export function IncomeTaxContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-blue-600" /> Refundable Credits
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">Refundable Credits
             </h4>
             <p className="text-xs">
               Refundable credits (like the Additional Child Tax Credit & EITC) can trigger an IRS tax refund check even if your tax liability is zero!
@@ -233,8 +229,7 @@ export function IncomeTaxContent() {
 
         {/* Real-World Use Cases */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-blue-600" /> Real-World Applications & Tax Lowering Strategies
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Real-World Applications & Tax Lowering Strategies
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="space-y-2">
@@ -257,7 +252,7 @@ export function IncomeTaxContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (FAQ)
           </h3>
         </div>

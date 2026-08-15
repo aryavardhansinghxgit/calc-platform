@@ -398,7 +398,7 @@ export function GradeCalculator() {
             <FileCheck className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
           </div>
           <div>
-            <h3 className="text-sm font-extrabold text-slate-900 dark:text-zinc-100">
+            <h3 className="text-sm font-extrabold text-blue-600 dark:text-blue-400">
               Next-Gen Grade Calculator &amp; Final Exam Target Solver
             </h3>
             <p className="text-[10px] text-slate-500 dark:text-zinc-400">

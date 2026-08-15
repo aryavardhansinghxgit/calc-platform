@@ -341,9 +341,7 @@ export function CarbohydrateCalculator() {
         {/* Left Column: Inputs Form */}
         <div className="lg:col-span-5 space-y-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm print:hidden">
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Sliders className="w-5 h-5 text-cyan-600" />
-              Personal Parameters
+            <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">Personal Parameters
             </h2>
             
             {/* Unit System Toggle */}
@@ -518,9 +516,7 @@ export function CarbohydrateCalculator() {
 
           {/* Fiber & Net Carb Inputs */}
           <div className="space-y-4 border-t border-slate-100 pt-4">
-            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <Apple className="w-4 h-4 text-emerald-600" />
-              Fiber & Net Carb Adjustments
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Fiber & Net Carb Adjustments
             </h3>
 
             <div className="grid grid-cols-2 gap-4">
@@ -708,9 +704,7 @@ export function CarbohydrateCalculator() {
             {activeTab === "distribution" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <PieIcon className="w-4 h-4 text-cyan-600" />
-                    Macronutrient Energy Share
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Macronutrient Energy Share
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Carbs: 4 kcal/g | Protein: 4 kcal/g | Fat: 9 kcal/g</span>
                 </div>
@@ -770,9 +764,7 @@ export function CarbohydrateCalculator() {
             {activeTab === "net-carbs" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Apple className="w-4 h-4 text-emerald-600" />
-                    Total Carbs vs Net Carbs vs Dietary Fiber
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Total Carbs vs Net Carbs vs Dietary Fiber
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Net Carbs = Total Carbs − Fiber</span>
                 </div>
@@ -804,9 +796,7 @@ export function CarbohydrateCalculator() {
             {activeTab === "carb-cycling" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-purple-600" />
-                    7-Day Carb Cycling Planner Matrix
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">7-Day Carb Cycling Planner Matrix
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">High / Medium / Low Carb Schedule</span>
                 </div>
@@ -856,9 +846,7 @@ export function CarbohydrateCalculator() {
             {activeTab === "food-gi-search" && (
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Utensils className="w-4 h-4 text-cyan-600" />
-                    Carbohydrate & Glycemic Food Database (Search & GI Ratings)
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Carbohydrate & Glycemic Food Database (Search & GI Ratings)
                   </h3>
 
                   {/* Search Input */}
@@ -938,9 +926,7 @@ export function CarbohydrateCalculator() {
             {/* TAB 5: Diet Style Comparison */}
             {activeTab === "diet-comparison" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-purple-600" />
-                  Carbohydrate Strategy Matrix Comparison
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Carbohydrate Strategy Matrix Comparison
                 </h3>
 
                 <div className="overflow-x-auto border border-slate-200 rounded-xl">
@@ -997,9 +983,7 @@ export function CarbohydrateCalculator() {
 
           {/* Smart Insights & Personalized Recommendations */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 print:hidden">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-amber-500" />
-              Smart Insights & Glycemic Strategy
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Smart Insights & Glycemic Strategy
             </h3>
 
             <div className="space-y-2.5">

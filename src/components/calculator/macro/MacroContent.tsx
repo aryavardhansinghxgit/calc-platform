@@ -33,7 +33,7 @@ export function MacroContent() {
             <BookOpen className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               The Ultimate Guide to Macronutrients, Calorie Targets & Precision Nutrition
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -44,7 +44,7 @@ export function MacroContent() {
 
         {/* Section 1 & 2 */}
         <div className="space-y-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">1–2.</span> What Are Macronutrients & Macro Calculators?
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -55,9 +55,7 @@ export function MacroContent() {
         {/* Section 3 to 6: Macronutrient Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
           <div className="bg-blue-50/80 p-6 rounded-2xl border border-emerald-200/80 space-y-3">
-            <h4 className="font-bold text-emerald-950 text-base flex items-center gap-2">
-              <Dumbbell className="w-5 h-5 text-blue-600" />
-              Protein (4 kcal/g)
+            <h4 className="font-bold text-emerald-950 text-base flex items-center gap-2">Protein (4 kcal/g)
             </h4>
             <p className="text-xs md:text-sm text-slate-900 leading-relaxed">
               Composed of essential amino acids (EAAs like Leucine). Critical for muscle protein synthesis (MPS), tissue repair, enzyme creation, and satiety.
@@ -65,9 +63,7 @@ export function MacroContent() {
           </div>
 
           <div className="bg-blue-50/80 p-6 rounded-2xl border border-blue-200/80 space-y-3">
-            <h4 className="font-bold text-blue-950 text-base flex items-center gap-2">
-              <Apple className="w-5 h-5 text-blue-600" />
-              Carbohydrates (4 kcal/g)
+            <h4 className="font-bold text-blue-950 text-base flex items-center gap-2">Carbohydrates (4 kcal/g)
             </h4>
             <p className="text-xs md:text-sm text-slate-900 leading-relaxed">
               Digested into glucose to supply central nervous system fuel and replenish glycogen stores for high-intensity exercise.
@@ -75,9 +71,7 @@ export function MacroContent() {
           </div>
 
           <div className="bg-blue-50/80 p-6 rounded-2xl border border-purple-200/80 space-y-3">
-            <h4 className="font-bold text-purple-950 text-base flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-blue-600" />
-              Dietary Fat (9 kcal/g)
+            <h4 className="font-bold text-purple-950 text-base flex items-center gap-2">Dietary Fat (9 kcal/g)
             </h4>
             <p className="text-xs md:text-sm text-slate-900 leading-relaxed">
               Provides essential fatty acids (Omega-3 & Omega-6) for testosterone/estrogen hormone production and fat-soluble vitamin absorption (A, D, E, K).
@@ -87,7 +81,7 @@ export function MacroContent() {
 
         {/* Section 10 & 11: BMR & TDEE Clinical Formulas */}
         <div className="space-y-4 pt-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">10–11.</span> Clinical BMR & TDEE Equations
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -131,7 +125,7 @@ export function MacroContent() {
 
         {/* Section 25: Macronutrient Food Reference Table */}
         <div className="space-y-4 pt-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">25.</span> Macronutrients in Common Foods
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -212,7 +206,7 @@ export function MacroContent() {
             <HelpCircle className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               Frequently Asked Questions (40 Clinical Answers)
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -261,7 +255,7 @@ export function MacroContent() {
       <section className="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         <div className="flex items-center gap-3  pb-4">
           <PieChart className="w-6 h-6 text-blue-600" />
-          <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+          <h2 className="text-xl md:text-2xl font-bold text-blue-600">
             Related Fitness & Nutrition Calculators
           </h2>
         </div>

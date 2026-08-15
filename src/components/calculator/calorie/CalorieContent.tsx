@@ -95,7 +95,7 @@ export function CalorieContent() {
       <section className="space-y-4 p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
         <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400">
           <Flame className="w-6 h-6" />
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-blue-600 dark:text-blue-400">
             Comprehensive Clinical Guide to Caloric Expenditure &amp; Energy Balance
           </h2>
         </div>
@@ -106,9 +106,7 @@ export function CalorieContent() {
 
       {/* 2. What Is Caloric Intake & Energy Balance */}
       <section className="space-y-4">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Scale className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-          1. The Physics of Energy Balance: First Law of Thermodynamics
+        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">1. The Physics of Energy Balance: First Law of Thermodynamics
         </h3>
         <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
           In human physiology, weight change is governed by the First Law of Thermodynamics: energy cannot be created or destroyed, only transformed. Energy Intake (calories consumed via food and beverages) versus Energy Expenditure (calories burned through resting metabolism, digestion, and movement) determines net body mass change:
@@ -131,9 +129,7 @@ export function CalorieContent() {
 
       {/* 3. BMR vs TDEE vs TEF */}
       <section className="space-y-4">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-          2. Deconstructing Total Daily Energy Expenditure (TDEE)
+        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">2. Deconstructing Total Daily Energy Expenditure (TDEE)
         </h3>
         <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
           Your TDEE is composed of four distinct metabolic components:
@@ -148,7 +144,7 @@ export function CalorieContent() {
 
       {/* 4. Formulas */}
       <section className="space-y-4 p-5 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400">
           3. Mathematical BMR Formulas Explained
         </h3>
         <div className="space-y-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">

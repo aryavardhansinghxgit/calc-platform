@@ -26,7 +26,7 @@ export function OvulationContent() {
             <BookOpen className="h-6 w-6" />
           </div>
           <div>
-            <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 m-0">
+            <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 m-0">
               Complete Clinical Guide to Ovulation & Fertility Tracking
             </h2>
             <p className="text-xs text-pink-600 dark:text-pink-400 font-semibold m-0 mt-0.5">
@@ -41,9 +41,7 @@ export function OvulationContent() {
 
       {/* 2. Menstrual Cycle Phases & Hormonal Cascade */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Activity className="h-5 w-5 text-pink-500" />
-          1. The Four Phases of the Menstrual Cycle
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">1. The Four Phases of the Menstrual Cycle
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           The human menstrual cycle is regulated by the Hypothalamic-Pituitary-Ovarian (HPO) axis, progressing through four synchronized phases:
@@ -90,9 +88,7 @@ export function OvulationContent() {
 
       {/* 3. The 6-Day Fertile Window & Conception Probability */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Sparkles className="h-5 w-5 text-pink-500" />
-          2. The Biological Fertile Window & Conception Probabilities
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">2. The Biological Fertile Window & Conception Probabilities
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           Biological fertility depends on the intersection of <strong>sperm lifespan</strong> (up to 5 days in fertile cervical mucus) and <strong>egg lifespan</strong> (12 to 24 hours post-ovulation). This creates a 6-day fertile window:
@@ -158,9 +154,7 @@ export function OvulationContent() {
 
       {/* 4. Symptothermal Tracking Methods */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Thermometer className="h-5 w-5 text-pink-500" />
-          3. Symptothermal Tracking: BBT, OPK, and Cervical Mucus
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">3. Symptothermal Tracking: BBT, OPK, and Cervical Mucus
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           While calendar algorithms estimate ovulation based on cycle length averages, combining <strong>biomarker tracking</strong> pinpoints ovulation with clinical accuracy:
@@ -192,9 +186,7 @@ export function OvulationContent() {
 
       {/* 5. Shettles Gender Timing Theory */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Flame className="h-5 w-5 text-pink-500" />
-          4. Shettles Method for Gender Conception Timing
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">4. Shettles Method for Gender Conception Timing
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           Developed by Dr. Landrum Shettles, this method proposes timing intercourse relative to ovulation to influence offspring sex based on sperm dimorphism:

@@ -102,7 +102,7 @@ export function StudentLoanContent() {
         <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Comprehensive Higher Education Financial Guide
         </div>
-        <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
+        <h1 className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
           Student Loan Calculator Guide: Repayment Plans, Forgiveness &amp; Projections
         </h1>
         <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
@@ -113,21 +113,21 @@ export function StudentLoanContent() {
       {/* Main Educational Content with Required Headings */}
       <div className="space-y-8 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">What Is a Student Loan?</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">What Is a Student Loan?</h2>
           <p>
             A student loan is money borrowed from the federal government or private financial institutions to pay for post-secondary education costs, including tuition, fees, room and board, books, and educational supplies.
           </p>
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">How Student Loans Work</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">How Student Loans Work</h2>
           <p>
             Student loans disburse funds per academic term. Repayment begins after a post-graduation grace period. Monthly payments are calculated based on principal, interest rate, and chosen repayment plan length.
           </p>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Federal Student Loans</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Federal Student Loans</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border space-y-1">
               <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Direct Subsidized Loans</span>
@@ -142,7 +142,7 @@ export function StudentLoanContent() {
 
         {/* Federal Repayment Plans Table matching Calculator.net PDF Page 3! */}
         <section className="space-y-3">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Student Loan Repayment Options (Calculator.net Reference Table)</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Student Loan Repayment Options (Calculator.net Reference Table)</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden">
               <thead className="bg-zinc-100 dark:bg-zinc-800 font-bold text-zinc-900 dark:text-zinc-100">
@@ -203,7 +203,7 @@ export function StudentLoanContent() {
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Baseline Calculation Examples</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Baseline Calculation Examples</h2>
           <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
             <div className="font-bold font-sans text-blue-600">Section A Baseline ($30,000 @ 6.8% 10 Yrs):</div>
             <div>Monthly Repayment = $345.24/mo | Total Interest = $11,428.92 | Total Payments = $41,428.92</div>
@@ -219,7 +219,7 @@ export function StudentLoanContent() {
       <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
           <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <h2 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
             Frequently Asked Questions (15 Key Student Loan Insights)
           </h2>
         </div>
@@ -261,7 +261,7 @@ export function StudentLoanContent() {
 
       {/* Related Calculators */}
       <section className="space-y-3  dark:border-zinc-800 pt-6">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Related Educational &amp; Financial Calculators</h2>
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400">Related Educational &amp; Financial Calculators</h2>
         <div className="flex flex-wrap gap-2 text-xs">
           <Link href="/calculators/personal-loan-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Personal Loan Calculator

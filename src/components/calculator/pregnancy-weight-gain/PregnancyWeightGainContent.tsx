@@ -26,7 +26,7 @@ export function PregnancyWeightGainContent() {
             <BookOpen className="h-6 w-6" />
           </div>
           <div>
-            <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 m-0">
+            <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 m-0">
               Complete Guide to Healthy Pregnancy Weight Gain
             </h2>
             <p className="text-xs text-pink-600 dark:text-pink-400 font-semibold m-0 mt-0.5">
@@ -41,9 +41,7 @@ export function PregnancyWeightGainContent() {
 
       {/* 2. Institute of Medicine (IOM) Guideline Tables */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Award className="h-5 w-5 text-pink-500" />
-          1. Institute of Medicine (IOM) Target Weight Gain Guidelines
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">1. Institute of Medicine (IOM) Target Weight Gain Guidelines
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           The Institute of Medicine (in collaboration with the National Research Council) established target weight gain categories based on pre-pregnancy Body Mass Index (BMI).
@@ -95,7 +93,7 @@ export function PregnancyWeightGainContent() {
         </div>
 
         {/* IOM Table 2: Twin Pregnancy */}
-        <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 pt-2">
+        <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 pt-2">
           Twin Gestation Weight Gain Guidelines
         </h3>
         <div className="overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800">
@@ -140,9 +138,7 @@ export function PregnancyWeightGainContent() {
 
       {/* 3. Physiological Weight Composition Breakdown */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Scale className="h-5 w-5 text-pink-500" />
-          2. Physiological Breakdown: Where Does the Weight Go?
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">2. Physiological Breakdown: Where Does the Weight Go?
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           A common misconception is that pregnancy weight gain consists mostly of fat. In reality, maternal body fat represents only about 25% to 30% of total gestational weight gain. For an average 30 lb (13.6 kg) total weight gain at full term (40 weeks):
@@ -186,9 +182,7 @@ export function PregnancyWeightGainContent() {
 
       {/* 4. Trimester Calorie Requirements & Nutrition */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <Flame className="h-5 w-5 text-pink-500" />
-          3. Trimester-by-Trimester Caloric & Nutrient Requirements
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">3. Trimester-by-Trimester Caloric & Nutrient Requirements
         </h2>
         <p className="text-xs text-slate-900 dark:text-slate-100">
           The phrase "eating for two" does not mean doubling caloric intake. The American College of Obstetricians and Gynecologists recommends specific, moderate daily caloric increases by trimester:
@@ -235,9 +229,7 @@ export function PregnancyWeightGainContent() {
 
       {/* 5. Complications of Suboptimal Weight Gain */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <AlertCircle className="h-5 w-5 text-blue-600" />
-          4. Complications of Inadequate or Excessive Weight Gain
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">4. Complications of Inadequate or Excessive Weight Gain
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -271,9 +263,7 @@ export function PregnancyWeightGainContent() {
 
       {/* 6. Food Safety & Substances to Avoid */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <ShieldCheck className="h-5 w-5 text-blue-600" />
-          5. Food Safety Guidelines & Substances to Avoid
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">5. Food Safety Guidelines & Substances to Avoid
         </h2>
         <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs space-y-3">
           <p className="m-0 leading-relaxed">

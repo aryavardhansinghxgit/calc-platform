@@ -33,7 +33,7 @@ export function FatIntakeContent() {
             <BookOpen className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               The Comprehensive Guide to Dietary Fat Intake, Fatty Acid Sub-Types & Cardiovascular Health
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -44,7 +44,7 @@ export function FatIntakeContent() {
 
         {/* Section 1 & 2 */}
         <div className="space-y-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">1–2.</span> What Is Dietary Fat & Why Is It Essential?
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -55,9 +55,7 @@ export function FatIntakeContent() {
         {/* Fatty Acid Types Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
           <div className="bg-blue-50/80 p-6 rounded-2xl border border-emerald-200/80 space-y-3">
-            <h4 className="font-bold text-emerald-950 text-base flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-blue-600" />
-              Monounsaturated (MUFA)
+            <h4 className="font-bold text-emerald-950 text-base flex items-center gap-2">Monounsaturated (MUFA)
             </h4>
             <p className="text-xs md:text-sm text-slate-900 leading-relaxed">
               Found in extra virgin olive oil and avocados. Lowers harmful LDL cholesterol while preserving protective HDL cholesterol.
@@ -65,9 +63,7 @@ export function FatIntakeContent() {
           </div>
 
           <div className="bg-blue-50/80 p-6 rounded-2xl border border-cyan-200/80 space-y-3">
-            <h4 className="font-bold text-cyan-950 text-base flex items-center gap-2">
-              <Activity className="w-5 h-5 text-blue-600" />
-              Polyunsaturated (PUFA) & Omega-3
+            <h4 className="font-bold text-cyan-950 text-base flex items-center gap-2">Polyunsaturated (PUFA) & Omega-3
             </h4>
             <p className="text-xs md:text-sm text-slate-900 leading-relaxed">
               EPA and DHA from wild salmon reduce triglycerides, decrease systemic inflammation, and support brain cell membrane fluidity.
@@ -75,9 +71,7 @@ export function FatIntakeContent() {
           </div>
 
           <div className="bg-blue-50/80 p-6 rounded-2xl border border-rose-200/80 space-y-3">
-            <h4 className="font-bold text-rose-950 text-base flex items-center gap-2">
-              <Flame className="w-5 h-5 text-blue-600" />
-              Saturated Fat Limits
+            <h4 className="font-bold text-rose-950 text-base flex items-center gap-2">Saturated Fat Limits
             </h4>
             <p className="text-xs md:text-sm text-slate-900 leading-relaxed">
               Limit saturated fat to &lt;10% of daily calories (&lt;7% according to the AHA for cardiovascular risk reduction).
@@ -87,7 +81,7 @@ export function FatIntakeContent() {
 
         {/* Section 18 & 19: Fat Intake by Age Table (Reference from PDF) */}
         <div className="space-y-4 pt-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">18–19.</span> Fat Intake Guidelines by Age Bracket
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -126,7 +120,7 @@ export function FatIntakeContent() {
 
         {/* Section 25: Healthy Fat Food Reference Table */}
         <div className="space-y-4 pt-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">25.</span> Healthy Fat Food Reference Values
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -191,7 +185,7 @@ export function FatIntakeContent() {
             <HelpCircle className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               Frequently Asked Questions (40 Clinical Answers)
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -240,7 +234,7 @@ export function FatIntakeContent() {
       <section className="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         <div className="flex items-center gap-3  pb-4">
           <PieChart className="w-6 h-6 text-blue-600" />
-          <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+          <h2 className="text-xl md:text-2xl font-bold text-blue-600">
             Related Fitness & Nutrition Calculators
           </h2>
         </div>

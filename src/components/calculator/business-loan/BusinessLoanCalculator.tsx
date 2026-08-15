@@ -497,7 +497,7 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
           <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-3">
             <div className="flex items-center gap-2">
               <Table className="h-5 w-5 text-purple-600" />
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 Commercial Amortization Schedule (Calculator.net Match)
               </h3>
             </div>
@@ -660,8 +660,7 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
       {/* TAB 5: VISUAL DASHBOARDS */}
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-blue-500" /> Commercial Loan Balance Amortization Over Time
+          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Commercial Loan Balance Amortization Over Time
           </h3>
 
           <div className="h-64 w-full">

@@ -7,7 +7,7 @@ export function Base64Content() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: WHAT IS BASE64 ENCODING */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. What is Base64 Encoding?
         </h2>
         <p>
@@ -20,14 +20,14 @@ export function Base64Content() {
 
       {/* SECTION 2: HOW THE BASE64 ALGORITHM WORKS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. How the Base64 Algorithm Works (Step-by-Step)
         </h2>
         <p>
           The Base64 algorithm processes binary data by grouping 3 input Bytes (24 bits total) and splitting them into 4 6-bit units. Each 6-bit unit yields a decimal value between 0 and 63, which maps directly to a character in the Base64 Index Table.
         </p>
 
-        <h3 className="text-base font-bold text-zinc-800 dark:text-zinc-200 mt-3">
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mt-3">
           Step-by-Step Conversion Matrix: Encoding the String "Man"
         </h3>
 
@@ -85,7 +85,7 @@ export function Base64Content() {
           </table>
         </div>
 
-        <h3 className="text-base font-bold text-zinc-800 dark:text-zinc-200 mt-4">
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mt-4">
           Understanding Base64 Padding ('=')
         </h3>
         <p>
@@ -99,7 +99,7 @@ export function Base64Content() {
 
       {/* SECTION 3: BASE64 INDEX TABLE */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. The Base64 Index Table Reference (RFC 4648)
         </h2>
         <p>
@@ -143,34 +143,34 @@ export function Base64Content() {
 
       {/* SECTION 4: KEY USE CASES */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. Key Use Cases in Modern Software Engineering
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">1. Data URIs in Web Development</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">1. Data URIs in Web Development</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Embed small icons, logos, and fonts inline directly inside HTML (<code>&lt;img src="data:image/png;base64,..." /&gt;</code>) or CSS files to reduce HTTP request round-trips.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">2. HTTP Basic Authentication</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">2. HTTP Basic Authentication</h3>
             <p className="text-slate-900 dark:text-slate-100">
               HTTP Basic Auth headers pass <code>username:password</code> credentials in Base64 encoding: <code>Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=</code>.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">3. JSON Web Tokens (JWT)</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">3. JSON Web Tokens (JWT)</h3>
             <p className="text-slate-900 dark:text-slate-100">
               JWT headers, claims payloads, and signatures rely on URL-Safe Base64 (Base64URL) to transmit authentication tokens across HTTP headers.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">4. Email Attachments (MIME RFC 2045)</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">4. Email Attachments (MIME RFC 2045)</h3>
             <p className="text-slate-900 dark:text-slate-100">
               SMTP protocol transmits binary attachments (PDFs, ZIPs, photos) safely by converting binary streams into 76-character chunked Base64 text.
             </p>
@@ -180,7 +180,7 @@ export function Base64Content() {
 
       {/* SECTION 5: PERFORMANCE CONSIDERATIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. Performance Considerations & Data Overhead
         </h2>
         <p>
@@ -197,7 +197,7 @@ export function Base64Content() {
 
       {/* SECTION 6: CODE SNIPPETS FOR DEVELOPERS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           6. Code Snippets for Developers
         </h2>
 

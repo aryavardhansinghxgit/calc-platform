@@ -5,7 +5,7 @@ export function MolarityContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-zinc-300">
       {/* 1. FUNDAMENTAL CONCEPTS */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Fundamental Concepts of Chemical Concentration
         </h2>
         <p className="leading-relaxed">
@@ -43,7 +43,7 @@ export function MolarityContent() {
 
       {/* 2. CORE MATHEMATICAL FORMULAS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           The Core Mathematical Formulas for Solution Chemistry
         </h2>
         <p className="leading-relaxed">
@@ -81,7 +81,7 @@ export function MolarityContent() {
           </div>
         </div>
 
-        <h3 className="text-xl font-extrabold text-slate-900 dark:text-zinc-100 pt-2">
+        <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 pt-2">
           Step-by-Step Solute Mass Calculation Example
         </h3>
         <p className="leading-relaxed text-xs">
@@ -103,7 +103,7 @@ export function MolarityContent() {
 
       {/* 3. COMPARISON REFERENCE TABLE */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Molarity vs. Molality vs. Normality Comparison Table
         </h2>
         <p className="leading-relaxed">
@@ -158,7 +158,7 @@ export function MolarityContent() {
 
       {/* 4. LABORATORY BEST PRACTICES */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Essential Laboratory Protocols &amp; Best Practices
         </h2>
         <p className="leading-relaxed">
@@ -184,7 +184,7 @@ export function MolarityContent() {
 
       {/* 5. HYDRATES & STOCK ACIDS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Working with Hydrates &amp; Commercial Stock Acids
         </h2>
         <p className="leading-relaxed">
@@ -238,7 +238,7 @@ export function MolarityContent() {
 
       {/* 6. TEMPERATURE DEPENDENCE */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Temperature Dependence &amp; Volumetric Glassware Calibration
         </h2>
         <p className="leading-relaxed text-xs">

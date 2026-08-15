@@ -354,7 +354,7 @@ export function DiceRollerCalculator() {
             <Dices className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="text-sm font-extrabold text-slate-900 dark:text-zinc-100">
+            <h3 className="text-sm font-extrabold text-blue-600 dark:text-blue-400">
               Virtual Polyhedral &amp; TTRPG Dice Station
             </h3>
             <p className="text-[10px] text-slate-500 dark:text-zinc-400">
@@ -513,8 +513,7 @@ export function DiceRollerCalculator() {
             <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs space-y-5">
               <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-3">
                 <div>
-                  <h4 className="text-xs font-extrabold text-slate-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">
-                    <Hash className="h-4 w-4 text-purple-600 dark:text-purple-400" /> TTRPG Formula Expression
+                  <h4 className="text-xs font-extrabold text-slate-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">TTRPG Formula Expression
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
                     Type custom RPG expressions or tap die buttons to build your formula.

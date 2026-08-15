@@ -29,8 +29,7 @@ export function InterestContent() {
           H2 1: WHAT IS INTEREST?
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <TrendingUp className="h-6 w-6 text-blue-600" /> What Is Interest?
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">What Is Interest?
         </h2>
 
         <p className="text-base font-medium text-zinc-800 dark:text-zinc-200 leading-relaxed">
@@ -43,8 +42,7 @@ export function InterestContent() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
           <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 space-y-2">
-            <h3 className="text-sm font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">
-              <DollarSign className="h-4 w-4 text-blue-500" /> Interest for Borrowers
+            <h3 className="text-sm font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">Interest for Borrowers
             </h3>
             <p className="text-xs text-slate-900 dark:text-slate-100">
               The cost of accessing capital today (loans, mortgages, credit cards). Borrowers pay interest to lenders as part of monthly debt amortization.
@@ -52,8 +50,7 @@ export function InterestContent() {
           </div>
 
           <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-50/30 border border-emerald-100 dark:border-emerald-900/40 space-y-2">
-            <h3 className="text-sm font-bold text-emerald-900 dark:text-blue-400 flex items-center gap-1.5">
-              <Award className="h-4 w-4 text-blue-600" /> Interest for Investors
+            <h3 className="text-sm font-bold text-emerald-900 dark:text-blue-400 flex items-center gap-1.5">Interest for Investors
             </h3>
             <p className="text-xs text-slate-900 dark:text-slate-100">
               The passive return earned on deposited assets (CDs, savings accounts, bonds). Investors leverage compounding to build long-term wealth.
@@ -66,15 +63,14 @@ export function InterestContent() {
           H2 2: SIMPLE INTEREST
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Percent className="h-6 w-6 text-blue-600" /> Understanding Simple Interest
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Understanding Simple Interest
         </h2>
 
         <p>
           <strong>Simple interest</strong> is calculated strictly on the original principal sum for the entire duration of the loan or investment. Accumulated interest is never added back into the principal base.
         </p>
 
-        <div className="p-5 rounded-xl bg-zinc-900 text-white font-sans tabular-nums space-y-2 shadow-md my-4">
+        <div className="p-5 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 font-sans tabular-nums space-y-2 shadow-md my-4">
           <span className="text-xs text-blue-400 font-bold uppercase tracking-wider block">Simple Interest Formula</span>
           <div className="text-xl sm:text-2xl font-black text-blue-400">
             I = P &times; r &times; t
@@ -96,15 +92,14 @@ export function InterestContent() {
           H2 3: COMPOUND INTEREST
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Zap className="h-6 w-6 text-blue-600" /> Understanding Compound Interest
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Understanding Compound Interest
         </h2>
 
         <p>
           <strong>Compound interest</strong> (often called "interest on interest") occurs when earned interest is periodically added back to the principal base, allowing subsequent interest to be calculated on a continuously growing total balance.
         </p>
 
-        <div className="p-5 rounded-xl bg-zinc-900 text-white font-sans tabular-nums space-y-3 shadow-md my-4">
+        <div className="p-5 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 font-sans tabular-nums space-y-3 shadow-md my-4">
           <span className="text-xs text-blue-400 font-bold uppercase tracking-wider block">Compound Interest Formulas</span>
           <div className="text-lg sm:text-xl font-black text-blue-400">
             Discrete: A = P &times; (1 + r / n)<sup>n &times; t</sup>
@@ -123,8 +118,7 @@ export function InterestContent() {
           H2 4: SIMPLE VS COMPOUND INTEREST COMPARISON
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Scale className="h-6 w-6 text-blue-600" /> Simple Interest vs. Compound Interest
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Simple Interest vs. Compound Interest
         </h2>
 
         <div className="overflow-x-auto my-4">
@@ -166,8 +160,7 @@ export function InterestContent() {
           H2 5: COMPOUNDING FREQUENCIES EXPLAINED
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Layers className="h-6 w-6 text-blue-600" /> Compounding Frequencies Explained (Daily to Continuous)
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Compounding Frequencies Explained (Daily to Continuous)
         </h2>
 
         <p>
@@ -211,8 +204,7 @@ export function InterestContent() {
           H2 6: THE RULE OF 72
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Clock className="h-6 w-6 text-blue-600" /> The Rule of 72
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">The Rule of 72
         </h2>
 
         <p>
@@ -231,8 +223,7 @@ export function InterestContent() {
           H2 7: INFLATION AND INTEREST
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Flame className="h-6 w-6 text-blue-600" /> Inflation and Interest: Real Purchasing Power
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Inflation and Interest: Real Purchasing Power
         </h2>
 
         <p>
@@ -248,8 +239,7 @@ export function InterestContent() {
           H2 8: TAXATION OF INTEREST INCOME
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <ShieldCheck className="h-6 w-6 text-blue-600" /> Taxation of Interest Income
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Taxation of Interest Income
         </h2>
 
         <p className="text-xs">
@@ -261,34 +251,33 @@ export function InterestContent() {
           H2 9: FREQUENTLY ASKED QUESTIONS (12+ FAQS)
          ========================================== */}
       <section className="space-y-6 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <HelpCircle className="h-6 w-6 text-blue-600" /> Frequently Asked Questions (12+ FAQs)
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Frequently Asked Questions (12+ FAQs)
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">1. What is the interest rate?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">1. What is the interest rate?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               The percentage charged by lenders or paid to investors per year relative to principal capital.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">2. What is the difference between APR and APY?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">2. What is the difference between APR and APY?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               APR is nominal annual interest without intra-year compounding. APY is effective annual yield taking compounding into account.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">3. How does compounding frequency impact returns?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">3. How does compounding frequency impact returns?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Higher compounding frequencies (e.g. daily vs annual) generate more frequent interest additions, yielding higher total ending wealth.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">4. What is the Rule of 72?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">4. What is the Rule of 72?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               A quick rule of thumb estimating doubling time by dividing 72 by the annual return percentage.
             </p>

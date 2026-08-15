@@ -267,8 +267,7 @@ export function GolfHandicapCalculator() {
           <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
               <div className="space-y-0.5">
-                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                  <Trophy className="h-4 w-4 text-emerald-600" /> WHS 20-Round Differential Matrix
+                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">WHS 20-Round Differential Matrix
                 </h3>
                 <p className="text-[11px] text-zinc-500">
                   {whsResult.whsRuleNote}
@@ -445,8 +444,7 @@ export function GolfHandicapCalculator() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           {/* Inputs Card */}
           <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <Flag className="h-4 w-4 text-emerald-600" /> Target Course & Format Details
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Target Course & Format Details
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -548,8 +546,7 @@ export function GolfHandicapCalculator() {
       {activeTab === "single" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <Calculator className="h-4 w-4 text-emerald-600" /> Single Round Differential Quick Converter
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Single Round Differential Quick Converter
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

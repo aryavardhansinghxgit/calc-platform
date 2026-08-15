@@ -7,7 +7,7 @@ export function FuelCostContent() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: THE MATHEMATICS OF FUEL CONSUMPTION & COST */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. The Mathematics of Fuel Consumption &amp; Cost
         </h2>
         <p>
@@ -33,7 +33,7 @@ export function FuelCostContent() {
 
       {/* SECTION 2: IMPERIAL VS. METRIC FUEL ECONOMY CONVERSION DYNAMICS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. Imperial vs. Metric Fuel Economy Conversion Dynamics (The "MPG Illusion")
         </h2>
         <p>
@@ -53,7 +53,7 @@ export function FuelCostContent() {
 
       {/* SECTION 3: AERODYNAMICS, SPEED & DRIVING PHYSICS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. Aerodynamics, Speed &amp; Driving Physics
         </h2>
         <p>
@@ -86,7 +86,7 @@ export function FuelCostContent() {
 
       {/* SECTION 4: 10 ACTIONABLE VEHICLE OPTIMIZATION TIPS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. Actionable Vehicle Optimization &amp; Fuel Saving Tips
         </h2>
         <ul className="list-disc pl-5 space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300">
@@ -99,7 +99,7 @@ export function FuelCostContent() {
 
       {/* SECTION 5: ELECTRIC VEHICLE (EV) VS. ICE COST PARITY */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. Electric Vehicle (EV) vs. Internal Combustion Engine (ICE) Cost Parity
         </h2>
         <p>
@@ -109,7 +109,7 @@ export function FuelCostContent() {
 
       {/* SECTION 6: COMMERCIAL FLEET & BUSINESS TAX MILEAGE DEDUCTIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           6. Commercial Fleet &amp; Business Tax Mileage Deductions
         </h2>
         <p>

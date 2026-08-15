@@ -558,8 +558,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
       {activeTab === "fraScale" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-5">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Clock className="h-5 w-5 text-emerald-500" /> Full Retirement Age (FRA) &amp; Monthly Benefit Scale
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Full Retirement Age (FRA) &amp; Monthly Benefit Scale
             </h3>
             <p className="text-xs text-zinc-500 mt-0.5">
               Your exact FRA is <strong>{results.fraDetails.fraDisplay}</strong> based on your birth year {results.fraDetails.birthYear}.
@@ -598,8 +597,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
       {activeTab === "spousalTax" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Users className="h-5 w-5 text-rose-500" /> Spousal, Survivor &amp; Benefit Taxability Suite
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Spousal, Survivor &amp; Benefit Taxability Suite
             </h3>
           </div>
 
@@ -663,8 +661,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-blue-500" /> Cumulative Lifetime Benefits Comparison Chart
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Cumulative Lifetime Benefits Comparison Chart
             </h3>
 
             <Button type="button" size="sm" variant="outline" onClick={exportCSV} className="h-8 text-xs cursor-pointer">

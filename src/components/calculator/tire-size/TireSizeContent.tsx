@@ -5,7 +5,7 @@ export function TireSizeContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-zinc-300">
       {/* 1. INTRODUCTION */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Comprehensive Guide to Tire Geometry, Wheel Fitment &amp; Speedometer Calibration
         </h2>
         <p className="leading-relaxed">
@@ -24,7 +24,7 @@ export function TireSizeContent() {
 
       {/* 2. ANATOMY OF A TIRE SIDEWALL */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           1. Anatomy of a Tire Sidewall: Deciphering Standardization Codes
         </h3>
         <p className="leading-relaxed">
@@ -89,7 +89,7 @@ export function TireSizeContent() {
 
       {/* 3. MATHEMATICAL FORMULAS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           2. The Core Mathematical Formulas for Tire Geometry
         </h3>
         <p className="leading-relaxed">
@@ -139,7 +139,7 @@ export function TireSizeContent() {
 
       {/* 4. SPEEDOMETER & GEAR RATIO CONSEQUENCES */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           3. Speedometer Error, Transmission &amp; Differential Gear Ratio Consequences
         </h3>
         <p className="leading-relaxed">
@@ -165,7 +165,7 @@ export function TireSizeContent() {
 
       {/* 5. PLUS SIZING RULE */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           4. The "+1" and "+2" Wheel Upsizing Rule (Plus Sizing Guide)
         </h3>
         <p className="leading-relaxed">
@@ -191,7 +191,7 @@ export function TireSizeContent() {
 
       {/* 6. WHEEL OFFSET & CLEARANCE */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           5. Wheel Offset (ET), Backspacing &amp; Suspension Clearance Mechanics
         </h3>
         <p className="leading-relaxed">
@@ -216,7 +216,7 @@ export function TireSizeContent() {
 
       {/* 7. DOT DATE CODES & UTQG */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           6. DOT Date Stamps, UTQG Quality Ratings &amp; Tire Maintenance
         </h3>
         <p className="leading-relaxed">

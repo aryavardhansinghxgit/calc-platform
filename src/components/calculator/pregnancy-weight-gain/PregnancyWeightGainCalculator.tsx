@@ -302,7 +302,7 @@ Calculated on CalcPlatform.`;
               <Baby className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h2 className="text-base font-bold text-blue-600 dark:text-blue-400">
                 Pregnancy & Maternal Details
               </h2>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -651,7 +651,7 @@ Calculated on CalcPlatform.`;
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                   Gestational Weight Gain Band (Week 1 – 40)
                 </h3>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -687,7 +687,7 @@ Calculated on CalcPlatform.`;
                       if (active && payload && payload.length) {
                         const data = payload[0].payload;
                         return (
-                          <div className="bg-zinc-900 text-white p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
+                          <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
                             <p className="font-bold text-pink-400">{data.week} Target Range</p>
                             <p>
                               Min Weight: <strong>{data.minWeight} {unitSystem === "metric" ? "kg" : "lbs"}</strong>
@@ -729,7 +729,7 @@ Calculated on CalcPlatform.`;
         {activeTab === "breakdown" && (
           <div className="space-y-5">
             <div>
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 Where Does the Weight Go at Week {results.currentWeek}?
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -807,7 +807,7 @@ Calculated on CalcPlatform.`;
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                   40-Week Gestational Weight Schedule
                 </h3>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">

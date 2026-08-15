@@ -102,7 +102,7 @@ export function PersonalLoanContent() {
         <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Complete Personal Loan &amp; Borrowing Guide
         </div>
-        <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
+        <h1 className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
           Personal Loan Calculator Guide: Amortization, Interest &amp; Debt Consolidation
         </h1>
         <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
@@ -113,21 +113,21 @@ export function PersonalLoanContent() {
       {/* Main Educational Content with Required Headings */}
       <div className="space-y-8 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">What Are Personal Loans?</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">What Are Personal Loans?</h2>
           <p>
             A personal loan is a fixed-rate installment loan repaid in equal monthly payments over a predetermined period (typically 12 to 84 months). Unlike auto loans or mortgages, unsecured personal loans do not require collateral.
           </p>
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">How Personal Loans Work</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">How Personal Loans Work</h2>
           <p>
             When approved for a personal loan, the lender disburses a lump sum into your bank account. Each monthly payment is divided into principal reduction and interest charges according to an amortization schedule.
           </p>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Personal Loan Payment Formula</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Personal Loan Payment Formula</h2>
           <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
             <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Monthly Payment Formula</span>
             <div>PMT = [ Principal × r × (1 + r)^n ] / [ (1 + r)^n - 1 ]</div>
@@ -136,7 +136,7 @@ export function PersonalLoanContent() {
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Baseline Calculation Example ($20,000 @ 10% for 5 Years)</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Baseline Calculation Example ($20,000 @ 10% for 5 Years)</h2>
           <p>
             For a $20,000 personal loan at 10.0% APR over 5 years (60 monthly payments):
           </p>
@@ -149,7 +149,7 @@ export function PersonalLoanContent() {
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Debt Consolidation Strategy Case Study</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Debt Consolidation Strategy Case Study</h2>
           <p>
             Consider a borrower carrying $8,000 on Card A at 19.99% APR ($240/mo) and $7,000 on Card B at 24.99% APR ($225/mo), totaling $15,000 in credit card debt.
           </p>
@@ -160,21 +160,21 @@ export function PersonalLoanContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-y border-zinc-200 dark:border-zinc-800 py-6 text-xs">
           <div>
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Unsecured vs Secured</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Unsecured vs Secured</h3>
             <p>Unsecured loans rely on credit history; secured loans require backing assets like CDs or home equity.</p>
           </div>
           <div>
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Origination Fees</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Origination Fees</h3>
             <p>Upfront processing fees (1% to 8%) deducted from total loan proceeds upon funding.</p>
           </div>
           <div>
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Early Payoff Benefits</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Early Payoff Benefits</h3>
             <p>Paying extra principal each month reduces overall loan duration and cumulative interest expenses.</p>
           </div>
         </div>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Common Personal Loan Mistakes to Avoid</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Common Personal Loan Mistakes to Avoid</h2>
           <p>
             Avoid borrowing more than necessary, ignoring origination fees, choosing terms that are too long, or failing to shop around with multiple lenders to compare pre-qualified APR offers.
           </p>
@@ -185,7 +185,7 @@ export function PersonalLoanContent() {
       <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
           <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <h2 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
             Frequently Asked Questions (15 Key Personal Loan Insights)
           </h2>
         </div>
@@ -227,7 +227,7 @@ export function PersonalLoanContent() {
 
       {/* Related Calculators */}
       <section className="space-y-3  dark:border-zinc-800 pt-6">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Related Financial &amp; Debt Calculators</h2>
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400">Related Financial &amp; Debt Calculators</h2>
         <div className="flex flex-wrap gap-2 text-xs">
           <Link href="/calculators/loan-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Loan Calculator

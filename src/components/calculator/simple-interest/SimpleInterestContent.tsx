@@ -27,8 +27,7 @@ export function SimpleInterestContent() {
           H2 1: WHAT IS SIMPLE INTEREST?
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <TrendingUp className="h-6 w-6 text-blue-600" /> What Is Simple Interest?
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">What Is Simple Interest?
         </h2>
 
         <p className="text-base font-medium text-zinc-800 dark:text-zinc-200 leading-relaxed">
@@ -41,8 +40,7 @@ export function SimpleInterestContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
           <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 space-y-2">
-            <h3 className="text-sm font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-blue-500" /> Simple Interest for Borrowers
+            <h3 className="text-sm font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">Simple Interest for Borrowers
             </h3>
             <p className="text-xs text-slate-900 dark:text-slate-100">
               Highly advantageous for borrowers! Because interest does not compound on accrued interest, borrowing costs remain lower over time compared to compounding loans like credit cards.
@@ -50,8 +48,7 @@ export function SimpleInterestContent() {
           </div>
 
           <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-50/30 border border-amber-100 dark:border-amber-900/40 space-y-2">
-            <h3 className="text-sm font-bold text-amber-900 dark:text-blue-400 flex items-center gap-1.5">
-              <AlertTriangle className="h-4 w-4 text-blue-600" /> Simple Interest for Investors
+            <h3 className="text-sm font-bold text-amber-900 dark:text-blue-400 flex items-center gap-1.5">Simple Interest for Investors
             </h3>
             <p className="text-xs text-slate-900 dark:text-slate-100">
               Investors receive fixed linear payouts, but miss out on long-term exponential asset growth. For long-term wealth accumulation, explore our <Link href="/calculators/compound-interest-calculator" className="text-blue-600 font-semibold hover:underline">Compound Interest Calculator</Link>.
@@ -64,8 +61,7 @@ export function SimpleInterestContent() {
           H2 2: SIMPLE INTEREST FORMULA
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Percent className="h-6 w-6 text-blue-600" /> Simple Interest Formula
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Simple Interest Formula
         </h2>
 
         <p>
@@ -73,7 +69,7 @@ export function SimpleInterestContent() {
         </p>
 
         {/* Formula Box */}
-        <div className="p-5 rounded-xl bg-zinc-900 text-white font-sans tabular-nums space-y-3 shadow-md my-4">
+        <div className="p-5 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 font-sans tabular-nums space-y-3 shadow-md my-4">
           <span className="text-xs text-blue-400 font-bold uppercase tracking-wider block">1. Total Simple Interest Formula</span>
           <div className="text-xl sm:text-2xl font-black text-blue-400">
             I = P &times; r &times; t
@@ -98,8 +94,7 @@ export function SimpleInterestContent() {
           H2 3: HOW SIMPLE INTEREST WORKS
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Clock className="h-6 w-6 text-blue-600" /> How Simple Interest Works: Step-by-Step Walkthrough
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">How Simple Interest Works: Step-by-Step Walkthrough
         </h2>
 
         <p>
@@ -126,8 +121,7 @@ export function SimpleInterestContent() {
           H2 4: SIMPLE INTEREST FOR DIFFERENT FREQUENCIES
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Zap className="h-6 w-6 text-blue-600" /> Simple Interest for Different Frequencies (Years, Months, Weeks, Days)
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Simple Interest for Different Frequencies (Years, Months, Weeks, Days)
         </h2>
 
         <p>
@@ -159,8 +153,7 @@ export function SimpleInterestContent() {
           H2 5: SIMPLE INTEREST EXAMPLES
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <BookOpen className="h-6 w-6 text-blue-600" /> Practical Simple Interest Examples
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Practical Simple Interest Examples
         </h2>
 
         <div className="space-y-3 text-xs">
@@ -190,8 +183,7 @@ export function SimpleInterestContent() {
           H2 6: WHAT FINANCIAL INSTRUMENTS USE SIMPLE INTEREST?
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <ShieldCheck className="h-6 w-6 text-blue-600" /> What Financial Instruments Use Simple Interest?
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">What Financial Instruments Use Simple Interest?
         </h2>
 
         <ul className="list-disc pl-5 space-y-2 text-xs text-slate-900 dark:text-slate-100">
@@ -206,8 +198,7 @@ export function SimpleInterestContent() {
           H2 7: SIMPLE INTEREST VS COMPOUND INTEREST
          ========================================== */}
       <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <Scale className="h-6 w-6 text-blue-600" /> Simple Interest vs. Compound Interest Comparison
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Simple Interest vs. Compound Interest Comparison
         </h2>
 
         <div className="overflow-x-auto my-4">
@@ -253,62 +244,61 @@ export function SimpleInterestContent() {
           H2 8: FREQUENTLY ASKED QUESTIONS (FAQ)
          ========================================== */}
       <section className="space-y-6 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-3">
-          <HelpCircle className="h-6 w-6 text-blue-600" /> Frequently Asked Questions (15+ FAQs)
+        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Frequently Asked Questions (15+ FAQs)
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">1. What is simple interest?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">1. What is simple interest?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Simple interest is an interest calculation method performed exclusively on the initial principal sum.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">2. How is simple interest calculated?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">2. How is simple interest calculated?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               By multiplying principal (P) by annual rate (r) and time in years (t): I = P &times; r &times; t.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">3. Is simple interest better than compound interest?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">3. Is simple interest better than compound interest?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               For borrowers, simple interest is better because interest doesn't compound. For investors, compound interest is far superior.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">4. Can simple interest be negative?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">4. Can simple interest be negative?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               In real-world nominal finance, interest rates are non-negative. However, net real simple interest can be negative if inflation exceeds the nominal rate.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">5. How do banks calculate monthly simple interest?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">5. How do banks calculate monthly simple interest?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Monthly simple interest equals principal multiplied by annual rate divided by 12 (I = P &times; r / 12).
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">6. Do car loans use simple interest?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">6. Do car loans use simple interest?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Yes, the vast majority of auto loans use simple interest calculated daily on the remaining principal balance.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">7. How to calculate simple interest for days?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">7. How to calculate simple interest for days?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Divide the number of days by 365: I = P &times; r &times; (days / 365).
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">8. What is the formula to find principal?</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">8. What is the formula to find principal?</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Principal P = I / (r &times; t), or from final balance P = A / (1 + r &times; t).
             </p>

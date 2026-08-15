@@ -7,7 +7,7 @@ export function GasMileageContent() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: THE MATHEMATICS OF FUEL ECONOMY & GAS MILEAGE */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. The Mathematics of Fuel Economy &amp; Gas Mileage
         </h2>
         <p>
@@ -33,7 +33,7 @@ export function GasMileageContent() {
 
       {/* SECTION 2: THE "MPG ILLUSION" & METRIC CONVERSION SCIENCE */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. The "MPG Illusion" &amp; Metric Conversion Science
         </h2>
         <p>
@@ -53,7 +53,7 @@ export function GasMileageContent() {
 
       {/* SECTION 3: HOW TO ACCURATELY TRACK GAS MILEAGE AT THE PUMP */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. How to Accurately Track Gas Mileage at the Pump (Step-by-Step)
         </h2>
         <ol className="list-decimal pl-5 space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300">
@@ -67,7 +67,7 @@ export function GasMileageContent() {
 
       {/* SECTION 4: KEY FACTORS AFFECTING REAL-WORLD GAS MILEAGE */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. Key Factors Affecting Real-World Gas Mileage
         </h2>
         <ul className="list-disc pl-5 space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300">
@@ -80,7 +80,7 @@ export function GasMileageContent() {
 
       {/* SECTION 5: DRIVING TECHNIQUES TO MAXIMIZE MPG (HYPER-MILING) */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. Driving Techniques to Maximize MPG (Hyper-Miling Strategies)
         </h2>
         <p>
@@ -95,7 +95,7 @@ export function GasMileageContent() {
 
       {/* SECTION 6: FLEET MILEAGE TRACKING & TAX DEDUCTIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           6. Fleet Mileage Tracking &amp; Tax Deductions
         </h2>
         <p>

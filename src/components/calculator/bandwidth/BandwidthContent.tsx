@@ -7,7 +7,7 @@ export function BandwidthContent() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: INTRODUCTION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. Introduction
         </h2>
         <p>
@@ -20,13 +20,13 @@ export function BandwidthContent() {
 
       {/* SECTION 2: MATHEMATICAL CONCEPT */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. Mathematical Concept
         </h2>
         <p>
           At the core of data transfer calculations lie fundamental mathematical relationships between data volume, transmission rates, time, and structural network overhead.
         </p>
-        <h3 className="text-base font-bold text-zinc-800 dark:text-zinc-200">
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
           Bits (b) vs. Bytes (B)
         </h3>
         <p>
@@ -42,7 +42,7 @@ export function BandwidthContent() {
           100 Mbps / 8 = 12.5 MB/s
         </div>
 
-        <h3 className="text-base font-bold text-zinc-800 dark:text-zinc-200 mt-4">
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mt-4">
           SI Metric (Base-1000) vs. IEC Binary (Base-1024) Standards
         </h3>
         <p>
@@ -57,7 +57,7 @@ export function BandwidthContent() {
           </li>
         </ul>
 
-        <h3 className="text-base font-bold text-zinc-800 dark:text-zinc-200 mt-4">
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mt-4">
           Bandwidth, Throughput, and Latency
         </h3>
         <p>
@@ -72,7 +72,7 @@ export function BandwidthContent() {
 
       {/* SECTION 3: FORMULA SECTION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. Formula Section
         </h2>
         <p>
@@ -127,7 +127,7 @@ export function BandwidthContent() {
 
       {/* SECTION 4: HOW THE CALCULATION WORKS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. How the Calculation Works
         </h2>
         <p>
@@ -152,13 +152,13 @@ export function BandwidthContent() {
 
       {/* SECTION 5: WORKED EXAMPLES */}
       <section className="space-y-4">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. Worked Examples
         </h2>
 
         {/* Basic Example */}
         <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
-          <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">
+          <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">
             Example 1: Basic — 10 GB Video Download over 100 Mbps Connection
           </h3>
           <p className="text-xs">
@@ -174,7 +174,7 @@ export function BandwidthContent() {
 
         {/* Intermediate Example */}
         <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
-          <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">
+          <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">
             Example 2: Intermediate — Web Server Hosting Bandwidth Sizing
           </h3>
           <p className="text-xs">
@@ -191,7 +191,7 @@ export function BandwidthContent() {
 
         {/* Advanced Example */}
         <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
-          <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">
+          <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">
             Example 3: Advanced — Remote Workforce Office Concurrency Simulation
           </h3>
           <p className="text-xs">
@@ -207,13 +207,13 @@ export function BandwidthContent() {
 
       {/* SECTION 6: VISUAL UNDERSTANDING */}
       <section className="space-y-4">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           6. Visual Understanding & Reference Tables
         </h2>
 
         {/* Table 1: Connection Speeds */}
         <div className="space-y-2">
-          <h3 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider">
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
             Table 1: Benchmark Internet Connection Speeds
           </h3>
           <div className="overflow-x-auto">
@@ -264,7 +264,7 @@ export function BandwidthContent() {
 
         {/* Table 2: Mobile Broadband */}
         <div className="space-y-2">
-          <h3 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider">
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
             Table 2: Mobile Broadband Connection Benchmarks
           </h3>
           <div className="overflow-x-auto">
@@ -310,7 +310,7 @@ export function BandwidthContent() {
 
       {/* SECTION 7: COMMON MISTAKES */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           7. Common Mistakes & Misconceptions
         </h2>
         <div className="space-y-2 text-xs">
@@ -346,30 +346,30 @@ export function BandwidthContent() {
 
       {/* SECTION 8: PRACTICAL APPLICATIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           8. Practical Applications
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Enterprise Cloud Backups</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Enterprise Cloud Backups</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Determining night-time backup windows for multi-terabyte virtual machine images over dedicated site-to-site VPN tunnels.
             </p>
           </div>
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Live Video Broadcasting & CDN</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Live Video Broadcasting & CDN</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Calculating total outbound bitrates for streaming 4K live streams (25 Mbps per viewer) across edge CDN distribution nodes.
             </p>
           </div>
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Remote Work Force Management</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Remote Work Force Management</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Sizing corporate office internet connections to prevent choppy Zoom video calls when dozens of employees operate simultaneously.
             </p>
           </div>
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Web Infrastructure Budgeting</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Web Infrastructure Budgeting</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Estimating monthly AWS/Azure egress bandwidth bills ($0.08 per GB) based on projected user traffic and average asset payload sizes.
             </p>
@@ -379,12 +379,12 @@ export function BandwidthContent() {
 
       {/* SECTION 9: RELATED MATHEMATICAL CONCEPTS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           9. Related Mathematical Concepts
         </h2>
         <div className="space-y-3 text-xs">
           <div>
-            <h3 className="font-bold text-zinc-800 dark:text-zinc-200">The Shannon-Hartley Theorem</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">The Shannon-Hartley Theorem</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Establishes the maximum theoretical channel capacity C in the presence of noise:
             </p>
@@ -397,7 +397,7 @@ export function BandwidthContent() {
           </div>
 
           <div>
-            <h3 className="font-bold text-zinc-800 dark:text-zinc-200">Bandwidth-Delay Product (BDP)</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Bandwidth-Delay Product (BDP)</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Measures the maximum volume of data in flight on a network link at any given instant:
             </p>
@@ -410,7 +410,7 @@ export function BandwidthContent() {
 
       {/* SECTION 10: SUMMARY */}
       <section className="space-y-3  dark:border-zinc-800 pt-4">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           10. Summary
         </h2>
         <p>

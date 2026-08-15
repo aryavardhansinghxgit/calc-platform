@@ -132,8 +132,7 @@ export function RetirementContent() {
       <div className="space-y-8 text-sm leading-relaxed">
         {/* Section 1: Rules of Thumb */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-blue-600" /> 1. Core Retirement Rules of Thumb
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">1. Core Retirement Rules of Thumb
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
@@ -162,8 +161,7 @@ export function RetirementContent() {
 
         {/* Section 2: Sources of Retirement Income */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Layers className="h-5 w-5 text-blue-600" /> 2. Sources of Retirement Income &amp; Vehicles
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">2. Sources of Retirement Income &amp; Vehicles
           </h3>
           
           <div className="overflow-x-auto">
@@ -211,7 +209,7 @@ export function RetirementContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (FAQ)
           </h3>
         </div>

@@ -583,8 +583,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
 
             {/* Late Penalty Risk Callout Card */}
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3 text-xs">
-              <h4 className="font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                <AlertTriangle className="h-4 w-4 text-amber-500" /> SECURE 2.0 Late Withdrawal Excise Penalty Risk
+              <h4 className="font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider text-[11px] flex items-center gap-1.5">SECURE 2.0 Late Withdrawal Excise Penalty Risk
               </h4>
               <div className="grid grid-cols-2 gap-3 font-sans tabular-nums">
                 <div className="bg-amber-50 dark:bg-amber-950/30 p-3 rounded-lg border border-amber-200 dark:border-amber-800">
@@ -606,8 +605,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-5">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <FileSpreadsheet className="h-5 w-5 text-purple-500" /> Multi-Account Portfolio Aggregator
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Multi-Account Portfolio Aggregator
               </h3>
               <p className="text-xs text-zinc-500 mt-0.5">
                 Add all your tax-deferred accounts. IRS rules allow aggregating IRAs, but employer 401(k) plans must be taken separately.
@@ -720,8 +718,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
       {activeTab === "qcdTax" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-4">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Heart className="h-5 w-5 text-rose-500" /> Qualified Charitable Distribution (QCD) Tax Optimizer
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Qualified Charitable Distribution (QCD) Tax Optimizer
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Transfer up to $105,000 directly from your IRA to a qualifying charity starting at age 70½ to satisfy RMDs completely tax-free.
@@ -783,8 +780,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
       {/* TAB 4: VISUAL LIFETIME CHART */}
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-blue-500" /> Account Balance Trajectory &amp; Annual RMDs (Age {results.currentAge} to 120)
+          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Account Balance Trajectory &amp; Annual RMDs (Age {results.currentAge} to 120)
           </h3>
 
           <div className="h-72 w-full">
@@ -808,8 +804,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
       {activeTab === "schedule" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Clock className="h-5 w-5 text-emerald-500" /> Lifetime Distribution Schedule (Age {results.currentAge} to 120)
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Lifetime Distribution Schedule (Age {results.currentAge} to 120)
             </h3>
 
             <div className="flex items-center gap-2">

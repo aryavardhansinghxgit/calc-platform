@@ -34,7 +34,7 @@ export function ReportModal({ isOpen, onClose, reportData, data }: ReportModalPr
   const modalContent = (
     <div id="printable-report-portal">
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4 sm:p-6 overflow-y-auto no-print-wrapper">
-        <div className="bg-zinc-900 text-white rounded-2xl border border-zinc-800 shadow-2xl max-w-4xl w-full flex flex-col max-h-[92vh] overflow-hidden no-print-wrapper">
+        <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 rounded-2xl border border-zinc-800 shadow-2xl max-w-4xl w-full flex flex-col max-h-[92vh] overflow-hidden no-print-wrapper">
           {/* Modal Top Action Toolbar (Hidden during print) */}
           <div className="flex items-center justify-between p-3.5 border-b border-zinc-800 bg-zinc-950 no-print">
             <div className="flex items-center gap-2">

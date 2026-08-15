@@ -251,7 +251,7 @@ Calculated on CalcPlatform Fertility Engine.`;
               <Heart className="h-5 w-5 fill-pink-500/20" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h2 className="text-base font-bold text-blue-600 dark:text-blue-400">
                 Pregnancy Conception Estimator
               </h2>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -553,7 +553,7 @@ Calculated on CalcPlatform Fertility Engine.`;
               <span className="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400">
                 Estimated Conception Date
               </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400">
                 {results.estimatedConceptionDateFormatted}
               </h3>
             </div>
@@ -695,7 +695,7 @@ Calculated on CalcPlatform Fertility Engine.`;
         {activeTab === "probability" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 Daily Conception Probability Curve
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -720,7 +720,7 @@ Calculated on CalcPlatform Fertility Engine.`;
                       if (active && payload && payload.length) {
                         const data = payload[0].payload;
                         return (
-                          <div className="bg-zinc-900 text-white p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
+                          <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
                             <p className="font-bold text-pink-400">{data.dateStr}</p>
                             <p>
                               Conception Likelihood: <strong>{data.probabilityPercent}%</strong>
@@ -751,7 +751,7 @@ Calculated on CalcPlatform Fertility Engine.`;
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                   Pregnancy Development & Milestone Schedule
                 </h3>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -802,7 +802,7 @@ Calculated on CalcPlatform Fertility Engine.`;
         {activeTab === "implantation" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 Embryo Implantation Window (6 to 12 Days Post-Ovulation)
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -843,7 +843,7 @@ Calculated on CalcPlatform Fertility Engine.`;
         {activeTab === "insights" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 Clinical & Fertility Insights
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -857,8 +857,7 @@ Calculated on CalcPlatform Fertility Engine.`;
                   key={idx}
                   className="p-4 rounded-xl border border-pink-500/20 bg-pink-500/5 text-zinc-900 dark:text-zinc-100 space-y-1.5"
                 >
-                  <h4 className="text-xs font-bold text-pink-600 dark:text-pink-400 uppercase tracking-wider flex items-center gap-1.5">
-                    <Sparkles className="h-3.5 w-3.5" /> {item.title}
+                  <h4 className="text-xs font-bold text-pink-600 dark:text-pink-400 uppercase tracking-wider flex items-center gap-1.5">{item.title}
                   </h4>
                   <p className="text-xs font-semibold leading-relaxed">{item.text}</p>
                   <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">

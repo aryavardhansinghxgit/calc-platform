@@ -683,8 +683,7 @@ export function PensionCalculator() {
       {activeTab === "dbFormula" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-5">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Percent className="h-5 w-5 text-purple-500" /> Defined Benefit Pension Multiplier Formula Helper
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Defined Benefit Pension Multiplier Formula Helper
             </h3>
             <p className="text-xs text-zinc-500 mt-0.5">
               Calculate your estimated monthly pension check directly using your final average salary, years of service, and multiplier %.
@@ -727,8 +726,7 @@ export function PensionCalculator() {
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-blue-500" /> Lifetime Pension &amp; Wealth Projection Chart
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Lifetime Pension &amp; Wealth Projection Chart
             </h3>
 
             <Button type="button" size="sm" variant="outline" onClick={exportCSV} className="h-8 text-xs cursor-pointer">

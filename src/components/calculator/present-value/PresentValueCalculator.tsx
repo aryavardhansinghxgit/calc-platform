@@ -736,7 +736,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
             <div className="flex items-center gap-3">
               <Layers className="h-6 w-6 text-emerald-500" />
               <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                   Net Present Value (NPV) & Custom Cash Flows Calculator
                 </h3>
                 <p className="text-xs text-zinc-500">
@@ -822,7 +822,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
           <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <Sliders className="h-6 w-6 text-purple-500" />
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                 Discount Rate Sensitivity Matrix
               </h3>
               <p className="text-xs text-zinc-500">
@@ -869,7 +869,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
           <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <BarChart3 className="h-6 w-6 text-amber-500" />
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                 Side-by-Side Scenario Comparison
               </h3>
               <p className="text-xs text-zinc-500">

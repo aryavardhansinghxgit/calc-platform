@@ -101,7 +101,7 @@ export function CommissionContent() {
         <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Comprehensive Sales Compensation &amp; Commission Guide
         </div>
-        <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
+        <h1 className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
           Commission Calculator Guide: Tiered Structures &amp; Sales Compensation Mechanics
         </h1>
         <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
@@ -112,21 +112,21 @@ export function CommissionContent() {
       {/* Main Educational Content with Required Headings */}
       <div className="space-y-8 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">What Is a Commission?</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">What Is a Commission?</h2>
           <p>
             A commission is a fee or financial reward paid to a salesperson, broker, or agent for negotiating or completing a commercial transaction. Commissions align representative incentives directly with organizational revenue generation.
           </p>
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">How Commissions Work</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">How Commissions Work</h2>
           <p>
             Commissions are calculated as a percentage of gross sales price or net profit margin. Payouts can be structured as commission-only, base salary plus commission, or graduated tiered commission rates.
           </p>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Simple &amp; Graduated Tiered Commission Formulas</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Simple &amp; Graduated Tiered Commission Formulas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Simple Commission Formula</span>
@@ -142,7 +142,7 @@ export function CommissionContent() {
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Graduated Tiered Brackets Example</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Graduated Tiered Brackets Example</h2>
           <p>
             For a salesperson generating $27,000 in monthly sales with the following tiered bracket structure:
           </p>
@@ -155,7 +155,7 @@ export function CommissionContent() {
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Real Estate Agent &amp; Brokerage Split Mechanics</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Real Estate Agent &amp; Brokerage Split Mechanics</h2>
           <p>
             Real estate commissions are split between the listing broker and buyer broker (e.g. 50/50 split of a 6% total commission). Each agent then splits their share with their sponsoring brokerage (e.g. 80% agent / 20% brokerage) until annual cap thresholds are achieved.
           </p>
@@ -163,21 +163,21 @@ export function CommissionContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-y border-zinc-200 dark:border-zinc-800 py-6 text-xs">
           <div>
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Commission Only</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Commission Only</h3>
             <p>High reward potential with zero base pay safety net, standard in real estate and automotive sales.</p>
           </div>
           <div>
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Base Salary + Commission</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Base Salary + Commission</h3>
             <p>Provides income stability alongside sales performance incentives, popular in B2B SaaS sales.</p>
           </div>
           <div>
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Draw Against Commission</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Draw Against Commission</h3>
             <p>Advance pay against future commission earnings to protect reps during long sales cycles.</p>
           </div>
         </div>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Quota &amp; Target Goal Seek Planning</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Quota &amp; Target Goal Seek Planning</h2>
           <p>
             Calculating required sales volume helps sales representatives and managers establish weekly and monthly activity targets needed to achieve specific compensation goals.
           </p>
@@ -188,7 +188,7 @@ export function CommissionContent() {
       <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
           <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <h2 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
             Frequently Asked Questions (15 Key Commission Insights)
           </h2>
         </div>
@@ -230,7 +230,7 @@ export function CommissionContent() {
 
       {/* Related Calculators */}
       <section className="space-y-3  dark:border-zinc-800 pt-6">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Related Financial &amp; Business Calculators</h2>
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400">Related Financial &amp; Business Calculators</h2>
         <div className="flex flex-wrap gap-2 text-xs">
           <Link href="/calculators/margin-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Profit Margin Calculator

@@ -5,7 +5,7 @@ export function DiceRollerContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-zinc-300">
       {/* 1. MATHEMATICS & COMBINATORICS */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           The Mathematics &amp; Combinatorics of Dice Rolling
         </h2>
         <p className="leading-relaxed">
@@ -47,7 +47,7 @@ export function DiceRollerContent() {
 
       {/* 2. MULTI-DICE GENERATING FUNCTIONS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           1. Multi-Dice Sum Combinations &amp; Polynomial Generating Functions
         </h3>
         <p className="leading-relaxed">
@@ -117,7 +117,7 @@ export function DiceRollerContent() {
 
       {/* 3. CENTRAL LIMIT THEOREM */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           2. The Central Limit Theorem &amp; Bell Curves in Game Design
         </h3>
         <p className="leading-relaxed">
@@ -146,7 +146,7 @@ export function DiceRollerContent() {
 
       {/* 4. ADVANCED TTRPG MECHANICS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           3. Advanced Tabletop RPG Mechanics Mathematics
         </h3>
         <p className="leading-relaxed">
@@ -178,7 +178,7 @@ export function DiceRollerContent() {
 
       {/* 5. CSPRNG VS PRNG */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           4. Cryptographic PRNG vs. Standard Pseudo-Random Number Generators
         </h3>
         <p className="leading-relaxed">
@@ -199,7 +199,7 @@ export function DiceRollerContent() {
 
       {/* 6. PHYSICAL DICE PHYSICS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           5. Physical Dice Manufacturing Biases &amp; Saltwater Float Testing
         </h3>
         <p className="leading-relaxed">

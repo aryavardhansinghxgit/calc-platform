@@ -50,8 +50,7 @@ export function RefinanceAiInsightPanel({ insights, score, rating }: RefinanceAi
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Key Benefits */}
           <div className="space-y-2">
-            <h4 className="text-xs font-bold text-emerald-700 dark:text-emerald-300 flex items-center gap-1.5 uppercase tracking-wider">
-              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> Why Refinancing Helps You
+            <h4 className="text-xs font-bold text-emerald-700 dark:text-emerald-300 flex items-center gap-1.5 uppercase tracking-wider">Why Refinancing Helps You
             </h4>
             <ul className="space-y-1.5 pl-2">
               {insights.benefits.length === 0 ? (
@@ -69,8 +68,7 @@ export function RefinanceAiInsightPanel({ insights, score, rating }: RefinanceAi
 
           {/* Potential Risks & Caveats */}
           <div className="space-y-2">
-            <h4 className="text-xs font-bold text-amber-700 dark:text-amber-300 flex items-center gap-1.5 uppercase tracking-wider">
-              <AlertTriangle className="h-3.5 w-3.5 text-amber-500" /> Potential Risks & Considerations
+            <h4 className="text-xs font-bold text-amber-700 dark:text-amber-300 flex items-center gap-1.5 uppercase tracking-wider">Potential Risks & Considerations
             </h4>
             <ul className="space-y-1.5 pl-2">
               {insights.risks.length === 0 ? (

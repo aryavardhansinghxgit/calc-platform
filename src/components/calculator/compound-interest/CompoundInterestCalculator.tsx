@@ -348,8 +348,7 @@ export function CompoundInterestCalculator() {
           {/* SECTION 1: RATE CONVERSION CALCULATOR CARD */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
             <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-              <h2 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Repeat className="h-4 w-4 text-blue-600" /> 1. Rate Conversion Calculator
+              <h2 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">1. Rate Conversion Calculator
               </h2>
               <Badge variant="outline" className="text-[10px] font-sans tabular-nums text-blue-600 border-blue-200">
                 Two-Way Conversion
@@ -446,8 +445,7 @@ export function CompoundInterestCalculator() {
               className="flex items-center justify-between cursor-pointer select-none"
               onClick={() => setShowFormulaPanel(!showFormulaPanel)}
             >
-              <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <BookOpen className="h-4 w-4 text-indigo-600" /> Live Dynamic Derivation Formula Panel
+              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Live Dynamic Derivation Formula Panel
               </h3>
               <Button variant="ghost" size="icon" className="h-6 w-6">
                 {showFormulaPanel ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -544,8 +542,7 @@ export function CompoundInterestCalculator() {
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3">
           <div>
-            <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-blue-600" /> Equivalent Rate Comparison Across All Frequencies
+            <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Equivalent Rate Comparison Across All Frequencies
             </h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
               Exact equivalent nominal rates required across 8 compounding frequencies to yield equal effective returns.
@@ -598,7 +595,7 @@ export function CompoundInterestCalculator() {
 
         {/* Effective Yield Recharts Bar Chart */}
         <div className="space-y-3 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-          <h3 className="text-xs font-bold text-zinc-800 dark:text-zinc-200">
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
             Effective Yield Comparison by Compounding Frequency
           </h3>
           <div className="h-64 w-full">
@@ -638,8 +635,7 @@ export function CompoundInterestCalculator() {
          ========================================== */}
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-          <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Percent className="h-5 w-5 text-indigo-600" /> APR vs APY Analyzer Module
+          <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">APR vs APY Analyzer Module
           </h2>
           <Badge variant="outline" className="text-[10px] text-indigo-600 border-indigo-200">
             Yield Incremental Gain
@@ -720,8 +716,7 @@ export function CompoundInterestCalculator() {
          ========================================== */}
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-          <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <DollarSign className="h-5 w-5 text-emerald-600" /> Compounding Frequency Investment Growth Tool
+          <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Compounding Frequency Investment Growth Tool
           </h2>
           <Badge variant="outline" className="text-[10px] text-emerald-600 border-emerald-200">
             {"A = P(1 + r/n)^(nt)"}
@@ -816,8 +811,7 @@ export function CompoundInterestCalculator() {
          ========================================== */}
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-          <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Zap className="h-5 w-5 text-amber-500" /> Continuous Compounding Calculator {"(A = Pe^{rt})"}
+          <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Continuous Compounding Calculator {"(A = Pe^{rt})"}
           </h2>
           <Badge variant="outline" className="text-[10px] text-amber-600 border-amber-200">
             Euler Constant e ≈ 2.71828
@@ -912,8 +906,7 @@ export function CompoundInterestCalculator() {
         {/* RULE OF 72 CALCULATOR (COL 5) */}
         <div className="lg:col-span-5 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h2 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Gauge className="h-4 w-4 text-purple-600" /> Rule of 72 Calculator
+            <h2 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Rule of 72 Calculator
             </h2>
             <Badge variant="outline" className="text-[10px] text-purple-600 border-purple-200">
               Doubling Estimator
@@ -969,8 +962,7 @@ export function CompoundInterestCalculator() {
         {/* SIMPLE VS COMPOUND INTEREST GROWTH (COL 7) */}
         <div className="lg:col-span-7 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h2 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-blue-600" /> Simple vs Compound Interest Growth
+            <h2 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Simple vs Compound Interest Growth
             </h2>
             <Badge variant="outline" className="text-[10px] text-blue-600 border-blue-200">
               Multi-Year Comparison
@@ -1044,8 +1036,7 @@ export function CompoundInterestCalculator() {
           SECTION 7: ADVANCED INSIGHTS & TAKEAWAYS
          ========================================== */}
       <div className="bg-gradient-to-br from-indigo-50 via-white to-blue-50 dark:from-indigo-950/30 dark:via-zinc-900 dark:to-blue-950/30 rounded-xl p-5 border border-indigo-100 dark:border-indigo-900/40 shadow-xs space-y-4">
-        <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-indigo-600" /> Advanced Financial Insights & Key Takeaways
+        <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Advanced Financial Insights & Key Takeaways
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           {advancedInsights.keyTakeaways.map((takeaway, index) => (

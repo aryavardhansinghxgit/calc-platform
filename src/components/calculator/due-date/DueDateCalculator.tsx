@@ -255,7 +255,7 @@ Calculated on CalcPlatform Due Date Engine.`;
               <Clock className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h2 className="text-base font-bold text-blue-600 dark:text-blue-400">
                 Pregnancy Due Date Estimator
               </h2>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -524,7 +524,7 @@ Calculated on CalcPlatform Due Date Engine.`;
               <span className="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400">
                 Estimated Delivery Due Date (EDD)
               </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400">
                 {results.estimatedDueDateFormatted}
               </h3>
             </div>
@@ -694,7 +694,7 @@ Calculated on CalcPlatform Due Date Engine.`;
         {activeTab === "distribution" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 Statistical Birth Timing Distribution (Weeks 36 to 42)
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -713,7 +713,7 @@ Calculated on CalcPlatform Due Date Engine.`;
                       if (active && payload && payload.length) {
                         const data = payload[0].payload;
                         return (
-                          <div className="bg-zinc-900 text-white p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
+                          <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
                             <p className="font-bold text-pink-400">{data.weekLabel}</p>
                             <p>
                               Delivery Likelihood: <strong>{data.probabilityPercent}%</strong>
@@ -753,7 +753,7 @@ Calculated on CalcPlatform Due Date Engine.`;
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                   Full 40-Week Gestational Timeline Schedule
                 </h3>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -804,7 +804,7 @@ Calculated on CalcPlatform Due Date Engine.`;
         {activeTab === "growth" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 Fetal Length (cm) & Weight (g) Growth Curve (Weeks 8 to 40)
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -824,7 +824,7 @@ Calculated on CalcPlatform Due Date Engine.`;
                       if (active && payload && payload.length) {
                         const data = payload[0].payload;
                         return (
-                          <div className="bg-zinc-900 text-white p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
+                          <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
                             <p className="font-bold text-pink-400">{data.weekLabel} Fetal Size</p>
                             <p>Fruit Analogy: <strong>{data.fruitAnalogy}</strong></p>
                             <p>Length: <strong>{data.lengthCm} cm</strong></p>
@@ -847,7 +847,7 @@ Calculated on CalcPlatform Due Date Engine.`;
         {activeTab === "insights" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 Personalized Prenatal Insights
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -861,8 +861,7 @@ Calculated on CalcPlatform Due Date Engine.`;
                   key={idx}
                   className="p-4 rounded-xl border border-pink-500/20 bg-pink-500/5 text-zinc-900 dark:text-zinc-100 space-y-1.5"
                 >
-                  <h4 className="text-xs font-bold text-pink-600 dark:text-pink-400 uppercase tracking-wider flex items-center gap-1.5">
-                    <Sparkles className="h-3.5 w-3.5" /> {item.title}
+                  <h4 className="text-xs font-bold text-pink-600 dark:text-pink-400 uppercase tracking-wider flex items-center gap-1.5">{item.title}
                   </h4>
                   <p className="text-xs font-semibold leading-relaxed">{item.text}</p>
                   <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">

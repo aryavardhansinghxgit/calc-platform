@@ -414,9 +414,7 @@ export function ResistorCalculator() {
           {activeTab === "color" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
               <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                  <Settings className="w-4 h-4 text-blue-600" />
-                  <span>Color Band Parameters</span>
+                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Color Band Parameters</span>
                 </h3>
                 <div className="flex gap-2">
                   <button
@@ -608,7 +606,7 @@ export function ResistorCalculator() {
           {/* TAB 2: SERIES & PARALLEL NETWORKS */}
           {activeTab === "series_parallel" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
                 <span>Network Configuration</span>
                 <button
                   onClick={handleReset}
@@ -680,7 +678,7 @@ export function ResistorCalculator() {
           {/* TAB 3: CONDUCTOR RESISTANCE */}
           {activeTab === "conductor" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
                 <span>Conductor physical properties</span>
                 <button
                   onClick={handleReset}
@@ -820,7 +818,7 @@ export function ResistorCalculator() {
           {/* TAB 4: SMD RESISTOR DECODER */}
           {activeTab === "smd" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
                 <span>SMD Resistor Codes</span>
                 <span className="text-[10px] text-zinc-400 font-bold uppercase">Standards: 3-digit, 4-digit, EIA-96</span>
               </h3>
@@ -844,7 +842,7 @@ export function ResistorCalculator() {
           {/* TAB 5: E-SERIES FINDER */}
           {activeTab === "finder" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
                 E-Series Lookup and Resistor Finder
               </h3>
 

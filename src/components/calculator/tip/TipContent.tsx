@@ -7,7 +7,7 @@ export function TipContent() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: THE MATHEMATICS OF TIPPING & GRATUITY */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. The Mathematics of Tipping & Gratuity
         </h2>
         <p>
@@ -34,7 +34,7 @@ export function TipContent() {
           Cost Per Person = Total Bill / N
         </div>
 
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">Step-by-Step Mathematical Example</h3>
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">Step-by-Step Mathematical Example</h3>
         <p>
           Suppose a party of 4 orders food and drinks totaling a subtotal of <strong>$120.00</strong>, with an 8.5% sales tax rate ($10.20) and a chosen tip rate of <strong>18%</strong>:
         </p>
@@ -48,7 +48,7 @@ export function TipContent() {
 
       {/* SECTION 2: MENTAL MATH SHORTCUTS FOR FAST TIPPING */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. Mental Math Shortcuts for Fast Tipping
         </h2>
         <p>
@@ -81,7 +81,7 @@ export function TipContent() {
 
       {/* SECTION 3: THE PRE-TAX VS. POST-TAX TIPPING DEBATE */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. The Pre-Tax vs. Post-Tax Tipping Debate
         </h2>
         <p>
@@ -99,7 +99,7 @@ export function TipContent() {
 
       {/* SECTION 4: INDUSTRY-SPECIFIC TIPPING BENCHMARKS TABLE */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. Industry-Specific Tipping Benchmarks Table
         </h2>
         <p>
@@ -153,7 +153,7 @@ export function TipContent() {
 
       {/* SECTION 5: INTERNATIONAL TIPPING CULTURE & ETIQUETTE GUIDE */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. International Tipping Culture & Etiquette Guide
         </h2>
         <p>
@@ -162,28 +162,28 @@ export function TipContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">North America (US & Canada)</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">North America (US & Canada)</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Tipping 15%–20% is customary and culturally expected due to low sub-minimum base wages for tipped restaurant workers.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Europe (UK, France, Germany, Italy)</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Europe (UK, France, Germany, Italy)</h3>
             <p className="text-slate-900 dark:text-slate-100">
               Service is often legally included (<em>service compris</em>). Rounding up the check or leaving 5%–10% cash for good service is standard.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Asia-Pacific (Japan, Korea, China, Australia)</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Asia-Pacific (Japan, Korea, China, Australia)</h3>
             <p className="text-slate-900 dark:text-slate-100">
               In Japan and Korea, tipping is not practiced and can be considered offensive. In Australia/NZ, high minimum wages mean tips are optional.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Latin America & Middle East</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Latin America & Middle East</h3>
             <p className="text-slate-900 dark:text-slate-100">
               10%–15% is standard (<em>propina</em>). In UAE/Dubai, 10% is often added to bills, but handing small cash directly to staff is customary.
             </p>
@@ -193,7 +193,7 @@ export function TipContent() {
 
       {/* SECTION 6: AUTOMATIC GRATUITY VS. SERVICE CHARGES */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           6. Automatic Gratuity vs. Service Charges
         </h2>
         <p>

@@ -308,8 +308,7 @@ export function TipCalculator() {
           {activeTab === "quick" ? (
             /* QUICK EQUAL SPLIT INPUT CARD */
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                <DollarSign className="h-4 w-4 text-emerald-600" /> Bill & Service Details
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Bill & Service Details
               </h3>
 
               {/* Subtotal & Tax Inputs */}
@@ -467,8 +466,7 @@ export function TipCalculator() {
             /* ITEMIZED GROUP SPLITTER CARD */
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4">
               <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                  <ListOrdered className="h-4 w-4 text-emerald-600" /> Itemized Diner Line Items
+                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Itemized Diner Line Items
                 </h3>
                 <Button
                   onClick={handleAddDiner}

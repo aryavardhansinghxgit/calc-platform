@@ -1001,7 +1001,7 @@ export function EmiCalculator() {
                 <Bookmark className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                   Save EMI Setup
                 </h3>
                 <p className="text-xs text-zinc-500">

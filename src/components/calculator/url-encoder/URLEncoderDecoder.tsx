@@ -605,7 +605,7 @@ export function URLEncoderDecoder() {
         <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
           <div className="flex items-center gap-2">
             <Settings2 className="h-4 w-4 text-blue-600" />
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
               Interactive URL Query Parameter Table Editor
             </h3>
             <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-blue-50 dark:bg-blue-950 text-blue-600">
@@ -693,7 +693,7 @@ export function URLEncoderDecoder() {
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-3">
           <div className="flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">
             <Eye className="h-4 w-4 text-purple-600" />
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
               Live URL Component Breakdown Inspector
             </h3>
           </div>

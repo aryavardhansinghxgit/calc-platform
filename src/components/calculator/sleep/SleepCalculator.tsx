@@ -346,8 +346,7 @@ export function SleepCalculator() {
 
           {/* RIGHT VISUAL CYCLE ARCHITECTURE CARDS (Col 6) */}
           <div className="lg:col-span-6 space-y-4">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
-              <Sparkles className="h-4 w-4 text-indigo-600" /> Recommended {mode === "wakeup" ? "Bedtimes" : "Wake-Up Times"}
+            <h3 className="text-xs font-extrabold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">Recommended {mode === "wakeup" ? "Bedtimes" : "Wake-Up Times"}
             </h3>
 
             <div className="space-y-3">
@@ -385,8 +384,7 @@ export function SleepCalculator() {
       {activeTab === "naps" && (
         <div className="space-y-5">
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-2">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <Coffee className="h-4 w-4 text-amber-600" /> Power Nap & Recovery Blueprint
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Power Nap & Recovery Blueprint
             </h3>
             <p className="text-xs text-zinc-500">
               Napping for 20 minutes boosts alertness without inducing deep sleep inertia. 90 minutes completes a full cycle.
@@ -426,8 +424,7 @@ export function SleepCalculator() {
       {activeTab === "debt" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <BatteryCharging className="h-4 w-4 text-indigo-600" /> Sleep Debt Calibrator
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Sleep Debt Calibrator
             </h3>
 
             <div className="space-y-4">
@@ -479,8 +476,7 @@ export function SleepCalculator() {
       {activeTab === "chronotype" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4 text-xs">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <Brain className="h-4 w-4 text-indigo-600" /> Circadian Chronotype Quiz
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Circadian Chronotype Quiz
             </h3>
 
             {/* Q1 */}

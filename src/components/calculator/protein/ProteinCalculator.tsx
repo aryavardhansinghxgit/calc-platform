@@ -338,9 +338,7 @@ export function ProteinCalculator() {
         {/* Left Column: Inputs Form */}
         <div className="lg:col-span-5 space-y-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm print:hidden">
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Sliders className="w-5 h-5 text-emerald-600" />
-              Personal Parameters
+            <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">Personal Parameters
             </h2>
             
             {/* Unit System Toggle */}
@@ -515,9 +513,7 @@ export function ProteinCalculator() {
 
           {/* Pregnancy & Meal Spacing Inputs */}
           <div className="space-y-4 border-t border-slate-100 pt-4">
-            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <Baby className="w-4 h-4 text-emerald-600" />
-              Special Additions & Meal Frequency
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Special Additions & Meal Frequency
             </h3>
 
             <div className="grid grid-cols-2 gap-4">
@@ -709,9 +705,7 @@ export function ProteinCalculator() {
             {activeTab === "distribution" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <PieIcon className="w-4 h-4 text-emerald-600" />
-                    Macronutrient Energy Distribution
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Macronutrient Energy Distribution
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Protein: 4 kcal/g | Carbs: 4 kcal/g | Fat: 9 kcal/g</span>
                 </div>
@@ -771,9 +765,7 @@ export function ProteinCalculator() {
             {activeTab === "per-meal" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-emerald-600" />
-                    Per-Meal Protein & Leucine Anabolic Spacing
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Per-Meal Protein & Leucine Anabolic Spacing
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Target: {mealFrequency} meals spaced 3-4 hrs apart</span>
                 </div>
@@ -799,9 +791,7 @@ export function ProteinCalculator() {
             {activeTab === "rda-comparison" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Award className="w-4 h-4 text-emerald-600" />
-                    RDA Minimum (0.8g/kg) vs Fitness Target Comparison
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">RDA Minimum (0.8g/kg) vs Fitness Target Comparison
                   </h3>
                 </div>
 
@@ -830,9 +820,7 @@ export function ProteinCalculator() {
             {/* TAB 4: 9 Essential Amino Acids */}
             {activeTab === "eaa-profile" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-purple-600" />
-                  9 Essential Amino Acids (EAAs) Daily Profile
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">9 Essential Amino Acids (EAAs) Daily Profile
                 </h3>
 
                 <div className="overflow-x-auto border border-slate-200 rounded-xl max-h-64">
@@ -862,9 +850,7 @@ export function ProteinCalculator() {
             {activeTab === "food-search" && (
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Utensils className="w-4 h-4 text-emerald-600" />
-                    High-Protein Food Database (Search & Quality Type)
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">High-Protein Food Database (Search & Quality Type)
                   </h3>
 
                   {/* Search Input */}
@@ -940,9 +926,7 @@ export function ProteinCalculator() {
 
           {/* Smart Insights & Personalized Recommendations */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 print:hidden">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-amber-500" />
-              Smart Insights & Protein Strategy
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Smart Insights & Protein Strategy
             </h3>
 
             <div className="space-y-2.5">

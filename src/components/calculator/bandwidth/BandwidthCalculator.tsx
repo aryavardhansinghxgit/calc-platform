@@ -498,9 +498,7 @@ export function BandwidthCalculator() {
           {/* Inputs Panel (Col 6) */}
           <div className="lg:col-span-6 space-y-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs">
             <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-              <h2 className="text-sm font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Sliders className="h-4 w-4 text-blue-600" />
-                <span>Download & Upload Parameters</span>
+              <h2 className="text-sm font-bold tracking-tight text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Download & Upload Parameters</span>
               </h2>
               <button
                 onClick={handleResetAll}
@@ -717,9 +715,7 @@ export function BandwidthCalculator() {
       {activeTab === "conversion" && (
         <div className="space-y-6">
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs max-w-2xl mx-auto space-y-4">
-            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <ArrowRightLeft className="h-4 w-4 text-blue-600" />
-              <span>Dynamic Bandwidth & Bitrate Converter</span>
+            <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Dynamic Bandwidth & Bitrate Converter</span>
             </h2>
 
             <div className="flex flex-col sm:flex-row gap-3">
@@ -781,9 +777,7 @@ export function BandwidthCalculator() {
       {activeTab === "hosting" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           <div className="lg:col-span-6 space-y-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs text-xs">
-            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3">
-              <Server className="h-4 w-4 text-blue-600" />
-              <span>Web Server & Hosting Inputs</span>
+            <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3"><span>Web Server & Hosting Inputs</span>
             </h2>
 
             {/* Traffic Views */}
@@ -917,7 +911,7 @@ export function BandwidthCalculator() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start text-xs">
           {/* Counters Grid (Col 7) */}
           <div className="lg:col-span-7 space-y-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs">
-            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
+            <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
               <span className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-purple-600" />
                 <span>Simultaneous Device & Activity Profile Planner</span>

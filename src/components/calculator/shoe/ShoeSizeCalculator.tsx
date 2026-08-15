@@ -283,8 +283,7 @@ export function ShoeSizeCalculator() {
 
             {/* Bilateral Foot Measurement Inputs */}
             <div className="space-y-4">
-              <h3 className="text-xs font-extrabold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
-                <Footprints className="h-4 w-4 text-emerald-600" /> Bilateral Foot Measurements ({unit})
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">Bilateral Foot Measurements ({unit})
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -348,8 +347,7 @@ export function ShoeSizeCalculator() {
 
             {/* INTERACTIVE VISUAL MEASUREMENT GUIDE VECTOR CARD */}
             <div className="p-4 bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-xl space-y-3 text-xs">
-              <h4 className="font-bold text-emerald-900 dark:text-emerald-200 flex items-center gap-1.5">
-                <Info className="h-4 w-4 text-emerald-600" /> At-Home Measurement Technique
+              <h4 className="font-bold text-emerald-900 dark:text-emerald-200 flex items-center gap-1.5">At-Home Measurement Technique
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                 <div className="sm:col-span-8 space-y-1 text-zinc-700 dark:text-zinc-300 text-[11px]">
@@ -429,8 +427,7 @@ export function ShoeSizeCalculator() {
       {activeTab === "converter" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <Globe className="h-4 w-4 text-emerald-600" /> Convert Size Across Global Systems
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Convert Size Across Global Systems
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -529,8 +526,7 @@ export function ShoeSizeCalculator() {
           <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-5">
             {/* Brand Tuning */}
             <div className="space-y-3">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                <Tag className="h-4 w-4 text-emerald-600" /> Brand Fit Bias Matcher
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Brand Fit Bias Matcher
               </h3>
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Select Brand</label>
@@ -562,8 +558,7 @@ export function ShoeSizeCalculator() {
 
             {/* Kids Growth Tracker */}
             <div className="space-y-3 pt-3 border-t border-zinc-100 dark:border-zinc-800">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                <TrendingUp className="h-4 w-4 text-emerald-600" /> Smart Kids' Growth Forecast
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Smart Kids' Growth Forecast
               </h3>
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Child's Current Age (Months)</label>

@@ -8,9 +8,7 @@ export function CagrContent() {
     <article className="prose prose-zinc dark:prose-invert max-w-none space-y-8 text-xs leading-relaxed">
       {/* 1. INTRODUCTION */}
       <section className="space-y-3">
-        <h2 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <TrendingUp className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          What is Compound Annual Growth Rate (CAGR) & Why Does It Matter?
+        <h2 className="text-lg font-bold tracking-tight text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">What is Compound Annual Growth Rate (CAGR) & Why Does It Matter?
         </h2>
         <p className="text-slate-900 dark:text-slate-100">
           <strong>Compound Annual Growth Rate (CAGR)</strong> is the geometric mean growth rate of an investment over a specified time period longer than one year. It represents the hypothetical, smoothed constant annual rate at which an investment would have grown if it had compounded at a steady rate each year.
@@ -22,9 +20,7 @@ export function CagrContent() {
 
       {/* 2. ABSOLUTE RETURN VS CAGR VS IRR COMPARISON TABLE */}
       <section className="space-y-3">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Layers className="h-4 w-4 text-blue-600" />
-          Absolute Return vs. CAGR vs. Internal Rate of Return (IRR)
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Absolute Return vs. CAGR vs. Internal Rate of Return (IRR)
         </h3>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse border border-zinc-200 dark:border-zinc-800 text-[11px]">
@@ -68,9 +64,7 @@ export function CagrContent() {
 
       {/* 3. MATHEMATICAL FORMULAS & DERIVATIONS */}
       <section className="space-y-4">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Calculator className="h-4 w-4 text-blue-600" />
-          Mathematical CAGR Formulas & Derivations
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Mathematical CAGR Formulas & Derivations
         </h3>
 
         <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">1. Standard CAGR Formula</h4>
@@ -104,9 +98,7 @@ export function CagrContent() {
 
       {/* 4. WORKED STEP-BY-STEP EXAMPLES */}
       <section className="space-y-3">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Zap className="h-4 w-4 text-blue-600" />
-          Step-by-Step Worked Calculation Examples
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Step-by-Step Worked Calculation Examples
         </h3>
         
         {/* Example A: Positive Growth */}
@@ -145,9 +137,7 @@ export function CagrContent() {
 
       {/* 5. TOP INVESTOR MISTAKES TO AVOID */}
       <section className="space-y-3">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <AlertTriangle className="h-4 w-4 text-blue-600" />
-          Top CAGR Analysis Mistakes to Avoid
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Top CAGR Analysis Mistakes to Avoid
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-slate-900 dark:text-slate-100">
           <div className="p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-1">

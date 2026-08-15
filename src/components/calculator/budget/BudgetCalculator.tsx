@@ -1026,7 +1026,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
             <div className="space-y-4">
               {/* Donut Chart: Expenses Breakdown */}
               <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-2">
-                <h3 className="text-xs font-bold text-zinc-800 dark:text-zinc-200">
+                <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
                   Expenses Breakdown by Category
                 </h3>
                 <div className="h-56 w-full">
@@ -1057,7 +1057,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
 
               {/* Bar Chart: 50/30/20 Actual vs Target */}
               <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-2">
-                <h3 className="text-xs font-bold text-zinc-800 dark:text-zinc-200">
+                <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
                   50 / 30 / 20 Actual vs Target ($/month)
                 </h3>
                 <div className="h-56 w-full">
@@ -1130,9 +1130,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
           {activeTab === "stresstest" && (
             <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-4 text-xs">
               <div>
-                <h3 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                  <Sliders className="h-4 w-4 text-amber-500" />
-                  What-If Sensitivity Stress Test
+                <h3 className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">What-If Sensitivity Stress Test
                 </h3>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">
                   Test how income drops or unexpected expense inflation affect your net monthly surplus.

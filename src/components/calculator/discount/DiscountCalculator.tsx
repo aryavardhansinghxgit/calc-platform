@@ -613,8 +613,7 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
       {/* TAB 5: VISUAL DASHBOARDS */}
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-blue-500" /> Original vs. Discounted Price Comparison
+          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Original vs. Discounted Price Comparison
           </h3>
 
           <div className="h-64 w-full">

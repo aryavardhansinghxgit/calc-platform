@@ -33,7 +33,7 @@ export function PeriodContent() {
             <BookOpen className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               The Ultimate Guide to Menstrual Cycles, Period Tracking & Reproductive Health
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -44,7 +44,7 @@ export function PeriodContent() {
 
         {/* Section 1 */}
         <div className="space-y-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">1.</span> What Is a Period?
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -54,7 +54,7 @@ export function PeriodContent() {
 
         {/* Section 2 */}
         <div className="space-y-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">2.</span> Understanding the Menstrual Cycle
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -70,9 +70,7 @@ export function PeriodContent() {
         {/* Section 3 & 4 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
           <div className="bg-slate-50/80 p-6 rounded-2xl border border-slate-200 space-y-3">
-            <h4 className="font-bold text-slate-900 text-base flex items-center gap-2">
-              <Activity className="w-5 h-5 text-blue-600" />
-              Menstrual Phase
+            <h4 className="font-bold text-slate-900 text-base flex items-center gap-2">Menstrual Phase
             </h4>
             <p className="text-xs md:text-sm text-slate-900 leading-relaxed">
               Days 1–5: Low estrogen and progesterone levels cause prostaglandins to trigger uterine muscle contractions and endometrial shedding.
@@ -80,9 +78,7 @@ export function PeriodContent() {
           </div>
 
           <div className="bg-slate-50/80 p-6 rounded-2xl border border-slate-200 space-y-3">
-            <h4 className="font-bold text-slate-900 text-base flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-blue-600" />
-              Follicular Phase
+            <h4 className="font-bold text-slate-900 text-base flex items-center gap-2">Follicular Phase
             </h4>
             <p className="text-xs md:text-sm text-slate-900 leading-relaxed">
               Days 1–13: FSH stimulates follicle maturation in the ovaries while rising estrogen thickens the uterine lining (7–14 mm).
@@ -92,7 +88,7 @@ export function PeriodContent() {
 
         {/* Section 5: Menstrual Cycle Table */}
         <div className="space-y-4 pt-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">5.</span> Menstrual Cycle Phase Architecture
           </h3>
           <div className="overflow-x-auto border border-slate-200 rounded-2xl">
@@ -137,7 +133,7 @@ export function PeriodContent() {
 
         {/* Section 8 to 12 Overview */}
         <div className="space-y-4 pt-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">8–12.</span> How Period & Ovulation Calculations Work
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -170,7 +166,7 @@ export function PeriodContent() {
             <HelpCircle className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               Frequently Asked Questions (30 Clinical Answers)
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -219,7 +215,7 @@ export function PeriodContent() {
       <section className="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         <div className="flex items-center gap-3  pb-4">
           <Baby className="w-6 h-6 text-blue-600" />
-          <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+          <h2 className="text-xl md:text-2xl font-bold text-blue-600">
             Related Fertility & Pregnancy Tools
           </h2>
         </div>

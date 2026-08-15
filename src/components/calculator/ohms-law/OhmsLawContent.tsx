@@ -7,9 +7,7 @@ export function OhmsLawContent() {
   return (
     <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10  dark:border-zinc-800 pt-8">
       <header>
-        <h2 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
-          <BookOpen className="h-6 w-6 text-blue-600" />
-          The Engineering Guide to Ohm&apos;s Law, Electrical Power, and Divider Networks
+        <h2 className="text-2xl font-black text-blue-600 dark:text-blue-400 tracking-tight flex items-center gap-2">The Engineering Guide to Ohm&apos;s Law, Electrical Power, and Divider Networks
         </h2>
         <p className="text-slate-900 dark:text-slate-100 text-xs">
           An authoritative reference on circuit equations, Joule heating limits, and practical electrical design.
@@ -18,7 +16,7 @@ export function OhmsLawContent() {
 
       {/* SECTION 1: INTRODUCTION */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>1.</span> Introduction
         </h3>
         <p>
@@ -31,7 +29,7 @@ export function OhmsLawContent() {
 
       {/* SECTION 2: MATHEMATICAL CONCEPT */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>2.</span> The Mathematical and Physical Foundations of Ohm&apos;s Law
         </h3>
         <p>
@@ -55,7 +53,7 @@ export function OhmsLawContent() {
 
       {/* SECTION 3: FORMULA SECTION */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>3.</span> The Equations
         </h3>
         <p>
@@ -103,7 +101,7 @@ export function OhmsLawContent() {
 
       {/* SECTION 4: HOW CALCULATION WORKS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>4.</span> Step-by-Step Sizing Processes
         </h3>
         <p>
@@ -127,15 +125,13 @@ export function OhmsLawContent() {
 
       {/* SECTION 5: WORKED EXAMPLES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>5.</span> Worked Engineering Examples
         </h3>
         <div className="space-y-4">
           {/* Example 1 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-blue-600" />
-              Example A: Given Voltage and Resistance
+            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">Example A: Given Voltage and Resistance
             </h4>
             <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Calculate current and power for a 12V automotive circuit connected to a 6 Ω load.
@@ -152,9 +148,7 @@ export function OhmsLawContent() {
 
           {/* Example 2 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-blue-600" />
-              Example B: LED Limiting Resistor
+            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">Example B: LED Limiting Resistor
             </h4>
             <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Find the series resistor needed to power a standard Red LED (forward voltage Vf = 2.0V, recommended forward current If = 20 mA) from a 9V battery source.
@@ -178,7 +172,7 @@ export function OhmsLawContent() {
 
       {/* SECTION 6: COMMON MISTAKES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>6.</span> Common Engineering Mistakes & Pitfalls
         </h3>
         <div className="p-4 border border-amber-200 dark:border-amber-900/60 bg-blue-50/50 dark:bg-blue-50/20 rounded-2xl space-y-2">
@@ -201,7 +195,7 @@ export function OhmsLawContent() {
 
       {/* SECTION 7: PRACTICAL APPLICATIONS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>7.</span> Practical Engineering Applications
         </h3>
         <p>
@@ -222,8 +216,7 @@ export function OhmsLawContent() {
 
       {/* SECTION 8: ENGINEERING DISCLAIMER */}
       <section className="space-y-3 bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <h3 className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-          <CheckCircle className="w-4 h-4" /> Technical Disclaimer
+        <h3 className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Technical Disclaimer
         </h3>
         <p className="text-xs mt-1">
           While Ohm&apos;s Law is incredibly useful, it assumes linear, ohmic behavior. Nonlinear components (such as diodes, LEDs, and transistors) have dynamic resistances that shift with voltage. Additionally, AC inductive and capacitive reactance must be solved using impedance-based vectors. Always consult component specification sheets when modeling physical circuits.

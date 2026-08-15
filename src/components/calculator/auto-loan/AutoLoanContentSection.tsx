@@ -32,7 +32,7 @@ export function AutoLoanContentSection() {
             <BookOpen className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
               The Complete Guide to Auto Financing & Vehicle Loans
             </h2>
             <p className="text-xs text-slate-900 dark:text-slate-100 mt-0.5">
@@ -44,7 +44,7 @@ export function AutoLoanContentSection() {
         <div className="prose prose-sm dark:prose-invert max-w-none space-y-6 text-xs sm:text-sm leading-relaxed">
           {/* Guide 1 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               1. What Is An Auto Loan?
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -57,7 +57,7 @@ export function AutoLoanContentSection() {
 
           {/* Guide 2 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               2. How Auto Financing Works
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -73,7 +73,7 @@ export function AutoLoanContentSection() {
 
           {/* Guide 3 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               3. Dealer Financing vs Bank Financing
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -97,7 +97,7 @@ export function AutoLoanContentSection() {
 
           {/* Guide 4 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               4. How Auto Loan Interest Works
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -107,7 +107,7 @@ export function AutoLoanContentSection() {
 
           {/* Guide 5 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               5. Understanding Trade-In Value & State Tax Credits
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -120,7 +120,7 @@ export function AutoLoanContentSection() {
 
           {/* Guide 6 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               6. How Down Payments Affect Auto Loans
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -130,7 +130,7 @@ export function AutoLoanContentSection() {
 
           {/* Guide 7 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               7. Lease vs Buy Comparison
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -140,7 +140,7 @@ export function AutoLoanContentSection() {
 
           {/* Guide 8 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               8. How Credit Scores Affect Loan Rates
             </h3>
             <div className="overflow-x-auto mt-2">
@@ -185,7 +185,7 @@ export function AutoLoanContentSection() {
 
           {/* Guide 9 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               9. Tips For Lower Monthly Payments
             </h3>
             <ul className="list-disc pl-5 space-y-1 text-slate-900 dark:text-zinc-300">
@@ -198,7 +198,7 @@ export function AutoLoanContentSection() {
 
           {/* Guide 10 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               10. Should You Pay Off Your Auto Loan Early?
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -208,7 +208,7 @@ export function AutoLoanContentSection() {
 
           {/* Guide 11 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               11. Common Auto Loan Mistakes To Avoid
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
@@ -238,7 +238,7 @@ export function AutoLoanContentSection() {
             <HelpCircle className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
               Frequently Asked Questions (FAQ)
             </h2>
             <p className="text-xs text-slate-900 dark:text-slate-100 mt-0.5">
@@ -288,7 +288,7 @@ export function AutoLoanContentSection() {
             <Calculator className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-base font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-base font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
               Related Financial Calculators
             </h2>
             <p className="text-xs text-slate-900 dark:text-slate-100">

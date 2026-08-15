@@ -7,7 +7,7 @@ export function URLEncoderContent() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: FUNDAMENTALS OF URL & URI ENCODING */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. Fundamentals of URL & URI Encoding (Percent-Encoding)
         </h2>
         <p>
@@ -20,7 +20,7 @@ export function URLEncoderContent() {
 
       {/* SECTION 2: THE RFC 3986 STANDARD & CHARACTER CLASSIFICATIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. The RFC 3986 Standard & Character Classifications
         </h2>
         <p>
@@ -53,7 +53,7 @@ export function URLEncoderContent() {
           </div>
         </div>
 
-        <h3 className="text-base font-bold text-zinc-800 dark:text-zinc-200 mt-4">
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mt-4">
           ASCII-to-Hex Percent-Encoding Reference Table
         </h3>
 
@@ -109,7 +109,7 @@ export function URLEncoderContent() {
 
       {/* SECTION 3: SPACE ENCODING: %20 VS + EXPLAINED */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. Space Encoding: %20 vs. + Explained
         </h2>
         <p>
@@ -135,7 +135,7 @@ export function URLEncoderContent() {
 
       {/* SECTION 4: KEY DIFFERENCES: encodeURI vs encodeURIComponent */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. Key Differences: encodeURI vs. encodeURIComponent
         </h2>
         <p>
@@ -172,7 +172,7 @@ export function URLEncoderContent() {
 
       {/* SECTION 5: SECURITY IMPLICATIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. Security Implications & Common Pitfalls
         </h2>
         <div className="bg-blue-50/60 dark:bg-blue-50/20 border border-amber-200 dark:border-amber-900 p-4 rounded-xl space-y-2 text-xs">
@@ -190,7 +190,7 @@ export function URLEncoderContent() {
 
       {/* SECTION 6: CODE SNIPPETS FOR DEVELOPERS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           6. Code Snippets Across Languages
         </h2>
 

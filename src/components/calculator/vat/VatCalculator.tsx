@@ -503,8 +503,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Globe className="h-5 w-5 text-emerald-500" /> Multi-Stage Production Supply Chain Map
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Multi-Stage Production Supply Chain Map
               </h3>
               <p className="text-xs text-zinc-500">
                 Visualize how VAT is collected incrementally at each production stage (Farmer &rarr; Roaster &rarr; Wholesaler &rarr; Cafe).
@@ -578,8 +577,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
       {activeTab === "rates_table" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Layers className="h-5 w-5 text-purple-500" /> Searchable Global VAT / GST Rate Directory
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Searchable Global VAT / GST Rate Directory
             </h3>
 
             <div className="relative">
@@ -643,8 +641,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-amber-500" /> Interactive VAT vs. Sales Tax Side-by-Side Comparison
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Interactive VAT vs. Sales Tax Side-by-Side Comparison
               </h3>
               <p className="text-xs text-zinc-500">
                 Compare multi-stage Value-Added Tax (with Input Tax Credit) against single-stage Retail Sales Tax across supply chain tiers.

@@ -600,8 +600,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Layers className="h-5 w-5 text-emerald-500" /> Multi-Item Tax Invoice Builder
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Multi-Item Tax Invoice Builder
               </h3>
               <p className="text-xs text-zinc-500">
                 Add multiple items with mixed GST rates (5%, 12%, 18%, 28%) and generate a B2B/B2C itemized tax invoice.
@@ -727,7 +726,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
           <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <BarChart3 className="h-6 w-6 text-purple-500" />
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                 Inter-State vs. Intra-State Supply Tax Split
               </h3>
               <p className="text-xs text-zinc-500">
@@ -790,7 +789,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
           <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <Building className="h-6 w-6 text-amber-500" />
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                 Composition Scheme vs. Regular GST Scheme Comparison
               </h3>
               <p className="text-xs text-zinc-500">

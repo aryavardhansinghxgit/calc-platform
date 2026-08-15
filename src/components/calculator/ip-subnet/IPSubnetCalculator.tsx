@@ -388,9 +388,7 @@ export function IPSubnetCalculator() {
           {activeTab === "ipv4" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 shadow-md space-y-4">
               <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <h3 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                  <Settings className="w-4 h-4 text-blue-600" />
-                  <span>IPv4 Parameters</span>
+                <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>IPv4 Parameters</span>
                 </h3>
                 <button
                   onClick={handleReset}
@@ -466,9 +464,7 @@ export function IPSubnetCalculator() {
           {/* TAB 2: IPv6 SUBNET CALCULATOR */}
           {activeTab === "ipv6" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <Settings className="w-4 h-4 text-blue-600" />
-                <span>IPv6 Parameters</span>
+              <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2"><span>IPv6 Parameters</span>
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="sm:col-span-2">
@@ -499,9 +495,7 @@ export function IPSubnetCalculator() {
           {/* TAB 3: SUBNET SPLITTER / LIST */}
           {activeTab === "splitter" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <Settings className="w-4 h-4 text-blue-600" />
-                <span>Subnet Splitter Configuration</span>
+              <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2"><span>Subnet Splitter Configuration</span>
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
@@ -523,9 +517,7 @@ export function IPSubnetCalculator() {
           {/* TAB 4: SUBNET PLANNER */}
           {activeTab === "planner" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <Settings className="w-4 h-4 text-blue-600" />
-                <span>Required Hosts Planner</span>
+              <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2"><span>Required Hosts Planner</span>
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -543,9 +535,7 @@ export function IPSubnetCalculator() {
           {/* TAB 5: ROUTE SUMMARIZER */}
           {activeTab === "route_summarizer" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <Settings className="w-4 h-4 text-blue-600" />
-                <span>Route Summarizer (Supernetting)</span>
+              <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2"><span>Route Summarizer (Supernetting)</span>
               </h3>
               <div>
                 <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 block mb-1">
@@ -835,8 +825,7 @@ export function IPSubnetCalculator() {
         <div className="lg:col-span-5 space-y-5">
           <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 shadow-md space-y-3">
             <div className="border-b border-zinc-200 dark:border-zinc-800 pb-2">
-              <h3 className="text-xs font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-1.5">
-                <Activity className="w-4 h-4 text-blue-500" /> Interactive Subnet Table (Click to load)
+              <h3 className="text-xs font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-1.5">Interactive Subnet Table (Click to load)
               </h3>
             </div>
             

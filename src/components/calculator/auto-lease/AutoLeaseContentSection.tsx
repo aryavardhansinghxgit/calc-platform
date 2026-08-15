@@ -118,7 +118,7 @@ export function AutoLeaseContentSection() {
             <BookOpen className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
               The Complete Guide to Auto Leasing Mechanics & Strategy
             </h2>
             <p className="text-xs text-slate-900 dark:text-slate-100 mt-0.5">
@@ -130,7 +130,7 @@ export function AutoLeaseContentSection() {
         <div className="prose prose-sm dark:prose-invert max-w-none space-y-6 text-xs sm:text-sm leading-relaxed">
           {/* Guide 1 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               1. What Is Auto Leasing?
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -140,7 +140,7 @@ export function AutoLeaseContentSection() {
 
           {/* Guide 2 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               2. Money Factor Explained
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -153,7 +153,7 @@ export function AutoLeaseContentSection() {
 
           {/* Guide 3 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               3. Residual Value Explained
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -163,7 +163,7 @@ export function AutoLeaseContentSection() {
 
           {/* Guide 4 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               4. Mileage Limits & Excess Mileage Fees
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -173,7 +173,7 @@ export function AutoLeaseContentSection() {
 
           {/* Guide 5 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               5. Normal vs Excess Wear and Tear
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
@@ -201,7 +201,7 @@ export function AutoLeaseContentSection() {
 
           {/* Guide 6 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               6. Lease Maintenance Requirements
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -211,7 +211,7 @@ export function AutoLeaseContentSection() {
 
           {/* Guide 7 & 8 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               7 & 8. Advantages vs Disadvantages of Leasing
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
@@ -239,7 +239,7 @@ export function AutoLeaseContentSection() {
 
           {/* Guide 9 & 10 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               9 & 10. When Leasing Makes Sense vs When Buying Is Better
             </h3>
             <p className="text-slate-900 dark:text-zinc-300">
@@ -258,7 +258,7 @@ export function AutoLeaseContentSection() {
             <ShieldAlert className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
               5 Pathways for Getting Out of an Auto Lease Early
             </h2>
             <p className="text-xs text-slate-900 dark:text-slate-100">
@@ -269,28 +269,28 @@ export function AutoLeaseContentSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs pt-1">
           <div className="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/50 space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">1. Lease Transfer / Swap</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-xs">1. Lease Transfer / Swap</h3>
             <p className="text-[11px] text-slate-900 dark:text-slate-100">
               Transfer your remaining lease contract to a qualified buyer using platforms like Swapalease or LeaseTrader for a small administrative fee.
             </p>
           </div>
 
           <div className="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/50 space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">2. Dealer Early Buyout</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-xs">2. Dealer Early Buyout</h3>
             <p className="text-[11px] text-slate-900 dark:text-slate-100">
               Sell or trade in the leased vehicle to an authorized dealer. If the car&apos;s market value exceeds the bank buyout payoff, you capture positive equity.
             </p>
           </div>
 
           <div className="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/50 space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">3. Lease Buyout & Private Sale</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-xs">3. Lease Buyout & Private Sale</h3>
             <p className="text-[11px] text-slate-900 dark:text-slate-100">
               Purchase the vehicle outright at the current payoff amount from the financing bank, take clear title, and sell it privately for market value.
             </p>
           </div>
 
           <div className="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/50 space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">4. Negotiating With Lessor</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-xs">4. Negotiating With Lessor</h3>
             <p className="text-[11px] text-slate-900 dark:text-slate-100">
               Contact the captive lender if experiencing severe hardship. Banks may grant temporary payment deferrals or formal early surrender terms.
             </p>
@@ -314,7 +314,7 @@ export function AutoLeaseContentSection() {
             <HelpCircle className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
               Frequently Asked Questions (FAQ)
             </h2>
             <p className="text-xs text-slate-900 dark:text-slate-100 mt-0.5">
@@ -361,7 +361,7 @@ export function AutoLeaseContentSection() {
             <Calculator className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-base font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-base font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
               Related Financial Calculators
             </h2>
             <p className="text-xs text-slate-900 dark:text-slate-100">

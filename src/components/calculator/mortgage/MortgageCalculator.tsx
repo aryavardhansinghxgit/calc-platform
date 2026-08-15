@@ -504,7 +504,7 @@ export function MortgageCalculator() {
         <div className="lg:col-span-5 space-y-4">
           <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-xs p-5 sm:p-6 space-y-5">
             <div>
-              <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
+              <h2 className="text-base font-bold text-blue-600 dark:text-blue-400">
                 Mortgage Inputs
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -1355,7 +1355,7 @@ export function MortgageCalculator() {
                 <Bookmark className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                   Save Calculation
                 </h3>
                 <p className="text-xs text-zinc-500">

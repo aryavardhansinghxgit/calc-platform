@@ -470,8 +470,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
       {activeTab === "optimizer" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Percent className="h-5 w-5 text-emerald-500" /> Traditional vs. Roth Tax Optimizer &amp; Breakeven Solver
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Traditional vs. Roth Tax Optimizer &amp; Breakeven Solver
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Compare exact after-tax wealth outcomes based on your current marginal tax bracket vs expected retirement tax bracket.
@@ -511,8 +510,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
       {activeTab === "checker" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-purple-500" /> 2025 &amp; 2026 IRS Contribution Cap Validation
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">2025 &amp; 2026 IRS Contribution Cap Validation
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Verify if your annual contributions comply with official IRS Publication 590 annual caps.
@@ -550,8 +548,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
       {activeTab === "schedule" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-indigo-500" /> Age-by-Age 4-Account Comparison Schedule
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Age-by-Age 4-Account Comparison Schedule
             </h3>
 
             <div className="flex items-center gap-2">

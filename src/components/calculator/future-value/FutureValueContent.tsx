@@ -167,8 +167,7 @@ export function FutureValueContent() {
 
         {/* Section 3 & 4 */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Clock className="h-5 w-5 text-blue-600" /> 3. Time Value of Money (TVM) & PV vs. FV
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Time Value of Money (TVM) & PV vs. FV
           </h3>
           <p>
             The <strong>Time Value of Money (TVM)</strong> is the core economic principle stating that a dollar in hand today is worth 
@@ -189,8 +188,7 @@ export function FutureValueContent() {
 
         {/* Section 5, 6 & 7: Annuities & Timing */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Layers className="h-5 w-5 text-blue-600" /> 5–7. Lump Sums vs. Ordinary Annuities vs. Annuities Due
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">5–7. Lump Sums vs. Ordinary Annuities vs. Annuities Due
           </h3>
           <p>
             When investing, cash can enter portfolio balances in two primary structures: a single upfront lump sum or recurring periodic deposits (annuities).
@@ -233,8 +231,7 @@ export function FutureValueContent() {
         {/* Section 8, 9 & 10: Compounding, Inflation & Taxes */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <PieIcon className="h-4 w-4 text-blue-500" /> 8. Compounding Frequency
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">8. Compounding Frequency
             </h4>
             <p className="text-xs">
               Compounding frequency dictates how often accrued interest is reinvested into the principal. 
@@ -243,8 +240,7 @@ export function FutureValueContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <AlertTriangle className="h-4 w-4 text-blue-600" /> 9. Inflation Drag
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">9. Inflation Drag
             </h4>
             <p className="text-xs">
               Inflation erodes purchasing power over time. A $1,000,000 nominal Future Value in 30 years with 3% annual inflation 
@@ -253,8 +249,7 @@ export function FutureValueContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-blue-600" /> 10. Tax Drag Impact
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">10. Tax Drag Impact
             </h4>
             <p className="text-xs">
               Taxes paid annually on investment growth reduce the compounding snowball effect. Utilizing tax-advantaged accounts 
@@ -265,8 +260,7 @@ export function FutureValueContent() {
 
         {/* Section 11 - 15: Use Cases & Pitfalls */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-blue-600" /> 11–15. Real-World Applications & Common Mistakes
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">11–15. Real-World Applications & Common Mistakes
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="space-y-2">
@@ -291,7 +285,7 @@ export function FutureValueContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (FAQ)
           </h3>
         </div>

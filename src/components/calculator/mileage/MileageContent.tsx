@@ -7,7 +7,7 @@ export function MileageContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-800 dark:text-zinc-200">
       {/* SECTION 1 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white  dark:border-zinc-800 pb-2">
           1. What is Vehicle Mileage &amp; Fuel Economy?
         </h2>
         <p>
@@ -26,11 +26,11 @@ export function MileageContent() {
 
       {/* SECTION 2 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white  dark:border-zinc-800 pb-2">
           2. Mathematical Formulas &amp; Conversion Equations
         </h2>
 
-        <h3 className="text-xl font-bold text-slate-900 dark:text-white">A. Standard Gas Mileage Formulas</h3>
+        <h3 className="text-xl font-bold text-blue-600 dark:text-white">A. Standard Gas Mileage Formulas</h3>
         <p>
           To compute fuel economy manually from trip distance and fuel volume added at the pump:
         </p>
@@ -47,7 +47,7 @@ export function MileageContent() {
           {"Cost Per Mile ($/mi) = Fuel Price per Gallon ($/gal) / US MPG"}
         </div>
 
-        <h3 className="text-xl font-bold text-slate-900 dark:text-white">B. The &quot;MPG Illusion&quot; Explained</h3>
+        <h3 className="text-xl font-bold text-blue-600 dark:text-white">B. The &quot;MPG Illusion&quot; Explained</h3>
         <p>
           Because Miles Per Gallon (MPG) is non-linear relative to actual fuel volume consumed, drivers frequently fall victim to the <strong>MPG Illusion</strong>. A linear increase in MPG does not produce a linear reduction in fuel consumption:
         </p>
@@ -85,7 +85,7 @@ export function MileageContent() {
           Notice that upgrading a heavy truck from 15 to 20 MPG saves <strong>over 3 times more fuel</strong> per 10,000 miles than upgrading an efficient commuter car from 40 to 50 MPG!
         </p>
 
-        <h3 className="text-xl font-bold text-slate-900 dark:text-white">C. Global Unit Conversion Formula Constants</h3>
+        <h3 className="text-xl font-bold text-blue-600 dark:text-white">C. Global Unit Conversion Formula Constants</h3>
         <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs rounded-xl">
           {"L/100km = 235.215 / US MPG = 282.481 / UK MPG"}
         </div>
@@ -93,7 +93,7 @@ export function MileageContent() {
 
       {/* SECTION 3 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white  dark:border-zinc-800 pb-2">
           3. The Tank-to-Tank Measurement Method (Step-by-Step)
         </h2>
         <p>
@@ -118,7 +118,7 @@ export function MileageContent() {
 
       {/* SECTION 4 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white  dark:border-zinc-800 pb-2">
           4. Key Mechanical &amp; Environmental Factors Influencing Mileage
         </h2>
         <ul className="list-disc pl-6 space-y-2">
@@ -136,7 +136,7 @@ export function MileageContent() {
 
       {/* SECTION 5 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white  dark:border-zinc-800 pb-2">
           5. Business Mileage &amp; Tax Deduction Regulations
         </h2>
         <p>
@@ -150,7 +150,7 @@ export function MileageContent() {
 
       {/* SECTION 6 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white  dark:border-zinc-800 pb-2">
           6. Electric Vehicle Mileage (MPGe) &amp; Energy Efficiency
         </h2>
         <p>

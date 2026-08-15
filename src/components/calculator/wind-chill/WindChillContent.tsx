@@ -7,7 +7,7 @@ export function WindChillContent() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: THE BIOPHYSICS OF WIND CHILL & HUMAN THERMOREGULATION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. The Biophysics of Wind Chill & Human Thermoregulation
         </h2>
         <p>
@@ -27,11 +27,11 @@ export function WindChillContent() {
 
       {/* SECTION 2: MATHEMATICAL FORMULAS & HISTORICAL EVOLUTION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. Mathematical Formulas & Historical Evolution
         </h2>
         
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">1. The Modern JAG/TI Formula (US NWS & Environment Canada)</h3>
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">1. The Modern JAG/TI Formula (US NWS & Environment Canada)</h3>
         <p>
           In 2001, the National Weather Service (NWS) and Environment Canada updated the wind chill index using clinical facial skin heat-transfer models developed by the Joint Action Group for Temperature Indices (JAG/TI):
         </p>
@@ -48,7 +48,7 @@ export function WindChillContent() {
           Where \(T\) is air temperature in °F or °C, and \(V\) is wind speed in mph or km/h measured at 10 meters (33 feet) standard anemometer height.
         </p>
 
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">2. The Historical Siple and Passel Antarctic Formula (1945–2001)</h3>
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">2. The Historical Siple and Passel Antarctic Formula (1945–2001)</h3>
         <p>
           The original wind chill index was created in 1945 by Antarctic explorers Paul Siple and Charles Passel. They measured how fast water cylinders froze in Antarctic winds. Because plastic bottles lack internal metabolic heat generation and blood circulation, the 1945 formula significantly overstated human cold perception and was replaced in 2001.
         </p>
@@ -56,7 +56,7 @@ export function WindChillContent() {
 
       {/* SECTION 3: WIND CHILL VS. HEAT INDEX VS. DEW POINT */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. Wind Chill vs. Heat Index vs. Dew Point
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
@@ -78,14 +78,14 @@ export function WindChillContent() {
 
       {/* SECTION 4: MEDICAL COLD INJURIES (FROSTBITE & HYPOTHERMIA) */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. Medical Cold Injuries: Frostbite & Hypothermia Staging
         </h2>
         <p>
           Cold exposure causes progressive tissue damage and core body cooling:
         </p>
 
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">Clinical Stages of Frostbite</h3>
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">Clinical Stages of Frostbite</h3>
         <ul className="list-disc pl-5 space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300">
           <li><strong>Frostnip (Pre-Frostbite):</strong> Superficial numbness, skin redness, and tingling. Reversible with immediate rewarming.</li>
           <li><strong>First-Degree Frostbite:</strong> Numbness and white/yellowish skin discoloration. Partial-thickness skin involvement.</li>
@@ -93,7 +93,7 @@ export function WindChillContent() {
           <li><strong>Third & Fourth-Degree Frostbite:</strong> Deep tissue necrosis involving muscles, tendons, and bones. Blood-filled blisters and purplish-black eschar (gangrene).</li>
         </ul>
 
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">Hypothermia Clinical Staging</h3>
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">Hypothermia Clinical Staging</h3>
         <ul className="list-disc pl-5 space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300">
           <li><strong>Mild Hypothermia (95°F / 35°C Core Temp):</strong> Uncontrollable shivering, rapid breathing, pale cold skin.</li>
           <li><strong>Moderate Hypothermia (90°F / 32°C Core Temp):</strong> Shivering stops, loss of fine motor skills, slurred speech, confusion.</li>
@@ -103,7 +103,7 @@ export function WindChillContent() {
 
       {/* SECTION 5: OCCUPATIONAL & OUTDOOR RECREATION SAFETY */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. Occupational & Outdoor Recreation Safety Standards
         </h2>
         <p>

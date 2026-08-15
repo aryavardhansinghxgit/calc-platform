@@ -95,7 +95,7 @@ export function RmdContent() {
         <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Comprehensive IRS Publication 590-B Guide
         </div>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400">
           Understanding Required Minimum Distributions (RMDs) &amp; IRS Rules
         </h2>
         <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
@@ -135,8 +135,7 @@ export function RmdContent() {
 
       {/* Deep-Dive Section 1: Calculation Formula & IRS Life Expectancy Tables */}
       <section className="space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Landmark className="h-5 w-5 text-blue-600" /> How RMDs Are Calculated: Mathematical Formulas &amp; IRS Tables
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">How RMDs Are Calculated: Mathematical Formulas &amp; IRS Tables
         </h3>
         <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
           Calculating your annual RMD requires two primary numbers: your account balance as of December 31st of the previous calendar year, and your life expectancy distribution factor from IRS Publication 590-B.
@@ -176,8 +175,7 @@ export function RmdContent() {
 
       {/* Deep-Dive Section 2: Account Rules & Aggregation Matrix */}
       <section className="space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <FileText className="h-5 w-5 text-blue-600" /> Account Types &amp; IRS Aggregation Rules
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Account Types &amp; IRS Aggregation Rules
         </h3>
         <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
           Not all tax-advantaged retirement accounts follow identical RMD rules. Understanding which accounts allow aggregation can prevent costly IRS compliance errors.
@@ -231,13 +229,11 @@ export function RmdContent() {
 
       {/* Deep-Dive Section 3: Tax Minimization Strategies */}
       <section className="space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Percent className="h-5 w-5 text-blue-600" /> Proven Strategies to Reduce or Eliminate RMD Taxes
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Proven Strategies to Reduce or Eliminate RMD Taxes
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-xl space-y-3">
-            <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-blue-600" /> 1. Qualified Charitable Distributions (QCDs)
+            <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">1. Qualified Charitable Distributions (QCDs)
             </h4>
             <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               If you donate to charities and are age 70½ or older, direct your IRA custodian to issue payments directly to eligible 501(c)(3) organizations. Up to $105,000 per year per individual can be transferred tax-free. Because QCDs bypass AGI, they protect you from higher Medicare Part B and D IRMAA surcharges and lessen taxability on Social Security benefits.
@@ -245,8 +241,7 @@ export function RmdContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-xl space-y-3">
-            <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-blue-600" /> 2. Pre-RMD Partial Roth Conversions
+            <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">2. Pre-RMD Partial Roth Conversions
             </h4>
             <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Between retirement (e.g. age 60–65) and your RMD starting age (73/75), you may be in a temporary lower income tax bracket. Executing annual partial Roth conversions fills lower marginal brackets (e.g. 12% or 22%), systematically reducing your pre-tax IRA balance and permanently lowering future mandatory RMD withdrawals.
@@ -259,7 +254,7 @@ export function RmdContent() {
       <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
           <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          <h3 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
             Frequently Asked Questions (15 Key RMD &amp; Tax Insights)
           </h3>
         </div>

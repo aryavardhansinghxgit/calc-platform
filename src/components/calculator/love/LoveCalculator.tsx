@@ -157,7 +157,7 @@ export function LoveCalculator() {
             <Heart className="h-5 w-5 fill-rose-500 text-rose-500 animate-pulse" />
           </div>
           <div>
-            <h3 className="text-sm font-extrabold text-slate-900 dark:text-zinc-100">
+            <h3 className="text-sm font-extrabold text-blue-600 dark:text-blue-400">
               Next-Gen Love, Compatibility &amp; Relationship Matcher
             </h3>
             <p className="text-[10px] text-slate-500 dark:text-zinc-400">
@@ -208,8 +208,7 @@ export function LoveCalculator() {
           {/* MAIN INPUT CARD */}
           <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs space-y-5">
             <div className="border-b border-slate-100 dark:border-zinc-800 pb-3">
-              <h4 className="text-xs font-extrabold text-slate-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">
-                <Users className="h-4 w-4 text-rose-500" /> Couple Details &amp; Parameters
+              <h4 className="text-xs font-extrabold text-slate-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">Couple Details &amp; Parameters
               </h4>
               <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
                 Enter names and optional dates/zodiac signs to calculate multi-pillar compatibility.

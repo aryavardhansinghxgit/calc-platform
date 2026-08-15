@@ -571,7 +571,7 @@ export function Base64Calculator() {
               <Upload className="h-6 w-6" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 {selectedFile ? `Selected File: ${selectedFile.name}` : "Drag & Drop Any File Here"}
               </h3>
               <p className="text-xs text-zinc-500">

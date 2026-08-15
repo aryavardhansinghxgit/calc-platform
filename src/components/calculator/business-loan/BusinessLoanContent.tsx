@@ -101,7 +101,7 @@ export function BusinessLoanContent() {
         <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Complete Commercial Financing &amp; Loan Guide
         </div>
-        <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
+        <h1 className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
           Business Loan Calculator Guide: Commercial Financing, Fees &amp; Real APR
         </h1>
         <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
@@ -112,21 +112,21 @@ export function BusinessLoanContent() {
       {/* Main Educational Content with Required Headings */}
       <div className="space-y-8 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">What Is a Business Loan?</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">What Is a Business Loan?</h2>
           <p>
             A business loan is a debt product provided by commercial banks, credit unions, SBA lenders, or online alternative finance companies to fund enterprise operations, equipment purchases, inventory, or expansion.
           </p>
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">How Business Loans Work</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">How Business Loans Work</h2>
           <p>
             Commercial loans feature specified principal amounts, interest rates, repayment schedules (monthly, quarterly, weekly), and upfront fees. Amortization payments cover interest charges and principal reduction over time.
           </p>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Business Loan &amp; Real APR Formulas</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Business Loan &amp; Real APR Formulas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Monthly Payback Formula</span>
@@ -140,7 +140,7 @@ export function BusinessLoanContent() {
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Baseline Calculation Example ($10,000 @ 10% for 5 Years + Fees)</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Baseline Calculation Example ($10,000 @ 10% for 5 Years + Fees)</h2>
           <p>
             For a $10,000 business loan at 10.0% APR over 5 years (60 monthly payments) with a 5% origination fee ($500) and a $750 documentation fee ($1,250 total fees):
           </p>
@@ -154,7 +154,7 @@ export function BusinessLoanContent() {
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">SBA Loans Explained (7(a), CDC/504, Microloans)</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">SBA Loans Explained (7(a), CDC/504, Microloans)</h2>
           <p>
             SBA loans offer competitive interest rates backed by a partial government guarantee. 7(a) loans suit working capital up to $5 million, while CDC/504 loans provide long-term real estate financing up to 25 years.
           </p>
@@ -162,21 +162,21 @@ export function BusinessLoanContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-y border-zinc-200 dark:border-zinc-800 py-6 text-xs">
           <div>
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">DSCR Ratio (≥ 1.25x)</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">DSCR Ratio (≥ 1.25x)</h3>
             <p>Net operating income divided by annual debt service; commercial benchmark for loan approval.</p>
           </div>
           <div>
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Origination &amp; Doc Fees</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Origination &amp; Doc Fees</h3>
             <p>Upfront processing costs that increase effective APR above nominal interest rates.</p>
           </div>
           <div>
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Conventional vs SBA</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Conventional vs SBA</h3>
             <p>SBA loans offer lower down payments and longer terms; conventional loans close faster.</p>
           </div>
         </div>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Common Business Loan Mistakes to Avoid</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Common Business Loan Mistakes to Avoid</h2>
           <p>
             Avoid underestimating total fees, borrowing short-term merchant cash advances for long-term growth, failing to check DSCR coverage, or applying without complete financial statements.
           </p>
@@ -187,7 +187,7 @@ export function BusinessLoanContent() {
       <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
           <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <h2 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
             Frequently Asked Questions (15 Key Business Loan Insights)
           </h2>
         </div>
@@ -229,7 +229,7 @@ export function BusinessLoanContent() {
 
       {/* Related Calculators */}
       <section className="space-y-3  dark:border-zinc-800 pt-6">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Related Commercial &amp; Financial Calculators</h2>
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400">Related Commercial &amp; Financial Calculators</h2>
         <div className="flex flex-wrap gap-2 text-xs">
           <Link href="/calculators/loan-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Loan Calculator

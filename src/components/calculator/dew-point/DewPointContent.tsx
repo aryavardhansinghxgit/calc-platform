@@ -7,7 +7,7 @@ export function DewPointContent() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: THE PHYSICS OF HUMIDITY, WATER VAPOR & DEW POINT */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. The Physics of Humidity, Water Vapor & Dew Point
         </h2>
         <p>
@@ -27,11 +27,11 @@ export function DewPointContent() {
 
       {/* SECTION 2: MATHEMATICAL FORMULAS & DERIVATIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. Mathematical Formulas & Derivations
         </h2>
         
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">1. The Alduchov &amp; Eskridge (1996) Improved Magnus Formula</h3>
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">1. The Alduchov &amp; Eskridge (1996) Improved Magnus Formula</h3>
         <p>
           The standard high-precision formulation for saturation vapor pressure e_s(T) and dew point T_d (precision ±0.01°C):
         </p>
@@ -48,7 +48,7 @@ export function DewPointContent() {
           Where T is air temperature in °C and RH is relative humidity (0–100%).
         </p>
 
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">2. The Rule-of-Thumb Approximation</h3>
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">2. The Rule-of-Thumb Approximation</h3>
         <p className="text-xs">
           For relative humidity values above 50%, the dew point can be estimated quickly without logarithms using:
         </p>
@@ -59,7 +59,7 @@ export function DewPointContent() {
 
       {/* SECTION 3: DEW POINT VS. WET-BULB VS. FROST POINT */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. Dew Point vs. Wet-Bulb Temperature vs. Frost Point
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
@@ -82,7 +82,7 @@ export function DewPointContent() {
 
       {/* SECTION 4: DEW POINT AND HUMAN THERMAL COMFORT */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. Dew Point and Human Thermal Comfort (The "Muggy" Index)
         </h2>
         <p>
@@ -100,7 +100,7 @@ export function DewPointContent() {
 
       {/* SECTION 5: REAL-WORLD APPLICATIONS & INDUSTRY USE CASES */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. Real-World Applications &amp; Industry Use Cases
         </h2>
         <ul className="list-disc pl-5 space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300">

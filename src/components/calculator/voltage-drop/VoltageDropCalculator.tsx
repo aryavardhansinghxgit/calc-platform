@@ -363,9 +363,7 @@ export function VoltageDropCalculator() {
         <div className="lg:col-span-7 space-y-5">
           <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Settings className="w-4 h-4 text-blue-600" />
-                <span>Electrical Parameters</span>
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Electrical Parameters</span>
               </h3>
               <button
                 onClick={handleReset}
@@ -440,7 +438,7 @@ export function VoltageDropCalculator() {
 
           {/* SECTION 2: CONDUCTOR DETAILS */}
           <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
               Conductor Configuration
             </h3>
 
@@ -576,7 +574,7 @@ export function VoltageDropCalculator() {
           {/* SECTION 3: ENVIRONMENT PARAMETERS (only when AC is active) */}
           {phase !== "dc" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
                 Conduit & Power Factor
               </h3>
 
@@ -614,7 +612,7 @@ export function VoltageDropCalculator() {
 
           {/* SECTION 4: DESIGN GOALS */}
           <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
               Design Constraints
             </h3>
 
@@ -867,9 +865,7 @@ export function VoltageDropCalculator() {
       {/* WHAT-IF RECOMMENDED WIRE GAUGE TABLE */}
       {result && recommendations.length > 0 && (
         <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-          <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-            <Info className="w-4 h-4 text-blue-500" />
-            <span>&quot;What If?&quot; Conductor Size Impact Table</span>
+          <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5"><span>&quot;What If?&quot; Conductor Size Impact Table</span>
           </h3>
           <p className="text-xs text-zinc-500">
             See how upgrading or downgrading wire sizes affects voltage drop and terminal voltage under identical electrical conditions:
@@ -915,7 +911,7 @@ export function VoltageDropCalculator() {
       {/* COMPARE GAUGE TOOL */}
       {mode !== "custom" && (
         <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4 no-print">
-          <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+          <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
             <span>📊</span> Conductor Sizing Comparator
           </h3>
           <p className="text-xs text-zinc-500">

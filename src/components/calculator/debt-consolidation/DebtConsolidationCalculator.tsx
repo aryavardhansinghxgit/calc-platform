@@ -559,8 +559,7 @@ Recommendation: ${results.recommendation}`;
       {activeTab === "realApr" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-4">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Percent className="h-5 w-5 text-emerald-500" /> Real Effective APR &amp; Max Fee Threshold Analysis
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Real Effective APR &amp; Max Fee Threshold Analysis
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Upfront fees increase your actual cost of borrowing. Real APR incorporates origination fees amortized over your loan term.
@@ -593,8 +592,7 @@ Recommendation: ${results.recommendation}`;
       {activeTab === "balTransfer" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-4">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Zap className="h-5 w-5 text-amber-500" /> 0% Intro APR Balance Transfer Card Alternative
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">0% Intro APR Balance Transfer Card Alternative
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Compare your consolidation loan against transferring your debt to a 0% intro APR credit card with a 3% transfer fee.
@@ -635,8 +633,7 @@ Recommendation: ${results.recommendation}`;
       {/* TAB 4: VISUAL COST BREAKDOWN & CHARTS */}
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-blue-500" /> Total Cost &amp; Interest Paid Comparison Chart
+          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Total Cost &amp; Interest Paid Comparison Chart
           </h3>
 
           <div className="h-64 w-full">
@@ -659,8 +656,7 @@ Recommendation: ${results.recommendation}`;
       {activeTab === "schedule" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-purple-500" /> Side-by-Side Monthly Amortization Schedule
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Side-by-Side Monthly Amortization Schedule
             </h3>
 
             <div className="flex items-center gap-2">

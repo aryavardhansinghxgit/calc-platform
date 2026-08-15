@@ -231,8 +231,7 @@ export function DewPointCalculator() {
         {/* LEFT INPUT PANE (Col 7) */}
         <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-5">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
-              <Sliders className="h-4 w-4 text-sky-600" /> Input Parameters
+            <h3 className="text-xs font-extrabold uppercase tracking-wider text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">Input Parameters
             </h3>
 
             {/* Temperature Unit Toggle */}

@@ -355,9 +355,7 @@ export function TdeeCalculator() {
         {/* Left Column: Inputs Form */}
         <div className="lg:col-span-5 space-y-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm print:hidden">
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Sliders className="w-5 h-5 text-cyan-600" />
-              Personal Parameters
+            <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">Personal Parameters
             </h2>
             
             {/* Unit System & Energy Unit Toggles */}
@@ -577,9 +575,7 @@ export function TdeeCalculator() {
 
           {/* Daily Steps & Workout Frequency */}
           <div className="space-y-4 border-t border-slate-100 pt-4">
-            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <Footprints className="w-4 h-4 text-cyan-600" />
-              Step Count & Workout Frequency
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Step Count & Workout Frequency
             </h3>
 
             <div className="grid grid-cols-2 gap-4">
@@ -768,9 +764,7 @@ export function TdeeCalculator() {
             {activeTab === "components" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <PieIcon className="w-4 h-4 text-cyan-600" />
-                    TDEE Metabolic Energy Component Breakdown
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">TDEE Metabolic Energy Component Breakdown
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Total: {results.tdee} {unitLabel}</span>
                 </div>
@@ -836,9 +830,7 @@ export function TdeeCalculator() {
             {activeTab === "goal-plan" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Scale className="w-4 h-4 text-cyan-600" />
-                    Goal Strategy Comparison ({unitLabel}/day)
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Goal Strategy Comparison ({unitLabel}/day)
                   </h3>
                 </div>
 
@@ -871,9 +863,7 @@ export function TdeeCalculator() {
             {activeTab === "projections" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <LineIcon className="w-4 h-4 text-emerald-600" />
-                    12-Week Projected Weight Trajectory
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">12-Week Projected Weight Trajectory
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Target: {results.targetCalories} {unitLabel}/day</span>
                 </div>
@@ -907,9 +897,7 @@ export function TdeeCalculator() {
             {/* TAB 4: 7 BMR Clinical Equations Table */}
             {activeTab === "bmr-formulas" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-purple-600" />
-                  7 Clinical BMR Formulas Comparison
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">7 Clinical BMR Formulas Comparison
                 </h3>
 
                 <div className="overflow-x-auto border border-slate-200 rounded-xl max-h-64">
@@ -940,9 +928,7 @@ export function TdeeCalculator() {
             {/* TAB 5: Exercise Calorie Burn Table */}
             {activeTab === "activity-burn" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-amber-500" />
-                  Calorie Burn Reference Table (per 30 mins)
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Calorie Burn Reference Table (per 30 mins)
                 </h3>
 
                 <div className="overflow-x-auto border border-slate-200 rounded-xl max-h-64">
@@ -971,9 +957,7 @@ export function TdeeCalculator() {
 
           {/* Smart Insights & Personalized Recommendations */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 print:hidden">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-amber-500" />
-              Smart Insights & Metabolic Strategy
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Smart Insights & Metabolic Strategy
             </h3>
 
             <div className="space-y-2.5">

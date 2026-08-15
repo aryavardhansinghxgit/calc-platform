@@ -8,9 +8,7 @@ export function RdContent() {
     <article className="prose prose-zinc dark:prose-invert max-w-none space-y-8 text-xs leading-relaxed">
       {/* 1. INTRODUCTION */}
       <section className="space-y-3">
-        <h2 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2  dark:border-zinc-800 pb-2">
-          <RefreshCw className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          What is a Recurring Deposit (RD) & How Does It Work?
+        <h2 className="text-lg font-bold tracking-tight text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-2">What is a Recurring Deposit (RD) & How Does It Work?
         </h2>
         <p className="text-slate-900 dark:text-slate-100">
           A <strong>Recurring Deposit (RD)</strong> is a term investment product offered by commercial banks, non-banking financial companies (NBFCs), and post offices that allows individuals to deposit a fixed monthly sum over a chosen tenure (ranging from 6 months up to 10 years). RDs combine the high guaranteed interest rates of Fixed Deposits with the budget-friendly installment structure of a Systematic Investment Plan (SIP).
@@ -22,9 +20,7 @@ export function RdContent() {
 
       {/* 2. RD VS FD VS SIP COMPARISON TABLE */}
       <section className="space-y-3">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Layers className="h-4 w-4 text-blue-600" />
-          Recurring Deposit (RD) vs. FD vs. Equity SIP Comparison
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Recurring Deposit (RD) vs. FD vs. Equity SIP Comparison
         </h3>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse border border-zinc-200 dark:border-zinc-800 text-[11px]">
@@ -68,9 +64,7 @@ export function RdContent() {
 
       {/* 3. MATHEMATICAL FORMULAS & DERIVATIONS */}
       <section className="space-y-4">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Calculator className="h-4 w-4 text-blue-600" />
-          Mathematical Recurring Deposit Formulas & Compounding Mechanics
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Mathematical Recurring Deposit Formulas & Compounding Mechanics
         </h3>
 
         <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">1. Quarterly Compounded RD Formula</h4>
@@ -102,9 +96,7 @@ export function RdContent() {
 
       {/* 4. WORKED STEP-BY-STEP EXAMPLE */}
       <section className="space-y-3">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Zap className="h-4 w-4 text-blue-600" />
-          Step-by-Step Worked Calculation Example
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Step-by-Step Worked Calculation Example
         </h3>
         <p className="text-slate-900 dark:text-slate-100">
           Let us walk through a 1-year (12-month) bank Recurring Deposit calculation:
@@ -130,22 +122,18 @@ export function RdContent() {
 
       {/* 5. SENIOR CITIZEN & TDS TAX RULES */}
       <section className="space-y-3">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Award className="h-4 w-4 text-blue-600" />
-          Senior Citizen Privileges & Tax Deducted at Source (TDS)
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Senior Citizen Privileges & Tax Deducted at Source (TDS)
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
           <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1.5">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 text-xs">
-              <Award className="h-3.5 w-3.5 text-blue-600" /> Senior Citizen Rate Premium (+0.50%)
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 text-xs">Senior Citizen Rate Premium (+0.50%)
             </h4>
             <p className="text-slate-900 dark:text-slate-100 text-[11px]">
               Commercial banks offer an extra <strong>+0.50% to +0.75% per annum</strong> bonus interest rate on Recurring Deposits for senior citizens (age 60+). Over a $500 monthly RD for 5 years, senior citizens earn over <strong>$1,200+ extra interest</strong>.
             </p>
           </div>
           <div className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1.5">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 text-xs">
-              <ShieldCheck className="h-3.5 w-3.5 text-blue-500" /> TDS Deductions (Section 194A)
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 text-xs">TDS Deductions (Section 194A)
             </h4>
             <p className="text-slate-900 dark:text-slate-100 text-[11px]">
               TDS applies to RD interest earnings exceeding statutory thresholds ($500 / ₹40,000 for regular investors; ₹50,000 for senior citizens). Submit Form 15G or Form 15H at the start of the year if your total taxable income is below the tax slab limit.
@@ -156,9 +144,7 @@ export function RdContent() {
 
       {/* 6. TOP INVESTOR MISTAKES TO AVOID */}
       <section className="space-y-3">
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <AlertTriangle className="h-4 w-4 text-blue-600" />
-          Top RD Investor Mistakes to Avoid
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Top RD Investor Mistakes to Avoid
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-slate-900 dark:text-slate-100">
           <div className="p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-1">

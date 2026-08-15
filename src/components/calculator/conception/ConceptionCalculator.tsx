@@ -319,9 +319,7 @@ export function ConceptionCalculator() {
         {/* Left Column: Inputs Form */}
         <div className="lg:col-span-5 space-y-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm print:hidden">
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Sliders className="w-5 h-5 text-rose-600" />
-              Calculation Inputs
+            <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">Calculation Inputs
             </h2>
             <span className="text-xs px-3 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 font-bold uppercase tracking-wider">
               {calculationMode}
@@ -461,9 +459,7 @@ export function ConceptionCalculator() {
 
           {/* Menstrual Cycle Parameters */}
           <div className="border-t border-slate-100 pt-4 space-y-4">
-            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <Activity className="w-4 h-4 text-purple-600" />
-              Menstrual Cycle Parameters
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Menstrual Cycle Parameters
             </h3>
 
             <div className="grid grid-cols-2 gap-4">
@@ -529,9 +525,7 @@ export function ConceptionCalculator() {
 
           {/* Fertility Biomarkers Tracker */}
           <div className="border-t border-slate-100 pt-4 space-y-4">
-            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <Droplet className="w-4 h-4 text-cyan-600" />
-              Fertility Biomarkers Tracker
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Fertility Biomarkers Tracker
             </h3>
 
             <div>
@@ -792,9 +786,7 @@ export function ConceptionCalculator() {
             {activeTab === "probability" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-emerald-600" />
-                    Daily Conception Probability Curve
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Daily Conception Probability Curve
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Peak Window: -2 to 0 DPO</span>
                 </div>
@@ -860,9 +852,7 @@ export function ConceptionCalculator() {
             {/* TAB 2: Cycle Phases */}
             {activeTab === "calendar" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-rose-600" />
-                  28-Day Menstrual Cycle Phase Breakdown
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">28-Day Menstrual Cycle Phase Breakdown
                 </h3>
 
                 <div className="space-y-3">
@@ -895,9 +885,7 @@ export function ConceptionCalculator() {
             {/* TAB 3: Pregnancy Timeline */}
             {activeTab === "timeline" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Baby className="w-4 h-4 text-purple-600" />
-                  Clinical 40-Week Pregnancy Milestones
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Clinical 40-Week Pregnancy Milestones
                 </h3>
 
                 <div className="relative border-l-2 border-slate-200 ml-3 space-y-4 pl-6 pt-2">
@@ -923,9 +911,7 @@ export function ConceptionCalculator() {
             {/* TAB 4: Implantation Map */}
             {activeTab === "implantation" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-cyan-600" />
-                  Embryo Implantation & Early hCG Window
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Embryo Implantation & Early hCG Window
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -954,9 +940,7 @@ export function ConceptionCalculator() {
             {activeTab === "bbt" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Thermometer className="w-4 h-4 text-rose-600" />
-                    Basal Body Temperature (BBT) Thermal Shift Chart
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Basal Body Temperature (BBT) Thermal Shift Chart
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Post-Ovulation Rise: +0.5°F to +1.0°F</span>
                 </div>
@@ -993,9 +977,7 @@ export function ConceptionCalculator() {
             {/* TAB 6: 6-Month Forecast */}
             {activeTab === "forecast" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <CalendarDays className="w-4 h-4 text-purple-600" />
-                  6-Month Projected Fertility & Ovulation Calendar
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">6-Month Projected Fertility & Ovulation Calendar
                 </h3>
 
                 <div className="overflow-x-auto border border-slate-200 rounded-xl">
@@ -1028,9 +1010,7 @@ export function ConceptionCalculator() {
 
           {/* Smart Insights & Personalized Recommendations */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 print:hidden">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-amber-500" />
-              Smart Insights & Clinical Recommendations
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Smart Insights & Clinical Recommendations
             </h3>
 
             <div className="space-y-2.5">

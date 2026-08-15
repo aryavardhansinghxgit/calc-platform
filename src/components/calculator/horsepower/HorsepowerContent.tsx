@@ -5,7 +5,7 @@ export function HorsepowerContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 mt-8 text-zinc-800 dark:text-zinc-200">
       {/* SECTION 1: WHAT IS HORSEPOWER? */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-zinc-900 dark:text-white">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white">
           1. What is Horsepower? (History &amp; Scientific Definition)
         </h2>
         <p className="leading-relaxed">
@@ -34,14 +34,14 @@ export function HorsepowerContent() {
 
       {/* SECTION 2: THE CORE MATHEMATICAL FORMULAS EXPLAINED */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-zinc-900 dark:text-white">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white">
           2. Core Mathematical Formulas &amp; The 5,252 RPM Intersection
         </h2>
         <p className="leading-relaxed">
           Engine dynamometers do not measure horsepower directly; instead, they measure engine rotational torque (lb-ft or N-m) and rotational speed (RPM). Horsepower is calculated from these two variables using standard mechanical conversion constants.
         </p>
 
-        <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100">
+        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400">
           Torque to Horsepower Formula
         </h3>
         <p className="leading-relaxed">
@@ -57,7 +57,7 @@ export function HorsepowerContent() {
           Horsepower (HP) = (Torque in N-m × RPM) / 7127.00
         </div>
 
-        <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100">
+        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400">
           Derivation of the 5,252 Constant
         </h3>
         <p className="leading-relaxed">
@@ -70,7 +70,7 @@ export function HorsepowerContent() {
           Because of this mathematical identity, when horsepower and torque (in lb-ft) are plotted on a chassis or engine dyno graph with matching vertical numerical scales, <strong>the torque and horsepower curves will ALWAYS intersect at exactly 5,252 RPM</strong>. Below 5,252 RPM, torque values in lb-ft exceed horsepower values; above 5,252 RPM, horsepower values exceed torque.
         </p>
 
-        <h3 className="text-lg font-bold text-zinc-800 dark:text-zinc-100">
+        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400">
           Quarter-Mile Drag Strip Formulas (Fox, Hale &amp; Hunt Models)
         </h3>
         <p className="leading-relaxed">
@@ -91,7 +91,7 @@ export function HorsepowerContent() {
 
       {/* SECTION 3: TYPES OF HORSEPOWER */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-zinc-900 dark:text-white">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white">
           3. Global Standards: Types of Horsepower Defined
         </h2>
         <p className="leading-relaxed">
@@ -123,7 +123,7 @@ export function HorsepowerContent() {
 
       {/* SECTION 4: HORSEPOWER VS TORQUE */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-zinc-900 dark:text-white">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white">
           4. Horsepower vs. Torque: The Automotive Distinction
         </h2>
         <p className="leading-relaxed">
@@ -144,7 +144,7 @@ export function HorsepowerContent() {
 
       {/* SECTION 5: BHP VS WHP DRIVETRAIN LOSS */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-zinc-900 dark:text-white">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white">
           5. Brake Horsepower (BHP) vs. Wheel Horsepower (WHP)
         </h2>
         <p className="leading-relaxed">
@@ -191,7 +191,7 @@ export function HorsepowerContent() {
 
       {/* SECTION 6: ATMOSPHERIC WEATHER CORRECTION */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-zinc-900 dark:text-white">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white">
           6. Environmental &amp; Atmospheric Correction Factors (SAE J1349)
         </h2>
         <p className="leading-relaxed">

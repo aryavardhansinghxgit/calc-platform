@@ -33,7 +33,7 @@ export function CarbohydrateContent() {
             <BookOpen className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               The Ultimate Guide to Carbohydrates, Net Carbs, Glycemic Load & Metabolic Health
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -44,7 +44,7 @@ export function CarbohydrateContent() {
 
         {/* Section 1 & 2 */}
         <div className="space-y-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">1–2.</span> What Are Carbohydrates & Why Do They Matter?
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -55,9 +55,7 @@ export function CarbohydrateContent() {
         {/* Section 3 to 6: Types of Carbs */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
           <div className="bg-blue-50/80 p-6 rounded-2xl border border-cyan-200/80 space-y-3">
-            <h4 className="font-bold text-cyan-950 text-base flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-blue-600" />
-              Simple Sugars
+            <h4 className="font-bold text-cyan-950 text-base flex items-center gap-2">Simple Sugars
             </h4>
             <p className="text-xs md:text-sm text-slate-900 leading-relaxed">
               Monosaccharides and disaccharides (glucose, fructose, sucrose) that digest rapidly, spiking blood sugar and insulin.
@@ -65,9 +63,7 @@ export function CarbohydrateContent() {
           </div>
 
           <div className="bg-blue-50/80 p-6 rounded-2xl border border-emerald-200/80 space-y-3">
-            <h4 className="font-bold text-emerald-950 text-base flex items-center gap-2">
-              <Apple className="w-5 h-5 text-blue-600" />
-              Complex Starches
+            <h4 className="font-bold text-emerald-950 text-base flex items-center gap-2">Complex Starches
             </h4>
             <p className="text-xs md:text-sm text-slate-900 leading-relaxed">
               Long-chain glucose polymers found in oats, brown rice, sweet potatoes, and legumes that provide sustained energy.
@@ -75,9 +71,7 @@ export function CarbohydrateContent() {
           </div>
 
           <div className="bg-blue-50/80 p-6 rounded-2xl border border-purple-200/80 space-y-3">
-            <h4 className="font-bold text-purple-950 text-base flex items-center gap-2">
-              <Activity className="w-5 h-5 text-blue-600" />
-              Dietary Fiber
+            <h4 className="font-bold text-purple-950 text-base flex items-center gap-2">Dietary Fiber
             </h4>
             <p className="text-xs md:text-sm text-slate-900 leading-relaxed">
               Non-digestible carbohydrates essential for gut microbiome health, cholesterol management, and lowering Net Carbs.
@@ -87,7 +81,7 @@ export function CarbohydrateContent() {
 
         {/* Section 14 to 16: GI, GL & Net Carbs Table */}
         <div className="space-y-4 pt-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">14–16.</span> Glycemic Index (GI), Glycemic Load (GL) & Net Carbs
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -126,7 +120,7 @@ export function CarbohydrateContent() {
 
         {/* Section 24: Carbohydrate Food Reference Table */}
         <div className="space-y-4 pt-4">
-          <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <h3 className="text-xl font-bold text-blue-600 flex items-center gap-2">
             <span className="text-blue-600">24.</span> Carbohydrate & Glycemic Reference Values
           </h3>
           <p className="text-slate-700 leading-relaxed text-sm md:text-base">
@@ -196,7 +190,7 @@ export function CarbohydrateContent() {
             <HelpCircle className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-blue-600">
               Frequently Asked Questions (40 Clinical Answers)
             </h2>
             <p className="text-sm text-slate-900 mt-1">
@@ -245,7 +239,7 @@ export function CarbohydrateContent() {
       <section className="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm space-y-6">
         <div className="flex items-center gap-3  pb-4">
           <PieChart className="w-6 h-6 text-blue-600" />
-          <h2 className="text-xl md:text-2xl font-bold text-slate-900">
+          <h2 className="text-xl md:text-2xl font-bold text-blue-600">
             Related Fitness & Nutrition Calculators
           </h2>
         </div>

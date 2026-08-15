@@ -301,9 +301,7 @@ export function PeriodCalculator() {
         {/* Left Column: Inputs Form */}
         <div className="lg:col-span-5 space-y-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm print:hidden">
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Sliders className="w-5 h-5 text-rose-600" />
-              Calculation Inputs
+            <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">Calculation Inputs
             </h2>
             <span className="text-xs px-3 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200 font-bold uppercase tracking-wider">
               {calculationMode}
@@ -355,9 +353,7 @@ export function PeriodCalculator() {
 
           {/* Advanced Inputs */}
           <div className="border-t border-slate-100 pt-4 space-y-4">
-            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <Activity className="w-4 h-4 text-purple-600" />
-              Advanced Health Parameters
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Advanced Health Parameters
             </h3>
 
             <div className="grid grid-cols-2 gap-4">
@@ -593,9 +589,7 @@ export function PeriodCalculator() {
             {activeTab === "probability" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-emerald-600" />
-                    Daily Conception Probability Curve
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Daily Conception Probability Curve
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Peak Window: -2 to 0 DPO</span>
                 </div>
@@ -639,9 +633,7 @@ export function PeriodCalculator() {
             {/* TAB 2: 12-Month Calendar Table */}
             {activeTab === "future-12m" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <CalendarDays className="w-4 h-4 text-purple-600" />
-                  Predicted 12-Month Period & Ovulation Schedule
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Predicted 12-Month Period & Ovulation Schedule
                 </h3>
 
                 <div className="overflow-x-auto border border-slate-200 rounded-xl">
@@ -676,9 +668,7 @@ export function PeriodCalculator() {
             {/* TAB 3: Cycle Phases */}
             {activeTab === "timeline" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-rose-600" />
-                  Menstrual Cycle Phase Architecture
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Menstrual Cycle Phase Architecture
                 </h3>
 
                 <div className="space-y-3">
@@ -711,9 +701,7 @@ export function PeriodCalculator() {
             {/* TAB 4: Cycle Stability Trends */}
             {activeTab === "trends" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-rose-600" />
-                  12-Month Cycle Length Stability Trend
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">12-Month Cycle Length Stability Trend
                 </h3>
 
                 <div className="h-60 w-full">
@@ -748,9 +736,7 @@ export function PeriodCalculator() {
 
           {/* Smart Insights & Personalized Recommendations */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 print:hidden">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-amber-500" />
-              Smart Insights & Personalized Recommendations
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Smart Insights & Personalized Recommendations
             </h3>
 
             <div className="space-y-2.5">

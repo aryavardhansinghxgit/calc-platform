@@ -13,11 +13,11 @@ export function ReportRecommendation({ recommendation }: ReportRecommendationPro
   return (
     <div className="border border-zinc-900 rounded-lg p-4 bg-zinc-50 space-y-2 mt-4">
       <div className="flex items-center justify-between border-b border-zinc-300 pb-1.5">
-        <h3 className="text-xs font-extrabold uppercase tracking-wider text-zinc-900">
+        <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600">
           {recommendation.title || "EXECUTIVE FINANCIAL RECOMMENDATION"}
         </h3>
         {recommendation.rating && (
-          <span className="text-[10px] font-sans tabular-nums font-extrabold uppercase px-2 py-0.5 rounded bg-zinc-900 text-white">
+          <span className="text-[10px] font-sans tabular-nums font-extrabold uppercase px-2 py-0.5 rounded bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400">
             {recommendation.rating} ({recommendation.score ?? 80}/100)
           </span>
         )}

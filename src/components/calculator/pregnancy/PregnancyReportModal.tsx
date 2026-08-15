@@ -116,9 +116,7 @@ export const PregnancyReportModal: React.FC<PregnancyReportModalProps> = ({ isOp
 
           {/* Current Fetal & Maternal Status */}
           <div className="space-y-2">
-            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <HeartPulse className="h-4 w-4 text-rose-500" />
-              Week {results.gestationalAgeWeeks} Developmental Overview
+            <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Week {results.gestationalAgeWeeks} Developmental Overview
             </h2>
             <div className="p-4 rounded-xl bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 text-xs space-y-2">
               <p><strong>Fetal Size Analogy:</strong> {currentWeekInfo.sizeAnalogy} (~{currentWeekInfo.lengthCm} cm, {currentWeekInfo.weightGrams} g)</p>
@@ -130,9 +128,7 @@ export const PregnancyReportModal: React.FC<PregnancyReportModalProps> = ({ isOp
 
           {/* Weight Gain Analysis */}
           <div className="space-y-2">
-            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <Scale className="h-4 w-4 text-emerald-500" />
-              Weight Gain & BMI Tracking (IOM Standards)
+            <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Weight Gain & BMI Tracking (IOM Standards)
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
               <div className="p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700">
@@ -152,9 +148,7 @@ export const PregnancyReportModal: React.FC<PregnancyReportModalProps> = ({ isOp
 
           {/* Key Clinical Milestones Table */}
           <div className="space-y-2">
-            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <Calendar className="h-4 w-4 text-blue-500" />
-              Calculated Milestone Schedule
+            <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Calculated Milestone Schedule
             </h2>
             <table className="w-full text-xs">
               <thead>

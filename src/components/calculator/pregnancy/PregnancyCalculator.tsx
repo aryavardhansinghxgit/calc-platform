@@ -161,9 +161,7 @@ export const PregnancyCalculator: React.FC = () => {
         {/* INPUT PANEL (COL 5) */}
         <div className="lg:col-span-5 space-y-4 p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm">
           <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-3">
-            <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-rose-500" />
-              Pregnancy Parameters
+            <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Pregnancy Parameters
             </h2>
             <button
               onClick={() => setUnitSystem(unitSystem === "imperial" ? "metric" : "imperial")}
@@ -569,9 +567,7 @@ export const PregnancyCalculator: React.FC = () => {
           {/* REVERSE MODE SPECIAL DETAILS CARD */}
           {mode === "reverse" && results.reverseDetails && (
             <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 space-y-2">
-              <h3 className="text-xs font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
-                <RotateCcw className="h-4 w-4 text-amber-600" />
-                Reverse Due Date Schedule Results
+              <h3 className="text-xs font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1.5">Reverse Due Date Schedule Results
               </h3>
               <div className="grid grid-cols-2 gap-2 text-xs text-amber-950 dark:text-amber-200 font-medium">
                 <p>Required LMP Date: <strong>{results.reverseDetails.estimatedLmp}</strong></p>
@@ -588,7 +584,7 @@ export const PregnancyCalculator: React.FC = () => {
               <div className="flex items-center gap-2">
                 <span className="text-xl">👶</span>
                 <div>
-                  <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                  <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                     Week {activeWeekNumber} Fetal Development
                   </h3>
                   <p className="text-xs text-zinc-500 dark:text-zinc-400">

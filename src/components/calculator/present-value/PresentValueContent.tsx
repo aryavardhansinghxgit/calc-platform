@@ -167,8 +167,7 @@ export function PresentValueContent() {
 
         {/* Section 3 & 4: TVM Principle & Comparison */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Clock className="h-5 w-5 text-blue-600" /> 3. The Time Value of Money (TVM) Principle
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. The Time Value of Money (TVM) Principle
           </h3>
           <p>
             The <strong>Time Value of Money (TVM)</strong> states that money available at the present time is worth more than 
@@ -188,8 +187,7 @@ export function PresentValueContent() {
 
         {/* Section 5 & 6: Annuities & Timing */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Layers className="h-5 w-5 text-blue-600" /> 5–7. Lump Sum PV vs. Annuity PV vs. Growing Annuity
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">5–7. Lump Sum PV vs. Annuity PV vs. Growing Annuity
           </h3>
           
           <div className="overflow-x-auto">
@@ -235,8 +233,7 @@ export function PresentValueContent() {
         {/* Section 8 & 9: Net Present Value & Discount Rates */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <PieIcon className="h-4 w-4 text-blue-500" /> 8. Net Present Value (NPV)
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">8. Net Present Value (NPV)
             </h4>
             <p className="text-xs">
               NPV evaluates commercial profitability by subtracting upfront capital outlays from the sum of discounted future cash flows.
@@ -244,8 +241,7 @@ export function PresentValueContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <AlertTriangle className="h-4 w-4 text-blue-600" /> 9. Discount Rate Selection
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">9. Discount Rate Selection
             </h4>
             <p className="text-xs">
               Choosing the right rate (WACC for corporates, risk-free rate + premium for investments) determines whether projects pass hurdle checks.
@@ -253,8 +249,7 @@ export function PresentValueContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-blue-600" /> 10. Sensitivity Analysis
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">10. Sensitivity Analysis
             </h4>
             <p className="text-xs">
               Testing Present Value across rate variations (±1% to ±3%) quantifies interest rate risk before committing capital.
@@ -264,8 +259,7 @@ export function PresentValueContent() {
 
         {/* Real Applications & Pitfalls */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-blue-600" /> 11–15. Real-World Applications & Best Practices
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">11–15. Real-World Applications & Best Practices
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="space-y-2">
@@ -288,7 +282,7 @@ export function PresentValueContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (FAQ)
           </h3>
         </div>

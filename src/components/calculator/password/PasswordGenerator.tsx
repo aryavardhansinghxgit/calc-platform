@@ -422,9 +422,7 @@ export function PasswordGenerator() {
       {/* 1. TOP HEADER SUMMARY */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm print:hidden">
         <div>
-          <h1 className="text-xl font-black text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
-            <Lock className="w-5 h-5 text-blue-600" />
-            Password Generator & Analyzer Suite
+          <h1 className="text-xl font-black text-blue-600 dark:text-zinc-50 flex items-center gap-2">Password Generator & Analyzer Suite
           </h1>
           <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
             Construct high-entropy credentials or inspect password policies locally using window.crypto CSPRNG.
@@ -1183,9 +1181,7 @@ export function PasswordGenerator() {
       {/* 5. SEARCHABLE SYMBOLS POOL DETAILS & EXPLANATION */}
       {activeTab === "random" && (
         <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm print:hidden">
-          <h3 className="text-sm font-bold text-zinc-800 dark:text-zinc-200 flex items-center gap-1.5">
-            <Info className="w-4 h-4 text-blue-600" />
-            Character Pool Details
+          <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Character Pool Details
           </h3>
           <div className="mt-4 overflow-x-auto text-xs">
             <table className="w-full text-left border-collapse">
@@ -1227,9 +1223,7 @@ export function PasswordGenerator() {
       {savedRecords.length > 0 && (
         <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm print:hidden">
           <div className="flex justify-between items-center border-b dark:border-zinc-800 pb-3">
-            <h3 className="text-sm font-black text-zinc-900 dark:text-zinc-50 flex items-center gap-1.5">
-              <Bookmark className="w-4 h-4 text-blue-600" />
-              Saved Local Passwords Bookmarks
+            <h3 className="text-sm font-black text-blue-600 dark:text-zinc-50 flex items-center gap-1.5">Saved Local Passwords Bookmarks
             </h3>
             <button
               onClick={() => {

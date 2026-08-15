@@ -491,7 +491,7 @@ export function RefinanceCalculator() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* LEFT COLUMN: CURRENT LOAN */}
             <div className="space-y-4 p-4 rounded-xl bg-zinc-50/70 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-700/80">
-              <h3 className="font-extrabold text-sm text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-700 pb-2">
+              <h3 className="font-extrabold text-sm text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-700 pb-2">
                 Current Loan
               </h3>
 
@@ -734,8 +734,7 @@ export function RefinanceCalculator() {
           {refinanceGoal === "shorten-loan" && (
             <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/60 space-y-3">
               <div className="flex items-center justify-between border-b border-blue-200 dark:border-blue-900/60 pb-2">
-                <h4 className="font-extrabold text-xs uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">
-                  <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Shorten Loan Duration Module
+                <h4 className="font-extrabold text-xs uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">Shorten Loan Duration Module
                 </h4>
                 <span className="text-[11px] font-semibold text-blue-700 dark:text-blue-300">
                   Goal: Pay off debt years earlier
@@ -808,8 +807,7 @@ export function RefinanceCalculator() {
           {refinanceGoal === "reduce-payment" && (
             <div className="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/60 space-y-3">
               <div className="flex items-center justify-between border-b border-emerald-200 dark:border-emerald-900/60 pb-2">
-                <h4 className="font-extrabold text-xs uppercase tracking-wider text-emerald-900 dark:text-emerald-200 flex items-center gap-1.5">
-                  <DollarSign className="h-4 w-4 text-emerald-600 dark:text-emerald-400" /> Reduce Monthly Payment Module
+                <h4 className="font-extrabold text-xs uppercase tracking-wider text-emerald-900 dark:text-emerald-200 flex items-center gap-1.5">Reduce Monthly Payment Module
                 </h4>
                 <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">
                   Goal: Maximize monthly out-of-pocket cash flow
@@ -841,8 +839,7 @@ export function RefinanceCalculator() {
           {refinanceGoal === "reduce-interest" && (
             <div className="p-4 rounded-xl bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-900/60 space-y-3">
               <div className="flex items-center justify-between border-b border-purple-200 dark:border-purple-900/60 pb-2">
-                <h4 className="font-extrabold text-xs uppercase tracking-wider text-purple-900 dark:text-purple-200 flex items-center gap-1.5">
-                  <Percent className="h-4 w-4 text-purple-600 dark:text-purple-400" /> Reduce Lifetime Interest Module
+                <h4 className="font-extrabold text-xs uppercase tracking-wider text-purple-900 dark:text-purple-200 flex items-center gap-1.5">Reduce Lifetime Interest Module
                 </h4>
                 <span className="text-[11px] font-semibold text-purple-700 dark:text-purple-300">
                   Goal: Minimize total borrowing cost paid to lender
@@ -1327,7 +1324,7 @@ export function RefinanceCalculator() {
                 <Bookmark className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                   Save Refinance Calculation
                 </h3>
                 <p className="text-xs text-zinc-500">

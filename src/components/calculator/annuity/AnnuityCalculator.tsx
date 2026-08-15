@@ -611,8 +611,7 @@ CAGR: ${results.cagr}% | Effective Yield: ${results.effectiveAnnualYield}%`;
       {activeTab === "targetPlanner" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Target className="h-5 w-5 text-emerald-500" /> Target Balance Planner (Reverse Financial Solver)
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Target Balance Planner (Reverse Financial Solver)
             </h3>
             <p className="text-xs text-zinc-500 mt-0.5">
               Enter your future wealth goal to reverse-calculate the required monthly or annual contributions needed.
@@ -670,8 +669,7 @@ CAGR: ${results.cagr}% | Effective Yield: ${results.effectiveAnnualYield}%`;
       {activeTab === "scenarioCompare" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Layers className="h-5 w-5 text-purple-500" /> 4-Plan Scenario Comparison
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">4-Plan Scenario Comparison
             </h3>
           </div>
 
@@ -724,8 +722,7 @@ CAGR: ${results.cagr}% | Effective Yield: ${results.effectiveAnnualYield}%`;
       {/* TAB 4: VISUAL DASHBOARDS */}
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-blue-500" /> Portfolio Growth Trajectory Over Time
+          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Portfolio Growth Trajectory Over Time
           </h3>
 
           <div className="h-72 w-full">
@@ -749,8 +746,7 @@ CAGR: ${results.cagr}% | Effective Yield: ${results.effectiveAnnualYield}%`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <FileSpreadsheet className="h-5 w-5 text-amber-500" /> Accumulation Schedule
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Accumulation Schedule
               </h3>
               <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg text-xs">
                 <button

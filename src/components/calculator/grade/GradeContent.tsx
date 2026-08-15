@@ -5,7 +5,7 @@ export function GradeContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-zinc-300">
       {/* 1. HOW ACADEMIC GRADING SYSTEMS WORK */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           How Academic Grading Systems Work
         </h2>
         <p className="leading-relaxed">
@@ -36,7 +36,7 @@ export function GradeContent() {
 
       {/* 2. CORE MATHEMATICAL FORMULAS */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           The Core Mathematical Formulas for Grade Calculation
         </h2>
         <p className="leading-relaxed">
@@ -74,7 +74,7 @@ export function GradeContent() {
           </div>
         </div>
 
-        <h3 className="text-xl font-extrabold text-slate-900 dark:text-zinc-100 pt-2">
+        <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 pt-2">
           Step-by-Step Final Exam Target Worked Example
         </h3>
         <p className="leading-relaxed text-xs">
@@ -100,7 +100,7 @@ export function GradeContent() {
 
       {/* 3. STANDARD CONVERSION TABLES */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Standard Grading Scales &amp; Conversion Tables
         </h2>
         <p className="leading-relaxed">
@@ -191,7 +191,7 @@ export function GradeContent() {
 
       {/* 4. ADVANCED POLICIES */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Advanced Grading Policies &amp; Mechanics Explained
         </h2>
         <p className="leading-relaxed">
@@ -217,7 +217,7 @@ export function GradeContent() {
 
       {/* 5. STRATEGIC STUDY PLANNING */}
       <section className="space-y-4  dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Strategic Study Planning &amp; Academic Triage
         </h2>
         <p className="leading-relaxed">

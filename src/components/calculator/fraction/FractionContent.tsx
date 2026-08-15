@@ -7,7 +7,7 @@ export function FractionContent() {
     <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed pt-6  dark:border-zinc-800">
       {/* 1. WHAT IS A FRACTION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>1.</span> What Is A Fraction?
         </h2>
         <p>
@@ -20,7 +20,7 @@ export function FractionContent() {
 
       {/* 2. PARTS OF A FRACTION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>2.</span> Parts Of A Fraction
         </h2>
         <p>Every standard fraction consists of three distinct mathematical components:</p>
@@ -39,7 +39,7 @@ export function FractionContent() {
 
       {/* 3. PROPER FRACTIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>3.</span> Proper Fractions
         </h2>
         <p>
@@ -52,7 +52,7 @@ export function FractionContent() {
 
       {/* 4. IMPROPER FRACTIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>4.</span> Improper Fractions
         </h2>
         <p>
@@ -65,7 +65,7 @@ export function FractionContent() {
 
       {/* 5. MIXED NUMBERS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>5.</span> Mixed Numbers
         </h2>
         <p>
@@ -81,7 +81,7 @@ export function FractionContent() {
 
       {/* 6. EQUIVALENT FRACTIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>6.</span> Equivalent Fractions
         </h2>
         <p>
@@ -95,7 +95,7 @@ export function FractionContent() {
 
       {/* 7. FRACTION SIMPLIFICATION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>7.</span> Fraction Simplification (Lowest Terms)
         </h2>
         <p>
@@ -108,7 +108,7 @@ export function FractionContent() {
 
       {/* 8. FRACTION ADDITION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>8.</span> Fraction Addition
         </h2>
         <p>
@@ -121,7 +121,7 @@ export function FractionContent() {
 
       {/* 9. FRACTION SUBTRACTION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>9.</span> Fraction Subtraction
         </h2>
         <p>
@@ -134,7 +134,7 @@ export function FractionContent() {
 
       {/* 10. FRACTION MULTIPLICATION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>10.</span> Fraction Multiplication
         </h2>
         <p>
@@ -147,7 +147,7 @@ export function FractionContent() {
 
       {/* 11. FRACTION DIVISION */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>11.</span> Fraction Division
         </h2>
         <p>
@@ -160,7 +160,7 @@ export function FractionContent() {
 
       {/* 12. CONVERTING FRACTIONS TO DECIMALS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>12.</span> Converting Fractions To Decimals
         </h2>
         <p>
@@ -170,7 +170,7 @@ export function FractionContent() {
 
       {/* 13. CONVERTING DECIMALS TO FRACTIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>13.</span> Converting Decimals To Fractions
         </h2>
         <p>
@@ -180,7 +180,7 @@ export function FractionContent() {
 
       {/* 14. FRACTIONS AND PERCENTAGES */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>14.</span> Fractions And Percentages
         </h2>
         <p>
@@ -193,7 +193,7 @@ export function FractionContent() {
 
       {/* 15. COMMON FRACTION MISTAKES */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>15.</span> Common Fraction Mistakes
         </h2>
         <ul className="list-disc pl-6 space-y-2">
@@ -211,7 +211,7 @@ export function FractionContent() {
 
       {/* 16. FRACTION APPLICATIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>16.</span> Practical Applications
         </h2>
         <p>
@@ -221,7 +221,7 @@ export function FractionContent() {
 
       {/* 17. ADVANCED FRACTION CONCEPTS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>17.</span> Advanced Fraction Concepts
         </h2>
         <p>
@@ -231,7 +231,7 @@ export function FractionContent() {
 
       {/* 18. WORKED EXAMPLES SECTION */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
           <span>18.</span> Worked Mathematical Examples
         </h2>
 

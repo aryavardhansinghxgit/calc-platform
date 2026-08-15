@@ -599,8 +599,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
       {activeTab === "lifeExpectancy" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Award className="h-5 w-5 text-rose-500" /> Single Life Expectancy Payout Solver
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Single Life Expectancy Payout Solver
             </h3>
           </div>
 
@@ -661,8 +660,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
       {activeTab === "jointLife" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Users className="h-5 w-5 text-purple-500" /> Joint Life Payout Solver (Primary Worker + Spouse)
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Joint Life Payout Solver (Primary Worker + Spouse)
             </h3>
           </div>
 
@@ -701,8 +699,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
       {activeTab === "immVsDef" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Layers className="h-5 w-5 text-amber-500" /> Immediate vs. Deferred Annuity Payout Comparison
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Immediate vs. Deferred Annuity Payout Comparison
             </h3>
           </div>
 
@@ -726,8 +723,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
       {/* TAB 6: VISUAL DASHBOARDS */}
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-blue-500" /> Balance Depletion &amp; Interest Growth Charts
+          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Balance Depletion &amp; Interest Growth Charts
           </h3>
 
           <div className="h-72 w-full">
@@ -750,8 +746,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
       {activeTab === "schedule" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-teal-500" /> Amortization Style Payout Schedule
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Amortization Style Payout Schedule
             </h3>
 
             <Button type="button" size="sm" variant="outline" onClick={exportCSV} className="h-8 text-xs cursor-pointer">

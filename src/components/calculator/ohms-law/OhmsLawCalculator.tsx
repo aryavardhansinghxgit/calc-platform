@@ -401,9 +401,7 @@ export function OhmsLawCalculator() {
           {activeTab === "ohms_law" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 shadow-md space-y-4">
               <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <h3 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                  <Settings className="w-4 h-4 text-blue-600" />
-                  <span>Configure Parameters (Select any 2 knowns)</span>
+                <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Configure Parameters (Select any 2 knowns)</span>
                 </h3>
                 <button
                   onClick={handleReset}
@@ -590,9 +588,7 @@ export function OhmsLawCalculator() {
           {/* TAB 2: VOLTAGE DIVIDER */}
           {activeTab === "voltage_divider" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <Settings className="w-4 h-4 text-blue-600" />
-                <span>Voltage Divider Inputs</span>
+              <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2"><span>Voltage Divider Inputs</span>
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -618,9 +614,7 @@ export function OhmsLawCalculator() {
           {/* TAB 3: CURRENT DIVIDER */}
           {activeTab === "current_divider" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <Settings className="w-4 h-4 text-blue-600" />
-                <span>Current Divider Inputs (Parallel Branches)</span>
+              <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2"><span>Current Divider Inputs (Parallel Branches)</span>
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -646,9 +640,7 @@ export function OhmsLawCalculator() {
           {/* TAB 4: LED RESISTOR */}
           {activeTab === "led_resistor" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <Settings className="w-4 h-4 text-blue-600" />
-                <span>LED Current Limiter Inputs</span>
+              <h3 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-2"><span>LED Current Limiter Inputs</span>
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
@@ -876,8 +868,7 @@ export function OhmsLawCalculator() {
         {/* RIGHT COLUMN: INTERACTIVE FORMULA WHEEL */}
         <div className="lg:col-span-5 space-y-5">
           <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 shadow-md space-y-4 flex flex-col items-center">
-            <h3 className="text-xs font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-1">
-              <Lightbulb className="w-4 h-4 text-amber-500" /> Interactive Formula Wheel
+            <h3 className="text-xs font-black uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-1">Interactive Formula Wheel
             </h3>
             
             {/* SVG Formula Wheel representation */}

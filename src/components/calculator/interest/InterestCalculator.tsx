@@ -348,8 +348,7 @@ export function InterestCalculator() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* LEFT COLUMN: CALCULATOR INPUTS (COL 7) */}
         <div className="lg:col-span-7 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <h2 className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
-            <Sliders className="h-4 w-4 text-blue-600" /> Investment & Interest Parameters
+          <h2 className="text-sm font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">Investment & Interest Parameters
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -588,8 +587,7 @@ export function InterestCalculator() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         {/* RULE OF 72 MODULE */}
         <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-3">
-          <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">
-            <Clock className="h-4 w-4 text-amber-500" /> Rule of 72 Doubling Time Analytics
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">Rule of 72 Doubling Time Analytics
           </h3>
           <div className="p-3.5 rounded-lg bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 space-y-2 text-xs">
             <div className="flex justify-between items-center">
@@ -612,8 +610,7 @@ export function InterestCalculator() {
 
         {/* TARGET WEALTH GOAL PLANNER */}
         <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-3">
-          <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">
-            <Award className="h-4 w-4 text-emerald-600" /> Future Wealth Target Goal Planner
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">Future Wealth Target Goal Planner
           </h3>
           <div className="space-y-2 text-xs">
             <div>
@@ -650,8 +647,7 @@ export function InterestCalculator() {
          ========================================== */}
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-          <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Layers className="h-5 w-5 text-indigo-600" /> Compounding Frequency Side-by-Side Comparison
+          <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Compounding Frequency Side-by-Side Comparison
           </h2>
           <Badge variant="outline" className="text-[10px] text-indigo-600 border-indigo-200">
             7 Frequencies Analyzed
@@ -695,7 +691,7 @@ export function InterestCalculator() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
         {/* PORTFOLIO GROWTH CHART (COL 7) */}
         <div className="md:col-span-7 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
             Portfolio Accumulation & Real Buying Power over Time
           </h3>
           <div className="h-64 w-full">
@@ -714,7 +710,7 @@ export function InterestCalculator() {
 
         {/* DOUGHNUT BREAKDOWN CHART (COL 5) */}
         <div className="md:col-span-5 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
             Portfolio Composition Breakdown
           </h3>
           <div className="h-64 w-full">
@@ -746,8 +742,7 @@ export function InterestCalculator() {
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
           <div className="flex items-center gap-3">
-            <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-blue-600" /> Accumulation Schedule Table
+            <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Accumulation Schedule Table
             </h2>
 
             <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg text-xs">

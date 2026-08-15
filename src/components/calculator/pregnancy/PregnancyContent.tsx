@@ -21,9 +21,7 @@ export const PregnancyContent: React.FC = () => {
     <article className="prose prose-zinc dark:prose-invert max-w-none space-y-10 my-10 text-zinc-800 dark:text-zinc-200 leading-relaxed">
       {/* SECTION 1: WHAT IS PREGNANCY? */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2 border-b border-rose-200 dark:border-rose-900/60 pb-3">
-          <BookOpen className="h-6 w-6 text-blue-600" />
-          1. What Is Pregnancy?
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-rose-200 dark:border-rose-900/60 pb-3">1. What Is Pregnancy?
         </h2>
         <p>
           Pregnancy is the physiological process during which one or more offspring develop inside a woman's uterus. Lasting approximately 40 weeks (280 days) from the first day of the last menstrual period (LMP) or 38 weeks (266 days) from fertilization, pregnancy encompasses complex endocrine, anatomical, metabolic, and immunological adaptations designed to nourish and protect the growing fetus.
@@ -35,7 +33,7 @@ export const PregnancyContent: React.FC = () => {
 
       {/* SECTION 2: PREGNANCY TERM & DUE DATE */}
       <section className="space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400">
           2. Pregnancy Term Definitions & Due Date Accuracy
         </h3>
         <p>
@@ -84,7 +82,7 @@ export const PregnancyContent: React.FC = () => {
 
       {/* SECTION 3, 4, 5, 6, 7: CALCULATION METHODS */}
       <section className="space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400">
           3–7. The Science of Due Date Calculation Methods
         </h3>
 
@@ -121,7 +119,7 @@ export const PregnancyContent: React.FC = () => {
 
       {/* SECTION 8 & 9: TRIMESTERS & FETAL DEVELOPMENT */}
       <section className="space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400">
           8–9. Detailed Breakdown of Pregnancy Trimesters
         </h3>
 
@@ -151,7 +149,7 @@ export const PregnancyContent: React.FC = () => {
 
       {/* SECTION 10 & 11 & 12: SCREENING & DETECTION */}
       <section className="space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400">
           10–12. Clinical Screening Windows & Detection Testing
         </h3>
         <p>
@@ -170,9 +168,7 @@ export const PregnancyContent: React.FC = () => {
 
       {/* SECTION 14: WEIGHT GAIN GUIDELINES (IOM TABLE) */}
       <section className="space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Scale className="h-5 w-5 text-blue-600" />
-          14. Pregnancy Weight Gain Guidelines (Institute of Medicine)
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">14. Pregnancy Weight Gain Guidelines (Institute of Medicine)
         </h3>
         <p className="text-sm">
           Weight gain during pregnancy supports maternal blood volume expansion, placenta growth, amniotic fluid, and fetal tissue development. The Institute of Medicine (IOM) recommends specific total weight gain targets based on pre-pregnancy Body Mass Index (BMI):
@@ -225,9 +221,7 @@ export const PregnancyContent: React.FC = () => {
 
       {/* SECTION 18: MEDICATIONS DURING PREGNANCY (FDA DRUG CATEGORIES TABLE) */}
       <section className="space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <ShieldAlert className="h-5 w-5 text-blue-600" />
-          18. FDA Medication Safety Classification Matrix
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">18. FDA Medication Safety Classification Matrix
         </h3>
         <p className="text-sm">
           Placental transfer of maternal medications can impact embryonic organogenesis. The FDA classifies pharmaceutical safety during pregnancy into five clinical categories:
@@ -275,9 +269,7 @@ export const PregnancyContent: React.FC = () => {
 
       {/* SECTION 19 & 20: HIGH RISK & WARNING RED FLAGS */}
       <section className="space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5 text-blue-600" />
-          19–20. Emergency Red-Flag Warning Signs
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">19–20. Emergency Red-Flag Warning Signs
         </h3>
 
         <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-50/40 border border-amber-300 dark:border-amber-800 text-xs space-y-2">
@@ -298,9 +290,7 @@ export const PregnancyContent: React.FC = () => {
 
       {/* SECTION 23: MEDICAL DISCLAIMER */}
       <section className="p-4 rounded-xl bg-zinc-100 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 text-xs space-y-2">
-        <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-          <Stethoscope className="h-4 w-4 text-blue-600" />
-          23. Medical & Educational Disclaimer
+        <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">23. Medical & Educational Disclaimer
         </h4>
         <p className="text-slate-900 dark:text-slate-100">
           This Pregnancy Calculator and educational guide is provided solely for general informational and tracking purposes. It does not provide medical diagnosis, formal treatment plans, or clinical care advice. Gestational timing estimates are mathematical approximations based on standard population averages. Always consult a board-certified OB-GYN, maternal-fetal medicine specialist, or certified nurse-midwife for clinical care decisions.
@@ -309,7 +299,7 @@ export const PregnancyContent: React.FC = () => {
 
       {/* SECTION 24: RELATED PREGNANCY TOOLS */}
       <section className="space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400">
           24. Related Women's Health & Pregnancy Tools
         </h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">

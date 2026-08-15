@@ -633,8 +633,7 @@ export function SimpleInterestCalculator() {
               className="flex items-center justify-between cursor-pointer select-none"
               onClick={() => setShowFormulaPanel(!showFormulaPanel)}
             >
-              <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <BookOpen className="h-4 w-4 text-indigo-600" /> Step-by-Step Mathematical Solution Derivation
+              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Step-by-Step Mathematical Solution Derivation
               </h3>
               <Button variant="ghost" size="icon" className="h-6 w-6">
                 {showFormulaPanel ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -728,8 +727,7 @@ export function SimpleInterestCalculator() {
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
           <div>
-            <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-blue-600" /> Yearly Schedule Table
+            <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Yearly Schedule Table
             </h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
               Year-by-year linear breakdown of opening principal, interest earned, and ending balance.
@@ -786,7 +784,7 @@ export function SimpleInterestCalculator() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
         {/* BAR CHART: ACCUMULATION OVER TIME (COL 7) */}
         <div className="md:col-span-7 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
             Balance Accumulation Timeline (Principal vs Cumulative Interest)
           </h3>
           <div className="h-64 w-full">
@@ -804,7 +802,7 @@ export function SimpleInterestCalculator() {
 
         {/* DOUGHNUT CHART: BREAKDOWN (COL 5) */}
         <div className="md:col-span-5 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
             Final Balance Composition
           </h3>
           <div className="h-64 w-full">
@@ -845,8 +843,7 @@ export function SimpleInterestCalculator() {
          ========================================== */}
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-          <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Zap className="h-5 w-5 text-indigo-600" /> Simple vs. Compound Interest Comparison Module
+          <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Simple vs. Compound Interest Comparison Module
           </h2>
           <Badge variant="outline" className="text-[10px] text-indigo-600 border-indigo-200">
             Compounding Bonus Analysis
