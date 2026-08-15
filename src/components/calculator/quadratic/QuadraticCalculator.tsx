@@ -267,8 +267,8 @@ export function QuadraticCalculator() {
     minY = centerY - spanY / 2;
     maxY = centerY + spanY / 2;
 
-    const toSvgX = (valX: number) => padding + ((valX - minX) / spanX) * (width - padding * 2);
-    const toSvgY = (valY: number) => padding + ((maxY - valY) / (maxY - minY)) * (height - padding * 2);
+    const toSvgX = (valX: number) => parseFloat((padding + ((valX - minX) / spanX) * (width - padding * 2)).toFixed(2));
+    const toSvgY = (valY: number) => parseFloat((padding + ((maxY - valY) / (maxY - minY)) * (height - padding * 2)).toFixed(2));
 
     // Parabola Curve Points
     const points: [number, number][] = [];
@@ -278,7 +278,7 @@ export function QuadraticCalculator() {
       points.push([toSvgX(xVal), toSvgY(yVal)]);
     }
 
-    const pathD = points.reduce((acc, curr, idx) => `${acc} ${idx === 0 ? "M" : "L"} ${curr[0]} ${curr[1]}`, "");
+    const pathD = points.reduce((acc, curr, idx) => `${acc} ${idx === 0 ? "M" : "L"} ${curr[0].toFixed(2)} ${curr[1].toFixed(2)}`, "");
 
     // Axis Lines
     const zeroX = toSvgX(0);
@@ -288,16 +288,16 @@ export function QuadraticCalculator() {
     const yIntSvg = [toSvgX(0), toSvgY(c)];
 
     return (
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto text-xs font-sans tabular-nums">
+      <svg suppressHydrationWarning viewBox={`0 0 ${width} ${height}`} className="w-full h-auto text-xs font-sans tabular-nums">
         {/* X and Y Cartesian Axes */}
-        <line x1={padding} y1={zeroY} x2={width - padding} y2={zeroY} stroke="currentColor" strokeOpacity={0.25} strokeWidth={1.5} />
-        <line x1={zeroX} y1={padding} x2={zeroX} y2={height - padding} stroke="currentColor" strokeOpacity={0.25} strokeWidth={1.5} />
+        <line suppressHydrationWarning x1={padding} y1={zeroY} x2={width - padding} y2={zeroY} stroke="currentColor" strokeOpacity={0.25} strokeWidth={1.5} />
+        <line suppressHydrationWarning x1={zeroX} y1={padding} x2={zeroX} y2={height - padding} stroke="currentColor" strokeOpacity={0.25} strokeWidth={1.5} />
 
         {/* Axis of Symmetry (Dashed Vertical Line) */}
-        <line x1={axisSymX} y1={padding} x2={axisSymX} y2={height - padding} stroke="#3b82f6" strokeDasharray="4 4" strokeWidth={1.5} />
+        <line suppressHydrationWarning x1={axisSymX} y1={padding} x2={axisSymX} y2={height - padding} stroke="#3b82f6" strokeDasharray="4 4" strokeWidth={1.5} />
 
         {/* Parabola Curve */}
-        <path d={pathD} fill="none" stroke="#2563eb" strokeWidth={2.5} className="dark:stroke-blue-400" />
+        <path suppressHydrationWarning d={pathD} fill="none" stroke="#2563eb" strokeWidth={2.5} className="dark:stroke-blue-400" />
 
         {/* Vertex Point Highlight */}
         <circle cx={vertexSvg[0]} cy={vertexSvg[1]} r={5} fill="#ef4444" />

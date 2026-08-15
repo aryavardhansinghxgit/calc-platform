@@ -215,8 +215,8 @@ export function LogCalculator() {
     const minY = -3;
     const maxY = 3;
 
-    const toSvgX = (x: number) => padding + ((x - minX) / (maxX - minX)) * (width - padding * 2);
-    const toSvgY = (y: number) => padding + ((maxY - y) / (maxY - minY)) * (height - padding * 2);
+    const toSvgX = (x: number) => parseFloat((padding + ((x - minX) / (maxX - minX)) * (width - padding * 2)).toFixed(2));
+    const toSvgY = (y: number) => parseFloat((padding + ((maxY - y) / (maxY - minY)) * (height - padding * 2)).toFixed(2));
 
     // Current Log Curve Points: f(x) = log_b(x)
     const points: [number, number][] = [];
@@ -227,7 +227,7 @@ export function LogCalculator() {
         points.push([toSvgX(xVal), toSvgY(yVal)]);
       }
     }
-    const pathD = points.reduce((acc, curr, idx) => `${acc} ${idx === 0 ? "M" : "L"} ${curr[0]} ${curr[1]}`, "");
+    const pathD = points.reduce((acc, curr, idx) => `${acc} ${idx === 0 ? "M" : "L"} ${curr[0].toFixed(2)} ${curr[1].toFixed(2)}`, "");
 
     // Overlay Curve 1: Natural Log ln(x)
     const pointsLn: [number, number][] = [];
@@ -238,7 +238,7 @@ export function LogCalculator() {
         pointsLn.push([toSvgX(xVal), toSvgY(yVal)]);
       }
     }
-    const pathLnD = pointsLn.reduce((acc, curr, idx) => `${acc} ${idx === 0 ? "M" : "L"} ${curr[0]} ${curr[1]}`, "");
+    const pathLnD = pointsLn.reduce((acc, curr, idx) => `${acc} ${idx === 0 ? "M" : "L"} ${curr[0].toFixed(2)} ${curr[1].toFixed(2)}`, "");
 
     // Key points: (1, 0) and (b, 1)
     const p1 = [toSvgX(1), toSvgY(0)];
@@ -247,16 +247,16 @@ export function LogCalculator() {
     const zeroY = toSvgY(0);
 
     return (
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto text-xs font-sans tabular-nums">
+      <svg suppressHydrationWarning viewBox={`0 0 ${width} ${height}`} className="w-full h-auto text-xs font-sans tabular-nums">
         {/* Axes */}
-        <line x1={padding} y1={zeroY} x2={width - padding} y2={zeroY} stroke="currentColor" strokeOpacity={0.25} strokeWidth={1.5} />
-        <line x1={zeroX} y1={padding} x2={zeroX} y2={height - padding} stroke="#ef4444" strokeDasharray="3 3" strokeWidth={1.5} />
+        <line suppressHydrationWarning x1={padding} y1={zeroY} x2={width - padding} y2={zeroY} stroke="currentColor" strokeOpacity={0.25} strokeWidth={1.5} />
+        <line suppressHydrationWarning x1={zeroX} y1={padding} x2={zeroX} y2={height - padding} stroke="#ef4444" strokeDasharray="3 3" strokeWidth={1.5} />
 
         {/* Natural Log Overlay Curve (Gray) */}
-        <path d={pathLnD} fill="none" stroke="currentColor" strokeOpacity={0.25} strokeWidth={1.5} />
+        <path suppressHydrationWarning d={pathLnD} fill="none" stroke="currentColor" strokeOpacity={0.25} strokeWidth={1.5} />
 
         {/* Current Log_b(x) Curve (Blue) */}
-        <path d={pathD} fill="none" stroke="#2563eb" strokeWidth={2.5} className="dark:stroke-blue-400" />
+        <path suppressHydrationWarning d={pathD} fill="none" stroke="#2563eb" strokeWidth={2.5} className="dark:stroke-blue-400" />
 
         {/* Key Point (1, 0) */}
         <circle cx={p1[0]} cy={p1[1]} r={4} fill="#10b981" />

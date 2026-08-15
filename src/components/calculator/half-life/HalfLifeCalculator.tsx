@@ -263,7 +263,7 @@ export function HalfLifeCalculator() {
       points.push([x, y]);
     }
 
-    const pathD = points.reduce((acc, curr, idx) => `${acc} ${idx === 0 ? "M" : "L"} ${curr[0]} ${curr[1]}`, "");
+    const pathD = points.reduce((acc, curr, idx) => `${acc} ${idx === 0 ? "M" : "L"} ${curr[0].toFixed(2)} ${curr[1].toFixed(2)}`, "");
 
     // Current operating point coordinate
     const curCycle = Math.min(Math.max(calculation.numCycles || 0, 0), maxCycles);
@@ -272,7 +272,7 @@ export function HalfLifeCalculator() {
     const curY = padding + (1 - curYVal) * chartHeight;
 
     return (
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto text-xs font-sans tabular-nums">
+      <svg suppressHydrationWarning viewBox={`0 0 ${width} ${height}`} className="w-full h-auto text-xs font-sans tabular-nums">
         {/* Background Grid Lines */}
         {[0, 0.25, 0.5, 0.75, 1].map((pct, i) => {
           const y = padding + (1 - pct) * chartHeight;

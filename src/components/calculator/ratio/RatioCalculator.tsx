@@ -362,7 +362,7 @@ export function RatioCalculator() {
       const wC = (pC / 100) * (width - 40);
 
       return (
-        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto text-xs font-sans tabular-nums">
+        <svg suppressHydrationWarning viewBox={`0 0 ${width} ${height}`} className="w-full h-auto text-xs font-sans tabular-nums">
           <rect x={20} y={30} width={wA} height={40} fill="#2563eb" rx={6} />
           <rect x={20 + wA} y={30} width={wB} height={40} fill="#10b981" rx={6} />
           {pC > 0 && <rect x={20 + wA + wB} y={30} width={wC} height={40} fill="#8b5cf6" rx={6} />}
