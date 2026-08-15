@@ -1,14 +1,20 @@
 import { ScientificNotationCalculatorOutputs } from "./types";
+import {
+  parseToScientific,
+  formatNormalizedScientific,
+  formatEngineeringNotation
+} from "./scientific-notation-logic";
 
 export function calculateScientificNotationCalculator(inputs: Record<string, any>): ScientificNotationCalculatorOutputs {
   const n = Number(inputs.number) || 3500000;
-  const sci = n.toExponential(4);
-  const exp = Math.floor(Math.log10(Math.abs(n) || 1));
-  const engExp = Math.floor(exp / 3) * 3;
-  const engCoeff = (n / Math.pow(10, engExp)).toFixed(3);
+  const parsed = parseToScientific(n);
+
+  const sci = formatNormalizedScientific(parsed, 4);
+  const eng = formatEngineeringNotation(parsed, 4);
+
   return {
     scientific: sci,
-    engineering: `${engCoeff} × 10^${engExp}`,
+    engineering: eng.engineeringString,
     standard: n
   };
 }
