@@ -1,14 +1,15 @@
 import { ProbabilityCalculatorOutputs } from "./types";
+import { computeTwoEventProbability } from "./probability-logic";
 
 export function calculateProbabilityCalculator(inputs: Record<string, any>): ProbabilityCalculatorOutputs {
-  const pa = Math.min(1, Math.max(0, Number(inputs.probA) || 0.5));
-  const pb = Math.min(1, Math.max(0, Number(inputs.probB) || 0.4));
-  const pAnd = pa * pb;
-  const pOr = pa + pb - pAnd;
-  const pNotA = 1 - pa;
+  const pa = inputs.probA ?? "0.5";
+  const pb = inputs.probB ?? "0.4";
+
+  const res = computeTwoEventProbability(pa, pb, "independent");
+
   return {
-    probAandB: parseFloat(pAnd.toFixed(4)),
-    probAorB: parseFloat(pOr.toFixed(4)),
-    probNotA: parseFloat(pNotA.toFixed(4))
+    probAandB: parseFloat(res.pIntersection.toFixed(4)),
+    probAorB: parseFloat(res.pUnion.toFixed(4)),
+    probNotA: parseFloat(res.pNotA.toFixed(4))
   };
 }
