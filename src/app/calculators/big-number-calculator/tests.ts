@@ -1,37 +1,51 @@
 import { calculateBigNumberCalculator } from "./calculator";
+import {
+  addBigInt,
+  multiplyBigInt,
+  modPowBigInt,
+  factorialBigInt,
+  factorialTrailingZeros,
+  analyzeDigits
+} from "./big-number-logic";
 
 export function runBigNumberCalculatorTests() {
-  const defaultInputs = {
-  "num1": "1234567890123456789",
-  "operation": "+",
-  "num2": "9876543210987654321"
-};
-  const res1 = calculateBigNumberCalculator(defaultInputs);
-  if (!res1 || typeof res1 !== "object") throw new Error("Formula failed for default inputs");
+  // Test 1: Addition of 30-digit numbers
+  const x = "1000000000000000000000000000000";
+  const y = "98765432109876543210987654321";
+  const sum = addBigInt(x, y);
+  if (sum !== "1098765432109876543210987654321") {
+    throw new Error(`BigInt addition failed: got ${sum}`);
+  }
 
-  const zeroInputs = {
-  "num1": 0,
-  "operation": 0,
-  "num2": 0
-};
-  const res2 = calculateBigNumberCalculator(zeroInputs);
-  if (!res2) throw new Error("Formula failed for zero inputs");
+  // Test 2: Modular Exponentiation (7^13 mod 13 = 7, per Fermat's Little Theorem 7^12 ≡ 1 mod 13)
+  const modPow = modPowBigInt("7", "13", "13");
+  if (modPow !== "7") {
+    throw new Error(`Modular exponentiation 7^13 mod 13 failed: expected 7, got ${modPow}`);
+  }
 
-  const negInputs = {
-  "num1": -50,
-  "operation": -50,
-  "num2": -50
-};
-  const res3 = calculateBigNumberCalculator(negInputs);
-  if (!res3) throw new Error("Formula failed for negative inputs");
+  // Test 3: Large Factorial Trailing Zeros (100! -> 24 zeros)
+  const zeros100 = factorialTrailingZeros(100);
+  if (zeros100 !== 24) {
+    throw new Error(`Legendre formula failed for 100!: expected 24 trailing zeros, got ${zeros100}`);
+  }
 
-  const nanInputs = {
-  "num1": null,
-  "operation": null,
-  "num2": null
-};
-  const res4 = calculateBigNumberCalculator(nanInputs);
-  if (!res4) throw new Error("Formula failed for NaN inputs");
+  // Test 4: Factorial Calculation (10! = 3628800)
+  const f10 = factorialBigInt(10);
+  if (f10 !== "3628800") {
+    throw new Error(`Factorial 10! failed: expected 3628800, got ${f10}`);
+  }
+
+  // Test 5: Digit Inspector Analytics
+  const analytics = analyzeDigits("1234567890");
+  if (analytics.digitCount !== 10 || analytics.digitSum !== 45) {
+    throw new Error(`Digit analytics failed: count=${analytics.digitCount}, sum=${analytics.digitSum}`);
+  }
+
+  // Test 6: Zero & Edge Inputs
+  const resZero = calculateBigNumberCalculator({ num1: "0", num2: "0", operation: "+" });
+  if (!resZero || typeof resZero.result !== "string") {
+    throw new Error("Formula failed for zero inputs");
+  }
 
   return true;
 }
