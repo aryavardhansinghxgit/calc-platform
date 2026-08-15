@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const percent_error_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Percent Error Calculator — Free Online Math Calculator",
-  description: "Calculate percent error between experimental results and accepted theoretical values.",
+  title: "Percent Error Calculator: Absolute, Relative & Signed Error",
+  description: "Free percent error calculator for observed and true values. See absolute error, relative error, signed error, accuracy, worked steps, charts, saved runs, and CSV export.",
   slug: "percent-error-calculator",
 });
