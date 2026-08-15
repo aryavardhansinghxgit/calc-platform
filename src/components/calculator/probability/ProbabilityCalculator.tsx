@@ -301,10 +301,9 @@ export function ProbabilityCalculator() {
           <div className="flex items-center gap-3 pt-2">
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center justify-center text-center cursor-pointer"
             >
-              <span className="inline-block w-0 h-0 border-y-[4px] border-y-transparent border-l-[7px] border-l-white"></span>
-              <span>Calculate</span>
+              Calculate
             </button>
 
             <button
@@ -551,10 +550,9 @@ export function ProbabilityCalculator() {
           <div className="flex items-center gap-3 pt-2">
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center justify-center text-center cursor-pointer"
             >
-              <span className="inline-block w-0 h-0 border-y-[4px] border-y-transparent border-l-[7px] border-l-white"></span>
-              <span>Calculate</span>
+              Calculate
             </button>
 
             <button
@@ -653,10 +651,9 @@ export function ProbabilityCalculator() {
           <div className="flex items-center gap-3 pt-2">
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center justify-center text-center cursor-pointer"
             >
-              <span className="inline-block w-0 h-0 border-y-[4px] border-y-transparent border-l-[7px] border-l-white"></span>
-              <span>Calculate</span>
+              Calculate
             </button>
 
             <button
@@ -688,7 +685,7 @@ export function ProbabilityCalculator() {
               <p>Probability of A occuring {s2RepeatA} times but not B = {s2PA}<sup>{s2RepeatA}</sup> × (1 - {s2PB})<sup>{s2RepeatB}</sup> = <strong>{s2Result.pAExactNotB.toFixed(8)}</strong></p>
               <p>Probability of B occuring {s2RepeatB} times but not A = (1 - {s2PA})<sup>{s2RepeatA}</sup> × {s2PB}<sup>{s2RepeatB}</sup> = <strong>{s2Result.pBExactNotA.toFixed(8)}</strong></p>
               <p>Probability of A occuring but not B = (1 - (1 - {s2PA})<sup>{s2RepeatA}</sup>) × (1 - {s2PB})<sup>{s2RepeatB}</sup> = <strong>{s2Result.pAAtLeastOneNotB.toFixed(8)}</strong></p>
-              <p>Probability of B occuring but not A = (1 - {s2PA})<sup>{s2RepeatA}</sup> × (1 - (1 - {s2PB})<sup>{s2RepeatB}</sup>) = <strong>{s2Result.pBAtLeastOneNotA.toFixed(8)}</strong></p>
+              <p>Probability of B occuring but not A = (1 - {s2PA})<sup>{s2RepeatA}</sup> × (1 - (1 - {s2PB})<sup>{s2RepeatB}</sup>) = <strong>{s2Result.pBExactNotA.toFixed(8)}</strong></p>
             </div>
           </div>
         )}
@@ -763,10 +760,9 @@ export function ProbabilityCalculator() {
             <div className="flex items-center gap-3 pt-2">
               <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center justify-center text-center cursor-pointer"
               >
-                <span className="inline-block w-0 h-0 border-y-[4px] border-y-transparent border-l-[7px] border-l-white"></span>
-                <span>Calculate</span>
+                Calculate
               </button>
 
               <button
