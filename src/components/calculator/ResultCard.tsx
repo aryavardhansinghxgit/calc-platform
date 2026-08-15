@@ -37,13 +37,13 @@ export function ResultCard({
       <div className="flex min-w-0 items-baseline gap-0.5">
         <span
           className={cn(
-            "min-w-0 break-all font-semibold tracking-tight font-mono",
+            "min-w-0 break-all font-semibold tracking-tight font-sans tabular-nums",
             highlight ? "text-xl text-blue-600 dark:text-blue-400" : "text-lg text-zinc-900 dark:text-zinc-100"
           )}
         >
           {value}
         </span>
-        {unit && <span className="shrink-0 text-[10px] text-zinc-400 font-mono">{unit}</span>}
+        {unit && <span className="shrink-0 text-[10px] text-zinc-400 font-medium">{unit}</span>}
       </div>
     </div>
   );

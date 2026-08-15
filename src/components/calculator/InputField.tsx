@@ -57,7 +57,7 @@ export function InputField({
             </TooltipProvider>
           )}
         </div>
-        {unit && <span className="text-[11px] font-mono text-zinc-400">{unit}</span>}
+        {unit && <span className="text-[11px] font-medium text-zinc-400">{unit}</span>}
       </div>
 
       <Input
@@ -70,7 +70,7 @@ export function InputField({
         max={max}
         step={step}
         aria-label={label}
-        className="h-9 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 text-sm rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20"
+        className="h-9.5 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 text-sm font-sans tabular-nums rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20"
       />
       {error && <p className="text-[11px] text-red-600 font-medium">{error}</p>}
     </div>

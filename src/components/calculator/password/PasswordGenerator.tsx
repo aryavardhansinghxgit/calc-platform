@@ -18,7 +18,8 @@ import {
   Clipboard,
   ShieldCheck,
   CheckCircle,
-  FileText
+  FileText,
+  Check
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { calculatePasswordGenerator } from "@/app/calculators/password-generator/calculator";

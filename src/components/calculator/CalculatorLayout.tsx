@@ -207,7 +207,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const handleSaveCalculation = () => {
     if (!calculationResult.success) return;
     const firstOutput = definition.outputs[0];
-    const primaryResult = firstOutput ? `${firstOutput.label}: ${calculationResult.formatted[firstOutput.name] || calculationResult.outputs[firstOutput.name]}` : "Calculated Result";
+    const primaryResult = firstOutput ? `${firstOutput.label}: ${calculationResult.formatted[firstOutput.name] || (calculationResult.data ? calculationResult.data[firstOutput.name] : "")}` : "Calculated Result";
     const newItem = {
       id: Date.now().toString(),
       title: definition.title,
@@ -397,7 +397,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const CustomChart = definition.ChartComponent;
 
   return (
-    <div className="space-y-3 max-w-7xl mx-auto py-1">
+    <div className="space-y-3 max-w-[1536px] w-full mx-auto py-1">
       {/* 1. Accessible Breadcrumbs Navigation */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
         <Link
@@ -418,9 +418,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       </nav>
 
       {/* 2. Page Header & Quick Layout Grid (Col-8 Main | Col-4 Sidebar matching Screen 2) */}
-      <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        {/* Main Interactive Calculator Area (Col 8) */}
-        <div className="min-w-0 lg:col-span-8 space-y-4">
+      <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Main Interactive Calculator Area (Col 8 / 9 on 2xl) */}
+        <div className="min-w-0 lg:col-span-8 2xl:col-span-9 space-y-4">
           <div>
             <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
               {definition.title}
@@ -648,7 +648,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                           size="sm"
                           onClick={() => {
                             if (calculationResult.success) {
-                              const summary = definition.outputs.map(o => `${o.label}: ${calculationResult.formatted[o.name] || calculationResult.outputs[o.name]}`).join(" | ");
+                              const summary = definition.outputs.map(o => `${o.label}: ${calculationResult.formatted[o.name] || (calculationResult.data ? calculationResult.data[o.name] : "")}`).join(" | ");
                               navigator.clipboard.writeText(summary);
                             }
                           }}
@@ -682,7 +682,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                         </div>
                         <div className="space-y-1.5 max-h-36 overflow-y-auto">
                           {savedItems.map((item) => (
-                            <div key={item.id} className="p-2 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-mono">
+                            <div key={item.id} className="p-2 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-sans tabular-nums">
                               <span className="font-bold text-zinc-800 dark:text-zinc-200 truncate">{item.primaryResult}</span>
                               <button onClick={() => handleDeleteSavedItem(item.id)} className="text-zinc-400 hover:text-red-500 p-0.5" title="Delete">
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -758,8 +758,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
         </div>
 
-        {/* Right Sidebar: Quick Navigation & Search Index (Col 4 matching Screen 2, 3 & 5) */}
-        <aside className="min-w-0 lg:col-span-4 space-y-4">
+        {/* Right Sidebar: Quick Navigation & Search Index */}
+        <aside className="min-w-0 lg:col-span-4 2xl:col-span-3 space-y-4">
           {/* Quick Search and Category Index */}
           <div className="bg-card text-card-foreground border border-border rounded-xl p-3.5 shadow-xs space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">

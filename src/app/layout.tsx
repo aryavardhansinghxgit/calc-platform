@@ -69,7 +69,7 @@ export default function RootLayout({
           <TooltipProvider>
             <div id="main-web-app" className="no-print-main-app flex flex-col min-h-screen">
               <Navbar />
-              <main className="mx-auto max-w-7xl px-4 sm:px-6 py-4 flex-1 w-full space-y-4">
+              <main className="mx-auto max-w-[1536px] px-4 sm:px-6 lg:px-8 py-4 flex-1 w-full space-y-4">
                 {children}
               </main>
               <Footer />

@@ -1032,8 +1032,8 @@ export function ResistorCalculator() {
                     onClick={handleSave}
                     className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
-                    {isSaved ? <Check className="w-4 h-4 text-emerald-400" /> : <Bookmark className="w-4 h-4 text-amber-400" />}
-                    <span>{isSaved ? "Saved!" : "Save"}</span>
+                    {justSaved ? <Check className="w-4 h-4 text-emerald-400" /> : <Bookmark className="w-4 h-4 text-amber-400" />}
+                    <span>{justSaved ? "Saved!" : "Save"}</span>
                   </button>
 
                   <button

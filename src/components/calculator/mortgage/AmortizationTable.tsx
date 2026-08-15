@@ -296,19 +296,19 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
                     <TableCell className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
                       {periodLabel}
                     </TableCell>
-                    <TableCell className="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+                    <TableCell className="text-xs text-zinc-500 dark:text-zinc-400 font-sans tabular-nums">
                       {dateLabel}
                     </TableCell>
-                    <TableCell className="text-xs font-mono font-semibold text-zinc-900 dark:text-zinc-100 text-right">
+                    <TableCell className="text-xs font-sans tabular-nums font-semibold text-zinc-900 dark:text-zinc-100 text-right">
                       {formatCurrency(paymentAmount)}
                     </TableCell>
-                    <TableCell className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-medium text-right">
+                    <TableCell className="text-xs font-sans tabular-nums text-emerald-600 dark:text-emerald-400 font-medium text-right">
                       {formatCurrency(principalAmount)}
                     </TableCell>
-                    <TableCell className="text-xs font-mono text-amber-600 dark:text-amber-400 font-medium text-right">
+                    <TableCell className="text-xs font-sans tabular-nums text-amber-600 dark:text-amber-400 font-medium text-right">
                       {formatCurrency(interestAmount)}
                     </TableCell>
-                    <TableCell className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400 text-right">
+                    <TableCell className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400 text-right">
                       {formatCurrency(balanceAmount)}
                     </TableCell>
                   </TableRow>
@@ -322,7 +322,7 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
       {/* Pagination Footer */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between pt-1">
-          <span className="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+          <span className="text-xs text-zinc-500 dark:text-zinc-400 font-sans tabular-nums">
             Showing Page {currentPage} of {totalPages} ({displayedRows.length} total entries)
           </span>
           <div className="flex items-center gap-1.5">

@@ -543,7 +543,7 @@ export function MortgageCalculator() {
                       step={5000}
                       value={homePrice}
                       onChange={(e) => setHomePrice(Math.max(0, Number(e.target.value)))}
-                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -592,7 +592,7 @@ export function MortgageCalculator() {
                       step={downPaymentType === "amount" ? 1000 : 0.5}
                       value={downPayment}
                       onChange={(e) => setDownPayment(Math.max(0, Number(e.target.value)))}
-                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                   <div className="flex items-center justify-between text-[10px] text-zinc-400 mt-1">
@@ -619,7 +619,7 @@ export function MortgageCalculator() {
                       max={50}
                       value={loanTermYears}
                       onChange={(e) => setLoanTermYears(Math.max(1, Number(e.target.value)))}
-                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                   <div>
@@ -634,7 +634,7 @@ export function MortgageCalculator() {
                       max={30}
                       value={interestRate}
                       onChange={(e) => setInterestRate(Math.max(0, Number(e.target.value)))}
-                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -669,7 +669,7 @@ export function MortgageCalculator() {
                       max={2100}
                       value={startYear}
                       onChange={(e) => setStartYear(Number(e.target.value))}
-                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -728,7 +728,7 @@ export function MortgageCalculator() {
                         step={propertyTaxType === "amount" ? 100 : 0.1}
                         value={propertyTax}
                         onChange={(e) => setPropertyTax(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
 
@@ -745,7 +745,7 @@ export function MortgageCalculator() {
                           step={50}
                           value={homeInsurance}
                           onChange={(e) => setHomeInsurance(Math.max(0, Number(e.target.value)))}
-                          className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                          className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                         />
                       </div>
                       <div>
@@ -759,7 +759,7 @@ export function MortgageCalculator() {
                           min={0}
                           value={pmiRate}
                           onChange={(e) => setPmiRate(Math.max(0, Number(e.target.value)))}
-                          className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                          className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                         />
                       </div>
                     </div>
@@ -777,7 +777,7 @@ export function MortgageCalculator() {
                           step={10}
                           value={hoaFee}
                           onChange={(e) => setHoaFee(Math.max(0, Number(e.target.value)))}
-                          className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                          className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                         />
                       </div>
                       <div>
@@ -791,7 +791,7 @@ export function MortgageCalculator() {
                           step={100}
                           value={otherCosts}
                           onChange={(e) => setOtherCosts(Math.max(0, Number(e.target.value)))}
-                          className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                          className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                         />
                       </div>
                     </div>
@@ -825,7 +825,7 @@ export function MortgageCalculator() {
                         min={0}
                         value={propertyTaxIncrease}
                         onChange={(e) => setPropertyTaxIncrease(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                     <div>
@@ -839,7 +839,7 @@ export function MortgageCalculator() {
                         min={0}
                         value={insuranceIncrease}
                         onChange={(e) => setInsuranceIncrease(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                     <div>
@@ -853,7 +853,7 @@ export function MortgageCalculator() {
                         min={0}
                         value={hoaIncrease}
                         onChange={(e) => setHoaIncrease(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                     <div>
@@ -867,7 +867,7 @@ export function MortgageCalculator() {
                         min={0}
                         value={otherCostsIncrease}
                         onChange={(e) => setOtherCostsIncrease(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                   </div>
@@ -922,7 +922,7 @@ export function MortgageCalculator() {
                           type="number"
                           value={extraMonthlyStartYear}
                           onChange={(e) => setExtraMonthlyStartYear(Number(e.target.value))}
-                          className="h-8 w-16 bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 font-mono text-[10px] px-1"
+                          className="h-8 w-16 bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-[10px] px-1"
                         />
                       </div>
                     </div>
@@ -960,7 +960,7 @@ export function MortgageCalculator() {
                           type="number"
                           value={extraYearlyStartYear}
                           onChange={(e) => setExtraYearlyStartYear(Number(e.target.value))}
-                          className="h-8 w-16 bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 font-mono text-[10px] px-1"
+                          className="h-8 w-16 bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-[10px] px-1"
                         />
                       </div>
                     </div>
@@ -1002,7 +1002,7 @@ export function MortgageCalculator() {
                                 onChange={(e) =>
                                   handleOneTimePaymentChange(row.id, "amount", Number(e.target.value))
                                 }
-                                className="pl-6 h-7 text-xs bg-white dark:bg-zinc-900 font-mono border-zinc-200 dark:border-zinc-700"
+                                className="pl-6 h-7 text-xs bg-white dark:bg-zinc-900 font-sans tabular-nums border-zinc-200 dark:border-zinc-700"
                               />
                             </div>
                             <span className="text-[10px] text-zinc-400">in</span>
@@ -1083,7 +1083,7 @@ export function MortgageCalculator() {
                     <Bookmark className="h-3 w-3" /> Save
                   </Button>
                 </div>
-                <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-mono mt-2 tracking-tight">
+                <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums mt-2 tracking-tight">
                   {formatCurrency(results.totalInitialMonthlyPayment)}
                 </div>
               </div>
@@ -1092,25 +1092,25 @@ export function MortgageCalculator() {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-blue-100 dark:border-zinc-800">
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2 rounded-lg border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">P&I Base</span>
-                  <span className="text-xs font-bold font-mono text-blue-600 dark:text-blue-400">
+                  <span className="text-xs font-bold font-sans tabular-nums text-blue-600 dark:text-blue-400">
                     {formatCurrency(results.monthlyPrincipalAndInterest)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2 rounded-lg border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Property Tax</span>
-                  <span className="text-xs font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                  <span className="text-xs font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
                     {formatCurrency(results.monthlyPropertyTax)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2 rounded-lg border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Home Insurance</span>
-                  <span className="text-xs font-bold font-mono text-amber-600 dark:text-amber-400">
+                  <span className="text-xs font-bold font-sans tabular-nums text-amber-600 dark:text-amber-400">
                     {formatCurrency(results.monthlyInsurance)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2 rounded-lg border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Other Costs</span>
-                  <span className="text-xs font-bold font-mono text-purple-600 dark:text-purple-400">
+                  <span className="text-xs font-bold font-sans tabular-nums text-purple-600 dark:text-purple-400">
                     {formatCurrency(
                       results.monthlyPmi + results.monthlyHoa + (results.monthlyOtherCosts / 12)
                     )}
@@ -1131,7 +1131,7 @@ export function MortgageCalculator() {
                       Biweekly Payback Results Summary
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-300 font-bold bg-emerald-100 dark:bg-emerald-900 px-2 py-0.5 rounded">
+                  <span className="text-[10px] font-sans tabular-nums text-emerald-700 dark:text-emerald-300 font-bold bg-emerald-100 dark:bg-emerald-900 px-2 py-0.5 rounded">
                     26 Pay Periods / Yr
                   </span>
                 </div>
@@ -1141,7 +1141,7 @@ export function MortgageCalculator() {
                     <span className="text-[10px] text-emerald-800 dark:text-emerald-400 block font-medium">
                       Biweekly Payment
                     </span>
-                    <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-mono">
+                    <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-sans tabular-nums">
                       {formatCurrency(results.biweeklyPayment)}
                     </span>
                   </div>
@@ -1149,7 +1149,7 @@ export function MortgageCalculator() {
                     <span className="text-[10px] text-emerald-800 dark:text-emerald-400 block font-medium">
                       Biweekly Payoff Date
                     </span>
-                    <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-mono">
+                    <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-sans tabular-nums">
                       {results.biweeklyPayoffDate}
                     </span>
                   </div>
@@ -1157,7 +1157,7 @@ export function MortgageCalculator() {
                     <span className="text-[10px] text-emerald-800 dark:text-emerald-400 block font-medium">
                       Biweekly Total Interest
                     </span>
-                    <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-mono">
+                    <span className="text-base font-extrabold text-emerald-900 dark:text-emerald-100 font-sans tabular-nums">
                       {formatCurrency(results.biweeklyTotalInterest)}
                     </span>
                   </div>
@@ -1165,7 +1165,7 @@ export function MortgageCalculator() {
                     <span className="text-[10px] text-emerald-800 dark:text-emerald-400 block font-medium">
                       Interest Savings
                     </span>
-                    <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
+                    <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-sans tabular-nums">
                       {formatCurrency(results.biweeklyInterestSavings)}
                     </span>
                   </div>
@@ -1178,25 +1178,25 @@ export function MortgageCalculator() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-xs">
               <span className="text-[10px] uppercase font-semibold text-zinc-400 block">Loan Amount</span>
-              <span className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100 font-mono">
+              <span className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums">
                 {formatCurrency(results.loanAmount)}
               </span>
             </div>
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-xs">
               <span className="text-[10px] uppercase font-semibold text-zinc-400 block">Total Interest</span>
-              <span className="text-sm font-extrabold text-amber-600 dark:text-amber-400 font-mono">
+              <span className="text-sm font-extrabold text-amber-600 dark:text-amber-400 font-sans tabular-nums">
                 {formatCurrency(results.totalInterestPaid)}
               </span>
             </div>
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-xs">
               <span className="text-[10px] uppercase font-semibold text-zinc-400 block">Total Cost of Loan</span>
-              <span className="text-sm font-extrabold text-blue-600 dark:text-blue-400 font-mono">
+              <span className="text-sm font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums">
                 {formatCurrency(results.totalCost)}
               </span>
             </div>
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-xs">
               <span className="text-[10px] uppercase font-semibold text-zinc-400 block">Payoff Date</span>
-              <span className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400 font-mono truncate block">
+              <span className="text-sm font-extrabold text-emerald-600 dark:text-emerald-400 font-sans tabular-nums truncate block">
                 {results.payoffDate}
               </span>
             </div>

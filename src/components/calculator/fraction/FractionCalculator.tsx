@@ -73,12 +73,12 @@ export function FractionCalculator() {
         const n2Val = BigInt(num2 || "0");
         const d2Val = BigInt(den2 || "1");
 
-        const sign1 = w1Val < 0n ? -1n : 1n;
-        const absW1 = w1Val < 0n ? -w1Val : w1Val;
+        const sign1 = w1Val < BigInt(0) ? BigInt(-1) : BigInt(1);
+        const absW1 = w1Val < BigInt(0) ? -w1Val : w1Val;
         const impN1 = sign1 * (absW1 * d1Val + n1Val);
 
-        const sign2 = w2Val < 0n ? -1n : 1n;
-        const absW2 = w2Val < 0n ? -w2Val : w2Val;
+        const sign2 = w2Val < BigInt(0) ? BigInt(-1) : BigInt(1);
+        const absW2 = w2Val < BigInt(0) ? -w2Val : w2Val;
         const impN2 = sign2 * (absW2 * d2Val + n2Val);
 
         return calculateFractionOperation(op, impN1, d1Val, impN2, d2Val);
@@ -87,23 +87,23 @@ export function FractionCalculator() {
       if (activeTab === "simplify") {
         const n = BigInt(num1 || "0");
         const d = BigInt(den1 || "1");
-        return calculateFractionOperation("+", n, d, 0n, 1n);
+        return calculateFractionOperation("+", n, d, BigInt(0), BigInt(1));
       }
 
       if (activeTab === "dec-to-frac") {
         const f = decimalToFrac(decVal || "0");
-        return calculateFractionOperation("+", f.n, f.d, 0n, 1n);
+        return calculateFractionOperation("+", f.n, f.d, BigInt(0), BigInt(1));
       }
 
       if (activeTab === "recurring-dec") {
         const f = recurringDecimalToFrac(nonRepeatStr, repeatStr);
-        return calculateFractionOperation("+", f.n, f.d, 0n, 1n);
+        return calculateFractionOperation("+", f.n, f.d, BigInt(0), BigInt(1));
       }
 
       if (activeTab === "approximation") {
         const val = parseFloat(decVal) || 0;
         const f = approximateFraction(val, 1000);
-        return calculateFractionOperation("+", f.n, f.d, 0n, 1n);
+        return calculateFractionOperation("+", f.n, f.d, BigInt(0), BigInt(1));
       }
 
       // Default fallback

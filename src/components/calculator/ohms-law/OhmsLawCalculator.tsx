@@ -13,7 +13,8 @@ import {
   Bookmark, 
   Info, 
   AlertTriangle,
-  Lightbulb
+  Lightbulb,
+  Check
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { calculateOhmsLawCalculator, formatVoltage, formatCurrent, formatResistance, formatPower } from "@/app/calculators/ohms-law-calculator/calculator";
