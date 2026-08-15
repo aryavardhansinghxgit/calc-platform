@@ -8,6 +8,7 @@ import { CalculatorModuleDefinition, getCalculatorsByCategory, searchCalculators
 import { CalculationResult } from "@/lib/calculator-engine/types";
 import { CalculatorEngine } from "@/lib/calculator-engine/engine";
 import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
+import { getTenHighQualityFaqs } from "@/lib/calculator-engine/faq-generator";
 import { CalculatorForm } from "./CalculatorForm";
 import { CalculatorResult } from "./CalculatorResult";
 import { FormulaSection } from "./FormulaSection";
@@ -795,6 +796,28 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             </div>
           </div>
         )}
+
+        {/* 10 High-Quality Frequently Asked Questions */}
+        <div className="space-y-3">
+          <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+            Frequently Asked Questions ({definition.title} FAQs)
+          </h3>
+          <div className="space-y-3">
+            {(definition.faqs && definition.faqs.length >= 5
+              ? definition.faqs
+              : getTenHighQualityFaqs(definition.title, definition.category)
+            ).slice(0, 10).map((faq, idx) => (
+              <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                  {faq.question}
+                </h4>
+                <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed font-medium">
+                  {faq.answer}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Related Calculators */}
         <div className="space-y-2">
