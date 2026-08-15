@@ -19,7 +19,7 @@ export function runProbabilityCalculatorTests() {
   }
 
   // Test 2: Independent Two-Event Probability (P(A)=0.5, P(B)=0.4 -> Intersection = 0.2, Union = 0.7)
-  const twoEv = computeTwoEventProbability("0.5", "0.4", "independent");
+  const twoEv = computeTwoEventProbability("0.5", "0.4");
   if (twoEv.pIntersection !== 0.2 || twoEv.pUnion !== 0.7) {
     throw new Error(`Independent two-event failed: got intersection=${twoEv.pIntersection}, union=${twoEv.pUnion}`);
   }
