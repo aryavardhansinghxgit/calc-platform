@@ -529,7 +529,7 @@ export function FuelCostCalculator() {
               <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl space-y-2 text-xs">
                 <div className="space-y-1">
                   <span className="font-bold text-zinc-700 dark:text-zinc-300 block text-[11px]">Efficiency Penalty Toggles</span>
-                  <div className="grid grid-cols-2 gap-2 text-zinc-600 dark:text-zinc-300">
+                  <div className="grid grid-cols-2 gap-2 text-slate-800 dark:text-slate-200 font-semibold">
                     <label className="flex items-center gap-1.5 cursor-pointer">
                       <input
                         type="checkbox"

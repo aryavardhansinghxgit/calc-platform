@@ -429,15 +429,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                   GROSS TOTAL PRICE (VAT INCLUSIVE)
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -657,7 +649,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                 <span className="font-bold text-sm text-blue-900 dark:text-blue-200">Value-Added Tax (VAT)</span>
                 <Badge className="bg-blue-600 text-white text-[10px]">Multi-Stage</Badge>
               </div>
-              <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-300">
+              <ul className="text-xs space-y-2 text-slate-800 dark:text-slate-200 font-semibold">
                 <li className="flex items-start gap-1.5">
                   <CheckCircle2 className="h-3.5 w-3.5 text-blue-600 shrink-0 mt-0.5" />
                   <span><strong>Collected incrementally:</strong> Tax paid at every production &amp; distribution stage.</span>
@@ -683,7 +675,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                 <span className="font-bold text-sm text-amber-900 dark:text-amber-200">Retail Sales Tax</span>
                 <Badge className="bg-amber-600 text-white text-[10px]">Single-Stage</Badge>
               </div>
-              <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-300">
+              <ul className="text-xs space-y-2 text-slate-800 dark:text-slate-200 font-semibold">
                 <li className="flex items-start gap-1.5">
                   <CheckCircle2 className="h-3.5 w-3.5 text-amber-600 shrink-0 mt-0.5" />
                   <span><strong>Collected at Retail:</strong> Tax is charged only at the final point of purchase by end consumers.</span>

@@ -621,15 +621,7 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
                   {results.isRefund ? "ESTIMATED IRS TAX REFUND" : "ESTIMATED TAX OWED TO IRS"}
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -739,26 +731,7 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                onClick={() => {
-                  const el = document.getElementById("tax-results-dashboard");
-                  if (el) el.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
-              >
-                Calculate Tax
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleReset}
-                className="text-xs font-medium border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
-              >
-                <RotateCcw className="h-3.5 w-3.5 mr-1" /> Clear
-              </Button>
-            </div>
+            
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">

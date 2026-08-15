@@ -238,26 +238,7 @@ export function GolfHandicapCalculator() {
           </button>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={handleDownloadCSV}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer"
-          >
-            <Download className="h-3.5 w-3.5" /> CSV
-          </Button>
-
-          <Button
-            onClick={() => setShowReportModal(true)}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 border-emerald-200"
-          >
-            <Printer className="h-3.5 w-3.5" /> PDF Card
-          </Button>
-        </div>
+        
       </div>
 
       {/* 2. TAB CONTENT PANES */}

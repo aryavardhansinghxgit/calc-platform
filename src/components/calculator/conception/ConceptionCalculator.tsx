@@ -178,7 +178,7 @@ export function ConceptionCalculator() {
     setTimeout(() => setCopied(false), 2500);
   };
 
-  // Trigger Print Report
+  // Trigger Print
   const handlePrint = () => {
     window.print();
   };
@@ -699,14 +699,7 @@ export function ConceptionCalculator() {
                   {copied ? "Copied!" : "Copy"}
                 </button>
 
-                <button
-                  onClick={handlePrint}
-                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
-                  title="Print Report"
-                >
-                  <Printer className="w-4 h-4" />
-                  Print
-                </button>
+                
               </div>
             </div>
           </div>

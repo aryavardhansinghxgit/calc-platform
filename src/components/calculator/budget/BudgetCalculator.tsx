@@ -993,31 +993,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
               </div>
 
               {/* Action Toolbar Buttons */}
-              <div className="flex items-center gap-2">
-                <Button
-                  size="sm"
-                  onClick={() => setIsReportOpen(true)}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-sm"
-                >
-                  <Printer className="h-3.5 w-3.5 mr-1.5" /> Print PDF Report
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={handleCopySummary}
-                  className="text-xs bg-white dark:bg-zinc-800 border-zinc-300 dark:border-zinc-700"
-                >
-                  {copyNotification ? (
-                    <>
-                      <Check className="h-3.5 w-3.5 text-emerald-500 mr-1" /> Copied!
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-3.5 w-3.5 mr-1" /> Copy Summary
-                    </>
-                  )}
-                </Button>
-              </div>
+              
             </div>
           )}
 
@@ -1092,7 +1068,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
 
               <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden text-xs max-h-[450px] overflow-y-auto">
                 <table className="w-full text-left">
-                  <thead className="sticky top-0 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-semibold border-b border-zinc-200 dark:border-zinc-700">
+                  <thead className="sticky top-0 bg-zinc-100 dark:bg-zinc-800 text-slate-800 dark:text-slate-200 font-semibold font-semibold border-b border-zinc-200 dark:border-zinc-700">
                     <tr>
                       <th className="p-2">Item</th>
                       <th className="p-2 text-right">Annual</th>

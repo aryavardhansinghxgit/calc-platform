@@ -226,26 +226,7 @@ export function EngineHorsepowerCalculator() {
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-zinc-400 block">
               Forum Export &amp; PDF Spec Sheet
             </span>
-            <div className="flex items-center gap-2">
-              <Button
-                onClick={handleCopySummary}
-                variant="outline"
-                size="sm"
-                className="h-8 text-xs font-bold gap-1 cursor-pointer bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-700 border-b-2 border-b-slate-300 dark:border-b-zinc-950 flex-1"
-              >
-                {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5" />}
-                {copied ? "Copied" : "Copy Specs"}
-              </Button>
-
-              <Button
-                onClick={() => setShowReportModal(true)}
-                variant="outline"
-                size="sm"
-                className="h-8 text-xs font-bold gap-1 cursor-pointer bg-red-600 hover:bg-red-500 text-white border-b-2 border-red-800 shadow-md shadow-red-600/20 flex-1"
-              >
-                <Printer className="h-3.5 w-3.5" /> PDF Sheet
-              </Button>
-            </div>
+            
           </div>
         </div>
 

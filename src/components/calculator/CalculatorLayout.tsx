@@ -194,16 +194,28 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const [sidebarQuery, setSidebarQuery] = useState("");
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [savedItems, setSavedItems] = useState<Array<{ id: string; title: string; primaryResult: string; timestamp: string }>>([]);
+  const [copied, setCopied] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  useEffect(() => {
+  const handleCopyResult = () => {
     try {
-      const stored = localStorage.getItem(`saved_calc_${definition.id}`);
-      if (stored) {
-        setSavedItems(JSON.parse(stored));
-      }
-    } catch (e) { }
-  }, [definition.id]);
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (e) {}
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({ title: definition.title, url: window.location.href }).catch(() => {});
+    } else {
+      handleCopyResult();
+    }
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   const handleSaveCalculation = () => {
     if (!calculationResult.success) return;
@@ -422,13 +434,58 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Main Interactive Calculator Area (Col 9) */}
         <div className="min-w-0 lg:col-span-9 space-y-4">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
-              {definition.title}
-            </h1>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 max-w-2xl leading-normal">
-              {definition.description}
-            </p>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 dark:bg-slate-900/50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
+            <div>
+              <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
+                {definition.title}
+              </h1>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 max-w-xl leading-normal font-medium">
+                {definition.description}
+              </p>
+            </div>
+
+            {/* TOP RIGHT CORNER ACTION BUTTONS: Copy | Save | Share | Print */}
+            <div className="flex flex-wrap items-center gap-2 shrink-0 sm:ml-auto no-print">
+              <button
+                type="button"
+                onClick={handleCopyResult}
+                className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                title="Copy"
+              >
+                <Copy className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                <span>{copied ? "Copied" : "Copy"}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleSaveCalculation}
+                className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                title="Save"
+              >
+                <Bookmark className="h-3.5 w-3.5 text-amber-500" />
+                <span>Save</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleShare}
+                className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                title="Share"
+              >
+                <ArrowRight className="h-3.5 w-3.5 text-blue-500" />
+                <span>Share</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl px-3.5 py-1.5 text-xs shadow-md shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center gap-1.5 cursor-pointer"
+                title="Print"
+              >
+                <Printer className="h-3.5 w-3.5" />
+                <span>Print</span>
+              </button>
+            </div>
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>

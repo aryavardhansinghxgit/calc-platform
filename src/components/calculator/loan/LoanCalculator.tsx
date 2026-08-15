@@ -203,7 +203,7 @@ export function LoanCalculator() {
     setValidationError("");
   };
 
-  // Handle Save Calculation
+  // Handle Save
   const handleSaveCalculation = (e: React.FormEvent) => {
     e.preventDefault();
     const newSave: SavedLoanCalculation = {
@@ -328,13 +328,7 @@ export function LoanCalculator() {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={handleShareUrl}
-            className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
-          >
-            <Share2 className="h-3.5 w-3.5" /> Share
-          </button>
+          
           <button
             type="button"
             onClick={() => setIsReportModalOpen(true)}
@@ -777,7 +771,7 @@ export function LoanCalculator() {
         </CardContent>
       </Card>
 
-      {/* Save Calculation Modal Dialog */}
+      {/* Save Modal Dialog */}
       {isSaveModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
           <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-2xl max-w-lg w-full p-6 space-y-4 relative">

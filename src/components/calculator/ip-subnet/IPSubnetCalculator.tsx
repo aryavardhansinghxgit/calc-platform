@@ -757,45 +757,30 @@ export function IPSubnetCalculator() {
           )}
 
           {/* UNIFIED ACTION BAR: Copy, Save, Share, Print */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-zinc-200 dark:border-zinc-800 no-print">
+          <div className="flex flex-wrap items-center justify-end gap-2.5 pt-3 border-t border-zinc-200 dark:border-zinc-800 no-print">
             <button
               type="button"
               onClick={handleCopy}
               disabled={!result || !!result.error}
-              className="text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-40"
+              className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-40"
             >
-              {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-zinc-400 dark:text-zinc-500" />}
-              <span>{copied ? "Copied!" : "Copy Result"}</span>
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />}
+              <span>{copied ? "Copied" : "Copy"}</span>
             </button>
 
             <button
               type="button"
               onClick={handleSave}
               disabled={!result || !!result.error}
-              className="text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-40"
+              className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-40"
             >
-              {justSaved ? <Check className="w-4 h-4 text-emerald-500" /> : <Bookmark className="w-4 h-4 text-amber-500" />}
-              <span>{justSaved ? "Saved!" : "Save"}</span>
+              {justSaved ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Bookmark className="w-3.5 h-3.5 text-amber-500" />}
+              <span>{justSaved ? "Saved" : "Save"}</span>
             </button>
 
-            <button
-              type="button"
-              onClick={handleShare}
-              disabled={!result || !!result.error}
-              className="text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-40"
-            >
-              <Share2 className="w-4 h-4 text-blue-500" />
-              <span>Share Link</span>
-            </button>
+            
 
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
-            >
-              <Printer className="w-4 h-4 text-purple-500" />
-              <span>Print Report</span>
-            </button>
+            
           </div>
 
           {/* HISTORY BOOKMARKS LIST */}

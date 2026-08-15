@@ -448,15 +448,7 @@ export function RefinanceCalculator() {
             <Copy className="h-3.5 w-3.5 text-blue-500" /> Copy
           </Button>
 
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleShareUrl}
-            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer"
-          >
-            <Share2 className="h-3.5 w-3.5 text-emerald-500" /> Share
-          </Button>
+          
 
           <Button
             type="button"

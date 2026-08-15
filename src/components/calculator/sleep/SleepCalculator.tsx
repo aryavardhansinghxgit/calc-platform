@@ -205,26 +205,7 @@ export function SleepCalculator() {
           </button>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={handleCopySchedule}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer"
-          >
-            {copied ? <Check className="h-3.5 w-3.5 text-indigo-600" /> : <Copy className="h-3.5 w-3.5" />}
-            {copied ? "Copied" : "Copy Schedule"}
-          </Button>
-
-          <Button
-            onClick={() => setShowReportModal(true)}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer bg-indigo-50 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:text-indigo-300 border-indigo-200"
-          >
-            <Printer className="h-3.5 w-3.5" /> PDF Report
-          </Button>
-        </div>
+        
       </div>
 
       {/* 2. TAB 1: SLEEP PLANNER */}

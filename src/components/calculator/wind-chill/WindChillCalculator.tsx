@@ -169,26 +169,7 @@ export function WindChillCalculator() {
           </select>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={handleCopySummary}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer"
-          >
-            {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5" />}
-            {copied ? "Copied" : "Share Summary"}
-          </Button>
 
-          <Button
-            onClick={() => setShowReportModal(true)}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer bg-sky-50 text-sky-700 hover:bg-sky-100 dark:bg-sky-950/40 dark:text-sky-300 border-sky-200"
-          >
-            <Printer className="h-3.5 w-3.5" /> Safety Briefing PDF
-          </Button>
-        </div>
       </div>
 
       {/* 2. SPLIT PANE INTERFACE */}
@@ -333,7 +314,7 @@ export function WindChillCalculator() {
             <label className="font-bold text-zinc-700 dark:text-zinc-300 block">
               Vulnerability Risk Profile Options
             </label>
-            <div className="flex flex-wrap items-center gap-4 text-zinc-600 dark:text-zinc-300">
+            <div className="flex flex-wrap items-center gap-4 text-slate-800 dark:text-slate-200 font-semibold">
               <label className="flex items-center gap-1.5 cursor-pointer">
                 <input
                   type="checkbox"

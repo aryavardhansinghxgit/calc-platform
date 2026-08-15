@@ -568,42 +568,28 @@ export function PasswordGenerator() {
           )}
 
           {/* UNIFIED ACTION BAR: Copy, Save, Share, Print */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 mt-4 border-t border-zinc-200 dark:border-zinc-800 no-print">
+          <div className="flex flex-wrap items-center justify-end gap-3 pt-3 mt-4 border-t border-zinc-200 dark:border-zinc-800 no-print">
             <button
               type="button"
               onClick={() => handleCopy(outputs.generatedPassword || "")}
-              className="text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+              className="text-xs font-bold text-slate-800 dark:text-slate-200 font-semibold hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
             >
               {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-zinc-400 dark:text-zinc-500" />}
-              <span>{copied ? "Copied!" : "Copy Result"}</span>
+              <span>{copied ? "Copied!" : "Copy"}</span>
             </button>
 
             <button
               type="button"
               onClick={handleSavePasswordClick}
-              className="text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
+              className="text-xs font-bold text-slate-800 dark:text-slate-200 font-semibold hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
             >
               <Bookmark className="w-4 h-4 text-amber-500" />
               <span>Save</span>
             </button>
 
-            <button
-              type="button"
-              onClick={handleShare}
-              className="text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
-            >
-              <Share2 className="w-4 h-4 text-blue-500" />
-              <span>Share Link</span>
-            </button>
+            
 
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="text-xs font-bold text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
-            >
-              <Printer className="w-4 h-4 text-purple-500" />
-              <span>Print Report</span>
-            </button>
+            
           </div>
 
         </div>
@@ -1256,7 +1242,7 @@ export function PasswordGenerator() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleCopy(rec.password)}
-                    className="p-1.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded text-zinc-600 dark:text-zinc-300"
+                    className="p-1.5 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 rounded text-slate-800 dark:text-slate-200 font-semibold"
                     title="Copy this password"
                   >
                     <Copy className="w-3.5 h-3.5" />

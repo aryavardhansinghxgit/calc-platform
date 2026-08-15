@@ -221,7 +221,7 @@ export function AmortizationCalculator() {
     setValidationError("");
   };
 
-  // Action: Save Calculation
+  // Action: Save
   const handleSaveCalculation = (e: React.FormEvent) => {
     e.preventDefault();
     const newSave: SavedAmortizationCalculation = {
@@ -360,15 +360,7 @@ export function AmortizationCalculator() {
               {shareSuccessMsg}
             </span>
           )}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleShareUrl}
-            className="h-8 text-xs gap-1.5 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 cursor-pointer"
-          >
-            <Share2 className="h-3.5 w-3.5 text-blue-500" /> Share Link
-          </Button>
+          
           <Button
             type="button"
             variant="outline"
@@ -384,7 +376,7 @@ export function AmortizationCalculator() {
             onClick={() => setIsSaveModalOpen(true)}
             className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs cursor-pointer"
           >
-            <Bookmark className="h-3.5 w-3.5" /> Save Calculation
+            <Bookmark className="h-3.5 w-3.5" /> Save
           </Button>
         </div>
       </div>
@@ -842,7 +834,7 @@ export function AmortizationCalculator() {
         </CardContent>
       </Card>
 
-      {/* Save Calculation Modal Dialog */}
+      {/* Save Modal Dialog */}
       {isSaveModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
           <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-2xl max-w-lg w-full p-6 space-y-4 relative">
@@ -860,7 +852,7 @@ export function AmortizationCalculator() {
               </div>
               <div>
                 <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
-                  Save Calculation
+                  Save
                 </h3>
                 <p className="text-xs text-zinc-500">
                   Save your amortization calculation setup locally to restore later
@@ -908,7 +900,7 @@ export function AmortizationCalculator() {
                     Cancel
                   </Button>
                   <Button type="submit" className="h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white">
-                    Save Calculation
+                    Save
                   </Button>
                 </div>
               </form>

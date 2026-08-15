@@ -1326,7 +1326,7 @@ export function ScientificCalculator() {
                 History {history.length > 0 && `(${history.length})`}
               </button>
 
-              {/* Copy Result Button */}
+              {/* Copy Button */}
               <button
                 onClick={handleCopy}
                 className="ml-auto text-[11px] text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-semibold"

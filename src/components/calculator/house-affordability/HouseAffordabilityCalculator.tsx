@@ -372,58 +372,7 @@ export function HouseAffordabilityCalculator() {
           </button>
         </div>
 
-        {/* Global Toolbar Actions */}
-        <div className="flex flex-wrap items-center gap-2">
-          {copySuccessMsg && (
-            <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 animate-pulse">
-              {copySuccessMsg}
-            </span>
-          )}
-          {shareSuccessMsg && (
-            <span className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 animate-pulse">
-              {shareSuccessMsg}
-            </span>
-          )}
 
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleCopyResults}
-            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900"
-          >
-            <Copy className="h-3.5 w-3.5 text-blue-500" /> Copy
-          </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleShareUrl}
-            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900"
-          >
-            <Share2 className="h-3.5 w-3.5 text-emerald-500" /> Share
-          </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handlePrint}
-            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900"
-          >
-            <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
-          </Button>
-
-          <Button
-            type="button"
-            size="sm"
-            onClick={() => setIsSaveModalOpen(true)}
-            className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
-          >
-            <Bookmark className="h-3.5 w-3.5" /> Save
-          </Button>
-        </div>
       </div>
 
       {/* ========================================================================= */}

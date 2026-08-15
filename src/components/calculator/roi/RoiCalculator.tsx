@@ -198,7 +198,7 @@ export function RoiCalculator() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Handle Share Link
+  // Handle Share
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
     setShared(true);
@@ -833,7 +833,7 @@ export function RoiCalculator() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-[11px]">
                 <thead>
-                  <tr className="bg-zinc-50 dark:bg-zinc-800/60 text-zinc-600 dark:text-zinc-300 font-semibold border-b border-zinc-200 dark:border-zinc-800">
+                  <tr className="bg-zinc-50 dark:bg-zinc-800/60 text-slate-800 dark:text-slate-200 font-semibold font-semibold border-b border-zinc-200 dark:border-zinc-800">
                     {scheduleView === "annual" ? (
                       <>
                         <th className="p-2">Year</th>

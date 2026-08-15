@@ -358,7 +358,7 @@ export function TipCalculator() {
                     className={`px-3 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
                       taxMode === "pre-tax"
                         ? "bg-white dark:bg-zinc-900 text-emerald-600 shadow-xs"
-                        : "text-zinc-600 dark:text-zinc-300"
+                        : "text-slate-800 dark:text-slate-200 font-semibold"
                     }`}
                   >
                     Pre-Tax Subtotal
@@ -368,7 +368,7 @@ export function TipCalculator() {
                     className={`px-3 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
                       taxMode === "post-tax"
                         ? "bg-white dark:bg-zinc-900 text-emerald-600 shadow-xs"
-                        : "text-zinc-600 dark:text-zinc-300"
+                        : "text-slate-800 dark:text-slate-200 font-semibold"
                     }`}
                   >
                     Post-Tax Total

@@ -864,7 +864,7 @@ Calculated on CalcPlatform Due Date Engine.`;
                   <h4 className="text-xs font-bold text-pink-600 dark:text-pink-400 uppercase tracking-wider flex items-center gap-1.5">{item.title}
                   </h4>
                   <p className="text-xs font-semibold leading-relaxed">{item.text}</p>
-                  <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                  <p className="text-xs text-slate-800 dark:text-slate-200 font-semibold leading-relaxed">
                     <strong>Medical Tip:</strong> {item.advice}
                   </p>
                 </div>
@@ -889,7 +889,7 @@ Calculated on CalcPlatform Due Date Engine.`;
             onClick={() => window.print()}
             className="px-3.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            <Printer className="h-3.5 w-3.5" /> Print Report
+            <Printer className="h-3.5 w-3.5" /> Print
           </button>
         </div>
 

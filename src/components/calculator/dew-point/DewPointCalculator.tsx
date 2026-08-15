@@ -204,26 +204,7 @@ export function DewPointCalculator() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={handleCopySummary}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer"
-          >
-            {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5" />}
-            {copied ? "Copied" : "Share Summary"}
-          </Button>
-
-          <Button
-            onClick={() => setShowReportModal(true)}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer bg-sky-50 text-sky-700 hover:bg-sky-100 dark:bg-sky-950/40 dark:text-sky-300 border-sky-200"
-          >
-            <Printer className="h-3.5 w-3.5" /> PDF Safety Report
-          </Button>
-        </div>
+        
       </div>
 
       {/* 2. SPLIT PANE INTERFACE */}

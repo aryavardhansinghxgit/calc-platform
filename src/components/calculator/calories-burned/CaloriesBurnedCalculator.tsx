@@ -474,28 +474,12 @@ Calculated via CalcPlatform Clinical Health Engine`;
 
             {/* Action Bar */}
             <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={handleSaveCalculation} className="bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 text-xs gap-1.5">
-                  <Bookmark className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                  Save Calculation
-                </Button>
-
-                <Button variant="outline" size="sm" onClick={handleCopySummary} className="bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 text-xs gap-1.5">
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-zinc-500" />}
-                  {copied ? "Copied!" : "Copy Summary"}
-                </Button>
-              </div>
+              
 
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={handleShare} className="bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 text-xs gap-1.5">
-                  <Share2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-                  Share
-                </Button>
+                
 
-                <Button variant="outline" size="sm" onClick={handlePrint} className="bg-amber-600 text-white hover:bg-amber-700 border-amber-600 text-xs gap-1.5 shadow-sm">
-                  <Printer className="w-3.5 h-3.5" />
-                  Print / PDF Report
-                </Button>
+                
               </div>
             </div>
           </CardContent>

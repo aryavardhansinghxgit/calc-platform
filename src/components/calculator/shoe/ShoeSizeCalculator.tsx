@@ -217,27 +217,7 @@ export function ShoeSizeCalculator() {
           </button>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={handleCopySummary}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer"
-          >
-            {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5" />}
-            {copied ? "Copied" : "Share Fit"}
-          </Button>
-
-          <Button
-            onClick={() => setShowReportModal(true)}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 border-emerald-200"
-          >
-            <Printer className="h-3.5 w-3.5" /> PDF Profile
-          </Button>
-        </div>
+        
       </div>
 
       {/* 2. TAB 1: MEASURE BY FOOT DIMENSIONS */}

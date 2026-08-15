@@ -333,7 +333,7 @@ export function PercentageCalculator() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleSave}
-                  className="text-xs text-slate-300 hover:text-white flex items-center gap-1 font-semibold px-2 py-0.5 bg-slate-800 hover:bg-slate-700 rounded transition-colors no-print"
+                  className="text-xs text-slate-800 dark:text-slate-200 font-semibold bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs flex items-center gap-1 font-semibold px-2 py-0.5 bg-slate-800 hover:bg-slate-700 rounded transition-colors no-print"
                   title="Save calculation"
                 >
                   {justSaved ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Bookmark className="w-3.5 h-3.5 text-blue-400" />}
@@ -341,7 +341,7 @@ export function PercentageCalculator() {
                 </button>
                 <button
                   onClick={handleCopy}
-                  className="text-xs text-slate-300 hover:text-white flex items-center gap-1 font-semibold no-print"
+                  className="text-xs text-slate-800 dark:text-slate-200 font-semibold bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs flex items-center gap-1 font-semibold no-print"
                 >
                   {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                   {copied ? "Copied" : "Copy"}

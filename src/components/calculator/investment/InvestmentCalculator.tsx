@@ -392,14 +392,7 @@ export function InvestmentCalculator() {
           >
             <Bookmark className="h-3.5 w-3.5 text-indigo-500" /> Save Scenario
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleShare}
-            className="h-8 text-xs font-semibold gap-1.5"
-          >
-            <Share2 className="h-3.5 w-3.5 text-blue-500" /> Share Result
-          </Button>
+          
           <Button
             variant="default"
             size="sm"

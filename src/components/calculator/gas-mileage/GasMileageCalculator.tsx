@@ -581,7 +581,7 @@ export function GasMileageCalculator() {
             </button>
 
             {showAdvanced && (
-              <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl space-y-2 text-xs text-zinc-600 dark:text-zinc-300">
+              <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl space-y-2 text-xs text-slate-800 dark:text-slate-200 font-semibold">
                 <div className="grid grid-cols-2 gap-2">
                   <label className="flex items-center gap-1.5 cursor-pointer">
                     <input

@@ -174,7 +174,7 @@ export function HeatIndexCalculator() {
             <Sun className="h-3.5 w-3.5 fill-amber-500" /> Direct Sun Exposure (+15°F / +8.3°C Radiant Load)
           </label>
 
-          <label className="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-zinc-600 dark:text-zinc-300">
+          <label className="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-slate-800 dark:text-slate-200 font-semibold">
             <input
               type="checkbox"
               checked={showWBGT}
@@ -185,26 +185,7 @@ export function HeatIndexCalculator() {
           </label>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={handleCopySummary}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer"
-          >
-            {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5" />}
-            {copied ? "Copied" : "Share Summary"}
-          </Button>
 
-          <Button
-            onClick={() => setShowReportModal(true)}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer bg-amber-50 text-amber-700 hover:bg-amber-100 dark:bg-amber-950/40 dark:text-amber-300 border-amber-200"
-          >
-            <Printer className="h-3.5 w-3.5" /> Safety Briefing PDF
-          </Button>
-        </div>
       </div>
 
       {/* 2. SPLIT PANE INTERFACE */}

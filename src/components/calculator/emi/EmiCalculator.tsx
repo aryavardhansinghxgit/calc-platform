@@ -230,7 +230,7 @@ export function EmiCalculator() {
     setValidationError("");
   };
 
-  // Save Calculation
+  // Save
   const handleSaveCalculation = (e: React.FormEvent) => {
     e.preventDefault();
     const newSave: SavedEmiCalculation = {
@@ -379,15 +379,7 @@ export function EmiCalculator() {
               {shareSuccessMsg}
             </span>
           )}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleShareUrl}
-            className="h-8 text-xs gap-1.5 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 cursor-pointer"
-          >
-            <Share2 className="h-3.5 w-3.5 text-blue-500" /> Share Link
-          </Button>
+          
           <Button
             type="button"
             variant="outline"

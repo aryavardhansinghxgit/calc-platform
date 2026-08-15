@@ -147,7 +147,7 @@ export function MortgageCalculator() {
   const [showExtraPayments, setShowExtraPayments] = useState<boolean>(true);
   const [activeChartTab, setActiveChartTab] = useState<"doughnut" | "balance" | "area">("doughnut");
 
-  // Save Calculation Modal & State
+  // Save Modal & State
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
   const [saveName, setSaveName] = useState<string>("");
@@ -456,8 +456,8 @@ export function MortgageCalculator() {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
-      {/* Top Action Bar: Save Calculation & Load Saved Calculations */}
-      {/* Top Action Bar: Save Calculation & Load Saved Calculations */}
+      {/* Top Action Bar: Save & Load Saved Calculations */}
+      {/* Top Action Bar: Save & Load Saved Calculations */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
         <div className="flex items-center gap-2">
           <Bookmark className="h-4 w-4 text-blue-600 dark:text-blue-400" />
@@ -493,7 +493,7 @@ export function MortgageCalculator() {
             onClick={() => setIsSaveModalOpen(true)}
             className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl px-4 py-2 text-xs shadow-md shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center gap-1.5 cursor-pointer"
           >
-            <Bookmark className="h-3.5 w-3.5" /> Save Calculation
+            <Bookmark className="h-3.5 w-3.5" /> Save
           </button>
         </div>
       </div>
@@ -1338,7 +1338,7 @@ export function MortgageCalculator() {
         </CardContent>
       </Card>
 
-      {/* Save Calculation Modal Dialog */}
+      {/* Save Modal Dialog */}
       {isSaveModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
           <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-2xl max-w-lg w-full p-6 space-y-4 relative">
@@ -1356,7 +1356,7 @@ export function MortgageCalculator() {
               </div>
               <div>
                 <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
-                  Save Calculation
+                  Save
                 </h3>
                 <p className="text-xs text-zinc-500">
                   Please provide a name and description to save it to your account (up to 100 calculations)
@@ -1421,7 +1421,7 @@ export function MortgageCalculator() {
                     Reset
                   </Button>
                   <Button type="submit" className="h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white">
-                    Save Calculation
+                    Save
                   </Button>
                 </div>
               </form>

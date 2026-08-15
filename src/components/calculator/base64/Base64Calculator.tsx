@@ -372,7 +372,7 @@ export function Base64Calculator() {
               }`}
             >
               <span>Standard</span>
-              <span className={`px-1.5 py-0.2 text-[10px] font-sans tabular-nums rounded ${variant === "standard" ? "bg-blue-700 text-white" : "bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300"}`}>
+              <span className={`px-1.5 py-0.2 text-[10px] font-sans tabular-nums rounded ${variant === "standard" ? "bg-blue-700 text-white" : "bg-zinc-200 dark:bg-zinc-700 text-slate-800 dark:text-slate-200 font-semibold"}`}>
                 + /
               </span>
             </button>
@@ -385,7 +385,7 @@ export function Base64Calculator() {
               }`}
             >
               <span>URL-Safe</span>
-              <span className={`px-1.5 py-0.2 text-[10px] font-sans tabular-nums rounded ${variant === "urlsafe" ? "bg-purple-700 text-white" : "bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300"}`}>
+              <span className={`px-1.5 py-0.2 text-[10px] font-sans tabular-nums rounded ${variant === "urlsafe" ? "bg-purple-700 text-white" : "bg-zinc-200 dark:bg-zinc-700 text-slate-800 dark:text-slate-200 font-semibold"}`}>
                 - _
               </span>
             </button>
