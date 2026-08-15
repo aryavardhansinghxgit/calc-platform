@@ -1,17 +1,19 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { type FormEvent, useMemo, useState } from "react";
 import {
   BarChart3,
+  Bookmark,
+  Check,
   Clipboard,
   Download,
+  FolderOpen,
   History,
   Info,
-  Printer,
-  RotateCcw,
   Save,
   Trash2,
   TrendingUp,
+  X,
 } from "lucide-react";
 
 type ErrorMode = "absolute" | "signed";
@@ -30,6 +32,8 @@ interface ErrorResult {
 
 interface SavedRun {
   id: string;
+  name?: string;
+  description?: string;
   observed: number;
   trueValue: number;
   percent: number;
@@ -82,14 +86,18 @@ export function PercentErrorCalculator() {
     if (typeof window === "undefined") return [];
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
+      const parsed = stored ? JSON.parse(stored) : [];
+      return Array.isArray(parsed) ? parsed : [];
     } catch {
       return [];
     }
   });
   const [batchText, setBatchText] = useState("56.891,62.327\n9.5,9.8\n100,98");
   const [copied, setCopied] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [saveName, setSaveName] = useState("");
+  const [saveDescription, setSaveDescription] = useState("");
+  const [saveSuccessMessage, setSaveSuccessMessage] = useState("");
 
   const result = useMemo<ErrorResult | null>(() => {
     const measured = parseValue(observed);
@@ -162,19 +170,41 @@ export function PercentErrorCalculator() {
     }
   };
 
-  const handleSave = () => {
+  const handleOpenSave = () => {
+    if (!result) return;
+    setSaveName("");
+    setSaveDescription("");
+    setSaveSuccessMessage("");
+    setIsSaveModalOpen(true);
+  };
+
+  const handleSave = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (!result) return;
     const next: SavedRun = {
       id: `${Date.now()}`,
+      name: saveName.trim() || `Percent error: ${formatValue(result.absolutePercent)}%`,
+      description: saveDescription.trim() || `${formatValue(result.observed, 6)} observed vs ${formatValue(result.trueValue, 6)} true`,
       observed: result.observed,
       trueValue: result.trueValue,
       percent: result.absolutePercent,
       direction: result.direction,
       createdAt: new Date().toISOString(),
     };
-    persistRuns([next, ...savedRuns.filter((run) => !(run.observed === next.observed && run.trueValue === next.trueValue))].slice(0, 20));
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 1800);
+    const updatedRuns = [next, ...savedRuns.filter((run) => !(run.observed === next.observed && run.trueValue === next.trueValue))].slice(0, 20);
+    persistRuns(updatedRuns);
+    setSaveSuccessMessage("Calculation saved successfully.");
+  };
+
+  const handleLoadSavedRun = (run: SavedRun) => {
+    setObserved(String(run.observed));
+    setTrueValue(String(run.trueValue));
+    setMode("absolute");
+    setIsSaveModalOpen(false);
+  };
+
+  const handleDeleteSavedRun = (id: string) => {
+    persistRuns(savedRuns.filter((run) => run.id !== id));
   };
 
   const handleExport = () => {
@@ -190,9 +220,9 @@ export function PercentErrorCalculator() {
     downloadFile("percent-error-batch.csv", csv, "text/csv;charset=utf-8");
   };
 
-  const handleReset = () => {
-    setObserved(DEFAULT_OBSERVED);
-    setTrueValue(DEFAULT_TRUE);
+  const handleClear = () => {
+    setObserved("0");
+    setTrueValue("0");
     setMode("absolute");
   };
 
@@ -202,6 +232,14 @@ export function PercentErrorCalculator() {
 
   return (
     <div className="space-y-4">
+      <div className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-zinc-50 p-3 shadow-sm dark:border-zinc-700 dark:bg-zinc-800/70 sm:flex-row sm:items-center sm:justify-between">
+        <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+          <button type="button" onClick={handleOpenSave} disabled={!result} className="w-full rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40">Save</button>
+          <button type="button" onClick={handleExport} disabled={!result} className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-600 transition hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">Export</button>
+          <button type="button" onClick={() => void handleCopy()} disabled={!result} className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-600 transition hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">{copied ? "Copied" : "Copy"}</button>
+          <button type="button" onClick={handleClear} className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-600 transition hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800">Clear</button>
+        </div>
+      </div>
       <section className="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex flex-col gap-3 border-b border-zinc-200 bg-zinc-50/80 p-4 dark:border-zinc-800 dark:bg-zinc-950/50 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -235,13 +273,6 @@ export function PercentErrorCalculator() {
               ))}
             </div>
 
-            <div className="flex flex-wrap gap-2 border-t border-zinc-100 pt-3 dark:border-zinc-800">
-              <button type="button" onClick={handleReset} className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"><RotateCcw className="h-3.5 w-3.5" /> Reset</button>
-              <button type="button" onClick={handleSave} disabled={!result} className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40"><Save className="h-3.5 w-3.5" /> {saved ? "Saved" : "Save run"}</button>
-              <button type="button" onClick={() => void handleCopy()} disabled={!result} className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-600 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"><Clipboard className="h-3.5 w-3.5" /> {copied ? "Copied" : "Copy"}</button>
-              <button type="button" onClick={handleExport} disabled={!result} className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-600 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"><Download className="h-3.5 w-3.5" /> Export</button>
-              <button type="button" onClick={() => window.print()} className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"><Printer className="h-3.5 w-3.5" /> Print</button>
-            </div>
           </div>
 
           <div className="min-w-0 rounded-xl border border-blue-100 bg-blue-50/60 p-4 dark:border-blue-900/70 dark:bg-blue-950/20">
@@ -271,6 +302,8 @@ export function PercentErrorCalculator() {
       <section className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-5"><div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"><div><div className="flex items-center gap-2"><TrendingUp className="h-4 w-4 text-emerald-600" /><h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Batch percent error analyzer</h2></div><p className="mt-1 text-xs text-zinc-500">Paste one observed,true pair per line. Commas and semicolons are accepted.</p></div><button type="button" onClick={handleExportBatch} disabled={!batchRows.length} className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-600 hover:bg-zinc-50 disabled:opacity-40 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"><Download className="h-3.5 w-3.5" /> Export CSV</button></div><textarea value={batchText} onChange={(event) => setBatchText(event.target.value)} aria-label="Batch observed and true value pairs" className="mt-4 min-h-24 w-full resize-y rounded-xl border border-zinc-300 bg-zinc-50 p-3 font-sans tabular-nums text-xs leading-5 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100" placeholder="observed,true\n56.891,62.327" /><div className="mt-3 overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-800"><table className="w-full min-w-[520px] text-left text-xs"><thead className="bg-zinc-50 text-[10px] uppercase tracking-wider text-zinc-500 dark:bg-zinc-950"><tr><th className="px-3 py-2">#</th><th className="px-3 py-2">Observed</th><th className="px-3 py-2">True</th><th className="px-3 py-2">Absolute error</th><th className="px-3 py-2">Percent error</th></tr></thead><tbody>{batchRows.map((row, index) => <tr key={`${index}-${row.observed}-${row.trueValue}`} className="border-t border-zinc-100 dark:border-zinc-800"><td className="px-3 py-2 text-zinc-400">{index + 1}</td><td className="px-3 py-2 font-sans tabular-nums">{row.valid ? formatValue(row.observed, 6) : "Invalid"}</td><td className="px-3 py-2 font-sans tabular-nums">{row.valid ? formatValue(row.trueValue, 6) : "Invalid"}</td><td className="px-3 py-2 font-sans tabular-nums">{row.valid ? formatValue(row.absoluteError, 6) : "—"}</td><td className={`px-3 py-2 font-sans tabular-nums font-bold ${row.valid ? "text-blue-600 dark:text-blue-400" : "text-red-500"}`}>{row.valid ? `${formatValue(row.percent)}%` : "Check true value"}</td></tr>)}</tbody></table></div>{batchRows.some((row) => row.valid) && <p className="mt-3 flex items-center gap-2 text-xs font-semibold text-zinc-600 dark:text-zinc-300"><BarChart3 className="h-3.5 w-3.5 text-blue-500" />Average absolute percent error: <span className="font-sans tabular-nums text-blue-600 dark:text-blue-400">{formatValue(batchAverage)}%</span></p>}</section>
 
       {savedRuns.length > 0 && <section className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 sm:p-5"><div className="flex items-center justify-between gap-3"><div className="flex items-center gap-2"><History className="h-4 w-4 text-blue-600" /><h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Saved calculations</h2><span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-bold text-zinc-500 dark:bg-zinc-800">{savedRuns.length}</span></div><button type="button" onClick={() => persistRuns([])} className="inline-flex items-center gap-1 text-[11px] font-semibold text-zinc-400 hover:text-red-500"><Trash2 className="h-3 w-3" /> Clear all</button></div><div className="mt-3 grid gap-2 sm:grid-cols-2">{savedRuns.map((run) => <div key={run.id} className="flex items-center justify-between gap-3 rounded-lg border border-zinc-100 bg-zinc-50 p-2.5 dark:border-zinc-800 dark:bg-zinc-950"><div className="min-w-0"><p className="truncate font-sans tabular-nums text-xs font-bold text-zinc-800 dark:text-zinc-200">{formatValue(run.observed, 6)} vs {formatValue(run.trueValue, 6)}</p><p className="mt-0.5 text-[10px] text-zinc-400">{new Date(run.createdAt).toLocaleString()}</p></div><span className="shrink-0 font-sans tabular-nums text-xs font-bold text-blue-600 dark:text-blue-400">{formatValue(run.percent)}%</span></div>)}</div></section>}
+
+      {isSaveModalOpen && <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"><div className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-5 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 sm:p-6"><button type="button" onClick={() => setIsSaveModalOpen(false)} className="absolute right-4 top-4 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200" aria-label="Close save dialog"><X className="h-5 w-5" /></button><div className="flex items-center gap-2.5"><div className="rounded-lg bg-blue-100 p-2 text-blue-600 dark:bg-blue-950 dark:text-blue-400"><Bookmark className="h-5 w-5" /></div><div><h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">Save Calculation</h3><p className="text-xs text-zinc-500">Name this result so you can load it later from this device.</p></div></div>{saveSuccessMessage ? <div className="mt-4 flex items-center gap-2 rounded-lg bg-emerald-50 p-3 text-xs font-semibold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"><Check className="h-4 w-4" /> {saveSuccessMessage}</div> : <form onSubmit={handleSave} className="mt-4 space-y-3"><div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 text-xs dark:border-zinc-700 dark:bg-zinc-800/60"><span className="block text-zinc-500">Current calculation</span><span className="mt-1 block font-sans tabular-nums text-sm font-bold text-zinc-900 dark:text-zinc-100">{result ? `${formatValue(result.absolutePercent)}% absolute error` : "No valid result"}</span><span className="mt-1 block text-[11px] text-zinc-500">{result ? `${formatValue(result.observed, 6)} observed vs ${formatValue(result.trueValue, 6)} true` : "Enter a non-zero true value first."}</span></div><label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Name (optional)<input type="text" value={saveName} onChange={(event) => setSaveName(event.target.value)} placeholder="e.g. Physics lab trial 1" className="mt-1 h-9 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-xs font-normal outline-none focus:border-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100" /></label><label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Description (optional)<textarea rows={2} value={saveDescription} onChange={(event) => setSaveDescription(event.target.value)} placeholder="e.g. Gravity measurement before calibration" className="mt-1 w-full rounded-lg border border-zinc-200 bg-zinc-50 p-2 text-xs font-normal outline-none focus:border-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100" /></label><div className="flex justify-end gap-2 pt-1"><button type="button" onClick={() => { setSaveName(""); setSaveDescription(""); }} className="rounded-lg border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800">Clear</button><button type="submit" className="rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700">Save Calculation</button></div></form>}{savedRuns.length > 0 && <div className="mt-5 space-y-2 border-t border-zinc-100 pt-4 dark:border-zinc-800"><span className="flex items-center gap-1.5 text-xs font-bold text-zinc-700 dark:text-zinc-300"><FolderOpen className="h-3.5 w-3.5 text-blue-500" /> Saved Calculations ({savedRuns.length})</span><div className="max-h-48 space-y-2 overflow-y-auto">{savedRuns.map((run) => <div key={run.id} className="flex items-center justify-between gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-2.5 dark:border-zinc-700 dark:bg-zinc-800/70"><div className="min-w-0"><span className="block truncate text-xs font-bold text-zinc-900 dark:text-zinc-100">{run.name || `Percent error: ${formatValue(run.percent)}%`}</span><span className="mt-0.5 block truncate text-[10px] text-zinc-500">{run.description || `${formatValue(run.observed, 6)} observed vs ${formatValue(run.trueValue, 6)} true`} • {new Date(run.createdAt).toLocaleDateString()}</span></div><div className="flex shrink-0 items-center gap-1"><button type="button" onClick={() => handleLoadSavedRun(run)} className="rounded px-2 py-1 text-[10px] font-semibold text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-950/40">Load</button><button type="button" onClick={() => handleDeleteSavedRun(run.id)} className="p-1 text-zinc-400 hover:text-red-500" title="Delete saved calculation"><Trash2 className="h-3.5 w-3.5" /></button></div></div>)}</div></div>}</div></div>}
 
       <p className="flex items-start gap-2 px-1 text-[11px] leading-5 text-zinc-500"><Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-500" />Use the same units for both inputs. Percent error is unitless, but the absolute error keeps the units of the original measurement.</p>
     </div>
