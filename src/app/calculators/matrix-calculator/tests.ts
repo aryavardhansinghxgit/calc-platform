@@ -1,45 +1,52 @@
 import { calculateMatrixCalculator } from "./calculator";
+import {
+  multiplyMatrices,
+  determinantMatrix,
+  inverseMatrix,
+  rrefMatrix,
+  solveLinearSystem,
+  computeEigenvalues2x2or3x3
+} from "./matrix-logic";
 
 export function runMatrixCalculatorTests() {
-  const defaultInputs = {
-  "a11": 1,
-  "a12": 2,
-  "a21": 3,
-  "a22": 4,
-  "operation": "det"
-};
-  const res1 = calculateMatrixCalculator(defaultInputs);
-  if (!res1 || typeof res1 !== "object") throw new Error("Formula failed for default inputs");
+  // Test 1: 2x2 Determinant det([1 2; 3 4]) = -2
+  const res1 = calculateMatrixCalculator({ a11: 1, a12: 2, a21: 3, a22: 4 });
+  if (res1.detA !== -2) {
+    throw new Error(`Expected det([1 2; 3 4]) = -2, got ${res1.detA}`);
+  }
 
-  const zeroInputs = {
-  "a11": 0,
-  "a12": 0,
-  "a21": 0,
-  "a22": 0,
-  "operation": 0
-};
-  const res2 = calculateMatrixCalculator(zeroInputs);
-  if (!res2) throw new Error("Formula failed for zero inputs");
+  // Test 2: Matrix Multiplication [1 2; 3 4] x [5 6; 7 8] = [19 22; 43 50]
+  const mult = multiplyMatrices(
+    [[1, 2], [3, 4]],
+    [[5, 6], [7, 8]]
+  );
+  if (mult[0][0] !== 19 || mult[0][1] !== 22 || mult[1][0] !== 43 || mult[1][1] !== 50) {
+    throw new Error(`Matrix multiplication failed: got ${JSON.stringify(mult)}`);
+  }
 
-  const negInputs = {
-  "a11": -50,
-  "a12": -50,
-  "a21": -50,
-  "a22": -50,
-  "operation": -50
-};
-  const res3 = calculateMatrixCalculator(negInputs);
-  if (!res3) throw new Error("Formula failed for negative inputs");
+  // Test 3: Matrix Inverse [2 4; 3 7] -> det 2, inv [3.5 -2; -1.5 1]
+  const inv = inverseMatrix([[2, 4], [3, 7]]);
+  if (inv[0][0] !== 3.5 || inv[0][1] !== -2 || inv[1][0] !== -1.5 || inv[1][1] !== 1) {
+    throw new Error(`Matrix inverse failed: got ${JSON.stringify(inv)}`);
+  }
 
-  const nanInputs = {
-  "a11": null,
-  "a12": null,
-  "a21": null,
-  "a22": null,
-  "operation": null
-};
-  const res4 = calculateMatrixCalculator(nanInputs);
-  if (!res4) throw new Error("Formula failed for NaN inputs");
+  // Test 4: RREF of [[1, 2, 3], [4, 5, 6]]
+  const { rref, rank } = rrefMatrix([[1, 2, 3], [4, 5, 6]]);
+  if (rank !== 2 || rref[0][0] !== 1 || rref[1][1] !== 1) {
+    throw new Error(`RREF failed: rank ${rank}, rref ${JSON.stringify(rref)}`);
+  }
+
+  // Test 5: Linear System Solver Ax = b ([2 1; 1 3], b=[5, 10] -> x=[1, 3])
+  const sol = solveLinearSystem([[2, 1], [1, 3]], [5, 10]);
+  if (!sol.hasSolution || !sol.isUnique || sol.solutionVector?.[0] !== 1 || sol.solutionVector?.[1] !== 3) {
+    throw new Error(`Ax = b solver failed: got ${sol.solutionString}`);
+  }
+
+  // Test 6: Zero & Edge Inputs
+  const resZero = calculateMatrixCalculator({ a11: 0, a12: 0, a21: 0, a22: 0 });
+  if (!resZero || typeof resZero.detA !== "number") {
+    throw new Error("Formula failed for zero inputs");
+  }
 
   return true;
 }
