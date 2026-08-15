@@ -147,6 +147,24 @@ function NormalCurveSVG({ mean, stdDev, leftBound, rightBound }: { mean: number;
 }
 
 export function ProbabilityCalculator() {
+  const [savedSection, setSavedSection] = useState<string | null>(null);
+
+  const handleSaveResult = (sectionId: string, sectionTitle: string, summaryText: string) => {
+    try {
+      const existing = JSON.parse(localStorage.getItem("saved_calc_probability-calculator") || "[]");
+      const newItem = {
+        id: Date.now().toString(),
+        title: `Probability - ${sectionTitle}`,
+        primaryResult: summaryText,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      const updated = [newItem, ...existing.filter((item: any) => item.primaryResult !== summaryText)].slice(0, 15);
+      localStorage.setItem("saved_calc_probability-calculator", JSON.stringify(updated));
+      setSavedSection(sectionId);
+      setTimeout(() => setSavedSection(null), 2000);
+    } catch (e) {}
+  };
+
   // SECTION 1: Probability of Two Events
   const [s1PA, setS1PA] = useState<string>("0.5");
   const [s1PB, setS1PB] = useState<string>("0.4");
@@ -323,10 +341,27 @@ export function ProbabilityCalculator() {
         {/* Output Section 1 */}
         {s1Result && (
           <div className="space-y-4 pt-2">
-            {/* Header Result Box */}
+            {/* Header Result Box with Save Button */}
             <div className="border border-blue-600 rounded overflow-hidden max-w-xl">
-              <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5">
-                Result
+              <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5 flex items-center justify-between">
+                <span>Result</span>
+                <button
+                  type="button"
+                  onClick={() => handleSaveResult("s1", "Two Events", `P(A)=${s1Result.pA}, P(B)=${s1Result.pB}, P(A∩B)=${s1Result.pIntersection.toFixed(4)}, P(A∪B)=${s1Result.pUnion.toFixed(4)}`)}
+                  className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+                >
+                  {savedSection === "s1" ? (
+                    <>
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"/></svg>
+                      <span>Saved!</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                      <span>Save</span>
+                    </>
+                  )}
+                </button>
               </div>
               <div className="bg-white dark:bg-slate-900 p-3 text-xs space-y-2 font-sans">
                 <div className="flex items-center justify-between py-1 border-b border-slate-100 dark:border-slate-800">
@@ -569,11 +604,28 @@ export function ProbabilityCalculator() {
           </p>
         </form>
 
-        {/* Solver Results */}
+        {/* Solver Results with Save Button */}
         {s1SolResult && s1SolResult.result && (
           <div className="border border-blue-600 rounded overflow-hidden max-w-md pt-2">
-            <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5">
-              Result
+            <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5 flex items-center justify-between">
+              <span>Result</span>
+              <button
+                type="button"
+                onClick={() => handleSaveResult("s1sol", "Two Events Solver", `Solver: P(A)=${s1SolResult.result?.pA}, P(B)=${s1SolResult.result?.pB}`)}
+                className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                {savedSection === "s1sol" ? (
+                  <>
+                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"/></svg>
+                    <span>Saved!</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                    <span>Save</span>
+                  </>
+                )}
+              </button>
             </div>
             <div className="bg-white dark:bg-slate-900 p-4 text-xs font-sans tabular-nums space-y-2">
               {s1SolResult.steps?.map((step, idx) => (
@@ -666,11 +718,28 @@ export function ProbabilityCalculator() {
           </div>
         </form>
 
-        {/* Section 2 Results */}
+        {/* Section 2 Results with Save Button */}
         {s2Result && (
           <div className="border border-blue-600 rounded overflow-hidden max-w-xl">
-            <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5">
-              Result
+            <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5 flex items-center justify-between">
+              <span>Result</span>
+              <button
+                type="button"
+                onClick={() => handleSaveResult("s2", "Series of Events", `Series A: P=${s2PA}^${s2RepeatA}=${s2Result.pAAll.toFixed(4)}, Series B: P=${s2PB}^${s2RepeatB}=${s2Result.pBAll.toFixed(4)}`)}
+                className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                {savedSection === "s2" ? (
+                  <>
+                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"/></svg>
+                    <span>Saved!</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                    <span>Save</span>
+                  </>
+                )}
+              </button>
             </div>
             <div className="bg-white dark:bg-slate-900 p-4 text-xs font-sans tabular-nums space-y-2">
               <p>Probability of A occuring {s2RepeatA} time(s) = {s2PA}<sup>{s2RepeatA}</sup> = <strong>{s2Result.pAAll.toFixed(5)}</strong></p>
@@ -786,12 +855,29 @@ export function ProbabilityCalculator() {
           </div>
         </div>
 
-        {/* Section 3 Results */}
+        {/* Section 3 Results with Save Button */}
         {s3Result && (
           <div className="space-y-4 pt-2">
             <div className="border border-blue-600 rounded overflow-hidden max-w-xl">
-              <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5">
-                Result
+              <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5 flex items-center justify-between">
+                <span>Result</span>
+                <button
+                  type="button"
+                  onClick={() => handleSaveResult("s3", "Normal Distribution", `Normal Dist: μ=${s3Result.norm.mean}, σ=${s3Result.norm.stdDev}, Area P=${s3Result.norm.probBetween.toFixed(5)}`)}
+                  className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+                >
+                  {savedSection === "s3" ? (
+                    <>
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"/></svg>
+                      <span>Saved!</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+                      <span>Save</span>
+                    </>
+                  )}
+                </button>
               </div>
               <div className="bg-white dark:bg-slate-900 p-4 text-xs font-sans space-y-2">
                 <p>The probability between {s3Result.norm.leftBoundStr} and {s3Result.norm.rightBoundStr} is <strong className="text-blue-700 dark:text-blue-400 font-sans tabular-nums font-bold">{s3Result.norm.probBetween.toFixed(5)}</strong></p>

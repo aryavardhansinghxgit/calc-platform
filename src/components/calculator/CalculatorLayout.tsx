@@ -443,49 +443,6 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                 {definition.description}
               </p>
             </div>
-
-            {/* TOP RIGHT CORNER ACTION BUTTONS: Copy | Save | Share | Print */}
-            <div className="flex flex-wrap items-center gap-2 shrink-0 sm:ml-auto no-print">
-              <button
-                type="button"
-                onClick={handleCopyResult}
-                className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
-                title="Copy"
-              >
-                <Copy className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-                <span>{copied ? "Copied" : "Copy"}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleSaveCalculation}
-                className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
-                title="Save"
-              >
-                <Bookmark className="h-3.5 w-3.5 text-amber-500" />
-                <span>Save</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleShare}
-                className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
-                title="Share"
-              >
-                <ArrowRight className="h-3.5 w-3.5 text-blue-500" />
-                <span>Share</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handlePrint}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl px-3.5 py-1.5 text-xs shadow-md shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center gap-1.5 cursor-pointer"
-                title="Print"
-              >
-                <Printer className="h-3.5 w-3.5" />
-                <span>Print</span>
-              </button>
-            </div>
           </div>
 
           <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
