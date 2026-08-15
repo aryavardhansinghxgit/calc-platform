@@ -22,7 +22,7 @@ export function GPAContent() {
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-purple-600 dark:text-purple-400 text-sm">Cumulative GPA (CGPA)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">Cumulative GPA (CGPA)</h4>
             <p className="leading-relaxed">
               Encompasses your complete academic transcript history by combining all quality points and credit hours earned from freshman through senior years across your entire academic career.
             </p>
@@ -31,7 +31,7 @@ export function GPAContent() {
       </section>
 
       {/* 2. CORE MATHEMATICAL FORMULAS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           The Core Mathematical Formulas for GPA Calculation
         </h2>
@@ -42,22 +42,22 @@ export function GPAContent() {
         {/* Math Formula Cards */}
         <div className="space-y-3 my-4">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
-            <span className="text-slate-500 font-bold block text-[10px] uppercase">1. Quality Points Formula:</span>
+            <span className="text-slate-900 font-bold block text-[10px] uppercase">1. Quality Points Formula:</span>
             <div className="text-blue-600 dark:text-blue-400 font-extrabold text-sm">
               Quality Points = Grade Point Value × Credit Hours
             </div>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
-            <span className="text-slate-500 font-bold block text-[10px] uppercase">2. Semester GPA Formula:</span>
-            <div className="text-purple-600 dark:text-purple-400 font-extrabold text-sm">
+            <span className="text-slate-900 font-bold block text-[10px] uppercase">2. Semester GPA Formula:</span>
+            <div className="text-blue-600 dark:text-blue-400 font-extrabold text-sm">
               Semester GPA = Total Quality Points in Semester / Total Graded Credit Hours
             </div>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
-            <span className="text-slate-500 font-bold block text-[10px] uppercase">3. Cumulative GPA Formula:</span>
-            <div className="text-emerald-600 dark:text-emerald-400 font-extrabold text-sm">
+            <span className="text-slate-900 font-bold block text-[10px] uppercase">3. Cumulative GPA Formula:</span>
+            <div className="text-blue-600 dark:text-blue-400 font-extrabold text-sm">
               Cumulative GPA = (Prior Quality Points + Term Quality Points) / (Prior Credits + Term Credits)
             </div>
           </div>
@@ -84,7 +84,7 @@ export function GPAContent() {
             <tbody className="font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">Calculus I</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-emerald-600">A</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-blue-600">A</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">4.0</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">4.0</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold">16.0</td>
@@ -98,14 +98,14 @@ export function GPAContent() {
               </tr>
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">Chemistry</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-purple-600">B+</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-blue-600">B+</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">3.3</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">4.0</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold">13.2</td>
               </tr>
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">History</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-amber-600">B</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-blue-600">B</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">3.0</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">3.0</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold">9.0</td>
@@ -115,7 +115,7 @@ export function GPAContent() {
                   Total Semester
                 </td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 text-blue-600">14.0 Credits</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 text-purple-600">49.3 Points</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 text-blue-600">49.3 Points</td>
               </tr>
             </tbody>
           </table>
@@ -127,7 +127,7 @@ export function GPAContent() {
       </section>
 
       {/* 3. CONVERSION TABLE */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           Standard 4.0 Grade Point Conversion Table
         </h2>
@@ -151,14 +151,14 @@ export function GPAContent() {
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold">A+</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">4.0 / 4.33</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">4.50</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-purple-600">5.00</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-blue-600">5.00</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">97% – 100%</td>
               </tr>
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold">A</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">4.00</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">4.50</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-purple-600">5.00</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-blue-600">5.00</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">93% – 96%</td>
               </tr>
               <tr>
@@ -218,10 +218,10 @@ export function GPAContent() {
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">65% – 69%</td>
               </tr>
               <tr>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-rose-600">F</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 text-rose-600">0.00</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 text-rose-600">0.00</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 text-rose-600">0.00</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-blue-600">F</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 text-blue-600">0.00</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 text-blue-600">0.00</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 text-blue-600">0.00</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">&lt; 65%</td>
               </tr>
             </tbody>
@@ -230,7 +230,7 @@ export function GPAContent() {
       </section>
 
       {/* 4. WEIGHTED VS UNWEIGHTED */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           Weighted vs. Unweighted High School GPA
         </h2>
@@ -247,7 +247,7 @@ export function GPAContent() {
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-purple-600 dark:text-purple-400 text-sm">Weighted GPA (5.0 Scale)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">Weighted GPA (5.0 Scale)</h4>
             <p className="leading-relaxed">
               Incentivizes academic rigor by awarding extra point bonuses for challenging coursework: +0.5 for Honors classes and +1.0 for Advanced Placement (AP), International Baccalaureate (IB), and Dual Enrollment courses.
             </p>
@@ -256,7 +256,7 @@ export function GPAContent() {
       </section>
 
       {/* 5. INTERNATIONAL CONVERSIONS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           International Grading System Conversions
         </h2>
@@ -274,7 +274,7 @@ export function GPAContent() {
       </section>
 
       {/* 6. STRATEGIES TO RAISE GPA */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           Evidence-Based Strategies to Raise Your GPA
         </h2>
@@ -285,21 +285,21 @@ export function GPAContent() {
         <div className="space-y-3 my-4 text-xs">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-1">
             <h4 className="font-bold text-slate-900 dark:text-zinc-100">1. Prioritize High-Credit Courses</h4>
-            <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
+            <p className="leading-relaxed text-slate-900 dark:text-slate-100">
               A 4-credit science lecture carries double the weight of a 2-credit elective lab. Earning an A in a 4-credit course provides maximum quality point leverage.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-1">
             <h4 className="font-bold text-slate-900 dark:text-zinc-100">2. Utilize Grade Forgiveness &amp; Retake Policies</h4>
-            <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
+            <p className="leading-relaxed text-slate-900 dark:text-slate-100">
               Retaking a course where you earned a D or F replaces the low grade point value in your cumulative denominator with your new retake grade, boosting CGPA significantly faster than taking new courses.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-1">
             <h4 className="font-bold text-slate-900 dark:text-zinc-100">3. Recognize the &quot;Freshman Year Leverage Effect&quot;</h4>
-            <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
+            <p className="leading-relaxed text-slate-900 dark:text-slate-100">
               Raising your GPA is mathematically easiest during freshman and sophomore years when your earned credit total is small. Every early semester A has a powerful impact before cumulative inertia sets in.
             </p>
           </div>

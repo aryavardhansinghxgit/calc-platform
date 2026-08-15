@@ -219,7 +219,7 @@ export function EmiContentSection() {
       {/* 2. The EMI Formula */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Calculator className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+          <Calculator className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           2. The Mathematical EMI Formula
         </h2>
         <p className="text-sm leading-relaxed">
@@ -244,7 +244,7 @@ export function EmiContentSection() {
       {/* 3. Reducing Balance vs Flat Rate */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Percent className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+          <Percent className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           3. Reducing Balance Rate vs. Flat Interest Rate
         </h2>
         <p className="text-sm leading-relaxed">
@@ -255,7 +255,7 @@ export function EmiContentSection() {
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-500"></span> Reducing Balance Method (Standard)
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Interest is recalculated monthly on the remaining principal balance. As you pay off principal, monthly interest charges decrease continuously.
             </p>
           </div>
@@ -263,7 +263,7 @@ export function EmiContentSection() {
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-rose-500"></span> Flat Rate Method (Expensive)
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Interest is charged on the original starting principal balance for the entire loan life, even after 90% of principal has been paid. A 10% Flat Rate is equivalent to roughly 18% Reducing Balance!
             </p>
           </div>
@@ -273,7 +273,7 @@ export function EmiContentSection() {
       {/* 4. Prepayment Strategies */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <TrendingDown className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+          <TrendingDown className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           4. How Prepayments Work: Reduce Tenure vs. Reduce EMI
         </h2>
         <p className="text-sm leading-relaxed">
@@ -282,13 +282,13 @@ export function EmiContentSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Strategy 1: Reduce Tenure (Recommended)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Keep your monthly EMI constant. Extra prepayment accelerates principal payoff, finishing your loan months or years ahead of schedule and saving maximum interest.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Strategy 2: Reduce EMI</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Maintain your original loan payoff date. The lender recalculates a lower required monthly EMI on your smaller principal balance, improving monthly cash flow.
             </p>
           </div>
@@ -298,7 +298,7 @@ export function EmiContentSection() {
       {/* 5. Processing Fees */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <DollarSign className="h-5 w-5 text-teal-600 dark:text-teal-400" />
+          <DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           5. Understanding Processing Fees & Preclosure Charges
         </h2>
         <p className="text-sm leading-relaxed">
@@ -309,7 +309,7 @@ export function EmiContentSection() {
       {/* 6. Frequently Asked Questions (15 Questions) */}
       <section className="space-y-4">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <HelpCircle className="h-5 w-5 text-amber-500" />
+          <HelpCircle className="h-5 w-5 text-blue-600" />
           6. Frequently Asked Questions (FAQ)
         </h2>
 
@@ -322,7 +322,7 @@ export function EmiContentSection() {
               <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
                 {idx + 1}. {item.question}
               </h3>
-              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
                 {item.answer}
               </p>
             </div>
@@ -331,8 +331,8 @@ export function EmiContentSection() {
       </section>
 
       {/* Internal Links Grid */}
-      <div className="pt-6 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+      <div className="pt-6  dark:border-zinc-800 space-y-3">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
           Explore Other Financial Calculators on CalcPlatform
         </h4>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">

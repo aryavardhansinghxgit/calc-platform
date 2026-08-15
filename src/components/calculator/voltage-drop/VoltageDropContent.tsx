@@ -5,13 +5,13 @@ import { BookOpen, HelpCircle, AlertTriangle, Cpu, CheckCircle } from "lucide-re
 
 export function VoltageDropContent() {
   return (
-    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10  dark:border-zinc-800 pt-8">
       <header>
         <h2 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
           <BookOpen className="h-6 w-6 text-blue-600" />
           Comprehensive Electrical Guide: Conductor Impedance & Voltage Drop
         </h2>
-        <p className="text-zinc-500 dark:text-zinc-400 text-xs">
+        <p className="text-slate-900 dark:text-slate-100 text-xs">
           An authoritative reference on mathematical formulations, physical wire properties, and National Electrical Code (NEC) guidelines.
         </p>
       </header>
@@ -68,7 +68,7 @@ export function VoltageDropContent() {
             <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               {"V_d = (2 × I × L × R) / 1000"}
             </div>
-            <p className="text-[11px] text-zinc-500">For 2-wire circuits where loop distance is double the one-way run (2 × L).</p>
+            <p className="text-[11px] text-slate-900">For 2-wire circuits where loop distance is double the one-way run (2 × L).</p>
           </div>
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
@@ -76,7 +76,7 @@ export function VoltageDropContent() {
             <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               {"V_d = (2 × I × L × Z_eff) / 1000"}
             </div>
-            <p className="text-[11px] text-zinc-500">Combines AC resistance and inductive reactance: Z_eff = R × cos(θ) + X × sin(θ).</p>
+            <p className="text-[11px] text-slate-900">Combines AC resistance and inductive reactance: Z_eff = R × cos(θ) + X × sin(θ).</p>
           </div>
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
@@ -84,7 +84,7 @@ export function VoltageDropContent() {
             <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               {"V_d = (√3 × I × L × Z_eff) / 1000"}
             </div>
-            <p className="text-[11px] text-zinc-500">Calculates line-to-line voltage drop utilizing a factor of √3 ≈ 1.732.</p>
+            <p className="text-[11px] text-slate-900">Calculates line-to-line voltage drop utilizing a factor of √3 ≈ 1.732.</p>
           </div>
         </div>
 
@@ -151,7 +151,7 @@ export function VoltageDropContent() {
               <Cpu className="w-3.5 h-3.5 text-blue-600" />
               Example A: Residential Subpanel Run (Single-Phase AC)
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Calculate the voltage drop of a 240V, 100A, single-phase circuit running through PVC conduit for a one-way distance of 150 feet. Conductor size is 1 AWG copper with a power factor of 0.90.
             </p>
             <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
@@ -173,10 +173,10 @@ export function VoltageDropContent() {
           {/* Example 2 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
             <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-purple-600" />
+              <Cpu className="w-3.5 h-3.5 text-blue-600" />
               Example B: Industrial Motor Feed (Three-Phase AC)
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Calculate the line-to-line voltage drop for a 480V, three-phase, 120A induction motor running through steel conduit for a one-way distance of 400 feet. Conductor size is 3/0 AWG copper with a power factor of 0.85.
             </p>
             <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
@@ -208,7 +208,7 @@ export function VoltageDropContent() {
         <div className="overflow-x-auto border border-zinc-200 dark:border-zinc-800 rounded-xl">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
-              <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-b border-zinc-200 dark:border-zinc-700">
+              <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300  dark:border-zinc-700">
                 <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Size (AWG)</th>
                 <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Diameter (in)</th>
                 <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Area (kcmil)</th>
@@ -217,7 +217,7 @@ export function VoltageDropContent() {
                 <th className="p-2">Reactance (PVC, Ω/kft)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+            <tbody className=" dark:divide-zinc-800">
               <tr>
                 <td className="p-2 border-r font-semibold">14 AWG</td>
                 <td className="p-2 border-r">0.0641</td>
@@ -292,8 +292,8 @@ export function VoltageDropContent() {
         <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
           <span>7.</span> Common Engineering Mistakes & Pitfalls
         </h3>
-        <div className="p-4 border border-amber-200 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/20 rounded-2xl space-y-2">
-          <p className="flex items-center gap-1 text-amber-800 dark:text-amber-400 font-bold text-xs">
+        <div className="p-4 border border-amber-200 dark:border-amber-900/60 bg-blue-50/50 dark:bg-blue-50/20 rounded-2xl space-y-2">
+          <p className="flex items-center gap-1 text-amber-800 dark:text-blue-400 font-bold text-xs">
             <AlertTriangle className="w-4 h-4" /> Avoid these critical assumptions:
           </p>
           <ul className="list-disc pl-5 space-y-1.5 text-xs">

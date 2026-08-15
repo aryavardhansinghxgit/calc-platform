@@ -23,11 +23,11 @@ export function BudgetContent() {
           <BookOpen className="h-7 w-7 text-blue-600 dark:text-blue-400" />
           Mastering Personal Budgeting: The Complete Financial Blueprint
         </h2>
-        <p className="text-sm sm:text-base leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm sm:text-base leading-relaxed text-slate-900 dark:text-zinc-300">
           A personal budget is the foundational architecture of long-term financial freedom.
           Whether your objective is escaping consumer credit card debt, purchasing a home, funding higher education, or achieving early retirement (FIRE), a structured budget converts passive income into intentional wealth building. By carefully tracking all household cash inflows alongside fixed and variable expenses, you eliminate financial anxiety and gain complete control over your money.
         </p>
-        <p className="text-sm sm:text-base leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm sm:text-base leading-relaxed text-slate-900 dark:text-zinc-300">
           Our advanced <strong>Budget Calculator</strong> goes far beyond primitive single-field spending logs. It analyzes multi-stream gross incomes, calculates precise net after-tax take-home pay, evaluates front-end and back-end Debt-to-Income (DTI) ratios, benchmarks allocations against the famous <strong>50/30/20 Rule</strong>, and provides real-time sensitivity stress testing for unexpected inflation spikes or income changes.
         </p>
       </section>
@@ -35,10 +35,10 @@ export function BudgetContent() {
       {/* 2. Key Budgeting Frameworks Compared */}
       <section className="space-y-4">
         <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Layers className="h-6 w-6 text-emerald-500" />
+          <Layers className="h-6 w-6 text-blue-600" />
           Popular Budgeting Methodologies Compared
         </h2>
-        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
           No single budgeting framework fits every lifestyle. Understanding the mechanics of the leading financial philosophies enables you to choose the strategy best suited to your risk tolerance and goals.
         </p>
 
@@ -49,7 +49,7 @@ export function BudgetContent() {
               <PieChart className="h-4 w-4 text-blue-500" />
               <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">The 50/30/20 Rule</h3>
             </div>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Popularized by Senator Elizabeth Warren, this rule allocates net take-home pay into three proportional buckets: <strong>50% Needs</strong> (housing, food, utilities), <strong>30% Wants</strong> (dining, hobbies, travel), and <strong>20% Savings & Debt Repayment</strong>.
             </p>
             <span className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 block">
@@ -60,16 +60,16 @@ export function BudgetContent() {
           {/* Framework 2 */}
           <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-2">
             <div className="flex items-center gap-2">
-              <DollarSign className="h-4 w-4 text-emerald-500" />
+              <DollarSign className="h-4 w-4 text-blue-600" />
               <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Zero-Based Budgeting</h3>
             </div>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Every single dollar of income is assigned a specific job (expense, investment, debt payoff, or savings) before the month begins, ensuring:
             </p>
             <div className="font-sans tabular-nums bg-zinc-100 dark:bg-zinc-800 p-2 rounded text-center text-zinc-800 dark:text-zinc-200 font-bold">
               Income - Expenses = $0
             </div>
-            <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 block">
+            <span className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 block">
               Best for: Detail-oriented planners and aggressive debt payoff strategies.
             </span>
           </div>
@@ -77,13 +77,13 @@ export function BudgetContent() {
           {/* Framework 3 */}
           <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-2">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-purple-500" />
+              <TrendingUp className="h-4 w-4 text-blue-600" />
               <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Pay Yourself First</h3>
             </div>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Reverse-budgeting where automated savings (401k, IRA, emergency fund) are deducted immediately upon receiving your paycheck. Whatever cash remains is spent freely without micro-categorization.
             </p>
-            <span className="text-[11px] font-semibold text-purple-600 dark:text-purple-400 block">
+            <span className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 block">
               Best for: High earners who consistently meet savings targets.
             </span>
           </div>
@@ -100,7 +100,7 @@ export function BudgetContent() {
         <div className="p-5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 space-y-3 text-xs">
           <div className="space-y-1">
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">1. Net Monthly Take-Home Pay Formula</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Net income converts gross income streams to after-tax monthly purchasing power:
             </p>
             <div className="bg-white dark:bg-zinc-800 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-zinc-800 dark:text-zinc-200">
@@ -110,7 +110,7 @@ export function BudgetContent() {
 
           <div className="space-y-1">
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">2. Back-End Debt-to-Income (DTI) Ratio</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               DTI evaluates debt burden relative to gross earnings. Mortgage underwriters enforce strict thresholds (typically &lt; 36% for prime approval):
             </p>
             <div className="bg-white dark:bg-zinc-800 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-zinc-800 dark:text-zinc-200">
@@ -130,7 +130,7 @@ export function BudgetContent() {
       {/* 4. Step-by-Step Calculation Example */}
       <section className="space-y-4">
         <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Lightbulb className="h-6 w-6 text-amber-500" />
+          <Lightbulb className="h-6 w-6 text-blue-600" />
           Step-by-Step Calculation Example
         </h2>
 
@@ -139,7 +139,7 @@ export function BudgetContent() {
             Case Study: Household Earns $83,000 Gross Salary with 28% Tax Rate
           </p>
 
-          <ol className="list-decimal pl-5 space-y-2 text-zinc-600 dark:text-zinc-300">
+          <ol className="list-decimal pl-5 space-y-2 text-slate-900 dark:text-zinc-300">
             <li>
               <strong>Gross Income:</strong> $83,000 / 12 = <strong>$6,916.67 / month</strong>.
             </li>
@@ -165,47 +165,47 @@ export function BudgetContent() {
       {/* 5. Common Budgeting Pitfalls */}
       <section className="space-y-4">
         <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <AlertTriangle className="h-6 w-6 text-rose-500" />
+          <AlertTriangle className="h-6 w-6 text-blue-600" />
           Common Budgeting Mistakes & How to Avoid Them
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-1.5">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-rose-500" />
+              <CheckCircle2 className="h-4 w-4 text-blue-600" />
               1. Forgetting Irregular & Annual Expenses
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Car insurance paid semi-annually, holiday gifts, or annual property taxes frequently wreck monthly budgets. Convert annual costs to monthly recurring reserves using our frequency selectors.
             </p>
           </div>
 
           <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-1.5">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-rose-500" />
+              <CheckCircle2 className="h-4 w-4 text-blue-600" />
               2. Underestimating "Small" Daily Expenses
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Daily $6 lattes, subscription services, and food delivery add up to $300-$500/month. Grouping dining out into your 30% Wants bucket reveals true discretionary impact.
             </p>
           </div>
 
           <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-1.5">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-rose-500" />
+              <CheckCircle2 className="h-4 w-4 text-blue-600" />
               3. Treating Emergency Funds as Optional
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Without a 3-6 month liquid emergency fund, unexpected medical bills or vehicle repairs force reliance on high-interest credit cards (20%+ APR).
             </p>
           </div>
 
           <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-1.5">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-rose-500" />
+              <CheckCircle2 className="h-4 w-4 text-blue-600" />
               4. Unrealistic Rigid Restrictions
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Cutting all fun, dining out, and hobbies causes "budget burnout." Allocating 30% to Wants ensures long-term psychological sustainability.
             </p>
           </div>
@@ -307,7 +307,7 @@ export function BudgetContent() {
                 <span className="text-blue-500 font-sans tabular-nums font-extrabold">Q:</span>
                 {faq.q}
               </h3>
-              <p className="text-zinc-600 dark:text-zinc-400 pl-4">
+              <p className="text-slate-900 dark:text-slate-100 pl-4">
                 {faq.a}
               </p>
             </div>

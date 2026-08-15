@@ -89,16 +89,16 @@ export function PensionContent() {
   ];
 
   return (
-    <div className="mt-12 space-y-12 border-t border-zinc-200 dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
+    <div className="mt-12 space-y-12  dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
       {/* Header */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Complete Actuarial &amp; Pension Payout Guide
         </div>
         <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
           Understanding Pension Payout Options, COLA &amp; Actuarial Trade-Offs
         </h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
+        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
           A defined-benefit pension represents one of the most valuable financial assets in retirement planning. However, when retiring, employees face irreversible choices: electing between an upfront lump sum vs. lifetime monthly income, selecting single-life vs. joint-and-survivor annuities, or determining whether working additional years yields a higher financial benefit. This guide analyzes actuarial formulas, tax implications, and decision frameworks.
         </p>
       </section>
@@ -106,28 +106,28 @@ export function PensionContent() {
       {/* Grid of Core Concepts */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-sm">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
             <Landmark className="h-5 w-5" /> Lump Sum vs. Annuity
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
             Lump sums provide liquidity and estate planning flexibility, but transfer all market risk to you. Monthly annuity payments provide guaranteed lifetime income backed by employer assets or the PBGC.
           </p>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-bold text-sm">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
             <Heart className="h-5 w-5" /> Survivor Ratios (50-100%)
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
             Joint-and-Survivor pensions reduce monthly checks during your joint lifetime to guarantee a continuing income (50%, 66%, 75%, or 100%) for your spouse after your passing.
           </p>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
             <TrendingUp className="h-5 w-5" /> COLA Power
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
             A Cost-of-Living Adjustment (COLA) compounds annually. A 3.5% COLA doubles your monthly pension check over 20 years, protecting your purchasing power against inflation.
           </p>
         </div>
@@ -136,23 +136,23 @@ export function PensionContent() {
       {/* Deep-Dive Section 1: Defined Benefit Formula */}
       <section className="space-y-4">
         <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Briefcase className="h-5 w-5 text-indigo-600" /> Defined Benefit Pension Formula Breakdown
+          <Briefcase className="h-5 w-5 text-blue-600" /> Defined Benefit Pension Formula Breakdown
         </h3>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
           Traditional pensions calculate your annual payout using a standardized actuarial formula based on service tenure and salary history.
         </p>
 
-        <div className="bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl text-xs space-y-3 font-sans tabular-nums">
+        <div className="bg-blue-50/70 dark:bg-blue-50/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl text-xs space-y-3 font-sans tabular-nums">
           <div className="text-indigo-900 dark:text-indigo-200 font-bold text-sm font-sans">
             Standard DB Pension Formula:
           </div>
-          <div className="text-base text-indigo-700 dark:text-indigo-300 font-extrabold">
+          <div className="text-base text-blue-600 dark:text-blue-400 font-extrabold">
             Annual Pension = Final Average Salary (FAS) × Credited Years of Service × Benefit Multiplier %
           </div>
-          <div className="text-zinc-600 dark:text-zinc-400 font-sans text-xs">
+          <div className="text-slate-900 dark:text-slate-100 font-sans text-xs">
             Example: If your highest 3-year average salary is $90,000, with 30 years of service and a 2.0% multiplier:
             <br />
-            <span className="font-sans tabular-nums font-bold text-indigo-600 dark:text-indigo-400">
+            <span className="font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">
               Annual Pension = $90,000 × 30 × 2.0% = $54,000/year ($4,500/month)
             </span>
           </div>
@@ -162,7 +162,7 @@ export function PensionContent() {
       {/* Deep-Dive Section 2: Comparison Table */}
       <section className="space-y-4">
         <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <FileText className="h-5 w-5 text-indigo-600" /> Defined Benefit vs. Defined Contribution (401k / IRA)
+          <FileText className="h-5 w-5 text-blue-600" /> Defined Benefit vs. Defined Contribution (401k / IRA)
         </h3>
 
         <div className="overflow-x-auto">
@@ -174,21 +174,21 @@ export function PensionContent() {
                 <th className="p-3 border border-zinc-200 dark:border-zinc-700">Defined Contribution (401k / IRA)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 text-zinc-600 dark:text-zinc-400">
+            <tbody className=" dark:divide-zinc-800 text-slate-900 dark:text-slate-100">
               <tr>
                 <td className="p-3 font-semibold text-zinc-900 dark:text-zinc-100 border">Investment Risk</td>
-                <td className="p-3 text-emerald-600 font-bold border">Employer Bears All Risk</td>
-                <td className="p-3 text-rose-600 font-bold border">Employee Bears Market Risk</td>
+                <td className="p-3 text-blue-600 font-bold border">Employer Bears All Risk</td>
+                <td className="p-3 text-blue-600 font-bold border">Employee Bears Market Risk</td>
               </tr>
               <tr>
                 <td className="p-3 font-semibold text-zinc-900 dark:text-zinc-100 border">Lifetime Income Guarantee</td>
-                <td className="p-3 text-emerald-600 font-bold border">Guaranteed for Life</td>
-                <td className="p-3 text-amber-600 font-bold border">Depends on Withdrawal Rate</td>
+                <td className="p-3 text-blue-600 font-bold border">Guaranteed for Life</td>
+                <td className="p-3 text-blue-600 font-bold border">Depends on Withdrawal Rate</td>
               </tr>
               <tr>
                 <td className="p-3 font-semibold text-zinc-900 dark:text-zinc-100 border">Liquidity &amp; Inheritance</td>
                 <td className="p-3 border">Limited (Ends at Death / Spouse Death)</td>
-                <td className="p-3 text-emerald-600 font-bold border">High (Passes to Heirs)</td>
+                <td className="p-3 text-blue-600 font-bold border">High (Passes to Heirs)</td>
               </tr>
               <tr>
                 <td className="p-3 font-semibold text-zinc-900 dark:text-zinc-100 border">Inflation Protection</td>
@@ -201,9 +201,9 @@ export function PensionContent() {
       </section>
 
       {/* 15+ FAQ Accordion Section */}
-      <section className="space-y-6 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+      <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
-          <HelpCircle className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+          <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           <h3 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
             Frequently Asked Questions (15 Key Pension Insights)
           </h3>
@@ -223,18 +223,18 @@ export function PensionContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 text-zinc-500 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 text-slate-900 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed  dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
                     {faq.a}
                   </div>
                 )}

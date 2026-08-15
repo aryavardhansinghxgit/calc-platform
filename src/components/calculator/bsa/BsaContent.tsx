@@ -63,15 +63,15 @@ export function BsaContent() {
     <div className="w-full max-w-7xl mx-auto space-y-12 mt-12 print:hidden font-sans">
       {/* Educational Guide Section */}
       <section className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-        <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-          <div className="p-2.5 bg-cyan-50 text-cyan-600 rounded-xl">
+        <div className="flex items-center gap-3  pb-4">
+          <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
             <BookOpen className="w-6 h-6" />
           </div>
           <div>
             <h2 className="text-2xl font-bold text-slate-900">
               Clinical Guide to Body Surface Area (BSA) & Medical Dosing
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-900 mt-0.5">
               Essential clinical guidance on BSA formulas, chemotherapy dosing, cardiac index, and renal normalization.
             </p>
           </div>
@@ -85,7 +85,7 @@ export function BsaContent() {
 
             if (trimmed.startsWith("# ")) {
               return (
-                <h1 key={idx} className="text-2xl font-bold text-slate-900 border-b border-slate-200 pb-2 mt-6">
+                <h1 key={idx} className="text-2xl font-bold text-slate-900  pb-2 mt-6">
                   {trimmed.replace("# ", "")}
                 </h1>
               );
@@ -103,7 +103,7 @@ export function BsaContent() {
               const rest = lines.slice(1).join("\n");
               return (
                 <div key={idx} className="space-y-2 mt-4">
-                  <h3 className="text-base font-bold text-slate-900 text-teal-700">
+                  <h3 className="text-base font-bold text-slate-900 text-blue-600">
                     {title}
                   </h3>
                   {rest && <p className="text-slate-700 leading-relaxed">{rest}</p>}
@@ -141,7 +141,7 @@ export function BsaContent() {
                         }
                         return (
                           <tbody key={rIdx}>
-                            <tr className="border-b border-slate-200 hover:bg-slate-50">
+                            <tr className=" hover:bg-slate-50">
                               {cells.map((cell, cIdx) => (
                                 <td key={cIdx} className="border border-slate-200 p-2.5">
                                   {cell.trim()}
@@ -166,16 +166,16 @@ export function BsaContent() {
 
       {/* FAQs Section */}
       <section className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div className="flex flex-wrap items-center justify-between gap-4  pb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
+            <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
               <HelpCircle className="w-6 h-6" />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-slate-900">
                 Frequently Asked Questions ({bsaFaqs.length}+ FAQs)
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-900 mt-0.5">
                 Medically reviewed answers on BSA formulas, chemotherapy dosing, and hemodynamics.
               </p>
             </div>
@@ -203,7 +203,7 @@ export function BsaContent() {
               className={`px-3 py-1.5 rounded-lg font-semibold transition-all whitespace-nowrap ${
                 faqCategoryFilter === cat
                   ? "bg-cyan-600 text-white shadow-xs"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  : "bg-slate-100 text-slate-900 hover:bg-slate-200"
               }`}
             >
               {cat}
@@ -231,15 +231,15 @@ export function BsaContent() {
                     </span>
                     <ChevronDown
                       className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200 ${
-                        isOpen ? "transform rotate-180 text-cyan-600" : ""
+                        isOpen ? "transform rotate-180 text-blue-600" : ""
                       }`}
                     />
                   </button>
 
                   {isOpen && (
-                    <div className="p-4 pt-0 text-xs text-slate-600 leading-relaxed border-t border-slate-200/60 bg-white">
+                    <div className="p-4 pt-0 text-xs text-slate-900 leading-relaxed /60 bg-white">
                       {faq.answer}
-                      <div className="mt-2 text-[10px] text-cyan-700 font-semibold uppercase tracking-wider">
+                      <div className="mt-2 text-[10px] text-blue-600 font-semibold uppercase tracking-wider">
                         Category: {faq.category}
                       </div>
                     </div>
@@ -255,8 +255,8 @@ export function BsaContent() {
 
       {/* Related Calculators Navigation */}
       <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 rounded-2xl text-white space-y-6">
-        <div className="flex items-center gap-3 border-b border-slate-700 pb-4">
-          <div className="p-2.5 bg-cyan-500/20 text-cyan-400 rounded-xl">
+        <div className="flex items-center gap-3  pb-4">
+          <div className="p-2.5 bg-cyan-500/20 text-blue-400 rounded-xl">
             <Link2 className="w-6 h-6" />
           </div>
           <div>
@@ -272,9 +272,9 @@ export function BsaContent() {
               href={calc.slug}
               className="p-4 bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-500/50 rounded-xl transition-all space-y-1.5 group"
             >
-              <div className="font-bold text-white group-hover:text-cyan-400 text-sm flex items-center justify-between">
+              <div className="font-bold text-white group-hover:text-blue-400 text-sm flex items-center justify-between">
                 {calc.name}
-                <span className="text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+                <span className="text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed">{calc.description}</p>
             </Link>

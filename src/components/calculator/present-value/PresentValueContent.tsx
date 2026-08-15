@@ -111,7 +111,7 @@ export function PresentValueContent() {
   ];
 
   return (
-    <div className="space-y-10 mt-8 border-t border-zinc-200 dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
+    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
       {/* Overview Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 text-white rounded-2xl p-6 md:p-8 shadow-lg">
         <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
@@ -146,7 +146,7 @@ export function PresentValueContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-base">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
               <Zap className="h-5 w-5" /> 2. Present Value Formula & Variables
             </div>
             <p>
@@ -155,7 +155,7 @@ export function PresentValueContent() {
             <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-lg font-sans tabular-nums text-xs text-center border border-zinc-200 dark:border-zinc-700">
               PV = FV / (1 + r / n)^(n × t)
             </div>
-            <ul className="text-xs space-y-1 text-zinc-600 dark:text-zinc-400">
+            <ul className="text-xs space-y-1 text-slate-900 dark:text-slate-100">
               <li>• <strong>PV:</strong> Present Value (Current upfront worth)</li>
               <li>• <strong>FV:</strong> Future Value target sum</li>
               <li>• <strong>r:</strong> Annual discount rate (decimal)</li>
@@ -168,7 +168,7 @@ export function PresentValueContent() {
         {/* Section 3 & 4: TVM Principle & Comparison */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Clock className="h-5 w-5 text-emerald-600" /> 3. The Time Value of Money (TVM) Principle
+            <Clock className="h-5 w-5 text-blue-600" /> 3. The Time Value of Money (TVM) Principle
           </h3>
           <p>
             The <strong>Time Value of Money (TVM)</strong> states that money available at the present time is worth more than 
@@ -179,8 +179,8 @@ export function PresentValueContent() {
               <span className="font-bold text-blue-800 dark:text-blue-300 block mb-1">Present Value (Discounting)</span>
               Moves backward in time. Calculates what future income is worth right now by stripping out potential compound interest.
             </div>
-            <div className="p-4 bg-emerald-50 dark:bg-emerald-950/30 rounded-lg border border-emerald-200 dark:border-emerald-900">
-              <span className="font-bold text-emerald-800 dark:text-emerald-300 block mb-1">Future Value (Compounding)</span>
+            <div className="p-4 bg-blue-50 dark:bg-blue-50/30 rounded-lg border border-emerald-200 dark:border-emerald-900">
+              <span className="font-bold text-emerald-800 dark:text-blue-400 block mb-1">Future Value (Compounding)</span>
               Moves forward in time. Calculates how current capital grows over time by adding compound interest.
             </div>
           </div>
@@ -189,7 +189,7 @@ export function PresentValueContent() {
         {/* Section 5 & 6: Annuities & Timing */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Layers className="h-5 w-5 text-purple-600" /> 5–7. Lump Sum PV vs. Annuity PV vs. Growing Annuity
+            <Layers className="h-5 w-5 text-blue-600" /> 5–7. Lump Sum PV vs. Annuity PV vs. Growing Annuity
           </h3>
           
           <div className="overflow-x-auto">
@@ -202,30 +202,30 @@ export function PresentValueContent() {
                   <th className="p-3 border border-zinc-200 dark:border-zinc-700">Key Application</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className=" dark:divide-zinc-800">
                 <tr>
                   <td className="p-3 font-semibold">Lump Sum</td>
                   <td className="p-3">Single payment at end of term</td>
                   <td className="p-3 font-sans tabular-nums text-[11px]">PV = FV / (1+r)^t</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">Zero-coupon bonds, single target payouts</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">Zero-coupon bonds, single target payouts</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Ordinary Annuity</td>
                   <td className="p-3">Equal deposits at period end</td>
                   <td className="p-3 font-sans tabular-nums text-[11px]">PV = PMT × [1 - (1+r)^-t] / r</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">Mortgages, fixed loan repayments</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">Mortgages, fixed loan repayments</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Annuity Due</td>
                   <td className="p-3">Equal deposits at period start</td>
                   <td className="p-3 font-sans tabular-nums text-[11px]">PV = PV_ordinary × (1+r)</td>
-                  <td className="p-3 text-emerald-600 font-bold">Lease payments, rent prepayments</td>
+                  <td className="p-3 text-blue-600 font-bold">Lease payments, rent prepayments</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Growing Annuity</td>
                   <td className="p-3">Cash flows growing at rate g</td>
                   <td className="p-3 font-sans tabular-nums text-[11px]">PV = PMT / (r-g) × [1 - ((1+g)/(1+r))^t]</td>
-                  <td className="p-3 text-purple-600 font-bold">Inflation-indexed pensions, dividend growth</td>
+                  <td className="p-3 text-blue-600 font-bold">Inflation-indexed pensions, dividend growth</td>
                 </tr>
               </tbody>
             </table>
@@ -245,7 +245,7 @@ export function PresentValueContent() {
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <AlertTriangle className="h-4 w-4 text-amber-500" /> 9. Discount Rate Selection
+              <AlertTriangle className="h-4 w-4 text-blue-600" /> 9. Discount Rate Selection
             </h4>
             <p className="text-xs">
               Choosing the right rate (WACC for corporates, risk-free rate + premium for investments) determines whether projects pass hurdle checks.
@@ -254,7 +254,7 @@ export function PresentValueContent() {
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-rose-500" /> 10. Sensitivity Analysis
+              <ShieldCheck className="h-4 w-4 text-blue-600" /> 10. Sensitivity Analysis
             </h4>
             <p className="text-xs">
               Testing Present Value across rate variations (±1% to ±3%) quantifies interest rate risk before committing capital.
@@ -265,18 +265,18 @@ export function PresentValueContent() {
         {/* Real Applications & Pitfalls */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-indigo-600" /> 11–15. Real-World Applications & Best Practices
+            <Award className="h-5 w-5 text-blue-600" /> 11–15. Real-World Applications & Best Practices
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="space-y-2">
               <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Lottery Payout Decisions</span>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-slate-900 dark:text-slate-100">
                 Determines whether taking a reduced immediate cash option or an annual annuity payout over 30 years yields superior net wealth after expected market returns.
               </p>
             </div>
             <div className="space-y-2">
               <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Real Estate & Commercial DCF</span>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-slate-900 dark:text-slate-100">
                 Discounting projected property rental revenues and exit cap rates back to current dollars ensures real estate acquisitions don't overpay.
               </p>
             </div>
@@ -319,7 +319,7 @@ export function PresentValueContent() {
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-zinc-600 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
+                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
                     {faq.answer}
                   </div>
                 )}

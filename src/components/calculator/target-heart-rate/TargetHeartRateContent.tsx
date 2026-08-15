@@ -113,13 +113,13 @@ export function TargetHeartRateContent() {
     <article className="mt-12 space-y-10 text-zinc-800 dark:text-zinc-200">
       {/* 1. Introduction */}
       <section className="space-y-4 p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-        <div className="flex items-center gap-2.5 text-emerald-600 dark:text-emerald-400">
+        <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400">
           <HeartPulse className="w-6 h-6" />
           <h2 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
             Comprehensive Clinical &amp; Sports Physiology Guide to Target Heart Rate
           </h2>
         </div>
-        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
           Target Heart Rate (THR) training is the cornerstone of modern exercise prescription, cardiovascular rehabilitation, and sports endurance science. By monitoring beats per minute (BPM) during physical activity, athletes and fitness enthusiasts can align workout intensity with specific metabolic adaptation targets—ranging from active recovery and fat oxidation to lactate threshold expansion and peak VO2 Max velocity.
         </p>
       </section>
@@ -132,7 +132,7 @@ export function TargetHeartRateContent() {
         <div className="space-y-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. Haskell &amp; Fox Formula (1971)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               MHR = 220 - Age
             </code>
           </div>
@@ -146,7 +146,7 @@ export function TargetHeartRateContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">C. Karvonen Method (Heart Rate Reserve)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-purple-700 dark:text-purple-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               THR = RHR + Intensity × (MHR - RHR)
             </code>
           </div>
@@ -156,7 +156,7 @@ export function TargetHeartRateContent() {
       {/* 3. 25 Clinical FAQs Accordion */}
       <section className="space-y-4">
         <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 font-bold text-xl">
-          <HelpCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+          <HelpCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
           <h3>Frequently Asked Questions</h3>
         </div>
 
@@ -174,10 +174,10 @@ export function TargetHeartRateContent() {
                   className="w-full p-4 text-left font-semibold text-sm text-zinc-900 dark:text-zinc-100 flex justify-between items-center hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
                 >
                   <span>{faq.q}</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform text-zinc-500 ${isOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`w-4 h-4 transition-transform text-slate-900 ${isOpen ? "rotate-180" : ""}`} />
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4 pt-1 text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed border-t border-zinc-100 dark:border-zinc-800">
+                  <div className="px-4 pb-4 pt-1 text-xs text-slate-900 dark:text-zinc-300 leading-relaxed  dark:border-zinc-800">
                     {faq.a}
                   </div>
                 )}

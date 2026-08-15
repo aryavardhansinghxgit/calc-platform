@@ -7,14 +7,14 @@ import { Atom, Info, Sparkles, Filter } from "lucide-react";
 
 // Category styling map
 const CATEGORY_MAP: Record<string, { label: string; bg: string; text: string; border: string }> = {
-  nonmetal: { label: "Reactive Nonmetal", bg: "bg-emerald-500/15 dark:bg-emerald-950/60", text: "text-emerald-700 dark:text-emerald-300", border: "border-emerald-300 dark:border-emerald-800" },
-  noble: { label: "Noble Gas", bg: "bg-purple-500/15 dark:bg-purple-950/60", text: "text-purple-700 dark:text-purple-300", border: "border-purple-300 dark:border-purple-800" },
-  alkali: { label: "Alkali Metal", bg: "bg-rose-500/15 dark:bg-rose-950/60", text: "text-rose-700 dark:text-rose-300", border: "border-rose-300 dark:border-rose-800" },
-  alkaline: { label: "Alkaline Earth Metal", bg: "bg-amber-500/15 dark:bg-amber-950/60", text: "text-amber-700 dark:text-amber-300", border: "border-amber-300 dark:border-amber-800" },
-  metalloid: { label: "Metalloid", bg: "bg-teal-500/15 dark:bg-teal-950/60", text: "text-teal-700 dark:text-teal-300", border: "border-teal-300 dark:border-teal-800" },
+  nonmetal: { label: "Reactive Nonmetal", bg: "bg-emerald-500/15 dark:bg-blue-50/60", text: "text-blue-600 dark:text-blue-400", border: "border-emerald-300 dark:border-emerald-800" },
+  noble: { label: "Noble Gas", bg: "bg-purple-500/15 dark:bg-blue-50/60", text: "text-blue-600 dark:text-blue-400", border: "border-purple-300 dark:border-purple-800" },
+  alkali: { label: "Alkali Metal", bg: "bg-rose-500/15 dark:bg-blue-50/60", text: "text-blue-600 dark:text-blue-400", border: "border-rose-300 dark:border-rose-800" },
+  alkaline: { label: "Alkaline Earth Metal", bg: "bg-amber-500/15 dark:bg-blue-50/60", text: "text-blue-600 dark:text-blue-400", border: "border-amber-300 dark:border-amber-800" },
+  metalloid: { label: "Metalloid", bg: "bg-teal-500/15 dark:bg-blue-50/60", text: "text-blue-600 dark:text-blue-400", border: "border-teal-300 dark:border-teal-800" },
   halogen: { label: "Halogen", bg: "bg-blue-500/15 dark:bg-blue-950/60", text: "text-blue-700 dark:text-blue-300", border: "border-blue-300 dark:border-blue-800" },
-  transition: { label: "Transition Metal", bg: "bg-sky-500/15 dark:bg-sky-950/60", text: "text-sky-700 dark:text-sky-300", border: "border-sky-300 dark:border-sky-800" },
-  "post-transition": { label: "Post-Transition Metal", bg: "bg-indigo-500/15 dark:bg-indigo-950/60", text: "text-indigo-700 dark:text-indigo-300", border: "border-indigo-300 dark:border-indigo-800" },
+  transition: { label: "Transition Metal", bg: "bg-sky-500/15 dark:bg-blue-50/60", text: "text-blue-600 dark:text-blue-400", border: "border-sky-300 dark:border-sky-800" },
+  "post-transition": { label: "Post-Transition Metal", bg: "bg-indigo-500/15 dark:bg-blue-50/60", text: "text-blue-600 dark:text-blue-400", border: "border-indigo-300 dark:border-indigo-800" },
   lanthanide: { label: "Lanthanide", bg: "bg-pink-500/15 dark:bg-pink-950/60", text: "text-pink-700 dark:text-pink-300", border: "border-pink-300 dark:border-pink-800" },
   actinide: { label: "Actinide", bg: "bg-orange-500/15 dark:bg-orange-950/60", text: "text-orange-700 dark:text-orange-300", border: "border-orange-300 dark:border-orange-800" },
 };
@@ -39,14 +39,14 @@ function ModernPeriodicTable() {
       <div className="bg-slate-50 dark:bg-zinc-800/80 p-4 rounded-2xl border border-slate-200 dark:border-zinc-700 shadow-xs space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-emerald-500/10 rounded-xl text-emerald-600 dark:text-emerald-400">
+            <div className="p-2 bg-emerald-500/10 rounded-xl text-blue-600 dark:text-blue-400">
               <Atom className="h-5 w-5" />
             </div>
             <div>
               <h3 className="text-base font-black text-slate-900 dark:text-zinc-100">
                 Interactive IUPAC Periodic Table of Elements
               </h3>
-              <p className="text-xs text-slate-500 dark:text-zinc-400">
+              <p className="text-xs text-slate-900 dark:text-slate-100">
                 Explore standard atomic weights ($g/mol$), monoisotopic masses ($Da$), categories, and elemental periods.
               </p>
             </div>
@@ -91,17 +91,17 @@ function ModernPeriodicTable() {
         <div className="bg-gradient-to-br from-emerald-50 via-teal-50/60 to-slate-50 dark:from-zinc-800 dark:to-zinc-900 text-slate-900 dark:text-zinc-100 p-4 rounded-2xl shadow-xs border border-emerald-200/80 dark:border-zinc-700 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-xl bg-white dark:bg-zinc-800 border border-emerald-300 dark:border-zinc-700 shadow-xs flex flex-col items-center justify-center shrink-0">
-              <span className="text-2xl font-black font-sans tabular-nums text-emerald-600 dark:text-emerald-400">{selectedElement.symbol}</span>
-              <span className="text-[9px] font-sans tabular-nums text-slate-500 dark:text-zinc-400">#{selectedElement.number}</span>
+              <span className="text-2xl font-black font-sans tabular-nums text-blue-600 dark:text-blue-400">{selectedElement.symbol}</span>
+              <span className="text-[9px] font-sans tabular-nums text-slate-900 dark:text-slate-100">#{selectedElement.number}</span>
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h4 className="text-lg font-black text-slate-900 dark:text-zinc-100">{selectedElement.name}</h4>
-                <span className="px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[10px] font-sans tabular-nums font-bold uppercase">
+                <span className="px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-50/60 text-blue-600 dark:text-blue-400 border border-emerald-200 dark:border-emerald-800 text-[10px] font-sans tabular-nums font-bold uppercase">
                   {CATEGORY_MAP[selectedElement.category]?.label || selectedElement.category}
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-zinc-400 font-sans tabular-nums mt-0.5">
+              <p className="text-xs text-slate-900 dark:text-slate-100 font-sans tabular-nums mt-0.5">
                 Period {selectedElement.period} • Group {selectedElement.group}
               </p>
             </div>
@@ -109,12 +109,12 @@ function ModernPeriodicTable() {
 
           <div className="grid grid-cols-2 gap-4 text-xs font-sans tabular-nums border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-zinc-700 pt-3 sm:pt-0 sm:pl-6 w-full sm:w-auto">
             <div>
-              <span className="text-[10px] text-slate-500 dark:text-zinc-400 uppercase tracking-wider block font-bold">Standard Atomic Weight</span>
-              <span className="text-sm font-black text-emerald-600 dark:text-emerald-400">{selectedElement.atomicWeight} g/mol</span>
+              <span className="text-[10px] text-slate-900 dark:text-slate-100 uppercase tracking-wider block font-bold">Standard Atomic Weight</span>
+              <span className="text-sm font-black text-blue-600 dark:text-blue-400">{selectedElement.atomicWeight} g/mol</span>
             </div>
             <div>
-              <span className="text-[10px] text-slate-500 dark:text-zinc-400 uppercase tracking-wider block font-bold">Monoisotopic Mass</span>
-              <span className="text-sm font-black text-purple-600 dark:text-purple-400">{selectedElement.monoisotopicMass} Da</span>
+              <span className="text-[10px] text-slate-900 dark:text-slate-100 uppercase tracking-wider block font-bold">Monoisotopic Mass</span>
+              <span className="text-sm font-black text-blue-600 dark:text-blue-400">{selectedElement.monoisotopicMass} Da</span>
             </div>
           </div>
         </div>
@@ -167,7 +167,7 @@ function ModernPeriodicTable() {
           </div>
 
           {/* Lanthanides & Actinides Rows */}
-          <div className="pt-4 border-t border-slate-100 dark:border-zinc-800 space-y-1.5">
+          <div className="pt-4  dark:border-zinc-800 space-y-1.5">
             {/* Lanthanides */}
             <div className="flex items-center gap-1">
               <span className="w-20 text-[10px] font-extrabold uppercase text-pink-600 dark:text-pink-400 shrink-0 font-sans tabular-nums">
@@ -247,7 +247,7 @@ export function MolecularWeightContent() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-4 text-xs">
           <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-1">
-            <h4 className="font-extrabold text-emerald-600 dark:text-emerald-400 text-sm">Atomic Mass (u or Da)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">Atomic Mass (u or Da)</h4>
             <p className="leading-relaxed">
               The mass of a single individual atom, expressed relative to Carbon-12 (defined as exactly 12.000 Da).
             </p>
@@ -261,7 +261,7 @@ export function MolecularWeightContent() {
           </div>
 
           <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-1">
-            <h4 className="font-extrabold text-purple-600 dark:text-purple-400 text-sm">Molar Mass (M)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">Molar Mass (M)</h4>
             <p className="leading-relaxed">
               The mass of exactly one mole (<strong>6.02214076 × 10²³</strong> entities) of a chemical substance, expressed in <strong>grams per mole (g/mol)</strong>.
             </p>
@@ -274,7 +274,7 @@ export function MolecularWeightContent() {
       </section>
 
       {/* 2. CORE MATHEMATICAL FORMULAS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           The Core Mathematical Formulas for Molar Mass Calculation
         </h2>
@@ -285,22 +285,22 @@ export function MolecularWeightContent() {
         {/* Math Formula Cards */}
         <div className="space-y-3 my-4">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
-            <span className="text-slate-500 font-bold block text-[10px] uppercase">1. Primary Molar Mass Formula:</span>
-            <div className="text-emerald-600 dark:text-emerald-400 font-extrabold text-sm">
+            <span className="text-slate-900 font-bold block text-[10px] uppercase">1. Primary Molar Mass Formula:</span>
+            <div className="text-blue-600 dark:text-blue-400 font-extrabold text-sm">
               M = Σ(Nᵢ × Aᵢ) = (N₁ · A₁) + (N₂ · A₂) + ... + (Nₖ · Aₖ)
             </div>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
-            <span className="text-slate-500 font-bold block text-[10px] uppercase">2. Elemental Mass Percentage Formula:</span>
+            <span className="text-slate-900 font-bold block text-[10px] uppercase">2. Elemental Mass Percentage Formula:</span>
             <div className="text-blue-600 dark:text-blue-400 font-extrabold text-sm">
               Mass % of Element i = [(Nᵢ × Aᵢ) / M_total] × 100
             </div>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 font-sans tabular-nums text-xs space-y-1">
-            <span className="text-slate-500 font-bold block text-[10px] uppercase">3. Mole-Mass-Molecule Conversions:</span>
-            <div className="text-purple-600 dark:text-purple-400 font-extrabold text-sm">
+            <span className="text-slate-900 font-bold block text-[10px] uppercase">3. Mole-Mass-Molecule Conversions:</span>
+            <div className="text-blue-600 dark:text-blue-400 font-extrabold text-sm">
               n = m / M,   m = n × M,   N = n × N_A (N_A = 6.022 × 10²³)
             </div>
           </div>
@@ -315,14 +315,14 @@ export function MolecularWeightContent() {
           <p className="text-slate-700 dark:text-zinc-300">• Sulfur (S): 1 × 32.060 g/mol = 32.060 g/mol</p>
           <p className="text-slate-700 dark:text-zinc-300">• Anhydrous Oxygen (O): 4 × 15.999 g/mol = 63.996 g/mol</p>
           <p className="text-slate-700 dark:text-zinc-300">• 5 Water Molecules (5H₂O): 5 × (2 × 1.008 + 15.999) = 90.075 g/mol</p>
-          <p className="text-emerald-600 dark:text-emerald-400 font-black text-sm">
+          <p className="text-blue-600 dark:text-blue-400 font-black text-sm">
             Total Molar Mass (CuSO₄·5H₂O) = 249.677 g/mol
           </p>
         </div>
       </section>
 
       {/* 3. EMPIRICAL VS MOLECULAR FORMULAS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           Empirical vs. Molecular Formula Determination
         </h2>
@@ -338,7 +338,7 @@ export function MolecularWeightContent() {
       </section>
 
       {/* 4. ISOTOPIC ABUNDANCES */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           Standard Atomic Weights &amp; Natural Isotopic Abundances
         </h2>
@@ -350,7 +350,7 @@ export function MolecularWeightContent() {
       </section>
 
       {/* 5. APPLICATIONS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           Applications in Stoichiometry, Pharmacology &amp; Industry
         </h2>
@@ -360,20 +360,20 @@ export function MolecularWeightContent() {
       </section>
 
       {/* 6. COMMON ERRORS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           Common Errors in Molecular Weight Calculations
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs my-4">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-amber-600 dark:text-amber-400 text-sm">Case Sensitivity Errors</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">Case Sensitivity Errors</h4>
             <p className="leading-relaxed">
               Entering <span className="font-sans tabular-nums">co</span> instead of <span className="font-sans tabular-nums">Co</span> causes Cobalt (58.93 g/mol) to be misparsed as Carbon Monoxide (28.01 g/mol). Always capitalize element symbols correctly!
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-rose-600 dark:text-rose-400 text-sm">Neglecting Crystallization Waters</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">Neglecting Crystallization Waters</h4>
             <p className="leading-relaxed">
               Weighing anhydrous salt mass when using hydrated reagents (e.g. <span className="font-sans tabular-nums">CuSO₄·5H₂O</span>) causes a massive 36% under-dosing error in solution concentration.
             </p>
@@ -382,11 +382,11 @@ export function MolecularWeightContent() {
       </section>
 
       {/* FULL MODERN INTERACTIVE PERIODIC TABLE BELOW EDUCATIONAL SECTION */}
-      <section className="border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className=" dark:border-zinc-800 pt-6">
         <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100 mb-2">
           Full Modern Periodic Table of Elements
         </h2>
-        <p className="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed mb-4">
+        <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed mb-4">
           Use the interactive periodic table reference below to inspect elemental atomic numbers, standard atomic weights, categories, and monoisotopic masses.
         </p>
 

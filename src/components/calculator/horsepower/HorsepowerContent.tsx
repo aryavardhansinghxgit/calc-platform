@@ -15,8 +15,8 @@ export function HorsepowerContent() {
           The concept was devised by Scottish engineer and inventor <strong>James Watt</strong> in 1782. To market his newly improved steam engines to coal mine operators and breweries, Watt needed a clear metric comparing engine output to the draft horses traditionally used to turn mill wheels and lift heavy water buckets from mineshafts.
         </p>
 
-        <div className="bg-amber-50 dark:bg-amber-950/40 p-4 rounded-xl border border-amber-200/80 dark:border-amber-900 space-y-2">
-          <h3 className="text-sm font-extrabold text-amber-900 dark:text-amber-300 uppercase tracking-wide">
+        <div className="bg-blue-50 dark:bg-blue-50/40 p-4 rounded-xl border border-amber-200/80 dark:border-amber-900 space-y-2">
+          <h3 className="text-sm font-extrabold text-amber-900 dark:text-blue-400 uppercase tracking-wide">
             James Watt’s Historic Experiment
           </h3>
           <p className="text-xs text-amber-800 dark:text-amber-200 leading-relaxed">
@@ -100,22 +100,22 @@ export function HorsepowerContent() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200/80 dark:border-zinc-700 space-y-1">
-            <h4 className="font-extrabold text-amber-700 dark:text-amber-400 uppercase">Mechanical / Imperial HP (hp)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 uppercase">Mechanical / Imperial HP (hp)</h4>
             <p>Standardized in the USA and UK. Defined as exactly 550 ft-lbs/sec or <strong>745.699872 Watts</strong>.</p>
           </div>
 
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200/80 dark:border-zinc-700 space-y-1">
-            <h4 className="font-extrabold text-amber-700 dark:text-amber-400 uppercase">Metric Horsepower (PS / CV / PK)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 uppercase">Metric Horsepower (PS / CV / PK)</h4>
             <p>Used across Europe (DIN 66036) and Japan. Defined as lifting 75 kg by 1 meter in 1 second = <strong>735.49875 Watts</strong> (1 HP ≈ 1.014 PS).</p>
           </div>
 
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200/80 dark:border-zinc-700 space-y-1">
-            <h4 className="font-extrabold text-amber-700 dark:text-amber-400 uppercase">Electrical Horsepower (hp(E))</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 uppercase">Electrical Horsepower (hp(E))</h4>
             <p>Used by electrical engineers for industrial electric motors. Defined as exactly <strong>746.0 Watts</strong>.</p>
           </div>
 
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200/80 dark:border-zinc-700 space-y-1">
-            <h4 className="font-extrabold text-amber-700 dark:text-amber-400 uppercase">Boiler Horsepower (hp(S))</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 uppercase">Boiler Horsepower (hp(S))</h4>
             <p>Used in industrial steam and HVAC. Defined as evaporating 34.5 lbs of water at 212°F per hour = <strong>33,475 BTU/hr</strong> (9.81 kW).</p>
           </div>
         </div>
@@ -163,25 +163,25 @@ export function HorsepowerContent() {
                 <th className="p-2 border border-zinc-200 dark:border-zinc-800">Example Output (400 BHP Crank)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+            <tbody className=" dark:divide-zinc-800">
               <tr>
                 <td className="p-2 font-bold">Front-Wheel Drive (FWD) Manual</td>
-                <td className="p-2 text-amber-600 font-bold">10% – 12%</td>
+                <td className="p-2 text-blue-600 font-bold">10% – 12%</td>
                 <td className="p-2 font-sans tabular-nums">352 – 360 WHP</td>
               </tr>
               <tr>
                 <td className="p-2 font-bold">Rear-Wheel Drive (RWD) Manual</td>
-                <td className="p-2 text-amber-600 font-bold">13% – 15%</td>
+                <td className="p-2 text-blue-600 font-bold">13% – 15%</td>
                 <td className="p-2 font-sans tabular-nums">340 – 348 WHP</td>
               </tr>
               <tr>
                 <td className="p-2 font-bold">Rear-Wheel Drive (RWD) Automatic</td>
-                <td className="p-2 text-amber-600 font-bold">16% – 19%</td>
+                <td className="p-2 text-blue-600 font-bold">16% – 19%</td>
                 <td className="p-2 font-sans tabular-nums">324 – 336 WHP</td>
               </tr>
               <tr>
                 <td className="p-2 font-bold">All-Wheel Drive (AWD / 4WD)</td>
-                <td className="p-2 text-amber-600 font-bold">20% – 25%</td>
+                <td className="p-2 text-blue-600 font-bold">20% – 25%</td>
                 <td className="p-2 font-sans tabular-nums">300 – 320 WHP</td>
               </tr>
             </tbody>

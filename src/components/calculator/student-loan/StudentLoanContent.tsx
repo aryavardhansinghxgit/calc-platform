@@ -96,22 +96,22 @@ export function StudentLoanContent() {
   ];
 
   return (
-    <div className="mt-12 space-y-12 border-t border-zinc-200 dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
+    <div className="mt-12 space-y-12  dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
       {/* Article Header */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Comprehensive Higher Education Financial Guide
         </div>
         <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
           Student Loan Calculator Guide: Repayment Plans, Forgiveness &amp; Projections
         </h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
+        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
           Student loans are significant long-term financial commitments. Understanding federal loan programs, in-school interest accrual, grace periods, extra payment payoff acceleration, federal repayment options, and refinancing strategies allows borrowers to minimize interest costs and achieve financial freedom.
         </p>
       </section>
 
       {/* Main Educational Content with Required Headings */}
-      <div className="space-y-8 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+      <div className="space-y-8 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
         <section className="space-y-2">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">What Is a Student Loan?</h2>
           <p>
@@ -154,48 +154,48 @@ export function StudentLoanContent() {
                   <th className="p-3">Loan Forgiveness?</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className=" dark:divide-zinc-800">
                 <tr className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/40">
                   <td className="p-3 font-bold">Standard</td>
                   <td className="p-3">10 years</td>
                   <td className="p-3">Fixed</td>
                   <td className="p-3">All borrowers</td>
-                  <td className="p-3 font-semibold text-rose-600">No</td>
+                  <td className="p-3 font-semibold text-blue-600">No</td>
                 </tr>
                 <tr className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/40">
                   <td className="p-3 font-bold">Graduated</td>
                   <td className="p-3">10 years</td>
                   <td className="p-3">Increase every two years</td>
                   <td className="p-3">All borrowers</td>
-                  <td className="p-3 font-semibold text-rose-600">No</td>
+                  <td className="p-3 font-semibold text-blue-600">No</td>
                 </tr>
                 <tr className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/40">
                   <td className="p-3 font-bold">Extended</td>
                   <td className="p-3">25 years</td>
                   <td className="p-3">10% or 15% of discretionary income</td>
                   <td className="p-3">Direct loans with &gt;$30,000 balance</td>
-                  <td className="p-3 font-semibold text-rose-600">No</td>
+                  <td className="p-3 font-semibold text-blue-600">No</td>
                 </tr>
                 <tr className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/40">
                   <td className="p-3 font-bold">Income-Based (IBR)</td>
                   <td className="p-3">20 or 25 years</td>
                   <td className="p-3">10% or 15% of discretionary income, capped at Standard plan</td>
                   <td className="p-3">Partial financial hardship</td>
-                  <td className="p-3 font-semibold text-emerald-600">Yes</td>
+                  <td className="p-3 font-semibold text-blue-600">Yes</td>
                 </tr>
                 <tr className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/40">
                   <td className="p-3 font-bold">PAYE / SAVE</td>
                   <td className="p-3">20 years</td>
                   <td className="p-3">5% to 10% of discretionary income</td>
                   <td className="p-3">Direct loan borrowers with financial hardship</td>
-                  <td className="p-3 font-semibold text-emerald-600">Yes</td>
+                  <td className="p-3 font-semibold text-blue-600">Yes</td>
                 </tr>
                 <tr className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/40">
                   <td className="p-3 font-bold">Income-Contingent (ICR)</td>
                   <td className="p-3">25 years</td>
                   <td className="p-3">Lesser of 20% of discretionary income or 12-year fixed plan</td>
                   <td className="p-3">Any Direct Loan borrower</td>
-                  <td className="p-3 font-semibold text-emerald-600">Yes</td>
+                  <td className="p-3 font-semibold text-blue-600">Yes</td>
                 </tr>
               </tbody>
             </table>
@@ -205,20 +205,20 @@ export function StudentLoanContent() {
         <section className="space-y-2">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Baseline Calculation Examples</h2>
           <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
-            <div className="font-bold font-sans text-indigo-600">Section A Baseline ($30,000 @ 6.8% 10 Yrs):</div>
+            <div className="font-bold font-sans text-blue-600">Section A Baseline ($30,000 @ 6.8% 10 Yrs):</div>
             <div>Monthly Repayment = $345.24/mo | Total Interest = $11,428.92 | Total Payments = $41,428.92</div>
-            <div className="font-bold font-sans text-indigo-600 pt-2">Section B Baseline Extra Payments ($350/mo + $150 extra):</div>
+            <div className="font-bold font-sans text-blue-600 pt-2">Section B Baseline Extra Payments ($350/mo + $150 extra):</div>
             <div>Accelerated Payoff = 6 Years 2 Months (Saved 3 Yrs 8 Mos) | Interest Saved = $4,421.28</div>
-            <div className="font-bold font-sans text-indigo-600 pt-2">Section C Projection ($20k bal + $10k/yr x 2 yrs @ 6.8%):</div>
+            <div className="font-bold font-sans text-blue-600 pt-2">Section C Projection ($20k bal + $10k/yr x 2 yrs @ 6.8%):</div>
             <div>Balance at Grad = $44,263.99 | Balance After Grace = $45,790.44 | Monthly = $526.96</div>
           </div>
         </section>
       </div>
 
       {/* 15+ FAQ Accordion Section */}
-      <section className="space-y-6 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+      <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
-          <HelpCircle className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+          <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
             Frequently Asked Questions (15 Key Student Loan Insights)
           </h2>
@@ -238,18 +238,18 @@ export function StudentLoanContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 text-zinc-500 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 text-slate-900 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed  dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
                     {faq.a}
                   </div>
                 )}
@@ -260,19 +260,19 @@ export function StudentLoanContent() {
       </section>
 
       {/* Related Calculators */}
-      <section className="space-y-3 border-t border-zinc-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-3  dark:border-zinc-800 pt-6">
         <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Related Educational &amp; Financial Calculators</h2>
         <div className="flex flex-wrap gap-2 text-xs">
-          <Link href="/calculators/personal-loan-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/personal-loan-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Personal Loan Calculator
           </Link>
-          <Link href="/calculators/loan-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/loan-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Loan Calculator
           </Link>
-          <Link href="/calculators/budget-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/budget-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Budget Calculator
           </Link>
-          <Link href="/calculators/savings-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/savings-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Savings Calculator
           </Link>
         </div>

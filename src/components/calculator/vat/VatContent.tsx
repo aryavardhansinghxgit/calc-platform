@@ -111,7 +111,7 @@ export function VatContent() {
   ];
 
   return (
-    <div className="space-y-10 mt-8 border-t border-zinc-200 dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
+    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
       {/* Overview Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 text-white rounded-2xl p-6 md:p-8 shadow-lg">
         <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
@@ -138,7 +138,7 @@ export function VatContent() {
             <p>
               Whether billing clients or calculating store shelf prices, use these mathematical identities:
             </p>
-            <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-400 font-sans tabular-nums bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
+            <ul className="text-xs space-y-2 text-slate-900 dark:text-slate-100 font-sans tabular-nums bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
               <li>• <strong>VAT Exclusive:</strong> Gross Price = Net Price × (1 + VAT Rate % / 100)</li>
               <li>• <strong>VAT Inclusive:</strong> Net Price = Gross Price / (1 + VAT Rate % / 100)</li>
               <li>• <strong>Tax Amount:</strong> VAT Amount = Gross Price - Net Price</li>
@@ -146,13 +146,13 @@ export function VatContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-base">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
               <Globe className="h-5 w-5" /> 2. Multi-Stage Supply Chain Collection
             </div>
             <p>
               Unlike sales tax, VAT is collected at every production tier. Each business claims credit for input VAT paid:
             </p>
-            <ul className="text-xs space-y-1.5 text-zinc-600 dark:text-zinc-400">
+            <ul className="text-xs space-y-1.5 text-slate-900 dark:text-slate-100">
               <li>• <strong>Stage 1 (Farmer):</strong> Sells coffee beans for £10 (+ £2 VAT). Remits £2 to tax authority.</li>
               <li>• <strong>Stage 2 (Roaster):</strong> Value adds £15. Sells roasted coffee for £25 (+ £5 VAT). Remits £5 - £2 = £3.</li>
               <li>• <strong>Stage 3 (Cafe):</strong> Value adds £15. Sells brewed cups for £40 (+ £8 VAT). Remits £8 - £5 = £3.</li>
@@ -166,7 +166,7 @@ export function VatContent() {
         {/* Section 3: Global VAT Rates Comparison Table */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Layers className="h-5 w-5 text-purple-600" /> 3. Standard VAT Rates Around the World
+            <Layers className="h-5 w-5 text-blue-600" /> 3. Standard VAT Rates Around the World
           </h3>
           
           <div className="overflow-x-auto">
@@ -179,48 +179,48 @@ export function VatContent() {
                   <th className="p-3 border border-zinc-200 dark:border-zinc-700">Reduced Rates %</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className=" dark:divide-zinc-800">
                 <tr>
                   <td className="p-3 font-semibold">🇬🇧 United Kingdom</td>
                   <td className="p-3">VAT</td>
                   <td className="p-3 font-sans tabular-nums font-bold text-blue-600">20%</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">5% (Energy) / 0% (Food, Books)</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">5% (Energy) / 0% (Food, Books)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">🇩🇪 Germany</td>
                   <td className="p-3">MwSt (Umsatzsteuer)</td>
                   <td className="p-3 font-sans tabular-nums font-bold text-blue-600">19%</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">7% (Food, Books, Cultural events)</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">7% (Food, Books, Cultural events)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">🇫🇷 France</td>
                   <td className="p-3">TVA</td>
                   <td className="p-3 font-sans tabular-nums font-bold text-blue-600">20%</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">10% / 5.5% / 2.1%</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">10% / 5.5% / 2.1%</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">🇪🇸 Spain</td>
                   <td className="p-3">IVA</td>
                   <td className="p-3 font-sans tabular-nums font-bold text-blue-600">21%</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">10% / 4% (Super-reduced)</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">10% / 4% (Super-reduced)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">🇦🇺 Australia</td>
                   <td className="p-3">GST</td>
                   <td className="p-3 font-sans tabular-nums font-bold text-blue-600">10%</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">0% (Fresh food, Health, Education)</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">0% (Fresh food, Health, Education)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">🇦🇪 UAE</td>
                   <td className="p-3">VAT</td>
                   <td className="p-3 font-sans tabular-nums font-bold text-blue-600">5%</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">0% (Exports, Healthcare, Education)</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">0% (Exports, Healthcare, Education)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">🇺🇸 United States</td>
                   <td className="p-3">State Sales Tax (No Federal VAT)</td>
-                  <td className="p-3 font-sans tabular-nums font-bold text-amber-600">0% - 9.5%</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">Varies by State / County / City</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">0% - 9.5%</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">Varies by State / County / City</td>
                 </tr>
               </tbody>
             </table>
@@ -230,18 +230,18 @@ export function VatContent() {
         {/* Real-World Use Cases */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-indigo-600" /> Key Differences: VAT vs. Retail Sales Tax
+            <Award className="h-5 w-5 text-blue-600" /> Key Differences: VAT vs. Retail Sales Tax
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="space-y-2 p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-lg border border-zinc-200 dark:border-zinc-700">
               <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Value-Added Tax (VAT)</span>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-slate-900 dark:text-slate-100">
                 Multi-stage tax with Input Tax Credit (ITC) mechanism. Businesses deduct VAT paid on raw materials from VAT charged on finished products, preventing double tax compounding.
               </p>
             </div>
             <div className="space-y-2 p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-lg border border-zinc-200 dark:border-zinc-700">
               <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Retail Sales Tax</span>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-slate-900 dark:text-slate-100">
                 Single-stage tax collected only when the end consumer buys the final product at retail. Intermediate business-to-business transactions are exempt using resale certificates.
               </p>
             </div>
@@ -284,7 +284,7 @@ export function VatContent() {
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-zinc-600 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
+                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
                     {faq.answer}
                   </div>
                 )}

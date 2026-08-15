@@ -93,22 +93,22 @@ export function DiscountContent() {
   ];
 
   return (
-    <div className="mt-12 space-y-12 border-t border-zinc-200 dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
+    <div className="mt-12 space-y-12  dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
       {/* Article Header */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Complete Shopping &amp; Business Discount Guide
         </div>
         <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
           Discount Calculator Guide: Single, Stacked &amp; Coupon Savings Mechanics
         </h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
+        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
           Discounts are ubiquitous in retail, wholesale, e-commerce, and corporate purchasing. Understanding discount formulas—such as single percentage off, fixed dollar coupons, stacked sequential discounts, and sales tax interactions—empowers shoppers and businesses to calculate exact final checkout costs and maximize financial savings.
         </p>
       </section>
 
       {/* Main Educational Content with Required H2 Headings */}
-      <div className="space-y-8 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+      <div className="space-y-8 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
         <section className="space-y-2">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">What Is a Discount?</h2>
           <p>
@@ -185,9 +185,9 @@ export function DiscountContent() {
       </div>
 
       {/* 15+ FAQ Accordion Section */}
-      <section className="space-y-6 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+      <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
-          <HelpCircle className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+          <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
             Frequently Asked Questions (15 Key Discount Insights)
           </h2>
@@ -207,18 +207,18 @@ export function DiscountContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 text-zinc-500 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 text-slate-900 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed  dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
                     {faq.a}
                   </div>
                 )}
@@ -229,22 +229,22 @@ export function DiscountContent() {
       </section>
 
       {/* Related Calculators */}
-      <section className="space-y-3 border-t border-zinc-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-3  dark:border-zinc-800 pt-6">
         <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Related Financial &amp; Shopping Calculators</h2>
         <div className="flex flex-wrap gap-2 text-xs">
-          <Link href="/calculators/percentage-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/percentage-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Percentage Calculator
           </Link>
-          <Link href="/calculators/sales-tax-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/sales-tax-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Sales Tax Calculator
           </Link>
-          <Link href="/calculators/gst-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/gst-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             GST Calculator
           </Link>
-          <Link href="/calculators/vat-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/vat-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             VAT Calculator
           </Link>
-          <Link href="/calculators/margin-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/margin-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Profit Margin Calculator
           </Link>
         </div>

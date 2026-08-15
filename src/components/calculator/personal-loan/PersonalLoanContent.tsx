@@ -96,22 +96,22 @@ export function PersonalLoanContent() {
   ];
 
   return (
-    <div className="mt-12 space-y-12 border-t border-zinc-200 dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
+    <div className="mt-12 space-y-12  dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
       {/* Article Header */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Complete Personal Loan &amp; Borrowing Guide
         </div>
         <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
           Personal Loan Calculator Guide: Amortization, Interest &amp; Debt Consolidation
         </h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
+        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
           Personal loans are popular financial tools for consolidating high-interest credit card debt, funding home renovations, or financing major expenses. Understanding monthly amortization payments, origination fees, interest costs, and APR empowers borrowers to make informed financial decisions.
         </p>
       </section>
 
       {/* Main Educational Content with Required Headings */}
-      <div className="space-y-8 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+      <div className="space-y-8 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
         <section className="space-y-2">
           <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">What Are Personal Loans?</h2>
           <p>
@@ -182,9 +182,9 @@ export function PersonalLoanContent() {
       </div>
 
       {/* 15+ FAQ Accordion Section */}
-      <section className="space-y-6 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+      <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
-          <HelpCircle className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+          <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
             Frequently Asked Questions (15 Key Personal Loan Insights)
           </h2>
@@ -204,18 +204,18 @@ export function PersonalLoanContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 text-zinc-500 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 text-slate-900 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed  dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
                     {faq.a}
                   </div>
                 )}
@@ -226,22 +226,22 @@ export function PersonalLoanContent() {
       </section>
 
       {/* Related Calculators */}
-      <section className="space-y-3 border-t border-zinc-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-3  dark:border-zinc-800 pt-6">
         <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Related Financial &amp; Debt Calculators</h2>
         <div className="flex flex-wrap gap-2 text-xs">
-          <Link href="/calculators/loan-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/loan-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Loan Calculator
           </Link>
-          <Link href="/calculators/credit-card-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/credit-card-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Credit Card Calculator
           </Link>
-          <Link href="/calculators/debt-consolidation-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/debt-consolidation-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Debt Consolidation Calculator
           </Link>
-          <Link href="/calculators/debt-payoff-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/debt-payoff-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Debt Payoff Calculator
           </Link>
-          <Link href="/calculators/auto-loan-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/auto-loan-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Auto Loan Calculator
           </Link>
         </div>

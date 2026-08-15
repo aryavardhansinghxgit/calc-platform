@@ -7,7 +7,7 @@ export function EngineHorsepowerContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-800 dark:text-zinc-200">
       {/* SECTION 1 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
           1. What is Engine Horsepower? (Origins &amp; Physics)
         </h2>
         <p>
@@ -32,7 +32,7 @@ export function EngineHorsepowerContent() {
 
       {/* SECTION 2 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
           2. Mathematical Models for Estimating Horsepower
         </h2>
         <p>
@@ -77,7 +77,7 @@ export function EngineHorsepowerContent() {
 
       {/* SECTION 3 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
           3. Gross HP vs. Net HP vs. Brake HP (BHP) vs. Wheel HP (WHP)
         </h2>
         <p>
@@ -101,7 +101,7 @@ export function EngineHorsepowerContent() {
 
       {/* SECTION 4 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
           4. Drivetrain Parasitic Loss Dynamics
         </h2>
         <p>
@@ -144,7 +144,7 @@ export function EngineHorsepowerContent() {
 
       {/* SECTION 5 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
           5. Forced Induction, Displacement &amp; Volumetric Efficiency (VE)
         </h2>
         <p>
@@ -162,7 +162,7 @@ export function EngineHorsepowerContent() {
 
       {/* SECTION 6 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
           6. Track Testing Safety &amp; Methodology
         </h2>
         <p>

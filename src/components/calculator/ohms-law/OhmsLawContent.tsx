@@ -5,13 +5,13 @@ import { BookOpen, AlertTriangle, Cpu, CheckCircle } from "lucide-react";
 
 export function OhmsLawContent() {
   return (
-    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10  dark:border-zinc-800 pt-8">
       <header>
         <h2 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
           <BookOpen className="h-6 w-6 text-blue-600" />
           The Engineering Guide to Ohm&apos;s Law, Electrical Power, and Divider Networks
         </h2>
-        <p className="text-zinc-500 dark:text-zinc-400 text-xs">
+        <p className="text-slate-900 dark:text-slate-100 text-xs">
           An authoritative reference on circuit equations, Joule heating limits, and practical electrical design.
         </p>
       </header>
@@ -137,7 +137,7 @@ export function OhmsLawContent() {
               <Cpu className="w-3.5 h-3.5 text-blue-600" />
               Example A: Given Voltage and Resistance
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Calculate current and power for a 12V automotive circuit connected to a 6 Ω load.
             </p>
             <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
@@ -153,10 +153,10 @@ export function OhmsLawContent() {
           {/* Example 2 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
             <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-purple-600" />
+              <Cpu className="w-3.5 h-3.5 text-blue-600" />
               Example B: LED Limiting Resistor
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Find the series resistor needed to power a standard Red LED (forward voltage Vf = 2.0V, recommended forward current If = 20 mA) from a 9V battery source.
             </p>
             <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
@@ -181,8 +181,8 @@ export function OhmsLawContent() {
         <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
           <span>6.</span> Common Engineering Mistakes & Pitfalls
         </h3>
-        <div className="p-4 border border-amber-200 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/20 rounded-2xl space-y-2">
-          <p className="flex items-center gap-1 text-amber-800 dark:text-amber-400 font-bold text-xs">
+        <div className="p-4 border border-amber-200 dark:border-amber-900/60 bg-blue-50/50 dark:bg-blue-50/20 rounded-2xl space-y-2">
+          <p className="flex items-center gap-1 text-amber-800 dark:text-blue-400 font-bold text-xs">
             <AlertTriangle className="w-4 h-4" /> Watch out for these critical errors during layout configuration:
           </p>
           <ul className="list-disc pl-5 space-y-1.5 text-xs">

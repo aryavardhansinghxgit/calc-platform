@@ -93,13 +93,13 @@ export function CalorieContent() {
     <article className="mt-12 space-y-10 text-zinc-800 dark:text-zinc-200">
       {/* 1. Introduction */}
       <section className="space-y-4 p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-        <div className="flex items-center gap-2.5 text-emerald-600 dark:text-emerald-400">
+        <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400">
           <Flame className="w-6 h-6" />
           <h2 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
             Comprehensive Clinical Guide to Caloric Expenditure &amp; Energy Balance
           </h2>
         </div>
-        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
           Understanding your daily caloric requirement is the fundamental cornerstone of evidence-based clinical nutrition, sports performance, and body composition management. Whether your goal is sustainable fat loss, lean muscle hypertrophy, athletic conditioning, or metabolic preservation, your daily energy balance dictates your biological trajectory. This guide details the physiological mechanics of Basal Metabolic Rate (BMR), Total Daily Energy Expenditure (TDEE), and macronutrient optimization.
         </p>
       </section>
@@ -107,20 +107,20 @@ export function CalorieContent() {
       {/* 2. What Is Caloric Intake & Energy Balance */}
       <section className="space-y-4">
         <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Scale className="w-5 h-5 text-sky-600 dark:text-sky-400" />
+          <Scale className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           1. The Physics of Energy Balance: First Law of Thermodynamics
         </h3>
-        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
           In human physiology, weight change is governed by the First Law of Thermodynamics: energy cannot be created or destroyed, only transformed. Energy Intake (calories consumed via food and beverages) versus Energy Expenditure (calories burned through resting metabolism, digestion, and movement) determines net body mass change:
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-semibold">
-          <div className="p-3 bg-sky-50 dark:bg-sky-950/30 rounded-xl border border-sky-200 dark:border-sky-800 text-sky-900 dark:text-sky-200">
+          <div className="p-3 bg-blue-50 dark:bg-blue-50/30 rounded-xl border border-sky-200 dark:border-sky-800 text-sky-900 dark:text-sky-200">
             <strong>Caloric Deficit (Energy Out &gt; In)</strong>
-            <p className="text-[11px] font-normal text-sky-700 dark:text-sky-300 mt-1">Forces the body to metabolize stored adipose lipid tissue and glycogen for energy, resulting in weight loss.</p>
+            <p className="text-[11px] font-normal text-blue-600 dark:text-blue-400 mt-1">Forces the body to metabolize stored adipose lipid tissue and glycogen for energy, resulting in weight loss.</p>
           </div>
-          <div className="p-3 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200">
+          <div className="p-3 bg-blue-50 dark:bg-blue-50/30 rounded-xl border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200">
             <strong>Energy Balance (Energy In = Out)</strong>
-            <p className="text-[11px] font-normal text-emerald-700 dark:text-emerald-300 mt-1">Maintains total body weight and physiological equilibrium without significant composition shifts.</p>
+            <p className="text-[11px] font-normal text-blue-600 dark:text-blue-400 mt-1">Maintains total body weight and physiological equilibrium without significant composition shifts.</p>
           </div>
           <div className="p-3 bg-orange-50 dark:bg-orange-950/30 rounded-xl border border-orange-200 dark:border-orange-800 text-orange-900 dark:text-orange-200">
             <strong>Caloric Surplus (Energy In &gt; Out)</strong>
@@ -132,13 +132,13 @@ export function CalorieContent() {
       {/* 3. BMR vs TDEE vs TEF */}
       <section className="space-y-4">
         <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Target className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           2. Deconstructing Total Daily Energy Expenditure (TDEE)
         </h3>
-        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
           Your TDEE is composed of four distinct metabolic components:
         </p>
-        <ul className="space-y-2 text-sm text-zinc-600 dark:text-zinc-300 list-disc pl-5">
+        <ul className="space-y-2 text-sm text-slate-900 dark:text-zinc-300 list-disc pl-5">
           <li><strong>Basal Metabolic Rate (BMR - 60% to 75%):</strong> Energy required for cell maintenance, organ function, respiration, and thermoregulation at complete rest.</li>
           <li><strong>Non-Exercise Activity Thermogenesis (NEAT - 15% to 30%):</strong> Calories burned during non-deliberate physical movement such as walking, typing, standing, and fidgeting.</li>
           <li><strong>Thermic Effect of Food (TEF - 10%):</strong> Energy consumed during nutrient digestion and processing (Protein = 20-30%, Carbs = 5-10%, Fat = 0-3%).</li>
@@ -155,7 +155,7 @@ export function CalorieContent() {
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. Mifflin-St Jeor Equation (Clinical Standard)</h4>
             <p>Validated in 1990 as the most reliable formula for modern sedentary lifestyles:</p>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               Male: BMR = (10 × W_kg) + (6.25 × H_cm) - (5 × Age) + 5<br/>
               Female: BMR = (10 × W_kg) + (6.25 × H_cm) - (5 × Age) - 161
             </code>
@@ -164,7 +164,7 @@ export function CalorieContent() {
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. Revised Harris-Benedict Equation (Roza &amp; Shizgal 1984)</h4>
             <p>Refined version of the classic 1919 study, suitable for active individuals:</p>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-sky-700 dark:text-sky-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               Male: BMR = 88.362 + (13.397 × W_kg) + (4.799 × H_cm) - (5.677 × Age)<br/>
               Female: BMR = 447.593 + (9.247 × W_kg) + (3.098 × H_cm) - (4.330 × Age)
             </code>
@@ -173,7 +173,7 @@ export function CalorieContent() {
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">C. Katch-McArdle Formula (Lean Mass Based)</h4>
             <p>Calculates BMR directly from Lean Body Mass (LBM), making it ideal for athletes:</p>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-purple-700 dark:text-purple-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               LBM = Weight_kg × (1 - BodyFat%/100)<br/>
               BMR = 370 + (21.6 × LBM)
             </code>
@@ -184,7 +184,7 @@ export function CalorieContent() {
       {/* 5. 20 Clinical FAQs Accordion */}
       <section className="space-y-4">
         <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 font-bold text-xl">
-          <HelpCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+          <HelpCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
           <h3>Frequently Asked Questions (Clinical &amp; Practical)</h3>
         </div>
 
@@ -202,10 +202,10 @@ export function CalorieContent() {
                   className="w-full p-4 text-left font-semibold text-sm text-zinc-900 dark:text-zinc-100 flex justify-between items-center hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
                 >
                   <span>{faq.q}</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform text-zinc-500 ${isOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`w-4 h-4 transition-transform text-slate-900 ${isOpen ? "rotate-180" : ""}`} />
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4 pt-1 text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed border-t border-zinc-100 dark:border-zinc-800">
+                  <div className="px-4 pb-4 pt-1 text-xs text-slate-900 dark:text-zinc-300 leading-relaxed  dark:border-zinc-800">
                     {faq.a}
                   </div>
                 )}

@@ -36,23 +36,23 @@ export function ShoeSizeContent() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-          <div className="p-3.5 bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-xl space-y-1">
-            <h3 className="font-bold text-emerald-800 dark:text-emerald-300">Step 1: Set Up Paper & Wall</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+          <div className="p-3.5 bg-blue-50/60 dark:bg-blue-50/20 border border-emerald-200 dark:border-emerald-900 rounded-xl space-y-1">
+            <h3 className="font-bold text-emerald-800 dark:text-blue-400">Step 1: Set Up Paper & Wall</h3>
+            <p className="text-slate-900 dark:text-slate-100">
               Tape a blank sheet of paper to a hard floor against a flat vertical wall. Wear the socks you plan to wear with the shoes.
             </p>
           </div>
 
           <div className="p-3.5 bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-xl space-y-1">
             <h3 className="font-bold text-blue-800 dark:text-blue-300">Step 2: Trace Both Feet</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Stand flat-footed with your heel touching the wall. Trace around your foot with a vertically held pen. Mark the longest toe and widest ball points.
             </p>
           </div>
 
-          <div className="p-3.5 bg-purple-50/60 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900 rounded-xl space-y-1">
-            <h3 className="font-bold text-purple-800 dark:text-purple-300">Step 3: Measure & Add Margin</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+          <div className="p-3.5 bg-blue-50/60 dark:bg-blue-50/20 border border-purple-200 dark:border-purple-900 rounded-xl space-y-1">
+            <h3 className="font-bold text-purple-800 dark:text-blue-400">Step 3: Measure & Add Margin</h3>
+            <p className="text-slate-900 dark:text-slate-100">
               Measure the distance from wall to longest toe mark in cm/inches. Add <strong>10 mm to 12 mm (0.4–0.5 in)</strong> of toe clearance allowance.
             </p>
           </div>
@@ -71,7 +71,7 @@ export function ShoeSizeContent() {
         <div className="space-y-3 text-xs">
           <div className="p-3.5 bg-zinc-100 dark:bg-zinc-800 rounded-xl space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">1. US & UK Barleycorn System (1/3 Inch Steps)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Traditional Anglo-American shoe sizing is based on the <em>barleycorn</em> unit (exactly <strong>1/3 of an inch</strong> or 8.46 mm):
             </p>
             <div className="p-2 bg-white dark:bg-zinc-900 font-sans tabular-nums text-[11px] rounded border border-zinc-200 dark:border-zinc-700 text-center my-1">
@@ -87,7 +87,7 @@ export function ShoeSizeContent() {
 
           <div className="p-3.5 bg-zinc-100 dark:bg-zinc-800 rounded-xl space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">2. European Paris Point System (2/3 CM Steps)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Continental European sizing uses the <em>Paris Point</em> (Point de Paris), equal to <strong>2/3 of a centimeter</strong> (6.67 mm):
             </p>
             <div className="p-2 bg-white dark:bg-zinc-900 font-sans tabular-nums text-[11px] rounded border border-zinc-200 dark:border-zinc-700 text-center my-1">
@@ -97,7 +97,7 @@ export function ShoeSizeContent() {
 
           <div className="p-3.5 bg-zinc-100 dark:bg-zinc-800 rounded-xl space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">3. Mondopoint System (ISO 9407)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               The international ISO 9407 standard used in Japan, East Asia, and military applications specifies foot length and width directly in <strong>millimeters (mm)</strong> (e.g., 270/100).
             </p>
           </div>
@@ -123,12 +123,12 @@ export function ShoeSizeContent() {
                 <th className="p-2.5 border border-zinc-200 dark:border-zinc-700">Japan (cm)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
+            <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">9.25 in</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">23.5 cm</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">6.0</td>
-                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-emerald-600">7.5</td>
+                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-blue-600">7.5</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">5.0</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">38</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">23.5</td>
@@ -137,7 +137,7 @@ export function ShoeSizeContent() {
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">9.65 in</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">24.5 cm</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">7.0</td>
-                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-emerald-600">8.5</td>
+                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-blue-600">8.5</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">6.0</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">39–40</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">24.5</td>
@@ -145,7 +145,7 @@ export function ShoeSizeContent() {
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">10.0 in</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">25.4 cm</td>
-                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-emerald-600">8.5</td>
+                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-blue-600">8.5</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">10.0</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">7.5</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">41–42</td>
@@ -154,7 +154,7 @@ export function ShoeSizeContent() {
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">10.5 in</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">26.7 cm</td>
-                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-emerald-600">10.0</td>
+                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-blue-600">10.0</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">11.5</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">9.0</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">43</td>
@@ -163,7 +163,7 @@ export function ShoeSizeContent() {
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">11.0 in</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">27.9 cm</td>
-                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-emerald-600">11.5</td>
+                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-blue-600">11.5</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">13.0</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">10.5</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">45</td>

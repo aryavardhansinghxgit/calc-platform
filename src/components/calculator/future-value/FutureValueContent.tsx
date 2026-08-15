@@ -111,7 +111,7 @@ export function FutureValueContent() {
   ];
 
   return (
-    <div className="space-y-10 mt-8 border-t border-zinc-200 dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
+    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
       {/* Overview Banner */}
       <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-lg">
         <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
@@ -146,7 +146,7 @@ export function FutureValueContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-base">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
               <Zap className="h-5 w-5" /> 2. Future Value Formula Explained
             </div>
             <p>
@@ -155,7 +155,7 @@ export function FutureValueContent() {
             <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-lg font-sans tabular-nums text-xs text-center border border-zinc-200 dark:border-zinc-700">
               FV = PV × (1 + r / n)^(n × t)
             </div>
-            <ul className="text-xs space-y-1 text-zinc-600 dark:text-zinc-400">
+            <ul className="text-xs space-y-1 text-slate-900 dark:text-slate-100">
               <li>• <strong>FV:</strong> Future Value of the investment</li>
               <li>• <strong>PV:</strong> Present Value (initial deposit)</li>
               <li>• <strong>r:</strong> Nominal annual interest rate (decimal)</li>
@@ -168,7 +168,7 @@ export function FutureValueContent() {
         {/* Section 3 & 4 */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Clock className="h-5 w-5 text-emerald-600" /> 3. Time Value of Money (TVM) & PV vs. FV
+            <Clock className="h-5 w-5 text-blue-600" /> 3. Time Value of Money (TVM) & PV vs. FV
           </h3>
           <p>
             The <strong>Time Value of Money (TVM)</strong> is the core economic principle stating that a dollar in hand today is worth 
@@ -176,8 +176,8 @@ export function FutureValueContent() {
             producing a higher total balance in the future.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-2">
-            <div className="p-4 bg-emerald-50 dark:bg-emerald-950/30 rounded-lg border border-emerald-200 dark:border-emerald-900">
-              <span className="font-bold text-emerald-800 dark:text-emerald-300 block mb-1">Present Value (PV) Focus</span>
+            <div className="p-4 bg-blue-50 dark:bg-blue-50/30 rounded-lg border border-emerald-200 dark:border-emerald-900">
+              <span className="font-bold text-emerald-800 dark:text-blue-400 block mb-1">Present Value (PV) Focus</span>
               Discounts future cash flows back to today's equivalent monetary value using a discount rate. Crucial for asset valuation and bond pricing.
             </div>
             <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-900">
@@ -190,7 +190,7 @@ export function FutureValueContent() {
         {/* Section 5, 6 & 7: Annuities & Timing */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Layers className="h-5 w-5 text-purple-600" /> 5–7. Lump Sums vs. Ordinary Annuities vs. Annuities Due
+            <Layers className="h-5 w-5 text-blue-600" /> 5–7. Lump Sums vs. Ordinary Annuities vs. Annuities Due
           </h3>
           <p>
             When investing, cash can enter portfolio balances in two primary structures: a single upfront lump sum or recurring periodic deposits (annuities).
@@ -206,24 +206,24 @@ export function FutureValueContent() {
                   <th className="p-3 border border-zinc-200 dark:border-zinc-700">Relative Yield</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className=" dark:divide-zinc-800">
                 <tr>
                   <td className="p-3 font-semibold">Lump Sum</td>
                   <td className="p-3">Single initial deposit at t=0</td>
                   <td className="p-3 font-sans tabular-nums text-[11px]">FV = PV × (1+r/n)^(nt)</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">Baseline growth on capital</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">Baseline growth on capital</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Ordinary Annuity</td>
                   <td className="p-3">Deposits at end of each period</td>
                   <td className="p-3 font-sans tabular-nums text-[11px]">FV = PMT × [((1+i)^n - 1) / i]</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">Standard recurring savings model</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">Standard recurring savings model</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Annuity Due</td>
                   <td className="p-3">Deposits at start of each period</td>
                   <td className="p-3 font-sans tabular-nums text-[11px]">FV = FV_ordinary × (1+i)</td>
-                  <td className="p-3 text-emerald-600 font-bold">+1 Extra period of interest per deposit</td>
+                  <td className="p-3 text-blue-600 font-bold">+1 Extra period of interest per deposit</td>
                 </tr>
               </tbody>
             </table>
@@ -244,7 +244,7 @@ export function FutureValueContent() {
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <AlertTriangle className="h-4 w-4 text-amber-500" /> 9. Inflation Drag
+              <AlertTriangle className="h-4 w-4 text-blue-600" /> 9. Inflation Drag
             </h4>
             <p className="text-xs">
               Inflation erodes purchasing power over time. A $1,000,000 nominal Future Value in 30 years with 3% annual inflation 
@@ -254,7 +254,7 @@ export function FutureValueContent() {
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-rose-500" /> 10. Tax Drag Impact
+              <ShieldCheck className="h-4 w-4 text-blue-600" /> 10. Tax Drag Impact
             </h4>
             <p className="text-xs">
               Taxes paid annually on investment growth reduce the compounding snowball effect. Utilizing tax-advantaged accounts 
@@ -266,19 +266,19 @@ export function FutureValueContent() {
         {/* Section 11 - 15: Use Cases & Pitfalls */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-indigo-600" /> 11–15. Real-World Applications & Common Mistakes
+            <Award className="h-5 w-5 text-blue-600" /> 11–15. Real-World Applications & Common Mistakes
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="space-y-2">
               <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Retirement & 401(k) Planning</span>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-slate-900 dark:text-slate-100">
                 Future Value modeling determines the target nest egg needed for financial independence. Adding annual step-up contributions 
                 (e.g., increasing monthly savings by 5% each year) can increase final retirement capital by 40%–70%.
               </p>
             </div>
             <div className="space-y-2">
               <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Systematic Investment Plans (SIP) & FDs</span>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-slate-900 dark:text-slate-100">
                 Dollar-cost averaging into index funds or committing to guaranteed Fixed Deposits (FD) relies on Future Value formulas 
                 to quantify returns across varying market conditions.
               </p>
@@ -322,7 +322,7 @@ export function FutureValueContent() {
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-zinc-600 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
+                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
                     {faq.answer}
                   </div>
                 )}

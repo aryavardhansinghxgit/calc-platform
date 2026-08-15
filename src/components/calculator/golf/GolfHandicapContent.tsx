@@ -18,16 +18,16 @@ export function GolfHandicapContent() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-          <div className="p-3.5 bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-xl space-y-1">
-            <h3 className="font-bold text-emerald-800 dark:text-emerald-300">Scratch Golfer (0.0 Index)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+          <div className="p-3.5 bg-blue-50/60 dark:bg-blue-50/20 border border-emerald-200 dark:border-emerald-900 rounded-xl space-y-1">
+            <h3 className="font-bold text-emerald-800 dark:text-blue-400">Scratch Golfer (0.0 Index)</h3>
+            <p className="text-slate-900 dark:text-slate-100">
               A player capable of playing to a Course Handicap of 0 on any rated golf course. A scratch golfer averages par on standard courses.
             </p>
           </div>
 
           <div className="p-3.5 bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-xl space-y-1">
             <h3 className="font-bold text-blue-800 dark:text-blue-300">Bogey Golfer (20.0 – 24.0 Index)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               A player with a Course Handicap of approximately 20 on a standard course, averaging about 1 stroke over par per hole.
             </p>
           </div>
@@ -43,7 +43,7 @@ export function GolfHandicapContent() {
           Every round posted generates a <strong>Score Differential</strong>, which measures how well you played relative to the difficulty of the course and tees:
         </p>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-emerald-700 dark:text-emerald-300 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-blue-600 dark:text-blue-400 font-bold">
           Score Differential = (113 / Slope Rating) × (Adjusted Gross Score - Course Rating - PCC)
         </div>
 
@@ -61,11 +61,11 @@ export function GolfHandicapContent() {
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Adjustment / Calculation Rule</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
+            <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans font-bold">3 Rounds</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">Lowest 1</td>
-                <td className="p-2 border border-zinc-200 dark:border-zinc-800 text-emerald-600 font-bold">Lowest 1 Differential - 2.0</td>
+                <td className="p-2 border border-zinc-200 dark:border-zinc-800 text-blue-600 font-bold">Lowest 1 Differential - 2.0</td>
               </tr>
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans font-bold">4 Rounds</td>
@@ -113,9 +113,9 @@ export function GolfHandicapContent() {
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">Average of Lowest 7 Differentials</td>
               </tr>
               <tr>
-                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans font-bold text-emerald-600">20 Rounds (Full)</td>
+                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans font-bold text-blue-600">20 Rounds (Full)</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold">Lowest 8</td>
-                <td className="p-2 border border-zinc-200 dark:border-zinc-800 text-emerald-600 font-bold">Average of Lowest 8 Differentials</td>
+                <td className="p-2 border border-zinc-200 dark:border-zinc-800 text-blue-600 font-bold">Average of Lowest 8 Differentials</td>
               </tr>
             </tbody>
           </table>
@@ -148,14 +148,14 @@ export function GolfHandicapContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Net Double Bogey Maximum</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Limits the maximum score on any single hole for handicap posting: <strong>Par + 2 + Handicap Strokes Received</strong>.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Soft Cap & Hard Cap</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Tracks your 365-day Low Index. Increases past +3.0 strokes are suppressed by 50% (Soft Cap), with a maximum ceiling of +5.0 strokes (Hard Cap).
             </p>
           </div>

@@ -85,40 +85,40 @@ export function BandwidthContent() {
             <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400">
               {"T_theoretical = (D_Bytes * 8) / S_bps"}
             </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">
+            <p className="text-xs text-slate-900 dark:text-slate-100">
               Where T is duration in seconds, D_Bytes is total file size in Bytes, and S_bps is connection speed in bits per second.
             </p>
           </div>
 
           <div className="bg-zinc-50 dark:bg-zinc-800/60 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100">Formula 2: Realistic Effective Duration with Network Overhead</h4>
-            <div className="font-sans tabular-nums text-xs text-emerald-600 dark:text-emerald-400">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400">
               {"T_realistic = (D_Bytes * 8) / [S_bps * (1 - Loss_overhead/100) * (Efficiency_isp/100)]"}
             </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">
+            <p className="text-xs text-slate-900 dark:text-slate-100">
               Where Loss_overhead is protocol header/interference loss percentage (0% to 50%) and Efficiency_isp is the measured ISP line efficiency percentage (50% to 100%).
             </p>
           </div>
 
           <div className="bg-zinc-50 dark:bg-zinc-800/60 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100">Formula 3: Web Hosting Required Transfer and Port Bandwidth</h4>
-            <div className="font-sans tabular-nums text-xs text-purple-600 dark:text-purple-400">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400">
               {"D_monthly_GB = [V_monthly * P_Bytes * (1 + Bot_overhead/100)] / 10^9"}
             </div>
-            <div className="font-sans tabular-nums text-xs text-purple-600 dark:text-purple-400 mt-1">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 mt-1">
               {"S_peak_Mbps = [(D_monthly_Bytes * 8) / 2,629,800] * (Surge_factor / 10^6)"}
             </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">
+            <p className="text-xs text-slate-900 dark:text-slate-100">
               Where V_monthly is monthly page views, P_Bytes is average page size, Bot_overhead is crawler overhead %, Surge_factor is peak surge multiplier, and 2,629,800 is the average number of seconds in a month (30.4375 days).
             </p>
           </div>
 
           <div className="bg-zinc-50 dark:bg-zinc-800/60 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100">Formula 4: Multi-Device Aggregate Concurrency Demand</h4>
-            <div className="font-sans tabular-nums text-xs text-amber-600 dark:text-amber-400">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400">
               {"S_aggregate_Mbps = [Sum(Count_i * Speed_i)] * (1 + Headroom/100)"}
             </div>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">
+            <p className="text-xs text-slate-900 dark:text-slate-100">
               Where Count_i is active device count for activity profile i, Speed_i is bitrate per stream, and Headroom is safety growth cushion %.
             </p>
           </div>
@@ -226,7 +226,7 @@ export function BandwidthContent() {
                   <th className="p-2 border border-zinc-200 dark:border-zinc-700">Realistic MB/s (10% Loss)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
+              <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
                 <tr>
                   <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans">V.90 Dialup Modem</td>
                   <td className="p-2 border border-zinc-200 dark:border-zinc-800">56 Kbps</td>
@@ -277,7 +277,7 @@ export function BandwidthContent() {
                   <th className="p-2 border border-zinc-200 dark:border-zinc-700">Typical Uplink Speed</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
+              <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
                 <tr>
                   <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans">3G</td>
                   <td className="p-2 border border-zinc-200 dark:border-zinc-800">HSPA+</td>
@@ -352,25 +352,25 @@ export function BandwidthContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Enterprise Cloud Backups</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Determining night-time backup windows for multi-terabyte virtual machine images over dedicated site-to-site VPN tunnels.
             </p>
           </div>
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Live Video Broadcasting & CDN</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Calculating total outbound bitrates for streaming 4K live streams (25 Mbps per viewer) across edge CDN distribution nodes.
             </p>
           </div>
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Remote Work Force Management</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Sizing corporate office internet connections to prevent choppy Zoom video calls when dozens of employees operate simultaneously.
             </p>
           </div>
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Web Infrastructure Budgeting</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Estimating monthly AWS/Azure egress bandwidth bills ($0.08 per GB) based on projected user traffic and average asset payload sizes.
             </p>
           </div>
@@ -385,20 +385,20 @@ export function BandwidthContent() {
         <div className="space-y-3 text-xs">
           <div>
             <h3 className="font-bold text-zinc-800 dark:text-zinc-200">The Shannon-Hartley Theorem</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Establishes the maximum theoretical channel capacity C in the presence of noise:
             </p>
             <div className="font-sans tabular-nums text-xs bg-zinc-50 dark:bg-zinc-800/60 p-2 rounded border border-zinc-200 dark:border-zinc-700 my-1 text-center">
               {"C = B * log2(1 + S/N)"}
             </div>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Where B is channel bandwidth in Hertz (Hz) and S/N is the signal-to-noise ratio.
             </p>
           </div>
 
           <div>
             <h3 className="font-bold text-zinc-800 dark:text-zinc-200">Bandwidth-Delay Product (BDP)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Measures the maximum volume of data in flight on a network link at any given instant:
             </p>
             <div className="font-sans tabular-nums text-xs bg-zinc-50 dark:bg-zinc-800/60 p-2 rounded border border-zinc-200 dark:border-zinc-700 my-1 text-center">
@@ -409,7 +409,7 @@ export function BandwidthContent() {
       </section>
 
       {/* SECTION 10: SUMMARY */}
-      <section className="space-y-3 border-t border-zinc-200 dark:border-zinc-800 pt-4">
+      <section className="space-y-3  dark:border-zinc-800 pt-4">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
           10. Summary
         </h2>

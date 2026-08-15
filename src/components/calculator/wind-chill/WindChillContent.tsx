@@ -17,9 +17,9 @@ export function WindChillContent() {
           Your body naturally warms a microscopic layer of air trapped directly against your skin, known as the <strong>thermal boundary layer</strong>. In calm conditions, this boundary layer provides a protective cushion of warm air that slows down conductive and radiative heat loss. However, when wind blows across your skin, it strips away this insulating layer through <strong>forced convective heat transfer</strong>, forcing your body to constantly expend metabolic energy heating fresh, cold air.
         </p>
 
-        <div className="p-3.5 bg-sky-50/60 dark:bg-sky-950/20 border border-sky-200 dark:border-sky-900 rounded-xl space-y-1 text-xs">
+        <div className="p-3.5 bg-blue-50/60 dark:bg-blue-50/20 border border-sky-200 dark:border-sky-900 rounded-xl space-y-1 text-xs">
           <h3 className="font-bold text-sky-900 dark:text-sky-200">Critical Physics Fact: Inanimate Objects vs. Human Tissue</h3>
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-slate-900 dark:text-slate-100">
             Wind chill accelerates the <em>speed</em> of cooling, but it <strong>cannot cool any object below the actual air temperature</strong>. A car radiator or water pipe exposed to a 10°F air temperature with a -15°F wind chill will cool down to 10°F much faster, but it will never drop below 10°F or freeze if the air temperature remains above 32°F (0°C).
           </p>
         </div>
@@ -36,15 +36,15 @@ export function WindChillContent() {
           In 2001, the National Weather Service (NWS) and Environment Canada updated the wind chill index using clinical facial skin heat-transfer models developed by the Joint Action Group for Temperature Indices (JAG/TI):
         </p>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-blue-600 dark:text-blue-400 font-bold">
           Wind Chill (°F) = 35.74 + 0.6215 × T - 35.75 × (V^0.16) + 0.4275 × T × (V^0.16)
         </div>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-blue-600 dark:text-blue-400 font-bold">
           Wind Chill (°C) = 13.12 + 0.6215 × T - 11.37 × (V^0.16) + 0.3965 × T × (V^0.16)
         </div>
 
-        <p className="text-xs text-zinc-600 dark:text-zinc-400">
+        <p className="text-xs text-slate-900 dark:text-slate-100">
           Where \(T\) is air temperature in °F or °C, and \(V\) is wind speed in mph or km/h measured at 10 meters (33 feet) standard anemometer height.
         </p>
 
@@ -62,14 +62,14 @@ export function WindChillContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100">Winter Wind Chill (Convective Loss)</h4>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Applies below 50°F (10°C). Driven primarily by wind speed stripping body heat through convective air displacement.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100">Summer Heat Index (Evaporative Suppression)</h4>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Applies above 80°F (27°C). Driven by high relative humidity preventing sweat evaporation from cooling the skin.
             </p>
           </div>

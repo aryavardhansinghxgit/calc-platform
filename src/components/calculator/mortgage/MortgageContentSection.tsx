@@ -34,7 +34,7 @@ export function MortgageContentSection() {
       {/* 2. Key Components of a Monthly Mortgage (PITI) */}
       <section className="space-y-3">
         <h3 className="text-lg font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <DollarSign className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+          <DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           Key Components of a Monthly Mortgage Payment (PITI)
         </h3>
         <p className="text-sm leading-relaxed">
@@ -45,7 +45,7 @@ export function MortgageContentSection() {
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full bg-blue-500"></span> Principal
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
               The original amount of money borrowed from the lender. Each monthly payment pays off a portion of this principal, slowly building equity in your home.
             </p>
           </div>
@@ -53,7 +53,7 @@ export function MortgageContentSection() {
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full bg-amber-500"></span> Interest
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
               The fee charged by the lender for borrowing their money, calculated as an annual percentage rate (APR) applied to your remaining loan balance.
             </p>
           </div>
@@ -61,7 +61,7 @@ export function MortgageContentSection() {
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full bg-emerald-500"></span> Property Taxes
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
               Taxes assessed by local county or city governments based on your property value. Lenders collect 1/12th of this annual cost monthly into an escrow account.
             </p>
           </div>
@@ -69,7 +69,7 @@ export function MortgageContentSection() {
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full bg-purple-500"></span> Home Insurance
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
               Hazard and property insurance required by lenders to protect the home against hazards like fires, storms, or physical damage.
             </p>
           </div>
@@ -79,7 +79,7 @@ export function MortgageContentSection() {
       {/* 3. Property Taxes */}
       <section className="space-y-3">
         <h3 className="text-lg font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Percent className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+          <Percent className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           Understanding Property Taxes
         </h3>
         <p className="text-sm leading-relaxed">
@@ -90,7 +90,7 @@ export function MortgageContentSection() {
       {/* 4. Homeowner's Insurance */}
       <section className="space-y-3">
         <h3 className="text-lg font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Home className="h-5 w-5 text-teal-600 dark:text-teal-400" />
+          <Home className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           Home Insurance Costs & Escrow
         </h3>
         <p className="text-sm leading-relaxed">
@@ -101,15 +101,15 @@ export function MortgageContentSection() {
       {/* 5. PMI Insurance (Private Mortgage Insurance) */}
       <section className="space-y-3">
         <h3 className="text-lg font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <ShieldAlert className="h-5 w-5 text-rose-600 dark:text-rose-400" />
+          <ShieldAlert className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           Private Mortgage Insurance (PMI)
         </h3>
         <p className="text-sm leading-relaxed">
           If your down payment is less than <strong>20% of the home price</strong> (Loan-to-Value ratio over 80%), conventional lenders require Private Mortgage Insurance (PMI). PMI protects the lender if you default.
         </p>
-        <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-xs space-y-2">
+        <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-50/30 border border-amber-200 dark:border-amber-800 text-xs space-y-2">
           <p className="font-bold text-amber-900 dark:text-amber-200">How to eliminate PMI:</p>
-          <ul className="list-disc list-inside space-y-1 text-amber-800 dark:text-amber-300">
+          <ul className="list-disc list-inside space-y-1 text-amber-800 dark:text-blue-400">
             <li><strong>Automatic Cancellation:</strong> Under federal law (HPA), PMI must automatically cancel when your principal balance reaches 78% of the original home price.</li>
             <li><strong>Requested Cancellation:</strong> You can request PMI removal once your loan balance reaches 80% LTV.</li>
             <li><strong>Re-Appraisal:</strong> Significant home renovations or local market appreciation can allow you to request an appraisal to remove PMI early.</li>
@@ -120,7 +120,7 @@ export function MortgageContentSection() {
       {/* 6. HOA Fees */}
       <section className="space-y-3">
         <h3 className="text-lg font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Building className="h-5 w-5 text-sky-600 dark:text-sky-400" />
+          <Building className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           HOA Fees & Community Assessments
         </h3>
         <p className="text-sm leading-relaxed">
@@ -131,7 +131,7 @@ export function MortgageContentSection() {
       {/* 7. Early Repayment Strategies */}
       <section className="space-y-3">
         <h3 className="text-lg font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <TrendingDown className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+          <TrendingDown className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           Proven Early Repayment Strategies
         </h3>
         <p className="text-sm leading-relaxed">
@@ -142,23 +142,23 @@ export function MortgageContentSection() {
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1">
               <CalendarCheck className="h-3.5 w-3.5 text-blue-500" /> Bi-Weekly Payments
             </h4>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Pay half your monthly mortgage payment every 2 weeks. This results in 26 half-payments (13 full monthly payments per year), cutting years off a 30-year term.
             </p>
           </div>
           <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs space-y-1">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1">
-              <DollarSign className="h-3.5 w-3.5 text-emerald-500" /> Fixed Extra Monthly
+              <DollarSign className="h-3.5 w-3.5 text-blue-600" /> Fixed Extra Monthly
             </h4>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Adding even $100 or $200 extra every month directly reduces principal, compounding savings every single month for the rest of the loan term.
             </p>
           </div>
           <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs space-y-1">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1">
-              <TrendingDown className="h-3.5 w-3.5 text-purple-500" /> Lump-Sum Lump
+              <TrendingDown className="h-3.5 w-3.5 text-blue-600" /> Lump-Sum Lump
             </h4>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Apply annual work bonuses, tax refunds, or inheritance payouts as one-time principal curtailments to dramatically reduce your payoff schedule.
             </p>
           </div>
@@ -171,11 +171,11 @@ export function MortgageContentSection() {
           Pros and Cons of Extra Mortgage Payments
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800 space-y-2">
-            <h4 className="font-bold text-sm text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" /> Advantages (Pros)
+          <div className="p-4 rounded-xl bg-blue-50/50 dark:bg-blue-50/20 border border-emerald-200 dark:border-emerald-800 space-y-2">
+            <h4 className="font-bold text-sm text-emerald-900 dark:text-blue-400 flex items-center gap-1.5">
+              <CheckCircle2 className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Advantages (Pros)
             </h4>
-            <ul className="space-y-1.5 text-xs text-emerald-800 dark:text-emerald-300">
+            <ul className="space-y-1.5 text-xs text-emerald-800 dark:text-blue-400">
               <li className="flex items-start gap-1.5">
                 <span className="font-bold">•</span> Guaranteed return on investment equal to your mortgage interest rate.
               </li>
@@ -191,11 +191,11 @@ export function MortgageContentSection() {
             </ul>
           </div>
 
-          <div className="p-4 rounded-xl bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-800 space-y-2">
-            <h4 className="font-bold text-sm text-rose-900 dark:text-rose-300 flex items-center gap-1.5">
-              <XCircle className="h-4 w-4 text-rose-600 dark:text-rose-400" /> Trade-offs (Cons)
+          <div className="p-4 rounded-xl bg-blue-50/50 dark:bg-blue-50/20 border border-rose-200 dark:border-rose-800 space-y-2">
+            <h4 className="font-bold text-sm text-rose-900 dark:text-blue-400 flex items-center gap-1.5">
+              <XCircle className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Trade-offs (Cons)
             </h4>
-            <ul className="space-y-1.5 text-xs text-rose-800 dark:text-rose-300">
+            <ul className="space-y-1.5 text-xs text-rose-800 dark:text-blue-400">
               <li className="flex items-start gap-1.5">
                 <span className="font-bold">•</span> Reduced liquidity — cash tied up in home equity cannot be easily spent in emergencies.
               </li>

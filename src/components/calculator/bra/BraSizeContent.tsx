@@ -32,23 +32,23 @@ export function BraSizeContent() {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-          <div className="p-3.5 bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900 rounded-xl space-y-1">
-            <h3 className="font-bold text-rose-700 dark:text-rose-300">1. Measure Underbust (Band)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+          <div className="p-3.5 bg-blue-50/50 dark:bg-blue-50/20 border border-rose-200 dark:border-rose-900 rounded-xl space-y-1">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">1. Measure Underbust (Band)</h3>
+            <p className="text-slate-900 dark:text-slate-100">
               Wrap tape around your ribcage directly underneath your bust. Exhale fully and pull tape <strong>snug</strong> (firm fit). Keep tape parallel to the floor across your back.
             </p>
           </div>
 
           <div className="p-3.5 bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-xl space-y-1">
             <h3 className="font-bold text-blue-700 dark:text-blue-300">2. Measure Bust (Overbust)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Wrap tape gently around the fullest point of your breasts (nipple level). Keep tape level across back without compressing tissue.
             </p>
           </div>
 
-          <div className="p-3.5 bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900 rounded-xl space-y-1">
-            <h3 className="font-bold text-purple-700 dark:text-purple-300">3. Leaning Technique (Soft Tissue)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+          <div className="p-3.5 bg-blue-50/50 dark:bg-blue-50/20 border border-purple-200 dark:border-purple-900 rounded-xl space-y-1">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">3. Leaning Technique (Soft Tissue)</h3>
+            <p className="text-slate-900 dark:text-slate-100">
               If breasts are projected or soft, lean forward 45 degrees while measuring overbust to capture full natural tissue volume.
             </p>
           </div>
@@ -73,27 +73,27 @@ export function BraSizeContent() {
               <tr className="bg-zinc-100 dark:bg-zinc-800 font-bold text-zinc-900 dark:text-zinc-100">
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Volume Group</th>
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Smaller Band / Larger Cup</th>
-                <th className="p-2 border border-zinc-200 dark:border-zinc-700 text-rose-600">Standard Baseline Size</th>
+                <th className="p-2 border border-zinc-200 dark:border-zinc-700 text-blue-600">Standard Baseline Size</th>
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Larger Band / Smaller Cup</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
+            <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans font-bold">Group A</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">30D</td>
-                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-rose-600">32C</td>
+                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-blue-600">32C</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">34B</td>
               </tr>
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans font-bold">Group B</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">32DD</td>
-                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-rose-600">34D</td>
+                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-blue-600">34D</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">36C</td>
               </tr>
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans font-bold">Group C</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">34DDD / 34E</td>
-                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-rose-600">36DD</td>
+                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-blue-600">36DD</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">38D</td>
               </tr>
             </tbody>
@@ -121,7 +121,7 @@ export function BraSizeContent() {
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Australia (AU/NZ)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
+            <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold">32D</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">32D</td>
@@ -164,28 +164,28 @@ export function BraSizeContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">1. Band Riding Up the Back</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               <strong>Cause:</strong> Band size is too large. <strong>Fix:</strong> Size down 1 band size (e.g. 36C → 34D).
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">2. Underwire Digging into Tissue</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               <strong>Cause:</strong> Cup is too small or wire root is too narrow. <strong>Fix:</strong> Size up 1 cup size.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">3. Cups Gaping or Wrinkling</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               <strong>Cause:</strong> Cup volume is too large or style cut is too projected for a shallow breast root. <strong>Fix:</strong> Try a balconette or demi cut.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">4. Double-Bust / Spilling ("Quad-Boob")</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               <strong>Cause:</strong> Cup volume is too small. <strong>Fix:</strong> Increase cup size by 1–2 letters.
             </p>
           </div>

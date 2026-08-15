@@ -74,13 +74,13 @@ export function SavingsContent() {
   ];
 
   return (
-    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10  dark:border-zinc-800 pt-8">
       <header>
         <h2 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
           <BookOpen className="h-6 w-6 text-blue-600" />
           Comprehensive Savings & Compound Wealth Guide
         </h2>
-        <p className="text-zinc-500 dark:text-zinc-400 text-xs">
+        <p className="text-slate-900 dark:text-slate-100 text-xs">
           Master compound interest, contribution growth strategies, tax drag, inflation defense, and retirement planning.
         </p>
       </header>
@@ -214,7 +214,7 @@ export function SavingsContent() {
         <p>
           The Effective Annual Rate (EAR) formula allows investors to accurately compare accounts with different compounding schedules:
         </p>
-        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl font-sans tabular-nums text-xs text-purple-600 dark:text-purple-400">
+        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400">
           {"EAR = (1 + r/n)^n - 1"}
         </div>
       </section>
@@ -283,7 +283,7 @@ export function SavingsContent() {
         <p>
           Divide 72 by your annual interest rate to determine the doubling period:
         </p>
-        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl font-sans tabular-nums text-xs text-emerald-600 dark:text-emerald-400">
+        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400">
           {"Years to Double = 72 / Interest Rate (%)"}
         </div>
       </section>
@@ -305,7 +305,7 @@ export function SavingsContent() {
       </section>
 
       {/* FAQ ACCORDION SECTION */}
-      <section className="space-y-4 pt-6 border-t border-zinc-200 dark:border-zinc-800">
+      <section className="space-y-4 pt-6  dark:border-zinc-800">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
           <HelpCircle className="h-5 w-5 text-blue-600" /> Frequently Asked Questions (FAQs)
         </h2>
@@ -325,7 +325,7 @@ export function SavingsContent() {
                 />
               </button>
               {openFaq === idx && (
-                <div className="p-3.5 pt-0 text-xs text-zinc-600 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800/60 leading-normal">
+                <div className="p-3.5 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800/60 leading-normal">
                   {faq.a}
                 </div>
               )}

@@ -4,7 +4,7 @@ import React from "react";
 
 export function FractionContent() {
   return (
-    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed pt-6 border-t border-zinc-200 dark:border-zinc-800">
+    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed pt-6  dark:border-zinc-800">
       {/* 1. WHAT IS A FRACTION */}
       <section className="space-y-3">
         <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
@@ -244,7 +244,7 @@ export function FractionContent() {
               <li>Convert to equivalent fractions: (3 × 3)/(4 × 3) = 9/12 and (1 × 2)/(6 × 2) = 2/12.</li>
               <li>Add numerators: (9 + 2)/12 = 11/12.</li>
             </ol>
-            <div className="text-xs font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Final Answer: 11/12</div>
+            <div className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">Final Answer: 11/12</div>
           </div>
 
           {/* INTERMEDIATE EXAMPLE */}
@@ -255,7 +255,7 @@ export function FractionContent() {
               <li>Multiply by reciprocal: (7/3) × (2/3) = 14/9.</li>
               <li>Convert to mixed number: 14 ÷ 9 = 1 remainder 5 ➔ 1 5/9.</li>
             </ol>
-            <div className="text-xs font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Final Answer: 1 5/9</div>
+            <div className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">Final Answer: 1 5/9</div>
           </div>
 
           {/* ADVANCED EXAMPLE */}
@@ -267,7 +267,7 @@ export function FractionContent() {
               <li>Subtract: 999999x = 142857 ➔ x = 142857 / 999999.</li>
               <li>Simplify by GCD 142857: (142857 ÷ 142857) / (999999 ÷ 142857) = 1/7.</li>
             </ol>
-            <div className="text-xs font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Final Answer: 1/7</div>
+            <div className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">Final Answer: 1/7</div>
           </div>
         </div>
       </section>

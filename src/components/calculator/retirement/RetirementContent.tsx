@@ -113,7 +113,7 @@ export function RetirementContent() {
   ];
 
   return (
-    <div className="space-y-10 mt-8 border-t border-zinc-200 dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
+    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
       {/* Overview Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 text-white rounded-2xl p-6 md:p-8 shadow-lg">
         <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
@@ -139,21 +139,21 @@ export function RetirementContent() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
             <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-2">
               <span className="font-bold text-blue-600 text-sm block">The 10% Savings Rule</span>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-slate-900 dark:text-slate-100">
                 Save 10% to 15% of your pre-tax income every year starting in your 20s. Over a 35-40 year career, this builds a multi-million dollar nest egg.
               </p>
             </div>
 
             <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-2">
-              <span className="font-bold text-indigo-600 text-sm block">The 80% Income Rule</span>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <span className="font-bold text-blue-600 text-sm block">The 80% Income Rule</span>
+              <p className="text-slate-900 dark:text-slate-100">
                 Aim to replace 70% to 80% of your pre-retirement annual salary to maintain your current lifestyle after retiring.
               </p>
             </div>
 
             <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-2">
-              <span className="font-bold text-emerald-600 text-sm block">The 4% Trinity Rule</span>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <span className="font-bold text-blue-600 text-sm block">The 4% Trinity Rule</span>
+              <p className="text-slate-900 dark:text-slate-100">
                 Withdraw 4% of your nest egg in Year 1 of retirement (adjusted for inflation thereafter). Historically guarantees portfolio survival for 30+ years.
               </p>
             </div>
@@ -163,7 +163,7 @@ export function RetirementContent() {
         {/* Section 2: Sources of Retirement Income */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Layers className="h-5 w-5 text-indigo-600" /> 2. Sources of Retirement Income &amp; Vehicles
+            <Layers className="h-5 w-5 text-blue-600" /> 2. Sources of Retirement Income &amp; Vehicles
           </h3>
           
           <div className="overflow-x-auto">
@@ -176,30 +176,30 @@ export function RetirementContent() {
                   <th className="p-3 border border-zinc-200 dark:border-zinc-700">Key Benefit</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className=" dark:divide-zinc-800">
                 <tr>
                   <td className="p-3 font-semibold text-blue-600">Employer 401(k) / 403(b)</td>
                   <td className="p-3">Pre-tax contributions, tax-deferred growth</td>
                   <td className="p-3">Taxable as ordinary income (RMDs at 73+)</td>
-                  <td className="p-3 text-zinc-500">Employer match (100% instant return)</td>
+                  <td className="p-3 text-slate-900">Employer match (100% instant return)</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-emerald-600">Roth IRA</td>
+                  <td className="p-3 font-semibold text-blue-600">Roth IRA</td>
                   <td className="p-3">After-tax dollars, 100% tax-free growth</td>
-                  <td className="p-3 font-bold text-emerald-600">Tax-free withdrawals after age 59½</td>
-                  <td className="p-3 text-zinc-500">No RMDs during owner lifetime</td>
+                  <td className="p-3 font-bold text-blue-600">Tax-free withdrawals after age 59½</td>
+                  <td className="p-3 text-slate-900">No RMDs during owner lifetime</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-indigo-600">Social Security</td>
+                  <td className="p-3 font-semibold text-blue-600">Social Security</td>
                   <td className="p-3">FICA payroll tax funded, CPI inflation-indexed</td>
                   <td className="p-3">Available age 62-70 (Max benefit at 70)</td>
-                  <td className="p-3 text-zinc-500">Guaranteed government lifetime payout</td>
+                  <td className="p-3 text-slate-900">Guaranteed government lifetime payout</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-purple-600">Health Savings Account (HSA)</td>
-                  <td className="p-3 font-bold text-purple-600">Triple-tax-advantaged</td>
+                  <td className="p-3 font-semibold text-blue-600">Health Savings Account (HSA)</td>
+                  <td className="p-3 font-bold text-blue-600">Triple-tax-advantaged</td>
                   <td className="p-3">Tax-free for medical expenses at any age</td>
-                  <td className="p-3 text-zinc-500">Acts like Traditional IRA after age 65</td>
+                  <td className="p-3 text-slate-900">Acts like Traditional IRA after age 65</td>
                 </tr>
               </tbody>
             </table>
@@ -242,7 +242,7 @@ export function RetirementContent() {
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-zinc-600 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
+                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
                     {faq.answer}
                   </div>
                 )}

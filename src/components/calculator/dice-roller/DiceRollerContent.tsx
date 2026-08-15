@@ -28,7 +28,7 @@ export function DiceRollerContent() {
             <div className="text-center font-sans tabular-nums font-extrabold text-slate-900 dark:text-zinc-100 py-1">
               {"E[X] = (n + 1) / 2"}
             </div>
-            <p className="text-xs text-slate-600 dark:text-zinc-400">
+            <p className="text-xs text-slate-900 dark:text-slate-100">
               For a standard 6-sided die (d6), {"E[X] = (6 + 1)/2 = 3.5"}. For a 20-sided die (d20), {"E[X] = (20 + 1)/2 = 10.5"}.
             </p>
           </div>
@@ -38,7 +38,7 @@ export function DiceRollerContent() {
             <div className="text-center font-sans tabular-nums font-extrabold text-slate-900 dark:text-zinc-100 py-1">
               {"Var(X) = (n² - 1) / 12"}
             </div>
-            <p className="text-xs text-slate-600 dark:text-zinc-400">
+            <p className="text-xs text-slate-900 dark:text-slate-100">
               Measures the statistical dispersion. For a d6, {"Var(X) = (36 - 1)/12 ≈ 2.917"}. For a d20, {"Var(X) = (400 - 1)/12 ≈ 33.25"}.
             </p>
           </div>
@@ -46,7 +46,7 @@ export function DiceRollerContent() {
       </section>
 
       {/* 2. MULTI-DICE GENERATING FUNCTIONS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           1. Multi-Dice Sum Combinations &amp; Polynomial Generating Functions
         </h3>
@@ -104,11 +104,11 @@ export function DiceRollerContent() {
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">(1+5, 2+4, 3+3, 4+2, 5+1) etc.</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">13.89%</td>
               </tr>
-              <tr className="bg-emerald-50/50 dark:bg-emerald-950/30">
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-extrabold text-emerald-700 dark:text-emerald-300">7 (Peak)</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-extrabold text-emerald-700 dark:text-emerald-300">6 / 36</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-bold text-emerald-700 dark:text-emerald-300">(1+6, 2+5, 3+4, 4+3, 5+2, 6+1)</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-extrabold text-emerald-700 dark:text-emerald-300">16.67%</td>
+              <tr className="bg-blue-50/50 dark:bg-blue-50/30">
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-extrabold text-blue-600 dark:text-blue-400">7 (Peak)</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-extrabold text-blue-600 dark:text-blue-400">6 / 36</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">(1+6, 2+5, 3+4, 4+3, 5+2, 6+1)</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-extrabold text-blue-600 dark:text-blue-400">16.67%</td>
               </tr>
             </tbody>
           </table>
@@ -116,7 +116,7 @@ export function DiceRollerContent() {
       </section>
 
       {/* 3. CENTRAL LIMIT THEOREM */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           2. The Central Limit Theorem &amp; Bell Curves in Game Design
         </h3>
@@ -129,7 +129,7 @@ export function DiceRollerContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4 text-xs">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-purple-700 dark:text-purple-400 text-sm">Flat Uniform Systems (1d20 - D&amp;D / Pathfinder)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">Flat Uniform Systems (1d20 - D&amp;D / Pathfinder)</h4>
             <p className="leading-relaxed">
               Single-die systems are inherently &quot;swingy&quot;. Every outcome from 1 to 20 has an identical 5.0% probability. This high variance promotes dramatic, unpredictable gameplay where beginner characters can occasionally outperform seasoned veterans on a lucky d20 roll.
             </p>
@@ -145,7 +145,7 @@ export function DiceRollerContent() {
       </section>
 
       {/* 4. ADVANCED TTRPG MECHANICS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           3. Advanced Tabletop RPG Mechanics Mathematics
         </h3>
@@ -177,7 +177,7 @@ export function DiceRollerContent() {
       </section>
 
       {/* 5. CSPRNG VS PRNG */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           4. Cryptographic PRNG vs. Standard Pseudo-Random Number Generators
         </h3>
@@ -187,7 +187,7 @@ export function DiceRollerContent() {
           While fast, these pseudo-random algorithms are deterministic and can exhibit subtle statistical periodicities or seed predictability over long sequences.
         </p>
 
-        <div className="p-4 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 space-y-2 text-xs">
+        <div className="p-4 rounded-xl bg-blue-50/60 dark:bg-blue-50/30 border border-emerald-200 dark:border-emerald-900 space-y-2 text-xs">
           <h4 className="font-extrabold text-emerald-900 dark:text-emerald-200 text-sm">How Our CSPRNG Guarantees True Fairness</h4>
           <p className="leading-relaxed">
             Our Dice Station engine utilizes the OS-level <strong>Cryptographically Secure Pseudo-Random Number Generator (CSPRNG)</strong> accessed via <code className="px-1.5 py-0.5 rounded bg-white dark:bg-zinc-800 font-sans tabular-nums font-bold">window.crypto.getRandomValues()</code>. 
@@ -198,7 +198,7 @@ export function DiceRollerContent() {
       </section>
 
       {/* 6. PHYSICAL DICE PHYSICS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
         <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
           5. Physical Dice Manufacturing Biases &amp; Saltwater Float Testing
         </h3>

@@ -7,7 +7,7 @@ export function MileageContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-800 dark:text-zinc-200">
       {/* SECTION 1 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
           1. What is Vehicle Mileage &amp; Fuel Economy?
         </h2>
         <p>
@@ -26,7 +26,7 @@ export function MileageContent() {
 
       {/* SECTION 2 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
           2. Mathematical Formulas &amp; Conversion Equations
         </h2>
 
@@ -65,7 +65,7 @@ export function MileageContent() {
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold text-blue-600">15 MPG → 20 MPG (+5 MPG)</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">666.7 gal → 500.0 gal</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-bold text-emerald-600">166.7 Gallons Saved</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums font-bold text-blue-600">166.7 Gallons Saved</td>
               </tr>
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">30 MPG → 35 MPG (+5 MPG)</td>
@@ -93,7 +93,7 @@ export function MileageContent() {
 
       {/* SECTION 3 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
           3. The Tank-to-Tank Measurement Method (Step-by-Step)
         </h2>
         <p>
@@ -118,7 +118,7 @@ export function MileageContent() {
 
       {/* SECTION 4 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
           4. Key Mechanical &amp; Environmental Factors Influencing Mileage
         </h2>
         <ul className="list-disc pl-6 space-y-2">
@@ -136,7 +136,7 @@ export function MileageContent() {
 
       {/* SECTION 5 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
           5. Business Mileage &amp; Tax Deduction Regulations
         </h2>
         <p>
@@ -150,7 +150,7 @@ export function MileageContent() {
 
       {/* SECTION 6 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white  dark:border-zinc-800 pb-2">
           6. Electric Vehicle Mileage (MPGe) &amp; Energy Efficiency
         </h2>
         <p>

@@ -131,16 +131,16 @@ export function AnnuityContent() {
   ];
 
   return (
-    <div className="mt-12 space-y-12 border-t border-zinc-200 dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
+    <div className="mt-12 space-y-12  dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
       {/* Overview Header */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Comprehensive Financial &amp; Insurance Annuity Guide
         </div>
         <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
           Annuity Accumulation, Fixed vs. Variable Structures &amp; Fee Mechanics
         </h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
+        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
           Annuities represent versatile insurance and investment instruments capable of accumulating capital tax-deferred or securing guaranteed lifetime income. Understanding contract mechanics—such as Ordinary Annuities vs. Annuity Due, fixed vs. indexed crediting, surrender charge schedules, and fee breakdowns—is vital for constructing a resilient retirement portfolio.
         </p>
       </section>
@@ -148,28 +148,28 @@ export function AnnuityContent() {
       {/* Grid of Core Concepts */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-sm">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
             <Landmark className="h-5 w-5" /> Ordinary vs. Annuity Due
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
             Annuity Due deposits occur at the beginning of each period, earning interest immediately for the full term. Ordinary Annuity deposits occur at the end of each period.
           </p>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
             <TrendingUp className="h-5 w-5" /> Fixed, Indexed &amp; Variable
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
             Fixed annuities guarantee interest rates; Fixed-Indexed annuities cap equity upside while protecting principal (0% floor); Variable annuities invest directly in market sub-accounts.
           </p>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-bold text-sm">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
             <AlertTriangle className="h-5 w-5" /> Surrender &amp; IRS Penalties
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
             Canceling early triggers declining surrender charges (e.g. 7% down to 0% over 7 years). Withdrawals of earnings before age 59½ incur a 10% IRS tax penalty.
           </p>
         </div>
@@ -178,7 +178,7 @@ export function AnnuityContent() {
       {/* Deep-Dive Section 1: Annuity Types Comparison */}
       <section className="space-y-4">
         <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <PieChart className="h-5 w-5 text-indigo-600" /> Fixed vs. Variable vs. Fixed-Indexed Annuities Comparison
+          <PieChart className="h-5 w-5 text-blue-600" /> Fixed vs. Variable vs. Fixed-Indexed Annuities Comparison
         </h3>
 
         <div className="overflow-x-auto">
@@ -191,22 +191,22 @@ export function AnnuityContent() {
                 <th className="p-3 border border-zinc-200 dark:border-zinc-700">Risk Profile</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 text-zinc-600 dark:text-zinc-400">
+            <tbody className=" dark:divide-zinc-800 text-slate-900 dark:text-slate-100">
               <tr>
                 <td className="p-3 font-semibold text-zinc-900 dark:text-zinc-100 border">Fixed Annuity / MYGA</td>
-                <td className="p-3 text-emerald-600 font-bold border">100% Guaranteed</td>
+                <td className="p-3 text-blue-600 font-bold border">100% Guaranteed</td>
                 <td className="p-3 border">Declared fixed interest rate (e.g. 5.5%)</td>
                 <td className="p-3 border">Very Low (Inflation Risk Only)</td>
               </tr>
               <tr>
                 <td className="p-3 font-semibold text-zinc-900 dark:text-zinc-100 border">Fixed-Indexed Annuity (FIA)</td>
-                <td className="p-3 text-emerald-600 font-bold border">100% Guaranteed (0% Floor)</td>
+                <td className="p-3 text-blue-600 font-bold border">100% Guaranteed (0% Floor)</td>
                 <td className="p-3 border">Indexed returns subject to caps/participation rates</td>
                 <td className="p-3 border">Low to Moderate</td>
               </tr>
               <tr>
                 <td className="p-3 font-semibold text-zinc-900 dark:text-zinc-100 border">Variable Annuity</td>
-                <td className="p-3 text-rose-600 font-bold border">No Principal Guarantee</td>
+                <td className="p-3 text-blue-600 font-bold border">No Principal Guarantee</td>
                 <td className="p-3 border">Direct equity/bond sub-account performance</td>
                 <td className="p-3 border">Moderate to High Market Risk</td>
               </tr>
@@ -216,9 +216,9 @@ export function AnnuityContent() {
       </section>
 
       {/* 25+ FAQ Accordion Section */}
-      <section className="space-y-6 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+      <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
-          <HelpCircle className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+          <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           <h3 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
             Frequently Asked Questions (25 Essential Annuity Insights)
           </h3>
@@ -238,18 +238,18 @@ export function AnnuityContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 text-zinc-500 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 text-slate-900 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed  dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
                     {faq.a}
                   </div>
                 )}

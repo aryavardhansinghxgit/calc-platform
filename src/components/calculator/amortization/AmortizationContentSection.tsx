@@ -125,7 +125,7 @@ export function AmortizationContentSection() {
       {/* 2. How Amortization Works */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <DollarSign className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+          <DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           2. How Amortization Works
         </h2>
         <p className="text-sm leading-relaxed">
@@ -136,7 +136,7 @@ export function AmortizationContentSection() {
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-amber-500"></span> Early Loan Years (Interest-Heavy)
             </h3>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
               Because your starting principal balance is at its absolute highest, the interest owed each month is large. Consequently, in the early years of a 15-year or 30-year loan, <strong>60% to 80% of your monthly payment goes toward interest</strong>, while only a small fraction pays down principal.
             </p>
           </div>
@@ -144,7 +144,7 @@ export function AmortizationContentSection() {
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-blue-500"></span> Later Loan Years (Principal-Heavy)
             </h3>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
               As principal is gradually paid off, the outstanding balance decreases. Since interest is calculated only on the remaining balance, monthly interest charges plummet. In the final years, <strong>90%+ of your payment goes directly toward principal equity</strong>.
             </p>
           </div>
@@ -154,7 +154,7 @@ export function AmortizationContentSection() {
       {/* 3. Principal vs Interest */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Percent className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+          <Percent className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           3. Principal vs Interest Breakdown
         </h2>
         <p className="text-sm leading-relaxed">
@@ -173,7 +173,7 @@ export function AmortizationContentSection() {
       {/* 4. Amortization Formula */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Calculator className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+          <Calculator className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           4. The Mathematical Amortization Formula
         </h2>
         <p className="text-sm leading-relaxed">
@@ -201,7 +201,7 @@ export function AmortizationContentSection() {
       {/* 5. Extra Payments Explained */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <TrendingDown className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+          <TrendingDown className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           5. Extra Payments Explained
         </h2>
         <p className="text-sm leading-relaxed">
@@ -215,25 +215,25 @@ export function AmortizationContentSection() {
       {/* 6. Benefits of Early Payoff */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <CheckCircle2 className="h-5 w-5 text-teal-600 dark:text-teal-400" />
+          <CheckCircle2 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           6. Key Benefits of Early Loan Payoff
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Massive Interest Savings</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Paying off a 30-year $300,000 mortgage just 5 years early can save over $70,000 in interest charges.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Rapid Equity Growth</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Accelerating principal payments builds home equity, increasing your financial safety net and borrowing power.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs space-y-1">
             <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Financial Peace of Mind</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Becoming completely debt-free reduces monthly overhead, freeing up cash flow for investments or retirement.
             </p>
           </div>
@@ -243,7 +243,7 @@ export function AmortizationContentSection() {
       {/* 7. Fixed vs Variable Loans */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Building className="h-5 w-5 text-sky-600 dark:text-sky-400" />
+          <Building className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           7. Fixed-Rate vs. Variable-Rate Amortization
         </h2>
         <p className="text-sm leading-relaxed">
@@ -254,7 +254,7 @@ export function AmortizationContentSection() {
       {/* 8. Amortization Schedule Guide */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <CalendarCheck className="h-5 w-5 text-rose-600 dark:text-rose-400" />
+          <CalendarCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           8. How to Read Your Amortization Schedule
         </h2>
         <p className="text-sm leading-relaxed">
@@ -276,7 +276,7 @@ export function AmortizationContentSection() {
       {/* 9. Frequently Asked Questions */}
       <section className="space-y-4">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <HelpCircle className="h-5 w-5 text-amber-500" />
+          <HelpCircle className="h-5 w-5 text-blue-600" />
           9. Frequently Asked Questions (FAQ)
         </h2>
 
@@ -285,7 +285,7 @@ export function AmortizationContentSection() {
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
               What is loan amortization?
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Amortization is the process of spreading out a loan into a series of equal periodic payments over a fixed term. Each payment covers both interest charges and principal balance reduction.
             </p>
           </div>
@@ -294,7 +294,7 @@ export function AmortizationContentSection() {
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
               How does an extra principal payment shorten an amortization schedule?
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Extra principal payments go 100% toward reducing the remaining loan principal. Because monthly interest is calculated on the remaining balance, reducing principal faster lowers compounding interest and accelerates your payoff date.
             </p>
           </div>
@@ -303,7 +303,7 @@ export function AmortizationContentSection() {
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
               What is the difference between an amortization schedule and a regular payment list?
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               An amortization schedule details the exact breakdown of every payment into principal reduction, interest paid, beginning balance, and ending balance for every period throughout the loan term.
             </p>
           </div>
@@ -312,7 +312,7 @@ export function AmortizationContentSection() {
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
               Can I amortize a loan with variable interest rates?
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Yes, but when interest rates fluctuate on variable or adjustable-rate loans (ARMs), the monthly payment and schedule must be recalculated at each rate adjustment period.
             </p>
           </div>
@@ -320,8 +320,8 @@ export function AmortizationContentSection() {
       </section>
 
       {/* Internal Links Footer Grid */}
-      <div className="pt-6 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+      <div className="pt-6  dark:border-zinc-800 space-y-3">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
           Explore Other Financial Tools on CalcPlatform
         </h4>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">

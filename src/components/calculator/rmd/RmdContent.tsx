@@ -89,16 +89,16 @@ export function RmdContent() {
   ];
 
   return (
-    <div className="mt-12 space-y-12 border-t border-zinc-200 dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
+    <div className="mt-12 space-y-12  dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
       {/* Overview Header */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Comprehensive IRS Publication 590-B Guide
         </div>
         <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
           Understanding Required Minimum Distributions (RMDs) &amp; IRS Rules
         </h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
+        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
           The Required Minimum Distribution (RMD) is one of the most critical retirement tax mandates established by the Internal Revenue Service (IRS). Once you reach your mandated starting age under federal law, you are legally required to withdraw a calculated minimum amount from your tax-deferred retirement accounts each calendar year. This guide breaks down the SECURE Act 2.0 modifications, calculation formulas, tax minimization strategies, and penalty protection rules.
         </p>
       </section>
@@ -106,28 +106,28 @@ export function RmdContent() {
       {/* Grid of Core Concepts */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-sm">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
             <Clock className="h-5 w-5" /> SECURE Act 2.0 Ages
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
             SECURE Act 2.0 increased the RMD age from 72 to <strong>73</strong> for individuals turning 72 between 2023 and 2032 (born 1951–1959). For those born in 1960 or later, the RMD starting age advances to <strong>75</strong> starting in 2033.
           </p>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
             <Sparkles className="h-5 w-5" /> QCD Tax Elimination
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
             Starting at age 70½, you can make a Qualified Charitable Distribution (QCD) up to $105,000 annually directly from your IRA to a qualifying charity. QCDs satisfy your RMD requirement without adding a single dollar to your Adjusted Gross Income (AGI).
           </p>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-bold text-sm">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
             <AlertTriangle className="h-5 w-5" /> Reduced Penalty Rates
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
             Missing an RMD deadline triggers an IRS excise penalty. SECURE 2.0 reduced the penalty from 50% down to <strong>25%</strong>, and further down to <strong>10%</strong> if the shortfall is corrected within the 2-year IRS correction window via Form 5329.
           </p>
         </div>
@@ -136,23 +136,23 @@ export function RmdContent() {
       {/* Deep-Dive Section 1: Calculation Formula & IRS Life Expectancy Tables */}
       <section className="space-y-4">
         <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Landmark className="h-5 w-5 text-indigo-600" /> How RMDs Are Calculated: Mathematical Formulas &amp; IRS Tables
+          <Landmark className="h-5 w-5 text-blue-600" /> How RMDs Are Calculated: Mathematical Formulas &amp; IRS Tables
         </h3>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
           Calculating your annual RMD requires two primary numbers: your account balance as of December 31st of the previous calendar year, and your life expectancy distribution factor from IRS Publication 590-B.
         </p>
 
-        <div className="bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl text-xs space-y-3 font-sans tabular-nums">
+        <div className="bg-blue-50/70 dark:bg-blue-50/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl text-xs space-y-3 font-sans tabular-nums">
           <div className="text-indigo-900 dark:text-indigo-200 font-bold text-sm font-sans">
             Primary RMD Equation:
           </div>
-          <div className="text-base text-indigo-700 dark:text-indigo-300 font-extrabold">
+          <div className="text-base text-blue-600 dark:text-blue-400 font-extrabold">
             Annual RMD = Account Balance (Dec 31 Prior Year) / IRS Life Expectancy Factor
           </div>
-          <div className="text-zinc-600 dark:text-zinc-400 font-sans text-xs">
+          <div className="text-slate-900 dark:text-slate-100 font-sans text-xs">
             Example: If your Traditional IRA balance on Dec 31, 2025 was $300,000 and you turn 75 in 2026, your IRS Table III factor is 24.6.
             <br />
-            <span className="font-sans tabular-nums font-bold text-indigo-600 dark:text-indigo-400">
+            <span className="font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">
               RMD = $300,000 / 24.6 = $12,195.12
             </span>
           </div>
@@ -161,13 +161,13 @@ export function RmdContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed">
           <div className="space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">1. IRS Table III (Uniform Lifetime Table)</h4>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Used by almost all account owners, including unmarried individuals, married individuals whose spouses are not sole beneficiaries, or married individuals whose spouses are not more than 10 years younger. It assumes a joint life expectancy with a hypothetical beneficiary 10 years younger.
             </p>
           </div>
           <div className="space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">2. IRS Table II (Joint Life and Last Survivor)</h4>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               Used exclusively when your spouse is the SOLE primary beneficiary of your account for the entire tax year AND is more than 10 years younger than you. Table II accounts for both real ages, resulting in a higher distribution period factor and smaller required annual withdrawals.
             </p>
           </div>
@@ -177,9 +177,9 @@ export function RmdContent() {
       {/* Deep-Dive Section 2: Account Rules & Aggregation Matrix */}
       <section className="space-y-4">
         <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <FileText className="h-5 w-5 text-indigo-600" /> Account Types &amp; IRS Aggregation Rules
+          <FileText className="h-5 w-5 text-blue-600" /> Account Types &amp; IRS Aggregation Rules
         </h3>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
           Not all tax-advantaged retirement accounts follow identical RMD rules. Understanding which accounts allow aggregation can prevent costly IRS compliance errors.
         </p>
 
@@ -193,34 +193,34 @@ export function RmdContent() {
                 <th className="p-3 border border-zinc-200 dark:border-zinc-700">IRS Rule &amp; Notes</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 text-zinc-600 dark:text-zinc-400">
+            <tbody className=" dark:divide-zinc-800 text-slate-900 dark:text-slate-100">
               <tr>
                 <td className="p-3 font-semibold text-zinc-900 dark:text-zinc-100 border">Traditional IRA / SEP / SIMPLE</td>
-                <td className="p-3 text-emerald-600 font-bold border">YES</td>
-                <td className="p-3 text-emerald-600 font-bold border">YES (IRA Pool)</td>
+                <td className="p-3 text-blue-600 font-bold border">YES</td>
+                <td className="p-3 text-blue-600 font-bold border">YES (IRA Pool)</td>
                 <td className="p-3 border">Calculate RMD per account, sum total, and withdraw from any single IRA or combination.</td>
               </tr>
               <tr>
                 <td className="p-3 font-semibold text-zinc-900 dark:text-zinc-100 border">Employer 401(k) / Profit-Sharing</td>
-                <td className="p-3 text-emerald-600 font-bold border">YES</td>
-                <td className="p-3 text-rose-600 font-bold border">NO</td>
+                <td className="p-3 text-blue-600 font-bold border">YES</td>
+                <td className="p-3 text-blue-600 font-bold border">NO</td>
                 <td className="p-3 border">Must calculate and withdraw the exact RMD separately from each employer 401(k) plan.</td>
               </tr>
               <tr>
                 <td className="p-3 font-semibold text-zinc-900 dark:text-zinc-100 border">403(b) Tax-Sheltered Annuities</td>
-                <td className="p-3 text-emerald-600 font-bold border">YES</td>
-                <td className="p-3 text-emerald-600 font-bold border">YES (403b Pool)</td>
+                <td className="p-3 text-blue-600 font-bold border">YES</td>
+                <td className="p-3 text-blue-600 font-bold border">YES (403b Pool)</td>
                 <td className="p-3 border">Can aggregate RMDs across multiple 403(b) plans, but cannot aggregate with IRAs or 401(k)s.</td>
               </tr>
               <tr>
                 <td className="p-3 font-semibold text-zinc-900 dark:text-zinc-100 border">Roth IRA (Lifetime Owner)</td>
-                <td className="p-3 text-emerald-600 font-bold border">NO (EXEMPT)</td>
+                <td className="p-3 text-blue-600 font-bold border">NO (EXEMPT)</td>
                 <td className="p-3 border">N/A</td>
                 <td className="p-3 border">Roth IRAs have no lifetime RMDs for the original account holder.</td>
               </tr>
               <tr>
                 <td className="p-3 font-semibold text-zinc-900 dark:text-zinc-100 border">Designated Roth 401(k) / 403(b)</td>
-                <td className="p-3 text-emerald-600 font-bold border">NO (Starting 2024)</td>
+                <td className="p-3 text-blue-600 font-bold border">NO (Starting 2024)</td>
                 <td className="p-3 border">N/A</td>
                 <td className="p-3 border">SECURE Act 2.0 eliminated lifetime RMDs for designated Roth 401(k)s effective 2024.</td>
               </tr>
@@ -232,23 +232,23 @@ export function RmdContent() {
       {/* Deep-Dive Section 3: Tax Minimization Strategies */}
       <section className="space-y-4">
         <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Percent className="h-5 w-5 text-indigo-600" /> Proven Strategies to Reduce or Eliminate RMD Taxes
+          <Percent className="h-5 w-5 text-blue-600" /> Proven Strategies to Reduce or Eliminate RMD Taxes
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-xl space-y-3">
             <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-500" /> 1. Qualified Charitable Distributions (QCDs)
+              <CheckCircle2 className="h-4 w-4 text-blue-600" /> 1. Qualified Charitable Distributions (QCDs)
             </h4>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               If you donate to charities and are age 70½ or older, direct your IRA custodian to issue payments directly to eligible 501(c)(3) organizations. Up to $105,000 per year per individual can be transferred tax-free. Because QCDs bypass AGI, they protect you from higher Medicare Part B and D IRMAA surcharges and lessen taxability on Social Security benefits.
             </p>
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-xl space-y-3">
             <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-500" /> 2. Pre-RMD Partial Roth Conversions
+              <CheckCircle2 className="h-4 w-4 text-blue-600" /> 2. Pre-RMD Partial Roth Conversions
             </h4>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Between retirement (e.g. age 60–65) and your RMD starting age (73/75), you may be in a temporary lower income tax bracket. Executing annual partial Roth conversions fills lower marginal brackets (e.g. 12% or 22%), systematically reducing your pre-tax IRA balance and permanently lowering future mandatory RMD withdrawals.
             </p>
           </div>
@@ -256,9 +256,9 @@ export function RmdContent() {
       </section>
 
       {/* 15+ FAQ Accordion Section */}
-      <section className="space-y-6 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+      <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
-          <HelpCircle className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+          <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           <h3 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
             Frequently Asked Questions (15 Key RMD &amp; Tax Insights)
           </h3>
@@ -278,18 +278,18 @@ export function RmdContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-xs font-bold shrink-0">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 text-zinc-500 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 text-slate-900 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed  dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
                     {faq.a}
                   </div>
                 )}

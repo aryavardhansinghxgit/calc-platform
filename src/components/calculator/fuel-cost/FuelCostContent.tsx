@@ -14,19 +14,19 @@ export function FuelCostContent() {
           Calculating vehicle fuel expenses involves evaluating the relationship between trip distance, engine efficiency, and fuel unit pricing:
         </p>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-emerald-700 dark:text-emerald-300 font-bold overflow-x-auto">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-blue-600 dark:text-blue-400 font-bold overflow-x-auto">
           Fuel Needed (Gallons) = Trip Distance (Miles) / Fuel Efficiency (MPG)
         </div>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold overflow-x-auto">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-blue-600 dark:text-blue-400 font-bold overflow-x-auto">
           Fuel Needed (Liters) = Distance (km) × [ (L/100km) / 100 ]
         </div>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-amber-700 dark:text-amber-300 font-bold overflow-x-auto">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-blue-600 dark:text-blue-400 font-bold overflow-x-auto">
           Total Cost = Fuel Needed × Price Per Unit + Tolls + Parking
         </div>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-purple-700 dark:text-purple-300 font-bold overflow-x-auto">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-blue-600 dark:text-blue-400 font-bold overflow-x-auto">
           Cost Per Mile ($/mi) = Fuel Price Per Gallon / Vehicle MPG
         </div>
       </section>
@@ -39,13 +39,13 @@ export function FuelCostContent() {
         <p>
           Miles Per Gallon (MPG) is a <em>distance-per-volume</em> metric, whereas Liters per 100 Kilometers (L/100km) is a <em>volume-per-distance</em> metric. This fundamental difference causes the non-linear relationship known as the <strong>MPG Illusion</strong>:
         </p>
-        <p className="text-xs text-zinc-600 dark:text-zinc-400">
+        <p className="text-xs text-slate-900 dark:text-slate-100">
           Replacing a 14 MPG gas guzzler with a 20 MPG vehicle saves far more fuel over 10,000 miles (214 gallons saved) than replacing a 35 MPG car with a 50 MPG hybrid (85 gallons saved), even though both represent a 15 MPG numerical improvement.
         </p>
 
-        <div className="p-3.5 bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-xl space-y-1 text-xs">
+        <div className="p-3.5 bg-blue-50/60 dark:bg-blue-50/20 border border-emerald-200 dark:border-emerald-900 rounded-xl space-y-1 text-xs">
           <h3 className="font-bold text-emerald-900 dark:text-emerald-200">Exact Mathematical Conversion Constants</h3>
-          <p className="font-sans tabular-nums text-emerald-700 dark:text-emerald-300 font-bold">
+          <p className="font-sans tabular-nums text-blue-600 dark:text-blue-400 font-bold">
             L/100km = 235.215 / US MPG &nbsp;|&nbsp; L/100km = 282.481 / UK Imperial MPG
           </p>
         </div>
@@ -63,7 +63,7 @@ export function FuelCostContent() {
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs font-sans tabular-nums">
           <div className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
             <div className="font-bold">60 mph</div>
-            <div className="text-emerald-600 font-bold">-3% MPG</div>
+            <div className="text-blue-600 font-bold">-3% MPG</div>
           </div>
           <div className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
             <div className="font-bold">65 mph</div>
@@ -71,15 +71,15 @@ export function FuelCostContent() {
           </div>
           <div className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
             <div className="font-bold">70 mph</div>
-            <div className="text-amber-600 font-bold">-17% MPG</div>
+            <div className="text-blue-600 font-bold">-17% MPG</div>
           </div>
           <div className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
             <div className="font-bold">75 mph</div>
-            <div className="text-rose-600 font-bold">-23% MPG</div>
+            <div className="text-blue-600 font-bold">-23% MPG</div>
           </div>
           <div className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
             <div className="font-bold">80 mph</div>
-            <div className="text-purple-600 font-bold">-28% MPG</div>
+            <div className="text-blue-600 font-bold">-28% MPG</div>
           </div>
         </div>
       </section>

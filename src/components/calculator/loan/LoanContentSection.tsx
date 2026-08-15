@@ -234,7 +234,7 @@ export function LoanContentSection() {
       {/* 2. How Loan Payments Work */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <DollarSign className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+          <DollarSign className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           2. How Loan Payments Work (Amortization Mechanics)
         </h2>
         <p className="text-sm leading-relaxed">
@@ -245,7 +245,7 @@ export function LoanContentSection() {
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-amber-500"></span> Principal Reduction
             </h3>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
               The portion of your payment that directly reduces your remaining loan debt. Paying down principal builds equity and reduces future compounding interest.
             </p>
           </div>
@@ -253,7 +253,7 @@ export function LoanContentSection() {
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full bg-blue-500"></span> Interest Charge
             </h3>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
               The fee charged by the bank for lending money. Monthly interest is calculated by multiplying your remaining principal balance by the monthly interest rate.
             </p>
           </div>
@@ -263,25 +263,25 @@ export function LoanContentSection() {
       {/* 3. What Affects Loan Interest */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Percent className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+          <Percent className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           3. What Factors Affect Your Loan Interest Rate?
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
             <strong>1. Credit Score (FICO/Vantage)</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Higher scores (740+) signify lower default risk, unlocking lower interest rates.</p>
+            <p className="text-slate-900 dark:text-slate-100">Higher scores (740+) signify lower default risk, unlocking lower interest rates.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
             <strong>2. Debt-to-Income (DTI) Ratio</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Lenders prefer DTI ratios below 36%, proving you have cash flow to support debt.</p>
+            <p className="text-slate-900 dark:text-slate-100">Lenders prefer DTI ratios below 36%, proving you have cash flow to support debt.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
             <strong>3. Loan Term Duration</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Shorter loan terms (e.g. 15-year vs 30-year) carry lower interest rates than longer terms.</p>
+            <p className="text-slate-900 dark:text-slate-100">Shorter loan terms (e.g. 15-year vs 30-year) carry lower interest rates than longer terms.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
             <strong>4. Central Bank Benchmark Rates</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Federal Reserve or central bank rate decisions influence overall market borrowing rates.</p>
+            <p className="text-slate-900 dark:text-slate-100">Federal Reserve or central bank rate decisions influence overall market borrowing rates.</p>
           </div>
         </div>
       </section>
@@ -289,7 +289,7 @@ export function LoanContentSection() {
       {/* 4. Secured vs Unsecured Loans */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <ShieldCheck className="h-5 w-5 text-teal-600 dark:text-teal-400" />
+          <ShieldCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           4. Secured vs. Unsecured Loans
         </h2>
         <p className="text-sm leading-relaxed">
@@ -298,13 +298,13 @@ export function LoanContentSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Secured Loans</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Backed by tangible collateral (e.g. home mortgage, auto loan). If payments default, the lender can seize the property. In exchange, interest rates are lower.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
             <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Unsecured Loans</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Requires no collateral (e.g. personal loans, student loans, credit cards). Lenders rely on credit history. Rates are higher due to increased lender risk.
             </p>
           </div>
@@ -314,7 +314,7 @@ export function LoanContentSection() {
       {/* 5. Fixed vs Variable Rate Loans */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Building className="h-5 w-5 text-sky-600 dark:text-sky-400" />
+          <Building className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           5. Fixed-Rate vs. Variable-Rate Loans
         </h2>
         <p className="text-sm leading-relaxed">
@@ -325,21 +325,21 @@ export function LoanContentSection() {
       {/* 6. How To Reduce Loan Interest */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Zap className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+          <Zap className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           6. How To Reduce Total Loan Interest Charges
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
             <strong className="text-zinc-900 dark:text-zinc-100">1. Make Extra Monthly Payments</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Adding $50-$200 extra each month directly pays down principal, slashing cumulative interest.</p>
+            <p className="text-slate-900 dark:text-slate-100">Adding $50-$200 extra each month directly pays down principal, slashing cumulative interest.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
             <strong className="text-zinc-900 dark:text-zinc-100">2. Switch to Biweekly Payments</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Paying biweekly equals 13 full payments per year, shaving years off long-term debt schedules.</p>
+            <p className="text-slate-900 dark:text-slate-100">Paying biweekly equals 13 full payments per year, shaving years off long-term debt schedules.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
             <strong className="text-zinc-900 dark:text-zinc-100">3. Refinance at Lower Rates</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">If your credit score improves or market rates drop, refinancing can lower your APR significantly.</p>
+            <p className="text-slate-900 dark:text-slate-100">If your credit score improves or market rates drop, refinancing can lower your APR significantly.</p>
           </div>
         </div>
       </section>
@@ -347,7 +347,7 @@ export function LoanContentSection() {
       {/* 7. Common Loan Mistakes */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5 text-rose-600 dark:text-rose-400" />
+          <AlertTriangle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           7. Common Borrower Mistakes To Avoid
         </h2>
         <ul className="list-disc list-inside space-y-2 text-sm pl-2">
@@ -366,7 +366,7 @@ export function LoanContentSection() {
       {/* 8. FAQ Section (15+ Questions) */}
       <section className="space-y-4">
         <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <HelpCircle className="h-5 w-5 text-amber-500" />
+          <HelpCircle className="h-5 w-5 text-blue-600" />
           8. Frequently Asked Questions (FAQ)
         </h2>
 
@@ -379,7 +379,7 @@ export function LoanContentSection() {
               <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
                 {idx + 1}. {item.question}
               </h3>
-              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
                 {item.answer}
               </p>
             </div>
@@ -388,8 +388,8 @@ export function LoanContentSection() {
       </section>
 
       {/* Internal Links Footer Grid */}
-      <div className="pt-6 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+      <div className="pt-6  dark:border-zinc-800 space-y-3">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
           Explore Other Financial Calculators on CalcPlatform
         </h4>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
