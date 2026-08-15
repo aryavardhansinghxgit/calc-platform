@@ -1,37 +1,47 @@
 import { calculateSampleSizeCalculator } from "./calculator";
+import {
+  computeSurveySampleSize,
+  computeABTestSampleSize,
+  computeContinuousMeanSampleSize,
+  computeReverseMarginOfError
+} from "./sample-size-logic";
 
 export function runSampleSizeCalculatorTests() {
-  const defaultInputs = {
-  "confidenceLevel": "95",
-  "marginError": 5,
-  "population": 10000
-};
-  const res1 = calculateSampleSizeCalculator(defaultInputs);
-  if (!res1 || typeof res1 !== "object") throw new Error("Formula failed for default inputs");
+  // Test 1: Infinite Population Cochran's Formula (95% Conf, ±5% MOE -> n = 385)
+  const infiniteRes = computeSurveySampleSize(95, 5, 50);
+  if (infiniteRes.sampleSize !== 385) {
+    throw new Error(`Infinite population sample size failed: expected 385, got ${infiniteRes.sampleSize}`);
+  }
 
-  const zeroInputs = {
-  "confidenceLevel": 0,
-  "marginError": 0,
-  "population": 0
-};
-  const res2 = calculateSampleSizeCalculator(zeroInputs);
-  if (!res2) throw new Error("Formula failed for zero inputs");
+  // Test 2: Finite Population Correction (95% Conf, ±5% MOE, N = 1000 -> n = 279)
+  const finiteRes = computeSurveySampleSize(95, 5, 50, 1000);
+  if (finiteRes.sampleSize !== 279) {
+    throw new Error(`Finite population FPC failed: expected 279, got ${finiteRes.sampleSize}`);
+  }
 
-  const negInputs = {
-  "confidenceLevel": -50,
-  "marginError": -50,
-  "population": -50
-};
-  const res3 = calculateSampleSizeCalculator(negInputs);
-  if (!res3) throw new Error("Formula failed for negative inputs");
+  // Test 3: Continuous Mean Sample Size (95% Conf, E = 2, SD = 10 -> n = 97)
+  const continuousN = computeContinuousMeanSampleSize(95, 2, 10);
+  if (continuousN !== 97) {
+    throw new Error(`Continuous mean sample size failed: expected 97, got ${continuousN}`);
+  }
 
-  const nanInputs = {
-  "confidenceLevel": null,
-  "marginError": null,
-  "population": null
-};
-  const res4 = calculateSampleSizeCalculator(nanInputs);
-  if (!res4) throw new Error("Formula failed for NaN inputs");
+  // Test 4: A/B Test Sample Size (3.0% vs 3.5% conversion, 80% power)
+  const abRes = computeABTestSampleSize(3.0, 3.5, 5, 80);
+  if (abRes.sampleSizePerVariant <= 0) {
+    throw new Error(`A/B test sample size calculation failed: got ${abRes.sampleSizePerVariant}`);
+  }
+
+  // Test 5: Reverse Margin of Error (n = 385, 95% Conf -> ±5.0%)
+  const reverseMOE = computeReverseMarginOfError(385, 95, 50);
+  if (Math.abs(reverseMOE - 5.0) > 0.1) {
+    throw new Error(`Reverse margin of error failed: expected ±5.0%, got ±${reverseMOE}%`);
+  }
+
+  // Test 6: Fallback calculator wrapper test
+  const resDefault = calculateSampleSizeCalculator({ confidenceLevel: "95", marginError: 5, population: 1000 });
+  if (resDefault.sampleSize !== 279) {
+    throw new Error(`Fallback calculator failed: expected 279, got ${resDefault.sampleSize}`);
+  }
 
   return true;
 }
