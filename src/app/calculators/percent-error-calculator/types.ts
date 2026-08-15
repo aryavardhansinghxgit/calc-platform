@@ -6,4 +6,7 @@ export interface PercentErrorCalculatorInputs {
 export interface PercentErrorCalculatorOutputs {
   percentError: number;
   absoluteError: number;
+  signedPercentError: number;
+  relativeError: number;
+  accuracy: number;
 }

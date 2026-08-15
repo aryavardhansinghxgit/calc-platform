@@ -1,33 +1,33 @@
 import { calculatePercentErrorCalculator } from "./calculator";
 
 export function runPercentErrorCalculatorTests() {
-  const defaultInputs = {
-  "expVal": 9.5,
-  "theoVal": 9.8
-};
+  const defaultInputs = { expVal: 9.5, theoVal: 9.8 };
   const res1 = calculatePercentErrorCalculator(defaultInputs);
-  if (!res1 || typeof res1 !== "object") throw new Error("Formula failed for default inputs");
+  if (Math.abs(res1.percentError - 3.061) > 0.001) throw new Error("Default percent error is incorrect");
+  if (Math.abs(res1.absoluteError - 0.3) > 0.0001) throw new Error("Absolute error is incorrect");
+  if (res1.signedPercentError >= 0) throw new Error("Underestimation should have a negative signed error");
 
-  const zeroInputs = {
-  "expVal": 0,
-  "theoVal": 0
-};
-  const res2 = calculatePercentErrorCalculator(zeroInputs);
-  if (!res2) throw new Error("Formula failed for zero inputs");
+  const exact = calculatePercentErrorCalculator({ expVal: 0, theoVal: 0.5 });
+  if (exact.percentError !== 100 || exact.absoluteError !== 0.5) throw new Error("Zero observed value is incorrect");
 
-  const negInputs = {
-  "expVal": -50,
-  "theoVal": -50
-};
-  const res3 = calculatePercentErrorCalculator(negInputs);
-  if (!res3) throw new Error("Formula failed for negative inputs");
+  const negative = calculatePercentErrorCalculator({ expVal: -50, theoVal: -50 });
+  if (negative.percentError !== 0 || negative.signedPercentError !== 0) throw new Error("Negative exact values are incorrect");
 
-  const nanInputs = {
-  "expVal": null,
-  "theoVal": null
-};
-  const res4 = calculatePercentErrorCalculator(nanInputs);
-  if (!res4) throw new Error("Formula failed for NaN inputs");
+  let zeroDenominatorFailed = false;
+  try {
+    calculatePercentErrorCalculator({ expVal: 0, theoVal: 0 });
+  } catch {
+    zeroDenominatorFailed = true;
+  }
+  if (!zeroDenominatorFailed) throw new Error("Zero true value should be rejected");
+
+  let invalidInputFailed = false;
+  try {
+    calculatePercentErrorCalculator({ expVal: null, theoVal: null });
+  } catch {
+    invalidInputFailed = true;
+  }
+  if (!invalidInputFailed) throw new Error("Missing values should be rejected");
 
   return true;
 }

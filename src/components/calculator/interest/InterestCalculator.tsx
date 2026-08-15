@@ -298,11 +298,15 @@ export function InterestCalculator() {
                 key={cur}
                 type="button"
                 onClick={() => setCurrencySymbol(cur)}
+<<<<<<< HEAD
                 className={`px-2 py-0.5 rounded font-sans tabular-nums font-bold text-xs transition-colors ${
                   currencySymbol === cur
+=======
+                className={`px-2 py-0.5 rounded font-mono font-bold text-xs transition-colors ${currencySymbol === cur
+>>>>>>> 0202f4f2f651556941f00d44ecadd2b97dc027fd
                     ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
                     : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
-                }`}
+                  }`}
               >
                 {cur}
               </button>
@@ -417,22 +421,20 @@ export function InterestCalculator() {
                 <button
                   type="button"
                   onClick={() => setContributionTiming("beginning")}
-                  className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${
-                    contributionTiming === "beginning"
+                  className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${contributionTiming === "beginning"
                       ? "bg-blue-600 text-white shadow-xs"
                       : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
-                  }`}
+                    }`}
                 >
                   Beginning of Period
                 </button>
                 <button
                   type="button"
                   onClick={() => setContributionTiming("end")}
-                  className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${
-                    contributionTiming === "end"
+                  className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${contributionTiming === "end"
                       ? "bg-blue-600 text-white shadow-xs"
                       : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
-                  }`}
+                    }`}
                 >
                   End of Period
                 </button>
@@ -742,22 +744,20 @@ export function InterestCalculator() {
               <button
                 type="button"
                 onClick={() => setScheduleMode("annual")}
-                className={`px-2 py-0.5 rounded font-semibold text-xs transition-colors ${
-                  scheduleMode === "annual"
+                className={`px-2 py-0.5 rounded font-semibold text-xs transition-colors ${scheduleMode === "annual"
                     ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
                     : "text-zinc-600 dark:text-zinc-400"
-                }`}
+                  }`}
               >
                 Annual
               </button>
               <button
                 type="button"
                 onClick={() => setScheduleMode("monthly")}
-                className={`px-2 py-0.5 rounded font-semibold text-xs transition-colors ${
-                  scheduleMode === "monthly"
+                className={`px-2 py-0.5 rounded font-semibold text-xs transition-colors ${scheduleMode === "monthly"
                     ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
                     : "text-zinc-600 dark:text-zinc-400"
-                }`}
+                  }`}
               >
                 Monthly
               </button>
