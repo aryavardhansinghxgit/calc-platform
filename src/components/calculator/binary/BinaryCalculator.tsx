@@ -387,7 +387,7 @@ export function BinaryCalculator() {
       result: resStr,
       resultsList: resList,
       expression: `Base-${sourceBase} (${baseInput}) → Base-${targetBase}`,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
     };
 
     const updated = [newItem, ...savedDecItems.filter(item => item.inputs !== inputsStr || item.operation !== opStr)].slice(0, 15);
@@ -434,7 +434,7 @@ export function BinaryCalculator() {
       result: resStr,
       resultsList: resList,
       expression: `${inputA} ${operation} ${inputB}`,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
     };
 
     const updated = [newItem, ...savedBinaryItems.filter(item => item.inputs !== inputsStr || item.operation !== opStr)].slice(0, 15);

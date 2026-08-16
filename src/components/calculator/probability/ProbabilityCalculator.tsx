@@ -189,7 +189,7 @@ export function ProbabilityCalculator() {
       operation: operationText,
       result: resultText,
       resultsList: resultsList || resultText.split(" | "),
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
     };
 
     const updated = [newItem, ...savedItems.filter(item => item.result !== resultText || item.inputs !== inputsText)].slice(0, 15);
