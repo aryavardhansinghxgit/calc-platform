@@ -188,7 +188,7 @@ export function CircleCalculator() {
   };
 
   const handleSaveSec = () => {
-    const inputsStr = `r = ${secRadius}, θ = ${secAngleDeg}°`;
+    const inputsStr = `Radius r = ${secRadius}, Angle θ = ${secAngleDeg}°`;
     const resList = [
       `Arc Length L = ${resultSec.arcLength}`,
       `Sector Area = ${resultSec.sectorArea}`,
@@ -210,7 +210,7 @@ export function CircleCalculator() {
   };
 
   const handleSaveSeg = () => {
-    const inputsStr = `r = ${segRadius}, chord c = ${segChord}`;
+    const inputsStr = `Radius r = ${segRadius}, Chord c = ${segChord}`;
     const resList = [
       `Sagitta h = ${resultSeg.sagitta}`,
       `Segment Area = ${resultSeg.segmentArea}`,
@@ -232,7 +232,7 @@ export function CircleCalculator() {
   };
 
   const handleSaveAnn = () => {
-    const inputsStr = `R = ${annOuterR}, r = ${annInnerR}`;
+    const inputsStr = `Outer Radius R = ${annOuterR}, Inner Radius r = ${annInnerR}`;
     const resList = [
       `Annulus Area = ${resultAnn.annulusArea}`,
       `Wall Thickness t = ${resultAnn.wallThickness}`,
@@ -254,7 +254,7 @@ export function CircleCalculator() {
   };
 
   const handleSaveEq = () => {
-    const inputsStr = `Center (${eqH}, ${eqK}), r = ${eqR}`;
+    const inputsStr = `Center (h, k) = (${eqH}, ${eqK}), Radius r = ${eqR}`;
     const resList = [
       `Standard Form: ${resultEq.standardForm}`,
       `General Form: ${resultEq.generalForm}`
@@ -275,11 +275,11 @@ export function CircleCalculator() {
   };
 
   const handleSave3P = () => {
-    const inputsStr = `P1(${p1x},${p1y}), P2(${p2x},${p2y}), P3(${p3x},${p3y})`;
+    const inputsStr = `Points P1(${p1x},${p1y}), P2(${p2x},${p2y}), P3(${p3x},${p3y})`;
     const resList = [
       `Circumcenter = (${result3P.center.h}, ${result3P.center.k})`,
       `Circumradius R = ${result3P.radius}`,
-      `Area = ${result3P.area}`
+      `Circumcircle Area = ${result3P.area}`
     ];
     const newItem: SavedCircleItem = {
       id: Date.now().toString(),
@@ -297,7 +297,7 @@ export function CircleCalculator() {
   };
 
   const handleSaveConv = () => {
-    const inputsStr = `r = ${convRadius} ${convUnit}`;
+    const inputsStr = `Radius r = ${convRadius} ${convUnit}`;
     const resList = [
       `Area = ${resultConv.meters.a} m²`,
       `Circumference = ${resultConv.meters.c} m`
@@ -458,6 +458,92 @@ export function CircleCalculator() {
     );
   };
 
+  const renderSavedCardsGroup = (
+    title: string,
+    items: SavedCircleItem[],
+    onClear: () => void,
+    onDelete: (id: string) => void,
+    storageKey: string
+  ) => {
+    if (items.length === 0) return null;
+    return (
+      <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+            <Bookmark className="w-4 h-4 text-blue-600" />
+            <span>{title} ({items.length})</span>
+          </h3>
+          <button
+            type="button"
+            onClick={onClear}
+            className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+          >
+            <Trash2 className="w-3.5 h-3.5" /> Clear All
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {items.map((item) => {
+            const isExpanded = !!expandedIds[item.id];
+            const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+            return (
+              <div
+                key={item.id}
+                className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between transition-all"
+              >
+                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
+                    <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onDelete(item.id)}
+                    className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                    title="Delete saved calculation"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                  <div>
+                    <span className="font-bold text-slate-500 dark:text-slate-400">Inputs: </span>
+                    <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs}</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => toggleExpand(item.id)}
+                    className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                  >
+                    <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
+                    {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
+                  </button>
+
+                  {isExpanded && (
+                    <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                      <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-[11px]">
+                        Calculation Details:
+                      </span>
+                      <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
+                        {resParts.map((resLine, idx) => (
+                          <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                            {resLine}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
       {/* ========================================================================= */}
@@ -533,53 +619,12 @@ export function CircleCalculator() {
           </div>
 
           {/* EMBEDDED SAVED CORE CALCULATIONS */}
-          {savedCoreItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
-                  <Bookmark className="w-4 h-4 text-blue-600" />
-                  <span>Saved Core Circle Calculations ({savedCoreItems.length})</span>
-                </h3>
-                <button
-                  type="button"
-                  onClick={() => { setSavedCoreItems([]); try { localStorage.removeItem("saved_circle_core"); } catch(e){} }}
-                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
-                >
-                  <Trash2 className="w-3.5 h-3.5" /> Clear All
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {savedCoreItems.map((item) => {
-                  const isExpanded = !!expandedIds[item.id];
-                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
-                  return (
-                    <div key={item.id} className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between">
-                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-                        <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
-                        <button type="button" onClick={() => { const updated = savedCoreItems.filter(i => i.id !== item.id); setSavedCoreItems(updated); try { localStorage.setItem("saved_circle_core", JSON.stringify(updated)); } catch(e){} }} className="text-slate-400 hover:text-red-600 p-0.5"><Trash2 className="w-3.5 h-3.5" /></button>
-                      </div>
-                      <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
-                        <div><span className="font-bold text-slate-500">Inputs: </span><span className="font-semibold">{item.inputs}</span></div>
-                        <button type="button" onClick={() => toggleExpand(item.id)} className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px]">
-                          <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
-                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
-                        </button>
-                        {isExpanded && (
-                          <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
-                            <div className="space-y-1 text-xs max-h-48 overflow-y-auto">
-                              {resParts.map((resLine, idx) => (
-                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60">{resLine}</div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+          {renderSavedCardsGroup(
+            "Saved Core Circle Calculations",
+            savedCoreItems,
+            () => { setSavedCoreItems([]); try { localStorage.removeItem("saved_circle_core"); } catch(e){} },
+            (id) => { const updated = savedCoreItems.filter(i => i.id !== id); setSavedCoreItems(updated); try { localStorage.setItem("saved_circle_core", JSON.stringify(updated)); } catch(e){} },
+            "saved_circle_core"
           )}
         </div>
       </div>
@@ -617,21 +662,12 @@ export function CircleCalculator() {
           </div>
 
           {/* EMBEDDED SAVED SECTOR CALCULATIONS */}
-          {savedSecItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2"><Bookmark className="w-4 h-4 text-blue-600" /><span>Saved Sector Calculations ({savedSecItems.length})</span></h3>
-                <button type="button" onClick={() => { setSavedSecItems([]); try { localStorage.removeItem("saved_circle_sec"); } catch(e){} }} className="text-xs text-red-600 font-semibold flex items-center gap-1"><Trash2 className="w-3.5 h-3.5" /> Clear All</button>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {savedSecItems.map((item) => (
-                  <div key={item.id} className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans space-y-2">
-                    <span className="font-extrabold text-blue-600 dark:text-blue-400 block">{item.title}</span>
-                    <span className="text-[11px] text-slate-600 dark:text-slate-400 block">{item.result}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {renderSavedCardsGroup(
+            "Saved Sector Calculations",
+            savedSecItems,
+            () => { setSavedSecItems([]); try { localStorage.removeItem("saved_circle_sec"); } catch(e){} },
+            (id) => { const updated = savedSecItems.filter(i => i.id !== id); setSavedSecItems(updated); try { localStorage.setItem("saved_circle_sec", JSON.stringify(updated)); } catch(e){} },
+            "saved_circle_sec"
           )}
         </div>
       </div>
@@ -669,21 +705,12 @@ export function CircleCalculator() {
           </div>
 
           {/* EMBEDDED SAVED SEGMENT CALCULATIONS */}
-          {savedSegItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2"><Bookmark className="w-4 h-4 text-blue-600" /><span>Saved Segment Calculations ({savedSegItems.length})</span></h3>
-                <button type="button" onClick={() => { setSavedSegItems([]); try { localStorage.removeItem("saved_circle_seg"); } catch(e){} }} className="text-xs text-red-600 font-semibold flex items-center gap-1"><Trash2 className="w-3.5 h-3.5" /> Clear All</button>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {savedSegItems.map((item) => (
-                  <div key={item.id} className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans space-y-2">
-                    <span className="font-extrabold text-blue-600 dark:text-blue-400 block">{item.title}</span>
-                    <span className="text-[11px] text-slate-600 dark:text-slate-400 block">{item.result}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {renderSavedCardsGroup(
+            "Saved Segment Calculations",
+            savedSegItems,
+            () => { setSavedSegItems([]); try { localStorage.removeItem("saved_circle_seg"); } catch(e){} },
+            (id) => { const updated = savedSegItems.filter(i => i.id !== id); setSavedSegItems(updated); try { localStorage.setItem("saved_circle_seg", JSON.stringify(updated)); } catch(e){} },
+            "saved_circle_seg"
           )}
         </div>
       </div>
@@ -723,21 +750,12 @@ export function CircleCalculator() {
           </div>
 
           {/* EMBEDDED SAVED ANNULUS CALCULATIONS */}
-          {savedAnnItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2"><Bookmark className="w-4 h-4 text-blue-600" /><span>Saved Annulus Calculations ({savedAnnItems.length})</span></h3>
-                <button type="button" onClick={() => { setSavedAnnItems([]); try { localStorage.removeItem("saved_circle_ann"); } catch(e){} }} className="text-xs text-red-600 font-semibold flex items-center gap-1"><Trash2 className="w-3.5 h-3.5" /> Clear All</button>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {savedAnnItems.map((item) => (
-                  <div key={item.id} className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans space-y-2">
-                    <span className="font-extrabold text-blue-600 dark:text-blue-400 block">{item.title}</span>
-                    <span className="text-[11px] text-slate-600 dark:text-slate-400 block">{item.result}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {renderSavedCardsGroup(
+            "Saved Annulus Calculations",
+            savedAnnItems,
+            () => { setSavedAnnItems([]); try { localStorage.removeItem("saved_circle_ann"); } catch(e){} },
+            (id) => { const updated = savedAnnItems.filter(i => i.id !== id); setSavedAnnItems(updated); try { localStorage.setItem("saved_circle_ann", JSON.stringify(updated)); } catch(e){} },
+            "saved_circle_ann"
           )}
         </div>
       </div>
@@ -781,21 +799,12 @@ export function CircleCalculator() {
           </div>
 
           {/* EMBEDDED SAVED EQUATION CALCULATIONS */}
-          {savedEqItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2"><Bookmark className="w-4 h-4 text-blue-600" /><span>Saved Circle Equations ({savedEqItems.length})</span></h3>
-                <button type="button" onClick={() => { setSavedEqItems([]); try { localStorage.removeItem("saved_circle_eq"); } catch(e){} }} className="text-xs text-red-600 font-semibold flex items-center gap-1"><Trash2 className="w-3.5 h-3.5" /> Clear All</button>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {savedEqItems.map((item) => (
-                  <div key={item.id} className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans space-y-2">
-                    <span className="font-extrabold text-blue-600 dark:text-blue-400 block">{item.title}</span>
-                    <span className="text-[11px] text-slate-600 dark:text-slate-400 block">{item.result}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {renderSavedCardsGroup(
+            "Saved Circle Equations",
+            savedEqItems,
+            () => { setSavedEqItems([]); try { localStorage.removeItem("saved_circle_eq"); } catch(e){} },
+            (id) => { const updated = savedEqItems.filter(i => i.id !== id); setSavedEqItems(updated); try { localStorage.setItem("saved_circle_eq", JSON.stringify(updated)); } catch(e){} },
+            "saved_circle_eq"
           )}
         </div>
       </div>
@@ -836,21 +845,12 @@ export function CircleCalculator() {
           </div>
 
           {/* EMBEDDED SAVED 3-POINT CALCULATIONS */}
-          {saved3PItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2"><Bookmark className="w-4 h-4 text-blue-600" /><span>Saved 3-Point Circumcircles ({saved3PItems.length})</span></h3>
-                <button type="button" onClick={() => { setSaved3PItems([]); try { localStorage.removeItem("saved_circle_3p"); } catch(e){} }} className="text-xs text-red-600 font-semibold flex items-center gap-1"><Trash2 className="w-3.5 h-3.5" /> Clear All</button>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {saved3PItems.map((item) => (
-                  <div key={item.id} className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans space-y-2">
-                    <span className="font-extrabold text-blue-600 dark:text-blue-400 block">{item.title}</span>
-                    <span className="text-[11px] text-slate-600 dark:text-slate-400 block">{item.result}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {renderSavedCardsGroup(
+            "Saved 3-Point Circumcircles",
+            saved3PItems,
+            () => { setSaved3PItems([]); try { localStorage.removeItem("saved_circle_3p"); } catch(e){} },
+            (id) => { const updated = saved3PItems.filter(i => i.id !== id); setSaved3PItems(updated); try { localStorage.setItem("saved_circle_3p", JSON.stringify(updated)); } catch(e){} },
+            "saved_circle_3p"
           )}
         </div>
       </div>
@@ -907,21 +907,12 @@ export function CircleCalculator() {
           </div>
 
           {/* EMBEDDED SAVED CONVERTER CALCULATIONS */}
-          {savedConvItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2"><Bookmark className="w-4 h-4 text-blue-600" /><span>Saved Converter Calculations ({savedConvItems.length})</span></h3>
-                <button type="button" onClick={() => { setSavedConvItems([]); try { localStorage.removeItem("saved_circle_conv"); } catch(e){} }} className="text-xs text-red-600 font-semibold flex items-center gap-1"><Trash2 className="w-3.5 h-3.5" /> Clear All</button>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {savedConvItems.map((item) => (
-                  <div key={item.id} className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans space-y-2">
-                    <span className="font-extrabold text-blue-600 dark:text-blue-400 block">{item.title}</span>
-                    <span className="text-[11px] text-slate-600 dark:text-slate-400 block">{item.result}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {renderSavedCardsGroup(
+            "Saved Converter Calculations",
+            savedConvItems,
+            () => { setSavedConvItems([]); try { localStorage.removeItem("saved_circle_conv"); } catch(e){} },
+            (id) => { const updated = savedConvItems.filter(i => i.id !== id); setSavedConvItems(updated); try { localStorage.setItem("saved_circle_conv", JSON.stringify(updated)); } catch(e){} },
+            "saved_circle_conv"
           )}
         </div>
       </div>
