@@ -12,17 +12,17 @@ export function PercentageContent() {
           What is a percentage?
         </h2>
         <p>
-          In mathematics, a percentage is a number or ratio that represents a fraction of 100. It is one of the ways to represent a dimensionless relationship between two numbers; other methods include ratios, fractions, and decimals. Percentages are often denoted by the symbol &quot;%&quot; written after the number. They can also be denoted by writing &quot;percent&quot; or &quot;pct&quot; after the number. For example, 35% is equivalent to the decimal 0.35, or the fractions <span className="inline-flex items-center align-middle mx-1"><sup>35</sup>&frasl;<sub>100</sub></span> and <span className="inline-flex items-center align-middle mx-1"><sup>7</sup>&frasl;<sub>20</sub></span>.
+          In mathematics, a percentage is a dimensionless ratio or number expressed as a fraction of 100. It serves as a standardized method to compare proportional parts relative to a fixed baseline total. Derived from the Latin term <em>per centum</em>, meaning &quot;by the hundred,&quot; percentages provide a universal language for analyzing ratios, growth rates, discounts, financial interest yields, and statistical distributions.
         </p>
         <p>
-          Percentages are computed by multiplying the value of a ratio by 100. For example, if 25 out of 50 students in a classroom are male, <span className="inline-flex items-center align-middle mx-1"><sup>25</sup>&frasl;<sub>50</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>1</sup>&frasl;<sub>2</sub></span> = 0.5. The value of the ratio is therefore 0.5, and multiplying this by 100 yields:
+          Percentages are denoted by the percent sign &quot;%&quot; or abbreviated as &quot;pct.&quot; Any percentage can be converted into an equivalent decimal by dividing by 100, or expressed as a simplified fraction. For example, 35% corresponds to the decimal 0.35 and the simplified fraction <span className="inline-flex items-center align-middle mx-1"><sup>7</sup>&frasl;<sub>20</sub></span>.
+        </p>
+        <p>
+          To compute a percentage from raw sample data, multiply the ratio of the part to the whole by 100. For instance, if 25 out of 50 students in a classroom are male, the proportion is <span className="inline-flex items-center align-middle mx-1"><sup>25</sup>&frasl;<sub>50</sub></span> = 0.5. Multiplying this proportion by 100 yields the percentage rate:
         </p>
         <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded font-sans tabular-nums font-semibold text-center text-xs">
-          0.5 × 100 = 50
+          0.5 × 100 = 50%
         </div>
-        <p>
-          In other words, the ratio of 25 males to students in the classroom is equivalent to 50% of students in the classroom being male.
-        </p>
       </section>
 
       {/* 2. PERCENTAGE FORMULA */}
@@ -31,21 +31,23 @@ export function PercentageContent() {
           Percentage formula
         </h2>
         <p>
-          Although the percentage formula can be written in different forms, it is essentially an algebraic equation involving three values:
+          The fundamental percentage relationship is expressed as a simple linear algebraic equation linking three core variables:
         </p>
         <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded font-sans tabular-nums font-semibold text-center text-xs">
           P × V<sub>1</sub> = V<sub>2</sub>
         </div>
         <p>
-          <strong>P</strong> is the percentage, <strong>V<sub>1</sub></strong> is the first value that the percentage will modify, and <strong>V<sub>2</sub></strong> is the result of the percentage operating on <strong>V<sub>1</sub></strong>. The calculator provided automatically converts the input percentage into a decimal to compute the solution. However, if solving for the percentage, the value returned will be the actual percentage, not its decimal representation.
+          Here, <strong>P</strong> is the percentage rate in decimal form (where 100% = 1.0), <strong>V<sub>1</sub></strong> represents the initial base value (100% whole), and <strong>V<sub>2</sub></strong> represents the resulting part value. Depending on which two variables are known, the formula reorganizes into three distinct operational forms:
         </p>
-        <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded font-sans tabular-nums font-semibold text-center text-xs space-y-1">
+        <ul className="list-disc pl-5 space-y-1.5 font-sans tabular-nums text-xs">
+          <li><strong>Solving for Part (V<sub>2</sub>):</strong> V<sub>2</sub> = (P / 100) × V<sub>1</sub></li>
+          <li><strong>Solving for Percentage Rate (P%):</strong> P = (V<sub>2</sub> / V<sub>1</sub>) × 100%</li>
+          <li><strong>Solving for Whole Base (V<sub>1</sub>):</strong> V<sub>1</sub> = V<sub>2</sub> / (P / 100)</li>
+        </ul>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3.5 rounded font-sans tabular-nums font-semibold text-center text-xs space-y-1">
           <p>EX: P × 30 = 1.5</p>
           <p>P = <span className="inline-flex items-center align-middle mx-1"><sup>1.5</sup>&frasl;<sub>30</sub></span> = 0.05 × 100 = 5%</p>
         </div>
-        <p>
-          If solving manually, the formula requires the percentage in decimal form, so the solution for P needs to be multiplied by 100 in order to convert it to a percent. This is essentially what the calculator above does, except that it accepts inputs in percent rather than decimal form.
-        </p>
       </section>
 
       {/* 3. PERCENTAGE DIFFERENCE FORMULA */}
@@ -54,12 +56,15 @@ export function PercentageContent() {
           Percentage difference formula
         </h2>
         <p>
-          The percentage difference between two values is calculated by dividing the absolute value of the difference between two numbers by the average of those two numbers. Multiplying the result by 100 will yield the solution in percent, rather than decimal form. Refer to the equation below for clarification:
+          Percentage difference measures the relative variation between two numbers when neither number serves as an official baseline or starting reference point. Rather than comparing against an initial value, percentage difference evaluates the absolute distance between the two values relative to their arithmetic mean:
         </p>
         <div className="bg-slate-100 dark:bg-slate-800 p-3.5 rounded font-sans tabular-nums font-semibold text-center text-xs space-y-2">
-          <p>Percentage Difference = <span className="inline-flex items-center align-middle mx-1"><sup>|V<sub>1</sub> - V<sub>2</sub>|</sup>&frasl;<sub>(V<sub>1</sub> + V<sub>2</sub>)/2</sub></span> × 100</p>
+          <p>Percentage Difference = <span className="inline-flex items-center align-middle mx-1"><sup>|V<sub>1</sub> - V<sub>2</sub>|</sup>&frasl;<sub>(V<sub>1</sub> + V<sub>2</sub>)/2</sub></span> × 100%</p>
           <p>EX: <span className="inline-flex items-center align-middle mx-1"><sup>|10 - 6|</sup>&frasl;<sub>(10 + 6)/2</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>4</sup>&frasl;<sub>8</sub></span> = 0.5 = 50%</p>
         </div>
+        <p>
+          Using the average baseline ensures that the calculated percentage difference remains symmetric—producing the exact same result regardless of which number is designated as V<sub>1</sub> or V<sub>2</sub>.
+        </p>
       </section>
 
       {/* 4. PERCENTAGE CHANGE FORMULA */}
@@ -68,15 +73,18 @@ export function PercentageContent() {
           Percentage change formula
         </h2>
         <p>
-          Percentage increase and decrease are calculated by computing the difference between two values and comparing that difference to the initial value. Mathematically, this involves using the absolute value of the difference between two values then dividing the result by the initial value, essentially calculating how much the initial value has changed.
+          Percentage change quantifies the relative directional growth (increase) or decay (decrease) from an initial starting value V<sub>1</sub> to a final resulting value V<sub>2</sub>. Unlike percentage difference, percentage change strictly divides the net difference by the initial starting value V<sub>1</sub>:
         </p>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3.5 rounded font-sans tabular-nums font-semibold text-center text-xs space-y-1">
+          <p>Percentage Change = <span className="inline-flex items-center align-middle mx-1"><sup>(V<sub>2</sub> - V<sub>1</sub>)</sup>&frasl;<sub>V<sub>1</sub></sub></span> × 100%</p>
+        </div>
         <p>
-          The percentage increase calculator above computes an increase or decrease of a specific percentage of the input number. It basically involves converting a percent into its decimal equivalent, and either subtracting (decrease) or adding (increase) the decimal equivalent from and to 1, respectively. Multiplying the original number by this value will result in either an increase or decrease of the number by the given percent. Refer to the example below for clarification:
+          When applying a percentage increase or decrease directly to a base number V<sub>1</sub>, convert the percentage into a decimal factor (P / 100) and add or subtract it from 1:
         </p>
-        <div className="bg-slate-100 dark:bg-slate-800 p-3.5 rounded font-sans tabular-nums font-semibold text-center text-xs space-y-2">
+        <div className="bg-slate-100 dark:bg-slate-800 p-3.5 rounded font-sans tabular-nums font-semibold text-center text-xs space-y-1.5">
           <p>EX: 500 increased by 10% (0.1)</p>
           <p>500 × (1 + 0.1) = 550</p>
-          <p>500 decreased by 10%</p>
+          <p>EX: 500 decreased by 10%</p>
           <p>500 × (1 - 0.1) = 450</p>
         </div>
       </section>
@@ -87,7 +95,7 @@ export function PercentageContent() {
           Common Percentage Conversions Reference
         </h2>
         <p>
-          Below is a quick lookup table converting common benchmark fractions into their exact decimal and percentage equivalents:
+          Below is a reference table showing quick mathematical conversions for common benchmark fractions, decimals, and percentage equivalents:
         </p>
         <div className="overflow-x-auto border border-slate-300 dark:border-slate-700 rounded max-w-xl">
           <table className="w-full text-xs text-left border-collapse font-sans tabular-nums">
@@ -115,7 +123,7 @@ export function PercentageContent() {
       <section className="p-4 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-200 dark:border-blue-800/60 space-y-2">
         <h3 className="text-base font-bold text-blue-950 dark:text-blue-200">Educational Summary</h3>
         <p className="text-xs text-blue-900 dark:text-blue-300">
-          Percentages provide a standard proportional baseline for computing relative ratios, rate changes, directional growth, and absolute differences across science, finance, and everyday mathematics.
+          Percentages serve as a standard proportional tool for computing relative ratios, rate changes, directional growth, and absolute differences across science, finance, and everyday mathematics.
         </p>
       </section>
 
