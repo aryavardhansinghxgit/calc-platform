@@ -369,22 +369,35 @@ export function CircleCalculator() {
     );
   };
 
-  // Render Segment Vector SVG
+  // Render Segment & Sagitta Vector SVG (Mathematically Aligned)
   const renderSegmentSVG = () => {
     const width = 240; const height = 180;
     return (
       <svg viewBox={`0 0 ${width} ${height}`} className="w-56 h-44">
         <rect width={width} height={height} fill="#f8fafc" rx="12" className="dark:fill-slate-800/40" />
-        <circle cx="120" cy="90" r="60" fill="none" stroke="#cbd5e1" strokeWidth="1.5" />
+        
+        {/* Full Circle Guide */}
+        <circle cx="120" cy="100" r="60" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeDasharray="3,3" />
+        <circle cx="120" cy="100" r="3" fill="#1d4ed8" />
+        <text x="124" y="112" className="text-[9px] font-mono font-bold fill-blue-700 dark:fill-blue-300">O</text>
 
-        {/* Segment Arc & Chord */}
-        <path d="M 70 50 A 60 60 0 0 1 170 50 Z" fill="#dc2626" fillOpacity="0.25" stroke="#dc2626" strokeWidth="2" />
-        <line x1="70" y1="50" x2="170" y2="50" stroke="#2563eb" strokeWidth="2.5" />
-        <text x="120" y="44" textAnchor="middle" className="text-[10px] font-mono font-bold fill-blue-600 dark:fill-blue-400">Chord (c)</text>
+        {/* Shaded Segment Area Cap */}
+        <path d="M 68 70 A 60 60 0 0 1 172 70 Z" fill="#dc2626" fillOpacity="0.25" stroke="#dc2626" strokeWidth="2" />
+        
+        {/* Chord Line */}
+        <line x1="68" y1="70" x2="172" y2="70" stroke="#2563eb" strokeWidth="2.5" />
+        <text x="120" y="84" textAnchor="middle" className="text-[10px] font-mono font-bold fill-blue-600 dark:fill-blue-400">Chord (c)</text>
 
-        {/* Sagitta height */}
-        <line x1="120" y1="50" x2="120" y2="30" stroke="#16a34a" strokeWidth="2" />
-        <text x="126" y="40" className="text-[10px] font-mono font-bold fill-emerald-600 dark:fill-emerald-400">h (sagitta)</text>
+        {/* Sagitta Height Line (Perpendicular from chord midpoint to arc top) */}
+        <line x1="120" y1="70" x2="120" y2="40" stroke="#16a34a" strokeWidth="2.5" />
+        <text x="125" y="55" className="text-[10px] font-mono font-bold fill-emerald-600 dark:fill-emerald-400">h (sagitta)</text>
+
+        {/* Radius dashed line to chord endpoint */}
+        <line x1="120" y1="100" x2="172" y2="70" stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="2,2" />
+        <text x="148" y="92" className="text-[9px] font-mono font-bold fill-slate-500">r</text>
+
+        {/* Perpendicular Right Angle Box */}
+        <path d="M 120 65 L 125 65 L 125 70" fill="none" stroke="#16a34a" strokeWidth="1" />
       </svg>
     );
   };
@@ -654,6 +667,24 @@ export function CircleCalculator() {
               </div>
             </div>
           </div>
+
+          {/* EMBEDDED SAVED SEGMENT CALCULATIONS */}
+          {savedSegItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2"><Bookmark className="w-4 h-4 text-blue-600" /><span>Saved Segment Calculations ({savedSegItems.length})</span></h3>
+                <button type="button" onClick={() => { setSavedSegItems([]); try { localStorage.removeItem("saved_circle_seg"); } catch(e){} }} className="text-xs text-red-600 font-semibold flex items-center gap-1"><Trash2 className="w-3.5 h-3.5" /> Clear All</button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {savedSegItems.map((item) => (
+                  <div key={item.id} className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans space-y-2">
+                    <span className="font-extrabold text-blue-600 dark:text-blue-400 block">{item.title}</span>
+                    <span className="text-[11px] text-slate-600 dark:text-slate-400 block">{item.result}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -690,6 +721,24 @@ export function CircleCalculator() {
               </div>
             </div>
           </div>
+
+          {/* EMBEDDED SAVED ANNULUS CALCULATIONS */}
+          {savedAnnItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2"><Bookmark className="w-4 h-4 text-blue-600" /><span>Saved Annulus Calculations ({savedAnnItems.length})</span></h3>
+                <button type="button" onClick={() => { setSavedAnnItems([]); try { localStorage.removeItem("saved_circle_ann"); } catch(e){} }} className="text-xs text-red-600 font-semibold flex items-center gap-1"><Trash2 className="w-3.5 h-3.5" /> Clear All</button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {savedAnnItems.map((item) => (
+                  <div key={item.id} className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans space-y-2">
+                    <span className="font-extrabold text-blue-600 dark:text-blue-400 block">{item.title}</span>
+                    <span className="text-[11px] text-slate-600 dark:text-slate-400 block">{item.result}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -730,6 +779,24 @@ export function CircleCalculator() {
               </div>
             </div>
           </div>
+
+          {/* EMBEDDED SAVED EQUATION CALCULATIONS */}
+          {savedEqItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2"><Bookmark className="w-4 h-4 text-blue-600" /><span>Saved Circle Equations ({savedEqItems.length})</span></h3>
+                <button type="button" onClick={() => { setSavedEqItems([]); try { localStorage.removeItem("saved_circle_eq"); } catch(e){} }} className="text-xs text-red-600 font-semibold flex items-center gap-1"><Trash2 className="w-3.5 h-3.5" /> Clear All</button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {savedEqItems.map((item) => (
+                  <div key={item.id} className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans space-y-2">
+                    <span className="font-extrabold text-blue-600 dark:text-blue-400 block">{item.title}</span>
+                    <span className="text-[11px] text-slate-600 dark:text-slate-400 block">{item.result}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -767,6 +834,24 @@ export function CircleCalculator() {
               </div>
             </div>
           </div>
+
+          {/* EMBEDDED SAVED 3-POINT CALCULATIONS */}
+          {saved3PItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2"><Bookmark className="w-4 h-4 text-blue-600" /><span>Saved 3-Point Circumcircles ({saved3PItems.length})</span></h3>
+                <button type="button" onClick={() => { setSaved3PItems([]); try { localStorage.removeItem("saved_circle_3p"); } catch(e){} }} className="text-xs text-red-600 font-semibold flex items-center gap-1"><Trash2 className="w-3.5 h-3.5" /> Clear All</button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {saved3PItems.map((item) => (
+                  <div key={item.id} className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans space-y-2">
+                    <span className="font-extrabold text-blue-600 dark:text-blue-400 block">{item.title}</span>
+                    <span className="text-[11px] text-slate-600 dark:text-slate-400 block">{item.result}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -820,6 +905,24 @@ export function CircleCalculator() {
               </tbody>
             </table>
           </div>
+
+          {/* EMBEDDED SAVED CONVERTER CALCULATIONS */}
+          {savedConvItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2"><Bookmark className="w-4 h-4 text-blue-600" /><span>Saved Converter Calculations ({savedConvItems.length})</span></h3>
+                <button type="button" onClick={() => { setSavedConvItems([]); try { localStorage.removeItem("saved_circle_conv"); } catch(e){} }} className="text-xs text-red-600 font-semibold flex items-center gap-1"><Trash2 className="w-3.5 h-3.5" /> Clear All</button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {savedConvItems.map((item) => (
+                  <div key={item.id} className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans space-y-2">
+                    <span className="font-extrabold text-blue-600 dark:text-blue-400 block">{item.title}</span>
+                    <span className="text-[11px] text-slate-600 dark:text-slate-400 block">{item.result}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
