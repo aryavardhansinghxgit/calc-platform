@@ -154,7 +154,7 @@ export function computeStandardMMM(data: number[], isSample: boolean = true): St
   for (const key in freqMap) {
     freqTable.push({ val: parseFloat(key), freq: freqMap[key] });
   }
-  freqTable.sort((a, b) => b.freq - a.freq || a.val - b.val);
+  freqTable.sort((a, b) => a.val - b.val);
 
   const modes: number[] = [];
   if (maxFreq > 1) {
@@ -278,8 +278,16 @@ export function computeAdvancedMeans(
     harmonicMean = n / recSum;
   }
 
-  // Trimmed Mean
-  const trimCount = Math.floor((n * trimPct) / 100);
+  // Robust Trimmed Mean: calculate trim count dynamically
+  let trimCount = Math.floor((n * trimPct) / 100);
+  if (trimCount === 0 && trimPct > 0 && n >= 3) {
+    trimCount = 1;
+  }
+  // Ensure we don't trim everything
+  if (2 * trimCount >= n) {
+    trimCount = Math.max(0, Math.floor((n - 1) / 2));
+  }
+
   const trimmed = sorted.slice(trimCount, n - trimCount);
   const trimmedMean = trimmed.length > 0 ? trimmed.reduce((acc, v) => acc + v, 0) / trimmed.length : sorted.reduce((acc, v) => acc + v, 0) / n;
 

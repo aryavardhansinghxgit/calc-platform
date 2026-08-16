@@ -3,31 +3,18 @@
 import React, { useState, useMemo, useEffect } from "react";
 import {
   Calculator,
-  Copy,
-  Check,
-  Share2,
-  Sparkles,
-  Sliders,
-  BookOpen,
-  Zap,
-  Grid,
-  ListOrdered,
-  Layers,
-  PieChart,
-  CheckCircle2,
-  Info,
-  ShieldCheck,
-  Split,
-  BarChart2,
-  TrendingUp,
-  Table,
   Bookmark,
   Trash2,
   ChevronDown,
   ChevronUp,
-  SlidersHorizontal,
-  Flame,
-  Activity
+  Sliders,
+  Layers,
+  BarChart2,
+  Activity,
+  CheckCircle2,
+  TrendingUp,
+  Split,
+  Table
 } from "lucide-react";
 import {
   parseDataset,
@@ -107,9 +94,6 @@ export function StatisticsCalculator() {
   const [savedDistItems, setSavedDistItems] = useState<SavedStatsItem[]>([]);
   const [justSavedDist, setJustSavedDist] = useState<boolean>(false);
 
-  // Action feedback states
-  const [copiedSummary1, setCopiedSummary1] = useState<boolean>(false);
-
   // Expand / Collapse state for saved calculation cards
   const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({});
 
@@ -145,6 +129,29 @@ export function StatisticsCalculator() {
   const activeSD1 = isSample ? stats1.sampleSD : stats1.popSD;
   const activeVar1 = isSample ? stats1.sampleVar : stats1.popVar;
 
+  // Dynamic Box Plot Scale for Card 1
+  const chartScales1 = useMemo(() => {
+    const minVal = stats1.min;
+    const maxVal = stats1.max;
+    const rangeVal = maxVal - minVal > 0 ? maxVal - minVal : 1;
+
+    const scaleX = (val: number) => {
+      return 50 + ((val - minVal) / rangeVal) * 400;
+    };
+
+    return {
+      minVal,
+      maxVal,
+      rangeVal,
+      scaleX,
+      xMin: scaleX(stats1.min),
+      xQ1: scaleX(stats1.q1),
+      xMed: scaleX(stats1.median),
+      xQ3: scaleX(stats1.q3),
+      xMax: scaleX(stats1.max)
+    };
+  }, [stats1]);
+
   // Card 2 Calculations
   const groupedResult = useMemo(() => computeGroupedStats(groupedVals, groupedFreqs), [groupedVals, groupedFreqs]);
 
@@ -175,14 +182,6 @@ export function StatisticsCalculator() {
       tailProb: parseFloat((1 - cdf).toFixed(4))
     };
   }, [distX]);
-
-  const handleCopy = (text: string, setFn: React.Dispatch<React.SetStateAction<boolean>>) => {
-    try {
-      navigator.clipboard.writeText(text);
-      setFn(true);
-      setTimeout(() => setFn(false), 2000);
-    } catch (e) {}
-  };
 
   // Save Handlers
   const handleSaveUnivariate = () => {
@@ -404,29 +403,31 @@ export function StatisticsCalculator() {
                     Variance Type (Bessel's Correction):
                   </label>
                   <div className="grid grid-cols-2 gap-2">
-                    <label
+                    <button
+                      type="button"
                       onClick={() => setIsSample(true)}
-                      className={`p-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 cursor-pointer transition-all ${
+                      className={`p-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all ${
                         isSample
                           ? "bg-blue-600 text-white border-blue-600 shadow-xs"
-                          : "bg-white dark:bg-slate-800 border-slate-300 text-slate-700 dark:text-slate-300"
+                          : "bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
                       }`}
                     >
-                      <input type="radio" checked={isSample} onChange={() => {}} className="sr-only" />
+                      <CheckCircle2 className={`w-3.5 h-3.5 ${isSample ? "text-white" : "opacity-0"}`} />
                       <span>Sample SD (s, n - 1)</span>
-                    </label>
+                    </button>
 
-                    <label
+                    <button
+                      type="button"
                       onClick={() => setIsSample(false)}
-                      className={`p-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 cursor-pointer transition-all ${
+                      className={`p-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all ${
                         !isSample
                           ? "bg-blue-600 text-white border-blue-600 shadow-xs"
-                          : "bg-white dark:bg-slate-800 border-slate-300 text-slate-700 dark:text-slate-300"
+                          : "bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
                       }`}
                     >
-                      <input type="radio" checked={!isSample} onChange={() => {}} className="sr-only" />
+                      <CheckCircle2 className={`w-3.5 h-3.5 ${!isSample ? "text-white" : "opacity-0"}`} />
                       <span>Population SD (&sigma;, N)</span>
-                    </label>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -546,22 +547,41 @@ export function StatisticsCalculator() {
               </div>
             )}
 
-            {/* TAB 2: BOX PLOT SVG */}
+            {/* TAB 2: DYNAMIC BOX PLOT SVG */}
             {activeVisual1 === "box" && (
               <div className="bg-slate-50 dark:bg-slate-800/60 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
                 <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300">
                   Five-Number Summary Box &amp; Whisker Plot (Min, Q1, Median, Q3, Max):
                 </h4>
                 <div className="w-full flex justify-center py-3 overflow-x-auto">
-                  <svg viewBox="0 0 500 100" className="w-full max-w-xl h-auto">
-                    <line x1="50" y1="50" x2="450" y2="50" stroke="#475569" strokeWidth="2" />
-                    <rect x="150" y="30" width="200" height="40" fill="#3b82f6" opacity="0.3" stroke="#1d4ed8" strokeWidth="2" />
-                    <line x1="250" y1="30" x2="250" y2="70" stroke="#1e40af" strokeWidth="3" />
-                    <text x="50" y="85" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700">Min: {stats1.min}</text>
-                    <text x="150" y="85" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700">Q1: {stats1.q1}</text>
-                    <text x="250" y="85" textAnchor="middle" className="text-[10px] font-mono font-bold fill-blue-700">Med: {stats1.median}</text>
-                    <text x="350" y="85" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700">Q3: {stats1.q3}</text>
-                    <text x="450" y="85" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700">Max: {stats1.max}</text>
+                  <svg viewBox="0 0 500 110" className="w-full max-w-xl h-auto">
+                    {/* Whisker Line */}
+                    <line x1={chartScales1.xMin} y1="50" x2={chartScales1.xMax} y2="50" stroke="#475569" strokeWidth="2" />
+                    <line x1={chartScales1.xMin} y1="35" x2={chartScales1.xMin} y2="65" stroke="#475569" strokeWidth="2" />
+                    <line x1={chartScales1.xMax} y1="35" x2={chartScales1.xMax} y2="65" stroke="#475569" strokeWidth="2" />
+
+                    {/* Box */}
+                    <rect
+                      x={chartScales1.xQ1}
+                      y="30"
+                      width={Math.max(4, chartScales1.xQ3 - chartScales1.xQ1)}
+                      height="40"
+                      fill="#3b82f6"
+                      opacity="0.3"
+                      stroke="#1d4ed8"
+                      strokeWidth="2"
+                      rx="2"
+                    />
+
+                    {/* Median Line */}
+                    <line x1={chartScales1.xMed} y1="30" x2={chartScales1.xMed} y2="70" stroke="#1e40af" strokeWidth="3" />
+
+                    {/* Labels */}
+                    <text x={chartScales1.xMin} y="92" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700 dark:fill-slate-300">Min: {stats1.min}</text>
+                    <text x={chartScales1.xQ1} y="92" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700 dark:fill-slate-300">Q1: {stats1.q1}</text>
+                    <text x={chartScales1.xMed} y="92" textAnchor="middle" className="text-[10px] font-mono font-bold fill-blue-700 dark:fill-blue-400">Med: {stats1.median}</text>
+                    <text x={chartScales1.xQ3} y="92" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700 dark:fill-slate-300">Q3: {stats1.q3}</text>
+                    <text x={chartScales1.xMax} y="92" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700 dark:fill-slate-300">Max: {stats1.max}</text>
                   </svg>
                 </div>
               </div>

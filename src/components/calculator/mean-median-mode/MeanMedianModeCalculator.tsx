@@ -116,6 +116,8 @@ export function MeanMedianModeCalculator() {
   // Card 1 Calculations
   const data1 = useMemo(() => parseDataset(rawInput), [rawInput]);
   const stats1 = useMemo(() => computeStandardMMM(data1, isSample), [data1, isSample]);
+  const activeSD1 = isSample ? stats1.sampleSD : stats1.popSD;
+  const activeVar1 = isSample ? stats1.sampleVar : stats1.popVar;
 
   // Card 2 Calculations
   const advResult = useMemo(() => computeAdvancedMeans(advValues, advWeights, trimPct), [advValues, advWeights, trimPct]);
@@ -136,9 +138,33 @@ export function MeanMedianModeCalculator() {
   const dataOutlier = useMemo(() => parseDataset(outlierInput), [outlierInput]);
   const outlierResult = useMemo(() => computeOutlierSkewness(dataOutlier), [dataOutlier]);
 
+  // Dynamic SVG Chart Coordinates for Card 1
+  const chartScales1 = useMemo(() => {
+    const minVal = stats1.min;
+    const maxVal = stats1.max;
+    const rangeVal = maxVal - minVal > 0 ? maxVal - minVal : 1;
+
+    const scaleX = (val: number) => {
+      return 50 + ((val - minVal) / rangeVal) * 400;
+    };
+
+    return {
+      minVal,
+      maxVal,
+      rangeVal,
+      scaleX,
+      xMin: scaleX(stats1.min),
+      xQ1: scaleX(stats1.q1),
+      xMed: scaleX(stats1.median),
+      xQ3: scaleX(stats1.q3),
+      xMax: scaleX(stats1.max),
+      xMean: scaleX(stats1.mean)
+    };
+  }, [stats1]);
+
   // Save Handlers
   const handleSaveStandard = () => {
-    const inputsStr = `Data (N=${stats1.count})`;
+    const inputsStr = `Data (N=${stats1.count}), Mode: ${isSample ? "Sample (n-1)" : "Population (N)"}`;
     const opStr = `Standard Central Tendency`;
     const resList = [
       `Mean (x̄) = ${stats1.mean}`,
@@ -147,7 +173,8 @@ export function MeanMedianModeCalculator() {
       `Range = ${stats1.range}`,
       `IQR = ${stats1.iqr}`,
       `Min / Max = [${stats1.min}, ${stats1.max}]`,
-      `SD (s) = ${stats1.sampleSD}`
+      `SD (${isSample ? "s" : "σ"}) = ${activeSD1}`,
+      `Variance (${isSample ? "s²" : "σ²"}) = ${activeVar1}`
     ];
 
     const newItem: SavedMMMItem = {
@@ -157,7 +184,7 @@ export function MeanMedianModeCalculator() {
       operation: opStr,
       result: resList.join(" | "),
       resultsList: resList,
-      expression: `x̄=${stats1.mean}, Med=${stats1.median}, Range=${stats1.range}`,
+      expression: `x̄=${stats1.mean}, Med=${stats1.median}, SD=${activeSD1}`,
       timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
     };
 
@@ -356,29 +383,31 @@ export function MeanMedianModeCalculator() {
                     Variance Type (Bessel's Correction):
                   </label>
                   <div className="grid grid-cols-2 gap-2">
-                    <label
+                    <button
+                      type="button"
                       onClick={() => setIsSample(true)}
-                      className={`p-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 cursor-pointer transition-all ${
+                      className={`p-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all ${
                         isSample
                           ? "bg-blue-600 text-white border-blue-600 shadow-xs"
-                          : "bg-white dark:bg-slate-800 border-slate-300 text-slate-700 dark:text-slate-300"
+                          : "bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
                       }`}
                     >
-                      <input type="radio" checked={isSample} onChange={() => {}} className="sr-only" />
+                      <CheckCircle2 className={`w-3.5 h-3.5 ${isSample ? "text-white" : "opacity-0"}`} />
                       <span>Sample SD (s, n - 1)</span>
-                    </label>
+                    </button>
 
-                    <label
+                    <button
+                      type="button"
                       onClick={() => setIsSample(false)}
-                      className={`p-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 cursor-pointer transition-all ${
+                      className={`p-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all ${
                         !isSample
                           ? "bg-blue-600 text-white border-blue-600 shadow-xs"
-                          : "bg-white dark:bg-slate-800 border-slate-300 text-slate-700 dark:text-slate-300"
+                          : "bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
                       }`}
                     >
-                      <input type="radio" checked={!isSample} onChange={() => {}} className="sr-only" />
+                      <CheckCircle2 className={`w-3.5 h-3.5 ${!isSample ? "text-white" : "opacity-0"}`} />
                       <span>Population SD (&sigma;, N)</span>
-                    </label>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -436,13 +465,17 @@ export function MeanMedianModeCalculator() {
                 </div>
 
                 <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center space-y-0.5">
-                  <span className="text-[10px] text-slate-400 block uppercase">IQR</span>
-                  <span className="font-mono text-slate-900 dark:text-slate-100">{stats1.iqr}</span>
+                  <span className="text-[10px] text-slate-400 block uppercase">
+                    Variance ({isSample ? "s²" : "σ²"})
+                  </span>
+                  <span className="font-mono text-slate-900 dark:text-slate-100">{activeVar1}</span>
                 </div>
 
                 <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center space-y-0.5">
-                  <span className="text-[10px] text-slate-400 block uppercase">Std Dev (s)</span>
-                  <span className="font-mono text-blue-600 dark:text-blue-400">{stats1.sampleSD}</span>
+                  <span className="text-[10px] text-slate-400 block uppercase">
+                    {isSample ? "Std Dev (s)" : "Std Dev (σ)"}
+                  </span>
+                  <span className="font-mono text-blue-600 dark:text-blue-400">{activeSD1}</span>
                 </div>
               </div>
             </div>
@@ -489,51 +522,133 @@ export function MeanMedianModeCalculator() {
               </div>
             </div>
 
-            {/* TAB 1: FREQUENCY BAR CHART SVG */}
+            {/* TAB 1: FREQUENCY BAR CHART SVG WITH MEAN (BLUE) & MEDIAN (GREEN) LINES */}
             {activeVisual1 === "freq" && (
               <div className="bg-slate-50 dark:bg-slate-800/60 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
-                <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                  Value Frequency Distribution (Vertical lines: Blue = Mean, Green = Median):
-                </h4>
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-bold">
+                  <span className="text-slate-700 dark:text-slate-300">Value Frequency Distribution:</span>
+                  <div className="flex items-center gap-4 text-[11px]">
+                    <span className="flex items-center gap-1.5 text-blue-600 dark:text-blue-400">
+                      <span className="w-3 h-0.5 bg-blue-600 inline-block"></span> Mean x̄ ({stats1.mean})
+                    </span>
+                    <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                      <span className="w-3 h-0.5 bg-emerald-600 border-b border-dashed border-emerald-600 inline-block"></span> Median ({stats1.median})
+                    </span>
+                  </div>
+                </div>
+
                 <div className="w-full flex justify-center py-2 overflow-x-auto">
                   <svg viewBox="0 0 500 160" className="w-full max-w-xl h-auto">
+                    {/* Axes */}
                     <line x1="40" y1="130" x2="480" y2="130" stroke="#94a3b8" strokeWidth="2" />
                     <line x1="40" y1="130" x2="40" y2="20" stroke="#94a3b8" strokeWidth="2" />
-                    {stats1.freqTable.slice(0, 10).map((item, idx) => {
+
+                    {/* Bars */}
+                    {stats1.freqTable.slice(0, 12).map((item, idx) => {
                       const maxFreq = Math.max(...stats1.freqTable.map(f => f.freq), 1);
-                      const barWidth = 420 / Math.min(stats1.freqTable.length, 10);
+                      const barWidth = 420 / Math.min(stats1.freqTable.length, 12);
                       const x = 40 + idx * barWidth;
-                      const h = (item.freq / maxFreq) * 100;
+                      const h = (item.freq / maxFreq) * 90;
                       const y = 130 - h;
                       return (
                         <g key={idx}>
                           <rect x={x + 4} y={y} width={barWidth - 8} height={h} fill="#3b82f6" opacity="0.7" rx="3" />
-                          <text x={x + barWidth / 2} y={y - 4} textAnchor="middle" className="text-[9px] font-mono font-bold fill-blue-700">{item.freq}</text>
+                          <text x={x + barWidth / 2} y={y - 4} textAnchor="middle" className="text-[9px] font-mono font-bold fill-blue-700 dark:fill-blue-300">{item.freq}</text>
                           <text x={x + barWidth / 2} y="145" textAnchor="middle" className="text-[8px] font-mono fill-slate-500">{item.val}</text>
                         </g>
                       );
                     })}
+
+                    {/* Dynamic Mean Line (Solid Blue) */}
+                    <line
+                      x1={chartScales1.xMean}
+                      y1="15"
+                      x2={chartScales1.xMean}
+                      y2="130"
+                      stroke="#2563eb"
+                      strokeWidth="2.5"
+                    />
+                    <circle cx={chartScales1.xMean} cy="15" r="3" fill="#2563eb" />
+
+                    {/* Dynamic Median Line (Dashed Green) */}
+                    <line
+                      x1={chartScales1.xMed}
+                      y1="15"
+                      x2={chartScales1.xMed}
+                      y2="130"
+                      stroke="#10b981"
+                      strokeWidth="2.5"
+                      strokeDasharray="4,3"
+                    />
+                    <circle cx={chartScales1.xMed} cy="15" r="3" fill="#10b981" />
                   </svg>
                 </div>
               </div>
             )}
 
-            {/* TAB 2: BOX PLOT SVG */}
+            {/* TAB 2: DYNAMIC SCALED BOX PLOT SVG */}
             {activeVisual1 === "box" && (
               <div className="bg-slate-50 dark:bg-slate-800/60 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
                 <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                  Five-Number Summary Box Plot (Min, Q1, Median, Q3, Max):
+                  Five-Number Summary Box Plot (Scaled Dynamically to Data Range [{stats1.min}, {stats1.max}]):
                 </h4>
                 <div className="w-full flex justify-center py-3 overflow-x-auto">
-                  <svg viewBox="0 0 500 100" className="w-full max-w-xl h-auto">
-                    <line x1="50" y1="50" x2="450" y2="50" stroke="#475569" strokeWidth="2" />
-                    <rect x="150" y="30" width="200" height="40" fill="#3b82f6" opacity="0.3" stroke="#1d4ed8" strokeWidth="2" />
-                    <line x1="250" y1="30" x2="250" y2="70" stroke="#1e40af" strokeWidth="3" />
-                    <text x="50" y="85" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700">Min: {stats1.min}</text>
-                    <text x="150" y="85" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700">Q1: {stats1.q1}</text>
-                    <text x="250" y="85" textAnchor="middle" className="text-[10px] font-mono font-bold fill-blue-700">Med: {stats1.median}</text>
-                    <text x="350" y="85" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700">Q3: {stats1.q3}</text>
-                    <text x="450" y="85" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700">Max: {stats1.max}</text>
+                  <svg viewBox="0 0 500 110" className="w-full max-w-xl h-auto">
+                    {/* Main Whisker Horizontal Line */}
+                    <line
+                      x1={chartScales1.xMin}
+                      y1="50"
+                      x2={chartScales1.xMax}
+                      y2="50"
+                      stroke="#475569"
+                      strokeWidth="2"
+                    />
+
+                    {/* Min End Vertical Cap */}
+                    <line x1={chartScales1.xMin} y1="35" x2={chartScales1.xMin} y2="65" stroke="#475569" strokeWidth="2" />
+                    
+                    {/* Max End Vertical Cap */}
+                    <line x1={chartScales1.xMax} y1="35" x2={chartScales1.xMax} y2="65" stroke="#475569" strokeWidth="2" />
+
+                    {/* Box (Q1 to Q3) */}
+                    <rect
+                      x={chartScales1.xQ1}
+                      y="30"
+                      width={Math.max(4, chartScales1.xQ3 - chartScales1.xQ1)}
+                      height="40"
+                      fill="#3b82f6"
+                      opacity="0.3"
+                      stroke="#1d4ed8"
+                      strokeWidth="2"
+                      rx="2"
+                    />
+
+                    {/* Median Vertical Line */}
+                    <line
+                      x1={chartScales1.xMed}
+                      y1="30"
+                      x2={chartScales1.xMed}
+                      y2="70"
+                      stroke="#1e40af"
+                      strokeWidth="3"
+                    />
+
+                    {/* Dynamic Labels Below */}
+                    <text x={chartScales1.xMin} y="92" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700 dark:fill-slate-300">
+                      Min: {stats1.min}
+                    </text>
+                    <text x={chartScales1.xQ1} y="92" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700 dark:fill-slate-300">
+                      Q1: {stats1.q1}
+                    </text>
+                    <text x={chartScales1.xMed} y="92" textAnchor="middle" className="text-[10px] font-mono font-bold fill-blue-700 dark:fill-blue-400">
+                      Med: {stats1.median}
+                    </text>
+                    <text x={chartScales1.xQ3} y="92" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700 dark:fill-slate-300">
+                      Q3: {stats1.q3}
+                    </text>
+                    <text x={chartScales1.xMax} y="92" textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700 dark:fill-slate-300">
+                      Max: {stats1.max}
+                    </text>
                   </svg>
                 </div>
               </div>
@@ -693,11 +808,13 @@ export function MeanMedianModeCalculator() {
                   />
                 </div>
 
-                <div>
-                  <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                {/* INTERACTIVE K% SELECTOR & SLIDER */}
+                <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300">
                     <span>Trim Percentage (k%):</span>
-                    <span className="text-blue-600 dark:text-blue-400 font-mono">{trimPct}%</span>
+                    <span className="text-blue-600 dark:text-blue-400 font-mono font-extrabold text-sm">{trimPct}%</span>
                   </div>
+
                   <input
                     type="range"
                     min="0"
@@ -707,6 +824,24 @@ export function MeanMedianModeCalculator() {
                     onChange={(e) => setTrimPct(parseInt(e.target.value, 10))}
                     className="w-full accent-blue-600 cursor-pointer"
                   />
+
+                  {/* QUICK PRESET BUTTONS FOR K% SELECTOR */}
+                  <div className="grid grid-cols-5 gap-1 pt-1">
+                    {[0, 5, 10, 15, 20].map((pct) => (
+                      <button
+                        key={pct}
+                        type="button"
+                        onClick={() => setTrimPct(pct)}
+                        className={`py-1 rounded-lg text-xs font-bold font-mono transition-all cursor-pointer ${
+                          trimPct === pct
+                            ? "bg-blue-600 text-white shadow-xs"
+                            : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100"
+                        }`}
+                      >
+                        {pct}%
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -1271,10 +1406,10 @@ export function MeanMedianModeCalculator() {
                         <td className="p-2 text-slate-500">{(statsB.range - statsA.range).toFixed(2)}</td>
                       </tr>
                       <tr>
-                        <td className="p-2 font-bold font-sans text-slate-600">Std Dev (s)</td>
-                        <td className="p-2">{statsA.sampleSD}</td>
-                        <td className="p-2">{statsB.sampleSD}</td>
-                        <td className="p-2 text-slate-500">{(statsB.sampleSD - statsA.sampleSD).toFixed(2)}</td>
+                        <td className="p-2 font-bold font-sans text-slate-600">Std Dev ({isSample ? "s" : "σ"})</td>
+                        <td className="p-2">{isSample ? statsA.sampleSD : statsA.popSD}</td>
+                        <td className="p-2">{isSample ? statsB.sampleSD : statsB.popSD}</td>
+                        <td className="p-2 text-slate-500">{((isSample ? statsB.sampleSD : statsB.popSD) - (isSample ? statsA.sampleSD : statsA.popSD)).toFixed(2)}</td>
                       </tr>
                     </tbody>
                   </table>
