@@ -5,7 +5,7 @@ export function calculateProbabilityCalculator(inputs: Record<string, any>): Pro
   const pa = inputs.probA ?? "0.5";
   const pb = inputs.probB ?? "0.4";
 
-  const res = computeTwoEventProbability(pa, pb, "independent");
+  const res = computeTwoEventProbability(pa, pb);
 
   return {
     probAandB: parseFloat(res.pIntersection.toFixed(4)),
