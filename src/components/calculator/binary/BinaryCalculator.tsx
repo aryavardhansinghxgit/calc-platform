@@ -830,7 +830,7 @@ export function BinaryCalculator() {
       {/* DEDICATED MULTI-BASE & DECIMAL CONVERTER CARD WITH MATCHING THIN BLUE BORDER */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span>Multi-Base & Decimal Converter</span>
+          <span>Binary and Decimal Converter</span>
           <button
             type="button"
             onClick={handleSaveDecConversion}
@@ -953,7 +953,7 @@ export function BinaryCalculator() {
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
                 <Bookmark className="w-4 h-4 text-blue-600" />
-                <span>Saved Base Conversions ({savedDecItems.length})</span>
+                <span>Saved Binary & Decimal Conversions ({savedDecItems.length})</span>
               </h3>
               <button
                 type="button"
