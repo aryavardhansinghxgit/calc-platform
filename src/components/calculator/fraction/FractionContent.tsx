@@ -4,281 +4,139 @@ import React from "react";
 
 export function FractionContent() {
   return (
-    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed pt-6  dark:border-zinc-800">
-      {/* 1. WHAT IS A FRACTION */}
+    <article className="space-y-8 text-slate-800 dark:text-slate-200 text-xs sm:text-sm leading-relaxed font-sans pt-4">
+
+      {/* 1. WHAT IS A FRACTION? */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>1.</span> What Is A Fraction?
+        <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+          What is a fraction?
         </h2>
         <p>
-          In mathematics, a <strong>fraction</strong> represents a numerical quantity that is not a whole number. It expresses a part of a whole or, more generally, any number of equal parts. A fraction is written in the form {"\\(a / b\\)"}, where {"\\(a\\)"} and {"\\(b\\)"} are integers, and {"\\(b \\neq 0\\)"}.
+          In mathematics, a fraction represents a numerical quantity that is a part of a whole or, more generally, any number of equal parts. Expressed in the form <span className="inline-flex items-center align-middle mx-1"><sup>a</sup>&frasl;<sub>b</sub></span> (where a and b are integers and b ≠ 0), a fraction defines a dimensionless ratio between the numerator (<strong>a</strong>), representing the number of chosen equal parts, and the denominator (<strong>b</strong>), representing the total number of equal parts comprising the whole.
         </p>
         <p>
-          Fractions are fundamental to arithmetic, algebra, geometry, and real-world measurements. Whether dividing a pizza among friends, measuring architectural dimensions in inches, or computing probability in statistics, fractions provide an exact mathematical representation of rational proportions.
+          For example, in the fraction <span className="inline-flex items-center align-middle mx-1"><sup>3</sup>&frasl;<sub>8</sub></span>, the numerator is 3 and the denominator is 8. A practical visual model is a circular pie cut into 8 equal slices: taking 3 slices leaves 5 slices remaining, representing <span className="inline-flex items-center align-middle mx-1"><sup>5</sup>&frasl;<sub>8</sub></span> of the total pie. The denominator can never equal 0, as division by zero is mathematically undefined.
         </p>
       </section>
 
-      {/* 2. PARTS OF A FRACTION */}
+      {/* 2. PROPER VS. IMPROPER FRACTIONS AND MIXED NUMBERS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>2.</span> Parts Of A Fraction
+        <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+          Proper vs. Improper Fractions and Mixed Numbers
         </h2>
-        <p>Every standard fraction consists of three distinct mathematical components:</p>
-        <ul className="list-disc pl-6 space-y-1">
+        <p>
+          Fractions are categorized into three primary structural forms depending on the relative magnitude of the numerator and denominator:
+        </p>
+        <ul className="list-disc pl-5 space-y-2 font-sans text-xs">
           <li>
-            <strong>Numerator ({"a"}):</strong> The top number in a fraction. It indicates how many equal parts are selected or being considered.
+            <strong>Proper Fractions:</strong> Fractions where the absolute value of the numerator is strictly less than the denominator (|a| &lt; |b|). Proper fractions always represent a quantity strictly less than 1 (e.g., <span className="inline-flex items-center align-middle mx-1"><sup>3</sup>&frasl;<sub>4</sub></span> = 0.75, <span className="inline-flex items-center align-middle mx-1"><sup>5</sup>&frasl;<sub>8</sub></span> = 0.625).
           </li>
           <li>
-            <strong>Fraction Bar (Vinculum):</strong> The horizontal line separating the top and bottom numbers, representing mathematical division ({"a ÷ b"}).
+            <strong>Improper Fractions:</strong> Fractions where the numerator is greater than or equal to the denominator (|a| ≥ |b|). Improper fractions represent values greater than or equal to 1 (e.g., <span className="inline-flex items-center align-middle mx-1"><sup>11</sup>&frasl;<sub>4</sub></span> = 2.75).
           </li>
           <li>
-            <strong>Denominator ({"b"}):</strong> The bottom number in a fraction. It indicates the total number of equal parts into which the whole is divided. The denominator can never equal zero.
-          </li>
-        </ul>
-      </section>
-
-      {/* 3. PROPER FRACTIONS */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>3.</span> Proper Fractions
-        </h2>
-        <p>
-          A <strong>proper fraction</strong> is a fraction in which the absolute value of the numerator is strictly less than the absolute value of the denominator ({"|a| < |b|"}).
-        </p>
-        <p>
-          Because the numerator is smaller than the denominator, the absolute value of a proper fraction is always strictly less than 1 (for example, 3/4 = 0.75, 5/8 = 0.625, and 1/2 = 0.5).
-        </p>
-      </section>
-
-      {/* 4. IMPROPER FRACTIONS */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>4.</span> Improper Fractions
-        </h2>
-        <p>
-          An <strong>improper fraction</strong> is a fraction in which the absolute value of the numerator is greater than or equal to the absolute value of the denominator ({"|a| ≥ |b|"}).
-        </p>
-        <p>
-          An improper fraction represents a value greater than or equal to 1. For instance, 7/4 = 1.75 and 11/3 = 3.666... In advanced algebra and calculus, improper fractions are preferred over mixed numbers because they simplify polynomial and matrix calculations.
-        </p>
-      </section>
-
-      {/* 5. MIXED NUMBERS */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>5.</span> Mixed Numbers
-        </h2>
-        <p>
-          A <strong>mixed number</strong> (or mixed fraction) combines a non-zero whole number and a proper fraction, written as {"w a/b"}. It represents the sum {"w + a/b"}.
-        </p>
-        <p>
-          To convert a mixed number {"w a/b"} to an improper fraction:
-        </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
-          {"Improper Fraction = [(Whole × Denominator) + Numerator] / Denominator"}
-        </div>
-      </section>
-
-      {/* 6. EQUIVALENT FRACTIONS */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>6.</span> Equivalent Fractions
-        </h2>
-        <p>
-          <strong>Equivalent fractions</strong> are different fractions that name the exact same numerical value. Multiplying or dividing both the numerator and denominator by the same non-zero integer generates an equivalent fraction.
-        </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
-          {"a / b = (a × k) / (b × k)   for any k ≠ 0"}
-        </div>
-        <p>For example: 1/2 = 2/4 = 3/6 = 4/8 = 5/10 = 0.5.</p>
-      </section>
-
-      {/* 7. FRACTION SIMPLIFICATION */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>7.</span> Fraction Simplification (Lowest Terms)
-        </h2>
-        <p>
-          Simplifying a fraction (reducing it to lowest terms) means dividing both the numerator and denominator by their <strong>Greatest Common Divisor (GCD)</strong> until no integer other than 1 can divide both numbers evenly.
-        </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
-          {"Simplified Fraction = [Numerator ÷ GCD] / [Denominator ÷ GCD]"}
-        </div>
-      </section>
-
-      {/* 8. FRACTION ADDITION */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>8.</span> Fraction Addition
-        </h2>
-        <p>
-          To add two fractions with different denominators, you must first convert them to equivalent fractions sharing a <strong>Least Common Denominator (LCD)</strong>:
-        </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
-          {"a/b + c/d = (a·d + b·c) / (b·d)"}
-        </div>
-      </section>
-
-      {/* 9. FRACTION SUBTRACTION */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>9.</span> Fraction Subtraction
-        </h2>
-        <p>
-          Fraction subtraction follows the exact same LCD principles as addition:
-        </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
-          {"a/b - c/d = (a·d - b·c) / (b·d)"}
-        </div>
-      </section>
-
-      {/* 10. FRACTION MULTIPLICATION */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>10.</span> Fraction Multiplication
-        </h2>
-        <p>
-          Unlike addition, fraction multiplication does NOT require a common denominator. Simply multiply top times top and bottom times bottom:
-        </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
-          {"(a/b) × (c/d) = (a × c) / (b × d)"}
-        </div>
-      </section>
-
-      {/* 11. FRACTION DIVISION */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>11.</span> Fraction Division
-        </h2>
-        <p>
-          To divide by a fraction, multiply by its <strong>reciprocal</strong> (flip the second fraction):
-        </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
-          {"(a/b) ÷ (c/d) = (a/b) × (d/c) = (a × d) / (b × c)"}
-        </div>
-      </section>
-
-      {/* 12. CONVERTING FRACTIONS TO DECIMALS */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>12.</span> Converting Fractions To Decimals
-        </h2>
-        <p>
-          To convert a fraction a/b into a decimal, perform long division: divide numerator a by denominator b. If the prime factors of the simplified denominator contain only 2 and 5, the decimal terminates (e.g. 3/8 = 0.375). Otherwise, it produces a repeating decimal (e.g. 1/3 = 0.333...).
-        </p>
-      </section>
-
-      {/* 13. CONVERTING DECIMALS TO FRACTIONS */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>13.</span> Converting Decimals To Fractions
-        </h2>
-        <p>
-          For terminating decimals, count the decimal places (d) and set the denominator to 10^d, then simplify. For repeating decimals, set up an algebraic equation (10^k · x - x) to eliminate the recurring digits.
-        </p>
-      </section>
-
-      {/* 14. FRACTIONS AND PERCENTAGES */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>14.</span> Fractions And Percentages
-        </h2>
-        <p>
-          A percentage is simply a fraction with a denominator of 100. To convert a fraction a/b to a percentage, multiply by 100%:
-        </p>
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-900 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
-          {"Percentage = (a / b) × 100%"}
-        </div>
-      </section>
-
-      {/* 15. COMMON FRACTION MISTAKES */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>15.</span> Common Fraction Mistakes
-        </h2>
-        <ul className="list-disc pl-6 space-y-2">
-          <li>
-            <strong>Adding Denominators:</strong> Incorrectly writing 1/3 + 1/4 = 2/7. Correct method requires converting to common denominator 12: 4/12 + 3/12 = 7/12.
-          </li>
-          <li>
-            <strong>Dividing Zero Denominators:</strong> Attempting to evaluate 5/0, which is undefined in mathematics.
-          </li>
-          <li>
-            <strong>Forgetting Reciprocal in Division:</strong> Multiplying across without flipping the divisor.
+            <strong>Mixed Numbers:</strong> A combination of an integer whole number and a proper fraction (e.g., 2<span className="inline-flex items-center align-middle mx-1"><sup>3</sup>&frasl;<sub>4</sub></span>). Mixed numbers provide intuitive real-world representations for measurements.
           </li>
         </ul>
-      </section>
-
-      {/* 16. FRACTION APPLICATIONS */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>16.</span> Practical Applications
-        </h2>
-        <p>
-          Fractions are used in structural engineering (beam tolerances), culinary arts (recipe scaling), finance (interest rates and stock yields), carpentry (fractional inch measurements), and medicine (dosage calculations).
-        </p>
-      </section>
-
-      {/* 17. ADVANCED FRACTION CONCEPTS */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>17.</span> Advanced Fraction Concepts
-        </h2>
-        <p>
-          Advanced mathematical topics include <strong>Continued Fractions</strong> (used to approximate irrational constants like π and e), <strong>Partial Fraction Decomposition</strong> (used in calculus integration), and <strong>Algebraic Rational Expressions</strong>.
-        </p>
-      </section>
-
-      {/* 18. WORKED EXAMPLES SECTION */}
-      <section className="space-y-4">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <span>18.</span> Worked Mathematical Examples
-        </h2>
-
-        <div className="space-y-4">
-          {/* BASIC EXAMPLE */}
-          <div className="p-4 bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
-            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">Basic Example: Add 3/4 + 1/6</h3>
-            <ol className="list-decimal pl-6 space-y-1 text-xs">
-              <li>Find LCM of denominators 4 and 6: LCM(4, 6) = 12.</li>
-              <li>Convert to equivalent fractions: (3 × 3)/(4 × 3) = 9/12 and (1 × 2)/(6 × 2) = 2/12.</li>
-              <li>Add numerators: (9 + 2)/12 = 11/12.</li>
-            </ol>
-            <div className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">Final Answer: 11/12</div>
-          </div>
-
-          {/* INTERMEDIATE EXAMPLE */}
-          <div className="p-4 bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
-            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">Intermediate Example: Divide 2 1/3 ÷ 1 1/2</h3>
-            <ol className="list-decimal pl-6 space-y-1 text-xs">
-              <li>Convert to improper fractions: 2 1/3 = 7/3 and 1 1/2 = 3/2.</li>
-              <li>Multiply by reciprocal: (7/3) × (2/3) = 14/9.</li>
-              <li>Convert to mixed number: 14 ÷ 9 = 1 remainder 5 ➔ 1 5/9.</li>
-            </ol>
-            <div className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">Final Answer: 1 5/9</div>
-          </div>
-
-          {/* ADVANCED EXAMPLE */}
-          <div className="p-4 bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
-            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">Advanced Example: Convert Repeating Decimal 0.142857142857...</h3>
-            <ol className="list-decimal pl-6 space-y-1 text-xs">
-              <li>Let x = 0.142857... Repeating block length is 6 digits.</li>
-              <li>Multiply by 10^6: 1000000x = 142857.142857...</li>
-              <li>Subtract: 999999x = 142857 ➔ x = 142857 / 999999.</li>
-              <li>Simplify by GCD 142857: (142857 ÷ 142857) / (999999 ÷ 142857) = 1/7.</li>
-            </ol>
-            <div className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">Final Answer: 1/7</div>
-          </div>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3.5 rounded font-sans tabular-nums font-semibold text-center text-xs space-y-1">
+          <p>Converting Mixed Number (w <span className="inline-flex items-center align-middle mx-1"><sup>a</sup>&frasl;<sub>b</sub></span>) to Improper Fraction:</p>
+          <p>Improper Numerator = (w × b) + a &nbsp;&rarr;&nbsp; Result = <span className="inline-flex items-center align-middle mx-1"><sup>(w × b) + a</sup>&frasl;<sub>b</sub></span></p>
+          <p>EX: 3<span className="inline-flex items-center align-middle mx-1"><sup>5</sup>&frasl;<sub>7</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>(3 × 7) + 5</sup>&frasl;<sub>7</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>26</sup>&frasl;<sub>7</sub></span></p>
         </div>
       </section>
 
-      {/* SUMMARY RECAP */}
+      {/* 3. HOW TO ADD AND SUBTRACT FRACTIONS */}
+      <section className="space-y-3">
+        <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+          How to Add and Subtract Fractions
+        </h2>
+        <p>
+          Adding or subtracting fractions requires a common denominator baseline before performing arithmetic on the numerators. If the fractions already possess identical denominators (like denominators), simply add or subtract the numerators while retaining the common denominator.
+        </p>
+        <p>
+          When denominators differ (unlike denominators), convert the fractions into equivalent fractions possessing a common denominator—preferably the Least Common Multiple (LCM) of the denominators:
+        </p>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3.5 rounded font-sans tabular-nums font-semibold text-center text-xs space-y-2">
+          <p><span className="inline-flex items-center align-middle mx-1"><sup>a</sup>&frasl;<sub>b</sub></span> + <span className="inline-flex items-center align-middle mx-1"><sup>c</sup>&frasl;<sub>d</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>(a × d) + (c × b)</sup>&frasl;<sub>b × d</sub></span></p>
+          <p>EX: <span className="inline-flex items-center align-middle mx-1"><sup>2</sup>&frasl;<sub>7</sub></span> + <span className="inline-flex items-center align-middle mx-1"><sup>3</sup>&frasl;<sub>8</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>(2 × 8) + (3 × 7)</sup>&frasl;<sub>7 × 8</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>16 + 21</sup>&frasl;<sub>56</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>37</sup>&frasl;<sub>56</sub></span></p>
+        </div>
+      </section>
+
+      {/* 4. HOW TO MULTIPLY AND DIVIDE FRACTIONS */}
+      <section className="space-y-3">
+        <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+          How to Multiply and Divide Fractions
+        </h2>
+        <p>
+          Unlike addition and subtraction, multiplying fractions does not require finding a common denominator. Multiply the numerators together to form the new numerator, and multiply the denominators together to form the new denominator:
+        </p>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3.5 rounded font-sans tabular-nums font-semibold text-center text-xs">
+          <span className="inline-flex items-center align-middle mx-1"><sup>a</sup>&frasl;<sub>b</sub></span> × <span className="inline-flex items-center align-middle mx-1"><sup>c</sup>&frasl;<sub>d</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>a × c</sup>&frasl;<sub>b × d</sub></span>
+        </div>
+        <p>
+          To divide one fraction by another, multiply the first fraction (dividend) by the reciprocal of the second fraction (divisor). The reciprocal of a fraction is obtained by swapping its numerator and denominator:
+        </p>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3.5 rounded font-sans tabular-nums font-semibold text-center text-xs space-y-1">
+          <p><span className="inline-flex items-center align-middle mx-1"><sup>a</sup>&frasl;<sub>b</sub></span> ÷ <span className="inline-flex items-center align-middle mx-1"><sup>c</sup>&frasl;<sub>d</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>a</sup>&frasl;<sub>b</sub></span> × <span className="inline-flex items-center align-middle mx-1"><sup>d</sup>&frasl;<sub>c</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>a × d</sup>&frasl;<sub>b × c</sub></span></p>
+          <p>EX: <span className="inline-flex items-center align-middle mx-1"><sup>3</sup>&frasl;<sub>4</sub></span> ÷ <span className="inline-flex items-center align-middle mx-1"><sup>1</sup>&frasl;<sub>6</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>3</sup>&frasl;<sub>4</sub></span> × <span className="inline-flex items-center align-middle mx-1"><sup>6</sup>&frasl;<sub>1</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>18</sup>&frasl;<sub>4</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>9</sup>&frasl;<sub>2</sub></span> = 4<span className="inline-flex items-center align-middle mx-1"><sup>1</sup>&frasl;<sub>2</sub></span></p>
+        </div>
+      </section>
+
+      {/* 5. ADVANCED TOPICS: SIMPLIFYING LARGE FRACTIONS AND BIG NUMBER ARITHMETIC */}
+      <section className="space-y-3">
+        <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+          Advanced Topics: Simplifying Large Fractions and Big Number Arithmetic
+        </h2>
+        <p>
+          Simplifying a fraction into its lowest terms involves dividing both the numerator and denominator by their Greatest Common Divisor (GCD). For large integer values, computing the GCD efficiently requires the Euclidean Algorithm, which repeatedly calculates remainder quotients:
+        </p>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3.5 rounded font-sans tabular-nums font-semibold text-center text-xs space-y-1">
+          <p>GCD(a, b) = GCD(b, a mod b)</p>
+          <p>EX: Simplifying <span className="inline-flex items-center align-middle mx-1"><sup>217</sup>&frasl;<sub>98</sub></span> &rarr; GCD(217, 98) = 7 &rarr; <span className="inline-flex items-center align-middle mx-1"><sup>217 ÷ 7</sup>&frasl;<sub>98 ÷ 7</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>31</sup>&frasl;<sub>14</sub></span> = 2<span className="inline-flex items-center align-middle mx-1"><sup>3</sup>&frasl;<sub>14</sub></span></p>
+        </div>
+        <p>
+          When handling multi-digit extreme integers that exceed standard double-precision floating-point limits (greater than 2<sup>53</sup> - 1), arbitrary precision <code>BigInt</code> arithmetic ensures zero loss of precision during cross-multiplication and reduction operations.
+        </p>
+      </section>
+
+      {/* 6. COMMON FRACTION BENCHMARK REFERENCE TABLE */}
+      <section className="space-y-3 pt-2">
+        <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+          Common Fraction Benchmark Reference
+        </h2>
+        <p>
+          Below is a quick lookup table converting benchmark fractions into exact decimal and percentage equivalents:
+        </p>
+        <div className="overflow-x-auto border border-slate-300 dark:border-slate-700 rounded max-w-xl">
+          <table className="w-full text-xs text-left border-collapse font-sans tabular-nums">
+            <thead>
+              <tr className="bg-slate-100 dark:bg-slate-800 border-b border-slate-300 dark:border-slate-700 font-bold">
+                <th className="p-2 border-r border-slate-300 dark:border-slate-700">Fraction</th>
+                <th className="p-2 border-r border-slate-300 dark:border-slate-700">Decimal</th>
+                <th className="p-2">Percentage</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800 font-medium">
+              <tr><td className="p-2 border-r border-slate-200 dark:border-slate-800 font-bold">1/2</td><td className="p-2 border-r border-slate-200 dark:border-slate-800">0.5</td><td className="p-2 font-bold text-blue-600 dark:text-blue-400">50%</td></tr>
+              <tr className="bg-slate-50/50 dark:bg-slate-800/30"><td className="p-2 border-r border-slate-200 dark:border-slate-800 font-bold">1/3</td><td className="p-2 border-r border-slate-200 dark:border-slate-800">0.333333...</td><td className="p-2 font-bold text-blue-600 dark:text-blue-400">33.333...%</td></tr>
+              <tr><td className="p-2 border-r border-slate-200 dark:border-slate-800 font-bold">1/4</td><td className="p-2 border-r border-slate-200 dark:border-slate-800">0.25</td><td className="p-2 font-bold text-blue-600 dark:text-blue-400">25%</td></tr>
+              <tr className="bg-slate-50/50 dark:bg-slate-800/30"><td className="p-2 border-r border-slate-200 dark:border-slate-800 font-bold">1/5</td><td className="p-2 border-r border-slate-200 dark:border-slate-800">0.2</td><td className="p-2 font-bold text-blue-600 dark:text-blue-400">20%</td></tr>
+              <tr><td className="p-2 border-r border-slate-200 dark:border-slate-800 font-bold">1/8</td><td className="p-2 border-r border-slate-200 dark:border-slate-800">0.125</td><td className="p-2 font-bold text-blue-600 dark:text-blue-400">12.5%</td></tr>
+              <tr className="bg-slate-50/50 dark:bg-slate-800/30"><td className="p-2 border-r border-slate-200 dark:border-slate-800 font-bold">1/10</td><td className="p-2 border-r border-slate-200 dark:border-slate-800">0.1</td><td className="p-2 font-bold text-blue-600 dark:text-blue-400">10%</td></tr>
+              <tr><td className="p-2 border-r border-slate-200 dark:border-slate-800 font-bold">3/4</td><td className="p-2 border-r border-slate-200 dark:border-slate-800">0.75</td><td className="p-2 font-bold text-blue-600 dark:text-blue-400">75%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* 7. SUMMARY */}
       <section className="p-4 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-200 dark:border-blue-800/60 space-y-2">
         <h3 className="text-base font-bold text-blue-950 dark:text-blue-200">Educational Summary</h3>
         <p className="text-xs text-blue-900 dark:text-blue-300">
-          Fractions express exact rational relationships that decimals cannot always represent concisely. Understanding proper vs improper forms, common denominators, and simplification provides the essential foundation for algebra, engineering, and scientific computation.
+          Fractions express exact rational proportions without rounding errors. Mastering fraction reduction, Least Common Multiple baselines, and reciprocal division is essential for algebra, engineering, and quantitative analysis.
         </p>
       </section>
+
     </article>
   );
 }
