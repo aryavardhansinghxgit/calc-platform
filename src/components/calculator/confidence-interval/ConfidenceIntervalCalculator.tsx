@@ -11,7 +11,6 @@ import {
   Copy,
   CheckCircle2,
   BarChart2,
-  Zap,
   FileText
 } from "lucide-react";
 import {
@@ -162,30 +161,6 @@ export function ConfidenceIntervalCalculator() {
   const varResult = useMemo(() => {
     return computeVarianceCI(varSD, varN, varCL, precision1);
   }, [varSD, varN, varCL, precision1]);
-
-  // Presets Handler for Card 1
-  const handleApplyPreset = (preset: "polling" | "pilot" | "clinical") => {
-    setUseRawData1(false);
-    if (preset === "polling") {
-      setMean1(52.0);
-      setSd1(15.0);
-      setN1(1000);
-      setCl1(95);
-      setKnownSigma1(false);
-    } else if (preset === "pilot") {
-      setMean1(24.5);
-      setSd1(4.0);
-      setN1(15);
-      setCl1(90);
-      setKnownSigma1(false);
-    } else if (preset === "clinical") {
-      setMean1(120.0);
-      setSd1(18.5);
-      setN1(50);
-      setCl1(99);
-      setKnownSigma1(true);
-    }
-  };
 
   // Save Handlers
   const handleSaveMean = () => {
@@ -395,33 +370,6 @@ export function ConfidenceIntervalCalculator() {
         </div>
 
         <div className="p-5 space-y-4">
-          {/* QUICK PRESETS BAR */}
-          <div className="flex flex-wrap items-center gap-2 bg-slate-50 dark:bg-slate-900/50 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold">
-            <span className="text-slate-500 flex items-center gap-1">
-              <Zap className="w-3.5 h-3.5 text-blue-600" /> Presets:
-            </span>
-            <button
-              type="button"
-              onClick={() => handleApplyPreset("polling")}
-              className="px-2.5 py-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
-            >
-              National Polling (95%, n=1000)
-            </button>
-            <button
-              type="button"
-              onClick={() => handleApplyPreset("pilot")}
-              className="px-2.5 py-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
-            >
-              Pilot Study (90%, n=15)
-            </button>
-            <button
-              type="button"
-              onClick={() => handleApplyPreset("clinical")}
-              className="px-2.5 py-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
-            >
-              Clinical Benchmark (99%, n=50)
-            </button>
-          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
             {/* LEFT COLUMN: INPUT FORM */}
