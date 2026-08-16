@@ -30,7 +30,6 @@ export function BinaryCalculator() {
   const [baseInput, setBaseInput] = useState<string>("255");
   const [sourceBase, setSourceBase] = useState<number>(10);
   const [targetBase, setTargetBase] = useState<number>(2);
-  const [justSavedDec, setJustSavedDec] = useState<boolean>(false);
 
   // Saved calculations state for Card 1 (Binary Operations)
   const [savedBinaryItems, setSavedBinaryItems] = useState<SavedBinaryItem[]>([]);
@@ -818,6 +817,7 @@ export function BinaryCalculator() {
             </div>
           </div>
         </div>
+      </div>
 
         {/* SAVED BINARY CALCULATIONS INSIDE CARD 1 */}
         {savedBinaryItems.length > 0 && (
@@ -1036,7 +1036,8 @@ export function BinaryCalculator() {
         )}
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 export default BinaryCalculator;
