@@ -67,7 +67,7 @@ export function ProbabilityContent() {
           <svg width="200" height="120" viewBox="0 0 200 120" className="border border-slate-200 dark:border-slate-700 rounded bg-white dark:bg-slate-900">
             <circle cx="80" cy="60" r="45" fill="#ffffff" stroke="#000000" strokeWidth="1.5" />
             <circle cx="120" cy="60" r="45" fill="#ffffff" stroke="#000000" strokeWidth="1.5" />
-            <path d="M 100 20 A 45 45 0 0 1 100 100 A 45 45 0 0 1 100 20 Z" fill="#ef4444" />
+            <path d="M 100 20 A 45 45 0 0 1 100 100 A 45 45 0 0 1 100 20 Z" fill="#2563eb" />
             <text x="60" y="65" textAnchor="middle" className="font-bold text-xs font-sans fill-slate-900 dark:fill-slate-100">A</text>
             <text x="140" y="65" textAnchor="middle" className="font-bold text-xs font-sans fill-slate-900 dark:fill-slate-100">B</text>
           </svg>
@@ -107,8 +107,8 @@ export function ProbabilityContent() {
         {/* Venn Diagram Union Mutually Exclusive SVG */}
         <div className="flex justify-center py-2">
           <svg width="220" height="110" viewBox="0 0 220 110" className="border border-slate-200 dark:border-slate-700 rounded bg-white dark:bg-slate-900">
-            <circle cx="65" cy="55" r="40" fill="#ef4444" opacity="0.8" stroke="#000000" strokeWidth="1.5" />
-            <circle cx="155" cy="55" r="40" fill="#ef4444" opacity="0.8" stroke="#000000" strokeWidth="1.5" />
+            <circle cx="65" cy="55" r="40" fill="#2563eb" opacity="0.8" stroke="#000000" strokeWidth="1.5" />
+            <circle cx="155" cy="55" r="40" fill="#2563eb" opacity="0.8" stroke="#000000" strokeWidth="1.5" />
             <text x="65" y="60" textAnchor="middle" className="font-bold text-xs font-sans fill-slate-900">A</text>
             <text x="155" y="60" textAnchor="middle" className="font-bold text-xs font-sans fill-slate-900">B</text>
           </svg>
@@ -128,8 +128,8 @@ export function ProbabilityContent() {
         {/* Venn Diagram Union Overlapping SVG */}
         <div className="flex justify-center py-2">
           <svg width="200" height="120" viewBox="0 0 200 120" className="border border-slate-200 dark:border-slate-700 rounded bg-white dark:bg-slate-900">
-            <circle cx="80" cy="60" r="45" fill="#ef4444" opacity="0.8" stroke="#000000" strokeWidth="1.5" />
-            <circle cx="120" cy="60" r="45" fill="#ef4444" opacity="0.8" stroke="#000000" strokeWidth="1.5" />
+            <circle cx="80" cy="60" r="45" fill="#2563eb" opacity="0.8" stroke="#000000" strokeWidth="1.5" />
+            <circle cx="120" cy="60" r="45" fill="#2563eb" opacity="0.8" stroke="#000000" strokeWidth="1.5" />
             <text x="65" y="65" textAnchor="middle" className="font-bold text-xs font-sans fill-slate-900">A</text>
             <text x="135" y="65" textAnchor="middle" className="font-bold text-xs font-sans fill-slate-900">B</text>
           </svg>
@@ -164,8 +164,8 @@ export function ProbabilityContent() {
         {/* Venn Diagram XOR SVG */}
         <div className="flex justify-center py-2">
           <svg width="200" height="120" viewBox="0 0 200 120" className="border border-slate-200 dark:border-slate-700 rounded bg-white dark:bg-slate-900">
-            <circle cx="80" cy="60" r="45" fill="#ef4444" opacity="0.8" stroke="#000000" strokeWidth="1.5" />
-            <circle cx="120" cy="60" r="45" fill="#ef4444" opacity="0.8" stroke="#000000" strokeWidth="1.5" />
+            <circle cx="80" cy="60" r="45" fill="#2563eb" opacity="0.8" stroke="#000000" strokeWidth="1.5" />
+            <circle cx="120" cy="60" r="45" fill="#2563eb" opacity="0.8" stroke="#000000" strokeWidth="1.5" />
             <path d="M 100 20 A 45 45 0 0 1 100 100 A 45 45 0 0 1 100 20 Z" fill="#ffffff" stroke="#000000" strokeWidth="1" />
             <text x="65" y="65" textAnchor="middle" className="font-bold text-xs font-sans fill-slate-900">A</text>
             <text x="135" y="65" textAnchor="middle" className="font-bold text-xs font-sans fill-slate-900">B</text>
@@ -230,10 +230,10 @@ export function ProbabilityContent() {
         {/* Normal Curve Graphic for Worked Example */}
         <div className="flex justify-center py-2">
           <svg width="240" height="110" viewBox="0 0 240 110" className="border border-slate-200 dark:border-slate-700 rounded bg-white dark:bg-slate-900">
-            <path d="M 20 90 L 48.5 90 L 48.5 86.8 L 77.1 79.5 L 105.7 45 L 134.3 45 L 162.8 79.5 L 162.8 90 L 220 90 Z" fill="#86efac" opacity="0.6" />
+            <path d="M 20 90 L 48.5 90 L 48.5 86.8 L 77.1 79.5 L 105.7 45 L 134.3 45 L 162.8 79.5 L 162.8 90 L 220 90 Z" fill="#93c5fd" opacity="0.6" />
             <line x1="10" y1="90" x2="230" y2="90" stroke="#334155" strokeWidth="1.5" />
-            <path d="M 10 90 Q 60 90 90 50 Q 120 10 150 50 Q 180 90 230 90" fill="none" stroke="#16a34a" strokeWidth="2" />
-            <line x1="120" y1="20" x2="120" y2="90" stroke="#16a34a" strokeDasharray="3 3" />
+            <path d="M 10 90 Q 60 90 90 50 Q 120 10 150 50 Q 180 90 230 90" fill="none" stroke="#2563eb" strokeWidth="2" />
+            <line x1="120" y1="20" x2="120" y2="90" stroke="#2563eb" strokeDasharray="3 3" />
             <text x="48.5" y="105" textAnchor="middle" className="text-[10px] font-sans tabular-nums font-bold fill-slate-700">-2</text>
             <text x="84.2" y="105" textAnchor="middle" className="text-[10px] font-sans tabular-nums font-bold fill-slate-700">-1</text>
             <text x="120" y="105" textAnchor="middle" className="text-[10px] font-sans tabular-nums font-bold fill-slate-700">0</text>

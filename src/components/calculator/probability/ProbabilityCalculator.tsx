@@ -791,7 +791,7 @@ export function ProbabilityCalculator() {
               <p>Probability of A occuring {s2RepeatA} times but not B = {s2PA}<sup>{s2RepeatA}</sup> × (1 - {s2PB})<sup>{s2RepeatB}</sup> = <strong>{s2Result.pAExactNotB.toFixed(8)}</strong></p>
               <p>Probability of B occuring {s2RepeatB} times but not A = (1 - {s2PA})<sup>{s2RepeatA}</sup> × {s2PB}<sup>{s2RepeatB}</sup> = <strong>{s2Result.pBExactNotA.toFixed(8)}</strong></p>
               <p>Probability of A occuring but not B = (1 - (1 - {s2PA})<sup>{s2RepeatA}</sup>) × (1 - {s2PB})<sup>{s2RepeatB}</sup> = <strong>{s2Result.pAAtLeastOneNotB.toFixed(8)}</strong></p>
-              <p>Probability of B occuring but not A = (1 - {s2PA})<sup>{s2RepeatA}</sup> × (1 - (1 - {s2PB})<sup>{s2RepeatB}</sup>) = <strong>{s2Result.pBExactNotA.toFixed(8)}</strong></p>
+              <p>Probability of B occuring but not A = (1 - {s2PA})<sup>{s2RepeatA}</sup> × (1 - (1 - {s2PB})<sup>{s2RepeatB}</sup>) = <strong>{s2Result.pBAtLeastOneNotA.toFixed(8)}</strong></p>
             </div>
           </div>
         )}

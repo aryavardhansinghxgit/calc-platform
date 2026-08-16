@@ -443,7 +443,7 @@ export function generateConfidenceIntervalsTable(
   stdDev: number = 1
 ): ConfidenceIntervalRow[] {
   const levels = [
-    { conf: 0.6827, nFix: 1 },
+    { conf: 0.6828, nFix: 1 },
     { conf: 0.80 },
     { conf: 0.90 },
     { conf: 0.95 },
@@ -469,7 +469,7 @@ export function generateConfidenceIntervalsTable(
       confidenceStr: conf.toString(),
       lowerBound: lower,
       upperBound: upper,
-      rangeStr: `${lower.toFixed(5)}–${upper.toFixed(5)}`,
+      rangeStr: `${lower.toFixed(5)} - ${upper.toFixed(5)}`,
       nValue: n
     };
   });
