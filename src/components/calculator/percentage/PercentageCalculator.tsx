@@ -357,9 +357,6 @@ export function PercentageCalculator() {
         <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
           Percentage Calculator
         </h2>
-        <p className="text-xs text-slate-600 dark:text-slate-400">
-          Please provide any two values below and click the &quot;Calculate&quot; button to get the third value.
-        </p>
 
         {/* Inputs Form */}
         <form onSubmit={handleS1Calculate} className="space-y-3 bg-slate-50 dark:bg-slate-800/50 p-4 rounded border border-slate-200 dark:border-slate-700 max-w-xl">
@@ -665,9 +662,6 @@ export function PercentageCalculator() {
         <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
           Percentage Change Calculator
         </h2>
-        <p className="text-xs text-slate-600 dark:text-slate-400">
-          Please provide any two values below and click the &quot;Calculate&quot; button to get the third value.
-        </p>
 
         {/* Inputs Form */}
         <form onSubmit={handleS4Calculate} className="space-y-3 bg-slate-50 dark:bg-slate-800/50 p-4 rounded border border-slate-200 dark:border-slate-700 max-w-xl">
