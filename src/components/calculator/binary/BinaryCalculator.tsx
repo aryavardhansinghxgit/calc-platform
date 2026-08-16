@@ -737,19 +737,9 @@ export function BinaryCalculator() {
           <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xs space-y-5">
             {/* HERO RESULT DISPLAY */}
             <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                  Calculated Binary Result ({bitWidth}-Bit Register)
-                </span>
-                <button
-                  type="button"
-                  onClick={handleSaveResult}
-                  className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold cursor-pointer transition-colors flex items-center gap-1"
-                >
-                  <Bookmark className="w-3 h-3" />
-                  <span>{justSaved ? "Saved!" : "Save"}</span>
-                </button>
-              </div>
+              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
+                Calculated Binary Result ({bitWidth}-Bit Register)
+              </span>
 
               {calculation.error ? (
                 <div className="text-xs font-bold text-amber-600 dark:text-amber-400">
