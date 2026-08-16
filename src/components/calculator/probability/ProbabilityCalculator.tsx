@@ -15,7 +15,11 @@ import {
 interface SavedItem {
   id: string;
   title: string;
-  summary: string;
+  inputs: string;
+  operation: string;
+  result: string;
+  resultsList?: string[];
+  summary?: string;
   timestamp: string;
 }
 
@@ -166,18 +170,29 @@ export function ProbabilityCalculator() {
     } catch (e) {}
   }, []);
 
-  const handleSaveResult = (e: React.MouseEvent, sectionId: string, sectionTitle: string, summaryText: string) => {
+  const handleSaveResult = (
+    e: React.MouseEvent,
+    sectionId: string,
+    sectionTitle: string,
+    inputsText: string,
+    operationText: string,
+    resultText: string,
+    resultsList?: string[]
+  ) => {
     e.preventDefault();
     e.stopPropagation();
 
     const newItem: SavedItem = {
       id: Date.now().toString(),
       title: sectionTitle,
-      summary: summaryText,
+      inputs: inputsText,
+      operation: operationText,
+      result: resultText,
+      resultsList: resultsList || resultText.split(" | "),
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     };
 
-    const updated = [newItem, ...savedItems.filter(item => item.summary !== summaryText)].slice(0, 15);
+    const updated = [newItem, ...savedItems.filter(item => item.result !== resultText || item.inputs !== inputsText)].slice(0, 15);
     setSavedItems(updated);
     try {
       localStorage.setItem("saved_probability_calculations", JSON.stringify(updated));
@@ -384,7 +399,24 @@ export function ProbabilityCalculator() {
                 <span>Result</span>
                 <button
                   type="button"
-                  onClick={(e) => handleSaveResult(e, "s1", "Two Events", `P(A)=${s1Result.pA}, P(B)=${s1Result.pB}, P(A∩B)=${s1Result.pIntersection.toFixed(4)}, P(A∪B)=${s1Result.pUnion.toFixed(4)}`)}
+                  onClick={(e) => handleSaveResult(
+                    e,
+                    "s1",
+                    "Probability of Two Events",
+                    `P(A) = ${s1Result.pA}, P(B) = ${s1Result.pB}`,
+                    "Two Independent Events",
+                    `P(A∩B) = ${s1Result.pIntersection.toFixed(4)}`,
+                    [
+                      `P(A') = ${s1Result.pNotA.toFixed(4)}`,
+                      `P(B') = ${s1Result.pNotB.toFixed(4)}`,
+                      `P(A∩B) = ${s1Result.pIntersection.toFixed(4)}`,
+                      `P(A∪B) = ${s1Result.pUnion.toFixed(4)}`,
+                      `P(AΔB) = ${s1Result.pXor.toFixed(4)}`,
+                      `P((A∪B)') = ${s1Result.pNeither.toFixed(4)}`,
+                      `P(A not B) = ${s1Result.pAnotB.toFixed(4)}`,
+                      `P(B not A) = ${s1Result.pBnotA.toFixed(4)}`
+                    ]
+                  )}
                   className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
                 >
                   {savedSection === "s1" ? (
@@ -648,7 +680,24 @@ export function ProbabilityCalculator() {
               <span>Result</span>
               <button
                 type="button"
-                onClick={(e) => handleSaveResult(e, "s1sol", "Two Events Solver", `Solver: P(A)=${s1SolResult.result?.pA}, P(B)=${s1SolResult.result?.pB}`)}
+                onClick={(e) => handleSaveResult(
+                  e,
+                  "s1sol",
+                  "Probability Solver for Two Events",
+                  s1SolResult.givenSummary || `P(A) = ${s1SolResult.result?.pA}, P(A∩B) = ${s1SolResult.result?.pIntersection}`,
+                  "Two Events Inverse Solver",
+                  `P(A) = ${s1SolResult.result?.pA}`,
+                  [
+                    `P(A) = ${s1SolResult.result?.pA}`,
+                    `P(B) = ${s1SolResult.result?.pB}`,
+                    `P(A') = ${s1SolResult.result?.pNotA.toFixed(4)}`,
+                    `P(B') = ${s1SolResult.result?.pNotB.toFixed(4)}`,
+                    `P(A∩B) = ${s1SolResult.result?.pIntersection.toFixed(4)}`,
+                    `P(A∪B) = ${s1SolResult.result?.pUnion.toFixed(4)}`,
+                    `P(AΔB) = ${s1SolResult.result?.pXor.toFixed(4)}`,
+                    `P((A∪B)') = ${s1SolResult.result?.pNeither.toFixed(4)}`
+                  ]
+                )}
                 className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
               >
                 {savedSection === "s1sol" ? (
@@ -762,7 +811,27 @@ export function ProbabilityCalculator() {
               <span>Result</span>
               <button
                 type="button"
-                onClick={(e) => handleSaveResult(e, "s2", "Series of Events", `Series A: P=${s2PA}^${s2RepeatA}=${s2Result.pAAll.toFixed(4)}, Series B: P=${s2PB}^${s2RepeatB}=${s2Result.pBAll.toFixed(4)}`)}
+                onClick={(e) => handleSaveResult(
+                  e,
+                  "s2",
+                  "Series of Independent Events",
+                  `Event A: P=${s2PA} (${s2RepeatA}x), Event B: P=${s2PB} (${s2RepeatB}x)`,
+                  "Repeated Series Probability",
+                  `P(A all ${s2RepeatA}x) = ${s2Result.pAAll.toFixed(4)}`,
+                  [
+                    `P(A all ${s2RepeatA}x) = ${s2Result.pAAll.toFixed(5)}`,
+                    `P(A none) = ${s2Result.pANone.toFixed(5)}`,
+                    `P(A at least 1) = ${s2Result.pAAtLeastOne.toFixed(5)}`,
+                    `P(B all ${s2RepeatB}x) = ${s2Result.pBAll.toFixed(5)}`,
+                    `P(B none) = ${s2Result.pBNone.toFixed(5)}`,
+                    `P(B at least 1) = ${s2Result.pBAtLeastOne.toFixed(5)}`,
+                    `P(Both Exact) = ${s2Result.pBothExact.toFixed(6)}`,
+                    `P(Neither) = ${s2Result.pNeither.toFixed(6)}`,
+                    `P(Both at least 1) = ${s2Result.pBothAtLeastOne.toFixed(6)}`,
+                    `P(A exact, not B) = ${s2Result.pAExactNotB.toFixed(6)}`,
+                    `P(B exact, not A) = ${s2Result.pBExactNotA.toFixed(6)}`
+                  ]
+                )}
                 className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
               >
                 {savedSection === "s2" ? (
@@ -900,7 +969,20 @@ export function ProbabilityCalculator() {
                 <span>Result</span>
                 <button
                   type="button"
-                  onClick={(e) => handleSaveResult(e, "s3", "Normal Distribution", `Normal Dist: μ=${s3Result.norm.mean}, σ=${s3Result.norm.stdDev}, Area P=${s3Result.norm.probBetween.toFixed(5)}`)}
+                  onClick={(e) => handleSaveResult(
+                    e,
+                    "s3",
+                    "Normal Distribution Probability",
+                    `Mean (μ) = ${s3Result.norm.mean}, Std Dev (σ) = ${s3Result.norm.stdDev}, Bounds: [${s3Result.norm.leftBoundStr}, ${s3Result.norm.rightBoundStr}]`,
+                    "Gaussian Normal CDF Area",
+                    `P(Between) = ${s3Result.norm.probBetween.toFixed(5)}`,
+                    [
+                      `P(Between ${s3Result.norm.leftBoundStr} and ${s3Result.norm.rightBoundStr}) = ${s3Result.norm.probBetween.toFixed(5)}`,
+                      `P(Outside ${s3Result.norm.leftBoundStr} and ${s3Result.norm.rightBoundStr}) = ${s3Result.norm.probOutside.toFixed(5)}`,
+                      `P(≤ ${s3Result.norm.leftBoundStr}) = ${s3Result.norm.probLessEqualLeft.toFixed(5)}`,
+                      `P(≥ ${s3Result.norm.rightBoundStr}) = ${s3Result.norm.probGreaterEqualRight.toFixed(5)}`
+                    ]
+                  )}
                   className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
                 >
                   {savedSection === "s3" ? (
@@ -973,28 +1055,58 @@ export function ProbabilityCalculator() {
             </button>
           </div>
 
-          <div className="space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {savedItems.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/60 p-3 rounded border border-slate-200 dark:border-slate-700 text-xs font-sans"
+                className="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-sans shadow-xs space-y-2"
               >
-                <div className="space-y-0.5 min-w-0 pr-3">
+                <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/80 pb-1.5">
+                  <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-slate-900 dark:text-slate-100">{item.title}</span>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400">{item.timestamp}</span>
+                    <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteSaved(item.id)}
+                      className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                      title="Delete calculation"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
                   </div>
-                  <p className="text-slate-600 dark:text-slate-300 truncate font-sans tabular-nums">{item.summary}</p>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => handleDeleteSaved(item.id)}
-                  className="text-slate-400 hover:text-red-600 p-1 transition-colors cursor-pointer shrink-0"
-                  title="Delete calculation"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                </button>
+                <div className="space-y-1 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                  <div>
+                    <span className="font-bold text-slate-500 dark:text-slate-400">Inputs: </span>
+                    <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs || item.summary}</span>
+                  </div>
+                  {item.operation && (
+                    <div>
+                      <span className="font-bold text-slate-500 dark:text-slate-400">Operation: </span>
+                      <span className="font-medium text-slate-800 dark:text-slate-200">{item.operation}</span>
+                    </div>
+                  )}
+
+                  <div className="pt-2 border-t border-slate-200/80 dark:border-slate-700/80 mt-1 space-y-1.5">
+                    <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-xs">
+                      Complete Calculated Answers:
+                    </span>
+                    <div className="space-y-1 text-[11px] font-sans tabular-nums max-h-56 overflow-y-auto pr-1">
+                      {(item.resultsList ?? (item.result ? item.result.split(" | ") : [])).map((resLine, idx) => {
+                        const parts = resLine.includes("=") ? resLine.split("=") : resLine.split(":");
+                        const label = parts[0]?.trim();
+                        const val = parts.slice(1).join("=").trim() || parts.slice(1).join(":").trim();
+                        return (
+                          <div key={idx} className="flex items-center justify-between bg-white dark:bg-slate-900 px-2.5 py-1 rounded border border-slate-200/80 dark:border-slate-800">
+                            <span className="font-semibold text-slate-700 dark:text-slate-300">{label}:</span>
+                            <span className="font-bold text-blue-600 dark:text-blue-400">{val || resLine}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

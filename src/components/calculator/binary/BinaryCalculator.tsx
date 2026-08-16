@@ -6,8 +6,11 @@ import { Copy, Check, ArrowRightLeft, Sparkles, HelpCircle, RefreshCw, Layers, B
 export interface SavedBinaryItem {
   id: string;
   title: string;
-  expression: string;
+  inputs: string;
+  operation: string;
   result: string;
+  resultsList?: string[];
+  expression?: string;
   timestamp: string;
 }
 
@@ -21,7 +24,6 @@ export function BinaryCalculator() {
   const [operation, setOperation] = useState<Operation>("+");
   const [bitWidth, setBitWidth] = useState<BitWidth>(8);
   const [repMode, setRepMode] = useState<RepMode>("unsigned");
-  const [grouping, setGrouping] = useState<number>(4); // 0 = none, 4 = 4-bit, 8 = 8-bit
   const [shiftAmount, setShiftAmount] = useState<number>(2);
 
   // Decimal to Binary & Input format modes
@@ -141,7 +143,7 @@ export function BinaryCalculator() {
 
       return {
         binRaw,
-        binGrouped: formatBitString(binRaw, grouping),
+        binGrouped: binRaw.replace(/(.{4})/g, "$1 ").trim(),
         hexRaw,
         octRaw,
         decStr,
@@ -288,7 +290,7 @@ export function BinaryCalculator() {
       multiBaseRem,
       steps
     };
-  }, [cleanA, cleanB, operation, bitWidth, repMode, grouping, shiftAmount]);
+  }, [cleanA, cleanB, operation, bitWidth, repMode, shiftAmount]);
 
   // Dedicated Multi-Base Conversion & Step-by-Step Derivation
   const baseConversionResult = useMemo(() => {
@@ -319,7 +321,7 @@ export function BinaryCalculator() {
       const mask = (1n << BigInt(bitWidth)) - 1n;
       const uVal = decVal < 0n ? (decVal + (1n << BigInt(bitWidth))) & mask : decVal & mask;
 
-      const binResult = formatBitString(uVal.toString(2).padStart(bitWidth, "0"), grouping);
+      const binResult = uVal.toString(2).padStart(bitWidth, "0").replace(/(.{4})/g, "$1 ").trim();
       const octResult = `0o${uVal.toString(8)}`;
       const decResult = decVal.toString();
       const hexResult = `0x${uVal.toString(16).toUpperCase()}`;
@@ -360,23 +362,35 @@ export function BinaryCalculator() {
     } catch (err) {
       return { error: "Invalid number format for selected base.", binResult: "", hexResult: "", octResult: "", decResult: "", targetResult: "", steps: [] };
     }
-  }, [baseInput, sourceBase, targetBase, bitWidth, grouping]);
+  }, [baseInput, sourceBase, targetBase, bitWidth]);
 
   const handleSaveDecConversion = () => {
     if (!baseConversionResult || baseConversionResult.error) return;
 
-    const expr = `Base-${sourceBase} (${baseInput}) → Base-${targetBase}`;
-    const resStr = `Binary: ${baseConversionResult.binResult}, Dec: ${baseConversionResult.decResult}, Hex: ${baseConversionResult.hexResult}, Base-${targetBase}: ${baseConversionResult.targetResult}`;
+    const inputsStr = `Source Value: ${baseInput} (Base-${sourceBase})`;
+    const opStr = `Conversion: Base-${sourceBase} → Base-${targetBase}`;
+
+    const resList = [
+      `Target Base-${targetBase} = ${baseConversionResult.targetResult}`,
+      `Binary (Base-2) = ${baseConversionResult.binResult}`,
+      `Decimal (Base-10) = ${baseConversionResult.decResult}`,
+      `Hexadecimal (Base-16) = ${baseConversionResult.hexResult}`,
+      `Octal (Base-8) = ${baseConversionResult.octResult}`
+    ];
+    const resStr = resList.join(" | ");
 
     const newItem: SavedBinaryItem = {
       id: Date.now().toString(),
       title: `Base Conversion (Base-${sourceBase} to ${targetBase})`,
-      expression: expr,
+      inputs: inputsStr,
+      operation: opStr,
       result: resStr,
+      resultsList: resList,
+      expression: `Base-${sourceBase} (${baseInput}) → Base-${targetBase}`,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     };
 
-    const updated = [newItem, ...savedDecItems.filter(item => item.expression !== expr)].slice(0, 15);
+    const updated = [newItem, ...savedDecItems.filter(item => item.inputs !== inputsStr || item.operation !== opStr)].slice(0, 15);
     setSavedDecItems(updated);
     try {
       localStorage.setItem("saved_dec_conversions", JSON.stringify(updated));
@@ -389,24 +403,41 @@ export function BinaryCalculator() {
   const handleSaveResult = () => {
     if (calculation.error || !calculation.multiBaseRes) return;
 
-    let expr = `${inputA} ${operation} ${inputB}`;
+    let inputsStr = `A: ${inputA}, B: ${inputB} (${bitWidth}-Bit)`;
+    let opStr = `Operation: ${operation} (${repMode})`;
     if (operation === "NOT") {
-      expr = `NOT ${inputA}`;
+      inputsStr = `A: ${inputA} (${bitWidth}-Bit)`;
+      opStr = `Bitwise NOT (~) (${repMode})`;
     } else if (operation === "<<" || operation === ">>") {
-      expr = `${inputA} ${operation} ${shiftAmount}`;
+      inputsStr = `A: ${inputA}, Shift: ${shiftAmount} (${bitWidth}-Bit)`;
+      opStr = `Shift ${operation} (${repMode})`;
     }
 
-    const resStr = `${calculation.multiBaseRes.binGrouped} (Dec: ${calculation.multiBaseRes.decStr})`;
+    const resList = [
+      `Binary (Base-2) = ${calculation.multiBaseRes.binGrouped}`,
+      `Decimal (Base-10) = ${calculation.multiBaseRes.decStr}`,
+      `Hexadecimal (Base-16) = 0x${calculation.multiBaseRes.hexRaw}`,
+      `Octal (Base-8) = 0o${calculation.multiBaseRes.octRaw}`,
+      `ASCII Character = ${calculation.multiBaseRes.asciiChar}`
+    ];
+    if (calculation.multiBaseRem) {
+      resList.push(`Remainder = ${calculation.multiBaseRem.binGrouped} (Dec: ${calculation.multiBaseRem.decStr})`);
+    }
+
+    const resStr = resList.join(" | ");
 
     const newItem: SavedBinaryItem = {
       id: Date.now().toString(),
       title: "Binary Operation",
-      expression: expr,
+      inputs: inputsStr,
+      operation: opStr,
       result: resStr,
+      resultsList: resList,
+      expression: `${inputA} ${operation} ${inputB}`,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     };
 
-    const updated = [newItem, ...savedBinaryItems.filter(item => item.expression !== expr)].slice(0, 15);
+    const updated = [newItem, ...savedBinaryItems.filter(item => item.inputs !== inputsStr || item.operation !== opStr)].slice(0, 15);
     setSavedBinaryItems(updated);
     try {
       localStorage.setItem("saved_binary_calculations", JSON.stringify(updated));
@@ -488,14 +519,6 @@ export function BinaryCalculator() {
                   <h2 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
                     Binary & Bitwise Inputs
                   </h2>
-                  <button
-                    type="button"
-                    onClick={handleSwap}
-                    className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition-colors flex items-center gap-1"
-                    title="Swap Inputs A and B"
-                  >
-                    <ArrowRightLeft className="w-3.5 h-3.5 text-blue-600" /> Swap A ↔ B
-                  </button>
                 </div>
 
             {/* BIT WIDTH & SIGNED REPRESENTATION MODE */}
@@ -590,6 +613,20 @@ export function BinaryCalculator() {
               )}
             </div>
 
+            {/* SWAP BUTTON BETWEEN INPUT A AND INPUT B */}
+            {operation !== "NOT" && operation !== "<<" && operation !== ">>" && (
+              <div className="flex items-center justify-center py-1">
+                <button
+                  type="button"
+                  onClick={handleSwap}
+                  className="px-3.5 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 font-bold text-xs hover:bg-blue-100 dark:hover:bg-blue-900/80 cursor-pointer transition-all flex items-center gap-1.5 shadow-xs"
+                  title="Swap Inputs A and B"
+                >
+                  <ArrowRightLeft className="w-4 h-4 text-blue-600 dark:text-blue-400" /> Swap A ↔ B
+                </button>
+              </div>
+            )}
+
             {/* INPUT B (or Shift Amount) */}
             {operation !== "NOT" && operation !== "<<" && operation !== ">>" && (
               <div>
@@ -647,38 +684,6 @@ export function BinaryCalculator() {
               </div>
             )}
 
-            {/* BIT GROUPING FORMATTER SELECTOR */}
-            <div>
-              <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
-                Display Bit Grouping
-              </label>
-              <div className="grid grid-cols-3 gap-2 text-xs font-bold">
-                <button
-                  onClick={() => setGrouping(0)}
-                  className={`py-1.5 rounded-lg border cursor-pointer ${
-                    grouping === 0 ? "bg-blue-50 dark:bg-blue-950/50 border-blue-600 text-blue-600" : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300"
-                  }`}
-                >
-                  Continuous
-                </button>
-                <button
-                  onClick={() => setGrouping(4)}
-                  className={`py-1.5 rounded-lg border cursor-pointer ${
-                    grouping === 4 ? "bg-blue-50 dark:bg-blue-950/50 border-blue-600 text-blue-600" : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300"
-                  }`}
-                >
-                  4-Bit (Nibbles)
-                </button>
-                <button
-                  onClick={() => setGrouping(8)}
-                  className={`py-1.5 rounded-lg border cursor-pointer ${
-                    grouping === 8 ? "bg-blue-50 dark:bg-blue-950/50 border-blue-600 text-blue-600" : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300"
-                  }`}
-                >
-                  8-Bit (Bytes)
-                </button>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -771,32 +776,51 @@ export function BinaryCalculator() {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-              {savedBinaryItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs"
-                >
-                  <div className="space-y-0.5 min-w-0 pr-2">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-slate-900 dark:text-slate-100">{item.title}</span>
-                      <span className="text-[10px] text-slate-400">{item.timestamp}</span>
-                    </div>
-                    <p className="text-slate-600 dark:text-slate-300 truncate font-sans tabular-nums">
-                      {item.expression} &rarr; <strong className="text-blue-600 dark:text-blue-400">{item.result}</strong>
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteSavedBinary(item.id)}
-                    className="text-slate-400 hover:text-red-600 p-1 transition-colors cursor-pointer shrink-0"
-                    title="Delete saved calculation"
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {savedBinaryItems.map((item) => {
+                const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                return (
+                  <div
+                    key={item.id}
+                    className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
+                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1.5">
+                      <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteSavedBinary(item.id)}
+                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                          title="Delete saved calculation"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                      <div>
+                        <span className="font-bold text-slate-500 dark:text-slate-400">Inputs / Operation: </span>
+                        <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs || item.expression}</span>
+                      </div>
+
+                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                        <span className="font-extrabold text-slate-500 dark:text-slate-400 block text-[11px]">
+                          Complete Results:
+                        </span>
+                        <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
+                          {resParts.map((resLine, idx) => (
+                            <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                              {resLine}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -940,32 +964,51 @@ export function BinaryCalculator() {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-              {savedDecItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs"
-                >
-                  <div className="space-y-0.5 min-w-0 pr-2">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-slate-900 dark:text-slate-100">{item.title}</span>
-                      <span className="text-[10px] text-slate-400">{item.timestamp}</span>
-                    </div>
-                    <p className="text-slate-600 dark:text-slate-300 truncate font-sans tabular-nums">
-                      {item.expression} &rarr; <strong className="text-blue-600 dark:text-blue-400">{item.result}</strong>
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteSavedDec(item.id)}
-                    className="text-slate-400 hover:text-red-600 p-1 transition-colors cursor-pointer shrink-0"
-                    title="Delete saved calculation"
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {savedDecItems.map((item) => {
+                const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                return (
+                  <div
+                    key={item.id}
+                    className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
+                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1.5">
+                      <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteSavedDec(item.id)}
+                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                          title="Delete saved calculation"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                      <div>
+                        <span className="font-bold text-slate-500 dark:text-slate-400">Inputs / Conversion: </span>
+                        <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs || item.expression}</span>
+                      </div>
+
+                      <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                        <span className="font-extrabold text-slate-500 dark:text-slate-400 block text-[11px]">
+                          Complete Results:
+                        </span>
+                        <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
+                          {resParts.map((resLine, idx) => (
+                            <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                              {resLine}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
