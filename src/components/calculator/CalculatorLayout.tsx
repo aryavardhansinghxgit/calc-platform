@@ -800,36 +800,35 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         {/* Educational Content & Examples */}
         {CustomContent && (
           <div className="space-y-3 text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
-            <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-              How {definition.title} Works — Guide & Examples
-            </h3>
             <div className="prose prose-slate dark:prose-invert max-w-none text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
               <CustomContent />
             </div>
           </div>
         )}
 
-        {/* 10 High-Quality Frequently Asked Questions */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-            Frequently Asked Questions ({definition.title} FAQs)
-          </h3>
+        {/* 10 High-Quality Frequently Asked Questions (Excluded for Math Category per AGENTS.md policy) */}
+        {definition.category !== "Math" && (
           <div className="space-y-3">
-            {(definition.faqs && definition.faqs.length >= 5
-              ? definition.faqs
-              : getTenHighQualityFaqs(definition.title, definition.category)
-            ).slice(0, 10).map((faq, idx) => (
-              <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
-                <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
-                  {faq.question}
-                </h4>
-                <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed font-medium">
-                  {faq.answer}
-                </p>
-              </div>
-            ))}
+            <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              Frequently Asked Questions
+            </h3>
+            <div className="space-y-3">
+              {(definition.faqs && definition.faqs.length >= 5
+                ? definition.faqs
+                : getTenHighQualityFaqs(definition.title, definition.category)
+              ).slice(0, 10).map((faq, idx) => (
+                <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                  <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                    {faq.question}
+                  </h4>
+                  <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed font-medium">
+                    {faq.answer}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Related Calculators */}
         <div className="space-y-2">

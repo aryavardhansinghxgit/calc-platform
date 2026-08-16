@@ -99,7 +99,7 @@ export function BinaryContent() {
       {/* SECTION 3: BINARY ARITHMETIC OPERATIONS EXPLAINED */}
       <section className="space-y-6">
         <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400">
-          Binary Arithmetic Operations Explained (with Step-by-Step Formulas)
+          Binary Arithmetic Operations Explained
         </h2>
 
         {/* H3 Addition */}
