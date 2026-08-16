@@ -24,6 +24,11 @@ export function BinaryCalculator() {
   const [grouping, setGrouping] = useState<number>(4); // 0 = none, 4 = 4-bit, 8 = 8-bit
   const [shiftAmount, setShiftAmount] = useState<number>(2);
 
+  // Decimal to Binary & Input format modes
+  const [inputAMode, setInputAMode] = useState<"bin" | "dec">("bin");
+  const [inputBMode, setInputBMode] = useState<"bin" | "dec">("bin");
+  const [decInput, setDecInput] = useState<string>("255");
+
   // Saved calculations state
   const [savedItems, setSavedItems] = useState<SavedBinaryItem[]>([]);
   const [justSaved, setJustSaved] = useState<boolean>(false);
@@ -62,15 +67,8 @@ export function BinaryCalculator() {
     }
   };
 
-  // Input Validation (Check for valid binary string 0 and 1)
+  // Helper Validation
   const isBinaryValid = (val: string) => /^[01\s]*$/.test(val);
-  const cleanBinStr = (val: string) => val.replace(/\s+/g, "");
-
-  const cleanA = cleanBinStr(inputA);
-  const cleanB = cleanBinStr(inputB);
-
-  const isValidA = isBinaryValid(inputA) && cleanA.length > 0;
-  const isValidB = isBinaryValid(inputB) && (operation === "NOT" || operation === "<<" || operation === ">>" || cleanB.length > 0);
 
   // Format Helper: Bit Grouping
   const formatBitString = (binStr: string, groupSize: number) => {
@@ -80,6 +78,34 @@ export function BinaryCalculator() {
     const regex = new RegExp(`.{1,${groupSize}}`, "g");
     return padded.match(regex)?.join(" ") || binStr;
   };
+
+  // Compute clean binary strings considering decimal or binary modes
+  const cleanA = useMemo(() => {
+    if (inputAMode === "dec") {
+      const dec = parseInt(inputA.trim(), 10);
+      if (isNaN(dec)) return "";
+      const big = BigInt(dec);
+      const mask = (1n << BigInt(bitWidth)) - 1n;
+      const uVal = big < 0n ? (big + (1n << BigInt(bitWidth))) & mask : big & mask;
+      return uVal.toString(2).padStart(bitWidth, "0");
+    }
+    return inputA.replace(/\s+/g, "");
+  }, [inputA, inputAMode, bitWidth]);
+
+  const cleanB = useMemo(() => {
+    if (inputBMode === "dec") {
+      const dec = parseInt(inputB.trim(), 10);
+      if (isNaN(dec)) return "";
+      const big = BigInt(dec);
+      const mask = (1n << BigInt(bitWidth)) - 1n;
+      const uVal = big < 0n ? (big + (1n << BigInt(bitWidth))) & mask : big & mask;
+      return uVal.toString(2).padStart(bitWidth, "0");
+    }
+    return inputB.replace(/\s+/g, "");
+  }, [inputB, inputBMode, bitWidth]);
+
+  const isValidA = inputAMode === "dec" ? !isNaN(parseInt(inputA.trim(), 10)) : (isBinaryValid(inputA) && cleanA.length > 0);
+  const isValidB = inputBMode === "dec" ? !isNaN(parseInt(inputB.trim(), 10)) : (isBinaryValid(inputB) && (operation === "NOT" || operation === "<<" || operation === ">>" || cleanB.length > 0));
 
   // Convert Binary String to BigInt (Unsigned & Signed)
   const parseBinToBigInt = (binStr: string, mode: RepMode, width: BitWidth): { val: bigint; decStr: string } => {
@@ -280,6 +306,52 @@ export function BinaryCalculator() {
     };
   }, [cleanA, cleanB, operation, bitWidth, repMode, grouping, shiftAmount]);
 
+  // Dedicated Decimal to Binary Step-by-Step Derivation
+  const decToBinSteps = useMemo(() => {
+    const numStr = decInput.trim();
+    const num = parseInt(numStr, 10);
+    if (isNaN(num)) return { error: "Please enter a valid integer.", binResult: "", hexResult: "", octResult: "", steps: [] };
+
+    let n = Math.abs(num);
+    if (n === 0) {
+      return {
+        binResult: formatBitString("0".padStart(bitWidth, "0"), grouping),
+        hexResult: "0x0",
+        octResult: "0o0",
+        steps: ["0 ÷ 2 = 0, Remainder 0", "Final Binary Result: 0₂"]
+      };
+    }
+
+    const stepLines: string[] = [];
+    const remainders: number[] = [];
+
+    while (n > 0) {
+      const q = Math.floor(n / 2);
+      const r = n % 2;
+      stepLines.push(`${n} ÷ 2 = ${q}, Remainder ${r}`);
+      remainders.push(r);
+      n = q;
+    }
+
+    const binUnsignedRaw = [...remainders].reverse().join("");
+    stepLines.push(`Read remainders from bottom to top: ${binUnsignedRaw}₂`);
+
+    const decBig = BigInt(numStr);
+    const mask = (1n << BigInt(bitWidth)) - 1n;
+    const uVal = decBig < 0n ? (decBig + (1n << BigInt(bitWidth))) & mask : decBig & mask;
+
+    const binFormatted = formatBitString(uVal.toString(2).padStart(bitWidth, "0"), grouping);
+    const hexFormatted = uVal.toString(16).toUpperCase();
+    const octFormatted = uVal.toString(8);
+
+    return {
+      binResult: binFormatted,
+      hexResult: `0x${hexFormatted}`,
+      octResult: `0o${octFormatted}`,
+      steps: stepLines
+    };
+  }, [decInput, bitWidth, grouping]);
+
   const handleSaveResult = () => {
     if (calculation.error || !calculation.multiBaseRes) return;
 
@@ -466,23 +538,39 @@ export function BinaryCalculator() {
             <div>
               <div className="flex items-center justify-between mb-1">
                 <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                  First Binary Input (A)
+                  First Input (A)
                 </label>
-                {!isValidA && (
-                  <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">
-                    Invalid Binary (Use 0 and 1)
-                  </span>
-                )}
+                <div className="flex items-center gap-1 bg-slate-200/70 dark:bg-slate-800 p-0.5 rounded-lg text-[10px] font-bold">
+                  <button
+                    type="button"
+                    onClick={() => { setInputAMode("bin"); setInputA("10101010"); }}
+                    className={`px-2 py-0.5 rounded cursor-pointer transition-all ${inputAMode === "bin" ? "bg-white dark:bg-slate-900 text-blue-600 shadow-xs" : "text-slate-600 dark:text-slate-400"}`}
+                  >
+                    Binary
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setInputAMode("dec"); setInputA("170"); }}
+                    className={`px-2 py-0.5 rounded cursor-pointer transition-all ${inputAMode === "dec" ? "bg-white dark:bg-slate-900 text-blue-600 shadow-xs" : "text-slate-600 dark:text-slate-400"}`}
+                  >
+                    Decimal
+                  </button>
+                </div>
               </div>
               <input
                 type="text"
                 value={inputA}
                 onChange={(e) => setInputA(e.target.value)}
-                placeholder="e.g. 10101010"
+                placeholder={inputAMode === "dec" ? "e.g. 170" : "e.g. 10101010"}
                 className={`w-full h-10 px-3 rounded-xl border ${
                   isValidA ? "border-slate-300 dark:border-slate-700" : "border-amber-500 ring-1 ring-amber-500"
                 } bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans tabular-nums font-bold text-sm focus:outline-none focus:ring-2 focus:ring-blue-600`}
               />
+              {inputAMode === "dec" && isValidA && (
+                <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 mt-1 block font-sans tabular-nums">
+                  Binary Equivalence: {cleanA}
+                </span>
+              )}
             </div>
 
             {/* INPUT B (or Shift Amount) */}
@@ -490,23 +578,39 @@ export function BinaryCalculator() {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                    Second Binary Input (B)
+                    Second Input (B)
                   </label>
-                  {!isValidB && (
-                    <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400">
-                      Invalid Binary (Use 0 and 1)
-                    </span>
-                  )}
+                  <div className="flex items-center gap-1 bg-slate-200/70 dark:bg-slate-800 p-0.5 rounded-lg text-[10px] font-bold">
+                    <button
+                      type="button"
+                      onClick={() => { setInputBMode("bin"); setInputB("00001111"); }}
+                      className={`px-2 py-0.5 rounded cursor-pointer transition-all ${inputBMode === "bin" ? "bg-white dark:bg-slate-900 text-blue-600 shadow-xs" : "text-slate-600 dark:text-slate-400"}`}
+                    >
+                      Binary
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setInputBMode("dec"); setInputB("15"); }}
+                      className={`px-2 py-0.5 rounded cursor-pointer transition-all ${inputBMode === "dec" ? "bg-white dark:bg-slate-900 text-blue-600 shadow-xs" : "text-slate-600 dark:text-slate-400"}`}
+                    >
+                      Decimal
+                    </button>
+                  </div>
                 </div>
                 <input
                   type="text"
                   value={inputB}
                   onChange={(e) => setInputB(e.target.value)}
-                  placeholder="e.g. 00001111"
+                  placeholder={inputBMode === "dec" ? "e.g. 15" : "e.g. 00001111"}
                   className={`w-full h-10 px-3 rounded-xl border ${
                     isValidB ? "border-slate-300 dark:border-slate-700" : "border-amber-500 ring-1 ring-amber-500"
                   } bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans tabular-nums font-bold text-sm focus:outline-none focus:ring-2 focus:ring-blue-600`}
                 />
+                {inputBMode === "dec" && isValidB && (
+                  <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 mt-1 block font-sans tabular-nums">
+                    Binary Equivalence: {cleanB}
+                  </span>
+                )}
               </div>
             )}
 
@@ -639,6 +743,59 @@ export function BinaryCalculator() {
                 </div>
               )}
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* DEDICATED DECIMAL TO BINARY CONVERTER & STEP DERIVATION */}
+      <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
+        <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+          <ArrowRightLeft className="w-4 h-4 text-blue-600" />
+          <span>Decimal to Binary Converter & Step-by-Step Derivation</span>
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+          <div className="md:col-span-4 space-y-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
+              Decimal Number (Base-10 Integer)
+            </label>
+            <input
+              type="number"
+              value={decInput}
+              onChange={(e) => setDecInput(e.target.value)}
+              placeholder="e.g. 255"
+              className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans tabular-nums font-bold text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+            />
+
+            <div className="pt-2 space-y-1.5 text-xs font-bold">
+              <div className="flex justify-between items-center bg-blue-50 dark:bg-blue-950/40 p-2 rounded-lg border border-blue-200 dark:border-blue-900/50">
+                <span className="text-slate-600 dark:text-slate-300">Binary (Base-2):</span>
+                <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums font-extrabold">{decToBinSteps.binResult || "0"}</span>
+              </div>
+              <div className="flex justify-between items-center bg-slate-100 dark:bg-slate-800 p-2 rounded-lg">
+                <span className="text-slate-500">Hexadecimal:</span>
+                <span className="text-slate-900 dark:text-slate-100 font-sans tabular-nums">{decToBinSteps.hexResult || "0x0"}</span>
+              </div>
+              <div className="flex justify-between items-center bg-slate-100 dark:bg-slate-800 p-2 rounded-lg">
+                <span className="text-slate-500">Octal:</span>
+                <span className="text-slate-900 dark:text-slate-100 font-sans tabular-nums">{decToBinSteps.octResult || "0o0"}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="md:col-span-8 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
+              Division by 2 Step-by-Step Algorithm
+            </span>
+            {decToBinSteps.steps && (
+              <div className="space-y-1 text-xs font-sans tabular-nums bg-slate-50 dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200/60 dark:border-slate-700/60 max-h-52 overflow-y-auto">
+                {decToBinSteps.steps.map((step, idx) => (
+                  <div key={idx} className="text-slate-800 dark:text-slate-200 font-medium py-0.5">
+                    <span className="font-bold text-blue-600 dark:text-blue-400 mr-2">{idx + 1}.</span> {step}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
