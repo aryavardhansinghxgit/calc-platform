@@ -27,7 +27,10 @@ export function BinaryCalculator() {
   // Decimal to Binary & Input format modes
   const [inputAMode, setInputAMode] = useState<"bin" | "dec">("bin");
   const [inputBMode, setInputBMode] = useState<"bin" | "dec">("bin");
-  const [decInput, setDecInput] = useState<string>("255");
+  const [baseInput, setBaseInput] = useState<string>("255");
+  const [sourceBase, setSourceBase] = useState<number>(10);
+  const [targetBase, setTargetBase] = useState<number>(2);
+  const [justSavedDec, setJustSavedDec] = useState<boolean>(false);
 
   // Saved calculations state
   const [savedItems, setSavedItems] = useState<SavedBinaryItem[]>([]);
@@ -306,51 +309,101 @@ export function BinaryCalculator() {
     };
   }, [cleanA, cleanB, operation, bitWidth, repMode, grouping, shiftAmount]);
 
-  // Dedicated Decimal to Binary Step-by-Step Derivation
-  const decToBinSteps = useMemo(() => {
-    const numStr = decInput.trim();
-    const num = parseInt(numStr, 10);
-    if (isNaN(num)) return { error: "Please enter a valid integer.", binResult: "", hexResult: "", octResult: "", steps: [] };
+  // Dedicated Multi-Base Conversion & Step-by-Step Derivation
+  const baseConversionResult = useMemo(() => {
+    const raw = baseInput.trim();
+    if (!raw) return { error: "Please enter a valid number.", binResult: "", hexResult: "", octResult: "", decResult: "", targetResult: "", steps: [] };
 
-    let n = Math.abs(num);
-    if (n === 0) {
+    try {
+      let decVal = 0n;
+      if (sourceBase === 10) {
+        decVal = BigInt(raw);
+      } else if (sourceBase === 2) {
+        if (!/^[01]+$/i.test(raw)) return { error: "Invalid Binary string (0-1 only).", binResult: "", hexResult: "", octResult: "", decResult: "", targetResult: "", steps: [] };
+        decVal = BigInt(`0b${raw}`);
+      } else if (sourceBase === 16) {
+        const cleanHex = raw.replace(/^0x/i, "");
+        if (!/^[0-9a-f]+$/i.test(cleanHex)) return { error: "Invalid Hexadecimal string (0-9, A-F).", binResult: "", hexResult: "", octResult: "", decResult: "", targetResult: "", steps: [] };
+        decVal = BigInt(`0x${cleanHex}`);
+      } else if (sourceBase === 8) {
+        const cleanOct = raw.replace(/^0o/i, "");
+        if (!/^[0-7]+$/i.test(cleanOct)) return { error: "Invalid Octal string (0-7 only).", binResult: "", hexResult: "", octResult: "", decResult: "", targetResult: "", steps: [] };
+        decVal = BigInt(`0o${cleanOct}`);
+      } else {
+        const parsed = parseInt(raw, sourceBase);
+        if (isNaN(parsed)) return { error: `Invalid Base-${sourceBase} input.`, binResult: "", hexResult: "", octResult: "", decResult: "", targetResult: "", steps: [] };
+        decVal = BigInt(parsed);
+      }
+
+      const mask = (1n << BigInt(bitWidth)) - 1n;
+      const uVal = decVal < 0n ? (decVal + (1n << BigInt(bitWidth))) & mask : decVal & mask;
+
+      const binResult = formatBitString(uVal.toString(2).padStart(bitWidth, "0"), grouping);
+      const octResult = `0o${uVal.toString(8)}`;
+      const decResult = decVal.toString();
+      const hexResult = `0x${uVal.toString(16).toUpperCase()}`;
+      const targetResult = uVal.toString(targetBase).toUpperCase();
+
+      // Step-by-step division derivation for targetBase
+      let n = Math.abs(Number(uVal));
+      const stepLines: string[] = [];
+      const remainders: string[] = [];
+
+      if (n === 0) {
+        stepLines.push(`0 ÷ ${targetBase} = 0, Remainder 0`);
+        stepLines.push(`Final Base-${targetBase} Result: 0`);
+      } else {
+        const digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        while (n > 0) {
+          const q = Math.floor(n / targetBase);
+          const r = n % targetBase;
+          const charR = digits[r];
+          stepLines.push(`${n} ÷ ${targetBase} = ${q}, Remainder ${r} (${charR})`);
+          remainders.push(charR);
+          n = q;
+        }
+        const convertedRaw = [...remainders].reverse().join("");
+        stepLines.push(`Read remainders from bottom to top &rarr; ${convertedRaw} (Base ${targetBase})`);
+      }
+
       return {
-        binResult: formatBitString("0".padStart(bitWidth, "0"), grouping),
-        hexResult: "0x0",
-        octResult: "0o0",
-        steps: ["0 ÷ 2 = 0, Remainder 0", "Final Binary Result: 0₂"]
+        decVal,
+        binResult,
+        octResult,
+        decResult,
+        hexResult,
+        targetResult,
+        steps: stepLines,
+        error: null
       };
+    } catch (err) {
+      return { error: "Invalid number format for selected base.", binResult: "", hexResult: "", octResult: "", decResult: "", targetResult: "", steps: [] };
     }
+  }, [baseInput, sourceBase, targetBase, bitWidth, grouping]);
 
-    const stepLines: string[] = [];
-    const remainders: number[] = [];
+  const handleSaveDecConversion = () => {
+    if (!baseConversionResult || baseConversionResult.error) return;
 
-    while (n > 0) {
-      const q = Math.floor(n / 2);
-      const r = n % 2;
-      stepLines.push(`${n} ÷ 2 = ${q}, Remainder ${r}`);
-      remainders.push(r);
-      n = q;
-    }
+    const expr = `Base-${sourceBase} (${baseInput}) → Base-${targetBase}`;
+    const resStr = `Binary: ${baseConversionResult.binResult}, Dec: ${baseConversionResult.decResult}, Hex: ${baseConversionResult.hexResult}, Base-${targetBase}: ${baseConversionResult.targetResult}`;
 
-    const binUnsignedRaw = [...remainders].reverse().join("");
-    stepLines.push(`Read remainders from bottom to top: ${binUnsignedRaw}₂`);
-
-    const decBig = BigInt(numStr);
-    const mask = (1n << BigInt(bitWidth)) - 1n;
-    const uVal = decBig < 0n ? (decBig + (1n << BigInt(bitWidth))) & mask : decBig & mask;
-
-    const binFormatted = formatBitString(uVal.toString(2).padStart(bitWidth, "0"), grouping);
-    const hexFormatted = uVal.toString(16).toUpperCase();
-    const octFormatted = uVal.toString(8);
-
-    return {
-      binResult: binFormatted,
-      hexResult: `0x${hexFormatted}`,
-      octResult: `0o${octFormatted}`,
-      steps: stepLines
+    const newItem: SavedBinaryItem = {
+      id: Date.now().toString(),
+      title: `Base Conversion (Base-${sourceBase} to ${targetBase})`,
+      expression: expr,
+      result: resStr,
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     };
-  }, [decInput, bitWidth, grouping]);
+
+    const updated = [newItem, ...savedItems.filter(item => item.expression !== expr)].slice(0, 15);
+    setSavedItems(updated);
+    try {
+      localStorage.setItem("saved_binary_calculations", JSON.stringify(updated));
+    } catch (err) {}
+
+    setJustSavedDec(true);
+    setTimeout(() => setJustSavedDec(false), 2000);
+  };
 
   const handleSaveResult = () => {
     if (calculation.error || !calculation.multiBaseRes) return;
@@ -747,49 +800,119 @@ export function BinaryCalculator() {
         </div>
       </div>
 
-      {/* DEDICATED DECIMAL TO BINARY CONVERTER & STEP DERIVATION */}
+      {/* DEDICATED MULTI-BASE & DECIMAL CONVERTER */}
       <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
-        <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <ArrowRightLeft className="w-4 h-4 text-blue-600" />
-          <span>Decimal to Binary Converter & Step-by-Step Derivation</span>
-        </h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+            <ArrowRightLeft className="w-4 h-4 text-blue-600" />
+            <span>Multi-Base & Decimal Converter</span>
+          </h3>
+          <button
+            type="button"
+            onClick={handleSaveDecConversion}
+            className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold cursor-pointer transition-colors flex items-center gap-1"
+          >
+            <Bookmark className="w-3 h-3" />
+            <span>{justSavedDec ? "Saved!" : "Save Conversion"}</span>
+          </button>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
-          <div className="md:col-span-4 space-y-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
-            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
-              Decimal Number (Base-10 Integer)
-            </label>
-            <input
-              type="number"
-              value={decInput}
-              onChange={(e) => setDecInput(e.target.value)}
-              placeholder="e.g. 255"
-              className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans tabular-nums font-bold text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
-            />
+          <div className="md:col-span-5 space-y-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Source Base
+                </label>
+                <select
+                  value={sourceBase}
+                  onChange={(e) => setSourceBase(Number(e.target.value))}
+                  className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans tabular-nums font-bold text-xs focus:outline-none focus:ring-1 focus:ring-blue-600"
+                >
+                  <option value={10}>Decimal (Base 10)</option>
+                  <option value={2}>Binary (Base 2)</option>
+                  <option value={16}>Hexadecimal (Base 16)</option>
+                  <option value={8}>Octal (Base 8)</option>
+                  <option value={3}>Ternary (Base 3)</option>
+                  <option value={5}>Quinary (Base 5)</option>
+                  <option value={12}>Duodecimal (Base 12)</option>
+                  <option value={20}>Vigesimal (Base 20)</option>
+                  <option value={36}>Base 36</option>
+                </select>
+              </div>
 
-            <div className="pt-2 space-y-1.5 text-xs font-bold">
-              <div className="flex justify-between items-center bg-blue-50 dark:bg-blue-950/40 p-2 rounded-lg border border-blue-200 dark:border-blue-900/50">
-                <span className="text-slate-600 dark:text-slate-300">Binary (Base-2):</span>
-                <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums font-extrabold">{decToBinSteps.binResult || "0"}</span>
-              </div>
-              <div className="flex justify-between items-center bg-slate-100 dark:bg-slate-800 p-2 rounded-lg">
-                <span className="text-slate-500">Hexadecimal:</span>
-                <span className="text-slate-900 dark:text-slate-100 font-sans tabular-nums">{decToBinSteps.hexResult || "0x0"}</span>
-              </div>
-              <div className="flex justify-between items-center bg-slate-100 dark:bg-slate-800 p-2 rounded-lg">
-                <span className="text-slate-500">Octal:</span>
-                <span className="text-slate-900 dark:text-slate-100 font-sans tabular-nums">{decToBinSteps.octResult || "0o0"}</span>
+              <div>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Target Base
+                </label>
+                <select
+                  value={targetBase}
+                  onChange={(e) => setTargetBase(Number(e.target.value))}
+                  className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans tabular-nums font-bold text-xs focus:outline-none focus:ring-1 focus:ring-blue-600"
+                >
+                  <option value={2}>Binary (Base 2)</option>
+                  <option value={8}>Octal (Base 8)</option>
+                  <option value={10}>Decimal (Base 10)</option>
+                  <option value={16}>Hexadecimal (Base 16)</option>
+                  <option value={3}>Base 3</option>
+                  <option value={5}>Base 5</option>
+                  <option value={12}>Base 12</option>
+                  <option value={20}>Base 20</option>
+                  <option value={36}>Base 36</option>
+                </select>
               </div>
             </div>
+
+            <div>
+              <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                Source Value (Base-{sourceBase})
+              </label>
+              <input
+                type="text"
+                value={baseInput}
+                onChange={(e) => setBaseInput(e.target.value)}
+                placeholder="e.g. 255"
+                className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-sans tabular-nums font-bold text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+            </div>
+
+            {baseConversionResult?.error ? (
+              <div className="text-xs font-bold text-amber-600 dark:text-amber-400">
+                {baseConversionResult.error}
+              </div>
+            ) : (
+              <div className="pt-1 space-y-1.5 text-xs font-bold">
+                <div className="flex justify-between items-center bg-blue-50 dark:bg-blue-950/40 p-2 rounded-lg border border-blue-200 dark:border-blue-900/50">
+                  <span className="text-slate-600 dark:text-slate-300">Binary (Base-2):</span>
+                  <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums font-extrabold">{baseConversionResult.binResult}</span>
+                </div>
+                <div className="flex justify-between items-center bg-slate-100 dark:bg-slate-800 p-2 rounded-lg">
+                  <span className="text-slate-500">Decimal (Base-10):</span>
+                  <span className="text-slate-900 dark:text-slate-100 font-sans tabular-nums">{baseConversionResult.decResult}</span>
+                </div>
+                <div className="flex justify-between items-center bg-slate-100 dark:bg-slate-800 p-2 rounded-lg">
+                  <span className="text-slate-500">Hexadecimal (Base-16):</span>
+                  <span className="text-slate-900 dark:text-slate-100 font-sans tabular-nums">{baseConversionResult.hexResult}</span>
+                </div>
+                <div className="flex justify-between items-center bg-slate-100 dark:bg-slate-800 p-2 rounded-lg">
+                  <span className="text-slate-500">Octal (Base-8):</span>
+                  <span className="text-slate-900 dark:text-slate-100 font-sans tabular-nums">{baseConversionResult.octResult}</span>
+                </div>
+                <div className="flex justify-between items-center bg-blue-100/70 dark:bg-blue-900/40 p-2 rounded-lg text-blue-900 dark:text-blue-200">
+                  <span>Target Base-{targetBase}:</span>
+                  <span className="font-sans tabular-nums font-extrabold text-sm">{baseConversionResult.targetResult}</span>
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="md:col-span-8 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+          <div className="md:col-span-7 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
             <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
-              Division by 2 Step-by-Step Algorithm
+              Division by {targetBase} Step-by-Step Derivation
             </span>
-            {decToBinSteps.steps && (
-              <div className="space-y-1 text-xs font-sans tabular-nums bg-slate-50 dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200/60 dark:border-slate-700/60 max-h-52 overflow-y-auto">
-                {decToBinSteps.steps.map((step, idx) => (
+            {baseConversionResult?.steps && (
+              <div className="space-y-1 text-xs font-sans tabular-nums bg-slate-50 dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200/60 dark:border-slate-700/60 max-h-60 overflow-y-auto">
+                {baseConversionResult.steps.map((step, idx) => (
                   <div key={idx} className="text-slate-800 dark:text-slate-200 font-medium py-0.5">
                     <span className="font-bold text-blue-600 dark:text-blue-400 mr-2">{idx + 1}.</span> {step}
                   </div>
