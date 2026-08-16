@@ -562,6 +562,91 @@ export function DistanceCalculator() {
               </div>
             </div>
           </div>
+
+          {/* EMBEDDED SAVED 2D CALCULATIONS INSIDE CARD 1 */}
+          {saved2DItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                  <Bookmark className="w-4 h-4 text-blue-600" />
+                  <span>Saved 2D Distance Calculations ({saved2DItems.length})</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSaved2DItems([]);
+                    try { localStorage.removeItem("saved_dist_2d"); } catch(e){}
+                  }}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Clear All
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {saved2DItems.map((item) => {
+                  const isExpanded = !!expandedIds[item.id];
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  return (
+                    <div
+                      key={item.id}
+                      className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between transition-all"
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
+                          <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = saved2DItems.filter(i => i.id !== item.id);
+                            setSaved2DItems(updated);
+                            try { localStorage.setItem("saved_dist_2d", JSON.stringify(updated)); } catch(e){}
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                          title="Delete saved calculation"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                        <div>
+                          <span className="font-bold text-slate-500 dark:text-slate-400">Inputs: </span>
+                          <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs}</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(item.id)}
+                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                        >
+                          <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
+                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
+                        </button>
+
+                        {isExpanded && (
+                          <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                            <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-[11px]">
+                              Calculation Details:
+                            </span>
+                            <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
+                              {resParts.map((resLine, idx) => (
+                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                  {resLine}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -616,6 +701,91 @@ export function DistanceCalculator() {
               </div>
             </div>
           </div>
+
+          {/* EMBEDDED SAVED 3D CALCULATIONS INSIDE CARD 2 */}
+          {saved3DItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                  <Bookmark className="w-4 h-4 text-blue-600" />
+                  <span>Saved 3D Distance Calculations ({saved3DItems.length})</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSaved3DItems([]);
+                    try { localStorage.removeItem("saved_dist_3d"); } catch(e){}
+                  }}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Clear All
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {saved3DItems.map((item) => {
+                  const isExpanded = !!expandedIds[item.id];
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  return (
+                    <div
+                      key={item.id}
+                      className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between transition-all"
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
+                          <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = saved3DItems.filter(i => i.id !== item.id);
+                            setSaved3DItems(updated);
+                            try { localStorage.setItem("saved_dist_3d", JSON.stringify(updated)); } catch(e){}
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                          title="Delete saved calculation"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                        <div>
+                          <span className="font-bold text-slate-500 dark:text-slate-400">Inputs: </span>
+                          <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs}</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(item.id)}
+                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                        >
+                          <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
+                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
+                        </button>
+
+                        {isExpanded && (
+                          <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                            <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-[11px]">
+                              Calculation Details:
+                            </span>
+                            <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
+                              {resParts.map((resLine, idx) => (
+                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                  {resLine}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -693,6 +863,91 @@ export function DistanceCalculator() {
               </div>
             </div>
           </div>
+
+          {/* EMBEDDED SAVED GEO CALCULATIONS INSIDE CARD 3 */}
+          {savedGeoItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                  <Bookmark className="w-4 h-4 text-blue-600" />
+                  <span>Saved Earth Distance Calculations ({savedGeoItems.length})</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSavedGeoItems([]);
+                    try { localStorage.removeItem("saved_dist_geo"); } catch(e){}
+                  }}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Clear All
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {savedGeoItems.map((item) => {
+                  const isExpanded = !!expandedIds[item.id];
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  return (
+                    <div
+                      key={item.id}
+                      className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between transition-all"
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
+                          <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = savedGeoItems.filter(i => i.id !== item.id);
+                            setSavedGeoItems(updated);
+                            try { localStorage.setItem("saved_dist_geo", JSON.stringify(updated)); } catch(e){}
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                          title="Delete saved calculation"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                        <div>
+                          <span className="font-bold text-slate-500 dark:text-slate-400">Inputs: </span>
+                          <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs}</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(item.id)}
+                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                        >
+                          <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
+                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
+                        </button>
+
+                        {isExpanded && (
+                          <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                            <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-[11px]">
+                              Calculation Details:
+                            </span>
+                            <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
+                              {resParts.map((resLine, idx) => (
+                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                  {resLine}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -745,6 +1000,91 @@ export function DistanceCalculator() {
               </div>
             </div>
           </div>
+
+          {/* EMBEDDED SAVED KINEMATICS CALCULATIONS INSIDE CARD 4 */}
+          {savedSdtItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                  <Bookmark className="w-4 h-4 text-blue-600" />
+                  <span>Saved Kinematics Calculations ({savedSdtItems.length})</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSavedSdtItems([]);
+                    try { localStorage.removeItem("saved_dist_sdt"); } catch(e){}
+                  }}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Clear All
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {savedSdtItems.map((item) => {
+                  const isExpanded = !!expandedIds[item.id];
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  return (
+                    <div
+                      key={item.id}
+                      className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between transition-all"
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
+                          <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = savedSdtItems.filter(i => i.id !== item.id);
+                            setSavedSdtItems(updated);
+                            try { localStorage.setItem("saved_dist_sdt", JSON.stringify(updated)); } catch(e){}
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                          title="Delete saved calculation"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                        <div>
+                          <span className="font-bold text-slate-500 dark:text-slate-400">Inputs: </span>
+                          <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs}</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(item.id)}
+                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                        >
+                          <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
+                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
+                        </button>
+
+                        {isExpanded && (
+                          <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                            <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-[11px]">
+                              Calculation Details:
+                            </span>
+                            <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
+                              {resParts.map((resLine, idx) => (
+                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                  {resLine}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -793,6 +1133,91 @@ export function DistanceCalculator() {
               </div>
             </div>
           </div>
+
+          {/* EMBEDDED SAVED POINT-TO-LINE CALCULATIONS INSIDE CARD 5 */}
+          {savedPtLineItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                  <Bookmark className="w-4 h-4 text-blue-600" />
+                  <span>Saved Point-to-Line Calculations ({savedPtLineItems.length})</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSavedPtLineItems([]);
+                    try { localStorage.removeItem("saved_dist_ptline"); } catch(e){}
+                  }}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Clear All
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {savedPtLineItems.map((item) => {
+                  const isExpanded = !!expandedIds[item.id];
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  return (
+                    <div
+                      key={item.id}
+                      className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between transition-all"
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
+                          <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = savedPtLineItems.filter(i => i.id !== item.id);
+                            setSavedPtLineItems(updated);
+                            try { localStorage.setItem("saved_dist_ptline", JSON.stringify(updated)); } catch(e){}
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                          title="Delete saved calculation"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                        <div>
+                          <span className="font-bold text-slate-500 dark:text-slate-400">Inputs: </span>
+                          <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs}</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(item.id)}
+                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                        >
+                          <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
+                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
+                        </button>
+
+                        {isExpanded && (
+                          <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                            <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-[11px]">
+                              Calculation Details:
+                            </span>
+                            <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
+                              {resParts.map((resLine, idx) => (
+                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                  {resLine}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -860,6 +1285,91 @@ export function DistanceCalculator() {
               </tbody>
             </table>
           </div>
+
+          {/* EMBEDDED SAVED CONVERTER CALCULATIONS INSIDE CARD 6 */}
+          {savedConvItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                  <Bookmark className="w-4 h-4 text-blue-600" />
+                  <span>Saved Master Distance Conversions ({savedConvItems.length})</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSavedConvItems([]);
+                    try { localStorage.removeItem("saved_dist_conv"); } catch(e){}
+                  }}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Clear All
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {savedConvItems.map((item) => {
+                  const isExpanded = !!expandedIds[item.id];
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  return (
+                    <div
+                      key={item.id}
+                      className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between transition-all"
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
+                          <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = savedConvItems.filter(i => i.id !== item.id);
+                            setSavedConvItems(updated);
+                            try { localStorage.setItem("saved_dist_conv", JSON.stringify(updated)); } catch(e){}
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                          title="Delete saved calculation"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                        <div>
+                          <span className="font-bold text-slate-500 dark:text-slate-400">Inputs: </span>
+                          <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs}</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(item.id)}
+                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                        >
+                          <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
+                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
+                        </button>
+
+                        {isExpanded && (
+                          <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                            <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-[11px]">
+                              Calculation Details:
+                            </span>
+                            <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
+                              {resParts.map((resLine, idx) => (
+                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                  {resLine}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
