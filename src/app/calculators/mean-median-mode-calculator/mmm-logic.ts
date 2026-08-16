@@ -34,12 +34,17 @@ export interface StandardMMMResult {
 }
 
 export interface AdvancedMeansResult {
+  originalMean: number;
   weightedMean?: number;
   geometricMean?: number;
   harmonicMean?: number;
   trimmedMean: number;
   midrange: number;
   trimPct: number;
+  trimCount: number;
+  removedItems: number[];
+  remainingItems: number[];
+  trimExplanation: string;
 }
 
 export interface GroupedMMMResult {
@@ -243,7 +248,16 @@ export function computeAdvancedMeans(
   const weights = parseDataset(weightStr);
 
   if (data.length === 0) {
-    return { trimmedMean: 0, midrange: 0, trimPct };
+    return {
+      originalMean: 0,
+      trimmedMean: 0,
+      midrange: 0,
+      trimPct,
+      trimCount: 0,
+      removedItems: [],
+      remainingItems: [],
+      trimExplanation: "No data provided."
+    };
   }
 
   const sorted = [...data].sort((a, b) => a - b);
@@ -251,6 +265,7 @@ export function computeAdvancedMeans(
   const min = sorted[0];
   const max = sorted[n - 1];
   const midrange = (min + max) / 2;
+  const originalMean = sorted.reduce((acc, v) => acc + v, 0) / n;
 
   // Weighted Mean
   let weightedMean: number | undefined = undefined;
@@ -278,26 +293,45 @@ export function computeAdvancedMeans(
     harmonicMean = n / recSum;
   }
 
-  // Robust Trimmed Mean: calculate trim count dynamically
-  let trimCount = Math.floor((n * trimPct) / 100);
-  if (trimCount === 0 && trimPct > 0 && n >= 3) {
-    trimCount = 1;
-  }
-  // Ensure we don't trim everything
-  if (2 * trimCount >= n) {
-    trimCount = Math.max(0, Math.floor((n - 1) / 2));
+  // Robust Trimmed Mean & Detailed Derivation Explanation
+  let trimCount = 0;
+  if (trimPct > 0) {
+    trimCount = Math.floor((n * trimPct) / 100);
+    if (trimCount === 0 && n >= 3) {
+      trimCount = 1;
+    }
+    if (2 * trimCount >= n) {
+      trimCount = Math.max(0, Math.floor((n - 1) / 2));
+    }
   }
 
-  const trimmed = sorted.slice(trimCount, n - trimCount);
-  const trimmedMean = trimmed.length > 0 ? trimmed.reduce((acc, v) => acc + v, 0) / trimmed.length : sorted.reduce((acc, v) => acc + v, 0) / n;
+  const bottomRemoved = sorted.slice(0, trimCount);
+  const topRemoved = sorted.slice(n - trimCount, n);
+  const removedItems = [...bottomRemoved, ...topRemoved];
+  const remainingItems = sorted.slice(trimCount, n - trimCount);
+  const trimmedMean = remainingItems.length > 0
+    ? remainingItems.reduce((acc, v) => acc + v, 0) / remainingItems.length
+    : originalMean;
+
+  let trimExplanation = "";
+  if (trimPct === 0 || trimCount === 0) {
+    trimExplanation = `No trimming applied (0%). Full dataset (N = ${n}) used for calculation. Mean = ${originalMean.toFixed(4)}.`;
+  } else {
+    trimExplanation = `Trimmed ${trimPct}% (${trimCount} value${trimCount > 1 ? "s" : ""} removed from each tail). Removed extreme values: [${removedItems.join(", ")}]. Remaining dataset (N = ${remainingItems.length}): [${remainingItems.join(", ")}]. Original Mean = ${originalMean.toFixed(4)} → Trimmed Mean = ${trimmedMean.toFixed(4)}.`;
+  }
 
   return {
+    originalMean: parseFloat(originalMean.toFixed(4)),
     weightedMean: weightedMean !== undefined ? parseFloat(weightedMean.toFixed(4)) : undefined,
     geometricMean: geometricMean !== undefined ? parseFloat(geometricMean.toFixed(4)) : undefined,
     harmonicMean: harmonicMean !== undefined ? parseFloat(harmonicMean.toFixed(4)) : undefined,
     trimmedMean: parseFloat(trimmedMean.toFixed(4)),
     midrange: parseFloat(midrange.toFixed(4)),
-    trimPct
+    trimPct,
+    trimCount,
+    removedItems,
+    remainingItems,
+    trimExplanation
   };
 }
 

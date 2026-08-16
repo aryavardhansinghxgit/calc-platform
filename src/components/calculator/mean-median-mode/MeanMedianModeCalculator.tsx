@@ -44,9 +44,9 @@ export function MeanMedianModeCalculator() {
   const [isSample, setIsSample] = useState<boolean>(true);
   const [activeVisual1, setActiveVisual1] = useState<StandardVisualTab>("freq");
 
-  // Card 2 Inputs: Advanced Means Suite
-  const [advValues, setAdvValues] = useState<string>("10, 20, 30, 40, 50");
-  const [advWeights, setAdvWeights] = useState<string>("1, 2, 3, 4, 5");
+  // Card 2 Inputs: Advanced Means Suite (Default asymmetric dataset with an outlier: 150)
+  const [advValues, setAdvValues] = useState<string>("10, 15, 18, 20, 22, 25, 150");
+  const [advWeights, setAdvWeights] = useState<string>("1, 2, 3, 4, 5, 6, 7");
   const [trimPct, setTrimPct] = useState<number>(10);
 
   // Card 3 Inputs: Grouped Data Mode
@@ -203,6 +203,7 @@ export function MeanMedianModeCalculator() {
       `Geometric Mean = ${advResult.geometricMean !== undefined ? advResult.geometricMean : "N/A"}`,
       `Harmonic Mean = ${advResult.harmonicMean !== undefined ? advResult.harmonicMean : "N/A"}`,
       `Trimmed Mean (${trimPct}%) = ${advResult.trimmedMean}`,
+      `Original Untrimmed Mean = ${advResult.originalMean}`,
       `Midrange = ${advResult.midrange}`
     ];
 
@@ -787,12 +788,14 @@ export function MeanMedianModeCalculator() {
 
               <div className="space-y-3">
                 <div>
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">Values (x_i):</label>
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                    Values (x_i) — Try adding an outlier like 150:
+                  </label>
                   <textarea
                     rows={2}
                     value={advValues}
                     onChange={(e) => setAdvValues(e.target.value)}
-                    placeholder="e.g. 10, 20, 30, 40, 50"
+                    placeholder="e.g. 10, 15, 18, 20, 22, 25, 150"
                     className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 text-xs font-mono font-bold"
                   />
                 </div>
@@ -803,7 +806,7 @@ export function MeanMedianModeCalculator() {
                     rows={2}
                     value={advWeights}
                     onChange={(e) => setAdvWeights(e.target.value)}
-                    placeholder="e.g. 1, 2, 3, 4, 5"
+                    placeholder="e.g. 1, 2, 3, 4, 5, 6, 7"
                     className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl p-2.5 text-xs font-mono font-bold"
                   />
                 </div>
@@ -846,7 +849,7 @@ export function MeanMedianModeCalculator() {
               </div>
             </div>
 
-            {/* RIGHT COLUMN: ADVANCED MEANS OUTPUT */}
+            {/* RIGHT COLUMN: ADVANCED MEANS OUTPUT & DETAILED TRIMMED MEAN DIAGNOSTIC */}
             <div className="md:col-span-7 space-y-4">
               <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
                 <div className="grid grid-cols-2 gap-3">
@@ -863,7 +866,7 @@ export function MeanMedianModeCalculator() {
                     <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
                       Trimmed Mean ({trimPct}%)
                     </span>
-                    <div className="text-2xl font-mono font-black text-slate-900 dark:text-slate-100">
+                    <div className="text-2xl font-mono font-black text-blue-600 dark:text-blue-400">
                       {advResult.trimmedMean}
                     </div>
                   </div>
@@ -872,7 +875,7 @@ export function MeanMedianModeCalculator() {
                     <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
                       Geometric Mean
                     </span>
-                    <div className="text-2xl font-mono font-black text-blue-600 dark:text-blue-400">
+                    <div className="text-2xl font-mono font-black text-slate-900 dark:text-slate-100">
                       {advResult.geometricMean !== undefined ? advResult.geometricMean : "N/A"}
                     </div>
                   </div>
@@ -883,6 +886,42 @@ export function MeanMedianModeCalculator() {
                     </span>
                     <div className="text-2xl font-mono font-black text-slate-900 dark:text-slate-100">
                       {advResult.harmonicMean !== undefined ? advResult.harmonicMean : "N/A"}
+                    </div>
+                  </div>
+                </div>
+
+                {/* DETAILED TRIMMED MEAN PURPOSE & DIAGNOSTIC CARD */}
+                <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                    <span className="text-xs font-extrabold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                      Trimmed Mean Breakdown &amp; Purpose
+                    </span>
+                    <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-mono">
+                      Untrimmed: {advResult.originalMean} &rarr; Trimmed: {advResult.trimmedMean}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-slate-600 dark:text-slate-400 font-sans leading-relaxed">
+                    <strong>Purpose of Trimmed Mean:</strong> Extreme outliers (like 150 in the dataset above) heavily distort the standard arithmetic mean ({advResult.originalMean}). Trimming the top and bottom {trimPct}% of values removes those extreme tail numbers, producing a robust average ({advResult.trimmedMean}) that accurately reflects typical data.
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                    <div className="p-2.5 bg-red-50 dark:bg-red-950/30 rounded-xl border border-red-200 dark:border-red-900/40 space-y-1">
+                      <span className="font-sans font-bold text-red-700 dark:text-red-400 text-[11px] block">
+                        Removed Extreme Outliers ({advResult.removedItems.length} values):
+                      </span>
+                      <span className="font-bold text-red-900 dark:text-red-200">
+                        {advResult.removedItems.length > 0 ? `[${advResult.removedItems.join(", ")}]` : "None (0%)"}
+                      </span>
+                    </div>
+
+                    <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl border border-emerald-200 dark:border-emerald-900/40 space-y-1">
+                      <span className="font-sans font-bold text-emerald-700 dark:text-emerald-400 text-[11px] block">
+                        Active Remaining Dataset ({advResult.remainingItems.length} values used):
+                      </span>
+                      <span className="font-bold text-emerald-900 dark:text-emerald-200">
+                        [{advResult.remainingItems.join(", ")}]
+                      </span>
                     </div>
                   </div>
                 </div>
