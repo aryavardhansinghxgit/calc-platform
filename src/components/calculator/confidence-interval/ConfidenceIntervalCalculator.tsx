@@ -17,6 +17,7 @@ import {
   computeMeanCI,
   computeProportionCI,
   computeTwoMeansCI,
+  computeTwoProportionsCI,
   computeVarianceCI,
   parseDataStream
 } from "@/app/calculators/confidence-interval-calculator/confidence-interval-logic";
@@ -67,7 +68,14 @@ export function ConfidenceIntervalCalculator() {
   const [twoMeansCL, setTwoMeansCL] = useState<number>(95);
   const [equalVar, setEqualVar] = useState<boolean>(false);
 
-  // Card 4 Inputs: Population Variance
+  // Card 4 Inputs: Difference Between Two Proportions
+  const [p1_x, setP1_x] = useState<number>(320);
+  const [p1_n, setP1_n] = useState<number>(500);
+  const [p2_x, setP2_x] = useState<number>(270);
+  const [p2_n, setP2_n] = useState<number>(500);
+  const [twoPropsCL, setTwoPropsCL] = useState<number>(95);
+
+  // Card 5 Inputs: Population Variance
   const [varSD, setVarSD] = useState<number>(10);
   const [varN, setVarN] = useState<number>(20);
   const [varCL, setVarCL] = useState<number>(95);
@@ -81,6 +89,9 @@ export function ConfidenceIntervalCalculator() {
 
   const [savedTwoMeansItems, setSavedTwoMeansItems] = useState<SavedCIItem[]>([]);
   const [justSavedTwoMeans, setJustSavedTwoMeans] = useState<boolean>(false);
+
+  const [savedTwoPropsItems, setSavedTwoPropsItems] = useState<SavedCIItem[]>([]);
+  const [justSavedTwoProps, setJustSavedTwoProps] = useState<boolean>(false);
 
   const [savedVarItems, setSavedVarItems] = useState<SavedCIItem[]>([]);
   const [justSavedVar, setJustSavedVar] = useState<boolean>(false);
@@ -103,8 +114,11 @@ export function ConfidenceIntervalCalculator() {
       const s3 = localStorage.getItem("saved_ci_twomeans");
       if (s3) setSavedTwoMeansItems(JSON.parse(s3));
 
-      const s4 = localStorage.getItem("saved_ci_var");
-      if (s4) setSavedVarItems(JSON.parse(s4));
+      const s4 = localStorage.getItem("saved_ci_twoprops");
+      if (s4) setSavedTwoPropsItems(JSON.parse(s4));
+
+      const s5 = localStorage.getItem("saved_ci_var");
+      if (s5) setSavedVarItems(JSON.parse(s5));
     } catch (e) {}
   }, []);
 
@@ -158,6 +172,11 @@ export function ConfidenceIntervalCalculator() {
   }, [m1_mean, m1_sd, m1_n, m2_mean, m2_sd, m2_n, equalVar, twoMeansCL, precision1]);
 
   // Card 4 Calculations
+  const twoPropsResult = useMemo(() => {
+    return computeTwoProportionsCI(p1_x, p1_n, p2_x, p2_n, twoPropsCL, precision1);
+  }, [p1_x, p1_n, p2_x, p2_n, twoPropsCL, precision1]);
+
+  // Card 5 Calculations
   const varResult = useMemo(() => {
     return computeVarianceCI(varSD, varN, varCL, precision1);
   }, [varSD, varN, varCL, precision1]);
@@ -244,6 +263,34 @@ export function ConfidenceIntervalCalculator() {
     try { localStorage.setItem("saved_ci_twomeans", JSON.stringify(updated)); } catch (e) {}
     setJustSavedTwoMeans(true);
     setTimeout(() => setJustSavedTwoMeans(false), 2000);
+  };
+
+  const handleSaveTwoProps = () => {
+    const inputsStr = `G1(${p1_x}/${p1_n}) vs G2(${p2_x}/${p2_n})`;
+    const opStr = `Difference of Two Proportions CI`;
+    const resList = [
+      `Difference CI = [${(twoPropsResult.lowerBound * 100).toFixed(2)}%, ${(twoPropsResult.upperBound * 100).toFixed(2)}%]`,
+      `Point Diff = ${(twoPropsResult.diff * 100).toFixed(2)}%`,
+      `Margin of Error = ±${(twoPropsResult.me * 100).toFixed(2)}%`,
+      `Critical Z* = ${twoPropsResult.criticalZ}`
+    ];
+
+    const newItem: SavedCIItem = {
+      id: Date.now().toString(),
+      title: `Prop Diff CI = [${(twoPropsResult.lowerBound * 100).toFixed(2)}%, ${(twoPropsResult.upperBound * 100).toFixed(2)}%]`,
+      inputs: inputsStr,
+      operation: opStr,
+      result: resList.join(" | "),
+      resultsList: resList,
+      expression: `Diff = ${(twoPropsResult.diff * 100).toFixed(2)}%`,
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+    };
+
+    const updated = [newItem, ...savedTwoPropsItems.filter(i => i.inputs !== inputsStr)].slice(0, 15);
+    setSavedTwoPropsItems(updated);
+    try { localStorage.setItem("saved_ci_twoprops", JSON.stringify(updated)); } catch (e) {}
+    setJustSavedTwoProps(true);
+    setTimeout(() => setJustSavedTwoProps(false), 2000);
   };
 
   const handleSaveVar = () => {
@@ -370,7 +417,6 @@ export function ConfidenceIntervalCalculator() {
         </div>
 
         <div className="p-5 space-y-4">
-
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
             {/* LEFT COLUMN: INPUT FORM */}
             <div className="md:col-span-5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-xs">
@@ -602,7 +648,7 @@ export function ConfidenceIntervalCalculator() {
             </div>
           </div>
 
-          {/* DYNAMIC SVG DISTRIBUTION visualizer */}
+          {/* DYNAMIC SVG DISTRIBUTION VISUALIZER */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-xs">
             <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
               <BarChart2 className="h-4 w-4" />
@@ -1109,7 +1155,191 @@ export function ConfidenceIntervalCalculator() {
       </div>
 
       {/* ========================================================================= */}
-      {/* CARD 4: POPULATION VARIANCE & STANDARD DEVIATION CI (σ², σ) */}
+      {/* CARD 4: DIFFERENCE BETWEEN TWO INDEPENDENT PROPORTIONS (p1 - p2) */}
+      {/* ========================================================================= */}
+      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
+        <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
+          <span>Difference Between Two Independent Proportions (p1 - p2)</span>
+          <button
+            type="button"
+            onClick={handleSaveTwoProps}
+            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <Bookmark className="w-3 h-3 text-white" />
+            <span>{justSavedTwoProps ? "Saved!" : "Save"}</span>
+          </button>
+        </div>
+
+        <div className="p-5 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+            <div className="md:col-span-5 space-y-4 bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+              <h2 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                Two Proportion Groups
+              </h2>
+
+              <div className="space-y-3">
+                <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+                  <span className="text-xs font-bold text-blue-600 dark:text-blue-400 block">Group 1 (x1 / n1):</span>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-[10px] text-slate-400 font-bold block">Successes (x1)</label>
+                      <input
+                        type="number"
+                        value={p1_x}
+                        onChange={(e) => setP1_x(parseInt(e.target.value) || 0)}
+                        className="w-full h-8 px-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-400 font-bold block">Sample Size (n1)</label>
+                      <input
+                        type="number"
+                        value={p1_n}
+                        onChange={(e) => setP1_n(parseInt(e.target.value) || 1)}
+                        className="w-full h-8 px-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+                  <span className="text-xs font-bold text-blue-600 dark:text-blue-400 block">Group 2 (x2 / n2):</span>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-[10px] text-slate-400 font-bold block">Successes (x2)</label>
+                      <input
+                        type="number"
+                        value={p2_x}
+                        onChange={(e) => setP2_x(parseInt(e.target.value) || 0)}
+                        className="w-full h-8 px-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs font-bold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-400 font-bold block">Sample Size (n2)</label>
+                      <input
+                        type="number"
+                        value={p2_n}
+                        onChange={(e) => setP2_n(parseInt(e.target.value) || 1)}
+                        className="w-full h-8 px-2 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN: TWO PROPORTIONS OUTPUT */}
+            <div className="md:col-span-7 space-y-4">
+              <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
+                <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
+                      Proportion Difference CI (p̂1 - p̂2)
+                    </span>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${twoPropsResult.isSignificant ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}>
+                      {twoPropsResult.isSignificant ? "Excludes 0: Significant" : "Includes 0: Not Significant"}
+                    </span>
+                  </div>
+                  <div className="text-3xl font-mono font-extrabold text-slate-900 dark:text-slate-100 break-all">
+                    [{(twoPropsResult.lowerBound * 100).toFixed(2)}%, {(twoPropsResult.upperBound * 100).toFixed(2)}%]
+                  </div>
+                  <p className="text-xs font-mono font-bold text-slate-500">
+                    p̂1 = {(twoPropsResult.p1Hat * 100).toFixed(2)}% | p̂2 = {(twoPropsResult.p2Hat * 100).toFixed(2)}% | Diff = {(twoPropsResult.diff * 100).toFixed(2)}%
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* EMBEDDED SAVED TWO PROPORTIONS CALCULATIONS INSIDE CARD 4 */}
+          {savedTwoPropsItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                  <Bookmark className="w-4 h-4 text-blue-600" />
+                  <span>Saved Two Proportions Calculations ({savedTwoPropsItems.length})</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSavedTwoPropsItems([]);
+                    try { localStorage.removeItem("saved_ci_twoprops"); } catch(e){}
+                  }}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Clear All
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {savedTwoPropsItems.map((item) => {
+                  const isExpanded = !!expandedIds[item.id];
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  return (
+                    <div
+                      key={item.id}
+                      className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between transition-all"
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
+                          <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = savedTwoPropsItems.filter(i => i.id !== item.id);
+                            setSavedTwoPropsItems(updated);
+                            try { localStorage.setItem("saved_ci_twoprops", JSON.stringify(updated)); } catch(e){}
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                          title="Delete saved calculation"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                        <div>
+                          <span className="font-bold text-slate-500 dark:text-slate-400">Inputs: </span>
+                          <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs || item.expression}</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(item.id)}
+                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                        >
+                          <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
+                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
+                        </button>
+
+                        {isExpanded && (
+                          <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                            <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-[11px]">
+                              Complete Converted Results:
+                            </span>
+                            <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
+                              {resParts.map((resLine, idx) => (
+                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                  {resLine}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* CARD 5: POPULATION VARIANCE & STANDARD DEVIATION CI (σ², σ) */}
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
@@ -1191,7 +1421,7 @@ export function ConfidenceIntervalCalculator() {
             </div>
           </div>
 
-          {/* EMBEDDED SAVED VARIANCE CALCULATIONS INSIDE CARD 4 */}
+          {/* EMBEDDED SAVED VARIANCE CALCULATIONS INSIDE CARD 5 */}
           {savedVarItems.length > 0 && (
             <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
               <div className="flex items-center justify-between">

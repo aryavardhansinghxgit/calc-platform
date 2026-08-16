@@ -331,6 +331,72 @@ export function computeTwoMeansCI(
   };
 }
 
+export interface TwoProportionsCIResult {
+  x1: number;
+  n1: number;
+  p1Hat: number;
+  x2: number;
+  n2: number;
+  p2Hat: number;
+  diff: number;
+  confidenceLevel: number;
+  criticalZ: number;
+  seDiff: number;
+  me: number;
+  lowerBound: number;
+  upperBound: number;
+  isSignificant: boolean;
+  stepText: string;
+}
+
+export function computeTwoProportionsCI(
+  x1Input: number,
+  n1Input: number,
+  x2Input: number,
+  n2Input: number,
+  confidenceLevelPct: number = 95,
+  precision: number = 4
+): TwoProportionsCIResult {
+  const n1 = Math.max(1, Math.round(n1Input));
+  const x1 = Math.max(0, Math.min(n1, Math.round(x1Input)));
+  const p1 = x1 / n1;
+
+  const n2 = Math.max(1, Math.round(n2Input));
+  const x2 = Math.max(0, Math.min(n2, Math.round(x2Input)));
+  const p2 = x2 / n2;
+
+  const diff = p1 - p2;
+  const cl = Math.max(50, Math.min(99.99, confidenceLevelPct)) / 100.0;
+  const alphaHalf = (1.0 - cl) / 2.0;
+  const z = Math.abs(inverseNormalCDF(1.0 - alphaHalf));
+
+  const seDiff = Math.sqrt((p1 * (1.0 - p1)) / n1 + (p2 * (1.0 - p2)) / n2);
+  const me = z * seDiff;
+
+  const lowerBound = Math.max(-1.0, diff - me);
+  const upperBound = Math.min(1.0, diff + me);
+  const isSignificant = (lowerBound > 0 && upperBound > 0) || (lowerBound < 0 && upperBound < 0);
+
+  const fmt = (v: number) => v.toFixed(precision);
+  const fmtPct = (v: number) => `${(v * 100).toFixed(2)}%`;
+
+  const stepText = `p̂1 = ${x1}/${n1} = ${fmtPct(p1)}, p̂2 = ${x2}/${n2} = ${fmtPct(p2)}.\nDiff = ${fmtPct(diff)}, Critical Z* = ${fmt(z)}.\nSE(diff) = ${fmt(seDiff)}, ME = ±${fmtPct(me)}.\nCI = [${fmtPct(lowerBound)}, ${fmtPct(upperBound)}]. ${isSignificant ? "Statistically significant (Excludes 0)." : "Not statistically significant (Includes 0)."}`;
+
+  return {
+    x1, n1, p1Hat: p1,
+    x2, n2, p2Hat: p2,
+    diff: parseFloat(diff.toFixed(precision)),
+    confidenceLevel: cl * 100,
+    criticalZ: parseFloat(z.toFixed(precision)),
+    seDiff: parseFloat(seDiff.toFixed(precision)),
+    me: parseFloat(me.toFixed(precision)),
+    lowerBound: parseFloat(lowerBound.toFixed(precision)),
+    upperBound: parseFloat(upperBound.toFixed(precision)),
+    isSignificant,
+    stepText
+  };
+}
+
 export interface VarianceCIResult {
   s: number;
   n: number;
