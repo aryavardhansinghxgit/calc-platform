@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Calculator,
   Copy,
@@ -8,7 +8,6 @@ import {
   Share2,
   Sparkles,
   Sliders,
-  RotateCcw,
   BookOpen,
   Zap,
   Grid,
@@ -20,7 +19,11 @@ import {
   ShieldCheck,
   Split,
   Atom,
-  Binary
+  Binary,
+  Bookmark,
+  Trash2,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import {
   ScientificNumber,
@@ -42,50 +45,71 @@ import {
   explainArithmeticStepByStep
 } from "@/app/calculators/scientific-notation-calculator/scientific-notation-logic";
 
-export type ScientificTab = "arithmetic" | "converter" | "sigfigs" | "constants";
+export interface SavedScientificItem {
+  id: string;
+  title: string;
+  inputs: string;
+  operation: string;
+  result: string;
+  resultsList?: string[];
+  expression?: string;
+  timestamp: string;
+}
 
 export function ScientificNotationCalculator() {
-  // Input Number X (Mantissa & Exponent)
+  // Card 1 Inputs: Arithmetic Solver
   const [manX, setManX] = useState<string>("1.23");
   const [expX, setExpX] = useState<string>("7");
-
-  // Input Number Y (Mantissa & Exponent)
   const [manY, setManY] = useState<string>("3.45");
   const [expY, setExpY] = useState<string>("2");
-
-  // Single converter raw text input
-  const [singleInput, setSingleInput] = useState<string>("1568938");
-
-  // Precision Slider (1 to 16 decimal places)
   const [precision, setPrecision] = useState<number>(4);
-
-  // Active Tab & Operation
-  const [activeTab, setActiveTab] = useState<ScientificTab>("arithmetic");
   const [arithOp, setArithOp] = useState<"add" | "sub" | "mult" | "div" | "pow" | "sqrt" | "sq">("mult");
 
-  // Selected Physical Constant
-  const [selectedConstant, setSelectedConstant] = useState<string>("");
+  // Card 2 Inputs: Single Converter
+  const [singleInput, setSingleInput] = useState<string>("1568938");
+  const [convPrecision, setConvPrecision] = useState<number>(4);
 
-  // Feedback states
+  // Card 3 Inputs: Physical Constants
+  const [selectedConstantName, setSelectedConstantName] = useState<string>("Speed of Light in Vacuum");
+
+  // Action feedback states
   const [copiedSci, setCopiedSci] = useState<boolean>(false);
   const [copiedDec, setCopiedDec] = useState<boolean>(false);
-  const [copiedLatex, setCopiedLatex] = useState<boolean>(false);
-  const [copiedUrl, setCopiedUrl] = useState<boolean>(false);
 
-  // Convert inputs to ScientificNumber objects
-  const numX: ScientificNumber = useMemo(() => {
-    return parseToScientific(`${manX}e${expX}`);
-  }, [manX, expX]);
+  // Saved calculation states for Card 1, 2, 3
+  const [savedArithItems, setSavedArithItems] = useState<SavedScientificItem[]>([]);
+  const [justSavedArith, setJustSavedArith] = useState<boolean>(false);
 
-  const numY: ScientificNumber = useMemo(() => {
-    return parseToScientific(`${manY}e${expY}`);
-  }, [manY, expY]);
+  const [savedConvItems, setSavedConvItems] = useState<SavedScientificItem[]>([]);
+  const [justSavedConv, setJustSavedConv] = useState<boolean>(false);
 
-  const numSingle: ScientificNumber = useMemo(() => {
-    return parseToScientific(singleInput);
-  }, [singleInput]);
+  const [savedConstItems, setSavedConstItems] = useState<SavedScientificItem[]>([]);
+  const [justSavedConst, setJustSavedConst] = useState<boolean>(false);
 
-  // Main Arithmetic Result
+  // Expand / Collapse state for saved calculation cards
+  const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({});
+
+  const toggleExpand = (id: string) => {
+    setExpandedIds(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  useEffect(() => {
+    try {
+      const storedArith = localStorage.getItem("saved_sci_arith");
+      if (storedArith) setSavedArithItems(JSON.parse(storedArith));
+
+      const storedConv = localStorage.getItem("saved_sci_converter");
+      if (storedConv) setSavedConvItems(JSON.parse(storedConv));
+
+      const storedConst = localStorage.getItem("saved_sci_constants");
+      if (storedConst) setSavedConstItems(JSON.parse(storedConst));
+    } catch (e) {}
+  }, []);
+
+  // Card 1 Numbers & Calculation
+  const numX: ScientificNumber = useMemo(() => parseToScientific(`${manX}e${expX}`), [manX, expX]);
+  const numY: ScientificNumber = useMemo(() => parseToScientific(`${manY}e${expY}`), [manY, expY]);
+
   const { arithResult, arithError } = useMemo(() => {
     try {
       if (arithOp === "add") return { arithResult: addScientific(numX, numY) };
@@ -101,332 +125,287 @@ export function ScientificNotationCalculator() {
     }
   }, [numX, numY, arithOp]);
 
-  // Target Result Object based on active tab
-  const activeResultNum: ScientificNumber = useMemo(() => {
-    if (activeTab === "converter") return numSingle;
-    return arithResult || { mantissa: 0, exponent: 0 };
-  }, [activeTab, numSingle, arithResult]);
-
-  // Output Representations
-  const normString = useMemo(() => formatNormalizedScientific(activeResultNum, precision), [activeResultNum, precision]);
-  const engDetails = useMemo(() => formatEngineeringNotation(activeResultNum, precision), [activeResultNum, precision]);
-  const eText = useMemo(() => formatENotation(activeResultNum, precision), [activeResultNum, precision]);
-  const decString = useMemo(() => formatStandardDecimal(activeResultNum, precision), [activeResultNum, precision]);
-  const wordString = useMemo(() => formatWordRepresentation(activeResultNum), [activeResultNum]);
-
+  const arithNormString = useMemo(() => formatNormalizedScientific(arithResult || numX, precision), [arithResult, numX, precision]);
+  const arithEngDetails = useMemo(() => formatEngineeringNotation(arithResult || numX, precision), [arithResult, numX, precision]);
+  const arithEText = useMemo(() => formatENotation(arithResult || numX, precision), [arithResult, numX, precision]);
+  const arithDecString = useMemo(() => formatStandardDecimal(arithResult || numX, precision), [arithResult, numX, precision]);
+  const arithWordString = useMemo(() => formatWordRepresentation(arithResult || numX), [arithResult, numX]);
   const stepExplanation = useMemo(() => {
-    if (activeTab === "arithmetic" && (arithOp === "add" || arithOp === "mult" || arithOp === "div" || arithOp === "sqrt")) {
+    if (arithOp !== "pow") {
       return explainArithmeticStepByStep(numX, numY, arithOp);
     }
-    return "";
-  }, [activeTab, numX, numY, arithOp]);
+    return `Exponentiation (${manX} × 10^${expX})^(${manY} × 10^${expY}) evaluated to normalized scientific form.`;
+  }, [numX, numY, arithOp, manX, expX, manY, expY]);
 
-  // Load Constant Handler
-  const handleSelectConstant = (name: string) => {
-    setSelectedConstant(name);
-    const found = PHYSICAL_CONSTANTS.find((c) => c.name === name);
-    if (found) {
-      setManX(found.mantissa.toString());
-      setExpX(found.exponent.toString());
-    }
+  // Card 2 Calculation: Single Converter
+  const numSingle: ScientificNumber = useMemo(() => parseToScientific(singleInput), [singleInput]);
+  const convNormString = useMemo(() => formatNormalizedScientific(numSingle, convPrecision), [numSingle, convPrecision]);
+  const convEngDetails = useMemo(() => formatEngineeringNotation(numSingle, convPrecision), [numSingle, convPrecision]);
+  const convEText = useMemo(() => formatENotation(numSingle, convPrecision), [numSingle, convPrecision]);
+  const convDecString = useMemo(() => formatStandardDecimal(numSingle, convPrecision), [numSingle, convPrecision]);
+  const convWordString = useMemo(() => formatWordRepresentation(numSingle), [numSingle]);
+
+  // Card 3 Calculation: Selected Constant
+  const selectedConstObj = useMemo(() => {
+    return PHYSICAL_CONSTANTS.find(c => c.name === selectedConstantName) || PHYSICAL_CONSTANTS[0];
+  }, [selectedConstantName]);
+
+  const constSciNum: ScientificNumber = useMemo(() => {
+    return parseToScientific(`${selectedConstObj.mantissa}e${selectedConstObj.exponent}`);
+  }, [selectedConstObj]);
+
+  const constNormString = useMemo(() => formatNormalizedScientific(constSciNum, 6), [constSciNum]);
+  const constDecString = useMemo(() => formatStandardDecimal(constSciNum, 8), [constSciNum]);
+  const constWordString = useMemo(() => formatWordRepresentation(constSciNum), [constSciNum]);
+
+  // Save Card 1 Handler
+  const handleSaveArith = () => {
+    const inputsStr = `X: (${manX} × 10^${expX}), Y: (${manY} × 10^${expY}), Op: ${arithOp}`;
+    const opStr = `Scientific Notation Arithmetic (${arithOp})`;
+    const resList = [
+      `Normalized Scientific = ${arithNormString}`,
+      `Decimal Form = ${arithDecString}`,
+      `Engineering Form = ${arithEngDetails.engineeringString} ${arithEngDetails.prefixSymbol ? `(${arithEngDetails.prefixSymbol})` : ""}`,
+      `E-Notation = ${arithEText}`,
+      `Word Representation = ${arithWordString}`
+    ];
+
+    const newItem: SavedScientificItem = {
+      id: Date.now().toString(),
+      title: `Scientific Arithmetic (${arithOp})`,
+      inputs: inputsStr,
+      operation: opStr,
+      result: resList.join(" | "),
+      resultsList: resList,
+      expression: arithNormString,
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+    };
+
+    const updated = [newItem, ...savedArithItems.filter(item => item.inputs !== inputsStr)].slice(0, 15);
+    setSavedArithItems(updated);
+    try {
+      localStorage.setItem("saved_sci_arith", JSON.stringify(updated));
+    } catch (err) {}
+
+    setJustSavedArith(true);
+    setTimeout(() => setJustSavedArith(false), 2000);
   };
 
-  const handleCopy = (text: string, setFn: React.Dispatch<React.SetStateAction<boolean>>) => {
-    navigator.clipboard.writeText(text);
-    setFn(true);
-    setTimeout(() => setFn(false), 2000);
+  // Save Card 2 Handler
+  const handleSaveConv = () => {
+    const inputsStr = `Raw Input: ${singleInput}, Precision: ${convPrecision} Places`;
+    const opStr = `Scientific & Engineering Conversion`;
+    const resList = [
+      `Normalized Scientific = ${convNormString}`,
+      `Engineering Form = ${convEngDetails.engineeringString} ${convEngDetails.prefixSymbol ? `(${convEngDetails.prefixSymbol})` : ""}`,
+      `E-Notation = ${convEText}`,
+      `Decimal Expansion = ${convDecString}`,
+      `Word Representation = ${convWordString}`
+    ];
+
+    const newItem: SavedScientificItem = {
+      id: Date.now().toString(),
+      title: `Converted (${singleInput})`,
+      inputs: inputsStr,
+      operation: opStr,
+      result: resList.join(" | "),
+      resultsList: resList,
+      expression: convNormString,
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+    };
+
+    const updated = [newItem, ...savedConvItems.filter(item => item.inputs !== inputsStr)].slice(0, 15);
+    setSavedConvItems(updated);
+    try {
+      localStorage.setItem("saved_sci_converter", JSON.stringify(updated));
+    } catch (err) {}
+
+    setJustSavedConv(true);
+    setTimeout(() => setJustSavedConv(false), 2000);
   };
 
-  const handleShare = () => {
-    const params = new URLSearchParams();
-    params.set("mx", manX);
-    params.set("ex", expX);
-    const shareableUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
-    handleCopy(shareableUrl, setCopiedUrl);
+  // Save Card 3 Handler
+  const handleSaveConst = () => {
+    const inputsStr = `Constant: ${selectedConstObj.name} (${selectedConstObj.symbol})`;
+    const opStr = `Physical Constant Lookup`;
+    const resList = [
+      `Scientific Form = ${selectedConstObj.mantissa} × 10^${selectedConstObj.exponent} ${selectedConstObj.unit}`,
+      `Standard Decimal = ${constDecString}`,
+      `Description = ${selectedConstObj.description}`
+    ];
+
+    const newItem: SavedScientificItem = {
+      id: Date.now().toString(),
+      title: `Constant (${selectedConstObj.symbol})`,
+      inputs: inputsStr,
+      operation: opStr,
+      result: resList.join(" | "),
+      resultsList: resList,
+      expression: constNormString,
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+    };
+
+    const updated = [newItem, ...savedConstItems.filter(item => item.inputs !== inputsStr)].slice(0, 15);
+    setSavedConstItems(updated);
+    try {
+      localStorage.setItem("saved_sci_constants", JSON.stringify(updated));
+    } catch (err) {}
+
+    setJustSavedConst(true);
+    setTimeout(() => setJustSavedConst(false), 2000);
   };
 
   return (
-    <div className="space-y-6">
-      {/* INPUT & HERO RESULT GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-        
-        {/* LEFT CARD: INPUT FORM */}
-        <div className="md:col-span-6 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-5 shadow-xs">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-2">
-              <Sliders className="h-4 w-4 text-blue-600" />
-              <span>Input Scientific Notation (X and Y)</span>
-            </h2>
-            <button
-              type="button"
-              onClick={() => {
-                setManX("1.23");
-                setExpX("7");
-                setManY("3.45");
-                setExpY("2");
-                setPrecision(4);
-              }}
-              className="text-[11px] font-semibold text-slate-500 hover:text-blue-600 flex items-center gap-1 cursor-pointer transition-colors"
-            >
-              <RotateCcw className="h-3 w-3" />
-              <span>Reset</span>
-            </button>
-          </div>
+    <div className="space-y-8 max-w-7xl mx-auto">
+      {/* ========================================================================= */}
+      {/* CARD 1: SCIENTIFIC NOTATION ARITHMETIC SOLVER (X × 10ᵃ & Y × 10ᵇ) */}
+      {/* ========================================================================= */}
+      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
+        <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
+          <span>Scientific Notation Arithmetic Solver (X &times; 10ᵃ &amp; Y &times; 10ᵇ)</span>
+          <button
+            type="button"
+            onClick={handleSaveArith}
+            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <Bookmark className="w-3 h-3 text-white" />
+            <span>{justSavedArith ? "Saved!" : "Save"}</span>
+          </button>
+        </div>
 
-          <div className="space-y-4">
-            {/* Input Number X */}
-            <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                Number X (Mantissa &times; 10^Exponent):
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  step="any"
-                  value={manX}
-                  onChange={(e) => setManX(e.target.value)}
-                  placeholder="1.23"
-                  className="w-1/2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm font-mono font-bold text-slate-900 dark:text-slate-100 outline-none"
-                />
-                <span className="text-xs font-bold text-slate-500">&times; 10^</span>
-                <input
-                  type="number"
-                  step="1"
-                  value={expX}
-                  onChange={(e) => setExpX(e.target.value)}
-                  placeholder="7"
-                  className="w-1/3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm font-mono font-bold text-slate-900 dark:text-slate-100 outline-none"
-                />
+        <div className="p-5 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+            {/* LEFT COLUMN: INPUT FORM */}
+            <div className="md:col-span-6 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-xs">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                  <Sliders className="h-4 w-4 text-blue-600" />
+                  <span>Input Number X &amp; Y Parameters</span>
+                </h2>
               </div>
-            </div>
 
-            {/* Input Number Y (Arithmetic Mode) */}
-            {activeTab === "arithmetic" && (
-              <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-800">
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                  Number Y (Mantissa &times; 10^Exponent):
-                </label>
-                <div className="flex items-center gap-2">
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                    Number X (Mantissa &times; 10^Exponent):
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      step="any"
+                      value={manX}
+                      onChange={(e) => setManX(e.target.value)}
+                      placeholder="1.23"
+                      className="w-1/2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm font-mono font-bold text-slate-900 dark:text-slate-100 outline-none"
+                    />
+                    <span className="text-xs font-bold text-slate-500">&times; 10^</span>
+                    <input
+                      type="number"
+                      step="1"
+                      value={expX}
+                      onChange={(e) => setExpX(e.target.value)}
+                      placeholder="7"
+                      className="w-1/3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm font-mono font-bold text-slate-900 dark:text-slate-100 outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-800">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                    Number Y (Mantissa &times; 10^Exponent):
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      step="any"
+                      value={manY}
+                      onChange={(e) => setManY(e.target.value)}
+                      placeholder="3.45"
+                      className="w-1/2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm font-mono font-bold text-slate-900 dark:text-slate-100 outline-none"
+                    />
+                    <span className="text-xs font-bold text-slate-500">&times; 10^</span>
+                    <input
+                      type="number"
+                      step="1"
+                      value={expY}
+                      onChange={(e) => setExpY(e.target.value)}
+                      placeholder="2"
+                      className="w-1/3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm font-mono font-bold text-slate-900 dark:text-slate-100 outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-800">
+                  <div className="flex justify-between items-center text-xs font-bold text-slate-700 dark:text-slate-300">
+                    <span>Decimal Precision:</span>
+                    <span className="font-mono text-blue-600">{precision} Places</span>
+                  </div>
                   <input
-                    type="number"
-                    step="any"
-                    value={manY}
-                    onChange={(e) => setManY(e.target.value)}
-                    placeholder="3.45"
-                    className="w-1/2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm font-mono font-bold text-slate-900 dark:text-slate-100 outline-none"
-                  />
-                  <span className="text-xs font-bold text-slate-500">&times; 10^</span>
-                  <input
-                    type="number"
-                    step="1"
-                    value={expY}
-                    onChange={(e) => setExpY(e.target.value)}
-                    placeholder="2"
-                    className="w-1/3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm font-mono font-bold text-slate-900 dark:text-slate-100 outline-none"
+                    type="range"
+                    min="1"
+                    max="16"
+                    value={precision}
+                    onChange={(e) => setPrecision(parseInt(e.target.value, 10))}
+                    className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
                   />
                 </div>
               </div>
-            )}
+            </div>
 
-            {/* Single Converter Raw Text Input */}
-            {activeTab === "converter" && (
-              <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-800">
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                  Single Converter Raw Input (Decimal, E-notation e.g. 1.5e8):
-                </label>
-                <input
-                  type="text"
-                  value={singleInput}
-                  onChange={(e) => setSingleInput(e.target.value)}
-                  placeholder="e.g. 1568938 or 2.3e-12"
-                  className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 dark:text-slate-100 outline-none"
-                />
+            {/* RIGHT COLUMN: HERO RESULT DISPLAY */}
+            <div className="md:col-span-6 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-xs">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                    Normalized Scientific Result
+                  </span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">
+                    Evaluated
+                  </span>
+                </div>
+
+                {arithError ? (
+                  <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs font-bold">
+                    {arithError}
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-slate-100 font-mono tracking-tight break-all">
+                      {arithNormString}
+                    </div>
+                    <p className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">
+                      Word Representation: {arithWordString}
+                    </p>
+
+                    <div className="grid grid-cols-3 gap-2 text-xs font-bold pt-2 border-t border-slate-100 dark:border-slate-800">
+                      <div className="p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-center space-y-0.5">
+                        <span className="text-[10px] text-slate-400 block uppercase">Decimal Form</span>
+                        <span className="font-mono text-slate-900 dark:text-slate-100 truncate block">{arithDecString}</span>
+                      </div>
+
+                      <div className="p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-center space-y-0.5">
+                        <span className="text-[10px] text-slate-400 block uppercase">Engineering</span>
+                        <span className="font-mono text-slate-900 dark:text-slate-100 truncate block">
+                          {arithEngDetails.engineeringString} {arithEngDetails.prefixSymbol && `(${arithEngDetails.prefixSymbol})`}
+                        </span>
+                      </div>
+
+                      <div className="p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-center space-y-0.5">
+                        <span className="text-[10px] text-slate-400 block uppercase">E-Notation</span>
+                        <span className="font-mono text-blue-600 dark:text-blue-400 truncate block">{arithEText}</span>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
-            )}
-
-            {/* Precision Slider */}
-            <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-800">
-              <div className="flex justify-between items-center text-xs font-bold text-slate-700 dark:text-slate-300">
-                <span>Decimal Precision:</span>
-                <span className="font-mono text-blue-600">{precision} Places</span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="16"
-                value={precision}
-                onChange={(e) => setPrecision(parseInt(e.target.value, 10))}
-                className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
-              />
-            </div>
-
-            {/* Physical Constants Dropdown Preset */}
-            <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-800">
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                Load Physical Constant Preset:
-              </label>
-              <select
-                value={selectedConstant}
-                onChange={(e) => handleSelectConstant(e.target.value)}
-                className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 dark:text-slate-100 outline-none cursor-pointer"
-              >
-                <option value="">Select Fundamental Constant...</option>
-                {PHYSICAL_CONSTANTS.map((c) => (
-                  <option key={c.name} value={c.name}>
-                    {c.name} ({c.symbol} = {c.mantissa} &times; 10^{c.exponent} {c.unit})
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {/* RIGHT CARD: HERO RESULT DISPLAY */}
-        <div className="md:col-span-6 bg-gradient-to-br from-blue-50/80 via-indigo-50/50 to-slate-50 dark:from-slate-900 dark:via-blue-950/30 dark:to-slate-900 border border-blue-200 dark:border-slate-700 rounded-2xl p-6 space-y-5 shadow-md relative overflow-hidden">
-          <div className="flex items-center justify-between border-b border-blue-200/80 dark:border-slate-800 pb-3">
-            <h2 className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400 flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-blue-600" />
-              <span>Scientific Result Dashboard</span>
-            </h2>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300">
-              Normalized
-            </span>
-          </div>
-
-          {/* MAIN HERO NUMERIC RESULT */}
-          {arithError ? (
-            <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs font-bold">
-              {arithError}
-            </div>
-          ) : (
-            <div className="space-y-1">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-                Normalized Scientific Notation:
-              </span>
-              <div className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-slate-100 font-mono tracking-tight break-all">
-                {normString}
-              </div>
-              <p className="text-xs font-mono font-bold text-blue-700 dark:text-blue-300 pt-1">
-                Word Representation: {wordString}
-              </p>
-            </div>
-          )}
-
-          {/* MULTI-FORMAT REPRESENTATIONS GRID */}
-          <div className="grid grid-cols-3 gap-2 pt-3 border-t border-blue-200/80 dark:border-slate-800">
-            <div className="bg-white/80 dark:bg-slate-800/80 p-2.5 rounded-xl border border-blue-100 dark:border-slate-700 text-center space-y-0.5">
-              <span className="text-[10px] font-bold text-slate-500 uppercase block">Decimal Form</span>
-              <p className="text-xs font-mono font-bold text-slate-900 dark:text-slate-100 truncate">{decString}</p>
-            </div>
-
-            <div className="bg-white/80 dark:bg-slate-800/80 p-2.5 rounded-xl border border-blue-100 dark:border-slate-700 text-center space-y-0.5">
-              <span className="text-[10px] font-bold text-slate-500 uppercase block">Engineering</span>
-              <p className="text-xs font-mono font-bold text-slate-900 dark:text-slate-100 truncate">
-                {engDetails.engineeringString} {engDetails.prefixSymbol && `(${engDetails.prefixSymbol})`}
-              </p>
-            </div>
-
-            <div className="bg-white/80 dark:bg-slate-800/80 p-2.5 rounded-xl border border-blue-100 dark:border-slate-700 text-center space-y-0.5">
-              <span className="text-[10px] font-bold text-slate-500 uppercase block">E-Notation</span>
-              <p className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400 truncate">{eText}</p>
             </div>
           </div>
 
-          {/* ACTION BUTTONS */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
-            <button
-              type="button"
-              onClick={() => handleCopy(normString, setCopiedSci)}
-              className="bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold rounded-xl px-2 py-2 text-xs shadow-xs transition-all flex items-center justify-center gap-1 cursor-pointer"
-            >
-              {copiedSci ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5 text-blue-600" />}
-              <span>{copiedSci ? "Copied!" : "Copy Scientific"}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleCopy(decString, setCopiedDec)}
-              className="bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold rounded-xl px-2 py-2 text-xs shadow-xs transition-all flex items-center justify-center gap-1 cursor-pointer"
-            >
-              {copiedDec ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <BookOpen className="h-3.5 w-3.5 text-blue-600" />}
-              <span>{copiedDec ? "Copied!" : "Copy Decimal"}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleCopy(`${activeResultNum.mantissa} \\times 10^{${activeResultNum.exponent}}`, setCopiedLatex)}
-              className="bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-semibold rounded-xl px-2 py-2 text-xs shadow-xs transition-all flex items-center justify-center gap-1 cursor-pointer"
-            >
-              {copiedLatex ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5 text-blue-600" />}
-              <span>{copiedLatex ? "Copied!" : "Copy LaTeX"}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={handleShare}
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl px-2 py-2 text-xs shadow-md active:scale-[0.98] transition-all flex items-center justify-center gap-1 cursor-pointer"
-            >
-              {copiedUrl ? <Check className="h-3.5 w-3.5 text-emerald-300" /> : <Share2 className="h-3.5 w-3.5" />}
-              <span>{copiedUrl ? "Link Copied!" : "Share URL"}</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* MULTI-TAB ARITHMETIC SUITE & STEP BREAKDOWN */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-5 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-4">
-          <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
-            <Layers className="h-4 w-4" />
-            <span>Arithmetic Operations & Multi-Format Converter</span>
-          </h3>
-
-          {/* TAB BUTTONS */}
-          <div className="flex flex-wrap gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
-            <button
-              type="button"
-              onClick={() => setActiveTab("arithmetic")}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === "arithmetic"
-                  ? "bg-white dark:bg-slate-900 text-blue-600 shadow-xs"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
-              }`}
-            >
-              <Zap className="h-3.5 w-3.5" />
-              <span>Arithmetic Solver</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("converter")}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === "converter"
-                  ? "bg-white dark:bg-slate-900 text-blue-600 shadow-xs"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
-              }`}
-            >
-              <Binary className="h-3.5 w-3.5" />
-              <span>Single Converter</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("constants")}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === "constants"
-                  ? "bg-white dark:bg-slate-900 text-blue-600 shadow-xs"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
-              }`}
-            >
-              <Atom className="h-3.5 w-3.5" />
-              <span>Constants Library</span>
-            </button>
-          </div>
-        </div>
-
-        {/* ARITHMETIC OP SELECTOR BUTTONS */}
-        {activeTab === "arithmetic" && (
-          <div className="space-y-4">
+          {/* ARITHMETIC OP SELECTOR BUTTONS & STEP DERIVATION */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-xs">
+            <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              Select Arithmetic Operation
+            </h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
               <button
                 type="button"
@@ -437,7 +416,6 @@ export function ScientificNotationCalculator() {
               >
                 X &times; Y
               </button>
-
               <button
                 type="button"
                 onClick={() => setArithOp("div")}
@@ -447,7 +425,6 @@ export function ScientificNotationCalculator() {
               >
                 X / Y
               </button>
-
               <button
                 type="button"
                 onClick={() => setArithOp("add")}
@@ -457,7 +434,6 @@ export function ScientificNotationCalculator() {
               >
                 X + Y
               </button>
-
               <button
                 type="button"
                 onClick={() => setArithOp("sub")}
@@ -467,7 +443,6 @@ export function ScientificNotationCalculator() {
               >
                 X - Y
               </button>
-
               <button
                 type="button"
                 onClick={() => setArithOp("pow")}
@@ -477,7 +452,6 @@ export function ScientificNotationCalculator() {
               >
                 X^Y
               </button>
-
               <button
                 type="button"
                 onClick={() => setArithOp("sqrt")}
@@ -487,7 +461,6 @@ export function ScientificNotationCalculator() {
               >
                 &radic;X
               </button>
-
               <button
                 type="button"
                 onClick={() => setArithOp("sq")}
@@ -499,36 +472,445 @@ export function ScientificNotationCalculator() {
               </button>
             </div>
 
-            {/* STEP-BY-STEP EXPLANATION BOX */}
             {stepExplanation && (
               <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-xs space-y-1">
-                <span className="text-blue-600 font-bold">Step-by-Step Mathematical Derivation:</span>
-                <p className="text-slate-800 dark:text-slate-200 pt-1 leading-relaxed">{stepExplanation}</p>
+                <span className="text-blue-600 font-bold block">Step-by-Step Mathematical Derivation:</span>
+                <p className="text-slate-800 dark:text-slate-200 leading-relaxed">{stepExplanation}</p>
               </div>
             )}
           </div>
-        )}
 
-        {/* CONSTANTS LIBRARY TAB CONTENT */}
-        {activeTab === "constants" && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-sans">
-            {PHYSICAL_CONSTANTS.map((c) => (
-              <div
-                key={c.name}
-                onClick={() => handleSelectConstant(c.name)}
-                className="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 hover:border-blue-500 cursor-pointer space-y-1 transition-all"
-              >
-                <div className="flex justify-between items-center">
-                  <span className="font-bold text-slate-900 dark:text-slate-100">{c.name} ({c.symbol})</span>
-                  <span className="text-[10px] font-mono text-blue-600 font-bold">{c.unit}</span>
-                </div>
-                <p className="font-mono text-xs font-extrabold text-blue-600">{c.mantissa} &times; 10^{c.exponent}</p>
-                <p className="text-[11px] text-slate-500">{c.description}</p>
+          {/* EMBEDDED SAVED ARITHMETIC SOLVES INSIDE CARD 1 */}
+          {savedArithItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                  <Bookmark className="w-4 h-4 text-blue-600" />
+                  <span>Saved Scientific Arithmetic ({savedArithItems.length})</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSavedArithItems([]);
+                    try { localStorage.removeItem("saved_sci_arith"); } catch(e){}
+                  }}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Clear All
+                </button>
               </div>
-            ))}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {savedArithItems.map((item) => {
+                  const isExpanded = !!expandedIds[item.id];
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  return (
+                    <div
+                      key={item.id}
+                      className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between transition-all"
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
+                          <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = savedArithItems.filter(i => i.id !== item.id);
+                            setSavedArithItems(updated);
+                            try { localStorage.setItem("saved_sci_arith", JSON.stringify(updated)); } catch(e){}
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                          title="Delete saved calculation"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                        <div>
+                          <span className="font-bold text-slate-500 dark:text-slate-400">Inputs: </span>
+                          <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs || item.expression}</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(item.id)}
+                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                        >
+                          <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
+                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
+                        </button>
+
+                        {isExpanded && (
+                          <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                            <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-[11px]">
+                              Complete Calculated Answers:
+                            </span>
+                            <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
+                              {resParts.map((resLine, idx) => (
+                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                  {resLine}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* CARD 2: SINGLE NUMBER TO SCIENTIFIC & ENGINEERING CONVERTER */}
+      {/* ========================================================================= */}
+      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
+        <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
+          <span>Single Number to Scientific &amp; Engineering Converter</span>
+          <button
+            type="button"
+            onClick={handleSaveConv}
+            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <Bookmark className="w-3 h-3 text-white" />
+            <span>{justSavedConv ? "Saved!" : "Save"}</span>
+          </button>
+        </div>
+
+        <div className="p-5 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+            <div className="md:col-span-5 space-y-4 bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+              <h2 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                Converter Inputs
+              </h2>
+
+              <div className="space-y-3">
+                <div>
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                    Raw Input (Decimal, E-notation e.g. 1.5e8)
+                  </label>
+                  <input
+                    type="text"
+                    value={singleInput}
+                    onChange={(e) => setSingleInput(e.target.value)}
+                    placeholder="e.g. 1568938 or 2.3e-12"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-mono font-bold text-sm"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex justify-between items-center text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    <span>Converter Precision:</span>
+                    <span className="font-mono text-blue-600">{convPrecision} Places</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="16"
+                    value={convPrecision}
+                    onChange={(e) => setConvPrecision(parseInt(e.target.value, 10))}
+                    className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN: CONVERTER OUTPUT */}
+            <div className="md:col-span-7 space-y-4">
+              <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
+                <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
+                    Normalized Scientific Form
+                  </span>
+                  <div className="text-3xl font-mono font-extrabold text-slate-900 dark:text-slate-100 break-all">
+                    {convNormString}
+                  </div>
+                  <p className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">
+                    Word Representation: {convWordString}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 text-xs font-bold">
+                  <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                    <span className="text-[10px] text-slate-400 block uppercase">Engineering</span>
+                    <span className="font-mono text-slate-900 dark:text-slate-100 truncate block">
+                      {convEngDetails.engineeringString} {convEngDetails.prefixSymbol && `(${convEngDetails.prefixSymbol})`}
+                    </span>
+                  </div>
+
+                  <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                    <span className="text-[10px] text-slate-400 block uppercase">E-Notation</span>
+                    <span className="font-mono text-blue-600 dark:text-blue-400 truncate block">{convEText}</span>
+                  </div>
+
+                  <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                    <span className="text-[10px] text-slate-400 block uppercase">Decimal Form</span>
+                    <span className="font-mono text-slate-900 dark:text-slate-100 truncate block">{convDecString}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
+
+          {/* EMBEDDED SAVED SCIENTIFIC CONVERSIONS INSIDE CARD 2 */}
+          {savedConvItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                  <Bookmark className="w-4 h-4 text-blue-600" />
+                  <span>Saved Scientific Conversions ({savedConvItems.length})</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSavedConvItems([]);
+                    try { localStorage.removeItem("saved_sci_converter"); } catch(e){}
+                  }}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Clear All
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {savedConvItems.map((item) => {
+                  const isExpanded = !!expandedIds[item.id];
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  return (
+                    <div
+                      key={item.id}
+                      className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between transition-all"
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
+                          <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = savedConvItems.filter(i => i.id !== item.id);
+                            setSavedConvItems(updated);
+                            try { localStorage.setItem("saved_sci_converter", JSON.stringify(updated)); } catch(e){}
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                          title="Delete saved calculation"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                        <div>
+                          <span className="font-bold text-slate-500 dark:text-slate-400">Inputs: </span>
+                          <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs || item.expression}</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(item.id)}
+                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                        >
+                          <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
+                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
+                        </button>
+
+                        {isExpanded && (
+                          <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                            <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-[11px]">
+                              Complete Converted Results:
+                            </span>
+                            <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
+                              {resParts.map((resLine, idx) => (
+                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                  {resLine}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* CARD 3: PHYSICAL CONSTANTS SCIENTIFIC LIBRARY */}
+      {/* ========================================================================= */}
+      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
+        <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
+          <span>Physical Constants Scientific Library</span>
+          <button
+            type="button"
+            onClick={handleSaveConst}
+            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <Bookmark className="w-3 h-3 text-white" />
+            <span>{justSavedConst ? "Saved!" : "Save"}</span>
+          </button>
+        </div>
+
+        <div className="p-5 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+            <div className="md:col-span-5 space-y-4 bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+              <h2 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                Select Fundamental Constant
+              </h2>
+
+              <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
+                {PHYSICAL_CONSTANTS.map((c) => (
+                  <div
+                    key={c.name}
+                    onClick={() => setSelectedConstantName(c.name)}
+                    className={`p-3 rounded-xl border text-xs cursor-pointer transition-all ${
+                      selectedConstantName === c.name
+                        ? "bg-blue-50 dark:bg-blue-950/40 border-blue-600 text-blue-900 dark:text-blue-100 font-bold"
+                        : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-blue-400"
+                    }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="font-extrabold">{c.name} ({c.symbol})</span>
+                      <span className="text-[10px] font-mono text-blue-600 font-bold">{c.unit}</span>
+                    </div>
+                    <p className="font-mono text-xs font-bold text-blue-600 pt-0.5">{c.mantissa} &times; 10^{c.exponent}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN: CONSTANT DETAILS OUTPUT */}
+            <div className="md:col-span-7 space-y-4">
+              <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
+                <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                    <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                      {selectedConstObj.name} ({selectedConstObj.symbol})
+                    </span>
+                    <span className="text-[10px] font-bold text-slate-400">{selectedConstObj.unit}</span>
+                  </div>
+
+                  <div className="text-3xl font-mono font-extrabold text-slate-900 dark:text-slate-100 break-all">
+                    {constNormString} {selectedConstObj.unit}
+                  </div>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
+                    {selectedConstObj.description}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs font-bold">
+                  <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                    <span className="text-[10px] text-slate-400 block uppercase">Standard Decimal</span>
+                    <span className="font-mono text-slate-900 dark:text-slate-100 truncate block">{constDecString}</span>
+                  </div>
+
+                  <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                    <span className="text-[10px] text-slate-400 block uppercase">Word Representation</span>
+                    <span className="font-mono text-blue-600 dark:text-blue-400 truncate block">{constWordString}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* EMBEDDED SAVED CONSTANT SOLVES INSIDE CARD 3 */}
+          {savedConstItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                  <Bookmark className="w-4 h-4 text-blue-600" />
+                  <span>Saved Physical Constants ({savedConstItems.length})</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSavedConstItems([]);
+                    try { localStorage.removeItem("saved_sci_constants"); } catch(e){}
+                  }}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Clear All
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {savedConstItems.map((item) => {
+                  const isExpanded = !!expandedIds[item.id];
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  return (
+                    <div
+                      key={item.id}
+                      className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-sans shadow-xs space-y-2 flex flex-col justify-between transition-all"
+                    >
+                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
+                          <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = savedConstItems.filter(i => i.id !== item.id);
+                            setSavedConstItems(updated);
+                            try { localStorage.setItem("saved_sci_constants", JSON.stringify(updated)); } catch(e){}
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                          title="Delete saved calculation"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+                        <div>
+                          <span className="font-bold text-slate-500 dark:text-slate-400">Inputs: </span>
+                          <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs || item.expression}</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => toggleExpand(item.id)}
+                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                        >
+                          <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
+                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
+                        </button>
+
+                        {isExpanded && (
+                          <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                            <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-[11px]">
+                              Complete Converted Results:
+                            </span>
+                            <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
+                              {resParts.map((resLine, idx) => (
+                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                  {resLine}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 }
+
+export default ScientificNotationCalculator;
