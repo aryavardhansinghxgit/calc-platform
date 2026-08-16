@@ -8,7 +8,6 @@ import {
   Share2,
   Sparkles,
   Sliders,
-  RotateCcw,
   BookOpen,
   Zap,
   Grid,
@@ -101,14 +100,7 @@ export function LcmCalculator() {
 
   const pairSummary = useMemo(() => computeLcmSummary(pairNumbers), [pairNumbers]);
 
-  // Presets
-  const presets = [
-    { label: "Small Integers", value: "8, 12, 30" },
-    { label: "Pair", value: "48, 60" },
-    { label: "Large Primes", value: "21, 14, 38" },
-    { label: "Fraction Denominators", value: "3, 5, 7" },
-    { label: "Quadruplet", value: "15, 25, 35, 45" }
-  ];
+
 
   const handleCopy = (text: string, setFn: React.Dispatch<React.SetStateAction<boolean>>) => {
     try {
@@ -221,14 +213,6 @@ export function LcmCalculator() {
                   <Sliders className="h-4 w-4 text-blue-600" />
                   <span>Input Integers (Comma or Space Separated)</span>
                 </h2>
-                <button
-                  type="button"
-                  onClick={() => setInputStr("12, 18, 30")}
-                  className="text-[11px] font-semibold text-slate-500 hover:text-blue-600 flex items-center gap-1 cursor-pointer transition-colors"
-                >
-                  <RotateCcw className="h-3 w-3" />
-                  <span>Reset</span>
-                </button>
               </div>
 
               <div className="space-y-2">
@@ -255,28 +239,7 @@ export function LcmCalculator() {
                 )}
               </div>
 
-              {/* QUICK PRESET CHIPS */}
-              <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-800">
-                <span className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                  Quick Input Presets:
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {presets.map((preset) => (
-                    <button
-                      key={preset.label}
-                      type="button"
-                      onClick={() => setInputStr(preset.value)}
-                      className={`px-2.5 py-1 text-xs font-semibold rounded-lg border transition-all cursor-pointer ${
-                        inputStr === preset.value
-                          ? "bg-blue-600 text-white border-blue-600 shadow-xs"
-                          : "bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-blue-500"
-                      }`}
-                    >
-                      {preset.label} ({preset.value})
-                    </button>
-                  ))}
-                </div>
-              </div>
+
             </div>
 
             {/* RIGHT COLUMN: HERO RESULT DISPLAY */}
