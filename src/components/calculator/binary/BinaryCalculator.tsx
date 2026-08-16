@@ -49,30 +49,7 @@ export function BinaryCalculator() {
     } catch (e) {}
   }, []);
 
-  // Quick Preset Handlers
-  const applyPreset = (preset: "add" | "sub" | "and" | "xor" | "shift") => {
-    if (preset === "add") {
-      setInputA("10101010");
-      setInputB("00001111");
-      setOperation("+");
-    } else if (preset === "sub") {
-      setInputA("11110000");
-      setInputB("00111100");
-      setOperation("-");
-    } else if (preset === "and") {
-      setInputA("11001100");
-      setInputB("10101010");
-      setOperation("AND");
-    } else if (preset === "xor") {
-      setInputA("11110000");
-      setInputB("10101010");
-      setOperation("XOR");
-    } else if (preset === "shift") {
-      setInputA("00001111");
-      setShiftAmount(2);
-      setOperation("<<");
-    }
-  };
+
 
   // Helper Validation
   const isBinaryValid = (val: string) => /^[01\s]*$/.test(val);
@@ -503,65 +480,23 @@ export function BinaryCalculator() {
         </div>
 
         <div className="p-5 space-y-4">
-          {/* QUICK PRESETS & SWAP TOOLBAR INSIDE CARD */}
-          <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs text-xs">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mr-1">
-                <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Presets:
-              </span>
-              <button
-                type="button"
-                onClick={() => applyPreset("add")}
-                className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:border-blue-300 cursor-pointer transition-colors"
-              >
-                Addition (+)
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset("sub")}
-                className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:border-blue-300 cursor-pointer transition-colors"
-              >
-                Subtraction (-)
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset("and")}
-                className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:border-blue-300 cursor-pointer transition-colors"
-              >
-                Bitwise AND
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset("xor")}
-                className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:border-blue-300 cursor-pointer transition-colors"
-              >
-                Bitwise XOR
-              </button>
-              <button
-                type="button"
-                onClick={() => applyPreset("shift")}
-                className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:border-blue-300 cursor-pointer transition-colors"
-              >
-                Left Shift (&lt;&lt;)
-              </button>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleSwap}
-              className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition-colors flex items-center gap-1"
-              title="Swap Inputs A and B"
-            >
-              <ArrowRightLeft className="w-3.5 h-3.5 text-blue-600" /> Swap A ↔ B
-            </button>
-          </div>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             {/* LEFT COLUMN: INPUT CONTROLS */}
             <div className="lg:col-span-5 space-y-4">
               <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
-                <h2 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                  Binary & Bitwise Inputs
-                </h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                    Binary & Bitwise Inputs
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={handleSwap}
+                    className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-xs hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition-colors flex items-center gap-1"
+                    title="Swap Inputs A and B"
+                  >
+                    <ArrowRightLeft className="w-3.5 h-3.5 text-blue-600" /> Swap A ↔ B
+                  </button>
+                </div>
 
             {/* BIT WIDTH & SIGNED REPRESENTATION MODE */}
             <div className="grid grid-cols-2 gap-3">
