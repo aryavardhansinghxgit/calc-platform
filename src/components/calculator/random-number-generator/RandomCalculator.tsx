@@ -1,13 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
-import { Copy, Check, Calculator, Bookmark, Trash2, History, Printer, RefreshCw, Download } from "lucide-react";
-import {
-  generateRandomNumbers,
-  generateGaussianNumbers,
-  RandomGenerationOutput,
-} from "@/lib/calculator-engine/formulas/random";
-import { RandomVisualizer } from "./RandomVisualizer";
+import React, { useState, useEffect } from "react";
 
 export interface SavedRandomItem {
   id: string;
@@ -17,29 +10,111 @@ export interface SavedRandomItem {
   timestamp: string;
 }
 
+// Random Generator Engine with Large Integer and 999-Digit Precision Support
+function generateRandomBasic(minStr: string, maxStr: string): string {
+  try {
+    const minBig = BigInt(minStr.trim() || "1");
+    const maxBig = BigInt(maxStr.trim() || "100");
+
+    if (minBig > maxBig) {
+      return "Error: Lower limit must be less than or equal to upper limit.";
+    }
+
+    const range = maxBig - minBig + 1n;
+    if (range <= 0n) return "1";
+
+    // For standard bounds
+    if (range <= BigInt(Number.MAX_SAFE_INTEGER)) {
+      const minNum = Number(minBig);
+      const maxNum = Number(maxBig);
+      const rand = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+      return rand.toString();
+    }
+
+    // For large BigInt bounds
+    const rangeStr = range.toString();
+    const numDigits = rangeStr.length;
+    let randStr = "";
+    for (let i = 0; i < numDigits; i++) {
+      randStr += Math.floor(Math.random() * 10).toString();
+    }
+
+    let randBig = BigInt(randStr) % range;
+    if (randBig < 0n) randBig = -randBig;
+    return (minBig + randBig).toString();
+  } catch (err) {
+    const min = parseFloat(minStr) || 1;
+    const max = parseFloat(maxStr) || 100;
+    if (min > max) return "Error: Invalid bounds";
+    return (Math.floor(Math.random() * (max - min + 1)) + min).toString();
+  }
+}
+
+function generateRandomComprehensive(
+  minStr: string,
+  maxStr: string,
+  countStr: string,
+  type: "integer" | "decimal",
+  precStr: string
+): string {
+  const count = Math.min(Math.max(1, parseInt(countStr || "1", 10)), 100);
+  const min = parseFloat(minStr || "0.2");
+  const max = parseFloat(maxStr || "112.5");
+  const precision = Math.min(Math.max(0, parseInt(precStr || "50", 10)), 999);
+
+  if (isNaN(min) || isNaN(max) || min > max) {
+    return "Error: Lower limit must be less than or equal to upper limit.";
+  }
+
+  const results: string[] = [];
+
+  for (let c = 0; c < count; c++) {
+    if (type === "integer") {
+      const minInt = Math.ceil(min);
+      const maxInt = Math.floor(max);
+      if (minInt > maxInt) {
+        results.push(Math.floor(min).toString());
+      } else {
+        const randInt = Math.floor(Math.random() * (maxInt - minInt + 1)) + minInt;
+        results.push(randInt.toString());
+      }
+    } else {
+      // High precision decimal generation
+      if (precision <= 14) {
+        const randVal = Math.random() * (max - min) + min;
+        results.push(randVal.toFixed(precision));
+      } else {
+        // Multi-digit precision string construction
+        const integerRange = Math.floor(max) - Math.ceil(min);
+        let wholePart = Math.floor(min);
+        if (integerRange > 0) {
+          wholePart += Math.floor(Math.random() * (integerRange + 1));
+        }
+
+        let digitsStr = "";
+        for (let i = 0; i < precision; i++) {
+          digitsStr += Math.floor(Math.random() * 10).toString();
+        }
+
+        const fullDec = `${wholePart}.${digitsStr}`;
+        const numericVal = parseFloat(fullDec);
+        if (numericVal < min) {
+          results.push(min.toFixed(precision));
+        } else if (numericVal > max) {
+          results.push(max.toFixed(precision));
+        } else {
+          results.push(fullDec);
+        }
+      }
+    }
+  }
+
+  return results.join(", ");
+}
+
 export function RandomCalculator() {
-  const [activeTab, setActiveTab] = useState<string>("simple");
-
-  // Inputs for Simple & Comprehensive
-  const [minVal, setMinVal] = useState<string>("1");
-  const [maxVal, setMaxVal] = useState<string>("100");
-  const [genCount, setGenCount] = useState<string>("1");
-  const [numType, setNumType] = useState<"integer" | "decimal">("integer");
-  const [precision, setPrecision] = useState<string>("2");
-  const [uniqueOnly, setUniqueOnly] = useState<boolean>(false);
-  const [sortOrder, setSortOrder] = useState<"none" | "asc" | "desc">("none");
-  const [useCrypto, setUseCrypto] = useState<boolean>(false);
-
-  // Inputs for List Picker & Shuffler
-  const [listInput, setListInput] = useState<string>("Apple, Banana, Cherry, Date, Elderberry, Fig, Grape");
-  const [pickCount, setPickCount] = useState<string>("1");
-
-  // Output format & triggers
-  const [outputFormat, setOutputFormat] = useState<"comma" | "space" | "newline" | "json">("comma");
-  const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
-  const [copied, setCopied] = useState(false);
   const [savedItems, setSavedItems] = useState<SavedRandomItem[]>([]);
-  const [justSaved, setJustSaved] = useState(false);
+  const [savedSection, setSavedSection] = useState<string | null>(null);
 
   useEffect(() => {
     try {
@@ -47,373 +122,366 @@ export function RandomCalculator() {
       if (stored) {
         setSavedItems(JSON.parse(stored));
       }
-    } catch (e) { }
+    } catch (e) {}
   }, []);
 
-  // Compute calculation output
-  const genOutput = useMemo<RandomGenerationOutput | null>(() => {
-    try {
-      const count = activeTab === "simple" ? 1 : parseInt(genCount) || 1;
-      const min = parseFloat(minVal) || 1;
-      const max = parseFloat(maxVal) || 100;
-      const prec = parseInt(precision) || 2;
+  const handleSaveResult = (e: React.MouseEvent, sectionId: string, sectionTitle: string, expression: string, resultStr: string) => {
+    e.preventDefault();
+    e.stopPropagation();
 
-      return generateRandomNumbers(
-        min,
-        max,
-        count,
-        activeTab === "simple" ? "integer" : numType,
-        prec,
-        uniqueOnly,
-        sortOrder,
-        useCrypto
-      );
-    } catch (e: any) {
-      return null;
-    }
-  }, [activeTab, minVal, maxVal, genCount, numType, precision, uniqueOnly, sortOrder, useCrypto, refreshTrigger]);
-
-  // Formatted string representation
-  const formattedResults = useMemo(() => {
-    if (!genOutput) return "";
-    const nums = genOutput.numbers;
-    if (outputFormat === "comma") return nums.join(", ");
-    if (outputFormat === "space") return nums.join(" ");
-    if (outputFormat === "newline") return nums.join("\n");
-    if (outputFormat === "json") return JSON.stringify(nums, null, 2);
-    return nums.join(", ");
-  }, [genOutput, outputFormat]);
-
-  const handleCopy = () => {
-    if (!formattedResults) return;
-    navigator.clipboard.writeText(formattedResults);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleDownload = () => {
-    if (!formattedResults) return;
-    const blob = new Blob([formattedResults], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `random-numbers-${Date.now()}.txt`;
-    link.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const handleSave = () => {
-    if (!genOutput) return;
     const newItem: SavedRandomItem = {
       id: Date.now().toString(),
-      title: activeTab.toUpperCase(),
-      expression: `Range [${minVal}, ${maxVal}] (N=${genOutput.count})`,
-      result: genOutput.numbers.slice(0, 5).join(", ") + (genOutput.numbers.length > 5 ? "..." : ""),
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      title: sectionTitle,
+      expression,
+      result: resultStr,
+      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     };
 
-    const updated = [newItem, ...savedItems.filter((i) => i.expression !== newItem.expression)].slice(0, 20);
+    const updated = [newItem, ...savedItems.filter(item => item.result !== resultStr)].slice(0, 15);
     setSavedItems(updated);
     try {
       localStorage.setItem("saved_random_calculations", JSON.stringify(updated));
-    } catch (e) { }
+    } catch (err) {}
 
-    setJustSaved(true);
-    setTimeout(() => setJustSaved(false), 2000);
+    setSavedSection(sectionId);
+    setTimeout(() => setSavedSection(null), 2000);
   };
 
   const handleDeleteSaved = (id: string) => {
-    const updated = savedItems.filter((i) => i.id !== id);
+    const updated = savedItems.filter(item => item.id !== id);
     setSavedItems(updated);
     try {
       localStorage.setItem("saved_random_calculations", JSON.stringify(updated));
-    } catch (e) { }
+    } catch (e) {}
+  };
+
+  const handleClearAllSaved = () => {
+    setSavedItems([]);
+    try {
+      localStorage.removeItem("saved_random_calculations");
+    } catch (e) {}
+  };
+
+  // =========================================================================
+  // MODULE 1: BASIC RANDOM NUMBER GENERATOR
+  // Inputs: Lower Limit = 1, Upper Limit = 100
+  // Output: Generated random integer (e.g. 13)
+  // =========================================================================
+  const [m1Min, setM1Min] = useState<string>("1");
+  const [m1Max, setM1Max] = useState<string>("100");
+  const [m1Result, setM1Result] = useState<string>(() => generateRandomBasic("1", "100"));
+
+  const handleM1Generate = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setM1Result(generateRandomBasic(m1Min, m1Max));
+  };
+
+  const handleM1Clear = () => {
+    setM1Min("");
+    setM1Max("");
+    setM1Result("");
+  };
+
+
+  // =========================================================================
+  // MODULE 2: COMPREHENSIVE VERSION
+  // Inputs: Lower Limit = 0.2, Upper Limit = 112.5, Generate 1 numbers,
+  // Type: Integer / Decimal (default Decimal), Precision = 50 digits
+  // Output: Generated high-precision decimal (e.g. 96.77650503355482490123...)
+  // =========================================================================
+  const [m2Min, setM2Min] = useState<string>("0.2");
+  const [m2Max, setM2Max] = useState<string>("112.5");
+  const [m2Count, setM2Count] = useState<string>("1");
+  const [m2Type, setM2Type] = useState<"integer" | "decimal">("decimal");
+  const [m2Precision, setM2Precision] = useState<string>("50");
+  const [m2Result, setM2Result] = useState<string>(() =>
+    generateRandomComprehensive("0.2", "112.5", "1", "decimal", "50")
+  );
+
+  const handleM2Generate = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setM2Result(generateRandomComprehensive(m2Min, m2Max, m2Count, m2Type, m2Precision));
+  };
+
+  const handleM2Clear = () => {
+    setM2Min("");
+    setM2Max("");
+    setM2Count("1");
+    setM2Type("decimal");
+    setM2Precision("50");
+    setM2Result("");
   };
 
   return (
-    <div className="space-y-6">
-      {/* MODE TABS */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-zinc-200 dark:border-zinc-800 scrollbar-none text-xs">
-        {[
-          { id: "simple", label: "Quick Integer Generator" },
-          { id: "comprehensive", label: "Comprehensive Generator" },
-          { id: "crypto", label: "Cryptographic PRNG (WebCrypto)" },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => {
-              setActiveTab(tab.id);
-              if (tab.id === "crypto") setUseCrypto(true);
-              else setUseCrypto(false);
-            }}
-            className={`px-3 py-1.5 rounded-lg font-bold whitespace-nowrap transition-all cursor-pointer ${activeTab === tab.id
-              ? "bg-blue-600 text-white shadow-xs"
-              : "bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200"
-              }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+    <div className="space-y-8 font-sans text-slate-800 dark:text-slate-200">
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* LEFT COLUMN: CONTROLS & INPUTS (Col 7) */}
-        <div className="lg:col-span-7 space-y-5">
-          <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-            <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
-              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Random Generator Settings</span>
-              </h3>
-              <button
-                onClick={() => setRefreshTrigger((prev) => prev + 1)}
-                className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-xs flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95 transition-all"
-              >
-                <RefreshCw className="w-3.5 h-3.5" /> Re-Generate
-              </button>
-            </div>
+      {/* ========================================================================= */}
+      {/* MODULE 1: RANDOM NUMBER GENERATOR (BASIC) */}
+      {/* ========================================================================= */}
+      <section id="random-number-generator" className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg p-5 shadow-xs space-y-4">
+        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+          Random Number Generator
+        </h2>
+        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          This version of the generator creates a random integer. It can deal with very large integers up to a few thousand digits.
+        </p>
 
-            {/* MIN & MAX RANGE INPUTS */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Lower Limit (Min)</label>
-                <input
-                  type="number"
-                  value={minVal}
-                  onChange={(e) => setMinVal(e.target.value)}
-                  className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
-                />
+        {/* Result Header & Large Display */}
+        {m1Result && (
+          <div className="space-y-3 max-w-md">
+            <div className="border border-blue-600 rounded overflow-hidden">
+              <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5 flex items-center justify-between">
+                <span>Result</span>
+                <button
+                  type="button"
+                  onClick={(e) => handleSaveResult(e, "m1", "Random Number Generator", `Range [${m1Min}, ${m1Max}]`, m1Result)}
+                  className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+                >
+                  {savedSection === "m1" ? "Saved!" : "Save"}
+                </button>
               </div>
-              <div>
-                <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Upper Limit (Max)</label>
-                <input
-                  type="number"
-                  value={maxVal}
-                  onChange={(e) => setMaxVal(e.target.value)}
-                  className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
-                />
+
+              <div className="bg-white dark:bg-slate-900 p-4 text-slate-900 dark:text-slate-100 font-sans tabular-nums font-bold text-xl sm:text-2xl break-all">
+                {m1Result}
               </div>
             </div>
-
-            {/* COMPREHENSIVE SETTINGS */}
-            {activeTab !== "simple" && (
-              <div className="space-y-4 pt-2 border-t border-zinc-200 dark:border-zinc-800">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Quantity (N)</label>
-                    <input
-                      type="number"
-                      min="1"
-                      max="10000"
-                      value={genCount}
-                      onChange={(e) => setGenCount(e.target.value)}
-                      className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:ring-2 focus:ring-blue-600 outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Number Type</label>
-                    <select
-                      value={numType}
-                      onChange={(e: any) => setNumType(e.target.value)}
-                      className="w-full px-3 py-2 font-sans tabular-nums font-bold text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl outline-none cursor-pointer"
-                    >
-                      <option value="integer">Integer</option>
-                      <option value="decimal">Decimal</option>
-                    </select>
-                  </div>
-                  {numType === "decimal" && (
-                    <div>
-                      <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Precision (Digits)</label>
-                      <input
-                        type="number"
-                        min="1"
-                        max="10"
-                        value={precision}
-                        onChange={(e) => setPrecision(e.target.value)}
-                        className="w-full px-3 py-2 font-sans tabular-nums font-bold text-sm bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-xl outline-none"
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-wrap items-center gap-4 text-xs font-bold">
-                  <label className="flex items-center gap-2 cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={uniqueOnly}
-                      onChange={(e) => setUniqueOnly(e.target.checked)}
-                      className="rounded border-zinc-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
-                    />
-                    <span>Unique Values Only</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={useCrypto}
-                      onChange={(e) => setUseCrypto(e.target.checked)}
-                      className="rounded border-zinc-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
-                    />
-                    <span>Hardware Cryptographic (WebCrypto)</span>
-                  </label>
-                </div>
-              </div>
-            )}
           </div>
+        )}
 
-          {/* LIVE HISTOGRAM VISUALIZER */}
-          {genOutput && (
-            <RandomVisualizer
-              numbers={genOutput.numbers}
-              histogramBins={genOutput.histogramBins}
-              mean={genOutput.mean}
-              stdDev={genOutput.stdDev}
-              min={genOutput.min}
-              max={genOutput.max}
+        {/* Form Inputs */}
+        <form onSubmit={handleM1Generate} className="space-y-3 bg-slate-50 dark:bg-slate-800/50 p-4 rounded border border-slate-200 dark:border-slate-700 max-w-md">
+          <div className="flex items-center justify-between gap-4">
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Lower Limit</label>
+            <input
+              type="text"
+              value={m1Min}
+              onChange={(e) => setM1Min(e.target.value)}
+              placeholder="1"
+              aria-label="Lower limit"
+              className="w-48 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2.5 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600"
             />
-          )}
-        </div>
-
-        {/* RIGHT COLUMN: RESULTS & STEP ENGINE (Col 5) */}
-        <div className="lg:col-span-5 space-y-4 sticky top-4">
-          <div className="p-4 sm:p-5 bg-slate-900 text-white rounded-2xl border border-slate-800 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                <span>🎯</span> Generated Output
-              </span>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleSave}
-                  className="text-xs text-slate-800 dark:text-slate-200 font-semibold bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs flex items-center gap-1 font-semibold px-2 py-0.5 bg-slate-800 hover:bg-slate-700 rounded transition-colors no-print"
-                  title="Save results"
-                >
-                  {justSaved ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Bookmark className="w-3.5 h-3.5 text-blue-400" />}
-                  {justSaved ? "Saved!" : "Save"}
-                </button>
-                <button
-                  onClick={handleCopy}
-                  className="text-xs text-slate-800 dark:text-slate-200 font-semibold bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs flex items-center gap-1 font-semibold no-print"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                  {copied ? "Copied" : "Copy"}
-                </button>
-              </div>
-            </div>
-
-            {genOutput ? (
-              <div className="space-y-3">
-                {/* Format Selector */}
-                <div className="flex items-center justify-between text-[11px] font-sans tabular-nums text-slate-400">
-                  <span>Format:</span>
-                  <div className="flex gap-1">
-                    {(["comma", "space", "newline", "json"] as const).map((fmt) => (
-                      <button
-                        key={fmt}
-                        onClick={() => setOutputFormat(fmt)}
-                        className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold cursor-pointer ${outputFormat === fmt ? "bg-blue-600 text-white" : "bg-slate-800 text-slate-300"
-                          }`}
-                      >
-                        {fmt}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Primary Large Output Display Box */}
-                <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl font-sans tabular-nums text-lg font-bold text-emerald-300 max-h-48 overflow-y-auto break-all">
-                  {formattedResults}
-                </div>
-
-                {/* Secondary Statistical Metrics */}
-                <div className="grid grid-cols-2 gap-2 text-xs font-sans tabular-nums">
-                  <div className="p-2.5 bg-slate-800/80 rounded-lg border border-slate-700">
-                    <div className="text-[10px] text-slate-400 font-sans">Sample Mean (μ)</div>
-                    <div className="font-bold text-slate-100">{genOutput.mean}</div>
-                  </div>
-                  <div className="p-2.5 bg-slate-800/80 rounded-lg border border-slate-700">
-                    <div className="text-[10px] text-slate-400 font-sans">Std Deviation (σ)</div>
-                    <div className="font-bold text-slate-100">{genOutput.stdDev}</div>
-                  </div>
-                  <div className="p-2.5 bg-slate-800/80 rounded-lg border border-slate-700">
-                    <div className="text-[10px] text-slate-400 font-sans">Range [Min, Max]</div>
-                    <div className="font-bold text-slate-100">[{genOutput.min}, {genOutput.max}]</div>
-                  </div>
-                  <div className="p-2.5 bg-slate-800/80 rounded-lg border border-slate-700">
-                    <div className="text-[10px] text-slate-400 font-sans">Sample Count (N)</div>
-                    <div className="font-bold text-slate-100">{genOutput.count}</div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="text-center py-6 text-slate-400 text-xs">
-                Click Re-Generate to generate random numbers.
-              </div>
-            )}
           </div>
 
-          {/* SAVED CALCULATIONS HISTORY */}
-          {savedItems.length > 0 && (
-            <div className="p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-3">
-              <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5"><span>Saved Calculations ({savedItems.length})</span>
-                </h4>
+          <div className="flex items-center justify-between gap-4">
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Upper Limit</label>
+            <input
+              type="text"
+              value={m1Max}
+              onChange={(e) => setM1Max(e.target.value)}
+              placeholder="100"
+              aria-label="Upper limit"
+              className="w-48 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2.5 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600"
+            />
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3 pt-2">
+            <button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors cursor-pointer"
+            >
+              Generate
+            </button>
+            <button
+              type="button"
+              onClick={handleM1Clear}
+              className="bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-semibold text-xs rounded px-4 py-1.5 transition-colors cursor-pointer"
+            >
+              Clear
+            </button>
+          </div>
+        </form>
+      </section>
+
+
+      {/* ========================================================================= */}
+      {/* MODULE 2: COMPREHENSIVE VERSION */}
+      {/* ========================================================================= */}
+      <section id="comprehensive-version" className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg p-5 shadow-xs space-y-4">
+        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+          Comprehensive Version
+        </h2>
+        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          This version of the generator can create one or many random integers or decimals. It can deal with very large numbers with up to 999 digits of precision.
+        </p>
+
+        {/* Result Header & Output Display */}
+        {m2Result && (
+          <div className="space-y-3 max-w-xl">
+            <div className="border border-blue-600 rounded overflow-hidden">
+              <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5 flex items-center justify-between">
+                <span>Result</span>
                 <button
-                  onClick={() => {
-                    setSavedItems([]);
-                    localStorage.removeItem("saved_random_calculations");
-                  }}
-                  className="text-[10px] text-zinc-400 hover:text-red-500 font-medium cursor-pointer"
+                  type="button"
+                  onClick={(e) => handleSaveResult(e, "m2", "Comprehensive Generator", `Range [${m2Min}, ${m2Max}] (${m2Type}, ${m2Precision} digits)`, m2Result)}
+                  className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
                 >
-                  Clear All
+                  {savedSection === "m2" ? "Saved!" : "Save"}
                 </button>
               </div>
 
-              <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
-                {savedItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-2 text-xs font-sans tabular-nums"
-                  >
-                    <div className="truncate">
-                      <div className="text-[10px] font-sans font-bold text-blue-600 dark:text-blue-400">{item.title}</div>
-                      <div className="text-zinc-700 dark:text-zinc-300 font-bold">{item.expression} ➔ <span className="text-emerald-600 dark:text-emerald-400">{item.result}</span></div>
-                    </div>
-                    <button
-                      onClick={() => handleDeleteSaved(item.id)}
-                      className="p-1 text-zinc-400 hover:text-red-500 rounded transition-colors"
-                      title="Remove"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ))}
+              <div className="bg-white dark:bg-slate-900 p-4 text-slate-900 dark:text-slate-100 font-sans tabular-nums font-semibold text-xs sm:text-sm leading-relaxed break-all max-h-64 overflow-y-auto">
+                {m2Result}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Form Inputs */}
+        <form onSubmit={handleM2Generate} className="space-y-3 bg-slate-50 dark:bg-slate-800/50 p-4 rounded border border-slate-200 dark:border-slate-700 max-w-md">
+          <div className="flex items-center justify-between gap-4">
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Lower Limit</label>
+            <input
+              type="text"
+              value={m2Min}
+              onChange={(e) => setM2Min(e.target.value)}
+              placeholder="0.2"
+              aria-label="Lower limit"
+              className="w-44 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2.5 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600"
+            />
+          </div>
+
+          <div className="flex items-center justify-between gap-4">
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Upper Limit</label>
+            <input
+              type="text"
+              value={m2Max}
+              onChange={(e) => setM2Max(e.target.value)}
+              placeholder="112.5"
+              aria-label="Upper limit"
+              className="w-44 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2.5 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600"
+            />
+          </div>
+
+          <div className="flex items-center justify-between gap-4">
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Generate</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={m2Count}
+                onChange={(e) => setM2Count(e.target.value)}
+                placeholder="1"
+                aria-label="Quantity of numbers to generate"
+                className="w-24 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2.5 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600 text-center"
+              />
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">numbers</span>
+            </div>
+          </div>
+
+          <div className="space-y-1 pt-1">
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">Type of result to generate?</label>
+            <div className="flex items-center gap-4 text-xs font-medium pt-0.5">
+              <label className="flex items-center gap-1.5 cursor-pointer">
+                <input
+                  type="radio"
+                  name="genType"
+                  value="integer"
+                  checked={m2Type === "integer"}
+                  onChange={() => setM2Type("integer")}
+                  className="accent-blue-600"
+                />
+                <span>Integer</span>
+              </label>
+              <label className="flex items-center gap-1.5 cursor-pointer">
+                <input
+                  type="radio"
+                  name="genType"
+                  value="decimal"
+                  checked={m2Type === "decimal"}
+                  onChange={() => setM2Type("decimal")}
+                  className="accent-blue-600"
+                />
+                <span>Decimal</span>
+              </label>
+            </div>
+          </div>
+
+          {m2Type === "decimal" && (
+            <div className="flex items-center justify-between gap-4 pt-1">
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Precision</label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={m2Precision}
+                  onChange={(e) => setM2Precision(e.target.value)}
+                  placeholder="50"
+                  aria-label="Precision digits"
+                  className="w-24 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2.5 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600 text-center"
+                />
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">digits</span>
               </div>
             </div>
           )}
 
-          {/* STEP-BY-STEP SOLUTION BREAKDOWN */}
-          {genOutput && genOutput.steps && (
-            <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5 border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <span>📘</span> Step-by-Step Generation Proof
-              </h4>
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3 pt-2">
+            <button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors cursor-pointer"
+            >
+              Generate
+            </button>
+            <button
+              type="button"
+              onClick={handleM2Clear}
+              className="bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-semibold text-xs rounded px-4 py-1.5 transition-colors cursor-pointer"
+            >
+              Clear
+            </button>
+          </div>
+        </form>
+      </section>
 
-              <div className="space-y-3">
-                {genOutput.steps.steps.map((st) => (
-                  <div key={st.stepNumber} className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-1">
-                    <div className="flex items-center justify-between text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                      <span>Step {st.stepNumber}: {st.title}</span>
-                    </div>
-                    <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold py-1">
-                      {st.latex}
-                    </div>
-                    <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
-                      {st.explanation}
-                    </p>
+
+      {/* ========================================================================= */}
+      {/* SAVED GENERATION HISTORY */}
+      {/* ========================================================================= */}
+      {savedItems.length > 0 && (
+        <section className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg p-5 shadow-xs space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+              <span>Saved Generations ({savedItems.length})</span>
+            </h3>
+            <button
+              type="button"
+              onClick={handleClearAllSaved}
+              className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer"
+            >
+              Clear All
+            </button>
+          </div>
+
+          <div className="space-y-2">
+            {savedItems.map((item) => (
+              <div
+                key={item.id}
+                className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/60 p-3 rounded border border-slate-200 dark:border-slate-700 text-xs font-sans"
+              >
+                <div className="space-y-0.5 min-w-0 pr-3">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-slate-900 dark:text-slate-100">{item.title}</span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400">{item.timestamp}</span>
                   </div>
-                ))}
+                  <p className="text-slate-600 dark:text-slate-300 truncate font-sans tabular-nums">
+                    {item.expression} &rarr; <strong className="text-blue-600 dark:text-blue-400">{item.result}</strong>
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleDeleteSaved(item.id)}
+                  className="text-slate-400 hover:text-red-600 p-1 transition-colors cursor-pointer shrink-0"
+                  title="Delete calculation"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
               </div>
-            </div>
-          )}
-        </div>
-      </div>
+            ))}
+          </div>
+        </section>
+      )}
+
     </div>
   );
 }
