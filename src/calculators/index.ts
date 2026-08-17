@@ -24,7 +24,16 @@ const RAW_CALCULATORS: CalculatorModuleDefinition[] = [
 
 // Deduplicate calculators by id to guarantee uniqueness
 export const ALL_CALCULATORS: CalculatorModuleDefinition[] = Array.from(
-  new Map(RAW_CALCULATORS.map((calc) => [calc.id.toLowerCase(), calc])).values()
+  new Map(
+    RAW_CALCULATORS.filter((c) => {
+      if (!c) return false;
+      if (!c.id || !c.slug) {
+        console.error("Found invalid calculator definition missing id/slug:", c);
+        return false;
+      }
+      return true;
+    }).map((calc) => [calc.id.toLowerCase(), calc])
+  ).values()
 );
 
 // Map lookup table for O(1) slug/id resolution
@@ -37,7 +46,9 @@ ALL_CALCULATORS.forEach((calc) => {
 
 export function getCalculatorDefinition(idOrSlug: string): CalculatorModuleDefinition | undefined {
   if (!idOrSlug) return undefined;
-  return CALCULATOR_REGISTRY[idOrSlug.toLowerCase().trim()];
+  const key = idOrSlug.toLowerCase().trim();
+  if (CALCULATOR_REGISTRY[key]) return CALCULATOR_REGISTRY[key];
+  return ALL_CALCULATORS.find((c) => c && (c.id?.toLowerCase() === key || c.slug?.toLowerCase() === key));
 }
 
 export function getAllCalculatorDefinitions(): CalculatorModuleDefinition[] {
