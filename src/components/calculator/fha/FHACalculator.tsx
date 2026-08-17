@@ -423,18 +423,24 @@ export function FHACalculator() {
                 </div>
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Finance UFMIP (1.75%)</label>
-                  <div className="flex bg-slate-200 dark:bg-slate-800 p-0.5 rounded-lg font-bold">
+                  <div className="flex w-full h-8 bg-slate-200 dark:bg-slate-800 p-0.5 rounded-lg font-bold">
                     <button
+                      type="button"
                       onClick={() => setFinanceUfmip(true)}
-                      className={`px-2 py-1 rounded-md text-[11px] cursor-pointer ${financeUfmip ? "bg-blue-600 text-white" : "text-slate-700 dark:text-slate-300"}`}
+                      className={`flex-1 h-full rounded-md text-[11px] font-extrabold transition-colors cursor-pointer flex items-center justify-center ${
+                        financeUfmip ? "bg-blue-600 text-white shadow-xs" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                      }`}
                     >
-                      Yes
+                      Yes (Loan)
                     </button>
                     <button
+                      type="button"
                       onClick={() => setFinanceUfmip(false)}
-                      className={`px-2 py-1 rounded-md text-[11px] cursor-pointer ${!financeUfmip ? "bg-blue-600 text-white" : "text-slate-700 dark:text-slate-300"}`}
+                      className={`flex-1 h-full rounded-md text-[11px] font-extrabold transition-colors cursor-pointer flex items-center justify-center ${
+                        !financeUfmip ? "bg-blue-600 text-white shadow-xs" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                      }`}
                     >
-                      Cash
+                      No (Cash)
                     </button>
                   </div>
                 </div>
