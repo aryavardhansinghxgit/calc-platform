@@ -330,7 +330,7 @@ export function RomanNumeralCalculator() {
       sections.push({
         title: "Roman Numeral Conversion Analysis",
         items: [
-          { label: "Arabic Integer Value", value: card1Result.arabicNumber.toLocaleString() },
+          { label: "Arabic Integer Value", value: card1Result.arabicNumber.toLocaleString("en-US") },
           { label: "Roman Numeral (Unicode)", value: card1Result.romanUnicode },
           { label: "Roman Numeral (ASCII)", value: card1Result.romanAscii },
           { label: "Additive Place Expansion", value: card1Result.stepByStepFormula },
@@ -372,7 +372,7 @@ export function RomanNumeralCalculator() {
       },
       keyMetrics: [
         { label: "Roman Numeral", value: card1Result ? card1Result.romanUnicode : "—", highlight: true },
-        { label: "Arabic Decimal", value: card1Result ? card1Result.arabicNumber.toLocaleString() : "—" },
+        { label: "Arabic Decimal", value: card1Result ? card1Result.arabicNumber.toLocaleString("en-US") : "—" },
         { label: "Date in Roman", value: dateResult ? dateResult.formattedMDY : "—" },
       ],
       sections,
@@ -401,7 +401,7 @@ export function RomanNumeralCalculator() {
         onSave={() => {
           if (!card1Result) return;
           card1Saved.save(
-            `${inputVal} ➔ ${card1Result.romanUnicode} (${card1Result.arabicNumber.toLocaleString()})`,
+            `${inputVal} ➔ ${card1Result.romanUnicode} (${card1Result.arabicNumber.toLocaleString("en-US")})`,
             card1Result
           );
           flashSave(setCard1SaveSuccess);
@@ -487,7 +487,7 @@ export function RomanNumeralCalculator() {
                     {card1Result.romanUnicode}
                   </span>
                   <span className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 font-sans">
-                    = {card1Result.arabicNumber.toLocaleString()}
+                    = {card1Result.arabicNumber.toLocaleString("en-US")}
                   </span>
                 </div>
 
@@ -515,7 +515,7 @@ export function RomanNumeralCalculator() {
         <CompactSavedDrawer
           {...card1Saved}
           cardTitle="Roman Converter"
-          formatSummary={(r) => `${r.romanUnicode} = ${r.arabicNumber.toLocaleString()}`}
+          formatSummary={(r) => `${r.romanUnicode} = ${r.arabicNumber.toLocaleString("en-US")}`}
         />
       </CompactCardWrapper>
 

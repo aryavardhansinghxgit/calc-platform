@@ -131,7 +131,7 @@ export function arabicToRoman(num: number, useVinculum = true): RomanConversionR
       arabicPart: partValue,
       romanPart: partAscii,
       unicodePart: partUni,
-      explanation: `${partValue.toLocaleString()} = ${partUni}`,
+      explanation: `${partValue.toLocaleString("en-US")} = ${partUni}`,
     });
   }
 
