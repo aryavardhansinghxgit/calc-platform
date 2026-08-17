@@ -18,17 +18,17 @@ import {
 export function CdCalculator() {
   const [currencySymbol, setCurrencySymbol] = useState<string>("$");
 
-  // Common 3D styling classes with physical 3D extruded borders
+  // 3D effect strictly on input filling boxes, tight zero-filler padding
   const input3DClass =
-    "w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-slate-900 dark:text-slate-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none transition-all text-xs";
+    "w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-slate-900 dark:text-slate-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none transition-all text-xs";
   const select3DClass =
-    "w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-slate-900 dark:text-slate-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none cursor-pointer text-xs";
+    "w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-slate-900 dark:text-slate-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none cursor-pointer text-xs";
   const outerBox3DClass =
-    "rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-[0_5px_0_0_#1d4ed8,0_10px_20px_rgba(0,0,0,0.12),inset_0_2px_0_rgba(255,255,255,0.4)] transition-all";
+    "border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs";
   const innerCard3DClass =
-    "grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50/90 dark:bg-slate-900/60 border-2 border-slate-300 dark:border-slate-700 rounded-xl p-3.5 shadow-[0_3px_0_0_#cbd5e1,0_6px_12px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.8)] text-xs";
+    "grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xs text-xs";
   const resultCard3DClass =
-    "bg-gradient-to-br from-blue-50/90 to-indigo-50/70 dark:from-slate-900 dark:to-blue-950/40 border-2 border-blue-300 dark:border-blue-800 rounded-xl p-3.5 shadow-[0_4px_0_0_#93c5fd,0_8px_16px_rgba(37,99,235,0.1),inset_0_1px_0_rgba(255,255,255,0.8)] space-y-3";
+    "bg-gradient-to-br from-blue-50/90 to-indigo-50/70 dark:from-slate-900 dark:to-blue-950/40 border border-blue-200 dark:border-blue-900/60 rounded-xl p-3 shadow-xs space-y-2";
 
   // =========================================================================
   // BOX 1: STANDARD FIXED-RATE CD GROWTH ENGINE

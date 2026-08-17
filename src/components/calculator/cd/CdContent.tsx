@@ -4,7 +4,7 @@ import React from "react";
 
 export function CdContent() {
   return (
-    <div className="space-y-6 text-black dark:text-white font-medium leading-normal max-w-4xl mx-auto text-xs">
+    <div className="space-y-3 text-black dark:text-white font-medium leading-normal max-w-4xl mx-auto text-xs">
       {/* H1 Title */}
       <div className="border-b border-slate-300 dark:border-slate-700 pb-2">
         <h1 className="text-xl font-black text-black dark:text-white tracking-tight">
