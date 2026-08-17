@@ -32,6 +32,7 @@ import { INTEREST_RATE_CALCULATOR } from "./interest-rate";
 import { SIMPLE_INTEREST_CALCULATOR } from "./simple-interest";
 import { INVESTMENT_CALCULATOR } from "./investment";
 import { SAVINGS_CALCULATOR } from "./savings";
+import { CD_CALCULATOR } from "./cd";
 import { SIP_CALCULATOR } from "./sip";
 import { FD_CALCULATOR } from "./fd";
 import { RD_CALCULATOR } from "./rd";
@@ -107,6 +108,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   SIMPLE_INTEREST_CALCULATOR,
   INVESTMENT_CALCULATOR,
   SAVINGS_CALCULATOR,
+  CD_CALCULATOR,
   SIP_CALCULATOR,
   FD_CALCULATOR,
   RD_CALCULATOR,

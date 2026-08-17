@@ -75,6 +75,12 @@ export function searchCalculators(query: string): CalculatorModuleDefinition[] {
   const tokens = q.split(/\s+/).filter(Boolean);
 
   const aliases: Record<string, string[]> = {
+    cd: ["cd-calculator"],
+    "certificate of deposit": ["cd-calculator"],
+    "cd calculator": ["cd-calculator"],
+    "cd interest": ["cd-calculator"],
+    "cd ladder": ["cd-calculator"],
+    "cd apy": ["cd-calculator"],
     interest: ["interest-rate-calculator", "interest-calculator"],
     tvm: ["finance-calculator"],
     finance: ["finance-calculator", "loan-calculator"],
@@ -102,8 +108,8 @@ export function searchCalculators(query: string): CalculatorModuleDefinition[] {
     property: ["mortgage", "rental-property-calculator"],
     tax: ["gst"],
     vat: ["gst"],
-    investment: ["sip", "compound-interest", "fd", "rd"],
-    deposit: ["fd", "rd", "compound-interest"],
+    investment: ["sip", "compound-interest", "fd", "rd", "cd-calculator"],
+    deposit: ["fd", "rd", "compound-interest", "cd-calculator"],
     returns: ["sip", "compound-interest"],
     installment: ["emi", "loan", "mortgage"],
     weight: ["bmi"],
@@ -122,14 +128,19 @@ export function searchCalculators(query: string): CalculatorModuleDefinition[] {
     const title = calc.title.toLowerCase();
     const desc = calc.description.toLowerCase();
     const cat = calc.category.toLowerCase();
+    const subcat = (calc.subcategory || "").toLowerCase();
     const id = calc.id.toLowerCase();
     const slug = calc.slug.toLowerCase();
-    const tags = calc.tags ? calc.tags.map((t) => t.toLowerCase()) : [];
+    const tags = [
+      ...(calc.tags || []),
+      ...(calc.keywords || []),
+    ].map((t) => t.toLowerCase());
 
     if (
       title.includes(q) ||
       desc.includes(q) ||
       cat.includes(q) ||
+      subcat.includes(q) ||
       id.includes(q) ||
       slug.includes(q) ||
       tags.some((t) => t.includes(q))
@@ -146,6 +157,7 @@ export function searchCalculators(query: string): CalculatorModuleDefinition[] {
         title.includes(token) ||
         desc.includes(token) ||
         cat.includes(token) ||
+        subcat.includes(token) ||
         id.includes(token) ||
         slug.includes(token) ||
         tags.some((t) => t.includes(token))
