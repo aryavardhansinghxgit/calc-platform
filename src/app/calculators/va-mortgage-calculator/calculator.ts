@@ -163,15 +163,21 @@ export function calculateEntitlement(input: EntitlementInput): EntitlementResult
   if (fullEntitlementAvailable) {
     return {
       fullEntitlementAvailable: true,
-      maxZeroDownPurchasePrice: Math.max(targetHomePrice, countyLoanLimit),
+      maxZeroDownPurchasePrice: targetHomePrice > 0 ? targetHomePrice : countyLoanLimit,
       requiredDownPaymentForTarget: 0,
-      remainingEntitlement: countyLoanLimit * 0.25,
+      remainingEntitlement: Math.round(countyLoanLimit * 0.25),
     };
   }
 
+  // If user entered prior loan amount (e.g. > 100,000) vs direct 25% entitlement dollar amount
+  const actualPriorEntitlement =
+    priorUsedEntitlement > countyLoanLimit * 0.25
+      ? priorUsedEntitlement * 0.25
+      : priorUsedEntitlement;
+
   // Partial entitlement calculation:
   // Max Guaranty = 25% of County Limit - Prior Used Entitlement
-  const maxGuaranty = Math.max(0, countyLoanLimit * 0.25 - priorUsedEntitlement);
+  const maxGuaranty = Math.max(0, countyLoanLimit * 0.25 - actualPriorEntitlement);
   const maxZeroDownPurchasePrice = Math.round(maxGuaranty * 4);
 
   let requiredDownPaymentForTarget = 0;

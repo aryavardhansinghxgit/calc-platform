@@ -724,9 +724,35 @@ export function VAMortgageCalculator() {
                   : `Max $0-Down Price: ${currencySymbol}${entitlementCalc.maxZeroDownPurchasePrice.toLocaleString()}`}
               </div>
 
-              <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200">
-                Required Down Payment for Target: {currencySymbol}{entitlementCalc.requiredDownPaymentForTarget.toLocaleString()}
+              <div className="grid grid-cols-2 gap-2 text-xs pt-1">
+                <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase block">Required Down Payment</span>
+                  <span className="font-extrabold text-slate-800 dark:text-slate-200">{currencySymbol}{entitlementCalc.requiredDownPaymentForTarget.toLocaleString()}</span>
+                </div>
+                <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                  <span className="text-[10px] text-slate-400 font-bold uppercase block">Remaining VA Guaranty</span>
+                  <span className="font-extrabold text-emerald-600">{currencySymbol}{entitlementCalc.remainingEntitlement.toLocaleString()}</span>
+                </div>
               </div>
+            </div>
+          </div>
+
+          {/* Derivation Box */}
+          <div className="p-4 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl text-xs space-y-2 font-mono">
+            <span className="font-bold text-blue-600 dark:text-blue-400 block font-sans">VA Entitlement Formula Derivation:</span>
+            <div className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1 text-slate-700 dark:text-slate-300">
+              <div>{"25% County Guaranty Limit = " + currencySymbol + parseFloat(countyLimit).toLocaleString() + " × 25% = " + currencySymbol + (parseFloat(countyLimit) * 0.25).toLocaleString()}</div>
+              {parseFloat(priorEntitlement) > 0 ? (
+                <>
+                  <div>{"Remaining Available Guaranty = " + currencySymbol + (parseFloat(countyLimit) * 0.25).toLocaleString() + " - " + currencySymbol + parseFloat(priorEntitlement).toLocaleString() + " = " + currencySymbol + entitlementCalc.remainingEntitlement.toLocaleString()}</div>
+                  <div>{"Max $0-Down Purchase Price = " + currencySymbol + entitlementCalc.remainingEntitlement.toLocaleString() + " × 4 = " + currencySymbol + entitlementCalc.maxZeroDownPurchasePrice.toLocaleString()}</div>
+                  {entitlementCalc.requiredDownPaymentForTarget > 0 && (
+                    <div>{"Required Down Payment = (" + currencySymbol + parseFloat(targetPrice).toLocaleString() + " - " + currencySymbol + entitlementCalc.maxZeroDownPurchasePrice.toLocaleString() + ") × 25% = " + currencySymbol + entitlementCalc.requiredDownPaymentForTarget.toLocaleString()}</div>
+                  )}
+                </>
+              ) : (
+                <div>{"Full Entitlement Active: Blue Water Navy Act permits $0-Down home purchases up to any loan amount approved by lender!"}</div>
+              )}
             </div>
           </div>
 
