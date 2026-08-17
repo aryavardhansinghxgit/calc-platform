@@ -177,6 +177,8 @@ import { HeightCalculator } from "./height/HeightCalculator";
 import { HeightContent } from "./height/HeightContent";
 import { ConversionCalculator } from "./conversion/ConversionCalculator";
 import { ConversionContent } from "./conversion/ConversionContent";
+import { DensityCalculator } from "./density/DensityCalculator";
+import { DensityContent } from "./density/DensityContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -420,8 +422,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isElectricity = idLower === "electricity-calculator" || slugLower === "electricity-calculator";
   const isHeight = idLower === "height-calculator" || slugLower === "height-calculator";
   const isConversion = idLower === "conversion-calculator" || slugLower === "conversion-calculator";
+  const isDensity = idLower === "density-calculator" || slugLower === "density-calculator";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isDensity ? DensityContent :
     isConversion ? ConversionContent :
     isHeight ? HeightContent :
     isElectricity ? ElectricityContent :
@@ -688,6 +692,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
               <HeightCalculator />
             ) : isConversion ? (
               <ConversionCalculator />
+            ) : isDensity ? (
+              <DensityCalculator />
             ) : (
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
                 <div className="grid min-w-0 grid-cols-1 md:grid-cols-12 gap-5 items-start">
@@ -851,7 +857,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs text-slate-900 dark:text-slate-100">
         {/* Formula & Calculation Method */}
-        {definition.formulaDescription && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && (
+        {definition.formulaDescription && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && (
           <div className="space-y-2">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Formula & Calculation Method
@@ -873,7 +879,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         )}
 
         {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Custom suites per AGENTS.md policy) */}
-        {definition.category !== "Math" && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && (
+        {definition.category !== "Math" && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && (
           <div className="space-y-3">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Frequently Asked Questions
