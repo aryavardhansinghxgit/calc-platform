@@ -1,0 +1,47 @@
+export const rentVsBuyExamples = [
+  {
+    title: "Standard $500,000 Purchase vs. $3,000/mo Rent Profile",
+    description: "$500,000 home purchase with 20% down, 6.632% interest rate, 30-year loan vs $3,000/month rent with 3% annual rent inflation.",
+    inputs: {
+      homePrice: 500000,
+      downPaymentPct: 20,
+      loanTermYears: 30,
+      interestRate: 6.632,
+      buyingClosingCostsPct: 2.0,
+      sellingClosingCostsPct: 7.0,
+      propertyTaxAnnual: 7500,
+      propertyTaxGrowthPct: 3.0,
+      homeInsuranceAnnual: 2500,
+      hoaDuesMonthly: 0,
+      maintenancePct: 1.5,
+      homeAppreciationPct: 3.0,
+      monthlyRent: 3000,
+      annualRentIncreasePct: 3.0,
+      renterInsuranceMonthly: 15,
+      securityDeposit: 3000,
+      upfrontRentalFees: 100,
+      inflationRatePct: 3.0,
+      investmentReturnRatePct: 5.0,
+      taxFilingStatus: "married_joint",
+      marginalTaxRatePct: 25.0,
+      itemizeDeductions: true,
+    },
+    expectedOutput: {
+      breakevenMessage: "Buying is cheaper if you stay for 4.8 years or longer.",
+      priceToRentRatio: "13.9",
+    },
+  },
+  {
+    title: "HCOL Metro Market ($800,000 Home vs. $2,800/mo Rent)",
+    description: "High price-to-rent market where renting and investing the down payment surplus yields greater wealth.",
+    inputs: {
+      homePrice: 800000,
+      downPaymentPct: 20,
+      monthlyRent: 2800,
+    },
+    expectedOutput: {
+      priceToRentRatio: "23.8",
+      breakevenMessage: "Renting remains cheaper over the entire stay under these assumptions.",
+    },
+  },
+];
