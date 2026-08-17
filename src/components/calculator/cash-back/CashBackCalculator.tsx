@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { Bookmark, Trash2, ChevronDown, ChevronUp, Download, ShieldCheck, TrendingUp } from "lucide-react";
+import { Bookmark, Trash2, ChevronDown, ChevronUp, Download, ShieldCheck, TrendingUp, BarChart2 } from "lucide-react";
 import {
   calculateCashBackVsLowInterest,
   calculateBreakevenRate,
@@ -117,8 +117,8 @@ export function CashBackCalculator() {
     document.body.removeChild(link);
   };
 
-  // SVG Multi-Year Amortization Payoff Chart
-  const svgPayoffChart = useMemo(() => {
+  // High-Quality SVG Payoff & Cost Comparison Chart
+  const svgCharts = useMemo(() => {
     const data = cbCalc.amortizationSchedule;
     if (!data || data.length === 0) return null;
 
@@ -141,38 +141,84 @@ export function CashBackCalculator() {
       .join(" ");
 
     return (
-      <div className="space-y-2 pt-1">
-        <div className="flex items-center justify-between text-xs font-bold px-1">
-          <span className="text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-            <TrendingUp className="w-4 h-4 text-blue-600" />
-            Loan Principal Payoff Balance Curve ($)
-          </span>
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1.5 text-blue-600 font-extrabold"><span className="w-3 h-1 bg-blue-600 rounded-full inline-block"></span> Cash Back</span>
-            <span className="flex items-center gap-1.5 text-emerald-600 font-extrabold"><span className="w-3 h-1 bg-emerald-600 rounded-full inline-block"></span> Low APR</span>
+      <div className="space-y-4">
+        {/* Stacked Cost Bar Chart Component */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs font-bold px-1">
+            <span className="text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <BarChart2 className="w-4 h-4 text-blue-600" />
+              Total Cost Breakdown ($)
+            </span>
+            <div className="flex items-center gap-2 text-[10px]">
+              <span className="flex items-center gap-1 text-blue-600 font-bold"><span className="w-2.5 h-2.5 bg-blue-600 rounded"></span> Principal</span>
+              <span className="flex items-center gap-1 text-red-500 font-bold"><span className="w-2.5 h-2.5 bg-red-500 rounded"></span> Interest</span>
+              <span className="flex items-center gap-1 text-amber-500 font-bold"><span className="w-2.5 h-2.5 bg-amber-500 rounded"></span> Tax & Fees</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 p-3 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs shadow-xs">
+            {/* Cash Back Offer Bar */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between font-bold">
+                <span className="text-blue-600">Cash Back</span>
+                <span className="font-extrabold">{currencySymbol}{cbCalc.cashBackOffer.totalCost.toLocaleString()}</span>
+              </div>
+              <div className="h-4 w-full bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden flex">
+                <div className="bg-blue-600 h-full" style={{ width: `${(cbCalc.cashBackOffer.totalLoanAmount / cbCalc.cashBackOffer.totalCost) * 100}%` }}></div>
+                <div className="bg-red-500 h-full" style={{ width: `${(cbCalc.cashBackOffer.totalInterest / cbCalc.cashBackOffer.totalCost) * 100}%` }}></div>
+                <div className="bg-amber-500 h-full" style={{ width: `${((cbCalc.cashBackOffer.salesTax + (parseFloat(fees) || 0)) / cbCalc.cashBackOffer.totalCost) * 100}%` }}></div>
+              </div>
+            </div>
+
+            {/* Low Interest Offer Bar */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between font-bold">
+                <span className="text-emerald-600">Low Rate</span>
+                <span className="font-extrabold">{currencySymbol}{cbCalc.lowInterestOffer.totalCost.toLocaleString()}</span>
+              </div>
+              <div className="h-4 w-full bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden flex">
+                <div className="bg-blue-600 h-full" style={{ width: `${(cbCalc.lowInterestOffer.totalLoanAmount / cbCalc.lowInterestOffer.totalCost) * 100}%` }}></div>
+                <div className="bg-red-500 h-full" style={{ width: `${(cbCalc.lowInterestOffer.totalInterest / cbCalc.lowInterestOffer.totalCost) * 100}%` }}></div>
+                <div className="bg-amber-500 h-full" style={{ width: `${((cbCalc.lowInterestOffer.salesTax + (parseFloat(fees) || 0)) / cbCalc.lowInterestOffer.totalCost) * 100}%` }}></div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <svg viewBox="0 0 380 165" className="w-full h-40 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-2 shadow-xs">
-          <line x1="35" y1="30" x2="355" y2="30" stroke="#f1f5f9" strokeDasharray="3 3" />
-          <line x1="35" y1="82" x2="355" y2="82" stroke="#f1f5f9" strokeDasharray="3 3" />
-          <line x1="35" y1="135" x2="355" y2="135" stroke="#cbd5e1" />
+        {/* Loan Balance Payoff Line Graph */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs font-bold px-1">
+            <span className="text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <TrendingUp className="w-4 h-4 text-blue-600" />
+              Loan Principal Payoff Balance Curve ($)
+            </span>
+            <div className="flex items-center gap-3">
+              <span className="flex items-center gap-1.5 text-blue-600 font-extrabold"><span className="w-3 h-1 bg-blue-600 rounded-full inline-block"></span> Cash Back</span>
+              <span className="flex items-center gap-1.5 text-emerald-600 font-extrabold"><span className="w-3 h-1 bg-emerald-600 rounded-full inline-block"></span> Low APR</span>
+            </div>
+          </div>
 
-          <polyline fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" points={pointsCash} />
-          <polyline fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" points={pointsLow} />
+          <svg viewBox="0 0 380 165" className="w-full h-40 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-2 shadow-xs">
+            <line x1="35" y1="30" x2="355" y2="30" stroke="#f1f5f9" strokeDasharray="3 3" />
+            <line x1="35" y1="82" x2="355" y2="82" stroke="#f1f5f9" strokeDasharray="3 3" />
+            <line x1="35" y1="135" x2="355" y2="135" stroke="#cbd5e1" />
 
-          <text x="30" y="33" fontSize="8" fill="#94a3b8" textAnchor="end" fontWeight="bold">{currencySymbol}{Math.round(maxVal / 1000)}k</text>
-          <text x="30" y="138" fontSize="8" fill="#94a3b8" textAnchor="end" fontWeight="bold">{currencySymbol}0</text>
+            <polyline fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" points={pointsCash} />
+            <polyline fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" points={pointsLow} />
 
-          <text x="35" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Mo 1</text>
-          <text x="115" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Mo 15</text>
-          <text x="195" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Mo 30</text>
-          <text x="275" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Mo 45</text>
-          <text x="355" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Mo 60</text>
-        </svg>
+            <text x="30" y="33" fontSize="8" fill="#94a3b8" textAnchor="end" fontWeight="bold">{currencySymbol}{Math.round(maxVal / 1000)}k</text>
+            <text x="30" y="138" fontSize="8" fill="#94a3b8" textAnchor="end" fontWeight="bold">{currencySymbol}0</text>
+
+            <text x="35" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Mo 1</text>
+            <text x="115" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Mo 15</text>
+            <text x="195" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Mo 30</text>
+            <text x="275" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Mo 45</text>
+            <text x="355" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Mo 60</text>
+          </svg>
+        </div>
       </div>
     );
-  }, [cbCalc, currencySymbol]);
+  }, [cbCalc, currencySymbol, fees]);
 
   // =========================================================================
   // BOX 2 TO 6 STATES
@@ -394,7 +440,7 @@ export function CashBackCalculator() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 1. CASH BACK OR LOW INTEREST CALCULATOR (EXACT COMPETITOR PARITY) */}
+      {/* 1. CASH BACK OR LOW INTEREST CALCULATOR (TWO COLUMNS INPUTS & TWO COLUMNS RESULTS) */}
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
@@ -410,144 +456,170 @@ export function CashBackCalculator() {
         </div>
 
         <div className="p-5 space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            {/* 3 Input Columns matching Calculator.net */}
-            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs text-xs">
-              {/* Column 1: Cash Back Offer */}
-              <div className="space-y-3">
-                <span className="font-extrabold text-blue-600 dark:text-blue-400 block border-b border-slate-200 dark:border-slate-800 pb-1">Cash Back Offer</span>
+          {/* TWO COLUMNS INPUT SECTION */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs text-xs">
+            {/* Column 1: Vehicle Purchase & Rebate Offer Inputs */}
+            <div className="space-y-3">
+              <span className="font-extrabold text-blue-600 dark:text-blue-400 block border-b border-slate-200 dark:border-slate-800 pb-1 uppercase tracking-wider text-[11px]">
+                Vehicle Purchase & Rebate Parameters
+              </span>
 
-                <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Cash Back Amount ($)</label>
-                  <input type="number" value={cashBackAmount} onChange={(e) => setCashBackAmount(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
-                </div>
-                <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Interest Rate (High) %</label>
-                  <input type="number" step="0.1" value={highInterestRate} onChange={(e) => setHighInterestRate(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
-                </div>
+              <div>
+                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Auto Price ($)</label>
+                <input type="number" value={autoPrice} onChange={(e) => setAutoPrice(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
               </div>
 
-              {/* Column 2: Low Interest Rate Offer */}
-              <div className="space-y-3">
-                <span className="font-extrabold text-emerald-600 dark:text-emerald-400 block border-b border-slate-200 dark:border-slate-800 pb-1">Low Interest Rate Offer</span>
-
-                <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Interest Rate (Low) %</label>
-                  <input type="number" step="0.1" value={lowInterestRate} onChange={(e) => setLowInterestRate(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
-                </div>
+              <div>
+                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Cash Back Amount ($)</label>
+                <input type="number" value={cashBackAmount} onChange={(e) => setCashBackAmount(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
               </div>
 
-              {/* Column 3: Other Information */}
-              <div className="space-y-3">
-                <span className="font-extrabold text-amber-600 dark:text-amber-400 block border-b border-slate-200 dark:border-slate-800 pb-1">Other Information</span>
+              <div>
+                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Down Payment ($)</label>
+                <input type="number" value={downPayment} onChange={(e) => setDownPayment(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+              </div>
 
-                <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Auto Price ($)</label>
-                  <input type="number" value={autoPrice} onChange={(e) => setAutoPrice(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
-                </div>
-                <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Loan Term (months)</label>
-                  <input type="number" value={loanTermMonths} onChange={(e) => setLoanTermMonths(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
-                </div>
-                <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Down Payment ($)</label>
-                  <input type="number" value={downPayment} onChange={(e) => setDownPayment(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
-                </div>
-                <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Trade-in Value ($)</label>
-                  <input type="number" value={tradeInValue} onChange={(e) => setTradeInValue(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
-                </div>
-                <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Sales Tax %</label>
-                  <input type="number" step="0.1" value={salesTaxRate} onChange={(e) => setSalesTaxRate(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
-                </div>
-                <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Fees & Title ($)</label>
-                  <input type="number" value={fees} onChange={(e) => setFees(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
-                </div>
-                <div className="pt-1 space-y-1 text-[11px] font-bold text-slate-600 dark:text-slate-400">
-                  <label className="flex items-center gap-1.5 cursor-pointer">
-                    <input type="checkbox" checked={includeFeesInLoan} onChange={(e) => setIncludeFeesInLoan(e.target.checked)} className="rounded border-slate-300 text-blue-600" />
-                    <span>Include All Fees in Loan</span>
-                  </label>
-                  <label className="flex items-center gap-1.5 cursor-pointer">
-                    <input type="checkbox" checked={taxAfterRebate} onChange={(e) => setTaxAfterRebate(e.target.checked)} className="rounded border-slate-300 text-blue-600" />
-                    <span>Sales Tax Applied After Rebate</span>
-                  </label>
-                </div>
+              <div>
+                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Trade-in Value ($)</label>
+                <input type="number" value={tradeInValue} onChange={(e) => setTradeInValue(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Title, Registration & Fees ($)</label>
+                <input type="number" value={fees} onChange={(e) => setFees(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
               </div>
             </div>
 
-            {/* Elevated Hero Result Output Box */}
-            <div className="lg:col-span-4 space-y-4">
-              <div className="bg-gradient-to-br from-blue-50/90 to-indigo-50/70 dark:from-slate-900 dark:to-blue-950/40 border border-blue-200 dark:border-blue-900/60 rounded-2xl p-5 shadow-xs space-y-4">
-                <div className="flex items-center justify-between border-b border-blue-200/60 dark:border-blue-900/40 pb-2">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400 flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-blue-600" />
-                    Decision Result
-                  </span>
-                  <span className="px-2 py-0.5 rounded-md bg-blue-600 text-white text-[10px] font-extrabold">
-                    Breakeven: {cbCalc.breakevenRate}%
-                  </span>
-                </div>
+            {/* Column 2: Rates, Term & Tax Parameters */}
+            <div className="space-y-3">
+              <span className="font-extrabold text-emerald-600 dark:text-emerald-400 block border-b border-slate-200 dark:border-slate-800 pb-1 uppercase tracking-wider text-[11px]">
+                Financing Rates & Tax Settings
+              </span>
 
-                <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-blue-200 dark:border-blue-900/60 shadow-xs space-y-1">
-                  <div className="text-sm font-extrabold text-slate-900 dark:text-slate-100 leading-snug">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Interest Rate (High) %</label>
+                  <input type="number" step="0.1" value={highInterestRate} onChange={(e) => setHighInterestRate(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Interest Rate (Low) %</label>
+                  <input type="number" step="0.1" value={lowInterestRate} onChange={(e) => setLowInterestRate(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Loan Term (months)</label>
+                  <input type="number" value={loanTermMonths} onChange={(e) => setLoanTermMonths(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Sales Tax %</label>
+                  <input type="number" step="0.1" value={salesTaxRate} onChange={(e) => setSalesTaxRate(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Your State</label>
+                <select value={selectedState} onChange={(e) => setSelectedState(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold">
+                  <option value="CA">California</option>
+                  <option value="TX">Texas</option>
+                  <option value="FL">Florida</option>
+                  <option value="NY">New York</option>
+                  <option value="IL">Illinois</option>
+                  <option value="PA">Pennsylvania</option>
+                  <option value="OH">Ohio</option>
+                  <option value="GA">Georgia</option>
+                </select>
+              </div>
+
+              <div className="pt-2 space-y-1.5 text-[11px] font-bold text-slate-600 dark:text-slate-400">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={includeFeesInLoan} onChange={(e) => setIncludeFeesInLoan(e.target.checked)} className="rounded border-slate-300 text-blue-600 h-4 w-4" />
+                  <span>Include All Fees & Taxes in Loan Balance</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={taxAfterRebate} onChange={(e) => setTaxAfterRebate(e.target.checked)} className="rounded border-slate-300 text-blue-600 h-4 w-4" />
+                  <span>Sales Tax Applied After Rebate Deduction</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          {/* TWO COLUMNS PROFESSIONAL RESULT SECTION */}
+          <div className="bg-gradient-to-br from-blue-50/90 to-indigo-50/70 dark:from-slate-900 dark:to-blue-950/40 border border-blue-200 dark:border-blue-900/60 rounded-2xl p-5 shadow-xs space-y-4">
+            <div className="flex items-center justify-between border-b border-blue-200/60 dark:border-blue-900/40 pb-3">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-blue-600" />
+                <span className="text-sm font-extrabold text-slate-900 dark:text-slate-100">
+                  Decision Recommendation & Offer Analysis
+                </span>
+              </div>
+              <span className="px-3 py-1 rounded-lg bg-blue-600 text-white text-xs font-extrabold">
+                Breakeven Rate: {cbCalc.breakevenRate}%
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+              {/* Result Column 1: Decision Summary & Offer Comparison Table */}
+              <div className="space-y-4">
+                <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-blue-200 dark:border-blue-900/60 shadow-xs space-y-1">
+                  <div className="text-base font-extrabold text-blue-600 dark:text-blue-400 leading-snug">
                     {cbCalc.winningMessage}
                   </div>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 font-medium">
                     {cbCalc.subMessage}
                   </p>
                 </div>
 
                 {/* Side-by-Side Offer Summary Table */}
-                <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
                   <table className="w-full text-xs text-left border-collapse font-sans">
-                    <thead className="bg-slate-100 dark:bg-slate-800 font-bold text-[10px] uppercase text-slate-500">
+                    <thead className="bg-slate-100 dark:bg-slate-800 font-bold text-[11px] uppercase text-slate-600 dark:text-slate-300">
                       <tr>
-                        <th className="p-2">Metric</th>
-                        <th className="p-2 text-blue-600">Cash Back</th>
-                        <th className="p-2 text-emerald-600">Low Rate</th>
+                        <th className="p-2.5">Financing Metric</th>
+                        <th className="p-2.5 text-blue-600 font-extrabold">Cash Back</th>
+                        <th className="p-2.5 text-emerald-600 font-extrabold">Low Rate</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-[11px]">
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-xs">
                       <tr>
-                        <td className="p-2 font-sans font-bold text-slate-700 dark:text-slate-300">Loan Amount</td>
-                        <td className="p-2">{currencySymbol}{cbCalc.cashBackOffer.totalLoanAmount.toLocaleString()}</td>
-                        <td className="p-2">{currencySymbol}{cbCalc.lowInterestOffer.totalLoanAmount.toLocaleString()}</td>
-                      </tr>
-                      <tr>
-                        <td className="p-2 font-sans font-bold text-slate-700 dark:text-slate-300">Sales Tax</td>
-                        <td className="p-2">{currencySymbol}{cbCalc.cashBackOffer.salesTax.toLocaleString()}</td>
-                        <td className="p-2">{currencySymbol}{cbCalc.lowInterestOffer.salesTax.toLocaleString()}</td>
+                        <td className="p-2.5 font-sans font-bold text-slate-700 dark:text-slate-300">Total Loan Amount</td>
+                        <td className="p-2.5">{currencySymbol}{cbCalc.cashBackOffer.totalLoanAmount.toLocaleString()}</td>
+                        <td className="p-2.5">{currencySymbol}{cbCalc.lowInterestOffer.totalLoanAmount.toLocaleString()}</td>
                       </tr>
                       <tr>
-                        <td className="p-2 font-sans font-bold text-slate-700 dark:text-slate-300">Upfront Pay</td>
-                        <td className="p-2">{currencySymbol}{cbCalc.cashBackOffer.upfrontPayment.toLocaleString()}</td>
-                        <td className="p-2">{currencySymbol}{cbCalc.lowInterestOffer.upfrontPayment.toLocaleString()}</td>
-                      </tr>
-                      <tr className="bg-blue-50/50 dark:bg-blue-950/30">
-                        <td className="p-2 font-sans font-bold text-slate-900 dark:text-slate-100">Monthly Pay</td>
-                        <td className="p-2 font-extrabold text-blue-600">{currencySymbol}{cbCalc.cashBackOffer.monthlyPayment}</td>
-                        <td className="p-2 font-extrabold text-emerald-600">{currencySymbol}{cbCalc.lowInterestOffer.monthlyPayment}</td>
+                        <td className="p-2.5 font-sans font-bold text-slate-700 dark:text-slate-300">Sales Tax</td>
+                        <td className="p-2.5">{currencySymbol}{cbCalc.cashBackOffer.salesTax.toLocaleString()}</td>
+                        <td className="p-2.5">{currencySymbol}{cbCalc.lowInterestOffer.salesTax.toLocaleString()}</td>
                       </tr>
                       <tr>
-                        <td className="p-2 font-sans font-bold text-slate-700 dark:text-slate-300">Total Interest</td>
-                        <td className="p-2 text-red-500">{currencySymbol}{cbCalc.cashBackOffer.totalInterest.toLocaleString()}</td>
-                        <td className="p-2 text-emerald-600">{currencySymbol}{cbCalc.lowInterestOffer.totalInterest.toLocaleString()}</td>
+                        <td className="p-2.5 font-sans font-bold text-slate-700 dark:text-slate-300">Upfront Payment</td>
+                        <td className="p-2.5">{currencySymbol}{cbCalc.cashBackOffer.upfrontPayment.toLocaleString()}</td>
+                        <td className="p-2.5">{currencySymbol}{cbCalc.lowInterestOffer.upfrontPayment.toLocaleString()}</td>
                       </tr>
-                      <tr className="font-extrabold bg-slate-50 dark:bg-slate-800">
-                        <td className="p-2 font-sans text-slate-900 dark:text-slate-100">Total Cost</td>
-                        <td className="p-2 text-blue-600">{currencySymbol}{cbCalc.cashBackOffer.totalCost.toLocaleString()}</td>
-                        <td className="p-2 text-emerald-600">{currencySymbol}{cbCalc.lowInterestOffer.totalCost.toLocaleString()}</td>
+                      <tr className="bg-blue-50/60 dark:bg-blue-950/40">
+                        <td className="p-2.5 font-sans font-extrabold text-slate-900 dark:text-slate-100">Monthly Payment</td>
+                        <td className="p-2.5 font-extrabold text-blue-600 text-sm">{currencySymbol}{cbCalc.cashBackOffer.monthlyPayment}</td>
+                        <td className="p-2.5 font-extrabold text-emerald-600 text-sm">{currencySymbol}{cbCalc.lowInterestOffer.monthlyPayment}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-sans font-bold text-slate-700 dark:text-slate-300">Total Loan Interest</td>
+                        <td className="p-2.5 text-red-500 font-bold">{currencySymbol}{cbCalc.cashBackOffer.totalInterest.toLocaleString()}</td>
+                        <td className="p-2.5 text-emerald-600 font-bold">{currencySymbol}{cbCalc.lowInterestOffer.totalInterest.toLocaleString()}</td>
+                      </tr>
+                      <tr className="font-extrabold bg-slate-100 dark:bg-slate-800/80">
+                        <td className="p-2.5 font-sans text-slate-900 dark:text-slate-100">Total Overall Cost</td>
+                        <td className="p-2.5 text-blue-600 text-sm">{currencySymbol}{cbCalc.cashBackOffer.totalCost.toLocaleString()}</td>
+                        <td className="p-2.5 text-emerald-600 text-sm">{currencySymbol}{cbCalc.lowInterestOffer.totalCost.toLocaleString()}</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
+              </div>
 
-                <div className="pt-1">
-                  {svgPayoffChart}
-                </div>
+              {/* Result Column 2: Dual Professional Charts */}
+              <div className="space-y-4">
+                {svgCharts}
               </div>
             </div>
           </div>
