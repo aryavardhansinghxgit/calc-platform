@@ -23,7 +23,7 @@ export function Hero() {
               CALCULATE ANYTHING IN SECONDS
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl leading-normal">
-              Professional calculators for Finance, Health, Education, and Business decisions.
+              Professional calculators for Finance, Health, Math, and Engineering decisions.
             </p>
           </div>
 

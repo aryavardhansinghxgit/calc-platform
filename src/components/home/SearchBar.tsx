@@ -30,7 +30,7 @@ const defaultQuickTags: QuickTag[] = [
   { id: "sip", label: "SIP", category: "Finance" },
   { id: "compound-interest", label: "Compound", category: "Finance" },
   { id: "fd", label: "FD", category: "Finance" },
-  { id: "gst", label: "GST", category: "Business" },
+  { id: "gst", label: "GST", category: "Finance" },
   { id: "percentage", label: "Percentage", category: "Math" },
   { id: "bmi", label: "BMI", category: "Health" },
   { id: "age", label: "Age", category: "Date" },

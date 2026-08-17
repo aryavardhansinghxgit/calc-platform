@@ -3,7 +3,6 @@ import {
   HeartPulse,
   Calculator,
   Hammer,
-  Briefcase,
   ArrowRightLeft,
   Calendar,
   MoreHorizontal,
@@ -58,15 +57,6 @@ const RAW_CATEGORIES: Omit<CategoryData, "count">[] = [
     icon: Hammer,
     featured: true,
     color: "amber",
-  },
-  {
-    id: "business",
-    name: "Business",
-    slug: "business",
-    description: "Profit margin, markup percentage, ROI return on investment, and break-even point.",
-    icon: Briefcase,
-    featured: true,
-    color: "indigo",
   },
   {
     id: "converters",
