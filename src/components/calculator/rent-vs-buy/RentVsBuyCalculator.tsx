@@ -50,25 +50,6 @@ export function RentVsBuyCalculator() {
   const [justSavedBox1, setJustSavedBox1] = useState<boolean>(false);
   const [showHistoryBox1, setShowHistoryBox1] = useState<boolean>(false);
 
-  const applyPreset = (presetName: string) => {
-    if (presetName === "young_pro") {
-      setHomePrice("400000");
-      setMonthlyRent("2500");
-      setDownPaymentPct("10");
-      setInvestmentReturnRatePct("8.0");
-    } else if (presetName === "suburban_family") {
-      setHomePrice("600000");
-      setMonthlyRent("3200");
-      setDownPaymentPct("20");
-      setHomeAppreciationPct("4.0");
-    } else if (presetName === "hcol_metro") {
-      setHomePrice("900000");
-      setMonthlyRent("3100");
-      setDownPaymentPct("20");
-      setHomeAppreciationPct("3.5");
-    }
-  };
-
   const rvbCalc = useMemo(() => {
     return calculateRentVsBuy({
       homePrice: parseFloat(homePrice) || 0,
@@ -491,16 +472,6 @@ export function RentVsBuyCalculator() {
         </div>
 
         <div className="p-5 space-y-6">
-          {/* Quick Presets */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3 text-xs font-bold">
-            <span className="text-slate-600 dark:text-slate-400">Housing Profile Presets:</span>
-            <div className="flex items-center gap-2">
-              <button onClick={() => applyPreset("young_pro")} className="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 hover:bg-blue-100 cursor-pointer">Young Pro (5-Yr Stay)</button>
-              <button onClick={() => applyPreset("suburban_family")} className="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 hover:bg-blue-100 cursor-pointer">Suburban Family (15-Yr Stay)</button>
-              <button onClick={() => applyPreset("hcol_metro")} className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 cursor-pointer">HCOL Metro (Price-to-Rent &gt; 25)</button>
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             <div className="lg:col-span-7 space-y-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs text-xs">
               <span className="font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">Home Purchase & Financing Assumptions</span>

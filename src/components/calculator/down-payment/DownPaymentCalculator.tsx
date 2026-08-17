@@ -54,10 +54,6 @@ export function DownPaymentCalculator() {
     }
   };
 
-  const applyPreset = (presetPct: number) => {
-    setDownPaymentPct(presetPct.toString());
-  };
-
   const dpCalc = useMemo(() => {
     return calculateDownPayment({
       calculationMode,
@@ -459,15 +455,6 @@ export function DownPaymentCalculator() {
               >
                 Calculate Max Home Price by Upfront Cash
               </button>
-            </div>
-
-            {/* Quick Program Presets */}
-            <div className="flex items-center gap-1 text-[11px] font-bold">
-              <span className="text-slate-400">Presets:</span>
-              <button onClick={() => applyPreset(3)} className="px-2 py-0.5 rounded bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 hover:bg-blue-100 cursor-pointer">Conv 3%</button>
-              <button onClick={() => applyPreset(3.5)} className="px-2 py-0.5 rounded bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 hover:bg-blue-100 cursor-pointer">FHA 3.5%</button>
-              <button onClick={() => applyPreset(0)} className="px-2 py-0.5 rounded bg-emerald-50 dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 cursor-pointer">VA/USDA 0%</button>
-              <button onClick={() => applyPreset(20)} className="px-2 py-0.5 rounded bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 hover:bg-blue-100 cursor-pointer">20% No-PMI</button>
             </div>
           </div>
 
