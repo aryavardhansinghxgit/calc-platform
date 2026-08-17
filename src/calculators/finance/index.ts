@@ -25,6 +25,7 @@ import { AUTO_LEASE_CALCULATOR } from "./auto-lease";
 import { CASH_BACK_CALCULATOR } from "./cash-back";
 
 // 3. Investment
+import { FINANCE_CALCULATOR_SUITE } from "./finance";
 import { COMPOUND_INTEREST_CALCULATOR } from "./compound-interest";
 import { INTEREST_CALCULATOR } from "./interest";
 import { SIMPLE_INTEREST_CALCULATOR } from "./simple-interest";
@@ -98,6 +99,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   CASH_BACK_CALCULATOR,
 
   // Investment
+  FINANCE_CALCULATOR_SUITE,
   COMPOUND_INTEREST_CALCULATOR,
   INTEREST_CALCULATOR,
   SIMPLE_INTEREST_CALCULATOR,
