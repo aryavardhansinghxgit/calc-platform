@@ -78,6 +78,8 @@ export function searchCalculators(query: string): CalculatorModuleDefinition[] {
     car: ["auto-loan", "loan"],
     vehicle: ["auto-loan"],
     auto: ["auto-loan"],
+    equity: ["home-equity-loan-calculator", "heloc-calculator"],
+    heloc: ["heloc-calculator", "home-equity-loan-calculator"],
     va: ["va-mortgage-calculator"],
     fha: ["fha-loan-calculator"],
     apr: ["apr-calculator"],

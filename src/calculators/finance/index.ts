@@ -3,6 +3,7 @@ import { CalculatorModuleDefinition } from "../types";
 // 1. Mortgage & House
 import { MORTGAGE_CALCULATOR } from "./mortgage";
 import { HOME_EQUITY_LOAN_CALCULATOR } from "./home-equity";
+import { HELOC_CALCULATOR } from "./heloc";
 import { VA_MORTGAGE_CALCULATOR } from "./va";
 import { FHA_LOAN_CALCULATOR } from "./fha";
 import { APR_CALCULATOR } from "./apr";
@@ -72,6 +73,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   // Mortgage & House
   MORTGAGE_CALCULATOR,
   HOME_EQUITY_LOAN_CALCULATOR,
+  HELOC_CALCULATOR,
   VA_MORTGAGE_CALCULATOR,
   FHA_LOAN_CALCULATOR,
   APR_CALCULATOR,
