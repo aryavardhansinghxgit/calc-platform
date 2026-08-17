@@ -25,11 +25,11 @@ export function FAQSection({ faqs = defaultFaqs }: FAQSectionProps) {
   return (
     <Accordion type="single" collapsible className="w-full">
       {faqs.map((faq, index) => (
-        <AccordionItem key={index} value={`item-${index}`} className="border-zinc-200 dark:border-zinc-700">
-          <AccordionTrigger className="text-sm font-medium text-zinc-900 dark:text-zinc-200 hover:text-blue-600 py-2.5 text-left">
+        <AccordionItem key={index} value={`item-${index}`} className="border-slate-300 dark:border-slate-700">
+          <AccordionTrigger className="text-sm font-bold text-black dark:text-white hover:text-black dark:hover:text-white hover:no-underline py-2.5 text-left">
             {faq.question}
           </AccordionTrigger>
-          <AccordionContent className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed pb-2">
+          <AccordionContent className="text-xs text-black dark:text-white leading-relaxed pb-2 font-medium">
             {faq.answer}
           </AccordionContent>
         </AccordionItem>
