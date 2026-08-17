@@ -155,6 +155,8 @@ import { MolarityCalculator } from "./molarity/MolarityCalculator";
 import { MolarityContent } from "./molarity/MolarityContent";
 import { MolecularWeightCalculator } from "./molecular-weight/MolecularWeightCalculator";
 import { MolecularWeightContent } from "./molecular-weight/MolecularWeightContent";
+import { ConcreteCalculator } from "./concrete/ConcreteCalculator";
+import { ConcreteContent } from "./concrete/ConcreteContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -387,8 +389,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isGrade = idLower === "grade-calculator" || slugLower === "grade-calculator";
   const isMolarity = idLower === "molarity-calculator" || slugLower === "molarity-calculator";
   const isMolecularWeight = idLower === "molecular-weight-calculator" || slugLower === "molecular-weight-calculator";
+  const isConcrete = idLower === "concrete-calculator" || slugLower === "concrete-calculator";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isConcrete ? ConcreteContent :
     isMolecularWeight ? MolecularWeightContent :
     isMolarity ? MolarityContent :
     isGrade ? GradeContent :
@@ -622,6 +626,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
               <AmortizationCalculator />
             ) : isMortgage ? (
               <MortgageCalculator />
+            ) : isConcrete ? (
+              <ConcreteCalculator />
             ) : (
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
                 <div className="grid min-w-0 grid-cols-1 md:grid-cols-12 gap-5 items-start">
