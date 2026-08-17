@@ -318,7 +318,7 @@ export function FinanceCalculator() {
           id="tvm-currency-select"
           value={currencySymbol}
           onChange={(e) => setCurrencySymbol(e.target.value)}
-          className="h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans font-bold cursor-pointer"
+          className="h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] cursor-pointer focus:border-blue-600 focus:outline-none"
         >
           <option value="$">USD ($)</option>
           <option value="€">EUR (€)</option>
@@ -380,8 +380,8 @@ export function FinanceCalculator() {
                   disabled={mode === "N"}
                   value={nVal}
                   onChange={(e) => setNVal(e.target.value)}
-                  className={`w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 font-bold ${
-                    mode === "N" ? "bg-slate-200 dark:bg-slate-800 text-slate-400" : "bg-white dark:bg-slate-900"
+                  className={`w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none ${
+                    mode === "N" ? "bg-slate-200 dark:bg-slate-800 text-slate-400" : "bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
                   }`}
                 />
               </div>
@@ -394,8 +394,8 @@ export function FinanceCalculator() {
                   disabled={mode === "IY"}
                   value={iyVal}
                   onChange={(e) => setIyVal(e.target.value)}
-                  className={`w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 font-bold ${
-                    mode === "IY" ? "bg-slate-200 dark:bg-slate-800 text-slate-400" : "bg-white dark:bg-slate-900"
+                  className={`w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none ${
+                    mode === "IY" ? "bg-slate-200 dark:bg-slate-800 text-slate-400" : "bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
                   }`}
                 />
               </div>
@@ -407,8 +407,8 @@ export function FinanceCalculator() {
                   disabled={mode === "PV"}
                   value={pvVal}
                   onChange={(e) => setPvVal(e.target.value)}
-                  className={`w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 font-bold ${
-                    mode === "PV" ? "bg-slate-200 dark:bg-slate-800 text-slate-400" : "bg-white dark:bg-slate-900"
+                  className={`w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none ${
+                    mode === "PV" ? "bg-slate-200 dark:bg-slate-800 text-slate-400" : "bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
                   }`}
                 />
               </div>
@@ -420,8 +420,8 @@ export function FinanceCalculator() {
                   disabled={mode === "PMT"}
                   value={pmtVal}
                   onChange={(e) => setPmtVal(e.target.value)}
-                  className={`w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 font-bold ${
-                    mode === "PMT" ? "bg-slate-200 dark:bg-slate-800 text-slate-400" : "bg-white dark:bg-slate-900"
+                  className={`w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none ${
+                    mode === "PMT" ? "bg-slate-200 dark:bg-slate-800 text-slate-400" : "bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
                   }`}
                 />
               </div>
@@ -436,11 +436,11 @@ export function FinanceCalculator() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">P/Y (# periods/yr)</label>
-                  <input type="number" value={pyVal} onChange={(e) => setPyVal(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <input type="number" value={pyVal} onChange={(e) => setPyVal(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none" />
                 </div>
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">C/Y (Compounding/yr)</label>
-                  <input type="number" value={cyVal} onChange={(e) => setCyVal(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <input type="number" value={cyVal} onChange={(e) => setCyVal(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none" />
                 </div>
               </div>
 
@@ -461,11 +461,11 @@ export function FinanceCalculator() {
               <div className="grid grid-cols-2 gap-3 pt-1 border-t border-slate-200 dark:border-slate-800">
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Inflation Rate %</label>
-                  <input type="number" step="0.1" value={inflationRate} onChange={(e) => setInflationRate(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <input type="number" step="0.1" value={inflationRate} onChange={(e) => setInflationRate(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none" />
                 </div>
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Tax Rate %</label>
-                  <input type="number" step="0.1" value={taxRate} onChange={(e) => setTaxRate(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <input type="number" step="0.1" value={taxRate} onChange={(e) => setTaxRate(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none" />
                 </div>
               </div>
             </div>
@@ -644,7 +644,7 @@ export function FinanceCalculator() {
             <div className="lg:col-span-6 space-y-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
               <div>
                 <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Annual Inflation Rate %</label>
-                <input type="number" step="0.1" value={inflationRate} onChange={(e) => setInflationRate(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                <input type="number" step="0.1" value={inflationRate} onChange={(e) => setInflationRate(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none" />
               </div>
             </div>
 
@@ -724,7 +724,7 @@ export function FinanceCalculator() {
             <div className="lg:col-span-6 space-y-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
               <div>
                 <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Capital Gains / Tax Drag Rate %</label>
-                <input type="number" step="0.1" value={taxRate} onChange={(e) => setTaxRate(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                <input type="number" step="0.1" value={taxRate} onChange={(e) => setTaxRate(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none" />
               </div>
             </div>
 
@@ -811,7 +811,7 @@ export function FinanceCalculator() {
             <div className="lg:col-span-6 space-y-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
               <div>
                 <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Target Wealth Milestone ($)</label>
-                <select value={targetMilestone} onChange={(e) => setTargetMilestone(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold">
+                <select value={targetMilestone} onChange={(e) => setTargetMilestone(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none cursor-pointer">
                   <option value="100000">$100,000 Milestone</option>
                   <option value="250000">$250,000 Milestone</option>
                   <option value="500000">$500,000 Milestone</option>
@@ -897,11 +897,11 @@ export function FinanceCalculator() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Scenario A Rate %</label>
-                  <input type="number" step="0.1" value={rateScenarioA} onChange={(e) => setRateScenarioA(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <input type="number" step="0.1" value={rateScenarioA} onChange={(e) => setRateScenarioA(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none" />
                 </div>
                 <div>
                   <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Scenario B Rate %</label>
-                  <input type="number" step="0.1" value={rateScenarioB} onChange={(e) => setRateScenarioB(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <input type="number" step="0.1" value={rateScenarioB} onChange={(e) => setRateScenarioB(e.target.value)} className="w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none" />
                 </div>
               </div>
             </div>
