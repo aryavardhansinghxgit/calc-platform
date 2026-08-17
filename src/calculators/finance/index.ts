@@ -2,6 +2,7 @@ import { CalculatorModuleDefinition } from "../types";
 
 // 1. Mortgage & House
 import { MORTGAGE_CALCULATOR } from "./mortgage";
+import { VA_MORTGAGE_CALCULATOR } from "./va";
 import { FHA_LOAN_CALCULATOR } from "./fha";
 import { APR_CALCULATOR } from "./apr";
 import { RENTAL_PROPERTY_CALCULATOR } from "./rental-property";
@@ -69,6 +70,7 @@ import { BUDGET_CALCULATOR } from "./budget";
 export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   // Mortgage & House
   MORTGAGE_CALCULATOR,
+  VA_MORTGAGE_CALCULATOR,
   FHA_LOAN_CALCULATOR,
   APR_CALCULATOR,
   RENTAL_PROPERTY_CALCULATOR,
