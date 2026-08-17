@@ -67,6 +67,7 @@ export function searchCalculators(query: string): CalculatorModuleDefinition[] {
     car: ["auto-loan", "loan"],
     vehicle: ["auto-loan"],
     auto: ["auto-loan"],
+    fha: ["fha-loan-calculator"],
     apr: ["apr-calculator"],
     dti: ["dti-calculator"],
     house: ["mortgage", "house-affordability", "rent-calculator", "dti-calculator"],
