@@ -413,7 +413,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Future Target Sum (FV)</span>
-                <span className="font-mono text-blue-600">{fmt(futureValue)}</span>
+                <span className="font-sans tabular-nums text-blue-600">{fmt(futureValue)}</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-bold">{currencySymbol}</span>
@@ -423,7 +423,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                   step="1000"
                   value={futureValue}
                   onChange={(e) => setFutureValue(Math.max(0, Number(e.target.value)))}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -432,7 +432,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Periodic Cash Deposit (PMT)</span>
-                <span className="font-mono text-emerald-600">{fmt(periodicPayment)}</span>
+                <span className="font-sans tabular-nums text-emerald-600">{fmt(periodicPayment)}</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-bold">{currencySymbol}</span>
@@ -442,7 +442,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                   step="50"
                   value={periodicPayment}
                   onChange={(e) => setPeriodicPayment(Math.max(0, Number(e.target.value)))}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -451,7 +451,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Annual Discount Rate (%)</span>
-                <span className="font-mono text-purple-600">{discountRate}%</span>
+                <span className="font-sans tabular-nums text-purple-600">{discountRate}%</span>
               </label>
               <div className="flex items-center gap-2">
                 <Input
@@ -461,7 +461,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                   step="0.1"
                   value={discountRate}
                   onChange={(e) => setDiscountRate(Math.max(0.1, Number(e.target.value)))}
-                  className="text-xs font-mono"
+                  className="text-xs font-sans tabular-nums"
                 />
                 <input
                   type="range"
@@ -479,7 +479,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Timeframe (Years)</span>
-                <span className="font-mono text-blue-600">{years} Years</span>
+                <span className="font-sans tabular-nums text-blue-600">{years} Years</span>
               </label>
               <div className="flex items-center gap-2">
                 <Input
@@ -488,7 +488,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                   max="100"
                   value={years}
                   onChange={(e) => setYears(Math.max(1, Number(e.target.value)))}
-                  className="text-xs font-mono"
+                  className="text-xs font-sans tabular-nums"
                 />
                 <input
                   type="range"
@@ -587,7 +587,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                         step="0.5"
                         value={growthRate}
                         onChange={(e) => setGrowthRate(Number(e.target.value))}
-                        className="text-xs font-mono"
+                        className="text-xs font-sans tabular-nums"
                       />
                     </div>
                     <div className="space-y-1">
@@ -598,7 +598,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                         step="0.1"
                         value={inflationRate}
                         onChange={(e) => setInflationRate(Number(e.target.value))}
-                        className="text-xs font-mono"
+                        className="text-xs font-sans tabular-nums"
                       />
                     </div>
                   </div>
@@ -616,15 +616,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                   Calculated Present Value (PV)
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -636,13 +628,13 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                 </div>
               </div>
 
-              <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-2 font-mono">
+              <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-2 font-sans tabular-nums">
                 {fmt(results.presentValue)}
               </div>
 
               {showAdvanced && inflationRate > 0 && (
                 <div className="text-xs text-blue-200 font-medium">
-                  Real Purchasing Power (Inflation-Adjusted): <span className="font-bold font-mono text-emerald-400">{fmt(results.realPresentValue)}</span>
+                  Real Purchasing Power (Inflation-Adjusted): <span className="font-bold font-sans tabular-nums text-emerald-400">{fmt(results.realPresentValue)}</span>
                 </div>
               )}
 
@@ -650,19 +642,19 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Lump Sum PV</div>
-                  <div className="font-bold font-mono text-white text-sm">{fmt(results.lumpSumPV)}</div>
+                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.lumpSumPV)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Annuity PV</div>
-                  <div className="font-bold font-mono text-emerald-400 text-sm">{fmt(results.annuityPV)}</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-400 text-sm">{fmt(results.annuityPV)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Future Cash Flows</div>
-                  <div className="font-bold font-mono text-purple-300 text-sm">{fmt(results.totalFutureCashFlows)}</div>
+                  <div className="font-bold font-sans tabular-nums text-purple-300 text-sm">{fmt(results.totalFutureCashFlows)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Total Discount</div>
-                  <div className="font-bold font-mono text-amber-300 text-sm">{fmt(results.totalDiscountAmount)}</div>
+                  <div className="font-bold font-sans tabular-nums text-amber-300 text-sm">{fmt(results.totalDiscountAmount)}</div>
                 </div>
               </div>
             </div>
@@ -671,25 +663,25 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
                 <div className="text-[10px] text-zinc-500 uppercase font-semibold">Discount Ratio</div>
-                <div className="text-base font-extrabold text-blue-600 dark:text-blue-400 font-mono mt-0.5">
+                <div className="text-base font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums mt-0.5">
                   {results.discountRatioPct}%
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
                 <div className="text-[10px] text-zinc-500 uppercase font-semibold">Effective Rate</div>
-                <div className="text-base font-extrabold text-purple-600 dark:text-purple-400 font-mono mt-0.5">
+                <div className="text-base font-extrabold text-purple-600 dark:text-purple-400 font-sans tabular-nums mt-0.5">
                   {results.effectiveDiscountRate}%
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
                 <div className="text-[10px] text-zinc-500 uppercase font-semibold">Lump Sum Share</div>
-                <div className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">
+                <div className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-sans tabular-nums mt-0.5">
                   {results.presentValue > 0 ? ((results.lumpSumPV / results.presentValue) * 100).toFixed(0) : 0}%
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
                 <div className="text-[10px] text-zinc-500 uppercase font-semibold">Annuity Share</div>
-                <div className="text-base font-extrabold text-amber-600 dark:text-amber-400 font-mono mt-0.5">
+                <div className="text-base font-extrabold text-amber-600 dark:text-amber-400 font-sans tabular-nums mt-0.5">
                   {results.presentValue > 0 ? ((results.annuityPV / results.presentValue) * 100).toFixed(0) : 0}%
                 </div>
               </div>
@@ -736,7 +728,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
             <div className="flex items-center gap-3">
               <Layers className="h-6 w-6 text-emerald-500" />
               <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                   Net Present Value (NPV) & Custom Cash Flows Calculator
                 </h3>
                 <p className="text-xs text-zinc-500">
@@ -761,7 +753,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                     type="number"
                     value={initialOutlay}
                     onChange={(e) => setInitialOutlay(Number(e.target.value))}
-                    className="pl-7 text-xs font-mono text-rose-600 font-bold"
+                    className="pl-7 text-xs font-sans tabular-nums text-rose-600 font-bold"
                   />
                 </div>
               </div>
@@ -778,7 +770,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                           type="number"
                           value={cf}
                           onChange={(e) => updateCashFlow(idx, Number(e.target.value))}
-                          className="pl-7 text-xs font-mono h-8"
+                          className="pl-7 text-xs font-sans tabular-nums h-8"
                         />
                       </div>
                       {unevenCashFlows.length > 1 && (
@@ -802,7 +794,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                 Calculated Net Present Value (NPV)
               </span>
 
-              <div className={`text-4xl sm:text-5xl font-extrabold font-mono ${results.npvResult && results.npvResult >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+              <div className={`text-4xl sm:text-5xl font-extrabold font-sans tabular-nums ${results.npvResult && results.npvResult >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
                 {fmt(results.npvResult || 0)}
               </div>
 
@@ -822,7 +814,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
           <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <Sliders className="h-6 w-6 text-purple-500" />
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                 Discount Rate Sensitivity Matrix
               </h3>
               <p className="text-xs text-zinc-500">
@@ -842,7 +834,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                   <th className="p-3 border-b border-zinc-200 dark:border-zinc-700 text-right">Discount Amount</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono text-[11px]">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums text-[11px]">
                 {results.sensitivityMatrix.map((point, idx) => (
                   <tr
                     key={idx}
@@ -869,7 +861,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
           <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <BarChart3 className="h-6 w-6 text-amber-500" />
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                 Side-by-Side Scenario Comparison
               </h3>
               <p className="text-xs text-zinc-500">
@@ -887,13 +879,13 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                   {results.scenarios.conservative.discountRate}% Rate
                 </Badge>
               </div>
-              <div className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 font-mono">
+              <div className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums">
                 {fmt(results.scenarios.conservative.presentValue)}
               </div>
               <div className="text-xs space-y-1 text-zinc-600 dark:text-zinc-400">
-                <div className="flex justify-between"><span>Nominal Flows:</span> <span className="font-mono">{fmt(results.scenarios.conservative.futureCashFlowTotal)}</span></div>
-                <div className="flex justify-between"><span>Discount:</span> <span className="font-mono text-amber-600">{fmt(results.scenarios.conservative.discountAmount)}</span></div>
-                <div className="flex justify-between"><span>Discount Ratio:</span> <span className="font-mono">{results.scenarios.conservative.discountRatioPct}%</span></div>
+                <div className="flex justify-between"><span>Nominal Flows:</span> <span className="font-sans tabular-nums">{fmt(results.scenarios.conservative.futureCashFlowTotal)}</span></div>
+                <div className="flex justify-between"><span>Discount:</span> <span className="font-sans tabular-nums text-amber-600">{fmt(results.scenarios.conservative.discountAmount)}</span></div>
+                <div className="flex justify-between"><span>Discount Ratio:</span> <span className="font-sans tabular-nums">{results.scenarios.conservative.discountRatioPct}%</span></div>
               </div>
             </div>
 
@@ -906,13 +898,13 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                   {results.scenarios.moderate.discountRate}% Rate
                 </Badge>
               </div>
-              <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 font-mono">
+              <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums">
                 {fmt(results.scenarios.moderate.presentValue)}
               </div>
               <div className="text-xs space-y-1 text-zinc-600 dark:text-zinc-400">
-                <div className="flex justify-between"><span>Nominal Flows:</span> <span className="font-mono">{fmt(results.scenarios.moderate.futureCashFlowTotal)}</span></div>
-                <div className="flex justify-between"><span>Discount:</span> <span className="font-mono text-amber-600">{fmt(results.scenarios.moderate.discountAmount)}</span></div>
-                <div className="flex justify-between"><span>Discount Ratio:</span> <span className="font-mono">{results.scenarios.moderate.discountRatioPct}%</span></div>
+                <div className="flex justify-between"><span>Nominal Flows:</span> <span className="font-sans tabular-nums">{fmt(results.scenarios.moderate.futureCashFlowTotal)}</span></div>
+                <div className="flex justify-between"><span>Discount:</span> <span className="font-sans tabular-nums text-amber-600">{fmt(results.scenarios.moderate.discountAmount)}</span></div>
+                <div className="flex justify-between"><span>Discount Ratio:</span> <span className="font-sans tabular-nums">{results.scenarios.moderate.discountRatioPct}%</span></div>
               </div>
             </div>
 
@@ -924,13 +916,13 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                   {results.scenarios.aggressive.discountRate}% Rate
                 </Badge>
               </div>
-              <div className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 font-mono">
+              <div className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums">
                 {fmt(results.scenarios.aggressive.presentValue)}
               </div>
               <div className="text-xs space-y-1 text-zinc-600 dark:text-zinc-400">
-                <div className="flex justify-between"><span>Nominal Flows:</span> <span className="font-mono">{fmt(results.scenarios.aggressive.futureCashFlowTotal)}</span></div>
-                <div className="flex justify-between"><span>Discount:</span> <span className="font-mono text-amber-600">{fmt(results.scenarios.aggressive.discountAmount)}</span></div>
-                <div className="flex justify-between"><span>Discount Ratio:</span> <span className="font-mono">{results.scenarios.aggressive.discountRatioPct}%</span></div>
+                <div className="flex justify-between"><span>Nominal Flows:</span> <span className="font-sans tabular-nums">{fmt(results.scenarios.aggressive.futureCashFlowTotal)}</span></div>
+                <div className="flex justify-between"><span>Discount:</span> <span className="font-sans tabular-nums text-amber-600">{fmt(results.scenarios.aggressive.discountAmount)}</span></div>
+                <div className="flex justify-between"><span>Discount Ratio:</span> <span className="font-sans tabular-nums">{results.scenarios.aggressive.discountRatioPct}%</span></div>
               </div>
             </div>
           </div>
@@ -994,7 +986,7 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
                 <th className="p-2.5 border-b border-zinc-200 dark:border-zinc-700 text-right">Cumulative PV</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono text-[11px]">
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums text-[11px]">
               {paginatedSchedule.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
                   <td className="p-2.5 font-sans font-medium text-zinc-800 dark:text-zinc-200">

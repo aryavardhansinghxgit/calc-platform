@@ -112,7 +112,7 @@ export function DebtPayoffContent() {
   ];
 
   return (
-    <div className="space-y-10 mt-8 border-t border-zinc-200 dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
+    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
       {/* Overview Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 text-white rounded-2xl p-6 md:p-8 shadow-lg">
         <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
@@ -139,20 +139,20 @@ export function DebtPayoffContent() {
             <p>
               Both methods eliminate debt, but target different human motivators:
             </p>
-            <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-400">
+            <ul className="text-xs space-y-2 text-slate-900 dark:text-slate-100">
               <li>• <strong>Debt Avalanche (Highest APR First):</strong> Pays off debts starting with the highest interest rate. Mathematically minimizes interest paid and achieves debt freedom in the absolute shortest time.</li>
               <li>• <strong>Debt Snowball (Lowest Balance First):</strong> Pays off debts starting with the smallest balance. Creates quick psychological wins, building emotional momentum to stick with your plan.</li>
             </ul>
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-base">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
               <Zap className="h-5 w-5" /> 2. The Snowball Payment Rollover Effect
             </div>
             <p>
               The key engine of rapid debt elimination is payment rollover reallocation:
             </p>
-            <ul className="text-xs space-y-1.5 text-zinc-600 dark:text-zinc-400">
+            <ul className="text-xs space-y-1.5 text-slate-900 dark:text-slate-100">
               <li>• When a debt (e.g. $150/mo minimum) is paid off to $0, <strong>do not spend that $150</strong>.</li>
               <li>• Reallocate that $150 directly into the monthly payment for your next target debt.</li>
               <li>• Your monthly debt budget remains constant while your principal reduction power compounds exponentially!</li>
@@ -162,8 +162,7 @@ export function DebtPayoffContent() {
 
         {/* Section 3: Alternative Relief Options */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <ShieldCheck className="h-5 w-5 text-purple-600" /> 3. Overview of Debt Relief &amp; Bankruptcy Options
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Overview of Debt Relief &amp; Bankruptcy Options
           </h3>
           
           <div className="overflow-x-auto">
@@ -176,30 +175,30 @@ export function DebtPayoffContent() {
                   <th className="p-3 border border-zinc-200 dark:border-zinc-700">Key Trade-offs</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className=" dark:divide-zinc-800">
                 <tr>
                   <td className="p-3 font-semibold text-blue-600">Debt Consolidation Loan</td>
                   <td className="p-3">Refinances multiple debts into 1 low-rate loan</td>
-                  <td className="p-3 font-bold text-emerald-600">Positive (Lowers utilization)</td>
-                  <td className="p-3 text-zinc-500">Requires good credit score (660+)</td>
+                  <td className="p-3 font-bold text-blue-600">Positive (Lowers utilization)</td>
+                  <td className="p-3 text-slate-900">Requires good credit score (660+)</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-indigo-600">Debt Management Plan (DMP)</td>
+                  <td className="p-3 font-semibold text-blue-600">Debt Management Plan (DMP)</td>
                   <td className="p-3">Non-profit agency negotiates 0%–8% interest rates</td>
-                  <td className="p-3 text-amber-600 font-medium">Mild Temporary Drop</td>
-                  <td className="p-3 text-zinc-500">Credit accounts closed during plan</td>
+                  <td className="p-3 text-blue-600 font-medium">Mild Temporary Drop</td>
+                  <td className="p-3 text-slate-900">Credit accounts closed during plan</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-amber-600">Debt Settlement</td>
+                  <td className="p-3 font-semibold text-blue-600">Debt Settlement</td>
                   <td className="p-3">Negotiates paying 45%–50% of balance to settle</td>
                   <td className="p-3 text-red-600 font-bold">Severe Drop (-100 to -150 pts)</td>
-                  <td className="p-3 text-zinc-500">Forgiven debt is taxable income to IRS</td>
+                  <td className="p-3 text-slate-900">Forgiven debt is taxable income to IRS</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-red-600">Chapter 7 Bankruptcy</td>
                   <td className="p-3">Court-ordered liquidation of debts in 3–6 mos</td>
                   <td className="p-3 text-red-600 font-bold">Maximum Damage (10 yrs on report)</td>
-                  <td className="p-3 text-zinc-500">May lose non-exempt personal assets</td>
+                  <td className="p-3 text-slate-900">May lose non-exempt personal assets</td>
                 </tr>
               </tbody>
             </table>
@@ -211,7 +210,7 @@ export function DebtPayoffContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (FAQ)
           </h3>
         </div>
@@ -242,7 +241,7 @@ export function DebtPayoffContent() {
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-zinc-600 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
+                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
                     {faq.answer}
                   </div>
                 )}

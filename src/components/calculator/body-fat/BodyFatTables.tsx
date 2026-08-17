@@ -71,26 +71,26 @@ export function BodyFatTables({ result }: BodyFatTablesProps) {
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               <tr>
                 <td className="py-2 px-3 font-semibold">0.5 lb / week (Conservative)</td>
-                <td className="py-2 px-3 font-mono">-250 kcal/day</td>
-                <td className="py-2 px-3 font-mono font-bold text-sky-600">{Math.ceil(fatToLose / 0.5)} weeks</td>
+                <td className="py-2 px-3 font-sans tabular-nums">-250 kcal/day</td>
+                <td className="py-2 px-3 font-sans tabular-nums font-bold text-sky-600">{Math.ceil(fatToLose / 0.5)} weeks</td>
                 <td className="py-2 px-3" suppressHydrationWarning>{new Date(Date.now() + (fatToLose / 0.5) * 7 * 86400000).toLocaleDateString()}</td>
               </tr>
               <tr className="bg-emerald-50/40 dark:bg-emerald-950/20 font-semibold">
                 <td className="py-2 px-3 text-emerald-800 dark:text-emerald-300 font-bold">1.0 lb / week (Standard)</td>
-                <td className="py-2 px-3 font-mono text-emerald-700">-500 kcal/day</td>
-                <td className="py-2 px-3 font-mono font-bold text-emerald-700">{Math.ceil(fatToLose)} weeks</td>
+                <td className="py-2 px-3 font-sans tabular-nums text-emerald-700">-500 kcal/day</td>
+                <td className="py-2 px-3 font-sans tabular-nums font-bold text-emerald-700">{Math.ceil(fatToLose)} weeks</td>
                 <td className="py-2 px-3 text-emerald-700" suppressHydrationWarning>{new Date(Date.now() + fatToLose * 7 * 86400000).toLocaleDateString()}</td>
               </tr>
               <tr>
                 <td className="py-2 px-3 font-semibold">1.5 lbs / week (Aggressive)</td>
-                <td className="py-2 px-3 font-mono">-750 kcal/day</td>
-                <td className="py-2 px-3 font-mono font-bold text-purple-600">{Math.ceil(fatToLose / 1.5)} weeks</td>
+                <td className="py-2 px-3 font-sans tabular-nums">-750 kcal/day</td>
+                <td className="py-2 px-3 font-sans tabular-nums font-bold text-purple-600">{Math.ceil(fatToLose / 1.5)} weeks</td>
                 <td className="py-2 px-3" suppressHydrationWarning>{new Date(Date.now() + (fatToLose / 1.5) * 7 * 86400000).toLocaleDateString()}</td>
               </tr>
               <tr>
                 <td className="py-2 px-3 font-semibold">2.0 lbs / week (Maximum)</td>
-                <td className="py-2 px-3 font-mono">-1000 kcal/day</td>
-                <td className="py-2 px-3 font-mono font-bold text-rose-600">{Math.ceil(fatToLose / 2.0)} weeks</td>
+                <td className="py-2 px-3 font-sans tabular-nums">-1000 kcal/day</td>
+                <td className="py-2 px-3 font-sans tabular-nums font-bold text-rose-600">{Math.ceil(fatToLose / 2.0)} weeks</td>
                 <td className="py-2 px-3" suppressHydrationWarning>{new Date(Date.now() + (fatToLose / 2.0) * 7 * 86400000).toLocaleDateString()}</td>
               </tr>
             </tbody>
@@ -110,16 +110,16 @@ export function BodyFatTables({ result }: BodyFatTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-3 px-3">Description</th>
-                <th className="py-3 px-3 font-mono text-purple-700 dark:text-purple-400">Women (% Fat)</th>
-                <th className="py-3 px-3 font-mono text-blue-700 dark:text-blue-400">Men (% Fat)</th>
+                <th className="py-3 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">Women (% Fat)</th>
+                <th className="py-3 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">Men (% Fat)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               {aceTable.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className={`py-2.5 px-3 font-bold ${row.color}`}>{row.description}</td>
-                  <td className="py-2.5 px-3 font-mono">{row.women}</td>
-                  <td className="py-2.5 px-3 font-mono">{row.men}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums">{row.women}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums">{row.men}</td>
                 </tr>
               ))}
             </tbody>
@@ -139,16 +139,16 @@ export function BodyFatTables({ result }: BodyFatTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Age Bracket</th>
-                <th className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">Women Ideal BFP</th>
-                <th className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">Men Ideal BFP</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">Women Ideal BFP</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">Men Ideal BFP</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               {jacksonPollockTable.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2 px-3 font-semibold text-zinc-900 dark:text-zinc-100">Age {row.age}</td>
-                  <td className="py-2 px-3 font-mono text-purple-700 dark:text-purple-400">{row.women}</td>
-                  <td className="py-2 px-3 font-mono text-blue-700 dark:text-blue-400">{row.men}</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">{row.women}</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">{row.men}</td>
                 </tr>
               ))}
             </tbody>

@@ -252,7 +252,7 @@ Calculated via CalcPlatform Calorie Engine`;
             .font-bold { font-weight: 700; }
             .font-semibold { font-weight: 600; }
             .font-black { font-weight: 900; }
-            .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+            .font-sans tabular-nums { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
             .text-zinc-900 { color: #18181b; }
             .text-zinc-800 { color: #27272a; }
             .text-zinc-700 { color: #3f3f46; }
@@ -603,48 +603,12 @@ Calculated via CalcPlatform Calorie Engine`;
 
           {/* Action Bar */}
           <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleSaveCalculation}
-                className="bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 text-xs gap-1.5"
-              >
-                <Bookmark className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                Save Calculation
-              </Button>
-
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleCopySummary}
-                className="bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 text-xs gap-1.5"
-              >
-                {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-zinc-500" />}
-                {copied ? "Copied!" : "Copy Summary"}
-              </Button>
-            </div>
+            
 
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleShare}
-                className="bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 text-xs gap-1.5"
-              >
-                <Share2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-                Share
-              </Button>
+              
 
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handlePrint}
-                className="bg-emerald-600 text-white hover:bg-emerald-700 border-emerald-600 text-xs gap-1.5 shadow-sm"
-              >
-                <Printer className="w-3.5 h-3.5" />
-                Print / PDF Report
-              </Button>
+              
             </div>
           </div>
         </CardContent>
@@ -701,43 +665,43 @@ Calculated via CalcPlatform Calorie Engine`;
                   <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
                     <tr className="bg-emerald-50/40 dark:bg-emerald-950/20 font-bold">
                       <td className="py-2.5 px-3 text-emerald-900 dark:text-emerald-200">Maintain Weight</td>
-                      <td className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400 text-sm">{result.tiers.maintain.caloriesPerDay} kcal</td>
+                      <td className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400 text-sm">{result.tiers.maintain.caloriesPerDay} kcal</td>
                       <td className="py-2.5 px-3">100%</td>
                       <td className="py-2.5 px-3 text-emerald-600 dark:text-emerald-400">0 lb/week</td>
                     </tr>
                     <tr>
                       <td className="py-2.5 px-3 font-semibold">Mild Weight Loss</td>
-                      <td className="py-2.5 px-3 font-mono font-bold text-sky-600 dark:text-sky-400">{result.tiers.mildLoss.caloriesPerDay} kcal</td>
+                      <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-sky-600 dark:text-sky-400">{result.tiers.mildLoss.caloriesPerDay} kcal</td>
                       <td className="py-2.5 px-3">{result.tiers.mildLoss.percentOfTdee}%</td>
                       <td className="py-2.5 px-3 text-sky-600 dark:text-sky-400">-0.5 lb/week (-0.25 kg)</td>
                     </tr>
                     <tr>
                       <td className="py-2.5 px-3 font-semibold">Weight Loss (Standard)</td>
-                      <td className="py-2.5 px-3 font-mono font-bold text-blue-600 dark:text-blue-400">{result.tiers.weightLoss.caloriesPerDay} kcal</td>
+                      <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">{result.tiers.weightLoss.caloriesPerDay} kcal</td>
                       <td className="py-2.5 px-3">{result.tiers.weightLoss.percentOfTdee}%</td>
                       <td className="py-2.5 px-3 text-blue-600 dark:text-blue-400">-1.0 lb/week (-0.5 kg)</td>
                     </tr>
                     <tr>
                       <td className="py-2.5 px-3 font-semibold">Extreme Weight Loss</td>
-                      <td className="py-2.5 px-3 font-mono font-bold text-orange-600 dark:text-orange-400">{result.tiers.extremeLoss.caloriesPerDay} kcal</td>
+                      <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-orange-600 dark:text-orange-400">{result.tiers.extremeLoss.caloriesPerDay} kcal</td>
                       <td className="py-2.5 px-3">{result.tiers.extremeLoss.percentOfTdee}%</td>
                       <td className="py-2.5 px-3 text-orange-600 dark:text-orange-400">-2.0 lb/week (-1.0 kg)</td>
                     </tr>
                     <tr>
                       <td className="py-2.5 px-3 font-semibold">Mild Weight Gain</td>
-                      <td className="py-2.5 px-3 font-mono text-zinc-900 dark:text-zinc-100">{result.tiers.mildGain.caloriesPerDay} kcal</td>
+                      <td className="py-2.5 px-3 font-sans tabular-nums text-zinc-900 dark:text-zinc-100">{result.tiers.mildGain.caloriesPerDay} kcal</td>
                       <td className="py-2.5 px-3">{result.tiers.mildGain.percentOfTdee}%</td>
                       <td className="py-2.5 px-3">+0.5 lb/week (+0.25 kg)</td>
                     </tr>
                     <tr>
                       <td className="py-2.5 px-3 font-semibold">Weight Gain</td>
-                      <td className="py-2.5 px-3 font-mono text-zinc-900 dark:text-zinc-100">{result.tiers.weightGain.caloriesPerDay} kcal</td>
+                      <td className="py-2.5 px-3 font-sans tabular-nums text-zinc-900 dark:text-zinc-100">{result.tiers.weightGain.caloriesPerDay} kcal</td>
                       <td className="py-2.5 px-3">{result.tiers.weightGain.percentOfTdee}%</td>
                       <td className="py-2.5 px-3">+1.0 lb/week (+0.5 kg)</td>
                     </tr>
                     <tr>
                       <td className="py-2.5 px-3 font-semibold">Fast Weight Gain</td>
-                      <td className="py-2.5 px-3 font-mono text-zinc-900 dark:text-zinc-100">{result.tiers.fastGain.caloriesPerDay} kcal</td>
+                      <td className="py-2.5 px-3 font-sans tabular-nums text-zinc-900 dark:text-zinc-100">{result.tiers.fastGain.caloriesPerDay} kcal</td>
                       <td className="py-2.5 px-3">{result.tiers.fastGain.percentOfTdee}%</td>
                       <td className="py-2.5 px-3">+2.0 lb/week (+1.0 kg)</td>
                     </tr>
@@ -758,7 +722,7 @@ Calculated via CalcPlatform Calorie Engine`;
                   <tr>
                     <th className="py-2.5 px-3">Activity Level</th>
                     <th className="py-2.5 px-3">Multiplier</th>
-                    <th className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400">Daily TDEE Burn</th>
+                    <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">Daily TDEE Burn</th>
                     <th className="py-2.5 px-3">Weekly Active Burn (Above BMR)</th>
                   </tr>
                 </thead>
@@ -766,9 +730,9 @@ Calculated via CalcPlatform Calorie Engine`;
                   {result.activityComparisonTable.map((row, idx) => (
                     <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                       <td className="py-2 px-3 font-semibold text-zinc-900 dark:text-zinc-100">{row.activityLabel}</td>
-                      <td className="py-2 px-3 font-mono text-zinc-500">{row.multiplier}×</td>
-                      <td className="py-2 px-3 font-mono font-bold text-emerald-700 dark:text-emerald-400">{row.tdee} kcal</td>
-                      <td className="py-2 px-3 font-mono text-sky-700 dark:text-sky-400">~{row.weightLossPotentialLbs} lbs/week burn equivalent</td>
+                      <td className="py-2 px-3 font-sans tabular-nums text-zinc-500">{row.multiplier}×</td>
+                      <td className="py-2 px-3 font-sans tabular-nums font-bold text-emerald-700 dark:text-emerald-400">{row.tdee} kcal</td>
+                      <td className="py-2 px-3 font-sans tabular-nums text-sky-700 dark:text-sky-400">~{row.weightLossPotentialLbs} lbs/week burn equivalent</td>
                     </tr>
                   ))}
                 </tbody>
@@ -788,7 +752,7 @@ Calculated via CalcPlatform Calorie Engine`;
                 <h4 className="text-sm font-bold text-blue-700 dark:text-blue-400">
                   Zigzag Schedule 1 (3 High / 4 Low)
                 </h4>
-                <span className="text-xs font-mono font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
+                <span className="text-xs font-sans tabular-nums font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded">
                   Avg: {result.tiers.weightLoss.caloriesPerDay} kcal
                 </span>
               </div>
@@ -798,7 +762,7 @@ Calculated via CalcPlatform Calorie Engine`;
                     <tr>
                       <th className="py-2 px-3">Day</th>
                       <th className="py-2 px-3">Day Type</th>
-                      <th className="py-2 px-3 font-mono text-blue-600">Calorie Target</th>
+                      <th className="py-2 px-3 font-sans tabular-nums text-blue-600">Calorie Target</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60">
@@ -812,7 +776,7 @@ Calculated via CalcPlatform Calorie Engine`;
                               {isHigh ? "High Calorie" : "Low Calorie"}
                             </span>
                           </td>
-                          <td className="py-2 px-3 font-mono font-bold text-blue-600 dark:text-blue-400">{d.schedule1Calories} kcal</td>
+                          <td className="py-2 px-3 font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">{d.schedule1Calories} kcal</td>
                         </tr>
                       );
                     })}
@@ -827,7 +791,7 @@ Calculated via CalcPlatform Calorie Engine`;
                 <h4 className="text-sm font-bold text-purple-700 dark:text-purple-400">
                   Zigzag Schedule 2 (Progressive Wave)
                 </h4>
-                <span className="text-xs font-mono font-bold bg-purple-50 text-purple-700 px-2 py-0.5 rounded">
+                <span className="text-xs font-sans tabular-nums font-bold bg-purple-50 text-purple-700 px-2 py-0.5 rounded">
                   Avg: {result.tiers.weightLoss.caloriesPerDay} kcal
                 </span>
               </div>
@@ -837,7 +801,7 @@ Calculated via CalcPlatform Calorie Engine`;
                     <tr>
                       <th className="py-2 px-3">Day</th>
                       <th className="py-2 px-3">Wave Ratio</th>
-                      <th className="py-2 px-3 font-mono text-purple-600">Calorie Target</th>
+                      <th className="py-2 px-3 font-sans tabular-nums text-purple-600">Calorie Target</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60">
@@ -845,7 +809,7 @@ Calculated via CalcPlatform Calorie Engine`;
                       <tr key={i}>
                         <td className="py-2 px-3 font-bold text-zinc-900 dark:text-zinc-100">{d.dayName}</td>
                         <td className="py-2 px-3 text-zinc-500">Day {i + 1} Wave</td>
-                        <td className="py-2 px-3 font-mono font-bold text-purple-600 dark:text-purple-400">{d.schedule2Calories} kcal</td>
+                        <td className="py-2 px-3 font-sans tabular-nums font-bold text-purple-600 dark:text-purple-400">{d.schedule2Calories} kcal</td>
                       </tr>
                     ))}
                   </tbody>
@@ -866,17 +830,17 @@ Calculated via CalcPlatform Calorie Engine`;
                 <div className="grid grid-cols-3 gap-2 text-center text-xs">
                   <div className="p-2 bg-amber-50 dark:bg-amber-950/20 rounded-lg">
                     <span className="text-[10px] text-amber-700 font-semibold block">Carbs</span>
-                    <strong className="font-mono text-amber-900 dark:text-amber-200 block text-sm">{m.carbsGrams}g</strong>
+                    <strong className="font-sans tabular-nums text-amber-900 dark:text-amber-200 block text-sm">{m.carbsGrams}g</strong>
                     <span className="text-[10px] text-zinc-500">{m.carbsPercent}%</span>
                   </div>
                   <div className="p-2 bg-emerald-50 dark:bg-emerald-950/20 rounded-lg">
                     <span className="text-[10px] text-emerald-700 font-semibold block">Protein</span>
-                    <strong className="font-mono text-emerald-900 dark:text-emerald-200 block text-sm">{m.proteinGrams}g</strong>
+                    <strong className="font-sans tabular-nums text-emerald-900 dark:text-emerald-200 block text-sm">{m.proteinGrams}g</strong>
                     <span className="text-[10px] text-zinc-500">{m.proteinPercent}%</span>
                   </div>
                   <div className="p-2 bg-rose-50 dark:bg-rose-950/20 rounded-lg">
                     <span className="text-[10px] text-rose-700 font-semibold block">Fat</span>
-                    <strong className="font-mono text-rose-900 dark:text-rose-200 block text-sm">{m.fatGrams}g</strong>
+                    <strong className="font-sans tabular-nums text-rose-900 dark:text-rose-200 block text-sm">{m.fatGrams}g</strong>
                     <span className="text-[10px] text-zinc-500">{m.fatPercent}%</span>
                   </div>
                 </div>
@@ -894,9 +858,7 @@ Calculated via CalcPlatform Calorie Engine`;
         <TabsContent value="converter" className="space-y-6">
           <div className="p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-5">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Zap className="w-5 h-5 text-amber-500" />
-                Food Energy Unit Converter
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Food Energy Unit Converter
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
                 Convert dietary Calories (kcal) into International System energy units (kJ, Joules, Megajoules, Watt-hours)
@@ -918,7 +880,7 @@ Calculated via CalcPlatform Calorie Engine`;
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-2">
               <div className="p-4 bg-sky-50 dark:bg-sky-950/30 rounded-xl border border-sky-200 dark:border-sky-800">
                 <span className="text-xs font-semibold text-sky-700 dark:text-sky-300 block">Kilojoules (kJ)</span>
-                <strong className="text-xl font-mono font-black text-sky-900 dark:text-sky-100 block mt-1">
+                <strong className="text-xl font-sans tabular-nums font-black text-sky-900 dark:text-sky-100 block mt-1">
                   {(converterInputKcal * 4.1868).toFixed(1)} kJ
                 </strong>
                 <span className="text-[10px] text-sky-600 dark:text-sky-400 block mt-0.5">1 kcal = 4.1868 kJ</span>
@@ -926,7 +888,7 @@ Calculated via CalcPlatform Calorie Engine`;
 
               <div className="p-4 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl border border-emerald-200 dark:border-emerald-800">
                 <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 block">Joules (J)</span>
-                <strong className="text-xl font-mono font-black text-emerald-900 dark:text-emerald-100 block mt-1">
+                <strong className="text-xl font-sans tabular-nums font-black text-emerald-900 dark:text-emerald-100 block mt-1">
                   {Math.round(converterInputKcal * 4186.8).toLocaleString()} J
                 </strong>
                 <span className="text-[10px] text-emerald-600 dark:text-emerald-400 block mt-0.5">1 kcal = 4,186.8 J</span>
@@ -934,7 +896,7 @@ Calculated via CalcPlatform Calorie Engine`;
 
               <div className="p-4 bg-purple-50 dark:bg-purple-950/30 rounded-xl border border-purple-200 dark:border-purple-800">
                 <span className="text-xs font-semibold text-purple-700 dark:text-purple-300 block">Megajoules (MJ)</span>
-                <strong className="text-xl font-mono font-black text-purple-900 dark:text-purple-100 block mt-1">
+                <strong className="text-xl font-sans tabular-nums font-black text-purple-900 dark:text-purple-100 block mt-1">
                   {(converterInputKcal * 0.0041868).toFixed(3)} MJ
                 </strong>
                 <span className="text-[10px] text-purple-600 dark:text-purple-400 block mt-0.5">1 kcal = 0.0041868 MJ</span>
@@ -942,7 +904,7 @@ Calculated via CalcPlatform Calorie Engine`;
 
               <div className="p-4 bg-amber-50 dark:bg-amber-950/30 rounded-xl border border-amber-200 dark:border-amber-800">
                 <span className="text-xs font-semibold text-amber-700 dark:text-amber-300 block">Watt-Hours (Wh)</span>
-                <strong className="text-xl font-mono font-black text-amber-900 dark:text-amber-100 block mt-1">
+                <strong className="text-xl font-sans tabular-nums font-black text-amber-900 dark:text-amber-100 block mt-1">
                   {(converterInputKcal * 1.163).toFixed(1)} Wh
                 </strong>
                 <span className="text-[10px] text-amber-600 dark:text-amber-400 block mt-0.5">1 kcal = 1.163 Wh</span>
@@ -962,7 +924,7 @@ Calculated via CalcPlatform Calorie Engine`;
               <div className="text-xs font-black tracking-widest text-emerald-700 uppercase">
                 CalcPlatform Metabolic &amp; Clinical Nutrition Labs
               </div>
-              <h1 className="text-2xl font-black text-zinc-900 mt-1">
+              <h1 className="text-2xl font-black text-blue-600 mt-1">
                 Clinical Caloric Expenditure &amp; TDEE Assessment Report
               </h1>
               <p className="text-xs text-zinc-500 mt-0.5">
@@ -972,7 +934,7 @@ Calculated via CalcPlatform Calorie Engine`;
             <div className="text-right text-xs text-zinc-500">
               <p className="font-bold text-zinc-800" suppressHydrationWarning>Date: {new Date().toLocaleDateString()}</p>
               <p suppressHydrationWarning>Time: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
-              <p className="font-mono text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #CALC-{Date.now().toString().slice(-6)}</p>
+              <p className="font-sans tabular-nums text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #CALC-{Date.now().toString().slice(-6)}</p>
             </div>
           </div>
 
@@ -1002,7 +964,7 @@ Calculated via CalcPlatform Calorie Engine`;
 
           {/* Section 1: Subject Profile & Physical Demographics */}
           <div className="space-y-2">
-            <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider border-b border-zinc-300 pb-1">
+            <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
               1. Subject Physical Demographics &amp; Metabolic Baseline
             </h3>
             <table className="w-full text-xs text-left border border-zinc-200 border-collapse">
@@ -1031,7 +993,7 @@ Calculated via CalcPlatform Calorie Engine`;
 
           {/* Section 2: Caloric Goal Targets */}
           <div className="space-y-2">
-            <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider border-b border-zinc-300 pb-1">
+            <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
               2. Target Daily Calorie Intake Tiers
             </h3>
             <table className="w-full text-xs text-left border border-zinc-200 border-collapse">
@@ -1052,25 +1014,25 @@ Calculated via CalcPlatform Calorie Engine`;
                 </tr>
                 <tr>
                   <td className="p-2 border-r border-zinc-200 font-semibold">Mild Weight Loss</td>
-                  <td className="p-2 border-r border-zinc-200 font-mono font-bold text-sky-700">{result.tiers.mildLoss.caloriesPerDay} kcal/day</td>
+                  <td className="p-2 border-r border-zinc-200 font-sans tabular-nums font-bold text-sky-700">{result.tiers.mildLoss.caloriesPerDay} kcal/day</td>
                   <td className="p-2 border-r border-zinc-200">{result.tiers.mildLoss.percentOfTdee}%</td>
                   <td className="p-2 text-sky-700">-0.5 lb/week (-0.25 kg)</td>
                 </tr>
                 <tr>
                   <td className="p-2 border-r border-zinc-200 font-semibold">Weight Loss (Standard)</td>
-                  <td className="p-2 border-r border-zinc-200 font-mono font-bold text-blue-700">{result.tiers.weightLoss.caloriesPerDay} kcal/day</td>
+                  <td className="p-2 border-r border-zinc-200 font-sans tabular-nums font-bold text-blue-700">{result.tiers.weightLoss.caloriesPerDay} kcal/day</td>
                   <td className="p-2 border-r border-zinc-200">{result.tiers.weightLoss.percentOfTdee}%</td>
                   <td className="p-2 text-blue-700">-1.0 lb/week (-0.5 kg)</td>
                 </tr>
                 <tr>
                   <td className="p-2 border-r border-zinc-200 font-semibold">Extreme Weight Loss</td>
-                  <td className="p-2 border-r border-zinc-200 font-mono font-bold text-orange-700">{result.tiers.extremeLoss.caloriesPerDay} kcal/day</td>
+                  <td className="p-2 border-r border-zinc-200 font-sans tabular-nums font-bold text-orange-700">{result.tiers.extremeLoss.caloriesPerDay} kcal/day</td>
                   <td className="p-2 border-r border-zinc-200">{result.tiers.extremeLoss.percentOfTdee}%</td>
                   <td className="p-2 text-orange-700">-2.0 lb/week (-1.0 kg)</td>
                 </tr>
                 <tr>
                   <td className="p-2 border-r border-zinc-200 font-semibold">Weight Gain</td>
-                  <td className="p-2 border-r border-zinc-200 font-mono font-bold">{result.tiers.weightGain.caloriesPerDay} kcal/day</td>
+                  <td className="p-2 border-r border-zinc-200 font-sans tabular-nums font-bold">{result.tiers.weightGain.caloriesPerDay} kcal/day</td>
                   <td className="p-2 border-r border-zinc-200">{result.tiers.weightGain.percentOfTdee}%</td>
                   <td className="p-2">+1.0 lb/week (+0.5 kg)</td>
                 </tr>
@@ -1080,7 +1042,7 @@ Calculated via CalcPlatform Calorie Engine`;
 
           {/* Section 3: 7-Day Zigzag Calorie Cycling Schedule */}
           <div className="space-y-2">
-            <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider border-b border-zinc-300 pb-1">
+            <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
               3. 7-Day Zigzag Calorie Cycling Schedule (Weight Loss Goal)
             </h3>
             <table className="w-full text-xs text-left border border-zinc-200 border-collapse">
@@ -1095,8 +1057,8 @@ Calculated via CalcPlatform Calorie Engine`;
                 {result.zigzagSchedule.map((d, idx) => (
                   <tr key={idx}>
                     <td className="p-2 border-r border-zinc-200 font-bold">{d.dayName}</td>
-                    <td className="p-2 border-r border-zinc-200 font-mono font-bold text-blue-700">{d.schedule1Calories} kcal</td>
-                    <td className="p-2 font-mono font-bold text-purple-700">{d.schedule2Calories} kcal</td>
+                    <td className="p-2 border-r border-zinc-200 font-sans tabular-nums font-bold text-blue-700">{d.schedule1Calories} kcal</td>
+                    <td className="p-2 font-sans tabular-nums font-bold text-purple-700">{d.schedule2Calories} kcal</td>
                   </tr>
                 ))}
               </tbody>
@@ -1105,7 +1067,7 @@ Calculated via CalcPlatform Calorie Engine`;
 
           {/* Section 4: Macronutrient Distribution Ratios */}
           <div className="space-y-2">
-            <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider border-b border-zinc-300 pb-1">
+            <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
               4. Daily Macronutrient Breakdown Options ({result.tiers.weightLoss.caloriesPerDay} kcal Target)
             </h3>
             <table className="w-full text-xs text-left border border-zinc-200 border-collapse">
@@ -1121,9 +1083,9 @@ Calculated via CalcPlatform Calorie Engine`;
                 {Object.values(result.macros).map((m, i) => (
                   <tr key={i}>
                     <td className="p-2 border-r border-zinc-200 font-bold">{m.name}</td>
-                    <td className="p-2 border-r border-zinc-200 font-mono">{m.carbsGrams}g ({m.carbsPercent}%)</td>
-                    <td className="p-2 border-r border-zinc-200 font-mono font-bold text-emerald-800">{m.proteinGrams}g ({m.proteinPercent}%)</td>
-                    <td className="p-2 font-mono">{m.fatGrams}g ({m.fatPercent}%)</td>
+                    <td className="p-2 border-r border-zinc-200 font-sans tabular-nums">{m.carbsGrams}g ({m.carbsPercent}%)</td>
+                    <td className="p-2 border-r border-zinc-200 font-sans tabular-nums font-bold text-emerald-800">{m.proteinGrams}g ({m.proteinPercent}%)</td>
+                    <td className="p-2 font-sans tabular-nums">{m.fatGrams}g ({m.fatPercent}%)</td>
                   </tr>
                 ))}
               </tbody>

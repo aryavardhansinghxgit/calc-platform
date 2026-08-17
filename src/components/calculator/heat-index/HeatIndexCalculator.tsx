@@ -174,7 +174,7 @@ export function HeatIndexCalculator() {
             <Sun className="h-3.5 w-3.5 fill-amber-500" /> Direct Sun Exposure (+15°F / +8.3°C Radiant Load)
           </label>
 
-          <label className="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-zinc-600 dark:text-zinc-300">
+          <label className="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-slate-800 dark:text-slate-200 font-semibold">
             <input
               type="checkbox"
               checked={showWBGT}
@@ -185,26 +185,7 @@ export function HeatIndexCalculator() {
           </label>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={handleCopySummary}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer"
-          >
-            {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5" />}
-            {copied ? "Copied" : "Share Summary"}
-          </Button>
 
-          <Button
-            onClick={() => setShowReportModal(true)}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer bg-amber-50 text-amber-700 hover:bg-amber-100 dark:bg-amber-950/40 dark:text-amber-300 border-amber-200"
-          >
-            <Printer className="h-3.5 w-3.5" /> Safety Briefing PDF
-          </Button>
-        </div>
       </div>
 
       {/* 2. SPLIT PANE INTERFACE */}
@@ -244,7 +225,7 @@ export function HeatIndexCalculator() {
                 type="number"
                 value={temp}
                 onChange={(e) => setTemp(Number(e.target.value))}
-                className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200 w-28"
+                className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200 w-28"
               />
               <input
                 type="range"
@@ -288,7 +269,7 @@ export function HeatIndexCalculator() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-bold text-zinc-700 dark:text-zinc-300">Relative Humidity</span>
-                  <span className="font-mono font-bold text-blue-600">{rhValue}% RH</span>
+                  <span className="font-sans tabular-nums font-bold text-blue-600">{rhValue}% RH</span>
                 </div>
                 <input
                   type="range"
@@ -303,13 +284,13 @@ export function HeatIndexCalculator() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-bold text-zinc-700 dark:text-zinc-300">Dew Point Temperature</span>
-                  <span className="font-mono font-bold text-blue-600">{dewPointValue}°{tempUnit}</span>
+                  <span className="font-sans tabular-nums font-bold text-blue-600">{dewPointValue}°{tempUnit}</span>
                 </div>
                 <Input
                   type="number"
                   value={dewPointValue}
                   onChange={(e) => setDewPointValue(Number(e.target.value))}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
             )}
@@ -330,7 +311,7 @@ export function HeatIndexCalculator() {
 
             {/* Primary Heat Index Reading */}
             <div className="space-y-1">
-              <div className="text-6xl font-black font-mono tracking-tight text-white">
+              <div className="text-6xl font-black font-sans tabular-nums tracking-tight text-white">
                 {tempUnit === "F" ? `${result.heatIndexF}°F` : `${result.heatIndexC}°C`}
               </div>
               <p className="text-xs text-amber-100 font-medium">
@@ -342,7 +323,7 @@ export function HeatIndexCalculator() {
             {result.isDirectSun && (
               <div className="p-3 bg-amber-500/30 rounded-xl border border-amber-300/40 text-xs font-bold text-amber-100 space-y-0.5">
                 <span>Direct Sun Heat Index (+15°F Solar Load):</span>
-                <div className="text-2xl font-black font-mono text-white">
+                <div className="text-2xl font-black font-sans tabular-nums text-white">
                   {tempUnit === "F" ? `${result.directSunHeatIndexF}°F` : `${result.directSunHeatIndexC}°C`}
                 </div>
               </div>
@@ -364,7 +345,7 @@ export function HeatIndexCalculator() {
               <span className="text-[10px] font-bold uppercase text-amber-200 flex items-center gap-1">
                 <Clock className="h-3.5 w-3.5" /> OSHA Work / Rest Schedule
               </span>
-              <div className="font-mono font-bold text-sm text-white">
+              <div className="font-sans tabular-nums font-bold text-sm text-white">
                 {result.oshaPlan.workMinutes}m Work / {result.oshaPlan.restMinutes}m Rest
               </div>
               <p className="text-[11px] text-amber-100">{result.oshaPlan.advisory}</p>
@@ -387,7 +368,7 @@ export function HeatIndexCalculator() {
 
         {showChart && (
           <div className="p-4 border-t border-zinc-100 dark:border-zinc-800 overflow-x-auto text-xs">
-            <table className="w-full text-center border-collapse font-mono text-[11px]">
+            <table className="w-full text-center border-collapse font-sans tabular-nums text-[11px]">
               <thead>
                 <tr className="bg-zinc-100 dark:bg-zinc-800 font-bold text-zinc-900 dark:text-zinc-100">
                   <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-sans">Relative Humidity \ Temp</th>

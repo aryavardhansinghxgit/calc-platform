@@ -2,7 +2,9 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const exponent_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Exponent Calculator — Free Online Math Calculator",
-  description: "Calculate powers, exponents, and base numbers raised to negative or fractional powers.",
+  title: "Exponent Calculator — Solve Powers, Radicals & Exponent Laws",
+  description: "Free online Exponent Calculator. Solve base and power equations (bⁿ), fractional exponents, negative powers, scientific notation, and 8 exponent laws.",
   slug: "exponent-calculator",
 });
+
+export default exponent_calculatorMetadata;

@@ -30,7 +30,7 @@ export function NumberInput({
   return (
     <div className="relative flex items-center">
       {prefixSymbol && (
-        <span className="absolute left-3 text.sm font-bold text-slate-400 font-mono">
+        <span className="absolute left-3 text.sm font-bold text-slate-400 font-sans tabular-nums">
           {prefixSymbol}
         </span>
       )}
@@ -47,7 +47,7 @@ export function NumberInput({
         {...props}
       />
       {suffixSymbol && (
-        <span className="absolute right-3 text-xs font-semibold text-slate-400 font-mono">
+        <span className="absolute right-3 text-xs font-semibold text-slate-400 font-sans tabular-nums">
           {suffixSymbol}
         </span>
       )}

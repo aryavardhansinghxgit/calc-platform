@@ -29,7 +29,7 @@ export function FAQSection({ faqs = defaultFaqs }: FAQSectionProps) {
           <AccordionTrigger className="text-sm font-medium text-zinc-900 dark:text-zinc-200 hover:text-blue-600 py-2.5 text-left">
             {faq.question}
           </AccordionTrigger>
-          <AccordionContent className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed pb-2">
+          <AccordionContent className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed pb-2">
             {faq.answer}
           </AccordionContent>
         </AccordionItem>

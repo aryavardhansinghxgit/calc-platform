@@ -386,7 +386,7 @@ export function RefinanceCalculator() {
           <span className="text-xs uppercase font-extrabold tracking-wider text-blue-300 flex items-center gap-1.5">
             <Target className="h-4 w-4 text-blue-400" /> Select Your Primary Refinance Goal:
           </span>
-          <span className="text-[11px] text-blue-200 font-mono hidden sm:inline">
+          <span className="text-[11px] text-blue-200 font-sans tabular-nums hidden sm:inline">
             Tailors scoring & recommendation algorithm
           </span>
         </div>
@@ -448,15 +448,7 @@ export function RefinanceCalculator() {
             <Copy className="h-3.5 w-3.5 text-blue-500" /> Copy
           </Button>
 
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleShareUrl}
-            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer"
-          >
-            <Share2 className="h-3.5 w-3.5 text-emerald-500" /> Share
-          </Button>
+          
 
           <Button
             type="button"
@@ -491,7 +483,7 @@ export function RefinanceCalculator() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* LEFT COLUMN: CURRENT LOAN */}
             <div className="space-y-4 p-4 rounded-xl bg-zinc-50/70 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-700/80">
-              <h3 className="font-extrabold text-sm text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-700 pb-2">
+              <h3 className="font-extrabold text-sm text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-700 pb-2">
                 Current Loan
               </h3>
 
@@ -526,7 +518,7 @@ export function RefinanceCalculator() {
                         step={5000}
                         value={remainingBalance}
                         onChange={(e) => setRemainingBalance(Math.max(0, Number(e.target.value)))}
-                        className="pl-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="pl-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                   </div>
@@ -543,7 +535,7 @@ export function RefinanceCalculator() {
                         step={50}
                         value={currentMonthlyPayment}
                         onChange={(e) => setCurrentMonthlyPayment(Math.max(0, Number(e.target.value)))}
-                        className="pl-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="pl-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                   </div>
@@ -563,7 +555,7 @@ export function RefinanceCalculator() {
                       step={5000}
                       value={originalLoanAmount}
                       onChange={(e) => setOriginalLoanAmount(Math.max(0, Number(e.target.value)))}
-                      className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -578,7 +570,7 @@ export function RefinanceCalculator() {
                         max={50}
                         value={originalLoanTermYears}
                         onChange={(e) => setOriginalLoanTermYears(Math.max(1, Number(e.target.value)))}
-                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                     <div>
@@ -592,7 +584,7 @@ export function RefinanceCalculator() {
                         max={originalLoanTermYears}
                         value={yearsPaid}
                         onChange={(e) => setYearsPaid(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                   </div>
@@ -612,7 +604,7 @@ export function RefinanceCalculator() {
                       step={5000}
                       value={payoffAmount}
                       onChange={(e) => setPayoffAmount(Math.max(0, Number(e.target.value)))}
-                      className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -632,7 +624,7 @@ export function RefinanceCalculator() {
                     max={100}
                     value={currentInterestRate}
                     onChange={(e) => setCurrentInterestRate(Math.max(0, Number(e.target.value)))}
-                    className="pl-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                    className="pl-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                   />
                 </div>
               </div>
@@ -656,7 +648,7 @@ export function RefinanceCalculator() {
                     max={50}
                     value={newLoanTermYears}
                     onChange={(e) => setNewLoanTermYears(Math.max(1, Number(e.target.value)))}
-                    className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                    className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                   />
                 </div>
                 <div>
@@ -673,7 +665,7 @@ export function RefinanceCalculator() {
                       max={100}
                       value={newInterestRate}
                       onChange={(e) => setNewInterestRate(Math.max(0, Number(e.target.value)))}
-                      className="pl-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="pl-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -693,7 +685,7 @@ export function RefinanceCalculator() {
                     max={10}
                     value={discountPoints}
                     onChange={(e) => setDiscountPoints(Math.max(0, Number(e.target.value)))}
-                    className="pl-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                    className="pl-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                   />
                 </div>
               </div>
@@ -721,7 +713,7 @@ export function RefinanceCalculator() {
                     step={250}
                     value={results.itemizedTotalCosts > 0 ? results.itemizedTotalCosts : closingCosts}
                     onChange={(e) => setClosingCosts(Math.max(0, Number(e.target.value)))}
-                    className="pl-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                    className="pl-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                   />
                 </div>
               </div>
@@ -734,8 +726,7 @@ export function RefinanceCalculator() {
           {refinanceGoal === "shorten-loan" && (
             <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/60 space-y-3">
               <div className="flex items-center justify-between border-b border-blue-200 dark:border-blue-900/60 pb-2">
-                <h4 className="font-extrabold text-xs uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">
-                  <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Shorten Loan Duration Module
+                <h4 className="font-extrabold text-xs uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">Shorten Loan Duration Module
                 </h4>
                 <span className="text-[11px] font-semibold text-blue-700 dark:text-blue-300">
                   Goal: Pay off debt years earlier
@@ -754,7 +745,7 @@ export function RefinanceCalculator() {
                     max={50}
                     value={newLoanTermYears}
                     onChange={(e) => setNewLoanTermYears(Math.max(1, Number(e.target.value)))}
-                    className="mt-1 bg-white dark:bg-zinc-900 font-mono text-xs"
+                    className="mt-1 bg-white dark:bg-zinc-900 font-sans tabular-nums text-xs"
                   />
                 </div>
 
@@ -777,7 +768,7 @@ export function RefinanceCalculator() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px] font-mono">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px] font-sans tabular-nums">
                 <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
                   <span className="text-zinc-500 block">Current Remaining</span>
                   <span className="font-bold text-zinc-900 dark:text-zinc-100">
@@ -808,15 +799,14 @@ export function RefinanceCalculator() {
           {refinanceGoal === "reduce-payment" && (
             <div className="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/60 space-y-3">
               <div className="flex items-center justify-between border-b border-emerald-200 dark:border-emerald-900/60 pb-2">
-                <h4 className="font-extrabold text-xs uppercase tracking-wider text-emerald-900 dark:text-emerald-200 flex items-center gap-1.5">
-                  <DollarSign className="h-4 w-4 text-emerald-600 dark:text-emerald-400" /> Reduce Monthly Payment Module
+                <h4 className="font-extrabold text-xs uppercase tracking-wider text-emerald-900 dark:text-emerald-200 flex items-center gap-1.5">Reduce Monthly Payment Module
                 </h4>
                 <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">
                   Goal: Maximize monthly out-of-pocket cash flow
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-mono">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-sans tabular-nums">
                 <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
                   <span className="text-zinc-500 block">Current Monthly Payment</span>
                   <span className="font-bold text-zinc-900 dark:text-zinc-100">{formatCurrency(results.currentMonthlyPayment)}</span>
@@ -841,15 +831,14 @@ export function RefinanceCalculator() {
           {refinanceGoal === "reduce-interest" && (
             <div className="p-4 rounded-xl bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-900/60 space-y-3">
               <div className="flex items-center justify-between border-b border-purple-200 dark:border-purple-900/60 pb-2">
-                <h4 className="font-extrabold text-xs uppercase tracking-wider text-purple-900 dark:text-purple-200 flex items-center gap-1.5">
-                  <Percent className="h-4 w-4 text-purple-600 dark:text-purple-400" /> Reduce Lifetime Interest Module
+                <h4 className="font-extrabold text-xs uppercase tracking-wider text-purple-900 dark:text-purple-200 flex items-center gap-1.5">Reduce Lifetime Interest Module
                 </h4>
                 <span className="text-[11px] font-semibold text-purple-700 dark:text-purple-300">
                   Goal: Minimize total borrowing cost paid to lender
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-mono">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-sans tabular-nums">
                 <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
                   <span className="text-zinc-500 block">Current Remaining Interest</span>
                   <span className="font-bold text-amber-600 dark:text-amber-400">{formatCurrency(results.currentRemainingInterest)}</span>
@@ -888,7 +877,7 @@ export function RefinanceCalculator() {
                     step={10000}
                     value={homeMarketValue}
                     onChange={(e) => setHomeMarketValue(Math.max(0, Number(e.target.value)))}
-                    className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                    className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                   />
                 </div>
                 <div>
@@ -902,7 +891,7 @@ export function RefinanceCalculator() {
                     step={5000}
                     value={cashOutAmount}
                     onChange={(e) => setCashOutAmount(Math.max(0, Number(e.target.value)))}
-                    className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                    className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                   />
                 </div>
                 <div>
@@ -916,12 +905,12 @@ export function RefinanceCalculator() {
                     max={100}
                     value={maxLtvPercent}
                     onChange={(e) => setMaxLtvPercent(Math.max(50, Number(e.target.value)))}
-                    className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                    className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px] font-mono">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px] font-sans tabular-nums">
                 <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
                   <span className="text-zinc-500 block">Available Equity</span>
                   <span className="font-bold text-purple-600 dark:text-purple-400">{formatCurrency(results.availableEquity)}</span>
@@ -968,14 +957,14 @@ export function RefinanceCalculator() {
                       placeholder="Balance ($)"
                       value={debt.balance}
                       onChange={(e) => handleUpdateDebtItem(debt.id, "balance", Number(e.target.value))}
-                      className="h-8 text-xs font-mono"
+                      className="h-8 text-xs font-sans tabular-nums"
                     />
                     <Input
                       type="number"
                       placeholder="Rate (%)"
                       value={debt.interestRate}
                       onChange={(e) => handleUpdateDebtItem(debt.id, "interestRate", Number(e.target.value))}
-                      className="h-8 text-xs font-mono"
+                      className="h-8 text-xs font-sans tabular-nums"
                     />
                     <div className="flex items-center gap-2">
                       <Input
@@ -983,7 +972,7 @@ export function RefinanceCalculator() {
                         placeholder="Payment ($)"
                         value={debt.monthlyPayment}
                         onChange={(e) => handleUpdateDebtItem(debt.id, "monthlyPayment", Number(e.target.value))}
-                        className="h-8 text-xs font-mono"
+                        className="h-8 text-xs font-sans tabular-nums"
                       />
                       <button type="button" onClick={() => handleDeleteDebtItem(debt.id)} className="text-zinc-400 hover:text-red-500 cursor-pointer">
                         <Trash2 className="h-4 w-4" />
@@ -993,7 +982,7 @@ export function RefinanceCalculator() {
                 ))}
               </div>
 
-              <div className="grid grid-cols-3 gap-2 pt-2 text-[11px] font-mono">
+              <div className="grid grid-cols-3 gap-2 pt-2 text-[11px] font-sans tabular-nums">
                 <div className="p-2 rounded-lg bg-white/80 dark:bg-zinc-800">
                   <span className="text-zinc-500 block">Total Consolidating Debt</span>
                   <span className="font-bold text-teal-600 dark:text-teal-400">{formatCurrency(results.totalConsolidatedDebt)}</span>
@@ -1039,7 +1028,7 @@ export function RefinanceCalculator() {
           </div>
 
           <div className="flex items-center gap-4 bg-white/10 p-4 rounded-2xl border border-white/20 backdrop-blur-xs">
-            <div className="text-4xl font-extrabold font-mono text-white tracking-tight">
+            <div className="text-4xl font-extrabold font-sans tabular-nums text-white tracking-tight">
               {results.refinanceScore}
               <span className="text-xs text-blue-300 font-sans font-normal block text-center">/ 100</span>
             </div>
@@ -1107,15 +1096,15 @@ export function RefinanceCalculator() {
                 <CardContent className="space-y-2 text-xs">
                   <div className="flex justify-between items-center py-1 border-b border-zinc-100 dark:border-zinc-800">
                     <span className="text-zinc-500">Current Payment:</span>
-                    <span className="font-bold font-mono text-zinc-900 dark:text-zinc-100">{formatCurrency(results.currentMonthlyPayment)}</span>
+                    <span className="font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">{formatCurrency(results.currentMonthlyPayment)}</span>
                   </div>
                   <div className="flex justify-between items-center py-1 border-b border-zinc-100 dark:border-zinc-800">
                     <span className="text-zinc-500">New Payment:</span>
-                    <span className="font-bold font-mono text-blue-600 dark:text-blue-400">{formatCurrency(results.newMonthlyPayment)}</span>
+                    <span className="font-bold font-sans tabular-nums text-blue-600 dark:text-blue-400">{formatCurrency(results.newMonthlyPayment)}</span>
                   </div>
                   <div className="flex justify-between items-center py-1 font-bold">
                     <span className="text-zinc-700 dark:text-zinc-300">Monthly Savings:</span>
-                    <span className="font-mono text-emerald-600 dark:text-emerald-400 text-sm">
+                    <span className="font-sans tabular-nums text-emerald-600 dark:text-emerald-400 text-sm">
                       {formatCurrency(results.monthlySavings)} ({results.monthlySavingsPercent}%)
                     </span>
                   </div>
@@ -1131,15 +1120,15 @@ export function RefinanceCalculator() {
                 <CardContent className="space-y-2 text-xs">
                   <div className="flex justify-between items-center py-1 border-b border-zinc-100 dark:border-zinc-800">
                     <span className="text-zinc-500">Current Remaining Interest:</span>
-                    <span className="font-bold font-mono text-amber-600 dark:text-amber-400">{formatCurrency(results.currentRemainingInterest)}</span>
+                    <span className="font-bold font-sans tabular-nums text-amber-600 dark:text-amber-400">{formatCurrency(results.currentRemainingInterest)}</span>
                   </div>
                   <div className="flex justify-between items-center py-1 border-b border-zinc-100 dark:border-zinc-800">
                     <span className="text-zinc-500">New Loan Interest:</span>
-                    <span className="font-bold font-mono text-blue-600 dark:text-blue-400">{formatCurrency(results.newLoanTotalInterest)}</span>
+                    <span className="font-bold font-sans tabular-nums text-blue-600 dark:text-blue-400">{formatCurrency(results.newLoanTotalInterest)}</span>
                   </div>
                   <div className="flex justify-between items-center py-1 font-bold">
                     <span className="text-zinc-700 dark:text-zinc-300">Total Interest Saved:</span>
-                    <span className="font-mono text-emerald-600 dark:text-emerald-400 text-sm">{formatCurrency(results.interestSaved)}</span>
+                    <span className="font-sans tabular-nums text-emerald-600 dark:text-emerald-400 text-sm">{formatCurrency(results.interestSaved)}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -1153,15 +1142,15 @@ export function RefinanceCalculator() {
                 <CardContent className="space-y-2 text-xs">
                   <div className="flex justify-between items-center py-1 border-b border-zinc-100 dark:border-zinc-800">
                     <span className="text-zinc-500">Closing Costs & Fees:</span>
-                    <span className="font-bold font-mono text-zinc-900 dark:text-zinc-100">{formatCurrency(results.closingCosts)}</span>
+                    <span className="font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">{formatCurrency(results.closingCosts)}</span>
                   </div>
                   <div className="flex justify-between items-center py-1 border-b border-zinc-100 dark:border-zinc-800">
                     <span className="text-zinc-500">Points Cost:</span>
-                    <span className="font-bold font-mono text-zinc-900 dark:text-zinc-100">{formatCurrency(results.pointsCost)}</span>
+                    <span className="font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">{formatCurrency(results.pointsCost)}</span>
                   </div>
                   <div className="flex justify-between items-center py-1 font-bold">
                     <span className="text-zinc-700 dark:text-zinc-300">Total Upfront Cost:</span>
-                    <span className="font-mono text-purple-600 dark:text-purple-400 text-sm">{formatCurrency(results.closingCosts + results.pointsCost)}</span>
+                    <span className="font-sans tabular-nums text-purple-600 dark:text-purple-400 text-sm">{formatCurrency(results.closingCosts + results.pointsCost)}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -1175,7 +1164,7 @@ export function RefinanceCalculator() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-xs">
-                  <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400 font-mono">
+                  <div className="text-2xl font-extrabold text-amber-600 dark:text-amber-400 font-sans tabular-nums">
                     {results.breakEvenMonths < 900 ? `${results.breakEvenMonths} Months (${results.breakEvenYears} Yrs)` : "No Break-Even"}
                   </div>
                   <p className="text-zinc-500 leading-relaxed text-[11px]">
@@ -1191,7 +1180,7 @@ export function RefinanceCalculator() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-xs">
-                  <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
+                  <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 font-sans tabular-nums">
                     {formatCurrency(results.netSavings)}
                   </div>
                   <p className="text-zinc-500 leading-relaxed text-[11px]">
@@ -1327,7 +1316,7 @@ export function RefinanceCalculator() {
                 <Bookmark className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                   Save Refinance Calculation
                 </h3>
                 <p className="text-xs text-zinc-500">
@@ -1344,7 +1333,7 @@ export function RefinanceCalculator() {
               <form onSubmit={handleSaveCalculation} className="space-y-3 pt-1">
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700/80 text-xs">
                   <span className="text-zinc-500 block">Summary:</span>
-                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-mono">
+                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-sans tabular-nums">
                     Monthly Savings: {formatCurrency(results.monthlySavings)}
                   </span>
                   <span className="text-[11px] text-zinc-500">

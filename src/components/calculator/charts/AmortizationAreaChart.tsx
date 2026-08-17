@@ -34,7 +34,7 @@ export function AmortizationAreaChart({ schedule }: AmortizationAreaChartProps) 
         <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-400">
           Principal vs. Interest Paid Over Time
         </h3>
-        <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400">
+        <span className="text-[10px] font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
           Equity Growth
         </span>
       </div>

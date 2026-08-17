@@ -110,16 +110,16 @@ export function SocialSecurityContent() {
   ];
 
   return (
-    <div className="mt-12 space-y-12 border-t border-zinc-200 dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
+    <div className="mt-12 space-y-12  dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
       {/* Overview Header */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Authoritative Social Security Administration (SSA) Guide
         </div>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400">
           Complete Guide to Social Security Benefits, FRA &amp; Claiming Strategies
         </h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
+        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
           Social Security serves as the cornerstone of retirement security for tens of millions of Americans. Deciding when and how to claim your benefits is one of the most consequential financial choices you will make. This guide breaks down Full Retirement Age (FRA) multipliers, early vs. delayed claiming trade-offs, spousal and survivor protections, taxation rules, and optimal claiming strategies.
         </p>
       </section>
@@ -127,28 +127,28 @@ export function SocialSecurityContent() {
       {/* Grid of Core Concepts */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-sm">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
             <Clock className="h-5 w-5" /> Full Retirement Age (FRA)
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
             Your FRA is 67 if born in 1960 or later. Claiming at 62 permanently reduces checks by up to 30%, while delaying to 70 increases monthly checks by 24% (+8%/yr).
           </p>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-bold text-sm">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
             <Users className="h-5 w-5" /> Spousal &amp; Survivor Rights
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
             Spouses can receive up to 50% of a worker's FRA benefit. Widows and widowers can claim up to 100% survivor benefits starting as early as age 60.
           </p>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
+          <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
             <Percent className="h-5 w-5" /> Taxability &amp; COLA
           </div>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
             Up to 85% of Social Security benefits become taxable if Combined Income exceeds $34k (single) or $44k (married). Annual COLA offsets consumer inflation.
           </p>
         </div>
@@ -156,10 +156,9 @@ export function SocialSecurityContent() {
 
       {/* Deep-Dive Section 1: Early vs. Delayed Claiming Comparison */}
       <section className="space-y-4">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <TrendingUp className="h-5 w-5 text-indigo-600" /> Benefit Multiplier Scale: Age 62 vs. FRA (67) vs. Age 70
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Benefit Multiplier Scale: Age 62 vs. FRA (67) vs. Age 70
         </h3>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
           The table below illustrates how your Primary Insurance Amount (PIA) adjusts depending on the exact age you file your application.
         </p>
 
@@ -173,30 +172,30 @@ export function SocialSecurityContent() {
                 <th className="p-3 border border-zinc-200 dark:border-zinc-700">Example ($2,200 FRA Base)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 text-zinc-600 dark:text-zinc-400">
+            <tbody className=" dark:divide-zinc-800 text-slate-900 dark:text-slate-100">
               <tr>
-                <td className="p-3 font-semibold text-rose-600 border">Age 62</td>
+                <td className="p-3 font-semibold text-blue-600 border">Age 62</td>
                 <td className="p-3 border">Earliest Eligibility</td>
-                <td className="p-3 font-bold text-rose-600 border">70.0% (-30.0%)</td>
-                <td className="p-3 font-mono border">$1,540 / month</td>
+                <td className="p-3 font-bold text-blue-600 border">70.0% (-30.0%)</td>
+                <td className="p-3 font-sans tabular-nums border">$1,540 / month</td>
               </tr>
               <tr>
                 <td className="p-3 font-semibold border">Age 65</td>
                 <td className="p-3 border">Early Claiming</td>
-                <td className="p-3 font-bold text-amber-600 border">86.7% (-13.3%)</td>
-                <td className="p-3 font-mono border">$1,907 / month</td>
+                <td className="p-3 font-bold text-blue-600 border">86.7% (-13.3%)</td>
+                <td className="p-3 font-sans tabular-nums border">$1,907 / month</td>
               </tr>
               <tr>
-                <td className="p-3 font-semibold text-indigo-600 border">Age 67</td>
+                <td className="p-3 font-semibold text-blue-600 border">Age 67</td>
                 <td className="p-3 font-bold border">Full Retirement Age (FRA)</td>
-                <td className="p-3 font-bold text-indigo-600 border">100.0% (Baseline)</td>
-                <td className="p-3 font-mono font-bold border">$2,200 / month</td>
+                <td className="p-3 font-bold text-blue-600 border">100.0% (Baseline)</td>
+                <td className="p-3 font-sans tabular-nums font-bold border">$2,200 / month</td>
               </tr>
               <tr>
-                <td className="p-3 font-semibold text-emerald-600 border">Age 70</td>
+                <td className="p-3 font-semibold text-blue-600 border">Age 70</td>
                 <td className="p-3 border">Maximum Delayed Credits</td>
-                <td className="p-3 font-bold text-emerald-600 border">124.0% (+24.0%)</td>
-                <td className="p-3 font-mono font-bold text-emerald-600 border">$2,728 / month</td>
+                <td className="p-3 font-bold text-blue-600 border">124.0% (+24.0%)</td>
+                <td className="p-3 font-sans tabular-nums font-bold text-blue-600 border">$2,728 / month</td>
               </tr>
             </tbody>
           </table>
@@ -204,10 +203,10 @@ export function SocialSecurityContent() {
       </section>
 
       {/* 20+ FAQ Accordion Section */}
-      <section className="space-y-6 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+      <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
-          <HelpCircle className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
-          <h3 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <h3 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
             Frequently Asked Questions (20 Key Social Security Insights)
           </h3>
         </div>
@@ -226,18 +225,18 @@ export function SocialSecurityContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold shrink-0">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 text-zinc-500 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 text-slate-900 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed  dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
                     {faq.a}
                   </div>
                 )}

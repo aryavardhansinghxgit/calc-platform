@@ -112,7 +112,7 @@ export function SalesTaxContent() {
   ];
 
   return (
-    <div className="space-y-10 mt-8 border-t border-zinc-200 dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
+    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
       {/* Overview Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 text-white rounded-2xl p-6 md:p-8 shadow-lg">
         <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
@@ -139,7 +139,7 @@ export function SalesTaxContent() {
             <p>
               Depending on which variables you possess, use these exact algebraic relationships:
             </p>
-            <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-400 font-mono bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
+            <ul className="text-xs space-y-2 text-slate-900 dark:text-slate-100 font-sans tabular-nums bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
               <li>• <strong>Mode A (Pre-Tax + Rate):</strong> Tax = Price × (Rate / 100)</li>
               <li>• <strong>Mode B (Final + Rate):</strong> Pre-Tax = Final / (1 + Rate / 100)</li>
               <li>• <strong>Mode C (Pre-Tax + Final):</strong> Rate = ((Final - Pre-Tax) / Pre-Tax) × 100</li>
@@ -149,13 +149,13 @@ export function SalesTaxContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-base">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
               <MapPin className="h-5 w-5" /> 2. Anatomy of Combined Tax Rates
             </div>
             <p>
               In most U.S. cities, your final sales tax receipt reflects a layered combination of multiple independent taxing authorities:
             </p>
-            <ul className="text-xs space-y-1.5 text-zinc-600 dark:text-zinc-400">
+            <ul className="text-xs space-y-1.5 text-slate-900 dark:text-slate-100">
               <li>• <strong>State Baseline Tax Rate:</strong> Mandated statewide by state legislature (e.g. California 7.25%, Texas 6.25%).</li>
               <li>• <strong>County Sales Tax:</strong> Added by county commissioners (e.g. 0.50% to 2.50%).</li>
               <li>• <strong>City / Municipal Tax:</strong> Added by local city councils (e.g. 1.00% to 3.00%).</li>
@@ -166,10 +166,9 @@ export function SalesTaxContent() {
 
         {/* Section 3: 50 State Sales Tax Summary */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Globe className="h-5 w-5 text-purple-600" /> 3. U.S. State Sales Tax Rates &amp; Exemption Overview
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. U.S. State Sales Tax Rates &amp; Exemption Overview
           </h3>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
+          <p className="text-xs text-slate-900 dark:text-slate-100">
             Below is a summary of baseline state sales tax rates, average local tax additions, and grocery/clothing exemption policies across major states:
           </p>
           
@@ -184,41 +183,41 @@ export function SalesTaxContent() {
                   <th className="p-3 border border-zinc-200 dark:border-zinc-700">Grocery Exempt?</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className=" dark:divide-zinc-800">
                 <tr>
                   <td className="p-3 font-semibold">California</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">7.25%</td>
-                  <td className="p-3 font-mono text-zinc-500">1.60%</td>
-                  <td className="p-3 font-mono">10.75%</td>
-                  <td className="p-3 text-emerald-600 font-bold">Yes (Exempt)</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">7.25%</td>
+                  <td className="p-3 font-sans tabular-nums text-slate-900">1.60%</td>
+                  <td className="p-3 font-sans tabular-nums">10.75%</td>
+                  <td className="p-3 text-blue-600 font-bold">Yes (Exempt)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Texas</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">6.25%</td>
-                  <td className="p-3 font-mono text-zinc-500">1.94%</td>
-                  <td className="p-3 font-mono">8.25%</td>
-                  <td className="p-3 text-emerald-600 font-bold">Yes (Exempt)</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">6.25%</td>
+                  <td className="p-3 font-sans tabular-nums text-slate-900">1.94%</td>
+                  <td className="p-3 font-sans tabular-nums">8.25%</td>
+                  <td className="p-3 text-blue-600 font-bold">Yes (Exempt)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Florida</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">6.00%</td>
-                  <td className="p-3 font-mono text-zinc-500">1.05%</td>
-                  <td className="p-3 font-mono">8.00%</td>
-                  <td className="p-3 text-emerald-600 font-bold">Yes (Exempt)</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">6.00%</td>
+                  <td className="p-3 font-sans tabular-nums text-slate-900">1.05%</td>
+                  <td className="p-3 font-sans tabular-nums">8.00%</td>
+                  <td className="p-3 text-blue-600 font-bold">Yes (Exempt)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">New York</td>
-                  <td className="p-3 font-mono font-bold text-blue-600">4.00%</td>
-                  <td className="p-3 font-mono text-zinc-500">4.52%</td>
-                  <td className="p-3 font-mono">8.88%</td>
-                  <td className="p-3 text-emerald-600 font-bold">Yes (Exempt)</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">4.00%</td>
+                  <td className="p-3 font-sans tabular-nums text-slate-900">4.52%</td>
+                  <td className="p-3 font-sans tabular-nums">8.88%</td>
+                  <td className="p-3 text-blue-600 font-bold">Yes (Exempt)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Oregon / Delaware / Montana / NH / AK</td>
-                  <td className="p-3 font-mono font-bold text-emerald-600">0.00% (No Tax)</td>
-                  <td className="p-3 font-mono text-zinc-500">0.00%</td>
-                  <td className="p-3 font-mono">0.00%</td>
-                  <td className="p-3 text-emerald-600 font-bold">Yes (Exempt)</td>
+                  <td className="p-3 font-sans tabular-nums font-bold text-blue-600">0.00% (No Tax)</td>
+                  <td className="p-3 font-sans tabular-nums text-slate-900">0.00%</td>
+                  <td className="p-3 font-sans tabular-nums">0.00%</td>
+                  <td className="p-3 text-blue-600 font-bold">Yes (Exempt)</td>
                 </tr>
               </tbody>
             </table>
@@ -227,14 +226,13 @@ export function SalesTaxContent() {
 
         {/* Section 4: History & IRS Deduction */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-indigo-600" /> U.S. Sales Tax History &amp; IRS Income Tax Deductions
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">U.S. Sales Tax History &amp; IRS Income Tax Deductions
           </h3>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
+          <p className="text-xs text-slate-900 dark:text-slate-100">
             <strong>Historical Context:</strong> Taxation on goods played a pivotal role in American independence, starting with the 1773 Boston Tea Party protesting British tea taxes. 
             Modern state sales taxes emerged during the Great Depression in the 1930s (led by Mississippi in 1930) as states sought reliable revenue sources.
           </p>
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
+          <p className="text-xs text-slate-900 dark:text-slate-100">
             <strong>IRS Schedule A Deduction:</strong> When filing federal tax returns, taxpayers who itemize can deduct either state/local income tax OR state/local sales tax. 
             If you made major purchases during the tax year (such as buying a car, boat, motorhome, or major home renovation materials), retaining receipts and claiming sales tax can result in significant federal tax savings under the SALT deduction allowance.
           </p>
@@ -245,7 +243,7 @@ export function SalesTaxContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (FAQ)
           </h3>
         </div>
@@ -276,7 +274,7 @@ export function SalesTaxContent() {
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-zinc-600 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
+                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
                     {faq.answer}
                   </div>
                 )}

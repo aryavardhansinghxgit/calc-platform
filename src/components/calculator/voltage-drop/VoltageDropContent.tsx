@@ -5,20 +5,18 @@ import { BookOpen, HelpCircle, AlertTriangle, Cpu, CheckCircle } from "lucide-re
 
 export function VoltageDropContent() {
   return (
-    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10  dark:border-zinc-800 pt-8">
       <header>
-        <h2 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
-          <BookOpen className="h-6 w-6 text-blue-600" />
-          Comprehensive Electrical Guide: Conductor Impedance & Voltage Drop
+        <h2 className="text-2xl font-black text-blue-600 dark:text-blue-400 tracking-tight flex items-center gap-2">Comprehensive Electrical Guide: Conductor Impedance & Voltage Drop
         </h2>
-        <p className="text-zinc-500 dark:text-zinc-400 text-xs">
+        <p className="text-slate-900 dark:text-slate-100 text-xs">
           An authoritative reference on mathematical formulations, physical wire properties, and National Electrical Code (NEC) guidelines.
         </p>
       </header>
 
       {/* SECTION 1: INTRODUCTION */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>1.</span> Introduction
         </h3>
         <p>
@@ -31,7 +29,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 2: MATHEMATICAL CONCEPT */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>2.</span> Underlying Mathematical & Physical Principles
         </h3>
         <p>
@@ -55,7 +53,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 3: FORMULA SECTION */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>3.</span> The Mathematical Formulas
         </h3>
         <p>
@@ -65,26 +63,26 @@ export function VoltageDropContent() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Direct Current (DC)</h4>
-            <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               {"V_d = (2 × I × L × R) / 1000"}
             </div>
-            <p className="text-[11px] text-zinc-500">For 2-wire circuits where loop distance is double the one-way run (2 × L).</p>
+            <p className="text-[11px] text-slate-900">For 2-wire circuits where loop distance is double the one-way run (2 × L).</p>
           </div>
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Single-Phase AC</h4>
-            <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               {"V_d = (2 × I × L × Z_eff) / 1000"}
             </div>
-            <p className="text-[11px] text-zinc-500">Combines AC resistance and inductive reactance: Z_eff = R × cos(θ) + X × sin(θ).</p>
+            <p className="text-[11px] text-slate-900">Combines AC resistance and inductive reactance: Z_eff = R × cos(θ) + X × sin(θ).</p>
           </div>
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Three-Phase AC</h4>
-            <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               {"V_d = (√3 × I × L × Z_eff) / 1000"}
             </div>
-            <p className="text-[11px] text-zinc-500">Calculates line-to-line voltage drop utilizing a factor of √3 ≈ 1.732.</p>
+            <p className="text-[11px] text-slate-900">Calculates line-to-line voltage drop utilizing a factor of √3 ≈ 1.732.</p>
           </div>
         </div>
 
@@ -103,7 +101,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 4: HOW CALCULATION WORKS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>4.</span> Step-by-Step Calculation Process
         </h3>
         <p>
@@ -141,20 +139,18 @@ export function VoltageDropContent() {
 
       {/* SECTION 5: WORKED EXAMPLES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>5.</span> Realistic Worked Engineering Examples
         </h3>
         <div className="space-y-4">
           {/* Example 1 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-blue-600" />
-              Example A: Residential Subpanel Run (Single-Phase AC)
+            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">Example A: Residential Subpanel Run (Single-Phase AC)
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Calculate the voltage drop of a 240V, 100A, single-phase circuit running through PVC conduit for a one-way distance of 150 feet. Conductor size is 1 AWG copper with a power factor of 0.90.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Look up 1 AWG copper in PVC conduit (Table 9):</strong></div>
               <div>AC Resistance (R) = 0.15 Ω/1000 ft</div>
               <div>Reactance (X) = 0.046 Ω/1000 ft</div>
@@ -172,14 +168,12 @@ export function VoltageDropContent() {
 
           {/* Example 2 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-purple-600" />
-              Example B: Industrial Motor Feed (Three-Phase AC)
+            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">Example B: Industrial Motor Feed (Three-Phase AC)
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Calculate the line-to-line voltage drop for a 480V, three-phase, 120A induction motor running through steel conduit for a one-way distance of 400 feet. Conductor size is 3/0 AWG copper with a power factor of 0.85.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Look up 3/0 AWG copper in Steel conduit (Table 9):</strong></div>
               <div>AC Resistance (R) = 0.079 Ω/1000 ft</div>
               <div>Reactance (X) = 0.052 Ω/1000 ft</div>
@@ -199,7 +193,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 6: VISUAL UNDERSTANDING TABLES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>6.</span> AWG Conductor Physical & Electrical Reference
         </h3>
         <p>
@@ -208,7 +202,7 @@ export function VoltageDropContent() {
         <div className="overflow-x-auto border border-zinc-200 dark:border-zinc-800 rounded-xl">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
-              <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-b border-zinc-200 dark:border-zinc-700">
+              <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300  dark:border-zinc-700">
                 <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Size (AWG)</th>
                 <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Diameter (in)</th>
                 <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Area (kcmil)</th>
@@ -217,7 +211,7 @@ export function VoltageDropContent() {
                 <th className="p-2">Reactance (PVC, Ω/kft)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+            <tbody className=" dark:divide-zinc-800">
               <tr>
                 <td className="p-2 border-r font-semibold">14 AWG</td>
                 <td className="p-2 border-r">0.0641</td>
@@ -289,11 +283,11 @@ export function VoltageDropContent() {
 
       {/* SECTION 7: COMMON MISTAKES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>7.</span> Common Engineering Mistakes & Pitfalls
         </h3>
-        <div className="p-4 border border-amber-200 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/20 rounded-2xl space-y-2">
-          <p className="flex items-center gap-1 text-amber-800 dark:text-amber-400 font-bold text-xs">
+        <div className="p-4 border border-amber-200 dark:border-amber-900/60 bg-blue-50/50 dark:bg-blue-50/20 rounded-2xl space-y-2">
+          <p className="flex items-center gap-1 text-amber-800 dark:text-blue-400 font-bold text-xs">
             <AlertTriangle className="w-4 h-4" /> Avoid these critical assumptions:
           </p>
           <ul className="list-disc pl-5 space-y-1.5 text-xs">
@@ -315,7 +309,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 8: PRACTICAL APPLICATIONS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>8.</span> Practical Engineering Applications
         </h3>
         <p>
@@ -336,7 +330,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 9: RELATED TOPICS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>9.</span> Related Mathematical & Electrical Concepts
         </h3>
         <p>
@@ -352,8 +346,7 @@ export function VoltageDropContent() {
 
       {/* SECTION 10: SUMMARY */}
       <section className="space-y-3 bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <h3 className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-          <CheckCircle className="w-4 h-4" /> Educational Summary
+        <h3 className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Educational Summary
         </h3>
         <p className="text-xs mt-1">
           Voltage drop is a physical reality in all electrical wiring systems. Minimizing it requires choosing the correct conductor material, increasing the wire size (AWG or metric cross-section), or keeping distance runs short. Proper calculations combining AC resistance and inductive reactance keep electrical systems compliant, safe, and operating at peak energy efficiency.

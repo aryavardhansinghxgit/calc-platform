@@ -113,7 +113,7 @@ export function FourZeroOneKContent() {
   ];
 
   return (
-    <div className="space-y-10 mt-8 border-t border-zinc-200 dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
+    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
       {/* Overview Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 text-white rounded-2xl p-6 md:p-8 shadow-lg">
         <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
@@ -142,7 +142,7 @@ export function FourZeroOneKContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-base">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
               <ShieldCheck className="h-5 w-5" /> 2. Traditional vs. Roth 401(k)
             </div>
             <p>
@@ -154,8 +154,7 @@ export function FourZeroOneKContent() {
 
         {/* Section 2: Early Withdrawal Penalties Table */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-amber-500" /> 3. Early Withdrawal Penalties &amp; Taxes Breakdown
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Early Withdrawal Penalties &amp; Taxes Breakdown
           </h3>
           
           <div className="overflow-x-auto">
@@ -168,7 +167,7 @@ export function FourZeroOneKContent() {
                   <th className="p-3 border border-zinc-200 dark:border-zinc-700">Net Cash Retained</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className=" dark:divide-zinc-800">
                 <tr>
                   <td className="p-3 font-semibold text-red-600">Early Cash-Out (under 59½)</td>
                   <td className="p-3 font-bold text-red-600">10% IRS Penalty</td>
@@ -176,22 +175,22 @@ export function FourZeroOneKContent() {
                   <td className="p-3 font-bold text-red-600">Only 55% – 65% of balance</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-amber-600">IRS Hardship Withdrawal</td>
-                  <td className="p-3 font-medium text-amber-600">10% Penalty (unless exempt)</td>
+                  <td className="p-3 font-semibold text-blue-600">IRS Hardship Withdrawal</td>
+                  <td className="p-3 font-medium text-blue-600">10% Penalty (unless exempt)</td>
                   <td className="p-3">Federal + State Income Tax</td>
-                  <td className="p-3 font-medium text-amber-700">70% – 75% of balance</td>
+                  <td className="p-3 font-medium text-blue-600">70% – 75% of balance</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-blue-600">401(k) Participant Loan</td>
-                  <td className="p-3 font-bold text-emerald-600">0% Penalty</td>
-                  <td className="p-3 font-bold text-emerald-600">0% Tax (Loan proceeds)</td>
-                  <td className="p-3 font-bold text-emerald-600">100% (Repaid with interest to self)</td>
+                  <td className="p-3 font-bold text-blue-600">0% Penalty</td>
+                  <td className="p-3 font-bold text-blue-600">0% Tax (Loan proceeds)</td>
+                  <td className="p-3 font-bold text-blue-600">100% (Repaid with interest to self)</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-emerald-600">Qualified Retirement (59½+)</td>
-                  <td className="p-3 font-bold text-emerald-600">0% Penalty</td>
+                  <td className="p-3 font-semibold text-blue-600">Qualified Retirement (59½+)</td>
+                  <td className="p-3 font-bold text-blue-600">0% Penalty</td>
                   <td className="p-3">Ordinary Income Tax (Traditional)</td>
-                  <td className="p-3 font-bold text-emerald-600">100% Tax-Free if Roth 401(k)</td>
+                  <td className="p-3 font-bold text-blue-600">100% Tax-Free if Roth 401(k)</td>
                 </tr>
               </tbody>
             </table>
@@ -203,7 +202,7 @@ export function FourZeroOneKContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (FAQ)
           </h3>
         </div>
@@ -234,7 +233,7 @@ export function FourZeroOneKContent() {
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-zinc-600 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
+                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
                     {faq.answer}
                   </div>
                 )}

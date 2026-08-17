@@ -286,7 +286,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Your Full Retirement Age:</span>
-          <span className="text-indigo-600 dark:text-indigo-400 font-mono text-sm">
+          <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-sm">
             {results.fraDetails.fraDisplay}
           </span>
         </div>
@@ -370,7 +370,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
                     max="2010"
                     value={birthYearInput}
                     onChange={(e) => setBirthYearInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                   <span className="text-[10px] text-zinc-400">FRA: {results.fraDetails.fraDisplay}</span>
                 </div>
@@ -383,7 +383,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
                     max="105"
                     value={lifeExpInput}
                     onChange={(e) => setLifeExpInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
               </div>
@@ -399,7 +399,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
                   step="50"
                   value={fraBenefitInput}
                   onChange={(e) => setFraBenefitInput(e.target.value)}
-                  className="text-xs font-mono h-9 px-3"
+                  className="text-xs font-sans tabular-nums h-9 px-3"
                 />
               </div>
 
@@ -413,7 +413,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
                     step="0.25"
                     value={returnRateInput}
                     onChange={(e) => setReturnRateInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
                 <div className="space-y-1">
@@ -425,7 +425,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
                     step="0.25"
                     value={colaInput}
                     onChange={(e) => setColaInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
               </div>
@@ -440,15 +440,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
                   RECOMMENDED CLAIMING AGE
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -473,22 +465,22 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
                 </span>
               </div>
 
-              <div className="bg-white/10 p-3 rounded-xl text-xs backdrop-blur-sm border border-white/10 font-mono">
+              <div className="bg-white/10 p-3 rounded-xl text-xs backdrop-blur-sm border border-white/10 font-sans tabular-nums">
                 💡 <strong>Delayed Claiming Advantage:</strong> +{fmt(results.idealClaimAge.delayedClaimingAdvantage)} total lifetime income by waiting from 62 to 70.
               </div>
 
               <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Lifetime at Age 62</div>
-                  <div className="font-bold font-mono text-rose-300 text-sm">{fmt(results.idealClaimAge.lifetimeBenefit62)}</div>
+                  <div className="font-bold font-sans tabular-nums text-rose-300 text-sm">{fmt(results.idealClaimAge.lifetimeBenefit62)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Lifetime at FRA ({results.fraDetails.fraDisplay})</div>
-                  <div className="font-bold font-mono text-blue-300 text-sm">{fmt(results.idealClaimAge.lifetimeBenefitFra)}</div>
+                  <div className="font-bold font-sans tabular-nums text-blue-300 text-sm">{fmt(results.idealClaimAge.lifetimeBenefitFra)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Lifetime at Age 70</div>
-                  <div className="font-bold font-mono text-emerald-300 text-sm">{fmt(results.idealClaimAge.lifetimeBenefit70)}</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-300 text-sm">{fmt(results.idealClaimAge.lifetimeBenefit70)}</div>
                 </div>
               </div>
             </div>
@@ -523,7 +515,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-purple-900 dark:text-purple-200 text-sm block border-b pb-1">
                 Claim Age Winner Recommendation
@@ -532,7 +524,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
                 {results.compareTwoAges.recommendedOption}
               </div>
               <div className="font-sans text-zinc-600 dark:text-zinc-400">
-                Lifetime Financial Advantage: <span className="font-bold text-emerald-600 font-mono">{fmt(results.compareTwoAges.financialAdvantage)}</span>
+                Lifetime Financial Advantage: <span className="font-bold text-emerald-600 font-sans tabular-nums">{fmt(results.compareTwoAges.financialAdvantage)}</span>
               </div>
             </div>
 
@@ -558,15 +550,14 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
       {activeTab === "fraScale" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-5">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Clock className="h-5 w-5 text-emerald-500" /> Full Retirement Age (FRA) &amp; Monthly Benefit Scale
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Full Retirement Age (FRA) &amp; Monthly Benefit Scale
             </h3>
             <p className="text-xs text-zinc-500 mt-0.5">
               Your exact FRA is <strong>{results.fraDetails.fraDisplay}</strong> based on your birth year {results.fraDetails.birthYear}.
             </p>
           </div>
 
-          <div className="grid grid-cols-4 gap-4 text-xs font-mono">
+          <div className="grid grid-cols-4 gap-4 text-xs font-sans tabular-nums">
             <div className="bg-rose-50 dark:bg-rose-950/30 p-4 rounded-xl border border-rose-200 dark:border-rose-800">
               <span className="font-sans font-bold text-rose-900 dark:text-rose-200 block text-xs">Age 62 (Early)</span>
               <span className="text-xl font-extrabold text-rose-600">{fmt((Number(fraBenefitInput) || 2200) * getBenefitAdjustmentFactor(62, results.fraDetails.fullRetirementAgeYears))}</span>
@@ -598,8 +589,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
       {activeTab === "spousalTax" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Users className="h-5 w-5 text-rose-500" /> Spousal, Survivor &amp; Benefit Taxability Suite
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Spousal, Survivor &amp; Benefit Taxability Suite
             </h3>
           </div>
 
@@ -607,13 +597,13 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
             <div className="space-y-4">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Worker FRA Monthly Benefit ($)</label>
-                <Input type="number" value={workerFraInput} onChange={(e) => setWorkerFraInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={workerFraInput} onChange={(e) => setWorkerFraInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">Spouse Claim Age</label>
-                  <Input type="number" min="62" max="70" value={spouseAgeInput} onChange={(e) => setSpouseAgeInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                  <Input type="number" min="62" max="70" value={spouseAgeInput} onChange={(e) => setSpouseAgeInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
                 <div className="space-y-1">
                   <label className="font-semibold text-zinc-700 dark:text-zinc-300">Filing Status</label>
@@ -630,11 +620,11 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
 
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Other Annual Income ($) (AGI + Interest)</label>
-                <Input type="number" value={otherIncomeInput} onChange={(e) => setOtherIncomeInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={otherIncomeInput} onChange={(e) => setOtherIncomeInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
 
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-5 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-3 font-mono">
+            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-5 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-3 font-sans tabular-nums">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 text-sm block border-b pb-1">
                 Spousal &amp; Taxability Breakdown
               </span>
@@ -663,8 +653,7 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-blue-500" /> Cumulative Lifetime Benefits Comparison Chart
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Cumulative Lifetime Benefits Comparison Chart
             </h3>
 
             <Button type="button" size="sm" variant="outline" onClick={exportCSV} className="h-8 text-xs cursor-pointer">

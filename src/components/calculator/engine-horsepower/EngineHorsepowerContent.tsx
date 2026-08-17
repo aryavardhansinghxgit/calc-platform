@@ -7,7 +7,7 @@ export function EngineHorsepowerContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-800 dark:text-zinc-200">
       {/* SECTION 1 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white  dark:border-zinc-800 pb-2">
           1. What is Engine Horsepower? (Origins &amp; Physics)
         </h2>
         <p>
@@ -17,7 +17,7 @@ export function EngineHorsepowerContent() {
           The unit was originally coined in the late 18th century by Scottish inventor <strong>James Watt</strong> to evaluate the performance of his improved steam engine against draft horses. Watt determined experimentally that a heavy pit pony could lift an average of 22,000 foot-pounds of coal per minute. He conservatively scaled this figure by 50% for standard draft horses, establishing the universal engineering definition:
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs rounded-xl">
           {"1 Mechanical Horsepower (HP) = 33,000 foot-pounds of work per minute = 550 ft-lb/sec = 745.7 Watts"}
         </div>
 
@@ -25,44 +25,44 @@ export function EngineHorsepowerContent() {
           Fundamentally, mechanical power is derived from basic Newtonian work and time principles:
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs rounded-xl">
           {"Power = Work / Time = (Force × Distance) / Time = Force × Velocity"}
         </div>
       </section>
 
       {/* SECTION 2 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white  dark:border-zinc-800 pb-2">
           2. Mathematical Models for Estimating Horsepower
         </h2>
         <p>
           In performance automotive testing outside a fixed engine dynamometer cell, vehicle dynamics engineers rely on three empirical models to estimate power output:
         </p>
 
-        <h3 className="text-xl font-bold text-slate-900 dark:text-white">A. The Quarter-Mile Elapsed Time (ET) Formula</h3>
+        <h3 className="text-xl font-bold text-blue-600 dark:text-white">A. The Quarter-Mile Elapsed Time (ET) Formula</h3>
         <p>
           First derived by performance researchers Fox and Hale, this formula computes horsepower based on total vehicle race weight (W, in pounds) and quarter-mile sprint duration (ET, in seconds):
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs rounded-xl">
           {"Horsepower = Weight (lbs) / (ET / 5.825)³"}
         </div>
 
-        <h3 className="text-xl font-bold text-slate-900 dark:text-white">B. The Quarter-Mile Trap Speed Formula</h3>
+        <h3 className="text-xl font-bold text-blue-600 dark:text-white">B. The Quarter-Mile Trap Speed Formula</h3>
         <p>
           Because quarter-mile elapsed time is heavily influenced by tire spin, launch traction, and driver reaction times, <strong>finish-line trap speed</strong> offers a significantly more reliable reflection of raw engine horsepower:
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs rounded-xl">
           {"Horsepower = Weight (lbs) × (Trap Speed (mph) / 234)³"}
         </div>
 
-        <h3 className="text-xl font-bold text-slate-900 dark:text-white">C. The Rotational Torque-to-Power Equation &amp; 5,252 Derivation</h3>
+        <h3 className="text-xl font-bold text-blue-600 dark:text-white">C. The Rotational Torque-to-Power Equation &amp; 5,252 Derivation</h3>
         <p>
           Internal combustion engines produce rotational torque (force around an axis). To convert rotational torque (T, in lb-ft) at a specific crankshaft engine speed (N, in RPM) into linear horsepower:
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs rounded-xl">
           {"Horsepower = (Torque (lb-ft) × RPM) / 5,252.11"}
         </div>
 
@@ -70,14 +70,14 @@ export function EngineHorsepowerContent() {
           The 5,252 constant is derived directly from James Watt&apos;s original standard (33,000 ft-lbs/min) divided by 2π radians per revolution:
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-mono text-sm text-center font-bold shadow-xs rounded-xl">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-blue-900 dark:text-blue-200 font-sans tabular-nums text-sm text-center font-bold shadow-xs rounded-xl">
           {"Constant = (33,000 ft-lbs/min) / (2π rad/rev) = 33,000 / 6.2831853 = 5,252.113"}
         </div>
       </section>
 
       {/* SECTION 3 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white  dark:border-zinc-800 pb-2">
           3. Gross HP vs. Net HP vs. Brake HP (BHP) vs. Wheel HP (WHP)
         </h2>
         <p>
@@ -101,7 +101,7 @@ export function EngineHorsepowerContent() {
 
       {/* SECTION 4 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white  dark:border-zinc-800 pb-2">
           4. Drivetrain Parasitic Loss Dynamics
         </h2>
         <p>
@@ -120,22 +120,22 @@ export function EngineHorsepowerContent() {
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">Front-Wheel Drive (FWD) Manual</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">10% – 12%</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">445 WHP</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">445 WHP</td>
               </tr>
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">Rear-Wheel Drive (RWD) Manual</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">13% – 15%</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">430 WHP</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">430 WHP</td>
               </tr>
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">Rear-Wheel Drive (RWD) Torque Converter Auto</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">16% – 19%</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">412 WHP</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">412 WHP</td>
               </tr>
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">All-Wheel Drive (AWD / 4WD) Systems</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800">20% – 25%</td>
-                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-mono">390 WHP</td>
+                <td className="p-2 border border-slate-200 dark:border-zinc-800 font-sans tabular-nums">390 WHP</td>
               </tr>
             </tbody>
           </table>
@@ -144,14 +144,14 @@ export function EngineHorsepowerContent() {
 
       {/* SECTION 5 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white  dark:border-zinc-800 pb-2">
           5. Forced Induction, Displacement &amp; Volumetric Efficiency (VE)
         </h2>
         <p>
           Naturally aspirated engines rely on atmospheric pressure to fill combustion chambers, achieving between 80% and 95% Volumetric Efficiency (VE). Forced induction systems (turbochargers and superchargers) compress ambient intake air above sea level pressure (14.7 PSI):
         </p>
 
-        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-mono text-sm text-center">
+        <div className="my-4 p-4 bg-slate-50 dark:bg-zinc-900 rounded-xl border border-slate-200 dark:border-zinc-800 font-sans tabular-nums text-sm text-center">
           {"Effective Compression Ratio = Static CR × √((Boost PSI + 14.7) / 14.7)"}
         </div>
 
@@ -162,7 +162,7 @@ export function EngineHorsepowerContent() {
 
       {/* SECTION 6 */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white border-b border-slate-200 dark:border-zinc-800 pb-2">
+        <h2 className="text-2xl font-black tracking-tight text-blue-600 dark:text-white  dark:border-zinc-800 pb-2">
           6. Track Testing Safety &amp; Methodology
         </h2>
         <p>

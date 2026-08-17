@@ -421,14 +421,14 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
                     min="0"
                     value={d.balance || ""}
                     onChange={(e) => updateDebtRow(d.id, "balance", Number(e.target.value))}
-                    className="col-span-3 h-8 text-xs font-mono px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="col-span-3 h-8 text-xs font-sans tabular-nums px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                   <Input
                     type="number"
                     min="0"
                     value={d.minPayment || ""}
                     onChange={(e) => updateDebtRow(d.id, "minPayment", Number(e.target.value))}
-                    className="col-span-2 h-8 text-xs font-mono px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="col-span-2 h-8 text-xs font-sans tabular-nums px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                   <Input
                     type="number"
@@ -437,7 +437,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
                     step="0.1"
                     value={d.apr || ""}
                     onChange={(e) => updateDebtRow(d.id, "apr", Number(e.target.value))}
-                    className="col-span-2 h-8 text-xs font-mono px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="col-span-2 h-8 text-xs font-sans tabular-nums px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                   <div className="col-span-1 flex justify-center">
                     {debts.length > 1 && (
@@ -500,7 +500,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
                     min="0"
                     value={extraMonthlyInput}
                     onChange={(e) => setExtraMonthlyInput(e.target.value)}
-                    className="text-xs font-mono"
+                    className="text-xs font-sans tabular-nums"
                   />
                 </div>
                 <div className="space-y-1">
@@ -510,7 +510,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
                     min="0"
                     value={extraAnnualInput}
                     onChange={(e) => setExtraAnnualInput(e.target.value)}
-                    className="text-xs font-mono"
+                    className="text-xs font-sans tabular-nums"
                   />
                 </div>
               </div>
@@ -554,15 +554,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
                   TIME TO TOTAL DEBT FREEDOM
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -574,7 +566,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-mono text-white mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-sans tabular-nums text-white mb-2">
                 {results.monthsToPayoff} Months <span className="text-xl font-normal text-zinc-300">({results.yearsToPayoff} Yrs)</span>
               </div>
 
@@ -602,15 +594,15 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
               <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Initial Total Debt</div>
-                  <div className="font-bold font-mono text-white text-sm">{fmt(results.initialTotalBalance)}</div>
+                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.initialTotalBalance)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Total Interest Paid</div>
-                  <div className="font-bold font-mono text-red-300 text-sm">{fmt(results.totalInterestPaid)}</div>
+                  <div className="font-bold font-sans tabular-nums text-red-300 text-sm">{fmt(results.totalInterestPaid)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Total Amount Paid</div>
-                  <div className="font-bold font-mono text-emerald-300 text-sm">{fmt(results.totalAmountPaid)}</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-300 text-sm">{fmt(results.totalAmountPaid)}</div>
                 </div>
               </div>
             </div>
@@ -643,8 +635,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-amber-500" /> Debt Avalanche vs. Debt Snowball Side-by-Side Strategy Comparison
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Debt Avalanche vs. Debt Snowball Side-by-Side Strategy Comparison
               </h3>
               <p className="text-xs text-zinc-500">
                 Compare mathematical interest minimization (Avalanche) against psychological win momentum (Snowball).
@@ -652,7 +643,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans tabular-nums text-xs">
             {/* Avalanche Card */}
             <div className="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-xl p-5 space-y-3">
               <div className="flex items-center justify-between font-sans">
@@ -682,7 +673,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
             </div>
           </div>
 
-          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4 rounded-xl text-xs flex justify-between items-center font-mono">
+          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4 rounded-xl text-xs flex justify-between items-center font-sans tabular-nums">
             <span>Interest Savings of Avalanche over Snowball:</span>
             <span className="font-extrabold text-amber-700 dark:text-amber-300 text-base">
               {fmt(Math.max(0, snowballRes.totalInterestPaid - avalancheRes.totalInterestPaid))}
@@ -696,8 +687,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Zap className="h-5 w-5 text-emerald-500" /> Snowball Payment Rollover Reallocation Impact
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Snowball Payment Rollover Reallocation Impact
               </h3>
               <p className="text-xs text-zinc-500">
                 Visualize the power of keeping your monthly payment budget constant vs letting payments shrink as debts are eliminated.
@@ -705,7 +695,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans tabular-nums text-xs">
             <div className="bg-zinc-50 dark:bg-zinc-800/40 p-5 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-2">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 text-sm block">Rollover OFF (Payments Shrink)</span>
               <div>Months to Payoff: <span className="font-bold">{rolloverOffRes.monthsToPayoff} mos</span></div>
@@ -719,7 +709,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-4 rounded-xl text-xs flex justify-between items-center font-mono shadow-sm">
+          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-4 rounded-xl text-xs flex justify-between items-center font-sans tabular-nums shadow-sm">
             <div>
               <span className="text-emerald-100 block text-[10px] uppercase font-semibold">Time Saved with Rollover</span>
               <span className="text-base font-extrabold">{rolloverOffRes.monthsToPayoff - results.monthsToPayoff} Months Faster!</span>
@@ -737,8 +727,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Landmark className="h-5 w-5 text-indigo-500" /> Single Debt Consolidation Loan Evaluator
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Single Debt Consolidation Loan Evaluator
               </h3>
               <p className="text-xs text-zinc-500">
                 Compare combining your debts into a single fixed-rate consolidation loan against your current multi-debt schedule.
@@ -749,15 +738,15 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Consolidation Loan APR (%)</label>
-              <Input type="number" min="0" step="0.25" value={consolidationAprInput} onChange={(e) => setConsolidationAprInput(e.target.value)} className="text-xs font-mono" />
+              <Input type="number" min="0" step="0.25" value={consolidationAprInput} onChange={(e) => setConsolidationAprInput(e.target.value)} className="text-xs font-sans tabular-nums" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Consolidation Term (Months)</label>
-              <Input type="number" min="1" max="120" value={consolidationTermInput} onChange={(e) => setConsolidationTermInput(e.target.value)} className="text-xs font-mono" />
+              <Input type="number" min="1" max="120" value={consolidationTermInput} onChange={(e) => setConsolidationTermInput(e.target.value)} className="text-xs font-sans tabular-nums" />
             </div>
           </div>
 
-          <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl space-y-3 font-mono text-xs">
+          <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl space-y-3 font-sans tabular-nums text-xs">
             <div className="flex justify-between">
               <span className="text-zinc-600 dark:text-zinc-400">Total Debt Balance Consolidated:</span>
               <span className="font-bold text-zinc-900 dark:text-zinc-100">{fmt(results.initialTotalBalance)}</span>
@@ -785,8 +774,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
       {activeTab === "schedule" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-purple-500" /> Multi-Debt Combined Amortization Schedule
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Multi-Debt Combined Amortization Schedule
             </h3>
 
             <div className="flex items-center gap-2">
@@ -819,7 +807,7 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
                   <th className="p-2.5 text-center">Debts Active</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-sans tabular-nums">
                 {paginatedSchedule.map((row) => (
                   <tr key={row.month} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">

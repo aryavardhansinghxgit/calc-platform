@@ -294,7 +294,7 @@ export function TireSizeCalculator() {
                 <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400 flex items-center gap-1.5">
                   <Disc className="h-4 w-4 text-blue-600" /> Stock Tire (Size 1)
                 </span>
-                <span className="text-xs font-mono font-black text-slate-800 dark:text-zinc-100 bg-blue-100 dark:bg-blue-950/60 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-900">
+                <span className="text-xs font-sans tabular-nums font-black text-slate-800 dark:text-zinc-100 bg-blue-100 dark:bg-blue-950/60 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-900">
                   {result.tire1.formattedSize}
                 </span>
               </div>
@@ -306,7 +306,7 @@ export function TireSizeCalculator() {
                   placeholder="e.g. 225/50R17 or 225 50 17"
                   value={quickInput1}
                   onChange={(e) => setQuickInput1(e.target.value)}
-                  className="h-8 text-xs font-mono bg-white dark:bg-zinc-900"
+                  className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
                 />
                 <Button
                   onClick={handleApplyQuick1}
@@ -323,7 +323,7 @@ export function TireSizeCalculator() {
                   <div className="space-y-1">
                     <div className="flex justify-between font-bold text-slate-700 dark:text-zinc-300">
                       <span>Section Width:</span>
-                      <span className="font-mono text-blue-600">{t1Width} mm</span>
+                      <span className="font-sans tabular-nums text-blue-600">{t1Width} mm</span>
                     </div>
                     <input
                       type="range"
@@ -339,7 +339,7 @@ export function TireSizeCalculator() {
                   <div className="space-y-1">
                     <div className="flex justify-between font-bold text-slate-700 dark:text-zinc-300">
                       <span>Aspect Ratio:</span>
-                      <span className="font-mono text-blue-600">{t1Aspect} %</span>
+                      <span className="font-sans tabular-nums text-blue-600">{t1Aspect} %</span>
                     </div>
                     <input
                       type="range"
@@ -355,7 +355,7 @@ export function TireSizeCalculator() {
                   <div className="space-y-1">
                     <div className="flex justify-between font-bold text-slate-700 dark:text-zinc-300">
                       <span>Rim Diameter:</span>
-                      <span className="font-mono text-blue-600">{t1Rim} in</span>
+                      <span className="font-sans tabular-nums text-blue-600">{t1Rim} in</span>
                     </div>
                     <input
                       type="range"
@@ -377,7 +377,7 @@ export function TireSizeCalculator() {
                       type="number"
                       value={t1FloatDia}
                       onChange={(e) => setT1FloatDia(Number(e.target.value))}
-                      className="h-8 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                      className="h-8 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                     />
                   </div>
                   <div className="space-y-1">
@@ -387,7 +387,7 @@ export function TireSizeCalculator() {
                       step="0.5"
                       value={t1FloatWidth}
                       onChange={(e) => setT1FloatWidth(Number(e.target.value))}
-                      className="h-8 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                      className="h-8 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                     />
                   </div>
                   <div className="space-y-1">
@@ -396,7 +396,7 @@ export function TireSizeCalculator() {
                       type="number"
                       value={t1Rim}
                       onChange={(e) => setT1Rim(Number(e.target.value))}
-                      className="h-8 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                      className="h-8 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                     />
                   </div>
                 </div>
@@ -429,7 +429,7 @@ export function TireSizeCalculator() {
                 <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
                   <Disc className="h-4 w-4 text-emerald-600" /> Target Tire (Size 2)
                 </span>
-                <span className="text-xs font-mono font-black text-slate-800 dark:text-zinc-100 bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-900">
+                <span className="text-xs font-sans tabular-nums font-black text-slate-800 dark:text-zinc-100 bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-900">
                   {result.tire2.formattedSize}
                 </span>
               </div>
@@ -441,7 +441,7 @@ export function TireSizeCalculator() {
                   placeholder="e.g. 245/45R18 or 33 12.5 15"
                   value={quickInput2}
                   onChange={(e) => setQuickInput2(e.target.value)}
-                  className="h-8 text-xs font-mono bg-white dark:bg-zinc-900"
+                  className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
                 />
                 <Button
                   onClick={handleApplyQuick2}
@@ -458,7 +458,7 @@ export function TireSizeCalculator() {
                   <div className="space-y-1">
                     <div className="flex justify-between font-bold text-slate-700 dark:text-zinc-300">
                       <span>Section Width:</span>
-                      <span className="font-mono text-emerald-600">{t2Width} mm</span>
+                      <span className="font-sans tabular-nums text-emerald-600">{t2Width} mm</span>
                     </div>
                     <input
                       type="range"
@@ -474,7 +474,7 @@ export function TireSizeCalculator() {
                   <div className="space-y-1">
                     <div className="flex justify-between font-bold text-slate-700 dark:text-zinc-300">
                       <span>Aspect Ratio:</span>
-                      <span className="font-mono text-emerald-600">{t2Aspect} %</span>
+                      <span className="font-sans tabular-nums text-emerald-600">{t2Aspect} %</span>
                     </div>
                     <input
                       type="range"
@@ -490,7 +490,7 @@ export function TireSizeCalculator() {
                   <div className="space-y-1">
                     <div className="flex justify-between font-bold text-slate-700 dark:text-zinc-300">
                       <span>Rim Diameter:</span>
-                      <span className="font-mono text-emerald-600">{t2Rim} in</span>
+                      <span className="font-sans tabular-nums text-emerald-600">{t2Rim} in</span>
                     </div>
                     <input
                       type="range"
@@ -512,7 +512,7 @@ export function TireSizeCalculator() {
                       type="number"
                       value={t2FloatDia}
                       onChange={(e) => setT2FloatDia(Number(e.target.value))}
-                      className="h-8 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                      className="h-8 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                     />
                   </div>
                   <div className="space-y-1">
@@ -522,7 +522,7 @@ export function TireSizeCalculator() {
                       step="0.5"
                       value={t2FloatWidth}
                       onChange={(e) => setT2FloatWidth(Number(e.target.value))}
-                      className="h-8 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                      className="h-8 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                     />
                   </div>
                   <div className="space-y-1">
@@ -531,7 +531,7 @@ export function TireSizeCalculator() {
                       type="number"
                       value={t2Rim}
                       onChange={(e) => setT2Rim(Number(e.target.value))}
-                      className="h-8 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                      className="h-8 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                     />
                   </div>
                 </div>
@@ -583,7 +583,7 @@ export function TireSizeCalculator() {
                       step="0.5"
                       value={stockRimWidth}
                       onChange={(e) => setStockRimWidth(Number(e.target.value))}
-                      className="h-8 text-xs font-mono bg-white dark:bg-zinc-900"
+                      className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
                     />
                   </div>
                   <div className="space-y-1">
@@ -592,7 +592,7 @@ export function TireSizeCalculator() {
                       type="number"
                       value={stockOffset}
                       onChange={(e) => setStockOffset(Number(e.target.value))}
-                      className="h-8 text-xs font-mono bg-white dark:bg-zinc-900"
+                      className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
                     />
                   </div>
                   <div className="space-y-1">
@@ -602,7 +602,7 @@ export function TireSizeCalculator() {
                       step="0.5"
                       value={newRimWidth}
                       onChange={(e) => setNewRimWidth(Number(e.target.value))}
-                      className="h-8 text-xs font-mono bg-white dark:bg-zinc-900"
+                      className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
                     />
                   </div>
                   <div className="space-y-1">
@@ -611,7 +611,7 @@ export function TireSizeCalculator() {
                       type="number"
                       value={newOffset}
                       onChange={(e) => setNewOffset(Number(e.target.value))}
-                      className="h-8 text-xs font-mono bg-white dark:bg-zinc-900"
+                      className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
                     />
                   </div>
                 </div>
@@ -660,7 +660,7 @@ export function TireSizeCalculator() {
                       step="0.01"
                       value={stockGearRatio}
                       onChange={(e) => setStockGearRatio(Number(e.target.value))}
-                      className="h-8 text-xs font-mono bg-white dark:bg-zinc-900 max-w-xs"
+                      className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 max-w-xs"
                     />
                   </div>
                   {result.gearResults && (
@@ -699,14 +699,14 @@ export function TireSizeCalculator() {
           <div className="grid grid-cols-2 gap-2 text-center bg-black/30 backdrop-blur-xs p-3 rounded-xl border border-white/20">
             <div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-blue-200 block">Diameter Delta</span>
-              <span className="text-xl sm:text-2xl font-black font-mono tracking-tight text-white">
+              <span className="text-xl sm:text-2xl font-black font-sans tabular-nums tracking-tight text-white">
                 {result.diameterDiffIn > 0 ? "+" : ""}{result.diameterDiffIn}"
               </span>
               <span className="text-[10px] text-blue-200 block">{result.diameterDiffMm} mm</span>
             </div>
             <div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-blue-200 block">Speed @ 65 MPH</span>
-              <span className="text-xl sm:text-2xl font-black font-mono tracking-tight text-emerald-300">
+              <span className="text-xl sm:text-2xl font-black font-sans tabular-nums tracking-tight text-emerald-300">
                 {result.speedAt65Mph}
               </span>
               <span className="text-[10px] text-blue-200 block">Actual GPS Speed</span>
@@ -1056,7 +1056,7 @@ export function TireSizeCalculator() {
                     <th className="py-2 px-1 text-right">Difference</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/10 font-mono text-[11px]">
+                <tbody className="divide-y divide-white/10 font-sans tabular-nums text-[11px]">
                   <tr className="hover:bg-white/5 transition-colors">
                     <td className="py-2.5 px-1 font-sans text-slate-200 font-bold">Overall Diameter</td>
                     <td className="py-2.5 px-1 text-center">
@@ -1151,7 +1151,7 @@ export function TireSizeCalculator() {
             <span className="text-[10px] font-bold uppercase tracking-wider text-blue-200 block text-center">
               Speedometer Calibration Delta Matrix
             </span>
-            <div className="grid grid-cols-6 gap-1 text-center font-mono text-[10px]">
+            <div className="grid grid-cols-6 gap-1 text-center font-sans tabular-nums text-[10px]">
               {result.speedDeltaTable.map((pt) => (
                 <div key={pt.indicatedMph} className="p-1 bg-white/10 rounded-md">
                   <span className="text-blue-200 block text-[9px]">{pt.indicatedMph} mph</span>

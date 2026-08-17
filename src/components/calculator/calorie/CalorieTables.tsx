@@ -131,8 +131,8 @@ export function CalorieTables() {
                 <th className="py-2.5 px-3">Food Item</th>
                 <th className="py-2.5 px-3">Category</th>
                 <th className="py-2.5 px-3">Serving Size</th>
-                <th className="py-2.5 px-3 font-mono text-emerald-600 dark:text-emerald-400">Calories (kcal)</th>
-                <th className="py-2.5 px-3 font-mono text-sky-600 dark:text-sky-400">Kilojoules (kJ)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-600 dark:text-emerald-400">Calories (kcal)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-sky-600 dark:text-sky-400">Kilojoules (kJ)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
@@ -141,8 +141,8 @@ export function CalorieTables() {
                   <td className="py-2 px-3 font-semibold text-zinc-900 dark:text-zinc-100">{f.name}</td>
                   <td className="py-2 px-3 text-zinc-500">{f.category}</td>
                   <td className="py-2 px-3 text-zinc-600 dark:text-zinc-400">{f.serving}</td>
-                  <td className="py-2 px-3 font-mono font-bold text-emerald-700 dark:text-emerald-400">{f.cals} kcal</td>
-                  <td className="py-2 px-3 font-mono text-sky-700 dark:text-sky-400">{f.kj} kJ</td>
+                  <td className="py-2 px-3 font-sans tabular-nums font-bold text-emerald-700 dark:text-emerald-400">{f.cals} kcal</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-sky-700 dark:text-sky-400">{f.kj} kJ</td>
                 </tr>
               ))}
             </tbody>
@@ -200,9 +200,9 @@ export function CalorieTables() {
               </tr>
               <tr className="bg-zinc-100 dark:bg-zinc-950 font-bold">
                 <td className="py-2.5 px-3 text-zinc-900 dark:text-zinc-100">Total Daily Energy</td>
-                <td className="py-2.5 px-3 text-emerald-700 dark:text-emerald-400 font-mono">1,200 Calories</td>
-                <td className="py-2.5 px-3 text-emerald-700 dark:text-emerald-400 font-mono">1,500 Calories</td>
-                <td className="py-2.5 px-3 text-emerald-700 dark:text-emerald-400 font-mono">2,000 Calories</td>
+                <td className="py-2.5 px-3 text-emerald-700 dark:text-emerald-400 font-sans tabular-nums">1,200 Calories</td>
+                <td className="py-2.5 px-3 text-emerald-700 dark:text-emerald-400 font-sans tabular-nums">1,500 Calories</td>
+                <td className="py-2.5 px-3 text-emerald-700 dark:text-emerald-400 font-sans tabular-nums">2,000 Calories</td>
               </tr>
             </tbody>
           </table>
@@ -221,18 +221,18 @@ export function CalorieTables() {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-3 px-3">Exercise Activity (1 Hour)</th>
-                <th className="py-3 px-3 font-mono text-sky-700 dark:text-sky-400">125 lb Person (57 kg)</th>
-                <th className="py-3 px-3 font-mono text-emerald-700 dark:text-emerald-400">155 lb Person (70 kg)</th>
-                <th className="py-3 px-3 font-mono text-purple-700 dark:text-purple-400">185 lb Person (84 kg)</th>
+                <th className="py-3 px-3 font-sans tabular-nums text-sky-700 dark:text-sky-400">125 lb Person (57 kg)</th>
+                <th className="py-3 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">155 lb Person (70 kg)</th>
+                <th className="py-3 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">185 lb Person (84 kg)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               {exerciseList.map((ex, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2 px-3 font-semibold text-zinc-900 dark:text-zinc-100">{ex.name}</td>
-                  <td className="py-2 px-3 font-mono text-sky-700 dark:text-sky-400">{ex.cals125} kcal</td>
-                  <td className="py-2 px-3 font-mono font-bold text-emerald-700 dark:text-emerald-400">{ex.cals155} kcal</td>
-                  <td className="py-2 px-3 font-mono text-purple-700 dark:text-purple-400">{ex.cals185} kcal</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-sky-700 dark:text-sky-400">{ex.cals125} kcal</td>
+                  <td className="py-2 px-3 font-sans tabular-nums font-bold text-emerald-700 dark:text-emerald-400">{ex.cals155} kcal</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">{ex.cals185} kcal</td>
                 </tr>
               ))}
             </tbody>
@@ -252,18 +252,18 @@ export function CalorieTables() {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Macronutrient / Component</th>
-                <th className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400">Calories (kcal per gram)</th>
-                <th className="py-2.5 px-3 font-mono text-sky-700 dark:text-sky-400">Kilojoules (kJ per gram)</th>
-                <th className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">Calories (kcal per oz)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">Calories (kcal per gram)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-sky-700 dark:text-sky-400">Kilojoules (kJ per gram)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">Calories (kcal per oz)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               {foodComponents.map((c, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2 px-3 font-semibold text-zinc-900 dark:text-zinc-100">{c.component}</td>
-                  <td className="py-2 px-3 font-mono font-bold text-emerald-700 dark:text-emerald-400">{c.kcalPerGram} kcal/g</td>
-                  <td className="py-2 px-3 font-mono text-sky-700 dark:text-sky-400">{c.kjPerGram} kJ/g</td>
-                  <td className="py-2 px-3 font-mono text-purple-700 dark:text-purple-400">{c.kcalPerOz} kcal/oz</td>
+                  <td className="py-2 px-3 font-sans tabular-nums font-bold text-emerald-700 dark:text-emerald-400">{c.kcalPerGram} kcal/g</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-sky-700 dark:text-sky-400">{c.kjPerGram} kJ/g</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">{c.kcalPerOz} kcal/oz</td>
                 </tr>
               ))}
             </tbody>

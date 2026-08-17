@@ -141,8 +141,7 @@ export function HouseAffordabilityContentSection() {
 
       {/* Related Financial Tools Header */}
       <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 space-y-2">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">
-          <Calculator className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Related Home Buying Tools
+        <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">Related Home Buying Tools
         </h4>
         <div className="flex flex-wrap gap-2 text-xs">
           <Link
@@ -192,9 +191,7 @@ export function HouseAffordabilityContentSection() {
 
       {/* 1. What Is House Affordability */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <BookOpen className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          1. What Is House Affordability?
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">1. What Is House Affordability?
         </h2>
         <p className="text-sm leading-relaxed">
           <strong>House Affordability</strong> is an evaluation of the maximum home purchase price and loan amount you can comfortably take on without straining your household finances or risking mortgage default. Lenders determine home affordability by measuring your gross household income against recurring debt obligations using <strong>Debt-to-Income (DTI) ratios</strong>.
@@ -203,37 +200,31 @@ export function HouseAffordabilityContentSection() {
 
       {/* 2. Front-End Ratio Explained */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Percent className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-          2. Front-End Ratio (Housing Ratio) Explained
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">2. Front-End Ratio (Housing Ratio) Explained
         </h2>
         <p className="text-sm leading-relaxed">
           The <strong>Front-End Ratio</strong> calculates the percentage of your gross monthly income that goes toward housing expenses alone (including mortgage principal & interest, property taxes, home insurance, and HOA fees).
         </p>
-        <div className="p-4 rounded-xl bg-zinc-900 text-zinc-100 dark:bg-zinc-950 font-mono text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
+        <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 font-sans tabular-nums text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
           Front-End Ratio = ( Monthly Housing Costs / Monthly Gross Income ) × 100
         </div>
       </section>
 
       {/* 3. Back-End Ratio Explained */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <TrendingDown className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-          3. Back-End Ratio (Total Debt Ratio) Explained
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Back-End Ratio (Total Debt Ratio) Explained
         </h2>
         <p className="text-sm leading-relaxed">
           The <strong>Back-End Ratio</strong> calculates the percentage of your gross monthly income required to cover housing expenses plus all other recurring debt payments (car loans, student loans, minimum credit card payments).
         </p>
-        <div className="p-4 rounded-xl bg-zinc-900 text-zinc-100 dark:bg-zinc-950 font-mono text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
+        <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 font-sans tabular-nums text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
           Back-End Ratio = [ ( Housing Costs + Other Monthly Debts ) / Monthly Gross Income ] × 100
         </div>
       </section>
 
       {/* 4. Conventional Loans and the 28/36 Rule */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Building className="h-5 w-5 text-sky-600 dark:text-sky-400" />
-          4. Conventional Loans and the 28/36 Rule
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">4. Conventional Loans and the 28/36 Rule
         </h2>
         <p className="text-sm leading-relaxed">
           Conventional mortgage underwriters strictly enforce the <strong>28/36 Rule</strong>:
@@ -250,9 +241,7 @@ export function HouseAffordabilityContentSection() {
 
       {/* 5. FHA Loans */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <ShieldCheck className="h-5 w-5 text-teal-600 dark:text-teal-400" />
-          5. FHA Loans and the 31/43 Rule
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">5. FHA Loans and the 31/43 Rule
         </h2>
         <p className="text-sm leading-relaxed">
           Government-backed <strong>FHA loans</strong> offer more lenient debt-to-income limits under the <strong>31/43 Rule</strong> (31% Front-End housing limit and 43% Back-End total debt limit). FHA loans require an upfront Mortgage Insurance Premium (MIP) and annual MIP fees.
@@ -261,9 +250,7 @@ export function HouseAffordabilityContentSection() {
 
       {/* 6. VA Loans */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Zap className="h-5 w-5 text-amber-500" />
-          6. VA Loans and the 41% Back-End Rule
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">6. VA Loans and the 41% Back-End Rule
         </h2>
         <p className="text-sm leading-relaxed">
           Eligible military veterans and active-duty service members can qualify for zero-down-payment <strong>VA loans</strong>. VA guidelines utilize a <strong>41% Back-End DTI benchmark</strong> without enforcing a rigid Front-End ratio cap.
@@ -272,35 +259,31 @@ export function HouseAffordabilityContentSection() {
 
       {/* 7. Custom Debt-To-Income Ratios */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-          7. Custom DTI Risk Levels Explained
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">7. Custom DTI Risk Levels Explained
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <strong className="text-emerald-600 dark:text-emerald-400">20% DTI — Conservative</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Leaves significant leftover income for aggressive retirement savings and investments.</p>
+            <strong className="text-blue-600 dark:text-blue-400">20% DTI — Conservative</strong>
+            <p className="text-slate-900 dark:text-slate-100">Leaves significant leftover income for aggressive retirement savings and investments.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
             <strong className="text-blue-600 dark:text-blue-400">30% DTI — Moderate</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Standard balanced allocation for average household budgets.</p>
+            <p className="text-slate-900 dark:text-slate-100">Standard balanced allocation for average household budgets.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <strong className="text-amber-600 dark:text-amber-400">40% DTI — Aggressive</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Stretches monthly budgets; requires strict discipline on discretionary spending.</p>
+            <strong className="text-blue-600 dark:text-blue-400">40% DTI — Aggressive</strong>
+            <p className="text-slate-900 dark:text-slate-100">Stretches monthly budgets; requires strict discipline on discretionary spending.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <strong className="text-rose-600 dark:text-rose-400">50% DTI — High Risk</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Creates vulnerability to unexpected job loss or medical emergencies.</p>
+            <strong className="text-blue-600 dark:text-blue-400">50% DTI — High Risk</strong>
+            <p className="text-slate-900 dark:text-slate-100">Creates vulnerability to unexpected job loss or medical emergencies.</p>
           </div>
         </div>
       </section>
 
       {/* 8. Why You May Not Afford a House */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <CheckCircle2 className="h-5 w-5 text-teal-600 dark:text-teal-400" />
-          8. Why You May Not Afford a House & How to Improve
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">8. Why You May Not Afford a House & How to Improve
         </h2>
         <ul className="list-disc list-inside space-y-2 text-sm pl-2">
           <li><strong>Reduce Existing Monthly Debt:</strong> Pay off car loans or credit cards to lower your Back-End DTI.</li>
@@ -312,9 +295,7 @@ export function HouseAffordabilityContentSection() {
 
       {/* 9. FAQs Section (12 Questions) */}
       <section className="space-y-4">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <HelpCircle className="h-5 w-5 text-amber-500" />
-          9. Frequently Asked Questions (FAQ)
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">9. Frequently Asked Questions (FAQ)
         </h2>
 
         <div className="space-y-3 text-xs">
@@ -323,10 +304,10 @@ export function HouseAffordabilityContentSection() {
               key={`faq-house-${idx}`}
               className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1"
             >
-              <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
+              <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">
                 {idx + 1}. {item.question}
               </h3>
-              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
                 {item.answer}
               </p>
             </div>
@@ -335,8 +316,8 @@ export function HouseAffordabilityContentSection() {
       </section>
 
       {/* Internal Links Grid */}
-      <div className="pt-6 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+      <div className="pt-6  dark:border-zinc-800 space-y-3">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
           Explore Related Financial Calculators on CalcPlatform
         </h4>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">

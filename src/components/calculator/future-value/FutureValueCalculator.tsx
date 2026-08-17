@@ -425,7 +425,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Initial Investment (PV)</span>
-                <span className="font-mono text-blue-600">{fmt(initialInvestment)}</span>
+                <span className="font-sans tabular-nums text-blue-600">{fmt(initialInvestment)}</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-bold">{currencySymbol}</span>
@@ -435,7 +435,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                   step="500"
                   value={initialInvestment}
                   onChange={(e) => setInitialInvestment(Math.max(0, Number(e.target.value)))}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -444,7 +444,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Periodic Contribution (PMT)</span>
-                <span className="font-mono text-emerald-600">{fmt(periodicContribution)}</span>
+                <span className="font-sans tabular-nums text-emerald-600">{fmt(periodicContribution)}</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-bold">{currencySymbol}</span>
@@ -454,7 +454,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                   step="50"
                   value={periodicContribution}
                   onChange={(e) => setPeriodicContribution(Math.max(0, Number(e.target.value)))}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -463,7 +463,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Expected Interest Rate (%)</span>
-                <span className="font-mono text-purple-600">{interestRate}%</span>
+                <span className="font-sans tabular-nums text-purple-600">{interestRate}%</span>
               </label>
               <div className="flex items-center gap-2">
                 <Input
@@ -473,7 +473,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                   step="0.1"
                   value={interestRate}
                   onChange={(e) => setInterestRate(Math.max(0, Number(e.target.value)))}
-                  className="text-xs font-mono"
+                  className="text-xs font-sans tabular-nums"
                 />
                 <input
                   type="range"
@@ -491,7 +491,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Investment Duration (Years)</span>
-                <span className="font-mono text-blue-600">{years} Years</span>
+                <span className="font-sans tabular-nums text-blue-600">{years} Years</span>
               </label>
               <div className="flex items-center gap-2">
                 <Input
@@ -500,7 +500,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                   max="100"
                   value={years}
                   onChange={(e) => setYears(Math.max(1, Number(e.target.value)))}
-                  className="text-xs font-mono"
+                  className="text-xs font-sans tabular-nums"
                 />
                 <input
                   type="range"
@@ -599,7 +599,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                         step="0.5"
                         value={stepUpRate}
                         onChange={(e) => setStepUpRate(Number(e.target.value))}
-                        className="text-xs font-mono"
+                        className="text-xs font-sans tabular-nums"
                       />
                     </div>
                     <div className="space-y-1">
@@ -610,7 +610,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                         step="0.1"
                         value={inflationRate}
                         onChange={(e) => setInflationRate(Number(e.target.value))}
-                        className="text-xs font-mono"
+                        className="text-xs font-sans tabular-nums"
                       />
                     </div>
                   </div>
@@ -624,7 +624,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                         step="1"
                         value={taxRate}
                         onChange={(e) => setTaxRate(Number(e.target.value))}
-                        className="text-xs font-mono"
+                        className="text-xs font-sans tabular-nums"
                       />
                     </div>
                     <div className="space-y-1">
@@ -635,7 +635,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                         max={years}
                         value={marketCrashYear}
                         onChange={(e) => setMarketCrashYear(Number(e.target.value))}
-                        className="text-xs font-mono"
+                        className="text-xs font-sans tabular-nums"
                       />
                     </div>
                   </div>
@@ -653,15 +653,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                   Projected Future Value
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -673,13 +665,13 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                 </div>
               </div>
 
-              <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-2 font-mono">
+              <div className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-2 font-sans tabular-nums">
                 {fmt(results.futureValue)}
               </div>
 
               {showAdvanced && inflationRate > 0 && (
                 <div className="text-xs text-blue-200 font-medium">
-                  Real Purchasing Power (Inflation-Adjusted): <span className="font-bold font-mono text-emerald-400">{fmt(results.inflationAdjustedFV)}</span>
+                  Real Purchasing Power (Inflation-Adjusted): <span className="font-bold font-sans tabular-nums text-emerald-400">{fmt(results.inflationAdjustedFV)}</span>
                 </div>
               )}
 
@@ -687,19 +679,19 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Total Invested</div>
-                  <div className="font-bold font-mono text-white text-sm">{fmt(results.totalInvested)}</div>
+                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.totalInvested)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Interest Earned</div>
-                  <div className="font-bold font-mono text-emerald-400 text-sm">{fmt(results.totalInterestEarned)}</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-400 text-sm">{fmt(results.totalInterestEarned)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Return Multiple</div>
-                  <div className="font-bold font-mono text-purple-300 text-sm">{results.returnMultiple}x</div>
+                  <div className="font-bold font-sans tabular-nums text-purple-300 text-sm">{results.returnMultiple}x</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Years to Double</div>
-                  <div className="font-bold font-mono text-amber-300 text-sm">{results.yearsToDouble} yrs</div>
+                  <div className="font-bold font-sans tabular-nums text-amber-300 text-sm">{results.yearsToDouble} yrs</div>
                 </div>
               </div>
             </div>
@@ -708,25 +700,25 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
                 <div className="text-[10px] text-zinc-500 uppercase font-semibold">Growth Efficiency</div>
-                <div className="text-base font-extrabold text-blue-600 dark:text-blue-400 font-mono mt-0.5">
+                <div className="text-base font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums mt-0.5">
                   {results.growthEfficiencyScore}%
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
                 <div className="text-[10px] text-zinc-500 uppercase font-semibold">Effective APY</div>
-                <div className="text-base font-extrabold text-purple-600 dark:text-purple-400 font-mono mt-0.5">
+                <div className="text-base font-extrabold text-purple-600 dark:text-purple-400 font-sans tabular-nums mt-0.5">
                   {results.effectiveAnnualYield}%
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
                 <div className="text-[10px] text-zinc-500 uppercase font-semibold">Interest Share</div>
-                <div className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">
+                <div className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-sans tabular-nums mt-0.5">
                   {results.interestContributionRatio}%
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
                 <div className="text-[10px] text-zinc-500 uppercase font-semibold">Monte Carlo Goal Prob</div>
-                <div className="text-base font-extrabold text-amber-600 dark:text-amber-400 font-mono mt-0.5">
+                <div className="text-base font-extrabold text-amber-600 dark:text-amber-400 font-sans tabular-nums mt-0.5">
                   {results.monteCarloProbability}%
                 </div>
               </div>
@@ -775,7 +767,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
           <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <Target className="h-6 w-6 text-emerald-500" />
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                 Goal-Based Investment Reverse Calculator
               </h3>
               <p className="text-xs text-zinc-500">
@@ -797,7 +789,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                     step="10000"
                     value={targetFV}
                     onChange={(e) => setTargetFV(Math.max(1000, Number(e.target.value)))}
-                    className="pl-7 text-xs font-mono font-bold text-emerald-600"
+                    className="pl-7 text-xs font-sans tabular-nums font-bold text-emerald-600"
                   />
                 </div>
               </div>
@@ -825,7 +817,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                       type="number"
                       value={initialInvestment}
                       onChange={(e) => setInitialInvestment(Number(e.target.value))}
-                      className="text-xs font-mono"
+                      className="text-xs font-sans tabular-nums"
                     />
                   </div>
                 )}
@@ -836,7 +828,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                       type="number"
                       value={periodicContribution}
                       onChange={(e) => setPeriodicContribution(Number(e.target.value))}
-                      className="text-xs font-mono"
+                      className="text-xs font-sans tabular-nums"
                     />
                   </div>
                 )}
@@ -847,7 +839,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                       type="number"
                       value={interestRate}
                       onChange={(e) => setInterestRate(Number(e.target.value))}
-                      className="text-xs font-mono"
+                      className="text-xs font-sans tabular-nums"
                     />
                   </div>
                 )}
@@ -858,7 +850,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                       type="number"
                       value={years}
                       onChange={(e) => setYears(Number(e.target.value))}
-                      className="text-xs font-mono"
+                      className="text-xs font-sans tabular-nums"
                     />
                   </div>
                 )}
@@ -871,7 +863,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                 Required Strategy to Reach {fmt(targetFV)}
               </span>
 
-              <div className="text-4xl sm:text-5xl font-extrabold text-white font-mono">
+              <div className="text-4xl sm:text-5xl font-extrabold text-white font-sans tabular-nums">
                 {goalSolveTarget === "pmt" && `${fmt(solvedGoalValue)} / month`}
                 {goalSolveTarget === "pv" && `${fmt(solvedGoalValue)} upfront`}
                 {goalSolveTarget === "rate" && `${solvedGoalValue}% annual return`}
@@ -892,7 +884,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
           <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <BarChart3 className="h-6 w-6 text-purple-500" />
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                 Side-by-Side Scenario Analysis
               </h3>
               <p className="text-xs text-zinc-500">
@@ -910,13 +902,13 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                   {(interestRate - 2.5).toFixed(1)}% Return
                 </Badge>
               </div>
-              <div className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 font-mono">
+              <div className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums">
                 {fmt(results.scenarios.conservative.futureValue)}
               </div>
               <div className="text-xs space-y-1 text-zinc-600 dark:text-zinc-400">
-                <div className="flex justify-between"><span>Invested:</span> <span className="font-mono">{fmt(results.scenarios.conservative.totalInvested)}</span></div>
-                <div className="flex justify-between"><span>Interest:</span> <span className="font-mono text-emerald-600">{fmt(results.scenarios.conservative.totalInterest)}</span></div>
-                <div className="flex justify-between"><span>Multiple:</span> <span className="font-mono">{results.scenarios.conservative.returnMultiple}x</span></div>
+                <div className="flex justify-between"><span>Invested:</span> <span className="font-sans tabular-nums">{fmt(results.scenarios.conservative.totalInvested)}</span></div>
+                <div className="flex justify-between"><span>Interest:</span> <span className="font-sans tabular-nums text-emerald-600">{fmt(results.scenarios.conservative.totalInterest)}</span></div>
+                <div className="flex justify-between"><span>Multiple:</span> <span className="font-sans tabular-nums">{results.scenarios.conservative.returnMultiple}x</span></div>
               </div>
             </div>
 
@@ -929,13 +921,13 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                   {interestRate.toFixed(1)}% Return
                 </Badge>
               </div>
-              <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 font-mono">
+              <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums">
                 {fmt(results.scenarios.moderate.futureValue)}
               </div>
               <div className="text-xs space-y-1 text-zinc-600 dark:text-zinc-400">
-                <div className="flex justify-between"><span>Invested:</span> <span className="font-mono">{fmt(results.scenarios.moderate.totalInvested)}</span></div>
-                <div className="flex justify-between"><span>Interest:</span> <span className="font-mono text-emerald-600">{fmt(results.scenarios.moderate.totalInterest)}</span></div>
-                <div className="flex justify-between"><span>Multiple:</span> <span className="font-mono">{results.scenarios.moderate.returnMultiple}x</span></div>
+                <div className="flex justify-between"><span>Invested:</span> <span className="font-sans tabular-nums">{fmt(results.scenarios.moderate.totalInvested)}</span></div>
+                <div className="flex justify-between"><span>Interest:</span> <span className="font-sans tabular-nums text-emerald-600">{fmt(results.scenarios.moderate.totalInterest)}</span></div>
+                <div className="flex justify-between"><span>Multiple:</span> <span className="font-sans tabular-nums">{results.scenarios.moderate.returnMultiple}x</span></div>
               </div>
             </div>
 
@@ -947,13 +939,13 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                   {(interestRate + 3.0).toFixed(1)}% Return
                 </Badge>
               </div>
-              <div className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 font-mono">
+              <div className="text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums">
                 {fmt(results.scenarios.aggressive.futureValue)}
               </div>
               <div className="text-xs space-y-1 text-zinc-600 dark:text-zinc-400">
-                <div className="flex justify-between"><span>Invested:</span> <span className="font-mono">{fmt(results.scenarios.aggressive.totalInvested)}</span></div>
-                <div className="flex justify-between"><span>Interest:</span> <span className="font-mono text-emerald-600">{fmt(results.scenarios.aggressive.totalInterest)}</span></div>
-                <div className="flex justify-between"><span>Multiple:</span> <span className="font-mono">{results.scenarios.aggressive.returnMultiple}x</span></div>
+                <div className="flex justify-between"><span>Invested:</span> <span className="font-sans tabular-nums">{fmt(results.scenarios.aggressive.totalInvested)}</span></div>
+                <div className="flex justify-between"><span>Interest:</span> <span className="font-sans tabular-nums text-emerald-600">{fmt(results.scenarios.aggressive.totalInterest)}</span></div>
+                <div className="flex justify-between"><span>Multiple:</span> <span className="font-sans tabular-nums">{results.scenarios.aggressive.returnMultiple}x</span></div>
               </div>
             </div>
           </div>
@@ -1017,7 +1009,7 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
                 <th className="p-2.5 border-b border-zinc-200 dark:border-zinc-700 text-right">End Balance</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono text-[11px]">
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums text-[11px]">
               {paginatedSchedule.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
                   <td className="p-2.5 font-sans font-medium text-zinc-800 dark:text-zinc-200">

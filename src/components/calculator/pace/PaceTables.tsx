@@ -45,18 +45,18 @@ export function PaceTables({ result }: PaceTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Target Race Distance</th>
-                <th className="py-2.5 px-3 font-mono text-emerald-700 dark:text-emerald-400">Predicted Finish Time</th>
-                <th className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">Required Pace (/mile)</th>
-                <th className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">Required Pace (/km)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">Predicted Finish Time</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">Required Pace (/mile)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">Required Pace (/km)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               {result.riegelPredictions.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2.5 px-3 font-bold text-zinc-900 dark:text-zinc-100">{row.eventName}</td>
-                  <td className="py-2.5 px-3 font-mono font-bold text-emerald-700 dark:text-emerald-400">{row.predictedTimeFormatted}</td>
-                  <td className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">{row.predictedPacePerMileFormatted}</td>
-                  <td className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">{row.predictedPacePerKmFormatted}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-emerald-700 dark:text-emerald-400">{row.predictedTimeFormatted}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">{row.predictedPacePerMileFormatted}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">{row.predictedPacePerKmFormatted}</td>
                 </tr>
               ))}
             </tbody>
@@ -76,20 +76,20 @@ export function PaceTables({ result }: PaceTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Event Distance</th>
-                <th className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">Men's WR Pace</th>
-                <th className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">Women's WR Pace</th>
-                <th className="py-2.5 px-3 font-mono">Men's WR Time</th>
-                <th className="py-2.5 px-3 font-mono">Women's WR Time</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">Men's WR Pace</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">Women's WR Pace</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums">Men's WR Time</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums">Women's WR Time</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               {worldRecordsTable.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2 px-3 font-bold text-zinc-900 dark:text-zinc-100">{row.event}</td>
-                  <td className="py-2 px-3 font-mono text-blue-700 dark:text-blue-400">{row.menPace}</td>
-                  <td className="py-2 px-3 font-mono text-purple-700 dark:text-purple-400">{row.womenPace}</td>
-                  <td className="py-2 px-3 font-mono text-zinc-500">{row.menTime}</td>
-                  <td className="py-2 px-3 font-mono text-zinc-500">{row.womenTime}</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">{row.menPace}</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">{row.womenPace}</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-zinc-500">{row.menTime}</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-zinc-500">{row.womenTime}</td>
                 </tr>
               ))}
             </tbody>
@@ -109,24 +109,24 @@ export function PaceTables({ result }: PaceTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Age</th>
-                <th className="py-2.5 px-3 font-mono text-rose-700 dark:text-rose-400">Max HR (220-Age)</th>
-                <th className="py-2.5 px-3 font-mono text-sky-600">Zone 1 (50-60%)</th>
-                <th className="py-2.5 px-3 font-mono text-emerald-600">Zone 2 (60-70%)</th>
-                <th className="py-2.5 px-3 font-mono text-teal-600">Zone 3 (70-80%)</th>
-                <th className="py-2.5 px-3 font-mono text-amber-600">Zone 4 (80-90%)</th>
-                <th className="py-2.5 px-3 font-mono text-rose-600">Zone 5 (90-100%)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-rose-700 dark:text-rose-400">Max HR (220-Age)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-sky-600">Zone 1 (50-60%)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-600">Zone 2 (60-70%)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-teal-600">Zone 3 (70-80%)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-amber-600">Zone 4 (80-90%)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-rose-600">Zone 5 (90-100%)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               {hrAgeMatrix.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2 px-3 font-bold text-zinc-900 dark:text-zinc-100">Age {row.age}</td>
-                  <td className="py-2 px-3 font-mono font-bold text-rose-700 dark:text-rose-400">{row.mhr}</td>
-                  <td className="py-2 px-3 font-mono text-sky-600">{row.z1} bpm</td>
-                  <td className="py-2 px-3 font-mono text-emerald-600">{row.z2} bpm</td>
-                  <td className="py-2 px-3 font-mono text-teal-600">{row.z3} bpm</td>
-                  <td className="py-2 px-3 font-mono text-amber-600">{row.z4} bpm</td>
-                  <td className="py-2 px-3 font-mono text-rose-600">{row.z5} bpm</td>
+                  <td className="py-2 px-3 font-sans tabular-nums font-bold text-rose-700 dark:text-rose-400">{row.mhr}</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-sky-600">{row.z1} bpm</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-emerald-600">{row.z2} bpm</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-teal-600">{row.z3} bpm</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-amber-600">{row.z4} bpm</td>
+                  <td className="py-2 px-3 font-sans tabular-nums text-rose-600">{row.z5} bpm</td>
                 </tr>
               ))}
             </tbody>

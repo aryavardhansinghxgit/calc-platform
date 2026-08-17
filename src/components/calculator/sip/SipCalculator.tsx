@@ -189,7 +189,7 @@ export function SipCalculator() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Handle Share Link
+  // Handle Share
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
     setShared(true);
@@ -373,9 +373,7 @@ export function SipCalculator() {
         {/* LEFT COLUMN: PARAMETER INPUT CONTROLS PANEL (Col 5) */}
         <div className="lg:col-span-5 space-y-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h2 className="text-sm font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Sliders className="h-4 w-4 text-blue-600" />
-              <span>Investment Parameters</span>
+            <h2 className="text-sm font-bold tracking-tight text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Investment Parameters</span>
             </h2>
             <button
               onClick={handleReset}
@@ -397,7 +395,7 @@ export function SipCalculator() {
                   type="number"
                   value={lumpsumAmount}
                   onChange={(e) => setLumpsumAmount(Number(e.target.value))}
-                  className="h-9 text-xs font-mono"
+                  className="h-9 text-xs font-sans tabular-nums"
                 />
                 <input
                   type="range"
@@ -419,7 +417,7 @@ export function SipCalculator() {
                   type="number"
                   value={monthlyInvestment}
                   onChange={(e) => setMonthlyInvestment(Number(e.target.value))}
-                  className="h-9 text-xs font-mono"
+                  className="h-9 text-xs font-sans tabular-nums"
                 />
                 <input
                   type="range"
@@ -444,7 +442,7 @@ export function SipCalculator() {
                 step="0.5"
                 value={expectedReturnRate}
                 onChange={(e) => setExpectedReturnRate(Number(e.target.value))}
-                className="h-9 text-xs font-mono"
+                className="h-9 text-xs font-sans tabular-nums"
               />
               <input
                 type="range"
@@ -467,7 +465,7 @@ export function SipCalculator() {
                 type="number"
                 value={timePeriodYears}
                 onChange={(e) => setTimePeriodYears(Number(e.target.value))}
-                className="h-9 text-xs font-mono"
+                className="h-9 text-xs font-sans tabular-nums"
               />
               <input
                 type="range"
@@ -536,7 +534,7 @@ export function SipCalculator() {
                   step="0.5"
                   value={inflationRate}
                   onChange={(e) => setInflationRate(Number(e.target.value))}
-                  className="h-8 text-xs font-mono"
+                  className="h-8 text-xs font-sans tabular-nums"
                 />
               </div>
               <div className="space-y-1">
@@ -546,7 +544,7 @@ export function SipCalculator() {
                   step="0.5"
                   value={taxRate}
                   onChange={(e) => setTaxRate(Number(e.target.value))}
-                  className="h-8 text-xs font-mono"
+                  className="h-8 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -561,7 +559,7 @@ export function SipCalculator() {
               <span className="text-xs font-semibold text-blue-100 block uppercase tracking-wider leading-tight">
                 Total Maturity Value
               </span>
-              <div className="text-lg sm:text-xl font-black tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-lg sm:text-xl font-black tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {formatCurrency(results.totalMaturityValue)}
               </div>
               <span className="text-[11px] text-blue-200 block leading-tight">In {timePeriodYears} years</span>
@@ -571,7 +569,7 @@ export function SipCalculator() {
               <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider leading-tight">
                 Total Invested Capital
               </span>
-              <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-zinc-100 tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-zinc-100 tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {formatCurrency(results.totalInvested)}
               </div>
               <span className="text-[11px] text-zinc-400 block leading-tight">Principal deposited</span>
@@ -581,7 +579,7 @@ export function SipCalculator() {
               <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider leading-tight">
                 Est. Wealth Returns
               </span>
-              <div className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {formatCurrency(results.estimatedReturns)}
               </div>
               <span className="text-[11px] text-emerald-600 font-bold block leading-tight">
@@ -594,15 +592,15 @@ export function SipCalculator() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl border border-zinc-200/60 dark:border-zinc-800 text-xs">
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Inflation-Adjusted</span>
-              <span className="font-bold text-amber-600 dark:text-amber-400 font-mono block">{formatCurrency(results.inflationAdjustedValue)}</span>
+              <span className="font-bold text-amber-600 dark:text-amber-400 font-sans tabular-nums block">{formatCurrency(results.inflationAdjustedValue)}</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Post-Tax Maturity</span>
-              <span className="font-bold text-zinc-900 dark:text-zinc-100 font-mono block">{formatCurrency(results.postTaxMaturityValue)}</span>
+              <span className="font-bold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums block">{formatCurrency(results.postTaxMaturityValue)}</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Estimated Tax Drag</span>
-              <span className="font-bold text-rose-500 font-mono block">{formatCurrency(results.totalTaxPaid)}</span>
+              <span className="font-bold text-rose-500 font-sans tabular-nums block">{formatCurrency(results.totalTaxPaid)}</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">SIP Health Rating</span>
@@ -613,21 +611,20 @@ export function SipCalculator() {
           {/* MODE SPECIFIC SPECIALIZED DASHBOARD PANELS */}
           {activeTab === "goal" && (
             <div className="bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 p-4 rounded-2xl space-y-3">
-              <h3 className="text-xs font-bold text-emerald-900 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Target className="h-4 w-4 text-emerald-600 shrink-0" /> Target Goal Requirement Analysis
+              <h3 className="text-xs font-bold text-emerald-900 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">Target Goal Requirement Analysis
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-center text-xs">
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">Req. Monthly SIP</span>
-                  <span className="font-black text-emerald-600 text-sm font-mono block">{formatCurrency(results.goalSeek.requiredMonthlySip)}/mo</span>
+                  <span className="font-black text-emerald-600 text-sm font-sans tabular-nums block">{formatCurrency(results.goalSeek.requiredMonthlySip)}/mo</span>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">Req. One-time Lumpsum</span>
-                  <span className="font-black text-emerald-600 text-sm font-mono block">{formatCurrency(results.goalSeek.requiredLumpsum)}</span>
+                  <span className="font-black text-emerald-600 text-sm font-sans tabular-nums block">{formatCurrency(results.goalSeek.requiredLumpsum)}</span>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-emerald-100 dark:border-emerald-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">Status vs Target</span>
-                  <span className={`font-black text-xs font-mono block ${results.goalSeek.shortfallOrSurplus >= 0 ? "text-emerald-600" : "text-rose-500"}`}>
+                  <span className={`font-black text-xs font-sans tabular-nums block ${results.goalSeek.shortfallOrSurplus >= 0 ? "text-emerald-600" : "text-rose-500"}`}>
                     {results.goalSeek.shortfallOrSurplus >= 0 ? `Surplus: ${formatCurrency(results.goalSeek.shortfallOrSurplus)}` : `Shortfall: ${formatCurrency(Math.abs(results.goalSeek.shortfallOrSurplus))}`}
                   </span>
                 </div>
@@ -637,23 +634,22 @@ export function SipCalculator() {
 
           {activeTab === "swp" && (
             <div className="bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 p-4 rounded-2xl space-y-3">
-              <h3 className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Umbrella className="h-4 w-4 text-amber-600 shrink-0" /> Systematic Withdrawal Plan (SWP) Results
+              <h3 className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">Systematic Withdrawal Plan (SWP) Results
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-center text-xs">
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-amber-100 dark:border-amber-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">Monthly Income Drawdown</span>
-                  <span className="font-black text-amber-600 font-mono block">{formatCurrency(results.swpResults.monthlyWithdrawal)}/mo</span>
+                  <span className="font-black text-amber-600 font-sans tabular-nums block">{formatCurrency(results.swpResults.monthlyWithdrawal)}/mo</span>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-amber-100 dark:border-amber-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">Duration Corpus Lasts</span>
-                  <span className="font-black text-amber-600 text-sm font-mono block">
+                  <span className="font-black text-amber-600 text-sm font-sans tabular-nums block">
                     {results.swpResults.isForever ? "Indefinitely (Forever)" : `${results.swpResults.yearsSustained} Years`}
                   </span>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-amber-100 dark:border-amber-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">Total Withdrawn</span>
-                  <span className="font-black text-amber-600 font-mono block">{formatCurrency(results.swpResults.totalWithdrawn)}</span>
+                  <span className="font-black text-amber-600 font-sans tabular-nums block">{formatCurrency(results.swpResults.totalWithdrawn)}</span>
                 </div>
               </div>
             </div>
@@ -661,7 +657,7 @@ export function SipCalculator() {
 
           {/* 3. CHARTS SECTION */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-4">
-            <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center justify-between">
+            <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center justify-between">
               <span>SIP Growth Visualizer</span>
               <span className="text-[10px] text-zinc-400 font-normal">Real-time simulation</span>
             </h3>
@@ -716,8 +712,7 @@ export function SipCalculator() {
           {/* SENSITIVITY MATRIX TAB PANEL */}
           {activeTab === "sensitivity" && (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3 text-xs">
-              <h3 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                <BarChart3 className="h-4 w-4 text-indigo-600" /> What-If Sensitivity Matrix (Return % vs Tenure)
+              <h3 className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">What-If Sensitivity Matrix (Return % vs Tenure)
               </h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse border border-zinc-200 dark:border-zinc-800 text-[10px]">
@@ -734,7 +729,7 @@ export function SipCalculator() {
                   </thead>
                   <tbody>
                     {[8, 10, 12, 14, 16].map((r) => (
-                      <tr key={r} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 font-mono">
+                      <tr key={r} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 font-sans tabular-nums">
                         <td className="p-2 font-bold border border-zinc-200 dark:border-zinc-800">{r}% p.a.</td>
                         {[5, 10, 15, 20, 25, 30].map((t) => {
                           const cell = results.sensitivityMatrix.find((c) => c.returnRate === r && c.tenureYears === t);
@@ -756,7 +751,7 @@ export function SipCalculator() {
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3 text-xs">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3">
               <div className="flex items-center gap-2">
-                <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Schedule Breakdown Table</h3>
+                <h3 className="font-bold text-blue-600 dark:text-blue-400">Schedule Breakdown Table</h3>
                 <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg text-[10px]">
                   <button
                     onClick={() => { setScheduleView("annual"); setCurrentPage(1); }}
@@ -808,7 +803,7 @@ export function SipCalculator() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-[11px]">
                 <thead>
-                  <tr className="bg-zinc-50 dark:bg-zinc-800/60 text-zinc-600 dark:text-zinc-300 font-semibold border-b border-zinc-200 dark:border-zinc-800">
+                  <tr className="bg-zinc-50 dark:bg-zinc-800/60 text-slate-800 dark:text-slate-200 font-semibold font-semibold border-b border-zinc-200 dark:border-zinc-800">
                     {scheduleView === "annual" ? (
                       <>
                         <th className="p-2">Year</th>
@@ -831,7 +826,7 @@ export function SipCalculator() {
                     )}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
                   {paginatedScheduleRows.length > 0 ? (
                     paginatedScheduleRows.map((r: any, idx) => (
                       <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">

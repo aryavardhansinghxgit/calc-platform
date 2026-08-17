@@ -307,7 +307,7 @@ export function SimpleInterestCalculator() {
                 key={cur}
                 type="button"
                 onClick={() => setCurrencySymbol(cur)}
-                className={`px-2 py-0.5 rounded font-mono font-bold text-xs transition-colors ${
+                className={`px-2 py-0.5 rounded font-sans tabular-nums font-bold text-xs transition-colors ${
                   currencySymbol === cur
                     ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
                     : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
@@ -324,16 +324,9 @@ export function SimpleInterestCalculator() {
             onClick={handleSaveScenario}
             className="h-8 text-xs font-semibold gap-1.5"
           >
-            <Bookmark className="h-3.5 w-3.5 text-indigo-500" /> Save Calculation
+            <Bookmark className="h-3.5 w-3.5 text-indigo-500" /> Save
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleShare}
-            className="h-8 text-xs font-semibold gap-1.5"
-          >
-            <Share2 className="h-3.5 w-3.5 text-blue-500" /> Share Result
-          </Button>
+          
           <Button
             variant="default"
             size="sm"
@@ -392,14 +385,14 @@ export function SimpleInterestCalculator() {
                       Principal Deposit / Borrowed Amount
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                         {currencySymbol}
                       </span>
                       <Input
                         type="number"
                         value={principalInput}
                         onChange={(e) => setPrincipalInput(e.target.value)}
-                        className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
                   </div>
@@ -414,7 +407,7 @@ export function SimpleInterestCalculator() {
                         step="0.1"
                         value={rateInput}
                         onChange={(e) => setRateInput(e.target.value)}
-                        className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
 
@@ -427,7 +420,7 @@ export function SimpleInterestCalculator() {
                           type="number"
                           value={termInput}
                           onChange={(e) => setTermInput(e.target.value)}
-                          className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 flex-1"
+                          className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 flex-1"
                         />
                         <select
                           value={timeUnit}
@@ -453,14 +446,14 @@ export function SimpleInterestCalculator() {
                       Target Interest Earned ($)
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                         {currencySymbol}
                       </span>
                       <Input
                         type="number"
                         value={targetInterestInput}
                         onChange={(e) => setTargetInterestInput(e.target.value)}
-                        className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
                   </div>
@@ -475,7 +468,7 @@ export function SimpleInterestCalculator() {
                         step="0.1"
                         value={rateInput}
                         onChange={(e) => setRateInput(e.target.value)}
-                        className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                        className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                       />
                     </div>
 
@@ -488,7 +481,7 @@ export function SimpleInterestCalculator() {
                           type="number"
                           value={termInput}
                           onChange={(e) => setTermInput(e.target.value)}
-                          className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 flex-1"
+                          className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 flex-1"
                         />
                         <select
                           value={timeUnit}
@@ -515,14 +508,14 @@ export function SimpleInterestCalculator() {
                         Principal Amount
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                           {currencySymbol}
                         </span>
                         <Input
                           type="number"
                           value={principalInput}
                           onChange={(e) => setPrincipalInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                         />
                       </div>
                     </div>
@@ -532,14 +525,14 @@ export function SimpleInterestCalculator() {
                         Target Total Interest ($)
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                           {currencySymbol}
                         </span>
                         <Input
                           type="number"
                           value={targetInterestInput}
                           onChange={(e) => setTargetInterestInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                         />
                       </div>
                     </div>
@@ -554,7 +547,7 @@ export function SimpleInterestCalculator() {
                         type="number"
                         value={termInput}
                         onChange={(e) => setTermInput(e.target.value)}
-                        className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 flex-1"
+                        className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 flex-1"
                       />
                       <select
                         value={timeUnit}
@@ -580,14 +573,14 @@ export function SimpleInterestCalculator() {
                         Principal Amount
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                           {currencySymbol}
                         </span>
                         <Input
                           type="number"
                           value={principalInput}
                           onChange={(e) => setPrincipalInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                         />
                       </div>
                     </div>
@@ -597,14 +590,14 @@ export function SimpleInterestCalculator() {
                         Target Total Interest ($)
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
                           {currencySymbol}
                         </span>
                         <Input
                           type="number"
                           value={targetInterestInput}
                           onChange={(e) => setTargetInterestInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                         />
                       </div>
                     </div>
@@ -619,7 +612,7 @@ export function SimpleInterestCalculator() {
                       step="0.1"
                       value={rateInput}
                       onChange={(e) => setRateInput(e.target.value)}
-                      className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                     />
                   </div>
                 </>
@@ -633,8 +626,7 @@ export function SimpleInterestCalculator() {
               className="flex items-center justify-between cursor-pointer select-none"
               onClick={() => setShowFormulaPanel(!showFormulaPanel)}
             >
-              <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <BookOpen className="h-4 w-4 text-indigo-600" /> Step-by-Step Mathematical Solution Derivation
+              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Step-by-Step Mathematical Solution Derivation
               </h3>
               <Button variant="ghost" size="icon" className="h-6 w-6">
                 {showFormulaPanel ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -642,7 +634,7 @@ export function SimpleInterestCalculator() {
             </div>
 
             {showFormulaPanel && (
-              <div className="space-y-3 pt-2 text-xs font-mono">
+              <div className="space-y-3 pt-2 text-xs font-sans tabular-nums">
                 {results.derivationSteps.map((step, idx) => (
                   <div key={idx} className="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1">
                     <span className="font-bold text-indigo-600 dark:text-indigo-400 block text-[11px]">
@@ -673,7 +665,7 @@ export function SimpleInterestCalculator() {
             {/* Main Result Display */}
             <div>
               <span className="text-xs text-zinc-400 block font-medium">Final Ending Balance (A)</span>
-              <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+              <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
                 {currencySymbol}{results.finalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
               <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
@@ -685,34 +677,34 @@ export function SimpleInterestCalculator() {
             <div className="grid grid-cols-2 gap-3 pt-2 border-t border-white/10">
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Initial Principal</span>
-                <span className="text-base font-bold text-white font-mono">
+                <span className="text-base font-bold text-white font-sans tabular-nums">
                   {currencySymbol}{results.principal.toLocaleString()}
                 </span>
               </div>
 
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Return on Investment (ROI)</span>
-                <span className="text-base font-bold text-emerald-400 font-mono">
+                <span className="text-base font-bold text-emerald-400 font-sans tabular-nums">
                   {results.roiPercent.toFixed(2)}%
                 </span>
               </div>
 
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Interest Per Year</span>
-                <span className="text-base font-bold text-white font-mono">
+                <span className="text-base font-bold text-white font-sans tabular-nums">
                   {currencySymbol}{results.interestPerYear.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Interest Per Month</span>
-                <span className="text-base font-bold text-white font-mono">
+                <span className="text-base font-bold text-white font-sans tabular-nums">
                   {currencySymbol}{results.interestPerMonth.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </span>
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-blue-900/40 border border-blue-500/30 text-xs text-blue-100 flex items-center justify-between font-mono">
+            <div className="p-3 rounded-xl bg-blue-900/40 border border-blue-500/30 text-xs text-blue-100 flex items-center justify-between font-sans tabular-nums">
               <span>Interest Per Day:</span>
               <span className="font-bold text-emerald-300">
                 {currencySymbol}{results.interestPerDay.toLocaleString(undefined, { minimumFractionDigits: 2 })}/day
@@ -728,8 +720,7 @@ export function SimpleInterestCalculator() {
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
           <div>
-            <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-blue-600" /> Yearly Schedule Table
+            <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Yearly Schedule Table
             </h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
               Year-by-year linear breakdown of opening principal, interest earned, and ending balance.
@@ -760,7 +751,7 @@ export function SimpleInterestCalculator() {
                 <th className="p-3">Closing Balance ({currencySymbol})</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
               {results.schedule.map((row) => (
                 <tr key={row.year} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
                   <td className="p-3 font-bold font-sans">Year {row.year}</td>
@@ -786,7 +777,7 @@ export function SimpleInterestCalculator() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
         {/* BAR CHART: ACCUMULATION OVER TIME (COL 7) */}
         <div className="md:col-span-7 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
             Balance Accumulation Timeline (Principal vs Cumulative Interest)
           </h3>
           <div className="h-64 w-full">
@@ -804,7 +795,7 @@ export function SimpleInterestCalculator() {
 
         {/* DOUGHNUT CHART: BREAKDOWN (COL 5) */}
         <div className="md:col-span-5 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
             Final Balance Composition
           </h3>
           <div className="h-64 w-full">
@@ -845,8 +836,7 @@ export function SimpleInterestCalculator() {
          ========================================== */}
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-          <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Zap className="h-5 w-5 text-indigo-600" /> Simple vs. Compound Interest Comparison Module
+          <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Simple vs. Compound Interest Comparison Module
           </h2>
           <Badge variant="outline" className="text-[10px] text-indigo-600 border-indigo-200">
             Compounding Bonus Analysis
@@ -858,19 +848,19 @@ export function SimpleInterestCalculator() {
             <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-3">
               <div className="flex justify-between items-center text-xs">
                 <span className="text-zinc-600 dark:text-zinc-400">Simple Interest Balance:</span>
-                <span className="font-bold font-mono text-zinc-900 dark:text-zinc-100 text-sm">
+                <span className="font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100 text-sm">
                   {currencySymbol}{results.comparison.simpleFinalBalance.toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs border-t border-zinc-200 dark:border-zinc-800 pt-2">
                 <span className="text-zinc-600 dark:text-zinc-400">Compound Balance (Monthly):</span>
-                <span className="font-bold font-mono text-emerald-600 dark:text-emerald-400 text-sm">
+                <span className="font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400 text-sm">
                   {currencySymbol}{results.comparison.compoundFinalBalance.toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs border-t border-zinc-200 dark:border-zinc-800 pt-2">
                 <span className="text-zinc-600 dark:text-zinc-400">Compounding Advantage:</span>
-                <span className="font-bold font-mono text-emerald-600 dark:text-emerald-400 text-sm">
+                <span className="font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400 text-sm">
                   +{currencySymbol}{results.comparison.interestDifference.toLocaleString()} (+{results.comparison.additionalWealthPercent.toFixed(1)}%)
                 </span>
               </div>

@@ -5,7 +5,7 @@ export function TireSizeContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-zinc-300">
       {/* 1. INTRODUCTION */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Comprehensive Guide to Tire Geometry, Wheel Fitment &amp; Speedometer Calibration
         </h2>
         <p className="leading-relaxed">
@@ -23,13 +23,13 @@ export function TireSizeContent() {
       </section>
 
       {/* 2. ANATOMY OF A TIRE SIDEWALL */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           1. Anatomy of a Tire Sidewall: Deciphering Standardization Codes
         </h3>
         <p className="leading-relaxed">
           Automotive tire manufacturers format tire specifications on the outer sidewall using standardized international alphanumeric codes. 
-          A typical metric tire code string reads: <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 font-mono text-sm">P225/50R17 98H</code>. 
+          A typical metric tire code string reads: <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-zinc-800 font-sans tabular-nums text-sm">P225/50R17 98H</code>. 
           Each segment represents a specific physical parameter:
         </p>
 
@@ -57,11 +57,11 @@ export function TireSizeContent() {
 
         <div className="p-4 rounded-xl bg-blue-50/50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900 space-y-2">
           <h4 className="font-extrabold text-blue-900 dark:text-blue-200 text-sm">Service Description: Load Index &amp; Speed Rating Table</h4>
-          <p className="text-xs text-slate-600 dark:text-zinc-300">
+          <p className="text-xs text-slate-900 dark:text-zinc-300">
             Following the rim size, the service description consists of a two- or three-digit <strong>Load Index</strong> and a letter <strong>Speed Rating</strong>. 
             The Load Index maps to the maximum load-carrying capacity per tire (e.g., index 98 = 1,653 lbs / 750 kg). The Speed Rating indicates the maximum certified top speed:
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono pt-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-sans tabular-nums pt-2">
             <div className="bg-white dark:bg-zinc-800 p-2 rounded border border-slate-200 dark:border-zinc-700 text-center">
               <span className="font-bold block text-blue-600">S Rating</span> 112 mph (180 km/h)
             </div>
@@ -88,8 +88,8 @@ export function TireSizeContent() {
       </section>
 
       {/* 3. MATHEMATICAL FORMULAS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           2. The Core Mathematical Formulas for Tire Geometry
         </h3>
         <p className="leading-relaxed">
@@ -97,39 +97,39 @@ export function TireSizeContent() {
           with rim diameter. The foundational equations powering our calculation engine are detailed below:
         </p>
 
-        <div className="space-y-4 my-4 font-mono text-sm">
+        <div className="space-y-4 my-4 font-sans tabular-nums text-sm">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 shadow-xs space-y-2">
             <span className="text-blue-600 dark:text-blue-400 font-sans font-extrabold block text-xs uppercase tracking-wider">1. Sidewall Height Formula</span>
-            <div className="text-center py-2 text-base font-extrabold text-blue-900 dark:text-blue-200 font-mono">
+            <div className="text-center py-2 text-base font-extrabold text-blue-900 dark:text-blue-200 font-sans tabular-nums">
               {"Sidewall Height (mm) = Section Width (mm) × (Aspect Ratio / 100)"}
             </div>
-            <div className="text-center text-xs text-slate-600 dark:text-zinc-400">
+            <div className="text-center text-xs text-slate-900 dark:text-slate-100">
               {"Sidewall Height (inches) = Sidewall Height (mm) / 25.4"}
             </div>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 shadow-xs space-y-2">
             <span className="text-blue-600 dark:text-blue-400 font-sans font-extrabold block text-xs uppercase tracking-wider">2. Overall Tire Diameter Formula</span>
-            <div className="text-center py-2 text-base font-extrabold text-blue-900 dark:text-blue-200 font-mono">
+            <div className="text-center py-2 text-base font-extrabold text-blue-900 dark:text-blue-200 font-sans tabular-nums">
               {"Overall Diameter (inches) = (2 × Sidewall Height (in)) + Wheel Rim Diameter (in)"}
             </div>
-            <div className="text-center text-xs text-slate-600 dark:text-zinc-400">
+            <div className="text-center text-xs text-slate-900 dark:text-slate-100">
               {"Overall Diameter (mm) = Overall Diameter (in) × 25.4"}
             </div>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 text-slate-800 dark:text-zinc-200 shadow-xs space-y-2">
             <span className="text-blue-600 dark:text-blue-400 font-sans font-extrabold block text-xs uppercase tracking-wider">3. Rolling Circumference &amp; Revolutions per Distance</span>
-            <div className="text-center py-1 text-sm font-bold text-emerald-700 dark:text-emerald-400">
+            <div className="text-center py-1 text-sm font-bold text-blue-600 dark:text-blue-400">
               {"Circumference (in) = π × Overall Diameter (in)"}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-center text-xs pt-2 border-t border-slate-200 dark:border-zinc-700">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-center text-xs pt-2  dark:border-zinc-700">
               <div>
-                <span className="text-slate-500 dark:text-zinc-400 block font-sans text-[10px] uppercase">Revolutions Per Mile (RPM)</span>
+                <span className="text-slate-900 dark:text-slate-100 block font-sans text-[10px] uppercase">Revolutions Per Mile (RPM)</span>
                 <span className="text-blue-700 dark:text-blue-300 font-bold">{"RPM = 63,360 / Circumference (in)"}</span>
               </div>
               <div>
-                <span className="text-slate-500 dark:text-zinc-400 block font-sans text-[10px] uppercase">Revolutions Per Kilometer (RPK)</span>
+                <span className="text-slate-900 dark:text-slate-100 block font-sans text-[10px] uppercase">Revolutions Per Kilometer (RPK)</span>
                 <span className="text-blue-700 dark:text-blue-300 font-bold">{"RPK = 1,000,000 / Circumference (mm)"}</span>
               </div>
             </div>
@@ -138,8 +138,8 @@ export function TireSizeContent() {
       </section>
 
       {/* 4. SPEEDOMETER & GEAR RATIO CONSEQUENCES */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           3. Speedometer Error, Transmission &amp; Differential Gear Ratio Consequences
         </h3>
         <p className="leading-relaxed">
@@ -151,21 +151,21 @@ export function TireSizeContent() {
           Conversely, installing smaller diameter tires causes the speedometer to read faster than actual GPS travel speed and causes the odometer to rack up mileage faster than actual distance traveled.
         </p>
 
-        <div className="p-4 rounded-xl bg-amber-50/60 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 space-y-2 text-xs">
+        <div className="p-4 rounded-xl bg-blue-50/60 dark:bg-blue-50/40 border border-amber-200 dark:border-amber-900 space-y-2 text-xs">
           <h4 className="font-extrabold text-amber-900 dark:text-amber-200 text-sm">Drivetrain &amp; Effective Final Drive Ratio Impact</h4>
           <p className="leading-relaxed">
             Increasing tire size effectively acts as an engine gearing tall-shift. Larger tires effectively lower your differential gear ratio (e.g., a stock 3.73 axle ratio with 10% larger tires effectively performs like a 3.39 ratio). 
             This raises top-end highway cruise efficiency but reduces low-end torque acceleration, off-the-line responsiveness, and heavy trailering capacity.
           </p>
-          <div className="p-3 bg-white dark:bg-zinc-800 rounded font-mono text-center font-bold text-amber-800 dark:text-amber-300">
+          <div className="p-3 bg-white dark:bg-zinc-800 rounded font-sans tabular-nums text-center font-bold text-amber-800 dark:text-blue-400">
             {"Effective Gear Ratio = Stock Axle Ratio × (Stock Tire Diameter / New Tire Diameter)"}
           </div>
         </div>
       </section>
 
       {/* 5. PLUS SIZING RULE */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           4. The "+1" and "+2" Wheel Upsizing Rule (Plus Sizing Guide)
         </h3>
         <p className="leading-relaxed">
@@ -176,22 +176,22 @@ export function TireSizeContent() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-4">
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 text-xs space-y-1">
             <span className="font-extrabold text-blue-600 block text-sm">Plus Zero Fitment</span>
-            <p className="text-slate-600 dark:text-zinc-300">Retains factory rim diameter while increasing section width and decreasing aspect ratio (e.g., 205/55R16 to 225/50R16).</p>
+            <p className="text-slate-900 dark:text-zinc-300">Retains factory rim diameter while increasing section width and decreasing aspect ratio (e.g., 205/55R16 to 225/50R16).</p>
           </div>
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 text-xs space-y-1">
             <span className="font-extrabold text-blue-600 block text-sm">Plus One (+1) Fitment</span>
-            <p className="text-slate-600 dark:text-zinc-300">Increases rim diameter by 1 inch while reducing aspect ratio by 10 points (e.g., 205/55R16 to 215/45R17).</p>
+            <p className="text-slate-900 dark:text-zinc-300">Increases rim diameter by 1 inch while reducing aspect ratio by 10 points (e.g., 205/55R16 to 215/45R17).</p>
           </div>
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 text-xs space-y-1">
             <span className="font-extrabold text-blue-600 block text-sm">Plus Two (+2) Fitment</span>
-            <p className="text-slate-600 dark:text-zinc-300">Increases rim diameter by 2 inches while reducing aspect ratio by 20 points (e.g., 205/55R16 to 225/35R18).</p>
+            <p className="text-slate-900 dark:text-zinc-300">Increases rim diameter by 2 inches while reducing aspect ratio by 20 points (e.g., 205/55R16 to 225/35R18).</p>
           </div>
         </div>
       </section>
 
       {/* 6. WHEEL OFFSET & CLEARANCE */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           5. Wheel Offset (ET), Backspacing &amp; Suspension Clearance Mechanics
         </h3>
         <p className="leading-relaxed">
@@ -201,22 +201,22 @@ export function TireSizeContent() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 my-4 text-xs">
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 space-y-1">
             <span className="font-bold text-slate-900 dark:text-zinc-100 block">Positive Offset (+ET)</span>
-            <p className="text-slate-600 dark:text-zinc-400">The hub mounting surface is positioned toward the front (outer face) of the wheel. Standard on modern front-wheel-drive and crossover vehicles. Pushes tires inward toward suspension struts.</p>
+            <p className="text-slate-900 dark:text-slate-100">The hub mounting surface is positioned toward the front (outer face) of the wheel. Standard on modern front-wheel-drive and crossover vehicles. Pushes tires inward toward suspension struts.</p>
           </div>
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 space-y-1">
             <span className="font-bold text-slate-900 dark:text-zinc-100 block">Zero Offset (ET 0)</span>
-            <p className="text-slate-600 dark:text-zinc-400">The mounting hub surface aligns exactly with the wheel's physical centerline.</p>
+            <p className="text-slate-900 dark:text-slate-100">The mounting hub surface aligns exactly with the wheel's physical centerline.</p>
           </div>
           <div className="p-3 rounded-xl bg-slate-50 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 space-y-1">
             <span className="font-bold text-slate-900 dark:text-zinc-100 block">Negative Offset (-ET)</span>
-            <p className="text-slate-600 dark:text-zinc-400">The hub mounting surface is recessed toward the back of the wheel. Common on deep-dish muscle cars and lifted off-road trucks. Pushes tires outward beyond fenders.</p>
+            <p className="text-slate-900 dark:text-slate-100">The hub mounting surface is recessed toward the back of the wheel. Common on deep-dish muscle cars and lifted off-road trucks. Pushes tires outward beyond fenders.</p>
           </div>
         </div>
       </section>
 
       {/* 7. DOT DATE CODES & UTQG */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
-        <h3 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
+        <h3 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           6. DOT Date Stamps, UTQG Quality Ratings &amp; Tire Maintenance
         </h3>
         <p className="leading-relaxed">
@@ -224,8 +224,8 @@ export function TireSizeContent() {
         </p>
 
         <div className="p-4 rounded-xl bg-slate-100 dark:bg-zinc-800/60 border border-slate-200 dark:border-zinc-700 space-y-2 text-xs">
-          <div className="font-mono font-bold text-sm text-blue-600">Example: DOT MAL9 ABCD 1326</div>
-          <p className="text-slate-600 dark:text-zinc-300">
+          <div className="font-sans tabular-nums font-bold text-sm text-blue-600">Example: DOT MAL9 ABCD 1326</div>
+          <p className="text-slate-900 dark:text-zinc-300">
             The code <strong>"1326"</strong> indicates the tire was produced during the <strong>13th week of the year 2026</strong>. 
             Automotive safety organizations recommend replacing all tires after 6 to 10 years of age regardless of remaining tread depth due to rubber compound oxidation and internal belt degradation.
           </p>

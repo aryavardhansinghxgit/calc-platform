@@ -61,7 +61,7 @@ const HousingCostPieChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-mono">
+      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
         Loading housing cost pie chart...
       </div>
     ),
@@ -73,7 +73,7 @@ const AffordabilityBarChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-mono">
+      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
         Loading affordability bar chart...
       </div>
     ),
@@ -372,58 +372,7 @@ export function HouseAffordabilityCalculator() {
           </button>
         </div>
 
-        {/* Global Toolbar Actions */}
-        <div className="flex flex-wrap items-center gap-2">
-          {copySuccessMsg && (
-            <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 animate-pulse">
-              {copySuccessMsg}
-            </span>
-          )}
-          {shareSuccessMsg && (
-            <span className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 animate-pulse">
-              {shareSuccessMsg}
-            </span>
-          )}
 
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleCopyResults}
-            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900"
-          >
-            <Copy className="h-3.5 w-3.5 text-blue-500" /> Copy
-          </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleShareUrl}
-            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900"
-          >
-            <Share2 className="h-3.5 w-3.5 text-emerald-500" /> Share
-          </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handlePrint}
-            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900"
-          >
-            <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
-          </Button>
-
-          <Button
-            type="button"
-            size="sm"
-            onClick={() => setIsSaveModalOpen(true)}
-            className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
-          >
-            <Bookmark className="h-3.5 w-3.5" /> Save
-          </Button>
-        </div>
       </div>
 
       {/* ========================================================================= */}
@@ -457,7 +406,7 @@ export function HouseAffordabilityCalculator() {
                       step={5000}
                       value={annualIncome}
                       onChange={(e) => setAnnualIncome(Math.max(0, Number(e.target.value)))}
-                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -472,7 +421,7 @@ export function HouseAffordabilityCalculator() {
                       id="loanTermYears1"
                       value={loanTermYears1}
                       onChange={(e) => setLoanTermYears1(Number(e.target.value))}
-                      className="mt-1 w-full h-9 rounded-md bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs px-2 text-zinc-900 dark:text-zinc-100 font-mono"
+                      className="mt-1 w-full h-9 rounded-md bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs px-2 text-zinc-900 dark:text-zinc-100 font-sans tabular-nums"
                     >
                       <option value={10}>10 Years</option>
                       <option value={15}>15 Years</option>
@@ -495,7 +444,7 @@ export function HouseAffordabilityCalculator() {
                         max={100}
                         value={interestRate1}
                         onChange={(e) => setInterestRate1(Math.max(0, Number(e.target.value)))}
-                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                   </div>
@@ -518,7 +467,7 @@ export function HouseAffordabilityCalculator() {
                       step={100}
                       value={monthlyDebt}
                       onChange={(e) => setMonthlyDebt(Math.max(0, Number(e.target.value)))}
-                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -561,7 +510,7 @@ export function HouseAffordabilityCalculator() {
                     step={downPaymentType1 === "percent" ? 1 : 5000}
                     value={downPayment1}
                     onChange={(e) => setDownPayment1(Math.max(0, Number(e.target.value)))}
-                    className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                    className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                   />
                 </div>
 
@@ -578,7 +527,7 @@ export function HouseAffordabilityCalculator() {
                       min={0}
                       value={propertyTaxRate1}
                       onChange={(e) => setPropertyTaxRate1(Math.max(0, Number(e.target.value)))}
-                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                   <div>
@@ -592,7 +541,7 @@ export function HouseAffordabilityCalculator() {
                       min={0}
                       value={hoaFeeRate1}
                       onChange={(e) => setHoaFeeRate1(Math.max(0, Number(e.target.value)))}
-                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                   <div>
@@ -606,7 +555,7 @@ export function HouseAffordabilityCalculator() {
                       min={0}
                       value={insuranceRate1}
                       onChange={(e) => setInsuranceRate1(Math.max(0, Number(e.target.value)))}
-                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -672,7 +621,7 @@ export function HouseAffordabilityCalculator() {
                   <span className="text-xs uppercase font-bold tracking-wider text-blue-600 dark:text-blue-400">
                     Maximum Affordable Home Price
                   </span>
-                  <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-mono mt-2 tracking-tight">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums mt-2 tracking-tight">
                     {formatCurrency(incomeResults.maxHomePrice)}
                   </div>
                 </div>
@@ -681,49 +630,49 @@ export function HouseAffordabilityCalculator() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-blue-100 dark:border-zinc-800">
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Mortgage Loan</span>
-                    <span className="text-sm font-bold font-mono text-blue-600 dark:text-blue-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-blue-600 dark:text-blue-400">
                       {formatCurrency(incomeResults.maxLoanAmount)}
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Down Payment</span>
-                    <span className="text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
                       {formatCurrency(incomeResults.requiredDownPayment)}
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Monthly Mortgage (P&I)</span>
-                    <span className="text-sm font-bold font-mono text-zinc-900 dark:text-zinc-100">
+                    <span className="text-sm font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
                       {formatCurrency(incomeResults.monthlyMortgagePmt)}
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Total Housing Cost</span>
-                    <span className="text-sm font-bold font-mono text-purple-600 dark:text-purple-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-purple-600 dark:text-purple-400">
                       {formatCurrency(incomeResults.totalMonthlyHousingCost)}
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Monthly Taxes</span>
-                    <span className="text-sm font-bold font-mono text-amber-600 dark:text-amber-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-amber-600 dark:text-amber-400">
                       {formatCurrency(incomeResults.monthlyTax)}
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Monthly Insurance</span>
-                    <span className="text-sm font-bold font-mono text-teal-600 dark:text-teal-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-teal-600 dark:text-teal-400">
                       {formatCurrency(incomeResults.monthlyInsurance)}
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Front-End Ratio</span>
-                    <span className="text-sm font-bold font-mono text-sky-600 dark:text-sky-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-sky-600 dark:text-sky-400">
                       {incomeResults.frontEndRatio}%
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Back-End Ratio</span>
-                    <span className="text-sm font-bold font-mono text-indigo-600 dark:text-indigo-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-indigo-600 dark:text-indigo-400">
                       {incomeResults.backEndRatio}%
                     </span>
                   </div>
@@ -800,7 +749,7 @@ export function HouseAffordabilityCalculator() {
                         <TableHead className="py-2 font-bold text-right">Balance</TableHead>
                       </TableRow>
                     </TableHeader>
-                    <TableBody className="text-xs font-mono">
+                    <TableBody className="text-xs font-sans tabular-nums">
                       {incomeResults.schedulePreview.map((row) => (
                         <TableRow key={`preview-${row.month}`} className="border-zinc-100 dark:border-zinc-800/60">
                           <TableCell className="py-2 font-sans font-medium">{row.date}</TableCell>
@@ -854,7 +803,7 @@ export function HouseAffordabilityCalculator() {
                       step={100}
                       value={housingBudget}
                       onChange={(e) => setHousingBudget(Math.max(0, Number(e.target.value)))}
-                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -869,7 +818,7 @@ export function HouseAffordabilityCalculator() {
                       id="loanTermYears2"
                       value={loanTermYears2}
                       onChange={(e) => setLoanTermYears2(Number(e.target.value))}
-                      className="mt-1 w-full h-9 rounded-md bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs px-2 text-zinc-900 dark:text-zinc-100 font-mono"
+                      className="mt-1 w-full h-9 rounded-md bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs px-2 text-zinc-900 dark:text-zinc-100 font-sans tabular-nums"
                     >
                       <option value={10}>10 Years</option>
                       <option value={15}>15 Years</option>
@@ -892,7 +841,7 @@ export function HouseAffordabilityCalculator() {
                         max={100}
                         value={interestRate2}
                         onChange={(e) => setInterestRate2(Math.max(0, Number(e.target.value)))}
-                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                   </div>
@@ -936,7 +885,7 @@ export function HouseAffordabilityCalculator() {
                     step={downPaymentType2 === "percent" ? 1 : 5000}
                     value={downPayment2}
                     onChange={(e) => setDownPayment2(Math.max(0, Number(e.target.value)))}
-                    className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                    className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                   />
                 </div>
 
@@ -965,7 +914,7 @@ export function HouseAffordabilityCalculator() {
                           min={0}
                           value={propertyTaxRate2}
                           onChange={(e) => setPropertyTaxRate2(Math.max(0, Number(e.target.value)))}
-                          className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                          className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                         />
                       </div>
                       <div>
@@ -979,7 +928,7 @@ export function HouseAffordabilityCalculator() {
                           min={0}
                           value={hoaFeeRate2}
                           onChange={(e) => setHoaFeeRate2(Math.max(0, Number(e.target.value)))}
-                          className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                          className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                         />
                       </div>
                       <div>
@@ -993,7 +942,7 @@ export function HouseAffordabilityCalculator() {
                           min={0}
                           value={insuranceRate2}
                           onChange={(e) => setInsuranceRate2(Math.max(0, Number(e.target.value)))}
-                          className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                          className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                         />
                       </div>
                       <div>
@@ -1007,7 +956,7 @@ export function HouseAffordabilityCalculator() {
                           min={0}
                           value={maintenanceRate2}
                           onChange={(e) => setMaintenanceRate2(Math.max(0, Number(e.target.value)))}
-                          className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                          className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                         />
                       </div>
                     </div>
@@ -1037,7 +986,7 @@ export function HouseAffordabilityCalculator() {
                   <span className="text-xs uppercase font-bold tracking-wider text-blue-600 dark:text-blue-400">
                     Maximum Affordable Home Price (Budget-Based)
                   </span>
-                  <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-mono mt-2 tracking-tight">
+                  <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums mt-2 tracking-tight">
                     {formatCurrency(budgetResults.maxHomePrice)}
                   </div>
                 </div>
@@ -1046,49 +995,49 @@ export function HouseAffordabilityCalculator() {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-blue-100 dark:border-zinc-800">
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Mortgage Loan</span>
-                    <span className="text-sm font-bold font-mono text-blue-600 dark:text-blue-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-blue-600 dark:text-blue-400">
                       {formatCurrency(budgetResults.maxLoanAmount)}
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Down Payment</span>
-                    <span className="text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
                       {formatCurrency(budgetResults.requiredDownPayment)}
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Monthly Mortgage (P&I)</span>
-                    <span className="text-sm font-bold font-mono text-zinc-900 dark:text-zinc-100">
+                    <span className="text-sm font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
                       {formatCurrency(budgetResults.monthlyMortgagePmt)}
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Total Monthly Outflow</span>
-                    <span className="text-sm font-bold font-mono text-purple-600 dark:text-purple-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-purple-600 dark:text-purple-400">
                       {formatCurrency(budgetResults.totalMonthlyHousingCost)}
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Monthly Taxes</span>
-                    <span className="text-sm font-bold font-mono text-amber-600 dark:text-amber-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-amber-600 dark:text-amber-400">
                       {formatCurrency(budgetResults.monthlyTax)}
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Monthly Insurance</span>
-                    <span className="text-sm font-bold font-mono text-teal-600 dark:text-teal-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-teal-600 dark:text-teal-400">
                       {formatCurrency(budgetResults.monthlyInsurance)}
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Monthly HOA</span>
-                    <span className="text-sm font-bold font-mono text-sky-600 dark:text-sky-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-sky-600 dark:text-sky-400">
                       {formatCurrency(budgetResults.monthlyHoa)}
                     </span>
                   </div>
                   <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                     <span className="text-[10px] text-zinc-500 block">Maintenance Reserve</span>
-                    <span className="text-sm font-bold font-mono text-pink-600 dark:text-pink-400">
+                    <span className="text-sm font-bold font-sans tabular-nums text-pink-600 dark:text-pink-400">
                       {formatCurrency(budgetResults.monthlyMaintenance)}
                     </span>
                   </div>
@@ -1119,7 +1068,7 @@ export function HouseAffordabilityCalculator() {
           <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-2xl max-w-4xl w-full p-6 space-y-4 relative max-h-[90vh] flex flex-col">
             <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
               <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                   Full Mortgage Amortization Schedule ({loanTermYears1} Years)
                 </h3>
                 <p className="text-xs text-zinc-500">
@@ -1158,7 +1107,7 @@ export function HouseAffordabilityCalculator() {
                     <TableHead className="font-bold text-right">Remaining Balance</TableHead>
                   </TableRow>
                 </TableHeader>
-                <TableBody className="text-xs font-mono">
+                <TableBody className="text-xs font-sans tabular-nums">
                   {incomeResults.fullSchedule.map((row) => (
                     <TableRow key={`full-schedule-${row.month}`} className="border-zinc-100 dark:border-zinc-800/60">
                       <TableCell className="font-sans font-bold">{row.month}</TableCell>
@@ -1218,7 +1167,7 @@ export function HouseAffordabilityCalculator() {
                 <Bookmark className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                   Save House Affordability Calculation
                 </h3>
                 <p className="text-xs text-zinc-500">
@@ -1235,7 +1184,7 @@ export function HouseAffordabilityCalculator() {
               <form onSubmit={handleSaveCalculation} className="space-y-3 pt-1">
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700/80 text-xs">
                   <span className="text-zinc-500 block">Calculation Summary:</span>
-                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-mono">
+                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-sans tabular-nums">
                     Max Home Price: {formatCurrency(activeCalc === "income" ? incomeResults.maxHomePrice : budgetResults.maxHomePrice)}
                   </span>
                   <span className="text-[11px] text-zinc-500">
@@ -1289,7 +1238,7 @@ export function HouseAffordabilityCalculator() {
                         <span className="font-bold text-zinc-900 dark:text-zinc-100 block">
                           {item.name}
                         </span>
-                        <span className="text-[10px] text-zinc-400 block font-mono">
+                        <span className="text-[10px] text-zinc-400 block font-sans tabular-nums">
                           {formatCurrency(item.maxHomePrice)} • {item.dateSaved}
                         </span>
                       </div>

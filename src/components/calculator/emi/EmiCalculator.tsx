@@ -51,7 +51,7 @@ const EmiBreakdownDoughnutChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-mono">
+      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
         Loading doughnut chart...
       </div>
     ),
@@ -63,7 +63,7 @@ const EmiBalanceLineChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-mono">
+      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
         Loading balance chart...
       </div>
     ),
@@ -75,7 +75,7 @@ const EmiYearlyBarChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-mono">
+      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
         Loading yearly bar chart...
       </div>
     ),
@@ -230,7 +230,7 @@ export function EmiCalculator() {
     setValidationError("");
   };
 
-  // Save Calculation
+  // Save
   const handleSaveCalculation = (e: React.FormEvent) => {
     e.preventDefault();
     const newSave: SavedEmiCalculation = {
@@ -379,15 +379,7 @@ export function EmiCalculator() {
               {shareSuccessMsg}
             </span>
           )}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleShareUrl}
-            className="h-8 text-xs gap-1.5 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 cursor-pointer"
-          >
-            <Share2 className="h-3.5 w-3.5 text-blue-500" /> Share Link
-          </Button>
+          
           <Button
             type="button"
             variant="outline"
@@ -487,7 +479,7 @@ export function EmiCalculator() {
                         step={10000}
                         value={loanAmount}
                         onChange={(e) => setLoanAmount(Math.max(0, Number(e.target.value)))}
-                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                   </div>
@@ -508,7 +500,7 @@ export function EmiCalculator() {
                         step={1000}
                         value={desiredEmi}
                         onChange={(e) => setDesiredEmi(Math.max(0, Number(e.target.value)))}
-                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                   </div>
@@ -529,7 +521,7 @@ export function EmiCalculator() {
                       max={100}
                       value={interestRate}
                       onChange={(e) => setInterestRate(Math.max(0, Number(e.target.value)))}
-                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -547,7 +539,7 @@ export function EmiCalculator() {
                       max={50}
                       value={loanTermYears}
                       onChange={(e) => setLoanTermYears(Math.max(0, Number(e.target.value)))}
-                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                   <div>
@@ -561,7 +553,7 @@ export function EmiCalculator() {
                       max={11}
                       value={loanTermMonths}
                       onChange={(e) => setLoanTermMonths(Math.max(0, Number(e.target.value)))}
-                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -580,7 +572,7 @@ export function EmiCalculator() {
                       max={10}
                       value={processingFeeRate}
                       onChange={(e) => setProcessingFeeRate(Math.max(0, Number(e.target.value)))}
-                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                   <div>
@@ -594,7 +586,7 @@ export function EmiCalculator() {
                       step={500}
                       value={processingFeeFlat}
                       onChange={(e) => setProcessingFeeFlat(Math.max(0, Number(e.target.value)))}
-                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                      className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                     />
                   </div>
                 </div>
@@ -617,7 +609,7 @@ export function EmiCalculator() {
                         step={1000}
                         value={extraMonthlyPrepayment}
                         onChange={(e) => setExtraMonthlyPrepayment(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
 
@@ -632,7 +624,7 @@ export function EmiCalculator() {
                         step={10000}
                         value={oneTimePrepayment}
                         onChange={(e) => setOneTimePrepayment(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
 
@@ -660,7 +652,7 @@ export function EmiCalculator() {
                             max={2100}
                             value={oneTimePrepaymentYear}
                             onChange={(e) => setOneTimePrepaymentYear(Number(e.target.value))}
-                            className="mt-0.5 h-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-[11px]"
+                            className="mt-0.5 h-8 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-[11px]"
                           />
                         </div>
                       </div>
@@ -717,7 +709,7 @@ export function EmiCalculator() {
                         max={100}
                         value={flatInterestRate}
                         onChange={(e) => setFlatInterestRate(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-mono text-xs"
+                        className="mt-1 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
                       />
                     </div>
                   </div>
@@ -760,7 +752,7 @@ export function EmiCalculator() {
                   </Button>
                 </div>
 
-                <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-mono mt-2 tracking-tight">
+                <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums mt-2 tracking-tight">
                   {mode === "reverse-solver"
                     ? formatCurrency(results.maxLoanAmount)
                     : formatCurrency(results.monthlyEmi)}
@@ -771,37 +763,37 @@ export function EmiCalculator() {
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-3 border-t border-blue-100 dark:border-zinc-800">
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Total Principal</span>
-                  <span className="text-sm font-bold font-mono text-blue-600 dark:text-blue-400">
+                  <span className="text-sm font-bold font-sans tabular-nums text-blue-600 dark:text-blue-400">
                     {formatCurrency(results.totalPrincipal)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Total Interest Payable</span>
-                  <span className="text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                  <span className="text-sm font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
                     {formatCurrency(results.totalInterestPayable)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Processing Fee</span>
-                  <span className="text-sm font-bold font-mono text-purple-600 dark:text-purple-400">
+                  <span className="text-sm font-bold font-sans tabular-nums text-purple-600 dark:text-purple-400">
                     {formatCurrency(results.processingFeeTotal)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Total Cost of Loan</span>
-                  <span className="text-sm font-bold font-mono text-zinc-900 dark:text-zinc-100">
+                  <span className="text-sm font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
                     {formatCurrency(results.totalCostOfLoan)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Loan Payoff Date</span>
-                  <span className="text-sm font-bold font-mono text-amber-600 dark:text-amber-400 truncate block">
+                  <span className="text-sm font-bold font-sans tabular-nums text-amber-600 dark:text-amber-400 truncate block">
                     {results.payoffDate}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
                   <span className="text-[10px] text-zinc-500 block">Interest-to-Cost Ratio</span>
-                  <span className="text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                  <span className="text-sm font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
                     {results.interestRatio}%
                   </span>
                 </div>
@@ -827,7 +819,7 @@ export function EmiCalculator() {
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300 block">
                       Total Interest Savings
                     </span>
-                    <div className="flex items-center justify-between font-mono">
+                    <div className="flex items-center justify-between font-sans tabular-nums">
                       <span className="text-zinc-500 line-through">
                         {formatCurrency(results.baselineTotalInterest)}
                       </span>
@@ -844,7 +836,7 @@ export function EmiCalculator() {
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300 block">
                       Payoff Timeline Comparison
                     </span>
-                    <div className="flex items-center justify-between font-mono">
+                    <div className="flex items-center justify-between font-sans tabular-nums">
                       <span className="text-zinc-500 line-through">
                         {results.baselinePayoffDate}
                       </span>
@@ -878,10 +870,10 @@ export function EmiCalculator() {
                     <span className="font-bold text-emerald-600 dark:text-emerald-400 block">
                       Reducing Balance Rate ({interestRate}%)
                     </span>
-                    <div className="text-xs font-mono font-bold text-zinc-900 dark:text-zinc-100">
+                    <div className="text-xs font-sans tabular-nums font-bold text-zinc-900 dark:text-zinc-100">
                       EMI: {formatCurrency(results.monthlyEmi)} / mo
                     </div>
-                    <div className="text-[11px] font-mono text-zinc-500">
+                    <div className="text-[11px] font-sans tabular-nums text-zinc-500">
                       Total Interest: {formatCurrency(results.totalInterestPayable)}
                     </div>
                   </div>
@@ -890,10 +882,10 @@ export function EmiCalculator() {
                     <span className="font-bold text-rose-600 dark:text-rose-400 block">
                       Flat Rate ({flatInterestRate}%)
                     </span>
-                    <div className="text-xs font-mono font-bold text-zinc-900 dark:text-zinc-100">
+                    <div className="text-xs font-sans tabular-nums font-bold text-zinc-900 dark:text-zinc-100">
                       Payment: {formatCurrency(results.flatRateMonthlyPayment)} / mo
                     </div>
-                    <div className="text-[11px] font-mono text-rose-600 dark:text-rose-400 font-bold">
+                    <div className="text-[11px] font-sans tabular-nums text-rose-600 dark:text-rose-400 font-bold">
                       Extra Interest Paid: {formatCurrency(results.flatVsReducingDifference)}
                     </div>
                   </div>
@@ -1001,7 +993,7 @@ export function EmiCalculator() {
                 <Bookmark className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
                   Save EMI Setup
                 </h3>
                 <p className="text-xs text-zinc-500">
@@ -1018,7 +1010,7 @@ export function EmiCalculator() {
               <form onSubmit={handleSaveCalculation} className="space-y-3 pt-1">
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700/80 text-xs">
                   <span className="text-zinc-500 block">Calculation Summary:</span>
-                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-mono">
+                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-sans tabular-nums">
                     Monthly EMI: {formatCurrency(results.monthlyEmi)}
                   </span>
                   <span className="text-[11px] text-zinc-500">
@@ -1072,7 +1064,7 @@ export function EmiCalculator() {
                         <span className="font-bold text-zinc-900 dark:text-zinc-100 block">
                           {item.name}
                         </span>
-                        <span className="text-[10px] text-zinc-400 block font-mono">
+                        <span className="text-[10px] text-zinc-400 block font-sans tabular-nums">
                           {formatCurrency(item.monthlyEmi)}/mo • {item.dateSaved}
                         </span>
                       </div>

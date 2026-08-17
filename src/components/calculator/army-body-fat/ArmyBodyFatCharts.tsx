@@ -120,7 +120,7 @@ export function BodyCompositionBarChart({ result }: ArmyBodyFatChartsProps) {
           <h4 className="font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Body Mass Breakdown</h4>
           <p className="text-[11px] text-zinc-500">Fat Mass vs Lean Muscle Mass</p>
         </div>
-        <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{result.category}</span>
+        <span className="font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">{result.category}</span>
       </div>
 
       <div className="h-4 w-full bg-zinc-100 dark:bg-zinc-950 rounded-full overflow-hidden flex border border-zinc-200 dark:border-zinc-800">

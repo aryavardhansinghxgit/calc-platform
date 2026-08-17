@@ -178,7 +178,7 @@ export function RdCalculator() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Handle Share Link
+  // Handle Share
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
     setShared(true);
@@ -360,9 +360,7 @@ export function RdCalculator() {
         {/* LEFT COLUMN: PARAMETER INPUT CONTROLS PANEL (Col 5) */}
         <div className="lg:col-span-5 space-y-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h2 className="text-sm font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Sliders className="h-4 w-4 text-blue-600" />
-              <span>RD Deposit Parameters</span>
+            <h2 className="text-sm font-bold tracking-tight text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>RD Deposit Parameters</span>
             </h2>
             <button
               onClick={handleReset}
@@ -383,7 +381,7 @@ export function RdCalculator() {
                 type="number"
                 value={monthlyDeposit}
                 onChange={(e) => setMonthlyDeposit(Number(e.target.value))}
-                className="h-9 text-xs font-mono"
+                className="h-9 text-xs font-sans tabular-nums"
               />
               <input
                 type="range"
@@ -409,7 +407,7 @@ export function RdCalculator() {
                 step="0.1"
                 value={interestRate}
                 onChange={(e) => setInterestRate(Number(e.target.value))}
-                className="h-9 text-xs font-mono"
+                className="h-9 text-xs font-sans tabular-nums"
               />
               <input
                 type="range"
@@ -446,7 +444,7 @@ export function RdCalculator() {
                 type="number"
                 value={tenureMonths}
                 onChange={(e) => setTenureMonths(Number(e.target.value))}
-                className="h-9 text-xs font-mono"
+                className="h-9 text-xs font-sans tabular-nums"
               />
               <input
                 type="range"
@@ -500,7 +498,7 @@ export function RdCalculator() {
                   step="0.5"
                   value={taxRate}
                   onChange={(e) => setTaxRate(Number(e.target.value))}
-                  className="h-8 text-xs font-mono"
+                  className="h-8 text-xs font-sans tabular-nums"
                 />
               </div>
               <div className="space-y-1">
@@ -510,7 +508,7 @@ export function RdCalculator() {
                   step="0.5"
                   value={inflationRate}
                   onChange={(e) => setInflationRate(Number(e.target.value))}
-                  className="h-8 text-xs font-mono"
+                  className="h-8 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -525,7 +523,7 @@ export function RdCalculator() {
               <span className="text-xs font-semibold text-blue-100 block uppercase tracking-wider leading-tight">
                 Total Maturity Amount
               </span>
-              <div className="text-lg sm:text-xl font-black tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-lg sm:text-xl font-black tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {formatCurrency(results.maturityAmount)}
               </div>
               <span className="text-[11px] text-blue-200 block leading-tight">In {tenureMonths} months</span>
@@ -535,7 +533,7 @@ export function RdCalculator() {
               <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider leading-tight">
                 Total Invested Capital
               </span>
-              <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-zinc-100 tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-zinc-100 tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {formatCurrency(results.totalInvested)}
               </div>
               <span className="text-[11px] text-zinc-400 block leading-tight">Monthly contributions</span>
@@ -545,7 +543,7 @@ export function RdCalculator() {
               <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider leading-tight">
                 Est. Interest Earned
               </span>
-              <div className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {formatCurrency(results.totalInterestEarned)}
               </div>
               <span className="text-[11px] text-emerald-600 font-bold block leading-tight">
@@ -558,15 +556,15 @@ export function RdCalculator() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl border border-zinc-200/60 dark:border-zinc-800 text-xs">
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Inflation-Adjusted</span>
-              <span className="font-bold text-amber-600 dark:text-amber-400 font-mono block">{formatCurrency(results.inflationAdjustedValue)}</span>
+              <span className="font-bold text-amber-600 dark:text-amber-400 font-sans tabular-nums block">{formatCurrency(results.inflationAdjustedValue)}</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Post-Tax Maturity</span>
-              <span className="font-bold text-zinc-900 dark:text-zinc-100 font-mono block">{formatCurrency(results.postTaxMaturityAmount)}</span>
+              <span className="font-bold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums block">{formatCurrency(results.postTaxMaturityAmount)}</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Total TDS / Tax Drag</span>
-              <span className="font-bold text-rose-500 font-mono block">{formatCurrency(results.totalTaxPaid)}</span>
+              <span className="font-bold text-rose-500 font-sans tabular-nums block">{formatCurrency(results.totalTaxPaid)}</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">RD Portfolio Rating</span>
@@ -577,8 +575,7 @@ export function RdCalculator() {
           {/* BANK COMPARISON TAB PANEL */}
           {activeTab === "bank-compare" && (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3 text-xs">
-              <h3 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                <Award className="h-4 w-4 text-indigo-600" /> Commercial Bank RD Rate Benchmarking
+              <h3 className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Commercial Bank RD Rate Benchmarking
               </h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse border border-zinc-200 dark:border-zinc-800 text-[11px]">
@@ -590,7 +587,7 @@ export function RdCalculator() {
                       <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-bold text-blue-600">Est. Maturity Value</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+                  <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
                     {results.bankComparisons.map((b, idx) => (
                       <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                         <td className="p-2 font-sans font-bold text-zinc-900 dark:text-zinc-100">{b.bankName}</td>
@@ -608,8 +605,7 @@ export function RdCalculator() {
           {/* SENSITIVITY MATRIX TAB PANEL */}
           {activeTab === "sensitivity" && (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3 text-xs">
-              <h3 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                <BarChart3 className="h-4 w-4 text-rose-600" /> What-If Sensitivity Matrix (Rate vs Tenure)
+              <h3 className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">What-If Sensitivity Matrix (Rate vs Tenure)
               </h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse border border-zinc-200 dark:border-zinc-800 text-[10px]">
@@ -626,7 +622,7 @@ export function RdCalculator() {
                   </thead>
                   <tbody>
                     {[5.5, 6.0, 6.5, 7.0, 7.5, 8.0].map((r) => (
-                      <tr key={r} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 font-mono">
+                      <tr key={r} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 font-sans tabular-nums">
                         <td className="p-2 font-bold border border-zinc-200 dark:border-zinc-800">{r}%</td>
                         {[1, 2, 3, 5, 7, 10].map((t) => {
                           const cell = results.sensitivityMatrix.find((c) => c.returnRate === r && c.tenureYears === t);
@@ -646,7 +642,7 @@ export function RdCalculator() {
 
           {/* 3. CHARTS SECTION */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-4">
-            <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center justify-between">
+            <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center justify-between">
               <span>RD Growth & Breakdown Visualizer</span>
               <span className="text-[10px] text-zinc-400 font-normal">Real-time simulation</span>
             </h3>
@@ -702,7 +698,7 @@ export function RdCalculator() {
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3 text-xs">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3">
               <div className="flex items-center gap-2">
-                <h3 className="font-bold text-zinc-900 dark:text-zinc-100">RD Amortization / Schedule Table</h3>
+                <h3 className="font-bold text-blue-600 dark:text-blue-400">RD Amortization / Schedule Table</h3>
                 <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg text-[10px]">
                   <button
                     onClick={() => { setScheduleView("annual"); setCurrentPage(1); }}
@@ -754,7 +750,7 @@ export function RdCalculator() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-[11px]">
                 <thead>
-                  <tr className="bg-zinc-50 dark:bg-zinc-800/60 text-zinc-600 dark:text-zinc-300 font-semibold border-b border-zinc-200 dark:border-zinc-800">
+                  <tr className="bg-zinc-50 dark:bg-zinc-800/60 text-slate-800 dark:text-slate-200 font-semibold font-semibold border-b border-zinc-200 dark:border-zinc-800">
                     {scheduleView === "annual" ? (
                       <>
                         <th className="p-2">Year</th>
@@ -777,7 +773,7 @@ export function RdCalculator() {
                     )}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
                   {paginatedScheduleRows.length > 0 ? (
                     paginatedScheduleRows.map((r: any, idx) => (
                       <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">

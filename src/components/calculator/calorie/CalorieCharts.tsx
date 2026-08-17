@@ -133,7 +133,7 @@ export function ZigzagBarChart({ result }: CalorieChartsProps) {
                     className="w-1/2 bg-blue-500 hover:bg-blue-600 rounded-t-md transition-all relative group"
                     style={{ height: `${h1}%` }}
                   >
-                    <div className="opacity-0 group-hover:opacity-100 absolute -top-7 left-1/2 -translate-x-1/2 bg-zinc-900 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow pointer-events-none z-10 whitespace-nowrap">
+                    <div className="opacity-0 group-hover:opacity-100 absolute -top-7 left-1/2 -translate-x-1/2 bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 text-[9px] font-bold px-1.5 py-0.5 rounded shadow pointer-events-none z-10 whitespace-nowrap">
                       {day.schedule1Calories} kcal
                     </div>
                   </div>
@@ -142,7 +142,7 @@ export function ZigzagBarChart({ result }: CalorieChartsProps) {
                     className="w-1/2 bg-purple-500 hover:bg-purple-600 rounded-t-md transition-all relative group"
                     style={{ height: `${h2}%` }}
                   >
-                    <div className="opacity-0 group-hover:opacity-100 absolute -top-7 left-1/2 -translate-x-1/2 bg-zinc-900 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow pointer-events-none z-10 whitespace-nowrap">
+                    <div className="opacity-0 group-hover:opacity-100 absolute -top-7 left-1/2 -translate-x-1/2 bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 text-[9px] font-bold px-1.5 py-0.5 rounded shadow pointer-events-none z-10 whitespace-nowrap">
                       {day.schedule2Calories} kcal
                     </div>
                   </div>

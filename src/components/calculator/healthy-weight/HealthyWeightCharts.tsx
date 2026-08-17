@@ -112,7 +112,7 @@ export function HealthyWeightMethodBarChart({ result }: HealthyWeightChartsProps
           <h4 className="font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Clinical Ideal Weight Method Comparison</h4>
           <p className="text-[11px] text-zinc-500">WHO vs Hamwi vs Devine vs Robinson vs Miller vs Peterson</p>
         </div>
-        <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">Mean: {result.consensusIdealWeightLbs} lbs</span>
+        <span className="font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Mean: {result.consensusIdealWeightLbs} lbs</span>
       </div>
 
       <div className="space-y-2 pt-1 text-xs">
@@ -122,7 +122,7 @@ export function HealthyWeightMethodBarChart({ result }: HealthyWeightChartsProps
             <div key={idx} className="space-y-1">
               <div className="flex justify-between items-center text-[11px]">
                 <span className="font-semibold text-zinc-800 dark:text-zinc-200">{m.methodName}</span>
-                <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{m.idealWeightLbs} lbs ({m.idealWeightKg} kg)</span>
+                <span className="font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">{m.idealWeightLbs} lbs ({m.idealWeightKg} kg)</span>
               </div>
               <div className="h-3 w-full bg-zinc-100 dark:bg-zinc-950 rounded-full overflow-hidden border border-zinc-200 dark:border-zinc-800">
                 <div

@@ -229,3 +229,9 @@ export function solvePercentageChange(v1: number, v2: number): PercentageCalcula
     },
   };
 }
+
+export function calculatePercentageFormula({ value1, value2 }: { value1: number; value2: number }) {
+  const result = (value1 / 100) * value2;
+  return { result };
+}
+

@@ -346,9 +346,7 @@ export function FatIntakeCalculator() {
         {/* Left Column: Inputs Form */}
         <div className="lg:col-span-5 space-y-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm print:hidden">
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Sliders className="w-5 h-5 text-rose-600" />
-              Personal Parameters
+            <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">Personal Parameters
             </h2>
             
             {/* Unit System Toggle */}
@@ -634,14 +632,7 @@ export function FatIntakeCalculator() {
                   {copied ? "Copied!" : "Copy"}
                 </button>
 
-                <button
-                  onClick={handlePrint}
-                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
-                  title="Print Report"
-                >
-                  <Printer className="w-4 h-4" />
-                  Print
-                </button>
+                
               </div>
             </div>
           </div>
@@ -710,9 +701,7 @@ export function FatIntakeCalculator() {
             {activeTab === "fat-types" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <PieIcon className="w-4 h-4 text-rose-600" />
-                    Fatty Acid Sub-Type Target Allocation
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Fatty Acid Sub-Type Target Allocation
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Total: {results.fatTargetGrams} g/day</span>
                 </div>
@@ -772,9 +761,7 @@ export function FatIntakeCalculator() {
             {activeTab === "macros" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <PieIcon className="w-4 h-4 text-rose-600" />
-                    Macronutrient Energy Distribution
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Macronutrient Energy Distribution
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Fat: 9 kcal/g | Carbs: 4 kcal/g | Protein: 4 kcal/g</span>
                 </div>
@@ -834,9 +821,7 @@ export function FatIntakeCalculator() {
             {activeTab === "sat-fat-limit" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Heart className="w-4 h-4 text-rose-600" />
-                    Saturated Fat Safety Threshold vs AHA Recommendation
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Saturated Fat Safety Threshold vs AHA Recommendation
                   </h3>
                 </div>
 
@@ -866,9 +851,7 @@ export function FatIntakeCalculator() {
             {activeTab === "omega-ratio" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-cyan-600" />
-                    Omega-6 to Omega-3 Dietary Ratio Analysis
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Omega-6 to Omega-3 Dietary Ratio Analysis
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Optimal: 1:1 to 4:1</span>
                 </div>
@@ -906,9 +889,7 @@ export function FatIntakeCalculator() {
             {activeTab === "food-search" && (
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Utensils className="w-4 h-4 text-rose-600" />
-                    Healthy Fats Food Database (Search & Fatty Acid Breakdown)
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Healthy Fats Food Database (Search & Fatty Acid Breakdown)
                   </h3>
 
                   {/* Search Input */}
@@ -978,9 +959,7 @@ export function FatIntakeCalculator() {
 
           {/* Smart Insights & Personalized Recommendations */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 print:hidden">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-amber-500" />
-              Smart Insights & Lipid Optimization Strategy
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Smart Insights & Lipid Optimization Strategy
             </h3>
 
             <div className="space-y-2.5">

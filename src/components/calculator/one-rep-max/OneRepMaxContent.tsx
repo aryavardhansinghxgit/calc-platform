@@ -113,33 +113,33 @@ export function OneRepMaxContent() {
     <article className="mt-12 space-y-10 text-zinc-800 dark:text-zinc-200">
       {/* 1. Introduction */}
       <section className="space-y-4 p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-        <div className="flex items-center gap-2.5 text-purple-600 dark:text-purple-400">
+        <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400">
           <Dumbbell className="w-6 h-6" />
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-blue-600 dark:text-blue-400">
             Comprehensive Clinical &amp; Exercise Science Guide to One Rep Max (1RM)
           </h2>
         </div>
-        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
           One Rep Max (1RM) represents the absolute ceiling of maximal dynamic muscle strength. Defined as the maximum weight an athlete can lift for a single repetition through a full range of motion with sound biomechanical form, 1RM is the fundamental metric used by strength and conditioning coaches, powerlifters, and sports scientists worldwide to prescribe exercise intensity.
         </p>
       </section>
 
       {/* 2. Clinical Formulas */}
       <section className="space-y-4 p-5 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400">
           1. Mathematical Equations for 1RM Estimation
         </h3>
         <div className="space-y-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. Epley Equation (1985)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-purple-700 dark:text-purple-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               1RM = Weight Lifted × (1 + Repetitions / 30)
             </code>
           </div>
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. Brzycki Equation (1993)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-blue-700 dark:text-blue-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-700 dark:text-blue-400">
               1RM = Weight Lifted × [ 36 / (37 - Repetitions) ]
             </code>
           </div>
@@ -149,7 +149,7 @@ export function OneRepMaxContent() {
       {/* 3. 25 Clinical FAQs Accordion */}
       <section className="space-y-4">
         <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 font-bold text-xl">
-          <HelpCircle className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+          <HelpCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
           <h3>Frequently Asked Questions</h3>
         </div>
 
@@ -167,10 +167,10 @@ export function OneRepMaxContent() {
                   className="w-full p-4 text-left font-semibold text-sm text-zinc-900 dark:text-zinc-100 flex justify-between items-center hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
                 >
                   <span>{faq.q}</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform text-zinc-500 ${isOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`w-4 h-4 transition-transform text-slate-900 ${isOpen ? "rotate-180" : ""}`} />
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4 pt-1 text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed border-t border-zinc-100 dark:border-zinc-800">
+                  <div className="px-4 pb-4 pt-1 text-xs text-slate-900 dark:text-zinc-300 leading-relaxed  dark:border-zinc-800">
                     {faq.a}
                   </div>
                 )}

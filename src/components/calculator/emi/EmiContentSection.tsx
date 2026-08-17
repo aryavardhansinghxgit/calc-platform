@@ -162,8 +162,7 @@ export function EmiContentSection() {
 
       {/* Internal Links Quick Navigation */}
       <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 space-y-2">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">
-          <Calculator className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Related Financial Tools
+        <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">Related Financial Tools
         </h4>
         <div className="flex flex-wrap gap-2 text-xs">
           <Link
@@ -207,9 +206,7 @@ export function EmiContentSection() {
 
       {/* 1. What is an EMI */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <BookOpen className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          1. What is an Equated Monthly Installment (EMI)?
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">1. What is an Equated Monthly Installment (EMI)?
         </h2>
         <p className="text-sm leading-relaxed">
           An <strong>Equated Monthly Installment (EMI)</strong> is a fixed dollar or rupee amount paid by a borrower to a financial institution on a fixed date every calendar month over a designated tenure. Every EMI installment combines two components: paying off part of the underlying <strong>principal debt</strong> and servicing accrued <strong>interest charges</strong>.
@@ -218,14 +215,12 @@ export function EmiContentSection() {
 
       {/* 2. The EMI Formula */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Calculator className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-          2. The Mathematical EMI Formula
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">2. The Mathematical EMI Formula
         </h2>
         <p className="text-sm leading-relaxed">
           The monthly EMI payment is calculated using the universal compounding annuity formula:
         </p>
-        <div className="p-4 rounded-xl bg-zinc-900 text-zinc-100 dark:bg-zinc-950 font-mono text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
+        <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 font-sans tabular-nums text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
           EMI = P × r × [ (1 + r)ⁿ ] / [ (1 + r)ⁿ - 1 ]
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
@@ -243,27 +238,23 @@ export function EmiContentSection() {
 
       {/* 3. Reducing Balance vs Flat Rate */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Percent className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-          3. Reducing Balance Rate vs. Flat Interest Rate
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Reducing Balance Rate vs. Flat Interest Rate
         </h2>
         <p className="text-sm leading-relaxed">
           Understanding interest calculation methods is essential to avoid hidden borrowing costs:
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500"></span> Reducing Balance Method (Standard)
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">Reducing Balance Method (Standard)
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Interest is recalculated monthly on the remaining principal balance. As you pay off principal, monthly interest charges decrease continuously.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-rose-500"></span> Flat Rate Method (Expensive)
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">Flat Rate Method (Expensive)
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Interest is charged on the original starting principal balance for the entire loan life, even after 90% of principal has been paid. A 10% Flat Rate is equivalent to roughly 18% Reducing Balance!
             </p>
           </div>
@@ -272,23 +263,21 @@ export function EmiContentSection() {
 
       {/* 4. Prepayment Strategies */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <TrendingDown className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-          4. How Prepayments Work: Reduce Tenure vs. Reduce EMI
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">4. How Prepayments Work: Reduce Tenure vs. Reduce EMI
         </h2>
         <p className="text-sm leading-relaxed">
           When making an extra prepayment, borrowers can choose between two main strategies:
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Strategy 1: Reduce Tenure (Recommended)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">Strategy 1: Reduce Tenure (Recommended)</h3>
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Keep your monthly EMI constant. Extra prepayment accelerates principal payoff, finishing your loan months or years ahead of schedule and saving maximum interest.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Strategy 2: Reduce EMI</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">Strategy 2: Reduce EMI</h3>
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Maintain your original loan payoff date. The lender recalculates a lower required monthly EMI on your smaller principal balance, improving monthly cash flow.
             </p>
           </div>
@@ -297,9 +286,7 @@ export function EmiContentSection() {
 
       {/* 5. Processing Fees */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <DollarSign className="h-5 w-5 text-teal-600 dark:text-teal-400" />
-          5. Understanding Processing Fees & Preclosure Charges
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">5. Understanding Processing Fees & Preclosure Charges
         </h2>
         <p className="text-sm leading-relaxed">
           Banks charge a one-time <strong>processing fee</strong> (typically 0.5% to 2% of the principal) to cover loan underwriting, documentation, and credit verification. Always factor processing fees into your total cost of borrowing.
@@ -308,9 +295,7 @@ export function EmiContentSection() {
 
       {/* 6. Frequently Asked Questions (15 Questions) */}
       <section className="space-y-4">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <HelpCircle className="h-5 w-5 text-amber-500" />
-          6. Frequently Asked Questions (FAQ)
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">6. Frequently Asked Questions (FAQ)
         </h2>
 
         <div className="space-y-3 text-xs">
@@ -319,10 +304,10 @@ export function EmiContentSection() {
               key={`faq-emi-${idx}`}
               className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1"
             >
-              <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
+              <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">
                 {idx + 1}. {item.question}
               </h3>
-              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
                 {item.answer}
               </p>
             </div>
@@ -331,8 +316,8 @@ export function EmiContentSection() {
       </section>
 
       {/* Internal Links Grid */}
-      <div className="pt-6 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+      <div className="pt-6  dark:border-zinc-800 space-y-3">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
           Explore Other Financial Calculators on CalcPlatform
         </h4>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">

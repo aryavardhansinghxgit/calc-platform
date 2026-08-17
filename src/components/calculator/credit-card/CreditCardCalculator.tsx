@@ -270,7 +270,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
               key={p.val}
               type="button"
               onClick={() => setAprInput(p.val)}
-              className={`px-2 py-0.5 rounded text-xs font-mono font-bold transition-all cursor-pointer ${
+              className={`px-2 py-0.5 rounded text-xs font-sans tabular-nums font-bold transition-all cursor-pointer ${
                 aprInput === p.val ? "bg-blue-600 text-white shadow-sm" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
               }`}
             >
@@ -386,7 +386,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
                   step="500"
                   value={balanceInput}
                   onChange={(e) => setBalanceInput(e.target.value)}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -401,7 +401,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
                 step="0.25"
                 value={aprInput}
                 onChange={(e) => setAprInput(e.target.value)}
-                className="text-xs font-mono"
+                className="text-xs font-sans tabular-nums"
               />
             </div>
 
@@ -417,7 +417,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
                     step="25"
                     value={monthlyPaymentInput}
                     onChange={(e) => setMonthlyPaymentInput(e.target.value)}
-                    className="pl-7 text-xs font-mono"
+                    className="pl-7 text-xs font-sans tabular-nums"
                   />
                 </div>
               </div>
@@ -432,7 +432,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
                   max="360"
                   value={targetMonthsInput}
                   onChange={(e) => setTargetMonthsInput(e.target.value)}
-                  className="text-xs font-mono"
+                  className="text-xs font-sans tabular-nums"
                 />
               </div>
             )}
@@ -497,15 +497,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
                   TIME TO PAY OFF CREDIT CARD
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -517,7 +509,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-mono text-white mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-sans tabular-nums text-white mb-2">
                 {results.monthsToPayoff} Months <span className="text-xl font-normal text-zinc-300">({results.yearsToPayoff} Yrs)</span>
               </div>
 
@@ -529,15 +521,15 @@ Estimated Payoff Date: ${results.payoffDate}`;
               <div className="grid grid-cols-3 gap-3 mt-6 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Monthly Payment</div>
-                  <div className="font-bold font-mono text-white text-sm">{fmt(results.monthlyPayment)}</div>
+                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.monthlyPayment)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Total Interest Paid</div>
-                  <div className="font-bold font-mono text-red-300 text-sm">{fmt(results.totalInterestPaid)}</div>
+                  <div className="font-bold font-sans tabular-nums text-red-300 text-sm">{fmt(results.totalInterestPaid)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Total Amount Paid</div>
-                  <div className="font-bold font-mono text-emerald-300 text-sm">{fmt(results.totalAmountPaid)}</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-300 text-sm">{fmt(results.totalAmountPaid)}</div>
                 </div>
               </div>
             </div>
@@ -570,8 +562,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Zap className="h-5 w-5 text-emerald-500" /> Extra Payment &amp; One-Time Lump Sum Simulator
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Extra Payment &amp; One-Time Lump Sum Simulator
               </h3>
               <p className="text-xs text-zinc-500">
                 Simulate how adding extra monthly payments or paying a lump sum today accelerates debt payoff.
@@ -582,16 +573,16 @@ Estimated Payoff Date: ${results.payoffDate}`;
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Additional Monthly Payment ($)</label>
-              <Input type="number" min="0" value={extraMonthlyInput} onChange={(e) => setExtraMonthlyInput(e.target.value)} className="text-xs font-mono" />
+              <Input type="number" min="0" value={extraMonthlyInput} onChange={(e) => setExtraMonthlyInput(e.target.value)} className="text-xs font-sans tabular-nums" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">One-Time Lump Sum Payment ($)</label>
-              <Input type="number" min="0" value={lumpSumInput} onChange={(e) => setLumpSumInput(e.target.value)} className="text-xs font-mono" />
+              <Input type="number" min="0" value={lumpSumInput} onChange={(e) => setLumpSumInput(e.target.value)} className="text-xs font-sans tabular-nums" />
             </div>
           </div>
 
           {/* Comparison Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans tabular-nums text-xs">
             <div className="bg-zinc-50 dark:bg-zinc-800/40 p-5 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-2">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 text-sm block">Standard Payoff Schedule</span>
               <div>Months to Payoff: <span className="font-bold">{results.monthsToPayoff} mos</span></div>
@@ -608,7 +599,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
           </div>
 
           {/* Savings Highlight */}
-          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-4 rounded-xl text-xs flex justify-between items-center font-mono shadow-sm">
+          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white p-4 rounded-xl text-xs flex justify-between items-center font-sans tabular-nums shadow-sm">
             <div>
               <span className="text-emerald-100 block text-[10px] uppercase font-semibold">Total Savings</span>
               <span className="text-sm">Time Saved: <strong>{results.monthsToPayoff - extraResults.monthsToPayoff} Months</strong></span>
@@ -626,8 +617,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <RefreshCw className="h-5 w-5 text-indigo-500" /> 0% Intro APR Balance Transfer Analyzer
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">0% Intro APR Balance Transfer Analyzer
               </h3>
               <p className="text-xs text-zinc-500">
                 Evaluate moving debt to a 0% introductory APR card including transfer fee trade-offs.
@@ -638,19 +628,19 @@ Estimated Payoff Date: ${results.payoffDate}`;
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Introductory APR (%)</label>
-              <Input type="number" min="0" value={transferAprInput} onChange={(e) => setTransferAprInput(e.target.value)} className="text-xs font-mono" />
+              <Input type="number" min="0" value={transferAprInput} onChange={(e) => setTransferAprInput(e.target.value)} className="text-xs font-sans tabular-nums" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Intro Period (Months)</label>
-              <Input type="number" min="1" value={introPeriodInput} onChange={(e) => setIntroPeriodInput(e.target.value)} className="text-xs font-mono" />
+              <Input type="number" min="1" value={introPeriodInput} onChange={(e) => setIntroPeriodInput(e.target.value)} className="text-xs font-sans tabular-nums" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Transfer Fee (%)</label>
-              <Input type="number" min="0" step="0.5" value={transferFeePctInput} onChange={(e) => setTransferFeePctInput(e.target.value)} className="text-xs font-mono" />
+              <Input type="number" min="0" step="0.5" value={transferFeePctInput} onChange={(e) => setTransferFeePctInput(e.target.value)} className="text-xs font-sans tabular-nums" />
             </div>
           </div>
 
-          <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl space-y-3 font-mono text-xs">
+          <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl space-y-3 font-sans tabular-nums text-xs">
             <div className="flex justify-between">
               <span className="text-zinc-600 dark:text-zinc-400">Upfront Balance Transfer Fee ({transferFeePctInput}%):</span>
               <span className="font-bold text-red-500">{fmt(transferResults.transferFeeAmount)}</span>
@@ -675,8 +665,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-amber-500" /> Debt Avalanche vs. Debt Snowball Strategy Comparison
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Debt Avalanche vs. Debt Snowball Strategy Comparison
               </h3>
               <p className="text-xs text-zinc-500">
                 Compare standard monthly payments against aggressive payoff strategies.
@@ -695,7 +684,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
                   <th className="p-2.5 text-right font-bold text-emerald-600">Interest Saved</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-sans tabular-nums">
                 {strategyResults.map((st, idx) => (
                   <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2.5 font-sans font-bold text-zinc-800 dark:text-zinc-200">{st.strategyName}</td>
@@ -715,8 +704,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
       {activeTab === "schedule" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-purple-500" /> Monthly Credit Card Amortization Schedule
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Monthly Credit Card Amortization Schedule
             </h3>
 
             <div className="flex items-center gap-2">
@@ -748,7 +736,7 @@ Estimated Payoff Date: ${results.payoffDate}`;
                   <th className="p-2.5 text-right">Ending Balance</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-sans tabular-nums">
                 {paginatedSchedule.map((row) => (
                   <tr key={row.month} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">Month {row.month}</td>

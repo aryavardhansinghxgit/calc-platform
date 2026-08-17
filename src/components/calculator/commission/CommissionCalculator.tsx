@@ -260,7 +260,7 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Commission Earned:</span>
-          <span className="text-indigo-600 dark:text-indigo-400 font-mono text-sm">
+          <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-sm">
             {fmt(simpleResults.commissionAmount)}
           </span>
         </div>
@@ -346,7 +346,7 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
                     value={salesPriceInput}
                     onChange={(e) => setSalesPriceInput(e.target.value)}
                     placeholder="e.g. 200000"
-                    className="text-xs font-mono h-9 px-3"
+                    className="text-xs font-sans tabular-nums h-9 px-3"
                   />
                 </div>
 
@@ -358,7 +358,7 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
                       value={commRateInput}
                       onChange={(e) => setCommRateInput(e.target.value)}
                       placeholder="e.g. 3.0"
-                      className="text-xs font-mono h-9 px-3"
+                      className="text-xs font-sans tabular-nums h-9 px-3"
                     />
                   </div>
                   <div className="space-y-1">
@@ -368,7 +368,7 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
                       value={commAmountInput}
                       onChange={(e) => setCommAmountInput(e.target.value)}
                       placeholder="e.g. 6000"
-                      className="text-xs font-mono h-9 px-3"
+                      className="text-xs font-sans tabular-nums h-9 px-3"
                     />
                   </div>
                 </div>
@@ -384,15 +384,7 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
                   COMMISSION EARNED
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -404,7 +396,7 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-mono mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-sans tabular-nums mb-2">
                 {fmt(simpleResults.commissionAmount)}
               </div>
 
@@ -452,11 +444,11 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Sales Price / Volume ($)</label>
-                <Input type="number" value={tieredSalesInput} onChange={(e) => setTieredSalesInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={tieredSalesInput} onChange={(e) => setTieredSalesInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Base Salary ($)</label>
-                <Input type="number" value={tieredBaseInput} onChange={(e) => setTieredBaseInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={tieredBaseInput} onChange={(e) => setTieredBaseInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
 
@@ -478,13 +470,13 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
                     value={tier.toAmount !== null ? tier.toAmount : ""}
                     onChange={(e) => updateTier(idx, "toAmount", e.target.value !== "" ? Number(e.target.value) : null)}
                     placeholder="No max"
-                    className="w-20 h-7 text-[11px] font-mono px-1.5"
+                    className="w-20 h-7 text-[11px] font-sans tabular-nums px-1.5"
                   />
                   <Input
                     type="number"
                     value={tier.ratePercent}
                     onChange={(e) => updateTier(idx, "ratePercent", Number(e.target.value))}
-                    className="w-16 h-7 text-[11px] font-mono px-1.5"
+                    className="w-16 h-7 text-[11px] font-sans tabular-nums px-1.5"
                   />
                   <span className="font-bold">%</span>
                   {tiers.length > 1 && (
@@ -497,7 +489,7 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-purple-900 dark:text-purple-200 text-sm block border-b pb-1">
                 Tiered Compensation Breakdown ($27k Baseline Match)
@@ -516,7 +508,7 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
               </div>
               <div className="flex justify-between font-sans text-zinc-600 dark:text-zinc-400">
                 <span>Effective Commission Rate:</span>
-                <span className="font-bold font-mono">{tieredResults.effectiveCommissionRate}%</span>
+                <span className="font-bold font-sans tabular-nums">{tieredResults.effectiveCommissionRate}%</span>
               </div>
             </div>
           </div>
@@ -533,22 +525,22 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
 
             <div className="space-y-1 text-xs">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Property Sale Price ($)</label>
-              <Input type="number" value={rePriceInput} onChange={(e) => setRePriceInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+              <Input type="number" value={rePriceInput} onChange={(e) => setRePriceInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Total Commission (%)</label>
-                <Input type="number" value={reTotalCommInput} onChange={(e) => setReTotalCommInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={reTotalCommInput} onChange={(e) => setReTotalCommInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Brokerage Split (% to Agent)</label>
-                <Input type="number" value={reBrokerSplitInput} onChange={(e) => setReBrokerSplitInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={reBrokerSplitInput} onChange={(e) => setReBrokerSplitInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-amber-900 dark:text-amber-200 text-sm block border-b pb-1">
                 Real Estate Commission Distribution
@@ -584,22 +576,22 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
 
             <div className="space-y-1 text-xs">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Target Total Earnings Goal ($)</label>
-              <Input type="number" value={goalTargetInput} onChange={(e) => setGoalTargetInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+              <Input type="number" value={goalTargetInput} onChange={(e) => setGoalTargetInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Base Salary ($)</label>
-                <Input type="number" value={goalBaseInput} onChange={(e) => setGoalBaseInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={goalBaseInput} onChange={(e) => setGoalBaseInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Commission Rate (%)</label>
-                <Input type="number" value={goalRateInput} onChange={(e) => setGoalRateInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={goalRateInput} onChange={(e) => setGoalRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-indigo-900 dark:text-indigo-200 text-sm block border-b pb-1">
                 Required Sales Volume to Hit Goal
@@ -620,8 +612,7 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
       {/* TAB 5: VISUAL DASHBOARDS */}
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-blue-500" /> Commission vs. Net Company Revenue Comparison
+          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Commission vs. Net Company Revenue Comparison
           </h3>
 
           <div className="h-64 w-full">

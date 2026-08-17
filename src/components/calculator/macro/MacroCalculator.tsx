@@ -332,9 +332,7 @@ export function MacroCalculator() {
         {/* Left Column: Inputs Form */}
         <div className="lg:col-span-5 space-y-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm print:hidden">
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Sliders className="w-5 h-5 text-emerald-600" />
-              Personal Parameters
+            <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">Personal Parameters
             </h2>
             
             {/* Unit System Toggle */}
@@ -509,9 +507,7 @@ export function MacroCalculator() {
 
           {/* Advanced BMR Formula & Body Composition */}
           <div className="space-y-4 border-t border-slate-100 pt-4">
-            <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <Activity className="w-4 h-4 text-purple-600" />
-              Advanced Formulas & Body Fat
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Advanced Formulas & Body Fat
             </h3>
 
             <div className="grid grid-cols-2 gap-4">
@@ -643,14 +639,7 @@ export function MacroCalculator() {
                   {copied ? "Copied!" : "Copy"}
                 </button>
 
-                <button
-                  onClick={handlePrint}
-                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
-                  title="Print Report"
-                >
-                  <Printer className="w-4 h-4" />
-                  Print
-                </button>
+                
               </div>
             </div>
           </div>
@@ -719,9 +708,7 @@ export function MacroCalculator() {
             {activeTab === "distribution" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <PieIcon className="w-4 h-4 text-emerald-600" />
-                    Macronutrient Energy Distribution
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Macronutrient Energy Distribution
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Protein: 4 kcal/g | Carbs: 4 kcal/g | Fat: 9 kcal/g</span>
                 </div>
@@ -782,9 +769,7 @@ export function MacroCalculator() {
             {activeTab === "trajectory" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-emerald-600" />
-                    12-Week Weight Trajectory Forecast
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">12-Week Weight Trajectory Forecast
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Goal: {goal.toUpperCase()}</span>
                 </div>
@@ -820,9 +805,7 @@ export function MacroCalculator() {
             {/* TAB 3: Macro Ratio Comparison */}
             {activeTab === "ratio-comparison" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-purple-600" />
-                  Dietary Style Macro Split Comparison
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Dietary Style Macro Split Comparison
                 </h3>
 
                 <div className="overflow-x-auto border border-slate-200 rounded-xl">
@@ -874,9 +857,7 @@ export function MacroCalculator() {
             {/* TAB 4: Body Composition & FFMI */}
             {activeTab === "body-comp" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Award className="w-4 h-4 text-emerald-600" />
-                  Body Composition & Fat-Free Mass Index (FFMI)
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Body Composition & Fat-Free Mass Index (FFMI)
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -905,9 +886,7 @@ export function MacroCalculator() {
             {activeTab === "food-search" && (
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Utensils className="w-4 h-4 text-emerald-600" />
-                    Macronutrient Food Database (Search & Filter)
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Macronutrient Food Database (Search & Filter)
                   </h3>
 
                   {/* Search Input */}
@@ -973,9 +952,7 @@ export function MacroCalculator() {
 
           {/* Smart Insights & Personalized Recommendations */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 print:hidden">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Zap className="w-4 h-4 text-amber-500" />
-              Smart Insights & Nutrition Strategy
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Smart Insights & Nutrition Strategy
             </h3>
 
             <div className="space-y-2.5">

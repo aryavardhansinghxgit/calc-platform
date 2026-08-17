@@ -584,45 +584,11 @@ export function BmiCalculator() {
 
             {/* ACTION BAR: Save, Copy, Share, Print */}
             <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-              <div className="flex items-center gap-2">
-                <Button
-                  onClick={handleSaveResult}
-                  size="sm"
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs gap-1.5 shadow-sm"
-                >
-                  <Bookmark className="w-3.5 h-3.5" />
-                  Save Result
-                </Button>
-                <Button
-                  onClick={handleCopyResults}
-                  variant="outline"
-                  size="sm"
-                  className="bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-xs gap-1.5"
-                >
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                  {copied ? "Copied!" : "Copy Summary"}
-                </Button>
-              </div>
+              
 
               <div className="flex items-center gap-2">
-                <Button
-                  onClick={handleShare}
-                  variant="outline"
-                  size="sm"
-                  className="bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-xs gap-1.5"
-                >
-                  <Share2 className="w-3.5 h-3.5" />
-                  Share
-                </Button>
-                <Button
-                  onClick={handlePrint}
-                  variant="outline"
-                  size="sm"
-                  className="bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-xs gap-1.5"
-                >
-                  <Printer className="w-3.5 h-3.5" />
-                  Print / Export PDF
-                </Button>
+                
+                
               </div>
             </div>
 
@@ -630,9 +596,7 @@ export function BmiCalculator() {
             {savedHistory.length > 0 && (
               <div className="p-4 bg-zinc-50 dark:bg-zinc-950/70 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-3">
                 <div className="flex justify-between items-center">
-                  <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider flex items-center gap-1.5">
-                    <Bookmark className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    Saved Calculation History
+                  <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider flex items-center gap-1.5">Saved Calculation History
                   </h4>
                   <button
                     onClick={handleClearHistory}
@@ -649,7 +613,7 @@ export function BmiCalculator() {
                         <strong className="text-zinc-900 dark:text-zinc-100">{item.bmi} BMI</strong> ({item.category})
                         <span className="text-zinc-500 block text-[10px]">{item.timestamp}</span>
                       </div>
-                      <span className="font-mono text-zinc-600 dark:text-zinc-400">{item.weight}</span>
+                      <span className="font-sans tabular-nums text-zinc-600 dark:text-zinc-400">{item.weight}</span>
                     </div>
                   ))}
                 </div>

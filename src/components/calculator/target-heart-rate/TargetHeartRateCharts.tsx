@@ -109,7 +109,7 @@ export function FormulaComparisonBarChart({ result }: TargetHeartRateChartsProps
           <h4 className="font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Clinical MHR Formula Comparison</h4>
           <p className="text-[11px] text-zinc-500">Haskell vs Tanaka vs Nes vs Gellish</p>
         </div>
-        <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">MHR: {result.calculatedMhr} BPM</span>
+        <span className="font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">MHR: {result.calculatedMhr} BPM</span>
       </div>
 
       <div className="space-y-2 pt-1 text-xs">
@@ -119,7 +119,7 @@ export function FormulaComparisonBarChart({ result }: TargetHeartRateChartsProps
             <div key={idx} className="space-y-1">
               <div className="flex justify-between items-center text-[11px]">
                 <span className="font-semibold text-zinc-800 dark:text-zinc-200">{f.formulaName}</span>
-                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{f.mhrBpm} BPM</span>
+                <span className="font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">{f.mhrBpm} BPM</span>
               </div>
               <div className="h-3 w-full bg-zinc-100 dark:bg-zinc-950 rounded-full overflow-hidden border border-zinc-200 dark:border-zinc-800">
                 <div
@@ -153,8 +153,8 @@ export function TargetHeartRatePyramid({ result }: TargetHeartRateChartsProps) {
               </div>
             </div>
             <div className="text-right">
-              <strong className="font-mono font-bold text-zinc-900 dark:text-zinc-100">{zone.minBpm} – {zone.maxBpm} BPM</strong>
-              <span className="text-[10px] font-mono text-zinc-500 block">{zone.percentageRange}</span>
+              <strong className="font-sans tabular-nums font-bold text-zinc-900 dark:text-zinc-100">{zone.minBpm} – {zone.maxBpm} BPM</strong>
+              <span className="text-[10px] font-sans tabular-nums text-zinc-500 block">{zone.percentageRange}</span>
             </div>
           </div>
         ))}

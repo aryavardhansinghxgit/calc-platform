@@ -7,7 +7,7 @@ export function DewPointContent() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: THE PHYSICS OF HUMIDITY, WATER VAPOR & DEW POINT */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. The Physics of Humidity, Water Vapor & Dew Point
         </h2>
         <p>
@@ -17,9 +17,9 @@ export function DewPointContent() {
           According to <strong>Dalton's Law of Partial Pressures</strong>, atmospheric air is a mixture of dry gases and water vapor. The maximum amount of water vapor that air can accommodate before condensation occurs is strictly governed by the air temperature—a thermodynamic relationship described by the <strong>Clausius-Clapeyron relation</strong>.
         </p>
 
-        <div className="p-3.5 bg-sky-50/60 dark:bg-sky-950/20 border border-sky-200 dark:border-sky-900 rounded-xl space-y-1 text-xs">
+        <div className="p-3.5 bg-blue-50/60 dark:bg-blue-50/20 border border-sky-200 dark:border-sky-900 rounded-xl space-y-1 text-xs">
           <h3 className="font-bold text-sky-900 dark:text-sky-200">Why Relative Humidity is Misleading Across Temperatures</h3>
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-slate-900 dark:text-slate-100">
             Relative Humidity (RH) measures the ratio of actual water vapor pressure to saturation vapor pressure at a given temperature. Because warm air can hold exponentially more water vapor than cold air, 50% RH at 95°F (35°C) represents a heavy mass of moisture (dew point 73°F), whereas 50% RH at 50°F (10°C) represents crisp dry air (dew point 32°F). Dew point is an absolute measure of actual moisture mass that remains constant regardless of temperature fluctuations.
           </p>
         </div>
@@ -27,62 +27,62 @@ export function DewPointContent() {
 
       {/* SECTION 2: MATHEMATICAL FORMULAS & DERIVATIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. Mathematical Formulas & Derivations
         </h2>
         
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">1. The Alduchov &amp; Eskridge (1996) Improved Magnus Formula</h3>
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">1. The Alduchov &amp; Eskridge (1996) Improved Magnus Formula</h3>
         <p>
           The standard high-precision formulation for saturation vapor pressure e_s(T) and dew point T_d (precision ±0.01°C):
         </p>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-mono text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold overflow-x-auto">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-blue-600 dark:text-blue-400 font-bold overflow-x-auto">
           gamma(T, RH) = ln(RH / 100) + (17.625 × T) / (243.04 + T)
         </div>
 
-        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-mono text-xs my-2 text-center text-sky-700 dark:text-sky-300 font-bold overflow-x-auto">
+        <div className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl font-sans tabular-nums text-xs my-2 text-center text-blue-600 dark:text-blue-400 font-bold overflow-x-auto">
           Td = (243.04 × gamma) / (17.625 - gamma)
         </div>
 
-        <p className="text-xs text-zinc-600 dark:text-zinc-400">
+        <p className="text-xs text-slate-900 dark:text-slate-100">
           Where T is air temperature in °C and RH is relative humidity (0–100%).
         </p>
 
-        <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">2. The Rule-of-Thumb Approximation</h3>
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">2. The Rule-of-Thumb Approximation</h3>
         <p className="text-xs">
           For relative humidity values above 50%, the dew point can be estimated quickly without logarithms using:
         </p>
-        <div className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg font-mono text-xs text-center text-sky-700 dark:text-sky-300 font-bold">
+        <div className="p-2.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg font-sans tabular-nums text-xs text-center text-blue-600 dark:text-blue-400 font-bold">
           Td ≈ T - [ (100 - RH) / 5 ]
         </div>
       </section>
 
       {/* SECTION 3: DEW POINT VS. WET-BULB VS. FROST POINT */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. Dew Point vs. Wet-Bulb Temperature vs. Frost Point
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100">Dew Point (Td)</h4>
-            <p className="text-zinc-600 dark:text-zinc-400">Temperature where existing water vapor reaches 100% saturation at constant pressure.</p>
+            <p className="text-slate-900 dark:text-slate-100">Temperature where existing water vapor reaches 100% saturation at constant pressure.</p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100">Wet-Bulb Temp (Tw)</h4>
-            <p className="text-zinc-600 dark:text-zinc-400">Lowest temperature achievable solely through evaporative cooling off a moist wick in moving air.</p>
+            <p className="text-slate-900 dark:text-slate-100">Lowest temperature achievable solely through evaporative cooling off a moist wick in moving air.</p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100">Frost Point (Tf)</h4>
-            <p className="text-zinc-600 dark:text-zinc-400">Desublimation temperature where vapor transitions directly into ice crystals below 32°F (0°C).</p>
+            <p className="text-slate-900 dark:text-slate-100">Desublimation temperature where vapor transitions directly into ice crystals below 32°F (0°C).</p>
           </div>
         </div>
       </section>
 
       {/* SECTION 4: DEW POINT AND HUMAN THERMAL COMFORT */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. Dew Point and Human Thermal Comfort (The "Muggy" Index)
         </h2>
         <p>
@@ -100,7 +100,7 @@ export function DewPointContent() {
 
       {/* SECTION 5: REAL-WORLD APPLICATIONS & INDUSTRY USE CASES */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. Real-World Applications &amp; Industry Use Cases
         </h2>
         <ul className="list-disc pl-5 space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300">

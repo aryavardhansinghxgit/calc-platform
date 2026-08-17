@@ -1095,10 +1095,10 @@ export function ScientificCalculator() {
     ],
     // Row 7
     [
-      { label: "7", action: "7", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
-      { label: "8", action: "8", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
-      { label: "9", action: "9", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
-      { label: "÷", action: "÷", className: "font-black text-white text-base bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "7", action: "7", className: "font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "8", action: "8", className: "font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "9", action: "9", className: "font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "÷", action: "÷", className: "font-bold text-white text-xs sm:text-sm bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
       { label: "Back", action: "Back", className: "text-xs text-zinc-700 dark:text-zinc-300" },
       { label: "Ans", action: "Ans", className: "font-bold text-blue-600 dark:text-blue-400" },
       { label: "M+", action: "M+", className: "font-bold text-purple-600 dark:text-purple-400" },
@@ -1106,10 +1106,10 @@ export function ScientificCalculator() {
     ],
     // Row 8
     [
-      { label: "4", action: "4", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
-      { label: "5", action: "5", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
-      { label: "6", action: "6", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
-      { label: "×", action: "×", className: "font-black text-white text-base bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "4", action: "4", className: "font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "5", action: "5", className: "font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "6", action: "6", className: "font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "×", action: "×", className: "font-bold text-white text-xs sm:text-sm bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
       { label: "(-)", action: "-", className: "font-bold text-zinc-700 dark:text-zinc-300" },
       { label: "EEX", action: "EEX", className: "font-bold text-emerald-600 dark:text-emerald-400" },
       { label: "M-", action: "M-", className: "font-bold text-purple-600 dark:text-purple-400" },
@@ -1117,19 +1117,19 @@ export function ScientificCalculator() {
     ],
     // Row 9
     [
-      { label: "1", action: "1", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
-      { label: "2", action: "2", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
-      { label: "3", action: "3", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
-      { label: "-", action: "-", className: "font-black text-white text-base bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
-      { label: "+", action: "+", className: "font-black text-white text-base bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
-      { label: "=", action: "=", className: "font-black text-white text-base bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "1", action: "1", className: "font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "2", action: "2", className: "font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "3", action: "3", className: "font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "-", action: "-", className: "font-bold text-white text-xs sm:text-sm bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "+", action: "+", className: "font-bold text-white text-xs sm:text-sm bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "=", action: "=", className: "font-bold text-white text-xs sm:text-sm bg-blue-600 border-blue-500 border-b-2 border-b-blue-800 hover:bg-blue-500 active:translate-y-0.5 active:border-b-0 shadow-xs" },
       { label: "Store", action: "Store", className: "font-bold text-purple-600 dark:text-purple-400" },
       { label: "Recall", action: "Recall", className: "font-bold text-purple-600 dark:text-purple-400" },
     ],
     // Row 10
     [
-      { label: "0", action: "0", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
-      { label: ".", action: ".", className: "font-black text-zinc-900 dark:text-zinc-100 text-base bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: "0", action: "0", className: "font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
+      { label: ".", action: ".", className: "font-bold text-zinc-900 dark:text-zinc-100 text-xs sm:text-sm bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-350 dark:border-b-zinc-900 hover:bg-zinc-50 active:translate-y-0.5 active:border-b-0 shadow-xs" },
       { label: "EXP", action: "EXP", className: "font-bold text-zinc-700 dark:text-zinc-300" },
       { label: "DRG►", action: "DRG►", className: "font-bold text-indigo-600 dark:text-indigo-400" },
       { label: ",", action: ",", className: "font-bold text-zinc-700 dark:text-zinc-300" },
@@ -1195,60 +1195,60 @@ export function ScientificCalculator() {
   const safeCursorPos = Math.min(Math.max(0, cursorPos), expression.length);
 
   return (
-    <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-      {/* LEFT COLUMN: Main Calculator Frame (Col 8) */}
-      <div className="min-w-0 lg:col-span-8 space-y-4">
-        <Card className="bg-sky-50 dark:bg-sky-950/40 text-zinc-900 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-700 border-b-4 border-b-zinc-350 dark:border-b-zinc-800 shadow-xl rounded-2xl overflow-hidden">
-          <CardContent className="p-4 sm:p-5 space-y-3">
+    <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      {/* LEFT COLUMN: Main Calculator Frame (Col 7) */}
+      <div className="min-w-0 lg:col-span-7 space-y-3 max-w-xl">
+        <Card className="bg-sky-50 dark:bg-sky-950/40 text-zinc-900 dark:text-zinc-100 border border-zinc-300 dark:border-zinc-700 border-b-4 border-b-zinc-350 dark:border-b-zinc-800 shadow-lg rounded-xl overflow-hidden">
+          <CardContent className="p-3 sm:p-4 space-y-2.5">
             {/* 1. LCD / DISPLAY BOX */}
-            <div className="bg-emerald-950 border-2 border-emerald-800/80 rounded-xl p-3 sm:p-4 text-right font-mono space-y-1 shadow-inner relative">
+            <div className="bg-emerald-950 border-2 border-emerald-800/80 rounded-lg p-2 sm:p-3 text-right font-sans tabular-nums space-y-1 shadow-inner relative">
               {/* LCD Top Status Bar */}
-              <div className="flex items-center justify-between text-[11px] font-sans border-b border-emerald-800/50 pb-1 mb-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 border border-emerald-600/40 px-1.5 py-0.2 rounded bg-emerald-900/40">
+              <div className="flex items-center justify-between text-[10px] font-sans border-b border-emerald-800/50 pb-0.5 mb-0.5">
+                <div className="flex items-center gap-1">
+                  <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-400 border border-emerald-600/40 px-1 py-0.2 rounded bg-emerald-900/40">
                     {angleMode.toUpperCase()}
                   </span>
                   {memory !== 0 && (
-                    <span className="text-[10px] font-bold text-amber-300 bg-amber-950/80 border border-amber-500/40 px-1.5 py-0.2 rounded flex items-center gap-1">
+                    <span className="text-[9px] font-bold text-amber-300 bg-amber-950/80 border border-amber-500/40 px-1 py-0.2 rounded flex items-center gap-1">
                       M = {memory}
                     </span>
                   )}
                 </div>
                 {statusMessage ? (
-                  <span className="text-[10px] font-semibold text-purple-300 bg-purple-950/80 border border-purple-700 px-2 py-0.5 rounded-full animate-pulse">
+                  <span className="text-[9px] font-semibold text-purple-300 bg-purple-950/80 border border-purple-700 px-1.5 py-0.5 rounded-full animate-pulse">
                     {statusMessage}
                   </span>
                 ) : (
-                  <span className="text-[10px] text-emerald-400/80 font-mono">
+                  <span className="text-[9px] text-emerald-400/80 font-sans tabular-nums">
                     {displayFormat.toUpperCase()}
                   </span>
                 )}
               </div>
 
               {/* Top Expression Row with Blinking Cursor */}
-              <div className="text-xs sm:text-sm text-emerald-300/80 min-h-[1.5rem] truncate font-mono flex items-center justify-end font-semibold select-none">
+              <div className="text-[11px] sm:text-xs text-emerald-300/80 min-h-[1.2rem] truncate font-sans tabular-nums flex items-center justify-end font-semibold select-none">
                 {expression.length === 0 ? (
                   <span className="text-emerald-500/60 font-sans italic flex items-center gap-0.5">
                     0
-                    <span className="inline-block w-0.5 h-4 bg-emerald-400 animate-pulse ml-0.5 rounded-full" />
+                    <span className="inline-block w-0.5 h-3.5 bg-emerald-400 animate-pulse ml-0.5 rounded-full" />
                   </span>
                 ) : (
-                  <span className="font-mono tracking-wide flex items-center justify-end">
+                  <span className="font-sans tabular-nums tracking-wide flex items-center justify-end">
                     <span>{expression.slice(0, safeCursorPos)}</span>
-                    <span className="inline-block w-0.5 h-4 bg-emerald-400 animate-pulse mx-[0.5px] rounded-full shadow-sm" />
+                    <span className="inline-block w-0.5 h-3.5 bg-emerald-400 animate-pulse mx-[0.5px] rounded-full shadow-sm" />
                     <span>{expression.slice(safeCursorPos)}</span>
                   </span>
                 )}
               </div>
 
               {/* Bottom Main Output Row */}
-              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-300 tracking-wider truncate flex items-center justify-end">
+              <div className="text-xl sm:text-2xl font-bold text-emerald-300 tracking-wider truncate flex items-center justify-end">
                 <span>{displayValue}</span>
               </div>
             </div>
 
             {/* 2. MODE SWITCHER BAR */}
-            <div className="flex flex-wrap items-center justify-between gap-2 py-1.5 px-3 bg-zinc-200/80 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-xl text-xs font-medium text-zinc-800 dark:text-zinc-300 shadow-xs">
+            <div className="flex flex-wrap items-center justify-between gap-1.5 py-1 px-2.5 bg-zinc-200/80 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-lg text-[11px] font-medium text-zinc-800 dark:text-zinc-300 shadow-xs">
               {/* Angle Mode Radio Group */}
               <div className="flex items-center gap-3">
                 <label className="flex items-center gap-1 cursor-pointer hover:text-blue-600">
@@ -1326,7 +1326,7 @@ export function ScientificCalculator() {
                 History {history.length > 0 && `(${history.length})`}
               </button>
 
-              {/* Copy Result Button */}
+              {/* Copy Button */}
               <button
                 onClick={handleCopy}
                 className="ml-auto text-[11px] text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-semibold"
@@ -1367,7 +1367,7 @@ export function ScientificCalculator() {
 
                 {history.length === 0 ? (
                   <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center py-3">
-                    No past calculations saved yet. Evaluate expressions with <strong className="font-mono text-blue-600">=</strong> or <strong className="font-mono text-blue-600">Enter</strong> to populate history.
+                    No past calculations saved yet. Evaluate expressions with <strong className="font-sans tabular-nums text-blue-600">=</strong> or <strong className="font-sans tabular-nums text-blue-600">Enter</strong> to populate history.
                   </p>
                 ) : (
                   <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1 text-xs">
@@ -1384,10 +1384,10 @@ export function ScientificCalculator() {
                         className="p-2 bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between cursor-pointer hover:bg-purple-50 dark:hover:bg-zinc-800 transition-colors group"
                       >
                         <div className="flex flex-col">
-                          <span className="font-mono text-zinc-700 dark:text-zinc-300">{item.expr}</span>
+                          <span className="font-sans tabular-nums text-zinc-700 dark:text-zinc-300">{item.expr}</span>
                           <span className="text-[10px] text-zinc-400">{item.time}</span>
                         </div>
-                        <strong className="font-mono text-zinc-900 dark:text-zinc-100 text-sm group-hover:text-purple-600 dark:group-hover:text-purple-400">
+                        <strong className="font-sans tabular-nums text-zinc-900 dark:text-zinc-100 text-sm group-hover:text-purple-600 dark:group-hover:text-purple-400">
                           = {item.result}
                         </strong>
                       </div>
@@ -1397,33 +1397,33 @@ export function ScientificCalculator() {
               </div>
             )}
 
-            {/* 4. DIRECTIONAL ARROW KEY CONTROLLER (3D Tactile Buttons) */}
-            <div className="flex flex-col items-center justify-center p-2.5 rounded-xl bg-zinc-200/70 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 shadow-xs my-1">
-              <div className="flex flex-col items-center gap-1">
+            {/* 4. DIRECTIONAL ARROW KEY CONTROLLER (Compact Tactile Controller) */}
+            <div className="flex flex-col items-center justify-center p-1.5 rounded-lg bg-zinc-200/70 dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 shadow-xs my-0.5">
+              <div className="flex flex-col items-center gap-0.5">
                 {/* ROW 1: UP (▲) */}
                 <button
                   type="button"
                   onClick={moveCursorUp}
                   title="Jump to Start of Equation (Up Arrow ▲)"
-                  className="w-11 h-9 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-sm font-black shadow-xs transition-all cursor-pointer"
+                  className="w-8 h-7 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-xs font-bold shadow-xs transition-all cursor-pointer"
                 >
                   ▲
                 </button>
 
                 {/* ROW 2: LEFT (◀), CURSOR POSITION BADGE, RIGHT (▶) */}
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-0.5">
                   <button
                     type="button"
                     onClick={moveCursorLeft}
                     title="Move Cursor Left 1 Character (Left Arrow ◀)"
-                    className="w-11 h-9 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-sm font-black shadow-xs transition-all cursor-pointer"
+                    className="w-8 h-7 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-xs font-bold shadow-xs transition-all cursor-pointer"
                   >
                     ◀
                   </button>
 
                   <div
                     onClick={() => triggerStatus(`Cursor Position: ${safeCursorPos} / ${expression.length}`)}
-                    className="h-9 px-2 text-[9px] font-mono font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/80 rounded-lg flex items-center justify-center cursor-pointer select-none shadow-xs"
+                    className="h-7 px-1.5 text-[8px] font-sans tabular-nums font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/80 rounded flex items-center justify-center cursor-pointer select-none shadow-xs"
                     title="Current Cursor Position"
                   >
                     {safeCursorPos}/{expression.length}
@@ -1433,7 +1433,7 @@ export function ScientificCalculator() {
                     type="button"
                     onClick={moveCursorRight}
                     title="Move Cursor Right 1 Character (Right Arrow ▶)"
-                    className="w-11 h-9 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-sm font-black shadow-xs transition-all cursor-pointer"
+                    className="w-8 h-7 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-xs font-bold shadow-xs transition-all cursor-pointer"
                   >
                     ▶
                   </button>
@@ -1444,23 +1444,23 @@ export function ScientificCalculator() {
                   type="button"
                   onClick={moveCursorDown}
                   title="Jump to End of Equation (Down Arrow ▼)"
-                  className="w-11 h-9 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-sm font-black shadow-xs transition-all cursor-pointer"
+                  className="w-8 h-7 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-xs font-bold shadow-xs transition-all cursor-pointer"
                 >
                   ▼
                 </button>
               </div>
             </div>
 
-            {/* 5. MAIN BUTTON GRID (8 columns x 10 rows with 3D Keycaps) */}
-            <div className="space-y-1.5 pt-1">
+            {/* 5. MAIN BUTTON GRID (8 columns x 10 rows Compact Keycaps) */}
+            <div className="space-y-1 pt-0.5">
               {mainPadRows.map((row, rIdx) => (
-                <div key={rIdx} className="grid grid-cols-4 sm:grid-cols-8 gap-1 sm:gap-1.5">
+                <div key={rIdx} className="grid grid-cols-4 sm:grid-cols-8 gap-1">
                   {row.map((btn, cIdx) => (
                     <button
                       key={cIdx}
                       type="button"
                       onClick={() => onBtnClick(btn.action)}
-                      className={`h-9 sm:h-10 rounded-lg text-xs font-semibold border transition-all duration-100 active:translate-y-0.5 active:border-b-0 flex items-center justify-center cursor-pointer select-none shadow-xs ${
+                      className={`h-7 sm:h-8 rounded-md text-[10px] sm:text-[11px] font-semibold border transition-all duration-100 active:translate-y-0.5 active:border-b-0 flex items-center justify-center cursor-pointer select-none shadow-xs ${
                         btn.className ||
                         "bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border-zinc-200 dark:border-zinc-700 border-b-2 border-b-zinc-300 dark:border-b-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-750"
                       }`}
@@ -1473,13 +1473,13 @@ export function ScientificCalculator() {
             </div>
 
             {/* 5. ADDITIONAL FUNCTIONS ACCORDION SECTION */}
-            <div className="pt-2">
+            <div className="pt-1.5">
               <button
                 type="button"
                 onClick={() => setShowAdditional((prev) => !prev)}
-                className="w-full flex items-center justify-between py-2 px-3 bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-xs font-bold text-zinc-800 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-900 transition-colors"
+                className="w-full flex items-center justify-between py-1.5 px-2.5 bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg text-xs font-bold text-zinc-800 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-900 transition-colors"
               >
-                <span className="flex items-center gap-2">
+                <span className="flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 text-amber-500" />
                   Additional Functions
                 </span>
@@ -1487,15 +1487,15 @@ export function ScientificCalculator() {
               </button>
 
               {showAdditional && (
-                <div className="space-y-1.5 pt-2.5">
+                <div className="space-y-1 pt-2">
                   {additionalRows.map((row, rIdx) => (
-                    <div key={rIdx} className="grid grid-cols-4 sm:grid-cols-8 gap-1 sm:gap-1.5">
+                    <div key={rIdx} className="grid grid-cols-4 sm:grid-cols-8 gap-1">
                       {row.map((btn, cIdx) => (
                         <button
                           key={cIdx}
                           type="button"
                           onClick={() => onBtnClick(btn.action)}
-                          className="h-8.5 rounded-lg text-[11px] font-semibold border bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-300 border-emerald-100 dark:border-emerald-900/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-all duration-150 active:scale-95 flex items-center justify-center cursor-pointer select-none"
+                          className="h-6 sm:h-7 rounded-md text-[9px] sm:text-[10px] font-semibold border bg-emerald-50/50 dark:bg-emerald-950/20 text-emerald-900 dark:text-emerald-300 border-emerald-100 dark:border-emerald-900/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-all duration-150 active:scale-95 flex items-center justify-center cursor-pointer select-none"
                         >
                           {btn.label}
                         </button>
@@ -1509,8 +1509,8 @@ export function ScientificCalculator() {
         </Card>
       </div>
 
-      {/* RIGHT COLUMN: Sidebar (Features, Instructions & Quick Examples) (Col 4) */}
-      <div className="min-w-0 lg:col-span-4 space-y-4">
+      {/* RIGHT COLUMN: Sidebar (Features, Instructions & Quick Examples) (Col 5) */}
+      <div className="min-w-0 lg:col-span-5 space-y-4">
         {/* Math Calculators Links */}
         <Card className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-sm p-4 space-y-3">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
@@ -1592,7 +1592,7 @@ export function ScientificCalculator() {
           </h3>
           <p className="text-xs text-zinc-500 dark:text-zinc-400">Click any example to load it into the calculator:</p>
 
-          <div className="space-y-1.5 font-mono text-xs">
+          <div className="space-y-1.5 font-sans tabular-nums text-xs">
             {sampleExamples.map((ex, idx) => (
               <button
                 key={idx}

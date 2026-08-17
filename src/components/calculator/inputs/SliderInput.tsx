@@ -40,9 +40,9 @@ export function SliderInput({
             min={min}
             max={max}
             step={step}
-            className="w-16 h-7 p-0 bg-transparent border-0 text-right font-mono font-bold text-sky-400 text-sm focus-visible:ring-0"
+            className="w-16 h-7 p-0 bg-transparent border-0 text-right font-sans tabular-nums font-bold text-sky-400 text-sm focus-visible:ring-0"
           />
-          {unit && <span className="text-xs text-slate-400 font-mono">{unit}</span>}
+          {unit && <span className="text-xs text-slate-400 font-sans tabular-nums">{unit}</span>}
         </div>
       </div>
       <input

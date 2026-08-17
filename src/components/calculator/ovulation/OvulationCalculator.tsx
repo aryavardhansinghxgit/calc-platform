@@ -244,7 +244,7 @@ Calculated on CalcPlatform Ovulation Engine.`;
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+              <h2 className="text-base font-bold text-blue-600 dark:text-blue-400">
                 Ovulation & Fertility Assessment Platform
               </h2>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -485,7 +485,7 @@ Calculated on CalcPlatform Ovulation Engine.`;
               <span className="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400">
                 Predicted Peak Ovulation Date
               </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400">
                 {results.predictedOvulationDateFormatted}
               </h3>
             </div>
@@ -597,7 +597,7 @@ Calculated on CalcPlatform Ovulation Engine.`;
           <div className="space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                   Interactive 35-Day Fertility Calendar Grid
                 </h3>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -684,7 +684,7 @@ Calculated on CalcPlatform Ovulation Engine.`;
         {activeTab === "probability" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 Daily Conception Probability Curve (-5 DPO to +1 DPO)
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -709,7 +709,7 @@ Calculated on CalcPlatform Ovulation Engine.`;
                       if (active && payload && payload.length) {
                         const data = payload[0].payload;
                         return (
-                          <div className="bg-zinc-900 text-white p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
+                          <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
                             <p className="font-bold text-pink-400">{data.dayLabel}</p>
                             <p>Conception Probability: <strong>{data.probabilityPercent}%</strong></p>
                             <p>Fertility Level: <strong>{data.fertilityLevel}</strong></p>
@@ -731,7 +731,7 @@ Calculated on CalcPlatform Ovulation Engine.`;
         {activeTab === "hormones" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 Hormonal Cycle Fluctuations (LH, Estrogen, Progesterone)
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -750,7 +750,7 @@ Calculated on CalcPlatform Ovulation Engine.`;
                       if (active && payload && payload.length) {
                         const data = payload[0].payload;
                         return (
-                          <div className="bg-zinc-900 text-white p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
+                          <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
                             <p className="font-bold text-pink-400">{data.dayLabel} Hormones</p>
                             <p className="text-pink-300">LH Surge: <strong>{data.lh} IU/L</strong></p>
                             <p className="text-emerald-300">Estrogen: <strong>{data.estrogen} pg/mL</strong></p>
@@ -774,7 +774,7 @@ Calculated on CalcPlatform Ovulation Engine.`;
         {activeTab === "insights" && (
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 Shettles Conception Method & Clinical Insights
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -783,13 +783,12 @@ Calculated on CalcPlatform Ovulation Engine.`;
             </div>
 
             <div className="p-4 rounded-xl border border-pink-500/20 bg-pink-500/5 text-zinc-900 dark:text-zinc-100 space-y-2">
-              <h4 className="text-xs font-bold text-pink-600 dark:text-pink-400 uppercase tracking-wider flex items-center gap-1.5">
-                <Flame className="h-4 w-4" /> {results.shettlesRecommendation.title}
+              <h4 className="text-xs font-bold text-pink-600 dark:text-pink-400 uppercase tracking-wider flex items-center gap-1.5">{results.shettlesRecommendation.title}
               </h4>
               <p className="text-xs font-bold">
                 Optimal Intercourse Window: <span className="text-pink-600 dark:text-pink-400">{results.shettlesRecommendation.bestWindow}</span>
               </p>
-              <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">
+              <p className="text-xs text-slate-800 dark:text-slate-200 font-semibold leading-relaxed">
                 {results.shettlesRecommendation.explanation}
               </p>
             </div>
@@ -800,11 +799,10 @@ Calculated on CalcPlatform Ovulation Engine.`;
                   key={idx}
                   className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/30 text-zinc-900 dark:text-zinc-100 space-y-1.5"
                 >
-                  <h5 className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider flex items-center gap-1.5">
-                    <Sparkles className="h-3.5 w-3.5" /> {item.title}
+                  <h5 className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider flex items-center gap-1.5">{item.title}
                   </h5>
                   <p className="text-xs font-semibold leading-relaxed">{item.text}</p>
-                  <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed m-0">
+                  <p className="text-xs text-slate-800 dark:text-slate-200 font-semibold leading-relaxed m-0">
                     <strong>Medical Tip:</strong> {item.advice}
                   </p>
                 </div>
@@ -829,7 +827,7 @@ Calculated on CalcPlatform Ovulation Engine.`;
             onClick={() => window.print()}
             className="px-3.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            <Printer className="h-3.5 w-3.5" /> Print Report
+            <Printer className="h-3.5 w-3.5" /> Print
           </button>
         </div>
 

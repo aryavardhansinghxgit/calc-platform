@@ -95,49 +95,47 @@ export function BmrContent() {
       <section className="space-y-4 p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
         <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400">
           <Activity className="w-6 h-6" />
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-blue-600 dark:text-blue-400">
             Comprehensive Clinical Guide to Basal Metabolic Rate (BMR) &amp; Human Energy Expenditure
           </h2>
         </div>
-        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
           Basal Metabolic Rate (BMR) is the foundational physiological metric governing human energy balance. It quantifies the minimum number of kilocalories your body consumes at complete rest over a 24-hour period to maintain vital organ function, cellular homeostasis, ion gradient maintenance, and biological synthesis. Understanding your exact BMR and Total Daily Energy Expenditure (TDEE) is essential for precision nutrition, weight loss, athletic conditioning, and body recomposition.
         </p>
       </section>
 
       {/* 2. Organ Burn Distribution */}
       <section className="space-y-4">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Flame className="w-5 h-5 text-rose-600 dark:text-rose-400" />
-          1. Biological Energy Partitioning: Where Do BMR Calories Go?
+        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">1. Biological Energy Partitioning: Where Do BMR Calories Go?
         </h3>
-        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
           Contrary to popular belief, skeletal muscle does not dominate resting energy burn. Internal organs account for over 60% of total resting metabolic rate despite comprising less than 10% of total body mass:
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-          <div className="p-3.5 bg-rose-50 dark:bg-rose-950/30 rounded-xl border border-rose-200 dark:border-rose-800">
+          <div className="p-3.5 bg-blue-50 dark:bg-blue-50/30 rounded-xl border border-rose-200 dark:border-rose-800">
             <strong className="text-rose-900 dark:text-rose-200 font-bold block text-sm">Liver (27% of BMR)</strong>
-            <p className="text-rose-700 dark:text-rose-300 mt-1">Continuous gluconeogenesis, protein synthesis, cholesterol assembly, and metabolic toxin clearance.</p>
+            <p className="text-blue-600 dark:text-blue-400 mt-1">Continuous gluconeogenesis, protein synthesis, cholesterol assembly, and metabolic toxin clearance.</p>
           </div>
-          <div className="p-3.5 bg-sky-50 dark:bg-sky-950/30 rounded-xl border border-sky-200 dark:border-sky-800">
+          <div className="p-3.5 bg-blue-50 dark:bg-blue-50/30 rounded-xl border border-sky-200 dark:border-sky-800">
             <strong className="text-sky-900 dark:text-sky-200 font-bold block text-sm">Brain (19% of BMR)</strong>
-            <p className="text-sky-700 dark:text-sky-300 mt-1">Uninterrupted glucose oxidation and Na+/K+-ATPase pump activity supporting neuronal membrane potentials.</p>
+            <p className="text-blue-600 dark:text-blue-400 mt-1">Uninterrupted glucose oxidation and Na+/K+-ATPase pump activity supporting neuronal membrane potentials.</p>
           </div>
-          <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl border border-emerald-200 dark:border-emerald-800">
+          <div className="p-3.5 bg-blue-50 dark:bg-blue-50/30 rounded-xl border border-emerald-200 dark:border-emerald-800">
             <strong className="text-emerald-900 dark:text-emerald-200 font-bold block text-sm">Muscle &amp; Kidneys (28% of BMR)</strong>
-            <p className="text-emerald-700 dark:text-emerald-300 mt-1">Renal ion transport (10%) and skeletal muscle resting protein turnover (18%).</p>
+            <p className="text-blue-600 dark:text-blue-400 mt-1">Renal ion transport (10%) and skeletal muscle resting protein turnover (18%).</p>
           </div>
         </div>
       </section>
 
       {/* 3. Mathematical Formulas */}
       <section className="space-y-4 p-5 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400">
           2. Mathematical Formulations: Mifflin-St Jeor, Harris-Benedict &amp; Katch-McArdle
         </h3>
         <div className="space-y-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. Mifflin-St Jeor Equation (1990) — Clinical Benchmark</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-emerald-700 dark:text-emerald-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               Male: BMR = (10 × W_kg) + (6.25 × H_cm) - (5 × Age) + 5<br/>
               Female: BMR = (10 × W_kg) + (6.25 × H_cm) - (5 × Age) - 161
             </code>
@@ -145,7 +143,7 @@ export function BmrContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. Revised Harris-Benedict Equation (Roza &amp; Shizgal 1984)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-purple-700 dark:text-purple-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               Male: BMR = 88.362 + (13.397 × W_kg) + (4.799 × H_cm) - (5.677 × Age)<br/>
               Female: BMR = 447.593 + (9.247 × W_kg) + (3.098 × H_cm) - (4.330 × Age)
             </code>
@@ -153,7 +151,7 @@ export function BmrContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">C. Katch-McArdle Equation (Lean Mass Based)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-sky-700 dark:text-sky-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               BMR = 370 + (21.6 × Lean Body Mass in kg)
             </code>
           </div>
@@ -163,7 +161,7 @@ export function BmrContent() {
       {/* 4. 20 Clinical FAQs Accordion */}
       <section className="space-y-4">
         <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 font-bold text-xl">
-          <HelpCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+          <HelpCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
           <h3>Frequently Asked Questions</h3>
         </div>
 
@@ -181,10 +179,10 @@ export function BmrContent() {
                   className="w-full p-4 text-left font-semibold text-sm text-zinc-900 dark:text-zinc-100 flex justify-between items-center hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
                 >
                   <span>{faq.q}</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform text-zinc-500 ${isOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`w-4 h-4 transition-transform text-slate-900 ${isOpen ? "rotate-180" : ""}`} />
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4 pt-1 text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed border-t border-zinc-100 dark:border-zinc-800">
+                  <div className="px-4 pb-4 pt-1 text-xs text-slate-900 dark:text-zinc-300 leading-relaxed  dark:border-zinc-800">
                     {faq.a}
                   </div>
                 )}

@@ -93,45 +93,45 @@ export function DiscountContent() {
   ];
 
   return (
-    <div className="mt-12 space-y-12 border-t border-zinc-200 dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
+    <div className="mt-12 space-y-12  dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
       {/* Article Header */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Complete Shopping &amp; Business Discount Guide
         </div>
-        <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
+        <h1 className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
           Discount Calculator Guide: Single, Stacked &amp; Coupon Savings Mechanics
         </h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
+        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
           Discounts are ubiquitous in retail, wholesale, e-commerce, and corporate purchasing. Understanding discount formulas—such as single percentage off, fixed dollar coupons, stacked sequential discounts, and sales tax interactions—empowers shoppers and businesses to calculate exact final checkout costs and maximize financial savings.
         </p>
       </section>
 
       {/* Main Educational Content with Required H2 Headings */}
-      <div className="space-y-8 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+      <div className="space-y-8 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">What Is a Discount?</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">What Is a Discount?</h2>
           <p>
             A discount is a reduction in the normal list price or marked price of a product or service offered by sellers to entice buyers, liquidate inventory, or reward prompt payment.
           </p>
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">How Discounts Work</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">How Discounts Work</h2>
           <p>
             Discounts function by subtracting a specified percentage or fixed dollar amount from an item's list price. In multi-tier pricing, secondary discounts apply sequentially to previously reduced balances.
           </p>
         </section>
 
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Percentage &amp; Fixed Amount Discount Formulas</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Percentage &amp; Fixed Amount Discount Formulas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Percentage Discount Formula</span>
               <div>Savings = Original Price × (Discount % / 100)</div>
               <div>Final Price = Original Price - Savings</div>
             </div>
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Fixed Amount Discount Formula</span>
               <div>Savings = Fixed Discount Amount</div>
               <div>Final Price = Original Price - Fixed Discount</div>
@@ -140,11 +140,11 @@ export function DiscountContent() {
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Multiple Discount Calculations (Stacked Discounts)</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Multiple Discount Calculations (Stacked Discounts)</h2>
           <p>
             When a store advertises "20% off clearance plus an extra 10% off at register", the discounts compound sequentially:
           </p>
-          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-mono text-xs space-y-1">
+          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
             <div>Final Price = Original Price × (1 - D1) × (1 - D2)</div>
             <div>Example: $100 × (1 - 0.20) × (1 - 0.10) = $100 × 0.80 × 0.90 = $72.00</div>
             <div>Effective Combined Discount = 28% (Not 30%)</div>
@@ -152,7 +152,7 @@ export function DiscountContent() {
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Coupon Discounts &amp; Sales Tax Interaction</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Coupon Discounts &amp; Sales Tax Interaction</h2>
           <p>
             Coupons can combine percentage off with fixed dollar amounts. In standard retail, sales tax is calculated on the net discounted price (after discount):
           </p>
@@ -163,21 +163,21 @@ export function DiscountContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-y border-zinc-200 dark:border-zinc-800 py-6 text-xs">
           <div>
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Marked Price vs Selling Price</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Marked Price vs Selling Price</h3>
             <p>Marked price is the MSRP tag; selling price is net cost after applying discounts.</p>
           </div>
           <div>
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Discount vs Rebate</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Discount vs Rebate</h3>
             <p>Discounts lower checkout price immediately; rebates require mail-in submission.</p>
           </div>
           <div>
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 mb-1">Discount vs Cashback</h3>
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Discount vs Cashback</h3>
             <p>Cashback credits rewards accounts after purchase; discounts reduce upfront cash spent.</p>
           </div>
         </div>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Retail Pricing &amp; E-commerce Discount Strategies</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Retail Pricing &amp; E-commerce Discount Strategies</h2>
           <p>
             Retailers employ promotional pricing strategies—such as loss leaders, flash sales, seasonal clearance, and promo code stacking—to accelerate sales volume and customer acquisition while managing gross margins.
           </p>
@@ -185,10 +185,10 @@ export function DiscountContent() {
       </div>
 
       {/* 15+ FAQ Accordion Section */}
-      <section className="space-y-6 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+      <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
-          <HelpCircle className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
-          <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <h2 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
             Frequently Asked Questions (15 Key Discount Insights)
           </h2>
         </div>
@@ -207,18 +207,18 @@ export function DiscountContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold shrink-0">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 text-zinc-500 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 text-slate-900 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed  dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
                     {faq.a}
                   </div>
                 )}
@@ -229,22 +229,22 @@ export function DiscountContent() {
       </section>
 
       {/* Related Calculators */}
-      <section className="space-y-3 border-t border-zinc-200 dark:border-zinc-800 pt-6">
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Related Financial &amp; Shopping Calculators</h2>
+      <section className="space-y-3  dark:border-zinc-800 pt-6">
+        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400">Related Financial &amp; Shopping Calculators</h2>
         <div className="flex flex-wrap gap-2 text-xs">
-          <Link href="/calculators/percentage-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/percentage-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Percentage Calculator
           </Link>
-          <Link href="/calculators/sales-tax-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/sales-tax-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Sales Tax Calculator
           </Link>
-          <Link href="/calculators/gst-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/gst-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             GST Calculator
           </Link>
-          <Link href="/calculators/vat-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/vat-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             VAT Calculator
           </Link>
-          <Link href="/calculators/margin-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-indigo-600 dark:text-indigo-400 font-semibold hover:underline">
+          <Link href="/calculators/margin-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Profit Margin Calculator
           </Link>
         </div>

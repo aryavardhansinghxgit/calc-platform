@@ -318,14 +318,7 @@ export function AutoLeaseCalculator() {
             <Bookmark className="h-3.5 w-3.5 text-zinc-500" /> Save
           </Button>
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleShare}
-            className="h-8 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 cursor-pointer"
-          >
-            <Share2 className="h-3.5 w-3.5 text-zinc-500" /> Share
-          </Button>
+          
 
           <Button
             size="sm"
@@ -348,7 +341,7 @@ export function AutoLeaseCalculator() {
         <div className="bg-zinc-50 dark:bg-zinc-950 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 flex items-center gap-3 overflow-x-auto text-xs">
           <span className="font-bold text-zinc-500 shrink-0">Saved Lease Scenarios:</span>
           {savedScenarios.map((s, i) => (
-            <Badge key={`sc-l-${i}`} variant="outline" className="bg-white dark:bg-zinc-900 shrink-0 font-mono">
+            <Badge key={`sc-l-${i}`} variant="outline" className="bg-white dark:bg-zinc-900 shrink-0 font-sans tabular-nums">
               {s.name}: {formatCurrency(s.payment)}/mo
             </Badge>
           ))}
@@ -366,7 +359,7 @@ export function AutoLeaseCalculator() {
           {/* TAB 1: TOTAL PRICE METHOD INPUTS */}
           {activeTab === "total" && (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
-              <h2 className="text-sm font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
+              <h2 className="text-sm font-extrabold tracking-tight text-blue-600 dark:text-blue-400 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
                 <span>Lease Contract Inputs</span>
                 <span className="text-[11px] font-normal text-zinc-400">Real-time Calculation</span>
               </h2>
@@ -379,12 +372,12 @@ export function AutoLeaseCalculator() {
                       Negotiated Vehicle Price (Cap Cost)
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">$</span>
                       <Input
                         type="number"
                         value={autoPrice}
                         onChange={(e) => setAutoPrice(Math.max(0, Number(e.target.value)))}
-                        className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                        className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                       />
                     </div>
                   </div>
@@ -394,12 +387,12 @@ export function AutoLeaseCalculator() {
                       Vehicle MSRP Sticker Price
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">$</span>
                       <Input
                         type="number"
                         value={vehicleMsrp}
                         onChange={(e) => setVehicleMsrp(Math.max(0, Number(e.target.value)))}
-                        className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                        className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                       />
                     </div>
                   </div>
@@ -414,7 +407,7 @@ export function AutoLeaseCalculator() {
                     <select
                       value={leaseTermMonths}
                       onChange={(e) => setLeaseTermMonths(Number(e.target.value))}
-                      className="w-full h-9 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs px-3 font-mono text-zinc-900 dark:text-zinc-100"
+                      className="w-full h-9 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs px-3 font-sans tabular-nums text-zinc-900 dark:text-zinc-100"
                     >
                       <option value={24}>24 Months (2 Years)</option>
                       <option value={36}>36 Months (3 Years)</option>
@@ -429,12 +422,12 @@ export function AutoLeaseCalculator() {
                       Cash Down Payment
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">$</span>
                       <Input
                         type="number"
                         value={downPayment}
                         onChange={(e) => setDownPayment(Math.max(0, Number(e.target.value)))}
-                        className="pl-7 h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                        className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                       />
                     </div>
                   </div>
@@ -447,12 +440,12 @@ export function AutoLeaseCalculator() {
                       Trade-In Value
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">$</span>
                       <Input
                         type="number"
                         value={tradeInValue}
                         onChange={(e) => setTradeInValue(Math.max(0, Number(e.target.value)))}
-                        className="pl-7 h-8 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
+                        className="pl-7 h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
                       />
                     </div>
                   </div>
@@ -462,12 +455,12 @@ export function AutoLeaseCalculator() {
                       Amount Owed on Trade
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-mono">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">$</span>
                       <Input
                         type="number"
                         value={amountOwedOnTradeIn}
                         onChange={(e) => setAmountOwedOnTradeIn(Math.max(0, Number(e.target.value)))}
-                        className="pl-7 h-8 text-xs font-mono bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
+                        className="pl-7 h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"
                       />
                     </div>
                   </div>
@@ -480,7 +473,7 @@ export function AutoLeaseCalculator() {
                       <Percent className="h-4 w-4" />
                     </div>
                     <div>
-                      <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                      <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
                         Interest Rate Configuration
                       </h3>
                       <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
@@ -499,7 +492,7 @@ export function AutoLeaseCalculator() {
                         step="0.01"
                         value={aprInput}
                         onChange={(e) => handleAprChange(e.target.value)}
-                        className={`h-9 text-xs font-mono bg-white dark:bg-zinc-900 ${
+                        className={`h-9 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 ${
                           aprError ? "border-rose-500 focus-visible:ring-rose-500" : "border-zinc-200 dark:border-zinc-800"
                         }`}
                       />
@@ -519,7 +512,7 @@ export function AutoLeaseCalculator() {
                         step="0.0001"
                         value={moneyFactorInput}
                         onChange={(e) => handleMoneyFactorChange(e.target.value)}
-                        className={`h-9 text-xs font-mono bg-white dark:bg-zinc-900 ${
+                        className={`h-9 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 ${
                           moneyFactorError ? "border-rose-500 focus-visible:ring-rose-500" : "border-zinc-200 dark:border-zinc-800"
                         }`}
                       />
@@ -532,7 +525,7 @@ export function AutoLeaseCalculator() {
                   </div>
 
                   <div className="pt-2 text-[11px] text-zinc-500 dark:text-zinc-400 space-y-1 border-t border-blue-100/60 dark:border-blue-900/30">
-                    <div className="font-mono font-bold text-blue-700 dark:text-blue-300">
+                    <div className="font-sans tabular-nums font-bold text-blue-700 dark:text-blue-300">
                       Money Factor = APR ÷ 2400 &nbsp;|&nbsp; APR = Money Factor × 2400
                     </div>
                     <p className="text-zinc-600 dark:text-zinc-400">
@@ -551,7 +544,7 @@ export function AutoLeaseCalculator() {
                       type="number"
                       value={residualPercent}
                       onChange={(e) => setResidualPercent(Math.max(0, Number(e.target.value)))}
-                      className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                     />
                   </div>
 
@@ -564,7 +557,7 @@ export function AutoLeaseCalculator() {
                       step="0.1"
                       value={salesTaxRate}
                       onChange={(e) => setSalesTaxRate(Math.max(0, Number(e.target.value)))}
-                      className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
+                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800"
                     />
                   </div>
                 </div>
@@ -592,7 +585,7 @@ export function AutoLeaseCalculator() {
                             type="number"
                             value={acquisitionFee}
                             onChange={(e) => setAcquisitionFee(Math.max(0, Number(e.target.value)))}
-                            className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                            className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                           />
                         </div>
                         <div>
@@ -601,7 +594,7 @@ export function AutoLeaseCalculator() {
                             type="number"
                             value={registrationFee}
                             onChange={(e) => setRegistrationFee(Math.max(0, Number(e.target.value)))}
-                            className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                            className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                           />
                         </div>
                         <div>
@@ -610,7 +603,7 @@ export function AutoLeaseCalculator() {
                             type="number"
                             value={documentationFee}
                             onChange={(e) => setDocumentationFee(Math.max(0, Number(e.target.value)))}
-                            className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                            className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                           />
                         </div>
                         <div>
@@ -619,7 +612,7 @@ export function AutoLeaseCalculator() {
                             type="number"
                             value={dispositionFee}
                             onChange={(e) => setDispositionFee(Math.max(0, Number(e.target.value)))}
-                            className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                            className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                           />
                         </div>
                       </div>
@@ -631,7 +624,7 @@ export function AutoLeaseCalculator() {
                             type="number"
                             value={securityDeposit}
                             onChange={(e) => setSecurityDeposit(Math.max(0, Number(e.target.value)))}
-                            className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                            className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                           />
                         </div>
                         <div>
@@ -640,7 +633,7 @@ export function AutoLeaseCalculator() {
                             type="number"
                             value={negativeEquityRollover}
                             onChange={(e) => setNegativeEquityRollover(Math.max(0, Number(e.target.value)))}
-                            className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                            className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                           />
                         </div>
                         <div>
@@ -649,7 +642,7 @@ export function AutoLeaseCalculator() {
                             type="number"
                             value={manufacturerIncentives}
                             onChange={(e) => setManufacturerIncentives(Math.max(0, Number(e.target.value)))}
-                            className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                            className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                           />
                         </div>
                         <div>
@@ -658,7 +651,7 @@ export function AutoLeaseCalculator() {
                             type="number"
                             value={leaseCashRebates}
                             onChange={(e) => setLeaseCashRebates(Math.max(0, Number(e.target.value)))}
-                            className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                            className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                           />
                         </div>
                       </div>
@@ -670,7 +663,7 @@ export function AutoLeaseCalculator() {
                           <select
                             value={mileageAllowancePerYear}
                             onChange={(e) => setMileageAllowancePerYear(Number(e.target.value))}
-                            className="w-full h-8 rounded border border-zinc-200 dark:border-zinc-800 text-xs px-2 font-mono bg-zinc-50 dark:bg-zinc-950"
+                            className="w-full h-8 rounded border border-zinc-200 dark:border-zinc-800 text-xs px-2 font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                           >
                             <option value={10000}>10,000 Mi / Yr</option>
                             <option value={12000}>12,000 Mi / Yr</option>
@@ -684,7 +677,7 @@ export function AutoLeaseCalculator() {
                             type="number"
                             value={expectedMilesPerYear}
                             onChange={(e) => setExpectedMilesPerYear(Math.max(0, Number(e.target.value)))}
-                            className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                            className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                           />
                         </div>
                         <div>
@@ -694,7 +687,7 @@ export function AutoLeaseCalculator() {
                             step="0.05"
                             value={excessMileageFeeRate}
                             onChange={(e) => setExcessMileageFeeRate(Math.max(0, Number(e.target.value)))}
-                            className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                            className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                           />
                         </div>
                       </div>
@@ -708,7 +701,7 @@ export function AutoLeaseCalculator() {
           {/* TAB 2: MONTHLY PAYMENT TARGET REVERSE SOLVER */}
           {activeTab === "target" && (
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
-              <h2 className="text-sm font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
+              <h2 className="text-sm font-extrabold tracking-tight text-blue-600 dark:text-blue-400 border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
                 Monthly Payment Target Reverse Lease Solver
               </h2>
 
@@ -721,7 +714,7 @@ export function AutoLeaseCalculator() {
                     type="number"
                     value={targetMonthlyPayment}
                     onChange={(e) => setTargetMonthlyPayment(Math.max(0, Number(e.target.value)))}
-                    className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                    className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                   />
                 </div>
 
@@ -734,7 +727,7 @@ export function AutoLeaseCalculator() {
                       type="number"
                       value={leaseTermMonths}
                       onChange={(e) => setLeaseTermMonths(Math.max(1, Number(e.target.value)))}
-                      className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                     />
                   </div>
                   <div>
@@ -746,7 +739,7 @@ export function AutoLeaseCalculator() {
                       step="0.01"
                       value={aprInput}
                       onChange={(e) => handleAprChange(e.target.value)}
-                      className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                     />
                   </div>
                 </div>
@@ -756,7 +749,7 @@ export function AutoLeaseCalculator() {
                     <span className="text-xs uppercase font-bold text-emerald-700 dark:text-emerald-400 tracking-wider">
                       Reverse Lease Capacity Output
                     </span>
-                    <div className="text-2xl font-black text-emerald-900 dark:text-emerald-100 font-mono">
+                    <div className="text-2xl font-black text-emerald-900 dark:text-emerald-100 font-sans tabular-nums">
                       {formatCurrency(results.targetResult.maxVehiclePrice)}
                     </div>
                     <p className="text-xs text-emerald-800 dark:text-emerald-300">
@@ -771,9 +764,7 @@ export function AutoLeaseCalculator() {
           {/* SECTION 8: MILEAGE ANALYSIS MODULE */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-                <Gauge className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                Mileage Excess Penalty Analysis
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Mileage Excess Penalty Analysis
               </h3>
               <Badge
                 variant="outline"
@@ -790,15 +781,15 @@ export function AutoLeaseCalculator() {
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
-              <div className="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 font-mono">
+              <div className="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums">
                 <span className="text-[10px] text-zinc-400 block font-sans">Total Contract Miles</span>
                 <span className="font-bold text-zinc-900 dark:text-zinc-100">{results.mileageAnalysis.totalAllowance.toLocaleString()} Mi</span>
               </div>
-              <div className="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 font-mono">
+              <div className="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums">
                 <span className="text-[10px] text-zinc-400 block font-sans">Expected Driving</span>
                 <span className="font-bold text-zinc-900 dark:text-zinc-100">{results.mileageAnalysis.expectedTotalMiles.toLocaleString()} Mi</span>
               </div>
-              <div className="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 font-mono">
+              <div className="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums">
                 <span className="text-[10px] text-zinc-400 block font-sans">Mileage Penalty</span>
                 <span className="font-bold text-rose-600 dark:text-rose-400">{formatCurrency(results.mileageAnalysis.totalPenaltyCost)}</span>
               </div>
@@ -814,23 +805,21 @@ export function AutoLeaseCalculator() {
           {/* SECTION 7: LEASE VS BUY DECISION ENGINE */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-                <ShieldCheck className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                Lease vs Buy Decision Engine
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Lease vs Buy Decision Engine
               </h3>
               <Badge className="bg-purple-600 text-white font-bold text-xs">
                 {results.leaseVsBuy.recommendation}
               </Badge>
             </div>
 
-            <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">
+            <p className="text-xs text-slate-800 dark:text-slate-200 font-semibold leading-relaxed">
               {results.leaseVsBuy.explanation}
             </p>
 
             <div className="grid grid-cols-2 gap-3 text-xs pt-1">
               <div className="p-3 rounded-lg bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 space-y-1">
                 <span className="font-bold text-blue-900 dark:text-blue-300 block">Leasing Choice</span>
-                <div className="font-mono text-zinc-900 dark:text-zinc-100">
+                <div className="font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
                   <div>Monthly: <strong>{formatCurrency(results.leaseVsBuy.leaseMonthlyPayment)}</strong></div>
                   <div>Outlay: <strong>{formatCurrency(results.leaseVsBuy.leaseTotalOutlay)}</strong></div>
                   <div>Net Cost: <strong className="text-blue-600">{formatCurrency(results.leaseVsBuy.leaseNetEffectiveCost)}</strong></div>
@@ -839,7 +828,7 @@ export function AutoLeaseCalculator() {
 
               <div className="p-3 rounded-lg bg-purple-50/60 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-900/40 space-y-1">
                 <span className="font-bold text-purple-900 dark:text-purple-300 block">Buying Choice</span>
-                <div className="font-mono text-zinc-900 dark:text-zinc-100">
+                <div className="font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
                   <div>Monthly: <strong>{formatCurrency(results.leaseVsBuy.buyMonthlyPayment)}</strong></div>
                   <div>Equity: <strong>{formatCurrency(results.leaseVsBuy.buyEquityRetained)}</strong></div>
                   <div>Net Cost: <strong className="text-purple-600">{formatCurrency(results.leaseVsBuy.buyNetEffectiveCost)}</strong></div>
@@ -863,7 +852,7 @@ export function AutoLeaseCalculator() {
               </Badge>
             </div>
 
-            <div className="text-4xl sm:text-5xl font-black text-white font-mono tracking-tight">
+            <div className="text-4xl sm:text-5xl font-black text-white font-sans tabular-nums tracking-tight">
               {formatCurrency(results.monthlyLeasePayment)}
               <span className="text-sm font-normal text-zinc-400 font-sans ml-1">/month</span>
             </div>
@@ -872,39 +861,37 @@ export function AutoLeaseCalculator() {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2">
               <div className="p-2.5 rounded-lg bg-zinc-900/80 border border-zinc-800">
                 <span className="text-[10px] text-zinc-400 block">Total Lease Cost</span>
-                <span className="text-sm font-bold text-zinc-100 font-mono">{formatCurrency(results.totalLeaseCost)}</span>
+                <span className="text-sm font-bold text-zinc-100 font-sans tabular-nums">{formatCurrency(results.totalLeaseCost)}</span>
               </div>
               <div className="p-2.5 rounded-lg bg-zinc-900/80 border border-zinc-800">
                 <span className="text-[10px] text-zinc-400 block">Monthly Depreciation</span>
-                <span className="text-sm font-bold text-blue-400 font-mono">{formatCurrency(results.monthlyDepreciation)}</span>
+                <span className="text-sm font-bold text-blue-400 font-sans tabular-nums">{formatCurrency(results.monthlyDepreciation)}</span>
               </div>
               <div className="p-2.5 rounded-lg bg-zinc-900/80 border border-zinc-800">
                 <span className="text-[10px] text-zinc-400 block">Monthly Rent Fee</span>
-                <span className="text-sm font-bold text-emerald-400 font-mono">{formatCurrency(results.monthlyFinanceFee)}</span>
+                <span className="text-sm font-bold text-emerald-400 font-sans tabular-nums">{formatCurrency(results.monthlyFinanceFee)}</span>
               </div>
               <div className="p-2.5 rounded-lg bg-zinc-900/80 border border-zinc-800">
                 <span className="text-[10px] text-zinc-400 block">Total Sales Tax</span>
-                <span className="text-sm font-bold text-amber-400 font-mono">{formatCurrency(results.totalSalesTaxPaid)}</span>
+                <span className="text-sm font-bold text-amber-400 font-sans tabular-nums">{formatCurrency(results.totalSalesTaxPaid)}</span>
               </div>
               <div className="p-2.5 rounded-lg bg-zinc-900/80 border border-zinc-800">
                 <span className="text-[10px] text-zinc-400 block">Upfront Outlay</span>
-                <span className="text-sm font-bold text-purple-400 font-mono">{formatCurrency(results.totalUpfrontCost)}</span>
+                <span className="text-sm font-bold text-purple-400 font-sans tabular-nums">{formatCurrency(results.totalUpfrontCost)}</span>
               </div>
               <div className="p-2.5 rounded-lg bg-zinc-900/80 border border-zinc-800">
                 <span className="text-[10px] text-zinc-400 block">Cost Per Mile</span>
-                <span className="text-sm font-bold text-zinc-100 font-mono">${results.costPerMile}</span>
+                <span className="text-sm font-bold text-zinc-100 font-sans tabular-nums">${results.costPerMile}</span>
               </div>
             </div>
           </div>
 
           {/* SECTION 5: ADVANCED BREAKDOWN TABLE */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-              <Sliders className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              Itemized Capitalized Cost Breakdown
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Itemized Capitalized Cost Breakdown
             </h3>
 
-            <div className="divide-y divide-zinc-100 dark:divide-zinc-800 text-xs font-mono">
+            <div className="divide-y divide-zinc-100 dark:divide-zinc-800 text-xs font-sans tabular-nums">
               {results.breakdown.map((row, idx) => (
                 <div key={`brk-${idx}`} className="py-1.5 flex items-center justify-between">
                   <span className="font-sans text-zinc-700 dark:text-zinc-300">{row.label}</span>
@@ -916,9 +903,7 @@ export function AutoLeaseCalculator() {
 
           {/* SECTION 6: VISUALIZATIONS MODULE */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-              <PieIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              Lease Charts & Visualizers
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Lease Charts & Visualizers
             </h3>
 
             {/* Chart 1: Doughnut */}
@@ -957,15 +942,13 @@ export function AutoLeaseCalculator() {
 
           {/* SECTION 9: SENSITIVITY ANALYSIS MATRIX */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
-              <TrendingDown className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              Sensitivity Matrix (APR & Residual vs Payment)
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Sensitivity Matrix (APR & Residual vs Payment)
             </h3>
 
             <div className="space-y-3 text-xs">
               <div>
                 <span className="font-bold text-zinc-700 dark:text-zinc-300 block mb-1.5">Interest Rate (APR) Sensitivity</span>
-                <div className="divide-y divide-zinc-100 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-lg p-2 font-mono text-[11px]">
+                <div className="divide-y divide-zinc-100 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-lg p-2 font-sans tabular-nums text-[11px]">
                   {results.sensitivityMatrix.aprVsPayment.map((s, i) => (
                     <div key={`apr-s-${i}`} className="py-1 flex justify-between">
                       <span className="font-sans text-zinc-600 dark:text-zinc-400">{s.valueLabel}</span>
@@ -977,7 +960,7 @@ export function AutoLeaseCalculator() {
 
               <div>
                 <span className="font-bold text-zinc-700 dark:text-zinc-300 block mb-1.5">Residual Value % Sensitivity</span>
-                <div className="divide-y divide-zinc-100 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-lg p-2 font-mono text-[11px]">
+                <div className="divide-y divide-zinc-100 dark:divide-zinc-800 border border-zinc-200 dark:border-zinc-800 rounded-lg p-2 font-sans tabular-nums text-[11px]">
                   {results.sensitivityMatrix.residualVsPayment.map((s, i) => (
                     <div key={`res-s-${i}`} className="py-1 flex justify-between">
                       <span className="font-sans text-zinc-600 dark:text-zinc-400">{s.valueLabel}</span>
@@ -995,7 +978,7 @@ export function AutoLeaseCalculator() {
               Mathematical Lease Formulas Used
             </h3>
 
-            <div className="space-y-2 font-mono text-[11px] bg-zinc-50 dark:bg-zinc-950 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300">
+            <div className="space-y-2 font-sans tabular-nums text-[11px] bg-zinc-50 dark:bg-zinc-950 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300">
               <p>• <strong>Depreciation:</strong> (Adjusted Cap Cost - Residual Value) ÷ Lease Term</p>
               <p>• <strong>Finance Charge:</strong> (Adjusted Cap Cost + Residual Value) × Money Factor</p>
               <p>• <strong>Monthly Tax:</strong> (Monthly Depreciation + Finance Charge) × Tax Rate</p>

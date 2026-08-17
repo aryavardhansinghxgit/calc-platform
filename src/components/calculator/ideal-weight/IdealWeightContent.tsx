@@ -95,24 +95,24 @@ export function IdealWeightContent() {
       <section className="space-y-4 p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
         <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400">
           <Activity className="w-6 h-6" />
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-blue-600 dark:text-blue-400">
             Comprehensive Clinical Guide to Ideal Body Weight (IBW) &amp; Body Frame Metrics
           </h2>
         </div>
-        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
           Ideal Body Weight (IBW) is a fundamental anthropometric standard used across clinical medicine, clinical pharmacology, epidemiology, and health fitness. While modern medicine acknowledges that body composition (muscle vs fat) is paramount, IBW formulas provide a vital baseline for estimating optimal weight targets, medical drug dosages, and nutritional guidelines based on height, biological gender, and skeletal frame size.
         </p>
       </section>
 
       {/* 2. Clinical Formulas */}
       <section className="space-y-4 p-5 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400">
           1. Mathematical Derivations of the 5 Clinical IBW Formulas
         </h3>
         <div className="space-y-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. G. J. Hamwi Formula (1964)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-blue-700 dark:text-blue-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-700 dark:text-blue-400">
               Male: 48.0 kg + 2.7 kg per inch over 5 feet<br/>
               Female: 45.5 kg + 2.2 kg per inch over 5 feet
             </code>
@@ -120,7 +120,7 @@ export function IdealWeightContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. B. J. Devine Formula (1974) — Clinical Gold Standard</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-sky-700 dark:text-sky-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               Male: 50.0 kg + 2.3 kg per inch over 5 feet<br/>
               Female: 45.5 kg + 2.3 kg per inch over 5 feet
             </code>
@@ -128,7 +128,7 @@ export function IdealWeightContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">C. J. D. Robinson Formula (1983)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-indigo-700 dark:text-indigo-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               Male: 52.0 kg + 1.9 kg per inch over 5 feet<br/>
               Female: 49.0 kg + 1.7 kg per inch over 5 feet
             </code>
@@ -136,7 +136,7 @@ export function IdealWeightContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">D. D. R. Miller Formula (1983)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-purple-700 dark:text-purple-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               Male: 56.2 kg + 1.41 kg per inch over 5 feet<br/>
               Female: 53.1 kg + 1.36 kg per inch over 5 feet
             </code>
@@ -144,7 +144,7 @@ export function IdealWeightContent() {
 
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">E. H. J. Lemmens Formula (2005)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-emerald-700 dark:text-emerald-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               IBW = 22.0 × Height(meters)²
             </code>
           </div>
@@ -154,7 +154,7 @@ export function IdealWeightContent() {
       {/* 3. 20 Clinical FAQs Accordion */}
       <section className="space-y-4">
         <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 font-bold text-xl">
-          <HelpCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+          <HelpCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
           <h3>Frequently Asked Questions</h3>
         </div>
 
@@ -172,10 +172,10 @@ export function IdealWeightContent() {
                   className="w-full p-4 text-left font-semibold text-sm text-zinc-900 dark:text-zinc-100 flex justify-between items-center hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
                 >
                   <span>{faq.q}</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform text-zinc-500 ${isOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`w-4 h-4 transition-transform text-slate-900 ${isOpen ? "rotate-180" : ""}`} />
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4 pt-1 text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed border-t border-zinc-100 dark:border-zinc-800">
+                  <div className="px-4 pb-4 pt-1 text-xs text-slate-900 dark:text-zinc-300 leading-relaxed  dark:border-zinc-800">
                     {faq.a}
                   </div>
                 )}

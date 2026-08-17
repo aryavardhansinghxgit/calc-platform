@@ -363,9 +363,7 @@ export function VoltageDropCalculator() {
         <div className="lg:col-span-7 space-y-5">
           <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Settings className="w-4 h-4 text-blue-600" />
-                <span>Electrical Parameters</span>
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Electrical Parameters</span>
               </h3>
               <button
                 onClick={handleReset}
@@ -383,7 +381,7 @@ export function VoltageDropCalculator() {
                   type="number"
                   value={voltage}
                   onChange={(e) => setVoltage(e.target.value)}
-                  className="font-mono"
+                  className="font-sans tabular-nums"
                   placeholder="120"
                 />
               </div>
@@ -395,7 +393,7 @@ export function VoltageDropCalculator() {
                   type="number"
                   value={currentAmps}
                   onChange={(e) => setCurrentAmps(e.target.value)}
-                  className="font-mono"
+                  className="font-sans tabular-nums"
                   placeholder="15"
                 />
               </div>
@@ -408,7 +406,7 @@ export function VoltageDropCalculator() {
                     type="number"
                     value={distance}
                     onChange={(e) => setDistance(e.target.value)}
-                    className="font-mono rounded-r-none border-r-0 flex-1"
+                    className="font-sans tabular-nums rounded-r-none border-r-0 flex-1"
                     placeholder="100"
                   />
                   <select
@@ -440,7 +438,7 @@ export function VoltageDropCalculator() {
 
           {/* SECTION 2: CONDUCTOR DETAILS */}
           <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
               Conductor Configuration
             </h3>
 
@@ -496,7 +494,7 @@ export function VoltageDropCalculator() {
                   <select
                     value={wireSize}
                     onChange={(e) => setWireSize(e.target.value)}
-                    className="w-full h-9 px-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs outline-none focus:ring-1 focus:ring-blue-500 font-mono font-bold"
+                    className="w-full h-9 px-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs outline-none focus:ring-1 focus:ring-blue-500 font-sans tabular-nums font-bold"
                   >
                     {wireType === "awg"
                       ? AWG_SIZES.map(s => <option key={s} value={s}>{s} AWG</option>)
@@ -512,7 +510,7 @@ export function VoltageDropCalculator() {
                     type="number"
                     value={conductorsPerPhase}
                     onChange={(e) => setConductorsPerPhase(e.target.value)}
-                    className="font-mono"
+                    className="font-sans tabular-nums"
                     placeholder="1"
                   />
                 </div>
@@ -527,7 +525,7 @@ export function VoltageDropCalculator() {
                       type="number"
                       value={customResistance}
                       onChange={(e) => setCustomResistance(e.target.value)}
-                      className="font-mono flex-1 rounded-r-none border-r-0"
+                      className="font-sans tabular-nums flex-1 rounded-r-none border-r-0"
                     />
                     <select
                       value={customResistanceUnit}
@@ -547,7 +545,7 @@ export function VoltageDropCalculator() {
                       type="number"
                       value={customReactance}
                       onChange={(e) => setCustomReactance(e.target.value)}
-                      className="font-mono flex-1 rounded-r-none border-r-0"
+                      className="font-sans tabular-nums flex-1 rounded-r-none border-r-0"
                     />
                     <select
                       value={customReactanceUnit}
@@ -566,7 +564,7 @@ export function VoltageDropCalculator() {
                     type="number"
                     value={conductorsPerPhase}
                     onChange={(e) => setConductorsPerPhase(e.target.value)}
-                    className="font-mono"
+                    className="font-sans tabular-nums"
                   />
                 </div>
               </div>
@@ -576,7 +574,7 @@ export function VoltageDropCalculator() {
           {/* SECTION 3: ENVIRONMENT PARAMETERS (only when AC is active) */}
           {phase !== "dc" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
                 Conduit & Power Factor
               </h3>
 
@@ -604,7 +602,7 @@ export function VoltageDropCalculator() {
                     type="number"
                     value={powerFactor}
                     onChange={(e) => setPowerFactor(e.target.value)}
-                    className="font-mono"
+                    className="font-sans tabular-nums"
                     placeholder="0.85"
                   />
                 </div>
@@ -614,7 +612,7 @@ export function VoltageDropCalculator() {
 
           {/* SECTION 4: DESIGN GOALS */}
           <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
               Design Constraints
             </h3>
 
@@ -626,7 +624,7 @@ export function VoltageDropCalculator() {
                     key={pct}
                     type="button"
                     onClick={() => setTargetDropPct(pct)}
-                    className={`px-3 py-1 border rounded-lg font-mono font-bold transition-all ${
+                    className={`px-3 py-1 border rounded-lg font-sans tabular-nums font-bold transition-all ${
                       targetDropPct === pct
                         ? "border-blue-600 text-blue-600 bg-blue-50/50 dark:bg-blue-950/20"
                         : "border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50"
@@ -641,7 +639,7 @@ export function VoltageDropCalculator() {
                     type="number"
                     value={targetDropPct}
                     onChange={(e) => setTargetDropPct(e.target.value)}
-                    className="w-12 bg-transparent outline-none text-center font-mono font-bold text-xs"
+                    className="w-12 bg-transparent outline-none text-center font-sans tabular-nums font-bold text-xs"
                   />
                   <span className="text-[10px] text-zinc-500 font-bold">%</span>
                 </div>
@@ -700,13 +698,13 @@ export function VoltageDropCalculator() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl">
                     <div className="text-[10px] text-slate-400 font-semibold">Voltage Drop</div>
-                    <div className="text-2xl font-mono font-black text-emerald-300 mt-0.5">
+                    <div className="text-2xl font-sans tabular-nums font-black text-emerald-300 mt-0.5">
                       {result.voltageDrop} V
                     </div>
                   </div>
                   <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl">
                     <div className="text-[10px] text-slate-400 font-semibold">Percentage Drop</div>
-                    <div className="text-2xl font-mono font-black text-emerald-300 mt-0.5">
+                    <div className="text-2xl font-sans tabular-nums font-black text-emerald-300 mt-0.5">
                       {result.voltageDropPct}%
                     </div>
                   </div>
@@ -714,7 +712,7 @@ export function VoltageDropCalculator() {
 
                 <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between">
                   <span className="text-xs text-slate-400 font-semibold">Voltage at Load Terminal</span>
-                  <span className="text-lg font-mono font-bold text-slate-100">
+                  <span className="text-lg font-sans tabular-nums font-bold text-slate-100">
                     {result.endVoltage} V
                   </span>
                 </div>
@@ -725,7 +723,7 @@ export function VoltageDropCalculator() {
                 </div>
 
                 {/* Conductor properties details list */}
-                <div className="p-3 bg-slate-800/50 rounded-xl border border-slate-800 text-xs font-mono space-y-1 text-slate-300">
+                <div className="p-3 bg-slate-800/50 rounded-xl border border-slate-800 text-xs font-sans tabular-nums space-y-1 text-slate-300">
                   <div className="flex justify-between border-b border-slate-800 pb-1 mb-1">
                     <span className="text-slate-400">Total Circuit Length:</span>
                     <span>{(result.conductors * result.distance * 2).toFixed(0)} {result.distanceUnit} (loop)</span>
@@ -747,42 +745,28 @@ export function VoltageDropCalculator() {
                 </div>
 
                 {/* UNIFIED ACTION BAR: Copy, Save, Share, Print */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800 no-print">
+                <div className="flex flex-wrap items-center justify-end gap-3 pt-3 border-t border-slate-800 no-print">
                   <button
                     type="button"
                     onClick={handleCopy}
-                    className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    className="text-xs font-bold text-slate-800 dark:text-slate-200 font-semibold bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
                     {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-slate-400" />}
-                    <span>{copied ? "Copied!" : "Copy Result"}</span>
+                    <span>{copied ? "Copied!" : "Copy"}</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={handleSave}
-                    className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    className="text-xs font-bold text-slate-800 dark:text-slate-200 font-semibold bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
-                    {isSaved ? <Check className="w-4 h-4 text-emerald-400" /> : <Bookmark className="w-4 h-4 text-amber-400" />}
-                    <span>{isSaved ? "Saved!" : "Save"}</span>
+                    {justSaved ? <Check className="w-4 h-4 text-emerald-400" /> : <Bookmark className="w-4 h-4 text-amber-400" />}
+                    <span>{justSaved ? "Saved!" : "Save"}</span>
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={handleShare}
-                    className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <Share2 className="w-4 h-4 text-blue-400" />
-                    <span>Share Link</span>
-                  </button>
+                  
 
-                  <button
-                    type="button"
-                    onClick={handlePrint}
-                    className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <Printer className="w-4 h-4 text-purple-400" />
-                    <span>Print Report</span>
-                  </button>
+                  
                 </div>
               </div>
             ) : (
@@ -811,7 +795,7 @@ export function VoltageDropCalculator() {
               </div>
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                 {savedItems.map((item) => (
-                  <div key={item.id} className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-mono">
+                  <div key={item.id} className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-sans tabular-nums">
                     <button
                       onClick={() => {
                         // Restore saved inputs
@@ -851,11 +835,11 @@ export function VoltageDropCalculator() {
             <details className="p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-3 group outline-none">
               <summary className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 cursor-pointer flex items-center justify-between select-none">
                 <span>📘 Show Calculation Breakdown</span>
-                <span className="text-[10px] font-mono group-open:hidden">Expand +</span>
-                <span className="text-[10px] font-mono hidden group-open:inline">Collapse -</span>
+                <span className="text-[10px] font-sans tabular-nums group-open:hidden">Expand +</span>
+                <span className="text-[10px] font-sans tabular-nums hidden group-open:inline">Collapse -</span>
               </summary>
               <div className="pt-2.5 border-t border-zinc-100 dark:border-zinc-800 mt-2">
-                <pre className="p-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl font-mono text-[11px] text-zinc-800 dark:text-zinc-300 overflow-x-auto leading-normal whitespace-pre-wrap">
+                <pre className="p-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl font-sans tabular-nums text-[11px] text-zinc-800 dark:text-zinc-300 overflow-x-auto leading-normal whitespace-pre-wrap">
                   {result.formulaBreakdown}
                 </pre>
               </div>
@@ -867,16 +851,14 @@ export function VoltageDropCalculator() {
       {/* WHAT-IF RECOMMENDED WIRE GAUGE TABLE */}
       {result && recommendations.length > 0 && (
         <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-          <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-            <Info className="w-4 h-4 text-blue-500" />
-            <span>&quot;What If?&quot; Conductor Size Impact Table</span>
+          <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5"><span>&quot;What If?&quot; Conductor Size Impact Table</span>
           </h3>
           <p className="text-xs text-zinc-500">
             See how upgrading or downgrading wire sizes affects voltage drop and terminal voltage under identical electrical conditions:
           </p>
 
           <div className="overflow-x-auto border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <table className="w-full text-xs text-left border-collapse font-mono">
+            <table className="w-full text-xs text-left border-collapse font-sans tabular-nums">
               <thead>
                 <tr className="bg-zinc-50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 border-b border-zinc-200 dark:border-zinc-700">
                   <th className="p-2.5 border-r border-zinc-200 dark:border-zinc-700">Wire Size</th>
@@ -915,7 +897,7 @@ export function VoltageDropCalculator() {
       {/* COMPARE GAUGE TOOL */}
       {mode !== "custom" && (
         <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4 no-print">
-          <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+          <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
             <span>📊</span> Conductor Sizing Comparator
           </h3>
           <p className="text-xs text-zinc-500">
@@ -954,7 +936,7 @@ export function VoltageDropCalculator() {
 
           {comparisonResults.length > 0 && (
             <div className="overflow-x-auto border border-zinc-200 dark:border-zinc-800 rounded-xl">
-              <table className="w-full text-xs text-left border-collapse font-mono">
+              <table className="w-full text-xs text-left border-collapse font-sans tabular-nums">
                 <thead>
                   <tr className="bg-zinc-50 dark:bg-zinc-850/50 text-zinc-700 dark:text-zinc-300 border-b border-zinc-200 dark:border-zinc-700">
                     <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Size</th>

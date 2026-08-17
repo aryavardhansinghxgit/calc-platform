@@ -7,7 +7,7 @@ export function Base64Content() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: WHAT IS BASE64 ENCODING */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. What is Base64 Encoding?
         </h2>
         <p>
@@ -20,14 +20,14 @@ export function Base64Content() {
 
       {/* SECTION 2: HOW THE BASE64 ALGORITHM WORKS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. How the Base64 Algorithm Works (Step-by-Step)
         </h2>
         <p>
           The Base64 algorithm processes binary data by grouping 3 input Bytes (24 bits total) and splitting them into 4 6-bit units. Each 6-bit unit yields a decimal value between 0 and 63, which maps directly to a character in the Base64 Index Table.
         </p>
 
-        <h3 className="text-base font-bold text-zinc-800 dark:text-zinc-200 mt-3">
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mt-3">
           Step-by-Step Conversion Matrix: Encoding the String "Man"
         </h3>
 
@@ -41,7 +41,7 @@ export function Base64Content() {
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700" colSpan={3}>Byte 3 ('n')</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+            <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans font-bold">1. ASCII Character</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 text-center" colSpan={3}>M</td>
@@ -74,7 +74,7 @@ export function Base64Content() {
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 text-center" colSpan={3}>5</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 text-center">46</td>
               </tr>
-              <tr className="bg-emerald-50/50 dark:bg-emerald-950/20 font-bold text-emerald-700 dark:text-emerald-400">
+              <tr className="bg-blue-50/50 dark:bg-blue-50/20 font-bold text-blue-600 dark:text-blue-400">
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans">6. Encoded Output</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 text-center text-sm" colSpan={2}>T</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 text-center text-sm" colSpan={3}>W</td>
@@ -85,7 +85,7 @@ export function Base64Content() {
           </table>
         </div>
 
-        <h3 className="text-base font-bold text-zinc-800 dark:text-zinc-200 mt-4">
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mt-4">
           Understanding Base64 Padding ('=')
         </h3>
         <p>
@@ -99,14 +99,14 @@ export function Base64Content() {
 
       {/* SECTION 3: BASE64 INDEX TABLE */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. The Base64 Index Table Reference (RFC 4648)
         </h2>
         <p>
           The standard Base64 character set maps indices 0 to 63 to printable ASCII characters:
         </p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-sans tabular-nums">
           <div className="bg-zinc-50 dark:bg-zinc-800/60 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700">
             <div className="font-bold text-blue-600 border-b pb-1 mb-1">Index 0 – 15</div>
             <div>0: A &nbsp; 4: E &nbsp; 8: I &nbsp; 12: M</div>
@@ -143,35 +143,35 @@ export function Base64Content() {
 
       {/* SECTION 4: KEY USE CASES */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. Key Use Cases in Modern Software Engineering
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">1. Data URIs in Web Development</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">1. Data URIs in Web Development</h3>
+            <p className="text-slate-900 dark:text-slate-100">
               Embed small icons, logos, and fonts inline directly inside HTML (<code>&lt;img src="data:image/png;base64,..." /&gt;</code>) or CSS files to reduce HTTP request round-trips.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">2. HTTP Basic Authentication</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">2. HTTP Basic Authentication</h3>
+            <p className="text-slate-900 dark:text-slate-100">
               HTTP Basic Auth headers pass <code>username:password</code> credentials in Base64 encoding: <code>Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=</code>.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">3. JSON Web Tokens (JWT)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">3. JSON Web Tokens (JWT)</h3>
+            <p className="text-slate-900 dark:text-slate-100">
               JWT headers, claims payloads, and signatures rely on URL-Safe Base64 (Base64URL) to transmit authentication tokens across HTTP headers.
             </p>
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">4. Email Attachments (MIME RFC 2045)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">4. Email Attachments (MIME RFC 2045)</h3>
+            <p className="text-slate-900 dark:text-slate-100">
               SMTP protocol transmits binary attachments (PDFs, ZIPs, photos) safely by converting binary streams into 76-character chunked Base64 text.
             </p>
           </div>
@@ -180,14 +180,14 @@ export function Base64Content() {
 
       {/* SECTION 5: PERFORMANCE CONSIDERATIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. Performance Considerations & Data Overhead
         </h2>
         <p>
           Base64 encoding always increases data size by approximately <strong>+33.33%</strong> ($4/3$ ratio).
         </p>
-        <div className="bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 p-4 rounded-xl space-y-2 text-xs">
-          <h4 className="font-bold text-amber-900 dark:text-amber-300">When to Use Base64 vs. Direct Binary Storage</h4>
+        <div className="bg-blue-50/60 dark:bg-blue-50/20 border border-amber-200 dark:border-amber-900 p-4 rounded-xl space-y-2 text-xs">
+          <h4 className="font-bold text-amber-900 dark:text-blue-400">When to Use Base64 vs. Direct Binary Storage</h4>
           <ul className="list-disc pl-5 space-y-1 text-zinc-700 dark:text-zinc-300">
             <li><strong>DO USE Base64:</strong> For inline web assets under 10 KB, micro-icons, API payload JSON strings, authentication headers, and small cryptographic signatures.</li>
             <li><strong>AVOID Base64:</strong> For large assets (e.g., multi-megabyte photos, high-resolution videos, large PDFs). Base64 bloats a 10 MB image to ~13.3 MB, causing unnecessary CPU decoding overhead and wasted network bandwidth. Use CDN asset hosting or multi-part binary uploads instead.</li>
@@ -197,15 +197,15 @@ export function Base64Content() {
 
       {/* SECTION 6: CODE SNIPPETS FOR DEVELOPERS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           6. Code Snippets for Developers
         </h2>
 
         <div className="space-y-3 text-xs">
           {/* JavaScript Browser */}
-          <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1 font-mono">
+          <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1 font-sans tabular-nums">
             <div className="text-zinc-400 text-[10px] uppercase font-bold">// JavaScript Browser (UTF-8 Compatible)</div>
-            <pre className="text-emerald-400 overflow-x-auto">
+            <pre className="text-blue-400 overflow-x-auto">
 {`// Encode Unicode text to Base64
 const encodeUtf8 = (text) => btoa(encodeURIComponent(text).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode('0x' + p1)));
 
@@ -215,7 +215,7 @@ const decodeUtf8 = (b64) => decodeURIComponent(Array.from(atob(b64), c => '%' + 
           </div>
 
           {/* Node.js */}
-          <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1 font-mono">
+          <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1 font-sans tabular-nums">
             <div className="text-zinc-400 text-[10px] uppercase font-bold">// Node.js (Buffer API)</div>
             <pre className="text-blue-400 overflow-x-auto">
 {`const encoded = Buffer.from("Hello CalcPlatform 🚀", "utf-8").toString("base64");
@@ -224,9 +224,9 @@ const decoded = Buffer.from(encoded, "base64").toString("utf-8");`}
           </div>
 
           {/* Python */}
-          <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1 font-mono">
+          <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1 font-sans tabular-nums">
             <div className="text-zinc-400 text-[10px] uppercase font-bold"># Python 3</div>
-            <pre className="text-purple-400 overflow-x-auto">
+            <pre className="text-blue-400 overflow-x-auto">
 {`import base64
 
 # Standard Base64

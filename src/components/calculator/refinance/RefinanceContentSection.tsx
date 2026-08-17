@@ -155,8 +155,7 @@ export function RefinanceContentSection() {
 
       {/* Internal Links Header Banner */}
       <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 space-y-2">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">
-          <Calculator className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Related Refinancing & Loan Calculators
+        <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">Related Refinancing & Loan Calculators
         </h4>
         <div className="flex flex-wrap gap-2 text-xs">
           <Link
@@ -200,9 +199,7 @@ export function RefinanceContentSection() {
 
       {/* 1. What Is Loan Refinancing */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <BookOpen className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          1. What Is Loan Refinancing?
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">1. What Is Loan Refinancing?
         </h2>
         <p className="text-sm leading-relaxed">
           <strong>Loan Refinancing</strong> involves taking out a brand-new loan to replace an existing debt obligation. Terms and conditions of refinancing vary widely depending on whether you are refinancing a home mortgage, car loan, student loan, or personal credit card debt. In a successful refinance, the new loan completely pays off the old balance, allowing you to secure a lower interest rate, change loan duration, or tap into accumulated equity.
@@ -211,76 +208,72 @@ export function RefinanceContentSection() {
 
       {/* 2. Reasons To Refinance */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <RefreshCw className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-          2. Top Reasons to Refinance a Loan
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">2. Top Reasons to Refinance a Loan
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
             <strong className="text-blue-600 dark:text-blue-400 block">• Save Money</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Reduce total lifetime borrowing costs by locking in a lower annual interest rate.</p>
+            <p className="text-slate-900 dark:text-slate-100">Reduce total lifetime borrowing costs by locking in a lower annual interest rate.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <strong className="text-indigo-600 dark:text-indigo-400 block">• Lower Interest Rate</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Capitalize on market interest rate drops or an upgraded personal credit score.</p>
+            <strong className="text-blue-600 dark:text-blue-400 block">• Lower Interest Rate</strong>
+            <p className="text-slate-900 dark:text-slate-100">Capitalize on market interest rate drops or an upgraded personal credit score.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <strong className="text-emerald-600 dark:text-emerald-400 block">• Need Cash (Cash-Out)</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Convert home equity into lump-sum cash for home improvements or medical expenses.</p>
+            <strong className="text-blue-600 dark:text-blue-400 block">• Need Cash (Cash-Out)</strong>
+            <p className="text-slate-900 dark:text-slate-100">Convert home equity into lump-sum cash for home improvements or medical expenses.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <strong className="text-sky-600 dark:text-sky-400 block">• Lower Monthly Payment</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Extend your loan term to reduce immediate monthly out-of-pocket cash demands.</p>
+            <strong className="text-blue-600 dark:text-blue-400 block">• Lower Monthly Payment</strong>
+            <p className="text-slate-900 dark:text-slate-100">Extend your loan term to reduce immediate monthly out-of-pocket cash demands.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <strong className="text-purple-600 dark:text-purple-400 block">• Shorten Loan Term</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Switch from a 30-year to a 15-year mortgage to pay off debt years faster.</p>
+            <strong className="text-blue-600 dark:text-blue-400 block">• Shorten Loan Term</strong>
+            <p className="text-slate-900 dark:text-slate-100">Switch from a 30-year to a 15-year mortgage to pay off debt years faster.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <strong className="text-teal-600 dark:text-teal-400 block">• Consolidate Debt</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Combine high-interest credit cards and personal loans into one low-interest mortgage.</p>
+            <strong className="text-blue-600 dark:text-blue-400 block">• Consolidate Debt</strong>
+            <p className="text-slate-900 dark:text-slate-100">Combine high-interest credit cards and personal loans into one low-interest mortgage.</p>
           </div>
           <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1 sm:col-span-2">
-            <strong className="text-amber-600 dark:text-amber-400 block">• Switch Variable to Fixed Rate</strong>
-            <p className="text-zinc-600 dark:text-zinc-400">Convert an unpredictable Adjustable-Rate Mortgage (ARM) into a stable fixed monthly payment.</p>
+            <strong className="text-blue-600 dark:text-blue-400 block">• Switch Variable to Fixed Rate</strong>
+            <p className="text-slate-900 dark:text-slate-100">Convert an unpredictable Adjustable-Rate Mortgage (ARM) into a stable fixed monthly payment.</p>
           </div>
         </div>
       </section>
 
       {/* 3. Mortgage Refinancing Options */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Building className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-          3. Mortgage Refinancing Types Explained
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Mortgage Refinancing Types Explained
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Rate & Term Refinance</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">Rate & Term Refinance</h3>
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Adjusts your interest rate, loan duration, or monthly payment without altering your principal balance.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Cash-Out Refinance</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">Cash-Out Refinance</h3>
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Borrows more than you owe on your current home mortgage, providing the excess equity difference in cash.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">Cash-In Refinance</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">Cash-In Refinance</h3>
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Pays down principal upfront during refinancing to lower loan-to-value (LTV) below 80% and eliminate PMI.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">FHA Streamline Refinance</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">FHA Streamline Refinance</h3>
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Allows existing FHA borrowers to reduce rates with minimal documentation and no home appraisal.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1 sm:col-span-2">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">ARM to Fixed Refinance</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">ARM to Fixed Refinance</h3>
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Locks in a predictable fixed interest rate before an adjustable-rate mortgage resets to higher market rates.
             </p>
           </div>
@@ -289,9 +282,7 @@ export function RefinanceContentSection() {
 
       {/* 4. Mortgage Refinance Costs Breakdown */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <DollarSign className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-          4. Itemized Mortgage Refinance Costs
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">4. Itemized Mortgage Refinance Costs
         </h2>
         <p className="text-sm leading-relaxed">
           Refinancing a home mortgage incurs upfront closing fees typically equal to 2% to 5% of the loan principal:
@@ -329,40 +320,34 @@ export function RefinanceContentSection() {
 
       {/* 5, 6, 7, 8. Non-Mortgage Refinancing (Student, Auto, Credit Card, Personal) */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Zap className="h-5 w-5 text-amber-500" />
-          5–8. Refinancing Other Major Loan Types
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">5–8. Refinancing Other Major Loan Types
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <GraduationCap className="h-4 w-4 text-blue-500" /> 5. Student Loan Refinancing
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">5. Student Loan Refinancing
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Consolidates multiple federal and private student loans into a single private loan with a lower interest rate, simplifying monthly billing.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Car className="h-4 w-4 text-emerald-500" /> 6. Auto Loan Refinancing
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">6. Auto Loan Refinancing
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Replaces existing car loans to secure lower monthly payments when interest rates drop or your credit score improves after vehicle purchase.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <CreditCard className="h-4 w-4 text-rose-500" /> 7. Credit Card Refinancing
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">7. Credit Card Refinancing
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Transfers high-APR credit card balances (18%–25%) onto 0% Intro APR balance transfer cards or low-rate personal loans.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <FileText className="h-4 w-4 text-purple-500" /> 8. Personal Loan Refinancing
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">8. Personal Loan Refinancing
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Replaces existing unsecured debt with a new fixed-rate personal loan, reducing monthly interest costs without requiring collateral.
             </p>
           </div>
@@ -371,9 +356,7 @@ export function RefinanceContentSection() {
 
       {/* 9. Frequently Asked Questions (14 FAQs) */}
       <section className="space-y-4">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <HelpCircle className="h-5 w-5 text-amber-500" />
-          9. Frequently Asked Questions (FAQ)
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">9. Frequently Asked Questions (FAQ)
         </h2>
 
         <div className="space-y-3 text-xs">
@@ -382,10 +365,10 @@ export function RefinanceContentSection() {
               key={`faq-refinance-section-${idx}`}
               className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1"
             >
-              <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
+              <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">
                 {idx + 1}. {item.question}
               </h3>
-              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
                 {item.answer}
               </p>
             </div>
@@ -394,8 +377,8 @@ export function RefinanceContentSection() {
       </section>
 
       {/* 10. Internal Links Grid Section */}
-      <div className="pt-6 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+      <div className="pt-6  dark:border-zinc-800 space-y-3">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
           10. Explore Related Financial Calculators on CalcPlatform
         </h4>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">

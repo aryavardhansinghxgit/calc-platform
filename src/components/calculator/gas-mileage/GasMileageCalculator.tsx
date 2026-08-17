@@ -383,7 +383,7 @@ export function GasMileageCalculator() {
                     type="number"
                     value={startOdo}
                     onChange={(e) => setStartOdo(Number(e.target.value))}
-                    className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
                 <div className="space-y-1">
@@ -392,7 +392,7 @@ export function GasMileageCalculator() {
                     type="number"
                     value={endOdo}
                     onChange={(e) => setEndOdo(Number(e.target.value))}
-                    className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -409,7 +409,7 @@ export function GasMileageCalculator() {
                 type="number"
                 value={tripDistance}
                 onChange={(e) => setTripDistance(Number(e.target.value))}
-                className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
               />
             </div>
           )}
@@ -435,21 +435,21 @@ export function GasMileageCalculator() {
 
               <div className="space-y-1.5">
                 {multiTankLogs.map((log, index) => (
-                  <div key={log.id} className="flex items-center gap-2 p-2 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200/60 text-xs font-mono">
+                  <div key={log.id} className="flex items-center gap-2 p-2 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200/60 text-xs font-sans tabular-nums">
                     <span className="font-bold text-zinc-400 w-12 text-[11px]">Tank #{index + 1}</span>
                     <Input
                       type="number"
                       value={log.distance}
                       onChange={(e) => updateFillUp(log.id, "distance", Number(e.target.value))}
                       placeholder={result.distanceUnitName}
-                      className="h-7 text-xs font-mono w-24"
+                      className="h-7 text-xs font-sans tabular-nums w-24"
                     />
                     <Input
                       type="number"
                       value={log.fuelAdded}
                       onChange={(e) => updateFillUp(log.id, "fuelAdded", Number(e.target.value))}
                       placeholder={result.fuelVolumeUnitName}
-                      className="h-7 text-xs font-mono w-24"
+                      className="h-7 text-xs font-sans tabular-nums w-24"
                     />
                     <Input
                       type="number"
@@ -457,7 +457,7 @@ export function GasMileageCalculator() {
                       value={log.pricePerUnit}
                       onChange={(e) => updateFillUp(log.id, "pricePerUnit", Number(e.target.value))}
                       placeholder="Price"
-                      className="h-7 text-xs font-mono w-20"
+                      className="h-7 text-xs font-sans tabular-nums w-20"
                     />
                     {multiTankLogs.length > 1 && (
                       <button
@@ -488,7 +488,7 @@ export function GasMileageCalculator() {
                     type="number"
                     value={tankCapacity}
                     onChange={(e) => setTankCapacity(Number(e.target.value))}
-                    className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
                 <div className="space-y-1">
@@ -499,7 +499,7 @@ export function GasMileageCalculator() {
                     type="number"
                     value={tripDistance}
                     onChange={(e) => setTripDistance(Number(e.target.value))}
-                    className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -517,7 +517,7 @@ export function GasMileageCalculator() {
                   type="number"
                   value={fuelAdded}
                   onChange={(e) => setFuelAdded(Number(e.target.value))}
-                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
 
@@ -530,7 +530,7 @@ export function GasMileageCalculator() {
                   step="0.01"
                   value={fuelPrice}
                   onChange={(e) => setFuelPrice(Number(e.target.value))}
-                  className="h-9 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                  className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                 />
               </div>
             </div>
@@ -563,7 +563,7 @@ export function GasMileageCalculator() {
                 type="number"
                 value={annualMileage}
                 onChange={(e) => setAnnualMileage(Number(e.target.value))}
-                className="h-8 text-xs font-mono font-bold bg-zinc-50 dark:bg-zinc-800"
+                className="h-8 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
               />
             </div>
           </div>
@@ -581,7 +581,7 @@ export function GasMileageCalculator() {
             </button>
 
             {showAdvanced && (
-              <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl space-y-2 text-xs text-zinc-600 dark:text-zinc-300">
+              <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl space-y-2 text-xs text-slate-800 dark:text-slate-200 font-semibold">
                 <div className="grid grid-cols-2 gap-2">
                   <label className="flex items-center gap-1.5 cursor-pointer">
                     <input
@@ -641,7 +641,7 @@ export function GasMileageCalculator() {
             <span className="text-[10px] font-bold uppercase tracking-wider text-sky-200 block">
               Calculated Fuel Mileage
             </span>
-            <div className="text-3xl sm:text-4xl font-black font-mono tracking-tight text-white">
+            <div className="text-3xl sm:text-4xl font-black font-sans tabular-nums tracking-tight text-white">
               {unitSystem === "indian"
                 ? `${result.kmL} ${result.efficiencyUnitName}`
                 : unitSystem === "metric"
@@ -676,7 +676,7 @@ export function GasMileageCalculator() {
               />
             </div>
 
-            <div className="flex justify-between text-[9px] text-sky-200 font-mono">
+            <div className="flex justify-between text-[9px] text-sky-200 font-sans tabular-nums">
               {unitSystem === "indian" ? (
                 <>
                   <span>&lt;12 km/l</span>
@@ -699,19 +699,19 @@ export function GasMileageCalculator() {
           <div className="grid grid-cols-2 gap-1.5 text-xs">
             <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
               <span className="text-[9px] uppercase font-bold text-sky-200 block">Cost Per {result.distanceUnitName}</span>
-              <span className="font-mono font-bold text-xs text-white">{currencySymbol}{result.costPerDistanceUnit}</span>
+              <span className="font-sans tabular-nums font-bold text-xs text-white">{currencySymbol}{result.costPerDistanceUnit}</span>
             </div>
             <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
               <span className="text-[9px] uppercase font-bold text-sky-200 block">Distance Per {currencySymbol}1</span>
-              <span className="font-mono font-bold text-xs text-white">{result.distancePerCurrencyUnit} {result.distanceUnitName}</span>
+              <span className="font-sans tabular-nums font-bold text-xs text-white">{result.distancePerCurrencyUnit} {result.distanceUnitName}</span>
             </div>
             <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
               <span className="text-[9px] uppercase font-bold text-sky-200 block">Driving Range</span>
-              <span className="font-mono font-bold text-xs text-white">{result.totalTankRange.toLocaleString()} {result.distanceUnitName}</span>
+              <span className="font-sans tabular-nums font-bold text-xs text-white">{result.totalTankRange.toLocaleString()} {result.distanceUnitName}</span>
             </div>
             <div className="bg-white/10 backdrop-blur-xs p-2 rounded-xl border border-white/20">
               <span className="text-[9px] uppercase font-bold text-sky-200 block">Fill Tank Cost</span>
-              <span className="font-mono font-bold text-xs text-white">{currencySymbol}{result.costToFillTank}</span>
+              <span className="font-sans tabular-nums font-bold text-xs text-white">{currencySymbol}{result.costToFillTank}</span>
             </div>
           </div>
 
@@ -720,7 +720,7 @@ export function GasMileageCalculator() {
             <span className="text-[9px] font-bold uppercase text-sky-200 flex items-center gap-1">
               <Leaf className="h-3 w-3 text-emerald-300" /> Annual Projection ({annualMileage.toLocaleString()} {result.distanceUnitName})
             </span>
-            <div className="flex justify-between font-mono text-xs font-bold text-white">
+            <div className="flex justify-between font-sans tabular-nums text-xs font-bold text-white">
               <span>Annual Fuel: {currencySymbol}{result.annualFuelCost}</span>
               <span className="text-emerald-300">{result.carbonFootprintTons} Tons CO2</span>
             </div>

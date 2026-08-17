@@ -355,9 +355,7 @@ export function GfrCalculator() {
           {/* Card Header with Clean Sub-Row Toggles */}
           <div className="border-b border-slate-100 pb-4 space-y-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <Sliders className="w-5 h-5 text-cyan-600" />
-                Patient Lab Parameters
+              <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">Patient Lab Parameters
               </h2>
             </div>
 
@@ -673,14 +671,7 @@ export function GfrCalculator() {
                   {copied ? "Copied!" : "Copy"}
                 </button>
 
-                <button
-                  onClick={handlePrint}
-                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
-                  title="Print Report"
-                >
-                  <Printer className="w-4 h-4" />
-                  Print
-                </button>
+                
               </div>
             </div>
           </div>
@@ -749,9 +740,7 @@ export function GfrCalculator() {
             {activeTab === "ckd-stage" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <Activity className="w-4 h-4 text-cyan-600" />
-                    Chronic Kidney Disease (CKD) Stage Spectrum
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Chronic Kidney Disease (CKD) Stage Spectrum
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">eGFR: {results.eGfr} mL/min/1.73m²</span>
                 </div>
@@ -778,9 +767,7 @@ export function GfrCalculator() {
             {activeTab === "formula-comp" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <BarChart2 className="w-4 h-4 text-cyan-600" />
-                    Multi-Formula Equation Comparison
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Multi-Formula Equation Comparison
                   </h3>
                 </div>
 
@@ -814,9 +801,7 @@ export function GfrCalculator() {
             {activeTab === "age-decline" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <LineIcon className="w-4 h-4 text-emerald-600" />
-                    Expected Age-Related GFR Decline Curve
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Expected Age-Related GFR Decline Curve
                   </h3>
                 </div>
 
@@ -849,9 +834,7 @@ export function GfrCalculator() {
             {/* TAB 4: KDIGO Prognosis Risk Grid */}
             {activeTab === "kdigo-matrix" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4 text-amber-500" />
-                  KDIGO 2024 CKD Risk Staging Grid
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">KDIGO 2024 CKD Risk Staging Grid
                 </h3>
 
                 <div className="p-4 rounded-2xl border text-xs space-y-2" style={{ backgroundColor: `${results.kdigoRisk.colorHex}15`, borderColor: `${results.kdigoRisk.colorHex}40` }}>
@@ -866,9 +849,7 @@ export function GfrCalculator() {
             {/* TAB 5: Clinical Action Plan */}
             {activeTab === "action-plan" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-cyan-600" />
-                  Nephrology Action Plan & Monitoring Guidance
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Nephrology Action Plan & Monitoring Guidance
                 </h3>
 
                 <div className="space-y-2.5">

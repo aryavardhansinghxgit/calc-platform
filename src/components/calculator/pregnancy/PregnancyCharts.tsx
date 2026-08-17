@@ -69,9 +69,7 @@ export const PregnancyCharts: React.FC<PregnancyChartsProps> = ({ results }) => 
       <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-rose-500 inline-block"></span>
-              Fetal Growth Trajectory (Weight in Grams)
+            <h3 className="text-sm sm:text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Fetal Growth Trajectory (Weight in Grams)
             </h3>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
               Standard fetal weight progression from Week 4 through Week 40
@@ -99,7 +97,7 @@ export const PregnancyCharts: React.FC<PregnancyChartsProps> = ({ results }) => 
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
                     return (
-                      <div className="p-2.5 rounded-lg bg-zinc-900 text-white text-xs space-y-1 shadow-lg border border-zinc-700">
+                      <div className="p-2.5 rounded-lg bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 text-xs space-y-1 shadow-lg border border-zinc-700">
                         <p className="font-bold text-rose-300">{data.week} ({data.weekNum} Weeks)</p>
                         <p>Weight: <span className="font-semibold text-white">{data.weightGrams} g</span></p>
                         <p>Length: <span className="font-semibold text-white">{data.lengthCm} cm</span></p>
@@ -122,9 +120,7 @@ export const PregnancyCharts: React.FC<PregnancyChartsProps> = ({ results }) => 
       <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 inline-block"></span>
-              Pregnancy Weight Gain Corridor (IOM Guidelines)
+            <h3 className="text-sm sm:text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Pregnancy Weight Gain Corridor (IOM Guidelines)
             </h3>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
               Recommended target range ({results.weightMetrics.minRecommendedLbs}–{results.weightMetrics.maxRecommendedLbs} lbs) based on pre-pregnancy BMI ({results.weightMetrics.preBmi})
@@ -152,7 +148,7 @@ export const PregnancyCharts: React.FC<PregnancyChartsProps> = ({ results }) => 
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
                     return (
-                      <div className="p-2.5 rounded-lg bg-zinc-900 text-white text-xs space-y-1 shadow-lg border border-zinc-700">
+                      <div className="p-2.5 rounded-lg bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 text-xs space-y-1 shadow-lg border border-zinc-700">
                         <p className="font-bold text-emerald-300">{data.week}</p>
                         <p>Recommended Min: <span className="font-semibold">{data.minRec} lbs</span></p>
                         <p>Recommended Max: <span className="font-semibold">{data.maxRec} lbs</span></p>
@@ -178,9 +174,7 @@ export const PregnancyCharts: React.FC<PregnancyChartsProps> = ({ results }) => 
       {/* Chart 3: Due Date Birth Probability Distribution */}
       <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-3">
         <div>
-          <h3 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full bg-amber-500 inline-block"></span>
-            Birth Timing Probability Window Distribution
+          <h3 className="text-sm sm:text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Birth Timing Probability Window Distribution
           </h3>
           <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
             Statistical probability distribution of spontaneous labor timing across gestational weeks
@@ -198,7 +192,7 @@ export const PregnancyCharts: React.FC<PregnancyChartsProps> = ({ results }) => 
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
                     return (
-                      <div className="p-2.5 rounded-lg bg-zinc-900 text-white text-xs space-y-1 shadow-lg border border-zinc-700">
+                      <div className="p-2.5 rounded-lg bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 text-xs space-y-1 shadow-lg border border-zinc-700">
                         <p className="font-bold text-amber-300">{data.week} ({data.label})</p>
                         <p>Probability: <span className="font-semibold text-white">{data.percent}%</span></p>
                         <p className="text-zinc-400 text-[11px]">{data.desc}</p>

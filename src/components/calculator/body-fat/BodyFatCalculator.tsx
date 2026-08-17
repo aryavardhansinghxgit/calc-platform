@@ -261,7 +261,7 @@ Calculated via CalcPlatform Health Engine`;
             .font-bold { font-weight: 700; }
             .font-semibold { font-weight: 600; }
             .font-black { font-weight: 900; }
-            .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+            .font-sans tabular-nums { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
             .text-zinc-900 { color: #18181b; }
             .text-zinc-800 { color: #27272a; }
             .text-zinc-700 { color: #3f3f46; }
@@ -557,28 +557,12 @@ Calculated via CalcPlatform Health Engine`;
 
             {/* Action Bar */}
             <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={handleSaveCalculation} className="bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 text-xs gap-1.5">
-                  <Bookmark className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                  Save Calculation
-                </Button>
-
-                <Button variant="outline" size="sm" onClick={handleCopySummary} className="bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 text-xs gap-1.5">
-                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-zinc-500" />}
-                  {copied ? "Copied!" : "Copy Summary"}
-                </Button>
-              </div>
+              
 
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={handleShare} className="bg-white dark:bg-zinc-950 text-zinc-700 dark:text-zinc-300 text-xs gap-1.5">
-                  <Share2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-                  Share
-                </Button>
+                
 
-                <Button variant="outline" size="sm" onClick={handlePrint} className="bg-blue-600 text-white hover:bg-blue-700 border-blue-600 text-xs gap-1.5 shadow-sm">
-                  <Printer className="w-3.5 h-3.5" />
-                  Print / PDF Report
-                </Button>
+                
               </div>
             </div>
           </CardContent>
@@ -647,7 +631,7 @@ Calculated via CalcPlatform Health Engine`;
               <div className="text-xs font-black tracking-widest text-blue-700 uppercase">
                 CalcPlatform Clinical Health &amp; Anthropometrics Lab
               </div>
-              <h1 className="text-2xl font-black text-zinc-900 mt-1">
+              <h1 className="text-2xl font-black text-blue-600 mt-1">
                 Clinical Body Fat &amp; Composition Assessment Report
               </h1>
               <p className="text-xs text-zinc-500 mt-0.5">
@@ -657,7 +641,7 @@ Calculated via CalcPlatform Health Engine`;
             <div className="text-right text-xs text-zinc-500">
               <p className="font-bold text-zinc-800" suppressHydrationWarning>Date: {new Date().toLocaleDateString()}</p>
               <p suppressHydrationWarning>Time: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
-              <p className="font-mono text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #BF-{Date.now().toString().slice(-6)}</p>
+              <p className="font-sans tabular-nums text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #BF-{Date.now().toString().slice(-6)}</p>
             </div>
           </div>
 
@@ -685,7 +669,7 @@ Calculated via CalcPlatform Health Engine`;
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider border-b border-zinc-300 pb-1">
+            <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
               1. Subject Physical Measurements
             </h3>
             <table className="w-full text-xs text-left border border-zinc-200 border-collapse">

@@ -109,7 +109,7 @@ function Dice3DFace({
 
   return (
     <div
-      className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-xl font-black font-mono border-2 shadow-[0_10px_25px_rgba(0,0,0,0.3)] transition-all duration-300 transform relative overflow-hidden ${
+      className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-xl font-black font-sans tabular-nums border-2 shadow-[0_10px_25px_rgba(0,0,0,0.3)] transition-all duration-300 transform relative overflow-hidden ${
         isRolling
           ? "rotate-[360deg] scale-110 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 border-purple-300 text-white animate-bounce"
           : isCritSuccess
@@ -141,7 +141,7 @@ function RollHistoryItem({ item }: { item: RollHistoryEntry }) {
     <div className="bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl p-2.5 transition-all shadow-2xs space-y-2">
       <div
         onClick={() => hasMultipleDice && setIsExpanded(!isExpanded)}
-        className={`flex items-center justify-between gap-2 text-xs font-mono font-bold ${
+        className={`flex items-center justify-between gap-2 text-xs font-sans tabular-nums font-bold ${
           hasMultipleDice ? "cursor-pointer select-none" : ""
         }`}
       >
@@ -176,7 +176,7 @@ function RollHistoryItem({ item }: { item: RollHistoryEntry }) {
         <div className="pt-2 border-t border-slate-100 dark:border-zinc-700/80 space-y-1.5">
           <div className="flex items-center justify-between text-[9px] font-extrabold uppercase text-slate-400 dark:text-zinc-400 tracking-wider">
             <span>All Rolled Dice ({diceValues.length} Total):</span>
-            <span className="text-purple-600 dark:text-purple-400 font-bold font-mono">{item.timestamp}</span>
+            <span className="text-purple-600 dark:text-purple-400 font-bold font-sans tabular-nums">{item.timestamp}</span>
           </div>
           <div className="flex flex-wrap gap-1.5 pt-0.5">
             {diceValues.map((val, idx) => (
@@ -354,7 +354,7 @@ export function DiceRollerCalculator() {
             <Dices className="h-5 w-5" />
           </div>
           <div>
-            <h3 className="text-sm font-extrabold text-slate-900 dark:text-zinc-100">
+            <h3 className="text-sm font-extrabold text-blue-600 dark:text-blue-400">
               Virtual Polyhedral &amp; TTRPG Dice Station
             </h3>
             <p className="text-[10px] text-slate-500 dark:text-zinc-400">
@@ -416,7 +416,7 @@ export function DiceRollerCalculator() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-zinc-300">
                   <label htmlFor="dice-count-input-simple">Number of Dice:</label>
-                  <span className="font-mono text-purple-600 dark:text-purple-400 text-sm font-extrabold">
+                  <span className="font-sans tabular-nums text-purple-600 dark:text-purple-400 text-sm font-extrabold">
                     {simpleDiceCount} {simpleDiceCount === 1 ? "Die" : "Dice"}
                   </span>
                 </div>
@@ -437,7 +437,7 @@ export function DiceRollerCalculator() {
                     max={50}
                     value={simpleDiceCount}
                     onChange={(e) => setSimpleDiceCount(Math.max(1, Number(e.target.value)))}
-                    className="w-20 h-9 text-xs font-mono font-bold bg-slate-50 dark:bg-zinc-800 text-center"
+                    className="w-20 h-9 text-xs font-sans tabular-nums font-bold bg-slate-50 dark:bg-zinc-800 text-center"
                   />
                 </div>
               </div>
@@ -476,7 +476,7 @@ export function DiceRollerCalculator() {
                     max={1000}
                     value={simpleDiceSides}
                     onChange={(e) => setSimpleDiceSides(Math.max(2, Number(e.target.value)))}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -487,7 +487,7 @@ export function DiceRollerCalculator() {
                     type="number"
                     value={simpleModifier}
                     onChange={(e) => setSimpleModifier(Number(e.target.value))}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -513,8 +513,7 @@ export function DiceRollerCalculator() {
             <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs space-y-5">
               <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-3">
                 <div>
-                  <h4 className="text-xs font-extrabold text-slate-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">
-                    <Hash className="h-4 w-4 text-purple-600 dark:text-purple-400" /> TTRPG Formula Expression
+                  <h4 className="text-xs font-extrabold text-slate-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">TTRPG Formula Expression
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
                     Type custom RPG expressions or tap die buttons to build your formula.
@@ -535,7 +534,7 @@ export function DiceRollerCalculator() {
                   <label htmlFor="advanced-formula-input-box" className="text-xs font-bold text-slate-700 dark:text-zinc-300">
                     Active Formula Notation:
                   </label>
-                  <span className="text-[10px] font-mono text-purple-600 dark:text-purple-400 font-bold">
+                  <span className="text-[10px] font-sans tabular-nums text-purple-600 dark:text-purple-400 font-bold">
                     Supports kh, kl, !, r&lt;=, &gt;=
                   </span>
                 </div>
@@ -545,7 +544,7 @@ export function DiceRollerCalculator() {
                   value={formulaInput}
                   onChange={(e) => setFormulaInput(e.target.value)}
                   placeholder="e.g. 4d6kh3 + 5, 2d20kh1, 3d6!"
-                  className="h-11 text-base font-mono font-bold bg-slate-50 dark:bg-zinc-800 border-slate-300 dark:border-zinc-700 text-purple-700 dark:text-purple-300"
+                  className="h-11 text-base font-sans tabular-nums font-bold bg-slate-50 dark:bg-zinc-800 border-slate-300 dark:border-zinc-700 text-purple-700 dark:text-purple-300"
                 />
               </div>
 
@@ -656,11 +655,11 @@ export function DiceRollerCalculator() {
               ))}
             </div>
 
-            <div className="text-4xl sm:text-5xl font-black font-mono tracking-tight text-slate-900 dark:text-zinc-100">
+            <div className="text-4xl sm:text-5xl font-black font-sans tabular-nums tracking-tight text-slate-900 dark:text-zinc-100">
               {currentResult ? currentResult.total : 0}
             </div>
 
-            <span className="text-xs font-mono font-bold text-purple-700 dark:text-purple-300 block">
+            <span className="text-xs font-sans tabular-nums font-bold text-purple-700 dark:text-purple-300 block">
               Formula: {currentResult?.expression || "1d20"}
             </span>
           </div>
@@ -676,7 +675,7 @@ export function DiceRollerCalculator() {
                   group.rolls.map((r, rIdx) => (
                     <span
                       key={`${gIdx}-${rIdx}`}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-mono font-extrabold border transition-all ${
+                      className={`px-2.5 py-1 rounded-lg text-xs font-sans tabular-nums font-extrabold border transition-all ${
                         !r.isKept
                           ? "bg-slate-200 text-slate-500 dark:bg-zinc-800 dark:text-zinc-500 border-slate-300 dark:border-zinc-700 line-through opacity-60"
                           : r.isCriticalSuccess
@@ -701,7 +700,7 @@ export function DiceRollerCalculator() {
               <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-700 dark:text-zinc-300 flex items-center gap-1.5">
                 <TrendingUp className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> Probability Bell Curve (PMF)
               </span>
-              <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 font-extrabold">
+              <span className="text-[10px] font-sans tabular-nums text-emerald-700 dark:text-emerald-400 font-extrabold">
                 μ = {probabilityAnalysis.mean} | σ = {probabilityAnalysis.stdDev}
               </span>
             </div>

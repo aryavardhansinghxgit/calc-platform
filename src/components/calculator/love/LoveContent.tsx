@@ -5,7 +5,7 @@ export function LoveContent() {
     <article className="prose prose-slate dark:prose-invert max-w-none space-y-8 text-slate-700 dark:text-zinc-300">
       {/* 1. PSYCHOLOGY & BIOLOGICAL CHEMISTRY OF ATTRACTION */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           The Psychology &amp; Biological Chemistry of Attraction
         </h2>
         <p className="leading-relaxed">
@@ -15,35 +15,35 @@ export function LoveContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4 text-xs">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-rose-600 dark:text-rose-400 text-sm">1. Dopamine (Pleasure &amp; Reward)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">1. Dopamine (Pleasure &amp; Reward)</h4>
             <p className="leading-relaxed">
               Triggers intense feelings of euphoria, motivation, and focused attention upon seeing or thinking about a romantic partner. Dopamine stimulates the same neural reward pathways activated by addiction.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-rose-600 dark:text-rose-400 text-sm">2. Oxytocin (Bonding &amp; Trust)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">2. Oxytocin (Bonding &amp; Trust)</h4>
             <p className="leading-relaxed">
               Known as the &quot;cuddle hormone,&quot; oxytocin is released during physical affection, eye contact, and intimacy, deepening long-term emotional security, empathy, and pair-bonding trust.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-rose-600 dark:text-rose-400 text-sm">3. Serotonin (Infatuation &amp; Obsession)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">3. Serotonin (Infatuation &amp; Obsession)</h4>
             <p className="leading-relaxed">
               During early stages of infatuation, serotonin levels temporarily drop, creating intrusive, constant thoughts about one&apos;s new partner—resembling the psychological dynamics of passionate fixation.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-rose-600 dark:text-rose-400 text-sm">4. Norepinephrine (Adrenaline &amp; Excitement)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">4. Norepinephrine (Adrenaline &amp; Excitement)</h4>
             <p className="leading-relaxed">
               Produces physiological arousal—causing butterflies in the stomach, racing heartbeats, sweaty palms, and heightened alertness during initial romantic encounters.
             </p>
           </div>
         </div>
 
-        <h3 className="text-xl font-extrabold text-slate-900 dark:text-zinc-100 pt-2">
+        <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 pt-2">
           Helen Fisher&apos;s 3 Stages of Romantic Love
         </h3>
         <p className="leading-relaxed">
@@ -68,8 +68,8 @@ export function LoveContent() {
       </section>
 
       {/* 2. NUMEROLOGY SYSTEMS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           The Systems Behind Name Matching &amp; Numerology
         </h2>
         <p className="leading-relaxed">
@@ -92,7 +92,7 @@ export function LoveContent() {
                 <th className="p-2 border border-slate-200 dark:border-zinc-800">9</th>
               </tr>
             </thead>
-            <tbody className="font-mono">
+            <tbody className="font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold">A, J, S</td>
                 <td className="p-2 border border-slate-200 dark:border-zinc-800 font-bold">B, K, T</td>
@@ -110,21 +110,21 @@ export function LoveContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs my-4">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-purple-700 dark:text-purple-400 text-sm">Soul Urge Number (Vowel Sums)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">Soul Urge Number (Vowel Sums)</h4>
             <p className="leading-relaxed">
               Calculated by summing the numerical values of all vowels (A, E, I, O, U, Y). The Soul Urge number represents an individual&apos;s innermost desires, romantic motivations, and subconscious cravings.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-purple-700 dark:text-purple-400 text-sm">Personality Number (Consonant Sums)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">Personality Number (Consonant Sums)</h4>
             <p className="leading-relaxed">
               Calculated by summing all consonants. The Personality number represents external behavioral expressions, social traits, and initial impressions projected to romantic partners.
             </p>
           </div>
         </div>
 
-        <h3 className="text-xl font-extrabold text-slate-900 dark:text-zinc-100 pt-2">
+        <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 pt-2">
           Life Path Number Calculation
         </h3>
         <p className="leading-relaxed">
@@ -134,8 +134,8 @@ export function LoveContent() {
       </section>
 
       {/* 3. ASTROLOGICAL & ZODIAC FRAMEWORKS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Astrological &amp; Zodiac Compatibility Frameworks
         </h2>
         <p className="leading-relaxed">
@@ -144,28 +144,28 @@ export function LoveContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs my-4">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-amber-600 dark:text-amber-400 text-sm">🔥 Fire Signs (Aries, Leo, Sagittarius)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">� Fire Signs (Aries, Leo, Sagittarius)</h4>
             <p className="leading-relaxed">
               Passionate, dynamic, energetic, and spontaneous. Highly compatible with Air signs (who fuel their ideas) and fellow Fire signs.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-emerald-600 dark:text-emerald-400 text-sm">🌿 Earth Signs (Taurus, Virgo, Capricorn)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">� Earth Signs (Taurus, Virgo, Capricorn)</h4>
             <p className="leading-relaxed">
               Grounded, practical, loyal, and security-focused. Deeply compatible with Water signs (who nurture emotional growth) and Earth signs.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">💨 Air Signs (Gemini, Libra, Aquarius)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">� Air Signs (Gemini, Libra, Aquarius)</h4>
             <p className="leading-relaxed">
               Intellectual, communicative, social, and analytical. Harmonize best with Fire and Air signs.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-cyan-600 dark:text-cyan-400 text-sm">🌊 Water Signs (Cancer, Scorpio, Pisces)</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">� Water Signs (Cancer, Scorpio, Pisces)</h4>
             <p className="leading-relaxed">
               Intuitive, empathetic, emotional, and protective. Flourish when paired with Earth and Water signs.
             </p>
@@ -174,8 +174,8 @@ export function LoveContent() {
       </section>
 
       {/* 4. 90S FLAMES GAME EXPLAINED */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           The 90s Classic &quot;FLAMES&quot; Game Explained
         </h2>
         <p className="leading-relaxed">
@@ -201,8 +201,8 @@ export function LoveContent() {
       </section>
 
       {/* 5. SCIENCE OF LONG-TERM SUCCESS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           The Science of Long-Term Relationship Success
         </h2>
         <p className="leading-relaxed">
@@ -218,7 +218,7 @@ export function LoveContent() {
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-2">
-            <h4 className="font-extrabold text-rose-700 dark:text-rose-300 text-sm">The &quot;Four Horsemen&quot; to Avoid</h4>
+            <h4 className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">The &quot;Four Horsemen&quot; to Avoid</h4>
             <ul className="list-disc pl-5 space-y-1">
               <li><strong>Criticism:</strong> Attacking a partner&apos;s character rather than addressing a specific behavior.</li>
               <li><strong>Contempt:</strong> Expressing sarcasm, eye-rolling, or mockery (the #1 predictor of divorce).</li>
@@ -230,8 +230,8 @@ export function LoveContent() {
       </section>
 
       {/* 6. HEALTHY HABITS */}
-      <section className="space-y-4 border-t border-slate-200 dark:border-zinc-800 pt-6">
-        <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-zinc-100">
+      <section className="space-y-4  dark:border-zinc-800 pt-6">
+        <h2 className="text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
           Healthy Communication &amp; Relationship Building Habits
         </h2>
         <p className="leading-relaxed">
@@ -241,14 +241,14 @@ export function LoveContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs my-4">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-1.5">
             <h4 className="font-bold text-slate-900 dark:text-zinc-100">Active Listening</h4>
-            <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
+            <p className="leading-relaxed text-slate-900 dark:text-slate-100">
               Listen to understand rather than to reply. Validate your partner&apos;s emotions even when agreeing to disagree.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 space-y-1.5">
             <h4 className="font-bold text-slate-900 dark:text-zinc-100">Shared Meaning &amp; Goals</h4>
-            <p className="leading-relaxed text-slate-600 dark:text-zinc-400">
+            <p className="leading-relaxed text-slate-900 dark:text-slate-100">
               Build joint life visions, support each other&apos;s career and personal ambitions, and establish meaningful couple rituals.
             </p>
           </div>

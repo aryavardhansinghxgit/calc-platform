@@ -431,7 +431,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Pre-Tax Price ($)</span>
-                <span className="font-mono text-blue-600">{fmt(results.preTaxPrice)}</span>
+                <span className="font-sans tabular-nums text-blue-600">{fmt(results.preTaxPrice)}</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-bold">$</span>
@@ -442,7 +442,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
                   placeholder="e.g. 100"
                   value={preTaxInput}
                   onChange={(e) => setPreTaxInput(e.target.value)}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -451,7 +451,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Sales Tax Rate (%)</span>
-                <span className="font-mono text-purple-600">{results.taxRate}%</span>
+                <span className="font-sans tabular-nums text-purple-600">{results.taxRate}%</span>
               </label>
               <Input
                 type="number"
@@ -461,7 +461,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
                 placeholder="e.g. 8.25"
                 value={taxRateInput}
                 onChange={(e) => setTaxRateInput(e.target.value)}
-                className="text-xs font-mono"
+                className="text-xs font-sans tabular-nums"
               />
             </div>
 
@@ -469,7 +469,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Final Price (After Tax)</span>
-                <span className="font-mono text-emerald-600">{fmt(results.afterTaxPrice)}</span>
+                <span className="font-sans tabular-nums text-emerald-600">{fmt(results.afterTaxPrice)}</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-bold">$</span>
@@ -480,7 +480,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
                   placeholder="e.g. 108.25"
                   value={afterTaxInput}
                   onChange={(e) => setAfterTaxInput(e.target.value)}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -489,7 +489,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Sales Tax Amount ($)</span>
-                <span className="font-mono text-emerald-600">{fmt(results.taxAmount)}</span>
+                <span className="font-sans tabular-nums text-emerald-600">{fmt(results.taxAmount)}</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-bold">$</span>
@@ -500,7 +500,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
                   placeholder="e.g. 8.25"
                   value={taxAmountInput}
                   onChange={(e) => setTaxAmountInput(e.target.value)}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -537,15 +537,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
                   FINAL TOTAL PRICE (AFTER TAX)
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -557,7 +549,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-mono text-white mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-sans tabular-nums text-white mb-2">
                 {fmt(results.afterTaxPrice)}
               </div>
 
@@ -569,15 +561,15 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
               <div className="grid grid-cols-3 gap-3 mt-6 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Pre-Tax Base Price</div>
-                  <div className="font-bold font-mono text-white text-sm">{fmt(results.preTaxPrice)}</div>
+                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.preTaxPrice)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Sales Tax Amount</div>
-                  <div className="font-bold font-mono text-emerald-300 text-sm">{fmt(results.taxAmount)}</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-300 text-sm">{fmt(results.taxAmount)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Applied Tax Rate</div>
-                  <div className="font-bold font-mono text-purple-300 text-sm">{results.taxRate}%</div>
+                  <div className="font-bold font-sans tabular-nums text-purple-300 text-sm">{results.taxRate}%</div>
                 </div>
               </div>
             </div>
@@ -611,8 +603,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <ShoppingCart className="h-5 w-5 text-emerald-500" /> Multi-Item Sales Receipt &amp; Invoice Builder
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Multi-Item Sales Receipt &amp; Invoice Builder
               </h3>
               <p className="text-xs text-zinc-500">
                 Add multiple product items, toggle taxable/exempt status, and calculate subtotal, sales tax, and grand total.
@@ -643,7 +634,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
                   <th className="p-2.5 w-10 text-center">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono text-[11px]">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums text-[11px]">
                 {receiptResults.items.map((item) => (
                   <tr key={item.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2">
@@ -660,7 +651,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
                         min="1"
                         value={item.quantity}
                         onChange={(e) => updateReceiptItem(item.id, "quantity", Number(e.target.value))}
-                        className="text-xs h-7 font-mono"
+                        className="text-xs h-7 font-sans tabular-nums"
                       />
                     </td>
                     <td className="p-2">
@@ -669,7 +660,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
                         min="0"
                         value={item.unitPrice}
                         onChange={(e) => updateReceiptItem(item.id, "unitPrice", Number(e.target.value))}
-                        className="text-xs h-7 font-mono"
+                        className="text-xs h-7 font-sans tabular-nums"
                       />
                     </td>
                     <td className="p-2">
@@ -698,7 +689,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
           </div>
 
           {/* Receipt Totals Summary Box */}
-          <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-wrap justify-between items-center gap-4 text-xs font-mono">
+          <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-wrap justify-between items-center gap-4 text-xs font-sans tabular-nums">
             <div className="space-y-1">
               <div><span className="text-zinc-400">Subtotal:</span> <span className="font-bold">{fmt(receiptResults.subtotal)}</span></div>
               <div><span className="text-zinc-400">Taxable Subtotal:</span> <span className="font-bold text-blue-600">{fmt(receiptResults.taxableSubtotal)}</span></div>
@@ -719,8 +710,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Building2 className="h-5 w-5 text-indigo-500" /> Business Sales Tax Revenue &amp; Collection Solver
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Business Sales Tax Revenue &amp; Collection Solver
               </h3>
               <p className="text-xs text-zinc-500">
                 Extract net sales revenue and tax collected payable to state authorities from gross cash receipts.
@@ -740,7 +730,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
                   step="500"
                   value={grossSalesInput}
                   onChange={(e) => setGrossSalesInput(e.target.value)}
-                  className="text-xs font-mono"
+                  className="text-xs font-sans tabular-nums"
                 />
               </div>
 
@@ -752,12 +742,12 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
                   type="number"
                   value={results.taxRate}
                   onChange={(e) => setTaxRateInput(e.target.value)}
-                  className="text-xs font-mono"
+                  className="text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
 
-            <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl space-y-3 font-mono text-xs">
+            <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl space-y-3 font-sans tabular-nums text-xs">
               <div className="flex justify-between">
                 <span className="text-zinc-600 dark:text-zinc-400">Gross Collected Revenue:</span>
                 <span className="font-bold text-zinc-900 dark:text-zinc-100">{fmt(businessResults.grossSalesRevenue)}</span>
@@ -779,8 +769,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
       {activeTab === "states" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-purple-500" /> Searchable 50 U.S. States Sales Tax Directory
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Searchable 50 U.S. States Sales Tax Directory
             </h3>
 
             <div className="relative">
@@ -812,10 +801,10 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
                 {filteredStates.map((s) => (
                   <tr key={s.code} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">{s.state}</td>
-                    <td className="p-2.5 font-mono text-zinc-500">{s.code}</td>
-                    <td className="p-2.5 font-mono font-bold text-blue-600">{s.stateRate}%</td>
-                    <td className="p-2.5 font-mono text-zinc-500">{s.avgLocalRate}%</td>
-                    <td className="p-2.5 font-mono text-purple-600">{s.maxCombinedRate}%</td>
+                    <td className="p-2.5 font-sans tabular-nums text-zinc-500">{s.code}</td>
+                    <td className="p-2.5 font-sans tabular-nums font-bold text-blue-600">{s.stateRate}%</td>
+                    <td className="p-2.5 font-sans tabular-nums text-zinc-500">{s.avgLocalRate}%</td>
+                    <td className="p-2.5 font-sans tabular-nums text-purple-600">{s.maxCombinedRate}%</td>
                     <td className="p-2.5">
                       {s.groceryExempt ? (
                         <span className="text-emerald-600 font-bold">Yes</span>
@@ -850,8 +839,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-amber-500" /> What-If State Sales Tax Savings Comparison
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">What-If State Sales Tax Savings Comparison
               </h3>
               <p className="text-xs text-zinc-500">
                 Compare total tax costs between two different state jurisdictions for major purchases.
@@ -862,7 +850,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Purchase Price ($)</label>
-              <Input type="number" value={comparePriceInput} onChange={(e) => setComparePriceInput(e.target.value)} className="text-xs font-mono" />
+              <Input type="number" value={comparePriceInput} onChange={(e) => setComparePriceInput(e.target.value)} className="text-xs font-sans tabular-nums" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">State A Jurisdiction</label>
@@ -894,7 +882,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans tabular-nums text-xs">
             <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 p-5 rounded-xl space-y-2">
               <span className="font-bold font-sans text-blue-900 dark:text-blue-200 text-sm block">
                 {whatIfResults.infoA.state} ({whatIfResults.infoA.stateRate}%)
@@ -914,7 +902,7 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
             </div>
           </div>
 
-          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4 rounded-xl text-xs flex justify-between items-center font-mono">
+          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-4 rounded-xl text-xs flex justify-between items-center font-sans tabular-nums">
             <span>Potential Tax Savings in {whatIfResults.cheaperState}:</span>
             <span className="font-extrabold text-amber-700 dark:text-amber-300 text-base">{fmt(whatIfResults.savings)}</span>
           </div>

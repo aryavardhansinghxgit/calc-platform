@@ -16,19 +16,19 @@ export function FormulaSection({
   variables = [],
 }: FormulaSectionProps) {
   return (
-    <div className="space-y-3">
-      {explanation && <p className="text-xs text-zinc-500 dark:text-zinc-400">{explanation}</p>}
+    <div className="space-y-4">
+      {explanation && <p className="text-sm text-slate-900 dark:text-slate-100 font-medium leading-relaxed">{explanation}</p>}
 
-      <div className="px-3 py-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 font-mono text-sm text-blue-600 dark:text-blue-400 font-semibold overflow-x-auto">
+      <div className="px-4 py-3 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 font-sans tabular-nums text-base text-blue-700 dark:text-blue-400 font-bold overflow-x-auto">
         {formula}
       </div>
 
       {variables.length > 0 && (
-        <div className="grid grid-cols-2 gap-1.5 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
           {variables.map((v, i) => (
-            <div key={i} className="flex items-center gap-1.5 px-2 py-1 rounded bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700">
-              <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">{v.symbol}</span>
-              <span className="text-zinc-600 dark:text-zinc-400">= {v.label}</span>
+            <div key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <span className="font-sans tabular-nums font-extrabold text-blue-600 dark:text-blue-400">{v.symbol}</span>
+              <span className="text-slate-900 dark:text-slate-100 font-medium">= {v.label}</span>
             </div>
           ))}
         </div>

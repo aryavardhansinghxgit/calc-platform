@@ -236,7 +236,7 @@ Recommendation: ${results.recommendation}`;
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Weighted Current APR:</span>
-          <span className="text-indigo-600 dark:text-indigo-400 font-mono text-sm">{results.currentWeightedApr.toFixed(2)}%</span>
+          <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-sm">{results.currentWeightedApr.toFixed(2)}%</span>
         </div>
       </div>
 
@@ -332,14 +332,14 @@ Recommendation: ${results.recommendation}`;
                       min="0"
                       value={d.balance || ""}
                       onChange={(e) => updateDebtRow(d.id, "balance", Number(e.target.value))}
-                      className="col-span-3 h-8 text-xs font-mono px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="col-span-3 h-8 text-xs font-sans tabular-nums px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                     <Input
                       type="number"
                       min="0"
                       value={d.minPayment || ""}
                       onChange={(e) => updateDebtRow(d.id, "minPayment", Number(e.target.value))}
-                      className="col-span-2 h-8 text-xs font-mono px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="col-span-2 h-8 text-xs font-sans tabular-nums px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                     <Input
                       type="number"
@@ -348,7 +348,7 @@ Recommendation: ${results.recommendation}`;
                       step="0.1"
                       value={d.apr || ""}
                       onChange={(e) => updateDebtRow(d.id, "apr", Number(e.target.value))}
-                      className="col-span-2 h-8 text-xs font-mono px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="col-span-2 h-8 text-xs font-sans tabular-nums px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                     <div className="col-span-1 flex justify-center">
                       {debts.length > 1 && (
@@ -377,7 +377,7 @@ Recommendation: ${results.recommendation}`;
                     placeholder={`$${results.currentTotalBalance.toLocaleString()}`}
                     value={customLoanAmountInput}
                     onChange={(e) => setCustomLoanAmountInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                   <span className="text-[10px] text-zinc-400">Leave blank to consolidate 100% of balance.</span>
                 </div>
@@ -390,7 +390,7 @@ Recommendation: ${results.recommendation}`;
                     step="0.25"
                     value={consolidationAprInput}
                     onChange={(e) => setConsolidationAprInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -405,7 +405,7 @@ Recommendation: ${results.recommendation}`;
                     max="30"
                     value={loanTermYearsInput}
                     onChange={(e) => setLoanTermYearsInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
 
@@ -417,7 +417,7 @@ Recommendation: ${results.recommendation}`;
                     max="11"
                     value={loanTermMonthsInput}
                     onChange={(e) => setLoanTermMonthsInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -432,7 +432,7 @@ Recommendation: ${results.recommendation}`;
                     step="0.5"
                     value={feeValueInput}
                     onChange={(e) => setFeeValueInput(e.target.value)}
-                    className="text-xs font-mono"
+                    className="text-xs font-sans tabular-nums"
                   />
                 </div>
 
@@ -472,15 +472,7 @@ Recommendation: ${results.recommendation}`;
                   NET TOTAL REFINANCE SAVINGS
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -492,7 +484,7 @@ Recommendation: ${results.recommendation}`;
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-mono text-white mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-sans tabular-nums text-white mb-2">
                 {fmt(results.netTotalSavings)}
               </div>
 
@@ -512,15 +504,15 @@ Recommendation: ${results.recommendation}`;
               <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Funded Loan Total</div>
-                  <div className="font-bold font-mono text-white text-sm">{fmt(results.fundedTotalLoan)}</div>
+                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.fundedTotalLoan)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">New Monthly Pmt</div>
-                  <div className="font-bold font-mono text-blue-300 text-sm">{fmt(results.consolidationMonthlyPayment)}</div>
+                  <div className="font-bold font-sans tabular-nums text-blue-300 text-sm">{fmt(results.consolidationMonthlyPayment)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Upfront Fees</div>
-                  <div className="font-bold font-mono text-amber-300 text-sm">{fmt(results.upfrontFeeAmount)}</div>
+                  <div className="font-bold font-sans tabular-nums text-amber-300 text-sm">{fmt(results.upfrontFeeAmount)}</div>
                 </div>
               </div>
             </div>
@@ -531,7 +523,7 @@ Recommendation: ${results.recommendation}`;
                 Current Debts vs. Proposed Consolidation Loan
               </h4>
 
-              <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+              <div className="grid grid-cols-2 gap-4 text-xs font-sans tabular-nums">
                 <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-2">
                   <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 text-sm block border-b pb-1">Current Debts</span>
                   <div>Combined Bal: <span className="font-bold">{fmt(results.currentTotalBalance)}</span></div>
@@ -559,15 +551,14 @@ Recommendation: ${results.recommendation}`;
       {activeTab === "realApr" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-4">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Percent className="h-5 w-5 text-emerald-500" /> Real Effective APR &amp; Max Fee Threshold Analysis
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Real Effective APR &amp; Max Fee Threshold Analysis
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Upfront fees increase your actual cost of borrowing. Real APR incorporates origination fees amortized over your loan term.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-sans tabular-nums text-xs">
             <div className="bg-zinc-50 dark:bg-zinc-800/40 p-5 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-2">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 text-sm block">Nominal APR</span>
               <div className="text-3xl font-extrabold text-blue-600">{results.consolidationApr.toFixed(2)}%</div>
@@ -593,15 +584,14 @@ Recommendation: ${results.recommendation}`;
       {activeTab === "balTransfer" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-4">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Zap className="h-5 w-5 text-amber-500" /> 0% Intro APR Balance Transfer Card Alternative
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">0% Intro APR Balance Transfer Card Alternative
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Compare your consolidation loan against transferring your debt to a 0% intro APR credit card with a 3% transfer fee.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 font-sans tabular-nums text-xs">
             <div className="bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-indigo-900 dark:text-indigo-200 text-sm block border-b pb-1">Fixed Consolidation Loan</span>
               <div>Term Duration: <span className="font-bold">{results.termMonths} Months</span></div>
@@ -619,7 +609,7 @@ Recommendation: ${results.recommendation}`;
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-amber-600 to-amber-700 text-white p-4 rounded-xl text-xs flex justify-between items-center font-mono shadow-sm">
+          <div className="bg-gradient-to-r from-amber-600 to-amber-700 text-white p-4 rounded-xl text-xs flex justify-between items-center font-sans tabular-nums shadow-sm">
             <div>
               <span className="text-amber-100 block text-[10px] uppercase font-semibold">0% Balance Transfer Savings vs Consolidation</span>
               <span className="text-base font-extrabold">{fmt(results.consolidationTotalCost - results.btTotalCost)} Cheaper!</span>
@@ -635,8 +625,7 @@ Recommendation: ${results.recommendation}`;
       {/* TAB 4: VISUAL COST BREAKDOWN & CHARTS */}
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-blue-500" /> Total Cost &amp; Interest Paid Comparison Chart
+          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Total Cost &amp; Interest Paid Comparison Chart
           </h3>
 
           <div className="h-64 w-full">
@@ -659,8 +648,7 @@ Recommendation: ${results.recommendation}`;
       {activeTab === "schedule" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-purple-500" /> Side-by-Side Monthly Amortization Schedule
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Side-by-Side Monthly Amortization Schedule
             </h3>
 
             <div className="flex items-center gap-2">
@@ -681,7 +669,7 @@ Recommendation: ${results.recommendation}`;
                   <th className="p-2.5 text-right text-indigo-600">Consolidation Pmt</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-sans tabular-nums">
                 {results.consolidationSchedule.slice(0, 36).map((r) => {
                   const cRow = results.currentSchedule.find((c) => c.month === r.month) || { balance: 0, payment: 0 };
                   return (

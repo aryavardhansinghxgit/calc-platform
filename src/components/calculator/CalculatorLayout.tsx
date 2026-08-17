@@ -8,6 +8,7 @@ import { CalculatorModuleDefinition, getCalculatorsByCategory, searchCalculators
 import { CalculationResult } from "@/lib/calculator-engine/types";
 import { CalculatorEngine } from "@/lib/calculator-engine/engine";
 import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
+import { getTenHighQualityFaqs } from "@/lib/calculator-engine/faq-generator";
 import { CalculatorForm } from "./CalculatorForm";
 import { CalculatorResult } from "./CalculatorResult";
 import { FormulaSection } from "./FormulaSection";
@@ -164,15 +165,15 @@ import { generateGenericReportData } from "@/lib/report-generator/generic-report
 // Lazy load heavy chart components
 const MortgagePieChart = dynamic(() => import("./charts/MortgagePieChart").then((m) => m.MortgagePieChart), {
   ssr: false,
-  loading: () => <div className="h-40 flex items-center justify-center text-xs text-zinc-400 font-mono">Loading chart...</div>,
+  loading: () => <div className="h-40 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">Loading chart...</div>,
 });
 const BalanceLineChart = dynamic(() => import("./charts/BalanceLineChart").then((m) => m.BalanceLineChart), {
   ssr: false,
-  loading: () => <div className="h-40 flex items-center justify-center text-xs text-zinc-400 font-mono">Loading line chart...</div>,
+  loading: () => <div className="h-40 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">Loading line chart...</div>,
 });
 const AmortizationAreaChart = dynamic(() => import("./charts/AmortizationAreaChart").then((m) => m.AmortizationAreaChart), {
   ssr: false,
-  loading: () => <div className="h-40 flex items-center justify-center text-xs text-zinc-400 font-mono">Loading area chart...</div>,
+  loading: () => <div className="h-40 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">Loading area chart...</div>,
 });
 
 export interface CalculatorLayoutProps {
@@ -193,21 +194,33 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const [sidebarQuery, setSidebarQuery] = useState("");
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [savedItems, setSavedItems] = useState<Array<{ id: string; title: string; primaryResult: string; timestamp: string }>>([]);
+  const [copied, setCopied] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  useEffect(() => {
+  const handleCopyResult = () => {
     try {
-      const stored = localStorage.getItem(`saved_calc_${definition.id}`);
-      if (stored) {
-        setSavedItems(JSON.parse(stored));
-      }
-    } catch (e) { }
-  }, [definition.id]);
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (e) {}
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({ title: definition.title, url: window.location.href }).catch(() => {});
+    } else {
+      handleCopyResult();
+    }
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   const handleSaveCalculation = () => {
     if (!calculationResult.success) return;
     const firstOutput = definition.outputs[0];
-    const primaryResult = firstOutput ? `${firstOutput.label}: ${calculationResult.formatted[firstOutput.name] || calculationResult.outputs[firstOutput.name]}` : "Calculated Result";
+    const primaryResult = firstOutput ? `${firstOutput.label}: ${calculationResult.formatted[firstOutput.name] || (calculationResult.data ? calculationResult.data[firstOutput.name] : "")}` : "Calculated Result";
     const newItem = {
       id: Date.now().toString(),
       title: definition.title,
@@ -397,7 +410,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const CustomChart = definition.ChartComponent;
 
   return (
-    <div className="space-y-3 max-w-7xl mx-auto py-1">
+    <div className="space-y-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1">
       {/* 1. Accessible Breadcrumbs Navigation */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
         <Link
@@ -417,15 +430,15 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         <span className="font-medium text-zinc-800 dark:text-zinc-200 truncate">{definition.title}</span>
       </nav>
 
-      {/* 2. Page Header & Quick Layout Grid (Col-8 Main | Col-4 Sidebar matching Screen 2) */}
-      <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        {/* Main Interactive Calculator Area (Col 8) */}
-        <div className="min-w-0 lg:col-span-8 space-y-4">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+      {/* 2. Page Header & Quick Layout Grid (Col-9 Main | Col-3 Sidebar) */}
+      <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Main Interactive Calculator Area (Col 9) */}
+        <div className="min-w-0 lg:col-span-9 space-y-4">
+          <div className="bg-slate-50 dark:bg-slate-900/50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
+            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
               {definition.title}
             </h1>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 max-w-2xl leading-normal">
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 max-w-xl leading-normal font-medium">
               {definition.description}
             </p>
           </div>
@@ -648,7 +661,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                           size="sm"
                           onClick={() => {
                             if (calculationResult.success) {
-                              const summary = definition.outputs.map(o => `${o.label}: ${calculationResult.formatted[o.name] || calculationResult.outputs[o.name]}`).join(" | ");
+                              const summary = definition.outputs.map(o => `${o.label}: ${calculationResult.formatted[o.name] || (calculationResult.data ? calculationResult.data[o.name] : "")}`).join(" | ");
                               navigator.clipboard.writeText(summary);
                             }
                           }}
@@ -682,7 +695,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                         </div>
                         <div className="space-y-1.5 max-h-36 overflow-y-auto">
                           {savedItems.map((item) => (
-                            <div key={item.id} className="p-2 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-mono">
+                            <div key={item.id} className="p-2 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-sans tabular-nums">
                               <span className="font-bold text-zinc-800 dark:text-zinc-200 truncate">{item.primaryResult}</span>
                               <button onClick={() => handleDeleteSavedItem(item.id)} className="text-zinc-400 hover:text-red-500 p-0.5" title="Delete">
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -703,63 +716,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
               </div>
             )}
           </CalculatorErrorBoundary>
-
-          {/* Collapsible Sections Below Main Calculator */}
-          <div className="space-y-2 pt-1">
-
-            {/* Formula */}
-            {definition.formulaDescription && (
-              <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden group">
-                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between gap-2 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
-                  <span className="min-w-0 flex flex-1 items-center gap-2">
-                    <CalcIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Formula & Calculation Method
-                  </span>
-                  <span className="text-[10px] text-blue-600 dark:text-blue-400 group-open:hidden font-mono">Expand +</span>
-                  <span className="text-[10px] text-zinc-400 hidden group-open:inline font-mono">Collapse -</span>
-                </summary>
-                <div className="px-4 pb-4 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                  <FormulaSection
-                    formula={definition.formulaDescription}
-                    explanation={`How ${definition.title} calculations work.`}
-                  />
-                </div>
-              </details>
-            )}
-
-            {/* Educational Content */}
-            {CustomContent && (
-              <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden group">
-                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between gap-2 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
-                  <span className="min-w-0 flex flex-1 items-center gap-2">
-                    <BookOpen className="h-4 w-4 text-blue-600 dark:text-blue-400" /> How {definition.title} Works — Guide & Examples
-                  </span>
-                  <span className="text-[10px] text-blue-600 dark:text-blue-400 group-open:hidden font-mono">Expand +</span>
-                  <span className="text-[10px] text-zinc-400 hidden group-open:inline font-mono">Collapse -</span>
-                </summary>
-                <div className="px-4 pb-4 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                  <CustomContent />
-                </div>
-              </details>
-            )}
-
-            {/* Related Calculators */}
-            <details className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden group">
-                <summary className="px-4 py-2.5 text-xs font-bold text-zinc-900 dark:text-zinc-200 select-none cursor-pointer flex items-center justify-between gap-2 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 transition-colors">
-                  <span className="min-w-0 flex flex-1 items-center gap-2">
-                  <CalcIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Related Calculators
-                </span>
-                <span className="text-[10px] text-blue-600 dark:text-blue-400 group-open:hidden font-mono">Expand +</span>
-                <span className="text-[10px] text-zinc-400 hidden group-open:inline font-mono">Collapse -</span>
-              </summary>
-              <div className="px-4 pb-4 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                <RelatedCalculators currentId={definition.id} category={definition.category} />
-              </div>
-            </details>
-          </div>
         </div>
 
-        {/* Right Sidebar: Quick Navigation & Search Index (Col 4 matching Screen 2, 3 & 5) */}
-        <aside className="min-w-0 lg:col-span-4 space-y-4">
+        {/* Right Sidebar: Quick Navigation & Search Index (Sticky Top 20) */}
+        <aside className="min-w-0 lg:col-span-3 sticky top-20 space-y-4">
           {/* Quick Search and Category Index */}
           <div className="bg-card text-card-foreground border border-border rounded-xl p-3.5 shadow-xs space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
@@ -781,7 +741,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                 <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   {definition.category} Calculators
                 </h3>
-                <span className="text-[10px] font-mono text-current bg-muted px-1.5 py-0.5 rounded">
+                <span className="text-[10px] font-sans tabular-nums text-current bg-muted px-1.5 py-0.5 rounded">
                   {filteredSidebarCalculators.length}
                 </span>
               </div>
@@ -820,6 +780,63 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             </div>
           </div>
         </aside>
+      </div>
+
+      {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs text-slate-900 dark:text-slate-100">
+        {/* Formula & Calculation Method */}
+        {definition.formulaDescription && (
+          <div className="space-y-2">
+            <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              Formula & Calculation Method
+            </h3>
+            <FormulaSection
+              formula={definition.formulaDescription}
+              explanation={`How ${definition.title} calculations work.`}
+            />
+          </div>
+        )}
+
+        {/* Educational Content & Examples */}
+        {CustomContent && (
+          <div className="space-y-3 text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
+            <div className="prose prose-slate dark:prose-invert max-w-none text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
+              <CustomContent />
+            </div>
+          </div>
+        )}
+
+        {/* 10 High-Quality Frequently Asked Questions (Excluded for Math Category per AGENTS.md policy) */}
+        {definition.category !== "Math" && (
+          <div className="space-y-3">
+            <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              Frequently Asked Questions
+            </h3>
+            <div className="space-y-3">
+              {(definition.faqs && definition.faqs.length >= 5
+                ? definition.faqs
+                : getTenHighQualityFaqs(definition.title, definition.category)
+              ).slice(0, 10).map((faq, idx) => (
+                <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                  <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                    {faq.question}
+                  </h4>
+                  <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed font-medium">
+                    {faq.answer}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Related Calculators */}
+        <div className="space-y-2">
+          <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+            Related Calculators
+          </h3>
+          <RelatedCalculators currentId={definition.id} category={definition.category} />
+        </div>
       </div>
 
       {/* Generic Report Modal */}

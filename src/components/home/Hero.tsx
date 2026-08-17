@@ -16,7 +16,7 @@ export function Hero() {
         {/* Left Column (Col 7 - Primary Content Area) */}
         <div className="min-w-0 lg:col-span-7 space-y-4">
           <div>
-            <span className="text-[11px] font-mono font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 uppercase tracking-wider">
+            <span className="text-[11px] font-sans tabular-nums font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 uppercase tracking-wider">
               Free 160+ Calculators
             </span>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground mt-1.5 leading-tight">

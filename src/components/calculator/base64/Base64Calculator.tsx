@@ -372,7 +372,7 @@ export function Base64Calculator() {
               }`}
             >
               <span>Standard</span>
-              <span className={`px-1.5 py-0.2 text-[10px] font-mono rounded ${variant === "standard" ? "bg-blue-700 text-white" : "bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300"}`}>
+              <span className={`px-1.5 py-0.2 text-[10px] font-sans tabular-nums rounded ${variant === "standard" ? "bg-blue-700 text-white" : "bg-zinc-200 dark:bg-zinc-700 text-slate-800 dark:text-slate-200 font-semibold"}`}>
                 + /
               </span>
             </button>
@@ -385,7 +385,7 @@ export function Base64Calculator() {
               }`}
             >
               <span>URL-Safe</span>
-              <span className={`px-1.5 py-0.2 text-[10px] font-mono rounded ${variant === "urlsafe" ? "bg-purple-700 text-white" : "bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-300"}`}>
+              <span className={`px-1.5 py-0.2 text-[10px] font-sans tabular-nums rounded ${variant === "urlsafe" ? "bg-purple-700 text-white" : "bg-zinc-200 dark:bg-zinc-700 text-slate-800 dark:text-slate-200 font-semibold"}`}>
                 - _
               </span>
             </button>
@@ -458,7 +458,7 @@ export function Base64Calculator() {
                   <FileText className="h-3.5 w-3.5 text-blue-600" />
                   <span>{opMode === "encode" ? "Raw Input Text" : "Base64 Input String"}</span>
                 </label>
-                <span className="text-[10px] font-mono text-zinc-400">
+                <span className="text-[10px] font-sans tabular-nums text-zinc-400">
                   {analytics.inputChars} chars | {analytics.inputBytes} B
                 </span>
               </div>
@@ -468,7 +468,7 @@ export function Base64Calculator() {
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder={opMode === "encode" ? "Type or paste text to encode..." : "Paste Base64 string to decode..."}
                 rows={10}
-                className="w-full flex-1 p-3 text-xs font-mono bg-zinc-50/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-600 resize-y"
+                className="w-full flex-1 p-3 text-xs font-sans tabular-nums bg-zinc-50/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-600 resize-y"
               />
             </div>
 
@@ -486,7 +486,7 @@ export function Base64Calculator() {
                     {variant === "standard" ? "Standard (+ /)" : "URL-Safe (- _)"}
                   </span>
                 </label>
-                <span className="text-[10px] font-mono text-zinc-400">
+                <span className="text-[10px] font-sans tabular-nums text-zinc-400">
                   {analytics.outputChars} chars | {analytics.outputBytes} B
                 </span>
               </div>
@@ -506,7 +506,7 @@ export function Base64Calculator() {
                   value={textResult.output}
                   placeholder="Output will appear dynamically..."
                   rows={10}
-                  className="w-full flex-1 p-3 text-xs font-mono bg-zinc-50/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none resize-y text-emerald-700 dark:text-emerald-400"
+                  className="w-full flex-1 p-3 text-xs font-sans tabular-nums bg-zinc-50/50 dark:bg-zinc-950/50 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none resize-y text-emerald-700 dark:text-emerald-400"
                 />
               )}
 
@@ -571,7 +571,7 @@ export function Base64Calculator() {
               <Upload className="h-6 w-6" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
                 {selectedFile ? `Selected File: ${selectedFile.name}` : "Drag & Drop Any File Here"}
               </h3>
               <p className="text-xs text-zinc-500">
@@ -633,7 +633,7 @@ export function Base64Calculator() {
                 readOnly
                 value={formattedFileOutput}
                 rows={8}
-                className="w-full p-3 text-xs font-mono bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none text-purple-700 dark:text-purple-400"
+                className="w-full p-3 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:outline-none text-purple-700 dark:text-purple-400"
               />
 
               <div className="flex justify-end gap-2">
@@ -657,7 +657,7 @@ export function Base64Calculator() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
           <span className="text-[10px] text-zinc-400 font-bold block uppercase">Input Size</span>
-          <span className="text-base font-black font-mono text-zinc-900 dark:text-zinc-100 block">
+          <span className="text-base font-black font-sans tabular-nums text-zinc-900 dark:text-zinc-100 block">
             {analytics.inputBytes} Bytes
           </span>
           <span className="text-[10px] text-zinc-400">{analytics.inputChars} characters</span>
@@ -665,7 +665,7 @@ export function Base64Calculator() {
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
           <span className="text-[10px] text-zinc-400 font-bold block uppercase">Encoded Size</span>
-          <span className="text-base font-black font-mono text-blue-600 block">
+          <span className="text-base font-black font-sans tabular-nums text-blue-600 block">
             {analytics.outputBytes} Bytes
           </span>
           <span className="text-[10px] text-zinc-400">{analytics.outputChars} characters</span>
@@ -673,7 +673,7 @@ export function Base64Calculator() {
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
           <span className="text-[10px] text-zinc-400 font-bold block uppercase">Overhead Expansion Ratio</span>
-          <span className={`text-base font-black font-mono block ${analytics.expansionRatio >= 0 ? "text-amber-600" : "text-emerald-600"}`}>
+          <span className={`text-base font-black font-sans tabular-nums block ${analytics.expansionRatio >= 0 ? "text-amber-600" : "text-emerald-600"}`}>
             {analytics.expansionRatio >= 0 ? `+${analytics.expansionRatio}%` : `${analytics.expansionRatio}%`}
           </span>
           <span className="text-[10px] text-zinc-400">Standard 4:3 size bloat</span>
@@ -681,7 +681,7 @@ export function Base64Calculator() {
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
           <span className="text-[10px] text-zinc-400 font-bold block uppercase">Line Breakdown</span>
-          <span className="text-base font-black font-mono text-purple-600 block">
+          <span className="text-base font-black font-sans tabular-nums text-purple-600 block">
             {analytics.lineCount} {analytics.lineCount === 1 ? "Line" : "Lines"}
           </span>
           <span className="text-[10px] text-zinc-400">{chunk76 ? "MIME 76-char chunked" : "Continuous stream"}</span>

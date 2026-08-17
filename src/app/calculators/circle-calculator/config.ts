@@ -1,51 +1,54 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateCircleCalculator } from "./calculator";
-import { circle_calculatorFaqs } from "./faq";
+import { CircleCalculator } from "@/components/calculator/circle/CircleCalculator";
+import { CircleContent } from "@/components/calculator/circle/CircleContent";
 
 export const circle_calculatorConfig: CalculatorModuleDefinition = {
   id: "circle-calculator",
-  title: "Circle Calculator",
+  title: "Circle Calculator & Circular Geometry Suite",
   slug: "circle-calculator",
   category: "Math",
   subcategory: "Geometry",
-  description: "Calculate circle radius, diameter, circumference, and area from any single known dimension.",
+  description: "Calculate circle radius, diameter, circumference, area, sector arc length, segment chord & sagitta, annulus ring area, circle equations, and 3-point circumcircles.",
   iconName: "Circle",
   featured: true,
-  keywords: ["circle calculator","circumference","circle area","radius","diameter"],
+  keywords: ["circle calculator", "circumference calculator", "circle area", "arc length", "sector area", "chord sagitta", "circle equation"],
   priority: 1,
-  relatedCalculators: ["area-calculator","volume-calculator"],
-  formulaDescription: "Area = πr²; Circumference = 2πr; Diameter = 2r",
-  faqs: circle_calculatorFaqs,
+  relatedCalculators: ["area-calculator", "volume-calculator", "triangle-calculator"],
+  formulaDescription: "Area A = πr²; Circumference C = 2πr; Sector L = (θ/360)2πr",
+  faqs: [],
+  CustomComponent: CircleCalculator,
+  ContentComponent: CircleContent,
   inputs: [
-  {
-    "name": "radius",
-    "label": "Radius (r)",
-    "type": "number",
-    "defaultValue": 5,
-    "min": 0.01,
-    "max": 10000,
-    "step": 0.5
-  }
-],
+    {
+      "name": "radius",
+      "label": "Radius (r)",
+      "type": "number",
+      "defaultValue": 5,
+      "min": 0.01,
+      "max": 10000,
+      "step": 0.5
+    }
+  ],
   outputs: [
-  {
-    "name": "area",
-    "label": "Circle Area",
-    "format": "number",
-    "highlight": true
-  },
-  {
-    "name": "circumference",
-    "label": "Circumference",
-    "format": "number"
-  },
-  {
-    "name": "diameter",
-    "label": "Diameter",
-    "format": "number"
-  }
-],
-  calculate: calculateCircleCalculator,
+    {
+      "name": "area",
+      "label": "Circle Area",
+      "format": "number",
+      "highlight": true
+    },
+    {
+      "name": "circumference",
+      "label": "Circumference",
+      "format": "number"
+    },
+    {
+      "name": "diameter",
+      "label": "Diameter",
+      "format": "number"
+    }
+  ],
+  calculate: calculateCircleCalculator
 };
 
 export default circle_calculatorConfig;

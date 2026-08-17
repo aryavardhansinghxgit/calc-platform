@@ -92,7 +92,7 @@ export function SearchBar({
               Calculator suggestions
             </span>
             {searchResults.length > 0 && (
-              <span className="text-[10px] font-mono font-semibold text-blue-600 dark:text-blue-400">
+              <span className="text-[10px] font-sans tabular-nums font-semibold text-blue-600 dark:text-blue-400">
                 {searchResults.length} matches
               </span>
             )}

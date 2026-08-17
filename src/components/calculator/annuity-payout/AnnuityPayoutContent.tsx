@@ -91,52 +91,52 @@ export function AnnuityPayoutContent() {
   ];
 
   return (
-    <div className="mt-12 space-y-12 border-t border-zinc-200 dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
+    <div className="mt-12 space-y-12  dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
       {/* Article Header */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Comprehensive Retirement Income &amp; Annuity Payout Guide
         </div>
-        <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
+        <h1 className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
           Annuity Payout Calculator Guide: Optimizing Guaranteed Retirement Income
         </h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
+        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
           Transitioning from accumulating retirement wealth to drawing down sustainable income is one of the most vital financial shifts in retirement planning. An annuity payout converts an accumulated balance into predictable, guaranteed income.
         </p>
       </section>
 
       {/* Main Educational Sections with Exact Requested H2 Headers */}
-      <div className="space-y-8 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+      <div className="space-y-8 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">What Is an Annuity Payout?</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">What Is an Annuity Payout?</h2>
           <p>
             An annuity payout is a series of recurring financial disbursements made by an insurance company to a contract owner (annuitant). Payouts can be structured for a fixed duration or guaranteed for life, providing income security.
           </p>
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">How an Annuity Payout Calculator Works</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">How an Annuity Payout Calculator Works</h2>
           <p>
             An Annuity Payout Calculator applies time-value-of-money annuity formulas to determine periodic income, total interest earned, and portfolio depletion schedules based on principal, interest rate, term length, and payout frequency.
           </p>
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Fixed Length vs Fixed Payment Payouts</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Fixed Length vs Fixed Payment Payouts</h2>
           <p>
             In a <strong>Fixed Length Payout</strong>, you choose a set term (such as 10, 15, or 20 years), and the calculator solves for the monthly income check. In a <strong>Fixed Payment Payout</strong>, you specify your required monthly dollar check, and the calculator determines how many years and months funds will last before depletion.
           </p>
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Immediate vs Deferred Annuities</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Immediate vs Deferred Annuities</h2>
           <p>
             Single Premium Immediate Annuities (SPIAs) begin generating monthly income checks almost immediately after purchase (within 1 to 12 months). Deferred Annuities accumulate earnings tax-deferred during a holding phase before payouts commence.
           </p>
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Qualified vs Non-Qualified Annuities</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Qualified vs Non-Qualified Annuities</h2>
           <p>
             Qualified annuities are funded with pre-tax dollars (such as IRA or 401k rollovers); their entire payout is taxable as ordinary income. Non-qualified annuities are purchased with after-tax dollars; only accumulated earnings are taxed upon withdrawal under IRS LIFO rules.
           </p>
@@ -144,66 +144,66 @@ export function AnnuityPayoutContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-y border-zinc-200 dark:border-zinc-800 py-6">
           <div>
-            <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">Accumulation Phase</h2>
+            <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 mb-1">Accumulation Phase</h2>
             <p className="text-xs">The initial growth period where premium deposits compound tax-deferred.</p>
           </div>
           <div>
-            <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">Annuitization Phase</h2>
+            <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 mb-1">Annuitization Phase</h2>
             <p className="text-xs">The formal conversion point where accumulated principal transitions into income streams.</p>
           </div>
           <div>
-            <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-1">Payout Phase</h2>
+            <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400 mb-1">Payout Phase</h2>
             <p className="text-xs">The distribution period where guaranteed periodic checks are disbursed to the annuitant.</p>
           </div>
         </div>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Early Withdrawal Rules &amp; Penalties</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Early Withdrawal Rules &amp; Penalties</h2>
           <p>
             Withdrawing taxable earnings from an annuity contract prior to age 59½ triggers a 10% IRS early withdrawal tax penalty on top of ordinary income tax rates.
           </p>
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">1035 Exchange &amp; Partial 1035 Exchange</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">1035 Exchange &amp; Partial 1035 Exchange</h2>
           <p>
             Under Section 1035 of the Internal Revenue Code, contract owners can exchange an existing annuity for a new annuity tax-free. A Partial 1035 Exchange allows splitting an existing annuity tax-free into multiple contracts.
           </p>
         </section>
 
         {/* Types of Annuity Payout Options with H3 Headings */}
-        <section className="space-y-4 border-t border-zinc-200 dark:border-zinc-800 pt-6">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Types of Annuity Payout Options</h2>
+        <section className="space-y-4  dark:border-zinc-800 pt-6">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Types of Annuity Payout Options</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800">
-              <h3 className="text-sm font-bold text-indigo-600 dark:text-indigo-400">Life Only</h3>
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">Life Only</h3>
               <p className="text-xs mt-1">Highest monthly check; pays guaranteed income for life, but payments cease immediately upon death.</p>
             </div>
             <div className="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800">
-              <h3 className="text-sm font-bold text-indigo-600 dark:text-indigo-400">Joint and Survivor</h3>
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">Joint and Survivor</h3>
               <p className="text-xs mt-1">Guarantees income for the lifetimes of both primary annuitant and surviving spouse (50%-100% payout).</p>
             </div>
             <div className="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800">
-              <h3 className="text-sm font-bold text-indigo-600 dark:text-indigo-400">Life with Period Certain</h3>
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">Life with Period Certain</h3>
               <p className="text-xs mt-1">Pays for life with a guaranteed minimum term (e.g. 10 or 20 years) passing to beneficiaries if death occurs early.</p>
             </div>
             <div className="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800">
-              <h3 className="text-sm font-bold text-indigo-600 dark:text-indigo-400">Lump Sum Withdrawal</h3>
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">Lump Sum Withdrawal</h3>
               <p className="text-xs mt-1">Withdraws the full account value at once, providing maximum liquidity but triggering immediate tax liability.</p>
             </div>
             <div className="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800">
-              <h3 className="text-sm font-bold text-indigo-600 dark:text-indigo-400">Fixed Period</h3>
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">Fixed Period</h3>
               <p className="text-xs mt-1">Disburses income for a specified number of years regardless of lifetime longevity.</p>
             </div>
             <div className="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800">
-              <h3 className="text-sm font-bold text-indigo-600 dark:text-indigo-400">Fixed Amount</h3>
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">Fixed Amount</h3>
               <p className="text-xs mt-1">Pays a fixed dollar check each month until accumulated principal and interest are fully exhausted.</p>
             </div>
           </div>
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Taxation of Annuities &amp; Inflation Impact</h2>
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Taxation of Annuities &amp; Inflation Impact</h2>
           <p>
             Non-qualified annuity payouts utilize the IRS Exclusion Ratio to separate taxable earnings from non-taxable principal returns. Inflation erodes real purchasing power over multi-decade retirements; electing Cost-of-Living Adjustments (COLA) helps mitigate inflation risk.
           </p>
@@ -211,10 +211,10 @@ export function AnnuityPayoutContent() {
       </div>
 
       {/* 15+ FAQ Accordion Section */}
-      <section className="space-y-6 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+      <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
-          <HelpCircle className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
-          <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <h2 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
             Frequently Asked Questions (15 Key Payout Insights)
           </h2>
         </div>
@@ -233,18 +233,18 @@ export function AnnuityPayoutContent() {
                   className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-mono text-xs font-bold shrink-0">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
                     {faq.q}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 text-zinc-500 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 text-slate-900 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                   />
                 </button>
 
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed border-t border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed  dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
                     {faq.a}
                   </div>
                 )}

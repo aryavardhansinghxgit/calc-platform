@@ -109,9 +109,7 @@ export function AutoLoanAmortizationTable({ monthlySchedule, annualSchedule }: A
       {/* Header Controls Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-100 dark:border-zinc-800">
         <div>
-          <h3 className="text-base font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Clock className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-            Amortization Schedule
+          <h3 className="text-base font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">Amortization Schedule
           </h3>
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
             Detailed breakdown of principal, interest, and remaining balance over time.
@@ -267,7 +265,7 @@ export function AutoLoanAmortizationTable({ monthlySchedule, annualSchedule }: A
                 paginatedMonthlyRows.map((r) => (
                   <TableRow
                     key={`m-${r.month}`}
-                    className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 border-zinc-100 dark:border-zinc-800/60 font-mono text-xs"
+                    className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 border-zinc-100 dark:border-zinc-800/60 font-sans tabular-nums text-xs"
                   >
                     <TableCell className="font-semibold text-zinc-900 dark:text-zinc-100 py-2">
                       Mo {r.month}
@@ -314,7 +312,7 @@ export function AutoLoanAmortizationTable({ monthlySchedule, annualSchedule }: A
               {annualSchedule.map((yr) => (
                 <TableRow
                   key={`yr-${yr.year}`}
-                  className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 border-zinc-100 dark:border-zinc-800/60 font-mono text-xs"
+                  className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 border-zinc-100 dark:border-zinc-800/60 font-sans tabular-nums text-xs"
                 >
                   <TableCell className="font-semibold text-zinc-900 dark:text-zinc-100 py-2.5">
                     Year {yr.year}

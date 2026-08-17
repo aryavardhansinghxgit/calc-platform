@@ -30,7 +30,7 @@ export function RefinanceScenarioComparer({ scenarios, onDelete }: RefinanceScen
               </CardDescription>
             </div>
           </div>
-          <span className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">
+          <span className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">
             {scenarios.length} Saved Scenarios
           </span>
         </div>
@@ -56,7 +56,7 @@ export function RefinanceScenarioComparer({ scenarios, onDelete }: RefinanceScen
                 </button>
               </div>
 
-              <div className="space-y-1.5 text-xs font-mono">
+              <div className="space-y-1.5 text-xs font-sans tabular-nums">
                 <div className="flex justify-between">
                   <span className="text-zinc-500 text-[11px]">Score:</span>
                   <span className="font-bold text-blue-600 dark:text-blue-400">

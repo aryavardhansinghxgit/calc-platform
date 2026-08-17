@@ -74,20 +74,18 @@ export function SavingsContent() {
   ];
 
   return (
-    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10  dark:border-zinc-800 pt-8">
       <header>
-        <h2 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
-          <BookOpen className="h-6 w-6 text-blue-600" />
-          Comprehensive Savings & Compound Wealth Guide
+        <h2 className="text-2xl font-black text-blue-600 dark:text-blue-400 tracking-tight flex items-center gap-2">Comprehensive Savings & Compound Wealth Guide
         </h2>
-        <p className="text-zinc-500 dark:text-zinc-400 text-xs">
+        <p className="text-slate-900 dark:text-slate-100 text-xs">
           Master compound interest, contribution growth strategies, tax drag, inflation defense, and retirement planning.
         </p>
       </header>
 
       {/* SECTION 1 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">What Is a Savings Calculator?</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">What Is a Savings Calculator?</h2>
         <p>
           A <strong>savings calculator</strong> is a sophisticated financial planning tool designed to simulate the future growth of monetary reserves over time. Whether you are building an emergency cash fund, saving for a home down payment, planning a child&apos;s college education, or building a retirement nest egg, a savings calculator models how periodic cash contributions interact with compound interest rates.
         </p>
@@ -98,11 +96,11 @@ export function SavingsContent() {
 
       {/* SECTION 2 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">How Savings Grow Over Time</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">How Savings Grow Over Time</h2>
         <p>
           Savings growth is driven by three interconnected variables: <strong>Time ($t$)</strong>, <strong>Contributions ($PMT$)</strong>, and <strong>Rate of Return ($r$)</strong>. When funds are deposited into a compound interest-bearing account, growth follows an exponential curve rather than a linear line.
         </p>
-        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 font-mono text-xs text-blue-600 dark:text-blue-400">
+        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800 font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400">
           {"A = P(1 + r/n)^(nt) + PMT × [((1 + r/n)^(nt) - 1) / (r/n)]"}
         </div>
         <p>
@@ -112,11 +110,11 @@ export function SavingsContent() {
 
       {/* SECTION 3 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Compound Interest Explained</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Compound Interest Explained</h2>
         <p>
           Albert Einstein famously called compound interest the &quot;eighth wonder of the world.&quot; Compounding occurs when interest earned on a principal balance is reinvested, causing subsequent interest calculations to apply to a continually expanding baseline.
         </p>
-        <h3 className="text-base font-semibold text-zinc-800 dark:text-zinc-200">The Power of Compounding Frequencies</h3>
+        <h3 className="text-base font-semibold text-blue-600 dark:text-blue-400">The Power of Compounding Frequencies</h3>
         <p>
           The frequency with which interest is compounded determines how rapidly your balance grows:
         </p>
@@ -129,7 +127,7 @@ export function SavingsContent() {
 
       {/* SECTION 4 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Simple Interest vs Compound Interest</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Simple Interest vs Compound Interest</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
@@ -162,7 +160,7 @@ export function SavingsContent() {
 
       {/* SECTION 5 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Importance of Regular Contributions</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Importance of Regular Contributions</h2>
         <p>
           While an initial deposit establishes a baseline, making consistent recurring contributions (monthly or annual) is the single most controllable factor in wealth accumulation. Regular deposits Dollar-Cost Average (DCA) your savings efforts and smooth out market volatility when investing in yield-bearing assets.
         </p>
@@ -170,7 +168,7 @@ export function SavingsContent() {
 
       {/* SECTION 6 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Monthly vs Annual Contributions</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Monthly vs Annual Contributions</h2>
         <p>
           Saving $500 every month produces a higher ending balance than depositing $6,000 at the end of the year. This is because monthly payments enter the account early, earning compounding returns throughout all 12 months of the calendar year.
         </p>
@@ -178,7 +176,7 @@ export function SavingsContent() {
 
       {/* SECTION 7 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Contribution Growth Strategy</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Contribution Growth Strategy</h2>
         <p>
           As your career advances and your income grows, your monthly savings should increase proportionately. Increasing your recurring deposit by just 3% to 5% each year offsets cost-of-living increases and accelerates your path toward financial independence.
         </p>
@@ -186,7 +184,7 @@ export function SavingsContent() {
 
       {/* SECTION 8 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Tax Impact on Savings</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Tax Impact on Savings</h2>
         <p>
           In taxable savings accounts, interest earned is treated as ordinary taxable income. A 24% marginal tax rate drag reduces a nominal 5.0% interest yield down to an effective post-tax return of 3.8%. Utilizing tax-advantaged accounts like Roth IRAs, 401(k)s, or Health Savings Accounts (HSAs) shields your compounding interest from annual tax drag.
         </p>
@@ -194,7 +192,7 @@ export function SavingsContent() {
 
       {/* SECTION 9 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Inflation and Purchasing Power</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Inflation and Purchasing Power</h2>
         <p>
           Inflation represents the gradual decrease in purchasing power over time. If inflation averages 2.5% annually, a future nominal balance of $500,000 in 20 years will possess an inflation-adjusted purchasing power equivalent to roughly $305,000 in today&apos;s dollars.
         </p>
@@ -202,7 +200,7 @@ export function SavingsContent() {
 
       {/* SECTION 10 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">APY vs APR</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">APY vs APR</h2>
         <p>
           The <strong>Annual Percentage Rate (APR)</strong> states the simple rate of interest, whereas the <strong>Annual Percentage Yield (APY)</strong> incorporates intra-year compounding. For example, a 5.00% APR compounding monthly yields an APY of 5.12%.
         </p>
@@ -210,18 +208,18 @@ export function SavingsContent() {
 
       {/* SECTION 11 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Effective Annual Rate (EAR)</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Effective Annual Rate (EAR)</h2>
         <p>
           The Effective Annual Rate (EAR) formula allows investors to accurately compare accounts with different compounding schedules:
         </p>
-        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl font-mono text-xs text-purple-600 dark:text-purple-400">
+        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400">
           {"EAR = (1 + r/n)^n - 1"}
         </div>
       </section>
 
       {/* SECTION 12 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Emergency Fund Planning</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Emergency Fund Planning</h2>
         <p>
           Financial advisors recommend holding 3 to 6 months of essential living expenses in a High-Yield Savings Account. An emergency fund provides a liquidity buffer against unexpected job changes, medical bills, or vehicle repairs.
         </p>
@@ -229,7 +227,7 @@ export function SavingsContent() {
 
       {/* SECTION 13 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Savings Goals</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Savings Goals</h2>
         <p>
           Categorize your savings goals into short-term (under 2 years), medium-term (2–5 years), and long-term (5+ years) horizons to match risk profiles with liquidity requirements.
         </p>
@@ -237,7 +235,7 @@ export function SavingsContent() {
 
       {/* SECTION 14 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Retirement Savings</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Retirement Savings</h2>
         <p>
           Accumulating a retirement corpus requires long-term compounding. According to the 4% safe withdrawal rule, accumulating $1,000,000 yields an estimated $40,000 per year ($3,333/month) in inflation-adjusted retirement income.
         </p>
@@ -245,7 +243,7 @@ export function SavingsContent() {
 
       {/* SECTION 15 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">FIRE Movement and Savings</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">FIRE Movement and Savings</h2>
         <p>
           The <strong>FIRE (Financial Independence, Retire Early)</strong> movement emphasizes saving 50% or more of your annual income to achieve a net worth of 25 times your annual living expenses, enabling retirement decades before traditional age 65.
         </p>
@@ -253,7 +251,7 @@ export function SavingsContent() {
 
       {/* SECTION 16 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Best Savings Strategies</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Best Savings Strategies</h2>
         <ul className="list-disc pl-5 space-y-1">
           <li><strong>Automate Savings:</strong> Set up auto-transfers on payday before discretionary spending occurs (&quot;Pay Yourself First&quot;).</li>
           <li><strong>High-Yield Savings:</strong> Move cash out of traditional 0.01% accounts into 4.0%+ HYSA accounts.</li>
@@ -263,7 +261,7 @@ export function SavingsContent() {
 
       {/* SECTION 17 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Common Savings Mistakes</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Common Savings Mistakes</h2>
         <p>
           Avoid leaving excess cash in low-yielding checking accounts, failing to adjust savings for inflation, ignoring tax drag, or stopping contributions during temporary economic downturns.
         </p>
@@ -271,7 +269,7 @@ export function SavingsContent() {
 
       {/* SECTION 18 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">How Much Should You Save Each Month?</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">How Much Should You Save Each Month?</h2>
         <p>
           Following the 50/30/20 budgeting framework, allocate at least 20% of your take-home income toward savings, investments, and principal debt reduction.
         </p>
@@ -279,18 +277,18 @@ export function SavingsContent() {
 
       {/* SECTION 19 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Rule of 72</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Rule of 72</h2>
         <p>
           Divide 72 by your annual interest rate to determine the doubling period:
         </p>
-        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl font-mono text-xs text-emerald-600 dark:text-emerald-400">
+        <div className="bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400">
           {"Years to Double = 72 / Interest Rate (%)"}
         </div>
       </section>
 
       {/* SECTION 20 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">High Yield Savings Accounts</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">High Yield Savings Accounts</h2>
         <p>
           High-Yield Savings Accounts (HYSAs) offer FDIC insurance protection up to $250,000 per depositor while delivering competitive variable APYs that keep pace with Federal Reserve benchmark interest rates.
         </p>
@@ -298,16 +296,15 @@ export function SavingsContent() {
 
       {/* SECTION 21 */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">Savings Account vs Investments</h2>
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Savings Account vs Investments</h2>
         <p>
           Use savings accounts for capital preservation, emergency funds, and goals under 3 years. Use diversified investments (stocks, bonds, index funds) for goals exceeding 5 years to achieve higher growth rates.
         </p>
       </section>
 
       {/* FAQ ACCORDION SECTION */}
-      <section className="space-y-4 pt-6 border-t border-zinc-200 dark:border-zinc-800">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <HelpCircle className="h-5 w-5 text-blue-600" /> Frequently Asked Questions (FAQs)
+      <section className="space-y-4 pt-6  dark:border-zinc-800">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">Frequently Asked Questions (FAQs)
         </h2>
         <div className="space-y-2">
           {faqs.map((faq, idx) => (
@@ -325,7 +322,7 @@ export function SavingsContent() {
                 />
               </button>
               {openFaq === idx && (
-                <div className="p-3.5 pt-0 text-xs text-zinc-600 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800/60 leading-normal">
+                <div className="p-3.5 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800/60 leading-normal">
                   {faq.a}
                 </div>
               )}

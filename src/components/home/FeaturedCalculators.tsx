@@ -54,8 +54,7 @@ export function FeaturedCalculators({
       {/* Section Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg sm:text-xl font-extrabold tracking-tight text-foreground flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-primary" /> Premier Interactive Solvers
+          <h2 className="text-lg sm:text-xl font-extrabold tracking-tight text-foreground flex items-center gap-2">Premier Interactive Solvers
           </h2>
           <p className="text-xs text-muted-foreground mt-0.5">
             Switch tabs for instant real-time computation & data breakdown.

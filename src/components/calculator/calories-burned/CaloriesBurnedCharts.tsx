@@ -106,7 +106,7 @@ export function CaloriesBurnedActivityBarChart({ result }: CaloriesBurnedChartsP
           <h4 className="font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Activity Calorie Burn Comparison</h4>
           <p className="text-[11px] text-zinc-500">For {result.durationMinutes} mins at {result.weightLbs} lbs ({result.weightKg} kg)</p>
         </div>
-        <span className="font-mono font-bold text-amber-600 dark:text-amber-400">Active MET: {result.met}</span>
+        <span className="font-sans tabular-nums font-bold text-amber-600 dark:text-amber-400">Active MET: {result.met}</span>
       </div>
 
       <div className="space-y-2 pt-1 text-xs">
@@ -119,7 +119,7 @@ export function CaloriesBurnedActivityBarChart({ result }: CaloriesBurnedChartsP
                 <span className={`font-semibold ${isCurrent ? "text-amber-600 dark:text-amber-400 font-bold" : "text-zinc-800 dark:text-zinc-200"}`}>
                   {item.activityName} {isCurrent && "★"}
                 </span>
-                <span className="font-mono font-bold text-amber-600 dark:text-amber-400">{item.caloriesBurned} kcal</span>
+                <span className="font-sans tabular-nums font-bold text-amber-600 dark:text-amber-400">{item.caloriesBurned} kcal</span>
               </div>
               <div className="h-3 w-full bg-zinc-100 dark:bg-zinc-950 rounded-full overflow-hidden border border-zinc-200 dark:border-zinc-800">
                 <div

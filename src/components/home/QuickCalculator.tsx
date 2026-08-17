@@ -194,7 +194,7 @@ export function QuickCalculator() {
         </span>
         <button
           onClick={() => setIsRad(!isRad)}
-          className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-muted text-muted-foreground hover:text-foreground border border-border transition-colors uppercase cursor-pointer"
+          className="text-[10px] font-sans tabular-nums font-semibold px-2 py-0.5 rounded bg-muted text-muted-foreground hover:text-foreground border border-border transition-colors uppercase cursor-pointer"
           title="Click to toggle RAD/DEG"
         >
           {isRad ? "RAD" : "DEG"}
@@ -203,16 +203,16 @@ export function QuickCalculator() {
 
       {/* Screen Display */}
       <div className="bg-slate-950 text-slate-5 border border-slate-800 rounded-lg p-2.5 text-right shadow-inner flex flex-col justify-between min-h-[64px]">
-        <div className="text-[11px] font-mono text-slate-400 h-4 truncate">
+        <div className="text-[11px] font-sans tabular-nums text-slate-400 h-4 truncate">
           {expression || "\u00A0"}
         </div>
-        <div className="text-2xl font-mono font-bold text-emerald-400 tracking-wider truncate">
+        <div className="text-2xl font-sans tabular-nums font-bold text-emerald-400 tracking-wider truncate">
           {display}
         </div>
       </div>
 
       {/* Calculator 5x5 Keypad Grid */}
-      <div className="grid grid-cols-5 gap-1.5 text-xs font-mono select-none">
+      <div className="grid grid-cols-5 gap-1.5 text-xs font-sans tabular-nums select-none">
         {/* Row 1: sin, cos, tan, AC, Backspace */}
         <button onClick={() => handleFunction("sin")} className="p-2 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-semibold transition-colors active:scale-95">sin</button>
         <button onClick={() => handleFunction("cos")} className="p-2 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-semibold transition-colors active:scale-95">cos</button>

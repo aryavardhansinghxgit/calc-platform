@@ -366,9 +366,7 @@ export function SavingsCalculator() {
         {/* LEFT COLUMN: INPUT CONTROLS PANEL (Col 5) */}
         <div className="lg:col-span-5 space-y-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-5 shadow-xs">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h2 className="text-sm font-bold tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Sliders className="h-4 w-4 text-blue-600" />
-              <span>Savings Parameters</span>
+            <h2 className="text-sm font-bold tracking-tight text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Savings Parameters</span>
             </h2>
             <button
               onClick={handleReset}
@@ -568,7 +566,7 @@ export function SavingsCalculator() {
               <span className="text-xs font-semibold text-blue-100 block uppercase tracking-wider leading-tight">
                 End Savings Balance
               </span>
-              <div className="text-lg sm:text-xl font-black tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-lg sm:text-xl font-black tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {formatCurrency(results.endBalance)}
               </div>
               <span className="text-[11px] text-blue-200 block leading-tight">In {yearsToSave} years</span>
@@ -578,7 +576,7 @@ export function SavingsCalculator() {
               <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider leading-tight">
                 Total Contributions
               </span>
-              <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-zinc-100 tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-base sm:text-lg font-black text-zinc-900 dark:text-zinc-100 tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {formatCurrency(results.totalContributions)}
               </div>
               <span className="text-[11px] text-emerald-600 font-bold block leading-tight">
@@ -590,7 +588,7 @@ export function SavingsCalculator() {
               <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider leading-tight">
                 Total Interest Earned
               </span>
-              <div className="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400 tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-base sm:text-lg font-black text-purple-600 dark:text-purple-400 tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {formatCurrency(results.totalInterestEarned)}
               </div>
               <span className="text-[11px] text-purple-500 font-bold block leading-tight">
@@ -602,7 +600,7 @@ export function SavingsCalculator() {
               <span className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 block uppercase tracking-wider leading-tight">
                 Inflation Adjusted
               </span>
-              <div className="text-base sm:text-lg font-black text-amber-600 dark:text-amber-400 tracking-tight font-mono leading-snug break-words my-0.5">
+              <div className="text-base sm:text-lg font-black text-amber-600 dark:text-amber-400 tracking-tight font-sans tabular-nums leading-snug break-words my-0.5">
                 {formatCurrency(results.inflationAdjustedBalance)}
               </div>
               <span className="text-[11px] text-zinc-400 block leading-tight">Today's buying power</span>
@@ -613,15 +611,15 @@ export function SavingsCalculator() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-zinc-50 dark:bg-zinc-800/40 p-3 rounded-xl border border-zinc-200/60 dark:border-zinc-800 text-xs">
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Annual APY</span>
-              <span className="font-bold text-zinc-900 dark:text-zinc-100 font-mono block">{results.apy}%</span>
+              <span className="font-bold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums block">{results.apy}%</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Real Yield (Post-Tax)</span>
-              <span className="font-bold text-zinc-900 dark:text-zinc-100 font-mono block">{results.realReturn}%</span>
+              <span className="font-bold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums block">{results.realReturn}%</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Total Tax Drag</span>
-              <span className="font-bold text-rose-500 font-mono block">{formatCurrency(results.totalTaxPaid)}</span>
+              <span className="font-bold text-rose-500 font-sans tabular-nums block">{formatCurrency(results.totalTaxPaid)}</span>
             </div>
             <div className="overflow-hidden">
               <span className="text-zinc-400 text-[10px] block">Health Score</span>
@@ -632,21 +630,20 @@ export function SavingsCalculator() {
           {/* SPECIAL TAB MODE SPECIFIC PANELS */}
           {activeTab === "goal" && (
             <div className="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 p-4 rounded-2xl space-y-3">
-              <h3 className="text-xs font-bold text-blue-900 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Target className="h-4 w-4 text-blue-600 shrink-0" /> Goal Seeking Requirements for {formatCurrency(targetGoalAmount)}
+              <h3 className="text-xs font-bold text-blue-900 dark:text-blue-300 uppercase tracking-wider flex items-center gap-1.5">Goal Seeking Requirements for {formatCurrency(targetGoalAmount)}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center text-xs">
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-blue-100 dark:border-blue-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">Req. Lump-sum Deposit</span>
-                  <span className="font-black text-blue-600 text-sm font-mono block">{formatCurrency(results.requiredInitialDeposit)}</span>
+                  <span className="font-black text-blue-600 text-sm font-sans tabular-nums block">{formatCurrency(results.requiredInitialDeposit)}</span>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-blue-100 dark:border-blue-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">Req. Monthly Savings</span>
-                  <span className="font-black text-blue-600 text-sm font-mono block">{formatCurrency(results.requiredMonthlyContribution)}/mo</span>
+                  <span className="font-black text-blue-600 text-sm font-sans tabular-nums block">{formatCurrency(results.requiredMonthlyContribution)}/mo</span>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-blue-100 dark:border-blue-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">Req. Annual Savings</span>
-                  <span className="font-black text-blue-600 text-sm font-mono block">{formatCurrency(results.requiredAnnualContribution)}/yr</span>
+                  <span className="font-black text-blue-600 text-sm font-sans tabular-nums block">{formatCurrency(results.requiredAnnualContribution)}/yr</span>
                 </div>
               </div>
             </div>
@@ -654,17 +651,16 @@ export function SavingsCalculator() {
 
           {activeTab === "retirement" && (
             <div className="bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 p-4 rounded-2xl space-y-3">
-              <h3 className="text-xs font-bold text-emerald-900 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Umbrella className="h-4 w-4 text-emerald-600 shrink-0" /> Estimated Retirement Nest Egg at Age {retirementAge}
+              <h3 className="text-xs font-bold text-emerald-900 dark:text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">Estimated Retirement Nest Egg at Age {retirementAge}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div className="bg-white dark:bg-zinc-900 p-3.5 rounded-xl border border-emerald-100 dark:border-emerald-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">Total Retirement Corpus</span>
-                  <span className="font-black text-emerald-600 text-base sm:text-lg font-mono block">{formatCurrency(results.retirementCorpus)}</span>
+                  <span className="font-black text-emerald-600 text-base sm:text-lg font-sans tabular-nums block">{formatCurrency(results.retirementCorpus)}</span>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 p-3.5 rounded-xl border border-emerald-100 dark:border-emerald-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">Est. Monthly Drawdown (4% Rule)</span>
-                  <span className="font-black text-emerald-600 text-base sm:text-lg font-mono block">{formatCurrency(results.monthlyRetirementIncome)}/mo</span>
+                  <span className="font-black text-emerald-600 text-base sm:text-lg font-sans tabular-nums block">{formatCurrency(results.monthlyRetirementIncome)}/mo</span>
                 </div>
               </div>
             </div>
@@ -672,21 +668,20 @@ export function SavingsCalculator() {
 
           {activeTab === "fire" && (
             <div className="bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 p-4 rounded-2xl space-y-3">
-              <h3 className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Flame className="h-4 w-4 text-amber-600 shrink-0" /> FIRE Financial Independence Projections
+              <h3 className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider flex items-center gap-1.5">FIRE Financial Independence Projections
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-center text-xs">
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-amber-100 dark:border-amber-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">LeanFIRE (75%)</span>
-                  <span className="font-black text-amber-600 font-mono block">{formatCurrency(results.leanFire)}</span>
+                  <span className="font-black text-amber-600 font-sans tabular-nums block">{formatCurrency(results.leanFire)}</span>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-amber-100 dark:border-amber-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">Standard FIRE Target</span>
-                  <span className="font-black text-amber-600 text-sm font-mono block">{formatCurrency(results.fireNumber)}</span>
+                  <span className="font-black text-amber-600 text-sm font-sans tabular-nums block">{formatCurrency(results.fireNumber)}</span>
                 </div>
                 <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-amber-100 dark:border-amber-900 overflow-hidden">
                   <span className="text-[10px] text-zinc-500 block">FatFIRE (150%)</span>
-                  <span className="font-black text-amber-600 font-mono block">{formatCurrency(results.fatFire)}</span>
+                  <span className="font-black text-amber-600 font-sans tabular-nums block">{formatCurrency(results.fatFire)}</span>
                 </div>
               </div>
               <p className="text-[11px] text-amber-800 dark:text-amber-300 font-medium text-center">
@@ -699,7 +694,7 @@ export function SavingsCalculator() {
 
           {/* 3. CHARTS SECTION */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-4">
-            <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center justify-between">
+            <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center justify-between">
               <span>Savings Growth Visualizer</span>
               <span className="text-[10px] text-zinc-400 font-normal">Real-time simulation</span>
             </h3>
@@ -779,8 +774,7 @@ export function SavingsCalculator() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Scenario Comparisons */}
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3 text-xs">
-              <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                <Layers className="h-4 w-4 text-blue-600" /> Return Scenarios Side-by-Side
+              <h4 className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">Return Scenarios Side-by-Side
               </h4>
               <div className="space-y-2">
                 {results.scenarios.map((scen, i) => (
@@ -822,8 +816,7 @@ export function SavingsCalculator() {
 
           {/* 5. CONTRIBUTION IMPACT ANALYZER */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl space-y-3">
-            <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">
-              <Zap className="h-4 w-4 text-amber-500" /> What Happens If You Save Slightly More?
+            <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">What Happens If You Save Slightly More?
             </h4>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
               {results.contributionImpacts.map((item, idx) => (
@@ -844,8 +837,7 @@ export function SavingsCalculator() {
 
       {/* 6. MILESTONE TRACKER */}
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-3">
-        <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-2">
-          <Award className="h-4 w-4 text-amber-500" /> Savings Milestone Achievements
+        <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center gap-2">Savings Milestone Achievements
         </h3>
         <div className="grid grid-cols-3 sm:grid-cols-9 gap-2">
           {results.milestones.map((m, idx) => (
@@ -870,7 +862,7 @@ export function SavingsCalculator() {
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Accumulation Schedule Table</h3>
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">Accumulation Schedule Table</h3>
             <div className="flex bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg text-xs">
               <button
                 onClick={() => setScheduleView("annual")}
@@ -942,7 +934,7 @@ export function SavingsCalculator() {
                 ? results.annualSchedule
                     .filter((row) => !searchQuery || String(row.year).includes(searchQuery))
                     .map((row) => (
-                      <tr key={row.year} className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 font-mono">
+                      <tr key={row.year} className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 font-sans tabular-nums">
                         <td className="py-2.5 px-3 font-sans font-bold text-zinc-900 dark:text-zinc-100">Year {row.year}</td>
                         <td className="py-2.5 px-3 text-zinc-600 dark:text-zinc-400">{formatCurrency(row.startingBalance)}</td>
                         <td className="py-2.5 px-3 text-emerald-600 font-semibold">+{formatCurrency(row.contributions)}</td>
@@ -955,7 +947,7 @@ export function SavingsCalculator() {
                     .filter((row) => !searchQuery || String(row.month).includes(searchQuery) || String(row.year).includes(searchQuery))
                     .slice(0, 60) // Show first 5 years of monthly for performance
                     .map((row) => (
-                      <tr key={row.month} className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 font-mono">
+                      <tr key={row.month} className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 font-sans tabular-nums">
                         <td className="py-2.5 px-3 font-sans font-medium text-zinc-700 dark:text-zinc-300">
                           Month {row.month} (Yr {row.year})
                         </td>

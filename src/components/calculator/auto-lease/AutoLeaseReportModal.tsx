@@ -37,10 +37,10 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
   return (
     <div id="printable-report-portal" className="no-print-wrapper">
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-xs p-4 sm:p-6 overflow-y-auto no-print-wrapper">
-        <div className="bg-zinc-900 text-white rounded-2xl border border-zinc-800 shadow-2xl max-w-4xl w-full flex flex-col max-h-[92vh] overflow-hidden no-print-wrapper">
+        <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 rounded-2xl border border-zinc-800 shadow-2xl max-w-4xl w-full flex flex-col max-h-[92vh] overflow-hidden no-print-wrapper">
           
           {/* Modal Header Toolbar (Hidden during browser printing) */}
-          <div className="flex items-center justify-between p-3.5 border-b border-zinc-800 bg-zinc-950 no-print">
+          <div className="flex items-center justify-end p-3.5 border-b border-zinc-800 bg-zinc-950 no-print">
             <div className="flex items-center gap-2">
               <div className="p-1.5 rounded-lg bg-blue-600 text-white">
                 <FileText className="h-4 w-4" />
@@ -56,13 +56,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
             </div>
 
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={handlePrint}
-                className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs cursor-pointer"
-              >
-                <Printer className="h-3.5 w-3.5" /> Print Report
-              </button>
+              
               <button
                 type="button"
                 onClick={handlePrint}
@@ -89,7 +83,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
                 <div>
                   <div className="flex items-center gap-2">
                     <Car className="h-6 w-6 text-blue-600" />
-                    <h1 className="text-xl font-extrabold tracking-tight text-zinc-900">
+                    <h1 className="text-xl font-extrabold tracking-tight text-blue-600">
                       Auto Lease Financial Executive Report
                     </h1>
                   </div>
@@ -111,7 +105,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
                   <span className="text-[10px] uppercase font-bold text-blue-600 tracking-wider">
                     Monthly Lease Payment
                   </span>
-                  <div className="text-xl font-black text-blue-900 font-mono mt-0.5">
+                  <div className="text-xl font-black text-blue-900 font-sans tabular-nums mt-0.5">
                     {formatCurrency(results.monthlyLeasePayment)}
                   </div>
                   <span className="text-[10px] text-blue-700 font-medium">
@@ -123,7 +117,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
                   <span className="text-[10px] uppercase font-bold text-emerald-600 tracking-wider">
                     Total Out-of-Pocket Lease
                   </span>
-                  <div className="text-xl font-black text-emerald-900 font-mono mt-0.5">
+                  <div className="text-xl font-black text-emerald-900 font-sans tabular-nums mt-0.5">
                     {formatCurrency(results.totalLeaseCost)}
                   </div>
                   <span className="text-[10px] text-emerald-700 font-medium">
@@ -135,7 +129,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
                   <span className="text-[10px] uppercase font-bold text-purple-600 tracking-wider">
                     Residual Buyout Price
                   </span>
-                  <div className="text-xl font-black text-purple-900 font-mono mt-0.5">
+                  <div className="text-xl font-black text-purple-900 font-sans tabular-nums mt-0.5">
                     {formatCurrency(results.residualValue)}
                   </div>
                   <span className="text-[10px] text-purple-700 font-bold">
@@ -148,10 +142,10 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
               <div className="grid grid-cols-2 gap-4 text-xs">
                 {/* Inputs Summary */}
                 <div className="border border-zinc-200 rounded-xl p-4 bg-zinc-50/50 space-y-2">
-                  <h3 className="font-bold text-zinc-900 uppercase text-[11px] border-b border-zinc-200 pb-1.5">
+                  <h3 className="font-bold text-blue-600 uppercase text-[11px] border-b border-zinc-200 pb-1.5">
                     Lease Parameters
                   </h3>
-                  <div className="space-y-1.5 font-mono text-[11px]">
+                  <div className="space-y-1.5 font-sans tabular-nums text-[11px]">
                     <div className="flex justify-between">
                       <span className="text-zinc-500 font-sans">Vehicle Negotiated Price:</span>
                       <span className="font-bold text-zinc-900">{formatCurrency(Number(inputs.autoPrice || 0))}</span>
@@ -185,10 +179,10 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
 
                 {/* Detailed Payment Breakdown */}
                 <div className="border border-zinc-200 rounded-xl p-4 bg-zinc-50/50 space-y-2">
-                  <h3 className="font-bold text-zinc-900 uppercase text-[11px] border-b border-zinc-200 pb-1.5">
+                  <h3 className="font-bold text-blue-600 uppercase text-[11px] border-b border-zinc-200 pb-1.5">
                     Monthly Payment Breakdown
                   </h3>
-                  <div className="space-y-1.5 font-mono text-[11px]">
+                  <div className="space-y-1.5 font-sans tabular-nums text-[11px]">
                     <div className="flex justify-between">
                       <span className="text-zinc-500 font-sans">Monthly Depreciation:</span>
                       <span className="font-bold text-zinc-900">{formatCurrency(results.monthlyDepreciation)}</span>
@@ -215,9 +209,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
 
               {/* Lease vs Buy Decision Summary */}
               <div className="border border-zinc-200 rounded-xl p-4 space-y-2 bg-zinc-50/30 text-xs">
-                <h3 className="font-bold text-zinc-900 uppercase text-[11px] flex items-center gap-1.5">
-                  <ShieldCheck className="h-4 w-4 text-purple-600" />
-                  Lease vs Buy Recommendation Analysis
+                <h3 className="font-bold text-blue-600 uppercase text-[11px] flex items-center gap-1.5">Lease vs Buy Recommendation Analysis
                 </h3>
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
@@ -228,7 +220,7 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
               </div>
 
               {/* Formula Reference */}
-              <div className="border border-zinc-200 rounded-xl p-3.5 bg-zinc-50/50 text-[10px] text-zinc-500 space-y-1 font-mono">
+              <div className="border border-zinc-200 rounded-xl p-3.5 bg-zinc-50/50 text-[10px] text-zinc-500 space-y-1 font-sans tabular-nums">
                 <span className="font-bold text-zinc-900 block font-sans text-xs">Applied Mathematical Formulas:</span>
                 <p>• Monthly Depreciation = (Adjusted Cap Cost - Residual Value) ÷ Lease Term</p>
                 <p>• Monthly Rent Charge = (Adjusted Cap Cost + Residual Value) × Money Factor</p>

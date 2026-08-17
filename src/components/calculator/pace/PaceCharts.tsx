@@ -114,7 +114,7 @@ export function SegmentSplitsBarChart({ segments }: { segments: SplitSegmentResu
             <div key={s.id} className="space-y-1">
               <div className="flex justify-between items-center text-[11px]">
                 <span className="font-semibold text-zinc-800 dark:text-zinc-200">Leg #{s.segmentNumber} ({s.distanceKm} km / {s.distanceMiles} mi)</span>
-                <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{s.pacePerKmFormatted} /km ({s.pacePerMileFormatted} /mi)</span>
+                <span className="font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">{s.pacePerKmFormatted} /km ({s.pacePerMileFormatted} /mi)</span>
               </div>
               <div className="h-3 w-full bg-zinc-100 dark:bg-zinc-950 rounded-full overflow-hidden border border-zinc-200 dark:border-zinc-800">
                 <div

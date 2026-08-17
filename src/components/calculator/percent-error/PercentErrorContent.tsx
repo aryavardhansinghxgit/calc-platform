@@ -1,65 +1,115 @@
 "use client";
 
-import Link from "next/link";
+import React from "react";
 
 export function PercentErrorContent() {
   return (
-    <article className="space-y-8 border-t border-zinc-200 pt-6 text-sm leading-relaxed text-zinc-700 dark:border-zinc-800 dark:text-zinc-300">
+    <article className="space-y-8 text-slate-800 dark:text-slate-200 text-xs sm:text-sm leading-relaxed font-sans pt-4">
+
+      {/* 1. WHAT IS PERCENTAGE ERROR? */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-950 dark:text-zinc-100">1. What percent error measures</h2>
-        <p>Percent error describes how far an observed or measured result is from a known, accepted, or theoretical value. It turns the difference into a scale-free ratio, so a measurement that is off by 0.2 units can be judged fairly whether the reference is 2 or 200 units. Students use it to evaluate laboratory work, while engineers and scientists use it to communicate measurement quality.</p>
-        <p>A small percent error means the observation is close to the reference. A large value signals a substantial discrepancy, which may come from instrument limits, calibration, procedure, rounding, an incorrect model, or a recording mistake. Percent error does not by itself identify the cause.</p>
+        <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+          What is percentage error?
+        </h2>
+        <p>
+          Percentage error (or percent error) is a dimensionless mathematical metric used to quantify the discrepancy between an experimentally observed or measured value and a known, accepted, or theoretical true value. In scientific experiments, engineering calibrations, and industrial quality control, measurements are rarely exact due to instrument precision limits, environmental fluctuations, or human estimation errors.
+        </p>
+        <p>
+          Calculating the percentage error provides a standardized scale-independent metric. By expressing the measurement deviation as a percentage of the reference value, researchers can meaningfully judge accuracy whether measuring microscopic atomic dimensions or planetary orbital distances. A low percentage error indicates high experimental accuracy, whereas a large percentage error suggests calibration issues, systematic bias, or procedural mistakes.
+        </p>
       </section>
 
+      {/* 2. THE PERCENTAGE ERROR FORMULA */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-950 dark:text-zinc-100">2. Mathematical definition and formula</h2>
-        <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 font-sans tabular-nums text-sm font-bold text-blue-900 dark:border-blue-900/70 dark:bg-blue-950/30 dark:text-blue-200">Percent error = |observed − true| ÷ |true| × 100%</div>
-        <p>The absolute value makes the standard percent error nonnegative. The denominator is the magnitude of the true value because error is a relative comparison to the reference size. The formula assumes the true value is known and nonzero. If the reference is zero, there is no meaningful percentage baseline; report the absolute difference instead.</p>
-        <div className="grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-950"><h3 className="font-bold text-zinc-900 dark:text-zinc-100">Absolute error</h3><p className="mt-1 font-sans tabular-nums text-xs text-blue-700 dark:text-blue-300">|observed − true|</p><p className="mt-1 text-xs">Keeps the original units.</p></div>
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-950"><h3 className="font-bold text-zinc-900 dark:text-zinc-100">Relative error</h3><p className="mt-1 font-sans tabular-nums text-xs text-blue-700 dark:text-blue-300">absolute error ÷ |true|</p><p className="mt-1 text-xs">A unitless proportion.</p></div>
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-950"><h3 className="font-bold text-zinc-900 dark:text-zinc-100">Percent error</h3><p className="mt-1 font-sans tabular-nums text-xs text-blue-700 dark:text-blue-300">relative error × 100</p><p className="mt-1 text-xs">The proportion expressed per 100.</p></div>
+        <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+          The Percentage Error Formula
+        </h2>
+        <p>
+          The standard non-directional percentage error formula computes the absolute magnitude of the error relative to the true accepted value:
+        </p>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3.5 rounded font-sans tabular-nums font-semibold text-center text-xs space-y-1">
+          <p>Percentage Error = <span className="inline-flex items-center align-middle mx-1"><sup>|V<sub>observed</sub> - V<sub>true</sub>|</sup>&frasl;<sub>V<sub>true</sub></sub></span> × 100%</p>
+        </div>
+        <p>
+          Alternatively, if evaluating directionality (whether the observation overestimated or underestimated the true value), the signed percentage error formula omits the absolute value operator:
+        </p>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3.5 rounded font-sans tabular-nums font-semibold text-center text-xs space-y-1">
+          <p>Signed Percentage Error = <span className="inline-flex items-center align-middle mx-1"><sup>(V<sub>observed</sub> - V<sub>true</sub>)</sup>&frasl;<sub>V<sub>true</sub></sub></span> × 100%</p>
         </div>
       </section>
 
+      {/* 3. HOW TO CALCULATE PERCENTAGE ERROR */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-950 dark:text-zinc-100">3. How to calculate it step by step</h2>
-        <ol className="list-decimal space-y-2 pl-5"><li>Write the observed measurement and the accepted value in the same units.</li><li>Subtract the true value from the observed value. This signed difference shows direction.</li><li>Take the absolute value to find the size of the error.</li><li>Divide the absolute error by the magnitude of the true value.</li><li>Multiply by 100 and attach the percent sign. Keep extra digits until the final step, then round appropriately.</li></ol>
-        <p>For an observed value of <strong>56.891</strong> and a true value of <strong>62.327</strong>: the signed difference is 56.891 − 62.327 = −5.436, the absolute error is |−5.436| = 5.436, and the percent error is (5.436 ÷ 62.327) × 100 = <strong>8.722%</strong>. The negative signed difference says the observation underestimated the reference; the standard percent error reports the size as 8.722%.</p>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-xl font-bold text-zinc-950 dark:text-zinc-100">4. Worked examples</h2>
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800"><h3 className="font-bold text-blue-700 dark:text-blue-300">Basic: exact result</h3><p className="mt-2 text-xs">Observed = 100, true = 100.</p><p className="mt-2 font-sans tabular-nums text-xs">|100 − 100| ÷ 100 × 100 = 0%</p><p className="mt-2 text-xs">An exact match has zero absolute and signed error.</p></div>
-          <div className="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800"><h3 className="font-bold text-blue-700 dark:text-blue-300">Intermediate: overestimate</h3><p className="mt-2 text-xs">Observed = 105, true = 100.</p><p className="mt-2 font-sans tabular-nums text-xs">|105 − 100| ÷ 100 × 100 = 5%</p><p className="mt-2 text-xs">The signed error is +5%, so the measurement is 5% above the reference.</p></div>
-          <div className="rounded-xl border border-zinc-200 p-4 dark:border-zinc-800"><h3 className="font-bold text-blue-700 dark:text-blue-300">Advanced: negative reference</h3><p className="mt-2 text-xs">Observed = −9.5, true = −9.8.</p><p className="mt-2 font-sans tabular-nums text-xs">0.3 ÷ 9.8 × 100 = 3.061%</p><p className="mt-2 text-xs">The denominator uses the reference magnitude, 9.8. State your sign convention when reporting signed error for negative quantities.</p></div>
+        <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+          How to Calculate Percentage Error
+        </h2>
+        <p>
+          Computing percentage error involves four systematic steps:
+        </p>
+        <ol className="list-decimal pl-5 space-y-2 font-sans text-xs">
+          <li>
+            <strong>Determine baseline values:</strong> Express both the observed (measured) value and the true (accepted) value in identical physical units.
+          </li>
+          <li>
+            <strong>Calculate the error difference:</strong> Subtract the true value from the observed value (V<sub>observed</sub> - V<sub>true</sub>).
+          </li>
+          <li>
+            <strong>Compute relative error:</strong> Divide the error difference by the true value. For absolute percentage error, take the absolute value of the numerator before dividing.
+          </li>
+          <li>
+            <strong>Scale to percentage:</strong> Multiply the decimal quotient by 100 and append the &quot;%&quot; symbol.
+          </li>
+        </ol>
+        <div className="bg-slate-100 dark:bg-slate-800 p-3.5 rounded font-sans tabular-nums font-semibold text-center text-xs space-y-1">
+          <p>EX: Observed = 10, True = 11</p>
+          <p>Difference = 10 - 11 = -1</p>
+          <p>Signed Percent Error = <span className="inline-flex items-center align-middle mx-1"><sup>-1</sup>&frasl;<sub>11</sub></span> × 100% = -9.090909%</p>
+          <p>Absolute Percent Error = <span className="inline-flex items-center align-middle mx-1"><sup>|-1|</sup>&frasl;<sub>11</sub></span> × 100% = 9.090909% error</p>
         </div>
       </section>
 
+      {/* 4. ABSOLUTE ERROR VS. PERCENTAGE ERROR */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-950 dark:text-zinc-100">5. Reading the visual comparison</h2>
-        <p>The calculator’s bars compare the magnitudes of the observed and true values on one scale. They are a quick intuition check, not a second formula. The metric cards show four different ideas: absolute error preserves units, relative error is the decimal ratio, signed error identifies over- or underestimation, and the closeness score is a simple 100% minus absolute percent error display.</p>
-        <p>The closeness score is capped at 0% for errors of 100% or more. It is a communication aid, not a formal uncertainty interval, confidence level, or accuracy specification.</p>
+        <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+          Absolute Error vs. Percentage Error
+        </h2>
+        <p>
+          It is essential to distinguish between absolute error and percentage error:
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+          <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-xs">Absolute Error</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              The raw physical magnitude of the difference: <strong>|V<sub>observed</sub> - V<sub>true</sub>|</strong>. Absolute error retains the original measurement units (e.g., ±0.5 grams or ±2 meters).
+            </p>
+          </div>
+          <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-xs">Percentage Error</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              The relative proportion of error normalized against the accepted reference size. Percentage error is unitless and expressed per hundred, enabling direct accuracy comparisons across different scales.
+            </p>
+          </div>
+        </div>
       </section>
 
+      {/* 5. NEGATIVE PERCENTAGE ERROR */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-950 dark:text-zinc-100">6. Common mistakes and edge cases</h2>
-        <ul className="list-disc space-y-2 pl-5"><li><strong>Using the observed value as the denominator:</strong> Standard percent error is relative to the true or accepted value, not the measurement.</li><li><strong>Dropping the absolute value:</strong> That changes the question from error magnitude to signed error. Use signed error when direction matters.</li><li><strong>Mixing units:</strong> Convert centimeters and meters, grams and kilograms, or other units before subtracting.</li><li><strong>Rounding too early:</strong> Early rounding can noticeably change results when the difference is small.</li><li><strong>True value equals zero:</strong> A percent error cannot be computed because division by zero is undefined. Use an absolute difference or a domain-specific tolerance instead.</li><li><strong>Unknown true value:</strong> If no accepted value exists, repeatability, standard deviation, uncertainty, or percent difference may be more appropriate.</li></ul>
+        <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
+          Negative Percentage Error
+        </h2>
+        <p>
+          When using the signed formula, a negative percentage error simply indicates that the observed measurement fell below the accepted true value (an underestimate). Conversely, a positive signed percentage error indicates an overestimate. In most standard academic reporting, absolute percentage error (without sign) is preferred unless directionality is explicitly required.
+        </p>
       </section>
 
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-950 dark:text-zinc-100">7. Practical applications</h2>
-        <p>In a physics lab, percent error compares a measured acceleration with the accepted value of gravitational acceleration. In chemistry, it compares an experimental yield, density, or concentration with a reference. In engineering, it helps evaluate sensors, tolerances, calibration checks, and numerical approximations. In data analysis, repeated rows in the batch analyzer can summarize the average discrepancy across a set of observations.</p>
-        <p>For experimental reporting, pair percent error with the measurement’s units, significant figures, uncertainty, and method. A 1% error may be excellent for one instrument and unacceptable for another; the acceptable threshold comes from the application.</p>
+      {/* 6. SUMMARY */}
+      <section className="p-4 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-200 dark:border-blue-800/60 space-y-2">
+        <h3 className="text-base font-bold text-blue-950 dark:text-blue-200">Educational Summary</h3>
+        <p className="text-xs text-blue-900 dark:text-blue-300">
+          Percentage error measures the accuracy of an experimental observation relative to an accepted true value. Dividing the difference by the true value and multiplying by 100 provides a universal metric for evaluating measurement precision across science and engineering.
+        </p>
       </section>
 
-      <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-950 dark:text-zinc-100">8. Related mathematical concepts</h2>
-        <p>Percent error is closely related to <Link href="/calculators/percentage-calculator" className="font-semibold text-blue-600 underline dark:text-blue-400">percentage change</Link>, but the baseline is different: percentage change uses an initial value, while percent error uses an accepted reference. <Link href="/calculators/standard-deviation-calculator" className="font-semibold text-blue-600 underline dark:text-blue-400">Standard deviation</Link> describes spread among repeated observations and does not require a known true value. Percent difference compares two values symmetrically using their average rather than treating one as the reference.</p>
-      </section>
-
-      <section className="rounded-xl border border-blue-200 bg-blue-50 p-4 dark:border-blue-900/70 dark:bg-blue-950/30"><h2 className="text-base font-bold text-blue-950 dark:text-blue-200">Summary</h2><p className="mt-2 text-xs leading-5 text-blue-900 dark:text-blue-300">Subtract the true value from the observation, take the absolute difference, divide by the magnitude of the true value, and multiply by 100. Use absolute percent error for magnitude, signed percent error for direction, and never compute a percentage baseline from a zero true value.</p></section>
     </article>
   );
 }

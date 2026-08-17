@@ -490,9 +490,7 @@ export function BacCalculator() {
           {/* Card Header with Clean Sub-Row Toggles */}
           <div className="border-b border-slate-100 pb-4 space-y-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <Sliders className="w-5 h-5 text-cyan-600" />
-                Personal Parameters
+              <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">Personal Parameters
               </h2>
             </div>
 
@@ -661,9 +659,7 @@ export function BacCalculator() {
           {/* Drinks Logger Grid Section */}
           <div className="space-y-4 border-t border-slate-100 pt-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                <Wine className="w-4 h-4 text-cyan-600" />
-                Drinks Consumed Log ({drinks.length})
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">Drinks Consumed Log ({drinks.length})
               </h3>
 
               {/* Quick Add Presets */}
@@ -818,14 +814,7 @@ export function BacCalculator() {
                   {copied ? "Copied!" : "Copy"}
                 </button>
 
-                <button
-                  onClick={handlePrint}
-                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
-                  title="Print Report"
-                >
-                  <Printer className="w-4 h-4" />
-                  Print
-                </button>
+                
               </div>
             </div>
           </div>
@@ -894,9 +883,7 @@ export function BacCalculator() {
             {activeTab === "elimination-chart" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <LineIcon className="w-4 h-4 text-cyan-600" />
-                    Hour-by-Hour BAC Elimination Schedule (%)
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Hour-by-Hour BAC Elimination Schedule (%)
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Rate: {eliminationRateBeta}% / hr</span>
                 </div>
@@ -930,9 +917,7 @@ export function BacCalculator() {
             {/* TAB 2: Behavioral Impairment Stage */}
             {activeTab === "impairment-spectrum" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-purple-600" />
-                  Clinical Impairment Stage Evaluation
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Clinical Impairment Stage Evaluation
                 </h3>
 
                 <div className="p-4 rounded-2xl border text-xs space-y-3 bg-slate-50 border-slate-200">
@@ -961,9 +946,7 @@ export function BacCalculator() {
             {/* TAB 3: International Driving Legal Limits */}
             {activeTab === "legal-limits" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4 text-rose-600" />
-                  International Driving Thresholds & Hours Until Legal
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">International Driving Thresholds & Hours Until Legal
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -993,9 +976,7 @@ export function BacCalculator() {
             {/* TAB 4: Drink Category Breakdown Bar Chart */}
             {activeTab === "drink-breakdown" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <BeerIcon className="w-4 h-4 text-amber-500" />
-                  Pure Alcohol Mass by Beverage Category (Grams)
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Pure Alcohol Mass by Beverage Category (Grams)
                 </h3>
 
                 <div className="h-64 w-full">
@@ -1031,9 +1012,7 @@ export function BacCalculator() {
             {/* TAB 5: Sobriety Action Plan & Safety Warnings */}
             {activeTab === "action-plan" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  Safety Guidance & Sobriety Protocol
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Safety Guidance & Sobriety Protocol
                 </h3>
 
                 {results.safetyWarnings.length > 0 && (

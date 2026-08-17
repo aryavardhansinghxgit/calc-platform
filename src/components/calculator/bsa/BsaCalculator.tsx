@@ -430,9 +430,7 @@ export function BsaCalculator() {
           {/* Card Header with Clean Sub-Row Toggles */}
           <div className="border-b border-slate-100 pb-4 space-y-3">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <Sliders className="w-5 h-5 text-cyan-600" />
-                Patient Anthropometrics
+              <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">Patient Anthropometrics
               </h2>
             </div>
 
@@ -756,14 +754,7 @@ export function BsaCalculator() {
                   {copied ? "Copied!" : "Copy"}
                 </button>
 
-                <button
-                  onClick={handlePrint}
-                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
-                  title="Print Report"
-                >
-                  <Printer className="w-4 h-4" />
-                  Print
-                </button>
+                
               </div>
             </div>
           </div>
@@ -832,9 +823,7 @@ export function BsaCalculator() {
             {activeTab === "formula-variance" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                    <BarChart2 className="w-4 h-4 text-cyan-600" />
-                    BSA Values Across 9 Clinical Formulas (m²)
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">BSA Values Across 9 Clinical Formulas (m²)
                   </h3>
                 </div>
 
@@ -871,9 +860,7 @@ export function BsaCalculator() {
             {/* TAB 2: Population Benchmarks Bar Chart */}
             {activeTab === "population-benchmarks" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <User className="w-4 h-4 text-purple-600" />
-                  Population Standard BSA Benchmarks (m²)
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Population Standard BSA Benchmarks (m²)
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
@@ -893,9 +880,7 @@ export function BsaCalculator() {
             {/* TAB 3: Chemotherapy Dosing Calculator Grid */}
             {activeTab === "chemo-dosing-grid" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4 text-rose-600" />
-                  Chemotherapy & Monoclonal Antibody Dosing Protocol
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Chemotherapy & Monoclonal Antibody Dosing Protocol
                 </h3>
 
                 <div className="p-4 rounded-2xl border text-xs space-y-3 bg-slate-50 border-slate-200">
@@ -921,9 +906,7 @@ export function BsaCalculator() {
             {/* TAB 4: Hemodynamic Cardiac & GFR Spectrum Meters */}
             {activeTab === "hemodynamic-spectrum" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <Heart className="w-4 h-4 text-rose-600" />
-                  Hemodynamic Cardiac Index & Renal Normalization
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Hemodynamic Cardiac Index & Renal Normalization
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
@@ -945,9 +928,7 @@ export function BsaCalculator() {
             {/* TAB 5: Clinical Action Plan */}
             {activeTab === "action-plan" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  Clinical Recommendations & Dosing Protocols
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Clinical Recommendations & Dosing Protocols
                 </h3>
 
                 <div className="space-y-2.5">

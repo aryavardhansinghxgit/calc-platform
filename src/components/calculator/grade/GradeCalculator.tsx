@@ -110,7 +110,7 @@ function CategoryPieChart({ breakdowns }: { breakdowns: any[] }) {
 
           {/* Centered Total Weight Label */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-sm font-black font-mono text-slate-900 dark:text-zinc-100">
+            <span className="text-sm font-black font-sans tabular-nums text-slate-900 dark:text-zinc-100">
               {totalWeight}%
             </span>
             <span className="text-[8px] font-extrabold uppercase text-slate-400 tracking-wider">
@@ -122,7 +122,7 @@ function CategoryPieChart({ breakdowns }: { breakdowns: any[] }) {
         {/* Pie Chart Legend */}
         <div className="space-y-1.5 flex-1 min-w-0 text-xs w-full">
           {slices.map((slice, idx) => (
-            <div key={idx} className="flex items-center justify-between gap-2 text-[11px] font-mono">
+            <div key={idx} className="flex items-center justify-between gap-2 text-[11px] font-sans tabular-nums">
               <div className="flex items-center gap-1.5 min-w-0">
                 <span
                   className="w-2.5 h-2.5 rounded-full shrink-0"
@@ -398,7 +398,7 @@ export function GradeCalculator() {
             <FileCheck className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
           </div>
           <div>
-            <h3 className="text-sm font-extrabold text-slate-900 dark:text-zinc-100">
+            <h3 className="text-sm font-extrabold text-blue-600 dark:text-blue-400">
               Next-Gen Grade Calculator &amp; Final Exam Target Solver
             </h3>
             <p className="text-[10px] text-slate-500 dark:text-zinc-400">
@@ -504,7 +504,7 @@ export function GradeCalculator() {
                     type="number"
                     value={curveValue}
                     onChange={(e) => setCurveValue(parseFloat(e.target.value) || 0)}
-                    className="h-8 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-8 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
               )}
@@ -528,7 +528,7 @@ export function GradeCalculator() {
                     type="number"
                     value={currentGrade}
                     onChange={(e) => setCurrentGrade(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -541,7 +541,7 @@ export function GradeCalculator() {
                     type="number"
                     value={targetGrade}
                     onChange={(e) => setTargetGrade(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -556,7 +556,7 @@ export function GradeCalculator() {
                     max="99"
                     value={finalExamWeight}
                     onChange={(e) => setFinalExamWeight(parseFloat(e.target.value) || 0)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -604,7 +604,7 @@ export function GradeCalculator() {
                         type="number"
                         value={cat.weight}
                         onChange={(e) => handleUpdateCategory(cat.id, "weight", parseFloat(e.target.value) || 0)}
-                        className="w-12 h-6 text-center text-xs font-mono font-black text-emerald-600 dark:text-emerald-400 bg-transparent outline-none"
+                        className="w-12 h-6 text-center text-xs font-sans tabular-nums font-black text-emerald-600 dark:text-emerald-400 bg-transparent outline-none"
                       />
                       <span className="text-xs font-black text-slate-700 dark:text-zinc-300">%</span>
                     </div>
@@ -659,7 +659,7 @@ export function GradeCalculator() {
                             onChange={(e) =>
                               handleUpdateAssignment(cat.id, a.id, "grade", parseFloat(e.target.value) || 0)
                             }
-                            className="h-7 w-16 text-xs font-mono font-bold text-center text-slate-900 dark:text-zinc-100 bg-slate-50 dark:bg-zinc-800 px-1"
+                            className="h-7 w-16 text-xs font-sans tabular-nums font-bold text-center text-slate-900 dark:text-zinc-100 bg-slate-50 dark:bg-zinc-800 px-1"
                           />
                           <span className="text-xs font-bold text-slate-600 dark:text-zinc-400">%</span>
                         </div>
@@ -725,7 +725,7 @@ export function GradeCalculator() {
                         value={a.grade}
                         onChange={(e) => handleUpdatePointAssignment(a.id, "grade", parseFloat(e.target.value) || 0)}
                         placeholder="Earned"
-                        className="h-8 text-xs font-mono text-center bg-white dark:bg-zinc-900"
+                        className="h-8 text-xs font-sans tabular-nums text-center bg-white dark:bg-zinc-900"
                       />
                     </div>
 
@@ -735,7 +735,7 @@ export function GradeCalculator() {
                         value={a.weightOrMax}
                         onChange={(e) => handleUpdatePointAssignment(a.id, "weightOrMax", parseFloat(e.target.value) || 0)}
                         placeholder="Max Points"
-                        className="h-8 text-xs font-mono text-center bg-white dark:bg-zinc-900"
+                        className="h-8 text-xs font-sans tabular-nums text-center bg-white dark:bg-zinc-900"
                       />
                     </div>
 
@@ -775,7 +775,7 @@ export function GradeCalculator() {
             </span>
 
             <div className="flex items-center justify-center gap-3">
-              <span className="text-4xl font-black font-mono text-emerald-600 dark:text-emerald-400">
+              <span className="text-4xl font-black font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
                 {result.overallGrade}%
               </span>
               <span className="px-3 py-1 rounded-xl bg-white dark:bg-zinc-900 text-2xl font-black text-slate-900 dark:text-zinc-100 border border-slate-200 dark:border-zinc-700 shadow-2xs">
@@ -801,7 +801,7 @@ export function GradeCalculator() {
                 <span className="text-[10px] font-extrabold uppercase text-emerald-700 dark:text-emerald-300 tracking-wider">
                   Required Final Exam Score
                 </span>
-                <span className="text-lg font-black font-mono text-emerald-600 dark:text-emerald-400">
+                <span className="text-lg font-black font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
                   {result.finalSolverResult.requiredFinalScore}%
                 </span>
               </div>
@@ -815,7 +815,7 @@ export function GradeCalculator() {
                   Final Exam Target Score Matrix:
                 </span>
                 {result.finalSolverResult.targetMatrix.map((tm, idx) => (
-                  <div key={idx} className="flex justify-between font-mono text-[11px]">
+                  <div key={idx} className="flex justify-between font-sans tabular-nums text-[11px]">
                     <span>Target {tm.letter}:</span>
                     <span className={`font-bold ${tm.isAchievable ? "text-emerald-600" : "text-rose-600"}`}>
                       {tm.requiredScore}%

@@ -414,9 +414,7 @@ export function ResistorCalculator() {
           {activeTab === "color" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
               <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                  <Settings className="w-4 h-4 text-blue-600" />
-                  <span>Color Band Parameters</span>
+                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Color Band Parameters</span>
                 </h3>
                 <div className="flex gap-2">
                   <button
@@ -493,7 +491,7 @@ export function ResistorCalculator() {
                                     className="w-4.5 h-4.5 rounded-full border border-zinc-400 dark:border-zinc-600 shadow-inner mb-1.5 ring-1 ring-zinc-300 dark:ring-zinc-700 shrink-0"
                                     style={{ backgroundColor: swatchColor }}
                                   />
-                                  <span className="text-[9px] font-black text-zinc-600 dark:text-zinc-300 group-hover:text-zinc-800 dark:group-hover:text-zinc-100 truncate w-full max-w-[80px]">
+                                  <span className="text-[9px] font-black text-slate-800 dark:text-slate-200 font-semibold group-hover:text-zinc-800 dark:group-hover:text-zinc-100 truncate w-full max-w-[80px]">
                                     {labelFn(c)}
                                   </span>
                                 </button>
@@ -547,7 +545,7 @@ export function ResistorCalculator() {
                         type="number"
                         value={targetResistance}
                         onChange={(e) => setTargetResistance(e.target.value)}
-                        className="font-mono flex-1 rounded-r-none border-r-0"
+                        className="font-sans tabular-nums flex-1 rounded-r-none border-r-0"
                       />
                       <select
                         value={targetResistanceUnit}
@@ -608,7 +606,7 @@ export function ResistorCalculator() {
           {/* TAB 2: SERIES & PARALLEL NETWORKS */}
           {activeTab === "series_parallel" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
                 <span>Network Configuration</span>
                 <button
                   onClick={handleReset}
@@ -655,7 +653,7 @@ export function ResistorCalculator() {
                   onChange={(e) => setResistorValuesString(e.target.value)}
                   placeholder="e.g. 100, 220, 4.7k, 1M, 2.2k@1"
                   rows={3}
-                  className="w-full p-2.5 text-xs font-mono border border-zinc-200 dark:border-zinc-800 rounded-lg outline-none focus:ring-1 focus:ring-blue-500 bg-white dark:bg-zinc-900"
+                  className="w-full p-2.5 text-xs font-sans tabular-nums border border-zinc-200 dark:border-zinc-800 rounded-lg outline-none focus:ring-1 focus:ring-blue-500 bg-white dark:bg-zinc-900"
                 />
                 <span className="text-[10px] text-zinc-400 mt-1 block">
                   Add custom tolerance via &apos;@&apos;, e.g. `2.2k@1` specifies 2.2 kΩ with ±1% tolerance.
@@ -671,7 +669,7 @@ export function ResistorCalculator() {
                   value={supplyVoltage}
                   onChange={(e) => setSupplyVoltage(e.target.value)}
                   placeholder="e.g. 12"
-                  className="font-mono text-xs"
+                  className="font-sans tabular-nums text-xs"
                 />
               </div>
             </div>
@@ -680,7 +678,7 @@ export function ResistorCalculator() {
           {/* TAB 3: CONDUCTOR RESISTANCE */}
           {activeTab === "conductor" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
                 <span>Conductor physical properties</span>
                 <button
                   onClick={handleReset}
@@ -716,7 +714,7 @@ export function ResistorCalculator() {
                       type="number"
                       value={conductorLength}
                       onChange={(e) => setConductorLength(e.target.value)}
-                      className="font-mono flex-1 rounded-r-none border-r-0 text-xs"
+                      className="font-sans tabular-nums flex-1 rounded-r-none border-r-0 text-xs"
                     />
                     <select
                       value={conductorLengthUnit}
@@ -765,7 +763,7 @@ export function ResistorCalculator() {
                         type="number"
                         value={conductorDiameter}
                         onChange={(e) => setConductorDiameter(e.target.value)}
-                        className="font-mono flex-1 rounded-r-none border-r-0 text-xs"
+                        className="font-sans tabular-nums flex-1 rounded-r-none border-r-0 text-xs"
                       />
                       <select
                         value={conductorDiameterUnit}
@@ -786,7 +784,7 @@ export function ResistorCalculator() {
                         type="number"
                         value={conductorArea}
                         onChange={(e) => setConductorArea(e.target.value)}
-                        className="font-mono flex-1 rounded-r-none border-r-0 text-xs"
+                        className="font-sans tabular-nums flex-1 rounded-r-none border-r-0 text-xs"
                       />
                       <select
                         value={conductorAreaUnit}
@@ -810,7 +808,7 @@ export function ResistorCalculator() {
                     type="number"
                     value={conductorTemp}
                     onChange={(e) => setConductorTemp(e.target.value)}
-                    className="font-mono text-xs"
+                    className="font-sans tabular-nums text-xs"
                   />
                 </div>
               </div>
@@ -820,7 +818,7 @@ export function ResistorCalculator() {
           {/* TAB 4: SMD RESISTOR DECODER */}
           {activeTab === "smd" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
                 <span>SMD Resistor Codes</span>
                 <span className="text-[10px] text-zinc-400 font-bold uppercase">Standards: 3-digit, 4-digit, EIA-96</span>
               </h3>
@@ -832,7 +830,7 @@ export function ResistorCalculator() {
                   value={smdCode}
                   onChange={(e) => setSmdCode(e.target.value)}
                   placeholder="e.g. 103, 4R7, 1002, 01A"
-                  className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 uppercase"
+                  className="font-sans tabular-nums text-xs font-bold text-blue-600 dark:text-blue-400 uppercase"
                 />
                 <span className="text-[10px] text-zinc-400 mt-1 block">
                   Supports 3-digit codes (e.g. `103`), 4-digit codes (e.g. `1002`), decimal codes (e.g. `4R7`), and EIA-96 codes (e.g. `01A`).
@@ -844,7 +842,7 @@ export function ResistorCalculator() {
           {/* TAB 5: E-SERIES FINDER */}
           {activeTab === "finder" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
                 E-Series Lookup and Resistor Finder
               </h3>
 
@@ -857,7 +855,7 @@ export function ResistorCalculator() {
                       type="number"
                       value={finderTargetResistance}
                       onChange={(e) => setFinderTargetResistance(e.target.value)}
-                      className="font-mono flex-1 rounded-r-none border-r-0 text-xs"
+                      className="font-sans tabular-nums flex-1 rounded-r-none border-r-0 text-xs"
                     />
                     <select
                       value={finderTargetUnit}
@@ -988,7 +986,7 @@ export function ResistorCalculator() {
                 <div className="grid grid-cols-1 gap-3">
                   <div className="p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-center">
                     <div className="text-[10px] text-slate-400 font-semibold uppercase">Calculated Resistance</div>
-                    <div className="text-3xl font-mono font-black text-emerald-300 mt-1">
+                    <div className="text-3xl font-sans tabular-nums font-black text-emerald-300 mt-1">
                       {result.formattedValue}
                     </div>
                   </div>
@@ -996,7 +994,7 @@ export function ResistorCalculator() {
 
                 {/* Nominal and tolerance details */}
                 {result.minOhms !== undefined && result.maxOhms !== undefined && (
-                  <div className="p-3 bg-slate-800/50 rounded-xl border border-slate-800 text-xs font-mono space-y-1 text-slate-300">
+                  <div className="p-3 bg-slate-800/50 rounded-xl border border-slate-800 text-xs font-sans tabular-nums space-y-1 text-slate-300">
                     <div className="flex justify-between">
                       <span className="text-slate-400">Nominal resistance:</span>
                       <span>{result.resistanceOhms} Ω</span>
@@ -1017,42 +1015,28 @@ export function ResistorCalculator() {
                 )}
 
                 {/* UNIFIED ACTION BAR: Copy, Save, Share, Print */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-800 no-print">
+                <div className="flex flex-wrap items-center justify-end gap-3 pt-3 border-t border-slate-800 no-print">
                   <button
                     type="button"
                     onClick={handleCopy}
-                    className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    className="text-xs font-bold text-slate-800 dark:text-slate-200 font-semibold bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
                     {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-slate-400" />}
-                    <span>{copied ? "Copied!" : "Copy Result"}</span>
+                    <span>{copied ? "Copied!" : "Copy"}</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={handleSave}
-                    className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                    className="text-xs font-bold text-slate-800 dark:text-slate-200 font-semibold bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
                   >
-                    {isSaved ? <Check className="w-4 h-4 text-emerald-400" /> : <Bookmark className="w-4 h-4 text-amber-400" />}
-                    <span>{isSaved ? "Saved!" : "Save"}</span>
+                    {justSaved ? <Check className="w-4 h-4 text-emerald-400" /> : <Bookmark className="w-4 h-4 text-amber-400" />}
+                    <span>{justSaved ? "Saved!" : "Save"}</span>
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={handleShare}
-                    className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <Share2 className="w-4 h-4 text-blue-400" />
-                    <span>Share Link</span>
-                  </button>
+                  
 
-                  <button
-                    type="button"
-                    onClick={handlePrint}
-                    className="text-xs font-bold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <Printer className="w-4 h-4 text-purple-400" />
-                    <span>Print Report</span>
-                  </button>
+                  
                 </div>
               </div>
             ) : (
@@ -1081,7 +1065,7 @@ export function ResistorCalculator() {
               </div>
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                 {savedItems.map((item) => (
-                  <div key={item.id} className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-mono">
+                  <div key={item.id} className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-sans tabular-nums">
                     <button
                       onClick={() => {
                         // Restore saved inputs
@@ -1144,11 +1128,11 @@ export function ResistorCalculator() {
             <details className="p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-3 group outline-none">
               <summary className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 cursor-pointer flex items-center justify-between select-none">
                 <span>📘 Show Calculation Breakdown</span>
-                <span className="text-[10px] font-mono group-open:hidden">Expand +</span>
-                <span className="text-[10px] font-mono hidden group-open:inline">Collapse -</span>
+                <span className="text-[10px] font-sans tabular-nums group-open:hidden">Expand +</span>
+                <span className="text-[10px] font-sans tabular-nums hidden group-open:inline">Collapse -</span>
               </summary>
               <div className="pt-2.5 border-t border-zinc-100 dark:border-zinc-800 mt-2">
-                <pre className="p-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl font-mono text-[11px] text-zinc-800 dark:text-zinc-300 overflow-x-auto leading-normal whitespace-pre-wrap">
+                <pre className="p-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl font-sans tabular-nums text-[11px] text-zinc-800 dark:text-zinc-300 overflow-x-auto leading-normal whitespace-pre-wrap">
                   {result.calculationSteps}
                 </pre>
               </div>

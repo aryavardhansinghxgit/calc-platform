@@ -95,46 +95,44 @@ export function BodyFatContent() {
       <section className="space-y-4 p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
         <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400">
           <Activity className="w-6 h-6" />
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-100">
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-blue-600 dark:text-blue-400">
             Comprehensive Clinical Guide to Body Fat Percentage &amp; Composition Analysis
           </h2>
         </div>
-        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
           Body Fat Percentage (BFP) is the premier physiological metric for evaluating metabolic health, athletic performance, and physical fitness. Unlike standard Body Mass Index (BMI)—which simply compares total scale weight against height—body fat percentage isolates adipose fat mass from lean body mass (muscles, bones, organs, and body water). This guide details the science, mathematical formulas, tape measurement techniques, and health standards established by the U.S. Navy and the American Council on Exercise (ACE).
         </p>
       </section>
 
       {/* 2. Subcutaneous vs Visceral Fat */}
       <section className="space-y-4">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Scale className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-          1. Biological Adipose Tissue: Subcutaneous vs. Visceral Fat
+        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">1. Biological Adipose Tissue: Subcutaneous vs. Visceral Fat
         </h3>
-        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+        <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
           Human body fat is stored in two distinct physiological depots:
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 bg-sky-50 dark:bg-sky-950/30 rounded-xl border border-sky-200 dark:border-sky-800">
+          <div className="p-4 bg-blue-50 dark:bg-blue-50/30 rounded-xl border border-sky-200 dark:border-sky-800">
             <strong className="text-sky-900 dark:text-sky-200 font-bold block text-sm">Subcutaneous Fat</strong>
-            <p className="text-sky-700 dark:text-sky-300 mt-1">Located directly beneath the dermis. Functions as thermal insulation, physical shock absorption, and long-term energy storage. Measured by tape circumferences and skinfold calipers.</p>
+            <p className="text-blue-600 dark:text-blue-400 mt-1">Located directly beneath the dermis. Functions as thermal insulation, physical shock absorption, and long-term energy storage. Measured by tape circumferences and skinfold calipers.</p>
           </div>
-          <div className="p-4 bg-rose-50 dark:bg-rose-950/30 rounded-xl border border-rose-200 dark:border-rose-800">
+          <div className="p-4 bg-blue-50 dark:bg-blue-50/30 rounded-xl border border-rose-200 dark:border-rose-800">
             <strong className="text-rose-900 dark:text-rose-200 font-bold block text-sm">Visceral Fat</strong>
-            <p className="text-rose-700 dark:text-rose-300 mt-1">Stored deep within the abdominal cavity around vital organs (liver, pancreas, intestines). Metabolically active adipose tissue associated with arterial plaque and type 2 diabetes.</p>
+            <p className="text-blue-600 dark:text-blue-400 mt-1">Stored deep within the abdominal cavity around vital organs (liver, pancreas, intestines). Metabolically active adipose tissue associated with arterial plaque and type 2 diabetes.</p>
           </div>
         </div>
       </section>
 
       {/* 3. Formulas */}
       <section className="space-y-4 p-5 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400">
           2. Mathematical Formulas: U.S. Navy &amp; BMI Equations
         </h3>
         <div className="space-y-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. U.S. Navy Method Equations (Hodgdon &amp; Beckett 1984)</h4>
             <p>Calculates BFP from anatomical tape circumferences (in inches):</p>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-emerald-700 dark:text-emerald-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               Male: BFP = 86.010 × log10(Waist - Neck) - 70.041 × log10(Height) + 36.76<br/>
               Female: BFP = 163.205 × log10(Waist + Hip - Neck) - 97.684 × log10(Height) - 78.387
             </code>
@@ -143,7 +141,7 @@ export function BodyFatContent() {
           <div>
             <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. Deurenberg BMI Body Fat Formula</h4>
             <p>Estimates BFP when tape measurements are unavailable:</p>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-mono text-sky-700 dark:text-sky-400">
+            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
               Adult Male: BFP = (1.20 × BMI) + (0.23 × Age) - 16.2<br/>
               Adult Female: BFP = (1.20 × BMI) + (0.23 × Age) - 5.4
             </code>
@@ -154,7 +152,7 @@ export function BodyFatContent() {
       {/* 4. 20 Clinical FAQs Accordion */}
       <section className="space-y-4">
         <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 font-bold text-xl">
-          <HelpCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+          <HelpCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
           <h3>Frequently Asked Questions</h3>
         </div>
 
@@ -172,10 +170,10 @@ export function BodyFatContent() {
                   className="w-full p-4 text-left font-semibold text-sm text-zinc-900 dark:text-zinc-100 flex justify-between items-center hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
                 >
                   <span>{faq.q}</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform text-zinc-500 ${isOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`w-4 h-4 transition-transform text-slate-900 ${isOpen ? "rotate-180" : ""}`} />
                 </button>
                 {isOpen && (
-                  <div className="px-4 pb-4 pt-1 text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed border-t border-zinc-100 dark:border-zinc-800">
+                  <div className="px-4 pb-4 pt-1 text-xs text-slate-900 dark:text-zinc-300 leading-relaxed  dark:border-zinc-800">
                     {faq.a}
                   </div>
                 )}

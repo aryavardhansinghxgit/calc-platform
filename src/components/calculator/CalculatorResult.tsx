@@ -13,7 +13,7 @@ export function CalculatorResult({ definition, result }: CalculatorResultProps) 
   if (!result.success) {
     return (
       <div className="rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 px-4 py-3">
-        <p className="text-xs text-red-600 dark:text-red-400 font-mono">Calculation Error: {result.error}</p>
+        <p className="text-xs text-red-600 dark:text-red-400 font-sans tabular-nums font-semibold">Calculation Error: {result.error}</p>
       </div>
     );
   }

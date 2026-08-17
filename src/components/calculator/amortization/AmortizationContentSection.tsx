@@ -65,8 +65,7 @@ export function AmortizationContentSection() {
 
       {/* Internal Links Quick Navigation Header */}
       <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 space-y-2">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">
-          <Calculator className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Related Financial Calculators
+        <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">Related Financial Calculators
         </h4>
         <div className="flex flex-wrap gap-2 text-xs">
           <Link
@@ -110,9 +109,7 @@ export function AmortizationContentSection() {
 
       {/* 1. What is Amortization */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <BookOpen className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          1. What is Amortization?
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">1. What is Amortization?
         </h2>
         <p className="text-sm leading-relaxed">
           <strong>Amortization</strong> is an accounting and financial concept that describes the step-by-step liquidation of a financial obligation or asset over time according to a predefined schedule. In personal finance and lending, loan amortization refers to paying off a debt (such as a mortgage, auto loan, or personal loan) through regular, equal monthly installments over a specified duration.
@@ -124,27 +121,23 @@ export function AmortizationContentSection() {
 
       {/* 2. How Amortization Works */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <DollarSign className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-          2. How Amortization Works
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">2. How Amortization Works
         </h2>
         <p className="text-sm leading-relaxed">
           The mechanics of amortization are governed by compounding mathematical principles. Although your total monthly payment remains constant on a fixed-rate loan, the internal composition of that payment shifts dramatically over the life of the loan:
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-amber-500"></span> Early Loan Years (Interest-Heavy)
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">Early Loan Years (Interest-Heavy)
             </h3>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
               Because your starting principal balance is at its absolute highest, the interest owed each month is large. Consequently, in the early years of a 15-year or 30-year loan, <strong>60% to 80% of your monthly payment goes toward interest</strong>, while only a small fraction pays down principal.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1.5">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-blue-500"></span> Later Loan Years (Principal-Heavy)
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">Later Loan Years (Principal-Heavy)
             </h3>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed">
               As principal is gradually paid off, the outstanding balance decreases. Since interest is calculated only on the remaining balance, monthly interest charges plummet. In the final years, <strong>90%+ of your payment goes directly toward principal equity</strong>.
             </p>
           </div>
@@ -153,9 +146,7 @@ export function AmortizationContentSection() {
 
       {/* 3. Principal vs Interest */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Percent className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-          3. Principal vs Interest Breakdown
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Principal vs Interest Breakdown
         </h2>
         <p className="text-sm leading-relaxed">
           Understanding the distinction between <strong>Principal</strong> and <strong>Interest</strong> is critical for strategic financial planning:
@@ -172,14 +163,12 @@ export function AmortizationContentSection() {
 
       {/* 4. Amortization Formula */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Calculator className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-          4. The Mathematical Amortization Formula
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">4. The Mathematical Amortization Formula
         </h2>
         <p className="text-sm leading-relaxed">
           The monthly payment on a standard amortized loan is computed using the standard Annuity Payment formula:
         </p>
-        <div className="p-4 rounded-xl bg-zinc-900 text-zinc-100 dark:bg-zinc-950 font-mono text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
+        <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 font-sans tabular-nums text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
           PMT = P × [ r(1 + r)ⁿ ] / [ (1 + r)ⁿ - 1 ]
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
@@ -200,9 +189,7 @@ export function AmortizationContentSection() {
 
       {/* 5. Extra Payments Explained */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <TrendingDown className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-          5. Extra Payments Explained
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">5. Extra Payments Explained
         </h2>
         <p className="text-sm leading-relaxed">
           When you make an <strong>extra principal payment</strong>—whether monthly, annually, or as a single one-time lump sum—the entirety of that extra money is applied directly to reducing your principal balance.
@@ -214,26 +201,24 @@ export function AmortizationContentSection() {
 
       {/* 6. Benefits of Early Payoff */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <CheckCircle2 className="h-5 w-5 text-teal-600 dark:text-teal-400" />
-          6. Key Benefits of Early Loan Payoff
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">6. Key Benefits of Early Loan Payoff
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Massive Interest Savings</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Massive Interest Savings</h3>
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Paying off a 30-year $300,000 mortgage just 5 years early can save over $70,000 in interest charges.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Rapid Equity Growth</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Rapid Equity Growth</h3>
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Accelerating principal payments builds home equity, increasing your financial safety net and borrowing power.
             </p>
           </div>
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs space-y-1">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100">Financial Peace of Mind</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Financial Peace of Mind</h3>
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Becoming completely debt-free reduces monthly overhead, freeing up cash flow for investments or retirement.
             </p>
           </div>
@@ -242,9 +227,7 @@ export function AmortizationContentSection() {
 
       {/* 7. Fixed vs Variable Loans */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Building className="h-5 w-5 text-sky-600 dark:text-sky-400" />
-          7. Fixed-Rate vs. Variable-Rate Amortization
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">7. Fixed-Rate vs. Variable-Rate Amortization
         </h2>
         <p className="text-sm leading-relaxed">
           On a <strong>fixed-rate loan</strong>, the interest rate and monthly payment remain static for the entire loan life. On a <strong>variable-rate (ARM) loan</strong>, interest rates adjust periodically based on market benchmarks (such as SOFR), causing the required monthly payment to adjust up or down.
@@ -253,9 +236,7 @@ export function AmortizationContentSection() {
 
       {/* 8. Amortization Schedule Guide */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <CalendarCheck className="h-5 w-5 text-rose-600 dark:text-rose-400" />
-          8. How to Read Your Amortization Schedule
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">8. How to Read Your Amortization Schedule
         </h2>
         <p className="text-sm leading-relaxed">
           Your amortization schedule is divided into standard columns:
@@ -275,44 +256,42 @@ export function AmortizationContentSection() {
 
       {/* 9. Frequently Asked Questions */}
       <section className="space-y-4">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <HelpCircle className="h-5 w-5 text-amber-500" />
-          9. Frequently Asked Questions (FAQ)
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">9. Frequently Asked Questions (FAQ)
         </h2>
 
         <div className="space-y-3 text-xs">
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">
               What is loan amortization?
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Amortization is the process of spreading out a loan into a series of equal periodic payments over a fixed term. Each payment covers both interest charges and principal balance reduction.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">
               How does an extra principal payment shorten an amortization schedule?
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Extra principal payments go 100% toward reducing the remaining loan principal. Because monthly interest is calculated on the remaining balance, reducing principal faster lowers compounding interest and accelerates your payoff date.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">
               What is the difference between an amortization schedule and a regular payment list?
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               An amortization schedule details the exact breakdown of every payment into principal reduction, interest paid, beginning balance, and ending balance for every period throughout the loan term.
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <h3 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">
+            <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">
               Can I amortize a loan with variable interest rates?
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
               Yes, but when interest rates fluctuate on variable or adjustable-rate loans (ARMs), the monthly payment and schedule must be recalculated at each rate adjustment period.
             </p>
           </div>
@@ -320,8 +299,8 @@ export function AmortizationContentSection() {
       </section>
 
       {/* Internal Links Footer Grid */}
-      <div className="pt-6 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+      <div className="pt-6  dark:border-zinc-800 space-y-3">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
           Explore Other Financial Tools on CalcPlatform
         </h4>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">

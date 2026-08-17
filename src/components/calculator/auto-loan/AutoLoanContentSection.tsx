@@ -27,15 +27,15 @@ export function AutoLoanContentSection() {
           SECTION 11: SEO EDUCATIONAL GUIDE (11 PARTS)
          ========================================== */}
       <section className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 sm:p-8 shadow-sm space-y-8 text-zinc-800 dark:text-zinc-200">
-        <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
+        <div className="flex items-center gap-3  dark:border-zinc-800 pb-4">
           <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
             <BookOpen className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
               The Complete Guide to Auto Financing & Vehicle Loans
             </h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+            <p className="text-xs text-slate-900 dark:text-slate-100 mt-0.5">
               Master car loan math, interest rates, trade-in credit rules, and vehicle affordability strategies.
             </p>
           </div>
@@ -44,26 +44,26 @@ export function AutoLoanContentSection() {
         <div className="prose prose-sm dark:prose-invert max-w-none space-y-6 text-xs sm:text-sm leading-relaxed">
           {/* Guide 1 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               1. What Is An Auto Loan?
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-300">
+            <p className="text-slate-900 dark:text-zinc-300">
               An auto loan is a secured loan used specifically to purchase a car, truck, SUV, or motorcycle. The financial institution (bank, credit union, or online lender) provides the upfront capital to buy the vehicle from a dealer or private seller. In exchange, the borrower agrees to repay the loan principal plus interest over a set term ranging from 24 to 84 months.
             </p>
-            <p className="text-zinc-600 dark:text-zinc-300 mt-2">
+            <p className="text-slate-900 dark:text-zinc-300 mt-2">
               Because auto loans are secured by the vehicle itself, the lender holds the vehicle title as collateral. If the borrower defaults on monthly payments, the lender has the legal right to repossess the car.
             </p>
           </div>
 
           {/* Guide 2 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               2. How Auto Financing Works
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-300">
+            <p className="text-slate-900 dark:text-zinc-300">
               Auto loan financing consists of four core elements:
             </p>
-            <ul className="list-disc pl-5 space-y-1 mt-1 text-zinc-600 dark:text-zinc-300">
+            <ul className="list-disc pl-5 space-y-1 mt-1 text-slate-900 dark:text-zinc-300">
               <li><strong>Vehicle Purchase Price:</strong> The negotiated sticker price of the car before taxes and fees.</li>
               <li><strong>Net Financed Amount:</strong> Vehicle price minus down payment and trade-in equity, plus state sales tax and dealer fees.</li>
               <li><strong>Annual Percentage Rate (APR):</strong> The interest rate charged annually by the lender on the remaining principal balance.</li>
@@ -73,22 +73,22 @@ export function AutoLoanContentSection() {
 
           {/* Guide 3 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               3. Dealer Financing vs Bank Financing
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-300">
+            <p className="text-slate-900 dark:text-zinc-300">
               Car buyers can choose between direct lending (banks, credit unions, online auto lenders) and indirect dealership financing:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
               <div className="bg-zinc-50 dark:bg-zinc-950 p-3.5 rounded-lg border border-zinc-200 dark:border-zinc-800">
                 <h4 className="font-bold text-xs text-blue-600 dark:text-blue-400 mb-1">Direct Bank / Credit Union Financing</h4>
-                <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
+                <p className="text-[11px] text-slate-900 dark:text-slate-100">
                   Pre-approvals from your local credit union or bank give you competitive interest rate leverage before stepping onto the dealership lot. You enter negotiations knowing your exact budget.
                 </p>
               </div>
               <div className="bg-zinc-50 dark:bg-zinc-950 p-3.5 rounded-lg border border-zinc-200 dark:border-zinc-800">
                 <h4 className="font-bold text-xs text-blue-600 dark:text-blue-400 mb-1">Dealership Financing</h4>
-                <p className="text-[11px] text-zinc-600 dark:text-zinc-400">
+                <p className="text-[11px] text-slate-900 dark:text-slate-100">
                   Dealers access network financing and captive manufacturer lenders (e.g., Toyota Financial). While convenient, dealers may mark up interest rates by 1–2% above wholesale approval rates.
                 </p>
               </div>
@@ -97,20 +97,20 @@ export function AutoLoanContentSection() {
 
           {/* Guide 4 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               4. How Auto Loan Interest Works
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-300">
+            <p className="text-slate-900 dark:text-zinc-300">
               Auto loan interest is calculated using simple daily interest amortized over your chosen term. In the early months of the loan, a larger portion of your monthly payment goes toward interest charges. As the principal balance declines over time, a greater percentage of each payment directly reduces the remaining loan balance.
             </p>
           </div>
 
           {/* Guide 5 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               5. Understanding Trade-In Value & State Tax Credits
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-300">
+            <p className="text-slate-900 dark:text-zinc-300">
               Trading in your current vehicle can significantly lower your new loan balance. In 42 US states, trade-in value provides a sales tax credit:
             </p>
             <div className="bg-blue-50 dark:bg-blue-950/40 p-3.5 rounded-lg border border-blue-100 dark:border-blue-900/50 mt-2 text-xs text-blue-900 dark:text-blue-200">
@@ -120,27 +120,27 @@ export function AutoLoanContentSection() {
 
           {/* Guide 6 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               6. How Down Payments Affect Auto Loans
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-300">
+            <p className="text-slate-900 dark:text-zinc-300">
               New vehicles depreciate roughly 20% in their first year of ownership. A substantial down payment (ideally 20% down on new cars, 10% on used cars) cushions against initial depreciation and protects you from going underwater on your loan.
             </p>
           </div>
 
           {/* Guide 7 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               7. Lease vs Buy Comparison
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-300">
+            <p className="text-slate-900 dark:text-zinc-300">
               Leasing involves renting a vehicle for 24 to 36 months, paying only for the vehicle's projected depreciation. Buying builds equity in an asset that you own free and clear once the loan is paid off.
             </p>
           </div>
 
           {/* Guide 8 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               8. How Credit Scores Affect Loan Rates
             </h3>
             <div className="overflow-x-auto mt-2">
@@ -153,30 +153,30 @@ export function AutoLoanContentSection() {
                     <th className="p-2 border-b">Avg Used Car APR</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                <tbody className=" dark:divide-zinc-800">
                   <tr>
-                    <td className="p-2 font-semibold text-emerald-600">Super Prime</td>
+                    <td className="p-2 font-semibold text-blue-600">Super Prime</td>
                     <td className="p-2">781 - 850</td>
-                    <td className="p-2 font-mono">5.25%</td>
-                    <td className="p-2 font-mono">6.75%</td>
+                    <td className="p-2 font-sans tabular-nums">5.25%</td>
+                    <td className="p-2 font-sans tabular-nums">6.75%</td>
                   </tr>
                   <tr>
                     <td className="p-2 font-semibold text-blue-600">Prime</td>
                     <td className="p-2">661 - 780</td>
-                    <td className="p-2 font-mono">6.45%</td>
-                    <td className="p-2 font-mono">8.75%</td>
+                    <td className="p-2 font-sans tabular-nums">6.45%</td>
+                    <td className="p-2 font-sans tabular-nums">8.75%</td>
                   </tr>
                   <tr>
-                    <td className="p-2 font-semibold text-amber-600">Non-Prime</td>
+                    <td className="p-2 font-semibold text-blue-600">Non-Prime</td>
                     <td className="p-2">601 - 660</td>
-                    <td className="p-2 font-mono">9.60%</td>
-                    <td className="p-2 font-mono">13.25%</td>
+                    <td className="p-2 font-sans tabular-nums">9.60%</td>
+                    <td className="p-2 font-sans tabular-nums">13.25%</td>
                   </tr>
                   <tr>
-                    <td className="p-2 font-semibold text-rose-600">Subprime</td>
+                    <td className="p-2 font-semibold text-blue-600">Subprime</td>
                     <td className="p-2">300 - 600</td>
-                    <td className="p-2 font-mono">14.50%+</td>
-                    <td className="p-2 font-mono">21.00%+</td>
+                    <td className="p-2 font-sans tabular-nums">14.50%+</td>
+                    <td className="p-2 font-sans tabular-nums">21.00%+</td>
                   </tr>
                 </tbody>
               </table>
@@ -185,10 +185,10 @@ export function AutoLoanContentSection() {
 
           {/* Guide 9 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               9. Tips For Lower Monthly Payments
             </h3>
-            <ul className="list-disc pl-5 space-y-1 text-zinc-600 dark:text-zinc-300">
+            <ul className="list-disc pl-5 space-y-1 text-slate-900 dark:text-zinc-300">
               <li>Increase your upfront cash down payment or trade-in allowance.</li>
               <li>Obtain credit union pre-approval before shopping at dealerships.</li>
               <li>Choose a 60-month loan term instead of 72 or 84 months.</li>
@@ -198,27 +198,27 @@ export function AutoLoanContentSection() {
 
           {/* Guide 10 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               10. Should You Pay Off Your Auto Loan Early?
             </h3>
-            <p className="text-zinc-600 dark:text-zinc-300">
+            <p className="text-slate-900 dark:text-zinc-300">
               Paying off an auto loan early eliminates monthly debt commitments and saves interest. Most standard auto loans carry no prepayment penalties. However, if your auto loan interest rate is exceptionally low (e.g. 0% to 2.9%), investing spare cash in high-yield savings or index funds may yield higher returns than early loan payoff.
             </p>
           </div>
 
           {/* Guide 11 */}
           <div>
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mb-2">
               11. Common Auto Loan Mistakes To Avoid
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
-              <div className="p-3 bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/40 rounded-lg text-rose-900 dark:text-rose-200 text-xs">
+              <div className="p-3 bg-blue-50 dark:bg-blue-50/30 border border-rose-200 dark:border-rose-900/40 rounded-lg text-rose-900 dark:text-rose-200 text-xs">
                 <strong>Mistake 1: Focusing Only On Monthly Payment</strong>
                 <p className="mt-1 opacity-90 text-[11px]">
                   Dealers can stretch terms to 84 months to meet target monthly payments while secretly adding thousands in total interest.
                 </p>
               </div>
-              <div className="p-3 bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/40 rounded-lg text-rose-900 dark:text-rose-200 text-xs">
+              <div className="p-3 bg-blue-50 dark:bg-blue-50/30 border border-rose-200 dark:border-rose-900/40 rounded-lg text-rose-900 dark:text-rose-200 text-xs">
                 <strong>Mistake 2: Rolling Over Negative Equity</strong>
                 <p className="mt-1 opacity-90 text-[11px]">
                   Rolling an upside-down balance into a new car loan compounds debt and severely damages long-term vehicle equity.
@@ -233,22 +233,22 @@ export function AutoLoanContentSection() {
           SECTION 12: FAQ ACCORDION WITH JSON-LD SCHEMA
          ========================================== */}
       <section className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 sm:p-8 shadow-sm space-y-4">
-        <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
-          <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
+        <div className="flex items-center gap-3  dark:border-zinc-800 pb-4">
+          <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-50/60 text-blue-600 dark:text-blue-400">
             <HelpCircle className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
               Frequently Asked Questions (FAQ)
             </h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+            <p className="text-xs text-slate-900 dark:text-slate-100 mt-0.5">
               Expert answers to common car financing, trade-in, and interest rate questions.
             </p>
           </div>
         </div>
 
         {/* FAQ Accordion List */}
-        <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
+        <div className=" dark:divide-zinc-800">
           {faqs.map((faq, idx) => {
             const isOpen = openFaq === idx;
             return (
@@ -269,7 +269,7 @@ export function AutoLoanContentSection() {
                 </button>
 
                 {isOpen && (
-                  <p className="mt-2 text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed pr-6 bg-zinc-50 dark:bg-zinc-950 p-3.5 rounded-lg border border-zinc-100 dark:border-zinc-800">
+                  <p className="mt-2 text-xs text-slate-900 dark:text-zinc-300 leading-relaxed pr-6 bg-zinc-50 dark:bg-zinc-950 p-3.5 rounded-lg border border-zinc-100 dark:border-zinc-800">
                     {faq.answer}
                   </p>
                 )}
@@ -283,15 +283,15 @@ export function AutoLoanContentSection() {
           SECTION 13: RELATED CALCULATORS GRID
          ========================================== */}
       <section className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 sm:p-8 shadow-sm space-y-4">
-        <div className="flex items-center gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
-          <div className="p-2 rounded-lg bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400">
+        <div className="flex items-center gap-3  dark:border-zinc-800 pb-3">
+          <div className="p-2 rounded-lg bg-blue-50 dark:bg-blue-50/60 text-blue-600 dark:text-blue-400">
             <Calculator className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-base font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-base font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
               Related Financial Calculators
             </h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            <p className="text-xs text-slate-900 dark:text-slate-100">
               Explore complementary borrowing, mortgage, and refinancing tools.
             </p>
           </div>
@@ -310,7 +310,7 @@ export function AutoLoanContentSection() {
                 </span>
                 <ArrowRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-transform group-hover:translate-x-0.5" />
               </div>
-              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-1 line-clamp-2">
+              <p className="text-[11px] text-slate-900 dark:text-slate-100 mt-1 line-clamp-2">
                 {calc.desc}
               </p>
             </Link>

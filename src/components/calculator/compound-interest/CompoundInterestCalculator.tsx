@@ -312,16 +312,9 @@ export function CompoundInterestCalculator() {
             onClick={handleSaveScenario}
             className="h-8 text-xs font-semibold gap-1.5"
           >
-            <Bookmark className="h-3.5 w-3.5 text-indigo-500" /> Save Calculation
+            <Bookmark className="h-3.5 w-3.5 text-indigo-500" /> Save
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleShare}
-            className="h-8 text-xs font-semibold gap-1.5"
-          >
-            <Share2 className="h-3.5 w-3.5 text-blue-500" /> Share Result
-          </Button>
+          
           <Button
             variant="default"
             size="sm"
@@ -348,10 +341,9 @@ export function CompoundInterestCalculator() {
           {/* SECTION 1: RATE CONVERSION CALCULATOR CARD */}
           <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
             <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-              <h2 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Repeat className="h-4 w-4 text-blue-600" /> 1. Rate Conversion Calculator
+              <h2 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">1. Rate Conversion Calculator
               </h2>
-              <Badge variant="outline" className="text-[10px] font-mono text-blue-600 border-blue-200">
+              <Badge variant="outline" className="text-[10px] font-sans tabular-nums text-blue-600 border-blue-200">
                 Two-Way Conversion
               </Badge>
             </div>
@@ -368,7 +360,7 @@ export function CompoundInterestCalculator() {
                     step="0.01"
                     value={inputRate}
                     onChange={(e) => setInputRate(e.target.value)}
-                    className="h-10 text-sm font-mono bg-zinc-50 dark:bg-zinc-950 pr-8 border-zinc-200 dark:border-zinc-800"
+                    className="h-10 text-sm font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 pr-8 border-zinc-200 dark:border-zinc-800"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-bold">%</span>
                 </div>
@@ -446,8 +438,7 @@ export function CompoundInterestCalculator() {
               className="flex items-center justify-between cursor-pointer select-none"
               onClick={() => setShowFormulaPanel(!showFormulaPanel)}
             >
-              <h3 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <BookOpen className="h-4 w-4 text-indigo-600" /> Live Dynamic Derivation Formula Panel
+              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Live Dynamic Derivation Formula Panel
               </h3>
               <Button variant="ghost" size="icon" className="h-6 w-6">
                 {showFormulaPanel ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -455,7 +446,7 @@ export function CompoundInterestCalculator() {
             </div>
 
             {showFormulaPanel && (
-              <div className="space-y-3 pt-2 text-xs font-mono">
+              <div className="space-y-3 pt-2 text-xs font-sans tabular-nums">
                 {conversionResult.formulaDerivation.map((step, idx) => (
                   <div key={idx} className="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1">
                     <span className="font-bold text-indigo-600 dark:text-indigo-400 block text-[11px]">
@@ -488,7 +479,7 @@ export function CompoundInterestCalculator() {
               <span className="text-xs text-zinc-400 block font-medium">
                 Equivalent Rate ({getFrequencyLabel(targetFrequency)})
               </span>
-              <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-mono mt-1">
+              <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
                 {conversionResult.convertedRatePercent.toFixed(5)}%
               </div>
               <p className="text-[11px] text-indigo-200/80 mt-1 font-sans">
@@ -500,28 +491,28 @@ export function CompoundInterestCalculator() {
             <div className="grid grid-cols-2 gap-3 pt-2 border-t border-white/10">
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Effective Annual Rate (EAR)</span>
-                <span className="text-base font-bold text-white font-mono">
+                <span className="text-base font-bold text-white font-sans tabular-nums">
                   {conversionResult.earPercent.toFixed(4)}%
                 </span>
               </div>
 
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Equivalent APY</span>
-                <span className="text-base font-bold text-white font-mono">
+                <span className="text-base font-bold text-white font-sans tabular-nums">
                   {conversionResult.equivalentApyPercent.toFixed(4)}%
                 </span>
               </div>
 
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Equivalent Monthly APR</span>
-                <span className="text-base font-bold text-white font-mono">
+                <span className="text-base font-bold text-white font-sans tabular-nums">
                   {conversionResult.equivalentAprPercent.toFixed(4)}%
                 </span>
               </div>
 
               <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                 <span className="text-[11px] text-zinc-400 block">Continuous Equivalent</span>
-                <span className="text-base font-bold text-white font-mono">
+                <span className="text-base font-bold text-white font-sans tabular-nums">
                   {conversionResult.continuousEquivalentPercent.toFixed(4)}%
                 </span>
               </div>
@@ -544,8 +535,7 @@ export function CompoundInterestCalculator() {
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3">
           <div>
-            <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-blue-600" /> Equivalent Rate Comparison Across All Frequencies
+            <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Equivalent Rate Comparison Across All Frequencies
             </h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
               Exact equivalent nominal rates required across 8 compounding frequencies to yield equal effective returns.
@@ -580,13 +570,13 @@ export function CompoundInterestCalculator() {
                       </Badge>
                     )}
                   </td>
-                  <td className="p-3 font-mono text-zinc-900 dark:text-zinc-100">
+                  <td className="p-3 font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
                     {row.equivalentRatePercent.toFixed(5)}%
                   </td>
-                  <td className="p-3 font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <td className="p-3 font-sans tabular-nums text-emerald-600 dark:text-emerald-400 font-semibold">
                     {row.effectiveYieldPercent.toFixed(5)}%
                   </td>
-                  <td className="p-3 font-mono text-zinc-600 dark:text-zinc-400">
+                  <td className="p-3 font-sans tabular-nums text-zinc-600 dark:text-zinc-400">
                     {row.differenceVsAnnualPercent > 0 ? "+" : ""}
                     {row.differenceVsAnnualPercent.toFixed(5)}%
                   </td>
@@ -598,7 +588,7 @@ export function CompoundInterestCalculator() {
 
         {/* Effective Yield Recharts Bar Chart */}
         <div className="space-y-3 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-          <h3 className="text-xs font-bold text-zinc-800 dark:text-zinc-200">
+          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
             Effective Yield Comparison by Compounding Frequency
           </h3>
           <div className="h-64 w-full">
@@ -638,8 +628,7 @@ export function CompoundInterestCalculator() {
          ========================================== */}
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-          <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Percent className="h-5 w-5 text-indigo-600" /> APR vs APY Analyzer Module
+          <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">APR vs APY Analyzer Module
           </h2>
           <Badge variant="outline" className="text-[10px] text-indigo-600 border-indigo-200">
             Yield Incremental Gain
@@ -657,7 +646,7 @@ export function CompoundInterestCalculator() {
                 step="0.1"
                 value={aprAnalyzerInput}
                 onChange={(e) => setAprAnalyzerInput(e.target.value)}
-                className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
               />
             </div>
 
@@ -683,13 +672,13 @@ export function CompoundInterestCalculator() {
             <div className="p-4 rounded-xl bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/40 space-y-3">
               <div className="flex justify-between items-center text-xs">
                 <span className="text-zinc-600 dark:text-zinc-400">Effective APY:</span>
-                <span className="font-bold font-mono text-indigo-600 dark:text-indigo-400 text-sm">
+                <span className="font-bold font-sans tabular-nums text-indigo-600 dark:text-indigo-400 text-sm">
                   {aprVsApyResult.apyPercent.toFixed(4)}%
                 </span>
               </div>
               <div className="flex justify-between items-center text-xs border-t border-indigo-100 dark:border-indigo-900/40 pt-2">
                 <span className="text-zinc-600 dark:text-zinc-400">Annual Gain on $10,000:</span>
-                <span className="font-bold font-mono text-emerald-600 dark:text-emerald-400 text-sm">
+                <span className="font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400 text-sm">
                   +${aprVsApyResult.interestGainPer10k.toFixed(2)}
                 </span>
               </div>
@@ -720,8 +709,7 @@ export function CompoundInterestCalculator() {
          ========================================== */}
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-          <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <DollarSign className="h-5 w-5 text-emerald-600" /> Compounding Frequency Investment Growth Tool
+          <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Compounding Frequency Investment Growth Tool
           </h2>
           <Badge variant="outline" className="text-[10px] text-emerald-600 border-emerald-200">
             {"A = P(1 + r/n)^(nt)"}
@@ -738,7 +726,7 @@ export function CompoundInterestCalculator() {
               type="number"
               value={freqCompPrincipal}
               onChange={(e) => setFreqCompPrincipal(Math.max(0, Number(e.target.value)))}
-              className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+              className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
             />
           </div>
 
@@ -751,7 +739,7 @@ export function CompoundInterestCalculator() {
               step="0.1"
               value={freqCompRate}
               onChange={(e) => setFreqCompRate(Math.max(0, Number(e.target.value)))}
-              className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+              className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
             />
           </div>
 
@@ -763,7 +751,7 @@ export function CompoundInterestCalculator() {
               type="number"
               value={freqCompYears}
               onChange={(e) => setFreqCompYears(Math.max(1, Number(e.target.value)))}
-              className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+              className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
             />
           </div>
         </div>
@@ -795,13 +783,13 @@ export function CompoundInterestCalculator() {
                       </Badge>
                     )}
                   </td>
-                  <td className="p-3 font-mono font-bold text-zinc-900 dark:text-zinc-100">
+                  <td className="p-3 font-sans tabular-nums font-bold text-zinc-900 dark:text-zinc-100">
                     ${row.futureValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
-                  <td className="p-3 font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <td className="p-3 font-sans tabular-nums text-emerald-600 dark:text-emerald-400 font-semibold">
                     +${row.totalInterest.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
-                  <td className="p-3 font-mono text-zinc-600 dark:text-zinc-400">
+                  <td className="p-3 font-sans tabular-nums text-zinc-600 dark:text-zinc-400">
                     {row.effectiveYieldPercent.toFixed(4)}%
                   </td>
                 </tr>
@@ -816,8 +804,7 @@ export function CompoundInterestCalculator() {
          ========================================== */}
       <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
         <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-          <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Zap className="h-5 w-5 text-amber-500" /> Continuous Compounding Calculator {"(A = Pe^{rt})"}
+          <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Continuous Compounding Calculator {"(A = Pe^{rt})"}
           </h2>
           <Badge variant="outline" className="text-[10px] text-amber-600 border-amber-200">
             Euler Constant e ≈ 2.71828
@@ -835,7 +822,7 @@ export function CompoundInterestCalculator() {
                   type="number"
                   value={contPrincipal}
                   onChange={(e) => setContPrincipal(Math.max(0, Number(e.target.value)))}
-                  className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                  className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                 />
               </div>
 
@@ -848,7 +835,7 @@ export function CompoundInterestCalculator() {
                   step="0.1"
                   value={contRate}
                   onChange={(e) => setContRate(Math.max(0, Number(e.target.value)))}
-                  className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                  className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                 />
               </div>
 
@@ -860,7 +847,7 @@ export function CompoundInterestCalculator() {
                   type="number"
                   value={contYears}
                   onChange={(e) => setContYears(Math.max(1, Number(e.target.value)))}
-                  className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                  className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
                 />
               </div>
             </div>
@@ -870,14 +857,14 @@ export function CompoundInterestCalculator() {
               <span className="text-[11px] uppercase font-bold text-amber-800 dark:text-amber-400 tracking-wider">
                 Continuous Compounding Output
               </span>
-              <div className="text-2xl font-black text-amber-900 dark:text-amber-100 font-mono">
+              <div className="text-2xl font-black text-amber-900 dark:text-amber-100 font-sans tabular-nums">
                 ${continuousResult.futureValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
-              <div className="text-xs text-amber-700 dark:text-amber-300 flex justify-between pt-2 border-t border-amber-200/50 font-mono">
+              <div className="text-xs text-amber-700 dark:text-amber-300 flex justify-between pt-2 border-t border-amber-200/50 font-sans tabular-nums">
                 <span>Interest Earned:</span>
                 <span className="font-bold">+${continuousResult.totalInterestEarned.toLocaleString()}</span>
               </div>
-              <div className="text-xs text-amber-700 dark:text-amber-300 flex justify-between font-mono">
+              <div className="text-xs text-amber-700 dark:text-amber-300 flex justify-between font-sans tabular-nums">
                 <span>Growth Multiplier:</span>
                 <span className="font-bold">{continuousResult.growthMultiplier.toFixed(4)}x</span>
               </div>
@@ -912,8 +899,7 @@ export function CompoundInterestCalculator() {
         {/* RULE OF 72 CALCULATOR (COL 5) */}
         <div className="lg:col-span-5 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h2 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Gauge className="h-4 w-4 text-purple-600" /> Rule of 72 Calculator
+            <h2 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Rule of 72 Calculator
             </h2>
             <Badge variant="outline" className="text-[10px] text-purple-600 border-purple-200">
               Doubling Estimator
@@ -929,28 +915,28 @@ export function CompoundInterestCalculator() {
               step="0.1"
               value={rule72Rate}
               onChange={(e) => setRule72Rate(Math.max(0.1, Number(e.target.value)))}
-              className="h-9 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+              className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
             />
           </div>
 
           <div className="p-4 rounded-xl bg-purple-50/60 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-900/40 space-y-3 text-xs">
             <div className="flex justify-between items-center">
               <span className="text-zinc-600 dark:text-zinc-400">Rule of 72 Estimate:</span>
-              <span className="font-mono font-bold text-purple-600 dark:text-purple-400 text-sm">
+              <span className="font-sans tabular-nums font-bold text-purple-600 dark:text-purple-400 text-sm">
                 {rule72Result.ruleOf72Years.toFixed(2)} Years
               </span>
             </div>
 
             <div className="flex justify-between items-center border-t border-purple-100 dark:border-purple-900/40 pt-2">
               <span className="text-zinc-600 dark:text-zinc-400">Rule of 69.3 Estimate:</span>
-              <span className="font-mono font-semibold text-zinc-800 dark:text-zinc-200">
+              <span className="font-sans tabular-nums font-semibold text-zinc-800 dark:text-zinc-200">
                 {rule72Result.ruleOf693Years.toFixed(2)} Years
               </span>
             </div>
 
             <div className="flex justify-between items-center">
               <span className="text-zinc-600 dark:text-zinc-400">Exact Doubling Time:</span>
-              <span className="font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+              <span className="font-sans tabular-nums font-semibold text-emerald-600 dark:text-emerald-400">
                 {rule72Result.exactYears.toFixed(2)} Years
               </span>
             </div>
@@ -969,8 +955,7 @@ export function CompoundInterestCalculator() {
         {/* SIMPLE VS COMPOUND INTEREST GROWTH (COL 7) */}
         <div className="lg:col-span-7 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h2 className="text-sm font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-blue-600" /> Simple vs Compound Interest Growth
+            <h2 className="text-sm font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Simple vs Compound Interest Growth
             </h2>
             <Badge variant="outline" className="text-[10px] text-blue-600 border-blue-200">
               Multi-Year Comparison
@@ -986,7 +971,7 @@ export function CompoundInterestCalculator() {
                 type="number"
                 value={simpleCompPrincipal}
                 onChange={(e) => setSimpleCompPrincipal(Math.max(0, Number(e.target.value)))}
-                className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
               />
             </div>
             <div>
@@ -998,7 +983,7 @@ export function CompoundInterestCalculator() {
                 step="0.1"
                 value={simpleCompRate}
                 onChange={(e) => setSimpleCompRate(Math.max(0, Number(e.target.value)))}
-                className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
               />
             </div>
             <div>
@@ -1009,7 +994,7 @@ export function CompoundInterestCalculator() {
                 type="number"
                 value={simpleCompYears}
                 onChange={(e) => setSimpleCompYears(Math.max(1, Number(e.target.value)))}
-                className="h-8 text-xs font-mono bg-zinc-50 dark:bg-zinc-950"
+                className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
               />
             </div>
           </div>
@@ -1025,7 +1010,7 @@ export function CompoundInterestCalculator() {
                   <th className="p-2">Interest Bonus</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
                 {simpleVsCompResult.milestones.map((m) => (
                   <tr key={m.year} className="hover:bg-zinc-50 dark:hover:bg-zinc-800">
                     <td className="p-2 font-bold">{m.year} Yrs</td>
@@ -1044,8 +1029,7 @@ export function CompoundInterestCalculator() {
           SECTION 7: ADVANCED INSIGHTS & TAKEAWAYS
          ========================================== */}
       <div className="bg-gradient-to-br from-indigo-50 via-white to-blue-50 dark:from-indigo-950/30 dark:via-zinc-900 dark:to-blue-950/30 rounded-xl p-5 border border-indigo-100 dark:border-indigo-900/40 shadow-xs space-y-4">
-        <h2 className="text-base font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-indigo-600" /> Advanced Financial Insights & Key Takeaways
+        <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Advanced Financial Insights & Key Takeaways
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           {advancedInsights.keyTakeaways.map((takeaway, index) => (

@@ -5,20 +5,18 @@ import { BookOpen, AlertTriangle, Cpu, CheckCircle, Table } from "lucide-react";
 
 export function ResistorContent() {
   return (
-    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10  dark:border-zinc-800 pt-8">
       <header>
-        <h2 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
-          <BookOpen className="h-6 w-6 text-blue-600" />
-          The Engineering Guide to Resistors, Color Codes, and Conductor Resistance
+        <h2 className="text-2xl font-black text-blue-600 dark:text-blue-400 tracking-tight flex items-center gap-2">The Engineering Guide to Resistors, Color Codes, and Conductor Resistance
         </h2>
-        <p className="text-zinc-500 dark:text-zinc-400 text-xs">
+        <p className="text-slate-900 dark:text-slate-100 text-xs">
           An authoritative reference on mathematical circuit analysis, conductor properties, and international standards.
         </p>
       </header>
 
       {/* SECTION 1: INTRODUCTION */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>1.</span> Introduction
         </h3>
         <p>
@@ -31,7 +29,7 @@ export function ResistorContent() {
 
       {/* SECTION 2: MATHEMATICAL CONCEPT */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>2.</span> Physical and Mathematical Principles of Resistance
         </h3>
         <p>
@@ -58,7 +56,7 @@ export function ResistorContent() {
 
       {/* SECTION 3: FORMULA SECTION */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>3.</span> The Formulas
         </h3>
         <p>
@@ -68,26 +66,26 @@ export function ResistorContent() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Series Resistance</h4>
-            <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               R_total = R_1 + R_2 + ... + R_n
             </div>
-            <p className="text-[11px] text-zinc-500">For series resistors, the equivalent resistance is simply the sum of individual values.</p>
+            <p className="text-[11px] text-slate-900">For series resistors, the equivalent resistance is simply the sum of individual values.</p>
           </div>
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Parallel Resistance</h4>
-            <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               1 / R_total = Σ (1 / R_i)
             </div>
-            <p className="text-[11px] text-zinc-500">The reciprocal equivalent resistance is the sum of the reciprocals of branch resistances.</p>
+            <p className="text-[11px] text-slate-900">The reciprocal equivalent resistance is the sum of the reciprocals of branch resistances.</p>
           </div>
 
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
             <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-xs">Conductor Resistance</h4>
-            <div className="font-mono text-xs text-blue-600 dark:text-blue-400 font-bold">
+            <div className="font-sans tabular-nums text-xs text-blue-600 dark:text-blue-400 font-bold">
               R = ρ × L / A
             </div>
-            <p className="text-[11px] text-zinc-500">Resistance equals material resistivity times length divided by cross-sectional area.</p>
+            <p className="text-[11px] text-slate-900">Resistance equals material resistivity times length divided by cross-sectional area.</p>
           </div>
         </div>
 
@@ -102,7 +100,7 @@ export function ResistorContent() {
 
       {/* SECTION 4: HOW CALCULATION WORKS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>4.</span> Step-by-Step Calculation Processes
         </h3>
         <p>
@@ -130,20 +128,18 @@ export function ResistorContent() {
 
       {/* SECTION 5: WORKED EXAMPLES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>5.</span> Worked Engineering Examples
         </h3>
         <div className="space-y-4">
           {/* Example 1 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-blue-600" />
-              Example A: Decoding a 5-Band Color Resistor
+            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">Example A: Decoding a 5-Band Color Resistor
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Decode the following bands in order: Orange, Blue, Black, Red, Brown.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Identify digits from first three bands:</strong></div>
               <div>Band 1 (Orange) = 3</div>
               <div>Band 2 (Blue) = 6</div>
@@ -162,14 +158,12 @@ export function ResistorContent() {
 
           {/* Example 2 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Cpu className="w-3.5 h-3.5 text-purple-600" />
-              Example B: Parallel Network Equivalent Resistance & Power
+            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">Example B: Parallel Network Equivalent Resistance & Power
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Find the total equivalent resistance of three resistors connected in parallel: R1 = 100 Ω (±5%), R2 = 220 Ω (±5%), R3 = 470 Ω (±5%) with a supply voltage of 12V.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Formula for parallel equivalent resistance:</strong></div>
               <div>1/R_total = 1/100 + 1/220 + 1/470 = 0.01 + 0.004545 + 0.002128 = 0.016673 S</div>
               <div>R_total = 1 / 0.016673 = 59.98 Ω</div>
@@ -187,7 +181,7 @@ export function ResistorContent() {
 
       {/* SECTION 6: COLOR CODE CHART */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>6.</span> Standard Resistor Color Code Reference
         </h3>
         <p>
@@ -196,7 +190,7 @@ export function ResistorContent() {
         <div className="overflow-x-auto border border-zinc-200 dark:border-zinc-800 rounded-xl">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
-              <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-b border-zinc-200 dark:border-zinc-700">
+              <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300  dark:border-zinc-700">
                 <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Color</th>
                 <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Significant Digit</th>
                 <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Multiplier</th>
@@ -204,7 +198,7 @@ export function ResistorContent() {
                 <th className="p-2">Temperature Coefficient (ppm/K)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+            <tbody className=" dark:divide-zinc-800">
               <tr>
                 <td className="p-2 border-r font-semibold">Black</td>
                 <td className="p-2 border-r">0</td>
@@ -241,7 +235,7 @@ export function ResistorContent() {
                 <td className="p-2">25</td>
               </tr>
               <tr>
-                <td className="p-2 border-r font-semibold text-emerald-600">Green</td>
+                <td className="p-2 border-r font-semibold text-blue-600">Green</td>
                 <td className="p-2 border-r">5</td>
                 <td className="p-2 border-r">×100k</td>
                 <td className="p-2 border-r">±0.5% (D)</td>
@@ -255,14 +249,14 @@ export function ResistorContent() {
                 <td className="p-2">10</td>
               </tr>
               <tr>
-                <td className="p-2 border-r font-semibold text-violet-600">Violet</td>
+                <td className="p-2 border-r font-semibold text-blue-600">Violet</td>
                 <td className="p-2 border-r">7</td>
                 <td className="p-2 border-r">×10M</td>
                 <td className="p-2 border-r">±0.1% (B)</td>
                 <td className="p-2">5</td>
               </tr>
               <tr>
-                <td className="p-2 border-r font-semibold text-zinc-500">Gray</td>
+                <td className="p-2 border-r font-semibold text-slate-900">Gray</td>
                 <td className="p-2 border-r">8</td>
                 <td className="p-2 border-r">×100M</td>
                 <td className="p-2 border-r">±0.01% (L)</td>
@@ -289,11 +283,11 @@ export function ResistorContent() {
 
       {/* SECTION 7: COMMON MISTAKES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>7.</span> Common Electronics Engineering Mistakes
         </h3>
-        <div className="p-4 border border-amber-200 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/20 rounded-2xl space-y-2">
-          <p className="flex items-center gap-1 text-amber-800 dark:text-amber-400 font-bold text-xs">
+        <div className="p-4 border border-amber-200 dark:border-amber-900/60 bg-blue-50/50 dark:bg-blue-50/20 rounded-2xl space-y-2">
+          <p className="flex items-center gap-1 text-amber-800 dark:text-blue-400 font-bold text-xs">
             <AlertTriangle className="w-4 h-4" /> Keep the following pitfalls in mind when implementing layouts:
           </p>
           <ul className="list-disc pl-5 space-y-1.5 text-xs">
@@ -318,7 +312,7 @@ export function ResistorContent() {
 
       {/* SECTION 8: PRACTICAL APPLICATIONS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>8.</span> Practical Applications
         </h3>
         <p>
@@ -339,7 +333,7 @@ export function ResistorContent() {
 
       {/* SECTION 9: RELATED CONCEPTS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>9.</span> Related Mathematical & Electrical Concepts
         </h3>
         <p>
@@ -354,8 +348,7 @@ export function ResistorContent() {
 
       {/* SECTION 10: SUMMARY */}
       <section className="space-y-3 bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <h3 className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-          <CheckCircle className="w-4 h-4" /> Educational Summary
+        <h3 className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Educational Summary
         </h3>
         <p className="text-xs mt-1">
           Resistors are indispensable tools for managing currents and voltages. Safely utilizing them requires looking up their color code values correctly, calculating combined network equivalents, accounting for temperature drifts, and verifying power dissipation limits. This calculator suite automates these math computations to ensure electrical layouts are calculated accurately.

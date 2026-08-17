@@ -217,27 +217,7 @@ export function ShoeSizeCalculator() {
           </button>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={handleCopySummary}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer"
-          >
-            {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5" />}
-            {copied ? "Copied" : "Share Fit"}
-          </Button>
-
-          <Button
-            onClick={() => setShowReportModal(true)}
-            variant="outline"
-            size="sm"
-            className="h-8 text-xs font-bold gap-1 cursor-pointer bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 border-emerald-200"
-          >
-            <Printer className="h-3.5 w-3.5" /> PDF Profile
-          </Button>
-        </div>
+        
       </div>
 
       {/* 2. TAB 1: MEASURE BY FOOT DIMENSIONS */}
@@ -283,8 +263,7 @@ export function ShoeSizeCalculator() {
 
             {/* Bilateral Foot Measurement Inputs */}
             <div className="space-y-4">
-              <h3 className="text-xs font-extrabold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
-                <Footprints className="h-4 w-4 text-emerald-600" /> Bilateral Foot Measurements ({unit})
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">Bilateral Foot Measurements ({unit})
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -298,7 +277,7 @@ export function ShoeSizeCalculator() {
                       value={leftLength}
                       onChange={(e) => setLeftLength(Number(e.target.value))}
                       step={unit === "in" ? 0.1 : 0.5}
-                      className="h-9 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                      className="h-9 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -308,7 +287,7 @@ export function ShoeSizeCalculator() {
                       value={leftWidth}
                       onChange={(e) => setLeftWidth(Number(e.target.value))}
                       step={unit === "in" ? 0.1 : 0.5}
-                      className="h-9 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                      className="h-9 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                     />
                   </div>
                 </div>
@@ -323,7 +302,7 @@ export function ShoeSizeCalculator() {
                       value={rightLength}
                       onChange={(e) => setRightLength(Number(e.target.value))}
                       step={unit === "in" ? 0.1 : 0.5}
-                      className="h-9 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                      className="h-9 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -333,7 +312,7 @@ export function ShoeSizeCalculator() {
                       value={rightWidth}
                       onChange={(e) => setRightWidth(Number(e.target.value))}
                       step={unit === "in" ? 0.1 : 0.5}
-                      className="h-9 text-xs font-mono font-bold bg-white dark:bg-zinc-900"
+                      className="h-9 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
                     />
                   </div>
                 </div>
@@ -348,8 +327,7 @@ export function ShoeSizeCalculator() {
 
             {/* INTERACTIVE VISUAL MEASUREMENT GUIDE VECTOR CARD */}
             <div className="p-4 bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900 rounded-xl space-y-3 text-xs">
-              <h4 className="font-bold text-emerald-900 dark:text-emerald-200 flex items-center gap-1.5">
-                <Info className="h-4 w-4 text-emerald-600" /> At-Home Measurement Technique
+              <h4 className="font-bold text-emerald-900 dark:text-emerald-200 flex items-center gap-1.5">At-Home Measurement Technique
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                 <div className="sm:col-span-8 space-y-1 text-zinc-700 dark:text-zinc-300 text-[11px]">
@@ -383,7 +361,7 @@ export function ShoeSizeCalculator() {
 
               {/* Primary Converted Size */}
               <div className="space-y-1">
-                <div className="text-6xl font-black font-mono tracking-tight text-white">
+                <div className="text-6xl font-black font-sans tabular-nums tracking-tight text-white">
                   {gender === "women"
                     ? dimensionResult.internationalSizes.usWomen
                     : gender === "kids"
@@ -402,7 +380,7 @@ export function ShoeSizeCalculator() {
               </div>
 
               {/* Global Matrix Snippet */}
-              <div className="grid grid-cols-4 gap-1.5 text-center text-xs font-mono pt-2">
+              <div className="grid grid-cols-4 gap-1.5 text-center text-xs font-sans tabular-nums pt-2">
                 <div className="p-2 bg-white/10 rounded-lg">
                   <span className="text-[9px] font-sans text-emerald-200 block">IND / UK</span>
                   <span className="font-bold text-white text-xs">{dimensionResult.internationalSizes.india}</span>
@@ -429,8 +407,7 @@ export function ShoeSizeCalculator() {
       {activeTab === "converter" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              <Globe className="h-4 w-4 text-emerald-600" /> Convert Size Across Global Systems
+            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Convert Size Across Global Systems
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -457,7 +434,7 @@ export function ShoeSizeCalculator() {
                   value={convValue}
                   onChange={(e) => setConvValue(Number(e.target.value))}
                   step={0.5}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
             </div>
@@ -471,7 +448,7 @@ export function ShoeSizeCalculator() {
                     <th className="p-2.5 border border-zinc-200 dark:border-zinc-700">Equivalent Size</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+                <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans tabular-nums">
                   <tr className="bg-emerald-50/40 dark:bg-emerald-950/20">
                     <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 font-sans font-bold text-emerald-800 dark:text-emerald-300">India (IND / BIS Standard)</td>
                     <td className="p-2.5 border border-zinc-200 dark:border-zinc-800 text-emerald-600 font-bold">IND {convertedMatrix.india}</td>
@@ -513,7 +490,7 @@ export function ShoeSizeCalculator() {
             <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-100 border-b border-white/20 pb-2">
               Conversion Quick Summary
             </h4>
-            <div className="text-5xl font-black font-mono tracking-tight text-white">
+            <div className="text-5xl font-black font-sans tabular-nums tracking-tight text-white">
               IND {convertedMatrix.india} = US {convertedMatrix.usMen}
             </div>
             <p className="text-xs text-emerald-100">
@@ -529,8 +506,7 @@ export function ShoeSizeCalculator() {
           <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-5">
             {/* Brand Tuning */}
             <div className="space-y-3">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                <Tag className="h-4 w-4 text-emerald-600" /> Brand Fit Bias Matcher
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Brand Fit Bias Matcher
               </h3>
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Select Brand</label>
@@ -562,8 +538,7 @@ export function ShoeSizeCalculator() {
 
             {/* Kids Growth Tracker */}
             <div className="space-y-3 pt-3 border-t border-zinc-100 dark:border-zinc-800">
-              <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                <TrendingUp className="h-4 w-4 text-emerald-600" /> Smart Kids' Growth Forecast
+              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Smart Kids' Growth Forecast
               </h3>
               <div className="space-y-1.5">
                 <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Child's Current Age (Months)</label>
@@ -571,7 +546,7 @@ export function ShoeSizeCalculator() {
                   type="number"
                   value={kidAgeMonths}
                   onChange={(e) => setKidAgeMonths(Number(e.target.value))}
-                  className="h-10 text-sm font-mono font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
+                  className="h-10 text-sm font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800 border-zinc-200"
                 />
               </div>
 
@@ -579,7 +554,7 @@ export function ShoeSizeCalculator() {
                 <div className="p-3.5 bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-xl space-y-2 text-xs">
                   <span className="font-bold text-blue-900 dark:text-blue-200">Growth Forecast Notes</span>
                   <p className="text-zinc-600 dark:text-zinc-400">{dimensionResult.growthProjection.growthNote}</p>
-                  <div className="grid grid-cols-2 gap-2 text-center font-mono pt-1">
+                  <div className="grid grid-cols-2 gap-2 text-center font-sans tabular-nums pt-1">
                     <div className="p-2 bg-white dark:bg-zinc-900 rounded-lg">
                       <span className="text-[10px] text-zinc-500 font-sans block">In 3 Months</span>
                       <span className="font-bold text-blue-600">US {dimensionResult.growthProjection.projected3MonthsSizeUs}</span>
@@ -598,7 +573,7 @@ export function ShoeSizeCalculator() {
             <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-100 border-b border-white/20 pb-2">
               Brand Tuned Summary
             </h4>
-            <div className="text-5xl font-black font-mono tracking-tight text-white">
+            <div className="text-5xl font-black font-sans tabular-nums tracking-tight text-white">
               US {dimensionResult.brandFit?.recommendedSizeUs}
             </div>
             <p className="text-xs text-emerald-100">

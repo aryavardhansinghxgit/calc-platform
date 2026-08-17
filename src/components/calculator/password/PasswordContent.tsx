@@ -5,20 +5,18 @@ import { BookOpen, AlertTriangle, ShieldCheck, Key } from "lucide-react";
 
 export function PasswordContent() {
   return (
-    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10 border-t border-zinc-200 dark:border-zinc-800 pt-8">
+    <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-10  dark:border-zinc-800 pt-8">
       <header>
-        <h2 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
-          <BookOpen className="h-6 w-6 text-blue-600" />
-          The Cryptographic Reference to Password Entropy, Passphrases, and Authentication Security
+        <h2 className="text-2xl font-black text-blue-600 dark:text-blue-400 tracking-tight flex items-center gap-2">The Cryptographic Reference to Password Entropy, Passphrases, and Authentication Security
         </h2>
-        <p className="text-zinc-500 dark:text-zinc-400 text-xs">
+        <p className="text-slate-900 dark:text-slate-100 text-xs">
           An authoritative educational guide on Shannon entropy, search space scales, offline cracking vectors, and password managers.
         </p>
       </header>
 
       {/* SECTION 1: INTRODUCTION */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>1.</span> Introduction to Password Generation
         </h3>
         <p>
@@ -31,7 +29,7 @@ export function PasswordContent() {
 
       {/* SECTION 2: WHAT MAKES A PASSWORD STRONG */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>2.</span> What Makes a Password Strong?
         </h3>
         <p>
@@ -52,7 +50,7 @@ export function PasswordContent() {
 
       {/* SECTION 3: PASSWORD LENGTH VS COMPLEXITY */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>3.</span> Password Length vs. Complexity
         </h3>
         <p>
@@ -65,13 +63,13 @@ export function PasswordContent() {
 
       {/* SECTION 4: PASSWORD ENTROPY */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>4.</span> Understanding Password Entropy in Bits
         </h3>
         <p>
           Password entropy quantifies the strength of a password-generation process, measured in bits of entropy. It is calculated using Shannon&apos;s formula:
         </p>
-        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-xl font-mono text-xs">
+        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-xl font-sans tabular-nums text-xs">
           Entropy (H) = Length (L) × log2(Pool Size N)
         </div>
         <p>
@@ -87,7 +85,7 @@ export function PasswordContent() {
 
       {/* SECTION 5: HOW THE CALCULATION WORKS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>5.</span> How the Calculations Work (Bitwise Operations)
         </h3>
         <p>
@@ -114,21 +112,19 @@ export function PasswordContent() {
 
       {/* SECTION 6: WORKED EXAMPLES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>6.</span> Worked Sizing Examples
         </h3>
         <div className="space-y-4">
           
           {/* Example 1 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Key className="w-3.5 h-3.5 text-blue-600" />
-              Example A: 16-Character Random Password (All Sets)
+            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">Example A: 16-Character Random Password (All Sets)
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Determine the entropy and combination space of a 16-character password generated using lowercase, uppercase, digits, and symbols.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Define Pool Size (N):</strong> 26 + 26 + 10 + 32 = 94 characters</div>
               <div><strong>2. Calculate Search Space (Combinations):</strong></div>
               <div>Combinations = 94^16 ≈ 3.71 × 10^31 possible passwords</div>
@@ -140,14 +136,12 @@ export function PasswordContent() {
 
           {/* Example 2 */}
           <div className="p-4 bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800 rounded-xl">
-            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">
-              <Key className="w-3.5 h-3.5 text-purple-600" />
-              Example B: 4-Word Passphrase
+            <h4 className="font-bold text-zinc-950 dark:text-zinc-50 text-xs flex items-center gap-1.5">Example B: 4-Word Passphrase
             </h4>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-xs text-slate-900 dark:text-slate-100 mt-1">
               Calculate the entropy of a 4-word passphrase chosen from a curated list of 96 words.
             </p>
-            <div className="mt-2 text-xs font-mono bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
+            <div className="mt-2 text-xs font-sans tabular-nums bg-zinc-100 dark:bg-zinc-900 p-3 rounded-lg border dark:border-zinc-800 space-y-1.5">
               <div><strong>1. Define pool size (N):</strong> 96 words</div>
               <div><strong>2. Calculate Combinations:</strong></div>
               <div>Combinations = 96^4 ≈ 8.49 × 10^7 possible phrases</div>
@@ -162,11 +156,11 @@ export function PasswordContent() {
 
       {/* SECTION 7: COMMON MISTAKES */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>7.</span> Common Weak Password Patterns
         </h3>
-        <div className="p-4 border border-amber-200 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/20 rounded-2xl space-y-2">
-          <p className="flex items-center gap-1 text-amber-800 dark:text-amber-400 font-bold text-xs">
+        <div className="p-4 border border-amber-200 dark:border-amber-900/60 bg-blue-50/50 dark:bg-blue-50/20 rounded-2xl space-y-2">
+          <p className="flex items-center gap-1 text-amber-800 dark:text-blue-400 font-bold text-xs">
             <AlertTriangle className="w-4 h-4" /> Avoid these patterns when creating credentials:
           </p>
           <ul className="list-disc pl-5 space-y-1.5 text-xs">
@@ -185,7 +179,7 @@ export function PasswordContent() {
 
       {/* SECTION 8: ONLINE VS OFFLINE ATTACKS */}
       <section className="space-y-3">
-        <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
+        <h3 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
           <span>8.</span> Online vs. Offline Password Attacks
         </h3>
         <p>
@@ -203,8 +197,7 @@ export function PasswordContent() {
 
       {/* SECTION 9: ENGINEERING DISCLAIMER */}
       <section className="space-y-3 bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <h3 className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-          <ShieldCheck className="w-4 h-4" /> Technical Disclaimer
+        <h3 className="text-xs font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Technical Disclaimer
         </h3>
         <p className="text-xs mt-1">
           A strong password is only one layer of account security. To protect your accounts against credential leaks, always enable Multi-Factor Authentication (MFA) and consider using cryptographic passkeys. Passkeys eliminate traditional passwords entirely, replacing them with public-key cryptography keys stored securely on your device.

@@ -7,7 +7,7 @@ export function URLEncoderContent() {
     <article className="prose dark:prose-invert max-w-none text-sm leading-relaxed space-y-8 py-2">
       {/* SECTION 1: FUNDAMENTALS OF URL & URI ENCODING */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           1. Fundamentals of URL & URI Encoding (Percent-Encoding)
         </h2>
         <p>
@@ -20,7 +20,7 @@ export function URLEncoderContent() {
 
       {/* SECTION 2: THE RFC 3986 STANDARD & CHARACTER CLASSIFICATIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           2. The RFC 3986 Standard & Character Classifications
         </h2>
         <p>
@@ -29,11 +29,11 @@ export function URLEncoderContent() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-emerald-600 dark:text-emerald-400">Unreserved Characters (Always Safe)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Unreserved Characters (Always Safe)</h3>
+            <p className="text-slate-900 dark:text-slate-100">
               Unreserved characters hold no structural meaning in URIs and must <strong>never</strong> be percent-encoded:
             </p>
-            <ul className="list-disc pl-5 font-mono space-y-0.5">
+            <ul className="list-disc pl-5 font-sans tabular-nums space-y-0.5">
               <li>Uppercase: <code>A–Z</code></li>
               <li>Lowercase: <code>a–z</code></li>
               <li>Digits: <code>0–9</code></li>
@@ -42,18 +42,18 @@ export function URLEncoderContent() {
           </div>
 
           <div className="p-3.5 bg-zinc-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 rounded-xl space-y-1">
-            <h3 className="font-bold text-amber-600 dark:text-amber-400">Reserved Characters (Must be Encoded if Data)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">Reserved Characters (Must be Encoded if Data)</h3>
+            <p className="text-slate-900 dark:text-slate-100">
               Reserved characters act as structural delimiters. If used inside key/value data, they <strong>must</strong> be encoded:
             </p>
-            <ul className="list-disc pl-5 font-mono space-y-0.5">
+            <ul className="list-disc pl-5 font-sans tabular-nums space-y-0.5">
               <li>Gen-Delims: <code>: / ? # [ ] @</code></li>
               <li>Sub-Delims: <code>! $ &amp; ' ( ) * + , ; =</code></li>
             </ul>
           </div>
         </div>
 
-        <h3 className="text-base font-bold text-zinc-800 dark:text-zinc-200 mt-4">
+        <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 mt-4">
           ASCII-to-Hex Percent-Encoding Reference Table
         </h3>
 
@@ -63,13 +63,13 @@ export function URLEncoderContent() {
               <tr className="bg-zinc-100 dark:bg-zinc-800 font-bold text-zinc-900 dark:text-zinc-100">
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Character</th>
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Description</th>
-                <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-mono">% Hex Code</th>
+                <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-sans tabular-nums">% Hex Code</th>
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Character</th>
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Description</th>
-                <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-mono">% Hex Code</th>
+                <th className="p-2 border border-zinc-200 dark:border-zinc-700 font-sans tabular-nums">% Hex Code</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+            <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold">(space)</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans">Space character</td>
@@ -109,7 +109,7 @@ export function URLEncoderContent() {
 
       {/* SECTION 3: SPACE ENCODING: %20 VS + EXPLAINED */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           3. Space Encoding: %20 vs. + Explained
         </h2>
         <p>
@@ -119,14 +119,14 @@ export function URLEncoderContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
           <div className="p-3.5 bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900 rounded-xl space-y-1">
             <h3 className="font-bold text-blue-700 dark:text-blue-300">RFC 3986 Standard (%20)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-900 dark:text-slate-100">
               According to standard URI syntax (RFC 3986), spaces in paths, hostnames, and query strings must be encoded as <code>%20</code>. This is the universal standard used by REST APIs, GraphQL, and modern web application routing frameworks.
             </p>
           </div>
 
-          <div className="p-3.5 bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900 rounded-xl space-y-1">
-            <h3 className="font-bold text-purple-700 dark:text-purple-300">HTML Form Submission (+ Sign)</h3>
-            <p className="text-zinc-600 dark:text-zinc-400">
+          <div className="p-3.5 bg-blue-50/50 dark:bg-blue-50/20 border border-purple-200 dark:border-purple-900 rounded-xl space-y-1">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400">HTML Form Submission (+ Sign)</h3>
+            <p className="text-slate-900 dark:text-slate-100">
               When HTML web forms submit data using <code>application/x-www-form-urlencoded</code>, space characters are historically encoded as a plus sign (<code>+</code>). Web servers decoding form inputs treat <code>+</code> as a space character.
             </p>
           </div>
@@ -135,7 +135,7 @@ export function URLEncoderContent() {
 
       {/* SECTION 4: KEY DIFFERENCES: encodeURI vs encodeURIComponent */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           4. Key Differences: encodeURI vs. encodeURIComponent
         </h2>
         <p>
@@ -152,7 +152,7 @@ export function URLEncoderContent() {
                 <th className="p-2 border border-zinc-200 dark:border-zinc-700">Example Output</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+            <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
               <tr>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-blue-600">encodeURI()</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans">Full web address / page URL</td>
@@ -160,7 +160,7 @@ export function URLEncoderContent() {
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">https://site.com/search?q=c%2B%2B</td>
               </tr>
               <tr>
-                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-purple-600">encodeURIComponent()</td>
+                <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-bold text-blue-600">encodeURIComponent()</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans">Single query parameter value</td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800 font-sans">Encodes ALL delimiters into <code>%XX</code></td>
                 <td className="p-2 border border-zinc-200 dark:border-zinc-800">https%3A%2F%2Fsite.com%2F...</td>
@@ -172,16 +172,16 @@ export function URLEncoderContent() {
 
       {/* SECTION 5: SECURITY IMPLICATIONS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           5. Security Implications & Common Pitfalls
         </h2>
-        <div className="bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 p-4 rounded-xl space-y-2 text-xs">
-          <h4 className="font-bold text-amber-900 dark:text-amber-300">1. Double-Encoding Bugs (%2520)</h4>
+        <div className="bg-blue-50/60 dark:bg-blue-50/20 border border-amber-200 dark:border-amber-900 p-4 rounded-xl space-y-2 text-xs">
+          <h4 className="font-bold text-amber-900 dark:text-blue-400">1. Double-Encoding Bugs (%2520)</h4>
           <p className="text-zinc-700 dark:text-zinc-300">
             Double encoding occurs when an already encoded string (such as <code>%20</code>) is passed through an encoder a second time. The <code>%</code> character becomes <code>%25</code>, producing <code>%2520</code>. When decoded on the server, it yields literal <code>%20</code> text rather than a space character, leading to 404 errors.
           </p>
 
-          <h4 className="font-bold text-amber-900 dark:text-amber-300 mt-2">2. Open Redirect & SSRF Prevention</h4>
+          <h4 className="font-bold text-amber-900 dark:text-blue-400 mt-2">2. Open Redirect & SSRF Prevention</h4>
           <p className="text-zinc-700 dark:text-zinc-300">
             Passing unvalidated encoded URLs into redirect endpoints allows attackers to perform Open Redirect or Server-Side Request Forgery (SSRF) attacks. Always parse and validate hostname domains before initiating HTTP requests.
           </p>
@@ -190,15 +190,15 @@ export function URLEncoderContent() {
 
       {/* SECTION 6: CODE SNIPPETS FOR DEVELOPERS */}
       <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
           6. Code Snippets Across Languages
         </h2>
 
-        <div className="space-y-3 text-xs font-mono">
+        <div className="space-y-3 text-xs font-sans tabular-nums">
           {/* JavaScript */}
           <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1">
             <div className="text-zinc-400 text-[10px] uppercase font-bold">// JavaScript (Browser & Node.js)</div>
-            <pre className="text-emerald-400 overflow-x-auto">
+            <pre className="text-blue-400 overflow-x-auto">
 {`// Encode parameter value
 const queryParam = encodeURIComponent("hello world & c++");
 // "hello%20world%20%26%20c%2B%2B"
@@ -225,7 +225,7 @@ decoded = urllib.parse.unquote("https%3A%2F%2Fexample.com")`}
           {/* PHP */}
           <div className="bg-zinc-900 text-zinc-100 p-3.5 rounded-xl space-y-1">
             <div className="text-zinc-400 text-[10px] uppercase font-bold">// PHP</div>
-            <pre className="text-purple-400 overflow-x-auto">
+            <pre className="text-blue-400 overflow-x-auto">
 {`$encoded = rawurlencode("hello world & c++");
 $decoded = rawurldecode("https%3A%2F%2Fexample.com");`}
             </pre>

@@ -21,9 +21,7 @@ export const PregnancyCalendar: React.FC<PregnancyCalendarProps> = ({ results })
     <div className="p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4 my-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-200 dark:border-zinc-800 pb-3">
         <div>
-          <h3 className="text-base font-extrabold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <CalendarIcon className="h-5 w-5 text-rose-500" />
-            Interactive Pregnancy Calendar & Milestones
+          <h3 className="text-base font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">Interactive Pregnancy Calendar & Milestones
           </h3>
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
             Key clinical screenings, developmental check-ins, and milestone timelines

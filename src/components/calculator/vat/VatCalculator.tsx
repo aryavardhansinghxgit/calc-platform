@@ -225,7 +225,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
           </Badge>
 
           {/* Currency Switcher */}
-          <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg text-xs font-mono">
+          <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg text-xs font-sans tabular-nums">
             {["£", "€", "$", "¥", "₹", "A$"].map((curr) => (
               <button
                 key={curr}
@@ -323,7 +323,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>VAT Rate (%)</span>
-                <span className="font-mono text-blue-600">{results.vatRate}%</span>
+                <span className="font-sans tabular-nums text-blue-600">{results.vatRate}%</span>
               </label>
               <Input
                 type="number"
@@ -333,7 +333,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                 placeholder="e.g. 20"
                 value={vatRateInput}
                 onChange={(e) => setVatRateInput(e.target.value)}
-                className="text-xs font-mono"
+                className="text-xs font-sans tabular-nums"
               />
             </div>
 
@@ -341,7 +341,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Net Price (Exclusive of VAT)</span>
-                <span className="font-mono text-blue-600">{fmt(results.netPrice)}</span>
+                <span className="font-sans tabular-nums text-blue-600">{fmt(results.netPrice)}</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-bold">{currencySymbol}</span>
@@ -352,7 +352,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                   placeholder="e.g. 100"
                   value={netPriceInput}
                   onChange={(e) => setNetPriceInput(e.target.value)}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -361,7 +361,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>Gross Price (Inclusive of VAT)</span>
-                <span className="font-mono text-emerald-600">{fmt(results.grossPrice)}</span>
+                <span className="font-sans tabular-nums text-emerald-600">{fmt(results.grossPrice)}</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-bold">{currencySymbol}</span>
@@ -372,7 +372,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                   placeholder="e.g. 120"
                   value={grossPriceInput}
                   onChange={(e) => setGrossPriceInput(e.target.value)}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -381,7 +381,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
             <div className="space-y-1">
               <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex justify-between">
                 <span>VAT Tax Amount</span>
-                <span className="font-mono text-purple-600">{fmt(results.taxAmount)}</span>
+                <span className="font-sans tabular-nums text-purple-600">{fmt(results.taxAmount)}</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-2.5 text-xs text-zinc-400 font-bold">{currencySymbol}</span>
@@ -392,7 +392,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                   placeholder="e.g. 20"
                   value={taxAmountInput}
                   onChange={(e) => setTaxAmountInput(e.target.value)}
-                  className="pl-7 text-xs font-mono"
+                  className="pl-7 text-xs font-sans tabular-nums"
                 />
               </div>
             </div>
@@ -429,15 +429,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                   GROSS TOTAL PRICE (VAT INCLUSIVE)
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -449,7 +441,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-mono text-white mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-sans tabular-nums text-white mb-2">
                 {fmt(results.grossPrice)}
               </div>
 
@@ -461,15 +453,15 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
               <div className="grid grid-cols-3 gap-3 mt-6 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Net Base Price</div>
-                  <div className="font-bold font-mono text-white text-sm">{fmt(results.netPrice)}</div>
+                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.netPrice)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">VAT Tax Amount</div>
-                  <div className="font-bold font-mono text-emerald-300 text-sm">{fmt(results.taxAmount)}</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-300 text-sm">{fmt(results.taxAmount)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Effective VAT Rate</div>
-                  <div className="font-bold font-mono text-purple-300 text-sm">{results.vatRate}%</div>
+                  <div className="font-bold font-sans tabular-nums text-purple-300 text-sm">{results.vatRate}%</div>
                 </div>
               </div>
             </div>
@@ -503,8 +495,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <Globe className="h-5 w-5 text-emerald-500" /> Multi-Stage Production Supply Chain Map
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Multi-Stage Production Supply Chain Map
               </h3>
               <p className="text-xs text-zinc-500">
                 Visualize how VAT is collected incrementally at each production stage (Farmer &rarr; Roaster &rarr; Wholesaler &rarr; Cafe).
@@ -516,19 +507,19 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700">
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Producer Cost ({currencySymbol})</label>
-              <Input type="number" value={baseProducerCost} onChange={(e) => setBaseProducerCost(Number(e.target.value))} className="text-xs font-mono" />
+              <Input type="number" value={baseProducerCost} onChange={(e) => setBaseProducerCost(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Processor Value Add</label>
-              <Input type="number" value={manufacturerValueAdd} onChange={(e) => setManufacturerValueAdd(Number(e.target.value))} className="text-xs font-mono" />
+              <Input type="number" value={manufacturerValueAdd} onChange={(e) => setManufacturerValueAdd(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Wholesaler Value Add</label>
-              <Input type="number" value={wholesalerValueAdd} onChange={(e) => setWholesalerValueAdd(Number(e.target.value))} className="text-xs font-mono" />
+              <Input type="number" value={wholesalerValueAdd} onChange={(e) => setWholesalerValueAdd(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Retailer Value Add</label>
-              <Input type="number" value={retailerValueAdd} onChange={(e) => setRetailerValueAdd(Number(e.target.value))} className="text-xs font-mono" />
+              <Input type="number" value={retailerValueAdd} onChange={(e) => setRetailerValueAdd(Number(e.target.value))} className="text-xs font-sans tabular-nums" />
             </div>
           </div>
 
@@ -545,7 +536,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                   <th className="p-2.5 text-right">Net Tax Remitted</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-mono text-[11px]">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums text-[11px]">
                 {supplyChainResults.stages.map((stage, idx) => (
                   <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2.5 font-sans font-bold text-zinc-800 dark:text-zinc-200">{stage.stageName}</td>
@@ -561,7 +552,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
           </div>
 
           {/* Supply Chain Summary & Bar Chart */}
-          <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-wrap justify-between items-center gap-4 text-xs font-mono">
+          <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-wrap justify-between items-center gap-4 text-xs font-sans tabular-nums">
             <div>
               <span className="text-zinc-500 block text-[10px] uppercase font-semibold">Total Value Added</span>
               <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{fmt(supplyChainResults.totalValueAdded)}</span>
@@ -578,8 +569,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
       {activeTab === "rates_table" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Layers className="h-5 w-5 text-purple-500" /> Searchable Global VAT / GST Rate Directory
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Searchable Global VAT / GST Rate Directory
             </h3>
 
             <div className="relative">
@@ -612,10 +602,10 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                     <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200 flex items-center gap-2">
                       <span>{preset.flag}</span> <span>{preset.country}</span>
                     </td>
-                    <td className="p-2.5 font-mono text-zinc-500">{preset.code}</td>
-                    <td className="p-2.5 font-mono font-bold text-blue-600">{preset.standardRate}%</td>
-                    <td className="p-2.5 font-mono text-zinc-500">{preset.reducedRate ? `${preset.reducedRate}%` : "—"}</td>
-                    <td className="p-2.5 font-mono">{preset.currencySymbol}</td>
+                    <td className="p-2.5 font-sans tabular-nums text-zinc-500">{preset.code}</td>
+                    <td className="p-2.5 font-sans tabular-nums font-bold text-blue-600">{preset.standardRate}%</td>
+                    <td className="p-2.5 font-sans tabular-nums text-zinc-500">{preset.reducedRate ? `${preset.reducedRate}%` : "—"}</td>
+                    <td className="p-2.5 font-sans tabular-nums">{preset.currencySymbol}</td>
                     <td className="p-2.5 text-right">
                       <Button
                         type="button"
@@ -643,8 +633,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-amber-500" /> Interactive VAT vs. Sales Tax Side-by-Side Comparison
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Interactive VAT vs. Sales Tax Side-by-Side Comparison
               </h3>
               <p className="text-xs text-zinc-500">
                 Compare multi-stage Value-Added Tax (with Input Tax Credit) against single-stage Retail Sales Tax across supply chain tiers.
@@ -660,7 +649,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                 <span className="font-bold text-sm text-blue-900 dark:text-blue-200">Value-Added Tax (VAT)</span>
                 <Badge className="bg-blue-600 text-white text-[10px]">Multi-Stage</Badge>
               </div>
-              <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-300">
+              <ul className="text-xs space-y-2 text-slate-800 dark:text-slate-200 font-semibold">
                 <li className="flex items-start gap-1.5">
                   <CheckCircle2 className="h-3.5 w-3.5 text-blue-600 shrink-0 mt-0.5" />
                   <span><strong>Collected incrementally:</strong> Tax paid at every production &amp; distribution stage.</span>
@@ -674,7 +663,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                   <span><strong>Global Adoption:</strong> Used in over 160 countries including UK, EU, Australia, Japan, UAE.</span>
                 </li>
               </ul>
-              <div className="pt-3 border-t border-blue-200/60 dark:border-blue-800/60 flex justify-between items-center text-xs font-mono">
+              <div className="pt-3 border-t border-blue-200/60 dark:border-blue-800/60 flex justify-between items-center text-xs font-sans tabular-nums">
                 <span className="text-zinc-500">Effective Tax Burden on Consumer</span>
                 <span className="font-bold text-blue-700 dark:text-blue-300 text-sm">{results.vatRate}%</span>
               </div>
@@ -686,7 +675,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                 <span className="font-bold text-sm text-amber-900 dark:text-amber-200">Retail Sales Tax</span>
                 <Badge className="bg-amber-600 text-white text-[10px]">Single-Stage</Badge>
               </div>
-              <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-300">
+              <ul className="text-xs space-y-2 text-slate-800 dark:text-slate-200 font-semibold">
                 <li className="flex items-start gap-1.5">
                   <CheckCircle2 className="h-3.5 w-3.5 text-amber-600 shrink-0 mt-0.5" />
                   <span><strong>Collected at Retail:</strong> Tax is charged only at the final point of purchase by end consumers.</span>
@@ -700,7 +689,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                   <span><strong>Primary Adoption:</strong> Standard system used across United States (state/city level).</span>
                 </li>
               </ul>
-              <div className="pt-3 border-t border-amber-200/60 dark:border-amber-800/60 flex justify-between items-center text-xs font-mono">
+              <div className="pt-3 border-t border-amber-200/60 dark:border-amber-800/60 flex justify-between items-center text-xs font-sans tabular-nums">
                 <span className="text-zinc-500">Typical US Sales Tax Range</span>
                 <span className="font-bold text-amber-700 dark:text-amber-300 text-sm">4.00% &ndash; 9.50%</span>
               </div>

@@ -111,7 +111,7 @@ export function IncomeTaxContent() {
   ];
 
   return (
-    <div className="space-y-10 mt-8 border-t border-zinc-200 dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
+    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
       {/* Overview Banner */}
       <div className="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-lg">
         <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
@@ -146,13 +146,13 @@ export function IncomeTaxContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-base">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
               <Zap className="h-5 w-5" /> 2. Marginal vs. Effective Tax Rate
             </div>
             <p>
               It is critical to distinguish between your marginal rate and effective rate:
             </p>
-            <ul className="text-xs space-y-1.5 text-zinc-600 dark:text-zinc-400">
+            <ul className="text-xs space-y-1.5 text-slate-900 dark:text-slate-100">
               <li>• <strong>Marginal Tax Rate:</strong> The rate paid on your last dollar of income (top bracket).</li>
               <li>• <strong>Effective Tax Rate:</strong> Total Tax Paid divided by Total Gross Income.</li>
             </ul>
@@ -164,8 +164,7 @@ export function IncomeTaxContent() {
 
         {/* Section 3 & 4: Deductions */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Layers className="h-5 w-5 text-purple-600" /> 3. Standard Deduction vs. Itemized Deductions (Schedule A)
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Standard Deduction vs. Itemized Deductions (Schedule A)
           </h3>
           <p>
             Taxpayers must choose between taking the fixed IRS <strong>Standard Deduction</strong> or itemizing specific qualifying expenses on <strong>Schedule A</strong>.
@@ -180,21 +179,21 @@ export function IncomeTaxContent() {
                   <th className="p-3 border border-zinc-200 dark:border-zinc-700">Key Itemized Deductions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className=" dark:divide-zinc-800">
                 <tr>
                   <td className="p-3 font-semibold">Single</td>
-                  <td className="p-3 font-mono text-blue-600 font-bold">$15,000</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">Mortgage Interest ($750k cap)</td>
+                  <td className="p-3 font-sans tabular-nums text-blue-600 font-bold">$15,000</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">Mortgage Interest ($750k cap)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Married Filing Jointly</td>
-                  <td className="p-3 font-mono text-blue-600 font-bold">$30,000</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">SALT Cap ($10,000 max state/property tax)</td>
+                  <td className="p-3 font-sans tabular-nums text-blue-600 font-bold">$30,000</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">SALT Cap ($10,000 max state/property tax)</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold">Head of Household</td>
-                  <td className="p-3 font-mono text-blue-600 font-bold">$22,500</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">Charitable Donations &amp; Medical (&gt;7.5% AGI)</td>
+                  <td className="p-3 font-sans tabular-nums text-blue-600 font-bold">$22,500</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">Charitable Donations &amp; Medical (&gt;7.5% AGI)</td>
                 </tr>
               </tbody>
             </table>
@@ -204,8 +203,7 @@ export function IncomeTaxContent() {
         {/* Section 5, 6 & 7: Deductions vs Credits */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <PieIcon className="h-4 w-4 text-blue-500" /> Tax Deductions
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">Tax Deductions
             </h4>
             <p className="text-xs">
               Deductions reduce taxable income before tax is calculated. A $1,000 deduction in the 22% bracket saves you <strong>$220</strong> in taxes.
@@ -213,8 +211,7 @@ export function IncomeTaxContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <AlertTriangle className="h-4 w-4 text-emerald-500" /> Tax Credits
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">Tax Credits
             </h4>
             <p className="text-xs">
               Tax credits reduce final tax bill dollar-for-dollar. A $1,000 tax credit saves you exactly <strong>$1,000</strong> in taxes.
@@ -222,8 +219,7 @@ export function IncomeTaxContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-purple-500" /> Refundable Credits
+            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">Refundable Credits
             </h4>
             <p className="text-xs">
               Refundable credits (like the Additional Child Tax Credit & EITC) can trigger an IRS tax refund check even if your tax liability is zero!
@@ -233,19 +229,18 @@ export function IncomeTaxContent() {
 
         {/* Real-World Use Cases */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-indigo-600" /> Real-World Applications & Tax Lowering Strategies
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Real-World Applications & Tax Lowering Strategies
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="space-y-2">
               <span className="font-bold text-zinc-900 dark:text-zinc-100 block">401(k) & Traditional IRA Contributions</span>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-slate-900 dark:text-slate-100">
                 Contributing pre-tax dollars to a 401(k) or Traditional IRA reduces your AGI dollar-for-dollar, lowering your tax bracket immediately.
               </p>
             </div>
             <div className="space-y-2">
               <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Health Savings Accounts (HSA)</span>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-slate-900 dark:text-slate-100">
                 HSAs provide a triple tax advantage: pre-tax contributions, tax-free growth, and tax-free withdrawals for medical expenses.
               </p>
             </div>
@@ -257,7 +252,7 @@ export function IncomeTaxContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (FAQ)
           </h3>
         </div>
@@ -288,7 +283,7 @@ export function IncomeTaxContent() {
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-zinc-600 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
+                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
                     {faq.answer}
                   </div>
                 )}

@@ -24,8 +24,7 @@ export function LatestCalculators({
     <section className="space-y-6 pt-8 border-t border-zinc-200">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
-          <h2 className="text-xl font-semibold tracking-tight text-zinc-900 flex items-center gap-2">
-            <Clock className="h-5 w-5 text-blue-600" /> {title}
+          <h2 className="text-xl font-semibold tracking-tight text-blue-600 flex items-center gap-2">{title}
           </h2>
           <p className="text-xs sm:text-sm text-zinc-500 mt-0.5">{subtitle}</p>
         </div>
@@ -42,7 +41,7 @@ export function LatestCalculators({
                     <div className="p-2 rounded-lg bg-zinc-50 border border-zinc-200 text-blue-600 group-hover:text-blue-700 transition-colors">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200">
+                    <span className="text-[11px] font-sans tabular-nums font-medium px-2 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200">
                       {calc.category}
                     </span>
                   </div>

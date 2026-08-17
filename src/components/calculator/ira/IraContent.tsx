@@ -74,7 +74,7 @@ export function IraContent() {
   ];
 
   return (
-    <div className="space-y-10 mt-8 border-t border-zinc-200 dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
+    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
       {/* Overview Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 text-white rounded-2xl p-6 md:p-8 shadow-lg">
         <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
@@ -93,8 +93,7 @@ export function IraContent() {
       <div className="space-y-8 text-sm leading-relaxed">
         {/* Section 1: Account Comparison Overview */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Layers className="h-5 w-5 text-blue-600" /> 1. Overview of IRA Vehicles (IRS Pub 590)
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">1. Overview of IRA Vehicles (IRS Pub 590)
           </h3>
           
           <div className="overflow-x-auto">
@@ -107,30 +106,30 @@ export function IraContent() {
                   <th className="p-3 border border-zinc-200 dark:border-zinc-700">Retirement Withdrawal Tax</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className=" dark:divide-zinc-800">
                 <tr>
                   <td className="p-3 font-semibold text-blue-600">Traditional IRA</td>
-                  <td className="p-3 font-mono">$7,000 ($8,000 age 50+)</td>
+                  <td className="p-3 font-sans tabular-nums">$7,000 ($8,000 age 50+)</td>
                   <td className="p-3">Pre-tax tax deductible</td>
-                  <td className="p-3 text-amber-600 font-semibold">Taxed as ordinary income</td>
+                  <td className="p-3 text-blue-600 font-semibold">Taxed as ordinary income</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-emerald-600">Roth IRA</td>
-                  <td className="p-3 font-mono">$7,000 ($8,000 age 50+)</td>
+                  <td className="p-3 font-semibold text-blue-600">Roth IRA</td>
+                  <td className="p-3 font-sans tabular-nums">$7,000 ($8,000 age 50+)</td>
                   <td className="p-3">After-tax dollars</td>
-                  <td className="p-3 font-bold text-emerald-600">100% Tax-Free</td>
+                  <td className="p-3 font-bold text-blue-600">100% Tax-Free</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-indigo-600">SEP IRA</td>
-                  <td className="p-3 font-mono">Up to $70,000 (25% net income)</td>
+                  <td className="p-3 font-semibold text-blue-600">SEP IRA</td>
+                  <td className="p-3 font-sans tabular-nums">Up to $70,000 (25% net income)</td>
                   <td className="p-3">Pre-tax tax deductible</td>
-                  <td className="p-3 text-amber-600 font-semibold">Taxed as ordinary income</td>
+                  <td className="p-3 text-blue-600 font-semibold">Taxed as ordinary income</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-purple-600">SIMPLE IRA</td>
-                  <td className="p-3 font-mono">$16,500 ($19,500 age 50+)</td>
+                  <td className="p-3 font-semibold text-blue-600">SIMPLE IRA</td>
+                  <td className="p-3 font-sans tabular-nums">$16,500 ($19,500 age 50+)</td>
                   <td className="p-3">Pre-tax tax deductible</td>
-                  <td className="p-3 text-amber-600 font-semibold">Taxed as ordinary income</td>
+                  <td className="p-3 text-blue-600 font-semibold">Taxed as ordinary income</td>
                 </tr>
               </tbody>
             </table>
@@ -140,7 +139,7 @@ export function IraContent() {
         {/* Section 2: IRA Investment Strategies & Self-Directed IRAs */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-base">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
               <TrendingUp className="h-5 w-5" /> 2. IRA Investment Strategies
             </div>
             <p>
@@ -149,7 +148,7 @@ export function IraContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold text-base">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
               <Landmark className="h-5 w-5" /> 3. Self-Directed IRAs (SD-IRA)
             </div>
             <p>
@@ -163,7 +162,7 @@ export function IraContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (10 Essential IRA FAQs)
           </h3>
         </div>
@@ -194,7 +193,7 @@ export function IraContent() {
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-zinc-600 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
+                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
                     {faq.answer}
                   </div>
                 )}

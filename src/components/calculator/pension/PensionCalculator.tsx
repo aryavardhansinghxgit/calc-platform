@@ -318,7 +318,7 @@ export function PensionCalculator() {
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>PV of Pension:</span>
-          <span className="text-indigo-600 dark:text-indigo-400 font-mono text-sm">
+          <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-sm">
             {fmt(results.lumpSumVsPension.presentValueOfPension)}
           </span>
         </div>
@@ -402,7 +402,7 @@ export function PensionCalculator() {
                     max="80"
                     value={retAge1}
                     onChange={(e) => setRetAge1(e.target.value)}
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
                 <div className="space-y-1">
@@ -413,7 +413,7 @@ export function PensionCalculator() {
                     max="105"
                     value={lifeExp1}
                     onChange={(e) => setLifeExp1(e.target.value)}
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
               </div>
@@ -432,7 +432,7 @@ export function PensionCalculator() {
                       step="10000"
                       value={lumpSumAmtInput}
                       onChange={(e) => setLumpSumAmtInput(e.target.value)}
-                      className="text-xs font-mono h-8 px-2 bg-white dark:bg-zinc-800"
+                      className="text-xs font-sans tabular-nums h-8 px-2 bg-white dark:bg-zinc-800"
                     />
                   </div>
                   <div className="space-y-1">
@@ -444,7 +444,7 @@ export function PensionCalculator() {
                       step="0.25"
                       value={returnRate1Input}
                       onChange={(e) => setReturnRate1Input(e.target.value)}
-                      className="text-xs font-mono h-8 px-2 bg-white dark:bg-zinc-800"
+                      className="text-xs font-sans tabular-nums h-8 px-2 bg-white dark:bg-zinc-800"
                     />
                   </div>
                 </div>
@@ -464,7 +464,7 @@ export function PensionCalculator() {
                       step="100"
                       value={monthlyPension1Input}
                       onChange={(e) => setMonthlyPension1Input(e.target.value)}
-                      className="text-xs font-mono h-8 px-2 bg-white dark:bg-zinc-800"
+                      className="text-xs font-sans tabular-nums h-8 px-2 bg-white dark:bg-zinc-800"
                     />
                   </div>
                   <div className="space-y-1">
@@ -476,7 +476,7 @@ export function PensionCalculator() {
                       step="0.25"
                       value={cola1Input}
                       onChange={(e) => setCola1Input(e.target.value)}
-                      className="text-xs font-mono h-8 px-2 bg-white dark:bg-zinc-800"
+                      className="text-xs font-sans tabular-nums h-8 px-2 bg-white dark:bg-zinc-800"
                     />
                   </div>
                 </div>
@@ -492,15 +492,7 @@ export function PensionCalculator() {
                   RECOMMENDED PENSION OPTION
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -520,22 +512,22 @@ export function PensionCalculator() {
                 Financial Advantage: <span className="font-bold text-emerald-300">{fmt(results.lumpSumVsPension.financialAdvantage)}</span> over your lifetime
               </div>
 
-              <div className="bg-white/10 p-3 rounded-xl text-xs backdrop-blur-sm border border-white/10 font-mono">
+              <div className="bg-white/10 p-3 rounded-xl text-xs backdrop-blur-sm border border-white/10 font-sans tabular-nums">
                 💡 <strong>Breakeven Crossover Age:</strong> Age {results.lumpSumVsPension.breakevenAge}
               </div>
 
               <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Present Value (PV)</div>
-                  <div className="font-bold font-mono text-white text-sm">{fmt(results.lumpSumVsPension.presentValueOfPension)}</div>
+                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.lumpSumVsPension.presentValueOfPension)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Lifetime Pension Total</div>
-                  <div className="font-bold font-mono text-emerald-300 text-sm">{fmt(results.lumpSumVsPension.totalLifetimePensionIncome)}</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-300 text-sm">{fmt(results.lumpSumVsPension.totalLifetimePensionIncome)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Lump Sum Value</div>
-                  <div className="font-bold font-mono text-blue-300 text-sm">{fmt(results.lumpSumVsPension.lumpSumAmount)}</div>
+                  <div className="font-bold font-sans tabular-nums text-blue-300 text-sm">{fmt(results.lumpSumVsPension.lumpSumAmount)}</div>
                 </div>
               </div>
             </div>
@@ -554,30 +546,30 @@ export function PensionCalculator() {
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Your Retirement Age</label>
-                <Input type="number" value={retAge2} onChange={(e) => setRetAge2(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={retAge2} onChange={(e) => setRetAge2(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Your Life Expectancy</label>
-                <Input type="number" value={retLifeExp2} onChange={(e) => setRetLifeExp2(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={retLifeExp2} onChange={(e) => setRetLifeExp2(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Spouse Age at Retirement</label>
-                <Input type="number" value={spouseAge2} onChange={(e) => setSpouseAge2(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={spouseAge2} onChange={(e) => setSpouseAge2(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Spouse Life Expectancy</label>
-                <Input type="number" value={spouseLifeExp2} onChange={(e) => setSpouseLifeExp2(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={spouseLifeExp2} onChange={(e) => setSpouseLifeExp2(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs border-t border-zinc-100 dark:border-zinc-800 pt-3">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Single Life Pension ($/mo)</label>
-                <Input type="number" value={singleMonthly2Input} onChange={(e) => setSingleMonthly2Input(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={singleMonthly2Input} onChange={(e) => setSingleMonthly2Input(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Joint Survivor Pension ($/mo)</label>
-                <Input type="number" value={jointMonthly2Input} onChange={(e) => setJointMonthly2Input(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={jointMonthly2Input} onChange={(e) => setJointMonthly2Input(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
 
@@ -596,7 +588,7 @@ export function PensionCalculator() {
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-rose-900 dark:text-rose-200 text-sm block border-b pb-1">
                 Survivor Plan Recommendation
@@ -605,7 +597,7 @@ export function PensionCalculator() {
                 {results.singleVsJoint.recommendedOption}
               </div>
               <div className="font-sans text-zinc-600 dark:text-zinc-400">
-                Survivor Protection Score: <span className="font-bold text-rose-600 font-mono">{results.singleVsJoint.survivorProtectionScore}%</span>
+                Survivor Protection Score: <span className="font-bold text-rose-600 font-sans tabular-nums">{results.singleVsJoint.survivorProtectionScore}%</span>
               </div>
             </div>
 
@@ -648,7 +640,7 @@ export function PensionCalculator() {
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-amber-900 dark:text-amber-200 text-sm block border-b pb-1">
                 Optimal Retirement Age Recommendation
@@ -657,7 +649,7 @@ export function PensionCalculator() {
                 {results.workLonger.recommendedOption}
               </div>
               <div className="font-sans text-zinc-600 dark:text-zinc-400">
-                Lifetime Net Financial Advantage: <span className="font-bold text-emerald-600 font-mono">{fmt(results.workLonger.netFinancialBenefit)}</span>
+                Lifetime Net Financial Advantage: <span className="font-bold text-emerald-600 font-sans tabular-nums">{fmt(results.workLonger.netFinancialBenefit)}</span>
               </div>
             </div>
 
@@ -683,8 +675,7 @@ export function PensionCalculator() {
       {activeTab === "dbFormula" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-5">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Percent className="h-5 w-5 text-purple-500" /> Defined Benefit Pension Multiplier Formula Helper
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Defined Benefit Pension Multiplier Formula Helper
             </h3>
             <p className="text-xs text-zinc-500 mt-0.5">
               Calculate your estimated monthly pension check directly using your final average salary, years of service, and multiplier %.
@@ -694,19 +685,19 @@ export function PensionCalculator() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Final Average Salary ($)</label>
-              <Input type="number" value={fasInput} onChange={(e) => setFasInput(e.target.value)} className="text-xs font-mono h-9 px-3" />
+              <Input type="number" value={fasInput} onChange={(e) => setFasInput(e.target.value)} className="text-xs font-sans tabular-nums h-9 px-3" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Years of Service</label>
-              <Input type="number" value={serviceYearsInput} onChange={(e) => setServiceYearsInput(e.target.value)} className="text-xs font-mono h-9 px-3" />
+              <Input type="number" value={serviceYearsInput} onChange={(e) => setServiceYearsInput(e.target.value)} className="text-xs font-sans tabular-nums h-9 px-3" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Benefit Multiplier (%/yr)</label>
-              <Input type="number" value={multiplierInput} onChange={(e) => setMultiplierInput(e.target.value)} className="text-xs font-mono h-9 px-3" />
+              <Input type="number" value={multiplierInput} onChange={(e) => setMultiplierInput(e.target.value)} className="text-xs font-sans tabular-nums h-9 px-3" />
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800 text-xs font-mono">
+          <div className="grid grid-cols-3 gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800 text-xs font-sans tabular-nums">
             <div className="bg-purple-50 dark:bg-purple-950/30 p-4 rounded-xl border border-purple-200 dark:border-purple-800">
               <span className="font-sans text-[11px] text-zinc-500 block">Calculated Monthly Pension</span>
               <span className="text-2xl font-extrabold text-purple-600">{fmt(results.dbFormula.calculatedMonthlyPension)}</span>
@@ -727,8 +718,7 @@ export function PensionCalculator() {
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-blue-500" /> Lifetime Pension &amp; Wealth Projection Chart
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Lifetime Pension &amp; Wealth Projection Chart
             </h3>
 
             <Button type="button" size="sm" variant="outline" onClick={exportCSV} className="h-8 text-xs cursor-pointer">

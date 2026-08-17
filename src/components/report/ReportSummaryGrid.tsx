@@ -22,7 +22,7 @@ export function ReportSummaryGrid({ metrics, sections }: ReportSummaryGridProps)
               <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block">
                 {m.label}
               </span>
-              <div className="text-base font-extrabold font-mono text-zinc-900">
+              <div className="text-base font-extrabold font-sans tabular-nums text-zinc-900">
                 {m.value}
               </div>
               {m.subtitle && (
@@ -43,7 +43,7 @@ export function ReportSummaryGrid({ metrics, sections }: ReportSummaryGridProps)
               key={`section-${idx}`}
               className="border border-zinc-300 rounded-lg p-4 space-y-3 bg-white"
             >
-              <h3 className="text-xs font-extrabold uppercase tracking-wider text-zinc-900 border-b border-zinc-200 pb-1.5">
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 border-b border-zinc-200 pb-1.5">
                 {sec.title}
               </h3>
               <div className="space-y-1.5 text-xs">
@@ -55,7 +55,7 @@ export function ReportSummaryGrid({ metrics, sections }: ReportSummaryGridProps)
                     }`}
                   >
                     <span className="text-zinc-600 font-medium">{item.label}:</span>
-                    <span className="font-mono text-zinc-900 font-bold">{item.value}</span>
+                    <span className="font-sans tabular-nums text-zinc-900 font-bold">{item.value}</span>
                   </div>
                 ))}
               </div>

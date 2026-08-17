@@ -38,8 +38,8 @@ export function ArmyBodyFatTables({ result }: ArmyBodyFatTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Age Bracket</th>
-                <th className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">Male Max Allowed</th>
-                <th className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">Female Max Allowed</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">Male Max Allowed</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">Female Max Allowed</th>
                 <th className="py-2.5 px-3 text-zinc-500">Status</th>
               </tr>
             </thead>
@@ -49,8 +49,8 @@ export function ArmyBodyFatTables({ result }: ArmyBodyFatTablesProps) {
                 return (
                   <tr key={idx} className={isCurrentBracket ? "bg-emerald-50/70 dark:bg-emerald-950/30 font-bold" : "hover:bg-zinc-50 dark:hover:bg-zinc-800/40"}>
                     <td className="py-2.5 px-3 font-bold text-zinc-900 dark:text-zinc-100">{row.ageGroup}</td>
-                    <td className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">{row.maleMax}</td>
-                    <td className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">{row.femaleMax}</td>
+                    <td className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">{row.maleMax}</td>
+                    <td className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">{row.femaleMax}</td>
                     <td className="py-2.5 px-3 text-zinc-500">
                       {isCurrentBracket ? <span className="text-emerald-700 dark:text-emerald-400 font-bold">Your Active Age Bracket</span> : "Standard"}
                     </td>
@@ -104,8 +104,8 @@ export function ArmyBodyFatTables({ result }: ArmyBodyFatTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Classification</th>
-                <th className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">Male Range</th>
-                <th className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">Female Range</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">Male Range</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">Female Range</th>
                 <th className="py-2.5 px-3">Description</th>
               </tr>
             </thead>
@@ -115,8 +115,8 @@ export function ArmyBodyFatTables({ result }: ArmyBodyFatTablesProps) {
                 return (
                   <tr key={idx} className={isSelected ? "bg-blue-50/70 dark:bg-blue-950/30 font-bold" : "hover:bg-zinc-50 dark:hover:bg-zinc-800/40"}>
                     <td className="py-2 px-3 font-bold text-zinc-900 dark:text-zinc-100">{row.category}</td>
-                    <td className="py-2 px-3 font-mono text-blue-700 dark:text-blue-400">{row.maleRange}</td>
-                    <td className="py-2 px-3 font-mono text-purple-700 dark:text-purple-400">{row.femaleRange}</td>
+                    <td className="py-2 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">{row.maleRange}</td>
+                    <td className="py-2 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">{row.femaleRange}</td>
                     <td className="py-2 px-3 text-zinc-500">{row.description}</td>
                   </tr>
                 );

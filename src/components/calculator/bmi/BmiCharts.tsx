@@ -164,7 +164,7 @@ export function BmiScaleMeter({ result }: BmiChartsProps) {
         </div>
       </div>
 
-      <div className="flex justify-between text-[10px] text-zinc-500 dark:text-zinc-400 font-mono px-0.5">
+      <div className="flex justify-between text-[10px] text-zinc-500 dark:text-zinc-400 font-sans tabular-nums px-0.5">
         <span>12</span>
         <span>18.5</span>
         <span>25.0</span>
@@ -363,7 +363,7 @@ export function ChildBmiPercentileChart({ result }: BmiChartsProps) {
         />
       </div>
 
-      <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">
+      <p className="text-xs text-slate-800 dark:text-slate-200 font-semibold leading-relaxed">
         For children aged 2–19, BMI is evaluated using age- and gender-specific percentiles from the CDC. A percentile between 5% and 85% indicates normal growth and healthy body weight.
       </p>
     </div>

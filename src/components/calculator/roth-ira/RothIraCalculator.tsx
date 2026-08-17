@@ -244,7 +244,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Roth Advantage over Taxable:</span>
-          <span className="text-emerald-600 dark:text-emerald-400 font-mono text-sm">+{fmt(results.rothAdvantageOverTaxable)}</span>
+          <span className="text-emerald-600 dark:text-emerald-400 font-sans tabular-nums text-sm">+{fmt(results.rothAdvantageOverTaxable)}</span>
         </div>
       </div>
 
@@ -314,7 +314,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
                     min="0"
                     value={currentBalanceInput}
                     onChange={(e) => setCurrentBalanceInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -325,7 +325,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
                     disabled={maximizeContributions}
                     value={maximizeContributions ? (Number(currentAgeInput) >= 50 ? "8000" : "7000") : annualContributionInput}
                     onChange={(e) => setAnnualContributionInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -369,7 +369,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
                     max="100"
                     value={currentAgeInput}
                     onChange={(e) => setCurrentAgeInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -380,7 +380,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
                     max="100"
                     value={retirementAgeInput}
                     onChange={(e) => setRetirementAgeInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -394,7 +394,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
                     step="0.5"
                     value={investmentReturnInput}
                     onChange={(e) => setInvestmentReturnInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -405,7 +405,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
                     max="50"
                     value={marginalTaxRateInput}
                     onChange={(e) => setMarginalTaxRateInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -421,15 +421,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
                   ROTH IRA VS TAXABLE ACCOUNT (AGE {results.retirementAge})
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -442,7 +434,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
               </div>
 
               {/* Calculator.net Exact Output Table */}
-              <div className="overflow-x-auto my-3 font-mono">
+              <div className="overflow-x-auto my-3 font-sans tabular-nums">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
                     <tr className="border-b border-white/20 text-white/70">
@@ -511,8 +503,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
       {activeTab === "backdoor" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Zap className="h-5 w-5 text-amber-500" /> Mode 2: Backdoor Roth IRA Conversion Calculator
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Mode 2: Backdoor Roth IRA Conversion Calculator
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Calculate the upfront tax cost of converting traditional IRA pre-tax dollars into a Roth IRA and project your net long-term tax-free gain.
@@ -522,18 +513,18 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
           <div className="grid grid-cols-2 gap-4 text-xs">
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Conversion Amount ($)</label>
-              <Input type="number" min="0" value={conversionAmountInput} onChange={(e) => setConversionAmountInput(e.target.value)} className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <Input type="number" min="0" value={conversionAmountInput} onChange={(e) => setConversionAmountInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
             <div className="space-y-1">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Current Tax Bracket (%)</label>
-              <Input type="number" min="0" max="50" value={marginalTaxRateInput} onChange={(e) => setMarginalTaxRateInput(e.target.value)} className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+              <Input type="number" min="0" max="50" value={marginalTaxRateInput} onChange={(e) => setMarginalTaxRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
             </div>
           </div>
 
-          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-6 rounded-xl space-y-3 font-mono text-xs">
+          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-6 rounded-xl space-y-3 font-sans tabular-nums text-xs">
             <div className="flex justify-between items-center text-sm font-sans font-bold text-amber-900 dark:text-amber-200 border-b pb-2">
               <span>Upfront Conversion Tax Due:</span>
-              <span className="text-2xl font-extrabold font-mono text-rose-600">{fmt(backdoorResults.taxDueOnConversion)}</span>
+              <span className="text-2xl font-extrabold font-sans tabular-nums text-rose-600">{fmt(backdoorResults.taxDueOnConversion)}</span>
             </div>
             <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
               <span>Future Tax-Free Roth Balance at Age {results.retirementAge}:</span>
@@ -550,8 +541,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
       {activeTab === "magi" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-purple-500" /> Mode 3: MAGI Income Eligibility &amp; Saver's Credit Checker
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Mode 3: MAGI Income Eligibility &amp; Saver's Credit Checker
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Check 2025/2026 Modified Adjusted Gross Income (MAGI) phase-outs and IRS Form 8880 tax credit eligibility.
@@ -581,8 +571,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
       {activeTab === "schedule" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-indigo-500" /> Annual Schedule (Principal vs. Roth IRA vs. Taxable Account)
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Annual Schedule (Principal vs. Roth IRA vs. Taxable Account)
             </h3>
 
             <div className="flex items-center gap-2">
@@ -611,7 +600,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
                   <th className="p-2 text-right">End</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-sans tabular-nums">
                 {results.schedule.map((r) => (
                   <tr key={r.age} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">

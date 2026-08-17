@@ -83,22 +83,22 @@ export function CaloriesBurnedTables({ result }: CaloriesBurnedTablesProps) {
             <thead className="bg-zinc-100 dark:bg-zinc-950 text-zinc-800 dark:text-zinc-200 uppercase font-bold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th className="py-2.5 px-3">Activity</th>
-                <th className="py-2.5 px-3 font-mono">MET</th>
-                <th className="py-2.5 px-3 font-mono text-zinc-600 dark:text-zinc-400">125 lbs (57 kg)</th>
-                <th className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">155 lbs (70 kg)</th>
-                <th className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">185 lbs (84 kg)</th>
-                <th className="py-2.5 px-3 font-mono text-amber-700 dark:text-amber-400">215 lbs (98 kg)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums">MET</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-zinc-600 dark:text-zinc-400">125 lbs (57 kg)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">155 lbs (70 kg)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">185 lbs (84 kg)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-amber-700 dark:text-amber-400">215 lbs (98 kg)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
               {weightMatrix.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2.5 px-3 font-bold text-zinc-900 dark:text-zinc-100">{row.activity}</td>
-                  <td className="py-2.5 px-3 font-mono font-bold text-amber-600 dark:text-amber-400">{row.met}</td>
-                  <td className="py-2.5 px-3 font-mono text-zinc-600 dark:text-zinc-400">{row.w125}</td>
-                  <td className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">{row.w155}</td>
-                  <td className="py-2.5 px-3 font-mono text-purple-700 dark:text-purple-400">{row.w185}</td>
-                  <td className="py-2.5 px-3 font-mono text-amber-700 dark:text-amber-400">{row.w215}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-amber-600 dark:text-amber-400">{row.met}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums text-zinc-600 dark:text-zinc-400">{row.w125}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">{row.w155}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">{row.w185}</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums text-amber-700 dark:text-amber-400">{row.w215}</td>
                 </tr>
               ))}
             </tbody>
@@ -132,8 +132,8 @@ export function CaloriesBurnedTables({ result }: CaloriesBurnedTablesProps) {
               <tr>
                 <th className="py-2.5 px-3">Activity Name</th>
                 <th className="py-2.5 px-3">Category</th>
-                <th className="py-2.5 px-3 font-mono text-amber-700 dark:text-amber-400">MET Value</th>
-                <th className="py-2.5 px-3 font-mono text-blue-700 dark:text-blue-400">1-Hr Burn (160 lbs / 72.5 kg)</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-amber-700 dark:text-amber-400">MET Value</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">1-Hr Burn (160 lbs / 72.5 kg)</th>
                 <th className="py-2.5 px-3 text-zinc-500">Exercise Description</th>
               </tr>
             </thead>
@@ -144,8 +144,8 @@ export function CaloriesBurnedTables({ result }: CaloriesBurnedTablesProps) {
                   <tr key={act.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="py-2 px-3 font-bold text-zinc-900 dark:text-zinc-100">{act.name}</td>
                     <td className="py-2 px-3">{act.category}</td>
-                    <td className="py-2 px-3 font-mono font-bold text-amber-600 dark:text-amber-400">{act.met}</td>
-                    <td className="py-2 px-3 font-mono text-blue-700 dark:text-blue-400">{hrBurn} kcal</td>
+                    <td className="py-2 px-3 font-sans tabular-nums font-bold text-amber-600 dark:text-amber-400">{act.met}</td>
+                    <td className="py-2 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">{hrBurn} kcal</td>
                     <td className="py-2 px-3 text-zinc-500">{act.description}</td>
                   </tr>
                 );

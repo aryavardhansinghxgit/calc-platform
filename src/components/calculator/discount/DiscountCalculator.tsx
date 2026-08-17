@@ -241,7 +241,7 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Final Price:</span>
-          <span className="text-indigo-600 dark:text-indigo-400 font-mono text-sm">
+          <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-sm">
             {fmt(solverResults.finalPrice)}
           </span>
         </div>
@@ -354,7 +354,7 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
                     value={origPriceInput}
                     onChange={(e) => setOrigPriceInput(e.target.value)}
                     placeholder="e.g. 59.99"
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
                 <div className="space-y-1">
@@ -366,7 +366,7 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
                     value={discountValInput}
                     onChange={(e) => setDiscountValInput(e.target.value)}
                     placeholder="e.g. 15"
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
               </div>
@@ -379,7 +379,7 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
                     value={finalPriceInput}
                     onChange={(e) => setFinalPriceInput(e.target.value)}
                     placeholder="e.g. 50.99"
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
                 <div className="space-y-1">
@@ -389,7 +389,7 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
                     value={youSavedInput}
                     onChange={(e) => setYouSavedInput(e.target.value)}
                     placeholder="e.g. 9.00"
-                    className="text-xs font-mono h-8 px-2"
+                    className="text-xs font-sans tabular-nums h-8 px-2"
                   />
                 </div>
               </div>
@@ -404,15 +404,7 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
                   FINAL SALE PRICE
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -424,7 +416,7 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-mono mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-sans tabular-nums mb-2">
                 {fmt(solverResults.finalPrice)}
               </div>
 
@@ -479,22 +471,22 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
 
             <div className="space-y-1 text-xs">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Original List Price ($)</label>
-              <Input type="number" value={stackedOrigInput} onChange={(e) => setStackedOrigInput(e.target.value)} className="text-xs font-mono h-9 px-3" />
+              <Input type="number" value={stackedOrigInput} onChange={(e) => setStackedOrigInput(e.target.value)} className="text-xs font-sans tabular-nums h-9 px-3" />
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">First Discount (% Off)</label>
-                <Input type="number" value={disc1Input} onChange={(e) => setDisc1Input(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={disc1Input} onChange={(e) => setDisc1Input(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Second Discount (% Off)</label>
-                <Input type="number" value={disc2Input} onChange={(e) => setDisc2Input(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={disc2Input} onChange={(e) => setDisc2Input(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-purple-900 dark:text-purple-200 text-sm block border-b pb-1">
                 Sequential Stacked Savings Breakdown
@@ -509,7 +501,7 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
               </div>
               <div className="flex justify-between font-sans text-zinc-600 dark:text-zinc-400">
                 <span>Total Saved:</span>
-                <span className="font-bold text-emerald-600 font-mono">{fmt(stackedResults.totalSaved)} ({stackedResults.effectiveCombinedDiscountPercent}% Off)</span>
+                <span className="font-bold text-emerald-600 font-sans tabular-nums">{fmt(stackedResults.totalSaved)} ({stackedResults.effectiveCombinedDiscountPercent}% Off)</span>
               </div>
             </div>
           </div>
@@ -526,22 +518,22 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
 
             <div className="space-y-1 text-xs">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Original List Price ($)</label>
-              <Input type="number" value={couponOrigInput} onChange={(e) => setCouponOrigInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+              <Input type="number" value={couponOrigInput} onChange={(e) => setCouponOrigInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Percentage Coupon (% Off)</label>
-                <Input type="number" value={couponPctInput} onChange={(e) => setCouponPctInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={couponPctInput} onChange={(e) => setCouponPctInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Fixed Coupon ($ Off)</label>
-                <Input type="number" value={couponFixedInput} onChange={(e) => setCouponFixedInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={couponFixedInput} onChange={(e) => setCouponFixedInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-amber-900 dark:text-amber-200 text-sm block border-b pb-1">
                 Coupon Stack Breakdown
@@ -573,22 +565,22 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
 
             <div className="space-y-1 text-xs">
               <label className="font-semibold text-zinc-700 dark:text-zinc-300">Original List Price ($)</label>
-              <Input type="number" value={taxOrigInput} onChange={(e) => setTaxOrigInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+              <Input type="number" value={taxOrigInput} onChange={(e) => setTaxOrigInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Discount (% Off)</label>
-                <Input type="number" value={taxDiscInput} onChange={(e) => setTaxDiscInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={taxDiscInput} onChange={(e) => setTaxDiscInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">Sales Tax Rate (%)</label>
-                <Input type="number" value={taxRateInput} onChange={(e) => setTaxRateInput(e.target.value)} className="text-xs font-mono h-8 px-2" />
+                <Input type="number" value={taxRateInput} onChange={(e) => setTaxRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-6 space-y-4 font-mono text-xs">
+          <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-indigo-900 dark:text-indigo-200 text-sm block border-b pb-1">
                 Sales Tax Checkout Summary
@@ -613,8 +605,7 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
       {/* TAB 5: VISUAL DASHBOARDS */}
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-blue-500" /> Original vs. Discounted Price Comparison
+          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Original vs. Discounted Price Comparison
           </h3>
 
           <div className="h-64 w-full">

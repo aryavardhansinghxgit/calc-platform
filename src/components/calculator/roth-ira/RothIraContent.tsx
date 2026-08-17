@@ -74,10 +74,10 @@ export function RothIraContent() {
   ];
 
   return (
-    <div className="space-y-10 mt-8 border-t border-zinc-200 dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
+    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
       {/* Overview Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 text-white rounded-2xl p-6 md:p-8 shadow-lg">
-        <div className="flex items-center gap-3 text-emerald-400 font-semibold text-xs tracking-wider uppercase mb-2">
+        <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
           <BookOpen className="h-4 w-4" /> The Tax-Free Wealth Masterclass
         </div>
         <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-3">
@@ -93,33 +93,31 @@ export function RothIraContent() {
       <div className="space-y-8 text-sm leading-relaxed">
         {/* Section 1: History & Core Mechanics */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-emerald-600" /> 1. What Is a Roth IRA &amp; How It Works
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">1. What Is a Roth IRA &amp; How It Works
           </h3>
           <p>
             Unlike Traditional IRAs or 401(k)s where contributions are tax-deductible up front but taxable upon withdrawal, a Roth IRA operates in reverse. 
             You contribute after-tax dollars today. In exchange, every single dollar of future compounding interest, stock appreciation, and dividend payout grows 100% tax-free.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs pt-2">
-            <div className="bg-emerald-50 dark:bg-emerald-950/30 p-4 rounded-xl border border-emerald-200 dark:border-emerald-800 space-y-1">
-              <span className="font-bold text-emerald-700 dark:text-emerald-300 text-sm block">100% Tax-Free Earnings</span>
-              <p className="text-zinc-600 dark:text-zinc-400">Withdraw capital gains and interest with zero federal, state, or local tax after age 59½.</p>
+            <div className="bg-blue-50 dark:bg-blue-50/30 p-4 rounded-xl border border-emerald-200 dark:border-emerald-800 space-y-1">
+              <span className="font-bold text-blue-600 dark:text-blue-400 text-sm block">100% Tax-Free Earnings</span>
+              <p className="text-slate-900 dark:text-slate-100">Withdraw capital gains and interest with zero federal, state, or local tax after age 59½.</p>
             </div>
             <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-xl border border-blue-200 dark:border-blue-800 space-y-1">
               <span className="font-bold text-blue-700 dark:text-blue-300 text-sm block">Emergency Principal Access</span>
-              <p className="text-zinc-600 dark:text-zinc-400">Withdraw 100% of your original principal contributions at any time without penalty or tax.</p>
+              <p className="text-slate-900 dark:text-slate-100">Withdraw 100% of your original principal contributions at any time without penalty or tax.</p>
             </div>
-            <div className="bg-purple-50 dark:bg-purple-950/30 p-4 rounded-xl border border-purple-200 dark:border-purple-800 space-y-1">
-              <span className="font-bold text-purple-700 dark:text-purple-300 text-sm block">No Lifetime RMDs</span>
-              <p className="text-zinc-600 dark:text-zinc-400">Original owners are never forced to take mandatory distributions, preserving compound growth for life.</p>
+            <div className="bg-blue-50 dark:bg-blue-50/30 p-4 rounded-xl border border-purple-200 dark:border-purple-800 space-y-1">
+              <span className="font-bold text-blue-600 dark:text-blue-400 text-sm block">No Lifetime RMDs</span>
+              <p className="text-slate-900 dark:text-slate-100">Original owners are never forced to take mandatory distributions, preserving compound growth for life.</p>
             </div>
           </div>
         </div>
 
         {/* Section 2: 2025/2026 Contribution & MAGI Income Limits */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <ShieldCheck className="h-5 w-5 text-blue-600" /> 2. 2025 &amp; 2026 Contribution &amp; MAGI Income Thresholds
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">2. 2025 &amp; 2026 Contribution &amp; MAGI Income Thresholds
           </h3>
           
           <div className="overflow-x-auto">
@@ -133,18 +131,18 @@ export function RothIraContent() {
                   <th className="p-3 border border-zinc-200 dark:border-zinc-700">Married Joint MAGI Phase-Out</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 font-mono">
+              <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
                 <tr>
                   <td className="p-3 font-bold text-blue-600">2025 Tax Year</td>
                   <td className="p-3">$7,000</td>
-                  <td className="p-3 font-bold text-emerald-600">$8,000</td>
+                  <td className="p-3 font-bold text-blue-600">$8,000</td>
                   <td className="p-3">$146,000 – $161,000</td>
                   <td className="p-3">$230,000 – $240,000</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-bold text-indigo-600">2026 Tax Year</td>
+                  <td className="p-3 font-bold text-blue-600">2026 Tax Year</td>
                   <td className="p-3">$7,500</td>
-                  <td className="p-3 font-bold text-emerald-600">$8,600</td>
+                  <td className="p-3 font-bold text-blue-600">$8,600</td>
                   <td className="p-3">$168,000 – $183,000</td>
                   <td className="p-3">$252,000 – $262,000</td>
                 </tr>
@@ -155,14 +153,13 @@ export function RothIraContent() {
 
         {/* Section 3: Backdoor Roth Conversions */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Zap className="h-5 w-5 text-amber-500" /> 3. Backdoor Roth IRA Strategy for High Income Earners
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Backdoor Roth IRA Strategy for High Income Earners
           </h3>
           <p>
             Taxpayers whose income exceeds IRS MAGI phase-out limits ($161k single / $240k married in 2025) cannot make direct Roth IRA contributions. 
             However, under current IRS tax code, high earners can use the <strong>Backdoor Roth IRA strategy</strong>:
           </p>
-          <ol className="list-decimal list-inside text-xs space-y-1 text-zinc-600 dark:text-zinc-400 pl-2">
+          <ol className="list-decimal list-inside text-xs space-y-1 text-slate-900 dark:text-slate-100 pl-2">
             <li>Contribute up to $7,000 / $8,000 to a non-deductible Traditional IRA (no income limits apply).</li>
             <li>Immediately convert the Traditional IRA balance into a Roth IRA.</li>
             <li>Pay income tax only on pre-tax earnings (if converted immediately, tax is $0).</li>
@@ -175,7 +172,7 @@ export function RothIraContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (10 Essential Roth IRA FAQs)
           </h3>
         </div>
@@ -206,7 +203,7 @@ export function RothIraContent() {
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-zinc-600 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
+                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
                     {faq.answer}
                   </div>
                 )}

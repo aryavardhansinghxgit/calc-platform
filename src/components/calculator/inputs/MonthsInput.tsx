@@ -27,7 +27,7 @@ export function MonthsInput({ id, label, value, onChange, min = 1, max = 360 }: 
           onChange={(e) => onChange(parseInt(e.target.value, 10) || 0)}
           min={min}
           max={max}
-          className="h-10 pr-14 bg-slate-950/80 border-slate-800 text-slate-100 text-sm font-mono rounded-[12px]"
+          className="h-10 pr-14 bg-slate-950/80 border-slate-800 text-slate-100 text-sm font-sans tabular-nums rounded-[12px]"
         />
         <span className="absolute right-3 text-xs font-medium text-slate-400">mo</span>
       </div>

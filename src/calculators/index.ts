@@ -11,7 +11,7 @@ import { OTHER_CALCULATORS } from "./other";
 export * from "./types";
 
 // Combine all category registries
-export const ALL_CALCULATORS: CalculatorModuleDefinition[] = [
+const RAW_CALCULATORS: CalculatorModuleDefinition[] = [
   ...FINANCE_CALCULATORS,
   ...MATH_CALCULATORS,
   ...BUSINESS_CALCULATORS,
@@ -21,6 +21,11 @@ export const ALL_CALCULATORS: CalculatorModuleDefinition[] = [
   ...CONVERTERS_CALCULATORS,
   ...OTHER_CALCULATORS,
 ];
+
+// Deduplicate calculators by id to guarantee uniqueness
+export const ALL_CALCULATORS: CalculatorModuleDefinition[] = Array.from(
+  new Map(RAW_CALCULATORS.map((calc) => [calc.id.toLowerCase(), calc])).values()
+);
 
 // Map lookup table for O(1) slug/id resolution
 const CALCULATOR_REGISTRY: Record<string, CalculatorModuleDefinition> = {};

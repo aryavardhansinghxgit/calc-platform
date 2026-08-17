@@ -111,7 +111,7 @@ export function GstContent() {
   ];
 
   return (
-    <div className="space-y-10 mt-8 border-t border-zinc-200 dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
+    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
       {/* Overview Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 text-white rounded-2xl p-6 md:p-8 shadow-lg">
         <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
@@ -138,7 +138,7 @@ export function GstContent() {
             <p>
               Understanding whether a price includes or excludes GST determines your exact invoice billing structure:
             </p>
-            <ul className="text-xs space-y-2 text-zinc-600 dark:text-zinc-400 font-mono bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
+            <ul className="text-xs space-y-2 text-slate-900 dark:text-slate-100 font-sans tabular-nums bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
               <li>• <strong>GST Exclusive:</strong> GST Amount = Base Price × (GST Rate % / 100)</li>
               <li>• <strong>GST Inclusive:</strong> Base Price = Total Amount / (1 + GST Rate % / 100)</li>
               <li>• <strong>Reverse GST:</strong> Base Price = GST Amount × (100 / GST Rate %)</li>
@@ -146,13 +146,13 @@ export function GstContent() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-base">
+            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
               <Zap className="h-5 w-5" /> 2. Dual GST Model (CGST + SGST vs. IGST)
             </div>
             <p>
               India uses a <strong>Dual GST Model</strong> where Central and State Governments administer tax concurrently:
             </p>
-            <ul className="text-xs space-y-1.5 text-zinc-600 dark:text-zinc-400">
+            <ul className="text-xs space-y-1.5 text-slate-900 dark:text-slate-100">
               <li>• <strong>Intra-State Supply (Same State):</strong> Tax is split 50/50 into <strong>CGST</strong> (Central GST) and <strong>SGST</strong> (State GST).</li>
               <li>• <strong>Inter-State Supply (Different State):</strong> Full tax is collected as <strong>IGST</strong> (Integrated GST).</li>
             </ul>
@@ -161,8 +161,7 @@ export function GstContent() {
 
         {/* Section 3: GST Rate Slabs Table */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Layers className="h-5 w-5 text-purple-600" /> 3. Official GST Tax Rate Slabs in India
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Official GST Tax Rate Slabs in India
           </h3>
           
           <div className="overflow-x-auto">
@@ -174,41 +173,41 @@ export function GstContent() {
                   <th className="p-3 border border-zinc-200 dark:border-zinc-700">CGST / SGST Split</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+              <tbody className=" dark:divide-zinc-800">
                 <tr>
-                  <td className="p-3 font-semibold text-emerald-600">0% (NIL Rate)</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">Fresh milk, vegetables, food grains, salt, curd, books</td>
-                  <td className="p-3 font-mono">0% / 0%</td>
+                  <td className="p-3 font-semibold text-blue-600">0% (NIL Rate)</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">Fresh milk, vegetables, food grains, salt, curd, books</td>
+                  <td className="p-3 font-sans tabular-nums">0% / 0%</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-blue-600">0.25%</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">Rough precious stones & cut/polished diamonds</td>
-                  <td className="p-3 font-mono">0.125% / 0.125%</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">Rough precious stones & cut/polished diamonds</td>
+                  <td className="p-3 font-sans tabular-nums">0.125% / 0.125%</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-amber-600">3%</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">Gold, silver, platinum, jewelry</td>
-                  <td className="p-3 font-mono">1.5% / 1.5%</td>
+                  <td className="p-3 font-semibold text-blue-600">3%</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">Gold, silver, platinum, jewelry</td>
+                  <td className="p-3 font-sans tabular-nums">1.5% / 1.5%</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-indigo-600">5%</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">Sugar, tea, coffee, edible oil, apparel &lt; ₹1,000, medicines</td>
-                  <td className="p-3 font-mono">2.5% / 2.5%</td>
+                  <td className="p-3 font-semibold text-blue-600">5%</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">Sugar, tea, coffee, edible oil, apparel &lt; ₹1,000, medicines</td>
+                  <td className="p-3 font-sans tabular-nums">2.5% / 2.5%</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-purple-600">12%</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">Computers, processed foods, fruit juice, apparel &gt; ₹1,000</td>
-                  <td className="p-3 font-mono">6% / 6%</td>
+                  <td className="p-3 font-semibold text-blue-600">12%</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">Computers, processed foods, fruit juice, apparel &gt; ₹1,000</td>
+                  <td className="p-3 font-sans tabular-nums">6% / 6%</td>
                 </tr>
                 <tr>
                   <td className="p-3 font-semibold text-blue-700">18% (Standard)</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">IT services, software, freelancing, telecom, restaurants, cosmetics</td>
-                  <td className="p-3 font-mono">9% / 9%</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">IT services, software, freelancing, telecom, restaurants, cosmetics</td>
+                  <td className="p-3 font-sans tabular-nums">9% / 9%</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-rose-600">28% (Peak)</td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">Automobiles, motorcycles, sin goods, tobacco, aerated drinks (+ Cess)</td>
-                  <td className="p-3 font-mono">14% / 14%</td>
+                  <td className="p-3 font-semibold text-blue-600">28% (Peak)</td>
+                  <td className="p-3 text-slate-900 dark:text-slate-100">Automobiles, motorcycles, sin goods, tobacco, aerated drinks (+ Cess)</td>
+                  <td className="p-3 font-sans tabular-nums">14% / 14%</td>
                 </tr>
               </tbody>
             </table>
@@ -217,19 +216,18 @@ export function GstContent() {
 
         {/* Real-World Use Cases */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-            <Award className="h-5 w-5 text-indigo-600" /> Composition Scheme vs. Regular GST Scheme
+          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Composition Scheme vs. Regular GST Scheme
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="space-y-2 p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-lg border border-zinc-200 dark:border-zinc-700">
               <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Regular GST Scheme</span>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-slate-900 dark:text-slate-100">
                 Taxpayers charge standard GST on output sales and claim full <strong>Input Tax Credit (ITC)</strong> on input purchases. Ideal for B2B businesses and traders with high purchase expenses.
               </p>
             </div>
             <div className="space-y-2 p-4 bg-zinc-50 dark:bg-zinc-800/40 rounded-lg border border-zinc-200 dark:border-zinc-700">
               <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Composition Scheme</span>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-slate-900 dark:text-slate-100">
                 Small traders and restaurants pay a flat 1% to 5% tax on annual turnover without claiming ITC. Offers quarterly filing and zero tax invoice paperwork.
               </p>
             </div>
@@ -241,7 +239,7 @@ export function GstContent() {
       <div className="space-y-6 pt-4">
         <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
             Frequently Asked Questions (FAQ)
           </h3>
         </div>
@@ -272,7 +270,7 @@ export function GstContent() {
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-zinc-600 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
+                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
                     {faq.answer}
                   </div>
                 )}

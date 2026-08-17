@@ -157,7 +157,7 @@ export function LoveCalculator() {
             <Heart className="h-5 w-5 fill-rose-500 text-rose-500 animate-pulse" />
           </div>
           <div>
-            <h3 className="text-sm font-extrabold text-slate-900 dark:text-zinc-100">
+            <h3 className="text-sm font-extrabold text-blue-600 dark:text-blue-400">
               Next-Gen Love, Compatibility &amp; Relationship Matcher
             </h3>
             <p className="text-[10px] text-slate-500 dark:text-zinc-400">
@@ -208,8 +208,7 @@ export function LoveCalculator() {
           {/* MAIN INPUT CARD */}
           <div className="bg-white dark:bg-zinc-900 p-5 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-xs space-y-5">
             <div className="border-b border-slate-100 dark:border-zinc-800 pb-3">
-              <h4 className="text-xs font-extrabold text-slate-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">
-                <Users className="h-4 w-4 text-rose-500" /> Couple Details &amp; Parameters
+              <h4 className="text-xs font-extrabold text-slate-900 dark:text-zinc-100 uppercase tracking-wider flex items-center gap-1.5">Couple Details &amp; Parameters
               </h4>
               <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">
                 Enter names and optional dates/zodiac signs to calculate multi-pillar compatibility.
@@ -259,7 +258,7 @@ export function LoveCalculator() {
                     type="date"
                     value={dob1}
                     onChange={(e) => setDob1(e.target.value)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
 
@@ -272,7 +271,7 @@ export function LoveCalculator() {
                     type="date"
                     value={dob2}
                     onChange={(e) => setDob2(e.target.value)}
-                    className="h-9 text-xs font-mono bg-slate-50 dark:bg-zinc-800"
+                    className="h-9 text-xs font-sans tabular-nums bg-slate-50 dark:bg-zinc-800"
                   />
                 </div>
               </div>
@@ -385,7 +384,7 @@ export function LoveCalculator() {
 
               {/* Centered Score Number */}
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-3xl font-black font-mono text-slate-900 dark:text-zinc-100">
+                <span className="text-3xl font-black font-sans tabular-nums text-slate-900 dark:text-zinc-100">
                   {animatedScore}%
                 </span>
                 <span className="text-[9px] font-extrabold uppercase text-rose-500 tracking-wider">
@@ -406,7 +405,7 @@ export function LoveCalculator() {
                 <button
                   type="button"
                   onClick={handleCopyMoniker}
-                  className="px-2.5 py-0.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 text-xs font-extrabold font-mono flex items-center gap-1 cursor-pointer transition-all border border-rose-200 dark:border-rose-800"
+                  className="px-2.5 py-0.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 dark:text-rose-300 text-xs font-extrabold font-sans tabular-nums flex items-center gap-1 cursor-pointer transition-all border border-rose-200 dark:border-rose-800"
                 >
                   {result.moniker}
                   {copiedMoniker ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
@@ -427,7 +426,7 @@ export function LoveCalculator() {
                 <div className="space-y-1">
                   <div className="flex justify-between font-bold">
                     <span className="text-rose-600 dark:text-rose-400">Romantic Passion / Chemistry</span>
-                    <span className="font-mono">{result.dimensions.passion}%</span>
+                    <span className="font-sans tabular-nums">{result.dimensions.passion}%</span>
                   </div>
                   <div className="h-2 w-full bg-slate-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                     <div
@@ -441,7 +440,7 @@ export function LoveCalculator() {
                 <div className="space-y-1">
                   <div className="flex justify-between font-bold">
                     <span className="text-blue-600 dark:text-blue-400">Intellectual &amp; Communication</span>
-                    <span className="font-mono">{result.dimensions.communication}%</span>
+                    <span className="font-sans tabular-nums">{result.dimensions.communication}%</span>
                   </div>
                   <div className="h-2 w-full bg-slate-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                     <div
@@ -455,7 +454,7 @@ export function LoveCalculator() {
                 <div className="space-y-1">
                   <div className="flex justify-between font-bold">
                     <span className="text-purple-600 dark:text-purple-400">Emotional Trust &amp; Stability</span>
-                    <span className="font-mono">{result.dimensions.trust}%</span>
+                    <span className="font-sans tabular-nums">{result.dimensions.trust}%</span>
                   </div>
                   <div className="h-2 w-full bg-slate-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                     <div
@@ -469,7 +468,7 @@ export function LoveCalculator() {
                 <div className="space-y-1">
                   <div className="flex justify-between font-bold">
                     <span className="text-emerald-600 dark:text-emerald-400">Long-Term Vision &amp; Growth</span>
-                    <span className="font-mono">{result.dimensions.longTermVision}%</span>
+                    <span className="font-sans tabular-nums">{result.dimensions.longTermVision}%</span>
                   </div>
                   <div className="h-2 w-full bg-slate-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                     <div
@@ -494,7 +493,7 @@ export function LoveCalculator() {
               {result.flames && activeEngine === "flames" && (
                 <div className="pt-2 border-t border-slate-200 dark:border-zinc-700 flex items-center justify-between text-xs">
                   <span className="font-bold text-slate-700 dark:text-zinc-300">FLAMES Outcome:</span>
-                  <span className="px-2.5 py-0.5 rounded-md bg-rose-500 text-white font-black font-mono">
+                  <span className="px-2.5 py-0.5 rounded-md bg-rose-500 text-white font-black font-sans tabular-nums">
                     {result.flames.outcome}
                   </span>
                 </div>

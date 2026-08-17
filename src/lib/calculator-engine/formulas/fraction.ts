@@ -38,27 +38,27 @@ export interface FractionCalculationOutput {
 // -------------------------------------------------------------
 
 export function gcdBigInt(a: bigint, b: bigint): bigint {
-  let x = a < 0n ? -a : a;
-  let y = b < 0n ? -b : b;
-  while (y !== 0n) {
+  let x = a < BigInt(0) ? -a : a;
+  let y = b < BigInt(0) ? -b : b;
+  while (y !== BigInt(0)) {
     const t = y;
     y = x % y;
     x = t;
   }
-  return x === 0n ? 1n : x;
+  return x === BigInt(0) ? BigInt(1) : x;
 }
 
 export function lcmBigInt(a: bigint, b: bigint): bigint {
-  if (a === 0n || b === 0n) return 0n;
+  if (a === BigInt(0) || b === BigInt(0)) return BigInt(0);
   const g = gcdBigInt(a, b);
   return (a / g) * b;
 }
 
 export function simplifyFrac(n: bigint, d: bigint): Fraction {
-  if (d === 0n) throw new Error("Denominator cannot be zero.");
+  if (d === BigInt(0)) throw new Error("Denominator cannot be zero.");
   let num = n;
   let den = d;
-  if (den < 0n) {
+  if (den < BigInt(0)) {
     num = -num;
     den = -den;
   }
@@ -70,12 +70,12 @@ export function toMixed(n: bigint, d: bigint): MixedFraction {
   const simp = simplifyFrac(n, d);
   const w = simp.n / simp.d;
   const rem = simp.n % simp.d;
-  return { w, n: rem < 0n ? -rem : rem, d: simp.d };
+  return { w, n: rem < BigInt(0) ? -rem : rem, d: simp.d };
 }
 
 export function mixedToImproperFrac(w: bigint, n: bigint, d: bigint): Fraction {
-  const sign = w < 0n ? -1n : 1n;
-  const absW = w < 0n ? -w : w;
+  const sign = w < BigInt(0) ? BigInt(-1) : BigInt(1);
+  const absW = w < BigInt(0) ? -w : w;
   const num = sign * (absW * d + n);
   return simplifyFrac(num, d);
 }
@@ -91,11 +91,11 @@ export function decimalToFrac(decStr: string): Fraction {
     const intPart = BigInt(parts[0] || "0");
     const decPart = parts[1] || "";
     const len = BigInt(decPart.length);
-    const denom = 10n ** len;
+    const denom = BigInt(10) ** len;
     const num = intPart * denom + BigInt(decPart);
     return simplifyFrac(num, denom);
   }
-  return { n: BigInt(clean), d: 1n };
+  return { n: BigInt(clean), d: BigInt(1) };
 }
 
 export function recurringDecimalToFrac(nonRepeat: string, repeat: string): Fraction {
@@ -119,7 +119,7 @@ export function recurringDecimalToFrac(nonRepeat: string, repeat: string): Fract
 // -------------------------------------------------------------
 
 export function approximateFraction(val: number, maxDenom = 1000): Fraction {
-  let m00 = 1n, m01 = 0n, m10 = 0n, m11 = 1n;
+  let m00 = BigInt(1), m01 = BigInt(0), m10 = BigInt(0), m11 = BigInt(1);
   let x = val;
   for (let i = 0; i < 20; i++) {
     const a = BigInt(Math.floor(x));
@@ -153,8 +153,8 @@ export function calculateFractionOperation(
 ): FractionCalculationOutput {
   const f1 = simplifyFrac(n1, d1);
   const f2 = simplifyFrac(n2, d2);
-  let resultNum = 0n;
-  let resultDen = 1n;
+  let resultNum = BigInt(0);
+  let resultDen = BigInt(1);
   const lcm = lcmBigInt(f1.d, f2.d);
   const steps: { stepNumber: number; title: string; latex: string; explanation: string }[] = [];
 
@@ -241,7 +241,7 @@ export function calculateFractionOperation(
   const finalSimp = simplifyFrac(resultNum, resultDen);
   const gcdVal = gcdBigInt(resultNum, resultDen);
 
-  if (gcdVal > 1n) {
+  if (gcdVal > BigInt(1)) {
     steps.push({
       stepNumber: steps.length + 1,
       title: "Simplify Fraction",
@@ -251,7 +251,7 @@ export function calculateFractionOperation(
   }
 
   const mixed = toMixed(finalSimp.n, finalSimp.d);
-  if (mixed.w !== 0n && mixed.n !== 0n) {
+  if (mixed.w !== BigInt(0) && mixed.n !== BigInt(0)) {
     steps.push({
       stepNumber: steps.length + 1,
       title: "Convert to Mixed Number",
@@ -263,14 +263,14 @@ export function calculateFractionOperation(
   const decNum = Number(finalSimp.n) / Number(finalSimp.d);
   const pct = (decNum * 100).toFixed(2) + "%";
 
-  const equivalents = [2n, 3n, 4n, 5n, 10n].map(
+  const equivalents = [BigInt(2), BigInt(3), BigInt(4), BigInt(5), BigInt(10)].map(
     (mult) => `${finalSimp.n * mult}/${finalSimp.d * mult}`
   );
 
   return {
     exactFraction: `${resultNum}/${resultDen}`,
     simplifiedFraction: `${finalSimp.n}/${finalSimp.d}`,
-    mixedNumber: mixed.w === 0n ? `${finalSimp.n}/${finalSimp.d}` : `${mixed.w} ${mixed.n}/${mixed.d}`,
+    mixedNumber: mixed.w === BigInt(0) ? `${finalSimp.n}/${finalSimp.d}` : `${mixed.w} ${mixed.n}/${mixed.d}`,
     decimal: decNum.toString(),
     recurringDecimal: formatRecurringDec(Number(finalSimp.n), Number(finalSimp.d)),
     percentage: pct,

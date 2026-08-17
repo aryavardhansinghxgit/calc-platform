@@ -226,7 +226,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Roth IRA at Age {results.retirementAge}:</span>
-          <span className="text-emerald-600 dark:text-emerald-400 font-mono text-sm">{fmt(results.rothBalance)}</span>
+          <span className="text-emerald-600 dark:text-emerald-400 font-sans tabular-nums text-sm">{fmt(results.rothBalance)}</span>
         </div>
       </div>
 
@@ -296,7 +296,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
                     min="0"
                     value={currentBalanceInput}
                     onChange={(e) => setCurrentBalanceInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -306,7 +306,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
                     min="0"
                     value={annualContributionInput}
                     onChange={(e) => setAnnualContributionInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -320,7 +320,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
                     max="100"
                     value={currentAgeInput}
                     onChange={(e) => setCurrentAgeInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -331,7 +331,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
                     max="100"
                     value={retirementAgeInput}
                     onChange={(e) => setRetirementAgeInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -342,7 +342,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
                     step="0.5"
                     value={investmentReturnInput}
                     onChange={(e) => setInvestmentReturnInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -363,7 +363,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
                     max="50"
                     value={currentTaxRateInput}
                     onChange={(e) => setCurrentTaxRateInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
                 <div className="space-y-1">
@@ -374,7 +374,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
                     max="50"
                     value={retirementTaxRateInput}
                     onChange={(e) => setRetirementTaxRateInput(e.target.value)}
-                    className="text-xs font-mono h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
                 </div>
               </div>
@@ -390,15 +390,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
                   IRA BALANCES AT RETIREMENT (AGE {results.retirementAge})
                 </span>
                 <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={copySummary}
-                    className="h-7 text-xs bg-white/10 hover:bg-white/20 border-white/20 text-white cursor-pointer"
-                  >
-                    <Share2 className="h-3 w-3 mr-1" /> {copyNotification ? "Copied!" : "Copy"}
-                  </Button>
+                  
                   <Button
                     type="button"
                     size="sm"
@@ -410,7 +402,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 my-3 font-mono">
+              <div className="grid grid-cols-2 gap-4 my-3 font-sans tabular-nums">
                 <div>
                   <div className="text-[11px] text-zinc-400">Roth IRA (100% Tax-Free)</div>
                   <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400">{fmt(results.rothBalance)}</div>
@@ -430,15 +422,15 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
               <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-white/10 text-xs">
                 <div>
                   <div className="text-zinc-400 text-[11px]">Pre-Tax Trad IRA</div>
-                  <div className="font-bold font-mono text-white text-sm">{fmt(results.traditionalPreTaxBalance)}</div>
+                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.traditionalPreTaxBalance)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Taxable Savings</div>
-                  <div className="font-bold font-mono text-amber-300 text-sm">{fmt(results.taxableBalance)}</div>
+                  <div className="font-bold font-sans tabular-nums text-amber-300 text-sm">{fmt(results.taxableBalance)}</div>
                 </div>
                 <div>
                   <div className="text-zinc-400 text-[11px]">Principal Out-of-Pocket</div>
-                  <div className="font-bold font-mono text-zinc-300 text-sm">{fmt(results.totalPrincipalInvested)}</div>
+                  <div className="font-bold font-sans tabular-nums text-zinc-300 text-sm">{fmt(results.totalPrincipalInvested)}</div>
                 </div>
               </div>
             </div>
@@ -470,15 +462,14 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
       {activeTab === "optimizer" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <Percent className="h-5 w-5 text-emerald-500" /> Traditional vs. Roth Tax Optimizer &amp; Breakeven Solver
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Traditional vs. Roth Tax Optimizer &amp; Breakeven Solver
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Compare exact after-tax wealth outcomes based on your current marginal tax bracket vs expected retirement tax bracket.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 text-xs font-mono">
+          <div className="grid grid-cols-2 gap-4 text-xs font-sans tabular-nums">
             <div className="bg-blue-50 dark:bg-blue-950/30 p-5 rounded-xl border border-blue-200 dark:border-blue-800 space-y-2">
               <span className="font-sans font-bold text-blue-700 dark:text-blue-300 text-sm block">Traditional IRA (After Retirement Tax)</span>
               <div className="text-2xl font-extrabold text-blue-600">{fmt(results.traditionalPostTaxBalance)}</div>
@@ -511,8 +502,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
       {activeTab === "checker" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-purple-500" /> 2025 &amp; 2026 IRS Contribution Cap Validation
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">2025 &amp; 2026 IRS Contribution Cap Validation
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
               Verify if your annual contributions comply with official IRS Publication 590 annual caps.
@@ -527,7 +517,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
                 <strong>Catch-Up Limit (Age 50+):</strong> $8,000 / year
               </p>
               <div className="pt-2 border-t border-purple-200">
-                Current Input: <strong className="font-mono text-purple-600 text-sm">{fmt(Number(annualContributionInput))}</strong>
+                Current Input: <strong className="font-sans tabular-nums text-purple-600 text-sm">{fmt(Number(annualContributionInput))}</strong>
                 {Number(annualContributionInput) > 7000 && Number(currentAgeInput) < 50 && (
                   <span className="block text-rose-600 font-bold text-[11px] mt-1">
                     ⚠️ WARNING: Contributions exceed $7,000 IRS limit for under age 50!
@@ -550,8 +540,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
       {activeTab === "schedule" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-indigo-500" /> Age-by-Age 4-Account Comparison Schedule
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Age-by-Age 4-Account Comparison Schedule
             </h3>
 
             <div className="flex items-center gap-2">
@@ -573,7 +562,7 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
                   <th className="p-2.5 text-right">Principal ($)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-mono">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-sans tabular-nums">
                 {results.schedule.map((r) => (
                   <tr key={r.age} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">
