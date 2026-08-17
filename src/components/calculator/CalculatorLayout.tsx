@@ -791,7 +791,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs text-slate-900 dark:text-slate-100">
         {/* Formula & Calculation Method */}
-        {definition.formulaDescription && (
+        {definition.formulaDescription && !isConcrete && (
           <div className="space-y-2">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Formula & Calculation Method
@@ -812,8 +812,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
         )}
 
-        {/* 10 High-Quality Frequently Asked Questions (Excluded for Math Category per AGENTS.md policy) */}
-        {definition.category !== "Math" && (
+        {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Concrete suite per AGENTS.md policy) */}
+        {definition.category !== "Math" && !isConcrete && (
           <div className="space-y-3">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Frequently Asked Questions

@@ -4,402 +4,300 @@ import React from "react";
 
 export function ConcreteContent() {
   return (
-    <article className="prose prose-sm dark:prose-invert max-w-none space-y-6">
-      {/* ── 1. Introduction ── */}
-      <section>
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-          What Is a Concrete Calculator?
+    <article className="prose prose-sm dark:prose-invert max-w-none space-y-8 text-zinc-800 dark:text-zinc-200">
+      {/* ── 1. Introduction & Engineering Fundamentals ── */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+          1. Concrete Volume & Material Estimation Fundamentals
         </h2>
         <p>
-          A concrete calculator estimates the volume of concrete needed for a construction project,
-          expressed in cubic feet, cubic yards, and cubic meters. It then converts that volume into
-          the number of pre-mixed bags required (40-, 50-, 60-, or 80-pound sizes) and the number
-          of ready-mix truck deliveries needed.
+          Concrete is the world&apos;s most widely used composite building material, formed through the exothermic chemical hydration of hydraulic Portland cement, fine aggregate (sand), coarse aggregate (gravel or crushed stone), and water. Because fresh concrete begins to set within 60 to 90 minutes of batching, accurate volume calculation is a critical engineering requirement.
         </p>
         <p>
-          <strong>Who uses it:</strong> General contractors, civil engineers, homeowners building
-          patios and driveways, masons, landscape designers, and municipal infrastructure planners.
-          Accurate concrete estimation prevents costly over-ordering (wasted material) and
-          dangerous under-ordering (cold joints and structural weakness from interrupted pours).
+          Ordering too little concrete results in <strong>cold joints</strong> — structural fault lines formed when fresh concrete is poured against already-hardened concrete — compromising shear strength and water resistance. Conversely, over-ordering creates costly waste ($125 to $150+ per cubic yard) and disposal challenges, as ready-mix trucks cannot return leftover wet concrete.
         </p>
-        <p>
-          <strong>Why it matters:</strong> Concrete is a perishable product once mixed — ready-mix
-          concrete must be placed within 60–90 minutes. Ordering too little forces an emergency
-          second delivery, creating a cold joint that weakens the structure. Ordering too much
-          wastes material that costs $125–$150 per cubic yard. A reliable calculator eliminates
-          both risks.
-        </p>
-      </section>
-
-      {/* ── 2. Mathematical Concepts ── */}
-      <section>
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-          Mathematical Concepts Behind Concrete Volume
-        </h2>
-        <p>
-          Every concrete volume estimation reduces to computing the volume of a geometric solid:
-        </p>
-        <ul className="list-disc pl-5 space-y-1">
-          <li>
-            <strong>Rectangular prism</strong> — slabs, walls, and square footings. Volume equals
-            length × width × height.
-          </li>
-          <li>
-            <strong>Right circular cylinder</strong> — columns, round footings, and post holes.
-            Volume equals π × radius² × height.
-          </li>
-          <li>
-            <strong>Hollow cylinder (annulus)</strong> — tubes and circular slabs with a central
-            void. Volume equals the difference between two concentric cylinders.
-          </li>
-          <li>
-            <strong>L-shaped cross-section</strong> — curbs and gutters. The cross-sectional area
-            is computed as the sum of two rectangles (the vertical curb face and the horizontal
-            gutter flag), then extruded along the length.
-          </li>
-          <li>
-            <strong>Stepped wedge</strong> — stairs. Each riser adds a rectangular block whose
-            height increases cumulatively, plus an optional platform slab on top.
-          </li>
-        </ul>
-        <p>
-          All dimensions must be converted to a consistent unit (feet) before computing volume.
-          The calculator supports feet, inches, yards, meters, and centimeters.
-        </p>
-      </section>
-
-      {/* ── 3. Formulas ── */}
-      <section>
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-          Formulas
-        </h2>
-
-        <h3 className="font-semibold text-zinc-800 dark:text-zinc-200 mt-4">
-          Slab, Wall, or Square Footing
-        </h3>
-        <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-3 font-mono text-sm text-blue-800 dark:text-blue-300">
-          V = L × W × H × Qty × (1 + Wastage% / 100)
-        </div>
-        <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
-          Where <em>L</em> = length, <em>W</em> = width, <em>H</em> = thickness or height, all in
-          feet. Result is in cubic feet. Divide by 27 for cubic yards.
-        </p>
-
-        <h3 className="font-semibold text-zinc-800 dark:text-zinc-200 mt-4">
-          Column, Hole, or Round Footing
-        </h3>
-        <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-3 font-mono text-sm text-blue-800 dark:text-blue-300">
-          V = π × (d / 2)² × H × Qty × (1 + Wastage% / 100)
-        </div>
-        <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
-          Where <em>d</em> = diameter, <em>H</em> = depth or height, both in feet.
-        </p>
-
-        <h3 className="font-semibold text-zinc-800 dark:text-zinc-200 mt-4">
-          Circular Slab or Tube
-        </h3>
-        <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-3 font-mono text-sm text-blue-800 dark:text-blue-300">
-          V = π × [(d₁/2)² − (d₂/2)²] × H × Qty × (1 + Wastage% / 100)
-        </div>
-        <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
-          Where <em>d₁</em> = outer diameter, <em>d₂</em> = inner diameter. The inner diameter
-          must be smaller than the outer diameter; otherwise the result is zero.
-        </p>
-
-        <h3 className="font-semibold text-zinc-800 dark:text-zinc-200 mt-4">
-          Curb & Gutter Barrier
-        </h3>
-        <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-3 font-mono text-sm text-blue-800 dark:text-blue-300">
-          V = [(CurbDepth × CurbHeight) + (GutterWidth × FlagThickness)] × Length × Qty
-        </div>
-        <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
-          The cross-section is modelled as two adjacent rectangles forming an L-shape.
-        </p>
-
-        <h3 className="font-semibold text-zinc-800 dark:text-zinc-200 mt-4">
-          Stairs
-        </h3>
-        <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-3 font-mono text-sm text-blue-800 dark:text-blue-300">
-          V = Width × Run × Rise × n(n+1)/2 + Width × PlatformDepth × (Rise × n)
-        </div>
-        <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
-          Where <em>n</em> = number of risers. The first term sums the cumulative step blocks
-          (each successive step is one rise taller). The second term adds the landing platform.
-        </p>
-      </section>
-
-      {/* ── 4. How the Calculation Works ── */}
-      <section>
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-          How the Calculation Works: Step by Step
-        </h2>
-        <ol className="list-decimal pl-5 space-y-2">
-          <li>
-            <strong>Enter dimensions</strong> — Provide length, width, height (or diameter, depth)
-            in your preferred unit system. The calculator converts everything to feet internally.
-          </li>
-          <li>
-            <strong>Set quantity and wastage</strong> — If you are pouring multiple identical
-            footings, increase the quantity. Add 5–10% wastage to account for spillage, uneven
-            sub-grade, and formwork absorption.
-          </li>
-          <li>
-            <strong>Compute raw volume</strong> — The appropriate geometric formula is applied.
-            The result is expressed in ft³, yd³, and m³.
-          </li>
-          <li>
-            <strong>Estimate weight</strong> — Volume is multiplied by concrete density (default:
-            133 lbs/ft³ for standard pre-mixed concrete, adjustable for lightweight or heavyweight
-            mixes).
-          </li>
-          <li>
-            <strong>Count bags</strong> — A standard 80-lb bag covers 0.60 ft³, a 60-lb bag covers
-            0.45 ft³, a 50-lb bag covers 0.375 ft³, and a 40-lb bag covers 0.30 ft³. The
-            calculator rounds up to the next whole bag.
-          </li>
-          <li>
-            <strong>Estimate truck deliveries</strong> — For large pours, divide the total cubic
-            yards by the truck capacity (typically 9–10 yd³ per ready-mix truck) and round up.
-          </li>
-        </ol>
-      </section>
-
-      {/* ── 5. Worked Examples ── */}
-      <section>
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-          Worked Examples
-        </h2>
-
-        <h3 className="font-semibold text-zinc-800 dark:text-zinc-200 mt-3">
-          Basic: Simple Patio Slab
-        </h3>
-        <p>
-          A homeowner wants to pour a 10 ft × 10 ft patio slab, 4 inches thick, with 5% wastage.
-        </p>
-        <div className="bg-slate-50 dark:bg-zinc-800 rounded-lg p-3 text-xs space-y-1 font-sans tabular-nums">
-          <p>Convert thickness: 4 in ÷ 12 = 0.333 ft</p>
-          <p>Raw volume: 10 × 10 × 0.333 = 33.33 ft³</p>
-          <p>With 5% wastage: 33.33 × 1.05 = 35.0 ft³</p>
-          <p>Cubic yards: 35.0 ÷ 27 = <strong>1.30 yd³</strong></p>
-          <p>80-lb bags needed: ⌈35.0 ÷ 0.60⌉ = <strong>59 bags</strong></p>
-          <p>Weight: 35.0 × 133 = <strong>4,655 lbs</strong> (2,112 kg)</p>
-        </div>
-
-        <h3 className="font-semibold text-zinc-800 dark:text-zinc-200 mt-4">
-          Intermediate: Fence Post Holes
-        </h3>
-        <p>
-          A contractor needs to fill 20 post holes, each 10 inches in diameter and 3 feet deep.
-        </p>
-        <div className="bg-slate-50 dark:bg-zinc-800 rounded-lg p-3 text-xs space-y-1 font-sans tabular-nums">
-          <p>Convert diameter: 10 in ÷ 12 = 0.833 ft → radius = 0.417 ft</p>
-          <p>Volume per hole: π × 0.417² × 3.0 = 1.636 ft³</p>
-          <p>Total for 20 holes: 1.636 × 20 = 32.72 ft³</p>
-          <p>Cubic yards: 32.72 ÷ 27 = <strong>1.21 yd³</strong></p>
-          <p>80-lb bags: ⌈32.72 ÷ 0.60⌉ = <strong>55 bags</strong></p>
-        </div>
-
-        <h3 className="font-semibold text-zinc-800 dark:text-zinc-200 mt-4">
-          Advanced: Concrete Staircase
-        </h3>
-        <p>
-          An engineer designs a 5-step staircase with 12-inch run, 6-inch rise, 50-inch width,
-          and a 5-inch deep landing platform.
-        </p>
-        <div className="bg-slate-50 dark:bg-zinc-800 rounded-lg p-3 text-xs space-y-1 font-sans tabular-nums">
-          <p>Convert to feet: run = 1.0 ft, rise = 0.5 ft, width = 4.167 ft, platform = 0.417 ft</p>
-          <p>Steps volume: 4.167 × 1.0 × 0.5 × (5 × 6) / 2 = 4.167 × 1.0 × 0.5 × 15 = 31.25 ft³</p>
-          <p>Platform volume: 4.167 × 0.417 × (0.5 × 5) = 4.167 × 0.417 × 2.5 = 4.34 ft³</p>
-          <p>Total: 31.25 + 4.34 = <strong>35.59 ft³</strong> = <strong>1.32 yd³</strong></p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 not-prose my-3">
+          <div className="p-3 bg-blue-50 dark:bg-blue-950/40 rounded-lg border border-blue-200 dark:border-blue-800/60">
+            <span className="text-xs font-bold text-blue-800 dark:text-blue-300 block mb-1">Cubic Foot (ft³)</span>
+            <span className="text-[11px] text-zinc-600 dark:text-zinc-400">1 ft³ = 1,728 in³ = 0.03704 yd³ = 0.0283 m³</span>
+          </div>
+          <div className="p-3 bg-blue-50 dark:bg-blue-950/40 rounded-lg border border-blue-200 dark:border-blue-800/60">
+            <span className="text-xs font-bold text-blue-800 dark:text-blue-300 block mb-1">Cubic Yard (yd³)</span>
+            <span className="text-[11px] text-zinc-600 dark:text-zinc-400">1 yd³ = 27 ft³ = 46,656 in³ = 0.7646 m³</span>
+          </div>
+          <div className="p-3 bg-blue-50 dark:bg-blue-950/40 rounded-lg border border-blue-200 dark:border-blue-800/60">
+            <span className="text-xs font-bold text-blue-800 dark:text-blue-300 block mb-1">Cubic Meter (m³)</span>
+            <span className="text-[11px] text-zinc-600 dark:text-zinc-400">1 m³ = 35.3147 ft³ = 1.30795 yd³</span>
+          </div>
         </div>
       </section>
 
-      {/* ── 6. Visual Understanding ── */}
-      <section>
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-          Reference Tables
+      {/* ── 2. Mathematical Formulas for Geometric Solids ── */}
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+          2. Mathematical Formulas by Geometric Shape
         </h2>
+        <p>
+          Construction elements correspond to specific geometric solid volumes. All linear inputs must be converted into a common unit (feet) before computation:
+        </p>
 
-        <h3 className="font-semibold text-zinc-800 dark:text-zinc-200 mt-3">
-          Bag Coverage Reference
-        </h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-xs border-collapse">
+        {/* Slab */}
+        <div className="bg-slate-50 dark:bg-zinc-800/60 rounded-lg p-4 border border-slate-200 dark:border-zinc-700/60 space-y-2">
+          <h3 className="font-bold text-sm text-blue-700 dark:text-blue-300 m-0">
+            A. Slabs, Square Footings, Grade Beams &amp; Retaining Walls
+          </h3>
+          <div className="font-mono text-xs bg-white dark:bg-zinc-900 p-2.5 rounded border border-zinc-200 dark:border-zinc-800 text-blue-600 dark:text-blue-400">
+            V (ft³) = Length (ft) × Width (ft) × Thickness (ft) × Quantity × [1 + (Wastage% / 100)]
+          </div>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 m-0">
+            To obtain cubic yards: <code>V (yd³) = V (ft³) / 27</code>. Example: a 10 ft × 10 ft slab at 4 inches thick requires <code>(10 × 10 × 0.333) / 27 = 1.235 yd³</code>.
+          </p>
+        </div>
+
+        {/* Column */}
+        <div className="bg-slate-50 dark:bg-zinc-800/60 rounded-lg p-4 border border-slate-200 dark:border-zinc-700/60 space-y-2">
+          <h3 className="font-bold text-sm text-blue-700 dark:text-blue-300 m-0">
+            B. Cylindrical Columns, Round Piers &amp; Sonotube Footings
+          </h3>
+          <div className="font-mono text-xs bg-white dark:bg-zinc-900 p-2.5 rounded border border-zinc-200 dark:border-zinc-800 text-blue-600 dark:text-blue-400">
+            V (ft³) = π × [Diameter (ft) / 2]² × Depth (ft) × Quantity × [1 + (Wastage% / 100)]
+          </div>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 m-0">
+            Calculates right circular cylinder volume. Radius equals <code>d / 2</code>.
+          </p>
+        </div>
+
+        {/* Tube */}
+        <div className="bg-slate-50 dark:bg-zinc-800/60 rounded-lg p-4 border border-slate-200 dark:border-zinc-700/60 space-y-2">
+          <h3 className="font-bold text-sm text-blue-700 dark:text-blue-300 m-0">
+            C. Annular Cylinders, Hollow Tubes &amp; Ring Foundations
+          </h3>
+          <div className="font-mono text-xs bg-white dark:bg-zinc-900 p-2.5 rounded border border-zinc-200 dark:border-zinc-800 text-blue-600 dark:text-blue-400">
+            V (ft³) = π × [(d₁ / 2)² − (d₂ / 2)²] × Height (ft) × Quantity × [1 + (Wastage% / 100)]
+          </div>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 m-0">
+            Where <em>d₁</em> is outer diameter and <em>d₂</em> is inner diameter. Inner diameter must strictly satisfy <code>d₂ &lt; d₁</code>.
+          </p>
+        </div>
+
+        {/* Curb & Gutter */}
+        <div className="bg-slate-50 dark:bg-zinc-800/60 rounded-lg p-4 border border-slate-200 dark:border-zinc-700/60 space-y-2">
+          <h3 className="font-bold text-sm text-blue-700 dark:text-blue-300 m-0">
+            D. Curb and Gutter Barriers (L-Shaped Extrusion)
+          </h3>
+          <div className="font-mono text-xs bg-white dark:bg-zinc-900 p-2.5 rounded border border-zinc-200 dark:border-zinc-800 text-blue-600 dark:text-blue-400">
+            Cross-Section Area (ft²) = [CurbDepth (ft) × CurbHeight (ft)] + [GutterWidth (ft) × FlagThickness (ft)]
+            <br />
+            V (ft³) = Area (ft²) × Length (ft) × Quantity
+          </div>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 m-0">
+            Models standard municipal L-curbs by summing the vertical curb stand and horizontal gutter apron.
+          </p>
+        </div>
+
+        {/* Stairs */}
+        <div className="bg-slate-50 dark:bg-zinc-800/60 rounded-lg p-4 border border-slate-200 dark:border-zinc-700/60 space-y-2">
+          <h3 className="font-bold text-sm text-blue-700 dark:text-blue-300 m-0">
+            E. Solid Concrete Staircases
+          </h3>
+          <div className="font-mono text-xs bg-white dark:bg-zinc-900 p-2.5 rounded border border-zinc-200 dark:border-zinc-800 text-blue-600 dark:text-blue-400">
+            V_steps (ft³) = Width (ft) × Run (ft) × Rise (ft) × [n × (n + 1) / 2]
+            <br />
+            V_platform (ft³) = Width (ft) × PlatformDepth (ft) × [n × Rise (ft)]
+            <br />
+            V_total = V_steps + V_platform
+          </div>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400 m-0">
+            Where <em>n</em> is the total number of risers. The arithmetic sum <code>n(n+1)/2</code> accounts for the cumulative monolithic volume beneath each ascending step.
+          </p>
+        </div>
+      </section>
+
+      {/* ── 3. Bagged vs Ready-Mix Decision Framework ── */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+          3. Pre-Mixed Bag vs. Ready-Mix Truck Delivery Matrix
+        </h2>
+        <p>
+          Determining whether to hand-mix bagged concrete or order ready-mix transit delivery depends on project scale, labor, and budget:
+        </p>
+        <div className="overflow-x-auto not-prose">
+          <table className="w-full text-xs border-collapse border border-zinc-200 dark:border-zinc-700">
             <thead>
-              <tr className="bg-blue-50 dark:bg-blue-950/30">
-                <th className="border border-blue-200 dark:border-blue-800 px-3 py-1.5 text-left font-bold">Bag Size</th>
-                <th className="border border-blue-200 dark:border-blue-800 px-3 py-1.5 text-left font-bold">Coverage (ft³)</th>
-                <th className="border border-blue-200 dark:border-blue-800 px-3 py-1.5 text-left font-bold">Bags per yd³</th>
+              <tr className="bg-blue-50 dark:bg-blue-950/40 text-zinc-800 dark:text-zinc-200 font-bold">
+                <th className="border border-zinc-200 dark:border-zinc-700 p-2.5 text-left">Volume Threshold</th>
+                <th className="border border-zinc-200 dark:border-zinc-700 p-2.5 text-left">Recommended Method</th>
+                <th className="border border-zinc-200 dark:border-zinc-700 p-2.5 text-left">80-lb Bag Equivalent</th>
+                <th className="border border-zinc-200 dark:border-zinc-700 p-2.5 text-left">Key Practical Factors</th>
               </tr>
             </thead>
-            <tbody>
-              {[
-                { size: "40 lb", coverage: "0.30", bags: "90" },
-                { size: "50 lb", coverage: "0.375", bags: "72" },
-                { size: "60 lb", coverage: "0.45", bags: "60" },
-                { size: "80 lb", coverage: "0.60", bags: "45" },
-              ].map((row) => (
-                <tr key={row.size}>
-                  <td className="border border-zinc-200 dark:border-zinc-700 px-3 py-1.5 font-semibold">{row.size}</td>
-                  <td className="border border-zinc-200 dark:border-zinc-700 px-3 py-1.5 font-sans tabular-nums">{row.coverage}</td>
-                  <td className="border border-zinc-200 dark:border-zinc-700 px-3 py-1.5 font-sans tabular-nums">{row.bags}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <h3 className="font-semibold text-zinc-800 dark:text-zinc-200 mt-4">
-          Recommended Slab Thickness by Application
-        </h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-xs border-collapse">
-            <thead>
-              <tr className="bg-blue-50 dark:bg-blue-950/30">
-                <th className="border border-blue-200 dark:border-blue-800 px-3 py-1.5 text-left font-bold">Application</th>
-                <th className="border border-blue-200 dark:border-blue-800 px-3 py-1.5 text-left font-bold">Minimum Thickness</th>
-                <th className="border border-blue-200 dark:border-blue-800 px-3 py-1.5 text-left font-bold">Notes</th>
+            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
+              <tr>
+                <td className="p-2.5 font-semibold">&lt; 1.0 yd³ (&lt; 27 ft³)</td>
+                <td className="p-2.5 text-emerald-600 dark:text-emerald-400 font-semibold">Pre-mixed bags (DIY)</td>
+                <td className="p-2.5 font-mono">1 – 45 bags</td>
+                <td className="p-2.5 text-zinc-600 dark:text-zinc-400">Cheaper than truck short-load fees; portable mixer or wheelbarrow.</td>
               </tr>
-            </thead>
-            <tbody>
-              {[
-                { app: "Sidewalk / Pathway", thickness: "4 inches", notes: "Light foot traffic only" },
-                { app: "Patio / Residential driveway", thickness: "4–5 inches", notes: "Passenger vehicles" },
-                { app: "Garage floor", thickness: "5–6 inches", notes: "Reinforce with wire mesh" },
-                { app: "Commercial parking lot", thickness: "6–8 inches", notes: "Heavy vehicles, rebar grid" },
-                { app: "Industrial slab", thickness: "8–12 inches", notes: "Forklift & heavy equipment loads" },
-                { app: "Foundation footing", thickness: "12+ inches", notes: "Below frost line, per engineer" },
-              ].map((row) => (
-                <tr key={row.app}>
-                  <td className="border border-zinc-200 dark:border-zinc-700 px-3 py-1.5 font-semibold">{row.app}</td>
-                  <td className="border border-zinc-200 dark:border-zinc-700 px-3 py-1.5 font-sans tabular-nums">{row.thickness}</td>
-                  <td className="border border-zinc-200 dark:border-zinc-700 px-3 py-1.5 text-zinc-500">{row.notes}</td>
-                </tr>
-              ))}
+              <tr>
+                <td className="p-2.5 font-semibold">1.0 – 2.5 yd³ (27 – 67.5 ft³)</td>
+                <td className="p-2.5 text-amber-600 dark:text-amber-400 font-semibold">Borderline / Site-Mix or Truck</td>
+                <td className="p-2.5 font-mono">45 – 113 bags</td>
+                <td className="p-2.5 text-zinc-600 dark:text-zinc-400">High physical labor (mixing ~7,000 lbs by hand). Truck delivery often justified.</td>
+              </tr>
+              <tr>
+                <td className="p-2.5 font-semibold">&gt; 2.5 yd³ (&gt; 67.5 ft³)</td>
+                <td className="p-2.5 text-blue-600 dark:text-blue-400 font-semibold">Ready-Mix Transit Truck</td>
+                <td className="p-2.5 font-mono">&gt; 113 bags</td>
+                <td className="p-2.5 text-zinc-600 dark:text-zinc-400">Monolithic pour without cold joints; precise slump control; lowest cost per yard.</td>
+              </tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      {/* ── 7. Common Mistakes ── */}
-      <section>
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-          Common Mistakes to Avoid
-        </h2>
-        <ul className="list-disc pl-5 space-y-2">
-          <li>
-            <strong>Mixing inches and feet without converting.</strong> Entering "4" for a
-            4-inch slab thickness while the unit selector is set to "feet" produces a volume 12×
-            too large. Always verify your unit selections.
-          </li>
-          <li>
-            <strong>Ignoring wastage.</strong> A zero-wastage estimate assumes perfectly level
-            sub-grade, zero spillage, and ideal formwork. Real-world pours typically waste 5–10%
-            of the ordered volume. For irregularly shaped excavations, use 10–15%.
-          </li>
-          <li>
-            <strong>Using standard density for lightweight concrete.</strong> Lightweight
-            aggregate concrete weighs 90–105 lbs/ft³, not 133 lbs/ft³. If your mix uses expanded
-            shale, clay, or slate aggregates, adjust the density setting.
-          </li>
-          <li>
-            <strong>Forgetting the inner diameter for tubes.</strong> When calculating annular
-            shapes (pipes, ring footings), failing to subtract the inner volume produces a
-            dramatically inflated estimate.
-          </li>
-          <li>
-            <strong>Under-estimating stair volume.</strong> Stairs are solid concrete, not hollow
-            steps. The volume increases quadratically with the number of risers because each
-            successive step sits atop all previous ones.
-          </li>
-        </ul>
-      </section>
-
-      {/* ── 8. Practical Applications ── */}
-      <section>
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-          Practical Applications
-        </h2>
-        <ul className="list-disc pl-5 space-y-2">
-          <li>
-            <strong>Residential construction:</strong> Driveways, patios, garage floors,
-            sidewalks, and foundation slabs. Homeowners can use bag-count estimates for small
-            DIY projects under 2 cubic yards.
-          </li>
-          <li>
-            <strong>Commercial and industrial:</strong> Warehouse floors, loading docks, parking
-            structures, and equipment pads. These projects typically use ready-mix trucks and
-            require pump-truck coordination.
-          </li>
-          <li>
-            <strong>Infrastructure:</strong> Curb and gutter construction for road projects,
-            concrete barriers, and bridge abutment footings. Municipal projects often require
-            volume estimates in metric (m³).
-          </li>
-          <li>
-            <strong>Landscaping:</strong> Retaining wall footings, fence post holes, and raised
-            garden bed foundations. Round footing estimates are especially useful for post and
-            column installations.
-          </li>
-          <li>
-            <strong>Engineering estimation:</strong> Structural engineers use concrete volume as
-            the basis for reinforcing steel (rebar) schedules, formwork design, and project
-            budgeting. Accurate volume is the starting point for all downstream calculations.
-          </li>
-        </ul>
-      </section>
-
-      {/* ── 9. Related Concepts ── */}
-      <section>
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-          Related Construction Concepts
-        </h2>
-        <ul className="list-disc pl-5 space-y-2">
-          <li>
-            <strong>Curing time:</strong> Concrete reaches approximately 70% of its design
-            strength after 7 days and 99% after 28 days under standard curing conditions
-            (68°F, moist-cured). Do not load the slab before it has cured sufficiently.
-          </li>
-          <li>
-            <strong>Compaction factor:</strong> When estimating gravel or crushed stone
-            sub-base volume, apply a compaction factor of 1.3–1.5× to account for the
-            reduction in volume after mechanical compaction.
-          </li>
-          <li>
-            <strong>Rebar spacing:</strong> For a 4-inch residential slab, #3 rebar at 18-inch
-            centers in both directions is typical. Thicker slabs and structural applications
-            require engineering design per ACI 318.
-          </li>
-          <li>
-            <strong>Slump test:</strong> Standard slump for residential concrete is 4–5 inches.
-            Higher slump (more water) makes pouring easier but reduces strength. Never add
-            water to ready-mix concrete beyond the specified water-cement ratio.
-          </li>
-          <li>
-            <strong>Concrete strength classes:</strong> Residential projects typically specify
-            2,500–3,000 PSI (17–21 MPa). Structural elements like columns and beams may require
-            4,000–6,000 PSI (28–41 MPa). Higher strength mixes use more cement per cubic yard.
-          </li>
-        </ul>
-      </section>
-
-      {/* ── 10. Summary ── */}
-      <section>
-        <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
-          Summary
+      {/* ── 4. Concrete Mix Ratios & Strength Classes ── */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+          4. Mix Ratios, Strength Classes &amp; Water-Cement Ratio
         </h2>
         <p>
-          Concrete volume estimation applies basic geometric volume formulas — rectangular
-          prisms for slabs and walls, cylinders for columns and footings, annular cylinders
-          for tubes, L-profiles for curbs, and stepped wedges for stairs. The critical steps
-          are: (1) consistent unit conversion, (2) applying a realistic wastage margin, and
-          (3) converting volume to practical quantities (bag counts or truck loads).
+          For site-mixed concrete, volumetric ratios specify parts of <strong>Cement : Sand (Fine Aggregate) : Stone (Coarse Aggregate)</strong>. The <em>water-cement ratio</em> ($w/c$) is the single most important factor governing final compressive strength (PSI / MPa) and permeability:
         </p>
+        <div className="overflow-x-auto not-prose">
+          <table className="w-full text-xs border-collapse border border-zinc-200 dark:border-zinc-700">
+            <thead>
+              <tr className="bg-blue-50 dark:bg-blue-950/40 text-zinc-800 dark:text-zinc-200 font-bold">
+                <th className="border border-zinc-200 dark:border-zinc-700 p-2.5 text-left">Mix Ratio</th>
+                <th className="border border-zinc-200 dark:border-zinc-700 p-2.5 text-left">Designation</th>
+                <th className="border border-zinc-200 dark:border-zinc-700 p-2.5 text-left">28-Day Strength</th>
+                <th className="border border-zinc-200 dark:border-zinc-700 p-2.5 text-left">Standard Construction Use Cases</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
+              <tr>
+                <td className="p-2.5 font-bold font-mono">1 : 2 : 4</td>
+                <td className="p-2.5">M15 / General Purpose</td>
+                <td className="p-2.5 font-sans font-semibold">2,200 – 2,500 PSI (15 MPa)</td>
+                <td className="p-2.5 text-zinc-600 dark:text-zinc-400">Garden walkways, light patio slabs, fence post anchors, non-load bearing work.</td>
+              </tr>
+              <tr>
+                <td className="p-2.5 font-bold font-mono">1 : 1.5 : 3</td>
+                <td className="p-2.5">M20 / Structural Standard</td>
+                <td className="p-2.5 font-sans font-semibold">3,000 – 3,500 PSI (20 MPa)</td>
+                <td className="p-2.5 text-zinc-600 dark:text-zinc-400">Residential driveways, foundation footings, basement floors, exterior slabs.</td>
+              </tr>
+              <tr>
+                <td className="p-2.5 font-bold font-mono">1 : 2 : 3</td>
+                <td className="p-2.5">M25 / High-Strength</td>
+                <td className="p-2.5 font-sans font-semibold">3,600 – 4,000+ PSI (25 MPa)</td>
+                <td className="p-2.5 text-zinc-600 dark:text-zinc-400">Heavy equipment pads, commercial driveways, structural beams, columns, stairs.</td>
+              </tr>
+              <tr>
+                <td className="p-2.5 font-bold font-mono">1 : 3 : 6</td>
+                <td className="p-2.5">M10 / Lean Mass Concrete</td>
+                <td className="p-2.5 font-sans font-semibold">1,450 – 1,800 PSI (10 MPa)</td>
+                <td className="p-2.5 text-zinc-600 dark:text-zinc-400">Sub-base leveling, pipe trench bedding, thick mass gravity retaining structures.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-zinc-500 italic">
+          * Note on water-cement ratio: An ideal $w/c$ is 0.40 to 0.45. Adding an extra gallon of water per bag reduces compressive strength by up to 250 PSI and increases drying shrinkage cracks.
+        </p>
+      </section>
+
+      {/* ── 5. Sub-Base Preparation & Rebar Schedules ── */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+          5. Sub-Base Engineering &amp; Reinforcement Guidelines
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 not-prose">
+          <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/60 rounded-lg border border-slate-200 dark:border-zinc-700/60 space-y-2">
+            <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider">
+              Sub-Base &amp; Soil Preparation
+            </h4>
+            <ul className="text-xs space-y-1.5 text-zinc-600 dark:text-zinc-400 list-disc pl-4">
+              <li>Excavate all organic topsoil down to undisturbed, stable subgrade.</li>
+              <li>Install a 4-inch layer of crushed gravel (3/4-inch minus with fines).</li>
+              <li>Compaction reduces crushed aggregate volume by <strong>1.30 to 1.40×</strong>.</li>
+              <li>Install a 10–15 mil polyethylene vapor barrier under interior basement and garage slabs.</li>
+            </ul>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/60 rounded-lg border border-slate-200 dark:border-zinc-700/60 space-y-2">
+            <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider">
+              Rebar &amp; Wire Mesh Placement
+            </h4>
+            <ul className="text-xs space-y-1.5 text-zinc-600 dark:text-zinc-400 list-disc pl-4">
+              <li><strong>4-inch slabs:</strong> #3 rebar (3/8&quot;) on 18&quot; grid or 6×6 W1.4/W1.4 welded wire mesh.</li>
+              <li><strong>5–6 inch driveways:</strong> #4 rebar (1/2&quot;) placed on a 12&quot; to 16&quot; grid.</li>
+              <li>Support all reinforcement on plastic or concrete chairs so it sits in the middle third of the slab depth.</li>
+              <li>Cut control joints every 24 to 30 times the slab thickness (e.g., 8–10 ft for a 4-inch slab).</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 6. Temperature & Curing Rules ── */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+          6. Temperature Management &amp; Curing Protocols (ACI 308)
+        </h2>
         <p>
-          For small projects (under 2 yd³), purchasing pre-mixed bags is cost-effective.
-          For projects exceeding 2–3 yd³, ready-mix delivery becomes both cheaper and
-          produces a superior monolithic pour with no cold joints. Always verify your
-          quantity estimate with a 5–10% wastage allowance before ordering.
+          Hydration is a temperature-sensitive chemical reaction. Proper curing retains moisture to allow maximum silicate hydration:
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 not-prose">
+          <div className="p-3 bg-slate-50 dark:bg-zinc-800/60 rounded-lg border border-slate-200 dark:border-zinc-700/60">
+            <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200 block mb-1">Cold Weather (&lt; 40°F / 4°C)</span>
+            <p className="text-[11px] text-zinc-600 dark:text-zinc-400 m-0">
+              Hydration slows dramatically below 40°F and ceases below freezing. Use insulated curing blankets, warm batch water, or Type III high-early cement. Never pour on frozen ground.
+            </p>
+          </div>
+          <div className="p-3 bg-slate-50 dark:bg-zinc-800/60 rounded-lg border border-slate-200 dark:border-zinc-700/60">
+            <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200 block mb-1">Standard (50°F to 85°F)</span>
+            <p className="text-[11px] text-zinc-600 dark:text-zinc-400 m-0">
+              Keep moist for at least 7 days using wet burlap, plastic sheeting, or a liquid curing compound. Concrete reaches ~70% of design strength at 7 days, 100% at 28 days.
+            </p>
+          </div>
+          <div className="p-3 bg-slate-50 dark:bg-zinc-800/60 rounded-lg border border-slate-200 dark:border-zinc-700/60">
+            <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200 block mb-1">Hot Weather (&gt; 90°F / 32°C)</span>
+            <p className="text-[11px] text-zinc-600 dark:text-zinc-400 m-0">
+              High evaporation causes rapid slump loss and plastic shrinkage cracking. Use chilled batch water, erect windbreaks/sunshades, and apply curing compounds immediately.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 7. Common Estimating & Pouring Mistakes ── */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+          7. Critical Estimation &amp; Site Pitfalls to Avoid
+        </h2>
+        <ul className="list-disc pl-5 space-y-2 text-xs">
+          <li>
+            <strong>Zero-Wastage Assumption:</strong> Forms flex, excavations have uneven subgrades, and spillage occurs. Always add a <strong>5% to 8% margin</strong> for uniform formwork and <strong>10% to 15%</strong> for rough earthen excavations (post holes and trenches).
+          </li>
+          <li>
+            <strong>Dimension Unit Mixing:</strong> Entering 4 inches as &quot;4&quot; with unit set to &quot;feet&quot; inflates the volume by 1200%. Verify all unit selectors before ordering.
+          </li>
+          <li>
+            <strong>Underestimating Stairs:</strong> Solid concrete stairs contain volume in both the triangular stair wedge and the rectangular steps. Treating stairs as hollow steps under-orders material by 40% to 60%.
+          </li>
+          <li>
+            <strong>Premature Loading:</strong> Walking on green concrete before 24–48 hours, or driving passenger vehicles before 7 days (and heavy trucks before 28 days), causes permanent subsurface microcracking.
+          </li>
+          <li>
+            <strong>Placing Rebar on Bare Dirt:</strong> Rebar lying on the ground without chairs will corrode from moisture exposure and provides zero tensile reinforcement to the slab.
+          </li>
+        </ul>
+      </section>
+
+      {/* ── 8. Summary ── */}
+      <section className="space-y-2">
+        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+          8. Summary &amp; Ordering Checklist
+        </h2>
+        <p className="text-xs leading-relaxed">
+          Accurate concrete planning begins with precise geometric volume calculation across your required shapes (slabs, columns, tubes, curbs, and stairs). Apply the appropriate wastage factor, select between pre-mixed bags (for jobs &lt; 1–2 yd³) or ready-mix delivery (for &gt; 2.5 yd³), and confirm your mix ratio and compressive strength specifications with your local supplier before placement.
         </p>
       </section>
     </article>
