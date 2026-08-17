@@ -28,6 +28,7 @@ import { CASH_BACK_CALCULATOR } from "./cash-back";
 import { FINANCE_CALCULATOR_SUITE } from "./finance";
 import { COMPOUND_INTEREST_CALCULATOR } from "./compound-interest";
 import { INTEREST_CALCULATOR } from "./interest";
+import { INTEREST_RATE_CALCULATOR } from "./interest-rate";
 import { SIMPLE_INTEREST_CALCULATOR } from "./simple-interest";
 import { INVESTMENT_CALCULATOR } from "./investment";
 import { SAVINGS_CALCULATOR } from "./savings";
@@ -102,6 +103,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   FINANCE_CALCULATOR_SUITE,
   COMPOUND_INTEREST_CALCULATOR,
   INTEREST_CALCULATOR,
+  INTEREST_RATE_CALCULATOR,
   SIMPLE_INTEREST_CALCULATOR,
   INVESTMENT_CALCULATOR,
   SAVINGS_CALCULATOR,
