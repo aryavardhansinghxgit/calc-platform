@@ -2,7 +2,8 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const height_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Height Calculator — Free Online Calculator",
-  description: "Convert height between feet/inches and cm, and predict child adult height.",
+  title: "Height Calculator — Child Adult Height Prediction & Stature Converter",
+  description:
+    "Free online height calculator using Khamis-Roche linear regression, Tanner Mid-Parental method, toddler doubling, WHO/CDC growth percentiles, and multi-unit conversions.",
   slug: "height-calculator",
 });
