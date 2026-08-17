@@ -22,6 +22,7 @@ import { REFINANCE_CALCULATOR } from "./refinance";
 // 2. Auto
 import { AUTO_LOAN_CALCULATOR } from "./auto-loan";
 import { AUTO_LEASE_CALCULATOR } from "./auto-lease";
+import { CASH_BACK_CALCULATOR } from "./cash-back";
 
 // 3. Investment
 import { COMPOUND_INTEREST_CALCULATOR } from "./compound-interest";
@@ -94,6 +95,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   // Auto
   AUTO_LOAN_CALCULATOR,
   AUTO_LEASE_CALCULATOR,
+  CASH_BACK_CALCULATOR,
 
   // Investment
   COMPOUND_INTEREST_CALCULATOR,

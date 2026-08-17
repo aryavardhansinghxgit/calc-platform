@@ -75,9 +75,10 @@ export function searchCalculators(query: string): CalculatorModuleDefinition[] {
   const tokens = q.split(/\s+/).filter(Boolean);
 
   const aliases: Record<string, string[]> = {
-    car: ["auto-loan", "loan"],
-    vehicle: ["auto-loan"],
-    auto: ["auto-loan"],
+    car: ["cash-back-or-low-interest-calculator", "auto-loan", "loan"],
+    vehicle: ["cash-back-or-low-interest-calculator", "auto-loan"],
+    auto: ["cash-back-or-low-interest-calculator", "auto-loan"],
+    rebate: ["cash-back-or-low-interest-calculator"],
     downpayment: ["down-payment-calculator", "mortgage"],
     down: ["down-payment-calculator"],
     equity: ["home-equity-loan-calculator", "heloc-calculator"],
