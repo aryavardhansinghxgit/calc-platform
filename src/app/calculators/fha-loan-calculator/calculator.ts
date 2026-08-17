@@ -11,6 +11,7 @@ import {
   FHA203kResult,
   FHAPrepaymentInput,
   FHAPrepaymentResult,
+  AmortizationRow,
 } from "./types";
 
 export function calculateFHALoan(input: FHALoanInput): FHALoanResult {
@@ -92,6 +93,70 @@ export function calculateFHALoan(input: FHALoanInput): FHALoanResult {
   const totalPaymentsOverTerm = Math.round(monthlyPrincipalAndInterest * totalMonths);
   const totalInterestOverTerm = Math.round(totalPaymentsOverTerm - totalFinancedLoanAmount);
 
+  // Build Monthly and Annual Amortization Schedules for FHA Loan
+  const monthlyAmortization: AmortizationRow[] = [];
+  const annualAmortization: AmortizationRow[] = [];
+
+  let balance = totalFinancedLoanAmount;
+  let currentYear = 1;
+  let yearBeginningBalance = balance;
+  let yearInterestAcc = 0;
+  let yearPrincipalAcc = 0;
+  let yearPaymentAcc = 0;
+  let yearMipAcc = 0;
+
+  const mipDurationMonths = typeof mipDurationYears === "number" ? mipDurationYears * 12 : totalMonths;
+
+  for (let m = 1; m <= totalMonths; m++) {
+    if (balance <= 0.01) break;
+
+    const mInterest = balance * monthlyRate;
+    let mPmt = monthlyPrincipalAndInterest;
+    if (mPmt > balance + mInterest) mPmt = balance + mInterest;
+
+    const mPrincipal = Math.min(balance, mPmt - mInterest);
+    const endingBal = Math.max(0, balance - mPrincipal);
+
+    const activeMip = m <= mipDurationMonths ? monthlyMipAmount : 0;
+
+    monthlyAmortization.push({
+      period: m,
+      dateLabel: `Month ${m}`,
+      beginningBalance: Math.round(balance),
+      payment: Math.round(mPmt + activeMip),
+      principal: Math.round(mPrincipal),
+      interest: Math.round(mInterest),
+      mip: Math.round(activeMip),
+      endingBalance: Math.round(endingBal),
+    });
+
+    yearInterestAcc += mInterest;
+    yearPrincipalAcc += mPrincipal;
+    yearPaymentAcc += (mPmt + activeMip);
+    yearMipAcc += activeMip;
+
+    if (m % 12 === 0 || m === totalMonths || endingBal <= 0.01) {
+      annualAmortization.push({
+        period: currentYear,
+        dateLabel: `Year ${currentYear}`,
+        beginningBalance: Math.round(yearBeginningBalance),
+        payment: Math.round(yearPaymentAcc),
+        principal: Math.round(yearPrincipalAcc),
+        interest: Math.round(yearInterestAcc),
+        mip: Math.round(yearMipAcc),
+        endingBalance: Math.round(endingBal),
+      });
+      currentYear++;
+      yearBeginningBalance = endingBal;
+      yearInterestAcc = 0;
+      yearPrincipalAcc = 0;
+      yearPaymentAcc = 0;
+      yearMipAcc = 0;
+    }
+
+    balance = endingBal;
+  }
+
   return {
     downPaymentAmount,
     effectiveDownPaymentPct,
@@ -110,6 +175,8 @@ export function calculateFHALoan(input: FHALoanInput): FHALoanResult {
     totalUpfrontCashRequired,
     totalPaymentsOverTerm,
     totalInterestOverTerm,
+    annualAmortization,
+    monthlyAmortization,
   };
 }
 

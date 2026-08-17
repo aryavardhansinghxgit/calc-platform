@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { Bookmark, Trash2, ChevronDown, ChevronUp, Check, Plus } from "lucide-react";
+import { Bookmark, Trash2, ChevronDown, ChevronUp, Check, Plus, Download } from "lucide-react";
 import {
   calculateFHALoan,
   calculateFHAVsConv,
@@ -28,6 +28,8 @@ export function FHACalculator() {
   const [homeInsuranceAnnual, setHomeInsuranceAnnual] = useState<string>("1400");
   const [hoaDuesMonthly, setHoaDuesMonthly] = useState<string>("0");
   const [closingCostsPct, setClosingCostsPct] = useState<string>("3.0");
+
+  const [amortizationView, setAmortizationView] = useState<"annual" | "monthly">("annual");
 
   const [savedBox1Items, setSavedBox1Items] = useState<SavedFHAItem[]>([]);
   const [justSavedBox1, setJustSavedBox1] = useState<boolean>(false);
@@ -85,6 +87,32 @@ export function FHACalculator() {
     } catch (e) {}
     setJustSavedBox1(true);
     setTimeout(() => setJustSavedBox1(false), 2000);
+  };
+
+  const handleExportCSV = () => {
+    const data = amortizationView === "annual" ? fhaCalc.annualAmortization : fhaCalc.monthlyAmortization;
+    if (!data || data.length === 0) return;
+
+    const headers = ["Period", "Beginning Balance", "Payment (P&I + MIP)", "Principal", "Interest", "Annual MIP", "Ending Balance"];
+    const rows = data.map((row) => [
+      `"${row.dateLabel}"`,
+      `"${row.beginningBalance}"`,
+      `"${row.payment}"`,
+      `"${row.principal}"`,
+      `"${row.interest}"`,
+      `"${row.mip}"`,
+      `"${row.endingBalance}"`,
+    ]);
+
+    const csvContent = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `fha_loan_amortization_${amortizationView}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   // SVG PITI Donut Chart
@@ -505,6 +533,69 @@ export function FHACalculator() {
               <div>{"Base Loan = Home Price - Down Payment = " + currencySymbol + parseFloat(homePrice).toLocaleString() + " - " + currencySymbol + fhaCalc.downPaymentAmount.toLocaleString() + " = " + currencySymbol + fhaCalc.baseLoanAmount.toLocaleString()}</div>
               <div>{"Upfront MIP (1.75%) = " + currencySymbol + fhaCalc.baseLoanAmount.toLocaleString() + " × 1.75% = " + currencySymbol + fhaCalc.ufmipAmount.toLocaleString() + " (" + (financeUfmip ? "Financed into loan = " + currencySymbol + fhaCalc.totalFinancedLoanAmount.toLocaleString() : "Paid cash at closing") + ")"}</div>
               <div>{"Annual MIP (Monthly) = (" + currencySymbol + fhaCalc.baseLoanAmount.toLocaleString() + " × " + fhaCalc.annualMipRate + "%) / 12 = " + currencySymbol + fhaCalc.monthlyMipAmount.toLocaleString() + "/mo (Duration: " + (fhaCalc.mipDurationYears === "Life of Loan" ? "Life of Loan" : `${fhaCalc.mipDurationYears} Years`) + ")"}</div>
+            </div>
+          </div>
+
+          {/* Interactive Amortization Table */}
+          <div className="space-y-3 pt-2">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="font-extrabold text-xs text-slate-800 dark:text-slate-200">
+                FHA Loan Amortization Schedule
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleExportCSV}
+                  className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
+                  title="Export Amortization Schedule to CSV"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Export CSV</span>
+                </button>
+                <div className="flex bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg text-xs font-bold">
+                  <button
+                    onClick={() => setAmortizationView("annual")}
+                    className={`px-2.5 py-1 rounded-md cursor-pointer ${amortizationView === "annual" ? "bg-blue-600 text-white" : "text-slate-600 dark:text-slate-400"}`}
+                  >
+                    Annual Summary
+                  </button>
+                  <button
+                    onClick={() => setAmortizationView("monthly")}
+                    className={`px-2.5 py-1 rounded-md cursor-pointer ${amortizationView === "monthly" ? "bg-blue-600 text-white" : "text-slate-600 dark:text-slate-400"}`}
+                  >
+                    Monthly Breakdown
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto max-h-64 rounded-xl border border-slate-200 dark:border-slate-800">
+              <table className="w-full text-xs text-left border-collapse font-mono">
+                <thead className="sticky top-0 bg-blue-600 text-white font-bold font-sans">
+                  <tr>
+                    <th className="p-2.5">Period</th>
+                    <th className="p-2.5">Beginning Balance</th>
+                    <th className="p-2.5">Payment (P&I + MIP)</th>
+                    <th className="p-2.5">Principal</th>
+                    <th className="p-2.5">Interest</th>
+                    <th className="p-2.5">Annual MIP</th>
+                    <th className="p-2.5">Ending Balance</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
+                  {(amortizationView === "annual" ? fhaCalc.annualAmortization : fhaCalc.monthlyAmortization).map((row) => (
+                    <tr key={row.period} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                      <td className="p-2.5 font-bold font-sans text-blue-600">{row.dateLabel}</td>
+                      <td className="p-2.5">{currencySymbol}{row.beginningBalance.toLocaleString()}</td>
+                      <td className="p-2.5 font-bold">{currencySymbol}{row.payment.toLocaleString()}</td>
+                      <td className="p-2.5 text-emerald-600">{currencySymbol}{row.principal.toLocaleString()}</td>
+                      <td className="p-2.5 text-red-500">{currencySymbol}{row.interest.toLocaleString()}</td>
+                      <td className="p-2.5 text-amber-500">{currencySymbol}{row.mip.toLocaleString()}</td>
+                      <td className="p-2.5">{currencySymbol}{row.endingBalance.toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
 

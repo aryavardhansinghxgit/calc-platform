@@ -16,6 +16,16 @@ export interface VAMortgageInput {
   currencySymbol: string;
 }
 
+export interface AmortizationRow {
+  period: number;
+  dateLabel: string;
+  beginningBalance: number;
+  payment: number;
+  principal: number;
+  interest: number;
+  endingBalance: number;
+}
+
 export interface VAMortgageResult {
   downPaymentAmount: number;
   baseLoanAmount: number;
@@ -30,6 +40,8 @@ export interface VAMortgageResult {
   totalUpfrontCashRequired: number;
   totalPaymentsOverTerm: number;
   totalInterestOverTerm: number;
+  annualAmortization: AmortizationRow[];
+  monthlyAmortization: AmortizationRow[];
 }
 
 export interface VAVsConvVsFHAInput {

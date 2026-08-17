@@ -13,6 +13,17 @@ export interface FHALoanInput {
   currencySymbol: string;
 }
 
+export interface AmortizationRow {
+  period: number;
+  dateLabel: string;
+  beginningBalance: number;
+  payment: number;
+  principal: number;
+  interest: number;
+  mip: number;
+  endingBalance: number;
+}
+
 export interface FHALoanResult {
   downPaymentAmount: number;
   effectiveDownPaymentPct: number;
@@ -31,6 +42,8 @@ export interface FHALoanResult {
   totalUpfrontCashRequired: number;
   totalPaymentsOverTerm: number;
   totalInterestOverTerm: number;
+  annualAmortization: AmortizationRow[];
+  monthlyAmortization: AmortizationRow[];
 }
 
 export interface FHAVsConvInput {
