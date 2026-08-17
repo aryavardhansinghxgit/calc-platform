@@ -2,7 +2,8 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const stair_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Stair Calculator — Free Online Calculator",
-  description: "Calculate stair riser height, tread depth, number of steps, and stringer angle for building code compliance.",
+  title: "Stair Calculator — Riser, Tread & Stringer Layout Suite",
+  description:
+    "Free online stair calculator compliant with IRC/IBC building codes. Calculate riser height, tread depth, stringer length, headroom opening, and lumber materials with 2D diagrams.",
   slug: "stair-calculator",
 });

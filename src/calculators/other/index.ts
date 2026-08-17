@@ -26,8 +26,10 @@ import { gpa_calculatorConfig } from "@/app/calculators/gpa-calculator/config";
 import { grade_calculatorConfig } from "@/app/calculators/grade-calculator/config";
 import { molarity_calculatorConfig } from "@/app/calculators/molarity-calculator/config";
 import { molecular_weight_calculatorConfig } from "@/app/calculators/molecular-weight-calculator/config";
+import { electricity_calculatorConfig } from "@/app/calculators/electricity-calculator/config";
 
 export const OTHER_CALCULATORS: CalculatorModuleDefinition[] = [
+  electricity_calculatorConfig,
   voltage_drop_calculatorConfig,
   resistor_calculatorConfig,
   ohms_law_calculatorConfig,

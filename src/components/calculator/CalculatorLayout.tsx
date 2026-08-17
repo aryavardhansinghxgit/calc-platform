@@ -155,6 +155,36 @@ import { MolarityCalculator } from "./molarity/MolarityCalculator";
 import { MolarityContent } from "./molarity/MolarityContent";
 import { MolecularWeightCalculator } from "./molecular-weight/MolecularWeightCalculator";
 import { MolecularWeightContent } from "./molecular-weight/MolecularWeightContent";
+import { ConcreteCalculator } from "./concrete/ConcreteCalculator";
+import { ConcreteContent } from "./concrete/ConcreteContent";
+import { BTUCalculator } from "./btu/BTUCalculator";
+import { BTUContent } from "./btu/BTUContent";
+import { SquareFootageCalculator } from "./square-footage/SquareFootageCalculator";
+import { SquareFootageContent } from "./square-footage/SquareFootageContent";
+import { StairCalculator } from "./stair/StairCalculator";
+import { StairContent } from "./stair/StairContent";
+import { RoofingCalculator } from "./roofing/RoofingCalculator";
+import { RoofingContent } from "./roofing/RoofingContent";
+import { TileCalculator } from "./tile/TileCalculator";
+import { TileContent } from "./tile/TileContent";
+import { MulchCalculator } from "./mulch/MulchCalculator";
+import { MulchContent } from "./mulch/MulchContent";
+import { GravelCalculator } from "./gravel/GravelCalculator";
+import { GravelContent } from "./gravel/GravelContent";
+import { ElectricityCalculator } from "./electricity/ElectricityCalculator";
+import { ElectricityContent } from "./electricity/ElectricityContent";
+import { HeightCalculator } from "./height/HeightCalculator";
+import { HeightContent } from "./height/HeightContent";
+import { ConversionCalculator } from "./conversion/ConversionCalculator";
+import { ConversionContent } from "./conversion/ConversionContent";
+import { DensityCalculator } from "./density/DensityCalculator";
+import { DensityContent } from "./density/DensityContent";
+import { MassCalculator } from "./mass/MassCalculator";
+import { MassContent } from "./mass/MassContent";
+import { SpeedCalculator } from "./speed/SpeedCalculator";
+import { SpeedContent } from "./speed/SpeedContent";
+import { RomanNumeralCalculator } from "./roman/RomanNumeralCalculator";
+import { RomanNumeralContent } from "./roman/RomanNumeralContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -387,8 +417,38 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isGrade = idLower === "grade-calculator" || slugLower === "grade-calculator";
   const isMolarity = idLower === "molarity-calculator" || slugLower === "molarity-calculator";
   const isMolecularWeight = idLower === "molecular-weight-calculator" || slugLower === "molecular-weight-calculator";
+  const isConcrete = idLower === "concrete-calculator" || slugLower === "concrete-calculator";
+  const isBtu = idLower === "btu-calculator" || slugLower === "btu-calculator";
+  const isSquareFootage = idLower === "square-footage-calculator" || slugLower === "square-footage-calculator";
+  const isStair = idLower === "stair-calculator" || slugLower === "stair-calculator";
+  const isRoofing = idLower === "roofing-calculator" || slugLower === "roofing-calculator";
+  const isTile = idLower === "tile-calculator" || slugLower === "tile-calculator";
+  const isMulch = idLower === "mulch-calculator" || slugLower === "mulch-calculator";
+  const isGravel = idLower === "gravel-calculator" || slugLower === "gravel-calculator";
+  const isElectricity = idLower === "electricity-calculator" || slugLower === "electricity-calculator";
+  const isHeight = idLower === "height-calculator" || slugLower === "height-calculator";
+  const isConversion = idLower === "conversion-calculator" || slugLower === "conversion-calculator";
+  const isDensity = idLower === "density-calculator" || slugLower === "density-calculator";
+  const isMass = idLower === "mass-calculator" || slugLower === "mass-calculator" || idLower === "weight-calculator" || slugLower === "weight-calculator";
+  const isSpeed = idLower === "speed-calculator" || slugLower === "speed-calculator";
+  const isRoman = idLower === "roman-numeral-converter" || slugLower === "roman-numeral-converter";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isRoman ? RomanNumeralContent :
+    isSpeed ? SpeedContent :
+    isMass ? MassContent :
+    isDensity ? DensityContent :
+    isConversion ? ConversionContent :
+    isHeight ? HeightContent :
+    isElectricity ? ElectricityContent :
+    isGravel ? GravelContent :
+    isMulch ? MulchContent :
+    isTile ? TileContent :
+    isRoofing ? RoofingContent :
+    isStair ? StairContent :
+    isSquareFootage ? SquareFootageContent :
+    isBtu ? BTUContent :
+    isConcrete ? ConcreteContent :
     isMolecularWeight ? MolecularWeightContent :
     isMolarity ? MolarityContent :
     isGrade ? GradeContent :
@@ -622,6 +682,36 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
               <AmortizationCalculator />
             ) : isMortgage ? (
               <MortgageCalculator />
+            ) : isConcrete ? (
+              <ConcreteCalculator />
+            ) : isBtu ? (
+              <BTUCalculator />
+            ) : isSquareFootage ? (
+              <SquareFootageCalculator />
+            ) : isStair ? (
+              <StairCalculator />
+            ) : isRoofing ? (
+              <RoofingCalculator />
+            ) : isTile ? (
+              <TileCalculator />
+            ) : isMulch ? (
+              <MulchCalculator />
+            ) : isGravel ? (
+              <GravelCalculator />
+            ) : isElectricity ? (
+              <ElectricityCalculator />
+            ) : isHeight ? (
+              <HeightCalculator />
+            ) : isConversion ? (
+              <ConversionCalculator />
+            ) : isDensity ? (
+              <DensityCalculator />
+            ) : isMass ? (
+              <MassCalculator />
+            ) : isSpeed ? (
+              <SpeedCalculator />
+            ) : isRoman ? (
+              <RomanNumeralCalculator />
             ) : (
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
                 <div className="grid min-w-0 grid-cols-1 md:grid-cols-12 gap-5 items-start">
@@ -785,7 +875,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs text-slate-900 dark:text-slate-100">
         {/* Formula & Calculation Method */}
-        {definition.formulaDescription && (
+        {definition.formulaDescription && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-2">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Formula & Calculation Method
@@ -806,8 +896,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
         )}
 
-        {/* 10 High-Quality Frequently Asked Questions (Excluded for Math Category per AGENTS.md policy) */}
-        {definition.category !== "Math" && (
+        {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Custom suites per AGENTS.md policy) */}
+        {definition.category !== "Math" && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-3">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Frequently Asked Questions

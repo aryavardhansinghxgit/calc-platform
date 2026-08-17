@@ -418,8 +418,8 @@ export function InterestCalculator() {
                   type="button"
                   onClick={() => setContributionTiming("beginning")}
                   className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${contributionTiming === "beginning"
-                      ? "bg-blue-600 text-white shadow-xs"
-                      : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                    ? "bg-blue-600 text-white shadow-xs"
+                    : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
                     }`}
                 >
                   Beginning of Period
@@ -428,8 +428,8 @@ export function InterestCalculator() {
                   type="button"
                   onClick={() => setContributionTiming("end")}
                   className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold transition-all ${contributionTiming === "end"
-                      ? "bg-blue-600 text-white shadow-xs"
-                      : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                    ? "bg-blue-600 text-white shadow-xs"
+                    : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
                     }`}
                 >
                   End of Period
@@ -741,8 +741,8 @@ export function InterestCalculator() {
                 type="button"
                 onClick={() => setScheduleMode("annual")}
                 className={`px-2 py-0.5 rounded font-semibold text-xs transition-colors ${scheduleMode === "annual"
-                    ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
-                    : "text-zinc-600 dark:text-zinc-400"
+                  ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
+                  : "text-zinc-600 dark:text-zinc-400"
                   }`}
               >
                 Annual
@@ -751,8 +751,8 @@ export function InterestCalculator() {
                 type="button"
                 onClick={() => setScheduleMode("monthly")}
                 className={`px-2 py-0.5 rounded font-semibold text-xs transition-colors ${scheduleMode === "monthly"
-                    ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
-                    : "text-zinc-600 dark:text-zinc-400"
+                  ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
+                  : "text-zinc-600 dark:text-zinc-400"
                   }`}
               >
                 Monthly

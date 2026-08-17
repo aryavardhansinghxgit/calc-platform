@@ -1,189 +1,235 @@
-"use client";
-
-import React, { useState } from "react";
-import { ChevronDown, HelpCircle, Activity, Scale, Award, BookOpen, ShieldCheck, HeartPulse } from "lucide-react";
+import React from "react";
 
 export function IdealWeightContent() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  const faqs = [
-    {
-      q: "What is Ideal Body Weight (IBW)?",
-      a: "Ideal Body Weight (IBW) is an anthropometric estimate of the optimal body weight associated with maximum life expectancy, minimal risk of chronic metabolic disease, and optimal organ function. IBW was originally developed in clinical medicine to calculate accurate drug dosages for narrow therapeutic window medications."
-    },
-    {
-      q: "Which Ideal Weight formula is the most accurate?",
-      a: "No single formula is perfect for all individuals. The Devine formula (1974) is the most widely adopted standard in clinical medicine and pharmacology. The Robinson (1983) and Miller (1983) formulas offer refined empirical models, while the Lemmens (2005) formula grounds target weight at a healthy BMI baseline of 22.0."
-    },
-    {
-      q: "Why do different IBW formulas give different results?",
-      a: "Different formulas were derived by different medical researchers studying different baseline populations. Hamwi (1964) used diabetic patient populations, Devine (1974) modified Hamwi for drug clearances, and Robinson/Miller (1983) adjusted baseline coefficients using modern regression analysis."
-    },
-    {
-      q: "How does Body Frame Size affect ideal body weight?",
-      a: "Bone density, joint breadth, and skeletal structure account for approximately 10% variation in lean tissue. A small-framed person should weigh approximately 10% less than the baseline formula result, while a large-framed person should weigh 10% more."
-    },
-    {
-      q: "How do I measure my wrist circumference to determine frame size?",
-      a: "Wrap a flexible tape measure around your dominant wrist just distal to the styloid process (wrist bone prominence). For women 5'2\" to 5'5\", a wrist under 6.0 inches indicates a small frame, 6.0 to 6.25 inches is medium, and over 6.25 inches is large."
-    },
-    {
-      q: "Why do IBW formulas not apply accurately to muscular athletes?",
-      a: "IBW formulas rely exclusively on height and gender without accounting for muscle mass versus fat mass. Highly muscular athletes, bodybuilders, and powerlifters carry dense skeletal muscle that increases weight above IBW guidelines without elevating metabolic risk."
-    },
-    {
-      q: "What is the Healthy BMI range recommended by WHO?",
-      a: "The World Health Organization defines the healthy adult BMI range as 18.5 to 24.9 kg/m². A BMI of 21.75 is considered the mathematical midpoint (prime target) for population health statistics."
-    },
-    {
-      q: "What is the difference between IBW and BMI?",
-      a: "BMI (Body Mass Index) evaluates weight relative to height squared ($W/H^2$) to output a single ratio. IBW outputs a specific target weight range in pounds or kilograms based on medical clinical equations."
-    },
-    {
-      q: "Why do men have higher ideal body weight targets than women of the same height?",
-      a: "Men naturally possess higher skeletal muscle mass, greater bone density, and lower essential fat levels (2-5% vs 10-13% in women), requiring higher baseline target weights."
-    },
-    {
-      q: "Can IBW formulas be used for children and teenagers under 18?",
-      a: "Standard adult IBW formulas (Hamwi, Devine, etc.) are validated for adults aged 18 and older. For children and adolescents aged 2 to 17, growth percentiles on CDC/WHO age-and-sex-specific BMI growth charts should be used instead."
-    },
-    {
-      q: "Why were IBW formulas originally created?",
-      a: "Dr. G. J. Hamwi originally created his formula in 1964 as a quick rule-of-thumb for estimating insulin dosages in diabetic patients. Dr. B. J. Devine adapted it in 1974 to standardize renal clearance calculations for nephrotoxic drugs like aminoglycosides."
-    },
-    {
-      q: "What is the Devine Formula equation?",
-      a: "For men: 50.0 kg + 2.3 kg per inch over 5 feet. For women: 45.5 kg + 2.3 kg per inch over 5 feet."
-    },
-    {
-      q: "What is the Hamwi Formula equation?",
-      a: "For men: 48.0 kg + 2.7 kg per inch over 5 feet. For women: 45.5 kg + 2.2 kg per inch over 5 feet."
-    },
-    {
-      q: "How does aging impact ideal body weight targets?",
-      a: "While baseline IBW formulas do not adjust upwards with age, clinical studies indicate that carrying a slightly higher BMI (23.0 to 26.0) in adults over age 65 offers protective benefits against osteoporosis and frailty."
-    },
-    {
-      q: "How much weight can safely be lost per week to reach IBW?",
-      a: "The clinical standard for safe, sustainable fat loss is 0.5 to 2.0 pounds (0.25 to 0.9 kg) per week, corresponding to a daily energy deficit of 250 to 1,000 calories."
-    },
-    {
-      q: "Does body fat percentage matter more than ideal weight?",
-      a: "Yes. Body fat percentage and visceral fat distribution are significantly stronger predictors of cardiovascular and metabolic health than scale weight alone."
-    },
-    {
-      q: "What is the Lemmens Formula?",
-      a: "Published by Dr. H. J. Lemmens in 2005, the formula calculates IBW directly from height in meters: IBW = 22 × Height(m)²."
-    },
-    {
-      q: "What are the limitations of relying solely on IBW?",
-      a: "IBW ignores individual body composition (fat vs muscle ratio), fluid retention, ethnic differences in bone density, and regional adipose storage."
-    },
-    {
-      q: "How does hydration affect scale weight relative to IBW?",
-      a: "Water weight can cause temporary scale fluctuations of 2 to 5 pounds daily due to sodium intake, carbohydrate glycogen storage, and hydration levels."
-    },
-    {
-      q: "What should I do if my current weight is higher than my calculated IBW?",
-      a: "Focus on sustainable lifestyle modifications: progressive resistance training, a modest caloric deficit (300-500 kcal/day), high protein intake, and consistent sleep rather than rapid crash dieting."
-    }
-  ];
-
   return (
-    <article className="mt-12 space-y-10 text-zinc-800 dark:text-zinc-200">
+    <div className="space-y-8 text-slate-800 dark:text-slate-200">
       {/* 1. Introduction */}
-      <section className="space-y-4 p-6 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-        <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400">
-          <Activity className="w-6 h-6" />
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-blue-600 dark:text-blue-400">
-            Comprehensive Clinical Guide to Ideal Body Weight (IBW) &amp; Body Frame Metrics
-          </h2>
-        </div>
-        <p className="text-sm leading-relaxed text-slate-900 dark:text-zinc-300">
-          Ideal Body Weight (IBW) is a fundamental anthropometric standard used across clinical medicine, clinical pharmacology, epidemiology, and health fitness. While modern medicine acknowledges that body composition (muscle vs fat) is paramount, IBW formulas provide a vital baseline for estimating optimal weight targets, medical drug dosages, and nutritional guidelines based on height, biological gender, and skeletal frame size.
+      <section className="space-y-3">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">
+          1. Clinical Foundations of Ideal Body Weight (IBW)
+        </h2>
+        <p className="text-sm leading-relaxed">
+          <strong>Ideal Body Weight (IBW)</strong> is an anthropometric standard representing the optimal statistical mass associated with maximal longevity, physiological homeostasis, and minimal risk of chronic cardiovascular and metabolic morbidity. Unlike general population averages, IBW models establish a baseline reference weight for a given height and biological sex.
+        </p>
+        <p className="text-sm leading-relaxed">
+          While widely utilized in fitness and clinical nutrition for caloric target planning, IBW equations serve a critical role in <strong>clinical pharmacology and critical care medicine</strong>: calculating renal clearance (Cockcroft-Gault equation for creatinine clearance), setting protective mechanical ventilation tidal volumes (6–8 mL/kg of IBW in acute respiratory distress syndrome), and dosing hydrophilic medications (such as aminoglycosides, vancomycin, and anesthetic agents) that distribute primarily into lean tissue rather than adipose stores.
         </p>
       </section>
 
-      {/* 2. Clinical Formulas */}
-      <section className="space-y-4 p-5 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400">
-          1. Mathematical Derivations of the 5 Clinical IBW Formulas
-        </h3>
-        <div className="space-y-3 text-xs leading-relaxed text-zinc-700 dark:text-zinc-300">
-          <div>
-            <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">A. G. J. Hamwi Formula (1964)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-700 dark:text-blue-400">
-              Male: 48.0 kg + 2.7 kg per inch over 5 feet<br/>
-              Female: 45.5 kg + 2.2 kg per inch over 5 feet
-            </code>
+      {/* 2. Mathematical Concept & Historical Evolution */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">
+          2. Mathematical Concept &amp; Historical Evolution of Formulas
+        </h2>
+        <p className="text-sm leading-relaxed">
+          Standard adult IBW equations are linear piecewise functions based on a 5-foot (60-inch / 152.4 cm) baseline stature. For every inch above 5 feet, an empirical mass coefficient is added.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div className="p-3 bg-blue-50/50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800 space-y-1">
+            <h3 className="font-bold text-blue-900 dark:text-blue-200 text-sm">Hamwi Formula (1964)</h3>
+            <p className="text-zinc-700 dark:text-zinc-300">
+              Developed by Dr. George J. Hamwi as a clinical rule-of-thumb for diabetic dietary planning. It establishes an aggressive linear progression with 6.0 lbs (2.7 kg) per inch for men and 5.0 lbs (2.3 kg) per inch for women over 5 feet.
+            </p>
           </div>
 
-          <div>
-            <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">B. B. J. Devine Formula (1974) — Clinical Gold Standard</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
-              Male: 50.0 kg + 2.3 kg per inch over 5 feet<br/>
-              Female: 45.5 kg + 2.3 kg per inch over 5 feet
-            </code>
+          <div className="p-3 bg-slate-50 dark:bg-zinc-800/40 rounded-lg border border-slate-200 dark:border-zinc-700 space-y-1">
+            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">Devine Formula (1974) — Pharmacopeial Gold Standard</h3>
+            <p className="text-zinc-700 dark:text-zinc-300">
+              Derived by Dr. Ben J. Devine to standardize renal pharmacokinetic clearance. Devine modified Hamwi by applying an exact 2.3 kg per inch addition for both sexes, anchored at 50.0 kg for men and 45.5 kg for women.
+            </p>
           </div>
 
-          <div>
-            <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">C. J. D. Robinson Formula (1983)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
-              Male: 52.0 kg + 1.9 kg per inch over 5 feet<br/>
-              Female: 49.0 kg + 1.7 kg per inch over 5 feet
-            </code>
+          <div className="p-3 bg-slate-50 dark:bg-zinc-800/40 rounded-lg border border-slate-200 dark:border-zinc-700 space-y-1">
+            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">Robinson Formula (1983)</h3>
+            <p className="text-zinc-700 dark:text-zinc-300">
+              Derived by Dr. J. D. Robinson via empirical regression analysis on metropolitan life insurance mortality tables, moderating the male baseline to 52.0 kg + 1.9 kg/inch and female to 49.0 kg + 1.7 kg/inch.
+            </p>
           </div>
 
-          <div>
-            <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">D. D. R. Miller Formula (1983)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
-              Male: 56.2 kg + 1.41 kg per inch over 5 feet<br/>
-              Female: 53.1 kg + 1.36 kg per inch over 5 feet
-            </code>
-          </div>
-
-          <div>
-            <h4 className="font-bold text-sm text-zinc-900 dark:text-zinc-100">E. H. J. Lemmens Formula (2005)</h4>
-            <code className="block p-2 mt-1 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 font-sans tabular-nums text-blue-600 dark:text-blue-400">
-              IBW = 22.0 × Height(meters)²
-            </code>
+          <div className="p-3 bg-slate-50 dark:bg-zinc-800/40 rounded-lg border border-slate-200 dark:border-zinc-700 space-y-1">
+            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">Miller Formula (1983)</h3>
+            <p className="text-zinc-700 dark:text-zinc-300">
+              Published by Dr. D. R. Miller to further refine linear slopes, setting men at 56.2 kg + 1.41 kg/inch and women at 53.1 kg + 1.36 kg/inch, resulting in higher baselines for shorter statures and gentler height scaling.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* 3. 20 Clinical FAQs Accordion */}
+      {/* 3. Mathematical Formula Section */}
       <section className="space-y-4">
-        <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100 font-bold text-xl">
-          <HelpCircle className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-          <h3>Frequently Asked Questions</h3>
-        </div>
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">
+          3. Formula Section &amp; Variable Definitions
+        </h2>
 
-        <div className="space-y-2.5">
-          {faqs.map((faq, index) => {
-            const isOpen = openFaq === index;
-            return (
-              <div
-                key={index}
-                className="border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden bg-white dark:bg-zinc-900"
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpenFaq(isOpen ? null : index)}
-                  className="w-full p-4 text-left font-semibold text-sm text-zinc-900 dark:text-zinc-100 flex justify-between items-center hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
-                >
-                  <span>{faq.q}</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform text-slate-900 ${isOpen ? "rotate-180" : ""}`} />
-                </button>
-                {isOpen && (
-                  <div className="px-4 pb-4 pt-1 text-xs text-slate-900 dark:text-zinc-300 leading-relaxed  dark:border-zinc-800">
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+        <div className="p-4 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700 space-y-3 text-xs font-mono">
+          <div>
+            <p className="font-bold text-blue-800 dark:text-blue-300">A. Devine Formula (1974)</p>
+            <p className="text-zinc-700 dark:text-zinc-300">
+              {"Men:   IBW (kg) = 50.0 + 2.3 × (Height_in - 60)"}<br />
+              {"Women: IBW (kg) = 45.5 + 2.3 × (Height_in - 60)"}
+            </p>
+          </div>
+
+          <div>
+            <p className="font-bold text-blue-800 dark:text-blue-300">B. Robinson Formula (1983)</p>
+            <p className="text-zinc-700 dark:text-zinc-300">
+              {"Men:   IBW (kg) = 52.0 + 1.9 × (Height_in - 60)"}<br />
+              {"Women: IBW (kg) = 49.0 + 1.7 × (Height_in - 60)"}
+            </p>
+          </div>
+
+          <div>
+            <p className="font-bold text-blue-800 dark:text-blue-300">C. Miller Formula (1983)</p>
+            <p className="text-zinc-700 dark:text-zinc-300">
+              {"Men:   IBW (kg) = 56.2 + 1.41 × (Height_in - 60)"}<br />
+              {"Women: IBW (kg) = 53.1 + 1.36 × (Height_in - 60)"}
+            </p>
+          </div>
+
+          <div>
+            <p className="font-bold text-blue-800 dark:text-blue-300">D. Hamwi Formula (1964)</p>
+            <p className="text-zinc-700 dark:text-zinc-300">
+              {"Men:   IBW (kg) = 48.0 + 2.7 × (Height_in - 60)   [106 lbs + 6 lbs/inch]"}<br />
+              {"Women: IBW (kg) = 45.5 + 2.2 × (Height_in - 60)   [100 lbs + 5 lbs/inch]"}
+            </p>
+          </div>
+
+          <div>
+            <p className="font-bold text-blue-800 dark:text-blue-300">E. Lemmens Formula (2005) &amp; WHO Healthy BMI Range</p>
+            <p className="text-zinc-700 dark:text-zinc-300">
+              {"Lemmens IBW (kg) = 22.0 × Height_m²"}<br />
+              {"WHO Normal Weight Bounds = 18.5 × Height_m²  to  24.99 × Height_m²"}
+            </p>
+          </div>
         </div>
       </section>
-    </article>
+
+      {/* 4. Bone Frame Size Impact & Mathematical Adjustment */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">
+          4. Skeletal Frame Size Adjustment (±10% Multiplier)
+        </h2>
+        <p className="text-sm leading-relaxed">
+          Bone density and joint circumference account for significant variations in non-adipose skeletal mass. Anthropometric standards adjust calculated IBW by <strong>±10%</strong> according to wrist circumference (ratio r = Height / Wrist):
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-center">
+          <div className="p-3 bg-slate-50 dark:bg-zinc-800/40 rounded border border-slate-200 dark:border-zinc-700">
+            <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Small Frame</span>
+            <span className="text-blue-600 font-mono font-bold block">IBW × 0.90 (-10%)</span>
+            <span className="text-[11px] text-zinc-500 block">Wrist &lt; 6.5&quot; (Men) / &lt; 6.0&quot; (Women)</span>
+          </div>
+          <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded border border-blue-200 dark:border-blue-800">
+            <span className="font-bold text-blue-950 dark:text-blue-100 block">Medium Frame</span>
+            <span className="text-blue-600 font-mono font-bold block">IBW × 1.00 (Standard)</span>
+            <span className="text-[11px] text-zinc-500 block">Wrist 6.5&quot;–7.5&quot; (Men) / 6.0&quot;–6.25&quot; (Women)</span>
+          </div>
+          <div className="p-3 bg-slate-50 dark:bg-zinc-800/40 rounded border border-slate-200 dark:border-zinc-700">
+            <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Large Frame</span>
+            <span className="text-blue-600 font-mono font-bold block">IBW × 1.10 (+10%)</span>
+            <span className="text-[11px] text-zinc-500 block">Wrist &gt; 7.5&quot; (Men) / &gt; 6.25&quot; (Women)</span>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Comprehensive Height-to-Weight Lookup Table */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">
+          5. Height-to-Ideal-Weight Clinical Reference Matrix
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs border-collapse border border-zinc-200 dark:border-zinc-700 font-sans tabular-nums">
+            <thead className="bg-slate-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-bold">
+              <tr>
+                <th className="p-2 border border-zinc-200 dark:border-zinc-700">Height</th>
+                <th className="p-2 border border-zinc-200 dark:border-zinc-700">Devine (Men)</th>
+                <th className="p-2 border border-zinc-200 dark:border-zinc-700">Devine (Women)</th>
+                <th className="p-2 border border-zinc-200 dark:border-zinc-700">Robinson (Men)</th>
+                <th className="p-2 border border-zinc-200 dark:border-zinc-700">WHO Healthy Range (18.5–24.9)</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
+              <tr>
+                <td className="p-2 font-bold">5&apos;4&quot; (163 cm)</td>
+                <td className="p-2 font-mono">130.5 lbs (59.2 kg)</td>
+                <td className="p-2 font-mono">120.6 lbs (54.7 kg)</td>
+                <td className="p-2 font-mono">131.4 lbs (59.6 kg)</td>
+                <td className="p-2 font-mono">108 – 145 lbs (49 – 66 kg)</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-bold">5&apos;7&quot; (170 cm)</td>
+                <td className="p-2 font-mono">145.7 lbs (66.1 kg)</td>
+                <td className="p-2 font-mono">135.8 lbs (61.6 kg)</td>
+                <td className="p-2 font-mono">143.9 lbs (65.3 kg)</td>
+                <td className="p-2 font-mono">118 – 159 lbs (53 – 72 kg)</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-bold">5&apos;10&quot; (178 cm)</td>
+                <td className="p-2 font-mono">160.9 lbs (73.0 kg)</td>
+                <td className="p-2 font-mono">151.0 lbs (68.5 kg)</td>
+                <td className="p-2 font-mono">156.5 lbs (71.0 kg)</td>
+                <td className="p-2 font-mono">129 – 174 lbs (59 – 79 kg)</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-bold">6&apos;0&quot; (183 cm)</td>
+                <td className="p-2 font-mono">171.1 lbs (77.6 kg)</td>
+                <td className="p-2 font-mono">161.2 lbs (73.1 kg)</td>
+                <td className="p-2 font-mono">164.9 lbs (74.8 kg)</td>
+                <td className="p-2 font-mono">136 – 184 lbs (62 – 83 kg)</td>
+              </tr>
+              <tr>
+                <td className="p-2 font-bold">6&apos;2&quot; (188 cm)</td>
+                <td className="p-2 font-mono">181.2 lbs (82.2 kg)</td>
+                <td className="p-2 font-mono">171.3 lbs (77.7 kg)</td>
+                <td className="p-2 font-mono">173.3 lbs (78.6 kg)</td>
+                <td className="p-2 font-mono">144 – 194 lbs (65 – 88 kg)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* 6. Step-by-Step Worked Clinical Example */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">
+          6. Step-by-Step Worked Calculation Example
+        </h2>
+        <div className="p-4 bg-slate-50 dark:bg-zinc-800/40 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-2 font-mono text-xs">
+          <p className="font-sans font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
+            <strong>Clinical Scenario:</strong> A 35-year-old male with a height of 5 feet 10 inches (70 inches / 1.778 m) and large bone frame. Calculate his Ideal Body Weight via the Devine formula and determine his WHO healthy weight range.
+          </p>
+
+          <p><strong>Step 1: Determine Inches Over 5 Feet (60 Inches)</strong><br />
+          {"Inches over 60 = 70 - 60 = 10 inches"}</p>
+
+          <p><strong>Step 2: Apply Devine Formula (Male Baseline)</strong><br />
+          {"IBW_base = 50.0 kg + (2.3 kg/inch × 10 inches) = 50.0 + 23.0 = 73.0 kg (160.94 lbs)"}</p>
+
+          <p><strong>Step 3: Apply Large Bone Frame Adjustment (+10%)</strong><br />
+          {"IBW_adjusted = 73.0 kg × 1.10 = 80.3 kg (177.03 lbs)"}</p>
+
+          <p><strong>Step 4: Compute WHO Healthy BMI Range (BMI 18.5 – 24.99)</strong><br />
+          {"Min Weight = 18.5 × (1.778 m)² = 18.5 × 3.1613 = 58.48 kg (128.9 lbs)"}<br />
+          {"Max Weight = 24.99 × (1.778 m)² = 24.99 × 3.1613 = 79.00 kg (174.16 lbs)"}</p>
+        </div>
+      </section>
+
+      {/* 7. Physiological Limitations of IBW */}
+      <section className="space-y-3">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">
+          7. Critical Physiological Limitations of IBW
+        </h2>
+        <ul className="list-disc pl-5 space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300">
+          <li>
+            <strong>Sarcopenia vs. Muscular Hypertrophy:</strong> Standard IBW equations treat all mass equally and do not distinguish between skeletal muscle mass and adipose tissue. Resistance-trained athletes may exceed IBW while maintaining low, healthy body fat percentages (8–12%).
+          </li>
+          <li>
+            <strong>Pediatric &amp; Geriatric Inapplicability:</strong> Linear IBW formulas are validated exclusively for skeletally mature adults (ages 18+). In elderly populations (&gt;65 years), a slightly higher BMI (23.0–26.0) is protective against osteoporotic fractures and frailty.
+          </li>
+          <li>
+            <strong>Fluid Retention &amp; Edema:</strong> Pathological fluid shifts (such as in congestive heart failure, hepatic cirrhosis, or acute kidney injury) distort scale weight relative to true dry lean tissue.
+          </li>
+        </ul>
+      </section>
+    </div>
   );
 }

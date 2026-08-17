@@ -1,7 +1,6 @@
 import { CalculatorModuleDefinition } from "./types";
 import { FINANCE_CALCULATORS } from "./finance";
 import { MATH_CALCULATORS } from "./math";
-import { BUSINESS_CALCULATORS } from "./business";
 import { HEALTH_CALCULATORS } from "./health";
 import { DATE_CALCULATORS } from "./date";
 import { CONSTRUCTION_CALCULATORS } from "./construction";
@@ -14,7 +13,6 @@ export * from "./types";
 const RAW_CALCULATORS: CalculatorModuleDefinition[] = [
   ...FINANCE_CALCULATORS,
   ...MATH_CALCULATORS,
-  ...BUSINESS_CALCULATORS,
   ...HEALTH_CALCULATORS,
   ...DATE_CALCULATORS,
   ...CONSTRUCTION_CALCULATORS,
