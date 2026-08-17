@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import {
   Scale,
   Award,
-  Bookmark,
-  Share2,
-  Printer,
+  Download,
+  Trash2,
+  FileSpreadsheet,
   Copy,
   Check,
   RefreshCw,
@@ -16,55 +16,329 @@ import {
   ShieldCheck,
   User,
   Activity,
+  HeartPulse,
+  Sparkles,
+  TrendingDown,
+  TrendingUp,
 } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
+import { Input } from "@/components/ui/input";
+import ReportModal from "@/components/report/ReportModal";
+import { CalculatorReportData } from "@/components/report/types";
 import {
   calculateIdealWeight,
+  evaluateFrameSizeFromWrist,
   UnitSystem,
   Gender,
   FrameSize,
   IdealWeightResult,
 } from "@/lib/formulas/idealWeight";
 
-import {
-  IdealWeightArchGauge,
-  IdealWeightFormulaBarChart,
-} from "./IdealWeightCharts";
+// ─── Local Storage Persistence Hook ─────────────────────────────────────────
 
-import { IdealWeightTables } from "./IdealWeightTables";
+interface SavedEstimate<T> {
+  id: string;
+  timestamp: string;
+  inputSummary: string;
+  result: T;
+  notes: string;
+}
+
+function flashSave(setter: React.Dispatch<React.SetStateAction<boolean>>) {
+  setter(true);
+  setTimeout(() => setter(false), 1500);
+}
+
+function useCardSaved<T>(storageKey: string) {
+  const [saved, setSaved] = useState<SavedEstimate<T>[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(storageKey);
+      if (raw) setSaved(JSON.parse(raw));
+    } catch {}
+  }, [storageKey]);
+
+  const save = useCallback(
+    (inputSummary: string, result: T, notes = "") => {
+      const entry: SavedEstimate<T> = {
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        inputSummary,
+        result,
+        notes,
+      };
+      setSaved((prev) => {
+        const next = [entry, ...prev].slice(0, 15);
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(next));
+        } catch {}
+        return next;
+      });
+    },
+    [storageKey]
+  );
+
+  const remove = useCallback(
+    (id: string) => {
+      setSaved((prev) => {
+        const next = prev.filter((e) => e.id !== id);
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(next));
+        } catch {}
+        return next;
+      });
+    },
+    [storageKey]
+  );
+
+  const clear = useCallback(() => {
+    setSaved([]);
+    try {
+      localStorage.removeItem(storageKey);
+    } catch {}
+  }, [storageKey]);
+
+  return { saved, isOpen, setIsOpen, save, remove, clear };
+}
+
+// ─── UI Helper Components ───────────────────────────────────────────────────
+
+function CardWrapper({
+  title,
+  children,
+  hasResult,
+  isSaved,
+  savedCount,
+  onToggleSaved,
+  onSave,
+}: {
+  title: string;
+  children: React.ReactNode;
+  hasResult?: boolean;
+  isSaved?: boolean;
+  savedCount?: number;
+  onToggleSaved?: () => void;
+  onSave?: () => void;
+}) {
+  return (
+    <div className="border border-blue-600/30 dark:border-blue-500/30 rounded-xl overflow-hidden shadow-xs bg-white dark:bg-zinc-900 transition-all">
+      <div className="bg-blue-600 text-white px-3.5 py-1.5 flex items-center justify-between">
+        <h3 className="font-bold text-xs tracking-wide text-white">{title}</h3>
+        {hasResult && onSave && (
+          <div className="flex items-center gap-1.5">
+            {savedCount !== undefined && savedCount > 0 && onToggleSaved && (
+              <button
+                type="button"
+                onClick={onToggleSaved}
+                className="text-[10px] bg-white/20 hover:bg-white/30 text-white font-bold px-1.5 py-0.5 rounded cursor-pointer transition-colors"
+                title="View saved calculations"
+              >
+                {savedCount} saved
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onSave}
+              className={`text-[11px] font-bold px-2 py-0.5 rounded cursor-pointer transition-all ${
+                isSaved
+                  ? "bg-emerald-500 text-white"
+                  : "bg-white text-blue-700 hover:bg-blue-50 shadow-xs"
+              }`}
+            >
+              {isSaved ? "Saved!" : "Save"}
+            </button>
+          </div>
+        )}
+      </div>
+      <div className="p-3.5 space-y-3">{children}</div>
+    </div>
+  );
+}
+
+function SavedDrawer<T>({
+  saved,
+  isOpen,
+  remove,
+  clear,
+  cardTitle,
+  formatSummary,
+}: {
+  saved: SavedEstimate<T>[];
+  isOpen: boolean;
+  remove: (id: string) => void;
+  clear: () => void;
+  cardTitle: string;
+  formatSummary: (result: T) => string;
+}) {
+  if (!isOpen || saved.length === 0) return null;
+
+  const exportCsv = () => {
+    const rows = [
+      ["Timestamp", "Input Summary", "Ideal Weight Result"],
+      ...saved.map((e) => [e.timestamp, e.inputSummary, formatSummary(e.result)]),
+    ];
+    const csv = rows.map((r) => r.map((c) => `"${c}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `ideal_weight_${cardTitle.toLowerCase().replace(/\s+/g, "_")}_history.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="mt-3 p-3 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 space-y-2 text-xs">
+      <div className="flex items-center justify-between pb-1 border-b border-zinc-200 dark:border-zinc-800">
+        <span className="font-bold text-zinc-700 dark:text-zinc-300">
+          Saved {cardTitle} ({saved.length})
+        </span>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={exportCsv}
+            className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-0.5 cursor-pointer"
+          >
+            <Download className="w-3 h-3" /> CSV
+          </button>
+          <button
+            onClick={clear}
+            className="text-[10px] text-zinc-400 hover:text-red-500 cursor-pointer"
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+      <div className="space-y-1.5 max-h-36 overflow-y-auto">
+        {saved.map((item) => (
+          <div
+            key={item.id}
+            className="p-2 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-[11px] font-sans tabular-nums"
+          >
+            <div className="truncate pr-2">
+              <span className="font-bold text-zinc-800 dark:text-zinc-200">
+                {formatSummary(item.result)}
+              </span>
+              <span className="text-zinc-400 ml-1.5">({item.inputSummary})</span>
+            </div>
+            <button
+              onClick={() => remove(item.id)}
+              className="text-zinc-400 hover:text-red-500 p-0.5 cursor-pointer"
+              title="Delete"
+            >
+              <Trash2 className="w-3 h-3" />
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Visual Weight Position Gauge ───────────────────────────────────────────
+
+function IdealWeightGauge({ result }: { result: IdealWeightResult }) {
+  const minBound = Math.max(50, result.whoMinLbs - 25);
+  const maxBound = result.whoMaxLbs + 35;
+  const range = maxBound - minBound;
+
+  const getPercent = (val: number) => {
+    return Math.max(0, Math.min(100, ((val - minBound) / range) * 100));
+  };
+
+  const whoMinPct = getPercent(result.whoMinLbs);
+  const whoMaxPct = getPercent(result.whoMaxLbs);
+  const consensusPct = getPercent(result.consensusLbs);
+  const currentPct = result.currentWeightLbs ? getPercent(result.currentWeightLbs) : null;
+
+  return (
+    <div className="space-y-2 bg-slate-50 dark:bg-zinc-800/40 p-3 rounded-lg border border-slate-200 dark:border-zinc-700">
+      <div className="flex items-center justify-between text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
+        <span>WEIGHT POSITION SPECTRUM (LBS)</span>
+        <span>WHO HEALTHY RANGE: {result.whoMinLbs} – {result.whoMaxLbs} lbs</span>
+      </div>
+
+      <div className="relative h-6 rounded-full bg-slate-200 dark:bg-zinc-700 overflow-hidden shadow-inner">
+        {/* Underweight Zone */}
+        <div
+          className="absolute top-0 bottom-0 left-0 bg-amber-400/80"
+          style={{ width: `${whoMinPct}%` }}
+          title="Underweight"
+        />
+
+        {/* Healthy WHO BMI Zone */}
+        <div
+          className="absolute top-0 bottom-0 bg-emerald-500/90"
+          style={{ left: `${whoMinPct}%`, width: `${whoMaxPct - whoMinPct}%` }}
+          title="Healthy WHO Range"
+        />
+
+        {/* Overweight Zone */}
+        <div
+          className="absolute top-0 bottom-0 right-0 bg-rose-400/80"
+          style={{ left: `${whoMaxPct}%` }}
+          title="Overweight / Obese"
+        />
+
+        {/* Consensus Ideal Weight Target Marker */}
+        <div
+          className="absolute top-0 bottom-0 w-1 bg-blue-900 dark:bg-white z-10 shadow-md transform -translate-x-1/2"
+          style={{ left: `${consensusPct}%` }}
+          title={`Consensus IBW: ${result.consensusLbs} lbs`}
+        />
+
+        {/* Current Weight Pin (if supplied) */}
+        {currentPct !== null && (
+          <div
+            className="absolute top-0 bottom-0 w-2.5 bg-purple-600 border-2 border-white rounded-full z-20 shadow-lg transform -translate-x-1/2"
+            style={{ left: `${currentPct}%` }}
+            title={`Current Weight: ${result.currentWeightLbs} lbs`}
+          />
+        )}
+      </div>
+
+      <div className="flex justify-between text-[10px] text-zinc-500 font-mono">
+        <span>{Math.round(minBound)} lbs</span>
+        <div className="flex items-center gap-1 text-blue-700 dark:text-blue-300 font-bold">
+          <Target className="w-3 h-3" /> Consensus Target: {result.consensusLbs} lbs ({result.consensusKg} kg)
+        </div>
+        <span>{Math.round(maxBound)} lbs</span>
+      </div>
+    </div>
+  );
+}
+
+// ─── MAIN COMPONENT ─────────────────────────────────────────────────────────
 
 export function IdealWeightCalculator() {
   // Input states
   const [unitSystem, setUnitSystem] = useState<UnitSystem>("us");
   const [gender, setGender] = useState<Gender>("male");
-  const [age, setAge] = useState<number>(25);
+  const [age, setAge] = useState<number>(28);
 
   // US Inputs
   const [heightFeet, setHeightFeet] = useState<number>(5);
   const [heightInches, setHeightInches] = useState<number>(10);
-  const [currentWeightLbs, setCurrentWeightLbs] = useState<string>("");
-  const [wristInches, setWristInches] = useState<string>("");
+  const [currentWeightLbs, setCurrentWeightLbs] = useState<string>("175");
+  const [wristInches, setWristInches] = useState<string>("7.0");
 
   // Metric Inputs
   const [heightCm, setHeightCm] = useState<number>(178);
-  const [currentWeightKg, setCurrentWeightKg] = useState<string>("");
-  const [wristCm, setWristCm] = useState<string>("");
+  const [currentWeightKg, setCurrentWeightKg] = useState<string>("79.4");
+  const [wristCm, setWristCm] = useState<string>("17.8");
 
   // Frame size state
   const [frameSize, setFrameSize] = useState<FrameSize>("medium");
 
-  // Saved calculations
-  const [savedCalculations, setSavedCalculations] = useState<
-    Array<{ id: string; timestamp: string; title: string; ibw: number; bmiRange: string }>
-  >([]);
-  const [copied, setCopied] = useState(false);
+  // Card Saves
+  const [card1SaveSuccess, setCard1SaveSuccess] = useState(false);
+  const card1Saved = useCardSaved<IdealWeightResult>("saved_ideal_weight_main");
 
-  // Unit system change handler
+  const [copied, setCopied] = useState(false);
+  const [isReportOpen, setIsReportOpen] = useState(false);
+
+  // Synchronized Unit System Switcher
   const handleUnitSystemChange = (newSystem: UnitSystem) => {
     setUnitSystem(newSystem);
     if (newSystem === "metric") {
@@ -96,18 +370,18 @@ export function IdealWeightCalculator() {
   const handleReset = () => {
     setUnitSystem("us");
     setGender("male");
-    setAge(25);
+    setAge(28);
     setHeightFeet(5);
     setHeightInches(10);
-    setCurrentWeightLbs("");
-    setWristInches("");
+    setCurrentWeightLbs("175");
+    setWristInches("7.0");
     setHeightCm(178);
-    setCurrentWeightKg("");
-    setWristCm("");
+    setCurrentWeightKg("79.4");
+    setWristCm("17.8");
     setFrameSize("medium");
   };
 
-  // Calculation Engine Call
+  // Calculation Result
   const result: IdealWeightResult = useMemo(() => {
     const wLbs = currentWeightLbs !== "" ? Number(currentWeightLbs) : undefined;
     const wKg = currentWeightKg !== "" ? Number(currentWeightKg) : undefined;
@@ -141,532 +415,423 @@ export function IdealWeightCalculator() {
     frameSize,
   ]);
 
-  const handleSaveCalculation = () => {
-    const newItem = {
-      id: Date.now().toString(),
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      title: `${age}y/o ${gender === "male" ? "Male" : "Female"} (${result.consensusLbs} lbs IBW)`,
-      ibw: result.consensusLbs,
-      bmiRange: `${result.whoMinLbs}–${result.whoMaxLbs} lbs`,
-    };
-    setSavedCalculations([newItem, ...savedCalculations]);
-  };
-
+  // Copy Summary
   const handleCopySummary = () => {
-    const summary = `Ideal Weight Assessment Report (${new Date().toLocaleDateString()})
-Age: ${age} | Gender: ${gender} | Height: ${result.heightCm} cm | Frame Size: ${result.frameSize}
-Consensus Ideal Weight: ${result.consensusLbs} lbs (${result.consensusKg} kg)
-Healthy BMI Range (18.5–25.0): ${result.whoMinLbs} lbs to ${result.whoMaxLbs} lbs
-Devine Formula: ${result.devine.weightLbs} lbs | Hamwi: ${result.hamwi.weightLbs} lbs | Robinson: ${result.robinson.weightLbs} lbs | Miller: ${result.miller.weightLbs} lbs | Lemmens: ${result.lemmens.weightLbs} lbs
-Calculated via CalcPlatform Health Engine`;
+    const summary = `Ideal Body Weight Clinical Assessment:
+• Gender: ${gender === "male" ? "Male" : "Female"}, Age: ${age}
+• Height: ${unitSystem === "us" ? `${heightFeet}'${heightInches}"` : `${heightCm} cm`}, Frame: ${frameSize}
+• Consensus Ideal Weight: ${result.consensusLbs} lbs (${result.consensusKg} kg)
+• WHO Healthy Range (BMI 18.5–24.9): ${result.whoMinLbs}–${result.whoMaxLbs} lbs (${result.whoMinKg}–${result.whoMaxKg} kg)
+• Devine: ${result.devine.weightLbs} lbs | Robinson: ${result.robinson.weightLbs} lbs | Miller: ${result.miller.weightLbs} lbs | Hamwi: ${result.hamwi.weightLbs} lbs`;
 
     navigator.clipboard.writeText(summary);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+    setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "My Ideal Weight Assessment",
-          text: `My Consensus Ideal Weight target is ${result.consensusLbs} lbs (${result.whoMinLbs}-${result.whoMaxLbs} lbs healthy range). Calculate yours:`,
-          url: window.location.href,
-        });
-      } catch {
-        handleCopySummary();
-      }
-    } else {
-      handleCopySummary();
-    }
-  };
-
-  // Dedicated Standalone Popup Print Engine
-  const handlePrint = () => {
-    const reportEl = document.getElementById("ideal-weight-print-report");
-    if (!reportEl) {
-      window.print();
-      return;
-    }
-
-    const printWindow = window.open("", "_blank", "width=900,height=1100");
-    if (!printWindow) {
-      window.print();
-      return;
-    }
-
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Clinical Ideal Weight Assessment Report - CalcPlatform</title>
-          <style>
-            *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-            body {
-              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-              background-color: #ffffff !important;
-              color: #18181b !important;
-              padding: 24px;
-              line-height: 1.5;
-            }
-            .p-8 { padding: 1.5rem; }
-            .max-w-4xl { max-width: 56rem; margin-left: auto; margin-right: auto; }
-            .space-y-6 > * + * { margin-top: 1.5rem; }
-            .space-y-4 > * + * { margin-top: 1rem; }
-            .space-y-2 > * + * { margin-top: 0.5rem; }
-            .space-y-1 > * + * { margin-top: 0.25rem; }
-            .bg-white { background-color: #ffffff; }
-            .bg-zinc-50 { background-color: #fafafa; }
-            .bg-zinc-100 { background-color: #f4f4f5; }
-            .border { border: 1px solid #e4e4e7; }
-            .border-b { border-bottom: 1px solid #e4e4e7; }
-            .border-b-2 { border-bottom: 2px solid; }
-            .border-t { border-top: 1px solid #e4e4e7; }
-            .border-r { border-right: 1px solid #e4e4e7; }
-            .border-zinc-200 { border-color: #e4e4e7; }
-            .border-zinc-300 { border-color: #d4d4d8; }
-            .border-blue-600 { border-color: #2563eb; }
-            .rounded-xl { border-radius: 0.75rem; }
-            .p-4 { padding: 1rem; }
-            .p-2 { padding: 0.5rem; }
-            .pb-4 { padding-bottom: 1rem; }
-            .pb-1 { padding-bottom: 0.25rem; }
-            .pt-4 { padding-top: 1rem; }
-            .mt-1 { margin-top: 0.25rem; }
-            .mt-0\\.5 { margin-top: 0.125rem; }
-            .flex { display: flex; }
-            .justify-between { justify-content: space-between; }
-            .items-start { align-items: flex-start; }
-            .grid { display: grid; }
-            .grid-cols-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-            .gap-3 { gap: 0.75rem; }
-            .text-center { text-align: center; }
-            .text-right { text-align: right; }
-            .text-left { text-left: left; }
-            .text-xs { font-size: 0.75rem; line-height: 1rem; }
-            .text-2xl { font-size: 1.5rem; line-height: 2rem; }
-            .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
-            .text-\\[10px\\] { font-size: 10px; }
-            .text-\\[9px\\] { font-size: 9px; }
-            .font-bold { font-weight: 700; }
-            .font-semibold { font-weight: 600; }
-            .font-black { font-weight: 900; }
-            .font-sans tabular-nums { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-            .text-zinc-900 { color: #18181b; }
-            .text-zinc-800 { color: #27272a; }
-            .text-zinc-700 { color: #3f3f46; }
-            .text-zinc-500 { color: #71717a; }
-            .text-zinc-400 { color: #a1a1aa; }
-            .text-blue-700 { color: #1d4ed8; }
-            .text-emerald-700 { color: #047857; }
-            .text-rose-700 { color: #be123c; }
-            .text-purple-700 { color: #7e22ce; }
-            .uppercase { text-transform: uppercase; }
-            .tracking-wider { letter-spacing: 0.05em; }
-            .tracking-widest { letter-spacing: 0.1em; }
-            .w-full { width: 100%; }
-            .w-1\\/4 { width: 25%; }
-            .border-collapse { border-collapse: collapse; }
-            table { width: 100%; border-collapse: collapse; }
-            th, td { padding: 6px 10px; border: 1px solid #e4e4e7; }
-            th { background-color: #f4f4f5; font-weight: 700; }
-            @page {
-              size: A4;
-              margin: 10mm;
-            }
-          </style>
-        </head>
-        <body>
-          ${reportEl.innerHTML}
-          <script>
-            window.onload = function() {
-              setTimeout(function() {
-                window.print();
-                window.close();
-              }, 300);
-            };
-          </script>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
-  };
+  // Report Data
+  const reportData: CalculatorReportData = useMemo(() => {
+    return {
+      meta: {
+        calculatorName: "Ideal Body Weight Calculator",
+        reportTitle: "Clinical Anthropometric Ideal Weight & Frame Assessment",
+        generatedDate: new Date().toLocaleDateString(),
+        generatedTime: new Date().toLocaleTimeString(),
+      },
+      keyMetrics: [
+        { label: "Consensus Ideal Weight", value: `${result.consensusLbs} lbs (${result.consensusKg} kg)`, highlight: true },
+        { label: "WHO Healthy Range", value: `${result.whoMinLbs} – ${result.whoMaxLbs} lbs` },
+        { label: "Skeletal Frame Multiplier", value: `${result.frameMultiplier > 1 ? "+" : ""}${Math.round((result.frameMultiplier - 1) * 100)}% (${result.frameSize})` },
+      ],
+      sections: [
+        {
+          title: "Multi-Formula Anthropometric Breakdown",
+          items: [
+            { label: "Devine Formula (1974 - Pharmacopeia)", value: `${result.devine.weightLbs} lbs (${result.devine.weightKg} kg)` },
+            { label: "Robinson Formula (1983 - Actuarial)", value: `${result.robinson.weightLbs} lbs (${result.robinson.weightKg} kg)` },
+            { label: "Miller Formula (1983 - Modified)", value: `${result.miller.weightLbs} lbs (${result.miller.weightKg} kg)` },
+            { label: "Hamwi Formula (1964 - Clinical Dietetics)", value: `${result.hamwi.weightLbs} lbs (${result.hamwi.weightKg} kg)` },
+            { label: "Lemmens Formula (2005 - BMI 22.0 Anchor)", value: `${result.lemmens.weightLbs} lbs (${result.lemmens.weightKg} kg)` },
+          ],
+        },
+        {
+          title: "Target Weight Trajectory (Safe Deficit / Surplus)",
+          items: [
+            { label: "Current Delta to Consensus IBW", value: `${result.weightDeltaLbs > 0 ? "+" : ""}${result.weightDeltaLbs} lbs` },
+            { label: "Weeks at 1.0 lb/week rate", value: `${result.weeksAtOneLbPerWk} weeks` },
+            { label: "Weeks at 1.5 lbs/week rate", value: `${result.weeksAtOneAndHalfLbPerWk} weeks` },
+          ],
+        },
+      ],
+    };
+  }, [result]);
 
   return (
-    <div className="space-y-6">
-      {/* Printable Report Styles */}
-      <style jsx global>{`
-        @media print {
-          body {
-            background: white !important;
-            color: black !important;
-          }
-          .ideal-weight-calculator-main-ui, nav, header, footer, sidebar {
-            display: none !important;
-          }
-          #ideal-weight-print-report {
-            display: block !important;
-            visibility: visible !important;
-            position: static !important;
-            width: 100% !important;
-            background: white !important;
-            color: black !important;
-            padding: 0 !important;
-            margin: 0 !important;
-          }
-        }
-      `}</style>
-
-      <div className="ideal-weight-calculator-main-ui space-y-6">
-        {/* Main Interactive Calculator Card */}
-        <Card className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-sm">
-          <CardHeader className="border-b border-zinc-100 dark:border-zinc-800/80 pb-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <CardTitle className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                  <Scale className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                  Ideal Weight Calculator
-                </CardTitle>
-                <CardDescription className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm mt-1">
-                  Hamwi, Devine, Robinson, Miller, Lemmens formulas &amp; WHO Healthy BMI Range ($18.5 - 25.0$)
-                </CardDescription>
+    <div className="space-y-4">
+      {/* ═══════════════════ CARD 1: PRIMARY IDEAL WEIGHT SOLVER ═══════════════════ */}
+      <CardWrapper
+        title="Ideal Body Weight &amp; Multi-Formula Engine"
+        hasResult={!!result}
+        isSaved={card1SaveSuccess}
+        savedCount={card1Saved.saved.length}
+        onToggleSaved={() => card1Saved.setIsOpen(!card1Saved.isOpen)}
+        onSave={() => {
+          card1Saved.save(
+            `${gender.toUpperCase()}, ${age}y, ${unitSystem === "us" ? `${heightFeet}'${heightInches}"` : `${heightCm}cm`}, Frame: ${frameSize} -> IBW: ${result.consensusLbs} lbs (${result.consensusKg} kg)`,
+            result
+          );
+          flashSave(setCard1SaveSuccess);
+        }}
+      >
+        <div className="space-y-3">
+          {/* Top Bar: Units & Gender */}
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-1 border-b border-zinc-100 dark:border-zinc-800 text-xs">
+            {/* Gender Switcher */}
+            <div className="flex items-center gap-1.5">
+              <span className="font-semibold text-zinc-600 dark:text-zinc-400">Gender:</span>
+              <div className="inline-flex rounded-md bg-zinc-100 dark:bg-zinc-800 p-0.5">
+                <button
+                  type="button"
+                  onClick={() => setGender("male")}
+                  className={`px-3 py-0.5 rounded text-xs font-bold transition-all cursor-pointer ${
+                    gender === "male"
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
+                  }`}
+                >
+                  Male
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGender("female")}
+                  className={`px-3 py-0.5 rounded text-xs font-bold transition-all cursor-pointer ${
+                    gender === "female"
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
+                  }`}
+                >
+                  Female
+                </button>
               </div>
-
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleReset}
-                className="self-start sm:self-auto bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-xs gap-1.5"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-                Reset Defaults
-              </Button>
             </div>
-          </CardHeader>
 
-          <CardContent className="p-4 sm:p-6 space-y-6">
-            {/* Unit System Navigation Tabs */}
-            <Tabs value={unitSystem} onValueChange={(val) => handleUnitSystemChange(val as UnitSystem)}>
-              <TabsList className="grid grid-cols-3 bg-zinc-100 dark:bg-zinc-950 p-1 border border-zinc-200 dark:border-zinc-800 rounded-xl mb-6">
-                <TabsTrigger value="us" className="text-xs sm:text-sm font-bold data-[state=active]:bg-white data-[state=active]:dark:bg-zinc-900 data-[state=active]:text-blue-700 data-[state=active]:dark:text-blue-400 shadow-sm">
-                  US Units (ft/in, lbs)
-                </TabsTrigger>
-                <TabsTrigger value="metric" className="text-xs sm:text-sm font-bold data-[state=active]:bg-white data-[state=active]:dark:bg-zinc-900 data-[state=active]:text-emerald-700 data-[state=active]:dark:text-emerald-400 shadow-sm">
-                  Metric Units (cm, kg)
-                </TabsTrigger>
-                <TabsTrigger value="other" className="text-xs sm:text-sm font-bold data-[state=active]:bg-white data-[state=active]:dark:bg-zinc-900 data-[state=active]:text-purple-700 data-[state=active]:dark:text-purple-400 shadow-sm">
-                  Other Units (m, kg)
-                </TabsTrigger>
-              </TabsList>
+            {/* Unit System Switcher */}
+            <div className="flex items-center gap-1.5">
+              <span className="font-semibold text-zinc-600 dark:text-zinc-400">Units:</span>
+              <div className="inline-flex rounded-md bg-zinc-100 dark:bg-zinc-800 p-0.5">
+                <button
+                  type="button"
+                  onClick={() => handleUnitSystemChange("us")}
+                  className={`px-2.5 py-0.5 rounded text-xs font-bold transition-all cursor-pointer ${
+                    unitSystem === "us"
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
+                  }`}
+                >
+                  US / Imperial (ft, in, lbs)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleUnitSystemChange("metric")}
+                  className={`px-2.5 py-0.5 rounded text-xs font-bold transition-all cursor-pointer ${
+                    unitSystem === "metric"
+                      ? "bg-blue-600 text-white shadow-xs"
+                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
+                  }`}
+                >
+                  Metric (cm, kg)
+                </button>
+              </div>
+            </div>
+          </div>
 
-              {/* Demographics: Age & Gender */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5 p-4 bg-zinc-50 dark:bg-zinc-950/60 rounded-xl border border-zinc-200 dark:border-zinc-800/80">
-                <div>
-                  <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
-                    Age (ages 2 – 120)
-                  </Label>
+          {/* Form Inputs Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 text-xs">
+            {/* Age */}
+            <div className="md:col-span-3 space-y-1">
+              <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Age (Years)</label>
+              <Input
+                type="number"
+                value={age}
+                onChange={(e) => setAge(Math.max(18, Math.min(120, Number(e.target.value) || 28)))}
+                className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
+              />
+            </div>
+
+            {/* Height */}
+            <div className="md:col-span-5 space-y-1">
+              <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+                Height ({unitSystem === "us" ? "Feet & Inches" : "Centimeters"})
+              </label>
+              {unitSystem === "us" ? (
+                <div className="grid grid-cols-2 gap-1.5">
+                  <div className="flex items-center gap-1">
+                    <Input
+                      type="number"
+                      value={heightFeet}
+                      onChange={(e) => setHeightFeet(Number(e.target.value) || 5)}
+                      className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
+                    />
+                    <span className="text-zinc-500 text-[11px]">ft</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Input
+                      type="number"
+                      value={heightInches}
+                      onChange={(e) => setHeightInches(Number(e.target.value) || 0)}
+                      className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
+                    />
+                    <span className="text-zinc-500 text-[11px]">in</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1">
                   <Input
                     type="number"
-                    min={2}
-                    max={120}
-                    value={age}
-                    onChange={(e) => setAge(Math.max(2, Math.min(120, Number(e.target.value) || 25)))}
-                    className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-semibold"
+                    value={heightCm}
+                    onChange={(e) => setHeightCm(Number(e.target.value) || 178)}
+                    className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                   />
+                  <span className="text-zinc-500 text-[11px]">cm</span>
                 </div>
+              )}
+            </div>
 
-                <div>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                      Biological Gender
-                    </Label>
-                    <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase">
-                      {gender === "male" ? "♂ Male Selected" : "♀ Female Selected"}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setGender("male")}
-                      className={`py-2 px-3 rounded-lg text-xs font-black transition-all border flex items-center justify-center gap-1.5 cursor-pointer ${
-                        gender === "male"
-                          ? "bg-blue-600 text-white border-blue-600 shadow-md ring-2 ring-blue-500/30"
-                          : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800"
-                      }`}
-                    >
-                      <span>♂</span> Male
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setGender("female")}
-                      className={`py-2 px-3 rounded-lg text-xs font-black transition-all border flex items-center justify-center gap-1.5 cursor-pointer ${
-                        gender === "female"
-                          ? "bg-rose-600 text-white border-rose-600 shadow-md ring-2 ring-rose-500/30"
-                          : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800"
-                      }`}
-                    >
-                      <span>♀</span> Female
-                    </button>
-                  </div>
-                </div>
-              </div>
+            {/* Frame Size */}
+            <div className="md:col-span-4 space-y-1">
+              <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+                Bone Frame Size
+              </label>
+              <select
+                value={frameSize}
+                onChange={(e) => setFrameSize(e.target.value as FrameSize)}
+                className="w-full h-7 text-xs rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-1 font-sans text-zinc-700 dark:text-zinc-300"
+              >
+                <option value="small">Small (-10% baseline)</option>
+                <option value="medium">Medium (Standard baseline)</option>
+                <option value="large">Large (+10% baseline)</option>
+              </select>
+            </div>
 
-              {/* US UNITS INPUTS */}
-              <TabsContent value="us" className="space-y-4 m-0">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Height</Label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="relative">
-                        <Input type="number" min={3} max={8} value={heightFeet} onChange={(e) => setHeightFeet(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
-                        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">ft</span>
-                      </div>
-                      <div className="relative">
-                        <Input type="number" step={0.5} min={0} max={11.5} value={heightInches} onChange={(e) => setHeightInches(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
-                        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">in</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
-                      Current Scale Weight (Optional)
-                    </Label>
-                    <div className="relative">
-                      <Input type="number" placeholder="e.g. 165" value={currentWeightLbs} onChange={(e) => setCurrentWeightLbs(e.target.value)} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
-                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">lbs</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
-                      Wrist Circumference (Optional Evaluator)
-                    </Label>
-                    <div className="relative">
-                      <Input type="number" step={0.25} placeholder="e.g. 6.5" value={wristInches} onChange={(e) => setWristInches(e.target.value)} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
-                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">in</span>
-                    </div>
-                  </div>
-                </div>
-              </TabsContent>
-
-              {/* METRIC UNITS INPUTS */}
-              <TabsContent value="metric" className="space-y-4 m-0">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Height (cm)</Label>
-                    <div className="relative">
-                      <Input type="number" min={90} max={250} value={heightCm} onChange={(e) => setHeightCm(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
-                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">cm</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Current Weight (kg)</Label>
-                    <div className="relative">
-                      <Input type="number" step={0.5} placeholder="e.g. 75" value={currentWeightKg} onChange={(e) => setCurrentWeightKg(e.target.value)} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
-                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">kg</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Wrist (cm)</Label>
-                    <div className="relative">
-                      <Input type="number" step={0.5} placeholder="e.g. 16.5" value={wristCm} onChange={(e) => setWristCm(e.target.value)} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
-                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">cm</span>
-                    </div>
-                  </div>
-                </div>
-              </TabsContent>
-            </Tabs>
-
-            {/* Frame Size Selector Bar */}
-            <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
-              <div className="flex items-center justify-between">
-                <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                  Body Frame Size Sizing Adjustment
-                </Label>
-                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">
-                  Current: {result.frameSize} frame ({result.frameMultiplier > 1 ? "+10%" : result.frameMultiplier < 1 ? "-10%" : "baseline"})
+            {/* Current Weight (Optional) */}
+            <div className="md:col-span-6 space-y-1">
+              <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+                Current Weight (Optional for delta tracking)
+              </label>
+              <div className="flex items-center gap-1.5">
+                <Input
+                  type="number"
+                  value={unitSystem === "us" ? currentWeightLbs : currentWeightKg}
+                  onChange={(e) => {
+                    if (unitSystem === "us") setCurrentWeightLbs(e.target.value);
+                    else setCurrentWeightKg(e.target.value);
+                  }}
+                  placeholder={unitSystem === "us" ? "e.g. 175" : "e.g. 79.4"}
+                  className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
+                />
+                <span className="text-zinc-500 text-[11px] font-bold">
+                  {unitSystem === "us" ? "lbs" : "kg"}
                 </span>
               </div>
-
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  { key: "small", label: "Small Frame (-10%)", desc: "Fine bone structure & slender wrist" },
-                  { key: "medium", label: "Medium Frame (Baseline)", desc: "Average proportioned bone breadth" },
-                  { key: "large", label: "Large Frame (+10%)", desc: "Broad bone structure & wide wrist" },
-                ].map((f) => (
-                  <button
-                    key={f.key}
-                    type="button"
-                    onClick={() => setFrameSize(f.key as FrameSize)}
-                    className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
-                      frameSize === f.key
-                        ? "bg-blue-50 dark:bg-blue-950/40 border-blue-600 ring-2 ring-blue-500/20"
-                        : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800"
-                    }`}
-                  >
-                    <div className="text-xs font-bold text-zinc-900 dark:text-zinc-100">{f.label}</div>
-                    <div className="text-[10px] text-zinc-500 dark:text-zinc-400 mt-0.5">{f.desc}</div>
-                  </button>
-                ))}
-              </div>
             </div>
 
-            {/* Action Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-              
-
-              <div className="flex items-center gap-2">
-                
-
-                
+            {/* Wrist Circumference (Optional auto frame) */}
+            <div className="md:col-span-6 space-y-1">
+              <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+                Wrist Circumference (Auto-detect frame size)
+              </label>
+              <div className="flex items-center gap-1.5">
+                <Input
+                  type="number"
+                  value={unitSystem === "us" ? wristInches : wristCm}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    if (unitSystem === "us") {
+                      setWristInches(e.target.value);
+                      if (val > 0) setFrameSize(evaluateFrameSizeFromWrist(gender, result.heightCm, undefined, val));
+                    } else {
+                      setWristCm(e.target.value);
+                      if (val > 0) setFrameSize(evaluateFrameSizeFromWrist(gender, result.heightCm, val, undefined));
+                    }
+                  }}
+                  placeholder={unitSystem === "us" ? "e.g. 7.0" : "e.g. 17.8"}
+                  className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
+                />
+                <span className="text-zinc-500 text-[11px] font-bold">
+                  {unitSystem === "us" ? "in" : "cm"}
+                </span>
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Results Dashboard */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1 space-y-6">
-            <IdealWeightArchGauge result={result} />
-            <IdealWeightFormulaBarChart result={result} />
           </div>
 
-          {/* Result Cards & Method Comparison */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4">
-              <div className="flex justify-between items-center">
-                <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
-                  Consensus Ideal Weight &amp; Healthy BMI Range
-                </h4>
-                <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-800">
-                  {result.frameSize.toUpperCase()} FRAME
+          {/* Primary Result Banner & Interactive Visualizer */}
+          <div className="space-y-3 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+            <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">
+                  CONSENSUS IDEAL BODY WEIGHT (MULTI-FORMULA AVERAGE)
                 </span>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
-                <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] block font-semibold">Consensus Ideal Weight</span>
-                  <strong className="text-xl font-black text-blue-600 dark:text-blue-400 block mt-0.5">{result.consensusLbs} lbs</strong>
-                  <span className="text-[9px] text-zinc-400 block mt-0.5">{result.consensusKg} kg</span>
+                <div className="text-2xl font-black text-blue-950 dark:text-blue-100 font-sans tabular-nums">
+                  {result.consensusLbs}{" "}
+                  <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">lbs</span>{" "}
+                  <span className="text-base text-zinc-500 font-normal">
+                    ({result.consensusKg} kg)
+                  </span>
                 </div>
-
-                <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] block font-semibold">Healthy BMI Range</span>
-                  <strong className="text-xl font-black text-emerald-600 dark:text-emerald-400 block mt-0.5">{result.whoMinLbs}–{result.whoMaxLbs}</strong>
-                  <span className="text-[9px] text-zinc-400 block mt-0.5">lbs (18.5–25.0 BMI)</span>
-                </div>
-
-                <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] block font-semibold">Devine Standard (1974)</span>
-                  <strong className="text-xl font-black text-sky-600 dark:text-sky-400 block mt-0.5">{result.devine.weightLbs} lbs</strong>
-                  <span className="text-[9px] text-zinc-400 block mt-0.5">{result.devine.weightKg} kg</span>
-                </div>
-
-                <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] block font-semibold">Lemmens BMI 22 (2005)</span>
-                  <strong className="text-xl font-black text-purple-600 dark:text-purple-400 block mt-0.5">{result.lemmens.weightLbs} lbs</strong>
-                  <span className="text-[9px] text-zinc-400 block mt-0.5">{result.lemmens.weightKg} kg</span>
+                <div className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 mt-0.5">
+                  WHO Normal BMI Weight Range: {result.whoMinLbs} – {result.whoMaxLbs} lbs ({result.whoMinKg} – {result.whoMaxKg} kg)
                 </div>
               </div>
 
-              {/* Interpretation Note */}
-              <div className="p-3 bg-blue-50/60 dark:bg-blue-950/20 rounded-xl border border-blue-200 dark:border-blue-900/40 text-xs text-zinc-700 dark:text-zinc-300">
-                <strong className="text-blue-900 dark:text-blue-200 font-bold block mb-1">Clinical Guidance:</strong>
-                For a height of <strong>{result.heightCm} cm</strong> ({result.heightInches} in) with a <strong>{result.frameSize}</strong> frame size, the recommended consensus ideal weight target is <strong>{result.consensusLbs} lbs</strong> ({result.consensusKg} kg). The World Health Organization healthy weight envelope spans <strong>{result.whoMinLbs} lbs</strong> to <strong>{result.whoMaxLbs} lbs</strong>.
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={handleCopySummary}
+                  className="h-7 text-xs font-semibold gap-1 bg-white dark:bg-zinc-800 cursor-pointer"
+                >
+                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-zinc-400" />}
+                  {copied ? "Copied" : "Copy Summary"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleReset}
+                  className="h-7 text-xs font-semibold gap-1 bg-white dark:bg-zinc-800 cursor-pointer"
+                >
+                  <RefreshCw className="w-3.5 h-3.5 text-zinc-400" />
+                  Reset
+                </Button>
               </div>
             </div>
 
-            {/* Auxiliary Tables */}
-            <IdealWeightTables result={result} />
+            {/* Visual Gauge */}
+            <IdealWeightGauge result={result} />
           </div>
         </div>
-      </div>
 
-      {/* Standalone Printable PDF Report Section */}
-      <div id="ideal-weight-print-report" className="hidden">
-        <div className="p-8 max-w-4xl mx-auto space-y-6 bg-white text-zinc-900 font-sans">
-          <div className="border-b-2 border-blue-600 pb-4 flex justify-between items-start">
-            <div>
-              <div className="text-xs font-black tracking-widest text-blue-700 uppercase">
-                CalcPlatform Clinical Health &amp; Anthropometrics Lab
-              </div>
-              <h1 className="text-2xl font-black text-blue-600 mt-1">
-                Clinical Ideal Body Weight (IBW) Assessment Report
-              </h1>
-              <p className="text-xs text-zinc-500 mt-0.5">
-                Hamwi, Devine, Robinson, Miller, Lemmens Equations &amp; WHO Healthy BMI Range
-              </p>
-            </div>
-            <div className="text-right text-xs text-zinc-500">
-              <p className="font-bold text-zinc-800" suppressHydrationWarning>Date: {new Date().toLocaleDateString()}</p>
-              <p suppressHydrationWarning>Time: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
-              <p className="font-sans tabular-nums text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #IBW-{Date.now().toString().slice(-6)}</p>
-            </div>
-          </div>
+        <SavedDrawer
+          {...card1Saved}
+          cardTitle="Ideal Body Weight"
+          formatSummary={(r) => `IBW: ${r.consensusLbs} lbs (${r.consensusKg} kg) | WHO: ${r.whoMinLbs}-${r.whoMaxLbs} lbs`}
+        />
+      </CardWrapper>
 
-          <div className="grid grid-cols-4 gap-3 bg-zinc-50 p-4 rounded-xl border border-zinc-200 text-center">
-            <div className="p-2 border-r border-zinc-200">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Consensus IBW</span>
-              <strong className="text-xl font-black text-blue-700 block mt-1">{result.consensusLbs} lbs</strong>
-              <span className="text-[9px] text-zinc-500 block">{result.consensusKg} kg</span>
-            </div>
-            <div className="p-2 border-r border-zinc-200">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Devine Standard</span>
-              <strong className="text-xl font-black text-sky-700 block mt-1">{result.devine.weightLbs} lbs</strong>
-              <span className="text-[9px] text-zinc-500 block">1974 Formula</span>
-            </div>
-            <div className="p-2 border-r border-zinc-200">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Healthy BMI Range</span>
-              <strong className="text-xl font-black text-emerald-700 block mt-1">{result.whoMinLbs}–{result.whoMaxLbs} lbs</strong>
-              <span className="text-[9px] text-zinc-500 block">WHO 18.5–25.0</span>
-            </div>
-            <div className="p-2">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Body Frame</span>
-              <strong className="text-xl font-black text-purple-700 block mt-1 uppercase">{result.frameSize}</strong>
-              <span className="text-[9px] text-zinc-500 block">{result.frameMultiplier > 1 ? "+10%" : result.frameMultiplier < 1 ? "-10%" : "Baseline"}</span>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
-              1. Subject Physical Demographics &amp; Parameters
-            </h3>
-            <table className="w-full text-xs text-left border border-zinc-200 border-collapse">
-              <tbody>
-                <tr className="border-b border-zinc-200 bg-zinc-50">
-                  <td className="p-2 font-bold w-1/4">Age &amp; Gender:</td>
-                  <td className="p-2 w-1/4">{age} years ({gender})</td>
-                  <td className="p-2 font-bold w-1/4">Devine Target (1974):</td>
-                  <td className="p-2 w-1/4">{result.devine.weightLbs} lbs ({result.devine.weightKg} kg)</td>
+      {/* ═══════════════════ CARD 2: MULTI-FORMULA COMPARISON ═══════════════════ */}
+      <CardWrapper title="Medical &amp; Pharmacopeial Formula Comparison Matrix">
+        <div className="space-y-2 text-xs">
+          <p className="text-zinc-600 dark:text-zinc-400 text-[11px]">
+            Comparison across clinical guidelines adjusted for {result.gender} ({result.heightInches}&quot; / {result.heightCm} cm) and {result.frameSize} bone frame:
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse border border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs">
+              <thead className="bg-slate-100 dark:bg-zinc-800 font-bold text-zinc-800 dark:text-zinc-200">
+                <tr>
+                  <th className="p-2 border border-zinc-200 dark:border-zinc-700">Formula</th>
+                  <th className="p-2 border border-zinc-200 dark:border-zinc-700">Year</th>
+                  <th className="p-2 border border-zinc-200 dark:border-zinc-700">Pounds (lbs)</th>
+                  <th className="p-2 border border-zinc-200 dark:border-zinc-700">Kilograms (kg)</th>
+                  <th className="p-2 border border-zinc-200 dark:border-zinc-700">Clinical Focus</th>
                 </tr>
-                <tr className="border-b border-zinc-200">
-                  <td className="p-2 font-bold">Height:</td>
-                  <td className="p-2">{result.heightCm} cm ({result.heightInches} in)</td>
-                  <td className="p-2 font-bold">Robinson Target (1983):</td>
-                  <td className="p-2">{result.robinson.weightLbs} lbs ({result.robinson.weightKg} kg)</td>
+              </thead>
+              <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
+                <tr className="bg-blue-50/40 dark:bg-blue-950/20 font-semibold">
+                  <td className="p-2 text-blue-900 dark:text-blue-200">{result.devine.name}</td>
+                  <td className="p-2">{result.devine.year}</td>
+                  <td className="p-2 font-bold text-blue-700 dark:text-blue-300">{result.devine.weightLbs} lbs</td>
+                  <td className="p-2">{result.devine.weightKg} kg</td>
+                  <td className="p-2 text-[10px] text-zinc-500">{result.devine.description}</td>
                 </tr>
-                <tr className="bg-zinc-50">
-                  <td className="p-2 font-bold">Current Weight:</td>
-                  <td className="p-2">{result.currentWeightLbs ? `${result.currentWeightLbs} lbs (${result.currentWeightKg} kg)` : "Not Specified"}</td>
-                  <td className="p-2 font-bold">Miller Target (1983):</td>
-                  <td className="p-2">{result.miller.weightLbs} lbs ({result.miller.weightKg} kg)</td>
+                <tr>
+                  <td className="p-2 font-medium">{result.robinson.name}</td>
+                  <td className="p-2">{result.robinson.year}</td>
+                  <td className="p-2 font-bold">{result.robinson.weightLbs} lbs</td>
+                  <td className="p-2">{result.robinson.weightKg} kg</td>
+                  <td className="p-2 text-[10px] text-zinc-500">{result.robinson.description}</td>
+                </tr>
+                <tr>
+                  <td className="p-2 font-medium">{result.miller.name}</td>
+                  <td className="p-2">{result.miller.year}</td>
+                  <td className="p-2 font-bold">{result.miller.weightLbs} lbs</td>
+                  <td className="p-2">{result.miller.weightKg} kg</td>
+                  <td className="p-2 text-[10px] text-zinc-500">{result.miller.description}</td>
+                </tr>
+                <tr>
+                  <td className="p-2 font-medium">{result.hamwi.name}</td>
+                  <td className="p-2">{result.hamwi.year}</td>
+                  <td className="p-2 font-bold">{result.hamwi.weightLbs} lbs</td>
+                  <td className="p-2">{result.hamwi.weightKg} kg</td>
+                  <td className="p-2 text-[10px] text-zinc-500">{result.hamwi.description}</td>
+                </tr>
+                <tr>
+                  <td className="p-2 font-medium">{result.lemmens.name}</td>
+                  <td className="p-2">{result.lemmens.year}</td>
+                  <td className="p-2 font-bold">{result.lemmens.weightLbs} lbs</td>
+                  <td className="p-2">{result.lemmens.weightKg} kg</td>
+                  <td className="p-2 text-[10px] text-zinc-500">{result.lemmens.description}</td>
                 </tr>
               </tbody>
             </table>
           </div>
-
-          <div className="border-t border-zinc-300 pt-4 text-[10px] text-zinc-500 space-y-1">
-            <p className="font-bold text-zinc-700">Clinical &amp; Medical Disclaimer:</p>
-            <p>
-              This report is generated based on standard IBW predictive equations (Devine 1974, Hamwi 1964, Robinson 1983, Miller 1983, Lemmens 2005). Individual muscle mass and athletic composition may alter targets. Consult a physician before embarking on aggressive weight loss programs.
-            </p>
-            <p className="text-zinc-400">© CalcPlatform Anthropometrics Lab • All Rights Reserved</p>
-          </div>
         </div>
+      </CardWrapper>
+
+      {/* ═══════════════════ CARD 3: TARGET TRAJECTORY & DELTA ═══════════════════ */}
+      {result.currentWeightLbs && (
+        <CardWrapper title="Target Weight Trajectory &amp; Deficit Planning">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div className="p-2.5 bg-slate-50 dark:bg-zinc-800/40 rounded border border-slate-200 dark:border-zinc-700 text-center">
+              <span className="text-[10px] text-zinc-500 block font-medium">Difference to Consensus IBW</span>
+              <div className="flex items-center justify-center gap-1 mt-0.5">
+                {result.weightDeltaLbs > 0 ? (
+                  <TrendingDown className="w-4 h-4 text-amber-500" />
+                ) : result.weightDeltaLbs < 0 ? (
+                  <TrendingUp className="w-4 h-4 text-blue-500" />
+                ) : (
+                  <Check className="w-4 h-4 text-emerald-500" />
+                )}
+                <span className="text-lg font-black text-zinc-900 dark:text-zinc-100 font-sans tabular-nums">
+                  {Math.abs(result.weightDeltaLbs)} lbs
+                </span>
+              </div>
+              <span className="text-[10px] text-zinc-500 block">
+                {result.weightDeltaLbs > 0 ? "Deficit to lose" : result.weightDeltaLbs < 0 ? "Surplus to gain" : "Exact Match"}
+              </span>
+            </div>
+
+            <div className="p-2.5 bg-slate-50 dark:bg-zinc-800/40 rounded border border-slate-200 dark:border-zinc-700 text-center">
+              <span className="text-[10px] text-zinc-500 block font-medium">At 1.0 lb / week Pace</span>
+              <span className="text-lg font-black text-blue-700 dark:text-blue-300 font-sans tabular-nums block mt-0.5">
+                {result.weeksAtOneLbPerWk} Weeks
+              </span>
+              <span className="text-[10px] text-zinc-500 block">500 kcal/day energy delta</span>
+            </div>
+
+            <div className="p-2.5 bg-slate-50 dark:bg-zinc-800/40 rounded border border-slate-200 dark:border-zinc-700 text-center">
+              <span className="text-[10px] text-zinc-500 block font-medium">At 1.5 lbs / week Pace</span>
+              <span className="text-lg font-black text-blue-700 dark:text-blue-300 font-sans tabular-nums block mt-0.5">
+                {result.weeksAtOneAndHalfLbPerWk} Weeks
+              </span>
+              <span className="text-[10px] text-zinc-500 block">750 kcal/day energy delta</span>
+            </div>
+          </div>
+        </CardWrapper>
+      )}
+
+      {/* ═══════════════════ REPORT TRIGGER ═══════════════════ */}
+      <div className="flex items-center justify-end pt-1">
+        <Button
+          variant="outline"
+          onClick={() => setIsReportOpen(true)}
+          className="h-8 text-xs font-semibold gap-1.5 cursor-pointer"
+        >
+          <FileSpreadsheet className="h-3.5 w-3.5 text-blue-500" /> Generate Clinical IBW Assessment Report
+        </Button>
       </div>
+
+      <ReportModal
+        isOpen={isReportOpen}
+        onClose={() => setIsReportOpen(false)}
+        reportData={reportData}
+      />
     </div>
   );
 }
