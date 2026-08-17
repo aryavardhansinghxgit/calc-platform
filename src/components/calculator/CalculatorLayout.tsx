@@ -161,6 +161,10 @@ import { BTUCalculator } from "./btu/BTUCalculator";
 import { BTUContent } from "./btu/BTUContent";
 import { SquareFootageCalculator } from "./square-footage/SquareFootageCalculator";
 import { SquareFootageContent } from "./square-footage/SquareFootageContent";
+import { StairCalculator } from "./stair/StairCalculator";
+import { StairContent } from "./stair/StairContent";
+import { RoofingCalculator } from "./roofing/RoofingCalculator";
+import { RoofingContent } from "./roofing/RoofingContent";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -396,8 +400,12 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isConcrete = idLower === "concrete-calculator" || slugLower === "concrete-calculator";
   const isBtu = idLower === "btu-calculator" || slugLower === "btu-calculator";
   const isSquareFootage = idLower === "square-footage-calculator" || slugLower === "square-footage-calculator";
+  const isStair = idLower === "stair-calculator" || slugLower === "stair-calculator";
+  const isRoofing = idLower === "roofing-calculator" || slugLower === "roofing-calculator";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isRoofing ? RoofingContent :
+    isStair ? StairContent :
     isSquareFootage ? SquareFootageContent :
     isBtu ? BTUContent :
     isConcrete ? ConcreteContent :
@@ -640,6 +648,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
               <BTUCalculator />
             ) : isSquareFootage ? (
               <SquareFootageCalculator />
+            ) : isStair ? (
+              <StairCalculator />
+            ) : isRoofing ? (
+              <RoofingCalculator />
             ) : (
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
                 <div className="grid min-w-0 grid-cols-1 md:grid-cols-12 gap-5 items-start">
@@ -803,7 +815,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs text-slate-900 dark:text-slate-100">
         {/* Formula & Calculation Method */}
-        {definition.formulaDescription && !isConcrete && !isBtu && !isSquareFootage && (
+        {definition.formulaDescription && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && (
           <div className="space-y-2">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Formula & Calculation Method
@@ -825,7 +837,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         )}
 
         {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Custom suites per AGENTS.md policy) */}
-        {definition.category !== "Math" && !isConcrete && !isBtu && !isSquareFootage && (
+        {definition.category !== "Math" && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && (
           <div className="space-y-3">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Frequently Asked Questions
