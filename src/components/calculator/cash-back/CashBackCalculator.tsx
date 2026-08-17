@@ -73,17 +73,19 @@ export function CashBackCalculator() {
     const newItem: SavedCashBackItem = {
       id: Date.now().toString(),
       title: "Cash Back vs. Low Interest Calculation",
-      inputsSummary: `Price: ${currencySymbol}${parseFloat(autoPrice).toLocaleString()} | Rebate: ${currencySymbol}${parseFloat(cashBackAmount).toLocaleString()} | Low Rate: ${lowInterestRate}% vs High: ${highInterestRate}%`,
+      inputsSummary: `Price: ${currencySymbol}${parseFloat(autoPrice || "0").toLocaleString()} | Rebate: ${currencySymbol}${parseFloat(cashBackAmount || "0").toLocaleString()} | High Rate: ${highInterestRate}% | Low Rate: ${lowInterestRate}% | Term: ${loanTermMonths} Mos | Down: ${currencySymbol}${parseFloat(downPayment || "0").toLocaleString()} | Trade: ${currencySymbol}${parseFloat(tradeInValue || "0").toLocaleString()} | Tax: ${salesTaxRate}% | Fees: ${currencySymbol}${parseFloat(fees || "0").toLocaleString()}`,
       primaryResult: cbCalc.winningMessage,
       detailsList: [
-        `Savings: ${currencySymbol}${cbCalc.savingsAmount.toLocaleString()}`,
-        `Cash Back Monthly: ${currencySymbol}${cbCalc.cashBackOffer.monthlyPayment}/mo (Total: ${currencySymbol}${cbCalc.cashBackOffer.totalCost.toLocaleString()})`,
-        `Low Interest Monthly: ${currencySymbol}${cbCalc.lowInterestOffer.monthlyPayment}/mo (Total: ${currencySymbol}${cbCalc.lowInterestOffer.totalCost.toLocaleString()})`,
+        `Net Dollar Savings: ${currencySymbol}${cbCalc.savingsAmount.toLocaleString()}`,
+        `Breakeven Outside Rate: ${cbCalc.breakevenRate}%`,
+        `Cash Back Offer: Pay = ${currencySymbol}${cbCalc.cashBackOffer.monthlyPayment}/mo | Upfront = ${currencySymbol}${cbCalc.cashBackOffer.upfrontPayment.toLocaleString()} | Interest = ${currencySymbol}${cbCalc.cashBackOffer.totalInterest.toLocaleString()} | Total = ${currencySymbol}${cbCalc.cashBackOffer.totalCost.toLocaleString()}`,
+        `Low Interest Offer: Pay = ${currencySymbol}${cbCalc.lowInterestOffer.monthlyPayment}/mo | Upfront = ${currencySymbol}${cbCalc.lowInterestOffer.upfrontPayment.toLocaleString()} | Interest = ${currencySymbol}${cbCalc.lowInterestOffer.totalInterest.toLocaleString()} | Total = ${currencySymbol}${cbCalc.lowInterestOffer.totalCost.toLocaleString()}`,
       ],
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
     const updated = [newItem, ...savedBox1Items];
     setSavedBox1Items(updated);
+    setShowHistoryBox1(true);
     try {
       localStorage.setItem("saved_cb_box1", JSON.stringify(updated));
     } catch (e) {}
@@ -240,13 +242,14 @@ export function CashBackCalculator() {
     const newItem: SavedCashBackItem = {
       id: Date.now().toString(),
       title: "Breakeven Interest Rate Solver",
-      inputsSummary: `Price: ${currencySymbol}${parseFloat(autoPrice).toLocaleString()} | Rebate: ${currencySymbol}${parseFloat(cashBackAmount).toLocaleString()} | Low Rate: ${lowInterestRate}%`,
+      inputsSummary: `Price: ${currencySymbol}${parseFloat(autoPrice || "0").toLocaleString()} | Rebate: ${currencySymbol}${parseFloat(cashBackAmount || "0").toLocaleString()} | Low Rate: ${lowInterestRate}%`,
       primaryResult: `Breakeven Outside Rate: ${bSolve.breakevenRate}%`,
       detailsList: [bSolve.explanation],
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
     const updated = [newItem, ...savedBox2Items];
     setSavedBox2Items(updated);
+    setShowHistoryBox2(true);
     try {
       localStorage.setItem("saved_cb_box2", JSON.stringify(updated));
     } catch (e) {}
@@ -272,7 +275,7 @@ export function CashBackCalculator() {
     const newItem: SavedCashBackItem = {
       id: Date.now().toString(),
       title: "Rebate Reinvestment & Opportunity Cost",
-      inputsSummary: `Rebate: ${currencySymbol}${parseFloat(cashBackAmount).toLocaleString()} @ ${reinvestmentRate}% Return Rate (${loanTermMonths} Mos)`,
+      inputsSummary: `Rebate: ${currencySymbol}${parseFloat(cashBackAmount || "0").toLocaleString()} @ ${reinvestmentRate}% Return Rate (${loanTermMonths} Mos)`,
       primaryResult: `Winner: ${reinvCalc.winner}`,
       detailsList: [
         `Reinvested Rebate Value: ${currencySymbol}${reinvCalc.futureReinvestedRebate.toLocaleString()}`,
@@ -283,6 +286,7 @@ export function CashBackCalculator() {
     };
     const updated = [newItem, ...savedBox3Items];
     setSavedBox3Items(updated);
+    setShowHistoryBox3(true);
     try {
       localStorage.setItem("saved_cb_box3", JSON.stringify(updated));
     } catch (e) {}
@@ -311,7 +315,7 @@ export function CashBackCalculator() {
     const newItem: SavedCashBackItem = {
       id: Date.now().toString(),
       title: "Multi-Offer Financing Comparison",
-      inputsSummary: `Vehicle Price: ${currencySymbol}${parseFloat(autoPrice).toLocaleString()} (${loanTermMonths} Mos)`,
+      inputsSummary: `Vehicle Price: ${currencySymbol}${parseFloat(autoPrice || "0").toLocaleString()} (${loanTermMonths} Mos)`,
       primaryResult: `Best Choice: ${multiCalc.bestOfferName}`,
       detailsList: [
         `Offer 1 (0% APR + $0 Rebate): ${currencySymbol}${multiCalc.offer1TotalCost.toLocaleString()}`,
@@ -322,6 +326,7 @@ export function CashBackCalculator() {
     };
     const updated = [newItem, ...savedBox4Items];
     setSavedBox4Items(updated);
+    setShowHistoryBox4(true);
     try {
       localStorage.setItem("saved_cb_box4", JSON.stringify(updated));
     } catch (e) {}
@@ -360,6 +365,7 @@ export function CashBackCalculator() {
     };
     const updated = [newItem, ...savedBox5Items];
     setSavedBox5Items(updated);
+    setShowHistoryBox5(true);
     try {
       localStorage.setItem("saved_cb_box5", JSON.stringify(updated));
     } catch (e) {}
@@ -388,13 +394,14 @@ export function CashBackCalculator() {
     const newItem: SavedCashBackItem = {
       id: Date.now().toString(),
       title: "Negative Equity Trade-In Roll-In",
-      inputsSummary: `Trade Allowance: ${currencySymbol}${parseFloat(tradeInValue).toLocaleString()} | Owed: ${currencySymbol}${parseFloat(existingLoanBalance).toLocaleString()} (Rolled In: ${currencySymbol}${negCalc.rolledInAmount.toLocaleString()})`,
+      inputsSummary: `Trade Allowance: ${currencySymbol}${parseFloat(tradeInValue || "0").toLocaleString()} | Owed: ${currencySymbol}${parseFloat(existingLoanBalance || "0").toLocaleString()} (Rolled In: ${currencySymbol}${negCalc.rolledInAmount.toLocaleString()})`,
       primaryResult: `Low Rate Monthly: ${currencySymbol}${negCalc.lowInterestMonthly}/mo vs Cash Back: ${currencySymbol}${negCalc.cashBackMonthly}/mo`,
       detailsList: [negCalc.recommendation],
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
     const updated = [newItem, ...savedBox6Items];
     setSavedBox6Items(updated);
+    setShowHistoryBox6(true);
     try {
       localStorage.setItem("saved_cb_box6", JSON.stringify(updated));
     } catch (e) {}
