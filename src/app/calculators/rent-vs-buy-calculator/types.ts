@@ -1,18 +1,20 @@
-export type TaxFilingStatus = "single" | "married_joint";
+export type TaxFilingStatus = "single" | "married_joint" | "married_separate" | "head_of_household";
 
 export interface RentVsBuyInput {
   homePrice: number;
   downPaymentPct: number;
-  loanTermYears: number;
   interestRate: number;
+  loanTermYears: number;
   buyingClosingCostsPct: number;
-  sellingClosingCostsPct: number;
+  propertyTaxPct: number;
   propertyTaxAnnual: number;
   propertyTaxGrowthPct: number;
   homeInsuranceAnnual: number;
-  hoaDuesMonthly: number;
+  hoaFeeAnnual: number;
   maintenancePct: number;
   homeAppreciationPct: number;
+  costInsuranceIncreasePct: number;
+  sellingClosingCostsPct: number;
 
   monthlyRent: number;
   annualRentIncreasePct: number;
@@ -20,12 +22,19 @@ export interface RentVsBuyInput {
   securityDeposit: number;
   upfrontRentalFees: number;
 
-  inflationRatePct: number;
   investmentReturnRatePct: number;
+  marginalFederalTaxRate: number;
+  marginalStateTaxRate: number;
   taxFilingStatus: TaxFilingStatus;
-  marginalTaxRatePct: number;
-  itemizeDeductions: boolean;
   currencySymbol: string;
+}
+
+export interface AverageCostRow {
+  year: number;
+  buyingMonthly: number;
+  buyingAnnual: number;
+  rentingMonthly: number;
+  rentingAnnual: number;
 }
 
 export interface YearlyComparisonRow {
@@ -54,6 +63,7 @@ export interface RentVsBuyResult {
   initialBuyingOutlay: number;
   initialRentingOutlay: number;
   priceToRentRatio: number;
+  averageCostTable: AverageCostRow[];
   yearlySchedule: YearlyComparisonRow[];
 }
 
@@ -91,7 +101,8 @@ export interface TaxShieldInput {
   interestRate: number;
   propertyTaxAnnual: number;
   filingStatus: TaxFilingStatus;
-  marginalTaxRatePct: number;
+  marginalFederalTaxRate: number;
+  marginalStateTaxRate: number;
 }
 
 export interface TaxShieldResult {

@@ -424,7 +424,7 @@ export function DownPaymentCalculator() {
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">Mortgage Down Payment & PITI Amortization Engine</span>
+          <span className="font-extrabold text-sm">Down Payment Calculator</span>
           <button
             type="button"
             onClick={handleSaveBox1}
@@ -534,11 +534,11 @@ export function DownPaymentCalculator() {
               </div>
             </div>
 
-            {/* Simple Result Card */}
+            {/* Elevated Hero Result Card */}
             <div className="lg:col-span-5 space-y-4">
-              <div className="bg-blue-50/60 dark:bg-slate-900/80 border border-blue-200 dark:border-blue-900/50 rounded-2xl p-5 shadow-xs space-y-4 text-center">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">
-                  {calculationMode === "home_price" ? "Total Monthly Payment & Cash Needed" : "Max Affordable Home Price Result"}
+              <div className="bg-gradient-to-br from-blue-50/90 to-indigo-50/70 dark:from-slate-900 dark:to-blue-950/40 border border-blue-200 dark:border-blue-900/60 rounded-2xl p-5 shadow-xs space-y-4 text-center">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400 block">
+                  {calculationMode === "home_price" ? "Monthly Payment & Cash Needed" : "Max Affordable Home Price Result"}
                 </span>
 
                 <div className="text-3xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums mt-1">
@@ -548,25 +548,25 @@ export function DownPaymentCalculator() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-center text-xs">
-                  <div className="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 font-sans tabular-nums">
+                  <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 font-sans tabular-nums shadow-xs">
                     <span className="text-[10px] text-slate-400 font-bold block uppercase">Down Payment</span>
-                    <span className="font-extrabold text-blue-600">{currencySymbol}{dpCalc.downPaymentAmount.toLocaleString()} ({dpCalc.downPaymentPct}%)</span>
+                    <span className="font-extrabold text-blue-600 text-sm">{currencySymbol}{dpCalc.downPaymentAmount.toLocaleString()} ({dpCalc.downPaymentPct}%)</span>
                   </div>
-                  <div className="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 font-sans tabular-nums">
+                  <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 font-sans tabular-nums shadow-xs">
                     <span className="text-[10px] text-slate-400 font-bold block uppercase">Loan Financed</span>
-                    <span className="font-extrabold text-slate-800 dark:text-slate-200">{currencySymbol}{dpCalc.loanAmount.toLocaleString()}</span>
+                    <span className="font-extrabold text-slate-800 dark:text-slate-200 text-sm">{currencySymbol}{dpCalc.loanAmount.toLocaleString()}</span>
                   </div>
                 </div>
 
-                <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-900/60 text-xs font-bold text-emerald-700 dark:text-emerald-400">
+                <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-900/60 text-xs font-bold text-emerald-700 dark:text-emerald-400 shadow-xs">
                   Total Cash Required at Closing: {currencySymbol}{dpCalc.totalCashToClose.toLocaleString()}
                 </div>
 
-                <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300">
+                <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 shadow-xs">
                   PMI Removal Milestone (78% LTV): <span className="text-blue-600">{dpCalc.pmiCancellationDateLabel}</span>
                 </div>
 
-                <div className="pt-2">
+                <div className="pt-1">
                   {svgPitiDonut}
                 </div>
               </div>
@@ -695,7 +695,7 @@ export function DownPaymentCalculator() {
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">Interactive Down Payment Tier Comparison (0% vs 3.5% vs 5% vs 10% vs 20% vs 30%)</span>
+          <span className="font-extrabold text-sm">Down Payment Comparison</span>
           <button
             type="button"
             onClick={handleSaveBox2}
@@ -784,7 +784,7 @@ export function DownPaymentCalculator() {
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">Down Payment vs. Index Fund Investment Opportunity Cost</span>
+          <span className="font-extrabold text-sm">Opportunity Cost Analysis</span>
           <button
             type="button"
             onClick={handleSaveBox3}
@@ -894,7 +894,7 @@ export function DownPaymentCalculator() {
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">Upfront Cash-to-Close & Closing Fee Estimator</span>
+          <span className="font-extrabold text-sm">Upfront Cash to Close</span>
           <button
             type="button"
             onClick={handleSaveBox4}
@@ -999,7 +999,7 @@ export function DownPaymentCalculator() {
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">Government & Loan Program Comparison Matrix (Conventional vs FHA vs VA vs USDA)</span>
+          <span className="font-extrabold text-sm">Loan Program Comparison</span>
           <button
             type="button"
             onClick={handleSaveBox5}
@@ -1088,7 +1088,7 @@ export function DownPaymentCalculator() {
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">First-Time Homebuyer Savings Goal & Timeline Planner</span>
+          <span className="font-extrabold text-sm">Savings Goal Planner</span>
           <button
             type="button"
             onClick={handleSaveBox6}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { Bookmark, Trash2, ChevronDown, ChevronUp, Check, Plus, Download } from "lucide-react";
+import { Bookmark, Trash2, ChevronDown, ChevronUp, Download, TrendingUp, ShieldCheck, DollarSign } from "lucide-react";
 import {
   calculateRentVsBuy,
   calculateNetWorthComparison,
@@ -19,32 +19,32 @@ export function RentVsBuyCalculator() {
   const [currencySymbol, setCurrencySymbol] = useState<string>("$");
 
   // =========================================================================
-  // BOX 1: CORE RENT VS BUY BREAKEVEN ENGINE STATES
+  // BOX 1: RENT VS BUY CALCULATOR STATES (EXACT COMPETITOR PARITY)
   // =========================================================================
   const [homePrice, setHomePrice] = useState<string>("500000");
   const [downPaymentPct, setDownPaymentPct] = useState<string>("20");
-  const [loanTermYears, setLoanTermYears] = useState<string>("30");
   const [interestRate, setInterestRate] = useState<string>("6.632");
-  const [buyingClosingCostsPct, setBuyingClosingCostsPct] = useState<string>("2.0");
-  const [sellingClosingCostsPct, setSellingClosingCostsPct] = useState<string>("7.0");
-  const [propertyTaxAnnual, setPropertyTaxAnnual] = useState<string>("7500");
-  const [propertyTaxGrowthPct, setPropertyTaxGrowthPct] = useState<string>("3.0");
+  const [loanTermYears, setLoanTermYears] = useState<string>("30");
+  const [buyingClosingCostsPct, setBuyingClosingCostsPct] = useState<string>("2");
+  const [propertyTaxPct, setPropertyTaxPct] = useState<string>("1.5");
+  const [propertyTaxGrowthPct, setPropertyTaxGrowthPct] = useState<string>("3");
   const [homeInsuranceAnnual, setHomeInsuranceAnnual] = useState<string>("2500");
-  const [hoaDuesMonthly, setHoaDuesMonthly] = useState<string>("0");
+  const [hoaFeeAnnual, setHoaFeeAnnual] = useState<string>("0");
   const [maintenancePct, setMaintenancePct] = useState<string>("1.5");
-  const [homeAppreciationPct, setHomeAppreciationPct] = useState<string>("3.0");
+  const [homeAppreciationPct, setHomeAppreciationPct] = useState<string>("3");
+  const [costInsuranceIncreasePct, setCostInsuranceIncreasePct] = useState<string>("3");
+  const [sellingClosingCostsPct, setSellingClosingCostsPct] = useState<string>("7");
 
   const [monthlyRent, setMonthlyRent] = useState<string>("3000");
-  const [annualRentIncreasePct, setAnnualRentIncreasePct] = useState<string>("3.0");
+  const [annualRentIncreasePct, setAnnualRentIncreasePct] = useState<string>("3");
   const [renterInsuranceMonthly, setRenterInsuranceMonthly] = useState<string>("15");
   const [securityDeposit, setSecurityDeposit] = useState<string>("3000");
   const [upfrontRentalFees, setUpfrontRentalFees] = useState<string>("100");
 
-  const [inflationRatePct, setInflationRatePct] = useState<string>("3.0");
-  const [investmentReturnRatePct, setInvestmentReturnRatePct] = useState<string>("5.0");
+  const [investmentReturnRatePct, setInvestmentReturnRatePct] = useState<string>("5");
+  const [marginalFederalTaxRate, setMarginalFederalTaxRate] = useState<string>("25");
+  const [marginalStateTaxRate, setMarginalStateTaxRate] = useState<string>("0");
   const [taxFilingStatus, setTaxFilingStatus] = useState<TaxFilingStatus>("married_joint");
-  const [marginalTaxRatePct, setMarginalTaxRatePct] = useState<string>("25.0");
-  const [itemizeDeductions, setItemizeDeductions] = useState<boolean>(true);
 
   const [savedBox1Items, setSavedBox1Items] = useState<SavedRentVsBuyItem[]>([]);
   const [justSavedBox1, setJustSavedBox1] = useState<boolean>(false);
@@ -54,16 +54,18 @@ export function RentVsBuyCalculator() {
     return calculateRentVsBuy({
       homePrice: parseFloat(homePrice) || 0,
       downPaymentPct: parseFloat(downPaymentPct) || 0,
-      loanTermYears: parseFloat(loanTermYears) || 30,
       interestRate: parseFloat(interestRate) || 0,
+      loanTermYears: parseFloat(loanTermYears) || 30,
       buyingClosingCostsPct: parseFloat(buyingClosingCostsPct) || 0,
-      sellingClosingCostsPct: parseFloat(sellingClosingCostsPct) || 0,
-      propertyTaxAnnual: parseFloat(propertyTaxAnnual) || 0,
+      propertyTaxPct: parseFloat(propertyTaxPct) || 0,
+      propertyTaxAnnual: (parseFloat(homePrice) * (parseFloat(propertyTaxPct) || 1.5)) / 100,
       propertyTaxGrowthPct: parseFloat(propertyTaxGrowthPct) || 0,
       homeInsuranceAnnual: parseFloat(homeInsuranceAnnual) || 0,
-      hoaDuesMonthly: parseFloat(hoaDuesMonthly) || 0,
+      hoaFeeAnnual: parseFloat(hoaFeeAnnual) || 0,
       maintenancePct: parseFloat(maintenancePct) || 0,
       homeAppreciationPct: parseFloat(homeAppreciationPct) || 0,
+      costInsuranceIncreasePct: parseFloat(costInsuranceIncreasePct) || 0,
+      sellingClosingCostsPct: parseFloat(sellingClosingCostsPct) || 0,
 
       monthlyRent: parseFloat(monthlyRent) || 0,
       annualRentIncreasePct: parseFloat(annualRentIncreasePct) || 0,
@@ -71,50 +73,48 @@ export function RentVsBuyCalculator() {
       securityDeposit: parseFloat(securityDeposit) || 0,
       upfrontRentalFees: parseFloat(upfrontRentalFees) || 0,
 
-      inflationRatePct: parseFloat(inflationRatePct) || 0,
       investmentReturnRatePct: parseFloat(investmentReturnRatePct) || 0,
+      marginalFederalTaxRate: parseFloat(marginalFederalTaxRate) || 0,
+      marginalStateTaxRate: parseFloat(marginalStateTaxRate) || 0,
       taxFilingStatus,
-      marginalTaxRatePct: parseFloat(marginalTaxRatePct) || 0,
-      itemizeDeductions,
       currencySymbol,
     });
   }, [
     homePrice,
     downPaymentPct,
-    loanTermYears,
     interestRate,
+    loanTermYears,
     buyingClosingCostsPct,
-    sellingClosingCostsPct,
-    propertyTaxAnnual,
+    propertyTaxPct,
     propertyTaxGrowthPct,
     homeInsuranceAnnual,
-    hoaDuesMonthly,
+    hoaFeeAnnual,
     maintenancePct,
     homeAppreciationPct,
+    costInsuranceIncreasePct,
+    sellingClosingCostsPct,
     monthlyRent,
     annualRentIncreasePct,
     renterInsuranceMonthly,
     securityDeposit,
     upfrontRentalFees,
-    inflationRatePct,
     investmentReturnRatePct,
+    marginalFederalTaxRate,
+    marginalStateTaxRate,
     taxFilingStatus,
-    marginalTaxRatePct,
-    itemizeDeductions,
     currencySymbol,
   ]);
 
   const handleSaveBox1 = () => {
     const newItem: SavedRentVsBuyItem = {
       id: Date.now().toString(),
-      title: "Core Rent vs. Buy Breakeven Engine",
-      inputsSummary: `Home: ${currencySymbol}${parseFloat(homePrice).toLocaleString()} vs Rent: ${currencySymbol}${parseFloat(monthlyRent).toLocaleString()}/mo (${downPaymentPct}% Down @ ${interestRate}%)`,
+      title: "Rent vs. Buy Calculation",
+      inputsSummary: `Home: ${currencySymbol}${parseFloat(homePrice).toLocaleString()} | Rent: ${currencySymbol}${parseFloat(monthlyRent).toLocaleString()}/mo`,
       primaryResult: rvbCalc.breakevenMessage,
       detailsList: [
         `Price-to-Rent Ratio: ${rvbCalc.priceToRentRatio}`,
-        `30-Yr Buying Cumulative Net Cost: ${currencySymbol}${rvbCalc.buyingCumulativeNetCost30Yr.toLocaleString()}`,
-        `30-Yr Renting Cumulative Net Cost: ${currencySymbol}${rvbCalc.rentingCumulativeNetCost30Yr.toLocaleString()}`,
-        `30-Yr Net Wealth Difference: ${currencySymbol}${rvbCalc.netWealthDifference30Yr.toLocaleString()}`,
+        `30-Yr Buying Cost: ${currencySymbol}${rvbCalc.buyingCumulativeNetCost30Yr.toLocaleString()}`,
+        `30-Yr Renting Cost: ${currencySymbol}${rvbCalc.rentingCumulativeNetCost30Yr.toLocaleString()}`,
       ],
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
@@ -128,32 +128,16 @@ export function RentVsBuyCalculator() {
   };
 
   const handleExportCSV = () => {
-    const data = rvbCalc.yearlySchedule;
+    const data = rvbCalc.averageCostTable;
     if (!data || data.length === 0) return;
 
-    const headers = [
-      "Year",
-      "Home Value",
-      "Remaining Mortgage",
-      "Home Equity",
-      "Buying Annual Outlay",
-      "Buying Net Cost (If Sold)",
-      "Renting Annual Outlay",
-      "Renting Net Cost",
-      "Renter Portfolio Value",
-      "Cheaper Option",
-    ];
+    const headers = ["Staying Length", "Average Buying Monthly", "Average Buying Annual", "Average Renting Monthly", "Average Renting Annual"];
     const rows = data.map((row) => [
-      `"Year ${row.year}"`,
-      `"${row.homeValue}"`,
-      `"${row.remainingMortgageBalance}"`,
-      `"${row.homeEquity}"`,
-      `"${row.buyingAnnualOutlay}"`,
-      `"${row.buyingCumulativeNetCost}"`,
-      `"${row.rentingAnnualOutlay}"`,
-      `"${row.rentingCumulativeNetCost}"`,
-      `"${row.renterPortfolioValue}"`,
-      `"${row.cheaperOption}"`,
+      `"${row.year} Year${row.year > 1 ? "s" : ""}"`,
+      `"${currencySymbol}${row.buyingMonthly}"`,
+      `"${currencySymbol}${row.buyingAnnual}"`,
+      `"${currencySymbol}${row.rentingMonthly}"`,
+      `"${currencySymbol}${row.rentingAnnual}"`,
     ]);
 
     const csvContent = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
@@ -161,74 +145,97 @@ export function RentVsBuyCalculator() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", `rent_vs_buy_30yr_proforma.csv`);
+    link.setAttribute("download", `rent_vs_buy_average_costs.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  // SVG Cumulative Cost & Wealth Crossing Timeline Graph
-  const svgTimelineChart = useMemo(() => {
-    const data = rvbCalc.yearlySchedule;
+  // High-Quality SVG Average Monthly Cost Chart (Buy vs Rent Lines & Area)
+  const svgAverageCostChart = useMemo(() => {
+    const data = rvbCalc.averageCostTable;
     if (!data || data.length === 0) return null;
 
-    const maxVal = Math.max(
-      ...data.map((d) => Math.max(d.buyingCumulativeNetCost, d.rentingCumulativeNetCost))
-    );
-    const minVal = Math.min(
-      ...data.map((d) => Math.min(d.buyingCumulativeNetCost, d.rentingCumulativeNetCost))
-    );
+    const maxVal = Math.max(...data.map((d) => Math.max(d.buyingMonthly, d.rentingMonthly)));
+    const minVal = Math.min(...data.map((d) => Math.min(d.buyingMonthly, d.rentingMonthly)));
     const range = maxVal - minVal || 1;
 
-    const pointsBuy = data
-      .map((d, i) => {
-        const x = (i / 29) * 300 + 30;
-        const y = 140 - ((d.buyingCumulativeNetCost - minVal) / range) * 110;
-        return `${x},${y}`;
-      })
-      .join(" ");
+    const pointsBuyArray = data.map((d, i) => {
+      const x = (i / 29) * 320 + 35;
+      const y = 135 - ((d.buyingMonthly - minVal) / range) * 105;
+      return { x, y };
+    });
 
-    const pointsRent = data
-      .map((d, i) => {
-        const x = (i / 29) * 300 + 30;
-        const y = 140 - ((d.rentingCumulativeNetCost - minVal) / range) * 110;
-        return `${x},${y}`;
-      })
-      .join(" ");
+    const pointsRentArray = data.map((d, i) => {
+      const x = (i / 29) * 320 + 35;
+      const y = 135 - ((d.rentingMonthly - minVal) / range) * 105;
+      return { x, y };
+    });
+
+    const pointsBuy = pointsBuyArray.map((p) => `${p.x},${p.y}`).join(" ");
+    const pointsRent = pointsRentArray.map((p) => `${p.x},${p.y}`).join(" ");
+
+    const areaBuy = `35,135 ${pointsBuy} 355,135`;
+    const areaRent = `35,135 ${pointsRent} 355,135`;
 
     return (
-      <div className="space-y-2">
-        <div className="flex items-center justify-between text-[11px] font-bold">
-          <span className="text-slate-600 dark:text-slate-400">Cumulative Net Cost Timeline ($)</span>
+      <div className="space-y-2 pt-1">
+        <div className="flex items-center justify-between text-xs font-bold px-1">
+          <span className="text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+            <TrendingUp className="w-4 h-4 text-blue-600" />
+            Average Monthly Cost Comparison ($/mo)
+          </span>
           <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1 text-blue-600"><span className="w-2.5 h-0.5 bg-blue-600 inline-block"></span> Buying</span>
-            <span className="flex items-center gap-1 text-emerald-600"><span className="w-2.5 h-0.5 bg-emerald-600 inline-block"></span> Renting</span>
+            <span className="flex items-center gap-1.5 text-blue-600 font-extrabold"><span className="w-3 h-1 bg-blue-600 rounded-full inline-block"></span> Buying</span>
+            <span className="flex items-center gap-1.5 text-emerald-600 font-extrabold"><span className="w-3 h-1 bg-emerald-600 rounded-full inline-block"></span> Renting</span>
           </div>
         </div>
-        <svg viewBox="0 0 360 160" className="w-full h-36 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-2">
+
+        <svg viewBox="0 0 380 165" className="w-full h-44 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-2 shadow-xs">
+          <defs>
+            <linearGradient id="buyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#2563eb" stopOpacity="0.25" />
+              <stop offset="100%" stopColor="#2563eb" stopOpacity="0.0" />
+            </linearGradient>
+            <linearGradient id="rentGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#10b981" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+            </linearGradient>
+          </defs>
+
           {/* Grid lines */}
-          <line x1="30" y1="30" x2="330" y2="30" stroke="#e2e8f0" strokeDasharray="2" />
-          <line x1="30" y1="85" x2="330" y2="85" stroke="#e2e8f0" strokeDasharray="2" />
-          <line x1="30" y1="140" x2="330" y2="140" stroke="#cbd5e1" />
+          <line x1="35" y1="30" x2="355" y2="30" stroke="#f1f5f9" strokeDasharray="3 3" />
+          <line x1="35" y1="65" x2="355" y2="65" stroke="#f1f5f9" strokeDasharray="3 3" />
+          <line x1="35" y1="100" x2="355" y2="100" stroke="#f1f5f9" strokeDasharray="3 3" />
+          <line x1="35" y1="135" x2="355" y2="135" stroke="#cbd5e1" />
 
-          {/* Polyline Buying */}
-          <polyline fill="none" stroke="#2563eb" strokeWidth="2.5" points={pointsBuy} />
-          {/* Polyline Renting */}
-          <polyline fill="none" stroke="#10b981" strokeWidth="2.5" points={pointsRent} />
+          {/* Y Axis Values */}
+          <text x="30" y="33" fontSize="8" fill="#94a3b8" textAnchor="end" fontFamily="sans-serif font-bold">{currencySymbol}{Math.round(maxVal / 1000)}k</text>
+          <text x="30" y="138" fontSize="8" fill="#94a3b8" textAnchor="end" fontFamily="sans-serif font-bold">{currencySymbol}{Math.round(minVal / 1000)}k</text>
 
-          {/* X Axis Labels */}
-          <text x="30" y="155" fontSize="8" fill="#94a3b8" textAnchor="middle">Yr 1</text>
-          <text x="105" y="155" fontSize="8" fill="#94a3b8" textAnchor="middle">Yr 8</text>
-          <text x="180" y="155" fontSize="8" fill="#94a3b8" textAnchor="middle">Yr 15</text>
-          <text x="255" y="155" fontSize="8" fill="#94a3b8" textAnchor="middle">Yr 23</text>
-          <text x="330" y="155" fontSize="8" fill="#94a3b8" textAnchor="middle">Yr 30</text>
+          {/* Gradient Areas */}
+          <polygon fill="url(#buyGrad)" points={areaBuy} />
+          <polygon fill="url(#rentGrad)" points={areaRent} />
+
+          {/* Polylines */}
+          <polyline fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" points={pointsBuy} />
+          <polyline fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" points={pointsRent} />
+
+          {/* X Axis Year Labels */}
+          <text x="35" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Yr 1</text>
+          <text x="90" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Yr 5</text>
+          <text x="145" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Yr 10</text>
+          <text x="200" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Yr 15</text>
+          <text x="255" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Yr 20</text>
+          <text x="310" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Yr 25</text>
+          <text x="355" y="152" fontSize="8" fill="#64748b" textAnchor="middle" fontWeight="bold">Yr 30</text>
         </svg>
       </div>
     );
-  }, [rvbCalc]);
+  }, [rvbCalc, currencySymbol]);
 
   // =========================================================================
-  // BOX 2: NET WORTH & INVESTMENT CAPITAL GROWTH COMPARATOR STATES
+  // OTHER 5 SIMPLE BOXES
   // =========================================================================
   const [savedBox2Items, setSavedBox2Items] = useState<SavedRentVsBuyItem[]>([]);
   const [justSavedBox2, setJustSavedBox2] = useState<boolean>(false);
@@ -239,7 +246,7 @@ export function RentVsBuyCalculator() {
       homePrice: parseFloat(homePrice) || 500000,
       downPaymentAmount: (parseFloat(homePrice) * parseFloat(downPaymentPct)) / 100,
       appreciationRate: parseFloat(homeAppreciationPct) || 3.0,
-      investmentReturnRate: parseFloat(investmentReturnRatePct) || 7.0,
+      investmentReturnRate: parseFloat(investmentReturnRatePct) || 5.0,
       years: 10,
     });
   }, [homePrice, downPaymentPct, homeAppreciationPct, investmentReturnRatePct]);
@@ -247,13 +254,12 @@ export function RentVsBuyCalculator() {
   const handleSaveBox2 = () => {
     const newItem: SavedRentVsBuyItem = {
       id: Date.now().toString(),
-      title: "Net Worth & Investment Capital Growth Comparator",
-      inputsSummary: `Home: ${currencySymbol}${parseFloat(homePrice).toLocaleString()} | Down: ${downPaymentPct}% | Appreciation: ${homeAppreciationPct}% vs Stock Return: ${investmentReturnRatePct}% (10 Yrs)`,
-      primaryResult: `10-Yr Winner: ${netWorthCalc.netWorthAdvantage}`,
+      title: "Net Worth Comparison",
+      inputsSummary: `Home: ${currencySymbol}${parseFloat(homePrice).toLocaleString()} | Appreciation: ${homeAppreciationPct}% vs Stock: ${investmentReturnRatePct}%`,
+      primaryResult: `Advantage: ${netWorthCalc.netWorthAdvantage}`,
       detailsList: [
-        `Projected Home Equity: ${currencySymbol}${netWorthCalc.projectedHomeEquity.toLocaleString()}`,
-        `Renter Stock Portfolio Value: ${currencySymbol}${netWorthCalc.renterStockPortfolioValue.toLocaleString()}`,
-        `Net Wealth Delta: ${currencySymbol}${netWorthCalc.netWorthDelta.toLocaleString()}`,
+        `Home Equity: ${currencySymbol}${netWorthCalc.projectedHomeEquity.toLocaleString()}`,
+        `Stock Portfolio: ${currencySymbol}${netWorthCalc.renterStockPortfolioValue.toLocaleString()}`,
       ],
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
@@ -266,9 +272,6 @@ export function RentVsBuyCalculator() {
     setTimeout(() => setJustSavedBox2(false), 2000);
   };
 
-  // =========================================================================
-  // BOX 3: PRICE-TO-RENT RATIO BENCHMARKING STATES
-  // =========================================================================
   const [savedBox3Items, setSavedBox3Items] = useState<SavedRentVsBuyItem[]>([]);
   const [justSavedBox3, setJustSavedBox3] = useState<boolean>(false);
   const [showHistoryBox3, setShowHistoryBox3] = useState<boolean>(false);
@@ -283,9 +286,9 @@ export function RentVsBuyCalculator() {
   const handleSaveBox3 = () => {
     const newItem: SavedRentVsBuyItem = {
       id: Date.now().toString(),
-      title: "Price-to-Rent Ratio City & Regional Benchmarking",
+      title: "Price-to-Rent Ratio",
       inputsSummary: `Home: ${currencySymbol}${parseFloat(homePrice).toLocaleString()} | Rent: ${currencySymbol}${parseFloat(monthlyRent).toLocaleString()}/mo`,
-      primaryResult: `Price-to-Rent Ratio: ${ptrCalc.ratio} (${ptrCalc.category})`,
+      primaryResult: `Ratio: ${ptrCalc.ratio} (${ptrCalc.category})`,
       detailsList: [ptrCalc.explanation],
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
@@ -298,9 +301,6 @@ export function RentVsBuyCalculator() {
     setTimeout(() => setJustSavedBox3(false), 2000);
   };
 
-  // =========================================================================
-  // BOX 4: ITEMIZED TAX BENEFIT & SALT CAP SIMULATOR STATES
-  // =========================================================================
   const [savedBox4Items, setSavedBox4Items] = useState<SavedRentVsBuyItem[]>([]);
   const [justSavedBox4, setJustSavedBox4] = useState<boolean>(false);
   const [showHistoryBox4, setShowHistoryBox4] = useState<boolean>(false);
@@ -311,24 +311,20 @@ export function RentVsBuyCalculator() {
       homePrice: parseFloat(homePrice) || 500000,
       mortgageBalance: mortgageBal,
       interestRate: parseFloat(interestRate) || 6.632,
-      propertyTaxAnnual: parseFloat(propertyTaxAnnual) || 7500,
+      propertyTaxAnnual: (parseFloat(homePrice) * parseFloat(propertyTaxPct)) / 100 || 7500,
       filingStatus: taxFilingStatus,
-      marginalTaxRatePct: parseFloat(marginalTaxRatePct) || 25.0,
+      marginalFederalTaxRate: parseFloat(marginalFederalTaxRate) || 25.0,
+      marginalStateTaxRate: parseFloat(marginalStateTaxRate) || 0.0,
     });
-  }, [homePrice, downPaymentPct, interestRate, propertyTaxAnnual, taxFilingStatus, marginalTaxRatePct]);
+  }, [homePrice, downPaymentPct, interestRate, propertyTaxPct, taxFilingStatus, marginalFederalTaxRate, marginalStateTaxRate]);
 
   const handleSaveBox4 = () => {
     const newItem: SavedRentVsBuyItem = {
       id: Date.now().toString(),
-      title: "Itemized Tax Benefit & SALT Cap Simulator (TCJA Impact)",
-      inputsSummary: `Filing: ${taxFilingStatus} | Bracket: ${marginalTaxRatePct}% | Prop Tax: ${currencySymbol}${parseFloat(propertyTaxAnnual).toLocaleString()}`,
-      primaryResult: `Annual Tax Shield Savings: ${currencySymbol}${taxCalc.annualTaxSavings.toLocaleString()}/yr`,
-      detailsList: [
-        `Annual Mortgage Interest: ${currencySymbol}${taxCalc.annualMortgageInterest.toLocaleString()}`,
-        `Capped Property Tax (SALT $10k Cap): ${currencySymbol}${taxCalc.cappedPropertyTax.toLocaleString()}`,
-        `Total Itemized Deductions: ${currencySymbol}${taxCalc.totalItemizedDeductions.toLocaleString()} vs Standard: ${currencySymbol}${taxCalc.standardDeduction.toLocaleString()}`,
-        taxCalc.explanation,
-      ],
+      title: "Tax Benefit Analysis",
+      inputsSummary: `Filing Status: ${taxFilingStatus} | Federal Tax: ${marginalFederalTaxRate}% | State Tax: ${marginalStateTaxRate}%`,
+      primaryResult: `Annual Tax Savings: ${currencySymbol}${taxCalc.annualTaxSavings.toLocaleString()}/yr`,
+      detailsList: [taxCalc.explanation],
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
     const updated = [newItem, ...savedBox4Items];
@@ -340,9 +336,6 @@ export function RentVsBuyCalculator() {
     setTimeout(() => setJustSavedBox4(false), 2000);
   };
 
-  // =========================================================================
-  // BOX 5: BEN FELIX 5% RULE & UNRECOVERABLE COST CALCULATOR STATES
-  // =========================================================================
   const [savedBox5Items, setSavedBox5Items] = useState<SavedRentVsBuyItem[]>([]);
   const [justSavedBox5, setJustSavedBox5] = useState<boolean>(false);
   const [showHistoryBox5, setShowHistoryBox5] = useState<boolean>(false);
@@ -350,23 +343,19 @@ export function RentVsBuyCalculator() {
   const benCalc = useMemo(() => {
     return calculateBenFelix({
       homePrice: parseFloat(homePrice) || 500000,
-      interestRate: parseFloat(interestRate) || 6.5,
-      propertyTaxPct: (parseFloat(propertyTaxAnnual) / (parseFloat(homePrice) || 500000)) * 100 || 1.5,
-      maintenancePct: parseFloat(maintenancePct) || 1.0,
+      interestRate: parseFloat(interestRate) || 6.632,
+      propertyTaxPct: parseFloat(propertyTaxPct) || 1.5,
+      maintenancePct: parseFloat(maintenancePct) || 1.5,
     });
-  }, [homePrice, interestRate, propertyTaxAnnual, maintenancePct]);
+  }, [homePrice, interestRate, propertyTaxPct, maintenancePct]);
 
   const handleSaveBox5 = () => {
     const newItem: SavedRentVsBuyItem = {
       id: Date.now().toString(),
-      title: "Ben Felix 5% Rule & Unrecoverable Housing Cost Calculator",
+      title: "5% Unrecoverable Cost Rule",
       inputsSummary: `Home: ${currencySymbol}${parseFloat(homePrice).toLocaleString()} | Rate: ${interestRate}%`,
       primaryResult: `Unrecoverable Owning Cost: ${currencySymbol}${benCalc.monthlyUnrecoverableCost.toLocaleString()}/mo`,
-      detailsList: [
-        `Annual Unrecoverable Cost: ${currencySymbol}${benCalc.annualUnrecoverableCost.toLocaleString()}/yr`,
-        `Max Advantageous Monthly Rent: ${currencySymbol}${benCalc.maxAdvantageousMonthlyRent.toLocaleString()}/mo`,
-        benCalc.explanation,
-      ],
+      detailsList: [benCalc.explanation],
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
     const updated = [newItem, ...savedBox5Items];
@@ -378,11 +367,7 @@ export function RentVsBuyCalculator() {
     setTimeout(() => setJustSavedBox5(false), 2000);
   };
 
-  // =========================================================================
-  // BOX 6: MOBILITY & RELOCATION PENALTY CALCULATOR STATES
-  // =========================================================================
   const [plannedStayYears, setPlannedStayYears] = useState<string>("3");
-
   const [savedBox6Items, setSavedBox6Items] = useState<SavedRentVsBuyItem[]>([]);
   const [justSavedBox6, setJustSavedBox6] = useState<boolean>(false);
   const [showHistoryBox6, setShowHistoryBox6] = useState<boolean>(false);
@@ -399,12 +384,12 @@ export function RentVsBuyCalculator() {
   const handleSaveBox6 = () => {
     const newItem: SavedRentVsBuyItem = {
       id: Date.now().toString(),
-      title: "Mobility & Relocation Penalty Calculator",
-      inputsSummary: `Home: ${currencySymbol}${parseFloat(homePrice).toLocaleString()} | Stay: ${plannedStayYears} Years | Closing: ${buyingClosingCostsPct}% Buy / ${sellingClosingCostsPct}% Sell`,
+      title: "Short-Term Stay Relocation Cost",
+      inputsSummary: `Home: ${currencySymbol}${parseFloat(homePrice).toLocaleString()} | Planned Stay: ${plannedStayYears} Years`,
       primaryResult: reloCalc.recommendation,
       detailsList: [
-        `Total Friction Transaction Fees: ${currencySymbol}${reloCalc.totalFrictionCosts.toLocaleString()}`,
-        `Monthly Amortized Relocation Drag: ${currencySymbol}${reloCalc.monthlyAmortizedDrag.toLocaleString()}/mo`,
+        `Total Closing Fees: ${currencySymbol}${reloCalc.totalFrictionCosts.toLocaleString()}`,
+        `Monthly Drag: ${currencySymbol}${reloCalc.monthlyAmortizedDrag.toLocaleString()}/mo`,
       ],
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     };
@@ -417,7 +402,6 @@ export function RentVsBuyCalculator() {
     setTimeout(() => setJustSavedBox6(false), 2000);
   };
 
-  // Load local storage
   useEffect(() => {
     try {
       const b1 = localStorage.getItem("saved_rvb_box1");
@@ -437,7 +421,7 @@ export function RentVsBuyCalculator() {
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto font-sans">
-      {/* Simple Currency Selector Header */}
+      {/* Currency Selector Header */}
       <div className="flex items-center justify-end gap-2 text-xs font-bold">
         <label htmlFor="rvb-currency-select" className="text-slate-500 font-medium">Currency:</label>
         <select
@@ -456,11 +440,11 @@ export function RentVsBuyCalculator() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 1. CORE RENT VS BUY BREAKEVEN ENGINE */}
+      {/* 1. RENT VS BUY CALCULATOR (EXACT COMPETITOR PARITY) */}
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">Comprehensive Rent vs. Buy Breakeven Engine</span>
+          <span className="font-extrabold text-sm">Rent vs. Buy Calculator</span>
           <button
             type="button"
             onClick={handleSaveBox1}
@@ -473,157 +457,204 @@ export function RentVsBuyCalculator() {
 
         <div className="p-5 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            <div className="lg:col-span-7 space-y-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs text-xs">
-              <span className="font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">Home Purchase & Financing Assumptions</span>
+            {/* Input Section - 3 Simple Columns like Competitor */}
+            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs text-xs">
+              {/* Column 1: Home Purchase */}
+              <div className="space-y-3">
+                <span className="font-extrabold text-blue-600 dark:text-blue-400 block border-b border-slate-200 dark:border-slate-800 pb-1">Home Purchase</span>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Target Home Price</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Home price</label>
                   <input type="number" value={homePrice} onChange={(e) => setHomePrice(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Down Payment %</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Down payment %</label>
                   <input type="number" value={downPaymentPct} onChange={(e) => setDownPaymentPct(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Interest Rate %</label>
-                  <input type="number" step="0.01" value={interestRate} onChange={(e) => setInterestRate(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Property Tax ($/yr)</label>
-                  <input type="number" value={propertyTaxAnnual} onChange={(e) => setPropertyTaxAnnual(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Interest rate %</label>
+                  <input type="number" step="0.001" value={interestRate} onChange={(e) => setInterestRate(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Insurance ($/yr)</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Loan term (years)</label>
+                  <input type="number" value={loanTermYears} onChange={(e) => setLoanTermYears(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Buying closing costs %</label>
+                  <input type="number" step="0.1" value={buyingClosingCostsPct} onChange={(e) => setBuyingClosingCostsPct(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Property tax % / year</label>
+                  <input type="number" step="0.1" value={propertyTaxPct} onChange={(e) => setPropertyTaxPct(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Property tax increase % / year</label>
+                  <input type="number" step="0.1" value={propertyTaxGrowthPct} onChange={(e) => setPropertyTaxGrowthPct(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Home insurance $ / year</label>
                   <input type="number" value={homeInsuranceAnnual} onChange={(e) => setHomeInsuranceAnnual(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Maintenance %</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">HOA fee $ / year</label>
+                  <input type="number" value={hoaFeeAnnual} onChange={(e) => setHoaFeeAnnual(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Maintenance cost % / year</label>
                   <input type="number" step="0.1" value={maintenancePct} onChange={(e) => setMaintenancePct(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Appreciation %</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Home value appreciation % / year</label>
                   <input type="number" step="0.1" value={homeAppreciationPct} onChange={(e) => setHomeAppreciationPct(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Cost/insurance increase % / year</label>
+                  <input type="number" step="0.1" value={costInsuranceIncreasePct} onChange={(e) => setCostInsuranceIncreasePct(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Selling closing costs %</label>
+                  <input type="number" step="0.1" value={sellingClosingCostsPct} onChange={(e) => setSellingClosingCostsPct(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
               </div>
 
-              <span className="font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block pt-2 border-t border-slate-200 dark:border-slate-800">Rental & Opportunity Cost Assumptions</span>
+              {/* Column 2: Home Rent */}
+              <div className="space-y-3">
+                <span className="font-extrabold text-emerald-600 dark:text-emerald-400 block border-b border-slate-200 dark:border-slate-800 pb-1">Home Rent</span>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Comparable Rent</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Monthly rental fee</label>
                   <input type="number" value={monthlyRent} onChange={(e) => setMonthlyRent(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Rent Inflation %</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Rental fee increase % / year</label>
                   <input type="number" step="0.1" value={annualRentIncreasePct} onChange={(e) => setAnnualRentIncreasePct(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Stock Return %</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Renter's insurance $ / month</label>
+                  <input type="number" value={renterInsuranceMonthly} onChange={(e) => setRenterInsuranceMonthly(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Security deposit</label>
+                  <input type="number" value={securityDeposit} onChange={(e) => setSecurityDeposit(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Upfront cost</label>
+                  <input type="number" value={upfrontRentalFees} onChange={(e) => setUpfrontRentalFees(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+              </div>
+
+              {/* Column 3: Your Information */}
+              <div className="space-y-3">
+                <span className="font-extrabold text-amber-600 dark:text-amber-400 block border-b border-slate-200 dark:border-slate-800 pb-1">Your Information</span>
+
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Average investment return %</label>
                   <input type="number" step="0.1" value={investmentReturnRatePct} onChange={(e) => setInvestmentReturnRatePct(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Filing Status</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Marginal federal tax rate %</label>
+                  <input type="number" step="0.1" value={marginalFederalTaxRate} onChange={(e) => setMarginalFederalTaxRate(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Marginal state tax rate %</label>
+                  <input type="number" step="0.1" value={marginalStateTaxRate} onChange={(e) => setMarginalStateTaxRate(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Tax filing status</label>
                   <select value={taxFilingStatus} onChange={(e) => setTaxFilingStatus(e.target.value as any)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold">
+                    <option value="married_joint">Married filing jointly</option>
                     <option value="single">Single</option>
-                    <option value="married_joint">Married Joint</option>
+                    <option value="married_separate">Married filing separately</option>
+                    <option value="head_of_household">Head of household</option>
                   </select>
                 </div>
               </div>
             </div>
 
-            {/* Simple Result Card */}
-            <div className="lg:col-span-5 space-y-4">
-              <div className="bg-blue-50/60 dark:bg-slate-900/80 border border-blue-200 dark:border-blue-900/50 rounded-2xl p-5 shadow-xs space-y-4 text-center">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">
-                  Breakeven Decision Result
-                </span>
-
-                <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-blue-200 dark:border-blue-900/50 text-xs font-extrabold text-blue-600 dark:text-blue-400">
-                  {rvbCalc.breakevenMessage}
+            {/* Elevated Hero Result Output Box */}
+            <div className="lg:col-span-4 space-y-4">
+              <div className="bg-gradient-to-br from-blue-50/90 to-indigo-50/70 dark:from-slate-900 dark:to-blue-950/40 border border-blue-200 dark:border-blue-900/60 rounded-2xl p-5 shadow-xs space-y-4">
+                <div className="flex items-center justify-between border-b border-blue-200/60 dark:border-blue-900/40 pb-2">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400 flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-blue-600" />
+                    Decision Result
+                  </span>
+                  <span className="px-2 py-0.5 rounded-md bg-blue-600 text-white text-[10px] font-extrabold">
+                    Ratio: {rvbCalc.priceToRentRatio}
+                  </span>
                 </div>
 
+                <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-blue-200 dark:border-blue-900/60 shadow-xs space-y-1">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Recommended Stay Horizon</span>
+                  <div className="text-sm font-extrabold text-slate-900 dark:text-slate-100 leading-snug">
+                    {rvbCalc.breakevenMessage}
+                  </div>
+                </div>
+
+                {/* 3 Key Stats */}
                 <div className="grid grid-cols-2 gap-2 text-center text-xs font-bold">
-                  <div className="p-2.5 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 block uppercase">30-Yr Buying Cost</span>
-                    <span className="text-blue-600 text-sm font-extrabold">{currencySymbol}{rvbCalc.buyingCumulativeNetCost30Yr.toLocaleString()}</span>
+                  <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-0.5">
+                    <span className="text-[10px] text-slate-400 block uppercase font-sans">30-Yr Buy Cost</span>
+                    <span className="text-blue-600 text-sm font-extrabold tabular-nums">{currencySymbol}{rvbCalc.buyingCumulativeNetCost30Yr.toLocaleString()}</span>
                   </div>
-                  <div className="p-2.5 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 block uppercase">30-Yr Renting Cost</span>
-                    <span className="text-emerald-600 text-sm font-extrabold">{currencySymbol}{rvbCalc.rentingCumulativeNetCost30Yr.toLocaleString()}</span>
+                  <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-0.5">
+                    <span className="text-[10px] text-slate-400 block uppercase font-sans">30-Yr Rent Cost</span>
+                    <span className="text-emerald-600 text-sm font-extrabold tabular-nums">{currencySymbol}{rvbCalc.rentingCumulativeNetCost30Yr.toLocaleString()}</span>
                   </div>
                 </div>
 
-                <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-900/60 text-xs font-bold text-emerald-700 dark:text-emerald-400">
-                  Price-to-Rent Ratio: <span className="text-blue-600">{rvbCalc.priceToRentRatio}</span> (30-Yr Net Wealth Difference: {currencySymbol}{rvbCalc.netWealthDifference30Yr.toLocaleString()})
-                </div>
-
-                <div className="pt-2">
-                  {svgTimelineChart}
+                <div className="pt-1">
+                  {svgAverageCostChart}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Derivation Box */}
-          <div className="p-4 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl text-xs space-y-2 font-mono">
-            <span className="font-bold text-blue-600 dark:text-blue-400 block font-sans">Underwriting & Housing Opportunity Formulas:</span>
-            <div className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1 text-slate-700 dark:text-slate-300">
-              <div>{"Price-to-Rent Ratio = Home Price (" + currencySymbol + parseFloat(homePrice).toLocaleString() + ") / Annual Rent (" + currencySymbol + (parseFloat(monthlyRent) * 12).toLocaleString() + ") = " + rvbCalc.priceToRentRatio}</div>
-              <div>{"Ben Felix 5% Unrecoverable Owning Cost = Home Price × (" + interestRate + "% + " + ((parseFloat(propertyTaxAnnual) / parseFloat(homePrice)) * 100).toFixed(1) + "% tax + " + maintenancePct + "% maint) = " + currencySymbol + Math.round(parseFloat(homePrice) * (parseFloat(interestRate) + 1.5 + parseFloat(maintenancePct)) / 100 / 12).toLocaleString() + "/mo"}</div>
-              <div>{"Initial Capital Invested by Renter = Down Payment + Buying Closing Costs = " + currencySymbol + rvbCalc.initialBuyingOutlay.toLocaleString()}</div>
-            </div>
-          </div>
-
-          {/* Interactive Pro-Forma Comparison Table */}
+          {/* Calculator.net Average Cost Table */}
           <div className="space-y-3 pt-2">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="font-extrabold text-xs text-slate-800 dark:text-slate-200">
-                30-Year Pro-Forma Buying vs. Renting Comparison
+                The following is the average cost based on the length you stay for the next 30 years.
               </span>
               <button
                 type="button"
                 onClick={handleExportCSV}
                 className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
-                title="Export 30-Year Comparison to CSV"
+                title="Export Average Costs to CSV"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Export CSV</span>
               </button>
             </div>
 
-            <div className="overflow-x-auto max-h-64 rounded-xl border border-slate-200 dark:border-slate-800">
-              <table className="w-full text-xs text-left border-collapse font-mono">
+            <div className="overflow-x-auto max-h-72 rounded-xl border border-slate-200 dark:border-slate-800">
+              <table className="w-full text-xs text-center border-collapse font-mono">
                 <thead className="sticky top-0 bg-blue-600 text-white font-bold font-sans">
                   <tr>
-                    <th className="p-2.5">Year</th>
-                    <th className="p-2.5">Home Value</th>
-                    <th className="p-2.5">Home Equity</th>
-                    <th className="p-2.5">Buying Net Cost (If Sold)</th>
-                    <th className="p-2.5">Renting Net Cost</th>
-                    <th className="p-2.5">Renter Portfolio Value</th>
-                    <th className="p-2.5">Cheaper Option</th>
+                    <th className="p-2.5 border-r border-blue-500" rowSpan={2}>Staying Length</th>
+                    <th className="p-2 border-b border-blue-500" colSpan={2}>Average Buying Cost</th>
+                    <th className="p-2 border-b border-blue-500" colSpan={2}>Average Renting Cost</th>
+                  </tr>
+                  <tr>
+                    <th className="p-2 border-r border-blue-500">Monthly</th>
+                    <th className="p-2 border-r border-blue-500">Annual</th>
+                    <th className="p-2 border-r border-blue-500">Monthly</th>
+                    <th className="p-2">Annual</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
-                  {rvbCalc.yearlySchedule.map((row) => (
-                    <tr key={row.year} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                      <td className="p-2.5 font-bold font-sans text-blue-600">Year {row.year}</td>
-                      <td className="p-2.5">{currencySymbol}{row.homeValue.toLocaleString()}</td>
-                      <td className="p-2.5 text-emerald-600 font-bold">{currencySymbol}{row.homeEquity.toLocaleString()}</td>
-                      <td className="p-2.5 font-bold text-blue-600">{currencySymbol}{row.buyingCumulativeNetCost.toLocaleString()}</td>
-                      <td className="p-2.5 font-bold text-slate-800 dark:text-slate-200">{currencySymbol}{row.rentingCumulativeNetCost.toLocaleString()}</td>
-                      <td className="p-2.5 text-amber-500">{currencySymbol}{row.renterPortfolioValue.toLocaleString()}</td>
-                      <td className="p-2.5 font-bold font-sans">
-                        <span className={`px-2 py-0.5 rounded text-[10px] ${row.cheaperOption === "Buy" ? "bg-blue-100 text-blue-700" : "bg-emerald-100 text-emerald-700"}`}>
-                          {row.cheaperOption}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                  {rvbCalc.averageCostTable.map((row) => {
+                    const isBreakevenRow = row.year === rvbCalc.breakevenYears;
+                    return (
+                      <tr key={row.year} className={`hover:bg-slate-50 dark:hover:bg-slate-800/50 ${isBreakevenRow ? "bg-blue-50/80 dark:bg-blue-950/40 font-bold border-l-4 border-l-blue-600" : ""}`}>
+                        <td className="p-2 font-bold font-sans text-blue-600 border-r border-slate-200 dark:border-slate-800">{row.year} Year{row.year > 1 ? "s" : ""}</td>
+                        <td className="p-2 border-r border-slate-200 dark:border-slate-800 font-bold text-blue-700 dark:text-blue-400">{currencySymbol}{row.buyingMonthly.toLocaleString()}</td>
+                        <td className="p-2 border-r border-slate-200 dark:border-slate-800">{currencySymbol}{row.buyingAnnual.toLocaleString()}</td>
+                        <td className="p-2 border-r border-slate-200 dark:border-slate-800 font-bold text-emerald-700 dark:text-emerald-400">{currencySymbol}{row.rentingMonthly.toLocaleString()}</td>
+                        <td className="p-2">{currencySymbol}{row.rentingAnnual.toLocaleString()}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -673,11 +704,11 @@ export function RentVsBuyCalculator() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 2. NET WORTH & INVESTMENT CAPITAL GROWTH COMPARATOR */}
+      {/* 2. NET WORTH COMPARISON */}
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">Net Worth & Investment Capital Growth Comparator (10-Year Horizon)</span>
+          <span className="font-extrabold text-sm">Net Worth Comparison</span>
           <button
             type="button"
             onClick={handleSaveBox2}
@@ -693,19 +724,18 @@ export function RentVsBuyCalculator() {
             <div className="lg:col-span-6 space-y-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Home Appreciation %</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Home appreciation %</label>
                   <input type="number" step="0.1" value={homeAppreciationPct} onChange={(e) => setHomeAppreciationPct(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Stock Market Return %</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Average investment return %</label>
                   <input type="number" step="0.1" value={investmentReturnRatePct} onChange={(e) => setInvestmentReturnRatePct(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
               </div>
             </div>
 
-            {/* Simple Result Card */}
-            <div className="lg:col-span-6 space-y-3 bg-blue-50/60 dark:bg-slate-900/80 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">10-Year Asset Wealth Comparison</span>
+            <div className="lg:col-span-6 space-y-3 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-blue-950/40 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/60 text-center">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">10-Year Result</span>
 
               <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums mt-1">
                 Advantage: {netWorthCalc.netWorthAdvantage}
@@ -724,7 +754,6 @@ export function RentVsBuyCalculator() {
             </div>
           </div>
 
-          {/* History Drawer for Box 2 */}
           {savedBox2Items.length > 0 && (
             <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
               <button
@@ -768,11 +797,11 @@ export function RentVsBuyCalculator() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 3. PRICE-TO-RENT RATIO BENCHMARKING */}
+      {/* 3. PRICE-TO-RENT RATIO */}
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">Price-to-Rent Ratio City & Regional Benchmarking</span>
+          <span className="font-extrabold text-sm">Price-to-Rent Ratio</span>
           <button
             type="button"
             onClick={handleSaveBox3}
@@ -788,19 +817,18 @@ export function RentVsBuyCalculator() {
             <div className="lg:col-span-6 space-y-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Target Home Price</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Home price</label>
                   <input type="number" value={homePrice} onChange={(e) => setHomePrice(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Monthly Target Rent</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Monthly rental fee</label>
                   <input type="number" value={monthlyRent} onChange={(e) => setMonthlyRent(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
               </div>
             </div>
 
-            {/* Simple Result Card */}
-            <div className="lg:col-span-6 space-y-3 bg-blue-50/60 dark:bg-slate-900/80 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">Market Evaluation</span>
+            <div className="lg:col-span-6 space-y-3 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-blue-950/40 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/60 text-center">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">Market Benchmark</span>
 
               <div className="text-3xl font-extrabold font-sans tabular-nums mt-1 text-blue-600">
                 Price-to-Rent Ratio: {ptrCalc.ratio}
@@ -816,7 +844,6 @@ export function RentVsBuyCalculator() {
             </div>
           </div>
 
-          {/* History Drawer for Box 3 */}
           {savedBox3Items.length > 0 && (
             <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
               <button
@@ -860,11 +887,11 @@ export function RentVsBuyCalculator() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 4. ITEMIZED TAX BENEFIT & SALT CAP SIMULATOR */}
+      {/* 4. TAX BENEFIT ANALYSIS */}
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">Itemized Tax Benefit & SALT Cap Simulator (TCJA Impact)</span>
+          <span className="font-extrabold text-sm">Tax Benefit Analysis</span>
           <button
             type="button"
             onClick={handleSaveBox4}
@@ -880,22 +907,18 @@ export function RentVsBuyCalculator() {
             <div className="lg:col-span-6 space-y-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Marginal Tax Rate %</label>
-                  <input type="number" step="0.1" value={marginalTaxRatePct} onChange={(e) => setMarginalTaxRatePct(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Marginal federal tax rate %</label>
+                  <input type="number" step="0.1" value={marginalFederalTaxRate} onChange={(e) => setMarginalFederalTaxRate(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Filing Status</label>
-                  <select value={taxFilingStatus} onChange={(e) => setTaxFilingStatus(e.target.value as any)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold">
-                    <option value="single">Single ($15k Std Ded)</option>
-                    <option value="married_joint">Married Joint ($30k Std Ded)</option>
-                  </select>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Marginal state tax rate %</label>
+                  <input type="number" step="0.1" value={marginalStateTaxRate} onChange={(e) => setMarginalStateTaxRate(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
               </div>
             </div>
 
-            {/* Simple Result Card */}
-            <div className="lg:col-span-6 space-y-3 bg-blue-50/60 dark:bg-slate-900/80 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">Annual Tax Savings Result</span>
+            <div className="lg:col-span-6 space-y-3 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-blue-950/40 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/60 text-center">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">Annual Tax Savings</span>
 
               <div className="text-3xl font-extrabold text-emerald-600 font-sans tabular-nums mt-1">
                 Save {currencySymbol}{taxCalc.annualTaxSavings.toLocaleString()} / year
@@ -907,7 +930,6 @@ export function RentVsBuyCalculator() {
             </div>
           </div>
 
-          {/* History Drawer for Box 4 */}
           {savedBox4Items.length > 0 && (
             <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
               <button
@@ -951,11 +973,11 @@ export function RentVsBuyCalculator() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 5. BEN FELIX 5% RULE & UNRECOVERABLE COST CALCULATOR */}
+      {/* 5. 5% UNRECOVERABLE COST RULE */}
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">Ben Felix 5% Rule & Unrecoverable Housing Cost Calculator</span>
+          <span className="font-extrabold text-sm">5% Unrecoverable Cost Rule</span>
           <button
             type="button"
             onClick={handleSaveBox5}
@@ -971,19 +993,18 @@ export function RentVsBuyCalculator() {
             <div className="lg:col-span-6 space-y-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Mortgage Rate %</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Interest rate %</label>
                   <input type="number" step="0.1" value={interestRate} onChange={(e) => setInterestRate(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Maintenance %</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Maintenance cost % / year</label>
                   <input type="number" step="0.1" value={maintenancePct} onChange={(e) => setMaintenancePct(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
               </div>
             </div>
 
-            {/* Simple Result Card */}
-            <div className="lg:col-span-6 space-y-3 bg-blue-50/60 dark:bg-slate-900/80 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">5% Rule Benchmark Result</span>
+            <div className="lg:col-span-6 space-y-3 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-blue-950/40 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/60 text-center">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">5% Rule Benchmark</span>
 
               <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums mt-1">
                 Unrecoverable Owning Cost: {currencySymbol}{benCalc.monthlyUnrecoverableCost.toLocaleString()}/mo
@@ -995,7 +1016,6 @@ export function RentVsBuyCalculator() {
             </div>
           </div>
 
-          {/* History Drawer for Box 5 */}
           {savedBox5Items.length > 0 && (
             <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
               <button
@@ -1039,11 +1059,11 @@ export function RentVsBuyCalculator() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 6. MOBILITY & RELOCATION PENALTY CALCULATOR */}
+      {/* 6. SHORT-TERM STAY RELOCATION COST */}
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">Mobility & Relocation Penalty Calculator</span>
+          <span className="font-extrabold text-sm">Short-Term Stay Relocation Cost</span>
           <button
             type="button"
             onClick={handleSaveBox6}
@@ -1059,41 +1079,35 @@ export function RentVsBuyCalculator() {
             <div className="lg:col-span-6 space-y-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Planned Stay Horizon (Yrs)</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Planned stay (years)</label>
                   <select value={plannedStayYears} onChange={(e) => setPlannedStayYears(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold">
-                    <option value="2">2 Years (Very Short)</option>
-                    <option value="3">3 Years (Short)</option>
-                    <option value="5">5 Years (Standard)</option>
-                    <option value="7">7 Years (Medium)</option>
-                    <option value="10">10 Years (Long)</option>
+                    <option value="2">2 Years</option>
+                    <option value="3">3 Years</option>
+                    <option value="5">5 Years</option>
+                    <option value="7">7 Years</option>
+                    <option value="10">10 Years</option>
                   </select>
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Selling Costs %</label>
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Selling closing costs %</label>
                   <input type="number" step="0.1" value={sellingClosingCostsPct} onChange={(e) => setSellingClosingCostsPct(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
                 </div>
               </div>
             </div>
 
-            {/* Simple Result Card */}
-            <div className="lg:col-span-6 space-y-3 bg-blue-50/60 dark:bg-slate-900/80 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">Transaction Relocation Friction</span>
+            <div className="lg:col-span-6 space-y-3 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-blue-950/40 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/60 text-center">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">Transaction Drag</span>
 
               <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums mt-1">
                 Friction Costs: {currencySymbol}{reloCalc.totalFrictionCosts.toLocaleString()}
               </div>
 
               <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold text-red-500">
-                Adds +{currencySymbol}{reloCalc.monthlyAmortizedDrag.toLocaleString()}/mo Drag on Short Stay!
-              </div>
-
-              <div className="text-xs font-bold text-slate-700 dark:text-slate-300">
-                {reloCalc.recommendation}
+                Adds +{currencySymbol}{reloCalc.monthlyAmortizedDrag.toLocaleString()}/mo Drag!
               </div>
             </div>
           </div>
 
-          {/* History Drawer for Box 6 */}
           {savedBox6Items.length > 0 && (
             <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
               <button

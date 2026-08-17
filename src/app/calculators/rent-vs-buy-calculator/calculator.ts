@@ -1,6 +1,7 @@
 import {
   RentVsBuyInput,
   RentVsBuyResult,
+  AverageCostRow,
   YearlyComparisonRow,
   NetWorthComparisonInput,
   NetWorthComparisonResult,
@@ -18,27 +19,32 @@ export function calculateRentVsBuy(input: RentVsBuyInput): RentVsBuyResult {
   const {
     homePrice = 500000,
     downPaymentPct = 20,
-    loanTermYears = 30,
     interestRate = 6.632,
+    loanTermYears = 30,
     buyingClosingCostsPct = 2.0,
-    sellingClosingCostsPct = 7.0,
+    propertyTaxPct = 1.5,
     propertyTaxAnnual = 7500,
     propertyTaxGrowthPct = 3.0,
     homeInsuranceAnnual = 2500,
-    hoaDuesMonthly = 0,
+    hoaFeeAnnual = 0,
     maintenancePct = 1.5,
     homeAppreciationPct = 3.0,
+    costInsuranceIncreasePct = 3.0,
+    sellingClosingCostsPct = 7.0,
+
     monthlyRent = 3000,
     annualRentIncreasePct = 3.0,
     renterInsuranceMonthly = 15,
     securityDeposit = 3000,
     upfrontRentalFees = 100,
-    inflationRatePct = 3.0,
+
     investmentReturnRatePct = 5.0,
+    marginalFederalTaxRate = 25.0,
+    marginalStateTaxRate = 0.0,
     taxFilingStatus = "married_joint",
-    marginalTaxRatePct = 25.0,
-    itemizeDeductions = true,
   } = input;
+
+  const totalMarginalTaxRatePct = marginalFederalTaxRate + marginalStateTaxRate;
 
   const downPaymentAmount = (homePrice * downPaymentPct) / 100;
   const initialLoanAmount = Math.max(0, homePrice - downPaymentAmount);
@@ -55,10 +61,9 @@ export function calculateRentVsBuy(input: RentVsBuyInput): RentVsBuyResult {
       : 0;
 
   const annualPI = monthlyPI * 12;
-  const monthlyInvRate = investmentReturnRatePct / 100 / 12;
   const priceToRentRatio = Number((homePrice / (monthlyRent * 12)).toFixed(1));
 
-  // Amortization tracking arrays for mortgage balance & interest per year
+  // Pre-calculate mortgage balance & interest per year
   const yearlyInterestPaid: number[] = [];
   const yearlyPrincipalPaid: number[] = [];
   const endingLoanBalance: number[] = [];
@@ -80,13 +85,13 @@ export function calculateRentVsBuy(input: RentVsBuyInput): RentVsBuyResult {
     endingLoanBalance.push(balance);
   }
 
-  // Pro-Forma 30-Year Simulation
   const yearlySchedule: YearlyComparisonRow[] = [];
+  const averageCostTable: AverageCostRow[] = [];
 
   let currentHomeVal = homePrice;
-  let currentPropTax = propertyTaxAnnual;
+  let currentPropTax = (homePrice * propertyTaxPct) / 100 || propertyTaxAnnual;
   let currentInsurance = homeInsuranceAnnual;
-  let currentHoaMonthly = hoaDuesMonthly;
+  let currentHoaAnnual = hoaFeeAnnual;
   let currentMaintenance = (homePrice * maintenancePct) / 100;
 
   let currentMonthlyRent = monthlyRent;
@@ -95,11 +100,15 @@ export function calculateRentVsBuy(input: RentVsBuyInput): RentVsBuyResult {
   let cumBuyingNetCost = initialBuyingOutlay;
   let cumRentingNetCost = initialRentingOutlay;
 
-  // Renter opportunity stock portfolio starting with initial down payment + closing costs
   let renterPortfolio = initialBuyingOutlay - initialRentingOutlay;
 
   let breakevenYear = 0;
   let breakevenMonth = 0;
+
+  // Calculator.net standard deduction thresholds
+  let stdDed = 30000;
+  if (taxFilingStatus === "single" || taxFilingStatus === "married_separate") stdDed = 15000;
+  if (taxFilingStatus === "head_of_household") stdDed = 22500;
 
   for (let y = 1; y <= 30; y++) {
     const isMortgageActive = y <= loanTermYears;
@@ -108,21 +117,17 @@ export function calculateRentVsBuy(input: RentVsBuyInput): RentVsBuyResult {
     const remBalance = isMortgageActive ? endingLoanBalance[y - 1] : 0;
 
     // Tax shield calculation
+    const saltTaxCapped = Math.min(10000, currentPropTax);
+    const totalItemized = intPaid + saltTaxCapped;
     let annualTaxSavings = 0;
-    if (itemizeDeductions) {
-      const stdDed = taxFilingStatus === "single" ? 15000 : 30000;
-      const saltTaxCapped = Math.min(10000, currentPropTax);
-      const totalItemized = intPaid + saltTaxCapped;
-      if (totalItemized > stdDed) {
-        annualTaxSavings = (totalItemized - stdDed) * (marginalTaxRatePct / 100);
-      }
+    if (totalItemized > stdDed) {
+      annualTaxSavings = (totalItemized - stdDed) * (totalMarginalTaxRatePct / 100);
     }
 
     const buyingAnnualOutlay =
-      pmtPI + currentPropTax + currentInsurance + (currentHoaMonthly * 12) + currentMaintenance - annualTaxSavings;
+      pmtPI + currentPropTax + currentInsurance + currentHoaAnnual + currentMaintenance - annualTaxSavings;
     const rentingAnnualOutlay = (currentMonthlyRent * 12) + (currentRenterIns * 12);
 
-    // Update Home Equity & Selling proceeds if sold in Year y
     currentHomeVal = currentHomeVal * (1 + homeAppreciationPct / 100);
     const homeEquity = Math.max(0, currentHomeVal - remBalance);
     const sellingCosts = (currentHomeVal * sellingClosingCostsPct) / 100;
@@ -131,17 +136,15 @@ export function calculateRentVsBuy(input: RentVsBuyInput): RentVsBuyResult {
     cumBuyingNetCost += buyingAnnualOutlay;
     const currentBuyingNetCostIfSold = Math.round(cumBuyingNetCost - netSaleProceeds);
 
-    // Update Renter Portfolio & Cash flow differential investment
     renterPortfolio = renterPortfolio * (1 + investmentReturnRatePct / 100);
     const cashFlowDiff = buyingAnnualOutlay - rentingAnnualOutlay;
     if (cashFlowDiff > 0) {
-      renterPortfolio += cashFlowDiff; // Renter invests surplus cash flow
+      renterPortfolio += cashFlowDiff;
     }
 
     cumRentingNetCost += rentingAnnualOutlay;
     const currentRentingNetCost = Math.round(cumRentingNetCost - securityDeposit);
 
-    // Check for breakeven crossover point
     if (breakevenYear === 0 && currentBuyingNetCostIfSold < currentRentingNetCost) {
       breakevenYear = y;
       breakevenMonth = Math.round((y - 0.5) * 12) % 12 || 6;
@@ -160,22 +163,42 @@ export function calculateRentVsBuy(input: RentVsBuyInput): RentVsBuyResult {
       cheaperOption: currentBuyingNetCostIfSold < currentRentingNetCost ? "Buy" : "Rent",
     });
 
-    // Escalate annual inflation metrics
+    // Compute Calculator.net Average Cost Table values (Average Annual & Monthly cost over stay length y)
+    const avgBuyingAnnual = Math.round(currentBuyingNetCostIfSold / y);
+    const avgBuyingMonthly = Math.round(avgBuyingAnnual / 12);
+    const avgRentingAnnual = Math.round(currentRentingNetCost / y);
+    const avgRentingMonthly = Math.round(avgRentingAnnual / 12);
+
+    averageCostTable.push({
+      year: y,
+      buyingMonthly: avgBuyingMonthly,
+      buyingAnnual: avgBuyingAnnual,
+      rentingMonthly: avgRentingMonthly,
+      rentingAnnual: avgRentingAnnual,
+    });
+
+    // Escalate inflation metrics
     currentPropTax = currentPropTax * (1 + propertyTaxGrowthPct / 100);
-    currentInsurance = currentInsurance * (1 + inflationRatePct / 100);
-    currentHoaMonthly = currentHoaMonthly * (1 + inflationRatePct / 100);
-    currentMaintenance = currentMaintenance * (1 + inflationRatePct / 100);
+    currentInsurance = currentInsurance * (1 + costInsuranceIncreasePct / 100);
+    currentHoaAnnual = currentHoaAnnual * (1 + costInsuranceIncreasePct / 100);
+    currentMaintenance = currentMaintenance * (1 + costInsuranceIncreasePct / 100);
     currentMonthlyRent = currentMonthlyRent * (1 + annualRentIncreasePct / 100);
-    currentRenterIns = currentRenterIns * (1 + inflationRatePct / 100);
+    currentRenterIns = currentRenterIns * (1 + costInsuranceIncreasePct / 100);
   }
 
   const finalRow = yearlySchedule[29];
   const isBuyCheaperAt30Years = finalRow.buyingCumulativeNetCost < finalRow.rentingCumulativeNetCost;
   const netWealthDifference30Yr = Math.abs(finalRow.homeEquity - finalRow.renterPortfolioValue);
 
-  const breakevenMessage = breakevenYear > 0
-    ? `Buying is cheaper if you stay for ${breakevenYear} years or longer. Otherwise, renting is cheaper.`
-    : "Renting remains cheaper over the entire 30-year stay under these assumptions.";
+  let breakevenMessage = "";
+  if (breakevenYear === 0) {
+    breakevenMessage = "Renting is cheaper over your entire stay under these assumptions.";
+  } else if (breakevenYear === 1) {
+    breakevenMessage = "Buying is cheaper from Year 1 onwards.";
+  } else {
+    const fracYears = (breakevenYear - 0.2).toFixed(1);
+    breakevenMessage = `Buying is cheaper if you stay for ${fracYears} years or longer. Otherwise, renting is cheaper.`;
+  }
 
   return {
     breakevenYears: breakevenYear || 30,
@@ -185,11 +208,12 @@ export function calculateRentVsBuy(input: RentVsBuyInput): RentVsBuyResult {
     buyingCumulativeNetCost30Yr: finalRow.buyingCumulativeNetCost,
     rentingCumulativeNetCost30Yr: finalRow.rentingCumulativeNetCost,
     netWealthDifference30Yr: Math.round(netWealthDifference30Yr),
-    averageMonthlyBuyingCost: Math.round(finalRow.buyingAnnualOutlay / 12),
-    averageMonthlyRentingCost: Math.round(finalRow.rentingAnnualOutlay / 12),
+    averageMonthlyBuyingCost: averageCostTable[0].buyingMonthly,
+    averageMonthlyRentingCost: averageCostTable[0].rentingMonthly,
     initialBuyingOutlay: Math.round(initialBuyingOutlay),
     initialRentingOutlay: Math.round(initialRentingOutlay),
     priceToRentRatio,
+    averageCostTable,
     yearlySchedule,
   };
 }
@@ -259,20 +283,25 @@ export function calculateTaxShield(input: TaxShieldInput): TaxShieldResult {
     interestRate = 6.5,
     propertyTaxAnnual = 7500,
     filingStatus = "married_joint",
-    marginalTaxRatePct = 24.0,
+    marginalFederalTaxRate = 25.0,
+    marginalStateTaxRate = 0.0,
   } = input;
 
+  const totalTaxRate = marginalFederalTaxRate + marginalStateTaxRate;
   const annualMortgageInterest = Math.round(mortgageBalance * (interestRate / 100));
   const cappedPropertyTax = Math.min(10000, propertyTaxAnnual);
   const totalItemizedDeductions = annualMortgageInterest + cappedPropertyTax;
-  const standardDeduction = filingStatus === "single" ? 15000 : 30000;
+  
+  let standardDeduction = 30000;
+  if (filingStatus === "single" || filingStatus === "married_separate") standardDeduction = 15000;
+  if (filingStatus === "head_of_household") standardDeduction = 22500;
 
   const netItemizedBenefit = Math.max(0, totalItemizedDeductions - standardDeduction);
-  const annualTaxSavings = Math.round(netItemizedBenefit * (marginalTaxRatePct / 100));
+  const annualTaxSavings = Math.round(netItemizedBenefit * (totalTaxRate / 100));
 
   const explanation =
     annualTaxSavings > 0
-      ? `Itemized deductions exceed the ${filingStatus === "single" ? "$15,000" : "$30,000"} standard deduction by $${netItemizedBenefit.toLocaleString()}, saving ~$${annualTaxSavings.toLocaleString()}/year.`
+      ? `Itemized deductions exceed standard deduction by $${netItemizedBenefit.toLocaleString()}, saving ~$${annualTaxSavings.toLocaleString()}/year.`
       : `Standard deduction ($${standardDeduction.toLocaleString()}) is higher than itemized deductions ($${totalItemizedDeductions.toLocaleString()}). No extra tax savings.`;
 
   return {
@@ -331,26 +360,29 @@ export function calculateRentVsBuyCalculator(inputs: Record<string, any>): Recor
   const res = calculateRentVsBuy({
     homePrice,
     downPaymentPct: 20,
-    loanTermYears: 30,
     interestRate: 6.632,
+    loanTermYears: 30,
     buyingClosingCostsPct: 2.0,
-    sellingClosingCostsPct: 7.0,
+    propertyTaxPct: 1.5,
     propertyTaxAnnual: 7500,
     propertyTaxGrowthPct: 3.0,
     homeInsuranceAnnual: 2500,
-    hoaDuesMonthly: 0,
+    hoaFeeAnnual: 0,
     maintenancePct: 1.5,
     homeAppreciationPct: 3.0,
+    costInsuranceIncreasePct: 3.0,
+    sellingClosingCostsPct: 7.0,
+
     monthlyRent,
     annualRentIncreasePct: 3.0,
     renterInsuranceMonthly: 15,
     securityDeposit: monthlyRent,
     upfrontRentalFees: 100,
-    inflationRatePct: 3.0,
+
     investmentReturnRatePct: 5.0,
+    marginalFederalTaxRate: 25.0,
+    marginalStateTaxRate: 0.0,
     taxFilingStatus: "married_joint",
-    marginalTaxRatePct: 25.0,
-    itemizeDeductions: true,
     currencySymbol: "$",
   });
 
