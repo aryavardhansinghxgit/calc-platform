@@ -2,6 +2,7 @@ import { CalculatorModuleDefinition } from "../types";
 
 // 1. Mortgage & House
 import { MORTGAGE_CALCULATOR } from "./mortgage";
+import { DTI_CALCULATOR } from "./dti";
 import { RENT_CALCULATOR } from "./rent";
 import { LOAN_CALCULATOR } from "./loan";
 import { EMI_CALCULATOR } from "./emi";
@@ -65,6 +66,7 @@ import { BUDGET_CALCULATOR } from "./budget";
 export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   // Mortgage & House
   MORTGAGE_CALCULATOR,
+  DTI_CALCULATOR,
   RENT_CALCULATOR,
   LOAN_CALCULATOR,
   EMI_CALCULATOR,
