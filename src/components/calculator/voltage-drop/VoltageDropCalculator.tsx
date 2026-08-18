@@ -743,27 +743,6 @@ export function VoltageDropCalculator() {
                     <span className="font-bold text-slate-800 dark:text-slate-100">{result.z.toFixed(5)} Ω/1000 ft</span>
                   </div>
                 </div>
-
-                {/* UNIFIED ACTION BAR: Copy, Save, Share, Print */}
-                <div className="flex flex-wrap items-center justify-end gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800 no-print">
-                  <button
-                    type="button"
-                    onClick={handleCopy}
-                    className="text-xs font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 shadow-xs rounded-xl px-3.5 py-1.5 flex items-center gap-1.5 transition-all cursor-pointer"
-                  >
-                    {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4 text-slate-400" />}
-                    <span>{copied ? "Copied!" : "Copy"}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleSave}
-                    className="text-xs font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 shadow-xs rounded-xl px-3.5 py-1.5 flex items-center gap-1.5 transition-all cursor-pointer"
-                  >
-                    {justSaved ? <Check className="w-4 h-4 text-emerald-600" /> : <Bookmark className="w-4 h-4 text-amber-500" />}
-                    <span>{justSaved ? "Saved!" : "Save"}</span>
-                  </button>
-                </div>
               </div>
             ) : (
               <div className="text-center py-6 text-slate-400 text-xs">
