@@ -27,6 +27,8 @@ import { LeaseCalculator } from "./lease/LeaseCalculator";
 import { LeaseContent } from "./lease/LeaseContent";
 import { CollegeCostCalculator } from "./college-cost/CollegeCostCalculator";
 import { CollegeCostContent } from "./college-cost/CollegeCostContent";
+import { DepreciationCalculator } from "./depreciation/DepreciationCalculator";
+import { DepreciationContent } from "./depreciation/DepreciationContent";
 import { CompoundInterestCalculator } from "./compound-interest/CompoundInterestCalculator";
 import { SimpleInterestCalculator } from "./simple-interest/SimpleInterestCalculator";
 import { InterestCalculator } from "./interest/InterestCalculator";
@@ -326,6 +328,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isAutoLease = definition.id === "auto-lease" || definition.slug === "auto-lease-calculator";
   const isLease = idLower === "lease-calculator" || slugLower === "lease-calculator" || idLower === "lease" || slugLower === "lease";
   const isCollegeCost = idLower === "college-cost-calculator" || slugLower === "college-cost-calculator" || idLower === "college-cost" || slugLower === "college-cost" || idLower === "college-calculator" || slugLower === "college-calculator";
+  const isDepreciation = idLower === "depreciation-calculator" || slugLower === "depreciation-calculator" || idLower === "depreciation" || slugLower === "depreciation";
   const isCompoundInterest = definition.id === "compound-interest" || definition.slug === "compound-interest-calculator";
   const isSimpleInterest = definition.id === "simple-interest" || definition.slug === "simple-interest-calculator";
   const isInterest = definition.id === "interest" || definition.slug === "interest-calculator";
@@ -457,6 +460,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isInflation = idLower === "inflation-calculator" || slugLower === "inflation-calculator" || idLower === "inflation" || slugLower === "inflation";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isDepreciation ? DepreciationContent :
     isCollegeCost ? CollegeCostContent :
     isLease ? LeaseContent :
     isRepayment ? RepaymentContent :
@@ -695,6 +699,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
               <SimpleInterestCalculator />
             ) : isCompoundInterest ? (
               <CompoundInterestCalculator />
+            ) : isDepreciation ? (
+              <DepreciationCalculator />
             ) : isCollegeCost ? (
               <CollegeCostCalculator />
             ) : isLease ? (
@@ -926,7 +932,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3.5 shadow-xs text-slate-900 dark:text-slate-100">
         {/* Formula & Calculation Method */}
-        {definition.formulaDescription && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
+        {definition.formulaDescription && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-2">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Formula & Calculation Method
@@ -948,7 +954,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         )}
 
         {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Custom suites per AGENTS.md policy) */}
-        {definition.category !== "Math" && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
+        {definition.category !== "Math" && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-3">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Frequently Asked Questions
