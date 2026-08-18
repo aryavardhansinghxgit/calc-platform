@@ -810,6 +810,14 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
               </div>
             )}
           </CalculatorErrorBoundary>
+
+          {/* Simple Related Calculators Links directly below calculator boxes */}
+          <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200/80 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
+              Related Calculators
+            </span>
+            <RelatedCalculators currentId={definition.id} category={definition.category} />
+          </div>
         </div>
 
         {/* Right Sidebar: Quick Navigation & Search Index (Sticky Top 20) */}
@@ -923,14 +931,6 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             </div>
           </div>
         )}
-
-        {/* Related Calculators */}
-        <div className="space-y-2">
-          <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-            Related Calculators
-          </h3>
-          <RelatedCalculators currentId={definition.id} category={definition.category} />
-        </div>
       </div>
 
       {/* Generic Report Modal */}

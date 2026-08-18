@@ -1029,54 +1029,111 @@ export function IrrCalculator() {
               </div>
 
               {/* DYNAMIC SVG CHART */}
-              <div className="h-44 w-full flex items-center justify-center">
-                <svg className="w-full h-full" viewBox="0 0 500 160">
-                  {/* Grid Lines */}
-                  <line x1="40" y1="20" x2="480" y2="20" stroke="#94a3b8" strokeDasharray="3 3" opacity="0.3" />
-                  <line x1="40" y1="80" x2="480" y2="80" stroke="#64748b" strokeWidth="1.5" />
-                  <text x="35" y="83" textAnchor="end" fontSize="9" fill="#64748b" fontFamily="sans-serif">$0</text>
-                  <line x1="40" y1="140" x2="480" y2="140" stroke="#94a3b8" strokeDasharray="3 3" opacity="0.3" />
+              <div className="h-48 w-full flex items-center justify-center relative">
+                {(() => {
+                  const npvValues = b3CurvePoints.map((p) => p.npv);
+                  const maxNpv = Math.max(...npvValues, 1000);
+                  const minNpv = Math.min(...npvValues, -1000);
+                  const range = maxNpv - minNpv || 1;
 
-                  {/* Curve Path */}
-                  {(() => {
-                    const maxNpv = Math.max(...b3CurvePoints.map((p) => p.npv), 1);
-                    const minNpv = Math.min(...b3CurvePoints.map((p) => p.npv), -1);
-                    const range = maxNpv - minNpv;
+                  // Dynamic Y position for NPV = 0
+                  const zeroY = 15 + ((maxNpv - 0) / range) * 125;
 
-                    const coords = b3CurvePoints.map((p) => {
-                      const x = 40 + (p.rate / 50) * 440;
-                      const y = 20 + ((maxNpv - p.npv) / range) * 120;
-                      return { x, y, ...p };
-                    });
+                  const coords = b3CurvePoints.map((p) => {
+                    const x = 50 + (p.rate / 50) * 430;
+                    const y = 15 + ((maxNpv - p.npv) / range) * 125;
+                    return { x, y, ...p };
+                  });
 
-                    const pathD = coords.reduce((acc, pt, idx) => (idx === 0 ? `M ${pt.x} ${pt.y}` : `${acc} L ${pt.x} ${pt.y}`), "");
+                  const pathD = coords.reduce((acc, pt, idx) => (idx === 0 ? `M ${pt.x} ${pt.y}` : `${acc} L ${pt.x} ${pt.y}`), "");
 
-                    // Shaded Value Add Area (y < 80)
-                    const interceptPt = coords.find((pt) => pt.npv <= 0) || coords[coords.length - 1];
+                  // IRR coordinate on curve (if within 0 to 50%)
+                  const irrVal = b1Calc.irrPercent;
+                  const hasValidIrr = !isNaN(irrVal) && irrVal >= 0 && irrVal <= 50;
+                  const irrX = 50 + (irrVal / 50) * 430;
 
-                    return (
-                      <>
-                        <path d={pathD} fill="none" stroke="#2563eb" strokeWidth="2.5" />
-                        {coords.map((pt, idx) => (
+                  return (
+                    <svg className="w-full h-full" viewBox="0 0 500 175">
+                      <defs>
+                        <linearGradient id="npvGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#2563eb" stopOpacity="0.3" />
+                          <stop offset="100%" stopColor="#2563eb" stopOpacity="0.0" />
+                        </linearGradient>
+                      </defs>
+
+                      {/* Top Grid & Label */}
+                      <line x1="50" y1="15" x2="480" y2="15" stroke="#94a3b8" strokeDasharray="3 3" opacity="0.25" />
+                      <text x="45" y="18" textAnchor="end" fontSize="8" fill="#64748b" fontFamily="sans-serif">
+                        +${Math.round(maxNpv).toLocaleString()}
+                      </text>
+
+                      {/* Dynamic Zero Line ($NPV = $0) */}
+                      <line x1="50" y1={zeroY} x2="480" y2={zeroY} stroke="#3b82f6" strokeWidth="1.5" strokeDasharray="4 2" />
+                      <text x="45" y={zeroY + 3} textAnchor="end" fontSize="9" fontWeight="bold" fill="#2563eb" fontFamily="sans-serif">
+                        $0
+                      </text>
+
+                      {/* Bottom Grid & Label */}
+                      <line x1="50" y1="140" x2="480" y2="140" stroke="#94a3b8" strokeDasharray="3 3" opacity="0.25" />
+                      <text x="45" y="143" textAnchor="end" fontSize="8" fill="#64748b" fontFamily="sans-serif">
+                        -${Math.abs(Math.round(minNpv)).toLocaleString()}
+                      </text>
+
+                      {/* IRR Vertical Intercept Guide Line */}
+                      {hasValidIrr && (
+                        <>
+                          <line x1={irrX} y1="15" x2={irrX} y2="145" stroke="#10b981" strokeWidth="1.5" strokeDasharray="3 3" />
+                          <circle cx={irrX} cy={zeroY} r="5" fill="#10b981" stroke="#ffffff" strokeWidth="2" />
+                          <rect x={Math.max(10, Math.min(410, irrX - 35))} y="2" width="70" height="14" rx="3" fill="#10b981" />
+                          <text
+                            x={Math.max(10, Math.min(410, irrX - 35)) + 35}
+                            y="12"
+                            textAnchor="middle"
+                            fontSize="8"
+                            fontWeight="bold"
+                            fill="#ffffff"
+                            fontFamily="sans-serif"
+                          >
+                            IRR: {irrVal}%
+                          </text>
+                        </>
+                      )}
+
+                      {/* The Continuous NPV Curve */}
+                      <path d={pathD} fill="none" stroke="#2563eb" strokeWidth="2.5" />
+
+                      {/* Data Dots along curve with tooltips */}
+                      {coords.map((pt, idx) => (
+                        <g key={idx} className="group cursor-pointer">
                           <circle
-                            key={idx}
                             cx={pt.x}
                             cy={pt.y}
                             r="3"
                             fill={pt.npv >= 0 ? "#10b981" : "#ef4444"}
+                            stroke="#ffffff"
+                            strokeWidth="1"
+                            className="transition-all hover:r-4.5"
                           />
-                        ))}
-                      </>
-                    );
-                  })()}
+                          <title>{`Rate: ${pt.rate}% | NPV: $${pt.npv.toLocaleString()}`}</title>
+                        </g>
+                      ))}
 
-                  {/* X Axis Labels */}
-                  <text x="40" y="155" textAnchor="middle" fontSize="8" fill="#64748b" fontFamily="sans-serif">0%</text>
-                  <text x="150" y="155" textAnchor="middle" fontSize="8" fill="#64748b" fontFamily="sans-serif">12.5%</text>
-                  <text x="260" y="155" textAnchor="middle" fontSize="8" fill="#64748b" fontFamily="sans-serif">25%</text>
-                  <text x="370" y="155" textAnchor="middle" fontSize="8" fill="#64748b" fontFamily="sans-serif">37.5%</text>
-                  <text x="480" y="155" textAnchor="middle" fontSize="8" fill="#64748b" fontFamily="sans-serif">50%</text>
-                </svg>
+                      {/* X Axis Baseline */}
+                      <line x1="50" y1="145" x2="480" y2="145" stroke="#64748b" strokeWidth="1" />
+
+                      {/* X Axis Discount Rate Labels */}
+                      <text x="50" y="160" textAnchor="middle" fontSize="8" fill="#64748b" fontFamily="sans-serif">0%</text>
+                      <text x="136" y="160" textAnchor="middle" fontSize="8" fill="#64748b" fontFamily="sans-serif">10%</text>
+                      <text x="222" y="160" textAnchor="middle" fontSize="8" fill="#64748b" fontFamily="sans-serif">20%</text>
+                      <text x="308" y="160" textAnchor="middle" fontSize="8" fill="#64748b" fontFamily="sans-serif">30%</text>
+                      <text x="394" y="160" textAnchor="middle" fontSize="8" fill="#64748b" fontFamily="sans-serif">40%</text>
+                      <text x="480" y="160" textAnchor="middle" fontSize="8" fill="#64748b" fontFamily="sans-serif">50%</text>
+                      <text x="265" y="172" textAnchor="middle" fontSize="8" fontWeight="bold" fill="#64748b" fontFamily="sans-serif">
+                        Discount Rate (%) &rarr;
+                      </text>
+                    </svg>
+                  );
+                })()}
               </div>
             </div>
 
