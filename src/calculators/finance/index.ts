@@ -41,6 +41,7 @@ import { ROI_CALCULATOR } from "./roi";
 import { FUTURE_VALUE_CALCULATOR } from "./future-value";
 import { PRESENT_VALUE_CALCULATOR } from "./present-value";
 import { BOND_CALCULATOR } from "./bond";
+import { MUTUAL_FUND_CALCULATOR } from "./mutual-fund";
 
 // 4. Taxes
 import { INCOME_TAX_CALCULATOR } from "./income-tax";
@@ -118,6 +119,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   FUTURE_VALUE_CALCULATOR,
   PRESENT_VALUE_CALCULATOR,
   BOND_CALCULATOR,
+  MUTUAL_FUND_CALCULATOR,
 
   // Taxes
   INCOME_TAX_CALCULATOR,
