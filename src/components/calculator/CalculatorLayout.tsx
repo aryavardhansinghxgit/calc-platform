@@ -46,6 +46,7 @@ import { GstCalculator } from "./gst/GstCalculator";
 import { VatCalculator } from "./vat/VatCalculator";
 import { SalesTaxCalculator } from "./sales-tax/SalesTaxCalculator";
 import { CreditCardCalculator } from "./credit-card/CreditCardCalculator";
+import { CreditCardContent } from "./credit-card/CreditCardContent";
 import { DebtPayoffCalculator } from "./debt-payoff/DebtPayoffCalculator";
 import { DebtConsolidationCalculator } from "./debt-consolidation/DebtConsolidationCalculator";
 import { RetirementCalculator } from "./retirement/RetirementCalculator";
@@ -446,6 +447,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isInflation = idLower === "inflation-calculator" || slugLower === "inflation-calculator" || idLower === "inflation" || slugLower === "inflation";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isCreditCard ? CreditCardContent :
     isRoman ? RomanNumeralContent :
     isSpeed ? SpeedContent :
     isMass ? MassContent :
@@ -903,9 +905,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       )}
 
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs text-slate-900 dark:text-slate-100">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3.5 shadow-xs text-slate-900 dark:text-slate-100">
         {/* Formula & Calculation Method */}
-        {definition.formulaDescription && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
+        {definition.formulaDescription && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-2">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Formula & Calculation Method
@@ -927,7 +929,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         )}
 
         {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Custom suites per AGENTS.md policy) */}
-        {definition.category !== "Math" && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
+        {definition.category !== "Math" && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-3">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Frequently Asked Questions
