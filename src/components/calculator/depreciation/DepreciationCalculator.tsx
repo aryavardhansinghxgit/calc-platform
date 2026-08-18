@@ -559,43 +559,45 @@ export function DepreciationCalculator() {
                   </div>
                 </div>
 
-                {/* DEPRECIATION VS RESIDUAL PROGRESS */}
-                <div className="space-y-1 pt-1">
-                  <div className="w-full h-3 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex">
-                    <div
-                      style={{
-                        width: `${
-                          Number(costInput) > 0
-                            ? (coreResult.totalAccumulatedDepreciation / Number(costInput)) * 100
-                            : 80
-                        }%`,
-                      }}
-                      className="bg-blue-600"
-                    />
-                    <div
-                      style={{
-                        width: `${
-                          Number(costInput) > 0
-                            ? (coreResult.endingBookValue / Number(costInput)) * 100
-                            : 20
-                        }%`,
-                      }}
-                      className="bg-emerald-500"
-                    />
-                  </div>
-                  <div className="flex justify-between text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400">
-                    <span>Depreciated: {fmt(coreResult.totalAccumulatedDepreciation)}</span>
-                    <span>Salvage / Book Value: {fmt(coreResult.endingBookValue)}</span>
+                    {/* DEPRECIATION VS RESIDUAL PROGRESS */}
+                    <div className="space-y-1.5 pt-1">
+                      <div className="w-full h-3.5 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex">
+                        <div
+                          style={{
+                            width: `${
+                              Number(costInput) > 0
+                                ? (coreResult.totalAccumulatedDepreciation / Number(costInput)) * 100
+                                : 80
+                            }%`,
+                          }}
+                          className="bg-blue-600"
+                        />
+                        <div
+                          style={{
+                            width: `${
+                              Number(costInput) > 0
+                                ? (coreResult.endingBookValue / Number(costInput)) * 100
+                                : 20
+                            }%`,
+                          }}
+                          className="bg-emerald-500"
+                        />
+                      </div>
+                      <div className="flex justify-between text-xs font-mono font-bold text-slate-600 dark:text-slate-400">
+                        <span>Depreciated: {fmt(coreResult.totalAccumulatedDepreciation)}</span>
+                        <span>Salvage / Book Value: {fmt(coreResult.endingBookValue)}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* AMORTIZATION / DEPRECIATION SCHEDULE */}
+              {/* AMORTIZATION / DEPRECIATION SCHEDULE (FULL WIDTH BIGGER BOX) */}
               {coreResult.schedule.length > 0 && (
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-extrabold uppercase text-blue-600 dark:text-blue-400">
-                      Annual Depreciation Schedule ({coreResult.methodName})
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xs">
+                  <div className="p-3 bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-xs font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                      Annual Depreciation &amp; Asset Book Value Schedule ({coreResult.methodName})
                     </span>
                     <div className="flex items-center gap-2">
                       <button
@@ -612,9 +614,9 @@ export function DepreciationCalculator() {
                           const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
                           triggerCsvDownload(`depreciation_schedule.csv`, csv);
                         }}
-                        className="px-2 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 rounded-lg text-[11px] font-bold flex items-center gap-1 border border-slate-200 dark:border-slate-700 cursor-pointer transition-colors"
+                        className="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-lg text-xs font-bold flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 cursor-pointer transition-colors"
                       >
-                        <Download className="w-3 h-3" /> Export CSV
+                        <Download className="w-3.5 h-3.5 text-blue-600" /> Export CSV
                       </button>
                       <input
                         type="text"
@@ -624,30 +626,30 @@ export function DepreciationCalculator() {
                           setTableSearch(e.target.value);
                           setCurrentPage(1);
                         }}
-                        className="h-6 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold focus:outline-none w-28"
+                        className="h-8 px-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold focus:outline-none w-32"
                       />
                     </div>
                   </div>
 
-                  <div className="overflow-x-auto max-h-44 overflow-y-auto">
-                    <table className="w-full text-left text-xs font-mono">
-                      <thead>
-                        <tr className="border-b border-slate-200 dark:border-slate-700 text-slate-500 font-sans font-bold uppercase text-[9px]">
-                          <th className="py-1 px-1.5">Year</th>
-                          <th className="py-1 px-1.5">Beginning BV</th>
-                          <th className="py-1 px-1.5">Depr Expense</th>
-                          <th className="py-1 px-1.5">Accum Depr</th>
-                          <th className="py-1 px-1.5">Ending BV</th>
+                  <div className="overflow-x-auto text-xs max-h-72 overflow-y-auto">
+                    <table className="w-full text-left border-collapse font-sans tabular-nums">
+                      <thead className="sticky top-0 bg-slate-50 dark:bg-slate-800/90 text-slate-600 dark:text-slate-400 font-bold border-b border-slate-200 dark:border-slate-700 backdrop-blur-xs">
+                        <tr>
+                          <th className="p-2.5">Year</th>
+                          <th className="p-2.5">Beginning Book Value</th>
+                          <th className="p-2.5">Depreciation Expense</th>
+                          <th className="p-2.5">Accumulated Depreciation</th>
+                          <th className="p-2.5">Ending Book Value</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-[11px]">
+                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                         {currentSchedulePage.map((row) => (
                           <tr key={row.year} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                            <td className="py-1 px-1.5 font-bold font-sans">Year {row.year}</td>
-                            <td className="py-1 px-1.5 text-slate-600 dark:text-slate-400">{fmt(row.beginningBookValue)}</td>
-                            <td className="py-1 px-1.5 font-bold text-blue-600">{fmt(row.depreciationExpense)}</td>
-                            <td className="py-1 px-1.5 text-amber-600">{fmt(row.accumulatedDepreciation)}</td>
-                            <td className="py-1 px-1.5 font-bold text-slate-900 dark:text-slate-100">{fmt(row.endingBookValue)}</td>
+                            <td className="p-2 font-bold text-slate-800 dark:text-slate-200">Year {row.year}</td>
+                            <td className="p-2 text-slate-600 dark:text-slate-400">{fmt(row.beginningBookValue)}</td>
+                            <td className="p-2 font-bold text-blue-600">{fmt(row.depreciationExpense)}</td>
+                            <td className="p-2 text-amber-600">{fmt(row.accumulatedDepreciation)}</td>
+                            <td className="p-2 font-bold text-slate-900 dark:text-slate-100">{fmt(row.endingBookValue)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -655,14 +657,14 @@ export function DepreciationCalculator() {
                   </div>
 
                   {totalPages > 1 && (
-                    <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800 text-[10px] font-bold">
+                    <div className="p-2.5 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between text-xs font-bold">
                       <span className="text-slate-500">Page {currentPage} of {totalPages}</span>
-                      <div className="flex gap-1">
+                      <div className="flex gap-1.5">
                         <button
                           type="button"
                           disabled={currentPage <= 1}
                           onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                          className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 disabled:opacity-40 cursor-pointer"
+                          className="px-3 py-1 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 disabled:opacity-40 cursor-pointer"
                         >
                           Prev
                         </button>
@@ -670,7 +672,7 @@ export function DepreciationCalculator() {
                           type="button"
                           disabled={currentPage >= totalPages}
                           onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                          className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 disabled:opacity-40 cursor-pointer"
+                          className="px-3 py-1 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 disabled:opacity-40 cursor-pointer"
                         >
                           Next
                         </button>
@@ -679,8 +681,6 @@ export function DepreciationCalculator() {
                   )}
                 </div>
               )}
-            </div>
-          </div>
 
           {/* SAVED CALCULATIONS BOX 1 */}
           {savedCoreItems.length > 0 && (

@@ -35,6 +35,10 @@ import { CreditCardPayoffCalculator } from "./credit-card-payoff/CreditCardPayof
 import { CreditCardPayoffContent } from "./credit-card-payoff/CreditCardPayoffContent";
 import { GDPCalculator } from "./gdp/GDPCalculator";
 import { GDPContent } from "./gdp/GDPContent";
+import { CreditCardCalculator } from "./credit-card/CreditCardCalculator";
+import { CreditCardContent } from "./credit-card/CreditCardContent";
+import { RepaymentCalculator } from "./repayment/RepaymentCalculator";
+import { RepaymentContent } from "./repayment/RepaymentContent";
 import { CompoundInterestCalculator } from "./compound-interest/CompoundInterestCalculator";
 import { SimpleInterestCalculator } from "./simple-interest/SimpleInterestCalculator";
 import { InterestCalculator } from "./interest/InterestCalculator";
@@ -57,10 +61,6 @@ import { IncomeTaxCalculator } from "./income-tax/IncomeTaxCalculator";
 import { GstCalculator } from "./gst/GstCalculator";
 import { VatCalculator } from "./vat/VatCalculator";
 import { SalesTaxCalculator } from "./sales-tax/SalesTaxCalculator";
-import { RepaymentCalculator } from "./repayment/RepaymentCalculator";
-import { RepaymentContent } from "./repayment/RepaymentContent";
-import { CreditCardCalculator } from "./credit-card/CreditCardCalculator";
-import { CreditCardContent } from "./credit-card/CreditCardContent";
 import { DebtPayoffCalculator } from "./debt-payoff/DebtPayoffCalculator";
 import { DebtConsolidationCalculator } from "./debt-consolidation/DebtConsolidationCalculator";
 import { RetirementCalculator } from "./retirement/RetirementCalculator";
@@ -711,6 +711,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
               <SimpleInterestCalculator />
             ) : isCompoundInterest ? (
               <CompoundInterestCalculator />
+            ) : isRepayment ? (
+              <RepaymentCalculator />
+            ) : isCreditCard ? (
+              <CreditCardCalculator />
             ) : isGdp ? (
               <GDPCalculator />
             ) : isCreditCardPayoff ? (

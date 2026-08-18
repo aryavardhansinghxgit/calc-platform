@@ -570,9 +570,9 @@ export function GDPCalculator() {
                         onClick={() => {
                           const headers = ["Macro Sector Component", "Dollar Value (Billion)", "Share of Total GDP (%)"];
                           const rows = [
-                            ["Personal Consumption (C)", coreResult.consumption.toFixed(2), coreResult.consumptionPct.toFixed(1) + "%"],
-                            ["Gross Private Investment (I)", coreResult.investment.toFixed(2), coreResult.investmentPct.toFixed(1) + "%"],
-                            ["Government Spending (G)", coreResult.government.toFixed(2), coreResult.governmentPct.toFixed(1) + "%"],
+                            ["Personal Consumption (C)", (Number(consumptionInput) || 0).toFixed(2), coreResult.consumptionPct.toFixed(1) + "%"],
+                            ["Gross Private Investment (I)", (Number(investmentInput) || 0).toFixed(2), coreResult.investmentPct.toFixed(1) + "%"],
+                            ["Government Spending (G)", (Number(governmentInput) || 0).toFixed(2), coreResult.governmentPct.toFixed(1) + "%"],
                             ["Exports (X)", Number(exportsInput).toFixed(2), "-"],
                             ["Imports (M)", Number(importsInput).toFixed(2), "-"],
                             ["Net Exports (NX)", coreResult.netExports.toFixed(2), coreResult.netExportsPct.toFixed(1) + "%"],
@@ -611,22 +611,102 @@ export function GDPCalculator() {
                   </div>
                 </div>
 
-                {/* SECTOR STACKED PROGRESS */}
-                <div className="space-y-1 pt-1">
-                  <div className="w-full h-3 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex">
-                    <div style={{ width: `${Math.max(0, Math.min(100, coreResult.consumptionPct))}%` }} className="bg-blue-600" />
-                    <div style={{ width: `${Math.max(0, Math.min(100, coreResult.investmentPct))}%` }} className="bg-amber-500" />
-                    <div style={{ width: `${Math.max(0, Math.min(100, coreResult.governmentPct))}%` }} className="bg-purple-600" />
-                    <div style={{ width: `${Math.max(0, Math.min(100, coreResult.netExportsPct))}%` }} className="bg-emerald-500" />
-                  </div>
-                  <div className="flex justify-between text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400">
-                    <span>Net Trade: {coreResult.netExports >= 0 ? `+${fmt(coreResult.netExports)}B Surplus` : `${fmt(coreResult.netExports)}B Deficit`}</span>
-                    <span>Total Trillion: {(coreResult.totalGdp / 1000).toFixed(2)}T</span>
+                    {/* SECTOR STACKED PROGRESS */}
+                    <div className="space-y-1.5 pt-1">
+                      <div className="w-full h-3.5 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex">
+                        <div style={{ width: `${Math.max(0, Math.min(100, coreResult.consumptionPct))}%` }} className="bg-blue-600" />
+                        <div style={{ width: `${Math.max(0, Math.min(100, coreResult.investmentPct))}%` }} className="bg-amber-500" />
+                        <div style={{ width: `${Math.max(0, Math.min(100, coreResult.governmentPct))}%` }} className="bg-purple-600" />
+                        <div style={{ width: `${Math.max(0, Math.min(100, coreResult.netExportsPct))}%` }} className="bg-emerald-500" />
+                      </div>
+                      <div className="flex justify-between text-xs font-mono font-bold text-slate-600 dark:text-slate-400">
+                        <span>Net Trade: {coreResult.netExports >= 0 ? `+${fmt(coreResult.netExports)}B Surplus` : `${fmt(coreResult.netExports)}B Deficit`}</span>
+                        <span>Total Output: {(coreResult.totalGdp / 1000).toFixed(3)} Trillion</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+
+            {/* FULL WIDTH EXPENDITURE SECTOR BREAKDOWN MATRIX (BIGGER BOX) */}
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xs">
+              <div className="p-3 bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                  National Expenditure Sector Distribution Matrix [GDP = C + I + G + (X - M)]
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const headers = ["Macro Sector Component", "Category Symbol", "Dollar Output (Billion)", "Economic Share of GDP (%)"];
+                    const rows = [
+                      ["Personal Consumption Expenditures", "C", (Number(consumptionInput) || 0).toFixed(2), coreResult.consumptionPct.toFixed(1) + "%"],
+                      ["Gross Private Domestic Investment", "I", (Number(investmentInput) || 0).toFixed(2), coreResult.investmentPct.toFixed(1) + "%"],
+                      ["Government Consumption & Investment", "G", (Number(governmentInput) || 0).toFixed(2), coreResult.governmentPct.toFixed(1) + "%"],
+                      ["Gross Exports", "X", Number(exportsInput).toFixed(2), "-"],
+                      ["Gross Imports", "M", Number(importsInput).toFixed(2), "-"],
+                      ["Net Foreign Trade (Exports - Imports)", "NX", coreResult.netExports.toFixed(2), coreResult.netExportsPct.toFixed(1) + "%"],
+                      ["Total Gross Domestic Product", "GDP", coreResult.totalGdp.toFixed(2), "100.0%"],
+                    ];
+                    const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+                    triggerCsvDownload(`gdp_expenditure_breakdown.csv`, csv);
+                  }}
+                  className="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-lg text-xs font-bold flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 cursor-pointer transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5 text-blue-600" /> Export Sector Matrix (CSV)
+                </button>
+              </div>
+
+              <div className="overflow-x-auto text-xs max-h-72 overflow-y-auto">
+                <table className="w-full text-left border-collapse font-sans tabular-nums">
+                  <thead className="sticky top-0 bg-slate-50 dark:bg-slate-800/90 text-slate-600 dark:text-slate-400 font-bold border-b border-slate-200 dark:border-slate-700 backdrop-blur-xs">
+                    <tr>
+                      <th className="p-2.5">Macroeconomic Sector</th>
+                      <th className="p-2.5">Symbol</th>
+                      <th className="p-2.5">Aggregate Dollar Value</th>
+                      <th className="p-2.5">Share of Total GDP (%)</th>
+                      <th className="p-2.5">Economic Role</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                      <td className="p-2 font-bold text-slate-800 dark:text-slate-200">Personal Consumption Expenditures</td>
+                      <td className="p-2 font-mono font-bold text-blue-600">C</td>
+                      <td className="p-2 font-bold text-slate-900 dark:text-slate-100">{fmt(Number(consumptionInput) || 0)} Billion</td>
+                      <td className="p-2 font-bold text-blue-600">{coreResult.consumptionPct.toFixed(1)}%</td>
+                      <td className="p-2 text-slate-500">Household goods, services, and consumer spending</td>
+                    </tr>
+                    <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                      <td className="p-2 font-bold text-slate-800 dark:text-slate-200">Gross Private Domestic Investment</td>
+                      <td className="p-2 font-mono font-bold text-amber-600">I</td>
+                      <td className="p-2 font-bold text-slate-900 dark:text-slate-100">{fmt(Number(investmentInput) || 0)} Billion</td>
+                      <td className="p-2 font-bold text-amber-600">{coreResult.investmentPct.toFixed(1)}%</td>
+                      <td className="p-2 text-slate-500">Business machinery, non-residential buildings, and housing</td>
+                    </tr>
+                    <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                      <td className="p-2 font-bold text-slate-800 dark:text-slate-200">Government Consumption &amp; Investment</td>
+                      <td className="p-2 font-mono font-bold text-purple-600">G</td>
+                      <td className="p-2 font-bold text-slate-900 dark:text-slate-100">{fmt(Number(governmentInput) || 0)} Billion</td>
+                      <td className="p-2 font-bold text-purple-600">{coreResult.governmentPct.toFixed(1)}%</td>
+                      <td className="p-2 text-slate-500">Public infrastructure, federal/defense and local municipal spending</td>
+                    </tr>
+                    <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                      <td className="p-2 font-bold text-slate-800 dark:text-slate-200">Net Exports of Goods &amp; Services</td>
+                      <td className="p-2 font-mono font-bold text-emerald-600">NX (X - M)</td>
+                      <td className="p-2 font-bold text-slate-900 dark:text-slate-100">{fmt(coreResult.netExports)} Billion</td>
+                      <td className="p-2 font-bold text-emerald-600">{coreResult.netExportsPct.toFixed(1)}%</td>
+                      <td className="p-2 text-slate-500">{coreResult.netExports >= 0 ? "Trade Surplus (Exports exceed Imports)" : "Trade Deficit (Imports exceed Exports)"}</td>
+                    </tr>
+                    <tr className="bg-slate-50/80 dark:bg-slate-800/60 font-extrabold border-t-2 border-slate-300 dark:border-slate-600">
+                      <td className="p-2.5 text-slate-900 dark:text-slate-100">Total Gross Domestic Product (GDP)</td>
+                      <td className="p-2.5 font-mono text-blue-600">Y</td>
+                      <td className="p-2.5 text-emerald-600 text-sm">{fmt(coreResult.totalGdp)} Billion</td>
+                      <td className="p-2.5 text-slate-900 dark:text-slate-100">100.0%</td>
+                      <td className="p-2.5 text-slate-600 dark:text-slate-400">Total National Economic Output</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
 
           {/* SAVED CALCULATIONS BOX 1 */}
           {savedCoreItems.length > 0 && (

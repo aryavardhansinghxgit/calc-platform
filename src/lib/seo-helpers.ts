@@ -10,6 +10,7 @@ export interface CalculatorSeoProps {
   slug: string;
   category?: string;
   baseUrl?: string;
+  keywords?: string[];
   faqs?: Array<{ question: string; answer: string }>;
 }
 
@@ -17,6 +18,7 @@ export function generateCalculatorMetadata({
   title,
   description,
   slug,
+  keywords,
   baseUrl = "https://calcplatform.example.com",
 }: CalculatorSeoProps) {
   const canonicalUrl = `${baseUrl}/calculators/${slug}`;
@@ -24,6 +26,7 @@ export function generateCalculatorMetadata({
   return {
     title: `${title} - Free Online Calculator | CalcPlatform`,
     description,
+    keywords,
     alternates: {
       canonical: canonicalUrl,
     },

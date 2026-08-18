@@ -40,7 +40,7 @@ export const BOAT_LOAN_CALCULATOR: CalculatorModuleDefinition = {
   ],
   inputs: [
     {
-      id: "boatPrice",
+      name: "boatPrice",
       label: "Boat Price ($)",
       type: "currency",
       defaultValue: 35000,
@@ -49,7 +49,7 @@ export const BOAT_LOAN_CALCULATOR: CalculatorModuleDefinition = {
       step: 500,
     },
     {
-      id: "downPayment",
+      name: "downPayment",
       label: "Down Payment ($)",
       type: "currency",
       defaultValue: 7000,
@@ -58,7 +58,7 @@ export const BOAT_LOAN_CALCULATOR: CalculatorModuleDefinition = {
       step: 500,
     },
     {
-      id: "loanTermYears",
+      name: "loanTermYears",
       label: "Loan Term (Years)",
       type: "number",
       defaultValue: 10,
@@ -67,7 +67,7 @@ export const BOAT_LOAN_CALCULATOR: CalculatorModuleDefinition = {
       step: 1,
     },
     {
-      id: "interestRatePct",
+      name: "interestRatePct",
       label: "Interest Rate (% APR)",
       type: "percentage",
       defaultValue: 7.0,
@@ -78,24 +78,24 @@ export const BOAT_LOAN_CALCULATOR: CalculatorModuleDefinition = {
   ],
   outputs: [
     {
-      id: "monthlyPayment",
+      name: "monthlyPayment",
       label: "Monthly Boat Payment",
-      type: "currency",
+      format: "currency",
     },
     {
-      id: "totalLoanAmount",
+      name: "totalLoanAmount",
       label: "Total Loan Amount",
-      type: "currency",
+      format: "currency",
     },
     {
-      id: "totalInterestPaid",
+      name: "totalInterestPaid",
       label: "Total Finance Interest",
-      type: "currency",
+      format: "currency",
     },
     {
-      id: "totalCostOfBoat",
+      name: "totalCostOfBoat",
       label: "Total Cost of Boat",
-      type: "currency",
+      format: "currency",
     },
   ],
   calculate: (inputs: Record<string, any>) => {

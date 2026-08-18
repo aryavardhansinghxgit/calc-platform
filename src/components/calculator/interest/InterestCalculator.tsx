@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   TrendingUp,
   Calculator as CalcIcon,
@@ -31,6 +31,7 @@ import {
   Layers,
   Download,
   Flame,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -82,6 +83,7 @@ export function InterestCalculator() {
   const [savedScenarios, setSavedScenarios] = useState<{ id: string; name: string; result: string; date: string }[]>([]);
   const [justSaved, setJustSaved] = useState<boolean>(false);
   const [shareToast, setShareToast] = useState<boolean>(false);
+  const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
 
   useEffect(() => {
     try {

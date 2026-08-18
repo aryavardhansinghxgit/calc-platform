@@ -1,5 +1,5 @@
 import { CalculatorModuleDefinition } from "../../types";
-import { calculateAgeFormula } from "@/lib/calculator-engine/formulas/age";
+import { calculateDetailedAge } from "@/lib/calculator-engine/formulas/age";
 
 export const AGE_CALCULATOR: CalculatorModuleDefinition = {
   id: "age",
@@ -38,13 +38,13 @@ export const AGE_CALCULATOR: CalculatorModuleDefinition = {
     },
   ],
   calculate: (inputs) => {
-    const res = calculateAgeFormula({
+    const res = calculateDetailedAge({
       birthDate: String(inputs.birthDate || "1995-06-15"),
     });
     return {
       ageSummary: `${res.years} years, ${res.months} months, ${res.days} days`,
-      totalDays: res.totalDays,
-      nextBirthdayDays: res.nextBirthdayDays,
+      totalDays: res.matrix.totalDays,
+      nextBirthdayDays: res.nextBirthday.daysRemaining,
     };
   },
 };

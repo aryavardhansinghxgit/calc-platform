@@ -47,7 +47,7 @@ export const LEASE_CALCULATOR: CalculatorModuleDefinition = {
   ],
   inputs: [
     {
-      id: "assetValue",
+      name: "assetValue",
       label: "Asset Value ($)",
       type: "currency",
       defaultValue: 20000,
@@ -56,7 +56,7 @@ export const LEASE_CALCULATOR: CalculatorModuleDefinition = {
       step: 100,
     },
     {
-      id: "residualValue",
+      name: "residualValue",
       label: "Residual Value ($)",
       type: "currency",
       defaultValue: 8000,
@@ -65,7 +65,7 @@ export const LEASE_CALCULATOR: CalculatorModuleDefinition = {
       step: 100,
     },
     {
-      id: "leaseTermMonths",
+      name: "leaseTermMonths",
       label: "Lease Term (Months)",
       type: "number",
       defaultValue: 36,
@@ -74,7 +74,7 @@ export const LEASE_CALCULATOR: CalculatorModuleDefinition = {
       step: 1,
     },
     {
-      id: "interestRatePct",
+      name: "interestRatePct",
       label: "Interest Rate / APR (%)",
       type: "percentage",
       defaultValue: 6.0,
@@ -85,24 +85,24 @@ export const LEASE_CALCULATOR: CalculatorModuleDefinition = {
   ],
   outputs: [
     {
-      id: "monthlyTotalPayment",
+      name: "monthlyTotalPayment",
       label: "Monthly Payment",
-      type: "currency",
+      format: "currency",
     },
     {
-      id: "totalMonthlyPayments",
+      name: "totalMonthlyPayments",
       label: "Total of Monthly Payments",
-      type: "currency",
+      format: "currency",
     },
     {
-      id: "totalDepreciation",
+      name: "totalDepreciation",
       label: "Total Depreciation",
-      type: "currency",
+      format: "currency",
     },
     {
-      id: "totalFinanceCharges",
+      name: "totalFinanceCharges",
       label: "Total Interest / Rent Charges",
-      type: "currency",
+      format: "currency",
     },
   ],
   calculate: (inputs: Record<string, any>) => {

@@ -41,7 +41,7 @@ export const COLLEGE_COST_CALCULATOR: CalculatorModuleDefinition = {
   ],
   inputs: [
     {
-      id: "currentAnnualCost",
+      name: "currentAnnualCost",
       label: "Today's Annual College Cost ($)",
       type: "currency",
       defaultValue: 30990,
@@ -50,7 +50,7 @@ export const COLLEGE_COST_CALCULATOR: CalculatorModuleDefinition = {
       step: 100,
     },
     {
-      id: "annualCostInflationPct",
+      name: "annualCostInflationPct",
       label: "College Cost Inflation Rate (%)",
       type: "percentage",
       defaultValue: 5.0,
@@ -59,7 +59,7 @@ export const COLLEGE_COST_CALCULATOR: CalculatorModuleDefinition = {
       step: 0.1,
     },
     {
-      id: "collegeDurationYears",
+      name: "collegeDurationYears",
       label: "College Attendance Duration (Years)",
       type: "number",
       defaultValue: 4,
@@ -68,7 +68,7 @@ export const COLLEGE_COST_CALCULATOR: CalculatorModuleDefinition = {
       step: 1,
     },
     {
-      id: "yearsUntilCollege",
+      name: "yearsUntilCollege",
       label: "College Starts In (Years)",
       type: "number",
       defaultValue: 3,
@@ -77,7 +77,7 @@ export const COLLEGE_COST_CALCULATOR: CalculatorModuleDefinition = {
       step: 1,
     },
     {
-      id: "percentCostsFromSavings",
+      name: "percentCostsFromSavings",
       label: "Percent of Costs from Savings (%)",
       type: "percentage",
       defaultValue: 35,
@@ -88,24 +88,24 @@ export const COLLEGE_COST_CALCULATOR: CalculatorModuleDefinition = {
   ],
   outputs: [
     {
-      id: "totalProjectedCollegeCost",
+      name: "totalProjectedCollegeCost",
       label: "Total Projected College Cost",
-      type: "currency",
+      format: "currency",
     },
     {
-      id: "projectedSavingsAtCollegeStart",
+      name: "projectedSavingsAtCollegeStart",
       label: "Accumulated Savings at Start",
-      type: "currency",
+      format: "currency",
     },
     {
-      id: "requiredMonthlySavingsToMeetGoal",
+      name: "requiredMonthlySavingsToMeetGoal",
       label: "Required Monthly Savings",
-      type: "currency",
+      format: "currency",
     },
     {
-      id: "totalOutOfPocketShortfall",
+      name: "totalOutOfPocketShortfall",
       label: "Unfunded Shortfall / Loans",
-      type: "currency",
+      format: "currency",
     },
   ],
   calculate: (inputs: Record<string, any>) => {

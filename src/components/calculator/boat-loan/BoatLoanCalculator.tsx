@@ -620,43 +620,45 @@ export function BoatLoanCalculator() {
                   </div>
                 </div>
 
-                {/* PRINCIPAL VS INTEREST PROGRESS */}
-                <div className="space-y-1 pt-1">
-                  <div className="w-full h-3 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex">
-                    <div
-                      style={{
-                        width: `${
-                          coreResult.totalOfPayments > 0
-                            ? (coreResult.totalLoanAmount / coreResult.totalOfPayments) * 100
-                            : 70
-                        }%`,
-                      }}
-                      className="bg-blue-600"
-                    />
-                    <div
-                      style={{
-                        width: `${
-                          coreResult.totalOfPayments > 0
-                            ? (coreResult.totalInterestPaid / coreResult.totalOfPayments) * 100
-                            : 30
-                        }%`,
-                      }}
-                      className="bg-amber-500"
-                    />
-                  </div>
-                  <div className="flex justify-between text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400">
-                    <span>Principal Financed: {fmt(coreResult.totalLoanAmount)}</span>
-                    <span>Finance Interest: {fmt(coreResult.totalInterestPaid)}</span>
+                    {/* PRINCIPAL VS INTEREST PROGRESS */}
+                    <div className="space-y-1.5 pt-1">
+                      <div className="w-full h-3.5 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex">
+                        <div
+                          style={{
+                            width: `${
+                              coreResult.totalOfPayments > 0
+                                ? (coreResult.totalLoanAmount / coreResult.totalOfPayments) * 100
+                                : 70
+                            }%`,
+                          }}
+                          className="bg-blue-600"
+                        />
+                        <div
+                          style={{
+                            width: `${
+                              coreResult.totalOfPayments > 0
+                                ? (coreResult.totalInterestPaid / coreResult.totalOfPayments) * 100
+                                : 30
+                            }%`,
+                          }}
+                          className="bg-amber-500"
+                        />
+                      </div>
+                      <div className="flex justify-between text-xs font-mono font-bold text-slate-600 dark:text-slate-400">
+                        <span>Principal Financed: {fmt(coreResult.totalLoanAmount)}</span>
+                        <span>Finance Interest: {fmt(coreResult.totalInterestPaid)}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* ANNUAL AMORTIZATION SCHEDULE */}
+              {/* ANNUAL AMORTIZATION SCHEDULE (FULL WIDTH BIGGER BOX) */}
               {coreResult.annualSchedule.length > 0 && (
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-extrabold uppercase text-blue-600 dark:text-blue-400">
-                      Annual Amortization Schedule
+                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xs">
+                  <div className="p-3 bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-xs font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                      Annual Marine Financing Amortization Schedule ({coreResult.annualSchedule.length} Reporting Periods)
                     </span>
                     <div className="flex items-center gap-2">
                       <button
@@ -664,7 +666,7 @@ export function BoatLoanCalculator() {
                         onClick={() => {
                           const headers = ["Period (Year)", "Interest Paid", "Principal Paid", "Ending Loan Balance"];
                           const rows = coreResult.annualSchedule.map((r) => [
-                            `Month ${r.month} (Yr ${r.year})`,
+                            `Year ${r.year}`,
                             r.interest.toFixed(2),
                             r.principal.toFixed(2),
                             r.endingBalance.toFixed(2),
@@ -672,9 +674,9 @@ export function BoatLoanCalculator() {
                           const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
                           triggerCsvDownload(`boat_loan_amortization_schedule.csv`, csv);
                         }}
-                        className="px-2 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 rounded-lg text-[11px] font-bold flex items-center gap-1 border border-slate-200 dark:border-slate-700 cursor-pointer transition-colors"
+                        className="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-lg text-xs font-bold flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 cursor-pointer transition-colors"
                       >
-                        <Download className="w-3 h-3" /> Export CSV
+                        <Download className="w-3.5 h-3.5 text-blue-600" /> Export CSV
                       </button>
                       <input
                         type="text"
@@ -684,28 +686,28 @@ export function BoatLoanCalculator() {
                           setTableSearch(e.target.value);
                           setCurrentPage(1);
                         }}
-                        className="h-6 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold focus:outline-none w-28"
+                        className="h-8 px-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold focus:outline-none w-32"
                       />
                     </div>
                   </div>
 
-                  <div className="overflow-x-auto max-h-44 overflow-y-auto">
-                    <table className="w-full text-left text-xs font-mono">
-                      <thead>
-                        <tr className="border-b border-slate-200 dark:border-slate-700 text-slate-500 font-sans font-bold uppercase text-[9px]">
-                          <th className="py-1 px-1.5">Year</th>
-                          <th className="py-1 px-1.5">Interest Paid</th>
-                          <th className="py-1 px-1.5">Principal Paid</th>
-                          <th className="py-1 px-1.5">Ending Loan Balance</th>
+                  <div className="overflow-x-auto text-xs max-h-72 overflow-y-auto">
+                    <table className="w-full text-left border-collapse font-sans tabular-nums">
+                      <thead className="sticky top-0 bg-slate-50 dark:bg-slate-800/90 text-slate-600 dark:text-slate-400 font-bold border-b border-slate-200 dark:border-slate-700 backdrop-blur-xs">
+                        <tr>
+                          <th className="p-2.5">Period (Year)</th>
+                          <th className="p-2.5">Interest Paid</th>
+                          <th className="p-2.5">Principal Paid</th>
+                          <th className="p-2.5">Ending Loan Balance</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-[11px]">
+                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                         {currentSchedulePage.map((row) => (
-                          <tr key={row.month} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                            <td className="py-1 px-1.5 font-bold font-sans">M{row.month} (Yr {row.year})</td>
-                            <td className="py-1 px-1.5 text-amber-600">{fmt(row.interest)}</td>
-                            <td className="py-1 px-1.5 text-blue-600 font-bold">{fmt(row.principal)}</td>
-                            <td className="py-1 px-1.5 font-bold text-slate-900 dark:text-slate-100">{fmt(row.endingBalance)}</td>
+                          <tr key={row.year} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                            <td className="p-2 font-bold text-slate-800 dark:text-slate-200">Year {row.year}</td>
+                            <td className="p-2 text-amber-600 font-bold">{fmt(row.interest)}</td>
+                            <td className="p-2 text-blue-600 font-bold">{fmt(row.principal)}</td>
+                            <td className="p-2 font-bold text-slate-900 dark:text-slate-100">{fmt(row.endingBalance)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -713,14 +715,14 @@ export function BoatLoanCalculator() {
                   </div>
 
                   {totalPages > 1 && (
-                    <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800 text-[10px] font-bold">
+                    <div className="p-2.5 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between text-xs font-bold">
                       <span className="text-slate-500">Page {currentPage} of {totalPages}</span>
-                      <div className="flex gap-1">
+                      <div className="flex gap-1.5">
                         <button
                           type="button"
                           disabled={currentPage <= 1}
                           onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                          className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 disabled:opacity-40 cursor-pointer"
+                          className="px-3 py-1 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 disabled:opacity-40 cursor-pointer"
                         >
                           Prev
                         </button>
@@ -728,7 +730,7 @@ export function BoatLoanCalculator() {
                           type="button"
                           disabled={currentPage >= totalPages}
                           onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                          className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 disabled:opacity-40 cursor-pointer"
+                          className="px-3 py-1 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 disabled:opacity-40 cursor-pointer"
                         >
                           Next
                         </button>
@@ -737,8 +739,6 @@ export function BoatLoanCalculator() {
                   )}
                 </div>
               )}
-            </div>
-          </div>
 
           {/* SAVED CALCULATIONS BOX 1 */}
           {savedCoreItems.length > 0 && (

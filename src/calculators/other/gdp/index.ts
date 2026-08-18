@@ -40,7 +40,7 @@ export const GDP_CALCULATOR: CalculatorModuleDefinition = {
   ],
   inputs: [
     {
-      id: "personalConsumption",
+      name: "personalConsumption",
       label: "Personal Consumption (C)",
       type: "currency",
       defaultValue: 19100,
@@ -49,7 +49,7 @@ export const GDP_CALCULATOR: CalculatorModuleDefinition = {
       step: 100,
     },
     {
-      id: "grossInvestment",
+      name: "grossInvestment",
       label: "Gross Investment (I)",
       type: "currency",
       defaultValue: 5100,
@@ -58,7 +58,7 @@ export const GDP_CALCULATOR: CalculatorModuleDefinition = {
       step: 100,
     },
     {
-      id: "governmentSpending",
+      name: "governmentSpending",
       label: "Government Spending (G)",
       type: "currency",
       defaultValue: 4850,
@@ -67,7 +67,7 @@ export const GDP_CALCULATOR: CalculatorModuleDefinition = {
       step: 100,
     },
     {
-      id: "exports",
+      name: "exports",
       label: "Exports (X)",
       type: "currency",
       defaultValue: 3150,
@@ -76,7 +76,7 @@ export const GDP_CALCULATOR: CalculatorModuleDefinition = {
       step: 100,
     },
     {
-      id: "imports",
+      name: "imports",
       label: "Imports (M)",
       type: "currency",
       defaultValue: 3820,
@@ -87,19 +87,19 @@ export const GDP_CALCULATOR: CalculatorModuleDefinition = {
   ],
   outputs: [
     {
-      id: "totalGdp",
+      name: "totalGdp",
       label: "Total Gross Domestic Product",
-      type: "currency",
+      format: "currency",
     },
     {
-      id: "netExports",
+      name: "netExports",
       label: "Net Exports (X - M)",
-      type: "currency",
+      format: "currency",
     },
     {
-      id: "gdpPerCapita",
+      name: "gdpPerCapita",
       label: "GDP Per Capita",
-      type: "currency",
+      format: "currency",
     },
   ],
   calculate: (inputs: Record<string, any>) => {

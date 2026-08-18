@@ -41,7 +41,7 @@ export const DEPRECIATION_CALCULATOR: CalculatorModuleDefinition = {
   ],
   inputs: [
     {
-      id: "assetCost",
+      name: "assetCost",
       label: "Asset Cost ($)",
       type: "currency",
       defaultValue: 11000,
@@ -50,7 +50,7 @@ export const DEPRECIATION_CALCULATOR: CalculatorModuleDefinition = {
       step: 100,
     },
     {
-      id: "salvageValue",
+      name: "salvageValue",
       label: "Salvage Value ($)",
       type: "currency",
       defaultValue: 1000,
@@ -59,7 +59,7 @@ export const DEPRECIATION_CALCULATOR: CalculatorModuleDefinition = {
       step: 100,
     },
     {
-      id: "usefulLifeYears",
+      name: "usefulLifeYears",
       label: "Depreciation Years",
       type: "number",
       defaultValue: 5,
@@ -70,19 +70,19 @@ export const DEPRECIATION_CALCULATOR: CalculatorModuleDefinition = {
   ],
   outputs: [
     {
-      id: "year1Depreciation",
+      name: "year1Depreciation",
       label: "Year 1 Depreciation",
-      type: "currency",
+      format: "currency",
     },
     {
-      id: "totalAccumulatedDepreciation",
+      name: "totalAccumulatedDepreciation",
       label: "Total Accumulated Depreciation",
-      type: "currency",
+      format: "currency",
     },
     {
-      id: "endingBookValue",
+      name: "endingBookValue",
       label: "Ending Book Value",
-      type: "currency",
+      format: "currency",
     },
   ],
   calculate: (inputs: Record<string, any>) => {
