@@ -676,19 +676,19 @@ export function TireSizeCalculator() {
         </div>
 
         {/* RIGHT DASHBOARD (Col 5) - INTERACTIVE VISUALIZER & COMPARISON */}
-        <div className="lg:col-span-5 bg-gradient-to-br from-blue-600 via-indigo-700 to-slate-900 text-white p-4 rounded-2xl shadow-md space-y-4">
+        <div className="lg:col-span-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 p-4 sm:p-5 rounded-2xl border border-blue-600/30 dark:border-blue-500/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08),0_2px_6px_-1px_rgba(0,0,0,0.04)] space-y-4">
           {/* Header & Safety Badge */}
-          <div className="flex items-center justify-between border-b border-white/20 pb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-100 flex items-center gap-1.5">
-              <Gauge className="h-4 w-4 text-white" /> Fitment &amp; Speed Dashboard
+          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+            <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
+              <Gauge className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Fitment &amp; Speed Dashboard
             </span>
             <span
               className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border ${
                 result.safetyRating === "safe"
-                  ? "bg-emerald-500/30 text-emerald-200 border-emerald-400/40"
+                  ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800"
                   : result.safetyRating === "caution"
-                  ? "bg-amber-500/30 text-amber-200 border-amber-400/40"
-                  : "bg-rose-500/30 text-rose-200 border-rose-400/40"
+                  ? "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800"
+                  : "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800"
               }`}
             >
               {result.safetyRating.toUpperCase()} ({result.diameterDiffPercent > 0 ? "+" : ""}{result.diameterDiffPercent}%)
@@ -696,20 +696,20 @@ export function TireSizeCalculator() {
           </div>
 
           {/* Primary Result Headline */}
-          <div className="grid grid-cols-2 gap-2 text-center bg-black/30 backdrop-blur-xs p-3 rounded-xl border border-white/20">
+          <div className="grid grid-cols-2 gap-3 text-center p-3.5 bg-gradient-to-b from-blue-50/80 via-white to-blue-50/40 dark:from-slate-800/80 dark:via-slate-900 dark:to-slate-800/40 border border-blue-200 dark:border-blue-900/50 rounded-xl shadow-[inset_0_1.5px_2px_rgba(255,255,255,0.8),0_2px_8px_-2px_rgba(37,99,235,0.12)]">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-blue-200 block">Diameter Delta</span>
-              <span className="text-xl sm:text-2xl font-black font-sans tabular-nums tracking-tight text-white">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">Diameter Delta</span>
+              <span className="text-xl sm:text-2xl font-black font-sans tabular-nums tracking-tight text-slate-900 dark:text-slate-100">
                 {result.diameterDiffIn > 0 ? "+" : ""}{result.diameterDiffIn}"
               </span>
-              <span className="text-[10px] text-blue-200 block">{result.diameterDiffMm} mm</span>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">{result.diameterDiffMm} mm</span>
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-blue-200 block">Speed @ 65 MPH</span>
-              <span className="text-xl sm:text-2xl font-black font-sans tabular-nums tracking-tight text-emerald-300">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">Speed @ 65 MPH</span>
+              <span className="text-xl sm:text-2xl font-black font-sans tabular-nums tracking-tight text-blue-600 dark:text-blue-400">
                 {result.speedAt65Mph}
               </span>
-              <span className="text-[10px] text-blue-200 block">Actual GPS Speed</span>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">Actual GPS Speed</span>
             </div>
           </div>
 
@@ -717,16 +717,16 @@ export function TireSizeCalculator() {
           <div
             className={`min-h-[64px] px-3.5 py-2.5 rounded-xl border text-xs flex items-center gap-2.5 transition-all duration-300 ${
               result.safetyRating === "safe"
-                ? "bg-emerald-950/60 border-emerald-500/50 text-emerald-100 shadow-sm shadow-emerald-900/30"
+                ? "bg-emerald-50/80 border-emerald-200 text-emerald-900 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-200 shadow-xs"
                 : result.safetyRating === "caution"
-                ? "bg-amber-950/60 border-amber-500/50 text-amber-100 shadow-sm shadow-amber-900/30"
-                : "bg-rose-950/60 border-rose-500/50 text-rose-100 shadow-sm shadow-rose-900/30"
+                ? "bg-amber-50/80 border-amber-200 text-amber-900 dark:bg-amber-950/40 dark:border-amber-800 dark:text-amber-200 shadow-xs"
+                : "bg-rose-50/80 border-rose-200 text-rose-900 dark:bg-rose-950/40 dark:border-rose-800 dark:text-rose-200 shadow-xs"
             }`}
           >
             {result.safetyRating === "safe" ? (
-              <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-400" />
+              <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
             ) : (
-              <AlertTriangle className="h-5 w-5 shrink-0 text-amber-400" />
+              <AlertTriangle className="h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
             )}
             <div className="flex-1 min-w-0">
               <span className="font-extrabold uppercase text-[10px] tracking-wider block opacity-90">
@@ -736,17 +736,17 @@ export function TireSizeCalculator() {
                   ? "Fitment Variance Caution"
                   : "Fitment Exceeds 3% Warning"}
               </span>
-              <p className="text-[11px] leading-snug font-medium text-slate-100 dark:text-zinc-100">{result.safetyMessage}</p>
+              <p className="text-[11px] leading-snug font-medium text-slate-800 dark:text-slate-200">{result.safetyMessage}</p>
             </div>
           </div>
 
           {/* INTERACTIVE 2D SVG VISUAL OVERLAY - PREMIUM CAD STYLING */}
-          <div className="bg-slate-950/80 backdrop-blur-md p-3.5 rounded-2xl border border-white/10 shadow-inner space-y-2.5">
+          <div className="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-inner space-y-2.5">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-200 flex items-center gap-1.5">
-                <Compass className="h-4 w-4 text-emerald-400" /> Scaled 2D Fitment Visualizer
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
+                <Compass className="h-4 w-4 text-blue-600 dark:text-blue-400" /> Scaled 2D Fitment Visualizer
               </span>
-              <div className="flex gap-1 text-[10px] bg-slate-900/90 p-0.5 rounded-lg border border-slate-800">
+              <div className="flex gap-1 text-[10px] bg-slate-200/80 dark:bg-slate-900 p-0.5 rounded-lg border border-slate-300 dark:border-slate-800">
                 <button
                   onClick={() => setVisualView("profile")}
                   className={`px-2.5 py-1 rounded-md cursor-pointer font-extrabold transition-all ${
@@ -1042,102 +1042,102 @@ export function TireSizeCalculator() {
           </div>
 
           {/* SIDE-BY-SIDE DATA COMPARISON TABLE - SPACIOUS & DE-CONGESTED */}
-          <div className="bg-slate-950/80 backdrop-blur-md p-3.5 rounded-2xl border border-white/15 space-y-3 text-xs shadow-inner">
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-200 block text-center border-b border-white/10 pb-2">
+          <div className="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-700 space-y-3 text-xs shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-200 block text-center border-b border-slate-200/80 dark:border-slate-700 pb-2">
               Comprehensive Geometry Matrix
             </span>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-white/15 text-[10px] uppercase font-extrabold text-blue-200 tracking-wider">
+                  <tr className="border-b border-slate-200/80 dark:border-slate-700 text-[10px] uppercase font-extrabold text-slate-500 dark:text-slate-400 tracking-wider">
                     <th className="py-2 px-1">Specification</th>
                     <th className="py-2 px-1 text-center">Stock ({result.tire1.formattedSize})</th>
                     <th className="py-2 px-1 text-center">New ({result.tire2.formattedSize})</th>
                     <th className="py-2 px-1 text-right">Difference</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/10 font-sans tabular-nums text-[11px]">
-                  <tr className="hover:bg-white/5 transition-colors">
-                    <td className="py-2.5 px-1 font-sans text-slate-200 font-bold">Overall Diameter</td>
+                <tbody className="divide-y divide-slate-200/60 dark:divide-slate-700/60 font-sans tabular-nums text-[11px]">
+                  <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="py-2.5 px-1 font-sans text-slate-700 dark:text-slate-200 font-bold">Overall Diameter</td>
                     <td className="py-2.5 px-1 text-center">
-                      <span className="font-bold text-white block">{result.tire1.diameterIn} in</span>
-                      <span className="text-[10px] text-blue-300 font-normal block">{result.tire1.diameterMm} mm</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100 block">{result.tire1.diameterIn} in</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 font-normal block">{result.tire1.diameterMm} mm</span>
                     </td>
                     <td className="py-2.5 px-1 text-center">
-                      <span className="font-bold text-white block">{result.tire2.diameterIn} in</span>
-                      <span className="text-[10px] text-emerald-300 font-normal block">{result.tire2.diameterMm} mm</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100 block">{result.tire2.diameterIn} in</span>
+                      <span className="text-[10px] text-blue-600 dark:text-blue-400 font-normal block">{result.tire2.diameterMm} mm</span>
                     </td>
                     <td className="py-2.5 px-1 text-right">
-                      <span className="font-extrabold text-emerald-300 block">
+                      <span className="font-extrabold text-blue-600 dark:text-blue-400 block">
                         {result.diameterDiffIn > 0 ? "+" : ""}{result.diameterDiffIn} in
                       </span>
-                      <span className="text-[10px] text-emerald-400 font-bold block">
+                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold block">
                         {result.diameterDiffPercent > 0 ? "+" : ""}{result.diameterDiffPercent}%
                       </span>
                     </td>
                   </tr>
-                  <tr className="hover:bg-white/5 transition-colors">
-                    <td className="py-2.5 px-1 font-sans text-slate-200 font-bold">Section Width</td>
+                  <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="py-2.5 px-1 font-sans text-slate-700 dark:text-slate-200 font-bold">Section Width</td>
                     <td className="py-2.5 px-1 text-center">
-                      <span className="font-bold text-white block">{result.tire1.widthIn} in</span>
-                      <span className="text-[10px] text-blue-300 font-normal block">{result.tire1.widthMm} mm</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100 block">{result.tire1.widthIn} in</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 font-normal block">{result.tire1.widthMm} mm</span>
                     </td>
                     <td className="py-2.5 px-1 text-center">
-                      <span className="font-bold text-white block">{result.tire2.widthIn} in</span>
-                      <span className="text-[10px] text-emerald-300 font-normal block">{result.tire2.widthMm} mm</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100 block">{result.tire2.widthIn} in</span>
+                      <span className="text-[10px] text-blue-600 dark:text-blue-400 font-normal block">{result.tire2.widthMm} mm</span>
                     </td>
                     <td className="py-2.5 px-1 text-right">
-                      <span className="font-extrabold text-emerald-300 block">
+                      <span className="font-extrabold text-blue-600 dark:text-blue-400 block">
                         {result.widthDiffIn > 0 ? "+" : ""}{result.widthDiffIn} in
                       </span>
-                      <span className="text-[10px] text-emerald-400 font-bold block">
+                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold block">
                         {result.widthDiffMm > 0 ? "+" : ""}{result.widthDiffMm} mm
                       </span>
                     </td>
                   </tr>
-                  <tr className="hover:bg-white/5 transition-colors">
-                    <td className="py-2.5 px-1 font-sans text-slate-200 font-bold">Sidewall Height</td>
+                  <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="py-2.5 px-1 font-sans text-slate-700 dark:text-slate-200 font-bold">Sidewall Height</td>
                     <td className="py-2.5 px-1 text-center">
-                      <span className="font-bold text-white block">{result.tire1.sidewallIn} in</span>
-                      <span className="text-[10px] text-blue-300 font-normal block">{result.tire1.sidewallMm} mm</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100 block">{result.tire1.sidewallIn} in</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 font-normal block">{result.tire1.sidewallMm} mm</span>
                     </td>
                     <td className="py-2.5 px-1 text-center">
-                      <span className="font-bold text-white block">{result.tire2.sidewallIn} in</span>
-                      <span className="text-[10px] text-emerald-300 font-normal block">{result.tire2.sidewallMm} mm</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100 block">{result.tire2.sidewallIn} in</span>
+                      <span className="text-[10px] text-blue-600 dark:text-blue-400 font-normal block">{result.tire2.sidewallMm} mm</span>
                     </td>
                     <td className="py-2.5 px-1 text-right">
-                      <span className="font-extrabold text-emerald-300 block">
+                      <span className="font-extrabold text-blue-600 dark:text-blue-400 block">
                         {result.sidewallDiffIn > 0 ? "+" : ""}{result.sidewallDiffIn} in
                       </span>
-                      <span className="text-[10px] text-emerald-400 font-bold block">
+                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold block">
                         {result.sidewallDiffMm > 0 ? "+" : ""}{result.sidewallDiffMm} mm
                       </span>
                     </td>
                   </tr>
-                  <tr className="hover:bg-white/5 transition-colors">
-                    <td className="py-2.5 px-1 font-sans text-slate-200 font-bold">Circumference</td>
+                  <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="py-2.5 px-1 font-sans text-slate-700 dark:text-slate-200 font-bold">Circumference</td>
                     <td className="py-2.5 px-1 text-center">
-                      <span className="font-bold text-white block">{result.tire1.circumferenceIn} in</span>
-                      <span className="text-[10px] text-blue-300 font-normal block">{result.tire1.circumferenceMm} mm</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100 block">{result.tire1.circumferenceIn} in</span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400 font-normal block">{result.tire1.circumferenceMm} mm</span>
                     </td>
                     <td className="py-2.5 px-1 text-center">
-                      <span className="font-bold text-white block">{result.tire2.circumferenceIn} in</span>
-                      <span className="text-[10px] text-emerald-300 font-normal block">{result.tire2.circumferenceMm} mm</span>
+                      <span className="font-bold text-slate-900 dark:text-slate-100 block">{result.tire2.circumferenceIn} in</span>
+                      <span className="text-[10px] text-blue-600 dark:text-blue-400 font-normal block">{result.tire2.circumferenceMm} mm</span>
                     </td>
                     <td className="py-2.5 px-1 text-right">
-                      <span className="font-extrabold text-emerald-300 block">
+                      <span className="font-extrabold text-blue-600 dark:text-blue-400 block">
                         {result.circumferenceDiffIn > 0 ? "+" : ""}{result.circumferenceDiffIn} in
                       </span>
-                      <span className="text-[10px] text-emerald-400 font-bold block">
+                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold block">
                         {result.circumferenceDiffMm > 0 ? "+" : ""}{result.circumferenceDiffMm} mm
                       </span>
                     </td>
                   </tr>
-                  <tr className="hover:bg-white/5 transition-colors">
-                    <td className="py-2.5 px-1 font-sans text-slate-200 font-bold">Revs / Mile (RPM)</td>
-                    <td className="py-2.5 px-1 text-center font-bold text-white">{result.tire1.revsPerMile}</td>
-                    <td className="py-2.5 px-1 text-center font-bold text-white">{result.tire2.revsPerMile}</td>
-                    <td className="py-2.5 px-1 text-right font-extrabold text-emerald-300">
+                  <tr className="hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="py-2.5 px-1 font-sans text-slate-700 dark:text-slate-200 font-bold">Revs / Mile (RPM)</td>
+                    <td className="py-2.5 px-1 text-center font-bold text-slate-900 dark:text-slate-100">{result.tire1.revsPerMile}</td>
+                    <td className="py-2.5 px-1 text-center font-bold text-slate-900 dark:text-slate-100">{result.tire2.revsPerMile}</td>
+                    <td className="py-2.5 px-1 text-right font-extrabold text-blue-600 dark:text-blue-400">
                       {result.revsPerMileDiff > 0 ? "+" : ""}{result.revsPerMileDiff}
                     </td>
                   </tr>
@@ -1147,16 +1147,16 @@ export function TireSizeCalculator() {
           </div>
 
           {/* SPEED DELTA CALIBRATION MATRIX TABLE */}
-          <div className="bg-black/40 backdrop-blur-xs p-3 rounded-xl border border-white/20 space-y-2 text-xs">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-blue-200 block text-center">
+          <div className="bg-white dark:bg-slate-800/80 p-3 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2 text-xs shadow-xs">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-600 dark:text-slate-300 block text-center">
               Speedometer Calibration Delta Matrix
             </span>
             <div className="grid grid-cols-6 gap-1 text-center font-sans tabular-nums text-[10px]">
               {result.speedDeltaTable.map((pt) => (
-                <div key={pt.indicatedMph} className="p-1 bg-white/10 rounded-md">
-                  <span className="text-blue-200 block text-[9px]">{pt.indicatedMph} mph</span>
-                  <span className="font-bold text-white block">{pt.actualMph}</span>
-                  <span className="text-[8px] text-emerald-300 block">
+                <div key={pt.indicatedMph} className="p-1 bg-slate-50 dark:bg-slate-900 rounded-md border border-slate-200/80 dark:border-slate-750">
+                  <span className="text-slate-500 dark:text-slate-400 block text-[9px] font-medium">{pt.indicatedMph} mph</span>
+                  <span className="font-bold text-slate-900 dark:text-slate-100 block">{pt.actualMph}</span>
+                  <span className="text-[8px] text-emerald-600 dark:text-emerald-400 font-bold block">
                     {pt.actualMph >= pt.indicatedMph ? "+" : ""}{(pt.actualMph - pt.indicatedMph).toFixed(1)}
                   </span>
                 </div>

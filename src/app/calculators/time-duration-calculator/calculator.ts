@@ -1,16 +1,57 @@
+import {
+  calculateSameDayDuration,
+  calculateCrossDateDuration,
+} from "@/lib/calculator-engine/formulas/time-duration";
 import { TimeDurationCalculatorOutputs } from "./types";
 
 export function calculateTimeDurationCalculator(inputs: Record<string, any>): TimeDurationCalculatorOutputs {
-  const dt1 = new Date(`${inputs.startDate || "2026-08-01"}T${inputs.startTime || "08:00"}:00`);
-  const dt2 = new Date(`${inputs.endDate || "2026-08-07"}T${inputs.endTime || "17:30"}:00`);
-  if (isNaN(dt1.getTime()) || isNaN(dt2.getTime())) return { formattedDuration: "Invalid Input", totalHours: 0 };
-  const diffMs = Math.max(0, dt2.getTime() - dt1.getTime());
-  const totalMins = Math.floor(diffMs / 60000);
-  const days = Math.floor(totalMins / (24 * 60));
-  const hrs = Math.floor((totalMins % (24 * 60)) / 60);
-  const mins = totalMins % 60;
+  const parseTime = (str: string) => {
+    const parts = String(str || "08:30").split(":").map(Number);
+    return { hour: parts[0] || 0, minute: parts[1] || 0, second: parts[2] || 0 };
+  };
+
+  const start = parseTime(inputs.startTime);
+  const end = parseTime(inputs.endTime);
+
+  const startD = inputs.startDate ? new Date(inputs.startDate) : new Date();
+  const endD = inputs.endDate ? new Date(inputs.endDate) : new Date();
+
+  // If same date
+  if (inputs.startDate && inputs.endDate && inputs.startDate === inputs.endDate) {
+    const result = calculateSameDayDuration({
+      startHour: start.hour,
+      startMinute: start.minute,
+      startSecond: start.second,
+      endHour: end.hour,
+      endMinute: end.minute,
+      endSecond: end.second,
+      is24Hour: true,
+    });
+    return {
+      formattedDuration: result.formattedHms,
+      totalHours: result.totalDecimalHours,
+    };
+  }
+
+  // Cross date
+  const result = calculateCrossDateDuration({
+    startYear: startD.getFullYear(),
+    startMonth: startD.getMonth(),
+    startDay: startD.getDate(),
+    startHour: start.hour,
+    startMinute: start.minute,
+    startSecond: start.second,
+    endYear: endD.getFullYear(),
+    endMonth: endD.getMonth(),
+    endDay: endD.getDate(),
+    endHour: end.hour,
+    endMinute: end.minute,
+    endSecond: end.second,
+    is24Hour: true,
+  });
+
   return {
-    formattedDuration: `${days} days, ${hrs} hours, ${mins} minutes`,
-    totalHours: parseFloat((diffMs / 3600000).toFixed(2))
+    formattedDuration: result.formattedFull,
+    totalHours: result.totalDecimalHours,
   };
 }

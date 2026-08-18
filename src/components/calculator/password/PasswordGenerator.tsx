@@ -567,17 +567,8 @@ export function PasswordGenerator() {
             </div>
           )}
 
-          {/* UNIFIED ACTION BAR: Copy, Save, Share, Print */}
+          {/* ACTION BAR: Save */}
           <div className="flex flex-wrap items-center justify-end gap-3 pt-3 mt-4 border-t border-zinc-200 dark:border-zinc-800 no-print">
-            <button
-              type="button"
-              onClick={() => handleCopy(outputs.generatedPassword || "")}
-              className="text-xs font-bold text-slate-800 dark:text-slate-200 font-semibold hover:text-zinc-950 dark:hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap"
-            >
-              {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-zinc-400 dark:text-zinc-500" />}
-              <span>{copied ? "Copied!" : "Copy"}</span>
-            </button>
-
             <button
               type="button"
               onClick={handleSavePasswordClick}

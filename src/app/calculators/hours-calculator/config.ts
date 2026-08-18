@@ -1,6 +1,7 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateHoursCalculator } from "./calculator";
-import { hours_calculatorFaqs } from "./faq";
+import { HoursCalculator } from "@/components/calculator/hours/HoursCalculator";
+import { HoursContent } from "@/components/calculator/hours/HoursContent";
 
 export const hours_calculatorConfig: CalculatorModuleDefinition = {
   id: "hours-calculator",
@@ -8,50 +9,58 @@ export const hours_calculatorConfig: CalculatorModuleDefinition = {
   slug: "hours-calculator",
   category: "date",
   subcategory: "Date & Time",
-  description: "Calculate total hours worked between start and end times minus break time.",
+  description: "Calculate total hours and minutes between two times, track multi-day durations, and compute timecard hours with break deductions and overtime.",
   iconName: "Timer",
   featured: true,
-  keywords: ["hours calculator","work hours","time worked","timecard"],
+  keywords: [
+    "hours calculator",
+    "calculate hours between two times",
+    "work hours calculator",
+    "hours and minutes finder",
+    "timecard calculator",
+    "overtime calculator",
+  ],
   priority: 1,
-  relatedCalculators: ["time-card-calculator","time-calculator"],
-  formulaDescription: "Total Hours = (End Time - Start Time - Break Mins) / 60",
-  faqs: hours_calculatorFaqs,
+  relatedCalculators: ["time-card-calculator", "time-calculator", "time-duration-calculator", "date-calculator", "day-counter-calculator"],
+  formulaDescription: "Total Hours = (End Time - Start Time - Unpaid Breaks) / 60",
+  CustomComponent: HoursCalculator,
+  ContentComponent: HoursContent,
   inputs: [
-  {
-    "name": "startTime",
-    "label": "Start Time (e.g. 09:00)",
-    "type": "text",
-    "defaultValue": "09:00"
-  },
-  {
-    "name": "endTime",
-    "label": "End Time (e.g. 17:00)",
-    "type": "text",
-    "defaultValue": "17:00"
-  },
-  {
-    "name": "breakMins",
-    "label": "Unpaid Break (minutes)",
-    "type": "number",
-    "defaultValue": 30,
-    "min": 0,
-    "max": 240,
-    "step": 5
-  }
-],
+    {
+      name: "startTime",
+      label: "Start Time",
+      type: "text",
+      defaultValue: "08:30",
+    },
+    {
+      name: "endTime",
+      label: "End Time",
+      type: "text",
+      defaultValue: "17:30",
+    },
+    {
+      name: "breakMins",
+      label: "Unpaid Break (minutes)",
+      type: "number",
+      defaultValue: 30,
+      min: 0,
+      max: 300,
+      step: 5,
+    },
+  ],
   outputs: [
-  {
-    "name": "totalHours",
-    "label": "Total Paid Hours",
-    "format": "number",
-    "highlight": true
-  },
-  {
-    "name": "formattedDuration",
-    "label": "Duration Format",
-    "format": "text"
-  }
-],
+    {
+      name: "totalHours",
+      label: "Total Paid Hours (Decimal)",
+      format: "number",
+      highlight: true,
+    },
+    {
+      name: "formattedDuration",
+      label: "Duration (Hours and Minutes)",
+      format: "text",
+    },
+  ],
   calculate: calculateHoursCalculator,
 };
 

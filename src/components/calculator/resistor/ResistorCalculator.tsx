@@ -940,9 +940,9 @@ export function ResistorCalculator() {
           )}
 
           {/* RESULTS CARD */}
-          <div className="p-4 sm:p-5 bg-slate-900 text-white rounded-2xl border border-slate-800 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+          <div className="p-4 sm:p-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-2xl border border-blue-600/30 dark:border-blue-500/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08),0_2px_6px_-1px_rgba(0,0,0,0.04)] space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
                 <span>⚡</span> Resistor Suite Outputs
               </span>
               <div className="flex items-center gap-1.5 no-print">
@@ -951,9 +951,9 @@ export function ResistorCalculator() {
                   variant="outline"
                   size="sm"
                   onClick={handleSave}
-                  className="h-7 text-xs gap-1.5 border-slate-700 hover:border-slate-600 bg-slate-800 hover:bg-slate-700 text-slate-100 cursor-pointer"
+                  className="h-7 text-xs gap-1.5 border border-slate-200 dark:border-slate-700 bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer rounded-lg"
                 >
-                  {justSaved ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Bookmark className="h-3.5 w-3.5 text-blue-400" />}
+                  {justSaved ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Bookmark className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />}
                   {justSaved ? "Saved!" : "Save"}
                 </Button>
                 <Button
@@ -961,16 +961,16 @@ export function ResistorCalculator() {
                   variant="outline"
                   size="sm"
                   onClick={handleCopy}
-                  className="h-7 text-xs gap-1.5 border-slate-700 hover:border-slate-600 bg-slate-800 hover:bg-slate-700 text-slate-100 cursor-pointer"
+                  className="h-7 text-xs gap-1.5 border border-slate-200 dark:border-slate-700 bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer rounded-lg"
                 >
-                  {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                  {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
                   {copied ? "Copied" : "Copy"}
                 </Button>
               </div>
             </div>
 
             {validationErrors.length > 0 ? (
-              <div className="p-3 bg-red-950/40 border border-red-800/80 rounded-xl text-xs text-red-400 font-semibold space-y-1">
+              <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 rounded-xl text-xs text-red-600 dark:text-red-400 font-semibold space-y-1">
                 <div className="font-bold flex items-center gap-1.5">
                   <Info className="w-3.5 h-3.5 shrink-0" /> Input Validation Errors:
                 </div>
@@ -984,9 +984,9 @@ export function ResistorCalculator() {
               <div className="space-y-4">
                 {/* Main value display */}
                 <div className="grid grid-cols-1 gap-3">
-                  <div className="p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-center">
-                    <div className="text-[10px] text-slate-400 font-semibold uppercase">Calculated Resistance</div>
-                    <div className="text-3xl font-sans tabular-nums font-black text-emerald-300 mt-1">
+                  <div className="p-4 bg-gradient-to-b from-blue-50/80 via-white to-blue-50/40 dark:from-slate-800/80 dark:via-slate-900 dark:to-slate-800/40 border border-blue-200 dark:border-blue-900/50 rounded-xl text-center shadow-[inset_0_1.5px_2px_rgba(255,255,255,0.8),0_2px_8px_-2px_rgba(37,99,235,0.12)]">
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">Calculated Resistance</div>
+                    <div className="text-3xl sm:text-4xl font-sans tabular-nums font-black text-blue-600 dark:text-blue-400 mt-1 tracking-tight">
                       {result.formattedValue}
                     </div>
                   </div>
@@ -994,50 +994,25 @@ export function ResistorCalculator() {
 
                 {/* Nominal and tolerance details */}
                 {result.minOhms !== undefined && result.maxOhms !== undefined && (
-                  <div className="p-3 bg-slate-800/50 rounded-xl border border-slate-800 text-xs font-sans tabular-nums space-y-1 text-slate-300">
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Nominal resistance:</span>
-                      <span>{result.resistanceOhms} Ω</span>
+                  <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700 text-xs font-sans tabular-nums space-y-1.5 text-slate-700 dark:text-slate-200 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]">
+                    <div className="flex justify-between items-center py-1 border-b border-slate-200/60 dark:border-slate-700/60">
+                      <span className="text-slate-500 dark:text-slate-400 font-medium">Nominal resistance:</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-100">{result.resistanceOhms} Ω</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Tolerance rate:</span>
-                      <span>±{result.tolerancePct}%</span>
+                    <div className="flex justify-between items-center py-1 border-b border-slate-200/60 dark:border-slate-700/60">
+                      <span className="text-slate-500 dark:text-slate-400 font-medium">Tolerance rate:</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-100">±{result.tolerancePct}%</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Minimum resistance:</span>
-                      <span>{formatOhms(result.minOhms)}</span>
+                    <div className="flex justify-between items-center py-1 border-b border-slate-200/60 dark:border-slate-700/60">
+                      <span className="text-slate-500 dark:text-slate-400 font-medium">Minimum resistance:</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-100">{formatOhms(result.minOhms)}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Maximum resistance:</span>
-                      <span>{formatOhms(result.maxOhms)}</span>
+                    <div className="flex justify-between items-center py-1">
+                      <span className="text-slate-500 dark:text-slate-400 font-medium">Maximum resistance:</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-100">{formatOhms(result.maxOhms)}</span>
                     </div>
                   </div>
                 )}
-
-                {/* UNIFIED ACTION BAR: Copy, Save, Share, Print */}
-                <div className="flex flex-wrap items-center justify-end gap-3 pt-3 border-t border-slate-800 no-print">
-                  <button
-                    type="button"
-                    onClick={handleCopy}
-                    className="text-xs font-bold text-slate-800 dark:text-slate-200 font-semibold bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-slate-400" />}
-                    <span>{copied ? "Copied!" : "Copy"}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleSave}
-                    className="text-xs font-bold text-slate-800 dark:text-slate-200 font-semibold bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    {justSaved ? <Check className="w-4 h-4 text-emerald-400" /> : <Bookmark className="w-4 h-4 text-amber-400" />}
-                    <span>{justSaved ? "Saved!" : "Save"}</span>
-                  </button>
-
-                  
-
-                  
-                </div>
               </div>
             ) : (
               <div className="text-center py-6 text-slate-400 text-xs">

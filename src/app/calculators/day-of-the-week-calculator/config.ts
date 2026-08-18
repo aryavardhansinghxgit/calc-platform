@@ -1,6 +1,7 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateDayoftheWeekCalculator } from "./calculator";
-import { day_of_the_week_calculatorFaqs } from "./faq";
+import { DayOfWeekCalculator } from "@/components/calculator/day-of-week/DayOfWeekCalculator";
+import { DayOfWeekContent } from "@/components/calculator/day-of-week/DayOfWeekContent";
 
 export const day_of_the_week_calculatorConfig: CalculatorModuleDefinition = {
   id: "day-of-the-week-calculator",
@@ -8,35 +9,43 @@ export const day_of_the_week_calculatorConfig: CalculatorModuleDefinition = {
   slug: "day-of-the-week-calculator",
   category: "date",
   subcategory: "Date & Time",
-  description: "Determine what day of the week any past or future historical date falls on.",
-  iconName: "HelpCircle",
+  description: "Determine the exact day of the week for any past, present, or future date with Zeller's congruence and planetary etymology.",
+  iconName: "Calendar",
   featured: true,
-  keywords: ["day of the week","what day was i born","day finder","calendar day"],
+  keywords: [
+    "day of the week calculator",
+    "what day of the week was I born",
+    "find day for date",
+    "day of week finder",
+    "born on a monday calculator",
+    "zeller congruence calculator",
+  ],
   priority: 1,
-  relatedCalculators: ["age-calculator","day-counter-calculator"],
-  formulaDescription: "Zeller's Congruence / Calendar Algorithm",
-  faqs: day_of_the_week_calculatorFaqs,
+  relatedCalculators: ["date-calculator", "day-counter-calculator", "age-calculator", "time-calculator", "hours-calculator"],
+  formulaDescription: "Zeller's Congruence & ISO 8601 Calendar Algorithm",
+  CustomComponent: DayOfWeekCalculator,
+  ContentComponent: DayOfWeekContent,
   inputs: [
-  {
-    "name": "targetDate",
-    "label": "Target Date",
-    "type": "date",
-    "defaultValue": "1969-07-20"
-  }
-],
+    {
+      name: "targetDate",
+      label: "Target Date",
+      type: "date",
+      defaultValue: "1969-07-20",
+    },
+  ],
   outputs: [
-  {
-    "name": "dayOfWeek",
-    "label": "Day of the Week",
-    "format": "text",
-    "highlight": true
-  },
-  {
-    "name": "isLeapYear",
-    "label": "Is Leap Year?",
-    "format": "text"
-  }
-],
+    {
+      name: "dayOfWeek",
+      label: "Day of the Week",
+      format: "text",
+      highlight: true,
+    },
+    {
+      name: "isLeapYear",
+      label: "Is Leap Year?",
+      format: "text",
+    },
+  ],
   calculate: calculateDayoftheWeekCalculator,
 };
 
