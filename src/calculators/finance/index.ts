@@ -44,6 +44,7 @@ import { BOND_CALCULATOR } from "./bond";
 import { MUTUAL_FUND_CALCULATOR } from "./mutual-fund";
 import { AVERAGE_RETURN_CALCULATOR } from "./average-return";
 import { IRR_CALCULATOR } from "./irr";
+import { PAYBACK_PERIOD_CALCULATOR } from "./payback-period";
 
 // 4. Taxes
 import { INCOME_TAX_CALCULATOR } from "./income-tax";
@@ -124,6 +125,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   MUTUAL_FUND_CALCULATOR,
   AVERAGE_RETURN_CALCULATOR,
   IRR_CALCULATOR,
+  PAYBACK_PERIOD_CALCULATOR,
 
   // Taxes
   INCOME_TAX_CALCULATOR,
