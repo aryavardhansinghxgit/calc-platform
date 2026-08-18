@@ -84,6 +84,7 @@ import { PERSONAL_LOAN_CALCULATOR } from "./personal-loan";
 import { BUSINESS_LOAN_CALCULATOR } from "./business-loan";
 import { STUDENT_LOAN_CALCULATOR } from "./student-loan";
 import { BUDGET_CALCULATOR } from "./budget";
+import { CURRENCY_CALCULATOR } from "./currency";
 
 export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   // Mortgage & House
@@ -170,6 +171,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   BUSINESS_LOAN_CALCULATOR,
   STUDENT_LOAN_CALCULATOR,
   BUDGET_CALCULATOR,
+  CURRENCY_CALCULATOR,
 ];
 
 export default FINANCE_CALCULATORS;
