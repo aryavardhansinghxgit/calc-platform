@@ -15,6 +15,7 @@ import { RENT_CALCULATOR } from "./rent";
 import { LOAN_CALCULATOR } from "./loan";
 import { EMI_CALCULATOR } from "./emi";
 import { AMORTIZATION_CALCULATOR } from "./amortization";
+import { PAYMENT_CALCULATOR } from "./payment";
 import { MORTGAGE_PAYOFF_CALCULATOR } from "./mortgage-payoff";
 import { HOUSE_AFFORDABILITY_CALCULATOR } from "./house-affordability";
 import { REFINANCE_CALCULATOR } from "./refinance";
@@ -98,6 +99,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   DTI_CALCULATOR,
   RENT_CALCULATOR,
   LOAN_CALCULATOR,
+  PAYMENT_CALCULATOR,
   EMI_CALCULATOR,
   AMORTIZATION_CALCULATOR,
   MORTGAGE_PAYOFF_CALCULATOR,
