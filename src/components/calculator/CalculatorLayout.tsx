@@ -812,9 +812,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </CalculatorErrorBoundary>
 
           {/* Simple Related Calculators Links directly below calculator boxes */}
-          <div className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200/80 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
-              Related Calculators
+          <div className="pt-2 pb-1 space-y-1">
+            <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
+              Related Calculators:
             </span>
             <RelatedCalculators currentId={definition.id} category={definition.category} />
           </div>
