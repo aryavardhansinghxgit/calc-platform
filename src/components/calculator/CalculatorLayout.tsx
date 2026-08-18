@@ -434,6 +434,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isRoman = idLower === "roman-numeral-converter" || slugLower === "roman-numeral-converter";
   const isBond = idLower === "bond-calculator" || slugLower === "bond-calculator" || idLower === "bond" || slugLower === "bond";
   const isMutualFund = idLower === "mutual-fund-calculator" || slugLower === "mutual-fund-calculator" || idLower === "mutual-fund" || slugLower === "mutual-fund";
+  const isAverageReturn = idLower === "average-return-calculator" || slugLower === "average-return-calculator" || idLower === "average-return" || slugLower === "average-return";
 
   const CustomContent = (definition as any).ContentComponent || (
     isRoman ? RomanNumeralContent :
@@ -877,7 +878,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs text-slate-900 dark:text-slate-100">
         {/* Formula & Calculation Method */}
-        {definition.formulaDescription && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
+        {definition.formulaDescription && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-2">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Formula & Calculation Method
@@ -899,7 +900,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         )}
 
         {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Custom suites per AGENTS.md policy) */}
-        {definition.category !== "Math" && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
+        {definition.category !== "Math" && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-3">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Frequently Asked Questions
