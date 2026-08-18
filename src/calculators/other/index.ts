@@ -27,6 +27,7 @@ import { grade_calculatorConfig } from "@/app/calculators/grade-calculator/confi
 import { molarity_calculatorConfig } from "@/app/calculators/molarity-calculator/config";
 import { molecular_weight_calculatorConfig } from "@/app/calculators/molecular-weight-calculator/config";
 import { electricity_calculatorConfig } from "@/app/calculators/electricity-calculator/config";
+import { GDP_CALCULATOR } from "./gdp";
 
 export const OTHER_CALCULATORS: CalculatorModuleDefinition[] = [
   electricity_calculatorConfig,
@@ -57,6 +58,7 @@ export const OTHER_CALCULATORS: CalculatorModuleDefinition[] = [
   grade_calculatorConfig,
   molarity_calculatorConfig,
   molecular_weight_calculatorConfig,
+  GDP_CALCULATOR,
 ];
 
 export default OTHER_CALCULATORS;
