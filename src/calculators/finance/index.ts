@@ -20,9 +20,10 @@ import { MORTGAGE_PAYOFF_CALCULATOR } from "./mortgage-payoff";
 import { HOUSE_AFFORDABILITY_CALCULATOR } from "./house-affordability";
 import { REFINANCE_CALCULATOR } from "./refinance";
 
-// 2. Auto
+// 2. Auto & Lease
 import { AUTO_LOAN_CALCULATOR } from "./auto-loan";
 import { AUTO_LEASE_CALCULATOR } from "./auto-lease";
+import { LEASE_CALCULATOR } from "./lease";
 import { CASH_BACK_CALCULATOR } from "./cash-back";
 
 // 3. Investment
@@ -109,9 +110,10 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   HOUSE_AFFORDABILITY_CALCULATOR,
   REFINANCE_CALCULATOR,
 
-  // Auto
+  // Auto & Lease
   AUTO_LOAN_CALCULATOR,
   AUTO_LEASE_CALCULATOR,
+  LEASE_CALCULATOR,
   CASH_BACK_CALCULATOR,
 
   // Investment
