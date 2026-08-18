@@ -43,6 +43,7 @@ import { PRESENT_VALUE_CALCULATOR } from "./present-value";
 import { BOND_CALCULATOR } from "./bond";
 import { MUTUAL_FUND_CALCULATOR } from "./mutual-fund";
 import { AVERAGE_RETURN_CALCULATOR } from "./average-return";
+import { IRR_CALCULATOR } from "./irr";
 
 // 4. Taxes
 import { INCOME_TAX_CALCULATOR } from "./income-tax";
@@ -122,6 +123,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   BOND_CALCULATOR,
   MUTUAL_FUND_CALCULATOR,
   AVERAGE_RETURN_CALCULATOR,
+  IRR_CALCULATOR,
 
   // Taxes
   INCOME_TAX_CALCULATOR,
