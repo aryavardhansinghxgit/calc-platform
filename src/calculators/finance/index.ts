@@ -49,6 +49,7 @@ import { PAYBACK_PERIOD_CALCULATOR } from "./payback-period";
 // 4. Taxes
 import { INCOME_TAX_CALCULATOR } from "./income-tax";
 import { SALARY_CALCULATOR } from "./salary";
+import { TAKE_HOME_PAY_CALCULATOR } from "./take-home-pay";
 import { MARRIAGE_TAX_CALCULATOR } from "./marriage-tax";
 import { ESTATE_TAX_CALCULATOR } from "./estate-tax";
 import { GST_CALCULATOR } from "./gst";
@@ -133,6 +134,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   // Taxes & Income
   INCOME_TAX_CALCULATOR,
   SALARY_CALCULATOR,
+  TAKE_HOME_PAY_CALCULATOR,
   MARRIAGE_TAX_CALCULATOR,
   ESTATE_TAX_CALCULATOR,
   GST_CALCULATOR,
