@@ -40,6 +40,7 @@ import { CAGR_CALCULATOR } from "./cagr";
 import { ROI_CALCULATOR } from "./roi";
 import { FUTURE_VALUE_CALCULATOR } from "./future-value";
 import { PRESENT_VALUE_CALCULATOR } from "./present-value";
+import { BOND_CALCULATOR } from "./bond";
 
 // 4. Taxes
 import { INCOME_TAX_CALCULATOR } from "./income-tax";
@@ -116,6 +117,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   ROI_CALCULATOR,
   FUTURE_VALUE_CALCULATOR,
   PRESENT_VALUE_CALCULATOR,
+  BOND_CALCULATOR,
 
   // Taxes
   INCOME_TAX_CALCULATOR,

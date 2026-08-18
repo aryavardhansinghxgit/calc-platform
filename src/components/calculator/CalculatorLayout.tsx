@@ -432,6 +432,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isMass = idLower === "mass-calculator" || slugLower === "mass-calculator" || idLower === "weight-calculator" || slugLower === "weight-calculator";
   const isSpeed = idLower === "speed-calculator" || slugLower === "speed-calculator";
   const isRoman = idLower === "roman-numeral-converter" || slugLower === "roman-numeral-converter";
+  const isBond = idLower === "bond-calculator" || slugLower === "bond-calculator" || idLower === "bond" || slugLower === "bond";
 
   const CustomContent = (definition as any).ContentComponent || (
     isRoman ? RomanNumeralContent :
@@ -875,7 +876,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs text-slate-900 dark:text-slate-100">
         {/* Formula & Calculation Method */}
-        {definition.formulaDescription && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
+        {definition.formulaDescription && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-2">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Formula & Calculation Method
@@ -897,7 +898,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         )}
 
         {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Custom suites per AGENTS.md policy) */}
-        {definition.category !== "Math" && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
+        {definition.category !== "Math" && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-3">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Frequently Asked Questions
