@@ -253,34 +253,25 @@ export function BsaContent() {
         </div>
       </section>
 
-      {/* Related Calculators Navigation */}
-      <section className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 rounded-2xl text-white space-y-6">
-        <div className="flex items-center gap-3  pb-4">
-          <div className="p-2.5 bg-cyan-500/20 text-blue-400 rounded-xl">
-            <Link2 className="w-6 h-6" />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-white">Related Health & Clinical Calculators</h2>
-            <p className="text-xs text-slate-400 mt-0.5">Explore our category-leading clinical metabolic and body analytics tools.</p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {/* Related Calculators */}
+      <div className="space-y-2 pt-6">
+        <h3 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+          Related Calculators
+        </h3>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs sm:text-sm font-semibold">
           {relatedCalculators.map((calc, idx) => (
-            <Link
-              key={idx}
-              href={calc.slug}
-              className="p-4 bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-cyan-500/50 rounded-xl transition-all space-y-1.5 group"
-            >
-              <div className="font-bold text-white group-hover:text-blue-400 text-sm flex items-center justify-between">
+            <React.Fragment key={idx}>
+              {idx > 0 && <span className="text-slate-300 dark:text-slate-700">|</span>}
+              <Link
+                href={calc.slug}
+                className="text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+              >
                 {calc.name}
-                <span className="text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-              </div>
-              <p className="text-xs text-slate-400 leading-relaxed">{calc.description}</p>
-            </Link>
+              </Link>
+            </React.Fragment>
           ))}
         </div>
-      </section>
+      </div>
     </div>
   );
 }

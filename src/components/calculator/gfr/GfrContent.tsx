@@ -161,50 +161,34 @@ export function GfrContent() {
         </div>
       </section>
 
-      {/* Cross-linking Related Calculators */}
-      <section className="bg-white p-8 md:p-12 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-        <div className="flex items-center gap-3  pb-4">
-          <Activity className="w-6 h-6 text-blue-600" />
-          <h2 className="text-xl md:text-2xl font-bold text-blue-600">
-            Related Health & Body Calculators
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {/* Related Calculators */}
+      <div className="space-y-2 pt-6">
+        <h3 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+          Related Calculators
+        </h3>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs sm:text-sm font-semibold">
           <Link
             href="/calculators/bmi-calculator"
-            className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-cyan-400 hover:bg-blue-50/30 transition-all group"
+            className="text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
           >
-            <div className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-              BMI Calculator
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600" />
-            </div>
-            <p className="text-xs text-slate-900 mt-1">Body mass index evaluation.</p>
+            BMI Calculator
           </Link>
-
+          <span className="text-slate-300 dark:text-slate-700">|</span>
           <Link
             href="/calculators/ideal-weight-calculator"
-            className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-emerald-400 hover:bg-blue-50/30 transition-all group"
+            className="text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
           >
-            <div className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-              Ideal Weight Calculator
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600" />
-            </div>
-            <p className="text-xs text-slate-900 mt-1">Devine, Robinson & Miller formulas.</p>
+            Ideal Weight Calculator
           </Link>
-
+          <span className="text-slate-300 dark:text-slate-700">|</span>
           <Link
             href="/calculators/tdee-calculator"
-            className="p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-purple-400 hover:bg-blue-50/30 transition-all group"
+            className="text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
           >
-            <div className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-              TDEE Calculator
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600" />
-            </div>
-            <p className="text-xs text-slate-900 mt-1">Total daily energy expenditure.</p>
+            TDEE Calculator
           </Link>
         </div>
-      </section>
+      </div>
 
       {/* Medical Disclaimer */}
       <section className="bg-blue-50 border border-amber-200 p-6 rounded-2xl flex items-start gap-4 text-xs md:text-sm text-amber-900">
