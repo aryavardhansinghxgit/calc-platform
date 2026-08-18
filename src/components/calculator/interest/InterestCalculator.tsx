@@ -89,7 +89,7 @@ export function InterestCalculator() {
     try {
       const s = localStorage.getItem("saved_interest_scenarios");
       if (s) setSavedScenarios(JSON.parse(s));
-    } catch (e) {}
+    } catch (e) { }
   }, []);
 
   // Parse numeric values safely
@@ -233,7 +233,7 @@ export function InterestCalculator() {
     setSavedScenarios(newSaved);
     try {
       localStorage.setItem("saved_interest_scenarios", JSON.stringify(newSaved));
-    } catch (e) {}
+    } catch (e) { }
     setJustSaved(true);
     setTimeout(() => setJustSaved(false), 2500);
   };
@@ -325,9 +325,8 @@ export function InterestCalculator() {
             variant="outline"
             size="sm"
             onClick={handleSaveScenario}
-            className={`h-8 text-xs font-semibold gap-1.5 cursor-pointer ${
-              justSaved ? "bg-emerald-500 text-white border-emerald-600 font-bold" : ""
-            }`}
+            className={`h-8 text-xs font-semibold gap-1.5 cursor-pointer ${justSaved ? "bg-emerald-500 text-white border-emerald-600 font-bold" : ""
+              }`}
           >
             {justSaved ? <CheckCircle2 className="h-3.5 w-3.5 text-white" /> : <Bookmark className="h-3.5 w-3.5 text-indigo-500" />}
             <span>{justSaved ? "Saved!" : `Save${savedScenarios.length > 0 ? ` (${savedScenarios.length})` : ""}`}</span>
