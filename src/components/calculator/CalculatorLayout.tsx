@@ -45,6 +45,8 @@ import { IncomeTaxCalculator } from "./income-tax/IncomeTaxCalculator";
 import { GstCalculator } from "./gst/GstCalculator";
 import { VatCalculator } from "./vat/VatCalculator";
 import { SalesTaxCalculator } from "./sales-tax/SalesTaxCalculator";
+import { RepaymentCalculator } from "./repayment/RepaymentCalculator";
+import { RepaymentContent } from "./repayment/RepaymentContent";
 import { CreditCardCalculator } from "./credit-card/CreditCardCalculator";
 import { CreditCardContent } from "./credit-card/CreditCardContent";
 import { DebtPayoffCalculator } from "./debt-payoff/DebtPayoffCalculator";
@@ -334,6 +336,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isGst = definition.id === "gst" || definition.slug === "gst-calculator";
   const isVat = definition.id === "vat" || definition.slug === "vat-calculator";
   const isSalesTax = definition.id === "sales-tax" || definition.slug === "sales-tax-calculator";
+  const isRepayment = definition.id === "repayment" || definition.slug === "repayment-calculator";
   const isCreditCard = definition.id === "credit-card" || definition.slug === "credit-card-calculator";
   const isDebtPayoff = definition.id === "debt-payoff" || definition.slug === "debt-payoff-calculator";
   const isDebtConsolidation = definition.id === "debt-consolidation" || definition.slug === "debt-consolidation-calculator";
@@ -443,10 +446,12 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isEstateTax = idLower === "estate-tax-calculator" || slugLower === "estate-tax-calculator" || idLower === "estate-tax" || slugLower === "estate-tax";
   const isTakeHomePay = idLower === "take-home-pay-calculator" || slugLower === "take-home-pay-calculator" || idLower === "take-home-pay" || slugLower === "take-home-pay";
   const isPayment = idLower === "payment-calculator" || slugLower === "payment-calculator" || idLower === "payment" || slugLower === "payment";
+  const isRepaymentMatch = idLower === "repayment-calculator" || slugLower === "repayment-calculator" || idLower === "repayment" || slugLower === "repayment";
   const isCurrency = idLower === "currency-calculator" || slugLower === "currency-calculator" || idLower === "currency" || slugLower === "currency";
   const isInflation = idLower === "inflation-calculator" || slugLower === "inflation-calculator" || idLower === "inflation" || slugLower === "inflation";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isRepayment ? RepaymentContent :
     isCreditCard ? CreditCardContent :
     isRoman ? RomanNumeralContent :
     isSpeed ? SpeedContent :
@@ -646,6 +651,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
               <DebtConsolidationCalculator />
             ) : isDebtPayoff ? (
               <DebtPayoffCalculator />
+            ) : isRepayment ? (
+              <RepaymentCalculator />
             ) : isCreditCard ? (
               <CreditCardCalculator />
             ) : isSalesTax ? (
@@ -907,7 +914,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3.5 shadow-xs text-slate-900 dark:text-slate-100">
         {/* Formula & Calculation Method */}
-        {definition.formulaDescription && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
+        {definition.formulaDescription && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-2">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Formula & Calculation Method
@@ -929,7 +936,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         )}
 
         {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Custom suites per AGENTS.md policy) */}
-        {definition.category !== "Math" && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
+        {definition.category !== "Math" && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-3">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Frequently Asked Questions

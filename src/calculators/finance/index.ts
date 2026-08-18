@@ -58,6 +58,7 @@ import { VAT_CALCULATOR } from "./vat";
 import { SALES_TAX_CALCULATOR } from "./sales-tax";
 
 // 5. Credit & Debt
+import { REPAYMENT_CALCULATOR } from "./repayment";
 import { CREDIT_CARD_CALCULATOR } from "./credit-card";
 import { CREDIT_CARD_PAYOFF_CALCULATOR } from "./credit-card-payoff";
 import { DEBT_PAYOFF_CALCULATOR } from "./debt-payoff";
@@ -146,6 +147,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   SALES_TAX_CALCULATOR,
 
   // Credit & Debt
+  REPAYMENT_CALCULATOR,
   CREDIT_CARD_CALCULATOR,
   CREDIT_CARD_PAYOFF_CALCULATOR,
   DEBT_PAYOFF_CALCULATOR,
