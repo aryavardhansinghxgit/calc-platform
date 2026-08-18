@@ -380,8 +380,122 @@ export function BondContent() {
           Bond valuation bridges time value of money discounting, numerical root-finding algorithms, and interest rate sensitivity calculus. By mastering the interplay between coupon rates, market discount yields, day-count accrued interest, duration, and convexity, investors and financial analysts can accurately price debt securities, model interest rate risk, and make optimal capital allocation decisions across global fixed-income markets.
         </p>
       </section>
+
+      {/* 11. FREQUENTLY ASKED QUESTIONS */}
+      <section className="space-y-4 pt-6 border-t border-slate-200 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          Frequently Asked Questions (FAQ)
+        </h2>
+        <div className="space-y-3 text-xs leading-relaxed text-black dark:text-slate-100">
+          {/* FAQ 1 */}
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              1. What is the fundamental difference between Coupon Rate and Yield to Maturity (YTM)?
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              The <strong>coupon rate</strong> is the fixed contractual annual interest percentage set by the issuer based on the bond&apos;s face value (e.g., a 5% coupon on $1,000 pays $50/year). In contrast, <strong>Yield to Maturity (YTM)</strong> is the internal rate of return (IRR) an investor earns if they buy the bond at its current market price and hold it until maturity. YTM factors in all periodic coupon distributions plus capital gains (if bought below par) or capital losses (if bought above par).
+            </p>
+          </div>
+
+          {/* FAQ 2 */}
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              2. Why do bond prices move inversely to market interest rates?
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              When broader market interest rates rise, newly issued bonds offer higher coupon yields. Existing bonds with lower fixed coupons become less attractive, so their market price must drop until their effective yield equals current market rates. Conversely, when market rates decline, existing higher-coupon bonds become more valuable, driving their market trading price above face value (trading at a premium).
+            </p>
+          </div>
+
+          {/* FAQ 3 */}
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              3. What is the difference between Clean Price and Dirty (Invoice) Price?
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              The <strong>Clean Price</strong> is the published market quote that excludes accrued interest accumulated since the last coupon payout. The <strong>Dirty Price</strong> (also called the Invoice or Settlement Price) is the actual gross cash amount paid by the buyer to the seller: Dirty Price = Clean Quoted Price + Accrued Interest.
+            </p>
+          </div>
+
+          {/* FAQ 4 */}
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              4. How does the day-count convention affect accrued interest calculations?
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              Different fixed-income sectors use distinct day-count rules to calculate the fraction of a coupon period elapsed between the last payment date and settlement date:
+              <br />• <strong>30/360:</strong> Assumes each month has 30 days and each year has 360 days (standard for US Corporate &amp; Municipal bonds).
+              <br />• <strong>Actual/Actual:</strong> Uses the exact number of calendar days in both the elapsed period and the coupon year (standard for US Treasury bonds and notes).
+              <br />• <strong>Actual/360:</strong> Uses actual days divided by 360 (common in money market instruments).
+            </p>
+          </div>
+
+          {/* FAQ 5 */}
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              5. What does Modified Duration indicate about a bond&apos;s interest rate risk?
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              Modified Duration measures the percentage price sensitivity of a bond to a 100-basis-point (1.0%) change in yield. For example, if a bond has a Modified Duration of 7.5%, a 1.0% increase in market interest rates will cause the bond&apos;s price to decline by approximately 7.5%, while a 1.0% drop in rates will increase the price by ~7.5%.
+            </p>
+          </div>
+
+          {/* FAQ 6 */}
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              6. What is a Zero-Coupon Bond and how is phantom income taxed?
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              A zero-coupon bond pays no intermediate periodic interest coupons; it is issued at a deep discount and redeems at full face value at maturity. For tax purposes (such as US Treasury STRIPS held in taxable accounts), the IRS requires investors to pay taxes annually on the imputed or accrued interest (Original Issue Discount - OID)—often termed &quot;phantom income&quot;—even though no cash is received until maturity.
+            </p>
+          </div>
+
+          {/* FAQ 7 */}
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              7. What is Yield to Call (YTC) and how is Yield to Worst (YTW) determined?
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              Callable bonds give the issuer the legal option to redeem the debt prior to maturity at a specified call price. <strong>Yield to Call (YTC)</strong> calculates the return assuming the bond is retired at the earliest call date. <strong>Yield to Worst (YTW)</strong> is the lowest possible yield among all potential retirement schedules (Maturity, Call Date 1, Call Date 2, or Put Dates), providing the most conservative return estimate for investors.
+            </p>
+          </div>
+
+          {/* FAQ 8 */}
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              8. How do I calculate the Tax-Equivalent Yield (TEY) on Municipal Bonds?
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              Because interest earned on municipal bonds is generally exempt from federal (and often state) income tax, investors compare it against taxable debt using the Tax-Equivalent Yield formula:
+              <br /><strong>TEY = Municipal Yield / (1 - Marginal Tax Rate)</strong>.
+              <br />For instance, a 3.50% tax-free municipal yield for an investor in a 35% tax bracket equals a 3.50% / (1 - 0.35) = 5.38% pre-tax corporate bond yield.
+            </p>
+          </div>
+
+          {/* FAQ 9 */}
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              9. What is the &quot;Pull-to-Par&quot; phenomenon?
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              &quot;Pull-to-par&quot; describes the natural mathematical trajectory where a bond&apos;s price steadily converges toward its contractual par value ($1,000) as the time remaining to maturity approaches zero. A premium bond gradually depreciates toward par, while a discount bond gradually appreciates toward par, assuming no default occurs.
+            </p>
+          </div>
+
+          {/* FAQ 10 */}
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              10. Why does positive Bond Convexity benefit fixed-income investors?
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              Because the relationship between bond prices and yields is curved (convex) rather than linear, positive convexity creates an asymmetric upside advantage: when interest rates drop by 100 bps, the bond price gains <em>more</em> than linear duration estimates; when interest rates rise by 100 bps, the bond price declines <em>less</em> than linear duration estimates.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
 
 export default BondContent;
+

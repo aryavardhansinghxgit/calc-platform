@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { Bookmark, Trash2, ChevronDown, ChevronUp, ArrowRightLeft, Sparkles, TrendingUp, ShieldAlert, BarChart3, Clock, DollarSign, Percent, FileText, Check, Layers } from "lucide-react";
+import { Bookmark, Trash2, ChevronDown, ChevronUp, Download, TrendingUp } from "lucide-react";
 import {
   calculateStandardBond,
   calculateDayCountPricing,
@@ -28,6 +28,18 @@ export function BondCalculator() {
   const outerBox3DClass =
     "border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs";
 
+  // Helper download trigger
+  const triggerCsvDownload = (filename: string, csvContent: string) => {
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // =========================================================================
   // BOX 1: UNIVERSAL BOND VALUATION & YIELD TO MATURITY (YTM) SOLVER
   // =========================================================================
@@ -44,6 +56,61 @@ export function BondCalculator() {
 
   const [savedBox1, setSavedBox1] = useState<SavedBondItem[]>([]);
   const [justSavedBox1, setJustSavedBox1] = useState<boolean>(false);
+
+  // Box 2 State
+  const [b2Face, setB2Face] = useState<string>("1000");
+  const [b2Coupon, setB2Coupon] = useState<string>("5.0");
+  const [b2Yield, setB2Yield] = useState<string>("6.0");
+  const [b2Freq, setB2Freq] = useState<CouponFrequency>("annual");
+  const [b2Settlement, setB2Settlement] = useState<string>("2026-08-17");
+  const [b2Maturity, setB2Maturity] = useState<string>("2029-08-13");
+  const [b2DayCount, setB2DayCount] = useState<DayCountConvention>("30/360");
+
+  const [savedBox2, setSavedBox2] = useState<SavedBondItem[]>([]);
+  const [justSavedBox2, setJustSavedBox2] = useState<boolean>(false);
+
+  // Box 3 State
+  const [b3SolveFor, setB3SolveFor] = useState<"price" | "ytm" | "maturity">("price");
+  const [b3Face, setB3Face] = useState<string>("1000");
+  const [b3Price, setB3Price] = useState<string>("675.56");
+  const [b3Ytm, setB3Ytm] = useState<string>("4.0");
+  const [b3Years, setB3Years] = useState<string>("10");
+  const [b3CompFreq, setB3CompFreq] = useState<"annual" | "semiannual">("semiannual");
+  const [b3ShowSchedule, setB3ShowSchedule] = useState<boolean>(false);
+
+  const [savedBox3, setSavedBox3] = useState<SavedBondItem[]>([]);
+  const [justSavedBox3, setJustSavedBox3] = useState<boolean>(false);
+
+  // Box 4 State
+  const [b4Face, setB4Face] = useState<string>("1000");
+  const [b4Coupon, setB4Coupon] = useState<string>("6.5");
+  const [b4Price, setB4Price] = useState<string>("1045.00");
+  const [b4YearsMaturity, setB4YearsMaturity] = useState<string>("10");
+  const [b4YearsCall, setB4YearsCall] = useState<string>("3");
+  const [b4CallPricePct, setB4CallPricePct] = useState<string>("102");
+  const [b4Freq, setB4Freq] = useState<CouponFrequency>("semiannual");
+
+  const [savedBox4, setSavedBox4] = useState<SavedBondItem[]>([]);
+  const [justSavedBox4, setJustSavedBox4] = useState<boolean>(false);
+
+  // Box 5 State
+  const [b5Face, setB5Face] = useState<string>("1000");
+  const [b5Coupon, setB5Coupon] = useState<string>("5.0");
+  const [b5Yield, setB5Yield] = useState<string>("5.0");
+  const [b5Years, setB5Years] = useState<string>("10");
+  const [b5Freq, setB5Freq] = useState<CouponFrequency>("semiannual");
+
+  const [savedBox5, setSavedBox5] = useState<SavedBondItem[]>([]);
+  const [justSavedBox5, setJustSavedBox5] = useState<boolean>(false);
+
+  // Box 6 State
+  const [b6MuniYield, setB6MuniYield] = useState<string>("3.5");
+  const [b6FedTax, setB6FedTax] = useState<string>("32");
+  const [b6StateTax, setB6StateTax] = useState<string>("5");
+  const [b6CorpYield, setB6CorpYield] = useState<string>("5.2");
+
+  const [savedBox6, setSavedBox6] = useState<SavedBondItem[]>([]);
+  const [justSavedBox6, setJustSavedBox6] = useState<boolean>(false);
 
   useEffect(() => {
     try {
@@ -76,44 +143,20 @@ export function BondCalculator() {
     });
   }, [b1Goal, b1Face, b1CouponRate, b1Years, b1Ytm, b1Price, b1Freq, b1DayCount, b1DaysAccrued]);
 
-  const handleApplyPreset = (name: string) => {
-    if (name === "us10y") {
-      setB1Goal("price");
-      setB1Face("1000");
-      setB1CouponRate("4.25");
-      setB1Years("10");
-      setB1Ytm("4.40");
-      setB1Freq("semiannual");
-      setB1DayCount("actual/actual");
-      setB1DaysAccrued("45");
-    } else if (name === "corp_ig") {
-      setB1Goal("price");
-      setB1Face("1000");
-      setB1CouponRate("5.50");
-      setB1Years("7");
-      setB1Ytm("6.20");
-      setB1Freq("semiannual");
-      setB1DayCount("30/360");
-      setB1DaysAccrued("30");
-    } else if (name === "high_yield") {
-      setB1Goal("ytm");
-      setB1Face("1000");
-      setB1CouponRate("8.00");
-      setB1Years("5");
-      setB1Price("910.00");
-      setB1Freq("semiannual");
-      setB1DayCount("30/360");
-      setB1DaysAccrued("15");
-    } else if (name === "par_bond") {
-      setB1Goal("price");
-      setB1Face("1000");
-      setB1CouponRate("5.00");
-      setB1Years("10");
-      setB1Ytm("5.00");
-      setB1Freq("semiannual");
-      setB1DayCount("30/360");
-      setB1DaysAccrued("0");
-    }
+  const handleExportCashFlowCSV = () => {
+    if (!b1Calc.cashFlowSchedule || b1Calc.cashFlowSchedule.length === 0) return;
+    const headers = ["Period", "Year", "Coupon Payment ($)", "Principal Payment ($)", "Total Cash Flow ($)", "Present Value ($)", "Remaining Principal ($)"];
+    const rows = b1Calc.cashFlowSchedule.map((r) => [
+      r.period,
+      r.year,
+      r.couponPayment,
+      r.principalPayment,
+      r.totalCashFlow,
+      r.presentValue,
+      r.remainingPrincipal,
+    ]);
+    const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+    triggerCsvDownload(`bond_cash_flow_schedule_${b1Years}yr.csv`, csv);
   };
 
   const handleSaveBox1 = () => {
@@ -168,20 +211,7 @@ export function BondCalculator() {
     } catch (e) {}
   };
 
-  // =========================================================================
-  // BOX 2: BOND PRICING WITH ACCRUED INTEREST & SETTLEMENT DATES
-  // =========================================================================
-  const [b2Face, setB2Face] = useState<string>("1000");
-  const [b2Coupon, setB2Coupon] = useState<string>("5.0");
-  const [b2Yield, setB2Yield] = useState<string>("6.0");
-  const [b2Freq, setB2Freq] = useState<CouponFrequency>("annual");
-  const [b2Settlement, setB2Settlement] = useState<string>("2026-08-17");
-  const [b2Maturity, setB2Maturity] = useState<string>("2029-08-13");
-  const [b2DayCount, setB2DayCount] = useState<DayCountConvention>("30/360");
-
-  const [savedBox2, setSavedBox2] = useState<SavedBondItem[]>([]);
-  const [justSavedBox2, setJustSavedBox2] = useState<boolean>(false);
-
+  // Box 2 Memo
   const b2Calc = useMemo(() => {
     return calculateDayCountPricing({
       faceValue: parseFloat(b2Face) || 1000,
@@ -242,20 +272,7 @@ export function BondCalculator() {
     } catch (e) {}
   };
 
-  // =========================================================================
-  // BOX 3: ZERO-COUPON BOND PRICING & COMPOUND ACCRETION
-  // =========================================================================
-  const [b3SolveFor, setB3SolveFor] = useState<"price" | "ytm" | "maturity">("price");
-  const [b3Face, setB3Face] = useState<string>("1000");
-  const [b3Price, setB3Price] = useState<string>("675.56");
-  const [b3Ytm, setB3Ytm] = useState<string>("4.0");
-  const [b3Years, setB3Years] = useState<string>("10");
-  const [b3CompFreq, setB3CompFreq] = useState<"annual" | "semiannual">("semiannual");
-  const [b3ShowSchedule, setB3ShowSchedule] = useState<boolean>(false);
-
-  const [savedBox3, setSavedBox3] = useState<SavedBondItem[]>([]);
-  const [justSavedBox3, setJustSavedBox3] = useState<boolean>(false);
-
+  // Box 3 Memo
   const b3Calc = useMemo(() => {
     return calculateZeroCouponBond({
       solveFor: b3SolveFor,
@@ -266,6 +283,20 @@ export function BondCalculator() {
       compoundingFrequency: b3CompFreq,
     });
   }, [b3SolveFor, b3Face, b3Price, b3Ytm, b3Years, b3CompFreq]);
+
+  const handleExportAccretionCSV = () => {
+    if (!b3Calc.accretionSchedule || b3Calc.accretionSchedule.length === 0) return;
+    const headers = ["Year", "Beginning Book Value ($)", "Imputed Annual Interest ($)", "Ending Book Value ($)", "Cumulative Accretion ($)"];
+    const rows = b3Calc.accretionSchedule.map((r) => [
+      r.year,
+      r.beginningValue,
+      r.imputedInterest,
+      r.endingValue,
+      r.cumulativeAccretion,
+    ]);
+    const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+    triggerCsvDownload(`zero_coupon_accretion_schedule.csv`, csv);
+  };
 
   const handleSaveBox3 = () => {
     const inputsStr = `Solve: ${b3SolveFor.toUpperCase()} | Par: $${b3Face} | Compounding: ${b3CompFreq}`;
@@ -318,20 +349,7 @@ export function BondCalculator() {
     } catch (e) {}
   };
 
-  // =========================================================================
-  // BOX 4: CALLABLE & PUTTABLE BOND SUITE (YTC, YTP & YTW)
-  // =========================================================================
-  const [b4Face, setB4Face] = useState<string>("1000");
-  const [b4Coupon, setB4Coupon] = useState<string>("6.5");
-  const [b4Price, setB4Price] = useState<string>("1045.00");
-  const [b4YearsMaturity, setB4YearsMaturity] = useState<string>("10");
-  const [b4YearsCall, setB4YearsCall] = useState<string>("3");
-  const [b4CallPricePct, setB4CallPricePct] = useState<string>("102");
-  const [b4Freq, setB4Freq] = useState<CouponFrequency>("semiannual");
-
-  const [savedBox4, setSavedBox4] = useState<SavedBondItem[]>([]);
-  const [justSavedBox4, setJustSavedBox4] = useState<boolean>(false);
-
+  // Box 4 Memo
   const b4Calc = useMemo(() => {
     return calculateCallableBond({
       faceValue: parseFloat(b4Face) || 1000,
@@ -391,18 +409,7 @@ export function BondCalculator() {
     } catch (e) {}
   };
 
-  // =========================================================================
-  // BOX 5: DURATION, CONVEXITY & RATE SHOCK RISK MATRIX
-  // =========================================================================
-  const [b5Face, setB5Face] = useState<string>("1000");
-  const [b5Coupon, setB5Coupon] = useState<string>("5.0");
-  const [b5Yield, setB5Yield] = useState<string>("5.0");
-  const [b5Years, setB5Years] = useState<string>("10");
-  const [b5Freq, setB5Freq] = useState<CouponFrequency>("semiannual");
-
-  const [savedBox5, setSavedBox5] = useState<SavedBondItem[]>([]);
-  const [justSavedBox5, setJustSavedBox5] = useState<boolean>(false);
-
+  // Box 5 Memo
   const b5Calc = useMemo(() => {
     return calculateDurationConvexity({
       faceValue: parseFloat(b5Face) || 1000,
@@ -412,6 +419,22 @@ export function BondCalculator() {
       couponFrequency: b5Freq,
     });
   }, [b5Face, b5Coupon, b5Yield, b5Years, b5Freq]);
+
+  const handleExportRateShockCSV = () => {
+    if (!b5Calc.rateShifts || b5Calc.rateShifts.length === 0) return;
+    const headers = ["Rate Shift (bps)", "New Yield (%)", "Exact Bond Price ($)", "Exact Change (%)", "Duration-Only Est ($)", "Duration+Convexity Est ($)", "Dollar Impact ($)"];
+    const rows = b5Calc.rateShifts.map((r) => [
+      r.shiftBps,
+      r.newYield,
+      r.exactPrice,
+      r.exactChangePercent,
+      r.durationEstPrice,
+      r.durationConvexityEstPrice,
+      r.dollarChange,
+    ]);
+    const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+    triggerCsvDownload(`interest_rate_shock_matrix.csv`, csv);
+  };
 
   const handleSaveBox5 = () => {
     const inputsStr = `Par: $${b5Face} | Coupon: ${b5Coupon}% | YTM: ${b5Yield}% | ${b5Years} Yrs`;
@@ -460,17 +483,7 @@ export function BondCalculator() {
     } catch (e) {}
   };
 
-  // =========================================================================
-  // BOX 6: TAX-EQUIVALENT MUNICIPAL YIELD (TEY) COMPARATOR
-  // =========================================================================
-  const [b6MuniYield, setB6MuniYield] = useState<string>("3.5");
-  const [b6FedTax, setB6FedTax] = useState<string>("32");
-  const [b6StateTax, setB6StateTax] = useState<string>("5");
-  const [b6CorpYield, setB6CorpYield] = useState<string>("5.2");
-
-  const [savedBox6, setSavedBox6] = useState<SavedBondItem[]>([]);
-  const [justSavedBox6, setJustSavedBox6] = useState<boolean>(false);
-
+  // Box 6 Memo
   const b6Calc = useMemo(() => {
     return calculateTaxEquivalentYield({
       municipalYield: parseFloat(b6MuniYield) || 0,
@@ -546,41 +559,6 @@ export function BondCalculator() {
         </div>
 
         <div className="p-4 sm:p-5 space-y-4">
-          {/* QUICK PRESET PROFILES */}
-          <div className="flex flex-wrap items-center gap-1.5 pb-1 border-b border-slate-200 dark:border-slate-800">
-            <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 mr-1 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-blue-600" /> Presets:
-            </span>
-            <button
-              type="button"
-              onClick={() => handleApplyPreset("us10y")}
-              className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-100 cursor-pointer"
-            >
-              US 10-Yr Benchmark
-            </button>
-            <button
-              type="button"
-              onClick={() => handleApplyPreset("corp_ig")}
-              className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 cursor-pointer"
-            >
-              Corporate IG (Discount)
-            </button>
-            <button
-              type="button"
-              onClick={() => handleApplyPreset("high_yield")}
-              className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 cursor-pointer"
-            >
-              High-Yield Junk (Solve YTM)
-            </button>
-            <button
-              type="button"
-              onClick={() => handleApplyPreset("par_bond")}
-              className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 cursor-pointer"
-            >
-              Par Bond (5.0%)
-            </button>
-          </div>
-
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
             {/* LEFT: INPUT CONTROLS */}
             <div className="lg:col-span-5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 space-y-3 shadow-xs">
@@ -881,12 +859,9 @@ export function BondCalculator() {
 
                       return (
                         <>
-                          {/* Curve line */}
                           <path d={pathD} fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" />
-                          {/* Current operating marker */}
                           <circle cx={currentX} cy={currentY} r="5" fill="#2563eb" stroke="#ffffff" strokeWidth="2" />
                           <circle cx={currentX} cy={currentY} r="9" fill="none" stroke="#2563eb" strokeOpacity="0.4" strokeWidth="2" />
-                          {/* Label at current operating point */}
                           <text
                             x={Math.min(420, Math.max(50, currentX + 8))}
                             y={Math.max(25, currentY - 8)}
@@ -906,8 +881,8 @@ export function BondCalculator() {
             </div>
           </div>
 
-          {/* CASH FLOW SCHEDULE TOGGLE */}
-          <div className="pt-1">
+          {/* CASH FLOW SCHEDULE TOGGLE & CSV EXPORT */}
+          <div className="pt-1 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={() => setB1ShowSchedule(!b1ShowSchedule)}
@@ -917,37 +892,46 @@ export function BondCalculator() {
               <span>{b1ShowSchedule ? "Hide Cash Flow Schedule Table" : "View Complete Coupon & Principal Payout Schedule"}</span>
             </button>
 
-            {b1ShowSchedule && (
-              <div className="mt-3 overflow-x-auto max-h-56 rounded-lg border border-slate-200 dark:border-slate-800 text-xs">
-                <table className="w-full text-center border-collapse font-sans tabular-nums">
-                  <thead className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold sticky top-0">
-                    <tr className="border-b border-slate-200 dark:border-slate-700">
-                      <th className="p-2">Period</th>
-                      <th className="p-2">Year</th>
-                      <th className="p-2">Coupon ($)</th>
-                      <th className="p-2">Principal ($)</th>
-                      <th className="p-2">Total Cash Flow</th>
-                      <th className="p-2">Present Value (PV)</th>
-                      <th className="p-2">Remaining Par</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                    {b1Calc.cashFlowSchedule.map((row) => (
-                      <tr key={row.period} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                        <td className="p-1.5 font-bold text-slate-600 dark:text-slate-400">{row.period}</td>
-                        <td className="p-1.5">{row.year}</td>
-                        <td className="p-1.5 text-emerald-600 font-bold">${row.couponPayment.toLocaleString()}</td>
-                        <td className="p-1.5 font-bold">{row.principalPayment > 0 ? `$${row.principalPayment.toLocaleString()}` : "$0.00"}</td>
-                        <td className="p-1.5 font-extrabold text-blue-600">${row.totalCashFlow.toLocaleString()}</td>
-                        <td className="p-1.5 text-slate-700 dark:text-slate-300">${row.presentValue.toLocaleString()}</td>
-                        <td className="p-1.5 text-slate-500">${row.remainingPrincipal.toLocaleString()}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            <button
+              type="button"
+              onClick={handleExportCashFlowCSV}
+              className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors border border-slate-200 dark:border-slate-700"
+            >
+              <Download className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>Export Cash Flow Schedule (CSV)</span>
+            </button>
           </div>
+
+          {b1ShowSchedule && (
+            <div className="mt-2 overflow-x-auto max-h-56 rounded-lg border border-slate-200 dark:border-slate-800 text-xs">
+              <table className="w-full text-center border-collapse font-sans tabular-nums">
+                <thead className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold sticky top-0">
+                  <tr className="border-b border-slate-200 dark:border-slate-700">
+                    <th className="p-2">Period</th>
+                    <th className="p-2">Year</th>
+                    <th className="p-2">Coupon ($)</th>
+                    <th className="p-2">Principal ($)</th>
+                    <th className="p-2">Total Cash Flow</th>
+                    <th className="p-2">Present Value (PV)</th>
+                    <th className="p-2">Remaining Par</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {b1Calc.cashFlowSchedule.map((row) => (
+                    <tr key={row.period} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                      <td className="p-1.5 font-bold text-slate-600 dark:text-slate-400">{row.period}</td>
+                      <td className="p-1.5">{row.year}</td>
+                      <td className="p-1.5 text-emerald-600 font-bold">${row.couponPayment.toLocaleString()}</td>
+                      <td className="p-1.5 font-bold">{row.principalPayment > 0 ? `$${row.principalPayment.toLocaleString()}` : "$0.00"}</td>
+                      <td className="p-1.5 font-extrabold text-blue-600">${row.totalCashFlow.toLocaleString()}</td>
+                      <td className="p-1.5 text-slate-700 dark:text-slate-300">${row.presentValue.toLocaleString()}</td>
+                      <td className="p-1.5 text-slate-500">${row.remainingPrincipal.toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
           {/* SAVED CALCULATIONS INSIDE BOX 1 */}
           {savedBox1.length > 0 && (
@@ -1390,8 +1374,8 @@ export function BondCalculator() {
             </div>
           </div>
 
-          {/* ACCRETION SCHEDULE TOGGLE */}
-          <div className="pt-1">
+          {/* ACCRETION SCHEDULE TOGGLE & CSV EXPORT */}
+          <div className="pt-1 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={() => setB3ShowSchedule(!b3ShowSchedule)}
@@ -1401,33 +1385,42 @@ export function BondCalculator() {
               <span>{b3ShowSchedule ? "Hide Annual Accretion Schedule" : "View Annual Constant-Yield Accretion (Phantom Tax Schedule)"}</span>
             </button>
 
-            {b3ShowSchedule && (
-              <div className="mt-3 overflow-x-auto max-h-56 rounded-lg border border-slate-200 dark:border-slate-800 text-xs">
-                <table className="w-full text-center border-collapse font-sans tabular-nums">
-                  <thead className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold sticky top-0">
-                    <tr className="border-b border-slate-200 dark:border-slate-700">
-                      <th className="p-2">Year</th>
-                      <th className="p-2">Beginning Book Value</th>
-                      <th className="p-2">Imputed Annual Interest</th>
-                      <th className="p-2">Ending Book Value</th>
-                      <th className="p-2">Cumulative Accretion</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                    {b3Calc.accretionSchedule.map((row) => (
-                      <tr key={row.year} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                        <td className="p-1.5 font-bold text-slate-600 dark:text-slate-400">Year {row.year}</td>
-                        <td className="p-1.5">${row.beginningValue.toLocaleString()}</td>
-                        <td className="p-1.5 text-blue-600 font-bold">${row.imputedInterest.toLocaleString()}</td>
-                        <td className="p-1.5 font-bold">${row.endingValue.toLocaleString()}</td>
-                        <td className="p-1.5 text-emerald-600 font-bold">${row.cumulativeAccretion.toLocaleString()}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+            <button
+              type="button"
+              onClick={handleExportAccretionCSV}
+              className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors border border-slate-200 dark:border-slate-700"
+            >
+              <Download className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>Export Accretion Schedule (CSV)</span>
+            </button>
           </div>
+
+          {b3ShowSchedule && (
+            <div className="mt-2 overflow-x-auto max-h-56 rounded-lg border border-slate-200 dark:border-slate-800 text-xs">
+              <table className="w-full text-center border-collapse font-sans tabular-nums">
+                <thead className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold sticky top-0">
+                  <tr className="border-b border-slate-200 dark:border-slate-700">
+                    <th className="p-2">Year</th>
+                    <th className="p-2">Beginning Book Value</th>
+                    <th className="p-2">Imputed Annual Interest</th>
+                    <th className="p-2">Ending Book Value</th>
+                    <th className="p-2">Cumulative Accretion</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {b3Calc.accretionSchedule.map((row) => (
+                    <tr key={row.year} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                      <td className="p-1.5 font-bold text-slate-600 dark:text-slate-400">Year {row.year}</td>
+                      <td className="p-1.5">${row.beginningValue.toLocaleString()}</td>
+                      <td className="p-1.5 text-blue-600 font-bold">${row.imputedInterest.toLocaleString()}</td>
+                      <td className="p-1.5 font-bold">${row.endingValue.toLocaleString()}</td>
+                      <td className="p-1.5 text-emerald-600 font-bold">${row.cumulativeAccretion.toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
           {/* SAVED CALCULATIONS INSIDE BOX 3 */}
           {savedBox3.length > 0 && (
@@ -1815,11 +1808,22 @@ export function BondCalculator() {
             </div>
           </div>
 
-          {/* INTEREST RATE SHOCK MATRIX TABLE */}
+          {/* INTEREST RATE SHOCK MATRIX TABLE & CSV EXPORT */}
           <div className="pt-2">
-            <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block mb-2">
-              Interest Rate Shift Shock Matrix (Duration vs. Convexity Adjustment)
-            </span>
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                Interest Rate Shift Shock Matrix (Duration vs. Convexity Adjustment)
+              </span>
+              <button
+                type="button"
+                onClick={handleExportRateShockCSV}
+                className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors border border-slate-200 dark:border-slate-700"
+              >
+                <Download className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                <span>Export Shock Matrix (CSV)</span>
+              </button>
+            </div>
+
             <div className="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800 text-xs">
               <table className="w-full text-center border-collapse font-sans tabular-nums">
                 <thead className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
