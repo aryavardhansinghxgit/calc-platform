@@ -808,8 +808,8 @@ export function CollegeCostCalculator() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                        {currentSchedulePage.map((row) => (
-                          <tr key={row.yearNumber} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                        {currentSchedulePage.map((row, idx) => (
+                          <tr key={`college-cost-sched-${row.yearNumber}-${idx}`} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
                             <td className="p-2 font-bold text-slate-800 dark:text-slate-200">College Year {row.yearNumber}</td>
                             <td className="p-2 text-slate-500">Age {row.childAge}</td>
                             <td className="p-2 font-bold text-slate-900 dark:text-slate-100">{fmt(row.projectedAnnualCost)}</td>

@@ -643,8 +643,8 @@ export function DepreciationCalculator() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                        {currentSchedulePage.map((row) => (
-                          <tr key={row.year} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                        {currentSchedulePage.map((row, idx) => (
+                          <tr key={`depr-sched-${row.year}-${idx}`} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
                             <td className="p-2 font-bold text-slate-800 dark:text-slate-200">Year {row.year}</td>
                             <td className="p-2 text-slate-600 dark:text-slate-400">{fmt(row.beginningBookValue)}</td>
                             <td className="p-2 font-bold text-blue-600">{fmt(row.depreciationExpense)}</td>

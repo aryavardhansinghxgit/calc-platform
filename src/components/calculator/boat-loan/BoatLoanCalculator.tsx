@@ -702,8 +702,8 @@ export function BoatLoanCalculator() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                        {currentSchedulePage.map((row) => (
-                          <tr key={row.year} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                        {currentSchedulePage.map((row, idx) => (
+                          <tr key={`boat-sched-${row.year}-${idx}`} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
                             <td className="p-2 font-bold text-slate-800 dark:text-slate-200">Year {row.year}</td>
                             <td className="p-2 text-amber-600 font-bold">{fmt(row.interest)}</td>
                             <td className="p-2 text-blue-600 font-bold">{fmt(row.principal)}</td>

@@ -669,8 +669,8 @@ export function CreditCardPayoffCalculator() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                        {currentSchedulePage.map((row) => (
-                          <tr key={row.month} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                        {currentSchedulePage.map((row, idx) => (
+                          <tr key={`cc-payoff-sched-${row.month}-${idx}`} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
                             <td className="p-2 font-bold text-slate-800 dark:text-slate-200">Month {row.month}</td>
                             <td className="p-2 font-bold text-slate-900 dark:text-slate-100">{fmt(row.totalPayment)}</td>
                             <td className="p-2 text-amber-600 font-bold">{fmt(row.totalInterest)}</td>
