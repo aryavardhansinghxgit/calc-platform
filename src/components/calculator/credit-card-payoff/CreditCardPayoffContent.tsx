@@ -67,128 +67,79 @@ export function CreditCardPayoffContent() {
   ];
 
   return (
-    <div className="space-y-3 text-black dark:text-zinc-100 font-sans leading-relaxed">
-      {/* SECTION 1: CREDIT CARD DYNAMICS & MULTI-CARD ADVANTAGES */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Credit Card Debt Elimination: Principles & Repayment Mechanics
+    <div className="space-y-10 text-black dark:text-slate-100 font-medium leading-relaxed">
+      {/* 1. PRINCIPLES OF REPAYMENT */}
+      <section className="space-y-3">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          1. Credit Card Debt Elimination: Principles &amp; Repayment Mechanics
         </h2>
-        <p className="text-xs text-black dark:text-zinc-200">
-          Credit cards are revolving unsecured debt instruments where compound interest accrues daily on unpaid balances. Multiple cards offer distinct benefits such as travel perks, retail cashback, and higher aggregate credit limits, but require a disciplined payoff strategy:
+        <p className="text-sm leading-relaxed text-black dark:text-slate-100">
+          Credit cards are revolving unsecured debt instruments where compound interest accrues daily on unpaid balances. Multiple cards offer distinct benefits such as travel perks, retail cashback, and higher aggregate credit limits, but require a disciplined payoff strategy.
         </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-1">
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Credit Utilization (CUR)</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1 text-xs font-medium">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
+            <span className="font-bold text-sm text-black dark:text-slate-100 block">Credit Utilization Ratio (CUR)</span>
+            <p className="text-black dark:text-slate-100">
               Total balance divided by total credit limit. Maintaining utilization below 10% to 30% maximizes credit scores.
             </p>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Daily Compounding (DPR)</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Interest calculated daily as (APR ÷ 365) × Average Daily Balance. Earlier mid-cycle payments save money.
-            </p>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Debt Avalanche</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Focuses excess cash on highest APR balances first. Mathematically guarantees lowest total interest paid.
-            </p>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Debt Snowball</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Focuses excess cash on smallest balance accounts first. Creates fast behavioral momentum and eliminates bills.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
+            <span className="font-bold text-sm text-black dark:text-slate-100 block">Daily Periodic Rate (DPR)</span>
+            <p className="text-black dark:text-slate-100">
+              Interest calculated daily as (APR ÷ 365) × Average Daily Balance. Earlier mid-cycle payments save money immediately.
             </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* SECTION 2: AVALANCHE VS SNOWBALL VS MINIMUM PAYMENTS */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Comparing Debt Elimination Strategies: Avalanche vs. Snowball vs. Minimum Payment
+      {/* 2. STRATEGY COMPARISON */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          2. Comparing Debt Elimination Strategies: Avalanche vs. Snowball
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-xs uppercase text-blue-600 dark:text-blue-400 block">1. Debt Avalanche (Math-First)</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Target Card: Highest APR (e.g. 24.99% card). Once paid, roll payment to next highest APR card. Best for saving the maximum dollar amount in finance charges.
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-medium">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              1. Debt Avalanche Strategy
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              Target Card: Highest APR (e.g. 24.99% card). Once paid, roll payment to next highest APR card. Mathematically guarantees the lowest total interest paid.
             </p>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-xs uppercase text-emerald-600 dark:text-emerald-400 block">2. Debt Snowball (Psychology-First)</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              2. Debt Snowball Strategy
+            </h3>
+            <p className="text-black dark:text-slate-100">
               Target Card: Smallest dollar balance (e.g. $800 card). Rapidly knocks out individual accounts to build confidence and streamline monthly obligations.
             </p>
           </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-xs uppercase text-red-600 dark:text-red-400 block">3. Minimum Payment Trap</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Paying only 1%–2% of balance causes loan terms to exceed 20 to 30 years with interest costs exceeding 150% to 300% of the original principal.
-            </p>
-          </div>
         </div>
-      </div>
+      </section>
 
-      {/* SECTION 3: WORKED MATHEMATICAL CASE STUDIES */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Worked Mathematical Example ($14,500 Total Debt Across 3 Cards with $500/Month Budget)
+      {/* 3. 12 FAQS */}
+      <section className="space-y-4 pt-6 border-t border-slate-200 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          Frequently Asked Questions (FAQ)
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-          <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Starting Card Profile</h3>
-            <div className="font-mono text-[11px] text-black dark:text-zinc-300 space-y-0.5">
-              <div>• Card 1: $4,600 Balance @ 18.99% APR ($100 Min Pmt)</div>
-              <div>• Card 2: $3,900 Balance @ 19.99% APR ($90 Min Pmt)</div>
-              <div>• Card 3: $6,000 Balance @ 15.99% APR ($120 Min Pmt)</div>
-              <div>• Total Debt: <strong>$14,500.00</strong> (Total Minimum: $310/mo)</div>
-              <div>• Monthly Debt Budget: <strong>$500.00/month</strong></div>
-            </div>
-          </div>
-
-          <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Avalanche Payoff Results</h3>
-            <div className="font-mono text-[11px] text-black dark:text-zinc-300 space-y-0.5">
-              <div>• Target Order: Card 2 (19.99%) → Card 1 (18.99%) → Card 3 (15.99%)</div>
-              <div>• Debt-Free Timeline: <strong>38 Months (~3.2 Years)</strong></div>
-              <div>• Total Payments: $18,720.00</div>
-              <div>• Total Interest Paid: <strong>$4,220.00</strong></div>
-              <div>• vs. Minimum Only: Saved 18+ Years & $8,500+ in Interest!</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* SECTION 4: 12 FAQS ALWAYS OPEN CARDS */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Frequently Asked Questions (12 Key Credit Card Payoff FAQs)
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="space-y-3 text-xs leading-relaxed text-black dark:text-slate-100">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 bg-slate-50 dark:bg-slate-800/50 space-y-1"
+              className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5"
             >
-              <h3 className="font-bold text-xs text-black dark:text-zinc-100">
+              <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
                 {faq.question}
               </h3>
-              <p className="text-[11px] text-black dark:text-zinc-300 leading-relaxed">
+              <p className="text-black dark:text-slate-100 leading-relaxed">
                 {faq.answer}
               </p>
             </div>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

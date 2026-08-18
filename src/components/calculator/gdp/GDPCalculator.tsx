@@ -5,6 +5,7 @@ import {
   Bookmark,
   Trash2,
   Check,
+  Download,
 } from "lucide-react";
 import {
   calculateExpenditureGdp,
@@ -27,6 +28,17 @@ export interface SavedGdpItem {
 export function GDPCalculator() {
   // Simple Currency Selector with Dollar ($) as default
   const [currencySymbol, setCurrencySymbol] = useState<string>("$");
+
+  const triggerCsvDownload = (filename: string, csvContent: string) => {
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // ==========================================
   // BOX 1: EXPENDITURE APPROACH GDP
@@ -545,13 +557,35 @@ export function GDPCalculator() {
                     </div>
                   </div>
 
-                  <div className="text-right">
+                  <div className="text-right space-y-1">
                     <span className="text-[10px] font-extrabold uppercase text-slate-400 block">
                       GDP Per Capita
                     </span>
-                    <span className="text-sm font-bold font-mono text-emerald-600">
-                      {currencySymbol}{Math.round((coreResult.totalGdp * 1000000000) / ((Number(populationInput) || 335) * 1000000)).toLocaleString()}/person
-                    </span>
+                    <div className="flex items-center gap-2 justify-end">
+                      <span className="text-sm font-bold font-mono text-emerald-600">
+                        {currencySymbol}{Math.round((coreResult.totalGdp * 1000000000) / ((Number(populationInput) || 335) * 1000000)).toLocaleString()}/person
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const headers = ["Macro Sector Component", "Dollar Value (Billion)", "Share of Total GDP (%)"];
+                          const rows = [
+                            ["Personal Consumption (C)", coreResult.consumption.toFixed(2), coreResult.consumptionPct.toFixed(1) + "%"],
+                            ["Gross Private Investment (I)", coreResult.investment.toFixed(2), coreResult.investmentPct.toFixed(1) + "%"],
+                            ["Government Spending (G)", coreResult.government.toFixed(2), coreResult.governmentPct.toFixed(1) + "%"],
+                            ["Exports (X)", Number(exportsInput).toFixed(2), "-"],
+                            ["Imports (M)", Number(importsInput).toFixed(2), "-"],
+                            ["Net Exports (NX)", coreResult.netExports.toFixed(2), coreResult.netExportsPct.toFixed(1) + "%"],
+                            ["Total GDP", coreResult.totalGdp.toFixed(2), "100.0%"],
+                          ];
+                          const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+                          triggerCsvDownload(`gdp_expenditure_breakdown.csv`, csv);
+                        }}
+                        className="px-2 py-0.5 bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 rounded text-[10px] font-bold flex items-center gap-1 border border-slate-200 dark:border-slate-700 cursor-pointer"
+                      >
+                        <Download className="w-2.5 h-2.5" /> CSV
+                      </button>
+                    </div>
                   </div>
                 </div>
 

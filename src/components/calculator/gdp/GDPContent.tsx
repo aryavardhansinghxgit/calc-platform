@@ -5,187 +5,138 @@ import React from "react";
 export function GDPContent() {
   const faqs = [
     {
-      question: "1. What is Gross Domestic Product (GDP)?",
+      question: "1. What is Gross Domestic Product (GDP) and what does it measure?",
       answer:
-        "Gross Domestic Product (GDP) is the monetary market value of all finished goods and services produced within a nation's geographical borders during a specific time period (typically quarterly or annually). It serves as the primary comprehensive scorecard of a country's economic health and size.",
+        "Gross Domestic Product (GDP) is the total monetary value of all finished goods and services produced within a country's geographic borders over a specific period (typically quarterly or annually). It serves as the primary comprehensive scorecard of a country's economic health and aggregate output.",
     },
     {
-      question: "2. What is the difference between Nominal GDP and Real GDP?",
+      question: "2. What is the Expenditure Approach formula for calculating GDP?",
       answer:
-        "Nominal GDP evaluates economic output using current raw market prices without adjusting for inflation. Real GDP adjusts for price changes by evaluating output using constant base-year prices via the GDP Deflator, reflecting true physical growth in goods and services produced.",
+        "The standard Keynesian expenditure formula is GDP = C + I + G + (X - M), where C = Personal Consumption Expenditures, I = Gross Private Domestic Investment, G = Government Consumption & Gross Investment, X = Gross Exports, and M = Gross Imports (with X - M representing Net Exports).",
     },
     {
-      question: "3. What is the Expenditure Approach formula for GDP?",
+      question: "3. What is the difference between Nominal GDP and Real GDP?",
       answer:
-        "The Expenditure Approach calculates GDP by summing total spending: GDP = C + I + G + (X - M), where C = Personal Consumption Expenditures, I = Gross Private Domestic Investment, G = Government Consumption & Gross Investment, X = Exports, and M = Imports.",
+        "Nominal GDP evaluates economic output using current market prices without adjusting for inflation, which can overstate growth during inflationary periods. Real GDP adjusts nominal output using a GDP Price Deflator index (Real GDP = [Nominal GDP ÷ GDP Deflator] × 100), measuring constant-dollar volume changes.",
     },
     {
-      question: "4. What is the Resource Cost - Income Approach to GDP?",
+      question: "4. What is the Income Approach to measuring GDP?",
       answer:
-        "The Income Approach measures the total factor earnings generated in production: National Income = Employee Compensation + Proprietors' Income + Rental Income + Corporate Profits + Net Interest Income. Adding indirect business taxes, capital depreciation, and net foreign factor income equals GDP.",
+        "The Income Approach calculates GDP by summing all resource earnings generated in the production process: Compensation of Employees (wages) + Proprietors' Income + Rental Income + Corporate Profits + Net Interest + Indirect Business Taxes + Depreciation (Consumption of Fixed Capital) + Net Foreign Factor Income.",
     },
     {
-      question: "5. Why are intermediate goods excluded from GDP calculations?",
+      question: "5. What is the Production (Value-Added) Approach (Gross Value Added - GVA)?",
       answer:
-        "To prevent 'double counting.' If the value of steel purchased by an automaker and the final value of the completed car were both counted, the steel would be counted twice. Only final goods sold to the end user (or the value added at each intermediate stage) are included.",
+        "The Production Approach calculates GDP by taking the Gross Output value of every industry sector (agriculture, manufacturing, services) and subtracting Intermediate Consumption (raw materials and energy used up in production): GVA = Gross Output - Intermediate Inputs + Net Product Taxes.",
     },
     {
       question: "6. What is GDP Per Capita and why is it important?",
       answer:
-        "GDP per capita is calculated by dividing a nation's total GDP by its total resident population (GDP ÷ Population). It serves as a standard international proxy for average individual economic productivity and material living standards.",
+        "GDP Per Capita divides total national GDP by total resident population (GDP Per Capita = GDP ÷ Population). It provides a per-person metric of average economic productivity and material living standards across nations with widely differing population sizes.",
     },
     {
-      question: "7. What is Purchasing Power Parity (PPP)?",
+      question: "7. What is Purchasing Power Parity (PPP) GDP?",
       answer:
-        "Purchasing Power Parity (PPP) adjusts nominal GDP figures by equalizing the purchasing power of different currencies based on a standardized basket of consumer goods. PPP accounts for local cost-of-living differences that market exchange rates overlook.",
+        "GDP at Purchasing Power Parity (PPP) adjusts nominal GDP figures to account for relative local price levels and cost-of-living differences between countries using a standardized basket of goods, preventing currency exchange rate distortions.",
     },
     {
-      question: "8. What is the GDP Deflator?",
+      question: "8. What is the GDP Deflator and how does it compare to the Consumer Price Index (CPI)?",
       answer:
-        "The GDP Deflator is a broad measure of price inflation across all domestically produced goods and services in an economy: GDP Deflator = (Nominal GDP ÷ Real GDP) × 100. Unlike the Consumer Price Index (CPI), it includes investment goods and government purchases.",
+        "The GDP Deflator measures price inflation across all domestically produced goods and services (including capital equipment and government purchases), whereas the Consumer Price Index (CPI) tracks only a fixed representative basket of consumer household purchases.",
     },
     {
-      question: "9. What critical economic activities are excluded from GDP?",
+      question: "9. What economic activities are excluded from official GDP calculations?",
       answer:
-        "GDP excludes non-market household labor (cooking, child-rearing), unpaid volunteer work, shadow/informal cash transactions, illegal black-market sales, transfer payments (social security, pensions), and environmental degradation or natural resource depletion.",
+        "GDP excludes non-market home labor (childcare, housekeeping), underground shadow economies, transfer payments (Social Security, welfare benefits), purely financial asset transactions (stocks, bonds), and sales of used second-hand goods.",
     },
     {
-      question: "10. What is the difference between GDP and GNP (Gross National Product)?",
+      question: "10. What is Gross National Product (GNP) / Gross National Income (GNI)?",
       answer:
-        "GDP measures all production occurring strictly within a country's physical borders regardless of citizenship. GNP (Gross National Product) measures all production generated by a country's citizens and domestic enterprises, including income earned abroad.",
+        "GNP/GNI measures the total market value produced by a nation's permanent citizens and corporate enterprises regardless of where production takes place globally: GNP = GDP + Net Primary Income from Abroad.",
     },
     {
-      question: "11. What defines an economic recession in terms of GDP?",
+      question: "11. What defines a technical economic recession?",
       answer:
-        "A widely cited rule of thumb defines an economic recession as two consecutive quarters of negative real GDP growth. In the United States, the National Bureau of Economic Research (NBER) officially designates recessions based on a broader decline in employment, income, and production.",
+        "A standard rule-of-thumb definition of a technical recession is two consecutive quarters of negative Real GDP growth. In the United States, the National Bureau of Economic Research (NBER) formally dates recessions based on broad declines in employment, personal income, and industrial production.",
     },
     {
-      question: "12. What is Net Exports (X - M) and what does a trade deficit mean for GDP?",
+      question: "12. What are the limitations of GDP as a measure of national well-being?",
       answer:
-        "Net Exports equals total gross exports minus total gross imports. When a nation imports more goods and services than it exports (M > X), Net Exports is negative, creating a trade deficit that acts as a subtraction from aggregate domestic GDP.",
+        "GDP measures aggregate transactional economic volume, not distribution of wealth, income inequality, environmental degradation, resource depletion, healthcare quality, or personal leisure and happiness. Natural disasters and cleanup efforts can ironically raise GDP despite destroying capital wealth.",
     },
   ];
 
   return (
-    <div className="space-y-3 text-black dark:text-zinc-100 font-sans leading-relaxed">
-      {/* SECTION 1: WHAT IS GDP & ECONOMIC MEASUREMENT */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          What is Gross Domestic Product? Macroeconomic Measurement Principles
+    <div className="space-y-10 text-black dark:text-slate-100 font-medium leading-relaxed">
+      {/* 1. PRINCIPLES OF MACROECONOMIC ACCOUNTING */}
+      <section className="space-y-3">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          1. Principles of Macroeconomic Accounting &amp; National Output
         </h2>
-        <p className="text-xs text-black dark:text-zinc-200">
-          Gross Domestic Product (GDP) is defined by the OECD and IMF as an aggregate measure of production equal to the sum of gross values added of all resident institutional units engaged in production, plus any taxes and minus any subsidies on products:
+        <p className="text-sm leading-relaxed text-black dark:text-slate-100">
+          <strong>Gross Domestic Product (GDP)</strong> represents the aggregate market value of all finalized goods, structures, agricultural commodities, and services produced domestically within an economy during a defined time window.
         </p>
+        <p className="text-sm leading-relaxed text-black dark:text-slate-100">
+          Macroeconomists utilize three theoretically equivalent computational methodologies to measure GDP: the <strong>Expenditure Approach</strong> (what is purchased), the <strong>Income Approach</strong> (what is earned), and the <strong>Production / Value-Added Approach</strong> (what is produced).
+        </p>
+      </section>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-1">
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Personal Consumption (C)</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Household spending on durable goods (cars, appliances), non-durable goods (food, fuel), and services (healthcare, rent).
+      {/* 2. THE THREE COMPUTATIONAL METHODOLOGIES */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          2. The Three GDP Methodologies Compared
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-medium">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              1. Expenditure Approach
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              <strong>GDP = C + I + G + (X - M)</strong>. Sums consumption, private investment, government purchases, and net foreign exports.
             </p>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Gross Investment (I)</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Business capital outlays on machinery, industrial factories, software technology, commercial real estate, and inventory changes.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              2. Income Approach
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              Sums wages, corporate profits, rental income, net interest, indirect taxes, and capital depreciation across all productive resources.
             </p>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Government Spending (G)</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Federal, state, and local expenditures on public infrastructure, defense procurement, education, and civil service payrolls.
-            </p>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Net Exports (X - M)</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Total gross exports shipped abroad minus total foreign imports consumed domestically.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              3. Production (GVA)
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              <strong>GVA = Gross Output - Intermediate Inputs</strong>. Calculates value-add across agriculture, industry, and service sectors.
             </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* SECTION 2: THREE METHODS TO MEASURE GDP */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          The Three Fundamental Methods of National Income Accounting
+      {/* 3. 12 FAQS */}
+      <section className="space-y-4 pt-6 border-t border-slate-200 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          Frequently Asked Questions (FAQ)
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 font-mono text-[11px]">
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold font-sans text-xs text-black dark:text-zinc-100 block">1. Expenditure Approach</span>
-            <div>GDP = C + I + G + (X - M)</div>
-            <div className="text-[10px] text-slate-500 font-sans">Sums aggregate final spending across all economic sectors.</div>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold font-sans text-xs text-black dark:text-zinc-100 block">2. Income Approach</span>
-            <div>GDP = Wages + Profits + Rent + Interest + Taxes + Depr</div>
-            <div className="text-[10px] text-slate-500 font-sans">Sums all factor payments earned in domestic production.</div>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold font-sans text-xs text-black dark:text-zinc-100 block">3. Production (Value-Added)</span>
-            <div>GDP = Gross Output - Intermediate Inputs + Taxes</div>
-            <div className="text-[10px] text-slate-500 font-sans">Sums net value added by every industrial manufacturing stage.</div>
-          </div>
-        </div>
-      </div>
-
-      {/* SECTION 3: WORKED MATHEMATICAL CASE STUDIES */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Worked Macroeconomic Case Study (Expenditure & Deflator Calculation)
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-          <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Expenditure Accounting</h3>
-            <div className="font-mono text-[11px] text-black dark:text-zinc-300 space-y-0.5">
-              <div>• Consumption (C) = $19,100 Billion (66.4%)</div>
-              <div>• Gross Investment (I) = $5,100 Billion (17.7%)</div>
-              <div>• Government Spending (G) = $4,850 Billion (16.9%)</div>
-              <div>• Net Exports (X - M) = $3,150B - $3,820B = -$670 Billion (-2.3%)</div>
-              <div>• Total Nominal GDP = <strong>$28,380.00 Billion ($28.38 Trillion)</strong></div>
-              <div>• Per Capita (335M Pop) = <strong>$84,716 / person</strong></div>
-            </div>
-          </div>
-
-          <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Real GDP vs. Inflation Deflator</h3>
-            <div className="font-mono text-[11px] text-black dark:text-zinc-300 space-y-0.5">
-              <div>• Nominal GDP = $28,380 Billion</div>
-              <div>• GDP Deflator Index = 124.5 (24.5% cumulative price inflation)</div>
-              <div>• Real GDP = ($28,380 ÷ 124.5) × 100 = <strong>$22,795.18 Billion</strong></div>
-              <div>• Inflation Drag = $5,584.82 Billion</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* SECTION 4: 12 FAQS ALWAYS OPEN CARDS */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Frequently Asked Questions (12 Key GDP & Macroeconomic FAQs)
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="space-y-3 text-xs leading-relaxed text-black dark:text-slate-100">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 bg-slate-50 dark:bg-slate-800/50 space-y-1"
+              className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5"
             >
-              <h3 className="font-bold text-xs text-black dark:text-zinc-100">
+              <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
                 {faq.question}
               </h3>
-              <p className="text-[11px] text-black dark:text-zinc-300 leading-relaxed">
+              <p className="text-black dark:text-slate-100 leading-relaxed">
                 {faq.answer}
               </p>
             </div>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

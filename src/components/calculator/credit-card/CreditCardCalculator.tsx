@@ -6,6 +6,7 @@ import {
   Trash2,
   Plus,
   Check,
+  Download,
 } from "lucide-react";
 import {
   calculateCreditCardPayoff,
@@ -29,6 +30,17 @@ export interface SavedPayoffItem {
 export function CreditCardCalculator() {
   // Simple Currency Selector with Dollar ($) as default
   const [currencySymbol, setCurrencySymbol] = useState<string>("$");
+
+  const triggerCsvDownload = (filename: string, csvContent: string) => {
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // ==========================================
   // BOX 1: SINGLE CARD PAYOFF
@@ -727,20 +739,41 @@ export function CreditCardCalculator() {
               {/* AMORTIZATION SCHEDULE */}
               {!payoffResult.isNeverEnding && payoffResult.schedule.length > 0 && (
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-2">
                     <span className="text-xs font-extrabold uppercase text-blue-600 dark:text-blue-400">
                       Amortization Schedule
                     </span>
-                    <input
-                      type="text"
-                      placeholder="Search month..."
-                      value={tableSearch}
-                      onChange={(e) => {
-                        setTableSearch(e.target.value);
-                        setCurrentPage(1);
-                      }}
-                      className="h-6 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold focus:outline-none w-32"
-                    />
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const headers = ["Month", "Starting Balance", "Payment", "Principal", "Interest", "Ending Balance"];
+                          const rows = payoffResult.schedule.map((r) => [
+                            r.month,
+                            r.startingBalance.toFixed(2),
+                            r.monthlyPayment.toFixed(2),
+                            r.principalPaid.toFixed(2),
+                            r.interestPaid.toFixed(2),
+                            r.endingBalance.toFixed(2),
+                          ]);
+                          const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+                          triggerCsvDownload(`credit_card_amortization_schedule.csv`, csv);
+                        }}
+                        className="px-2 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 rounded-lg text-[11px] font-bold flex items-center gap-1 border border-slate-200 dark:border-slate-700 cursor-pointer transition-colors"
+                      >
+                        <Download className="w-3 h-3" /> Export CSV
+                      </button>
+                      <input
+                        type="text"
+                        placeholder="Search month..."
+                        value={tableSearch}
+                        onChange={(e) => {
+                          setTableSearch(e.target.value);
+                          setCurrentPage(1);
+                        }}
+                        className="h-6 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-bold focus:outline-none w-28"
+                      />
+                    </div>
                   </div>
 
                   <div className="overflow-x-auto max-h-44 overflow-y-auto">

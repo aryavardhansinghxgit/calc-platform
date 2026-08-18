@@ -60,187 +60,118 @@ export function RepaymentContent() {
         "Discrete compounding calculates interest at specific intervals (monthly, daily, quarterly), whereas continuous compounding assumes interest accumulates and compounds at every infinitesimal moment using the mathematical constant e. The periodic rate formula for continuous compounding is i = e^(r/k) - 1.",
     },
     {
-      question: "12. How does inflation reduce the real economic burden of fixed-rate debt?",
+      question: "12. What is the difference between simple interest and amortized installment loans?",
       answer:
-        "Inflation erodes the purchasing power of money over time. When you hold a fixed-rate loan, your monthly payment remains unchanged in nominal dollars while your wages and living costs rise with inflation, meaning each future payment represents a smaller percentage of your real economic purchasing power.",
+        "Simple interest calculates finance charges strictly on the original principal balance (Interest = Principal × Rate × Time). In amortized installment loans, interest is recalculated at every payment interval against the declining remaining balance, with each installment paying accrued interest first and principal second.",
     },
   ];
 
   return (
-    <div className="space-y-3 text-black dark:text-zinc-100 font-sans leading-relaxed">
-      {/* SECTION 1: WHAT IS LOAN REPAYMENT */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          What is Debt Repayment? Understanding Principal, Interest & Obligations
+    <div className="space-y-10 text-black dark:text-slate-100 font-medium leading-relaxed">
+      {/* 1. PRINCIPLES OF LOAN REPAYMENT */}
+      <section className="space-y-3">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          1. Principles of Debt Repayment &amp; Amortization Mathematics
         </h2>
-        <p className="text-xs text-black dark:text-zinc-200">
-          Loan repayment is the contractual process of settling borrowed money through structured periodic payments consisting of principal amortization and accrued finance charges. Making on-time repayments builds credit health (FICO and VantageScore), prevents costly collections or legal judgments, and minimizes cumulative lifetime borrowing expenses.
+        <p className="text-sm leading-relaxed text-black dark:text-slate-100">
+          A <strong>Loan Repayment Schedule</strong> (or amortization plan) is a structured financial mechanism that breaks down how a fixed borrowed principal balance, plus periodic compound interest charges, is systematically repaid over time through regular installments.
         </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1">
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Principal Reduction</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              The exact portion of your installment that directly pays down the outstanding loan balance, creating equity and lowering future interest.
-            </p>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Interest Finance Charges</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              The fee charged by the lender for borrowing capital, calculated by multiplying your periodic interest rate by your remaining balance.
-            </p>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Amortization Mechanics</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Early payments are heavily weighted toward interest, while later payments shift rapidly toward paying down principal.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* SECTION 2: FIXED TERM VS FIXED INSTALLMENT */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Choosing Your Repayment Plan: Fixed Term vs. Fixed Installment
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-          <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-bold text-xs text-black dark:text-zinc-100">
-              1. Mode A: Fixed Loan Term (Target Date Budgeting)
-            </h3>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              You choose the exact lifespan of the loan (e.g. 5-year auto loan, 15-year or 30-year mortgage), and the formula calculates the precise monthly payment required:
-            </p>
-            <div className="font-mono text-[11px] bg-white dark:bg-slate-900 p-2 rounded border border-slate-200 dark:border-slate-700">
-              PMT = P × [i(1+i)^n] ÷ [(1+i)^n - 1]
-            </div>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              <strong>Best For:</strong> Structured loans with rigid contractual maturity dates.
-            </p>
-          </div>
-
-          <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-bold text-xs text-black dark:text-zinc-100">
-              2. Mode B: Fixed Installment (Cash Flow Budgeting)
-            </h3>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              You specify a fixed dollar amount from your disposable income (e.g. $400/month), and the formula solves for total periods (n) logarithmically:
-            </p>
-            <div className="font-mono text-[11px] bg-white dark:bg-slate-900 p-2 rounded border border-slate-200 dark:border-slate-700">
-              n = -ln(1 - (P × i)/PMT) ÷ ln(1 + i)
-            </div>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              <strong>Best For:</strong> Accelerating credit cards, personal loans, and debt elimination.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* SECTION 3: THE 4 MAJOR CONSUMER DEBT CATEGORIES */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          The 4 Most Common Types of Consumer Loan Repayments
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">1. Mortgages</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Secured long-term real estate loans amortized over 15 to 30 years with fixed or adjustable interest rates.
-            </p>
-          </div>
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">2. Auto Loans</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Secured medium-term consumer vehicle loans typically repaid monthly over 36 to 84 months.
-            </p>
-          </div>
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">3. Student Loans</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Federal IDR/Standard vs. Private student loans with 5-to-25-year repayment terms and deferment rules.
-            </p>
-          </div>
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">4. Credit Cards</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Revolving debt with floating APRs and dropping minimum payments designed to maximize lender interest.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* SECTION 4: COMPOUNDING & PAYMENT FREQUENCY INTERACTION */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          How Compounding Frequency and Repayment Intervals Work Together
-        </h2>
-        <p className="text-xs text-black dark:text-zinc-200">
-          When loan interest compounds on a different schedule than your repayment frequency (e.g., daily compounding with monthly payments, or semi-annual compounding with bi-weekly payments), the mathematical effective periodic rate is computed as:
+        <p className="text-sm leading-relaxed text-black dark:text-slate-100">
+          Every loan payment is mathematically split into two distinct portions: <strong>accrued interest</strong> (the cost of borrowing paid to the creditor) and <strong>principal reduction</strong> (the equity portion that reduces the remaining debt balance).
         </p>
+      </section>
 
-        <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 font-mono text-[11px] space-y-1 text-black dark:text-zinc-200">
-          <div>• Discrete Compounding: i = (1 + r / m)^(m / k) - 1</div>
-          <div>• Continuous Compounding: i = e^(r / k) - 1</div>
-          <div className="text-[10px] text-slate-500 font-sans">
-            Where r = nominal annual rate, m = compounding periods/year, k = repayment periods/year.
+      {/* 2. THE TWO PRIMARY REPAYMENT MODES */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          2. Fixed Loan Term vs. Fixed Installment Amount
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-medium">
+          <div className="p-4 sm:p-5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              1. Fixed Term Mode (Solving for Payment)
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              You specify the exact loan balance, interest rate, and desired duration (e.g. 5 years or 30 years). The amortization formula calculates the exact fixed periodic installment required to retire the loan balance to zero by the maturity date.
+            </p>
+          </div>
+
+          <div className="p-4 sm:p-5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              2. Fixed Installment Mode (Solving for Timeline)
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              You specify the budget you can afford to pay each month (e.g. $400/mo). The calculator solves logarithmically for the number of periods $N = -\ln(1 - (B \cdot i) / PMT) / \ln(1 + i)$ required to eliminate the debt.
+            </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* SECTION 5: WORKED MATHEMATICAL CASE STUDIES */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Worked Mathematical Examples: $25,000 Personal Loan @ 8.0% APR
+      {/* 3. MULTI-COMPOUNDING & FREQUENCY HARMONIZATION */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          3. Multi-Compounding Frequency Harmonization Formula
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-          <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Example 1: Fixed 5-Year Term (60 Months)</h3>
-            <div className="font-mono text-[11px] text-black dark:text-zinc-300 space-y-0.5">
-              <div>• Principal (P) = $25,000 | i = 0.08 / 12 = 0.006667</div>
-              <div>• Total Periods (n) = 60 Months</div>
-              <div>• Monthly Payment = $25,000 × [0.006667(1.006667)^60] / [(1.006667)^60 - 1] = <strong>$506.91/mo</strong></div>
-              <div>• Total Paid = <strong>$30,414.60</strong></div>
-              <div>• Total Interest = <strong>$5,414.60</strong></div>
-            </div>
+        <div className="p-4 sm:p-5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-3 text-xs font-medium">
+          <p className="text-black dark:text-slate-100">
+            When payment frequency ($k$) differs from compounding frequency ($m$), the effective periodic interest rate ($i$) is converted via the standard financial formula:
+          </p>
+          <div className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 font-mono text-xs">
+            i = (1 + r / m)^(m / k) - 1
+          </div>
+          <p className="text-black dark:text-slate-100">
+            For continuous compounding, the periodic rate simplifies to <strong>i = e^(r / k) - 1</strong>. This ensures exact mathematical precision whether calculating mortgages, auto loans, or multi-compounding personal debt.
+          </p>
+        </div>
+      </section>
+
+      {/* 4. ACCELERATION STRATEGIES */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          4. Debt Payoff Accelerators: Bi-Weekly &amp; Extra Principal Payments
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-medium">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              Accelerated Bi-Weekly Payments
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              By paying half your monthly installment every 14 days, you make 26 half-payments per year (13 full payments). That 1 extra monthly payment per year directly reduces principal, saving thousands in interest and cutting years off your debt timeline.
+            </p>
           </div>
 
-          <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Example 2: Fixed Installment of $700/mo</h3>
-            <div className="font-mono text-[11px] text-black dark:text-zinc-300 space-y-0.5">
-              <div>• Principal (P) = $25,000 | Payment (PMT) = $700.00</div>
-              <div>• n = -ln(1 - (25000 × 0.006667)/700) ÷ ln(1.006667) = <strong>41.1 Months (3.4 Yrs)</strong></div>
-              <div>• Total Interest = <strong>$3,546.20</strong></div>
-              <div>• Interest Savings = <strong>$1,868.40</strong> and 19 months shaved off!</div>
-            </div>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              Lump-Sum Prepayments
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              Applying tax refunds, work bonuses, or inheritance funds directly to principal reduces the baseline on which future interest is calculated, triggering immediate compounding interest savings.
+            </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* SECTION 6: 12 FAQS ALWAYS OPEN CARDS */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Frequently Asked Questions (12 Key Loan Repayment FAQs)
+      {/* 5. 12 FAQS */}
+      <section className="space-y-4 pt-6 border-t border-slate-200 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          Frequently Asked Questions (FAQ)
         </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="space-y-3 text-xs leading-relaxed text-black dark:text-slate-100">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 bg-slate-50 dark:bg-slate-800/50 space-y-1"
+              className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5"
             >
-              <h3 className="font-bold text-xs text-black dark:text-zinc-100">
+              <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
                 {faq.question}
               </h3>
-              <p className="text-[11px] text-black dark:text-zinc-300 leading-relaxed">
+              <p className="text-black dark:text-slate-100 leading-relaxed">
                 {faq.answer}
               </p>
             </div>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

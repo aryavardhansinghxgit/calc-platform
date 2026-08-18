@@ -5,211 +5,176 @@ import React from "react";
 export function LeaseContent() {
   const faqs = [
     {
-      question: "1. What is a lease and how does it work?",
+      question: "1. How is a monthly auto or equipment lease payment calculated?",
       answer:
-        "A lease is a contractual agreement where the asset owner (lessor) grants another party (lessee) the right to use an asset (vehicle, equipment, or real estate) for a specified term in exchange for periodic payments. Unlike a loan, a lease finances only the asset's depreciation during the term plus finance charges, rather than full purchase value.",
+        "A lease payment consists of two primary components: Monthly Depreciation Fee plus Monthly Finance Charge (Rent Charge). Depreciation Fee = (Net Capitalized Cost - Residual Value) ÷ Lease Term in Months. Rent Charge = (Net Capitalized Cost + Residual Value) × Money Factor. Adding monthly sales tax equals the total periodic payment.",
     },
     {
-      question: "2. What is the difference between rent and a lease?",
+      question: "2. What is a Money Factor and how do I convert it to an Annual Percentage Rate (APR)?",
       answer:
-        "While often used interchangeably, a lease refers to a formal, legally binding long-term contractual agreement (typically 12 to 60 months) with locked terms, payment obligations, and residual conditions. Rent generally refers to shorter-term or periodic month-to-month arrangements that can be modified or terminated with short notice.",
+        "The Money Factor (also called the lease factor or lease fee) is a fractional decimal used by leasing finance companies to calculate interest charges. To convert Money Factor to an approximate APR percentage, multiply by 2,400 (e.g., 0.00250 × 2,400 = 6.00% APR). To convert APR to Money Factor, divide by 2,400.",
     },
     {
-      question: "3. What is Residual Value and why is it critical in a lease?",
+      question: "3. What is Residual Value and why is it critical in a lease agreement?",
       answer:
-        "Residual value is the projected wholesale market value of an asset at the end of the lease term. Higher residual values reduce the total depreciation you must finance, leading directly to lower monthly lease payments.",
+        "The Residual Value is the projected fair market value of the vehicle or equipment at the end of the lease term, set by the financing lessor at signing. A higher residual value means less total depreciation over the lease term, resulting in lower monthly lease payments.",
     },
     {
-      question: "4. What is Money Factor and how do I convert it to APR?",
+      question: "4. What is the difference between an Operating Lease and a Capital / Finance Lease?",
       answer:
-        "Money Factor (lease factor) is the fractional interest rate applied by lessors. To convert Money Factor to an Annual Percentage Rate (APR), multiply by 2,400 (e.g. 0.0025 × 2,400 = 6.0% APR). Conversely, divide APR by 2,400 to find the Money Factor.",
+        "Under GAAP/IFRS standards, an Operating Lease functions like a traditional rental where the lessor retains asset ownership risks, and payments are treated as operational expenses. A Capital/Finance Lease transfers substantially all risks and ownership rewards to the lessee, requiring the asset and liability to be capitalized on the balance sheet.",
     },
     {
-      question: "5. How is a monthly lease payment calculated mathematically?",
+      question: "5. Should I put a large down payment (Capitalized Cost Reduction) on an auto lease?",
       answer:
-        "Monthly lease payments consist of three parts: 1) Monthly Depreciation = (Net Capitalized Cost - Residual Value) ÷ Lease Term; 2) Monthly Finance Charge = (Net Cap Cost + Residual Value) × Money Factor; and 3) Monthly Sales Tax = (Depreciation + Finance Charge) × Sales Tax Rate.",
+        "Financial advisors generally recommend $0 or minimal down payments on leases. If a leased vehicle is totaled or stolen early in the contract, insurance payouts go directly to the leasing bank, and your upfront cash down payment is typically lost completely unless covered by GAP insurance.",
     },
     {
-      question: "6. Is it better to lease or buy an automobile?",
+      question: "6. What is GAP (Guaranteed Asset Protection) insurance and is it included in leases?",
       answer:
-        "Leasing offers 30% to 50% lower monthly payments, warranty protection, and the ability to drive a new car every 3 years without trade-in hassles. Buying requires higher payments but builds long-term vehicle equity and eliminates mileage restrictions and wear-and-tear fees.",
+        "GAP insurance covers the financial shortfall between the vehicle's depreciated actual market value and the outstanding lease balance if the car is totaled or stolen. Most manufacturer captive finance leases (e.g. BMW FS, Honda Financial) include complimentary GAP coverage, but independent lessors may require separate purchase.",
     },
     {
-      question: "7. What is the difference between a Capital Lease and an Operating Lease?",
+      question: "7. What are the tax advantages of leasing equipment for small businesses?",
       answer:
-        "Under ASC 842 / IFRS 16 accounting rules, a Capital/Finance Lease transfers substantially all benefits and risks of ownership to the lessee (recorded as an asset and liability on the balance sheet). An Operating Lease is a traditional rental where the lessor retains asset ownership and risk.",
+        "Under Section 179 and standard IRS guidelines, operating lease payments on equipment and commercial vehicles can often be deducted as 100% ordinary business operating expenses, reducing taxable net income without depleting capital credit lines.",
     },
     {
-      question: "8. What are NNN (Triple Net) commercial real estate leases?",
+      question: "8. What happens if I exceed the annual mileage limit on a leased vehicle?",
       answer:
-        "In a Triple Net (NNN) lease, the tenant pays base rent plus all three major operational expenses: property taxes, building insurance, and common area maintenance (CAM). In a Gross Lease, the landlord pays all building expenses out of a single flat rental fee.",
+        "Lease agreements establish strict annual mileage allowances (typically 10,000, 12,000, or 15,000 miles per year). Exceeding this limit incurs an excess mileage penalty at lease end, ranging from $0.15 to $0.30 per excess mile.",
     },
     {
-      question: "9. Should I make a large down payment (Cap Cost Reduction) on a lease?",
+      question: "9. Can I buy my leased vehicle at the end of the term (Lease Buyout)?",
       answer:
-        "Financial analysts strongly advise making $0 or minimal down payment on auto leases. If the vehicle is totaled or stolen early in the lease, insurance and GAP coverage pay off the lessor, but your upfront down payment cash is permanently lost.",
+        "Yes. Nearly all standard consumer closed-end leases provide a contractual purchase option allowing the lessee to purchase the vehicle for the preset Residual Value plus a nominal purchase option documentation fee ($150–$500).",
     },
     {
-      question: "10. What happens if I exceed the annual lease mileage limit?",
+      question: "10. What is the difference between Closed-End and Open-End leases?",
       answer:
-        "Standard auto leases include mileage allowances (typically 10,000 to 15,000 miles/year). Exceeding this allowance results in end-of-lease penalty fees typically ranging from $0.15 to $0.30 per excess mile.",
+        "In a Closed-End lease (standard consumer auto lease), the lessee returns the vehicle at lease end with zero liability for market depreciation beyond excess wear and mileage. In an Open-End lease (common for commercial fleets), the lessee must pay the difference if the physical resale value falls below the contractual residual value.",
     },
     {
       question: "11. What is an Acquisition Fee and Disposition Fee?",
       answer:
-        "An Acquisition Fee ($500–$1,000) is an upfront administrative fee charged by the leasing bank to establish the lease. A Disposition Fee ($350–$500) is charged at the end of the lease to clean, recondition, and auction the returned vehicle if you do not purchase it.",
+        "An Acquisition Fee (or bank fee, $595–$1,095) is charged upfront by the lessor for originating the lease contract. A Disposition Fee ($350–$595) is charged at lease turn-in to cover vehicle reconditioning, transport, and auction resale costs (waived if you purchase or lease another vehicle from the same brand).",
     },
     {
-      question: "12. Can I negotiate the purchase price (Cap Cost) of a leased vehicle?",
+      question: "12. Is it financially better to lease or buy a vehicle?",
       answer:
-        "Yes. The vehicle price (Gross Capitalized Cost) is fully negotiable just like a cash purchase. Negotiating a lower vehicle price directly reduces monthly depreciation charges and finance fees.",
+        "Leasing offers lower monthly payments, perpetual factory warranty coverage, and the ability to drive new vehicles every 2 to 4 years. Buying/financing costs more per month initially, but builds equity and delivers substantially lower long-term cost of ownership when the vehicle is kept past loan payoff.",
     },
   ];
 
   return (
-    <div className="space-y-3 text-black dark:text-zinc-100 font-sans leading-relaxed">
-      {/* SECTION 1: WHAT IS A LEASE & CORE CONCEPTS */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          What is a Lease? Financial Mechanics & Legal Definitions
+    <div className="space-y-10 text-black dark:text-slate-100 font-medium leading-relaxed">
+      {/* 1. PRINCIPLES OF LEASING */}
+      <section className="space-y-3">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          1. Principles of Leasing &amp; Mathematical Mechanics
         </h2>
-        <p className="text-xs text-black dark:text-zinc-200">
-          A lease is an enforceable contract between a lessor (the legal owner of an asset) and a lessee (the party granted user rights) for a defined term in exchange for scheduled periodic payments. Leasing is widely utilized across motor vehicles, corporate machinery, commercial aircraft, office spaces, and industrial real estate.
+        <p className="text-sm leading-relaxed text-black dark:text-slate-100">
+          A <strong>Lease Agreement</strong> is a contractual financial arrangement wherein the owner of an asset (the <em>lessor</em>) grants another party (the <em>lessee</em>) the legal right to possess and operate the equipment or vehicle for a specified duration in exchange for periodic lease payments.
         </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1">
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Gross Capitalized Cost</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              The agreed-upon sales price of the asset plus any added options, administrative fees, or rolled-in negative trade-in balance.
-            </p>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Residual Value</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              The contractually predetermined wholesale value of the asset at lease maturity. Higher residual reduces monthly payments.
-            </p>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Money Factor (Lease Factor)</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              The fractional interest rate used to calculate finance rent charges. Multiplying Money Factor by 2,400 yields the equivalent APR.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* SECTION 2: LEASE FORMULA & STEP-BY-STEP CALCULATION */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          How Lease Payments Are Calculated: Step-by-Step Mathematical Formulas
-        </h2>
-        <p className="text-xs text-black dark:text-zinc-200">
-          Unlike an amortized loan where you pay off 100% of the loan principal, a lease only charges for the difference between the starting price (Cap Cost) and the ending value (Residual), plus a finance charge on the tied-up capital:
+        <p className="text-sm leading-relaxed text-black dark:text-slate-100">
+          Unlike purchasing an asset where the buyer finances 100% of the purchase price, a lease finances only the <strong>projected depreciation</strong> of the asset over the term, plus an implicit financing charge (money factor / interest rate).
         </p>
+      </section>
 
-        <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 font-mono text-[11px] space-y-1 text-black dark:text-zinc-200">
-          <div className="font-bold font-sans text-xs text-black dark:text-zinc-100">Core Mathematical Formulas:</div>
-          <div>1. Adjusted Cap Cost = Gross Agreed Price + Fees - Down Payment - Trade-in Equity</div>
-          <div>2. Monthly Depreciation Fee = (Adjusted Cap Cost - Residual Value) ÷ Lease Term (Months)</div>
-          <div>3. Monthly Rent Charge = (Adjusted Cap Cost + Residual Value) × Money Factor</div>
-          <div>4. Base Monthly Payment = Monthly Depreciation Fee + Monthly Rent Charge</div>
-          <div>5. Total Monthly Payment = Base Monthly Payment × (1 + Sales Tax Rate)</div>
-        </div>
-      </div>
-
-      {/* SECTION 3: COMMERCIAL & REAL ESTATE LEASE STRUCTURES */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Commercial, Equipment & Real Estate Lease Structures
+      {/* 2. THE LEASE PAYMENT FORMULA */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          2. Standard Auto &amp; Equipment Lease Formula Breakdown
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Gross Lease</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Tenant pays a flat rent; landlord pays all building property taxes, insurance, and maintenance expenses.
+        <div className="p-4 sm:p-5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-3 text-xs font-medium">
+          <p className="text-black dark:text-slate-100">
+            A standard monthly lease installment consists of three distinct mathematical components:
+          </p>
+          <div className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 font-mono text-xs space-y-1">
+            <div>1. Monthly Depreciation = (Net Cap Cost - Residual Value) ÷ Term in Months</div>
+            <div>2. Monthly Finance Fee (Rent Charge) = (Net Cap Cost + Residual Value) × Money Factor</div>
+            <div>3. Total Monthly Payment = (Monthly Depreciation + Rent Charge) × (1 + Sales Tax Rate)</div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. MONEY FACTOR VS APR */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          3. Converting Money Factor to Annual Percentage Rate (APR)
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-medium">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              Money Factor to APR (Rule of 2400)
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              Multiply the fractional money factor by 2,400. For example, a money factor of <strong>0.00250</strong> corresponds to an APR of <strong>6.00%</strong> (0.00250 × 2400 = 6.0%).
             </p>
           </div>
 
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Single Net (N Lease)</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Tenant pays base rent plus their proportional share of real estate property taxes.
-            </p>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Double Net (NN Lease)</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Tenant pays base rent plus property taxes and building insurance premiums.
-            </p>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Triple Net (NNN Lease)</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Tenant pays base rent, property taxes, insurance, and all common area maintenance (CAM) repairs.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              APR to Money Factor
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              Divide the annual percentage interest rate by 2,400. For example, an interest rate of <strong>7.20% APR</strong> equals a money factor of <strong>0.00300</strong> (7.20 ÷ 2400 = 0.00300).
             </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* SECTION 4: WORKED MATHEMATICAL CASE STUDIES */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Worked Mathematical Example ($20,000 Asset Value @ 6.0% APR over 36 Months)
+      {/* 4. LEASE VS BUY TRADEOFFS */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          4. Strategic Comparison: Leasing vs. Purchasing
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-          <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Lease Breakdown ($8,000 Residual)</h3>
-            <div className="font-mono text-[11px] text-black dark:text-zinc-300 space-y-0.5">
-              <div>• Net Capitalized Cost = $20,000.00</div>
-              <div>• Residual Value = $8,000.00 (40%)</div>
-              <div>• Total Depreciation = $20,000 - $8,000 = $12,000</div>
-              <div>• Monthly Depreciation = $12,000 ÷ 36 = <strong>$333.33/mo</strong></div>
-              <div>• Money Factor = 6.0% ÷ 2,400 = 0.0025</div>
-              <div>• Monthly Rent Charge = ($20,000 + $8,000) × 0.0025 = <strong>$70.00/mo</strong></div>
-              <div>• Base Monthly Payment = $333.33 + $70.00 = <strong>$403.33/mo</strong></div>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-medium">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              When Leasing is Superior
+            </h3>
+            <ul className="list-disc list-inside space-y-1 text-black dark:text-slate-100">
+              <li>Desire to drive new vehicles every 2 to 4 years under continuous factory warranty.</li>
+              <li>Lower monthly cash outlays compared to equal-term financing.</li>
+              <li>Small business equipment where payments are 100% tax-deductible operational expenses.</li>
+            </ul>
           </div>
 
-          <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Cumulative 3-Year Totals</h3>
-            <div className="font-mono text-[11px] text-black dark:text-zinc-300 space-y-0.5">
-              <div>• Total Monthly Payments = 36 × $405.06 = <strong>$14,582.28</strong></div>
-              <div>• Total Depreciation Paid = <strong>$12,000.00 (82.3%)</strong></div>
-              <div>• Total Finance Interest Charges = <strong>$2,582.28 (17.7%)</strong></div>
-              <div>• Purchase Option at Term End = <strong>$8,000.00</strong></div>
-              <div>• Total Cost if Bought Out = $14,582.28 + $8,000 = $22,582.28</div>
-            </div>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              When Buying is Superior
+            </h3>
+            <ul className="list-disc list-inside space-y-1 text-black dark:text-slate-100">
+              <li>Intention to retain vehicle or equipment for 6 to 10+ years past loan payoff.</li>
+              <li>High annual mileage driving (&gt;15,000 miles/year) that incurs heavy lease penalties.</li>
+              <li>Building long-term tangible asset equity.</li>
+            </ul>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* SECTION 5: 12 FAQS ALWAYS OPEN CARDS */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Frequently Asked Questions (12 Key Lease FAQs)
+      {/* 5. 12 FAQS */}
+      <section className="space-y-4 pt-6 border-t border-slate-200 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          Frequently Asked Questions (FAQ)
         </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="space-y-3 text-xs leading-relaxed text-black dark:text-slate-100">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 bg-slate-50 dark:bg-slate-800/50 space-y-1"
+              className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5"
             >
-              <h3 className="font-bold text-xs text-black dark:text-zinc-100">
+              <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
                 {faq.question}
               </h3>
-              <p className="text-[11px] text-black dark:text-zinc-300 leading-relaxed">
+              <p className="text-black dark:text-slate-100 leading-relaxed">
                 {faq.answer}
               </p>
             </div>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

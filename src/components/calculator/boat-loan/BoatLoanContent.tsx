@@ -5,181 +5,138 @@ import React from "react";
 export function BoatLoanContent() {
   const faqs = [
     {
-      question: "1. What is a boat loan and how does marine financing work?",
+      question: "1. What are typical interest rates, terms, and down payments on boat loans?",
       answer:
-        "A boat loan is a specialized installment loan used to purchase a recreational vessel, yacht, or commercial boat. The boat itself serves as loan collateral, allowing lenders to offer extended repayment terms (often 10 to 20 years for larger vessels) and fixed interest rates comparable to auto loans or home equity financing.",
+        "Marine financing terms typically range from 5 to 20 years (longer for yachts and vessels over $100k). Interest rates average between 6.5% and 10.5% depending on credit rating, loan amount, and vessel age. Lenders standardly require a 10% to 20% down payment.",
     },
     {
-      question: "2. How long are typical boat loan terms?",
+      question: "2. What is the Total Cost of Boat Ownership (TCO) beyond the monthly loan payment?",
       answer:
-        "Boat loan terms range from 2 to 20 years depending on the loan amount and vessel age. Loans under $25,000 are typically financed over 5 to 10 years, while vessels over $50,000 to $100,000 frequently qualify for 15 to 20-year financing to keep monthly payments affordable.",
+        "A common marine industry rule of thumb estimates annual operating and maintenance expenses at 10% to 15% of the boat's purchase price each year, including marina slip slipways/mooring fees, comprehensive marine insurance, fuel, engine servicing, winterization, and haul-out storage.",
     },
     {
-      question: "3. How much down payment is required for a boat loan?",
+      question: "3. What is a Marine Survey and why do boat lenders require one?",
       answer:
-        "Most marine lenders require a down payment between 10% and 20% of the purchase price. Buyers with tier-1 credit (740+) may qualify for 0% to 5% down programs, while older used boats or high-performance vessels may require 20% to 30% down.",
+        "A Marine Survey is a comprehensive physical inspection and valuation conducted by a certified marine surveyor (SAMS or NAMS). Lenders require surveys on used vessels (typically over 25–30 feet or valued over $25,000) to confirm hull integrity, seaworthiness, and fair market appraisal value before underwriting financing.",
     },
     {
-      question: "4. What credit score is needed to qualify for marine financing?",
+      question: "4. Can a boat loan qualify for the US Second Home Mortgage Interest tax deduction?",
       answer:
-        "A credit score of 700 or higher unlocks the lowest marine interest rates and longest loan terms. Many lenders approve applicants with credit scores down to 640–660 with higher down payments and shorter terms.",
+        "Yes. Under IRS Section 163(h), a boat can qualify as a secondary residence for mortgage interest deductions if it contains basic living accommodations: a permanent sleeping berth, galley (cooking facilities), and an onboard head (marine toilet/bathroom).",
     },
     {
-      question: "5. What are the typical annual ongoing maintenance and storage costs for a boat?",
+      question: "5. What is the difference between US Coast Guard (USCG) Documentation and State Titling?",
       answer:
-        "A standard rule of thumb is that annual ongoing maintenance, insurance, fuel, and storage equal approximately 10% to 15% of the boat's purchase price each year ($3,500 to $5,000/year for a $35,000 vessel).",
+        "USCG Documentation is a national federal registration for vessels measuring at least 5 net tons (typically 25+ feet). Most marine lenders require USCG Documentation with a Preferred Ship Mortgage because it establishes a clear federal lien and international recognition for cruising foreign waters.",
     },
     {
-      question: "6. What is a Marine Survey and is it mandatory for a boat loan?",
+      question: "6. How fast do new and used boats depreciate over time?",
       answer:
-        "A marine survey is a comprehensive mechanical and structural inspection conducted by a certified marine surveyor (similar to a home inspection). Lenders almost universally require an independent marine survey on used boats over $25,000 or older than 10 years.",
+        "New boats experience rapid initial depreciation: typically 15% to 25% in year one and 8% to 12% annually in years two through five. By year five, most vessels stabilize around 50% to 60% of their original MSRP before leveling off.",
     },
     {
-      question: "7. Can boat loan interest be tax-deductible as a second home?",
+      question: "7. When should I consider refinancing my existing boat loan?",
       answer:
-        "Yes. Under IRS regulations, if your boat contains dedicated sleeping quarters, a permanent galley (cooking facility), and a head (toilet facility), it may qualify as a second home, allowing you to deduct the loan interest as mortgage interest.",
+        "Refinancing makes financial sense when prevailing marine market rates drop by at least 1.0% to 1.5% below your existing APR, your credit score has improved significantly, or you wish to extend/shorten your repayment timeline to optimize cash flow.",
     },
     {
-      question: "8. Is boat insurance mandatory when financing a vessel?",
+      question: "8. What is the difference between a Secured Boat Loan and an Unsecured Personal Loan?",
       answer:
-        "Yes. Lenders require comprehensive marine hull and liability insurance naming the lender as the primary loss payee before disbursing loan funds. Annual insurance typically ranges from 1% to 2% of the boat's market value.",
+        "A secured marine loan uses the vessel as collateral, offering lower interest rates, higher loan amounts ($500k+), and longer terms (up to 20 years). An unsecured loan requires no collateral or marine survey but carries higher interest rates, shorter terms (3 to 7 years), and lower borrowing caps ($50k–$100k).",
     },
     {
-      question: "9. What is the difference between wet slip and dry stack storage?",
+      question: "9. How do boat loan terms differ between new vs. older used vessels?",
       answer:
-        "A wet slip keeps the boat in the water at a marina dock year-round, allowing immediate access but exposing the hull to marine growth. Dry stack storage stores the boat in an indoor rack warehouse, using a forklift to launch it on demand, which protects the gelcoat and reduces maintenance.",
+        "Newer boats qualify for the longest terms (15 to 20 years) and lowest rates. Vessels older than 10 to 15 years often face stricter lender caps: maximum 5-to-10-year terms, mandatory hull surveys, and higher interest rates.",
     },
     {
-      question: "10. How does boat sales tax work across different states?",
+      question: "10. What credit score is needed to qualify for competitive boat financing?",
       answer:
-        "State boat sales tax rates range from 0% (in states like Delaware, Alaska, Montana, New Hampshire, and Oregon) to 8%+. Several coastal states (e.g. Florida and Maryland) enforce maximum sales tax caps (e.g. $18,000 max tax in Florida) to attract yacht buyers.",
+        "While some subprime marine lenders accept scores around 640–660, prime competitive rates and maximum loan-to-value (LTV) terms require a FICO score of 700 to 740+ along with a debt-to-income (DTI) ratio below 40%–45%.",
     },
     {
-      question: "11. Can I finance boat trailers, electronics, and accessories in the loan?",
+      question: "11. Are boat sales taxes paid upfront or financed into the loan?",
       answer:
-        "Yes. Most marine lenders allow you to roll the cost of the boat trailer, outboard motors, GPS/fishfinder navigation electronics, and dealer rigging fees directly into the financed loan balance.",
+        "Depending on the state where the boat is registered and lender underwriting policies, state sales/use taxes (typically 3% to 8%, with some states having tax caps like Florida's $18,000 cap) can be paid out-of-pocket at closing or rolled into the financed principal balance.",
     },
     {
-      question: "12. What happens if I pay off my boat loan early?",
+      question: "12. How does boat winterization and seasonal storage affect ownership cost?",
       answer:
-        "Most recreational boat loans do not have prepayment penalty fees, allowing you to make extra principal payments or pay off the entire balance early to save thousands in finance interest charges.",
+        "In cold-climate regions, winterization (engine fogging, antifreeze flushing, shrink-wrapping) and dry-stack or yard storage typically add $1,000 to $3,500+ annually to ownership costs to protect engines and plumbing from freeze damage.",
     },
   ];
 
   return (
-    <div className="space-y-3 text-black dark:text-zinc-100 font-sans leading-relaxed">
-      {/* SECTION 1: WHAT IS A BOAT LOAN & KEY MECHANICS */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Marine Financing: How Boat Loans Work & Key Components
+    <div className="space-y-10 text-black dark:text-slate-100 font-medium leading-relaxed">
+      {/* 1. PRINCIPLES OF MARINE FINANCING */}
+      <section className="space-y-3">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          1. Principles of Marine Financing &amp; Vessel Amortization
         </h2>
-        <p className="text-xs text-black dark:text-zinc-200">
-          A boat loan is an amortized installment contract where a financial institution lends capital to acquire a vessel. Marine loans differ from automotive financing due to extended repayment horizons (up to 20 years), specialized marine surveys, and vessel titling standards:
+        <p className="text-sm leading-relaxed text-black dark:text-slate-100">
+          Marine financing represents a specialized sector of collateralized asset lending. Because boats and marine vessels operate in harsh aquatic environments and retain substantial tangible value over long lifespans, boat loans often feature extended amortization horizons (10 to 20 years) comparable to residential home equity lending.
         </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 pt-1">
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Down Payment</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Typically 10% to 20% cash or trade-in equity. Reduces loan principal and protects against rapid early marine depreciation.
-            </p>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Extended Terms (10–20 Yrs)</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Larger vessels qualify for 120 to 240-month terms to keep monthly payments manageable on high-value yachts.
-            </p>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Marine Survey</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              Professional hull and engine inspection required by lenders on used boats to verify seaworthiness and fair market value.
-            </p>
-          </div>
-
-          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <span className="font-bold text-[11px] uppercase text-black dark:text-zinc-100 block">Collateral Lien</span>
-            <p className="text-[11px] text-black dark:text-zinc-300">
-              The lender holds a preferred ship mortgage or state title lien until the final installment is paid in full.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* SECTION 2: HIDDEN & ONGOING COSTS OF BOAT OWNERSHIP */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          The True Cost of Boat Ownership (Beyond the Monthly Loan Payment)
-        </h2>
-        <p className="text-xs text-black dark:text-zinc-200">
-          A successful boat budget must incorporate ongoing operating costs that average 10% to 15% of the boat value annually:
+        <p className="text-sm leading-relaxed text-black dark:text-slate-100">
+          Understanding the true cost of boat ownership requires evaluating both the monthly financing payment and ongoing ownership expenses like marina slip fees, insurance, fuel, and scheduled winterization.
         </p>
+      </section>
 
-        <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 font-mono text-[11px] space-y-1 text-black dark:text-zinc-200">
-          <div className="font-bold font-sans text-xs text-black dark:text-zinc-100">Annual Recurring Ownership Expenses:</div>
-          <div>1. Slip & Dockage / Dry Storage: $2,000 to $10,000/year depending on marina location and vessel length.</div>
-          <div>2. Marine Insurance: $400 to $2,500/year covering collision, hurricane haul-out, and $500k liability.</div>
-          <div>3. Fuel Consumption: $500 to $3,000/year (marine outboards burn 5 to 20+ gallons per cruising hour).</div>
-          <div>4. Winterization & Seasonal Maintenance: $800 to $2,000/year for engine fluid changes, shrink-wrap, and bottom paint.</div>
-          <div>5. Trailer Maintenance & State Registration: $200 to $500/year for wheel bearings, lights, and state decal stickers.</div>
-        </div>
-      </div>
-
-      {/* SECTION 3: WORKED MATHEMATICAL CASE STUDIES */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Worked Mathematical Example ($35,000 Boat Price, $7,000 Down @ 7.0% APR over 10 Years)
+      {/* 2. THE TOTAL COST OF OWNERSHIP (TCO) */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          2. The Total Cost of Boat Ownership (The 10%–15% Rule)
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-          <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Loan & Upfront Breakdown</h3>
-            <div className="font-mono text-[11px] text-black dark:text-zinc-300 space-y-0.5">
-              <div>• Purchase Price = $35,000.00</div>
-              <div>• Down Payment (20%) = $7,000.00</div>
-              <div>• Total Loan Financed = <strong>$28,000.00</strong></div>
-              <div>• Sales Tax (3%) = $1,050.00</div>
-              <div>• Dealer & Rigging Fees = $2,800.00</div>
-              <div>• Total Upfront Out-of-Pocket = <strong>$10,850.00</strong></div>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-medium">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              1. Mooring &amp; Slip Fees
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              Wet slips, dry-stack storage, or mooring balls typically cost $150 to $600+/month depending on vessel length and marina location.
+            </p>
           </div>
 
-          <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Repayment & Total Cost (120 Months)</h3>
-            <div className="font-mono text-[11px] text-black dark:text-zinc-300 space-y-0.5">
-              <div>• Monthly Loan Payment = <strong>$325.10/mo</strong></div>
-              <div>• Total of 120 Loan Payments = $39,012.45</div>
-              <div>• Total Finance Interest Paid = <strong>$11,012.45 (28.2%)</strong></div>
-              <div>• Principal Repaid = $28,000.00 (71.8%)</div>
-              <div>• Grand Total Cost of Boat = <strong>$49,862.45</strong></div>
-            </div>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              2. Marine Insurance &amp; Fuel
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              Comprehensive hull and liability marine coverage averages 1.0%–1.5% of boat value per year. High-horsepower outboard and inboard engines consume significant fuel during cruising.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
+            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
+              3. Maintenance &amp; Winterization
+            </h3>
+            <p className="text-black dark:text-slate-100">
+              Annual engine service, anti-fouling bottom paint, hull cleaning, and winter freeze protection average $1,500 to $4,000+ annually.
+            </p>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* SECTION 4: 12 FAQS ALWAYS OPEN CARDS */}
-      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 p-3.5 shadow-xs space-y-2.5">
-        <h2 className="text-sm font-extrabold text-black dark:text-zinc-100">
-          Frequently Asked Questions (12 Key Boat Financing FAQs)
+      {/* 3. 12 FAQS */}
+      <section className="space-y-4 pt-6 border-t border-slate-200 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
+          Frequently Asked Questions (FAQ)
         </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="space-y-3 text-xs leading-relaxed text-black dark:text-slate-100">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="border border-slate-200 dark:border-slate-800 rounded-lg p-2.5 bg-slate-50 dark:bg-slate-800/50 space-y-1"
+              className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5"
             >
-              <h3 className="font-bold text-xs text-black dark:text-zinc-100">
+              <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
                 {faq.question}
               </h3>
-              <p className="text-[11px] text-black dark:text-zinc-300 leading-relaxed">
+              <p className="text-black dark:text-slate-100 leading-relaxed">
                 {faq.answer}
               </p>
             </div>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 }
