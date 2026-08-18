@@ -19,6 +19,7 @@ import {
   Layers,
   Globe,
   Lock,
+  Target,
 } from "lucide-react";
 
 export function CreditCardContent() {
@@ -30,250 +31,251 @@ export function CreditCardContent() {
 
   const faqs = [
     {
-      question: "What is a credit card and how does revolving credit work?",
-      answer: "A credit card is a financial payment card issued by banks that provides a revolving line of credit. Cardholders can borrow funds up to an approved credit limit to make purchases or cash advances. If the full balance is paid off before the statement due date, no interest is charged.",
+      question: "1. How is credit card interest calculated on a daily balance?",
+      answer:
+        "Credit card issuers calculate interest using the Average Daily Balance (ADB) method. First, the Annual Percentage Rate (APR) is divided by 365 to determine the Daily Periodic Rate (DPR). At the end of each billing cycle, your daily ending balances are summed and divided by the number of days in the cycle to find your ADB. The monthly interest charge equals ADB × DPR × Number of Days in the billing cycle.",
     },
     {
-      question: "What is Annual Percentage Rate (APR) on credit cards?",
-      answer: "APR is the annualized interest rate charged on unpaid credit card balances carried past the grace period. Credit card APRs are typically variable rates tied to the U.S. Prime Rate (ranging from 14% to 29.99%).",
+      question: "2. What is the credit card minimum payment trap and how does it work?",
+      answer:
+        "The minimum payment trap occurs when a cardholder pays only the minimum amount required by the issuer (typically 1% to 2% of the balance plus monthly interest, or a flat floor of $25–$35). Because the required dollar amount decreases as the balance shrinks, repayment stretches across 15 to 30+ years, forcing borrowers to repay two to three times the original principal in interest charges alone.",
     },
     {
-      question: "How is monthly credit card interest calculated?",
-      answer: "Most credit card issuers use the Average Daily Balance (ADB) method: Daily Periodic Rate (DPR) = APR / 365. Monthly Interest = DPR × Average Daily Balance × Number of Days in Billing Cycle.",
+      question: "3. Which debt elimination strategy is better: Debt Avalanche or Debt Snowball?",
+      answer:
+        "Mathematically, the Debt Avalanche method is superior because it channels extra payments to the debt with the highest APR, minimizing total interest paid and clearing balances in the shortest possible time. The Debt Snowball method prioritizes the smallest balance first, which provides psychological quick-wins but results in slightly higher lifetime interest costs.",
     },
     {
-      question: "Why does paying only the minimum monthly payment take so long?",
-      answer: "Minimum monthly payments are calculated as a small percentage of your balance (usually 1% to 2% plus interest). As your balance decreases, the minimum payment shrinks, causing most of your payment to go toward interest rather than principal reduction.",
+      question: "4. How does a 0% APR balance transfer save money on credit card debt?",
+      answer:
+        "A 0% balance transfer credit card freezes interest charges for an introductory promotional window (usually 12 to 21 months). By transferring high-APR balances (e.g. 24%), 100% of your monthly payments go directly toward principal reduction. After deducting the upfront transfer fee (typically 3% to 5%), borrowers often save thousands of dollars in interest.",
     },
     {
-      question: "What is a 0% Intro APR Balance Transfer Card?",
-      answer: "A balance transfer credit card allows you to move high-interest debt from existing cards to a new card offering a 0% introductory APR for 12 to 21 months. A one-time balance transfer fee (typically 3% to 5%) applies.",
+      question: "5. What happens if my monthly payment is less than the monthly interest charge?",
+      answer:
+        "If your monthly payment is less than the monthly finance charge, your debt experiences negative amortization. Unpaid interest is added to your principal balance, causing the debt to grow indefinitely regardless of how many payments you make.",
     },
     {
-      question: "What is the difference between Debt Avalanche and Debt Snowball?",
-      answer: "Debt Avalanche pays off debts in order of highest APR first, mathematically minimizing total interest paid. Debt Snowball pays off debts from smallest balance to largest balance, building psychological momentum.",
+      question: "6. How does my credit card balance affect my credit utilization score?",
+      answer:
+        "Credit utilization measures the percentage of your total revolving credit limit currently in use (Total Balances ÷ Total Limits). Revolving credit utilization accounts for 30% of your FICO score. Maintaining utilization below 30% is standard, but keeping it below 10% is recommended for achieving top-tier credit scores above 760.",
     },
     {
-      question: "What happens if I miss a credit card payment?",
-      answer: "Missing a payment incurs a late payment fee (up to $41), triggers a penalty APR (up to 29.99%), and if overdue by 30+ days, is reported to major credit bureaus, dropping your FICO score by 60 to 110 points.",
+      question: "7. Why do credit card cash advances cost significantly more than purchases?",
+      answer:
+        "Cash advances do not have a 21-day grace period; interest begins compounding immediately upon withdrawal. Furthermore, cash advances carry higher APRs (typically 25% to 29.99%), require an upfront transaction fee of 3% to 5% (or a $10 minimum), and incur separate third-party ATM surcharges.",
     },
     {
-      question: "What is credit utilization ratio and why does it matter?",
-      answer: "Credit utilization is the percentage of your total available credit limit that you are currently using. Keeping total credit utilization below 30% (ideally under 10%) is critical for maintaining a high credit score.",
+      question: "8. How does making bi-weekly payments help pay off credit card debt faster?",
+      answer:
+        "Making a bi-weekly payment of half your monthly amount results in 26 half-payments per year, which equals 13 full monthly payments instead of 12. This extra payment per year directly reduces principal, accelerates debt-free timelines, and lowers the Average Daily Balance (ADB) across every billing cycle.",
     },
     {
-      question: "How does a credit card grace period work?",
-      answer: "The grace period is the window (typically 21 to 25 days) between your statement closing date and your payment due date. If you paid your previous monthly statement balance in full, new purchases incur zero interest during this grace period.",
+      question: "9. Can I lower my credit card APR by negotiating directly with my card issuer?",
+      answer:
+        "Yes. Cardholders with an established track record of on-time payments can frequently call their card issuer's retention department to request an APR reduction, a temporary hardship plan, or a promotional interest freeze. Studies indicate over 70% of cardholders who request an APR reduction receive a 1% to 5% rate drop.",
     },
     {
-      question: "What is the Fair Credit Billing Act (FCBA) fraud protection?",
-      answer: "Under federal FCBA law, your maximum legal liability for unauthorized fraudulent charges on a stolen credit card is $50. Most major card issuers provide 0% fraud liability guarantees.",
+      question: "10. What is a Penalty APR and how is it triggered?",
+      answer:
+        "A Penalty APR is a punitive interest rate (frequently 29.99%) that issuers apply when a payment is 60 or more days past due. Under the CARD Act, the issuer must review your account after 6 months of consecutive on-time payments to consider restoring your standard rate.",
     },
     {
-      question: "What is a Cash Advance on a credit card?",
-      answer: "A cash advance allows you to withdraw physical cash using your credit card at an ATM or bank branch. Cash advances carry higher APRs, have NO grace period (interest begins compounding immediately), and incur cash advance fees (3% to 5%).",
+      question: "11. When should I consider a personal consolidation loan over credit cards?",
+      answer:
+        "A fixed-rate personal debt consolidation loan is beneficial when you can secure an interest rate substantially lower than your current credit card APRs (e.g. 9%–13% vs. 22%–28%) and want a fixed monthly payment with an unambiguous debt-free date (typically 2 to 5 years).",
     },
     {
-      question: "What is a Secured Credit Card?",
-      answer: "A secured credit card requires a refundable cash security deposit (e.g. $200) that serves as your credit limit. It is designed for individuals with poor or limited credit history to rebuild their credit score.",
-    },
-    {
-      question: "What is the difference between a Credit Card and a Charge Card?",
-      answer: "Credit cards allow you to carry a revolving balance month-to-month with interest charges. Charge cards (like traditional Amex cards) require the full statement balance to be paid in full every month with no preset spending limit.",
-    },
-    {
-      question: "How much extra should I pay each month to pay off debt faster?",
-      answer: "Adding even $50 to $100 per month above your minimum payment can shave years off your payoff timeline and save thousands of dollars in compounding interest.",
-    },
-    {
-      question: "Is a Personal Loan better than a Credit Card for debt consolidation?",
-      answer: "Fixed-rate personal loans usually offer significantly lower APRs (6% to 14%) than credit cards (18% to 28%) and have fixed payoff dates (2 to 5 years), making them an effective consolidation tool.",
-    },
-    {
-      question: "What is the Average Daily Balance (ADB) interest formula?",
-      answer: "ADB = (Sum of daily balances during billing cycle) / (Number of days in billing cycle). Monthly Interest = ADB × (APR / 365) × Days.",
-    },
-    {
-      question: "Does closing an unused credit card hurt your credit score?",
-      answer: "Yes. Closing a credit card reduces your total available credit limit (raising your credit utilization ratio) and eventually shortens your average age of credit accounts.",
-    },
-    {
-      question: "What are credit card rewards, cashback, and points?",
-      answer: "Card issuers pass back a portion of merchant interchange fees to cardholders as cashback (1% to 5%), travel miles, or rewards points on eligible purchases.",
-    },
-    {
-      question: "How do I negotiate a lower credit card APR with my bank?",
-      answer: "Call your card issuer's customer service, highlight your consistent on-time payment history, mention competing card offers, and politely request a reduced interest rate.",
-    },
-    {
-      question: "Why should I use an online Credit Card Payoff Calculator?",
-      answer: "An online payoff calculator simulates exact payoff dates, calculates total interest costs under different payment strategies, models balance transfers, and generates printable PDF debt elimination plans.",
+      question: "12. What is the credit card grace period and how do I forfeit it?",
+      answer:
+        "The grace period is the interval (minimum 21 days) between your statement closing date and your payment due date where no interest is charged on new purchases. If you carry any unpaid balance past the due date, you forfeit the grace period, and interest immediately accrues on all new purchases from the date of the transaction.",
     },
   ];
 
   return (
-    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
-      {/* Overview Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 text-white rounded-2xl p-6 md:p-8 shadow-lg">
-        <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
-          <BookOpen className="h-4 w-4" /> Debt Elimination &amp; Credit Masterclass
-        </div>
-        <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-3">
-          Mastering Credit Card Payoff: APR Calculations, Strategies &amp; Balance Transfers
+    <div className="space-y-6 text-black dark:text-zinc-100 font-sans leading-relaxed">
+      {/* SECTION 1: INTRODUCTION & REVOLVING CREDIT MECHANICS */}
+      <div className="border border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 p-5 space-y-4">
+        <h2 className="text-lg sm:text-xl font-bold text-black dark:text-zinc-100">
+          What is Credit Card Debt? How Revolving Credit Works
         </h2>
-        <p className="text-zinc-300 text-sm leading-relaxed max-w-4xl">
-          Credit cards are the most accessible revolving credit instruments in modern finance, but carrying a balance at double-digit APRs 
-          can create compounding debt traps. Understanding Daily Periodic Rates (DPR), minimum payment rules, balance transfer mechanics, 
-          and debt acceleration methods (Avalanche vs. Snowball) is the fastest path to financial freedom.
+        <p className="text-sm text-black dark:text-zinc-200">
+          Credit cards represent an unsecured form of revolving consumer credit. Unlike installment loans (such as auto loans or mortgages) which have fixed principal amounts, fixed monthly payments, and a predetermined maturity date, revolving credit permits cardholders to continuously borrow against a pre-approved credit ceiling, repay part or all of the outstanding balance, and borrow again indefinitely.
+        </p>
+        <p className="text-sm text-black dark:text-zinc-200">
+          When cardholders carry an unpaid balance past their monthly due date, the credit card issuer levies finance charges based on the Annual Percentage Rate (APR). Because credit card debt is unsecured—meaning no physical collateral guarantees the loan—issuers offset default risk by charging substantially higher interest rates (typically 18% to 29.99%) than secured lending products.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">The 21-Day Grace Period</h3>
+            <p className="text-xs text-black dark:text-zinc-300">
+              Federal law mandates a minimum 21-day grace period between the statement closing date and due date. Paying 100% of the statement balance eliminates all interest charges.
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Forfeiting the Grace Period</h3>
+            <p className="text-xs text-black dark:text-zinc-300">
+              Carrying even a $1 balance past the due date forfeits the grace period. All subsequent purchases begin accruing interest immediately from the exact transaction date.
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1.5">
+            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Daily Compounding (ADB)</h3>
+            <p className="text-xs text-black dark:text-zinc-300">
+              Finance charges compound daily based on your Daily Periodic Rate (APR ÷ 365) multiplied across your cumulative Average Daily Balance.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* SECTION 2: HOW CREDIT CARD INTEREST IS CALCULATED (AVERAGE DAILY BALANCE) */}
+      <div className="border border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 p-5 space-y-4">
+        <h2 className="text-lg sm:text-xl font-bold text-black dark:text-zinc-100">
+          How Credit Card Interest is Compounded: The Average Daily Balance Formula
+        </h2>
+        <p className="text-sm text-black dark:text-zinc-200">
+          Most credit card issuers calculate monthly finance charges using the Average Daily Balance (ADB) method. Rather than calculating interest on the beginning or ending monthly balance alone, the issuer tracks your precise balance on each individual day of the billing cycle.
+        </p>
+
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 font-mono text-xs space-y-2 text-black dark:text-zinc-200">
+          <div className="font-bold font-sans text-sm text-black dark:text-zinc-100">Mathematical Formulas:</div>
+          <div>1. Daily Periodic Rate (DPR) = APR ÷ 365</div>
+          <div>2. Average Daily Balance (ADB) = (Sum of Daily Balances for All Days in Billing Cycle) ÷ (Days in Cycle)</div>
+          <div>3. Monthly Interest Charge = ADB × DPR × (Number of Days in Billing Cycle)</div>
+        </div>
+
+        <p className="text-sm text-black dark:text-zinc-200">
+          <strong>Step-by-Step Numerical Example:</strong> Assume you carry a credit card with an 18% APR (DPR = 0.18 ÷ 365 = 0.00049315) across a 30-day billing cycle:
+        </p>
+        <ul className="list-disc pl-5 text-xs text-black dark:text-zinc-300 space-y-1 font-mono">
+          <li>Days 1 to 15 (15 days): Ending balance is $5,000 → Sum = 15 × $5,000 = $75,000</li>
+          <li>Day 16: You make a $1,000 payment, reducing balance to $4,000</li>
+          <li>Days 16 to 30 (15 days): Ending balance is $4,000 → Sum = 15 × $4,000 = $60,000</li>
+          <li>Total Cumulative Daily Balance = $75,000 + $60,000 = $135,000</li>
+          <li>Average Daily Balance (ADB) = $135,000 ÷ 30 = $4,500</li>
+          <li>Monthly Interest Charge = $4,500 × 0.00049315 × 30 = <strong>$66.58</strong></li>
+        </ul>
+      </div>
+
+      {/* SECTION 3: THE MINIMUM PAYMENT TRAP */}
+      <div className="border border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 p-5 space-y-4">
+        <h2 className="text-lg sm:text-xl font-bold text-black dark:text-zinc-100">
+          The Dangers of the Minimum Payment Trap Explained
+        </h2>
+        <p className="text-sm text-black dark:text-zinc-200">
+          Card issuers establish minimum payment formulas designed to minimize short-term default risk while maximizing lifetime interest income. Standard issuer minimum formulas require the greater of:
+        </p>
+        <ul className="list-disc pl-5 text-xs text-black dark:text-zinc-300 space-y-1">
+          <li><strong>Formula A:</strong> 1% of the current principal balance + accrued monthly interest charges + any late fees.</li>
+          <li><strong>Formula B:</strong> 2.0% to 2.5% of the total statement balance.</li>
+          <li><strong>Floor Amount:</strong> A minimum floor of $25.00 to $35.00 (or the full balance if less than the floor).</li>
+        </ul>
+        <p className="text-sm text-black dark:text-zinc-200">
+          <strong>Why the Minimum Payment Trap is Asymptotic:</strong> Because the required payment is a percentage of the remaining balance, the dollar amount required drops every single month. In the early years, nearly 85% of your payment is consumed by interest, leaving only a tiny fraction to reduce principal. Repayment stretches across 15 to 30 years, costing thousands more than the original purchases.
         </p>
       </div>
 
-      {/* Main Content Grid */}
-      <div className="space-y-8 text-sm leading-relaxed">
-        {/* Section 1 & 2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
-              <CardIcon className="h-5 w-5" /> 1. How Credit Card Interest Compound Mechanics Work
-            </div>
-            <p>
-              Credit card interest is compounded daily using the <strong>Average Daily Balance (ADB)</strong> method:
+      {/* SECTION 4: DEBT ELIMINATION STRATEGIES (AVALANCHE VS SNOWBALL) */}
+      <div className="border border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 p-5 space-y-4">
+        <h2 className="text-lg sm:text-xl font-bold text-black dark:text-zinc-100">
+          Debt Elimination Strategies: Debt Avalanche vs. Debt Snowball
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+            <h3 className="font-bold text-sm text-black dark:text-zinc-100 flex items-center gap-1.5">
+              <Zap className="w-4 h-4 text-blue-600" /> 1. The Debt Avalanche Method (Lowest Total Interest)
+            </h3>
+            <p className="text-xs text-black dark:text-zinc-300">
+              Under the Debt Avalanche method, you make minimum payments on all credit accounts, then channel every available dollar of your extra budget toward the account with the <strong>highest interest rate (APR)</strong>.
             </p>
-            <ul className="text-xs space-y-2 text-slate-900 dark:text-slate-100 font-sans tabular-nums bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700">
-              <li>• <strong>Daily Periodic Rate (DPR):</strong> DPR = APR / 365</li>
-              <li>• <strong>Average Daily Balance (ADB):</strong> Sum of Daily Balances / Days in Cycle</li>
-              <li>• <strong>Monthly Interest Charged:</strong> Interest = DPR × ADB × Days in Billing Cycle</li>
-            </ul>
+            <p className="text-xs text-black dark:text-zinc-300">
+              <strong>Mathematical Advantage:</strong> This is provably the optimal strategy for minimizing total finance charges and eliminating debt in the fewest total months.
+            </p>
           </div>
 
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
-              <Zap className="h-5 w-5" /> 2. Debt Avalanche vs. Debt Snowball Method
-            </div>
-            <p>
-              When tackling credit card debt, choose between mathematical optimization or psychological momentum:
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+            <h3 className="font-bold text-sm text-black dark:text-zinc-100 flex items-center gap-1.5">
+              <Target className="w-4 h-4 text-indigo-600" /> 2. The Debt Snowball Method (Psychological Momentum)
+            </h3>
+            <p className="text-xs text-black dark:text-zinc-300">
+              Under the Debt Snowball method, you make minimum payments on all accounts and focus extra funds on the account with the <strong>smallest balance</strong>, regardless of APR.
             </p>
-            <ul className="text-xs space-y-2 text-slate-900 dark:text-slate-100">
-              <li>• <strong>Debt Avalanche (Highest APR First):</strong> Pay minimums on all cards, then throw extra cash at the card with the highest interest rate. Mathematically minimizes total interest paid.</li>
-              <li>• <strong>Debt Snowball (Lowest Balance First):</strong> Pay off the card with the smallest balance first for quick psychological wins, building momentum as accounts reach $0 balance.</li>
-            </ul>
+            <p className="text-xs text-black dark:text-zinc-300">
+              <strong>Behavioral Advantage:</strong> Completely eliminating accounts quickly provides psychological motivation and reduces the cognitive overload of managing multiple monthly bills.
+            </p>
           </div>
         </div>
+      </div>
 
-        {/* Section 3: Credit Card Types Matrix */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Types of Credit Cards Comparison Matrix
-          </h3>
-          
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse border border-zinc-200 dark:border-zinc-800">
-              <thead>
-                <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200">
-                  <th className="p-3 border border-zinc-200 dark:border-zinc-700">Card Category</th>
-                  <th className="p-3 border border-zinc-200 dark:border-zinc-700">Typical APR Range</th>
-                  <th className="p-3 border border-zinc-200 dark:border-zinc-700">Primary Features / Benefits</th>
-                  <th className="p-3 border border-zinc-200 dark:border-zinc-700">Best Suited For</th>
-                </tr>
-              </thead>
-              <tbody className=" dark:divide-zinc-800">
-                <tr>
-                  <td className="p-3 font-semibold text-blue-600">Balance Transfer Card</td>
-                  <td className="p-3 font-sans tabular-nums">0% Intro APR (12–21 mos), then 18%–28%</td>
-                  <td className="p-3">0% interest period; 3%–5% transfer fee</td>
-                  <td className="p-3 font-medium">Consolidating high-interest debt</td>
-                </tr>
-                <tr>
-                  <td className="p-3 font-semibold text-blue-600">Cashback Rewards Card</td>
-                  <td className="p-3 font-sans tabular-nums">18% – 26%</td>
-                  <td className="p-3">1.5% to 5% cash rebates on purchases</td>
-                  <td className="p-3 font-medium">Cardholders who pay balance in full monthly</td>
-                </tr>
-                <tr>
-                  <td className="p-3 font-semibold text-blue-600">Secured Credit Card</td>
-                  <td className="p-3 font-sans tabular-nums">22% – 29%</td>
-                  <td className="p-3">Requires cash deposit equal to credit limit</td>
-                  <td className="p-3 font-medium">Rebuilding bad credit or zero credit history</td>
-                </tr>
-                <tr>
-                  <td className="p-3 font-semibold text-blue-600">Travel Rewards Card</td>
-                  <td className="p-3 font-sans tabular-nums">20% – 28%</td>
-                  <td className="p-3">Airline miles, hotel upgrades, lounge access</td>
-                  <td className="p-3 font-medium">Frequent travelers who pay monthly in full</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Real-World Advantages & Disadvantages */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Advantages vs. Disadvantages of Credit Cards
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div className="space-y-2 p-4 bg-blue-50/50 dark:bg-blue-50/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
-              <span className="font-bold text-emerald-900 dark:text-emerald-200 block">Advantages</span>
-              <ul className="space-y-1 text-slate-900 dark:text-zinc-300">
-                <li>• Federal FCBA fraud protection ($50 max legal liability).</li>
-                <li>• Complimentary rental car collision insurance &amp; trip protection.</li>
-                <li>• Earn 1.5% to 5% cashback or travel points on spending.</li>
-                <li>• Build positive credit history &amp; higher FICO credit scores.</li>
-              </ul>
+      {/* SECTION 5: WORKED MATHEMATICAL CASE STUDIES */}
+      <div className="border border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 p-5 space-y-4">
+        <h2 className="text-lg sm:text-xl font-bold text-black dark:text-zinc-100">
+          Worked Mathematical Examples: $6,000 Balance @ 21.99% APR
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Scenario A: Fixed $200 Monthly Payment</h3>
+            <div className="font-mono text-xs text-black dark:text-zinc-300 space-y-1">
+              <div>Balance (B) = $6,000 | APR = 21.99% (i = 0.018325/mo)</div>
+              <div>Fixed Monthly Payment (PMT) = $200.00</div>
+              <div>Logarithmic Payoff Formula:</div>
+              <div>N = -ln(1 - (B × i)/PMT) ÷ ln(1 + i)</div>
+              <div>N = -ln(1 - 0.54975) ÷ ln(1.018325) = <strong>44 Months (3.7 Years)</strong></div>
+              <div>Total Interest Paid = <strong>$2,787.21</strong></div>
+              <div>Total Repaid = <strong>$8,787.21</strong></div>
             </div>
-            <div className="space-y-2 p-4 bg-blue-50/50 dark:bg-blue-50/20 rounded-lg border border-amber-200 dark:border-amber-800">
-              <span className="font-bold text-amber-900 dark:text-amber-200 block">Disadvantages &amp; Risks</span>
-              <ul className="space-y-1 text-slate-900 dark:text-zinc-300">
-                <li>• High compounding interest rates (18% to 29.99% APR).</li>
-                <li>• Minimum payment traps extending debt for 10 to 20+ years.</li>
-                <li>• Late payment penalties ($41 fee + 30-day credit score impact).</li>
-                <li>• Risk of impulsive spending and over-indebtedness.</li>
-              </ul>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+            <h3 className="font-bold text-xs uppercase text-black dark:text-zinc-100">Scenario B: Minimum Payments Only</h3>
+            <div className="font-mono text-xs text-black dark:text-zinc-300 space-y-1">
+              <div>Formula = Monthly Interest + 1% Balance (Floor: $25)</div>
+              <div>Month 1 Payment = $109.95 + $60.00 = $169.95</div>
+              <div>Month 60 Payment = $62.30</div>
+              <div>Month 120 Payment = $31.80</div>
+              <div>Total Payoff Time = <strong>214 Months (17.8 Years)</strong></div>
+              <div>Total Interest Paid = <strong>$7,642.10</strong></div>
+              <div>Total Repaid = <strong>$13,642.10</strong> (Over 2.2× original principal!)</div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 20 SEO FAQs Section */}
-      <div className="space-y-6 pt-4">
-        <div className="flex items-center gap-3">
-          <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-            Frequently Asked Questions (FAQ)
-          </h3>
-        </div>
+      {/* SECTION 6: 12 SIMPLE, RELEVANT, MOST-SEARCHED FAQS (STRICTLY IN BLACK) */}
+      <div className="border border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 p-5 space-y-4">
+        <h2 className="text-lg sm:text-xl font-bold text-black dark:text-zinc-100 flex items-center gap-2">
+          <HelpCircle className="w-5 h-5 text-black dark:text-zinc-100" />
+          Frequently Asked Questions (12 Key Credit Card Payoff FAQs)
+        </h2>
 
-        <div className="space-y-3">
-          {faqs.map((faq, index) => {
-            const isOpen = openFaq === index;
-            return (
-              <div
-                key={index}
-                className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden transition-all shadow-sm"
+        <div className="space-y-2">
+          {faqs.map((faq, index) => (
+            <div
+              key={index}
+              className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-800/50"
+            >
+              <button
+                type="button"
+                onClick={() => toggleFaq(index)}
+                className="w-full px-4 py-3 text-left font-bold text-xs sm:text-sm text-black dark:text-zinc-100 flex items-center justify-between gap-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800"
               >
-                <button
-                  type="button"
-                  onClick={() => toggleFaq(index)}
-                  className="w-full text-left p-4 flex items-center justify-between font-semibold text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors focus:outline-none"
-                >
-                  <span className="flex items-center gap-2">
-                    <span className="text-xs text-blue-600 dark:text-blue-400 font-bold min-w-[20px]">
-                      Q{index + 1}.
-                    </span>
-                    {faq.question}
-                  </span>
-                  {isOpen ? (
-                    <ChevronUp className="h-4 w-4 text-zinc-400 flex-shrink-0" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 text-zinc-400 flex-shrink-0" />
-                  )}
-                </button>
-                {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
-                    {faq.answer}
-                  </div>
+                <span>{faq.question}</span>
+                {openFaq === index ? (
+                  <ChevronUp className="w-4 h-4 text-black dark:text-zinc-400 shrink-0" />
+                ) : (
+                  <ChevronDown className="w-4 h-4 text-black dark:text-zinc-400 shrink-0" />
                 )}
-              </div>
-            );
-          })}
+              </button>
+
+              {openFaq === index && (
+                <div className="px-4 pb-3.5 pt-1 text-xs text-black dark:text-zinc-200 border-t border-slate-200/60 dark:border-slate-700/60">
+                  {faq.answer}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </div>
