@@ -25,6 +25,7 @@ import { AUTO_LOAN_CALCULATOR } from "./auto-loan";
 import { AUTO_LEASE_CALCULATOR } from "./auto-lease";
 import { LEASE_CALCULATOR } from "./lease";
 import { CASH_BACK_CALCULATOR } from "./cash-back";
+import { BOAT_LOAN_CALCULATOR } from "./boat-loan";
 import { COLLEGE_COST_CALCULATOR } from "./college-cost";
 import { DEPRECIATION_CALCULATOR } from "./depreciation";
 
@@ -117,6 +118,7 @@ export const FINANCE_CALCULATORS: CalculatorModuleDefinition[] = [
   AUTO_LEASE_CALCULATOR,
   LEASE_CALCULATOR,
   CASH_BACK_CALCULATOR,
+  BOAT_LOAN_CALCULATOR,
 
   // Investment
   FINANCE_CALCULATOR_SUITE,
