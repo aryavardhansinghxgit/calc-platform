@@ -79,9 +79,16 @@ export function InterestCalculator() {
   const [targetWealthInput, setTargetWealthInput] = useState<string>("100000");
 
   const [scheduleMode, setScheduleMode] = useState<"annual" | "monthly">("annual");
-  const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
-  const [savedScenarios, setSavedScenarios] = useState<{ name: string; result: string; date: string }[]>([]);
+  const [savedScenarios, setSavedScenarios] = useState<{ id: string; name: string; result: string; date: string }[]>([]);
+  const [justSaved, setJustSaved] = useState<boolean>(false);
   const [shareToast, setShareToast] = useState<boolean>(false);
+
+  useEffect(() => {
+    try {
+      const s = localStorage.getItem("saved_interest_scenarios");
+      if (s) setSavedScenarios(JSON.parse(s));
+    } catch (e) {}
+  }, []);
 
   // Parse numeric values safely
   const parsedInitial = useMemo(() => Math.max(0, parseFloat(initialInvestmentInput) || 0), [initialInvestmentInput]);
@@ -214,15 +221,19 @@ export function InterestCalculator() {
   };
 
   const handleSaveScenario = () => {
-    const newSaved = [
-      ...savedScenarios,
-      {
-        name: `Interest (${currencySymbol}${results.initialInvestment.toLocaleString()} @ ${parsedRate}%)`,
-        result: `${currencySymbol}${results.endingBalance.toLocaleString()}`,
-        date: new Date().toLocaleDateString(),
-      },
-    ];
+    const newItem = {
+      id: Date.now().toString() + Math.random().toString(36).substring(2, 7),
+      name: `Interest (${currencySymbol}${results.initialInvestment.toLocaleString()} @ ${parsedRate}%)`,
+      result: `${currencySymbol}${results.endingBalance.toLocaleString()}`,
+      date: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
+    };
+    const newSaved = [newItem, ...savedScenarios].slice(0, 10);
     setSavedScenarios(newSaved);
+    try {
+      localStorage.setItem("saved_interest_scenarios", JSON.stringify(newSaved));
+    } catch (e) {}
+    setJustSaved(true);
+    setTimeout(() => setJustSaved(false), 2500);
   };
 
   const handleShare = () => {
@@ -312,9 +323,12 @@ export function InterestCalculator() {
             variant="outline"
             size="sm"
             onClick={handleSaveScenario}
-            className="h-8 text-xs font-semibold gap-1.5"
+            className={`h-8 text-xs font-semibold gap-1.5 cursor-pointer ${
+              justSaved ? "bg-emerald-500 text-white border-emerald-600 font-bold" : ""
+            }`}
           >
-            <Bookmark className="h-3.5 w-3.5 text-indigo-500" /> Save
+            {justSaved ? <CheckCircle2 className="h-3.5 w-3.5 text-white" /> : <Bookmark className="h-3.5 w-3.5 text-indigo-500" />}
+            <span>{justSaved ? "Saved!" : `Save${savedScenarios.length > 0 ? ` (${savedScenarios.length})` : ""}`}</span>
           </Button>
 
           <Button
@@ -328,9 +342,47 @@ export function InterestCalculator() {
         </div>
       </div>
 
-      {shareToast && (
-        <div className="p-3 bg-emerald-500 text-white text-xs font-bold rounded-lg shadow-md flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4" /> Link copied to clipboard!
+      {savedScenarios.length > 0 && (
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3 shadow-xs space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-extrabold uppercase text-blue-600 dark:text-blue-400">
+              Saved Scenarios ({savedScenarios.length})
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                setSavedScenarios([]);
+                localStorage.removeItem("saved_interest_scenarios");
+              }}
+              className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+            >
+              <Trash2 className="w-3 h-3" /> Clear All
+            </button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            {savedScenarios.map((sc) => (
+              <div key={sc.id} className="p-2.5 bg-zinc-50 dark:bg-zinc-800/60 rounded-lg border border-zinc-200 dark:border-zinc-700 text-xs flex justify-between items-center">
+                <div>
+                  <div className="font-bold text-zinc-900 dark:text-zinc-100">{sc.name}</div>
+                  <div className="font-mono text-emerald-600 font-bold">{sc.result}</div>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[9px] text-zinc-400 font-mono">{sc.date}</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const updated = savedScenarios.filter((item) => item.id !== sc.id);
+                      setSavedScenarios(updated);
+                      localStorage.setItem("saved_interest_scenarios", JSON.stringify(updated));
+                    }}
+                    className="text-zinc-400 hover:text-red-600 p-0.5 cursor-pointer"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

@@ -53,7 +53,7 @@ export function RepaymentCalculator() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const rowsPerPage = 12;
 
-  // Saved calculations for Box 1
+  // Saved calculations state for all 6 boxes
   const [savedCoreItems, setSavedCoreItems] = useState<SavedRepaymentItem[]>([]);
   const [justSavedCore, setJustSavedCore] = useState<boolean>(false);
 
@@ -240,17 +240,17 @@ export function RepaymentCalculator() {
   // SAVE HANDLERS FOR ALL 6 BOXES
   // ==========================================
   const handleSaveCore = () => {
-    const inputStr = `Balance: ${currencySymbol}${loanBalanceInput} @ ${interestRateInput}% | Compounded: ${compoundingFreq} | Pay: ${paymentFreq} | Mode: ${calcMode === "term" ? `${targetYearsInput}y ${targetMonthsInput}m` : `Fixed ${currencySymbol}${fixedInstallmentInput}`}`;
+    const inputStr = `Balance: ${currencySymbol}${loanBalanceInput} @ ${interestRateInput}% | Compound: ${compoundingFreq} | Pay: ${paymentFreq} | Mode: ${calcMode === "term" ? `${targetYearsInput}y ${targetMonthsInput}m` : `Fixed ${currencySymbol}${fixedInstallmentInput}`}`;
     const resList = [
-      `Periodic Payment: ${fmt(coreResult.installmentPayment)}`,
+      `Payment: ${fmt(coreResult.installmentPayment)}`,
       `Total Interest: ${fmt(coreResult.totalInterestPaid)}`,
-      `Total Paid: ${fmt(coreResult.totalAmountRepaid)}`,
-      `Payoff Time: ${coreResult.totalYears}y ${coreResult.totalMonths % 12}m (${coreResult.totalPeriods} periods)`,
+      `Total Repaid: ${fmt(coreResult.totalAmountRepaid)}`,
+      `Payoff: ${coreResult.totalYears}y ${coreResult.totalMonths % 12}m (${coreResult.totalPeriods} periods)`,
       `Payoff Date: ${coreResult.payoffDate}`,
     ];
 
     const newItem: SavedRepaymentItem = {
-      id: Date.now().toString() + Math.random().toString(36).substring(2, 6),
+      id: Date.now().toString() + Math.random().toString(36).substring(2, 7),
       title: "Repayment Calculation",
       inputs: inputStr,
       result: resList.join(" | "),
@@ -277,7 +277,7 @@ export function RepaymentCalculator() {
     ];
 
     const newItem: SavedRepaymentItem = {
-      id: Date.now().toString() + Math.random().toString(36).substring(2, 6),
+      id: Date.now().toString() + Math.random().toString(36).substring(2, 7),
       title: "Accelerated Bi-Weekly Plan",
       inputs: inputStr,
       result: resList.join(" | "),
@@ -297,13 +297,13 @@ export function RepaymentCalculator() {
   const handleSaveConsolidation = () => {
     const inputStr = `${debts.length} Debts (Total ${currencySymbol}${consolidationResult.totalCurrentBalance}) -> Consolidate @ ${consolidationAprInput}% for ${consolidationYearsInput} Yrs`;
     const resList = [
-      `Consolidated Monthly: ${fmt(consolidationResult.consolidatedMonthlyPayment)}/mo (Saves ${fmt(consolidationResult.monthlyPaymentSavings)}/mo)`,
+      `New Monthly: ${fmt(consolidationResult.consolidatedMonthlyPayment)}/mo (Saves ${fmt(consolidationResult.monthlyPaymentSavings)}/mo)`,
       `Total Interest Saved: ${fmt(consolidationResult.totalInterestSavings)}`,
-      `Months Saved: ${consolidationResult.monthsSaved} Months`,
+      `Payoff: ${consolidationResult.consolidatedPayoffMonths} Months (Saves ${consolidationResult.monthsSaved} Mos)`,
     ];
 
     const newItem: SavedRepaymentItem = {
-      id: Date.now().toString() + Math.random().toString(36).substring(2, 6),
+      id: Date.now().toString() + Math.random().toString(36).substring(2, 7),
       title: "Multi-Debt Consolidation",
       inputs: inputStr,
       result: resList.join(" | "),
@@ -329,7 +329,7 @@ export function RepaymentCalculator() {
     ];
 
     const newItem: SavedRepaymentItem = {
-      id: Date.now().toString() + Math.random().toString(36).substring(2, 6),
+      id: Date.now().toString() + Math.random().toString(36).substring(2, 7),
       title: "Inflation-Adjusted Repayment",
       inputs: inputStr,
       result: resList.join(" | "),
@@ -351,11 +351,11 @@ export function RepaymentCalculator() {
     const resList = [
       `Max Borrowable Principal: ${fmt(affordResult.maxBorrowablePrincipal)}`,
       `Total Repaid: ${fmt(affordResult.totalRepaid)}`,
-      `Total Interest: ${fmt(affordResult.totalInterestPaid)}`,
+      `Total Interest Charges: ${fmt(affordResult.totalInterestPaid)}`,
     ];
 
     const newItem: SavedRepaymentItem = {
-      id: Date.now().toString() + Math.random().toString(36).substring(2, 6),
+      id: Date.now().toString() + Math.random().toString(36).substring(2, 7),
       title: "Loan Affordability Calculation",
       inputs: inputStr,
       result: resList.join(" | "),
@@ -377,11 +377,11 @@ export function RepaymentCalculator() {
     const resList = [
       `Avalanche: ${velocityResult.avalancheMonths} Mos | Total Interest: ${fmt(velocityResult.avalancheInterest)}`,
       `Snowball: ${velocityResult.snowballMonths} Mos | Total Interest: ${fmt(velocityResult.snowballInterest)}`,
-      `Avalanche Savings vs Snowball: ${fmt(velocityResult.avalancheInterestSaved)} & ${velocityResult.avalancheMonthsSaved} Mos saved`,
+      `Avalanche Savings: ${fmt(velocityResult.avalancheInterestSaved)} & ${velocityResult.avalancheMonthsSaved} Mos saved`,
     ];
 
     const newItem: SavedRepaymentItem = {
-      id: Date.now().toString() + Math.random().toString(36).substring(2, 6),
+      id: Date.now().toString() + Math.random().toString(36).substring(2, 7),
       title: "Debt Payoff Velocity",
       inputs: inputStr,
       result: resList.join(" | "),
@@ -1263,6 +1263,43 @@ export function RepaymentCalculator() {
               </div>
             </div>
           </div>
+
+          {/* SAVED INFLATION LIST */}
+          {savedInflationItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold uppercase text-blue-600 dark:text-blue-400">
+                  Saved Inflation Calculations ({savedInflationItems.length})
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSavedInflationItems([]);
+                    localStorage.removeItem("saved_repay_inflation");
+                  }}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <Trash2 className="w-3 h-3" /> Clear All
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                {savedInflationItems.map((item) => (
+                  <div key={item.id} className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-xs space-y-1">
+                    <div className="flex justify-between border-b pb-1 text-[11px]">
+                      <span className="font-bold text-blue-600">{item.title}</span>
+                      <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
+                    </div>
+                    <div className="space-y-0.5 font-mono text-[10px]">
+                      {item.resultsList?.map((line, idx) => (
+                        <div key={idx} className="bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded">{line}</div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -1352,6 +1389,43 @@ export function RepaymentCalculator() {
               </div>
             </div>
           </div>
+
+          {/* SAVED AFFORDABILITY LIST */}
+          {savedAffordItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold uppercase text-blue-600 dark:text-blue-400">
+                  Saved Affordability Calculations ({savedAffordItems.length})
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSavedAffordItems([]);
+                    localStorage.removeItem("saved_repay_afford");
+                  }}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <Trash2 className="w-3 h-3" /> Clear All
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                {savedAffordItems.map((item) => (
+                  <div key={item.id} className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-xs space-y-1">
+                    <div className="flex justify-between border-b pb-1 text-[11px]">
+                      <span className="font-bold text-blue-600">{item.title}</span>
+                      <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
+                    </div>
+                    <div className="space-y-0.5 font-mono text-[10px]">
+                      {item.resultsList?.map((line, idx) => (
+                        <div key={idx} className="bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded">{line}</div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -1431,6 +1505,43 @@ export function RepaymentCalculator() {
               </div>
             </div>
           </div>
+
+          {/* SAVED VELOCITY LIST */}
+          {savedVelocityItems.length > 0 && (
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold uppercase text-blue-600 dark:text-blue-400">
+                  Saved Velocity Plans ({savedVelocityItems.length})
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSavedVelocityItems([]);
+                    localStorage.removeItem("saved_repay_velocity");
+                  }}
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                >
+                  <Trash2 className="w-3 h-3" /> Clear All
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                {savedVelocityItems.map((item) => (
+                  <div key={item.id} className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-xs space-y-1">
+                    <div className="flex justify-between border-b pb-1 text-[11px]">
+                      <span className="font-bold text-blue-600">{item.title}</span>
+                      <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
+                    </div>
+                    <div className="space-y-0.5 font-mono text-[10px]">
+                      {item.resultsList?.map((line, idx) => (
+                        <div key={idx} className="bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded">{line}</div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
