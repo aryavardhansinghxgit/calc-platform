@@ -937,15 +937,6 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         </aside>
       </div>
 
-      {/* Intermediate Related Calculators (Between Calculator & Content Section) for Non-Finance */}
-      {definition.category !== "Finance" && (
-        <div className="space-y-2">
-          <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-            Related Calculators
-          </h3>
-          <RelatedCalculators currentId={definition.id} category={definition.category} />
-        </div>
-      )}
 
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3.5 shadow-xs text-slate-900 dark:text-slate-100">
