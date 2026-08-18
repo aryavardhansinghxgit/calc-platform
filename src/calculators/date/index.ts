@@ -1,5 +1,4 @@
 import { CalculatorModuleDefinition } from "../types";
-import { AGE_CALCULATOR } from "./age";
 import { age_calculatorConfig } from "@/app/calculators/age-calculator/config";
 import { date_calculatorConfig } from "@/app/calculators/date-calculator/config";
 import { time_calculatorConfig } from "@/app/calculators/time-calculator/config";
@@ -11,7 +10,6 @@ import { day_counter_calculatorConfig } from "@/app/calculators/day-counter-calc
 import { day_of_the_week_calculatorConfig } from "@/app/calculators/day-of-the-week-calculator/config";
 
 export const DATE_CALCULATORS: CalculatorModuleDefinition[] = [
-  AGE_CALCULATOR,
   age_calculatorConfig,
   date_calculatorConfig,
   time_calculatorConfig,
