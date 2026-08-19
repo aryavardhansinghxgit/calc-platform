@@ -186,15 +186,15 @@ export function QuickCalculator() {
   }, [inputDigit, inputDot, performOperation, handleEqual, backspace, clearAll]);
 
   return (
-    <div className="bg-card text-card-foreground border border-border rounded-xl p-3 shadow-md max-w-[320px] w-full mx-auto space-y-2 font-sans transition-all">
+    <div className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-3.5 shadow-[0_12px_30px_rgba(0,0,0,0.08),0_4px_10px_rgba(0,0,0,0.04)] max-w-[320px] w-full mx-auto space-y-2.5 font-sans transition-all">
       {/* Header Bar */}
       <div className="flex items-center justify-between px-1 text-xs">
-        <span className="flex items-center gap-1.5 font-bold text-primary tracking-wide">
-          <CalcIcon className="h-3.5 w-3.5 text-primary" /> Quick Scientific Calc
+        <span className="flex items-center gap-1.5 font-bold text-blue-600 dark:text-blue-400 tracking-wide">
+          <CalcIcon className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Quick Scientific Calc
         </span>
         <button
           onClick={() => setIsRad(!isRad)}
-          className="text-[10px] font-sans tabular-nums font-semibold px-2 py-0.5 rounded bg-muted text-muted-foreground hover:text-foreground border border-border transition-colors uppercase cursor-pointer"
+          className="text-[10px] font-sans tabular-nums font-semibold px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 border border-zinc-200 dark:border-zinc-700 transition-colors uppercase cursor-pointer"
           title="Click to toggle RAD/DEG"
         >
           {isRad ? "RAD" : "DEG"}
@@ -202,7 +202,7 @@ export function QuickCalculator() {
       </div>
 
       {/* Screen Display */}
-      <div className="bg-slate-950 text-slate-5 border border-slate-800 rounded-lg p-2.5 text-right shadow-inner flex flex-col justify-between min-h-[64px]">
+      <div className="bg-slate-950 text-slate-50 border border-slate-800 rounded-xl p-2.5 text-right shadow-[inset_0_2px_6px_rgba(0,0,0,0.8)] flex flex-col justify-between min-h-[64px]">
         <div className="text-[11px] font-sans tabular-nums text-slate-400 h-4 truncate">
           {expression || "\u00A0"}
         </div>
@@ -214,39 +214,39 @@ export function QuickCalculator() {
       {/* Calculator 5x5 Keypad Grid */}
       <div className="grid grid-cols-5 gap-1.5 text-xs font-sans tabular-nums select-none">
         {/* Row 1: sin, cos, tan, AC, Backspace */}
-        <button onClick={() => handleFunction("sin")} className="p-2 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-semibold transition-colors active:scale-95">sin</button>
-        <button onClick={() => handleFunction("cos")} className="p-2 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-semibold transition-colors active:scale-95">cos</button>
-        <button onClick={() => handleFunction("tan")} className="p-2 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-semibold transition-colors active:scale-95">tan</button>
-        <button onClick={clearAll} className="p-2 rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 font-bold transition-colors active:scale-95">AC</button>
-        <button onClick={backspace} className="p-2 flex items-center justify-center rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 font-bold transition-colors active:scale-95" title="Backspace"><Delete className="h-3.5 w-3.5" /></button>
+        <button onClick={() => handleFunction("sin")} className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-700 font-semibold shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">sin</button>
+        <button onClick={() => handleFunction("cos")} className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-700 font-semibold shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">cos</button>
+        <button onClick={() => handleFunction("tan")} className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-700 font-semibold shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">tan</button>
+        <button onClick={clearAll} className="p-2 rounded-lg bg-red-600 text-white hover:bg-red-700 font-bold shadow-[0_2px_0_rgba(185,28,28,0.4)] active:shadow-none active:translate-y-0.5 transition-all">AC</button>
+        <button onClick={backspace} className="p-2 flex items-center justify-center rounded-lg bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/20 hover:bg-amber-500/25 font-bold shadow-[0_2px_0_rgba(217,119,6,0.2)] active:shadow-none active:translate-y-0.5 transition-all" title="Backspace"><Delete className="h-3.5 w-3.5" /></button>
 
         {/* Row 2: √, 7, 8, 9, ÷ */}
-        <button onClick={() => handleFunction("sqrt")} className="p-2 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-semibold transition-colors active:scale-95">√</button>
-        <button onClick={() => inputDigit("7")} className="p-2 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors active:scale-95">7</button>
-        <button onClick={() => inputDigit("8")} className="p-2 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors active:scale-95">8</button>
-        <button onClick={() => inputDigit("9")} className="p-2 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors active:scale-95">9</button>
-        <button onClick={() => performOperation("÷")} className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-bold transition-colors active:scale-95">÷</button>
+        <button onClick={() => handleFunction("sqrt")} className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-700 font-semibold shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">√</button>
+        <button onClick={() => inputDigit("7")} className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-bold border border-zinc-200/80 dark:border-zinc-700 shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">7</button>
+        <button onClick={() => inputDigit("8")} className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-bold border border-zinc-200/80 dark:border-zinc-700 shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">8</button>
+        <button onClick={() => inputDigit("9")} className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-bold border border-zinc-200/80 dark:border-zinc-700 shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">9</button>
+        <button onClick={() => performOperation("÷")} className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-bold shadow-[0_2px_0_rgba(29,78,216,0.4)] active:shadow-none active:translate-y-0.5 transition-all">÷</button>
 
         {/* Row 3: x², 4, 5, 6, × */}
-        <button onClick={() => handleFunction("sq")} className="p-2 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-semibold transition-colors active:scale-95">x²</button>
-        <button onClick={() => inputDigit("4")} className="p-2 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors active:scale-95">4</button>
-        <button onClick={() => inputDigit("5")} className="p-2 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors active:scale-95">5</button>
-        <button onClick={() => inputDigit("6")} className="p-2 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors active:scale-95">6</button>
-        <button onClick={() => performOperation("×")} className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-bold transition-colors active:scale-95">×</button>
+        <button onClick={() => handleFunction("sq")} className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-700 font-semibold shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">x²</button>
+        <button onClick={() => inputDigit("4")} className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-bold border border-zinc-200/80 dark:border-zinc-700 shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">4</button>
+        <button onClick={() => inputDigit("5")} className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-bold border border-zinc-200/80 dark:border-zinc-700 shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">5</button>
+        <button onClick={() => inputDigit("6")} className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-bold border border-zinc-200/80 dark:border-zinc-700 shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">6</button>
+        <button onClick={() => performOperation("×")} className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-bold shadow-[0_2px_0_rgba(29,78,216,0.4)] active:shadow-none active:translate-y-0.5 transition-all">×</button>
 
         {/* Row 4: %, 1, 2, 3, - */}
-        <button onClick={() => handleFunction("%")} className="p-2 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-semibold transition-colors active:scale-95">%</button>
-        <button onClick={() => inputDigit("1")} className="p-2 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors active:scale-95">1</button>
-        <button onClick={() => inputDigit("2")} className="p-2 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors active:scale-95">2</button>
-        <button onClick={() => inputDigit("3")} className="p-2 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors active:scale-95">3</button>
-        <button onClick={() => performOperation("-")} className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-bold transition-colors active:scale-95">-</button>
+        <button onClick={() => handleFunction("%")} className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-700 font-semibold shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">%</button>
+        <button onClick={() => inputDigit("1")} className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-bold border border-zinc-200/80 dark:border-zinc-700 shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">1</button>
+        <button onClick={() => inputDigit("2")} className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-bold border border-zinc-200/80 dark:border-zinc-700 shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">2</button>
+        <button onClick={() => inputDigit("3")} className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-bold border border-zinc-200/80 dark:border-zinc-700 shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">3</button>
+        <button onClick={() => performOperation("-")} className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-bold shadow-[0_2px_0_rgba(29,78,216,0.4)] active:shadow-none active:translate-y-0.5 transition-all">-</button>
 
         {/* Row 5: ±, 0, ., =, + */}
-        <button onClick={() => handleFunction("+/-")} className="p-2 rounded-md bg-secondary text-secondary-foreground hover:bg-muted font-semibold transition-colors active:scale-95">±</button>
-        <button onClick={() => inputDigit("0")} className="p-2 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors active:scale-95">0</button>
-        <button onClick={inputDot} className="p-2 rounded-md bg-muted text-foreground hover:bg-secondary font-bold transition-colors active:scale-95">.</button>
-        <button onClick={handleEqual} className="p-2 rounded-md bg-emerald-600 dark:bg-emerald-500 text-white hover:opacity-90 font-bold transition-colors active:scale-95 shadow-xs">=</button>
-        <button onClick={() => performOperation("+")} className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-bold transition-colors active:scale-95">+</button>
+        <button onClick={() => handleFunction("+/-")} className="p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-700 font-semibold shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">±</button>
+        <button onClick={() => inputDigit("0")} className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-bold border border-zinc-200/80 dark:border-zinc-700 shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">0</button>
+        <button onClick={inputDot} className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-bold border border-zinc-200/80 dark:border-zinc-700 shadow-[0_2px_0_rgba(0,0,0,0.06)] active:shadow-none active:translate-y-0.5 transition-all">.</button>
+        <button onClick={handleEqual} className="p-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 font-bold shadow-[0_2px_0_rgba(5,150,105,0.4)] active:shadow-none active:translate-y-0.5 transition-all">=</button>
+        <button onClick={() => performOperation("+")} className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-bold shadow-[0_2px_0_rgba(29,78,216,0.4)] active:shadow-none active:translate-y-0.5 transition-all">+</button>
       </div>
     </div>
   );

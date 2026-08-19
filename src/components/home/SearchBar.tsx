@@ -65,13 +65,13 @@ export function SearchBar({
         <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none z-10" />
         <Input
           type="text"
-          placeholder="Search 160+ calculators (e.g. Mortgage, EMI, SIP, GST, BMI)..."
+          placeholder="Search 200+ calculators (e.g. Mortgage, EMI, SIP, GST, BMI)..."
           value={query}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           onChange={(e) => handleQueryChange(e.target.value)}
           aria-label="Search all calculators"
-          className="pl-10 pr-9 h-11 text-sm bg-background border-blue-200 dark:border-blue-900/70 text-foreground placeholder:text-muted-foreground rounded-xl shadow-sm focus:border-primary focus:ring-4 focus:ring-primary/15 transition-all"
+          className="pl-10 pr-9 h-11 text-sm bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 rounded-xl shadow-[0_3px_10px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.06)] focus:border-blue-500 focus:ring-4 focus:ring-blue-500/15 focus:shadow-[0_8px_25px_rgba(37,99,235,0.18)] transition-all"
         />
         {query && (
           <button
