@@ -7,7 +7,7 @@ export const dice_rollerConfig: CalculatorModuleDefinition = {
   title: "Dice Roller & TTRPG Probability Engine",
   slug: "dice-roller",
   category: "other",
-  subcategory: "Everyday Utility",
+  subcategory: "Everyday & Lifestyle",
   description: "Virtual Polyhedral Dice Roller & TTRPG Engine. Roll d4, d6, d8, d10, d12, d20, d100, custom notation (4d6kh3, Advantage), CSPRNG randomness, and live probability curves.",
   iconName: "Dices",
   featured: true,

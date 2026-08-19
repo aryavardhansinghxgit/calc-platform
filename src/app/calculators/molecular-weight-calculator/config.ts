@@ -7,7 +7,7 @@ export const molecular_weight_calculatorConfig: CalculatorModuleDefinition = {
   title: "Molecular Weight Calculator (Molar Mass)",
   slug: "molecular-weight-calculator",
   category: "other",
-  subcategory: "Academic & Education",
+  subcategory: "Science & Education",
   description: "Next-Gen Chemical Formula Molar Mass Calculator. Supports nested brackets, crystal hydrates, organic shorthands, monoisotopic mass, empirical formula solver, and moles converter.",
   iconName: "Atom",
   featured: true,

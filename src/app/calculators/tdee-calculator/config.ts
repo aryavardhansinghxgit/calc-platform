@@ -7,7 +7,7 @@ export const tdee_calculatorConfig: CalculatorModuleDefinition = {
   title: "TDEE Calculator",
   slug: "tdee-calculator",
   category: "Health",
-  subcategory: "Fitness",
+  subcategory: "Nutrition & Health",
   description:
     "Calculate your Total Daily Energy Expenditure (TDEE), BMR, maintenance calories, and deficit/surplus targets across 10 modes and 7 clinical BMR formulas. Features step count analyzer and 12-week weight projections.",
   iconName: "Activity",

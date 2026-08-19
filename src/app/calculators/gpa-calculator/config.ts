@@ -7,7 +7,7 @@ export const gpa_calculatorConfig: CalculatorModuleDefinition = {
   title: "GPA Calculator & Academic Standing Planner",
   slug: "gpa-calculator",
   category: "other",
-  subcategory: "Academic & Education",
+  subcategory: "Science & Education",
   description: "Next-Gen College & High School GPA Calculator. Multi-term semester tracking, AP/IB weighted 5.0 scales, grade forgiveness retakes, Target GPA solver, and international grade converter.",
   iconName: "GraduationCap",
   featured: true,

@@ -7,7 +7,7 @@ export const fat_intake_calculatorConfig: CalculatorModuleDefinition = {
   title: "Fat Intake Calculator",
   slug: "fat-intake-calculator",
   category: "Health",
-  subcategory: "Fitness",
+  subcategory: "Nutrition & Health",
   description:
     "Calculate your daily dietary fat requirements, saturated fat limits, monounsaturated/polyunsaturated targets, and Omega-3 ratios across 10 modes and 5 BMR formulas. Features searchable healthy fats food database.",
   iconName: "Flame",

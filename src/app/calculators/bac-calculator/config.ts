@@ -8,7 +8,7 @@ export const bac_calculatorConfig: CalculatorModuleDefinition = {
   description:
     "Professional Blood Alcohol Concentration (BAC) suite supporting Widmark & Seidl equations, hour-by-hour elimination schedule, legal DUI limits, and alcohol calories.",
   category: "health",
-  subcategory: "toxicology",
+  subcategory: "Nutrition & Health",
   iconName: "Activity",
   tags: [
     "bac",

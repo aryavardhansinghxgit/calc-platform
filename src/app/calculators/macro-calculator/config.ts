@@ -7,7 +7,7 @@ export const macro_calculatorConfig: CalculatorModuleDefinition = {
   title: "Macro Calculator",
   slug: "macro-calculator",
   category: "Health",
-  subcategory: "Fitness",
+  subcategory: "Nutrition & Health",
   description:
     "Calculate your exact daily macronutrients (protein, carbs, fats) and calorie targets across 10 modes and 6 BMR formulas. Features searchable food database and body composition analysis.",
   iconName: "PieChart",

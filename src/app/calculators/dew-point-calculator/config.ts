@@ -7,7 +7,7 @@ export const dew_point_calculatorConfig: CalculatorModuleDefinition = {
   title: "Dew Point Calculator",
   slug: "dew-point-calculator",
   category: "other",
-  subcategory: "Weather & Science Calculators",
+  subcategory: "Science & Education",
   description: "Free online Dew Point Calculator. Calculate dew point, relative humidity, air temp, wet-bulb, frost point, absolute humidity, Muggy Index comfort & ISO 8502-4 painting safety.",
   iconName: "Droplets",
   featured: true,

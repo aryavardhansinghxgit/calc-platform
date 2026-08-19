@@ -7,7 +7,7 @@ export const protein_calculatorConfig: CalculatorModuleDefinition = {
   title: "Protein Calculator",
   slug: "protein-calculator",
   category: "Health",
-  subcategory: "Fitness",
+  subcategory: "Nutrition & Health",
   description:
     "Calculate your exact daily protein requirements, per-meal targets, leucine trigger, and essential amino acid breakdown across 10 modes and 5 BMR formulas. Features searchable high-protein food database.",
   iconName: "Dumbbell",

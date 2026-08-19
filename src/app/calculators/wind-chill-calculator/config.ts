@@ -7,7 +7,7 @@ export const wind_chill_calculatorConfig: CalculatorModuleDefinition = {
   title: "Wind Chill Calculator",
   slug: "wind-chill-calculator",
   category: "other",
-  subcategory: "Weather & Science Calculators",
+  subcategory: "Science & Education",
   description: "Free online NWS Wind Chill Calculator. Calculate wind chill temperature, real-time frostbite risk timer, apparent temperature, and winter PPE clothing advice.",
   iconName: "Wind",
   featured: true,

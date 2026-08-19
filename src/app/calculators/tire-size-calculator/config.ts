@@ -7,7 +7,7 @@ export const tire_size_calculatorConfig: CalculatorModuleDefinition = {
   title: "Tire Size Calculator",
   slug: "tire-size-calculator",
   category: "other",
-  subcategory: "Transportation",
+  subcategory: "Automotive & Fuel",
   description: "Calculate tire overall diameter, sidewall height, circumference, speedometer error, wheel offset clearance, and gear ratio impact.",
   iconName: "Disc",
   featured: true,

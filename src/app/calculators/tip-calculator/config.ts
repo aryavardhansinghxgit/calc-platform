@@ -9,7 +9,7 @@ export const tip_calculatorConfig: CalculatorModuleDefinition = {
   title: "Tip Calculator",
   slug: "tip-calculator",
   category: "other",
-  subcategory: "Everyday Utility",
+  subcategory: "Everyday & Lifestyle",
   description: "Free online tip calculator. Calculate tips pre-tax or post-tax, split restaurant bills, apply smart rounding, and split itemized group checks.",
   iconName: "DollarSign",
   featured: true,

@@ -9,7 +9,7 @@ export const bra_size_calculatorConfig: CalculatorModuleDefinition = {
   title: "Bra Size Calculator",
   slug: "bra-size-calculator",
   category: "other",
-  subcategory: "Everyday Utility",
+  subcategory: "Everyday & Lifestyle",
   description: "Calculate bra size across US/CAN, UK, EU, FR, and AU standards. Features sister size finder, breast shape adjustor, style engine, and visual measurement guide.",
   iconName: "Heart",
   featured: true,

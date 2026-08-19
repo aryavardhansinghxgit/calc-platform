@@ -9,7 +9,7 @@ export const ip_subnet_calculatorConfig: CalculatorModuleDefinition = {
   title: "IP Subnet Calculator",
   slug: "ip-subnet-calculator",
   category: "other",
-  subcategory: "Internet",
+  subcategory: "Tech & Electrical",
   description: "Calculate IPv4 and IPv6 subnet masks, network IPs, broadcast IPs, CIDR prefix lengths, and usable host ranges. Slice subnets and aggregate routes.",
   iconName: "Network",
   featured: true,

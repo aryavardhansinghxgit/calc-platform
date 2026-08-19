@@ -7,7 +7,7 @@ export const horsepower_calculatorConfig: CalculatorModuleDefinition = {
   title: "Horsepower Calculator",
   slug: "horsepower-calculator",
   category: "other",
-  subcategory: "Performance & Engine Calculators",
+  subcategory: "Automotive & Fuel",
   description: "Calculate engine horsepower from Torque/RPM, 1/4-mile drag times, 0–60 mph acceleration, WHP vs BHP drivetrain losses, and SAE weather corrections.",
   iconName: "Zap",
   featured: true,

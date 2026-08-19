@@ -7,7 +7,7 @@ export const gfr_calculatorConfig: CalculatorModuleDefinition = {
   title: "GFR Calculator",
   slug: "gfr-calculator",
   category: "Health",
-  subcategory: "Clinical",
+  subcategory: "Nutrition & Health",
   description:
     "Calculate estimated Glomerular Filtration Rate (eGFR), CKD Stages 1-5, and KDIGO prognosis risk using CKD-EPI 2021 (race-free), CKD-EPI 2009, MDRD, Mayo, Cockcroft-Gault, and Bedside Schwartz Pediatric equations.",
   iconName: "Activity",

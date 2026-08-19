@@ -7,7 +7,7 @@ export const engine_horsepower_calculatorConfig: CalculatorModuleDefinition = {
   title: "Engine Horsepower Calculator",
   slug: "engine-horsepower-calculator",
   category: "other",
-  subcategory: "Performance & Engine Calculators",
+  subcategory: "Automotive & Fuel",
   description: "Free Engine Horsepower Calculator. Compute Crank BHP & Wheel WHP from 1/4-mile ET, finish line trap speed, torque & RPM, or displacement & forced induction boost pressure.",
   iconName: "Gauge",
   featured: true,

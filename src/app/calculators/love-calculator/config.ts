@@ -7,7 +7,7 @@ export const love_calculatorConfig: CalculatorModuleDefinition = {
   title: "Love Calculator & Relationship Matcher",
   slug: "love-calculator",
   category: "other",
-  subcategory: "Everyday Utility",
+  subcategory: "Everyday & Lifestyle",
   description: "Next-Gen Love & Compatibility Engine. Multi-pillar matching via Pythagorean Name Numerology, Zodiac Western Astrology, and Birthday Life Path analysis.",
   iconName: "Heart",
   featured: true,

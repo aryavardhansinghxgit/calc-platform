@@ -59,6 +59,17 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       "Auto",
       "Others",
     ],
+    health: [
+      "Fitness",
+      "Pregnancy",
+      "Nutrition & Health",
+    ],
+    other: [
+      "Tech & Electrical",
+      "Automotive & Fuel",
+      "Science & Education",
+      "Everyday & Lifestyle",
+    ],
   };
 
   const preferred = PREFERRED_ORDER[category.slug];

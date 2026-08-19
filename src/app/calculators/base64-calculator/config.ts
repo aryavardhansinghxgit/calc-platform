@@ -9,7 +9,7 @@ export const base64_calculatorConfig: CalculatorModuleDefinition = {
   title: "Base64 Encoder / Decoder",
   slug: "base64-calculator",
   category: "other",
-  subcategory: "Internet",
+  subcategory: "Tech & Electrical",
   description: "Advanced client-side Base64 encoder and decoder. Converts text and drag-and-drop file assets into Base64 strings, RFC 4648 URL-Safe variants, and HTML/CSS Data URIs.",
   iconName: "Code",
   featured: true,

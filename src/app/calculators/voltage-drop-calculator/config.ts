@@ -9,7 +9,7 @@ export const voltage_drop_calculatorConfig: CalculatorModuleDefinition = {
   title: "Voltage Drop Calculator",
   slug: "voltage-drop-calculator",
   category: "other",
-  subcategory: "Electronics & Circuits",
+  subcategory: "Tech & Electrical",
   description: "Calculate electrical wire voltage drop percentage based on wire gauge, current, distance, phase, power factor, and conduit type.",
   iconName: "Zap",
   featured: true,

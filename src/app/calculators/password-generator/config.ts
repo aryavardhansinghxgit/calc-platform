@@ -9,7 +9,7 @@ export const password_generatorConfig: CalculatorModuleDefinition = {
   title: "Password Generator",
   slug: "password-generator",
   category: "other",
-  subcategory: "Internet",
+  subcategory: "Tech & Electrical",
   description: "Generate cryptographically secure, fully customizable random passwords, memorizable passphrases, or secure PIN codes with local entropy and strength audits.",
   iconName: "Lock",
   featured: true,

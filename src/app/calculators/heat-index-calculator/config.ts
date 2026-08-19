@@ -7,7 +7,7 @@ export const heat_index_calculatorConfig: CalculatorModuleDefinition = {
   title: "Heat Index Calculator",
   slug: "heat-index-calculator",
   category: "other",
-  subcategory: "Weather & Science Calculators",
+  subcategory: "Science & Education",
   description: "Free online NWS Heat Index Calculator. Calculate feels-like heat index with NOAA Rothfusz regression, Dew Point dual mode, direct sunshine +15°F toggle, and OSHA work/rest schedules.",
   iconName: "Sun",
   featured: true,

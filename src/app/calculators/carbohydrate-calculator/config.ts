@@ -7,7 +7,7 @@ export const carbohydrate_calculatorConfig: CalculatorModuleDefinition = {
   title: "Carbohydrate Calculator",
   slug: "carbohydrate-calculator",
   category: "Health",
-  subcategory: "Fitness",
+  subcategory: "Nutrition & Health",
   description:
     "Calculate your exact daily carbohydrate requirements, net carbs, glycemic load, and 7-day carb cycling schedule across 10 modes and 5 BMR formulas. Includes searchable food GI database.",
   iconName: "Apple",

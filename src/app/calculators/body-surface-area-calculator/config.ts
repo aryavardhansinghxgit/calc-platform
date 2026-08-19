@@ -8,7 +8,7 @@ export const body_surface_area_calculatorConfig: CalculatorModuleDefinition = {
   description:
     "Clinical Body Surface Area (BSA) suite supporting Mosteller, Du Bois, Haycock, Schlich 3D, Chemotherapy dosing, Cardiac Index, GFR normalization, and 9-formula comparison.",
   category: "health",
-  subcategory: "clinical",
+  subcategory: "Nutrition & Health",
   iconName: "Activity",
   tags: [
     "bsa",

@@ -7,7 +7,7 @@ export const body_type_calculatorConfig: CalculatorModuleDefinition = {
   title: "Body Type Calculator",
   slug: "body-type-calculator",
   category: "Health",
-  subcategory: "Fitness & Body Composition",
+  subcategory: "Nutrition & Health",
   description:
     "Determine your anatomical body shape category (Hourglass, Pear, Apple, Spoon, Rectangle, V-Shape), Waist-to-Hip Ratio (WHR), WHtR health risk, and Heath-Carter Somatotype with custom wardrobe styling recommendations.",
   iconName: "User",

@@ -6,7 +6,7 @@ export const GDP_CALCULATOR: CalculatorModuleDefinition = {
   title: "GDP Calculator",
   slug: "gdp-calculator",
   category: "Other",
-  subcategory: "Economics & Macro",
+  subcategory: "Science & Education",
   description:
     "Calculate Gross Domestic Product (GDP) using the Expenditure Approach, Resource Cost - Income Approach, Real vs. Nominal GDP Deflator, and GDP Per Capita.",
   iconName: "Globe",

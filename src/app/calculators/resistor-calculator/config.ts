@@ -9,7 +9,7 @@ export const resistor_calculatorConfig: CalculatorModuleDefinition = {
   title: "Resistor Calculator",
   slug: "resistor-calculator",
   category: "other",
-  subcategory: "Electronics & Circuits",
+  subcategory: "Tech & Electrical",
   description: "Decode resistor color codes (4, 5, or 6 bands), calculate series and parallel resistor combinations, decode SMD codes, and determine wire conductor resistance.",
   iconName: "Cpu",
   featured: true,

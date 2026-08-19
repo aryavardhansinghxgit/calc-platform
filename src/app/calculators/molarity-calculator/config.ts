@@ -7,7 +7,7 @@ export const molarity_calculatorConfig: CalculatorModuleDefinition = {
   title: "Molarity Calculator & Dilution Solver",
   slug: "molarity-calculator",
   category: "other",
-  subcategory: "Academic & Education",
+  subcategory: "Science & Education",
   description: "Next-Gen Molarity Calculator. Calculate mass, volume, concentration, C1V1=C2V2 stock dilution, mass percent to molarity, PPM converter, and generate lab bench protocols.",
   iconName: "FlaskConical",
   featured: true,

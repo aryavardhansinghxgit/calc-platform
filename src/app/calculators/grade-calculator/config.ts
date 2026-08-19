@@ -7,7 +7,7 @@ export const grade_calculatorConfig: CalculatorModuleDefinition = {
   title: "Grade Calculator & Final Exam Target Solver",
   slug: "grade-calculator",
   category: "other",
-  subcategory: "Academic & Education",
+  subcategory: "Science & Education",
   description: "Next-Gen Grade Calculator. Calculate weighted category grades, total points, drop lowest N scores, what-if scenario simulation, and solve required final exam scores.",
   iconName: "FileCheck",
   featured: true,

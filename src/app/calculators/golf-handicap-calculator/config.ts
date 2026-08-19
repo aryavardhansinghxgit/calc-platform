@@ -9,7 +9,7 @@ export const golf_handicap_calculatorConfig: CalculatorModuleDefinition = {
   title: "Golf Handicap Calculator",
   slug: "golf-handicap-calculator",
   category: "other",
-  subcategory: "Everyday Utility",
+  subcategory: "Everyday & Lifestyle",
   description: "Calculate World Handicap System (WHS) Golf Handicap Index, 1–20 round differentials, and Course / Playing Handicaps.",
   iconName: "Trophy",
   featured: true,

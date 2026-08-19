@@ -9,7 +9,7 @@ export const bandwidth_calculatorConfig: CalculatorModuleDefinition = {
   title: "Bandwidth Calculator",
   slug: "bandwidth-calculator",
   category: "other",
-  subcategory: "Internet",
+  subcategory: "Tech & Electrical",
   description: "Calculate file download/upload duration, dynamic bandwidth unit conversions, web server hosting port bandwidth, and multi-device concurrency requirements.",
   iconName: "Wifi",
   featured: true,

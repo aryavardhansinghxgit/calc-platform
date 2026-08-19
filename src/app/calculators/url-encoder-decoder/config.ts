@@ -9,7 +9,7 @@ export const url_encoder_decoderConfig: CalculatorModuleDefinition = {
   title: "URL Encoder / Decoder",
   slug: "url-encoder-decoder",
   category: "other",
-  subcategory: "Internet",
+  subcategory: "Tech & Electrical",
   description: "Advanced client-side percent-encoding and decoding tool. Includes interactive query parameter key-value table editor, URL breakdown inspector, 4 encoding modes, and RFC 3986 compliance.",
   iconName: "Link2",
   featured: true,

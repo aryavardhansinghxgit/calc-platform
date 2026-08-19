@@ -7,7 +7,7 @@ export const sleep_calculatorConfig: CalculatorModuleDefinition = {
   title: "Sleep Calculator",
   slug: "sleep-calculator",
   category: "other",
-  subcategory: "Everyday Utility",
+  subcategory: "Everyday & Lifestyle",
   description: "Free online sleep cycle calculator. Calculate optimal bedtimes and wake-up times based on 90-minute ultradian cycles, sleep latency, power naps, and chronotypes.",
   iconName: "Moon",
   featured: true,
