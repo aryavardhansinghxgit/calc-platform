@@ -12,6 +12,13 @@ export interface CategoryGridProps {
   onSelectCategory?: (category: string) => void;
 }
 
+const CATEGORY_CUTOFFS: Record<string, string> = {
+  finance: "lease-calculator",
+  health: "carbohydrate-calculator",
+  math: "standard-deviation-calculator",
+  other: "tire-size-calculator",
+};
+
 export function CategoryGrid() {
   const mainCategories = CATEGORIES.slice(0, 4);
 
@@ -29,6 +36,15 @@ export function CategoryGrid() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {mainCategories.map((cat) => {
           const tools = getCalculatorsByCategory(cat.slug);
+          const cutoffSlug = CATEGORY_CUTOFFS[cat.slug];
+          let displayedTools = tools;
+
+          if (cutoffSlug) {
+            const cutoffIndex = tools.findIndex((t) => t.slug === cutoffSlug);
+            if (cutoffIndex !== -1) {
+              displayedTools = tools.slice(0, cutoffIndex + 1);
+            }
+          }
 
           return (
             <div key={cat.id} className="min-w-0 space-y-2.5">
@@ -41,7 +57,7 @@ export function CategoryGrid() {
 
               {/* Clean Tool Text Link List */}
               <ul className="space-y-1.5 text-xs">
-                {tools.map((calc) => (
+                {displayedTools.map((calc) => (
                   <li key={calc.id}>
                     <Link
                       href={`/calculators/${calc.slug}`}
