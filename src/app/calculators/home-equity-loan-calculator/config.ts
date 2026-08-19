@@ -9,7 +9,7 @@ export const home_equityConfig: CalculatorModuleDefinition = {
   title: "Home Equity Loan Calculator — Monthly Payments & Borrowing Power",
   slug: "home-equity-loan-calculator",
   category: "Finance",
-  subcategory: "Mortgage & House",
+  subcategory: "Mortgage and Real Estate",
   description:
     "Free Home Equity Loan & Borrowing Capacity Suite. Calculate monthly payments, maximum CLTV borrowing limits, compare HELOC vs Cash-Out Refinance, DTI qualification, and IRS 2026 tax deductibility.",
   iconName: "Home",

@@ -9,7 +9,7 @@ export const cdConfig: CalculatorModuleDefinition = {
   title: "CD Calculator — Certificate of Deposit Interest & APY Growth",
   slug: "cd-calculator",
   category: "Finance",
-  subcategory: "Savings",
+  subcategory: "Investment",
   description:
     "Free CD Calculator. Calculate Certificate of Deposit interest returns, effective APY, tax drag, inflation purchasing power, CD ladder strategies, early withdrawal penalties, and CD vs HYSA comparisons.",
   iconName: "PiggyBank",

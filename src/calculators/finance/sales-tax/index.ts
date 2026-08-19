@@ -6,7 +6,7 @@ export const SALES_TAX_CALCULATOR: CalculatorModuleDefinition = {
   title: "Sales Tax Calculator – U.S. State & Local Tax Estimator",
   slug: "sales-tax-calculator",
   category: "Finance",
-  subcategory: "Taxes",
+  subcategory: "Tax and Salary",
   description:
     "Calculate U.S. state and local sales taxes, 5-way bi-directional solving (Modes A–E), 50 US state tax rate directory, multi-item receipt builder, business tax collection solver, and what-if state tax savings comparison.",
   iconName: "Receipt",

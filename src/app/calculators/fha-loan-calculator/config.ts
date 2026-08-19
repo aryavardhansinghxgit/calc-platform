@@ -9,7 +9,7 @@ export const fha_loanConfig: CalculatorModuleDefinition = {
   title: "FHA Loan Calculator — Monthly Payments, MIP & Qualification",
   slug: "fha-loan-calculator",
   category: "Finance",
-  subcategory: "Mortgage & House",
+  subcategory: "Mortgage and Real Estate",
   description:
     "Free FHA Loan Calculator & Mortgage Qualification Suite. Calculate total monthly PITI payments, 1.75% Upfront MIP & annual MIP schedules, compare FHA vs Conventional 97, verify county limits, and check DTI ratios.",
   iconName: "ShieldCheck",

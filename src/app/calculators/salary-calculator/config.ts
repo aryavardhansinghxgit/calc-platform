@@ -8,7 +8,7 @@ export const salary_calculatorConfig: CalculatorModuleDefinition = {
   title: "Salary Calculator — Hourly, Monthly & Annual Paycheck Converter",
   slug: "salary-calculator",
   category: "Finance",
-  subcategory: "Income & Payroll",
+  subcategory: "Tax and Salary",
   description:
     "Convert salary and wages across Hourly, Daily, Weekly, Bi-Weekly, Semi-Monthly, Monthly, and Annual pay periods with paid time off, holidays, overtime, and net take-home tax estimations.",
   iconName: "DollarSign",

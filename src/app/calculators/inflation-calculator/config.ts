@@ -8,7 +8,7 @@ export const inflation_calculatorConfig: CalculatorModuleDefinition = {
   title: "Inflation Calculator — CPI Purchasing Power & Future Value Suite",
   slug: "inflation-calculator",
   category: "Finance",
-  subcategory: "Economic & Purchasing Power",
+  subcategory: "Others",
   description:
     "Calculate historical purchasing power using US BLS CPI-U data from 1913 to present, project future inflation decay, adjust real wages, and model real investment returns.",
   iconName: "TrendingUp",

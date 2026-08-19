@@ -6,7 +6,7 @@ export const MARGIN_CALCULATOR: CalculatorModuleDefinition = {
   title: "Margin Calculator – Profit, Stock & Forex Leverage Suite",
   slug: "margin-calculator",
   category: "Finance",
-  subcategory: "Business",
+  subcategory: "Others",
   description:
     "Free Margin Calculator. Calculate gross profit margin, markup percentage, stock trading margin requirements, margin call trigger prices, and forex leverage requirements.",
   iconName: "PieChart",

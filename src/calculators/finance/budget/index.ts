@@ -5,7 +5,7 @@ export const BUDGET_CALCULATOR: CalculatorModuleDefinition = {
   title: "Budget Calculator",
   slug: "budget-calculator",
   category: "Finance",
-  subcategory: "Personal Finance",
+  subcategory: "Others",
   description:
     "Comprehensive Budget Calculator with multi-income streams, itemized living expenses, DTI ratio analysis, 50/30/20 benchmark tracking, interactive charts, and printable financial reports.",
   iconName: "PieChart",

@@ -6,7 +6,7 @@ export const BOAT_LOAN_CALCULATOR: CalculatorModuleDefinition = {
   title: "Boat Loan Calculator",
   slug: "boat-loan-calculator",
   category: "Finance",
-  subcategory: "Auto & Lease",
+  subcategory: "Auto",
   description:
     "Calculate boat loan payments, total marine financing interest, upfront purchase costs, slip/marina storage fees, and true total cost of vessel ownership.",
   iconName: "Ship",

@@ -6,7 +6,7 @@ export const DEBT_PAYOFF_CALCULATOR: CalculatorModuleDefinition = {
   title: "Debt Payoff Calculator – Financial Freedom Acceleration Suite",
   slug: "debt-payoff-calculator",
   category: "Finance",
-  subcategory: "Credit & Debt",
+  subcategory: "Others",
   description:
     "Calculate multi-debt payoff schedules, compare Debt Avalanche (highest interest first) vs. Debt Snowball (lowest balance first), test payment rollover reallocation, extra payments, and debt consolidation loan savings.",
   iconName: "TrendingDown",

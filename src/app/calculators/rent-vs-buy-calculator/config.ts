@@ -9,7 +9,7 @@ export const rentVsBuyConfig: CalculatorModuleDefinition = {
   title: "Rent vs. Buy Calculator — Should You Buy a Home or Rent?",
   slug: "rent-vs-buy-calculator",
   category: "Finance",
-  subcategory: "Mortgage & House",
+  subcategory: "Mortgage and Real Estate",
   description:
     "Free Rent vs. Buy Calculator. Model breakeven timeline horizons, unrecoverable costs, opportunity costs, Price-to-Rent ratios, Ben Felix 5% rule, and 30-year net worth divergence.",
   iconName: "Home",

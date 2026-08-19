@@ -9,7 +9,7 @@ export const dti_calculatorConfig: CalculatorModuleDefinition = {
   title: "Debt-to-Income (DTI) Ratio Calculator — Check Mortgage Qualification",
   slug: "dti-calculator",
   category: "Finance",
-  subcategory: "Mortgage & House",
+  subcategory: "Mortgage and Real Estate",
   description:
     "Free Debt-to-Income (DTI) Ratio Calculator & Mortgage Qualification Suite. Calculate Front-End & Back-End DTI ratios, compare Conventional, FHA, VA, USDA & Jumbo approval limits, solve required income, and simulate debt payoff impacts.",
   iconName: "PieChart",

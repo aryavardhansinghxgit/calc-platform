@@ -8,7 +8,7 @@ export const payment_calculatorConfig: CalculatorModuleDefinition = {
   title: "Payment Calculator — Calculate Monthly Loan Payments & Amortization",
   slug: "payment-calculator",
   category: "Finance",
-  subcategory: "Loans & Debt",
+  subcategory: "Others",
   description:
     "Calculate monthly loan payments, multi-frequency bi-weekly savings, payoff schedules, and interest with our free payment calculator.",
   iconName: "DollarSign",

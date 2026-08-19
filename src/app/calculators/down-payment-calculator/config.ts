@@ -9,7 +9,7 @@ export const downPaymentConfig: CalculatorModuleDefinition = {
   title: "Down Payment Calculator — Mortgage Down Payment & PMI Payoff Suite",
   slug: "down-payment-calculator",
   category: "Finance",
-  subcategory: "Mortgage & House",
+  subcategory: "Mortgage and Real Estate",
   description:
     "Free Down Payment Calculator. Dual mode calculation (by home price or max cash available), 0% to 30% tier comparisons, PMI cancellation date milestone, opportunity cost index fund simulator, and upfront cash-to-close.",
   iconName: "DollarSign",

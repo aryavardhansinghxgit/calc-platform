@@ -6,7 +6,7 @@ export const BUSINESS_LOAN_CALCULATOR: CalculatorModuleDefinition = {
   title: "Business Loan Calculator – Real APR & Commercial Suite",
   slug: "business-loan-calculator",
   category: "Finance",
-  subcategory: "Business",
+  subcategory: "Others",
   description:
     "Free Business Loan Calculator. Calculate monthly payback, total interest, origination and documentation fees, Real Rate (APR), SBA loan options, DSCR cash flow coverage, and amortization schedules.",
   iconName: "Briefcase",

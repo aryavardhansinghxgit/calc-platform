@@ -50,7 +50,24 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     subcategoryMap[sub].push(calc);
   });
 
-  const subcategoryNames = Object.keys(subcategoryMap);
+  const PREFERRED_ORDER: Record<string, string[]> = {
+    finance: [
+      "Mortgage and Real Estate",
+      "Investment",
+      "Retirement",
+      "Tax and Salary",
+      "Auto",
+      "Others",
+    ],
+  };
+
+  const preferred = PREFERRED_ORDER[category.slug];
+  const subcategoryNames = preferred
+    ? [
+        ...preferred.filter((name) => subcategoryMap[name]?.length),
+        ...Object.keys(subcategoryMap).filter((name) => !preferred.includes(name)),
+      ]
+    : Object.keys(subcategoryMap);
 
   return (
     <div className="space-y-4 max-w-7xl mx-auto py-1">

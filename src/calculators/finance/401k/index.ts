@@ -6,7 +6,7 @@ export const FOUR_ZERO_ONE_K_CALCULATOR: CalculatorModuleDefinition = {
   title: "401(k) Calculator – Wealth & Retirement Suite",
   slug: "401k-calculator",
   category: "Finance",
-  subcategory: "Retirement & Investing",
+  subcategory: "Retirement",
   description:
     "Free 401(k) Calculator. Calculate gross 401(k) retirement balance, purchasing power in today's dollars, employer match maximization, early withdrawal penalty costs, and 2025/2026 IRS contribution caps.",
   iconName: "TrendingUp",

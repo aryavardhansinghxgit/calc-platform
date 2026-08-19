@@ -6,7 +6,7 @@ export const GST_CALCULATOR: CalculatorModuleDefinition = {
   title: "GST Calculator – Indian Goods & Services Tax Estimator",
   slug: "gst-calculator",
   category: "Finance",
-  subcategory: "Taxes",
+  subcategory: "Tax and Salary",
   description:
     "Calculate Indian GST inclusive & exclusive amounts, reverse GST, CGST/SGST/IGST inter-state splits, multi-item tax invoices, and composition scheme tax savings.",
   iconName: "Receipt",

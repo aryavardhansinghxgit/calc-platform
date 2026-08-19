@@ -8,7 +8,7 @@ export const estate_tax_calculatorConfig: CalculatorModuleDefinition = {
   title: "Estate Tax Calculator — Federal & State Death Tax Estimator",
   slug: "estate-tax-calculator",
   category: "Finance",
-  subcategory: "Taxes",
+  subcategory: "Tax and Salary",
   description:
     "Calculate your federal estate tax liability, state death taxes, portability (DSUE) election, and wealth transfer to heirs with our comprehensive estate planning tool.",
   iconName: "Landmark",

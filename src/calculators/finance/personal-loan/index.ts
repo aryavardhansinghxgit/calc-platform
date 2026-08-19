@@ -6,7 +6,7 @@ export const PERSONAL_LOAN_CALCULATOR: CalculatorModuleDefinition = {
   title: "Personal Loan Calculator – Amortization & Consolidation Suite",
   slug: "personal-loan-calculator",
   category: "Finance",
-  subcategory: "Personal",
+  subcategory: "Others",
   description:
     "Free Personal Loan Calculator. Calculate monthly payments, total interest, annual and monthly amortization schedules, fee options, debt consolidation APR savings, and early payoff acceleration.",
   iconName: "DollarSign",

@@ -9,7 +9,7 @@ export const helocConfig: CalculatorModuleDefinition = {
   title: "HELOC Calculator — Home Equity Line of Credit Payments & Draw Limits",
   slug: "heloc-calculator",
   category: "Finance",
-  subcategory: "Mortgage & House",
+  subcategory: "Mortgage and Real Estate",
   description:
     "Free HELOC & Revolving Credit Planning Suite. Calculate 2-phase monthly payments (interest-only draw vs amortizing repayment), payment shock jump, maximum CLTV credit limits, variable rate stress testing, and IRS tax rules.",
   iconName: "CreditCard",

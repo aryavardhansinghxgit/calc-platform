@@ -6,7 +6,7 @@ export const COLLEGE_COST_CALCULATOR: CalculatorModuleDefinition = {
   title: "College Cost Calculator",
   slug: "college-cost-calculator",
   category: "Finance",
-  subcategory: "Education & Debt",
+  subcategory: "Others",
   description:
     "Calculate future college costs with tuition inflation, estimate 529 savings plans, required monthly savings, student loan repayment burdens, and major ROI.",
   iconName: "GraduationCap",

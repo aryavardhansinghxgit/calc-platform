@@ -6,7 +6,7 @@ export const STUDENT_LOAN_CALCULATOR: CalculatorModuleDefinition = {
   title: "Student Loan Calculator – Repayment & Projection Suite",
   slug: "student-loan-calculator",
   category: "Finance",
-  subcategory: "Personal",
+  subcategory: "Others",
   description:
     "Free Student Loan Calculator. Calculate monthly student loan repayments, 4-way missing solvers, extra payment payoff acceleration, in-school debt projections, federal repayment plans, and refinancing savings.",
   iconName: "GraduationCap",

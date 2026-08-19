@@ -6,7 +6,7 @@ export const DEBT_CONSOLIDATION_CALCULATOR: CalculatorModuleDefinition = {
   title: "Debt Consolidation Calculator – Real APR & Refinance Suite",
   slug: "debt-consolidation-calculator",
   category: "Finance",
-  subcategory: "Credit & Debt",
+  subcategory: "Others",
   description:
     "Calculate whether consolidating your credit cards and loans into a single lower-rate loan saves money. Solves Real Effective APR accounting for upfront origination fees, fee sensitivity thresholds, and 0% balance transfer card options.",
   iconName: "Landmark",

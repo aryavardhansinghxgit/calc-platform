@@ -8,7 +8,7 @@ export const take_home_pay_calculatorConfig: CalculatorModuleDefinition = {
   title: "Take-Home Paycheck Calculator — Calculate Net Pay & Tax Withholdings",
   slug: "take-home-pay-calculator",
   category: "Finance",
-  subcategory: "Salary & Taxes",
+  subcategory: "Tax and Salary",
   description:
     "Calculate your net take-home paycheck after federal, state, and FICA taxes, pre-tax 401(k) deductions, and Form W-4 adjustments with our free paycheck calculator.",
   iconName: "Briefcase",

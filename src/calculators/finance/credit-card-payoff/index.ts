@@ -6,7 +6,7 @@ export const CREDIT_CARD_PAYOFF_CALCULATOR: CalculatorModuleDefinition = {
   title: "Credit Card Payoff Calculator",
   slug: "credit-card-payoff-calculator",
   category: "Finance",
-  subcategory: "Credit & Debt",
+  subcategory: "Others",
   description: "Calculate the exact monthly payment required to pay off your credit card balance in a target timeframe.",
   iconName: "CreditCard",
   featured: false,

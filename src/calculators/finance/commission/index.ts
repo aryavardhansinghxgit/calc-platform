@@ -6,7 +6,7 @@ export const COMMISSION_CALCULATOR: CalculatorModuleDefinition = {
   title: "Commission Calculator – Tiered & Sales Compensation Suite",
   slug: "commission-calculator",
   category: "Finance",
-  subcategory: "Business",
+  subcategory: "Others",
   description:
     "Free Commission Calculator. Calculate sales commission payout, 3-way missing solvers, base salary plus commission, graduated tiered brackets, real estate splits, and target sales goal planners.",
   iconName: "Briefcase",

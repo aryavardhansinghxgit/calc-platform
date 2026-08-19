@@ -7,7 +7,7 @@ export const REFINANCE_CALCULATOR: CalculatorModuleDefinition = {
   title: "Refinance Calculator",
   slug: "refinance-calculator",
   category: "Finance",
-  subcategory: "Mortgage & House",
+  subcategory: "Mortgage and Real Estate",
   description: "Compare your current loan with a new refinanced loan to estimate payment changes, interest savings, refinancing costs, and break-even period.",
   iconName: "RefreshCw",
   featured: true,

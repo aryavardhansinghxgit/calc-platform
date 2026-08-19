@@ -9,7 +9,7 @@ export const interestRateConfig: CalculatorModuleDefinition = {
   title: "Interest Rate Calculator — Find Loan APR, Investment Returns & APY",
   slug: "interest-rate-calculator",
   category: "Finance",
-  subcategory: "Interest",
+  subcategory: "Investment",
   description:
     "Free Interest Rate Calculator. Solve for loan interest rates, true APR with fees, lump-sum investment returns, periodic annuity growth rates, APR to APY conversions, and inflation/tax-adjusted real yields.",
   iconName: "Percent",

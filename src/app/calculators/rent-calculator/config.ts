@@ -9,7 +9,7 @@ export const rent_calculatorConfig: CalculatorModuleDefinition = {
   title: "Rent Calculator — How Much Rent Can You Afford?",
   slug: "rent-calculator",
   category: "Finance",
-  subcategory: "Personal Finance",
+  subcategory: "Mortgage and Real Estate",
   description:
     "Free advanced Rent Calculator & Budgeting Suite. Calculate maximum affordable rent using the 30% gross rule, 40x landlord rule, 50/30/20 budget framework, Front-End & Back-End DTI, utility cost index, upfront move-in cash, and fair roommate rent splitters.",
   iconName: "Home",

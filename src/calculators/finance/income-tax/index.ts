@@ -6,7 +6,7 @@ export const INCOME_TAX_CALCULATOR: CalculatorModuleDefinition = {
   title: "Income Tax Calculator – US Federal Tax & Refund Estimator",
   slug: "income-tax-calculator",
   category: "Finance",
-  subcategory: "Taxes",
+  subcategory: "Tax and Salary",
   description:
     "Calculate 2026 & 2025 US Federal income tax liability, tax refund checks, self-employment tax, capital gains rates, itemized vs standard deductions, and tax credit savings.",
   iconName: "FileText",

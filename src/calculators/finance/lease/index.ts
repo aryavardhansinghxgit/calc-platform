@@ -6,7 +6,7 @@ export const LEASE_CALCULATOR: CalculatorModuleDefinition = {
   title: "Lease Calculator",
   slug: "lease-calculator",
   category: "Finance",
-  subcategory: "Auto & Equipment",
+  subcategory: "Others",
   description:
     "Calculate monthly lease payments, total lease cost, effective interest rate, depreciation charges, money factor, and compare leasing vs buying for vehicles, equipment, and property.",
   iconName: "Car",

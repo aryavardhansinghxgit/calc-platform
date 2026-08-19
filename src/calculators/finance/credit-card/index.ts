@@ -6,7 +6,7 @@ export const CREDIT_CARD_CALCULATOR: CalculatorModuleDefinition = {
   title: "Credit Card Calculator",
   slug: "credit-card-calculator",
   category: "Finance",
-  subcategory: "Credit & Debt",
+  subcategory: "Others",
   description:
     "Free Credit Card Calculator. Calculate payoff months, total interest, minimum payment rules, extra monthly payments, 0% balance transfers, and Debt Avalanche vs. Snowball payoff strategies.",
   iconName: "CreditCard",

@@ -7,7 +7,7 @@ export const HOUSE_AFFORDABILITY_CALCULATOR: CalculatorModuleDefinition = {
   title: "House Affordability Calculator",
   slug: "house-affordability-calculator",
   category: "Finance",
-  subcategory: "Mortgage & House",
+  subcategory: "Mortgage and Real Estate",
   description: "Determine how much house you can afford based on household income, monthly debts, down payment, and DTI rules or fixed monthly budgets.",
   iconName: "Home",
   featured: true,

@@ -6,7 +6,7 @@ export const REPAYMENT_CALCULATOR: CalculatorModuleDefinition = {
   title: "Repayment Calculator",
   slug: "repayment-calculator",
   category: "Finance",
-  subcategory: "Credit & Debt",
+  subcategory: "Others",
   description:
     "Free Repayment Calculator. Calculate loan payments and debt payoff timelines with 8 compounding intervals, 8 payment frequencies, fixed term vs. fixed payment modes, extra payments, and bi-weekly accelerators.",
   iconName: "DollarSign",

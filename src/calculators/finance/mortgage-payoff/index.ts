@@ -6,7 +6,7 @@ export const MORTGAGE_PAYOFF_CALCULATOR: CalculatorModuleDefinition = {
   title: "Mortgage Payoff Calculator",
   slug: "mortgage-payoff-calculator",
   category: "Finance",
-  subcategory: "Mortgage & House",
+  subcategory: "Mortgage and Real Estate",
   description: "Calculate how much time and interest you save by making extra monthly mortgage payments.",
   iconName: "TrendingDown",
   featured: false,

@@ -6,7 +6,7 @@ export const DISCOUNT_CALCULATOR: CalculatorModuleDefinition = {
   title: "Discount Calculator – Stacked Savings & Coupon Suite",
   slug: "discount-calculator",
   category: "Finance",
-  subcategory: "Business",
+  subcategory: "Others",
   description:
     "Free Discount Calculator. Calculate final sale price after single or stacked percentage discounts, fixed coupons, sales tax, and reverse list price solvers.",
   iconName: "Tag",

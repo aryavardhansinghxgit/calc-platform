@@ -9,7 +9,7 @@ export const apr_calculatorConfig: CalculatorModuleDefinition = {
   title: "APR Calculator — Calculate Annual Percentage Rate & Loan Comparison",
   slug: "apr-calculator",
   category: "Finance",
-  subcategory: "Credit & Cards",
+  subcategory: "Mortgage and Real Estate",
   description:
     "Free APR Calculator. Calculate exact Annual Percentage Rate (APR), compare mortgage & auto loan offers with fees, analyze credit card payoff schedules, and solve target loan capacity.",
   iconName: "Percent",

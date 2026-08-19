@@ -6,7 +6,7 @@ export const RETIREMENT_CALCULATOR: CalculatorModuleDefinition = {
   title: "Retirement Calculator – Financial Independence Suite",
   slug: "retirement-calculator",
   category: "Finance",
-  subcategory: "Retirement & Investing",
+  subcategory: "Retirement",
   description:
     "Free Retirement Calculator. Calculate your target retirement nest egg, annual savings shortfall, post-retirement monthly withdrawal capacity, nest egg longevity, and test the 4% Trinity Rule.",
   iconName: "TrendingUp",

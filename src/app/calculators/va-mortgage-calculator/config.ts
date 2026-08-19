@@ -9,7 +9,7 @@ export const va_mortgageConfig: CalculatorModuleDefinition = {
   title: "VA Mortgage Calculator — Funding Fee, Entitlement & Payments",
   slug: "va-mortgage-calculator",
   category: "Finance",
-  subcategory: "Mortgage & House",
+  subcategory: "Mortgage and Real Estate",
   description:
     "Free VA Mortgage Calculator with 2026 Funding Fee logic & Amortization. Calculate monthly PITI payments, 0% down entitlement, VA vs Conventional vs FHA comparison, bi-weekly savings, and IRRRL refinancing.",
   iconName: "Award",

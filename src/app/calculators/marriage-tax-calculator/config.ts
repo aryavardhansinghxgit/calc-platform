@@ -8,7 +8,7 @@ export const marriage_tax_calculatorConfig: CalculatorModuleDefinition = {
   title: "Marriage Tax Calculator — Penalty vs. Bonus Comparison",
   slug: "marriage-tax-calculator",
   category: "Finance",
-  subcategory: "Taxes",
+  subcategory: "Tax and Salary",
   description:
     "Calculate your marriage tax penalty or bonus. Compare Two Singles vs. Married Filing Jointly (MFJ) vs. Married Filing Separately (MFS) with FICA, SALT cap, and surtax estimations.",
   iconName: "Heart",

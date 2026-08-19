@@ -6,7 +6,7 @@ export const DEPRECIATION_CALCULATOR: CalculatorModuleDefinition = {
   title: "Depreciation Calculator",
   slug: "depreciation-calculator",
   category: "Finance",
-  subcategory: "Accounting & Tax",
+  subcategory: "Others",
   description:
     "Calculate asset depreciation schedules across Straight-Line, Double Declining Balance (DDB), 150% Declining Balance, Sum-of-Years' Digits (SYD), Units of Production, and MACRS IRS tax depreciation.",
   iconName: "TrendingDown",

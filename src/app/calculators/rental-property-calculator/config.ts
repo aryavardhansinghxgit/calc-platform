@@ -9,7 +9,7 @@ export const rental_propertyConfig: CalculatorModuleDefinition = {
   title: "Rental Property Calculator — Cash Flow, Cap Rate, ROI & IRR Analysis",
   slug: "rental-property-calculator",
   category: "Finance",
-  subcategory: "Investment",
+  subcategory: "Mortgage and Real Estate",
   description:
     "Free Rental Property Calculator & Real Estate Investment Analysis Suite. Calculate multi-year cash flow, Cap Rate, Cash-on-Cash Return, IRR, DSCR, BRRRR strategy, 27.5-year tax depreciation, and rules-of-thumb (1%, 50%, 70% rules).",
   iconName: "Home",

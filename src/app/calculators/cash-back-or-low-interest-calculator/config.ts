@@ -9,7 +9,7 @@ export const cashBackConfig: CalculatorModuleDefinition = {
   title: "Cash Back or Low Interest Calculator — Auto Loan Incentive Comparison",
   slug: "cash-back-or-low-interest-calculator",
   category: "Finance",
-  subcategory: "Auto Loan",
+  subcategory: "Auto",
   description:
     "Free Cash Back or Low Interest Calculator. Compare auto manufacturer cash rebates vs 0% APR low-interest dealer financing, calculate breakeven APRs, and evaluate 60-month amortization schedules.",
   iconName: "Car",

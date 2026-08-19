@@ -9,7 +9,7 @@ export const financeConfig: CalculatorModuleDefinition = {
   title: "Finance Calculator — Time Value of Money (TVM) Solvers",
   slug: "finance-calculator",
   category: "Finance",
-  subcategory: "General",
+  subcategory: "Investment",
   description:
     "Free Finance Calculator. Solve for Future Value (FV), Present Value (PV), Periodic Payment (PMT), Interest Rate (I/Y), and Term (N). Features compound interest visualizers, inflation drag, and post-tax net returns.",
   iconName: "DollarSign",

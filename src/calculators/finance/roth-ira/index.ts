@@ -6,7 +6,7 @@ export const ROTH_IRA_CALCULATOR: CalculatorModuleDefinition = {
   title: "Roth IRA Calculator – Tax-Free Wealth Suite",
   slug: "roth-ira-calculator",
   category: "Finance",
-  subcategory: "Retirement & Investing",
+  subcategory: "Retirement",
   description:
     "Free Roth IRA Calculator. Calculate 100% tax-free retirement growth, compare against regular taxable savings accounts, test 2025/2026 IRS contribution caps, and evaluate Backdoor Roth conversions.",
   iconName: "TrendingUp",

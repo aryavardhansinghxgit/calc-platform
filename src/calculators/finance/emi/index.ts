@@ -7,7 +7,7 @@ export const EMI_CALCULATOR: CalculatorModuleDefinition = {
   title: "EMI Calculator",
   slug: "emi-calculator",
   category: "Finance",
-  subcategory: "Mortgage & House",
+  subcategory: "Mortgage and Real Estate",
   description: "Calculate Equated Monthly Installment (EMI), prepayment strategies, reducing vs flat rate comparison, and total loan interest schedule.",
   iconName: "DollarSign",
   featured: true,

@@ -6,7 +6,7 @@ export const VAT_CALCULATOR: CalculatorModuleDefinition = {
   title: "VAT Calculator – Global Value-Added Tax Estimator",
   slug: "vat-calculator",
   category: "Finance",
-  subcategory: "Taxes",
+  subcategory: "Tax and Salary",
   description:
     "Calculate Value-Added Tax (VAT) exclusive and inclusive amounts, reverse VAT, 4-way bi-directional solving, multi-stage supply chain tax maps, and global country rate presets.",
   iconName: "Receipt",

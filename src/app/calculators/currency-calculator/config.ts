@@ -8,7 +8,7 @@ export const currency_calculatorConfig: CalculatorModuleDefinition = {
   title: "Currency Calculator — Live Exchange Rates & Multi-Currency Converter",
   slug: "currency-calculator",
   category: "Finance",
-  subcategory: "Banking & Global",
+  subcategory: "Others",
   description:
     "Convert between 25+ global currencies in real-time, simulate bank transfer fees and markups, calculate travel budgets, and view exchange rate cross-matrices.",
   iconName: "Coins",

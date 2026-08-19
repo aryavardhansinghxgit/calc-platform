@@ -6,7 +6,7 @@ export const IRA_CALCULATOR: CalculatorModuleDefinition = {
   title: "IRA Calculator – Traditional vs Roth Retirement Suite",
   slug: "ira-calculator",
   category: "Finance",
-  subcategory: "Retirement & Investing",
+  subcategory: "Retirement",
   description:
     "Free IRA Calculator. Compare Traditional IRA, Roth IRA, SEP IRA, SIMPLE IRA, and regular taxable savings side-by-side. Calculate pre-tax and post-tax retirement balances and test 2025/2026 IRS contribution caps.",
   iconName: "TrendingUp",
