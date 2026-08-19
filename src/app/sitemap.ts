@@ -3,13 +3,14 @@ import { getAllCalculatorDefinitions } from "@/calculators";
 import { CATEGORIES } from "@/data/categories";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://calcplatform.example.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.com";
+  const currentDate = new Date();
 
-  // 1. Static Pages
+  // 1. Core Platform Pages
   const staticRoutes: MetadataRoute.Sitemap = [
     {
-      url: baseUrl,
-      lastModified: new Date(),
+      url: `${baseUrl}`,
+      lastModified: currentDate,
       changeFrequency: "daily",
       priority: 1.0,
     },
@@ -18,19 +19,45 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // 2. Category Hub Pages
   const categoryRoutes: MetadataRoute.Sitemap = CATEGORIES.map((cat) => ({
     url: `${baseUrl}/category/${cat.slug}`,
-    lastModified: new Date(),
+    lastModified: currentDate,
+    changeFrequency: "daily",
+    priority: 0.85,
+  }));
+
+  // 3. Calculator Tool Pages (Deduplicated across all categories)
+  const allCalculators = getAllCalculatorDefinitions();
+  const seenSlugs = new Set<string>();
+  const calculatorRoutes: MetadataRoute.Sitemap = [];
+
+  for (const calc of allCalculators) {
+    if (!calc.slug || seenSlugs.has(calc.slug)) continue;
+    seenSlugs.add(calc.slug);
+
+    calculatorRoutes.push({
+      url: `${baseUrl}/calculators/${calc.slug}`,
+      lastModified: currentDate,
+      changeFrequency: "weekly",
+      priority: calc.featured ? 0.9 : 0.75,
+    });
+  }
+
+  // 4. Standalone Top-Level Aliases
+  const standaloneAliases = [
+    "loan-calculator",
+    "cd-calculator",
+    "finance-calculator",
+    "house-affordability-calculator",
+    "interest-rate-calculator",
+    "refinance-calculator",
+    "cash-back-or-low-interest-calculator",
+  ];
+
+  const standaloneRoutes: MetadataRoute.Sitemap = standaloneAliases.map((slug) => ({
+    url: `${baseUrl}/${slug}`,
+    lastModified: currentDate,
     changeFrequency: "weekly",
     priority: 0.8,
   }));
 
-  // 3. Calculator Tool Pages (derived directly from registry)
-  const calculatorDefinitions = getAllCalculatorDefinitions();
-  const calculatorRoutes: MetadataRoute.Sitemap = calculatorDefinitions.map((calc) => ({
-    url: `${baseUrl}/calculators/${calc.slug}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly",
-    priority: 0.9,
-  }));
-
-  return [...staticRoutes, ...categoryRoutes, ...calculatorRoutes];
+  return [...staticRoutes, ...categoryRoutes, ...calculatorRoutes, ...standaloneRoutes];
 }
