@@ -85,12 +85,31 @@ export function Footer() {
         </div>
 
         <div>
-          <h4 className="text-white font-semibold mb-3 text-xs uppercase tracking-wider">Platform Info</h4>
-          <p className="text-xs text-blue-100 leading-relaxed">
-            Calculations are for estimation purposes only. All calculations run client-side for total privacy.
-          </p>
-          <div className="mt-4 text-xs text-blue-200">
-            &copy; {new Date().getFullYear()} CalcPlatform. All rights reserved.
+          <h4 className="text-white font-semibold mb-3 text-xs uppercase tracking-wider">Company & Legal</h4>
+          <ul className="space-y-2 text-xs">
+            <li>
+              <Link href="/about" className="text-blue-50 hover:text-white transition-colors">
+                About Us
+              </Link>
+            </li>
+            <li>
+              <Link href="/privacy" className="text-blue-50 hover:text-white transition-colors">
+                Privacy Policy
+              </Link>
+            </li>
+            <li>
+              <Link href="/terms" className="text-blue-50 hover:text-white transition-colors">
+                Terms & Conditions
+              </Link>
+            </li>
+            <li>
+              <Link href="/contact" className="text-blue-50 hover:text-white transition-colors">
+                Contact Us
+              </Link>
+            </li>
+          </ul>
+          <div className="mt-4 pt-3 border-t border-blue-500/60 text-[11px] text-blue-200">
+            &copy; {new Date().getFullYear()} CalcPlatform. All calculations run client-side for total privacy.
           </div>
         </div>
       </div>

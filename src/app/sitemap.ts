@@ -59,5 +59,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...staticRoutes, ...categoryRoutes, ...calculatorRoutes, ...standaloneRoutes];
+  // 5. Institutional & Legal Pages
+  const institutionalPages = ["about", "privacy", "terms", "contact"];
+  const institutionalRoutes: MetadataRoute.Sitemap = institutionalPages.map((slug) => ({
+    url: `${baseUrl}/${slug}`,
+    lastModified: currentDate,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...categoryRoutes, ...calculatorRoutes, ...standaloneRoutes, ...institutionalRoutes];
 }
