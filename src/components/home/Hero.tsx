@@ -34,8 +34,8 @@ export function Hero() {
             </div>
 
             {/* Hero Heading */}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 leading-tight">
-              CALCULATE ANYTHING IN SECONDS
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-50 leading-tight font-heading">
+              <span className="text-blue-600 dark:text-blue-500">CALCULATE</span> ANYTHING IN SECONDS
             </h1>
 
             {/* Subtitle */}
