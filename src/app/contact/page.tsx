@@ -9,44 +9,95 @@ import {
   Lightbulb,
   CheckCircle2,
   Send,
-  HelpCircle,
   Clock,
-  Sparkles,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     topic: "calculation-feedback",
     subject: "",
     message: "",
+    honeypot: "", // Anti-spam field
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.email || !formData.message) return;
-    setSubmitted(true);
+
+    setLoading(true);
+    setErrorMessage("");
+
+    try {
+      // 1. Try our internal API route
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        // 2. Direct fallback to FormSubmit service if API route fails
+        const directRes = await fetch("https://formsubmit.co/ajax/xasvmax@gmail.com", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            _subject: `[CalcPlatform] ${formData.subject || formData.topic}`,
+            name: formData.name || "Anonymous User",
+            email: formData.email,
+            topic: formData.topic,
+            message: formData.message,
+          }),
+        });
+
+        if (directRes.ok) {
+          setSubmitted(true);
+        } else {
+          setErrorMessage(
+            "There was an issue delivering the message. You can email us directly at xasvmax@gmail.com"
+          );
+        }
+      }
+    } catch (err) {
+      console.error("Contact submit error:", err);
+      // Fallback
+      setErrorMessage(
+        "Network connection issue. Please send an email directly to xasvmax@gmail.com"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const departments = [
     {
       icon: Bug,
       title: "Formula & Math Review",
-      email: "math-review@calcplatform.com",
+      email: "xasvmax@gmail.com",
       desc: "Report a formula discrepancy, edge-case rounding anomaly, or calculation suggestion.",
     },
     {
       icon: Lightbulb,
       title: "New Calculator Requests",
-      email: "requests@calcplatform.com",
+      email: "xasvmax@gmail.com",
       desc: "Suggest a new financial, scientific, mathematical, or engineering calculator.",
     },
     {
       icon: Mail,
-      title: "General & Technical Support",
-      email: "support@calcplatform.com",
+      title: "Direct Support & Inquiries",
+      email: "xasvmax@gmail.com",
       desc: "For general inquiries, UI feedback, browser compatibility issues, or partnerships.",
     },
   ];
@@ -63,7 +114,7 @@ export default function ContactPage() {
             Contact & Support
           </h1>
           <p className="text-xs sm:text-sm text-blue-100 max-w-xl mx-auto leading-relaxed">
-            Have feedback on a calculation, found a bug, or want to suggest a new tool? We'd love to hear from you.
+            Have feedback on a calculation, found a bug, or want to suggest a new tool? All inquiries are delivered directly to our support inbox.
           </p>
         </div>
       </section>
@@ -88,8 +139,13 @@ export default function ContactPage() {
                 <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
                   {dept.desc}
                 </p>
-                <div className="pt-2 text-xs font-mono text-blue-600 dark:text-blue-400 font-semibold break-all">
-                  {dept.email}
+                <div className="pt-2 text-xs font-mono">
+                  <a
+                    href={`mailto:${dept.email}`}
+                    className="text-blue-600 dark:text-blue-400 font-semibold hover:underline break-all"
+                  >
+                    {dept.email}
+                  </a>
                 </div>
               </div>
             );
@@ -104,10 +160,10 @@ export default function ContactPage() {
                 <CheckCircle2 className="h-10 w-10" />
               </div>
               <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                Message Received!
+                Message Sent Successfully!
               </h2>
               <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto leading-relaxed">
-                Thank you for reaching out. Our mathematical and technical review team will review your submission promptly.
+                Thank you for reaching out. Your message has been sent to <strong>xasvmax@gmail.com</strong>. We will review and respond promptly.
               </p>
               <div className="pt-3">
                 <button
@@ -119,9 +175,10 @@ export default function ContactPage() {
                       topic: "calculation-feedback",
                       subject: "",
                       message: "",
+                      honeypot: "",
                     });
                   }}
-                  className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors"
+                  className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors cursor-pointer"
                 >
                   Send Another Message
                 </button>
@@ -134,9 +191,27 @@ export default function ContactPage() {
                   Send Us a Message
                 </h2>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                  Fill out the form below and we will get back to you as soon as possible.
+                  Fill out the form below. Messages are delivered directly to <span className="font-semibold text-blue-600 dark:text-blue-400">xasvmax@gmail.com</span>.
                 </p>
               </div>
+
+              {errorMessage && (
+                <div className="p-3 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 shrink-0" />
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+
+              {/* Hidden spam honeypot */}
+              <input
+                type="text"
+                name="_honey"
+                value={formData.honeypot}
+                onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                style={{ display: "none" }}
+                tabIndex={-1}
+                autoComplete="off"
+              />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5 text-left">
@@ -216,14 +291,24 @@ export default function ContactPage() {
               <div className="flex items-center justify-between pt-2">
                 <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 dark:text-zinc-400">
                   <Clock className="h-3.5 w-3.5" />
-                  We typically respond within 24–48 hours.
+                  Direct response to xasvmax@gmail.com.
                 </div>
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
+                  disabled={loading}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
                 >
-                  <Send className="h-3.5 w-3.5" />
-                  Send Message
+                  {loading ? (
+                    <>
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-3.5 w-3.5" />
+                      Send Message
+                    </>
+                  )}
                 </button>
               </div>
             </form>
