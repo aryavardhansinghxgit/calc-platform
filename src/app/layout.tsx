@@ -22,6 +22,15 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "CalcPlatform - Professional Free Online Calculators",
   description: "Fast, precise, interactive calculators for finance, mortgage, loan EMI, SIP wealth, BMI health, and mathematics.",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+  },
 };
 
 export default function RootLayout({
