@@ -8,28 +8,32 @@ export const MORTGAGE_CALCULATOR: CalculatorModuleDefinition = {
   slug: "mortgage-calculator",
   category: "Finance",
   subcategory: "Mortgage and Real Estate",
-  description: "Calculate home loan payments, monthly principal & interest breakdown, property taxes, insurance, PMI, HOA fees, annual increases, extra payments, and amortization schedule.",
+  description: "Calculate monthly mortgage payments (P&I), property taxes, insurance, PMI, and HOA fees. Model extra principal payments, biweekly schedules, and view full amortization.",
   iconName: "Home",
   featured: true,
   tags: ["mortgage", "home loan", "interest", "real estate", "property tax", "pmi", "hoa", "amortization"],
-  formulaDescription: "Monthly Payment = P × [r(1 + r)^n] / [(1 + r)^n - 1] + Property Tax + Insurance + PMI + HOA + Other Costs + Extra Payments",
+  formulaDescription: "Monthly Payment = P × [r(1 + r)^n] / [(1 + r)^n - 1] + Property Tax + Insurance + PMI + HOA + (Other Costs / 12) + Extra Payments",
   ContentComponent: MortgageContentSection,
   faqs: [
     {
-      question: "How is my total monthly mortgage payment calculated?",
-      answer: "Your monthly payment consists of Principal & Interest (calculated via loan amount, interest rate, and term), plus estimated Property Tax, Home Insurance, PMI (if applicable), HOA fees, and any optional Extra Payments.",
+      question: "How is my monthly principal and interest payment calculated?",
+      answer: "Your base payment is calculated using standard fixed-rate amortization: M = P × [r(1+r)^n] / [(1+r)^n - 1], where P is loan principal, r is the monthly note rate (annual rate / 12), and n is total monthly periods.",
     },
     {
-      question: "How does making extra payments affect my mortgage?",
-      answer: "Extra payments go directly toward reducing your principal balance, which significantly decreases total interest paid over the life of the loan and shortens your mortgage payoff date.",
+      question: "What is the difference between PITI and Total Monthly Housing Outflow?",
+      answer: "PITI represents Principal, Interest, Taxes, and Insurance. Total Monthly Housing Outflow is a broader figure that adds PMI, HOA dues, maintenance reserves, and elective extra principal payments.",
     },
     {
       question: "When can Private Mortgage Insurance (PMI) be removed?",
-      answer: "PMI is required when your down payment is less than 20% (LTV > 80%). On standard conventional loans, PMI automatically terminates once your principal balance drops to 80% of the original home purchase price.",
+      answer: "Under the Homeowners Protection Act of 1998, borrowers may request PMI cancellation in writing at 80% LTV, while servicers must automatically terminate PMI at 78% LTV if payments are current.",
     },
     {
-      question: "Why should I account for annual increases in taxes and insurance?",
-      answer: "Property taxes, homeowner's insurance, and HOA dues tend to increase over time due to property re-assessments and inflation. Modeling these annual percentage increases gives you a realistic long-term budget picture.",
+      question: "How do extra principal payments shorten my mortgage term?",
+      answer: "Extra payments reduce your unpaid principal balance directly, lowering all future monthly interest calculations and extinguishing the remaining balance years ahead of schedule.",
+    },
+    {
+      question: "How does a biweekly mortgage payment program save interest?",
+      answer: "A biweekly schedule makes 26 half-payments per year (equivalent to 13 monthly payments). This extra annual payment applies directly to principal, compressing a 30-year term down to roughly 24 years.",
     },
   ],
   inputs: [

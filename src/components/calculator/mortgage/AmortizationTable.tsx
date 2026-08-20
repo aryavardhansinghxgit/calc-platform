@@ -218,7 +218,7 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="pl-8 h-9 w-full sm:w-48 text-xs bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 rounded-xl"
+              className="pl-8 h-9 w-full sm:w-48 text-xs"
             />
           </div>
 
