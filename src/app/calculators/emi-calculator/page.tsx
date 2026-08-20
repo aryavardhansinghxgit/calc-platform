@@ -5,8 +5,8 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "EMI Calculator – Equated Monthly Installment & Prepayment Analyzer",
-    description: "Calculate equated monthly installments (EMI), prepayment strategies, reducing vs flat rate comparison, and total loan interest schedules.",
+    title: "EMI Calculator – Monthly Loan Payment & Prepayment Analyzer",
+    description: "Calculate exact monthly loan payments (EMI), compare Reducing Balance vs Flat Rate interest, model extra payment savings, and analyze total borrowing costs.",
     slug: EMI_CALCULATOR.slug,
   });
 }

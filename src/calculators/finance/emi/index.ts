@@ -8,24 +8,32 @@ export const EMI_CALCULATOR: CalculatorModuleDefinition = {
   slug: "emi-calculator",
   category: "Finance",
   subcategory: "Mortgage and Real Estate",
-  description: "Calculate Equated Monthly Installment (EMI), prepayment strategies, reducing vs flat rate comparison, and total loan interest schedule.",
+  description: "Calculate exact monthly loan payments (EMI), compare Reducing Balance vs Flat Rate interest, model extra payment savings, and analyze total borrowing costs.",
   iconName: "DollarSign",
   featured: true,
-  tags: ["emi", "loan emi", "home loan emi", "car loan emi", "personal loan emi", "prepayment"],
-  formulaDescription: "EMI = P × r × (1 + r)^n / [(1 + r)^n - 1]. Supports prepayment strategies and Flat Rate vs Reducing Balance Interest methods.",
+  tags: ["emi", "loan emi", "home loan emi", "car loan emi", "personal loan emi", "prepayment", "monthly payment"],
+  formulaDescription: "EMI = P × r × (1 + r)^n / [(1 + r)^n - 1]. Compounding reducing-balance monthly debt service calculation.",
   ContentComponent: EmiContentSection,
   faqs: [
     {
-      question: "What is an EMI (Equated Monthly Installment)?",
-      answer: "EMI stands for Equated Monthly Installment, a fixed payment amount made by a borrower to a lender at a specified date each calendar month until the loan is fully paid off.",
+      question: "What is an Equated Monthly Installment (EMI)?",
+      answer: "An Equated Monthly Installment (EMI) is a fixed monthly payment made by a borrower to a lender over a designated loan term. Each installment combines principal balance repayment and accrued periodic interest charges.",
+    },
+    {
+      question: "What is the difference between an EMI and a standard monthly loan payment?",
+      answer: "There is no mathematical difference. 'EMI' is the standard term used internationally (particularly in India, the UK, and the GCC), while US lenders and consumers conventionally use 'monthly loan payment' or 'installment payment.'",
+    },
+    {
+      question: "How is a monthly loan payment calculated mathematically?",
+      answer: "It is calculated using the universal compounding annuity formula: M = P × [r(1+r)^n] / [(1+r)^n - 1], where P is principal, r is the periodic monthly interest rate (Annual Rate / 12 / 100), and n is total months.",
     },
     {
       question: "How do prepayments reduce total loan interest?",
-      answer: "Prepayments reduce your remaining loan principal balance directly. Lowering principal reduces monthly compounding interest in subsequent periods, allowing you to save money or pay off early.",
+      answer: "Extra prepayments apply directly toward reducing your unpaid principal balance. Lowering the principal balance immediately reduces future compounding interest charges in subsequent billing periods.",
     },
     {
       question: "What is the difference between Reducing Balance Rate and Flat Interest Rate?",
-      answer: "Reducing Balance Rate calculates interest only on the remaining principal balance after each EMI payment. Flat Rate calculates interest on the original starting principal for the entire loan life, resulting in significantly higher total interest.",
+      answer: "Reducing Balance Rate calculates interest only on the remaining unpaid principal balance after each monthly payment. Flat Rate calculates interest on the full original starting principal for the entire loan life, resulting in substantially higher lifetime borrowing costs.",
     },
   ],
   inputs: [
