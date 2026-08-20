@@ -49,7 +49,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { CompoundInterestContent } from "./CompoundInterestContent";
 import {
   CompoundingFrequency,
   convertInterestRate,
@@ -252,52 +251,6 @@ export function CompoundInterestCalculator() {
   return (
     <div className="space-y-8 max-w-7xl mx-auto py-2">
       {/* ==========================================
-          SECTION 1: HERO HEADER & QUICK ACTIONS
-         ========================================== */}
-      <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 space-y-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-400/30">
-              <TrendingUp className="h-3.5 w-3.5" /> Rate Conversion & Compounding Engine
-            </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-medium border border-emerald-400/30">
-              <Zap className="h-3 w-3" /> Two-Way EAR Translation
-            </span>
-          </div>
-
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-              Compound Interest Calculator
-            </h1>
-            <p className="text-xs sm:text-sm text-indigo-100/80 mt-1 max-w-3xl leading-relaxed">
-              Convert interest rates between different compounding frequencies (Daily, Monthly, Continuous, etc.), derive Effective Annual Rates (EAR/APY), compare simple vs compound growth, evaluate Rule of 72, and model continuous compounding.
-            </p>
-          </div>
-
-          {/* Badges */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 text-xs">
-            <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/15 border-white/10 gap-1.5">
-              <CheckCircle2 className="h-3 w-3 text-emerald-400" /> Multi-Frequency Rate Converter
-            </Badge>
-            <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/15 border-white/10 gap-1.5">
-              <CheckCircle2 className="h-3 w-3 text-emerald-400" /> APR vs APY Analyzer
-            </Badge>
-            <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/15 border-white/10 gap-1.5">
-              <CheckCircle2 className="h-3 w-3 text-emerald-400" /> Continuous Compounding (A=Pe^rt)
-            </Badge>
-            <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/15 border-white/10 gap-1.5">
-              <CheckCircle2 className="h-3 w-3 text-emerald-400" /> Rule of 72 Calculator
-            </Badge>
-            <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/15 border-white/10 gap-1.5">
-              <CheckCircle2 className="h-3 w-3 text-emerald-400" /> Printable PDF Executive Report
-            </Badge>
-          </div>
-        </div>
-      </div>
-
-      {/* ==========================================
           ACTION CONTROLS BAR
          ========================================== */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
@@ -464,66 +417,66 @@ export function CompoundInterestCalculator() {
 
         {/* RIGHT COLUMN: PRIMARY RESULT DASHBOARD CARD (COL 5) */}
         <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-4">
-          <div className="bg-gradient-to-br from-zinc-900 via-slate-900 to-indigo-950 text-white rounded-2xl p-6 shadow-xl border border-zinc-800 space-y-5">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <span className="text-xs uppercase font-extrabold tracking-wider text-indigo-400">
+          <div className="bg-gradient-to-br from-blue-50/90 via-white to-indigo-50/60 dark:from-slate-900 dark:via-slate-850 dark:to-indigo-950/30 text-slate-900 dark:text-slate-100 rounded-2xl p-6 shadow-xs border border-blue-200/80 dark:border-blue-900/60 space-y-5">
+            <div className="flex items-center justify-between border-b border-blue-100 dark:border-slate-800 pb-3">
+              <span className="text-xs uppercase font-extrabold tracking-wider text-blue-700 dark:text-blue-400">
                 Converted Interest Rate Output
               </span>
-              <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-400/30 text-[10px]">
+              <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-[10px]">
                 Active Yield
               </Badge>
             </div>
 
             {/* Main Converted Output */}
             <div>
-              <span className="text-xs text-zinc-400 block font-medium">
+              <span className="text-xs text-slate-500 dark:text-slate-400 block font-medium">
                 Equivalent Rate ({getFrequencyLabel(targetFrequency)})
               </span>
-              <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
+              <div className="text-3xl sm:text-4xl font-black text-blue-700 dark:text-blue-400 tracking-tight font-sans tabular-nums mt-1">
                 {conversionResult.convertedRatePercent.toFixed(5)}%
               </div>
-              <p className="text-[11px] text-indigo-200/80 mt-1 font-sans">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 font-sans">
                 Converted from {parsedRate}% {getFrequencyLabel(sourceFrequency)}
               </p>
             </div>
 
             {/* Metric Grid */}
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-white/10">
-              <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                <span className="text-[11px] text-zinc-400 block">Effective Annual Rate (EAR)</span>
-                <span className="text-base font-bold text-white font-sans tabular-nums">
+            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 block font-medium">Effective Annual Rate (EAR)</span>
+                <span className="text-base font-bold text-slate-900 dark:text-slate-100 font-sans tabular-nums">
                   {conversionResult.earPercent.toFixed(4)}%
                 </span>
               </div>
 
-              <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                <span className="text-[11px] text-zinc-400 block">Equivalent APY</span>
-                <span className="text-base font-bold text-white font-sans tabular-nums">
+              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 block font-medium">Equivalent APY</span>
+                <span className="text-base font-bold text-slate-900 dark:text-slate-100 font-sans tabular-nums">
                   {conversionResult.equivalentApyPercent.toFixed(4)}%
                 </span>
               </div>
 
-              <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                <span className="text-[11px] text-zinc-400 block">Equivalent Monthly APR</span>
-                <span className="text-base font-bold text-white font-sans tabular-nums">
+              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 block font-medium">Equivalent Monthly APR</span>
+                <span className="text-base font-bold text-slate-900 dark:text-slate-100 font-sans tabular-nums">
                   {conversionResult.equivalentAprPercent.toFixed(4)}%
                 </span>
               </div>
 
-              <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                <span className="text-[11px] text-zinc-400 block">Continuous Equivalent</span>
-                <span className="text-base font-bold text-white font-sans tabular-nums">
+              <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
+                <span className="text-[11px] text-slate-500 dark:text-slate-400 block font-medium">Continuous Equivalent</span>
+                <span className="text-base font-bold text-slate-900 dark:text-slate-100 font-sans tabular-nums">
                   {conversionResult.continuousEquivalentPercent.toFixed(4)}%
                 </span>
               </div>
             </div>
 
             {/* Insight Statement Box */}
-            <div className="p-3 rounded-xl bg-indigo-900/40 border border-indigo-500/30 text-xs text-indigo-100 space-y-1">
-              <span className="font-bold text-indigo-300 flex items-center gap-1 text-[11px]">
-                <Info className="h-3.5 w-3.5 text-indigo-400" /> Conversion Insight
+            <div className="p-3.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 text-xs text-blue-950 dark:text-blue-200 space-y-1">
+              <span className="font-bold text-blue-700 dark:text-blue-300 flex items-center gap-1 text-[11px]">
+                <Info className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Conversion Insight
               </span>
-              <p className="leading-relaxed text-[11px] opacity-90">{conversionResult.insight}</p>
+              <p className="leading-relaxed text-[11px] text-blue-900 dark:text-blue-200">{conversionResult.insight}</p>
             </div>
           </div>
         </div>
@@ -1040,11 +993,6 @@ export function CompoundInterestCalculator() {
           ))}
         </div>
       </div>
-
-      {/* ==========================================
-          SECTION 8: COMPREHENSIVE EDUCATIONAL GUIDE & 15+ FAQS
-         ========================================== */}
-      <CompoundInterestContent />
 
       {/* ==========================================
           EXECUTIVE PRINT / PDF REPORT MODAL

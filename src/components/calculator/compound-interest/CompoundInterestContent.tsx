@@ -3,813 +3,694 @@
 import React from "react";
 import Link from "next/link";
 import {
-  BookOpen,
-  HelpCircle,
   TrendingUp,
   Calculator as CalcIcon,
-  PieChart,
-  ShieldCheck,
   CheckCircle2,
+  DollarSign,
   AlertTriangle,
   ArrowRight,
+  HelpCircle,
+  Clock,
+  Layers,
+  ArrowUpRight,
+  Scale,
+  RefreshCw,
+  Flame,
+  ShieldCheck,
   Percent,
   Zap,
-  Clock,
-  DollarSign,
-  Scale,
-  Award,
-  Layers,
-  Sliders,
 } from "lucide-react";
 
 export function CompoundInterestContent() {
+  const faqList = [
+    {
+      question: "What is compound interest?",
+      answer:
+        "Compound interest is the interest calculated on the initial principal plus all accumulated interest from prior periods, allowing savings and investments to grow exponentially over time.",
+    },
+    {
+      question: "What is the mathematical compound interest formula?",
+      answer:
+        "The standard formula is A = P × (1 + r/n)^(n×t), where A is future value, P is principal, r is nominal annual interest rate as a decimal, n is compounding frequency per year, and t is years.",
+    },
+    {
+      question: "What is the difference between APR and APY?",
+      answer:
+        "In this calculator, APR is treated as the stated nominal annual rate before intra-year compounding, while APY (Annual Percentage Yield) reflects the effective annual return earned when intra-year compounding is included. Official consumer APR disclosures on loans may incorporate additional upfront fees and finance charges.",
+    },
+    {
+      question: "How does compounding frequency affect investment returns?",
+      answer:
+        "More frequent compounding (such as daily or monthly) reinvests earnings earlier, producing higher effective annual yields and larger final balances compared to annual compounding under the same nominal rate.",
+    },
+    {
+      question: "What is Effective Annual Rate (EAR)?",
+      answer:
+        "Effective Annual Rate (EAR) is the standardized annualized rate that accounts for compounding within the year (EAR = (1 + r/n)^n - 1), allowing direct comparisons between financial products with differing compounding schedules.",
+    },
+    {
+      question: "What is continuous compounding?",
+      answer:
+        "Continuous compounding represents the mathematical upper bound of compounding where interest is calculated and added constantly at every infinitely small instant using the formula A = P × e^(rt).",
+    },
+    {
+      question: "What is the Rule of 72 and how accurate is it?",
+      answer:
+        "The Rule of 72 is a mental shortcut to estimate doubling time by dividing 72 by the annual interest rate (72 / r). It is accurate within 1% error for interest rates between 5% and 10%.",
+    },
+    {
+      question: "How does simple interest differ from compound interest?",
+      answer:
+        "Simple interest calculates returns strictly on original principal (A = P × (1 + rt)), resulting in linear growth, whereas compound interest generates accelerating exponential growth.",
+    },
+    {
+      question: "Can compound interest work against borrowers on debt?",
+      answer:
+        "Yes. When unpaid interest on revolving credit lines or loans is added back to the principal or calculated on a daily periodic basis, finance charges expand if balances are not paid off promptly.",
+    },
+    {
+      question: "Is my calculation data private?",
+      answer:
+        "Yes. All computations execute 100% client-side in your web browser. No financial data, interest rates, or balances are transmitted to external servers.",
+    },
+  ];
+
   return (
-    <article className="prose dark:prose-invert max-w-none space-y-12 text-zinc-700 dark:text-zinc-300 leading-relaxed text-sm">
-      {/* ==========================================
-          H2 1: WHAT IS COMPOUND INTEREST?
-         ========================================== */}
-      <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">What Is Compound Interest?
-        </h2>
-
-        <p className="text-base font-medium text-zinc-800 dark:text-zinc-200 leading-relaxed">
-          <strong>Compound interest</strong> is the addition of interest to the principal sum of a loan or deposit—or in simpler terms, <em>interest earned on interest</em>. It is the fundamental mechanism that powers modern wealth accumulation, allowing financial assets to grow exponentially over time rather than linearly.
+    <div className="space-y-10 text-slate-800 dark:text-slate-200">
+      {/* 1. What Is Compound Interest? */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400">
+            <TrendingUp className="h-5 w-5" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            1. What Is Compound Interest?
+          </h2>
+        </div>
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+          <strong className="text-slate-900 dark:text-slate-100">Compound interest</strong> occurs when previously accumulated interest is added back to the principal sum of a deposit or loan, allowing subsequent interest calculations to be based on an expanding foundation. Compound interest can accelerate long-term capital growth because previously accrued interest can itself earn additional returns.
         </p>
 
-        <p>
-          When you place funds in a compounding financial vehicle (such as a high-yield savings account, fixed deposit, or reinvested index fund), the initial money you deposit generates an interest payout. In the subsequent period, interest is calculated not just on your initial deposit, but on your <strong>initial deposit plus all previously accumulated interest</strong>. This continuous cycle creates an accelerating snowball effect: the larger your balance becomes, the faster your interest earnings compound.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
-          <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 space-y-2">
-            <h3 className="text-sm font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">Earning Compound Interest (Wealth Generation)
-            </h3>
-            <p className="text-xs text-slate-900 dark:text-slate-100">
-              When you invest or save, compounding works continuously in your favor. Reinvesting your yield turns small regular contributions into large fortunes over multi-decade horizons in vehicles like 401(k)s, IRAs, and mutual funds.
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+          <div className="p-4 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/60 space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
+              <CheckCircle2 className="h-4 w-4" /> Earning Compound Growth (Assets)
+            </span>
+            <p className="text-xs text-slate-600 dark:text-slate-300">
+              When saving or investing, compounding operates in your favor. Reinvesting interest and dividends accelerates wealth accumulation over multi-decade horizons in cash deposit vehicles and diversified portfolios.
             </p>
           </div>
-
-          <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-50/30 border border-rose-100 dark:border-rose-900/40 space-y-2">
-            <h3 className="text-sm font-bold text-rose-900 dark:text-blue-400 flex items-center gap-1.5">Paying Compound Interest (Debt Snowball)
-            </h3>
-            <p className="text-xs text-slate-900 dark:text-slate-100">
-              When you borrow money (e.g., credit cards or revolving lines of credit), compound interest works against you. Unpaid interest is added to your principal balance, causing debt to escalate rapidly if minimum payments are missed.
+          <div className="p-4 rounded-xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/60 space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-wider text-rose-700 dark:text-rose-400 flex items-center gap-1.5">
+              <AlertTriangle className="h-4 w-4" /> Paying Compound Interest (Liabilities)
+            </span>
+            <p className="text-xs text-slate-600 dark:text-slate-300">
+              When borrowing money, compound interest increases the cost of carrying balances. If finance charges are added to unpaid principal or calculated daily, overall debt balances can escalate if payments are delayed.
             </p>
           </div>
         </div>
+      </section>
 
-        <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 pt-2">Real-World Examples of Compounding Vehicles</h3>
-        <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-900 dark:text-slate-100">
-          <li><strong>Savings Accounts & CDs:</strong> Banks pay monthly or daily compounding interest on cash deposits. Explore our <Link href="/category/finance" className="text-blue-600 font-semibold hover:underline">Savings Calculator</Link> to project high-yield savings growth.</li>
-          <li><strong>Mutual Funds & ETFs:</strong> Reinvested dividends purchase additional shares, expanding your underlying asset base automatically. Use our <Link href="/calculators/investment-calculator" className="text-blue-600 font-semibold hover:underline">Investment Calculator</Link> for equity portfolio projections.</li>
-          <li><strong>Retirement Accounts (401k / Roth IRA):</strong> Multi-decade tax-advantaged compounding builds retirement security. Try our <Link href="/calculators/retirement-calculator" className="text-blue-600 font-semibold hover:underline">Retirement Calculator</Link>.</li>
-          <li><strong>Credit Cards:</strong> Lenders charge daily compound interest on unpaid balances, driving high effective annual percentage rates (APR).</li>
-        </ul>
-
-        {/* Standard Formula Box */}
-        <div className="p-5 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 font-sans tabular-nums space-y-3 shadow-md my-4">
-          <span className="text-xs text-blue-400 font-bold uppercase tracking-wider block">Standard Compound Interest Formula</span>
-          <div className="text-xl sm:text-2xl font-black text-blue-400">
-            A = P &times; (1 + r / n)<sup>(n &times; t)</sup>
+      {/* 2. The Core Compound Interest Formula */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400">
+            <CalcIcon className="h-5 w-5" />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-zinc-300 pt-2 ">
-            <div><strong>A</strong> = Future Value (Final Accumulated Balance)</div>
-            <div><strong>P</strong> = Principal (Initial Deposit / Loan Amount)</div>
-            <div><strong>r</strong> = Nominal Annual Interest Rate (as a decimal)</div>
-            <div><strong>n</strong> = Compounding Frequency (periods per year)</div>
-            <div><strong>t</strong> = Time Horizon in Years</div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            2. The Core Compound Interest Formula
+          </h2>
+        </div>
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+          For discrete compounding schedules (daily, monthly, quarterly, semi-annually, or annually), future value is computed using the standard compound interest formula:
+        </p>
+
+        <div className="p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white font-mono text-center text-lg sm:text-xl font-bold tracking-wider shadow-md overflow-x-auto">
+          {"A = P × (1 + r / n)^(n × t)"}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 text-xs">
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="font-bold text-blue-600 dark:text-blue-400 font-mono text-sm block">A</span>
+            <span className="font-semibold text-slate-900 dark:text-slate-100 block">Future Value</span>
+            <span className="text-slate-500 text-[11px] block">Final accumulated balance</span>
+          </div>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="font-bold text-emerald-600 dark:text-emerald-400 font-mono text-sm block">P</span>
+            <span className="font-semibold text-slate-900 dark:text-slate-100 block">Initial Principal</span>
+            <span className="text-slate-500 text-[11px] block">Starting cash deposit</span>
+          </div>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="font-bold text-amber-600 dark:text-amber-400 font-mono text-sm block">r</span>
+            <span className="font-semibold text-slate-900 dark:text-slate-100 block">Annual Rate</span>
+            <span className="text-slate-500 text-[11px] block">Nominal interest as decimal</span>
+          </div>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="font-bold text-purple-600 dark:text-purple-400 font-mono text-sm block">n</span>
+            <span className="font-semibold text-slate-900 dark:text-slate-100 block">Frequency</span>
+            <span className="text-slate-500 text-[11px] block">Compounding cycles / year</span>
+          </div>
+          <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="font-bold text-cyan-600 dark:text-cyan-400 font-mono text-sm block">t</span>
+            <span className="font-semibold text-slate-900 dark:text-slate-100 block">Time Horizon</span>
+            <span className="text-slate-500 text-[11px] block">Number of years</span>
           </div>
         </div>
 
-        <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-2 text-xs">
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100">Simple Numerical Worked Example:</h4>
-          <p>
-            Suppose you deposit <strong>$1,000</strong> in a certificate of deposit paying <strong>6% annual interest</strong> compounded <strong>semi-annually (n = 2)</strong> for <strong>2 years (t = 2)</strong>.
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 space-y-2 text-xs">
+          <span className="font-bold text-slate-900 dark:text-slate-100 block">
+            Zero-Rate Case (r = 0.0%):
+          </span>
+          <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+            When the nominal interest rate is zero ($r = 0$), the formula simplifies to:
           </p>
-          <div className="font-sans tabular-nums text-blue-600 dark:text-blue-400 font-semibold">
-            A = 1,000 &times; (1 + 0.06 / 2)<sup>(2 &times; 2)</sup> = 1,000 &times; (1.03)<sup>4</sup> = 1,000 &times; 1.125508 = $1,125.51
+          <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 font-mono font-bold text-blue-600 dark:text-blue-400 text-center">
+            {"lim_{r → 0} A = P × (1 + 0)^(nt) = P"}
           </div>
-          <p className="text-slate-900">
-            Total interest earned over 2 years is <strong>$125.51</strong>, which is <strong>$5.51 more</strong> than simple interest ($120.00) because interest earned in period 1 earned additional interest in periods 2, 3, and 4.
-          </p>
-        </div>
-      </section>
-
-      {/* ==========================================
-          H2 2: HOW COMPOUND INTEREST WORKS
-         ========================================== */}
-      <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">How Compound Interest Works: Step-by-Step Breakdown
-        </h2>
-
-        <p>
-          To intuitively understand compound growth, observe how a <strong>$10,000 deposit</strong> earning <strong>8% annual interest</strong> grows over 10 consecutive years. Notice how the annual interest earned increases every single year even though you never add another dollar of fresh capital:
-        </p>
-
-        <ul className="list-disc pl-5 space-y-1.5 text-xs">
-          <li><strong>Year 1:</strong> Interest is earned on the initial $10,000 principal ($10,000 &times; 8% = $800). Ending balance: $10,800.</li>
-          <li><strong>Year 2:</strong> Interest is earned on the new balance of $10,800 ($10,800 &times; 8% = $864). Ending balance: $11,664.</li>
-          <li><strong>Year 3:</strong> Interest is earned on the new balance of $11,664 ($11,664 &times; 8% = $933.12). Ending balance: $12,597.12.</li>
-        </ul>
-
-        {/* 10-Year Year-by-Year Schedule Table */}
-        <div className="overflow-x-auto my-4">
-          <table className="w-full text-xs text-left">
-            <thead className="bg-zinc-100 dark:bg-zinc-800 font-bold text-zinc-800 dark:text-zinc-200  dark:border-zinc-700">
-              <tr>
-                <th className="p-3">Year</th>
-                <th className="p-3">Beginning Balance ($)</th>
-                <th className="p-3">Interest Earned (8% Annual)</th>
-                <th className="p-3">Ending Balance ($)</th>
-                <th className="p-3">Cumulative Growth (%)</th>
-              </tr>
-            </thead>
-            <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold font-sans">Year 1</td>
-                <td className="p-3">$10,000.00</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">+$800.00</td>
-                <td className="p-3 font-bold">$10,800.00</td>
-                <td className="p-3 text-slate-900">8.00%</td>
-              </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold font-sans">Year 2</td>
-                <td className="p-3">$10,800.00</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">+$864.00</td>
-                <td className="p-3 font-bold">$11,664.00</td>
-                <td className="p-3 text-slate-900">16.64%</td>
-              </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold font-sans">Year 3</td>
-                <td className="p-3">$11,664.00</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">+$933.12</td>
-                <td className="p-3 font-bold">$12,597.12</td>
-                <td className="p-3 text-slate-900">25.97%</td>
-              </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold font-sans">Year 4</td>
-                <td className="p-3">$12,597.12</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">+$1,007.77</td>
-                <td className="p-3 font-bold">$13,604.89</td>
-                <td className="p-3 text-slate-900">36.05%</td>
-              </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold font-sans">Year 5</td>
-                <td className="p-3">$13,604.89</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">+$1,088.39</td>
-                <td className="p-3 font-bold">$14,693.28</td>
-                <td className="p-3 text-slate-900">46.93%</td>
-              </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold font-sans">Year 6</td>
-                <td className="p-3">$14,693.28</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">+$1,175.46</td>
-                <td className="p-3 font-bold">$15,868.74</td>
-                <td className="p-3 text-slate-900">58.69%</td>
-              </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold font-sans">Year 7</td>
-                <td className="p-3">$15,868.74</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">+$1,269.50</td>
-                <td className="p-3 font-bold">$17,138.24</td>
-                <td className="p-3 text-slate-900">71.38%</td>
-              </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold font-sans">Year 8</td>
-                <td className="p-3">$17,138.24</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">+$1,371.06</td>
-                <td className="p-3 font-bold">$18,509.30</td>
-                <td className="p-3 text-slate-900">85.09%</td>
-              </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold font-sans">Year 9</td>
-                <td className="p-3">$18,509.30</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">+$1,480.74</td>
-                <td className="p-3 font-bold">$19,990.05</td>
-                <td className="p-3 text-slate-900">99.90%</td>
-              </tr>
-              <tr className="bg-blue-50/70 dark:bg-blue-50/40 hover:bg-blue-50/70 font-bold">
-                <td className="p-3 font-sans">Year 10</td>
-                <td className="p-3">$19,990.05</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">+$1,599.20</td>
-                <td className="p-3 font-bold text-blue-600 dark:text-blue-400">$21,589.25</td>
-                <td className="p-3 text-blue-600">115.89%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <p className="text-xs leading-relaxed">
-          <strong>Why the Growth Curve Steepens:</strong> In Year 1, interest generated $800. By Year 10, annual interest reached $1,599.20—nearly double the first year's payout! This exponential slope occurs because the base upon which interest is calculated grows every single year.
-        </p>
-      </section>
-
-      {/* ==========================================
-          H2 3: COMPOUND INTEREST FORMULA EXPLAINED
-         ========================================== */}
-      <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Compound Interest Formulas & Mathematical Mechanics
-        </h2>
-
-        <p>
-          Depending on your financial objective, different mathematical rearrangements of the compound interest formula are required.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
-          <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-50/30 border border-purple-100 dark:border-purple-900/40 space-y-2">
-            <span className="text-xs font-bold text-purple-900 dark:text-blue-400 block">1. Future Value Formula (FV)</span>
-            <div className="font-sans tabular-nums text-sm font-black text-blue-600 dark:text-blue-400">
-              FV = P &times; (1 + r/n)<sup>nt</sup>
-            </div>
-            <p className="text-[11px] text-slate-900 dark:text-slate-100">
-              Used to calculate what a current lump-sum investment will grow into in the future. Calculate future wealth using our <Link href="/calculators/future-value-calculator" className="text-blue-600 font-semibold hover:underline">Future Value Calculator</Link>.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-50/30 border border-indigo-100 dark:border-indigo-900/40 space-y-2">
-            <span className="text-xs font-bold text-indigo-900 dark:text-blue-400 block">2. Present Value Formula (PV)</span>
-            <div className="font-sans tabular-nums text-sm font-black text-blue-600 dark:text-blue-400">
-              PV = FV / (1 + r/n)<sup>nt</sup>
-            </div>
-            <p className="text-[11px] text-slate-900 dark:text-slate-100">
-              Used to determine how much money you must deposit today to reach a specific financial target in the future. Try our <Link href="/calculators/present-value-calculator" className="text-blue-600 font-semibold hover:underline">Present Value Calculator</Link>.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 space-y-2">
-            <span className="text-xs font-bold text-blue-900 dark:text-blue-300 block">3. CAGR / Required Return Rate</span>
-            <div className="font-sans tabular-nums text-sm font-black text-blue-700 dark:text-blue-300">
-              r = n &times; [(FV/P)<sup>1/(nt)</sup> &minus; 1]
-            </div>
-            <p className="text-[11px] text-slate-900 dark:text-slate-100">
-              Used to find the exact annual return rate needed to turn principal P into future value FV. See our <Link href="/calculators/roi-calculator" className="text-blue-600 font-semibold hover:underline">ROI Calculator</Link>.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ==========================================
-          H2 4: SIMPLE INTEREST VS COMPOUND INTEREST
-         ========================================== */}
-      <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Simple Interest vs Compound Interest: Detailed Comparison
-        </h2>
-
-        <p>
-          The distinction between simple interest and compound interest represents the difference between linear accumulation and exponential compounding.
-        </p>
-
-        {/* Detailed Feature Comparison Table */}
-        <div className="overflow-x-auto my-4">
-          <table className="w-full text-xs text-left">
-            <thead className="bg-zinc-100 dark:bg-zinc-800 font-bold text-zinc-800 dark:text-zinc-200  dark:border-zinc-700">
-              <tr>
-                <th className="p-3">Feature</th>
-                <th className="p-3">Simple Interest</th>
-                <th className="p-3">Compound Interest</th>
-              </tr>
-            </thead>
-            <tbody className=" dark:divide-zinc-800">
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold">Interest Calculation</td>
-                <td className="p-3 text-slate-900 dark:text-slate-100">Calculated strictly on the initial principal sum.</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">Calculated on principal PLUS accumulated interest.</td>
-              </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold">Growth Pattern</td>
-                <td className="p-3 text-slate-900 dark:text-slate-100">Linear growth (equal dollar amounts each year).</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">Exponential growth (accelerating annual earnings).</td>
-              </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold">Long-Term Returns</td>
-                <td className="p-3 text-slate-900 dark:text-slate-100">Substantially lower over multi-year horizons.</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">Exponentially higher over 10+ year timeframes.</td>
-              </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold">Savings Accounts</td>
-                <td className="p-3 text-slate-900 dark:text-slate-100">Rarely used in modern retail banking.</td>
-                <td className="p-3 text-blue-600 dark:text-blue-400 font-bold">Standard format for savings, CDs, and money markets.</td>
-              </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold">Loans</td>
-                <td className="p-3 text-slate-900 dark:text-slate-100">Used for short-term car loans or personal notes.</td>
-                <td className="p-3 text-slate-900 dark:text-slate-100">Used for mortgages, student loans, and credit cards.</td>
-              </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-bold">Mathematical Complexity</td>
-                <td className="p-3 font-sans tabular-nums text-slate-900">I = P &times; r &times; t</td>
-                <td className="p-3 font-sans tabular-nums text-blue-600 font-bold">A = P &times; (1 + r/n)<sup>nt</sup></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* 20-Year Comparative Worked Example */}
-        <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-50/30 border border-emerald-200 dark:border-emerald-900/40 space-y-2 text-xs">
-          <h4 className="font-bold text-emerald-900 dark:text-emerald-200 text-sm">20-Year Case Study ($10,000 at 8% Interest):</h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            <div className="p-3 rounded-lg bg-white dark:bg-zinc-900 border border-emerald-100 dark:border-emerald-900">
-              <span className="font-bold block text-zinc-700 dark:text-zinc-300">Simple Interest Result (Linear)</span>
-              <div className="font-sans tabular-nums text-base font-bold text-zinc-800 dark:text-zinc-200 mt-1">$26,000.00</div>
-              <span className="text-[11px] text-slate-900 block">$10,000 principal + $16,000 simple interest ($800/yr &times; 20)</span>
-            </div>
-
-            <div className="p-3 rounded-lg bg-white dark:bg-zinc-900 border border-emerald-300 dark:border-emerald-700">
-              <span className="font-bold block text-blue-600 dark:text-blue-400">Compound Interest Result (Monthly n=12)</span>
-              <div className="font-sans tabular-nums text-base font-black text-blue-600 dark:text-blue-400 mt-1">$49,268.03</div>
-              <span className="text-[11px] text-blue-600 dark:text-blue-400 block">$10,000 principal + $39,268.03 compound interest!</span>
-            </div>
-          </div>
-          <p className="pt-1 text-zinc-700 dark:text-zinc-300">
-            <strong>The Compounding Advantage:</strong> Compound interest generated an extra <strong>+$23,268.03 in pure wealth</strong> (+145.4% more profit) on the exact same $10,000 investment!
+          <p className="text-slate-500 text-[11px]">
+            Under a zero-percent rate assumption, total interest earned is identically $0.00, and the ending balance equals the original principal deposit. To project single lump sums under various discount rate and duration assumptions, use our{" "}
+            <Link
+              href="/calculators/future-value-calculator"
+              className="font-bold text-blue-600 dark:text-blue-400 underline hover:text-blue-700"
+            >
+              future value calculator
+            </Link>.
           </p>
         </div>
       </section>
 
-      {/* ==========================================
-          H2 5: DIFFERENT COMPOUNDING FREQUENCIES
-         ========================================== */}
-      <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Impact of Compounding Frequencies
-        </h2>
-
-        <p>
-          The compounding frequency specifies how often accrued interest is calculated and added back to the principal balance. As frequency increases, interest is reinvested earlier, generating slightly higher yields.
+      {/* 3. Step-by-Step Worked Mathematical Calculation */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400">
+            <Layers className="h-5 w-5" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            3. Step-by-Step Worked Mathematical Calculation
+          </h2>
+        </div>
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+          To illustrate discrete compounding mechanics, let us evaluate the mathematical model under a hypothetical scenario:
         </p>
 
-        {/* Frequencies Comparison Table ($10k at 8% for 10 Years) */}
-        <div className="overflow-x-auto my-4">
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs space-y-2">
+          <span className="font-bold text-slate-900 dark:text-slate-100 block">Hypothetical Model Parameters:</span>
+          <ul className="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300">
+            <li><strong>Initial Principal Deposit (P):</strong> $10,000.00</li>
+            <li><strong>Nominal Annual Interest Rate (r):</strong> 8.00% (0.08)</li>
+            <li><strong>Compounding Frequency (n):</strong> 12 (Monthly Compounding)</li>
+            <li><strong>Time Horizon (t):</strong> 20 Years (n × t = 240 monthly compounding cycles)</li>
+          </ul>
+        </div>
+
+        <div className="space-y-3">
+          <div className="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs space-y-1">
+            <strong className="text-blue-600 dark:text-blue-400 font-bold block">Step 1: Compute Periodic Monthly Rate (i)</strong>
+            <span className="font-mono text-slate-700 dark:text-slate-300 block">i = r / n = 0.08 / 12 ≈ 0.00666667 (0.6667% per month)</span>
+          </div>
+          <div className="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs space-y-1">
+            <strong className="text-blue-600 dark:text-blue-400 font-bold block">Step 2: Compute Compounding Factor (1 + i)^(n×t)</strong>
+            <span className="font-mono text-slate-700 dark:text-slate-300 block">(1 + 0.00666667)²⁴⁰ ≈ 4.92680277</span>
+          </div>
+          <div className="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs space-y-1">
+            <strong className="text-blue-600 dark:text-blue-400 font-bold block">Step 3: Solve Final Accumulated Value (A)</strong>
+            <span className="font-mono text-slate-700 dark:text-slate-300 block">
+              A = $10,000 × 4.92680277 = <strong>$49,268.03</strong>
+            </span>
+          </div>
+          <div className="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs space-y-1">
+            <strong className="text-blue-600 dark:text-blue-400 font-bold block">Step 4: Decompose Principal & Compound Earnings</strong>
+            <span className="font-mono text-slate-700 dark:text-slate-300 block">
+              Initial Principal (P) = $10,000.00 (20.3% of ending balance)
+            </span>
+            <span className="font-mono text-emerald-600 dark:text-emerald-400 font-bold block">
+              Total Compound Interest Earned = $49,268.03 − $10,000.00 = <strong>$39,268.03</strong> (Growth Multiplier: 4.93x)
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Compounding Frequency Comparison */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400">
+            <Percent className="h-5 w-5" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            4. Compounding Frequency: How Intervals Change Returns
+          </h2>
+        </div>
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+          The compounding frequency (n) specifies how often accrued interest is credited back to the principal balance during the year. Under identical starting principal (P = $10,000), annual nominal rate (r = 7.0%), and time horizon (t = 10 Years), more frequent compounding yields higher final balances due to earlier reinvestment of intermediate returns:
+        </p>
+
+        <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
           <table className="w-full text-xs text-left">
-            <thead className="bg-zinc-100 dark:bg-zinc-800 font-bold text-zinc-800 dark:text-zinc-200  dark:border-zinc-700">
+            <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold">
               <tr>
-                <th className="p-3">Compounding Frequency</th>
+                <th className="p-3">Compounding Schedule</th>
                 <th className="p-3">Periods / Year (n)</th>
-                <th className="p-3">Final Balance ($)</th>
-                <th className="p-3">Interest Earned ($)</th>
+                <th className="p-3">Final Balance (A)</th>
+                <th className="p-3">Total Interest Earned</th>
                 <th className="p-3">Effective Annual Yield (APY)</th>
               </tr>
             </thead>
-            <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-sans font-medium">Annual</td>
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-mono">
+              <tr>
+                <td className="p-3 font-semibold font-sans text-slate-900 dark:text-slate-100">Annual</td>
                 <td className="p-3">1</td>
-                <td className="p-3 font-bold">$21,589.25</td>
-                <td className="p-3 text-blue-600 font-semibold">+$11,589.25</td>
-                <td className="p-3 text-slate-900">8.0000%</td>
+                <td className="p-3">$19,671.51</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400">$9,671.51</td>
+                <td className="p-3">7.0000%</td>
               </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-sans font-medium">Semi-Annual</td>
+              <tr>
+                <td className="p-3 font-semibold font-sans text-slate-900 dark:text-slate-100">Semi-Annual</td>
                 <td className="p-3">2</td>
-                <td className="p-3 font-bold">$21,911.23</td>
-                <td className="p-3 text-blue-600 font-semibold">+$11,911.23</td>
-                <td className="p-3 text-slate-900">8.1600%</td>
+                <td className="p-3">$19,897.89</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400">$9,897.89</td>
+                <td className="p-3">7.1225%</td>
               </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-sans font-medium">Quarterly</td>
+              <tr>
+                <td className="p-3 font-semibold font-sans text-slate-900 dark:text-slate-100">Quarterly</td>
                 <td className="p-3">4</td>
-                <td className="p-3 font-bold">$22,080.40</td>
-                <td className="p-3 text-blue-600 font-semibold">+$12,080.40</td>
-                <td className="p-3 text-slate-900">8.2432%</td>
+                <td className="p-3">$20,015.97</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400">$10,015.97</td>
+                <td className="p-3">7.1859%</td>
               </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-sans font-medium">Monthly</td>
+              <tr>
+                <td className="p-3 font-semibold font-sans text-slate-900 dark:text-slate-100">Monthly</td>
                 <td className="p-3">12</td>
-                <td className="p-3 font-bold">$22,196.40</td>
-                <td className="p-3 text-blue-600 font-semibold">+$12,196.40</td>
-                <td className="p-3 text-slate-900">8.2999%</td>
+                <td className="p-3">$20,096.61</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400">$10,096.61</td>
+                <td className="p-3">7.2290%</td>
               </tr>
-              <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
-                <td className="p-3 font-sans font-medium">Daily</td>
+              <tr>
+                <td className="p-3 font-semibold font-sans text-slate-900 dark:text-slate-100">Bi-Weekly</td>
+                <td className="p-3">26</td>
+                <td className="p-3">$20,118.59</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400">$10,118.59</td>
+                <td className="p-3">7.2386%</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-semibold font-sans text-slate-900 dark:text-slate-100">Weekly</td>
+                <td className="p-3">52</td>
+                <td className="p-3">$20,128.05</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400">$10,128.05</td>
+                <td className="p-3">7.2458%</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-semibold font-sans text-slate-900 dark:text-slate-100">Daily</td>
                 <td className="p-3">365</td>
-                <td className="p-3 font-bold">$22,253.46</td>
-                <td className="p-3 text-blue-600 font-semibold">+$12,253.46</td>
-                <td className="p-3 text-slate-900">8.3278%</td>
+                <td className="p-3 font-bold text-blue-600 dark:text-blue-400">$20,136.18</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400 font-bold">$10,136.18</td>
+                <td className="p-3 font-bold">7.2501%</td>
               </tr>
-              <tr className="bg-blue-50/70 dark:bg-blue-50/40 hover:bg-blue-50/70 font-bold">
-                <td className="p-3 font-sans">Continuous (A = Pe^rt)</td>
-                <td className="p-3">&infin;</td>
-                <td className="p-3 text-amber-900 dark:text-amber-100">$22,255.41</td>
-                <td className="p-3 text-blue-600 font-bold">+$12,255.41</td>
-                <td className="p-3 text-blue-600">8.3287%</td>
+              <tr>
+                <td className="p-3 font-semibold font-sans text-slate-900 dark:text-slate-100">Continuous</td>
+                <td className="p-3">∞</td >
+                <td className="p-3 font-bold text-emerald-600 dark:text-emerald-400">$20,137.53</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400 font-bold">$10,137.53</td>
+                <td className="p-3 font-bold">7.2508%</td>
               </tr>
             </tbody>
           </table>
         </div>
-      </section>
-
-      {/* ==========================================
-          H2 6: APR VS APY
-         ========================================== */}
-      <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">APR vs. APY: Knowing the Crucial Difference
-        </h2>
-
-        <p>
-          Financial institutions frequently quote interest rates using two distinct metrics: <strong>APR (Annual Percentage Rate)</strong> and <strong>APY (Annual Percentage Yield)</strong>. Understanding the difference is vital when comparing loans or investment products.
+        <p className="text-xs text-slate-500">
+          Under the stated assumptions, increasing compounding frequency from Annual to Monthly produces an extra <strong>+$425.10</strong> in interest. Increasing from Daily to Continuous adds only <strong>+$1.35</strong> over 10 years, demonstrating asymptotic diminishing returns.
         </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
-          <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 space-y-2">
-            <h3 className="text-sm font-bold text-blue-900 dark:text-blue-300">APR (Annual Percentage Rate)</h3>
-            <p className="text-xs text-slate-900 dark:text-slate-100">
-              The stated nominal annual rate. It does NOT reflect intra-year compounding. Lenders prefer quoting APR on credit cards and mortgages because it makes borrowing rates appear lower.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-50/30 border border-purple-100 dark:border-purple-900/40 space-y-2">
-            <h3 className="text-sm font-bold text-purple-900 dark:text-blue-400">APY (Annual Percentage Yield)</h3>
-            <p className="text-xs text-slate-900 dark:text-slate-100">
-              The effective annual return including compounding. Banks quote APY on savings accounts and CDs because intra-year compounding makes return yields appear higher.
-            </p>
-          </div>
-        </div>
-
-        <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 font-sans tabular-nums space-y-2 text-xs">
-          <span className="text-blue-400 font-bold">APY Conversion Formula:</span>
-          <div className="text-base font-bold text-blue-400">
-            APY = (1 + APR / n)<sup>n</sup> &minus; 1
-          </div>
-          <p className="text-zinc-400 text-[11px]">
-            Example: A credit card charging 12% APR with monthly compounding (n = 12) has an effective APY of:
-            <br />
-            (1 + 0.12/12)<sup>12</sup> &minus; 1 = (1.01)<sup>12</sup> &minus; 1 = <strong>12.6825%</strong>.
-          </p>
-        </div>
       </section>
 
-      {/* ==========================================
-          H2 7: EFFECTIVE ANNUAL RATE (EAR)
-         ========================================== */}
-      <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Effective Annual Rate (EAR)
-        </h2>
-
-        <p>
-          <strong>Effective Annual Rate (EAR)</strong>—mathematically equivalent to APY—is the universal benchmark used in corporate finance and quantitative banking to evaluate the true annual cost of debt or return on investments across mismatched compounding schedules.
+      {/* 5. APR vs. APY & Rate Conversion */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400">
+            <Scale className="h-5 w-5" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            5. APR vs. APY & Effective Annual Rate (EAR)
+          </h2>
+        </div>
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+          Financial institutions utilize distinct interest rate metrics depending on whether products involve borrowing or depositing funds:
         </p>
-
-        {/* EAR Table for 10% APR */}
-        <div className="overflow-x-auto my-4">
-          <table className="w-full text-xs text-left">
-            <thead className="bg-zinc-100 dark:bg-zinc-800 font-bold text-zinc-800 dark:text-zinc-200  dark:border-zinc-700">
-              <tr>
-                <th className="p-3">Nominal Rate (APR)</th>
-                <th className="p-3">Compounding Schedule</th>
-                <th className="p-3">Effective Annual Rate (EAR / APY)</th>
-                <th className="p-3">Effective Yield Increase</th>
-              </tr>
-            </thead>
-            <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
-              <tr>
-                <td className="p-3 font-sans">10.00%</td>
-                <td className="p-3 font-sans">Annual (n = 1)</td>
-                <td className="p-3 font-bold text-zinc-800 dark:text-zinc-200">10.0000%</td>
-                <td className="p-3 text-zinc-400">Baseline</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-sans">10.00%</td>
-                <td className="p-3 font-sans">Semi-Annual (n = 2)</td>
-                <td className="p-3 font-bold text-zinc-800 dark:text-zinc-200">10.2500%</td>
-                <td className="p-3 text-blue-600">+0.2500%</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-sans">10.00%</td>
-                <td className="p-3 font-sans">Quarterly (n = 4)</td>
-                <td className="p-3 font-bold text-zinc-800 dark:text-zinc-200">10.3813%</td>
-                <td className="p-3 text-blue-600">+0.3813%</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-sans">10.00%</td>
-                <td className="p-3 font-sans">Monthly (n = 12)</td>
-                <td className="p-3 font-bold text-zinc-800 dark:text-zinc-200">10.4713%</td>
-                <td className="p-3 text-blue-600">+0.4713%</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-sans">10.00%</td>
-                <td className="p-3 font-sans">Daily (n = 365)</td>
-                <td className="p-3 font-bold text-zinc-800 dark:text-zinc-200">10.5156%</td>
-                <td className="p-3 text-blue-600">+0.5156%</td>
-              </tr>
-              <tr className="bg-blue-50/70 dark:bg-blue-50/40 font-bold">
-                <td className="p-3 font-sans">10.00%</td>
-                <td className="p-3 font-sans">Continuous</td>
-                <td className="p-3 font-bold text-blue-600 dark:text-blue-400">10.5171%</td>
-                <td className="p-3 text-blue-600">+0.5171%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* ==========================================
-          H2 8: THE POWER OF COMPOUND INTEREST OVER TIME
-         ========================================== */}
-      <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Time Horizon: The Single Most Dominant Factor
-        </h2>
-
-        <p>
-          While principal and interest rates matter, <strong>time horizon is the exponential variable</strong> in compound growth. Doubling your investment horizon doesn't double your return—it quadruples or octuples it!
-        </p>
-
-        {/* Growth over 5, 10, 20, 30, 40 years ($5k at 8%) */}
-        <div className="overflow-x-auto my-4">
-          <table className="w-full text-xs text-left">
-            <thead className="bg-zinc-100 dark:bg-zinc-800 font-bold text-zinc-800 dark:text-zinc-200  dark:border-zinc-700">
-              <tr>
-                <th className="p-3">Time Horizon</th>
-                <th className="p-3">Initial Deposit ($)</th>
-                <th className="p-3">Final Accumulated Balance ($)</th>
-                <th className="p-3">Total Interest Earned ($)</th>
-                <th className="p-3">Growth Multiplier</th>
-              </tr>
-            </thead>
-            <tbody className=" dark:divide-zinc-800 font-sans tabular-nums">
-              <tr>
-                <td className="p-3 font-bold font-sans">5 Years</td>
-                <td className="p-3">$5,000.00</td>
-                <td className="p-3 font-bold">$7,346.64</td>
-                <td className="p-3 text-blue-600">+$2,346.64</td>
-                <td className="p-3 text-slate-900">1.47x</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-bold font-sans">10 Years</td>
-                <td className="p-3">$5,000.00</td>
-                <td className="p-3 font-bold">$10,794.62</td>
-                <td className="p-3 text-blue-600">+$5,794.62</td>
-                <td className="p-3 text-slate-900">2.16x</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-bold font-sans">20 Years</td>
-                <td className="p-3">$5,000.00</td>
-                <td className="p-3 font-bold">$23,304.79</td>
-                <td className="p-3 text-blue-600">+$18,304.79</td>
-                <td className="p-3 text-slate-900">4.66x</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-bold font-sans">30 Years</td>
-                <td className="p-3">$5,000.00</td>
-                <td className="p-3 font-bold">$50,313.28</td>
-                <td className="p-3 text-blue-600">+$45,313.28</td>
-                <td className="p-3 text-slate-900">10.06x</td>
-              </tr>
-              <tr className="bg-blue-50/70 dark:bg-blue-950/40 font-bold">
-                <td className="p-3 font-sans">40 Years</td>
-                <td className="p-3">$5,000.00</td>
-                <td className="p-3 text-blue-700 dark:text-blue-300">$108,622.61</td>
-                <td className="p-3 text-blue-600 font-bold">+$103,622.61</td>
-                <td className="p-3 text-blue-600">21.72x</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* ==========================================
-          H2 9: RETIREMENT PLANNING
-         ========================================== */}
-      <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Compound Interest & Retirement Planning
-        </h2>
-
-        <p>
-          Retirement plans like 401(k)s, Traditional IRAs, and Roth IRAs utilize regular monthly contributions coupled with tax-free or tax-deferred compounding. Calculate monthly contribution trajectories using our <Link href="/calculators/sip-calculator" className="text-blue-600 font-semibold hover:underline">SIP Calculator</Link> or <Link href="/calculators/fd-calculator" className="text-blue-600 font-semibold hover:underline">FD Calculator</Link>.
-        </p>
-
-        <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-50/30 border border-emerald-200 dark:border-emerald-900/40 space-y-2 text-xs">
-          <h4 className="font-bold text-emerald-900 dark:text-emerald-200 text-sm">The Power of $300/Month from Age 25 to 65:</h4>
-          <p className="text-zinc-700 dark:text-zinc-300">
-            If an investor contributes <strong>$300 per month</strong> into a low-cost index fund earning an average <strong>8% annual return</strong> over 40 years:
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-sans tabular-nums pt-1">
-            <div className="p-2 rounded bg-white dark:bg-zinc-900">
-              <span className="text-[10px] text-slate-900 block">Total Out-of-Pocket:</span>
-              <span className="font-bold">$144,000</span>
-            </div>
-            <div className="p-2 rounded bg-white dark:bg-zinc-900">
-              <span className="text-[10px] text-slate-900 block">Total Interest Earned:</span>
-              <span className="font-bold text-blue-600">+$905,181</span>
-            </div>
-            <div className="p-2 rounded bg-emerald-600 text-white font-bold">
-              <span className="text-[10px] text-emerald-200 block">Final Nest Egg:</span>
-              <span>$1,049,181</span>
-            </div>
-          </div>
-          <p className="text-slate-900 dark:text-slate-100 pt-1">
-            Over <strong>86% of the final million-dollar balance</strong> consists of pure compound interest!
-          </p>
-        </div>
-      </section>
-
-      {/* ==========================================
-          H2 10: COMPOUND INTEREST IN LOANS & DEBT
-         ========================================== */}
-      <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">The Dark Side: Compound Interest in Loans & Debt
-        </h2>
-
-        <p>
-          While compounding is an investor's greatest ally, it is a borrower's heaviest burden. Credit cards compound interest <strong>daily</strong> on revolving balances. If you make only minimum monthly payments, your payment primarily covers daily interest charges, leaving the principal balance virtually untouched.
-        </p>
-
-        <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">Strategies to Prevent Debt Compounding:</h3>
-        <ul className="list-disc pl-5 space-y-1 text-xs text-slate-900 dark:text-slate-100">
-          <li><strong>Pay Credit Card Balances in Full:</strong> Avoid revolving balances to prevent daily compound interest charges.</li>
-          <li><strong>Use the Debt Avalanche Method:</strong> Target extra payments toward loans with the highest APY first.</li>
-          <li><strong>Make Extra Principal Payments:</strong> Accelerating principal reduction curtails future interest compounding.</li>
-        </ul>
-      </section>
-
-      {/* ==========================================
-          H2 11: FACTORS THAT AFFECT COMPOUND GROWTH
-         ========================================== */}
-      <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">5 Key Factors Affecting Compound Growth
-        </h2>
-
-        <ol className="list-decimal pl-5 space-y-2 text-xs">
-          <li><strong>Initial Principal ($P$):</strong> The starting seed capital. Higher initial deposits provide a larger base for period 1 compounding.</li>
-          <li><strong>Interest Rate ($r$):</strong> The rate of return. Small increases in interest rate yield dramatic non-linear compounding gains over multi-decade spans.</li>
-          <li><strong>Time Horizon ($t$):</strong> The single most dominant factor. Exponential acceleration requires time to mature.</li>
-          <li><strong>Compounding Frequency ($n$):</strong> Daily vs monthly vs annual compounding schedules. More frequent intervals increase effective APY.</li>
-          <li><strong>Additional Contributions ($PMT$):</strong> Regular monthly or annual additions inject fresh principal, compounding alongside existing balances.</li>
-        </ol>
-      </section>
-
-      {/* ==========================================
-          H2 12: COMMON MISTAKES INVESTORS MAKE
-         ========================================== */}
-      <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">6 Common Mistakes That Severely Undermine Compounding
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1">
-            <h4 className="font-bold text-zinc-800 dark:text-zinc-200">1. Delaying the Start Date</h4>
-            <p className="text-slate-900 dark:text-slate-100">Waiting 10 years to start investing can reduce your final retirement balance by over 50% due to lost compounding years.</p>
-          </div>
-
-          <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1">
-            <h4 className="font-bold text-zinc-800 dark:text-zinc-200">2. Ignoring High Management Fees</h4>
-            <p className="text-slate-900 dark:text-slate-100">A 2% annual expense ratio erodes compounding returns significantly over 30 years compared to low-cost index funds (0.05%).</p>
-          </div>
-
-          <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1">
-            <h4 className="font-bold text-zinc-800 dark:text-zinc-200">3. Premature Cash Withdrawals</h4>
-            <p className="text-slate-900 dark:text-slate-100">Cashing out investment dividends or retirement accounts breaks the continuous compounding cycle.</p>
-          </div>
-
-          <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-1">
-            <h4 className="font-bold text-zinc-800 dark:text-zinc-200">4. Confusing APR with APY</h4>
-            <p className="text-slate-900 dark:text-slate-100">Failing to evaluate the effective annual rate (EAR) when comparing loan offers or savings accounts.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* ==========================================
-          H2 13: TIPS TO MAXIMIZE COMPOUND GROWTH
-         ========================================== */}
-      <section className="space-y-4 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Actionable Strategies to Maximize Compound Growth
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div className="p-3 rounded-lg bg-blue-50/60 dark:bg-blue-50/30 border border-emerald-100 dark:border-emerald-900/40 flex items-start gap-2">
-            <CheckCircle2 className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
-            <span><strong>Start Immediately:</strong> Time in the market beats timing the market.</span>
-          </div>
-
-          <div className="p-3 rounded-lg bg-blue-50/60 dark:bg-blue-50/30 border border-emerald-100 dark:border-emerald-900/40 flex items-start gap-2">
-            <CheckCircle2 className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
-            <span><strong>Automate Reinvestment:</strong> Enable DRIP (Dividend Reinvestment Plans) on stocks and mutual funds.</span>
-          </div>
-
-          <div className="p-3 rounded-lg bg-blue-50/60 dark:bg-blue-50/30 border border-emerald-100 dark:border-emerald-900/40 flex items-start gap-2">
-            <CheckCircle2 className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
-            <span><strong>Escalate Contributions:</strong> Increase your monthly deposit rate by 1% to 2% every year.</span>
-          </div>
-
-          <div className="p-3 rounded-lg bg-blue-50/60 dark:bg-blue-50/30 border border-emerald-100 dark:border-emerald-900/40 flex items-start gap-2">
-            <CheckCircle2 className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
-            <span><strong>Minimize Investment Fees:</strong> Choose low-cost index funds and ETFs.</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ==========================================
-          H2 14: FREQUENTLY ASKED QUESTIONS (FAQ)
-         ========================================== */}
-      <section className="space-y-6 bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <h2 className="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400 flex items-center gap-2  dark:border-zinc-800 pb-3">Frequently Asked Questions (15+ Comprehensive FAQs)
-        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">1. What is compound interest?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              Compound interest is interest calculated on both the initial principal deposit and all cumulative interest earned from prior periods.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
+            <strong className="text-slate-900 dark:text-slate-100 block font-semibold">Nominal Rate / Mathematical APR:</strong>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              The stated annual percentage rate before intra-year compounding is applied. In this calculator, APR is treated as a nominal rate ($r$) for mathematical compounding comparisons. Official consumer APR disclosures on loans under the Truth in Lending Act (TILA) may incorporate additional finance charges or origination fees.
+            </p>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
+            <strong className="text-slate-900 dark:text-slate-100 block font-semibold">Annual Percentage Yield (APY) & EAR:</strong>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              The standardized effective annual rate reflecting intra-year compounding over a 365-day year:
+            </p>
+            <div className="p-2 rounded-lg bg-white dark:bg-slate-900 font-mono text-center font-bold text-blue-600 dark:text-blue-400">
+              {"APY = (1 + APR / n)ⁿ − 1"}
+            </div>
+            <p className="text-[11px] text-slate-500">
+              Under the US Truth in Savings Act (TISA), banks disclose APY on deposit products so consumers can compare accounts with differing compounding schedules.
+            </p>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/60 text-xs leading-relaxed text-blue-950 dark:text-blue-200 space-y-1">
+          <strong className="block font-semibold">Rate Conversion Mathematics:</strong>
+          <span>
+            A <strong>6.00% nominal rate with monthly compounding</strong> generates an Effective Annual Rate (EAR) of <strong>6.16778%</strong>. The mathematically equivalent nominal daily-compounded rate is <strong>5.98554%</strong> under the stated assumptions.
+          </span>
+        </div>
+      </section>
+
+      {/* 6. Continuous Compounding & Rule of 72 */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400">
+            <Zap className="h-5 w-5" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            6. Continuous Compounding & The Rule of 72
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
+            <strong className="text-slate-900 dark:text-slate-100 block font-semibold">Continuous Compounding (A = P eʳᵗ):</strong>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              For a fixed nominal interest rate, continuous compounding represents the mathematical limiting value of increasingly frequent discrete compounding as $n$ approaches infinity.
+            </p>
+            <p className="text-[11px] text-slate-500">
+              Hypothetical model: $5,000 at 6.5% over 5 years yields <strong>$6,920.15</strong> (+$1,920.15 interest, 1.3840x multiplier).
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">2. How is compound interest calculated?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              It is calculated using the formula A = P(1 + r/n)^(nt), where P is principal, r is rate, n is compounding frequency, and t is time in years.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
+            <strong className="text-slate-900 dark:text-slate-100 block font-semibold">Rule of 72 Doubling Approximation:</strong>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Estimates doubling time via $T \approx 72 / r$. For an 8% return, Rule of 72 estimates <strong>9.00 years</strong> vs. exact logarithmic doubling of <strong>9.01 years</strong> (0.07% error).
             </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">3. What is the difference between APR and APY?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              APR is the stated nominal rate without compounding, while APY reflects the true effective annual rate including intra-year compounding.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">4. What compounding frequency is best for investors?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              Higher compounding frequencies (such as daily or continuous) maximize returns because earnings are reinvested earlier.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">5. Can compound interest make you rich?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              Yes. Consistent monthly deposits combined with 20 to 40 years of compound growth are responsible for building self-made retirement millionaires.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">6. How does compound interest affect debt and loans?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              On loans like credit cards, unpaid interest compounds daily, causing total balances to multiply rapidly if only minimum payments are made.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">7. What is Effective Annual Rate (EAR)?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              EAR is the standardized annual return metric that accounts for intra-year compounding, allowing fair comparisons across different compounding frequencies.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">8. How does inflation affect compound interest growth?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              Inflation reduces real purchasing power. Real return equals nominal compound return minus the inflation rate.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">9. What is continuous compounding?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              Continuous compounding assumes interest is calculated and added constantly at every infinitely small instant using A = Pe^(rt).
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">10. How much can $10,000 grow in 20 years at 8%?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              $10,000 grows to $46,609 under annual compounding and $49,268 under monthly compounding at 8% over 20 years.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">11. What is the Rule of 72?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              A quick mental rule to estimate how many years it takes to double your money by dividing 72 by the annual return percentage (72 / r).
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">12. Do savings accounts compound daily or monthly?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              Most high-yield savings accounts compound interest daily and credit it to your account on the last day of each month.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">13. Is simple interest ever better than compound interest?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              For borrowers, simple interest is vastly superior because debt does not snowball. For investors, compound interest is always better.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">14. What is the difference between nominal and effective rate?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              The nominal rate is the stated annual percentage without intra-year compounding, while the effective rate is the actual rate earned including compounding.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 space-y-1.5">
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">15. How do taxes affect compound interest returns?</h3>
-            <p className="text-slate-900 dark:text-slate-100">
-              Taxes on annual interest payments reduce the compounding base each year unless funds are held in tax-deferred or tax-free accounts like 401(k)s or Roth IRAs.
+            <p className="text-[11px] text-slate-500">
+              The Rule of 69.3 ($69.3 / r$) provides closer estimates for continuous compounding or rates under 5%.
             </p>
           </div>
         </div>
       </section>
-    </article>
+
+      {/* 7. Simple vs. Compound Interest Growth */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400">
+            <Clock className="h-5 w-5" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            7. Simple vs. Compound Interest: 30-Year Comparison
+          </h2>
+        </div>
+        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+          Simple interest calculates returns strictly on the initial deposit ($A = P(1+rt)$), whereas compound interest reinvests earnings ($A = P(1+r/12)^(12×t)$):
+        </p>
+
+        <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+          <table className="w-full text-xs text-left">
+            <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold">
+              <tr>
+                <th className="p-3">Milestone ($10,000 at 8% Annual Rate)</th>
+                <th className="p-3">Simple Interest Balance</th>
+                <th className="p-3">Compound Balance (Monthly)</th>
+                <th className="p-3">Compounding Advantage (Bonus)</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-mono">
+              <tr>
+                <td className="p-3 font-semibold font-sans text-slate-900 dark:text-slate-100">Year 1</td>
+                <td className="p-3">$10,800.00</td>
+                <td className="p-3">$10,830.00</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400 font-bold">+$30.00</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-semibold font-sans text-slate-900 dark:text-slate-100">Year 5</td>
+                <td className="p-3">$14,000.00</td>
+                <td className="p-3">$14,898.46</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400 font-bold">+$898.46</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-semibold font-sans text-slate-900 dark:text-slate-100">Year 10</td>
+                <td className="p-3">$18,000.00</td>
+                <td className="p-3">$22,196.40</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400 font-bold">+$4,196.40</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-semibold font-sans text-slate-900 dark:text-slate-100">Year 20</td>
+                <td className="p-3">$26,000.00</td>
+                <td className="p-3">$49,268.03</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400 font-bold">+$23,268.03</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-semibold font-sans text-slate-900 dark:text-slate-100">Year 30</td>
+                <td className="p-3">$34,000.00</td>
+                <td className="p-3 font-bold text-blue-600 dark:text-blue-400">$109,357.30</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400 font-bold">+$75,357.30</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* 8. Practical Applications in Personal Finance */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400">
+            <DollarSign className="h-5 w-5" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            8. Practical Applications in Personal Finance
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
+            <strong className="text-slate-900 dark:text-slate-100 block font-semibold">Savings Accounts & CDs:</strong>
+            <p className="text-slate-600 dark:text-slate-300">
+              Commercial bank products differ in APY, compounding conventions, minimum balances, and early-withdrawal penalties. To model term deposit growth, evaluate our{" "}
+              <Link
+                href="/calculators/cd-calculator"
+                className="font-bold text-blue-600 dark:text-blue-400 underline hover:text-blue-700"
+              >
+                CD calculator
+              </Link>{" "}
+              or plan cash reserves with our{" "}
+              <Link
+                href="/calculators/savings-calculator"
+                className="font-bold text-blue-600 dark:text-blue-400 underline hover:text-blue-700"
+              >
+                savings calculator
+              </Link>.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
+            <strong className="text-slate-900 dark:text-slate-100 block font-semibold">Credit Cards & Debt:</strong>
+            <p className="text-slate-600 dark:text-slate-300">
+              Credit-card interest calculations depend on the issuer and cardholder agreement. Many U.S. issuers use daily periodic rates or average-daily-balance methods. To estimate payoff timelines, use our{" "}
+              <Link
+                href="/calculators/credit-card-payoff-calculator"
+                className="font-bold text-blue-600 dark:text-blue-400 underline hover:text-blue-700"
+              >
+                credit card payoff calculator
+              </Link>.
+            </p>
+          </div>
+        </div>
+
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-xs space-y-2">
+          <strong className="text-slate-900 dark:text-slate-100 block font-semibold">
+            Hypothetical Ordinary-Annuity Model ($300/Month from Age 25 to 65 at 8% Return):
+          </strong>
+          <p className="text-slate-600 dark:text-slate-300">
+            Consider an illustrative investor contributing $300/month for 40 years under a constant 8.0% annual return assumption compounded monthly:
+          </p>
+          <ul className="list-disc pl-5 space-y-0.5 text-slate-600 dark:text-slate-300 font-mono">
+            <li>Total Out-of-Pocket Deposits: <strong>$144,000.00</strong></li>
+            <li>Projected Ending Value: <strong>$1,049,181.18</strong></li>
+            <li>Total Compound Earnings: <strong>$905,181.18</strong> (86.3% of the ending balance)</li>
+          </ul>
+          <p className="text-[11px] text-slate-500">
+            *Assumed modeling parameter only; past performance does not guarantee future results. For retirement planning, explore our{" "}
+            <Link
+              href="/calculators/retirement-calculator"
+              className="font-bold text-blue-600 dark:text-blue-400 underline hover:text-blue-700"
+            >
+              retirement calculator
+            </Link>{" "}
+            and{" "}
+            <Link
+              href="/calculators/sip-calculator"
+              className="font-bold text-blue-600 dark:text-blue-400 underline hover:text-blue-700"
+            >
+              SIP calculator
+            </Link>.
+          </p>
+        </div>
+
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-xs space-y-1.5">
+          <strong className="text-slate-900 dark:text-slate-100 block font-semibold">
+            Scenario-Specific Fee Drag ($100,000 Principal over 30 Years at 7% Gross Return):
+          </strong>
+          <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+            At a 0.0% fee, the balance grows to <strong>$761,225.50</strong>. After a 1.0% annual management fee (6.0% net return), the balance reaches <strong>$574,349.12</strong>, representing a cumulative fee drag of <strong>$186,876.38</strong>.
+          </p>
+        </div>
+      </section>
+
+      {/* 9. Related Financial Calculators */}
+      <section className="space-y-4 pt-2">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400">
+            <ArrowUpRight className="h-5 w-5" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            9. Explore Related Financial Calculators
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+          <Link
+            href="/calculators/future-value-calculator"
+            className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-all flex items-center justify-between group"
+          >
+            <div>
+              <span className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 block">
+                Future Value Calculator
+              </span>
+              <span className="text-slate-500 text-[11px]">Time-value-of-money projections</span>
+            </div>
+            <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-500 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+          <Link
+            href="/calculators/investment-calculator"
+            className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-all flex items-center justify-between group"
+          >
+            <div>
+              <span className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 block">
+                Investment Calculator
+              </span>
+              <span className="text-slate-500 text-[11px]">Multi-asset portfolio modeling</span>
+            </div>
+            <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-500 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+          <Link
+            href="/calculators/savings-calculator"
+            className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-all flex items-center justify-between group"
+          >
+            <div>
+              <span className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 block">
+                Savings Calculator
+              </span>
+              <span className="text-slate-500 text-[11px]">Cash savings accumulation</span>
+            </div>
+            <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-500 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+          <Link
+            href="/calculators/sip-calculator"
+            className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-all flex items-center justify-between group"
+          >
+            <div>
+              <span className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 block">
+                SIP Calculator
+              </span>
+              <span className="text-slate-500 text-[11px]">Monthly recurring contributions</span>
+            </div>
+            <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-500 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+          <Link
+            href="/calculators/retirement-calculator"
+            className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-all flex items-center justify-between group"
+          >
+            <div>
+              <span className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 block">
+                Retirement Calculator
+              </span>
+              <span className="text-slate-500 text-[11px]">Nest egg and income targets</span>
+            </div>
+            <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-500 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+          <Link
+            href="/calculators/cagr-calculator"
+            className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-all flex items-center justify-between group"
+          >
+            <div>
+              <span className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 block">
+                CAGR Calculator
+              </span>
+              <span className="text-slate-500 text-[11px]">Annualized growth rate analysis</span>
+            </div>
+            <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-500 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+          <Link
+            href="/calculators/cd-calculator"
+            className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-all flex items-center justify-between group"
+          >
+            <div>
+              <span className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 block">
+                CD Calculator
+              </span>
+              <span className="text-slate-500 text-[11px]">Certificate of deposit returns</span>
+            </div>
+            <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-500 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+          <Link
+            href="/calculators/credit-card-payoff-calculator"
+            className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/30 transition-all flex items-center justify-between group"
+          >
+            <div>
+              <span className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 block">
+                Credit Card Payoff Calculator
+              </span>
+              <span className="text-slate-500 text-[11px]">Revolving debt payoff schedules</span>
+            </div>
+            <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-blue-500 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </div>
+      </section>
+
+      {/* 10. Frequently Asked Questions */}
+      <section className="space-y-4 pt-2">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400">
+            <HelpCircle className="h-5 w-5" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+            10. Frequently Asked Questions
+          </h2>
+        </div>
+        <div className="space-y-3">
+          {faqList.map((faq, idx) => (
+            <div
+              key={idx}
+              className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5"
+            >
+              <h3 className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                {faq.question}
+              </h3>
+              <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+                {faq.answer}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 11. Methodology & Privacy Disclaimer */}
+      <section className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 text-[11px] leading-relaxed text-slate-500 space-y-1.5">
+        <strong className="block font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+          <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+          Client-Side Privacy & Mathematical Methodology:
+        </strong>
+        <p>
+          All computations execute 100% client-side in your web browser using standard IEEE 754 floating-point equations. No financial inputs, interest rates, or balances are stored or transmitted to external servers. This calculator is provided for educational and mathematical scenario modeling only and does not constitute financial advice, banking recommendations, or a guarantee of investment returns. Past historical performance does not guarantee future results.
+        </p>
+      </section>
+    </div>
   );
 }
+
+export default CompoundInterestContent;
