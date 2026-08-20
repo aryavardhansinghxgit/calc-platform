@@ -459,40 +459,43 @@ Payoff Date: ${loanResults.payoffDateStr}`;
 
           {/* Results Panel (6 Cols) */}
           <div className="lg:col-span-6 space-y-4">
-            <div className="rounded-2xl p-6 shadow-md text-white relative overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950">
+            <div className="rounded-2xl p-6 shadow-sm border border-blue-100 dark:border-zinc-800 relative overflow-hidden bg-gradient-to-br from-blue-50/80 via-indigo-50/40 to-slate-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-900 text-zinc-900 dark:text-zinc-100">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs uppercase tracking-wider font-bold text-white/80">
+                <span className="text-xs uppercase tracking-wider font-bold text-zinc-500 dark:text-zinc-400">
                   MONTHLY PAYMENT
                 </span>
                 <div className="flex gap-2">
-                  
                   <Button
                     type="button"
                     size="sm"
                     onClick={() => setIsReportOpen(true)}
-                    className="h-7 text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold cursor-pointer"
+                    className="h-7 text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-semibold cursor-pointer shadow-xs"
                   >
                     <Printer className="h-3 w-3 mr-1" /> PDF Report
                   </Button>
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-sans tabular-nums mb-2">
+              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-indigo-600 dark:text-indigo-400 font-sans tabular-nums mb-2">
                 {fmt(loanResults.monthlyPayment)}
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs text-white/90 font-medium pt-2 border-t border-white/10">
-                <div>
-                  Total 60 Payments: <span className="font-bold text-indigo-200 block">{fmt(loanResults.totalPayments)}</span>
+              <div className="grid grid-cols-2 gap-3 text-xs text-zinc-600 dark:text-zinc-400 font-medium pt-3 border-t border-zinc-200/80 dark:border-zinc-800">
+                <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
+                  <span className="text-[10px] text-zinc-500 block">Total Payments</span>
+                  <span className="font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100 text-sm block">{fmt(loanResults.totalPayments)}</span>
                 </div>
-                <div>
-                  Total Interest: <span className="font-bold text-emerald-300 block">{fmt(loanResults.totalInterestPaid)}</span>
+                <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
+                  <span className="text-[10px] text-zinc-500 block">Total Interest</span>
+                  <span className="font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400 text-sm block">{fmt(loanResults.totalInterestPaid)}</span>
                 </div>
-                <div>
-                  Payoff Date: <span className="font-bold text-amber-200 block">{loanResults.payoffDateStr}</span>
+                <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
+                  <span className="text-[10px] text-zinc-500 block">Payoff Date</span>
+                  <span className="font-bold font-sans tabular-nums text-blue-600 dark:text-blue-400 text-sm block truncate">{loanResults.payoffDateStr}</span>
                 </div>
-                <div>
-                  Effective APR: <span className="font-bold text-blue-200 block">{loanResults.effectiveApr}%</span>
+                <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
+                  <span className="text-[10px] text-zinc-500 block">Effective APR</span>
+                  <span className="font-bold font-sans tabular-nums text-purple-600 dark:text-purple-400 text-sm block">{loanResults.effectiveApr}%</span>
                 </div>
               </div>
             </div>
