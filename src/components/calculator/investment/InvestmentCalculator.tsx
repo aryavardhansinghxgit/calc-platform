@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Link from "next/link";
 import {
   TrendingUp,
   Calculator as CalcIcon,
@@ -33,9 +34,8 @@ import {
   Flame,
   Target,
   Scale,
+  Calendar,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   BarChart,
@@ -75,11 +75,11 @@ export function InvestmentCalculator() {
   // Inputs State
   const [startingAmountInput, setStartingAmountInput] = useState<string>("20000");
   const [goalInput, setGoalInput] = useState<string>("500000");
-  const [rateInput, setRateInput] = useState<string>("6.0");
-  const [durationValInput, setDurationValInput] = useState<string>("10");
+  const [rateInput, setRateInput] = useState<string>("8.0");
+  const [durationValInput, setDurationValInput] = useState<string>("20");
   const [durationUnit, setDurationUnit] = useState<"years" | "months">("years");
   const [compoundingFrequency, setCompoundingFrequency] = useState<CompoundingFrequency>("annual");
-  const [additionalContributionInput, setAdditionalContributionInput] = useState<string>("1000");
+  const [additionalContributionInput, setAdditionalContributionInput] = useState<string>("500");
   const [contributionFrequency, setContributionFrequency] = useState<ContributionFrequency>("month");
   const [contributionTiming, setContributionTiming] = useState<ContributionTiming>("end");
 
@@ -93,419 +93,309 @@ export function InvestmentCalculator() {
 
   const [scheduleMode, setScheduleMode] = useState<"annual" | "monthly">("annual");
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
-  const [savedScenarios, setSavedScenarios] = useState<{ name: string; result: string; date: string }[]>([]);
   const [shareToast, setShareToast] = useState<boolean>(false);
 
-  // Scenario B Comparison State
-  const [showScenarioComparison, setShowScenarioComparison] = useState<boolean>(false);
-  const [scenarioBRate, setScenarioBRate] = useState<string>("8.0");
+  // ==========================================
+  // PARSED NUMERIC INPUTS & CALCULATIONS
+  // ==========================================
+  const parsedStartingAmount = Math.max(0, Number(startingAmountInput) || 0);
+  const parsedGoal = Math.max(0, Number(goalInput) || 0);
+  const parsedRate = Math.max(0, Number(rateInput) || 0);
+  const parsedDuration = Math.max(0.1, Number(durationValInput) || 1);
+  const parsedContribution = Math.max(0, Number(additionalContributionInput) || 0);
+  const parsedStepUp = Math.max(0, Number(stepUpInput) || 0);
+  const parsedInflation = Math.max(0, Number(inflationInput) || 0);
+  const parsedTaxRate = Math.max(0, Number(taxRateInput) || 0);
+  const parsedExpenseRatio = Math.max(0, Number(expenseRatioInput) || 0);
 
-  // Parse numeric inputs safely
-  const parsedStarting = useMemo(() => Math.max(0, parseFloat(startingAmountInput) || 0), [startingAmountInput]);
-  const parsedGoal = useMemo(() => Math.max(0, parseFloat(goalInput) || 0), [goalInput]);
-  const parsedRate = useMemo(() => Math.max(0, parseFloat(rateInput) || 0), [rateInput]);
-  const parsedDuration = useMemo(() => Math.max(0, parseFloat(durationValInput) || 0), [durationValInput]);
-  const parsedContrib = useMemo(() => Math.max(0, parseFloat(additionalContributionInput) || 0), [additionalContributionInput]);
-  const parsedStepUp = useMemo(() => Math.max(0, parseFloat(stepUpInput) || 0), [stepUpInput]);
-  const parsedInflation = useMemo(() => Math.max(0, parseFloat(inflationInput) || 0), [inflationInput]);
-  const parsedTax = useMemo(() => Math.max(0, parseFloat(taxRateInput) || 0), [taxRateInput]);
-  const parsedExpense = useMemo(() => Math.max(0, parseFloat(expenseRatioInput) || 0), [expenseRatioInput]);
-  const parsedScenarioBRate = useMemo(() => Math.max(0, parseFloat(scenarioBRate) || 0), [scenarioBRate]);
+  const results = useMemo(() => {
+    return calculateInvestmentFormula({
+      mode: activeMode,
+      startingAmount: parsedStartingAmount,
+      investmentGoal: parsedGoal,
+      annualReturnRate: parsedRate,
+      durationValue: parsedDuration,
+      durationUnit: durationUnit,
+      compoundingFrequency: compoundingFrequency,
+      additionalContribution: parsedContribution,
+      contributionFrequency: contributionFrequency,
+      contributionTiming: contributionTiming,
+      annualContributionIncrease: parsedStepUp,
+      inflationRate: parsedInflation,
+      taxRate: parsedTaxRate,
+      expenseRatio: parsedExpenseRatio,
+      currencySymbol: currencySymbol,
+      monteCarloSimulationsCount: simCount,
+    });
+  }, [
+    activeMode,
+    parsedStartingAmount,
+    parsedGoal,
+    parsedRate,
+    parsedDuration,
+    durationUnit,
+    compoundingFrequency,
+    parsedContribution,
+    contributionFrequency,
+    contributionTiming,
+    parsedStepUp,
+    parsedInflation,
+    parsedTaxRate,
+    parsedExpenseRatio,
+    currencySymbol,
+    simCount,
+  ]);
 
-  // Execute Main Investment Engine Math
-  const results = useMemo(
-    () =>
-      calculateInvestmentFormula({
-        mode: activeMode,
-        startingAmount: parsedStarting,
-        investmentGoal: parsedGoal,
-        annualReturnRate: parsedRate,
-        durationValue: parsedDuration,
-        durationUnit,
-        compoundingFrequency,
-        additionalContribution: parsedContrib,
-        contributionFrequency,
-        contributionTiming,
-        annualContributionIncrease: parsedStepUp,
-        inflationRate: parsedInflation,
-        taxRate: parsedTax,
-        expenseRatio: parsedExpense,
-        currencySymbol,
-        monteCarloSimulationsCount: simCount,
-      }),
-    [
-      activeMode,
-      parsedStarting,
-      parsedGoal,
-      parsedRate,
-      parsedDuration,
-      durationUnit,
-      compoundingFrequency,
-      parsedContrib,
-      contributionFrequency,
-      contributionTiming,
-      parsedStepUp,
-      parsedInflation,
-      parsedTax,
-      parsedExpense,
-      currencySymbol,
-      simCount,
-    ]
-  );
-
-  // Scenario B Results calculation for comparison
-  const scenarioBResults = useMemo(
-    () =>
-      calculateInvestmentFormula({
-        mode: activeMode,
-        startingAmount: parsedStarting,
-        investmentGoal: parsedGoal,
-        annualReturnRate: parsedScenarioBRate,
-        durationValue: parsedDuration,
-        durationUnit,
-        compoundingFrequency,
-        additionalContribution: parsedContrib,
-        contributionFrequency,
-        contributionTiming,
-        annualContributionIncrease: parsedStepUp,
-        inflationRate: parsedInflation,
-        taxRate: parsedTax,
-        expenseRatio: parsedExpense,
-        currencySymbol,
-        monteCarloSimulationsCount: 100,
-      }),
-    [
-      activeMode,
-      parsedStarting,
-      parsedGoal,
-      parsedScenarioBRate,
-      parsedDuration,
-      durationUnit,
-      compoundingFrequency,
-      parsedContrib,
-      contributionFrequency,
-      contributionTiming,
-      parsedStepUp,
-      parsedInflation,
-      parsedTax,
-      parsedExpense,
-      currencySymbol,
-    ]
-  );
-
-  // Recharts Chart Data
-  const doughnutData = useMemo(
-    () => [
+  // Doughnut Chart Data
+  const doughnutData = useMemo(() => {
+    return [
       { name: "Starting Principal", value: results.startingAmount, color: "#3b82f6" },
       { name: "Total Contributions", value: results.totalContributions, color: "#8b5cf6" },
-      { name: "Total Investment Gains", value: results.totalInterestEarned, color: "#10b981" },
-    ],
-    [results.startingAmount, results.totalContributions, results.totalInterestEarned]
-  );
+      { name: "Total Growth", value: Math.max(0, results.totalInterestEarned), color: "#10b981" },
+    ];
+  }, [results]);
 
-  const scenarioComparisonData = useMemo(
-    () => [
-      { name: `Scenario A (${parsedRate}%)`, Balance: results.endingBalance, Interest: results.totalInterestEarned },
-      { name: `Scenario B (${parsedScenarioBRate}%)`, Balance: scenarioBResults.endingBalance, Interest: scenarioBResults.totalInterestEarned },
-    ],
-    [results, scenarioBResults, parsedRate, parsedScenarioBRate]
-  );
-
-  // Executive PDF Report Data
-  const reportData: CalculatorReportData = useMemo(
-    () => ({
-      meta: {
-        calculatorName: "Investment Calculator",
-        reportTitle: "Investment Portfolio & Wealth Projection Executive Report",
-        generatedDate: new Date().toLocaleDateString(),
-        generatedTime: new Date().toLocaleTimeString(),
-        currencySymbol,
-      },
-      keyMetrics: [
-        { label: "Future Portfolio Value", value: `${currencySymbol}${results.endingBalance.toLocaleString()}`, colorTheme: "blue" },
-        { label: "Total Investment Gain", value: `${currencySymbol}${results.totalInterestEarned.toLocaleString()}`, colorTheme: "emerald" },
-        { label: "Total Principal Contributed", value: `${currencySymbol}${results.totalPrincipal.toLocaleString()}`, colorTheme: "purple" },
-        { label: "Inflation-Adjusted Value", value: `${currencySymbol}${results.inflationAdjustedFutureValue.toLocaleString()}`, colorTheme: "amber" },
-      ],
-      sections: [
-        {
-          title: "Calculation Parameters",
-          items: [
-            { label: "Calculator Mode", value: activeMode.toUpperCase() },
-            { label: "Starting Principal", value: `${currencySymbol}${results.startingAmount.toLocaleString()}` },
-            { label: "Recurring Contribution", value: `${currencySymbol}${parsedContrib.toLocaleString()}/${contributionFrequency}` },
-            { label: "Annual Rate of Return", value: `${parsedRate}%` },
-            { label: "Investment Duration", value: `${parsedDuration} ${durationUnit}` },
-          ],
-        },
-        {
-          title: "Performance & Wealth Metrics",
-          items: [
-            { label: "Effective APY", value: `${results.effectiveAnnualReturnPercent.toFixed(2)}%` },
-            { label: "Growth Multiple", value: `${results.growthMultiple.toFixed(2)}x` },
-            { label: "Est. Passive Income (4% Rule)", value: `${currencySymbol}${results.estimatedPassiveIncomePerYear.toLocaleString()}/yr` },
-            { label: "Monte Carlo Success Rate", value: `${results.monteCarlo.successProbabilityPercent.toFixed(1)}%` },
-          ],
-        },
-      ],
-      table: {
-        title: "Annual Accumulation Schedule",
-        headers: [
-          { key: "year", label: "Year" },
-          { key: "startingBalance", label: "Starting Balance" },
-          { key: "contributions", label: "Contributions" },
-          { key: "interestEarned", label: "Interest Earned" },
-          { key: "endingBalance", label: "Ending Balance" },
-        ],
-        rows: results.annualSchedule as any,
-      },
-      notes: [
-        `Portfolio simulated across ${results.annualSchedule.length} annual periods.`,
-        `Inflation rate assumption configured to ${parsedInflation}% per annum.`,
-      ],
-    }),
-    [currencySymbol, results, activeMode, parsedContrib, contributionFrequency, parsedRate, parsedDuration, durationUnit, parsedInflation]
-  );
+  // Reset Handler
+  const handleReset = () => {
+    setActiveMode("future_value");
+    setStartingAmountInput("20000");
+    setGoalInput("500000");
+    setRateInput("8.0");
+    setDurationValInput("20");
+    setDurationUnit("years");
+    setCompoundingFrequency("annual");
+    setAdditionalContributionInput("500");
+    setContributionFrequency("month");
+    setContributionTiming("end");
+    setStepUpInput("0");
+    setInflationInput("3.0");
+    setTaxRateInput("0");
+    setExpenseRatioInput("0.10");
+  };
 
   // CSV Export Handler
   const handleExportCSV = () => {
-    const isAnn = scheduleMode === "annual";
-    const headers = isAnn
-      ? ["Year", "Starting Balance", "Contributions", "Interest Earned", "Fees Paid", "Ending Balance"]
-      : ["Month", "Beginning Balance", "Contribution", "Interest", "Fees Paid", "Ending Balance"];
-
-    const rows = isAnn
-      ? results.annualSchedule.map((r) => [r.year, r.startingBalance, r.contributions, r.interestEarned, r.feesPaid, r.endingBalance])
-      : results.monthlySchedule.map((r) => [r.month, r.beginningBalance, r.contribution, r.interest, r.fees, r.endingBalance]);
-
-    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `investment_schedule_${scheduleMode}_${Date.now()}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const headers = "Year,Starting Balance,Contributions,Interest Earned,Ending Balance\n";
+    const rows = results.annualSchedule
+      .map(
+        (r) =>
+          `${r.year},${r.startingBalance.toFixed(2)},${r.contributions.toFixed(2)},${r.interestEarned.toFixed(2)},${r.endingBalance.toFixed(2)}`
+      )
+      .join("\n");
+    const blob = new Blob([headers + rows], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `investment-growth-schedule-${Date.now()}.csv`;
+    a.click();
   };
 
-  const handleSaveScenario = () => {
-    const newSaved = [
-      ...savedScenarios,
-      {
-        name: `Investment (${currencySymbol}${results.startingAmount.toLocaleString()} @ ${parsedRate}%)`,
-        result: `${currencySymbol}${results.endingBalance.toLocaleString()}`,
-        date: new Date().toLocaleDateString(),
-      },
-    ];
-    setSavedScenarios(newSaved);
-  };
-
+  // Share link handler
   const handleShare = () => {
-    if (navigator.clipboard) {
+    if (typeof window !== "undefined") {
       navigator.clipboard.writeText(window.location.href);
       setShareToast(true);
-      setTimeout(() => setShareToast(false), 3000);
+      setTimeout(() => setShareToast(false), 2500);
     }
   };
 
+  // Report Data
+  const reportData: CalculatorReportData = {
+    meta: {
+      calculatorName: "Investment Calculator",
+      reportTitle: "Investment Portfolio & Future Value Analysis",
+      generatedDate: new Date().toLocaleDateString(),
+      generatedTime: new Date().toLocaleTimeString(),
+      currencySymbol: currencySymbol,
+    },
+    keyMetrics: [
+      {
+        label: "Estimated Ending Portfolio Value",
+        value: `${currencySymbol}${results.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        colorTheme: "blue",
+      },
+      {
+        label: "Total Principal & Contributions",
+        value: `${currencySymbol}${(results.startingAmount + results.totalContributions).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        colorTheme: "purple",
+      },
+      {
+        label: "Total Investment Growth Earned",
+        value: `${currencySymbol}${results.totalInterestEarned.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        colorTheme: "emerald",
+      },
+      {
+        label: "Inflation-Adjusted Real Value",
+        value: `${currencySymbol}${results.inflationAdjustedFutureValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+        colorTheme: "amber",
+      },
+    ],
+    sections: [
+      {
+        title: "Input Assumptions",
+        items: [
+          { label: "Starting Principal", value: `${currencySymbol}${parsedStartingAmount.toLocaleString()}` },
+          { label: "Additional Contribution", value: `${currencySymbol}${parsedContribution.toLocaleString()} (${contributionFrequency})` },
+          { label: "Expected Annual Return", value: `${parsedRate}%` },
+          { label: "Investment Duration", value: `${parsedDuration} ${durationUnit}` },
+          { label: "Compounding Frequency", value: compoundingFrequency },
+          { label: "Inflation Rate", value: `${parsedInflation}%` },
+        ],
+      },
+    ],
+    table: {
+      title: "Annual Accumulation Schedule",
+      headers: [
+        { key: "year", label: "Year" },
+        { key: "starting", label: "Starting Balance" },
+        { key: "contrib", label: "Contributions" },
+        { key: "interest", label: "Interest Earned" },
+        { key: "ending", label: "Ending Balance" },
+      ],
+      rows: results.annualSchedule.map((r) => ({
+        year: `Year ${r.year}`,
+        starting: `${currencySymbol}${r.startingBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+        contrib: `${currencySymbol}${r.contributions.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+        interest: `${currencySymbol}${r.interestEarned.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+        ending: `${currencySymbol}${r.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`,
+      })),
+    },
+    notes: [
+      "This investment analysis is provided for educational and illustrative purposes only. Actual market returns fluctuate and are not guaranteed.",
+    ],
+  };
+
   return (
-    <div className="space-y-8 max-w-7xl mx-auto py-2">
-      {/* ==========================================
-          SECTION 1: HERO HEADER & QUICK ACTIONS
-         ========================================== */}
-      <div className="bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="space-y-8 font-sans w-full">
+      {/* =========================================================================
+          MODE SWITCHER TABS & CURRENCY TOGGLE
+          ========================================================================= */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2 rounded-2xl bg-[#EAEFF6] dark:bg-slate-800 border border-slate-300/90 dark:border-slate-700">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+          {[
+            { id: "future_value", label: "Future Value" },
+            { id: "contributions", label: "Target Contribution" },
+            { id: "return_rate", label: "Required Return" },
+            { id: "starting_amount", label: "Starting Amount" },
+            { id: "retirement", label: "Retirement Goal" },
+            { id: "fire", label: "FIRE Target" },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveMode(tab.id as InvestmentMode)}
+              className={`px-4 py-2 rounded-xl text-xs font-black transition-all whitespace-nowrap cursor-pointer ${
+                activeMode === tab.id
+                  ? "bg-blue-600 text-white border border-blue-700"
+                  : "text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-white/90 dark:hover:bg-slate-700 font-bold border border-transparent hover:border-slate-300"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
 
-        <div className="relative z-10 space-y-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold border border-blue-400/30">
-              <TrendingUp className="h-3.5 w-3.5" /> Investment Planning Suite
-            </span>
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-medium border border-emerald-400/30">
-              <Zap className="h-3 w-3" /> Monte Carlo Engine
-            </span>
-          </div>
-
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-              Investment Calculator
-            </h1>
-            <p className="text-xs sm:text-sm text-blue-100/80 mt-1 max-w-3xl leading-relaxed">
-              Model portfolio growth across 6 operational modes, simulate Monte Carlo market risk (1,000-10,000 runs), track target wealth goals, evaluate fee & tax drag, and export schedule tables.
-            </p>
-          </div>
-
-          {/* Badges */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 text-xs">
-            <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/15 border-white/10 gap-1.5">
-              <CheckCircle2 className="h-3 w-3 text-emerald-400" /> 6 Operational Modes
-            </Badge>
-            <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/15 border-white/10 gap-1.5">
-              <CheckCircle2 className="h-3 w-3 text-emerald-400" /> Monte Carlo Risk Simulations
-            </Badge>
-            <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/15 border-white/10 gap-1.5">
-              <CheckCircle2 className="h-3 w-3 text-emerald-400" /> Inflation & Fee Drag Analysis
-            </Badge>
-            <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/15 border-white/10 gap-1.5">
-              <CheckCircle2 className="h-3 w-3 text-emerald-400" /> Goal Tracker Timeline
-            </Badge>
-            <Badge variant="secondary" className="bg-white/10 text-white hover:bg-white/15 border-white/10 gap-1.5">
-              <CheckCircle2 className="h-3 w-3 text-emerald-400" /> Printable PDF Executive Report
-            </Badge>
-          </div>
+        <div className="flex items-center gap-1.5 px-2 self-end sm:self-auto bg-white dark:bg-slate-900 p-1 rounded-xl border border-slate-300 dark:border-slate-700">
+          <span className="text-[11px] font-extrabold text-slate-600 dark:text-slate-400 pl-1">Currency:</span>
+          {["$", "€", "£", "₹", "C$"].map((cur) => (
+            <button
+              key={cur}
+              type="button"
+              onClick={() => setCurrencySymbol(cur)}
+              className={`h-7 px-2.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
+                currencySymbol === cur
+                  ? "bg-blue-600 text-white border border-blue-700"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-100 border border-transparent hover:border-slate-300"
+              }`}
+            >
+              {cur}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* ==========================================
-          ACTION CONTROLS BAR
-         ========================================== */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-zinc-900 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-xs">
-        <div className="flex items-center gap-2 text-xs font-bold text-zinc-700 dark:text-zinc-300">
-          <Sliders className="h-4 w-4 text-blue-600" /> Calculation Controls
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Currency Selector */}
-          <div className="flex items-center gap-1.5 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg text-xs font-medium">
-            <span className="text-zinc-500 pl-1">Currency:</span>
-            {["$", "€", "£", "¥", "₹"].map((cur) => (
-              <button
-                key={cur}
-                type="button"
-                onClick={() => setCurrencySymbol(cur)}
-                className={`px-2 py-0.5 rounded font-sans tabular-nums font-bold text-xs transition-colors ${
-                  currencySymbol === cur
-                    ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
-                    : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
-                }`}
-              >
-                {cur}
-              </button>
-            ))}
-          </div>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleSaveScenario}
-            className="h-8 text-xs font-semibold gap-1.5"
-          >
-            <Bookmark className="h-3.5 w-3.5 text-indigo-500" /> Save Scenario
-          </Button>
-          
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => setIsReportOpen(true)}
-            className="h-8 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white gap-1.5"
-          >
-            <Printer className="h-3.5 w-3.5" /> Printable PDF Report
-          </Button>
-        </div>
-      </div>
-
-      {shareToast && (
-        <div className="p-3 bg-emerald-500 text-white text-xs font-bold rounded-lg shadow-md flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4" /> Link copied to clipboard!
-        </div>
-      )}
-
-      {/* ==========================================
-          MAIN CALCULATOR GRID (COL-7 INPUTS | COL-5 DASHBOARD)
-         ========================================== */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* LEFT COLUMN: 6 MODE TABS & INPUTS (COL 7) */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
-            {/* Mode Navigation Tabs */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-xl">
-              {[
-                { id: "future_value", label: "Future Value" },
-                { id: "contributions", label: "Contributions" },
-                { id: "return_rate", label: "Return Rate" },
-                { id: "starting_amount", label: "Starting Amount" },
-                { id: "retirement", label: "Retirement" },
-                { id: "fire", label: "FIRE Target" },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActiveMode(tab.id as InvestmentMode)}
-                  className={`py-2 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                    activeMode === tab.id
-                      ? "bg-white dark:bg-zinc-900 text-blue-600 dark:text-blue-400 shadow-xs"
-                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Core Inputs based on activeMode */}
-            <div className="space-y-4 pt-1">
-              {/* MODE 1: FUTURE VALUE */}
+      {/* =========================================================================
+          MAIN FULL-WIDTH 2-COLUMN CALCULATOR CARD: INPUTS | RESULTS
+          ========================================================================= */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.06)] p-6 sm:p-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* LEFT COLUMN: INPUTS (COL 7) */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="space-y-5">
+              {/* MODE 1: FUTURE VALUE (STANDARD) */}
               {activeMode === "future_value" && (
                 <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {/* Starting Principal */}
                     <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        Starting Principal Amount
+                      <label className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">
+                        Starting Principal
                       </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
+                      <div className="relative flex items-center h-12 rounded-xl bg-[#F8FAFC] dark:bg-slate-800/90 border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 focus-within:border-blue-600 dark:focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-600 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all">
+                        <span className="pl-4 pr-2 text-slate-500 dark:text-slate-400 font-bold text-base select-none">
                           {currencySymbol}
                         </span>
-                        <Input
+                        <input
                           type="number"
                           value={startingAmountInput}
                           onChange={(e) => setStartingAmountInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
+                          className="w-full h-full bg-transparent border-0 focus:outline-none focus:ring-0 text-base font-bold text-slate-900 dark:text-slate-100 pr-4"
+                          placeholder="20000"
                         />
                       </div>
                     </div>
 
+                    {/* Expected Annual Return */}
                     <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        Expected Return Rate (%)
+                      <label className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">
+                        Expected Annual Return (%)
                       </label>
-                      <Input
-                        type="number"
-                        step="0.1"
-                        value={rateInput}
-                        onChange={(e) => setRateInput(e.target.value)}
-                        className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                      />
+                      <div className="relative flex items-center h-12 rounded-xl bg-[#F8FAFC] dark:bg-slate-800/90 border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 focus-within:border-blue-600 dark:focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-600 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all">
+                        <input
+                          type="number"
+                          step="0.1"
+                          value={rateInput}
+                          onChange={(e) => setRateInput(e.target.value)}
+                          className="w-full h-full bg-transparent border-0 focus:outline-none focus:ring-0 text-base font-bold text-slate-900 dark:text-slate-100 pl-4 pr-2"
+                          placeholder="8.0"
+                        />
+                        <span className="pr-4 pl-2 text-slate-500 dark:text-slate-400 font-bold text-sm select-none">
+                          %
+                        </span>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {/* Additional Contribution */}
                     <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        Additional Contribution ($)
+                      <label className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">
+                        Additional Contribution
                       </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
+                      <div className="relative flex items-center h-12 rounded-xl bg-[#F8FAFC] dark:bg-slate-800/90 border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 focus-within:border-blue-600 dark:focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-600 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all">
+                        <span className="pl-4 pr-2 text-slate-500 dark:text-slate-400 font-bold text-base select-none">
                           {currencySymbol}
                         </span>
-                        <Input
+                        <input
                           type="number"
                           value={additionalContributionInput}
                           onChange={(e) => setAdditionalContributionInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
+                          className="w-full h-full bg-transparent border-0 focus:outline-none focus:ring-0 text-base font-bold text-slate-900 dark:text-slate-100 pr-4"
+                          placeholder="500"
                         />
                       </div>
                     </div>
 
+                    {/* Frequency & Timing */}
                     <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        Contribution Frequency & Timing
+                      <label className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">
+                        Contribution Frequency &amp; Timing
                       </label>
-                      <div className="flex gap-1.5">
+                      <div className="flex gap-2">
                         <select
                           value={contributionFrequency}
                           onChange={(e) => setContributionFrequency(e.target.value as ContributionFrequency)}
-                          className="h-9 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs px-2 font-medium text-zinc-900 dark:text-zinc-100 flex-1"
+                          className="h-12 rounded-xl border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 bg-[#F8FAFC] dark:bg-slate-800/90 text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 px-3.5 flex-1 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                         >
                           <option value="month">Monthly</option>
                           <option value="year">Annually</option>
@@ -513,10 +403,10 @@ export function InvestmentCalculator() {
                         <select
                           value={contributionTiming}
                           onChange={(e) => setContributionTiming(e.target.value as ContributionTiming)}
-                          className="h-9 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs px-2 font-medium text-zinc-900 dark:text-zinc-100 flex-1"
+                          className="h-12 rounded-xl border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 bg-[#F8FAFC] dark:bg-slate-800/90 text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 px-3.5 flex-1 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                         >
                           <option value="end">End of Period</option>
-                          <option value="beginning">Beginning of Period</option>
+                          <option value="beginning">Beginning</option>
                         </select>
                       </div>
                     </div>
@@ -524,297 +414,84 @@ export function InvestmentCalculator() {
                 </>
               )}
 
-              {/* MODE 2: CONTRIBUTIONS */}
-              {activeMode === "contributions" && (
-                <>
+              {/* OTHER MODES */}
+              {activeMode !== "future_value" && (
+                <div className="space-y-5">
                   <div>
-                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                      Target Investment Goal ($)
+                    <label className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">
+                      Target Investment Goal
                     </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
+                    <div className="relative flex items-center h-12 rounded-xl bg-[#F8FAFC] dark:bg-slate-800/90 border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 focus-within:border-blue-600 dark:focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-600 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all">
+                      <span className="pl-4 pr-2 text-slate-500 dark:text-slate-400 font-bold text-base select-none">
                         {currencySymbol}
                       </span>
-                      <Input
+                      <input
                         type="number"
                         value={goalInput}
                         onChange={(e) => setGoalInput(e.target.value)}
-                        className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
+                        className="w-full h-full bg-transparent border-0 focus:outline-none focus:ring-0 text-base font-bold text-slate-900 dark:text-slate-100 pr-4"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                      <label className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">
                         Starting Principal Amount
                       </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
+                      <div className="relative flex items-center h-12 rounded-xl bg-[#F8FAFC] dark:bg-slate-800/90 border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 focus-within:border-blue-600 dark:focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-600 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all">
+                        <span className="pl-4 pr-2 text-slate-500 dark:text-slate-400 font-bold text-base select-none">
                           {currencySymbol}
                         </span>
-                        <Input
+                        <input
                           type="number"
                           value={startingAmountInput}
                           onChange={(e) => setStartingAmountInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
+                          className="w-full h-full bg-transparent border-0 focus:outline-none focus:ring-0 text-base font-bold text-slate-900 dark:text-slate-100 pr-4"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                      <label className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">
                         Expected Return Rate (%)
                       </label>
-                      <Input
-                        type="number"
-                        step="0.1"
-                        value={rateInput}
-                        onChange={(e) => setRateInput(e.target.value)}
-                        className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                      />
+                      <div className="relative flex items-center h-12 rounded-xl bg-[#F8FAFC] dark:bg-slate-800/90 border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 focus-within:border-blue-600 dark:focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-600 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all">
+                        <input
+                          type="number"
+                          step="0.1"
+                          value={rateInput}
+                          onChange={(e) => setRateInput(e.target.value)}
+                          className="w-full h-full bg-transparent border-0 focus:outline-none focus:ring-0 text-base font-bold text-slate-900 dark:text-slate-100 pl-4 pr-2"
+                        />
+                        <span className="pr-4 pl-2 text-slate-500 dark:text-slate-400 font-bold text-sm select-none">
+                          %
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </>
+                </div>
               )}
 
-              {/* MODE 3: RETURN RATE */}
-              {activeMode === "return_rate" && (
-                <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        Target Investment Goal ($)
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
-                          {currencySymbol}
-                        </span>
-                        <Input
-                          type="number"
-                          value={goalInput}
-                          onChange={(e) => setGoalInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        Starting Principal Amount
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
-                          {currencySymbol}
-                        </span>
-                        <Input
-                          type="number"
-                          value={startingAmountInput}
-                          onChange={(e) => setStartingAmountInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                      Additional Contribution ($)
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
-                        {currencySymbol}
-                      </span>
-                      <Input
-                        type="number"
-                        value={additionalContributionInput}
-                        onChange={(e) => setAdditionalContributionInput(e.target.value)}
-                        className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {/* MODE 4: STARTING AMOUNT */}
-              {activeMode === "starting_amount" && (
-                <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        Target Investment Goal ($)
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
-                          {currencySymbol}
-                        </span>
-                        <Input
-                          type="number"
-                          value={goalInput}
-                          onChange={(e) => setGoalInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        Expected Return Rate (%)
-                      </label>
-                      <Input
-                        type="number"
-                        step="0.1"
-                        value={rateInput}
-                        onChange={(e) => setRateInput(e.target.value)}
-                        className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                      Additional Contribution ($)
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
-                        {currencySymbol}
-                      </span>
-                      <Input
-                        type="number"
-                        value={additionalContributionInput}
-                        onChange={(e) => setAdditionalContributionInput(e.target.value)}
-                        className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {/* MODE 5: RETIREMENT */}
-              {activeMode === "retirement" && (
-                <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        Current Retirement Savings
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
-                          {currencySymbol}
-                        </span>
-                        <Input
-                          type="number"
-                          value={startingAmountInput}
-                          onChange={(e) => setStartingAmountInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        Monthly Contribution ($)
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
-                          {currencySymbol}
-                        </span>
-                        <Input
-                          type="number"
-                          value={additionalContributionInput}
-                          onChange={(e) => setAdditionalContributionInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                      Expected Annual Return (%)
-                    </label>
-                    <Input
-                      type="number"
-                      step="0.1"
-                      value={rateInput}
-                      onChange={(e) => setRateInput(e.target.value)}
-                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                    />
-                  </div>
-                </>
-              )}
-
-              {/* MODE 6: FIRE TARGET */}
-              {activeMode === "fire" && (
-                <>
-                  <div>
-                    <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                      Expected Annual Living Expenses ($)
-                    </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
-                        {currencySymbol}
-                      </span>
-                      <Input
-                        type="number"
-                        value={additionalContributionInput}
-                        onChange={(e) => setAdditionalContributionInput(e.target.value)}
-                        className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        Current Savings / Capital ($)
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-xs font-sans tabular-nums">
-                          {currencySymbol}
-                        </span>
-                        <Input
-                          type="number"
-                          value={startingAmountInput}
-                          onChange={(e) => setStartingAmountInput(e.target.value)}
-                          className="pl-7 h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                        Expected Annual Return (%)
-                      </label>
-                      <Input
-                        type="number"
-                        step="0.1"
-                        value={rateInput}
-                        onChange={(e) => setRateInput(e.target.value)}
-                        className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {/* Common Duration & Frequency Controls */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* DURATION & COMPOUNDING CONTROLS */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">
                     Investment Duration
                   </label>
-                  <div className="flex gap-1.5">
-                    <Input
-                      type="number"
-                      value={durationValInput}
-                      onChange={(e) => setDurationValInput(e.target.value)}
-                      className="h-9 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950 flex-1"
-                    />
+                  <div className="flex gap-2">
+                    <div className="relative flex items-center h-12 rounded-xl bg-[#F8FAFC] dark:bg-slate-800/90 border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 focus-within:border-blue-600 dark:focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-600 focus-within:bg-white dark:focus-within:bg-slate-900 flex-1">
+                      <input
+                        type="number"
+                        value={durationValInput}
+                        onChange={(e) => setDurationValInput(e.target.value)}
+                        className="w-full h-full bg-transparent border-0 focus:outline-none focus:ring-0 text-base font-bold text-slate-900 dark:text-slate-100 px-4"
+                      />
+                    </div>
                     <select
                       value={durationUnit}
                       onChange={(e) => setDurationUnit(e.target.value as "years" | "months")}
-                      className="h-9 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs px-2 font-medium text-zinc-900 dark:text-zinc-100"
+                      className="h-12 rounded-xl border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 bg-[#F8FAFC] dark:bg-slate-800/90 text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 px-3.5 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                     >
                       <option value="years">Years</option>
                       <option value="months">Months</option>
@@ -823,13 +500,13 @@ export function InvestmentCalculator() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                  <label className="block text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 mb-2">
                     Compounding Frequency
                   </label>
                   <select
                     value={compoundingFrequency}
                     onChange={(e) => setCompoundingFrequency(e.target.value as CompoundingFrequency)}
-                    className="w-full h-9 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-xs px-2 font-medium text-zinc-900 dark:text-zinc-100"
+                    className="w-full h-12 rounded-xl border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 bg-[#F8FAFC] dark:bg-slate-800/90 text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 px-3.5 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                   >
                     <option value="annual">Annually (1/yr)</option>
                     <option value="semi-annual">Semi-Annually (2/yr)</option>
@@ -841,297 +518,244 @@ export function InvestmentCalculator() {
                 </div>
               </div>
 
-              {/* COLLAPSIBLE ADVANCED SETTINGS PANEL */}
-              <div className="border-t border-zinc-100 dark:border-zinc-800 pt-3">
+              {/* COLLAPSIBLE ADVANCED SETTINGS */}
+              <div className="border-t border-slate-200 dark:border-slate-800 pt-5">
                 <button
                   type="button"
                   onClick={() => setShowAdvanced(!showAdvanced)}
-                  className="flex items-center justify-between w-full text-xs font-bold text-indigo-600 dark:text-indigo-400 py-1"
+                  className="flex items-center justify-between w-full text-xs font-bold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 p-3.5 rounded-xl bg-[#F8FAFC] dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700 hover:border-slate-400 transition-all cursor-pointer"
                 >
-                  <span className="flex items-center gap-1.5">
-                    <Sliders className="h-3.5 w-3.5" /> Advanced Investment Settings (Fees, Inflation, Taxes, Step-Up %)
+                  <span className="flex items-center gap-2.5">
+                    <Sliders className="h-4 w-4 text-blue-600" />
+                    <span>Advanced Assumptions (Step-Up %, Inflation, Tax Drag, Expense Ratio)</span>
                   </span>
                   {showAdvanced ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </button>
 
                 {showAdvanced && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
                     <div>
-                      <label className="block text-[11px] text-zinc-600 dark:text-zinc-400 mb-1">
-                        Annual Contribution Increase / Step-Up (%)
+                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Annual Step-Up / Contribution Increase (%)
                       </label>
-                      <Input
+                      <input
                         type="number"
                         step="0.5"
                         value={stepUpInput}
                         onChange={(e) => setStepUpInput(e.target.value)}
-                        className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
+                        className="w-full h-11 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 hover:border-slate-400 px-3.5 text-xs font-bold text-slate-900 dark:text-slate-100 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[11px] text-zinc-600 dark:text-zinc-400 mb-1">
+                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                         Inflation Rate (%)
                       </label>
-                      <Input
+                      <input
                         type="number"
                         step="0.1"
                         value={inflationInput}
                         onChange={(e) => setInflationInput(e.target.value)}
-                        className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
+                        className="w-full h-11 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 hover:border-slate-400 px-3.5 text-xs font-bold text-slate-900 dark:text-slate-100 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[11px] text-zinc-600 dark:text-zinc-400 mb-1">
-                        Tax Rate (%)
+                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Tax Rate on Gains (%)
                       </label>
-                      <Input
+                      <input
                         type="number"
                         step="0.5"
                         value={taxRateInput}
                         onChange={(e) => setTaxRateInput(e.target.value)}
-                        className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
+                        className="w-full h-11 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 hover:border-slate-400 px-3.5 text-xs font-bold text-slate-900 dark:text-slate-100 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[11px] text-zinc-600 dark:text-zinc-400 mb-1">
-                        Management Fee / Expense Ratio (%)
+                      <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                        Expense Ratio / Management Fee (%)
                       </label>
-                      <Input
+                      <input
                         type="number"
                         step="0.05"
                         value={expenseRatioInput}
                         onChange={(e) => setExpenseRatioInput(e.target.value)}
-                        className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
+                        className="w-full h-11 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 hover:border-slate-400 px-3.5 text-xs font-bold text-slate-900 dark:text-slate-100 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                       />
                     </div>
                   </div>
                 )}
               </div>
-            </div>
-          </div>
-        </div>
 
-        {/* RIGHT COLUMN: RESULTS DASHBOARD CARD (COL 5) */}
-        <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-4">
-          <div className="bg-gradient-to-br from-zinc-900 via-slate-900 to-blue-950 text-white rounded-2xl p-6 shadow-xl border border-zinc-800 space-y-5">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <span className="text-xs uppercase font-extrabold tracking-wider text-blue-400">
-                Investment Portfolio Output ({activeMode.toUpperCase()})
-              </span>
-              <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-400/30 text-[10px]">
-                {results.growthMultiple.toFixed(2)}x Growth
-              </Badge>
-            </div>
-
-            {/* DYNAMIC MAIN RESULT DISPLAY PER MODE */}
-            {activeMode === "future_value" && (
-              <div>
-                <span className="text-xs text-zinc-400 block font-medium">Future Portfolio Value</span>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
-                  {currencySymbol}{results.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </div>
-                <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
-                  Total Investment Gain: <strong className="text-white">{currencySymbol}{results.totalInterestEarned.toLocaleString()}</strong>
-                </p>
-              </div>
-            )}
-
-            {activeMode === "contributions" && (
-              <div>
-                <span className="text-xs text-zinc-400 block font-medium">Required Monthly Contribution</span>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
-                  {currencySymbol}{results.requiredMonthlyContribution.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/mo
-                </div>
-                <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
-                  Annual Equivalent: <strong className="text-white">{currencySymbol}{results.requiredAnnualContribution.toLocaleString()}/yr</strong>
-                </p>
-              </div>
-            )}
-
-            {activeMode === "return_rate" && (
-              <div>
-                <span className="text-xs text-zinc-400 block font-medium">Required Annual Return Rate</span>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
-                  {results.requiredReturnRate.toFixed(2)}%
-                </div>
-                <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
-                  To reach goal of <strong className="text-white">{currencySymbol}{parsedGoal.toLocaleString()}</strong>
-                </p>
-              </div>
-            )}
-
-            {activeMode === "starting_amount" && (
-              <div>
-                <span className="text-xs text-zinc-400 block font-medium">Required Starting Principal</span>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
-                  {currencySymbol}{results.requiredStartingAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </div>
-                <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
-                  To reach goal of <strong className="text-white">{currencySymbol}{parsedGoal.toLocaleString()}</strong>
-                </p>
-              </div>
-            )}
-
-            {activeMode === "retirement" && (
-              <div>
-                <span className="text-xs text-zinc-400 block font-medium">Retirement Portfolio at Maturity</span>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
-                  {currencySymbol}{results.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </div>
-                <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
-                  Est. Safe Passive Income (4% Rule): <strong className="text-white">{currencySymbol}{(results.estimatedPassiveIncomePerYear / 12).toLocaleString(undefined, { maximumFractionDigits: 0 })}/mo</strong>
-                </p>
-              </div>
-            )}
-
-            {activeMode === "fire" && (
-              <div>
-                <span className="text-xs text-zinc-400 block font-medium">FIRE Number Target (25x Expenses)</span>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400 tracking-tight font-sans tabular-nums mt-1">
-                  {currencySymbol}{results.fireNumberTarget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </div>
-                <p className="text-[11px] text-blue-200/80 mt-1 font-sans">
-                  Projected Portfolio: <strong className="text-white">{currencySymbol}{results.endingBalance.toLocaleString()} ({results.goalTracker.currentProgressPercent.toFixed(1)}% Progress)</strong>
-                </p>
-              </div>
-            )}
-
-            {/* Metric Cards Grid */}
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-white/10">
-              <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                <span className="text-[11px] text-zinc-400 block">Starting Principal</span>
-                <span className="text-base font-bold text-white font-sans tabular-nums">
-                  {currencySymbol}{results.startingAmount.toLocaleString()}
-                </span>
-              </div>
-
-              <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                <span className="text-[11px] text-zinc-400 block">Total Contributions</span>
-                <span className="text-base font-bold text-purple-300 font-sans tabular-nums">
-                  {currencySymbol}{results.totalContributions.toLocaleString()}
-                </span>
-              </div>
-
-              <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                <span className="text-[11px] text-zinc-400 block">Effective APY</span>
-                <span className="text-base font-bold text-emerald-300 font-sans tabular-nums">
-                  {results.effectiveAnnualReturnPercent.toFixed(2)}%
-                </span>
-              </div>
-
-              <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                <span className="text-[11px] text-zinc-400 block">Est. Passive Income</span>
-                <span className="text-base font-bold text-emerald-300 font-sans tabular-nums">
-                  {currencySymbol}{results.estimatedPassiveIncomePerYear.toLocaleString()}/yr
-                </span>
-              </div>
-            </div>
-
-            <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-500/30 text-xs text-amber-100 flex items-center justify-between font-sans tabular-nums">
-              <span>Inflation-Adjusted Purchasing Power:</span>
-              <span className="font-bold text-amber-300">
-                {currencySymbol}{results.inflationAdjustedFutureValue.toLocaleString()}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ==========================================
-          SECTION 2: MONTE CARLO RISK SIMULATOR & GOAL TRACKER
-         ========================================== */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-        {/* MONTE CARLO STOCHASTIC SIMULATOR (COL 7) */}
-        <div className="md:col-span-7 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2">
-            <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Monte Carlo Stochastic Risk Simulation ({simCount.toLocaleString()} Runs)
-            </h3>
-            <div className="flex gap-1">
-              {[1000, 5000].map((cnt) => (
+              {/* ACTION BUTTONS (CLEAN FLAT BORDERED BUTTONS) */}
+              <div className="flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-800">
                 <button
-                  key={cnt}
                   type="button"
-                  onClick={() => setSimCount(cnt)}
-                  className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                    simCount === cnt ? "bg-emerald-600 text-white" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600"
-                  }`}
+                  onClick={handleReset}
+                  className="h-12 px-4 text-xs font-bold border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  {cnt} Runs
+                  <RotateCcw className="h-4 w-4 text-slate-500" />
+                  <span>Reset</span>
                 </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 text-xs font-sans tabular-nums">
-            <div className="p-3 rounded-lg bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/40">
-              <span className="text-[10px] text-rose-600 block font-sans font-bold">10th % (Worst Case)</span>
-              <span className="font-bold text-rose-700 dark:text-rose-400">
-                {currencySymbol}{results.monteCarlo.worstCase10th.toLocaleString()}
-              </span>
-            </div>
-
-            <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40">
-              <span className="text-[10px] text-blue-600 block font-sans font-bold">50th % (Average Case)</span>
-              <span className="font-bold text-blue-700 dark:text-blue-400">
-                {currencySymbol}{results.monteCarlo.averageCase50th.toLocaleString()}
-              </span>
-            </div>
-
-            <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40">
-              <span className="text-[10px] text-emerald-600 block font-sans font-bold">90th % (Best Case)</span>
-              <span className="font-bold text-emerald-700 dark:text-emerald-400">
-                {currencySymbol}{results.monteCarlo.bestCase90th.toLocaleString()}
-              </span>
-            </div>
-          </div>
-
-          <div className="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-xs flex items-center justify-between font-sans tabular-nums">
-            <span className="font-sans text-zinc-600 dark:text-zinc-400">Probability of Achieving Target Goal:</span>
-            <span className="font-bold text-emerald-600 dark:text-emerald-400 text-sm">
-              {results.monteCarlo.successProbabilityPercent.toFixed(1)}% Success Rate
-            </span>
-          </div>
-        </div>
-
-        {/* GOAL TRACKER TIMELINE (COL 5) */}
-        <div className="md:col-span-5 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-2">Target Investment Goal Tracker
-          </h3>
-
-          <div className="space-y-3 text-xs">
-            <div>
-              <label className="block text-[11px] text-zinc-600 dark:text-zinc-400 mb-1">
-                Set Target Goal ($)
-              </label>
-              <Input
-                type="number"
-                value={goalInput}
-                onChange={(e) => setGoalInput(e.target.value)}
-                className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex justify-between text-[11px] font-bold">
-                <span>Progress: {results.goalTracker.currentProgressPercent.toFixed(1)}%</span>
-                <span>{currencySymbol}{results.endingBalance.toLocaleString()} / {currencySymbol}{parsedGoal.toLocaleString()}</span>
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  className="h-12 px-4 text-xs font-bold border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl transition-all flex items-center gap-2 cursor-pointer"
+                >
+                  <Share2 className="h-4 w-4 text-slate-500" />
+                  <span>Share</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsReportOpen(true)}
+                  className="h-12 px-6 text-sm font-bold bg-blue-600 hover:bg-blue-700 active:bg-blue-800 border border-blue-700 hover:border-blue-800 text-white rounded-xl transition-all ml-auto flex items-center gap-2.5 cursor-pointer"
+                >
+                  <Printer className="h-4 w-4" />
+                  <span>Executive Report</span>
+                </button>
               </div>
-              <div className="w-full bg-zinc-100 dark:bg-zinc-800 h-2.5 rounded-full overflow-hidden">
-                <div
-                  className="bg-emerald-500 h-full rounded-full transition-all duration-500"
-                  style={{ width: `${Math.min(100, results.goalTracker.currentProgressPercent)}%` }}
-                />
-              </div>
+              {shareToast && (
+                <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 text-right">
+                  ✓ Link copied to clipboard!
+                </p>
+              )}
             </div>
+          </div>
 
-            <div className="p-3 rounded-lg bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/40 space-y-1 font-sans tabular-nums text-[11px]">
-              <div className="flex justify-between text-zinc-700 dark:text-zinc-300">
-                <span>Req. Monthly Savings to Hit Goal:</span>
-                <span className="font-bold text-indigo-600 dark:text-indigo-400">
-                  {currencySymbol}{results.goalTracker.requiredMonthlySavingsToGoal.toLocaleString()}/mo
+          {/* RIGHT COLUMN: RESULTS (COL 5 - DOMINANT LAYERED RESULT PANEL) */}
+          <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-4">
+            <div className="bg-[#F0F5FF] dark:bg-slate-900/95 border-2 border-blue-200 dark:border-blue-700/70 rounded-3xl p-6 sm:p-7 shadow-sm space-y-4">
+              {/* PRIMARY RESULT CARD */}
+              <div className="bg-white dark:bg-slate-800/95 rounded-2xl p-5 sm:p-6 border border-blue-200/90 dark:border-blue-800/80 shadow-[0_2px_12px_-2px_rgba(37,99,235,0.08)] space-y-2">
+                {activeMode === "future_value" && (
+                  <>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+                        Estimated Future Portfolio Value
+                      </span>
+                      <Badge className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 px-2.5 py-0.5 text-xs font-bold rounded-full">
+                        {results.growthMultiple.toFixed(2)}x Growth
+                      </Badge>
+                    </div>
+                    <div className="text-3xl sm:text-4xl lg:text-[44px] font-black text-blue-700 dark:text-blue-400 tracking-tight leading-none py-1.5">
+                      {currencySymbol}{results.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </div>
+                    <p className="text-sm sm:text-base font-black text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 pt-1">
+                      <span>Total Investment Gain:</span>
+                      <span>+{currencySymbol}{results.totalInterestEarned.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                    </p>
+                  </>
+                )}
+
+                {activeMode === "contributions" && (
+                  <>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+                      Required Monthly Contribution
+                    </span>
+                    <div className="text-3xl sm:text-4xl lg:text-[44px] font-black text-blue-700 dark:text-blue-400 tracking-tight leading-none py-1.5">
+                      {currencySymbol}{results.requiredMonthlyContribution.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}/mo
+                    </div>
+                    <p className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 pt-1">
+                      Annual Equivalent: <strong>{currencySymbol}{results.requiredAnnualContribution.toLocaleString()}/yr</strong>
+                    </p>
+                  </>
+                )}
+
+                {activeMode === "return_rate" && (
+                  <>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+                      Required Annual Return Rate
+                    </span>
+                    <div className="text-3xl sm:text-4xl lg:text-[44px] font-black text-blue-700 dark:text-blue-400 tracking-tight leading-none py-1.5">
+                      {results.requiredReturnRate.toFixed(2)}%
+                    </div>
+                    <p className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 pt-1">
+                      To reach target of <strong>{currencySymbol}{parsedGoal.toLocaleString()}</strong>
+                    </p>
+                  </>
+                )}
+
+                {activeMode === "starting_amount" && (
+                  <>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+                      Required Starting Principal
+                    </span>
+                    <div className="text-3xl sm:text-4xl lg:text-[44px] font-black text-blue-700 dark:text-blue-400 tracking-tight leading-none py-1.5">
+                      {currencySymbol}{results.requiredStartingAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </div>
+                    <p className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 pt-1">
+                      To reach target of <strong>{currencySymbol}{parsedGoal.toLocaleString()}</strong>
+                    </p>
+                  </>
+                )}
+
+                {activeMode === "retirement" && (
+                  <>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+                      Retirement Portfolio at Maturity
+                    </span>
+                    <div className="text-3xl sm:text-4xl lg:text-[44px] font-black text-blue-700 dark:text-blue-400 tracking-tight leading-none py-1.5">
+                      {currencySymbol}{results.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </div>
+                    <p className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 pt-1">
+                      Safe Passive Income (4% Rule): <strong>{currencySymbol}{(results.estimatedPassiveIncomePerYear / 12).toLocaleString(undefined, { maximumFractionDigits: 0 })}/mo</strong>
+                    </p>
+                  </>
+                )}
+
+                {activeMode === "fire" && (
+                  <>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+                      FIRE Target (25x Annual Expenses)
+                    </span>
+                    <div className="text-3xl sm:text-4xl lg:text-[44px] font-black text-blue-700 dark:text-blue-400 tracking-tight leading-none py-1.5">
+                      {currencySymbol}{results.fireNumberTarget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </div>
+                    <p className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 pt-1">
+                      Progress: <strong>{results.goalTracker.currentProgressPercent.toFixed(1)}%</strong>
+                    </p>
+                  </>
+                )}
+              </div>
+
+              {/* 2x2 METRICS GRID (4 DISTINCT WHITE INNER CARDS) */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-blue-100 dark:border-slate-700 shadow-2xs space-y-1">
+                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">Starting Principal</span>
+                  <span className="text-base font-black text-slate-900 dark:text-slate-100 block">
+                    {currencySymbol}{results.startingAmount.toLocaleString()}
+                  </span>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-blue-100 dark:border-slate-700 shadow-2xs space-y-1">
+                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">Total Contributions</span>
+                  <span className="text-base font-black text-purple-700 dark:text-purple-400 block">
+                    {currencySymbol}{results.totalContributions.toLocaleString()}
+                  </span>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-blue-100 dark:border-slate-700 shadow-2xs space-y-1">
+                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">Effective APY</span>
+                  <span className="text-base font-black text-blue-700 dark:text-blue-400 block">
+                    {results.effectiveAnnualReturnPercent.toFixed(2)}%
+                  </span>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-blue-100 dark:border-slate-700 shadow-2xs space-y-1">
+                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">Est. Passive Income</span>
+                  <span className="text-base font-black text-emerald-700 dark:text-emerald-400 block">
+                    {currencySymbol}{results.estimatedPassiveIncomePerYear.toLocaleString()}/yr
+                  </span>
+                </div>
+              </div>
+
+              {/* INFLATION PURCHASING POWER CALLOUT CARD */}
+              <div className="p-3.5 rounded-xl bg-amber-50/95 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-xs flex items-center justify-between">
+                <span className="font-sans font-bold text-amber-900 dark:text-amber-200 text-xs">Real Inflation-Adjusted Power:</span>
+                <span className="font-black text-amber-800 dark:text-amber-300 text-sm">
+                  {currencySymbol}{results.inflationAdjustedFutureValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                 </span>
               </div>
             </div>
@@ -1139,121 +763,51 @@ export function InvestmentCalculator() {
         </div>
       </div>
 
-      {/* ==========================================
-          SECTION 3: INVESTMENT SCENARIO COMPARISON TOOL
-         ========================================== */}
-      <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
-        <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
-          <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Investment Scenario Comparison Tool
-          </h2>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setShowScenarioComparison(!showScenarioComparison)}
-            className="h-7 text-xs font-bold gap-1"
-          >
-            {showScenarioComparison ? "Hide Comparison" : "Compare Scenarios"}
-          </Button>
-        </div>
-
-        {showScenarioComparison && (
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-            <div className="md:col-span-5 space-y-3">
-              <div>
-                <label className="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                  Scenario B Expected Rate (%)
-                </label>
-                <Input
-                  type="number"
-                  step="0.5"
-                  value={scenarioBRate}
-                  onChange={(e) => setScenarioBRate(e.target.value)}
-                  className="h-8 text-xs font-sans tabular-nums bg-zinc-50 dark:bg-zinc-950"
-                />
-              </div>
-
-              <div className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 space-y-2 text-xs font-sans tabular-nums">
-                <div className="flex justify-between">
-                  <span>Scenario A ({parsedRate}%):</span>
-                  <span className="font-bold text-zinc-900 dark:text-zinc-100">
-                    {currencySymbol}{results.endingBalance.toLocaleString()}
-                  </span>
-                </div>
-                <div className="flex justify-between border-t border-zinc-200 dark:border-zinc-800 pt-1.5">
-                  <span>Scenario B ({parsedScenarioBRate}%):</span>
-                  <span className="font-bold text-emerald-600 dark:text-emerald-400">
-                    {currencySymbol}{scenarioBResults.endingBalance.toLocaleString()}
-                  </span>
-                </div>
-                <div className="flex justify-between border-t border-zinc-200 dark:border-zinc-800 pt-1.5">
-                  <span>Wealth Difference:</span>
-                  <span className="font-bold text-indigo-600 dark:text-indigo-400">
-                    {scenarioBResults.endingBalance >= results.endingBalance ? "+" : ""}
-                    {currencySymbol}{(scenarioBResults.endingBalance - results.endingBalance).toLocaleString()}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="md:col-span-7 space-y-2">
-              <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
-                Scenario A vs Scenario B Portfolio Growth Comparison
-              </span>
-              <div className="h-44 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={scenarioComparisonData}>
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
-                    <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-                    <YAxis tick={{ fontSize: 10 }} />
-                    <Tooltip formatter={(val: any) => [`${currencySymbol}${Number(val || 0).toLocaleString()}`, "Value"]} />
-                    <Bar dataKey="Balance" fill="#4f46e5" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
+      {/* =========================================================================
+          VISUALIZATIONS: GROWTH ACCUMULATION & ASSET BREAKDOWN (2 WHITE CARDS)
+          ========================================================================= */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        {/* PORTFOLIO GROWTH AREA CHART CARD (COL 7) */}
+        <div className="md:col-span-7 bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-200/90 dark:border-slate-800 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.06)] space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h3 className="text-xs sm:text-sm font-black text-blue-700 dark:text-blue-400 flex items-center gap-2 uppercase tracking-wider">
+              <TrendingUp className="h-4 w-4" />
+              <span>Portfolio Accumulation Over Time</span>
+            </h3>
+            <span className="text-xs font-bold text-slate-500">Nominal vs Real</span>
           </div>
-        )}
-      </div>
-
-      {/* ==========================================
-          SECTION 4: RECHARTS VISUALIZATIONS GRID
-         ========================================== */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-        {/* PORTFOLIO GROWTH AREA CHART (COL 7) */}
-        <div className="md:col-span-7 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
-            Portfolio Accumulation & Inflation-Adjusted Purchasing Power
-          </h3>
-          <div className="h-64 w-full">
+          <div className="h-64 w-full pt-2">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={results.annualSchedule}>
                 <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
-                <XAxis dataKey="year" tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 10 }} />
+                <XAxis dataKey="year" tick={{ fontSize: 10, fill: "#64748b" }} />
+                <YAxis tick={{ fontSize: 10, fill: "#64748b" }} />
                 <Tooltip formatter={(val: any) => [`${currencySymbol}${Number(val || 0).toLocaleString()}`, "Value"]} />
-                <Area type="monotone" dataKey="endingBalance" name="Nominal Balance" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.2} />
-                <Area type="monotone" dataKey="realEndingBalance" name="Inflation Adjusted" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.15} />
+                <Area type="monotone" dataKey="endingBalance" name="Nominal Balance" stroke="#2563eb" fill="#3b82f6" fillOpacity={0.2} strokeWidth={2.5} />
+                <Area type="monotone" dataKey="realEndingBalance" name="Inflation Adjusted" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.15} strokeWidth={2.5} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* DOUGHNUT BREAKDOWN CHART (COL 5) */}
-        <div className="md:col-span-5 bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-4">
-          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400">
-            Final Portfolio Composition
-          </h3>
-          <div className="h-64 w-full">
+        {/* DOUGHNUT BREAKDOWN CARD (COL 5) */}
+        <div className="md:col-span-5 bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-200/90 dark:border-slate-800 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.06)] space-y-4">
+          <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h3 className="text-xs sm:text-sm font-black text-blue-700 dark:text-blue-400 flex items-center gap-2 uppercase tracking-wider">
+              <PieIcon className="h-4 w-4" />
+              <span>Final Portfolio Composition</span>
+            </h3>
+          </div>
+          <div className="h-48 w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
               <RechartsPieChart>
                 <Pie
                   data={doughnutData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={55}
-                  outerRadius={80}
-                  paddingAngle={5}
+                  innerRadius={45}
+                  outerRadius={72}
+                  paddingAngle={4}
                   dataKey="value"
                 >
                   {doughnutData.map((entry, index) => (
@@ -1264,40 +818,42 @@ export function InvestmentCalculator() {
               </RechartsPieChart>
             </ResponsiveContainer>
           </div>
-          <div className="grid grid-cols-3 gap-1 text-[11px] pt-2 border-t border-zinc-100 dark:border-zinc-800 font-medium">
-            <div className="flex items-center gap-1">
-              <div className="h-2.5 w-2.5 rounded bg-blue-500" />
+          <div className="grid grid-cols-3 gap-2 text-xs pt-3 border-t border-slate-100 dark:border-slate-800 font-bold">
+            <div className="flex items-center gap-1.5">
+              <div className="h-3 w-3 rounded-full bg-blue-500" />
               <span>Principal: {results.percentStartingAmount.toFixed(1)}%</span>
             </div>
-            <div className="flex items-center gap-1">
-              <div className="h-2.5 w-2.5 rounded bg-purple-500" />
+            <div className="flex items-center gap-1.5">
+              <div className="h-3 w-3 rounded-full bg-purple-500" />
               <span>Contrib: {results.percentContributions.toFixed(1)}%</span>
             </div>
-            <div className="flex items-center gap-1">
-              <div className="h-2.5 w-2.5 rounded bg-emerald-500" />
-              <span>Interest: {results.percentInterest.toFixed(1)}%</span>
+            <div className="flex items-center gap-1.5">
+              <div className="h-3 w-3 rounded-full bg-emerald-500" />
+              <span>Growth: {results.percentInterest.toFixed(1)}%</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ==========================================
-          SECTION 5: SCHEDULE TABLES & EXPORTS
-         ========================================== */}
-      <div className="bg-white dark:bg-zinc-900 rounded-xl p-5 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
+      {/* =========================================================================
+          ACCUMULATION SCHEDULE TABLE (WHITE CARD)
+          ========================================================================= */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-200/90 dark:border-slate-800 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.06)] space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
           <div className="flex items-center gap-3">
-            <h2 className="text-base font-black text-blue-600 dark:text-blue-400 flex items-center gap-2">Accumulation Schedule Table
-            </h2>
+            <h3 className="text-sm font-black text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-blue-600" />
+              <span>Accumulation Schedule Table</span>
+            </h3>
 
-            <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-1 rounded-lg text-xs">
+            <div className="flex items-center gap-1 bg-[#EAEFF6] dark:bg-slate-800 p-1 rounded-xl text-xs">
               <button
                 type="button"
                 onClick={() => setScheduleMode("annual")}
-                className={`px-2 py-0.5 rounded font-semibold text-xs transition-colors ${
+                className={`px-3 py-1 rounded-lg font-bold text-xs transition-all cursor-pointer ${
                   scheduleMode === "annual"
-                    ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
-                    : "text-zinc-600 dark:text-zinc-400"
+                    ? "bg-blue-600 text-white border border-blue-700"
+                    : "text-slate-700 dark:text-slate-300 hover:text-slate-950 border border-transparent hover:border-slate-300"
                 }`}
               >
                 Annual
@@ -1305,10 +861,10 @@ export function InvestmentCalculator() {
               <button
                 type="button"
                 onClick={() => setScheduleMode("monthly")}
-                className={`px-2 py-0.5 rounded font-semibold text-xs transition-colors ${
+                className={`px-3 py-1 rounded-lg font-bold text-xs transition-all cursor-pointer ${
                   scheduleMode === "monthly"
-                    ? "bg-white dark:bg-zinc-900 text-blue-600 shadow-xs"
-                    : "text-zinc-600 dark:text-zinc-400"
+                    ? "bg-blue-600 text-white border border-blue-700"
+                    : "text-slate-700 dark:text-slate-300 hover:text-slate-950 border border-transparent hover:border-slate-300"
                 }`}
               >
                 Monthly
@@ -1316,44 +872,42 @@ export function InvestmentCalculator() {
             </div>
           </div>
 
-          <Button
+          <button
             type="button"
-            variant="outline"
-            size="sm"
             onClick={handleExportCSV}
-            className="h-8 text-xs font-bold gap-1.5"
+            className="h-9 px-4 text-xs font-bold border border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-xl hover:bg-slate-50 flex items-center gap-2 cursor-pointer transition-all"
           >
-            <Download className="h-3.5 w-3.5 text-blue-600" /> Export CSV
-          </Button>
+            <Download className="h-3.5 w-3.5 text-blue-600" />
+            <span>Export CSV</span>
+          </button>
         </div>
 
-        {/* Schedule Table */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto max-h-80 overflow-y-auto">
           {scheduleMode === "annual" ? (
             <table className="w-full text-xs text-left">
-              <thead className="bg-zinc-50 dark:bg-zinc-950 font-bold text-zinc-700 dark:text-zinc-300 border-b border-zinc-200 dark:border-zinc-800">
+              <thead className="bg-[#EEF4FB] dark:bg-slate-800/90 font-black text-slate-900 dark:text-slate-100 border-b-2 border-slate-300 dark:border-slate-700 sticky top-0">
                 <tr>
-                  <th className="p-3">Year</th>
-                  <th className="p-3">Starting Balance ({currencySymbol})</th>
-                  <th className="p-3">Contributions ({currencySymbol})</th>
-                  <th className="p-3">Interest Earned ({currencySymbol})</th>
-                  <th className="p-3">Ending Balance ({currencySymbol})</th>
+                  <th className="p-3.5">Year</th>
+                  <th className="p-3.5">Starting Balance ({currencySymbol})</th>
+                  <th className="p-3.5">Contributions ({currencySymbol})</th>
+                  <th className="p-3.5">Growth Earned ({currencySymbol})</th>
+                  <th className="p-3.5">Ending Balance ({currencySymbol})</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {results.annualSchedule.map((row) => (
-                  <tr key={row.year} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
-                    <td className="p-3 font-bold font-sans">Year {row.year}</td>
-                    <td className="p-3 text-zinc-600 dark:text-zinc-400">
+                  <tr key={row.year} className="hover:bg-[#F8FAFC] dark:hover:bg-slate-800/60 transition-colors">
+                    <td className="p-3.5 font-bold font-sans">Year {row.year}</td>
+                    <td className="p-3.5 text-slate-600 dark:text-slate-400">
                       {currencySymbol}{row.startingBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="p-3 text-purple-600 dark:text-purple-400 font-semibold">
+                    <td className="p-3.5 text-purple-700 dark:text-purple-400 font-bold">
                       +{currencySymbol}{row.contributions.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="p-3 text-emerald-600 dark:text-emerald-400 font-bold">
+                    <td className="p-3.5 text-emerald-600 dark:text-emerald-400 font-black">
                       +{currencySymbol}{row.interestEarned.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="p-3 font-bold text-zinc-900 dark:text-zinc-100">
+                    <td className="p-3.5 font-black text-slate-900 dark:text-slate-100">
                       {currencySymbol}{row.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
                   </tr>
@@ -1362,29 +916,29 @@ export function InvestmentCalculator() {
             </table>
           ) : (
             <table className="w-full text-xs text-left">
-              <thead className="bg-zinc-50 dark:bg-zinc-950 font-bold text-zinc-700 dark:text-zinc-300 border-b border-zinc-200 dark:border-zinc-800">
+              <thead className="bg-[#EEF4FB] dark:bg-slate-800/90 font-black text-slate-900 dark:text-slate-100 border-b-2 border-slate-300 dark:border-slate-700 sticky top-0">
                 <tr>
-                  <th className="p-3">Month</th>
-                  <th className="p-3">Beginning Balance ({currencySymbol})</th>
-                  <th className="p-3">Contribution ({currencySymbol})</th>
-                  <th className="p-3">Interest ({currencySymbol})</th>
-                  <th className="p-3">Ending Balance ({currencySymbol})</th>
+                  <th className="p-3.5">Month</th>
+                  <th className="p-3.5">Beginning Balance ({currencySymbol})</th>
+                  <th className="p-3.5">Contribution ({currencySymbol})</th>
+                  <th className="p-3.5">Growth ({currencySymbol})</th>
+                  <th className="p-3.5">Ending Balance ({currencySymbol})</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
-                {results.monthlySchedule.map((row) => (
-                  <tr key={row.month} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
-                    <td className="p-3 font-bold font-sans">Month {row.month}</td>
-                    <td className="p-3 text-zinc-600 dark:text-zinc-400">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                {results.monthlySchedule.slice(0, 120).map((row) => (
+                  <tr key={row.month} className="hover:bg-[#F8FAFC] dark:hover:bg-slate-800/60 transition-colors">
+                    <td className="p-3.5 font-bold font-sans">Month {row.month}</td>
+                    <td className="p-3.5 text-slate-600 dark:text-slate-400">
                       {currencySymbol}{row.beginningBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="p-3 text-purple-600 dark:text-purple-400 font-semibold">
+                    <td className="p-3.5 text-purple-700 dark:text-purple-400 font-bold">
                       +{currencySymbol}{row.contribution.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="p-3 text-emerald-600 dark:text-emerald-400 font-bold">
+                    <td className="p-3.5 text-emerald-600 dark:text-emerald-400 font-black">
                       +{currencySymbol}{row.interest.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="p-3 font-bold text-zinc-900 dark:text-zinc-100">
+                    <td className="p-3.5 font-black text-slate-900 dark:text-slate-100">
                       {currencySymbol}{row.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
                   </tr>
@@ -1395,14 +949,45 @@ export function InvestmentCalculator() {
         </div>
       </div>
 
-      {/* ==========================================
-          SECTION 6: EDUCATIONAL CONTENT & FAQS COMPONENT
-         ========================================== */}
-      <InvestmentContent />
+      {/* =========================================================================
+          COMPACT RELATED CALCULATORS (DIRECTLY BELOW CALCULATOR, ABOVE CONTENT)
+          ========================================================================= */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-3">
+        <span className="font-black text-slate-900 dark:text-slate-100 uppercase tracking-wider text-xs block">
+          Related Calculators:
+        </span>
+        <div className="flex flex-wrap gap-2.5">
+          {[
+            { label: "Compound Interest", href: "/calculators/compound-interest-calculator" },
+            { label: "Savings", href: "/calculators/savings-calculator" },
+            { label: "Future Value", href: "/calculators/future-value-calculator" },
+            { label: "Retirement", href: "/calculators/retirement-calculator" },
+            { label: "CAGR", href: "/calculators/cagr-calculator" },
+            { label: "401(k)", href: "/calculators/401k-calculator" },
+            { label: "SIP", href: "/calculators/sip-calculator" },
+            { label: "Traditional IRA", href: "/calculators/traditional-ira-calculator" },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="px-3.5 py-2 rounded-xl bg-[#F8FAFC] dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/50 border border-slate-300/80 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-600 text-blue-700 dark:text-blue-400 font-bold text-xs transition-all"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      </div>
 
-      {/* ==========================================
-          EXECUTIVE PRINT / PDF REPORT MODAL
-         ========================================== */}
+      {/* =========================================================================
+          MAIN EDUCATIONAL CONTENT & OPEN FAQS
+          ========================================================================= */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/90 dark:border-slate-800 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.06)]">
+        <InvestmentContent />
+      </div>
+
+      {/* =========================================================================
+          PRINT / PDF REPORT MODAL
+          ========================================================================= */}
       {isReportOpen && (
         <ReportModal
           isOpen={isReportOpen}
@@ -1413,3 +998,5 @@ export function InvestmentCalculator() {
     </div>
   );
 }
+
+export default InvestmentCalculator;

@@ -539,8 +539,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
 
       {/* 2. Page Header & Quick Layout Grid (Col-9 Main | Col-3 Sidebar) */}
       <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Main Interactive Calculator Area (Col 9) */}
-        <div className="min-w-0 lg:col-span-9 space-y-4">
+        {/* Main Interactive Calculator Area (Col 12 for Investment Calculator, Col 9 for standard calculators) */}
+        <div className={`min-w-0 ${isInvestment ? "lg:col-span-12" : "lg:col-span-9"} space-y-4`}>
           <div className="bg-slate-50 dark:bg-slate-900/50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
             <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
               {isLoan ? "Loan Calculator & Amortization Payment Analyzer" : isPersonalLoan ? "Personal Loan Calculator & Amortization Payment Suite" : definition.title}
@@ -872,8 +872,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             )}
           </CalculatorErrorBoundary>
 
-          {/* Simple Related Calculators Links directly below calculator boxes (Suppressed for Personal Loan, Salary, and Income Tax which have dedicated approved suites) */}
-          {!isPersonalLoan && !isSalary && !isIncomeTax && (
+          {/* Simple Related Calculators Links directly below calculator boxes (Suppressed for Personal Loan, Salary, Income Tax, and Investment which have dedicated approved suites) */}
+          {!isPersonalLoan && !isSalary && !isIncomeTax && !isInvestment && (
             <div className="pt-2 pb-1 space-y-1">
               <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
                 Related Calculators:
@@ -883,119 +883,123 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
         </div>
 
-        {/* Right Sidebar: Quick Navigation & Search Index (Sticky Top 20) */}
-        <aside className="min-w-0 lg:col-span-3 sticky top-20 space-y-4">
-          {/* Quick Search and Category Index */}
-          <div className="bg-card text-card-foreground border border-border rounded-xl p-3.5 shadow-xs space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              Quick Search
-            </h3>
-            <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Find calculator..."
-                value={sidebarQuery}
-                onChange={(e) => setSidebarQuery(e.target.value)}
-                className="pl-8 bg-background border-border h-8 text-xs rounded-lg"
-              />
-            </div>
-
-            <div className="border-t border-border pt-3 space-y-2.5">
-              <div className="flex items-center justify-between border-b border-border pb-2">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  {definition.category} Calculators
-                </h3>
-                <span className="text-[10px] font-sans tabular-nums text-current bg-muted px-1.5 py-0.5 rounded">
-                  {filteredSidebarCalculators.length}
-                </span>
+        {/* Right Sidebar: Quick Navigation & Search Index (Suppressed for Investment Calculator to grant full width) */}
+        {!isInvestment && (
+          <aside className="min-w-0 lg:col-span-3 sticky top-20 space-y-4">
+            {/* Quick Search and Category Index */}
+            <div className="bg-card text-card-foreground border border-border rounded-xl p-3.5 shadow-xs space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Quick Search
+              </h3>
+              <div className="relative">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Find calculator..."
+                  value={sidebarQuery}
+                  onChange={(e) => setSidebarQuery(e.target.value)}
+                  className="pl-8 bg-background border-border h-8 text-xs rounded-lg"
+                />
               </div>
 
-              <ul className="space-y-1 text-xs">
-                {visibleSidebarCalculators.map((calc, idx) => {
-                  const isActive = calc.id === definition.id || calc.slug === definition.slug;
-                  return (
-                    <li key={`${calc.id}-${calc.slug}-${idx}`}>
-                      <Link
-                        href={`/calculators/${calc.slug}`}
-                        className={`flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors group ${isActive
-                          ? "bg-blue-600 text-white font-semibold shadow-sm"
-                          : "text-foreground hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-950/40 dark:hover:text-blue-300"
-                          }`}
-                      >
-                        <span className="truncate">{getCalculatorDisplayTitle(calc.title)}</span>
-                        <ArrowRight className={`h-3 w-3 transition-transform ${isActive ? "text-white" : "text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"}`} />
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
+              <div className="border-t border-border pt-3 space-y-2.5">
+                <div className="flex items-center justify-between border-b border-border pb-2">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    {definition.category} Calculators
+                  </h3>
+                  <span className="text-[10px] font-sans tabular-nums text-current bg-muted px-1.5 py-0.5 rounded">
+                    {filteredSidebarCalculators.length}
+                  </span>
+                </div>
 
-              {filteredSidebarCalculators.length === 0 && (
-                <p className="px-2 py-1 text-xs text-muted-foreground">No calculators found.</p>
-              )}
+                <ul className="space-y-1 text-xs">
+                  {visibleSidebarCalculators.map((calc, idx) => {
+                    const isActive = calc.id === definition.id || calc.slug === definition.slug;
+                    return (
+                      <li key={`${calc.id}-${calc.slug}-${idx}`}>
+                        <Link
+                          href={`/calculators/${calc.slug}`}
+                          className={`flex items-center justify-between px-2 py-1.5 rounded-lg transition-colors group ${isActive
+                            ? "bg-blue-600 text-white font-semibold shadow-sm"
+                            : "text-foreground hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-blue-950/40 dark:hover:text-blue-300"
+                            }`}
+                        >
+                          <span className="truncate">{getCalculatorDisplayTitle(calc.title)}</span>
+                          <ArrowRight className={`h-3 w-3 transition-transform ${isActive ? "text-white" : "text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"}`} />
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
 
-              <Link
-                href={categoryHref}
-                className="flex items-center justify-between border-t border-border pt-2 text-xs font-semibold text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-              >
-                See all {definition.category} calculators
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
+                {filteredSidebarCalculators.length === 0 && (
+                  <p className="px-2 py-1 text-xs text-muted-foreground">No calculators found.</p>
+                )}
+
+                <Link
+                  href={categoryHref}
+                  className="flex items-center justify-between border-t border-border pt-2 text-xs font-semibold text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                  See all {definition.category} calculators
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </div>
             </div>
-          </div>
-        </aside>
+          </aside>
+        )}
       </div>
 
 
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3.5 shadow-xs text-slate-900 dark:text-slate-100">
-        {/* Formula & Calculation Method */}
-        {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
-          <div className="space-y-2">
-            <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-              Formula & Calculation Method
-            </h3>
-            <FormulaSection
-              formula={definition.formulaDescription}
-              explanation={`How ${definition.title} calculations work.`}
-            />
-          </div>
-        )}
-
-        {/* Educational Content & Examples */}
-        {CustomContent && (
-          <div className="space-y-3 text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
-            <div className="prose prose-slate dark:prose-invert max-w-none text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
-              <CustomContent />
+      {!isInvestment && (
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3.5 shadow-xs text-slate-900 dark:text-slate-100">
+          {/* Formula & Calculation Method */}
+          {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
+            <div className="space-y-2">
+              <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                Formula & Calculation Method
+              </h3>
+              <FormulaSection
+                formula={definition.formulaDescription}
+                explanation={`How ${definition.title} calculations work.`}
+              />
             </div>
-          </div>
-        )}
+          )}
 
-        {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Custom suites per AGENTS.md policy) */}
-        {definition.category !== "Math" && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
-          <div className="space-y-3">
-            <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-              Frequently Asked Questions
-            </h3>
+          {/* Educational Content & Examples */}
+          {CustomContent && (
+            <div className="space-y-3 text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
+              <div className="prose prose-slate dark:prose-invert max-w-none text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
+                <CustomContent />
+              </div>
+            </div>
+          )}
+
+          {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Custom suites per AGENTS.md policy) */}
+          {definition.category !== "Math" && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
             <div className="space-y-3">
-              {(definition.faqs && definition.faqs.length >= 5
-                ? definition.faqs
-                : getTenHighQualityFaqs(definition.title, definition.category)
-              ).slice(0, 10).map((faq, idx) => (
-                <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
-                  <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
-                    {faq.question}
-                  </h4>
-                  <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed font-medium">
-                    {faq.answer}
-                  </p>
-                </div>
-              ))}
+              <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                Frequently Asked Questions
+              </h3>
+              <div className="space-y-3">
+                {(definition.faqs && definition.faqs.length >= 5
+                  ? definition.faqs
+                  : getTenHighQualityFaqs(definition.title, definition.category)
+                ).slice(0, 10).map((faq, idx) => (
+                  <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                    <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                      {faq.question}
+                    </h4>
+                    <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed font-medium">
+                      {faq.answer}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       {/* Generic Report Modal */}
       <ReportModal
