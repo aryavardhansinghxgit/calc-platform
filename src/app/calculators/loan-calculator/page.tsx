@@ -5,8 +5,8 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Loan Calculator – Monthly Payment, Loan Amount & Loan Term",
-    description: "Calculate monthly loan payments, loan amount, loan term, and total interest with detailed amortization schedules and charts.",
+    title: "Loan Calculator – Monthly, Biweekly & Extra Payment Payoff",
+    description: "Calculate loan payments across monthly, biweekly, and weekly schedules. Model extra payments, generate complete amortization schedules, and solve for loan amount, term, or interest rate.",
     slug: LOAN_CALCULATOR.slug,
   });
 }

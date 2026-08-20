@@ -632,7 +632,7 @@ export function LoanCalculator() {
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Estimated APR</span>
+                  <span className="text-[10px] text-zinc-500 block">Nominal APR (Fee-Free)</span>
                   <span className="text-sm font-bold font-sans tabular-nums text-purple-600 dark:text-purple-400">
                     {results.estimatedApr}%
                   </span>

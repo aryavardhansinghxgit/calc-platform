@@ -197,7 +197,7 @@ export function calculateLoanModule(inputs: LoanInput): LoanOutput {
     requiredTermMonths: totalMonths % 12,
     requiredTermYears: Math.floor(totalMonths / 12),
     estimatedInterestRate: Number(calcInterestRate.toFixed(2)),
-    estimatedApr: Number((calcInterestRate * 1.05).toFixed(2)),
+    estimatedApr: Number(calcInterestRate.toFixed(2)),
     totalPaymentsCount: activeTotalPaymentsCount,
     totalInterest,
     totalRepayment,
