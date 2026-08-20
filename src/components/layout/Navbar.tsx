@@ -129,7 +129,7 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
               onBlur={() => setTimeout(() => setIsFocused(false), 200)}
               onChange={handleSearch}
               aria-label="Search calculators"
-              className="pl-8 pr-12 bg-blue-700/70 border-blue-400/70 text-white placeholder:text-blue-100 focus:border-white focus:ring-2 focus:ring-white/20 rounded-lg h-8 text-xs transition-all"
+              className="pl-8 pr-12 bg-blue-700/80 border border-blue-400/60 hover:border-blue-300 text-white placeholder:text-blue-200 focus:border-white focus:ring-1 focus:ring-white/30 rounded-lg h-8 text-xs transition-all shadow-none"
             />
             {/* Autocomplete Popup */}
             {isFocused && searchTerm.trim() !== "" && (
