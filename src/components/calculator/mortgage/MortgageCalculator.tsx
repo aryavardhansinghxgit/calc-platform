@@ -1093,7 +1093,7 @@ export function MortgageCalculator() {
                 <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-0.5">Other Costs</span>
                 <span className="text-sm font-extrabold font-sans tabular-nums text-purple-600 dark:text-purple-400">
                   {formatCurrency(
-                    results.monthlyPmi + results.monthlyHoa + (results.monthlyOtherCosts / 12)
+                    results.monthlyPmi + results.monthlyHoa + results.monthlyOtherCosts
                   )}
                 </span>
               </div>
@@ -1243,7 +1243,7 @@ export function MortgageCalculator() {
                   principalAndInterest={results.monthlyPrincipalAndInterest}
                   propertyTax={results.monthlyPropertyTax}
                   insurance={results.monthlyInsurance}
-                  otherCosts={results.monthlyPmi + results.monthlyHoa + (results.monthlyOtherCosts / 12)}
+                  otherCosts={results.monthlyPmi + results.monthlyHoa + results.monthlyOtherCosts}
                   extraPayment={extraMonthlyPayment}
                 />
               )}

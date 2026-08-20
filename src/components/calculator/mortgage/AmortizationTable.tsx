@@ -126,10 +126,10 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
           `${r.year},"${r.dateRange}",${r.totalPayment.toFixed(2)},${(r.principalPaid + r.extraPaid).toFixed(2)},${r.interestPaid.toFixed(2)},${r.extraPaid.toFixed(2)},${r.remainingBalance.toFixed(2)}`
       );
     } else if (viewMode === "biweekly" && biweeklySchedule) {
-      headers = "Biweekly Period,Date,Payment,Principal,Interest,Remaining Balance\n";
+      headers = "Biweekly Period,Date,Payment,Principal,Interest,Taxes & Fees,Remaining Balance\n";
       csvLines = biweeklySchedule.map(
         (r) =>
-          `${r.month},"${r.date}",${r.payment.toFixed(2)},${r.principalPaid.toFixed(2)},${r.interestPaid.toFixed(2)},${r.remainingBalance.toFixed(2)}`
+          `${r.month},"${r.date}",${r.payment.toFixed(2)},${r.principalPaid.toFixed(2)},${r.interestPaid.toFixed(2)},${((r.propertyTax || 0) + (r.homeInsurance || 0) + (r.pmi || 0) + (r.hoaFee || 0) + (r.otherCosts || 0)).toFixed(2)},${r.remainingBalance.toFixed(2)}`
       );
     } else {
       headers = "Month,Date,Payment,Principal,Interest,Extra Paid,Taxes & Fees,Remaining Balance\n";

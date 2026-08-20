@@ -1,45 +1,41 @@
-import {
-  MortgageModuleInput,
-  MortgageModuleOutput,
-  AmortizationRow,
-  CostBreakdownItem,
-} from "./types";
-import { PMT } from "@/lib/finance/financial-math";
+// Comprehensive PMI, Escalation, and Consistency Audit Runner
 
-export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageModuleOutput {
+function appPMT(rate, nper, pv, fv = 0, type = 0) {
+  if (rate === 0) return -(pv + fv) / nper;
+  const pvif = Math.pow(1 + rate, nper);
+  let pmt = (rate * (pv * pvif + fv)) / (pvif - 1);
+  if (type === 1) pmt /= 1 + rate;
+  return pmt;
+}
+
+function calculateMortgage(inputs) {
   const {
     homePrice = 400000,
     downPayment = 80000,
     downPaymentType = "amount",
     interestRate = 6.5,
     loanTermYears = 30,
-    startMonth = new Date().getMonth() + 1,
-    startYear = new Date().getFullYear(),
-
+    startMonth = 8,
+    startYear = 2026,
     propertyTax = 4800,
     propertyTaxType = "amount",
     homeInsurance = 1500,
     pmiRate = 0.5,
     hoaFee = 0,
     otherCosts = 0,
-
     propertyTaxIncrease = 2.0,
     insuranceIncrease = 3.0,
     hoaIncrease = 2.5,
     otherCostsIncrease = 2.0,
-
     extraMonthlyPayment = 0,
     extraMonthlyStartMonth = startMonth,
     extraMonthlyStartYear = startYear,
-
     extraYearlyPayment = 0,
     extraYearlyStartMonth = startMonth,
     extraYearlyStartYear = startYear,
-
     extraOneTimePayments = [],
   } = inputs;
 
-  // 1. Down Payment & Loan Amount
   let downPaymentAmount = 0;
   if (downPaymentType === "percent") {
     downPaymentAmount = (homePrice * Math.max(0, downPayment)) / 100;
@@ -53,23 +49,20 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
   const totalMonths = Math.max(1, Math.round(loanTermYears * 12));
   const monthlyRate = Math.max(0, interestRate) / 100 / 12;
 
-  // 2. Base Monthly Principal & Interest Payment
   let monthlyPrincipalAndInterest = 0;
   if (loanAmount > 0) {
     if (monthlyRate > 0) {
-      monthlyPrincipalAndInterest = PMT(monthlyRate, totalMonths, loanAmount);
+      monthlyPrincipalAndInterest = appPMT(monthlyRate, totalMonths, loanAmount);
     } else {
       monthlyPrincipalAndInterest = loanAmount / totalMonths;
     }
   }
 
-  // Initial first-year monthly components
   const initialAnnualTax = propertyTaxType === "percent" ? (homePrice * propertyTax) / 100 : propertyTax;
   const initialMonthlyTax = initialAnnualTax / 12;
   const initialMonthlyInsurance = homeInsurance / 12;
   const initialMonthlyOtherCosts = otherCosts / 12;
 
-  // PMI rules: Required if initial down payment < 20% (LTV > 80%)
   const requiresPmi = downPaymentPercent < 20;
   const initialAnnualPmi = requiresPmi ? loanAmount * (pmiRate / 100) : 0;
   const initialMonthlyPmi = initialAnnualPmi / 12;
@@ -83,22 +76,7 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
     initialMonthlyOtherCosts +
     extraMonthlyPayment;
 
-  // 3. Baseline calculation (without extra payments) to calculate interest savings
-  let baselineInterestPaid = 0;
-  if (loanAmount > 0) {
-    let bBalance = loanAmount;
-    for (let m = 1; m <= totalMonths; m++) {
-      const bInterest = bBalance * monthlyRate;
-      let bPrincipal = monthlyPrincipalAndInterest - bInterest;
-      if (bPrincipal > bBalance) bPrincipal = bBalance;
-      baselineInterestPaid += bInterest;
-      bBalance -= bPrincipal;
-      if (bBalance <= 0) break;
-    }
-  }
-
-  // 4. Monthly schedule simulation with inflation and extra payments (including multiple one-time payments)
-  const schedule: AmortizationRow[] = [];
+  const schedule = [];
   let balance = loanAmount;
   let accumulatedInterest = 0;
   let accumulatedTax = 0;
@@ -118,7 +96,6 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
 
   while (balance > 0.001 && currentMonthIndex < totalMonths) {
     currentMonthIndex++;
-
     const yearIndex = Math.floor((currentMonthIndex - 1) / 12);
 
     const taxMultiplier = Math.pow(1 + propertyTaxIncrease / 100, yearIndex);
@@ -143,10 +120,8 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
     const yNum = startYear + Math.floor(totalMonthOffset / 12);
     const dateStr = `${monthNames[mNum - 1]} ${yNum}`;
 
-    // Extra payments logic
     let extraPaidThisMonth = 0;
 
-    // Monthly extra payment check
     const isMonthlyActive =
       yNum > extraMonthlyStartYear ||
       (yNum === extraMonthlyStartYear && mNum >= extraMonthlyStartMonth);
@@ -154,14 +129,12 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
       extraPaidThisMonth += Math.max(0, extraMonthlyPayment);
     }
 
-    // Yearly extra payment check
     const isYearlyActive =
       mNum === extraYearlyStartMonth && yNum >= extraYearlyStartYear;
     if (isYearlyActive) {
       extraPaidThisMonth += Math.max(0, extraYearlyPayment);
     }
 
-    // Multiple One-Time Payments check
     if (extraOneTimePayments && extraOneTimePayments.length > 0) {
       extraOneTimePayments.forEach((otp) => {
         if (Number(otp.amount) > 0 && Number(otp.month) === mNum && Number(otp.year) === yNum) {
@@ -215,120 +188,8 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
   const finalY = startYear + Math.floor(lastMonthOffset / 12);
   const payoffDate = `${fullMonthNames[finalM]} ${finalY}`;
 
-  const totalInterestPaid = accumulatedInterest;
-  const totalPrincipalPaid = loanAmount;
-  const totalPropertyTaxPaid = accumulatedTax;
-  const totalInsurancePaid = accumulatedInsurance;
-  const totalPmiPaid = accumulatedPmi;
-  const totalHoaPaid = accumulatedHoa;
-  const totalOtherCostsPaid = accumulatedOther;
-
-  const totalCost =
-    totalPrincipalPaid +
-    totalInterestPaid +
-    totalPropertyTaxPaid +
-    totalInsurancePaid +
-    totalPmiPaid +
-    totalHoaPaid +
-    totalOtherCostsPaid;
-
-  const interestSavings = Math.max(0, baselineInterestPaid - totalInterestPaid);
-  const monthsSaved = Math.max(0, totalMonths - payoffMonths);
-
-  // 5. Biweekly Calculation Engine
-  const biweeklyPayment = monthlyPrincipalAndInterest / 2;
-  const biweeklyRate = Math.max(0, interestRate) / 100 / 26;
-  const maxBiweeklyPeriods = loanTermYears * 26;
-
-  let biweeklyBalance = loanAmount;
-  let biweeklyAccumulatedInterest = 0;
-  let biweeklyPeriodCount = 0;
-  const biweeklySchedule: AmortizationRow[] = [];
-
-  while (biweeklyBalance > 0.001 && biweeklyPeriodCount < maxBiweeklyPeriods) {
-    biweeklyPeriodCount++;
-    const periodInterest = biweeklyBalance * biweeklyRate;
-    let periodPrincipal = biweeklyPayment - periodInterest;
-    if (periodPrincipal < 0) periodPrincipal = 0;
-    if (periodPrincipal > biweeklyBalance) periodPrincipal = biweeklyBalance;
-
-    biweeklyBalance -= periodPrincipal;
-    biweeklyAccumulatedInterest += periodInterest;
-
-    // Approximate date for biweekly row (every 2 weeks = ~0.46 months)
-    const monthOffset = Math.floor((biweeklyPeriodCount - 1) * (12 / 26));
-    const totalOffset = (startMonth - 1) + monthOffset;
-    const bM = (totalOffset % 12);
-    const bY = startYear + Math.floor(totalOffset / 12);
-    const bDateStr = `BW ${biweeklyPeriodCount} (${monthNames[bM]} ${bY})`;
-
-    biweeklySchedule.push({
-      month: biweeklyPeriodCount,
-      year: Math.ceil(biweeklyPeriodCount / 26),
-      date: bDateStr,
-      payment: periodPrincipal + periodInterest + (initialMonthlyTax / 2) + (initialMonthlyInsurance / 2),
-      principalPaid: periodPrincipal,
-      interestPaid: periodInterest,
-      extraPaid: 0,
-      propertyTax: initialMonthlyTax / 2,
-      homeInsurance: initialMonthlyInsurance / 2,
-      pmi: 0,
-      hoaFee: hoaFee / 2,
-      otherCosts: initialMonthlyOtherCosts / 2,
-      remainingBalance: Math.max(0, biweeklyBalance),
-      totalInterestPaid: biweeklyAccumulatedInterest,
-    });
-
-    if (biweeklyBalance <= 0) break;
-  }
-
-  const biweeklyPayoffMonths = Math.ceil((biweeklyPeriodCount * 12) / 26);
-  const bwLastMonthOffset = (startMonth - 1) + (biweeklyPayoffMonths - 1);
-  const bwFinalM = (bwLastMonthOffset % 12);
-  const bwFinalY = startYear + Math.floor(bwLastMonthOffset / 12);
-  const biweeklyPayoffDate = `${fullMonthNames[bwFinalM]} ${bwFinalY}`;
-
-  const biweeklyInterestSavings = Math.max(0, baselineInterestPaid - biweeklyAccumulatedInterest);
-  const biweeklyMonthsSaved = Math.max(0, totalMonths - biweeklyPayoffMonths);
-
-  // Breakdown table & Donut visual items
-  const totalOtherLifetime = totalPmiPaid + totalHoaPaid + totalOtherCostsPaid;
-  const initialOtherMonthly = initialMonthlyPmi + hoaFee + initialMonthlyOtherCosts;
-
-  const breakdown: CostBreakdownItem[] = [
-    {
-      category: "Principal & Interest",
-      monthlyFirstYear: monthlyPrincipalAndInterest,
-      totalLifetime: totalPrincipalPaid + totalInterestPaid,
-      percentageOfTotal: totalCost > 0 ? ((totalPrincipalPaid + totalInterestPaid) / totalCost) * 100 : 0,
-      color: "#3B82F6",
-    },
-    {
-      category: "Property Tax",
-      monthlyFirstYear: initialMonthlyTax,
-      totalLifetime: totalPropertyTaxPaid,
-      percentageOfTotal: totalCost > 0 ? (totalPropertyTaxPaid / totalCost) * 100 : 0,
-      color: "#10B981",
-    },
-    {
-      category: "Home Insurance",
-      monthlyFirstYear: initialMonthlyInsurance,
-      totalLifetime: totalInsurancePaid,
-      percentageOfTotal: totalCost > 0 ? (totalInsurancePaid / totalCost) * 100 : 0,
-      color: "#F59E0B",
-    },
-    {
-      category: "Other Costs (PMI, HOA, Fees)",
-      monthlyFirstYear: initialOtherMonthly,
-      totalLifetime: totalOtherLifetime,
-      percentageOfTotal: totalCost > 0 ? (totalOtherLifetime / totalCost) * 100 : 0,
-      color: "#8B5CF6",
-    },
-  ];
-
   return {
     loanAmount,
-    downPaymentAmount,
     downPaymentPercent,
     monthlyPrincipalAndInterest,
     monthlyPropertyTax: initialMonthlyTax,
@@ -336,34 +197,71 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
     monthlyPmi: initialMonthlyPmi,
     monthlyHoa: hoaFee,
     monthlyOtherCosts: initialMonthlyOtherCosts,
-    monthlyExtraPayment: extraMonthlyPayment,
     totalInitialMonthlyPayment,
-
-    totalInterestPaid,
-    totalBaselineInterestPaid: baselineInterestPaid,
-    interestSavings,
-    monthsSaved,
-
-    totalPrincipalPaid,
-    totalPropertyTaxPaid,
-    totalInsurancePaid,
-    totalPmiPaid,
-    totalHoaPaid,
-    totalOtherCostsPaid,
-    totalCost,
-
+    totalInterestPaid: accumulatedInterest,
+    totalPropertyTaxPaid: accumulatedTax,
+    totalInsurancePaid: accumulatedInsurance,
+    totalPmiPaid: accumulatedPmi,
+    totalHoaPaid: accumulatedHoa,
+    totalOtherCostsPaid: accumulatedOther,
+    totalCost: loanAmount + accumulatedInterest + accumulatedTax + accumulatedInsurance + accumulatedPmi + accumulatedHoa + accumulatedOther,
     payoffDate,
     payoffMonths,
-
-    biweeklyPayment,
-    biweeklyPayoffDate,
-    biweeklyPayoffMonths,
-    biweeklyTotalInterest: biweeklyAccumulatedInterest,
-    biweeklyInterestSavings,
-    biweeklyMonthsSaved,
-    biweeklyAmortizationSchedule: biweeklySchedule,
-
-    breakdown,
-    amortizationSchedule: schedule,
+    schedule,
   };
 }
+
+console.log("=== 1. DETAILED PMI SCHEDULE THRESHOLD ANALYSIS ===");
+// Home = $400k, DP = $40k (10% DP, $360k loan), Rate = 6.5%, Term = 30Y, PMI Rate = 0.5%
+// 80% threshold = $320,000. 78% threshold = $312,000.
+const pmiRes = calculateMortgage({
+  homePrice: 400000,
+  downPayment: 40000,
+  interestRate: 6.5,
+  loanTermYears: 30,
+  pmiRate: 0.5,
+  propertyTax: 0,
+  homeInsurance: 0,
+  hoaFee: 0,
+  otherCosts: 0,
+  propertyTaxIncrease: 0,
+  insuranceIncrease: 0,
+  hoaIncrease: 0,
+  otherCostsIncrease: 0
+});
+
+console.log("Initial Loan: $360,000 | 80% Threshold: $320,000 | 78% Threshold: $312,000");
+console.log("Initial Monthly PMI:", pmiRes.monthlyPmi.toFixed(2));
+
+// Find month where balance crosses 80% and 78%
+let pmiStopMonth = -1;
+let pmiStopBalance = 0;
+let crossed78Month = -1;
+
+for (let i = 0; i < pmiRes.schedule.length; i++) {
+  const row = pmiRes.schedule[i];
+  if (row.pmi > 0 && pmiRes.schedule[i+1] && pmiRes.schedule[i+1].pmi === 0) {
+    pmiStopMonth = row.month;
+    pmiStopBalance = row.remainingBalance;
+  }
+  if (row.remainingBalance <= 312000 && crossed78Month === -1) {
+    crossed78Month = row.month;
+  }
+}
+
+console.log(`PMI charged up to Month ${pmiStopMonth} (Remaining Balance: $${pmiStopBalance.toFixed(2)})`);
+console.log(`Month ${pmiStopMonth + 1} PMI charged: $${pmiRes.schedule[pmiStopMonth].pmi.toFixed(2)} (Balance: $${pmiRes.schedule[pmiStopMonth].remainingBalance.toFixed(2)})`);
+console.log(`Balance reaches <= 78% ($312k) at Month ${crossed78Month} (Balance: $${pmiRes.schedule[crossed78Month-1].remainingBalance.toFixed(2)})`);
+console.log(`Total PMI Paid across life of loan: $${pmiRes.totalPmiPaid.toFixed(2)}`);
+
+console.log("\n=== 2. ANNUAL ESCALATION COMPOUNDING TEST ===");
+const escRates = [0, 1, 2, 3, 20];
+escRates.forEach(rate => {
+  const taxBase = 400; // $400/mo
+  const y1 = taxBase * Math.pow(1 + rate/100, 0);
+  const y2 = taxBase * Math.pow(1 + rate/100, 1);
+  const y3 = taxBase * Math.pow(1 + rate/100, 2);
+  const y10 = taxBase * Math.pow(1 + rate/100, 9);
+  const y30 = taxBase * Math.pow(1 + rate/100, 29);
+  console.log(`Rate ${rate}% -> Y1: $${y1.toFixed(2)}, Y2: $${y2.toFixed(2)}, Y3: $${y3.toFixed(2)}, Y10: $${y10.toFixed(2)}, Y30: $${y30.toFixed(2)}`);
+});
