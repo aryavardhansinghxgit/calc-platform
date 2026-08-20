@@ -48,7 +48,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { IncomeTaxContent } from "./IncomeTaxContent";
 import {
   calculateIncomeTax,
   FilingStatus,
@@ -71,7 +70,7 @@ export function IncomeTaxCalculator() {
   // W-2 & Primary Income
   const [wagesW2, setWagesW2] = useState<number>(85000);
   const [fedTaxWithheld, setFedTaxWithheld] = useState<number>(9500);
-  const [stateTaxWithheld, setStateTaxWithheld] = useState<number>(2500);
+  const [stateTaxWithheld, setStateTaxWithheld] = useState<number>(0);
   const [localTaxWithheld, setLocalTaxWithheld] = useState<number>(0);
 
   // Self Employment & Business Toggle
@@ -610,56 +609,73 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
           <div id="tax-results-dashboard" className="lg:col-span-7 space-y-4">
             {/* Primary Highlight Card (Refund vs Owed) */}
             <div
-              className={`rounded-2xl p-6 shadow-md text-white relative overflow-hidden transition-all ${
+              className={`rounded-2xl p-6 border shadow-xs relative overflow-hidden transition-all ${
                 results.isRefund
-                  ? "bg-gradient-to-br from-emerald-900 via-teal-950 to-slate-900"
-                  : "bg-gradient-to-br from-amber-950 via-rose-950 to-slate-900"
+                  ? "bg-emerald-50/80 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800/60 text-slate-900 dark:text-slate-100"
+                  : "bg-amber-50/80 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800/60 text-slate-900 dark:text-slate-100"
               }`}
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs uppercase tracking-wider font-bold text-white/80">
+                <span
+                  className={`text-xs uppercase tracking-wider font-bold ${
+                    results.isRefund
+                      ? "text-emerald-700 dark:text-emerald-400"
+                      : "text-amber-800 dark:text-amber-400"
+                  }`}
+                >
                   {results.isRefund ? "ESTIMATED IRS TAX REFUND" : "ESTIMATED TAX OWED TO IRS"}
                 </span>
                 <div className="flex gap-2">
-                  
                   <Button
                     type="button"
                     size="sm"
                     onClick={() => setIsReportOpen(true)}
-                    className="h-7 text-xs bg-blue-600 hover:bg-blue-500 text-white font-semibold cursor-pointer"
+                    className="h-7 text-xs bg-blue-600 hover:bg-blue-500 text-white font-semibold cursor-pointer shadow-xs"
                   >
                     <Printer className="h-3 w-3 mr-1" /> PDF Report
                   </Button>
                 </div>
               </div>
 
-              <div className="text-4xl sm:text-5xl font-extrabold tracking-tight font-sans tabular-nums text-white mb-2">
+              <div
+                className={`text-4xl sm:text-5xl font-extrabold tracking-tight font-sans tabular-nums mb-2 ${
+                  results.isRefund
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : "text-amber-700 dark:text-amber-400"
+                }`}
+              >
                 {fmt(Math.abs(results.netTaxRefundOrOwed))}
               </div>
 
-              <div className="text-xs text-white/90 font-medium">
+              <div className="text-xs text-slate-600 dark:text-slate-400 font-medium">
                 {results.isRefund
                   ? "✓ You have overwithheld taxes and are due a refund check from the IRS."
                   : "⚠ Your tax withholding was lower than your calculated tax liability."}
               </div>
 
               {/* Secondary Breakdown */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-4 border-t border-white/10 text-xs">
+              <div
+                className={`grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-4 border-t text-xs ${
+                  results.isRefund
+                    ? "border-emerald-200/70 dark:border-emerald-800/50"
+                    : "border-amber-200/70 dark:border-amber-800/50"
+                }`}
+              >
                 <div>
-                  <div className="text-zinc-400 text-[11px]">Gross Income</div>
-                  <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.totalGrossIncome)}</div>
+                  <div className="text-slate-500 dark:text-slate-400 text-[11px]">Gross Income</div>
+                  <div className="font-bold font-sans tabular-nums text-slate-900 dark:text-slate-100 text-sm">{fmt(results.totalGrossIncome)}</div>
                 </div>
                 <div>
-                  <div className="text-zinc-400 text-[11px]">Taxable Income</div>
-                  <div className="font-bold font-sans tabular-nums text-emerald-300 text-sm">{fmt(results.totalTaxableIncome)}</div>
+                  <div className="text-slate-500 dark:text-slate-400 text-[11px]">Taxable Income</div>
+                  <div className="font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400 text-sm">{fmt(results.totalTaxableIncome)}</div>
                 </div>
                 <div>
-                  <div className="text-zinc-400 text-[11px]">Federal Tax Liability</div>
-                  <div className="font-bold font-sans tabular-nums text-purple-300 text-sm">{fmt(results.totalTaxLiability)}</div>
+                  <div className="text-slate-500 dark:text-slate-400 text-[11px]">Federal Tax Liability</div>
+                  <div className="font-bold font-sans tabular-nums text-purple-600 dark:text-purple-400 text-sm">{fmt(results.totalTaxLiability)}</div>
                 </div>
                 <div>
-                  <div className="text-zinc-400 text-[11px]">Tax Withheld</div>
-                  <div className="font-bold font-sans tabular-nums text-amber-300 text-sm">{fmt(results.totalTaxWithheld)}</div>
+                  <div className="text-slate-500 dark:text-slate-400 text-[11px]">Tax Withheld</div>
+                  <div className="font-bold font-sans tabular-nums text-amber-600 dark:text-amber-400 text-sm">{fmt(results.totalTaxWithheld)}</div>
                 </div>
               </div>
             </div>
@@ -679,13 +695,13 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
-                <div className="text-[10px] text-zinc-500 uppercase font-semibold">Deduction Saved</div>
+                <div className="text-[10px] text-zinc-500 uppercase font-semibold">Total Deductions</div>
                 <div className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-sans tabular-nums mt-0.5">
                   {fmt(results.effectiveDeduction)}
                 </div>
               </div>
               <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm text-center">
-                <div className="text-[10px] text-zinc-500 uppercase font-semibold">Estimated Take-Home</div>
+                <div className="text-[10px] text-zinc-500 uppercase font-semibold">Income After Fed Tax</div>
                 <div className="text-base font-extrabold text-teal-600 dark:text-teal-400 font-sans tabular-nums mt-0.5">
                   {fmt(results.takeHomePay)}
                 </div>
@@ -1001,9 +1017,6 @@ Marginal Bracket: ${results.marginalTaxBracketLabel}`;
 
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
-
-      {/* Educational Article & 20 FAQs */}
-      <IncomeTaxContent />
     </div>
   );
 }

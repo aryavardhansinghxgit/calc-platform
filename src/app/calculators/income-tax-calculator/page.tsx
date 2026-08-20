@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Income Tax Calculator – 2026/2025 US Federal Tax & Refund Estimator",
+    title: "2026 Income Tax Calculator – Federal Tax & Refund Estimator",
     description:
-      "Free advanced Income Tax Calculator. Calculate 2026 & 2025 federal tax liability, estimated tax refund, self-employment tax, capital gains rates, itemized vs standard deductions, and tax credit savings.",
+      "Calculate your 2026 & 2025 US federal income tax liability, refund check, tax brackets, Child Tax Credit, standard vs. itemized deductions, and Form 1040 lines.",
     slug: INCOME_TAX_CALCULATOR.slug,
   });
 }

@@ -1,8 +1,12 @@
 /**
- * Precision US Federal Income Tax & Refund Calculation Engine (2026 & 2025 IRS Tax Brackets)
- * Supports W-2 Box 1-19, 1099-INT, 1099-DIV (Ordinary & Qualified), Short/Long Term Capital Gains,
- * Self-Employment Tax (Schedule C + SE Tax), Above-The-Line (ATL) Adjustments, Standard vs. Itemized Deductions,
- * Tax Credits (CTC, ODC, Dependent Care, AOTC, Saver's, Energy), and Federal/State Tax Refund vs Owed calculations.
+ * Precision US Federal Income Tax & Refund Calculation Engine
+ * 
+ * Statutory Authorities & Sources:
+ * - IRS Revenue Procedure 2025-32 (Tax Year 2026 Inflation Adjustments & Tax Brackets)
+ * - IRS Revenue Procedure 2024-40 (Tax Year 2025 Inflation Adjustments & Tax Brackets)
+ * - Internal Revenue Code (IRC §§ 1, 24, 63, 164, 1401, 1402)
+ * - IRS Form 1040 & Schedule Instructions (Schedules 1, A, C, SE, 8812)
+ * - Current Enacted Statutes (including One Big Beautiful Bill Act Provisions for 2025–2028)
  */
 
 export type FilingStatus = 'single' | 'joint' | 'separately' | 'head';
@@ -11,8 +15,8 @@ export type TaxYear = '2026' | '2025';
 export interface IncomeTaxInput {
   taxYear?: TaxYear;
   filingStatus?: FilingStatus;
-  youngDependents?: number; // Age 0-16
-  otherDependents?: number; // Age 17+
+  youngDependents?: number; // Age 0-16 (Qualifying child under CTC)
+  otherDependents?: number; // Age 17+ (Qualifying relative under ODC)
   age?: number;
 
   // W-2 & Primary Income
@@ -23,7 +27,7 @@ export interface IncomeTaxInput {
 
   // Self-Employment & Additional Income
   hasBusinessIncome?: boolean;
-  selfEmploymentIncome?: number; // Schedule C
+  selfEmploymentIncome?: number; // Schedule C Net Profit
   socialSecurityIncome?: number; // SSA-1099
   interestIncome?: number; // 1099-INT
   ordinaryDividends?: number;
@@ -34,10 +38,10 @@ export interface IncomeTaxInput {
   otherIncome?: number; // Unemployment, 1099-R
   stateLocalTaxRate?: number; // %
 
-  // Above-the-Line (ATL) & Special Provisions
-  tipsIncome?: number; // Max $25,000 deduction (2025-2028 rules)
+  // Above-the-Line (ATL) Deductions & Enacted Provisions
+  tipsIncome?: number; // Max $25,000 deduction
   overtimeIncome?: number; // Max $12,500 Single / $25,000 Joint deduction
-  carLoanInterest?: number; // Max $10,000 deduction for qualified vehicle
+  carLoanInterest?: number; // Max $10,000 deduction for qualified vehicle loan
   iraContributions?: number;
   studentLoanInterest?: number; // Max $2,500
   educatorExpenses?: number; // Max $300
@@ -96,6 +100,8 @@ export interface IncomeTaxCalculationResult {
   aboveTheLineDeductions: number;
   adjustedGrossIncome: number; // AGI
   standardDeduction: number;
+  seniorBonus: number;
+  enhancedSeniorDeduction: number;
   itemizedDeductions: number;
   deductionUsed: 'standard' | 'itemized';
   effectiveDeduction: number;
@@ -110,8 +116,8 @@ export interface IncomeTaxCalculationResult {
   totalTaxBeforeCredits: number;
   
   // Credits
-  childTaxCredit: number; // CTC
-  otherDependentCredit: number; // ODC
+  childTaxCredit: number; // CTC (after phaseout)
+  otherDependentCredit: number; // ODC (after phaseout)
   totalTaxCredits: number;
   totalTaxLiability: number; // After nonrefundable credits
 
@@ -124,15 +130,55 @@ export interface IncomeTaxCalculationResult {
   effectiveTaxRate: number; // (Total Tax / Gross Income) * 100
   marginalTaxBracketRate: number; // % top bracket
   marginalTaxBracketLabel: string;
-  takeHomePay: number; // Gross Income - Total Tax - SE Tax - State/Local Tax
+  takeHomePay: number; // Gross Income - Federal Tax - SE Tax - State/Local Tax
 
   bracketBreakdown: TaxBracketBreakdown[];
   form1040Summary: TaxFormStepRow[];
   filingStatusComparison: FilingStatusComparison[];
 }
 
-// 2026 IRS Federal Tax Brackets (Adjusted for Inflation)
+// 2026 IRS Federal Tax Brackets (IRS Revenue Procedure 2025-32)
 const BRACKETS_2026: Record<FilingStatus, { rate: number; min: number; max: number }[]> = {
+  single: [
+    { rate: 0.10, min: 0, max: 12400 },
+    { rate: 0.12, min: 12400, max: 50400 },
+    { rate: 0.22, min: 50400, max: 105700 },
+    { rate: 0.24, min: 105700, max: 201775 },
+    { rate: 0.32, min: 201775, max: 256225 },
+    { rate: 0.35, min: 256225, max: 640600 },
+    { rate: 0.37, min: 640600, max: Infinity },
+  ],
+  joint: [
+    { rate: 0.10, min: 0, max: 24800 },
+    { rate: 0.12, min: 24800, max: 100800 },
+    { rate: 0.22, min: 100800, max: 211400 },
+    { rate: 0.24, min: 211400, max: 403550 },
+    { rate: 0.32, min: 403550, max: 512450 },
+    { rate: 0.35, min: 512450, max: 768700 },
+    { rate: 0.37, min: 768700, max: Infinity },
+  ],
+  separately: [
+    { rate: 0.10, min: 0, max: 12400 },
+    { rate: 0.12, min: 12400, max: 50400 },
+    { rate: 0.22, min: 50400, max: 105700 },
+    { rate: 0.24, min: 105700, max: 201775 },
+    { rate: 0.32, min: 201775, max: 256225 },
+    { rate: 0.35, min: 256225, max: 384350 },
+    { rate: 0.37, min: 384350, max: Infinity },
+  ],
+  head: [
+    { rate: 0.10, min: 0, max: 17650 },
+    { rate: 0.12, min: 17650, max: 67450 },
+    { rate: 0.22, min: 67450, max: 105700 },
+    { rate: 0.24, min: 105700, max: 201750 },
+    { rate: 0.32, min: 201750, max: 256200 },
+    { rate: 0.35, min: 256200, max: 640600 },
+    { rate: 0.37, min: 640600, max: Infinity },
+  ],
+};
+
+// 2025 IRS Federal Tax Brackets (IRS Revenue Procedure 2024-40)
+const BRACKETS_2025: Record<FilingStatus, { rate: number; min: number; max: number }[]> = {
   single: [
     { rate: 0.10, min: 0, max: 11925 },
     { rate: 0.12, min: 11925, max: 48475 },
@@ -171,63 +217,30 @@ const BRACKETS_2026: Record<FilingStatus, { rate: number; min: number; max: numb
   ],
 };
 
-// 2025 IRS Federal Tax Brackets
-const BRACKETS_2025: Record<FilingStatus, { rate: number; min: number; max: number }[]> = {
-  single: [
-    { rate: 0.10, min: 0, max: 11600 },
-    { rate: 0.12, min: 11600, max: 47150 },
-    { rate: 0.22, min: 47150, max: 100525 },
-    { rate: 0.24, min: 100525, max: 191950 },
-    { rate: 0.32, min: 191950, max: 243725 },
-    { rate: 0.35, min: 243725, max: 609350 },
-    { rate: 0.37, min: 609350, max: Infinity },
-  ],
-  joint: [
-    { rate: 0.10, min: 0, max: 23200 },
-    { rate: 0.12, min: 23200, max: 94300 },
-    { rate: 0.22, min: 94300, max: 201050 },
-    { rate: 0.24, min: 201050, max: 383900 },
-    { rate: 0.32, min: 383900, max: 487450 },
-    { rate: 0.35, min: 487450, max: 731200 },
-    { rate: 0.37, min: 731200, max: Infinity },
-  ],
-  separately: [
-    { rate: 0.10, min: 0, max: 11600 },
-    { rate: 0.12, min: 11600, max: 47150 },
-    { rate: 0.22, min: 47150, max: 100525 },
-    { rate: 0.24, min: 100525, max: 191950 },
-    { rate: 0.32, min: 191950, max: 243725 },
-    { rate: 0.35, min: 243725, max: 365600 },
-    { rate: 0.37, min: 365600, max: Infinity },
-  ],
-  head: [
-    { rate: 0.10, min: 0, max: 16550 },
-    { rate: 0.12, min: 16550, max: 63100 },
-    { rate: 0.22, min: 63100, max: 100500 },
-    { rate: 0.24, min: 100500, max: 191950 },
-    { rate: 0.32, min: 191950, max: 243700 },
-    { rate: 0.35, min: 243700, max: 609350 },
-    { rate: 0.37, min: 609350, max: Infinity },
-  ],
-};
-
-// Standard Deductions
+// Standard Deductions for 2026 (IRS Rev. Proc. 2025-32)
 const STANDARD_DEDUCTIONS_2026: Record<FilingStatus, number> = {
-  single: 15000,
-  joint: 30000,
-  separately: 15000,
-  head: 22500,
+  single: 16100,
+  joint: 32200,
+  separately: 16100,
+  head: 24150,
 };
 
+// Standard Deductions for 2025 (Enacted Statutory Law)
 const STANDARD_DEDUCTIONS_2025: Record<FilingStatus, number> = {
-  single: 15000,
-  joint: 30000,
-  separately: 15000,
-  head: 22500,
+  single: 15750,
+  joint: 31500,
+  separately: 15750,
+  head: 23625,
+};
+
+// SALT Limitations (State and Local Tax Cap)
+const SALT_CAPS: Record<TaxYear, { standard: number; separately: number }> = {
+  '2026': { standard: 40400, separately: 20200 },
+  '2025': { standard: 40000, separately: 20000 },
 };
 
 /**
- * Computes complete US Federal Income Tax Liability & Refund / Amount Owed
+ * Calculates complete US Federal Income Tax Liability, Credits, Deductions, and Refund/Owed
  */
 export function calculateIncomeTax(input: IncomeTaxInput): IncomeTaxCalculationResult {
   const {
@@ -237,8 +250,8 @@ export function calculateIncomeTax(input: IncomeTaxInput): IncomeTaxCalculationR
     otherDependents = 0,
     age = 30,
 
-    wagesW2 = 80000,
-    fedTaxWithheld = 9000,
+    wagesW2 = 85000,
+    fedTaxWithheld = 9500,
     stateTaxWithheld = 0,
     localTaxWithheld = 0,
 
@@ -273,14 +286,12 @@ export function calculateIncomeTax(input: IncomeTaxInput): IncomeTaxCalculationR
   const brackets = taxYear === '2026' ? BRACKETS_2026[filingStatus] : BRACKETS_2025[filingStatus];
   const standardDeductionBase = taxYear === '2026' ? STANDARD_DEDUCTIONS_2026[filingStatus] : STANDARD_DEDUCTIONS_2025[filingStatus];
 
-  // Extra standard deduction for seniors (65+)
-  const seniorBonus = age >= 65 ? (filingStatus === 'single' || filingStatus === 'head' ? 1950 : 1550) : 0;
-  const totalStandardDeduction = standardDeductionBase + seniorBonus;
-
-  // 1. Self-Employment Tax (Schedule SE: 15.3% on 92.35% of net SE profit)
+  // 1. Self-Employment Tax (Schedule SE: 12.4% Social Security up to wage base + 2.9% Medicare)
   const netSEProfit = Math.max(0, Number(selfEmploymentIncome) || 0);
   const seTaxableSubject = netSEProfit * 0.9235;
-  const selfEmploymentTax = seTaxableSubject * 0.153;
+  const ssWageBase = taxYear === '2026' ? 184500 : 176100;
+  const seSubjectToSS = Math.min(seTaxableSubject, ssWageBase);
+  const selfEmploymentTax = (seSubjectToSS * 0.124) + (seTaxableSubject * 0.029);
   const halfSETaxDeduction = selfEmploymentTax * 0.50; // 50% SE tax is Above-the-line deduction
 
   // 2. Gross Income Aggregation
@@ -297,7 +308,7 @@ export function calculateIncomeTax(input: IncomeTaxInput): IncomeTaxCalculationR
     (Number(longTermCapitalGains) || 0) +
     (Number(otherIncome) || 0);
 
-  // 3. Above-the-Line (ATL) Deductions & Special 2025-2028 Provisions
+  // 3. Above-the-Line (ATL) Deductions & Enacted Provisions
   const cappedStudentLoan = Math.min(2500, Math.max(0, Number(studentLoanInterest) || 0));
   const cappedEducator = Math.min(300, Math.max(0, Number(educatorExpenses) || 0));
   const cappedTips = Math.min(25000, Math.max(0, Number(input.tipsIncome) || 0));
@@ -318,8 +329,32 @@ export function calculateIncomeTax(input: IncomeTaxInput): IncomeTaxCalculationR
   // Adjusted Gross Income (AGI)
   const adjustedGrossIncome = Math.max(0, totalGrossIncome - aboveTheLineDeductions);
 
-  // 4. Below-the-Line (Itemized) Deductions (SALT cap $10,000)
-  const saltClaimed = Math.min(10000, (Number(stateTaxWithheld) || 0) + (Number(localTaxWithheld) || 0) + (Number(realEstateTax) || 0));
+  // 4. Senior Deductions (Age 65+)
+  // A. Traditional Additional Standard Deduction for Age 65+
+  let seniorBonus = 0;
+  if (age >= 65) {
+    if (taxYear === '2026') {
+      seniorBonus = (filingStatus === 'single' || filingStatus === 'head') ? 2050 : 1650;
+    } else {
+      seniorBonus = (filingStatus === 'single' || filingStatus === 'head') ? 2000 : 1600;
+    }
+  }
+
+  // B. Enhanced Senior Deduction (2025–2028: $6,000 with phaseout)
+  let enhancedSeniorDeduction = 0;
+  if (age >= 65) {
+    const seniorPhaseoutThreshold = filingStatus === 'joint' ? 150000 : 75000;
+    const excessIncome = Math.max(0, adjustedGrossIncome - seniorPhaseoutThreshold);
+    const seniorReduction = Math.floor(excessIncome / 1000) * 50;
+    enhancedSeniorDeduction = Math.max(0, 6000 - seniorReduction);
+  }
+
+  const totalStandardDeduction = standardDeductionBase + seniorBonus + enhancedSeniorDeduction;
+
+  // 5. Below-the-Line (Itemized) Deductions (SALT cap: $40,000 / $40,400; MFS $20,000 / $20,200)
+  const saltCap = filingStatus === 'separately' ? SALT_CAPS[taxYear].separately : SALT_CAPS[taxYear].standard;
+  const totalSaltTaxes = (Number(stateTaxWithheld) || 0) + (Number(localTaxWithheld) || 0) + (Number(realEstateTax) || 0);
+  const saltClaimed = Math.min(saltCap, totalSaltTaxes);
   const medicalThreshold = adjustedGrossIncome * 0.075;
   const medicalDeductible = Math.max(0, (Number(medicalExpenses) || 0) - medicalThreshold);
 
@@ -335,7 +370,7 @@ export function calculateIncomeTax(input: IncomeTaxInput): IncomeTaxCalculationR
   const effectiveDeduction = useItemized ? itemizedDeductions : totalStandardDeduction;
   const deductionUsed = useItemized ? 'itemized' : 'standard';
 
-  // 5. Taxable Income Calculation
+  // 6. Taxable Income Calculation
   const totalTaxableIncome = Math.max(0, adjustedGrossIncome - effectiveDeduction);
 
   // Separate Preferential Income (Qualified Dividends + Long-Term Capital Gains) from Ordinary Income
@@ -343,7 +378,7 @@ export function calculateIncomeTax(input: IncomeTaxInput): IncomeTaxCalculationR
   const taxablePreferentialIncome = Math.min(totalTaxableIncome, preferentialIncome);
   const taxableOrdinaryIncome = Math.max(0, totalTaxableIncome - taxablePreferentialIncome);
 
-  // 6. Ordinary Tax Brackets Computation
+  // 7. Ordinary Tax Brackets Computation
   let ordinaryIncomeTax = 0;
   const bracketBreakdown: TaxBracketBreakdown[] = [];
   let marginalRate = 0.10;
@@ -370,11 +405,19 @@ export function calculateIncomeTax(input: IncomeTaxInput): IncomeTaxCalculationR
     }
   });
 
-  // 7. Preferential Tax Computation (0%, 15%, 20% rates for LT Cap Gains & Qualified Divs)
+  // 8. Preferential Tax Computation (0%, 15%, 20% rates for LT Cap Gains & Qualified Divs)
   let preferentialIncomeTax = 0;
   if (taxablePreferentialIncome > 0) {
-    const prefThreshold0 = filingStatus === 'joint' ? 94050 : 47025;
-    const prefThreshold15 = filingStatus === 'joint' ? 583750 : 518900;
+    let prefThreshold0 = 49450;
+    let prefThreshold15 = 545500;
+
+    if (taxYear === '2026') {
+      prefThreshold0 = filingStatus === 'joint' ? 98900 : (filingStatus === 'head' ? 66200 : 49450);
+      prefThreshold15 = filingStatus === 'joint' ? 613700 : (filingStatus === 'head' ? 579600 : 545500);
+    } else {
+      prefThreshold0 = filingStatus === 'joint' ? 96700 : (filingStatus === 'head' ? 64750 : 48350);
+      prefThreshold15 = filingStatus === 'joint' ? 600050 : (filingStatus === 'head' ? 566700 : 533400);
+    }
 
     let remainingPref = taxablePreferentialIncome;
     let baseOrdinary = taxableOrdinaryIncome;
@@ -399,9 +442,26 @@ export function calculateIncomeTax(input: IncomeTaxInput): IncomeTaxCalculationR
 
   const totalTaxBeforeCredits = ordinaryIncomeTax + preferentialIncomeTax + selfEmploymentTax;
 
-  // 8. Tax Credits Calculation
-  const childTaxCredit = Math.max(0, (Number(youngDependents) || 0) * 2200);
-  const otherDependentCredit = Math.max(0, (Number(otherDependents) || 0) * 500);
+  // 9. Child Tax Credit (CTC) & Credit for Other Dependents (ODC) with Statutory Phaseout
+  const rawCTC = Math.max(0, (Number(youngDependents) || 0) * 2200);
+  const rawODC = Math.max(0, (Number(otherDependents) || 0) * 500);
+  const totalDependentCreditsRaw = rawCTC + rawODC;
+
+  // Phaseout: $50 per $1,000 MAGI over $200k Single / $400k MFJ
+  const phaseoutThreshold = filingStatus === 'joint' ? 400000 : 200000;
+  const magiExcess = Math.max(0, adjustedGrossIncome - phaseoutThreshold);
+  const creditReduction = Math.ceil(magiExcess / 1000) * 50;
+
+  const totalDependentCreditsAfterPhaseout = Math.max(0, totalDependentCreditsRaw - creditReduction);
+  
+  // Allocate phaseout reduction first to ODC then to CTC
+  let otherDependentCredit = 0;
+  let childTaxCredit = 0;
+  if (totalDependentCreditsRaw > 0) {
+    const ratio = totalDependentCreditsAfterPhaseout / totalDependentCreditsRaw;
+    otherDependentCredit = rawODC * ratio;
+    childTaxCredit = rawCTC * ratio;
+  }
 
   // Child & Dependent Care Credit (20% of up to $3k for 1, $6k for 2+)
   const childCareCap = (youngDependents + otherDependents) >= 2 ? 6000 : 3000;
@@ -426,7 +486,7 @@ export function calculateIncomeTax(input: IncomeTaxInput): IncomeTaxCalculationR
   const totalTaxCredits = childTaxCredit + otherDependentCredit + addlCredits;
   const totalTaxLiability = Math.max(0, totalTaxBeforeCredits - totalTaxCredits);
 
-  // 9. Withholdings & Refund / Owed
+  // 10. Withholdings & Refund / Owed
   const totalTaxWithheld = Number(fedTaxWithheld) || 0;
   const netTaxRefundOrOwed = totalTaxWithheld - totalTaxLiability;
   const isRefund = netTaxRefundOrOwed >= 0;
@@ -467,6 +527,8 @@ export function calculateIncomeTax(input: IncomeTaxInput): IncomeTaxCalculationR
     aboveTheLineDeductions: Number(aboveTheLineDeductions.toFixed(2)),
     adjustedGrossIncome: Number(adjustedGrossIncome.toFixed(2)),
     standardDeduction: Number(totalStandardDeduction.toFixed(2)),
+    seniorBonus: Number(seniorBonus.toFixed(2)),
+    enhancedSeniorDeduction: Number(enhancedSeniorDeduction.toFixed(2)),
     itemizedDeductions: Number(itemizedDeductions.toFixed(2)),
     deductionUsed,
     effectiveDeduction: Number(effectiveDeduction.toFixed(2)),
@@ -533,7 +595,11 @@ function calculateIncomeTaxFast(input: IncomeTaxInput): {
     }
   });
 
-  const credits = (input.youngDependents || 0) * 2200;
+  const rawCredits = (input.youngDependents || 0) * 2200;
+  const threshold = status === 'joint' ? 400000 : 200000;
+  const phaseout = Math.ceil(Math.max(0, gross - threshold) / 1000) * 50;
+  const credits = Math.max(0, rawCredits - phaseout);
+
   const taxLiability = Math.max(0, tax - credits);
   const effectiveRate = gross > 0 ? (taxLiability / gross) * 100 : 0;
   const refundOrOwed = (input.fedTaxWithheld || 0) - taxLiability;
