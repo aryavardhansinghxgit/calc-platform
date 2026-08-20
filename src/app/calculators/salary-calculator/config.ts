@@ -5,12 +5,12 @@ import { SalaryContent } from "@/components/calculator/salary/SalaryContent";
 
 export const salary_calculatorConfig: CalculatorModuleDefinition = {
   id: "salary-calculator",
-  title: "Salary Calculator — Hourly, Monthly & Annual Paycheck Converter",
+  title: "Salary Calculator (Hourly to Annual & Paycheck Conversion)",
   slug: "salary-calculator",
   category: "Finance",
   subcategory: "Tax and Salary",
   description:
-    "Convert salary and wages across Hourly, Daily, Weekly, Bi-Weekly, Semi-Monthly, Monthly, and Annual pay periods with paid time off, holidays, overtime, and net take-home tax estimations.",
+    "Calculate annual salary, hourly wage, bi-weekly pay, and take-home pay. Features paid PTO adjustment, FLSA overtime, and cost-of-living comparison.",
   iconName: "DollarSign",
   featured: true,
   keywords: [

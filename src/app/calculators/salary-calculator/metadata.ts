@@ -3,34 +3,35 @@ import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const salary_calculatorMetadata: Metadata = {
   ...generateCalculatorMetadata({
-    title: "Salary Calculator — Hourly, Monthly & Annual Paycheck Converter",
+    title: "Salary Calculator: Hourly to Salary & Paycheck Conversion",
     description:
-      "Advanced Salary and Paycheck Calculator. Convert between Hourly, Daily, Weekly, Bi-Weekly, Semi-Monthly, and Annual earnings with overtime, PTO, and take-home tax estimations.",
+      "Calculate annual salary, hourly wage, bi-weekly pay, and take-home pay. Features paid PTO adjustment, FLSA overtime, and cost-of-living comparison.",
     slug: "salary-calculator",
   }),
   keywords: [
     "salary calculator",
     "hourly to salary calculator",
     "salary to hourly calculator",
-    "paycheck calculator",
-    "biweekly to annual salary calculator",
-    "net take home pay calculator",
-    "how much do i make an hour",
-    "annual to monthly salary calculator",
-    "gross to net salary calculator",
-    "overtime pay calculator",
-    "cost of living salary converter",
+    "hourly wage calculator",
+    "biweekly pay calculator",
+    "semi monthly salary calculator",
+    "salary calculator with PTO",
+    "overtime salary calculator",
+    "take home pay calculator",
+    "cost of living salary calculator",
+    "target salary calculator",
+    "reverse salary calculator",
   ],
   openGraph: {
-    title: "Salary Calculator — Hourly, Monthly & Annual Paycheck Converter",
+    title: "Salary Calculator: Hourly to Salary & Paycheck Conversion",
     description:
-      "Advanced Salary & Paycheck Converter Suite. Calculate Gross-to-Net Pay, FICA Taxes, Overtime Multipliers, and 50/30/20 Budgeting.",
+      "Calculate annual salary, hourly wage, bi-weekly pay, and take-home pay. Features paid PTO adjustment, FLSA overtime, and cost-of-living comparison.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Salary Calculator — Hourly, Monthly & Annual Paycheck Converter",
+    title: "Salary Calculator: Hourly to Salary & Paycheck Conversion",
     description:
-      "Advanced Salary & Paycheck Converter Suite. Calculate Gross-to-Net Pay, FICA Taxes, Overtime Multipliers, and 50/30/20 Budgeting.",
+      "Calculate annual salary, hourly wage, bi-weekly pay, and take-home pay. Features paid PTO adjustment, FLSA overtime, and cost-of-living comparison.",
   },
 };

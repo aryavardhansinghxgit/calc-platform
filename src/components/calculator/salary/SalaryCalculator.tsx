@@ -14,6 +14,11 @@ import {
   Clock,
   ArrowRight,
   ShieldCheck,
+  RotateCcw,
+  Sliders,
+  CheckCircle2,
+  ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import {
   calculateUniversalSalary,
@@ -29,12 +34,16 @@ import {
 } from "@/app/calculators/salary-calculator/types";
 
 export function SalaryCalculator() {
-  const input3DClass =
-    "w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-slate-900 dark:text-slate-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none transition-all text-xs";
-  const select3DClass =
-    "w-full h-8 px-2.5 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-slate-900 dark:text-slate-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.08),0_1px_2px_rgba(0,0,0,0.04)] focus:border-blue-600 focus:outline-none cursor-pointer text-xs";
-  const outerBox3DClass =
-    "border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs";
+  const [activeTab, setActiveTab] = useState<
+    "universal" | "take-home" | "overtime" | "pay-schedule" | "cost-of-living" | "target-salary"
+  >("universal");
+
+  const inputClass =
+    "w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 font-semibold text-slate-900 dark:text-slate-100 focus:border-blue-600 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-slate-900 focus:outline-none transition-all text-xs";
+  const selectClass =
+    "w-full h-9 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 font-semibold text-slate-900 dark:text-slate-100 focus:border-blue-600 dark:focus:border-blue-400 focus:bg-white dark:focus:bg-slate-900 focus:outline-none cursor-pointer transition-all text-xs";
+  const cardClass =
+    "border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs";
 
   const triggerCsvDownload = (filename: string, csvContent: string) => {
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -48,7 +57,7 @@ export function SalaryCalculator() {
   };
 
   // =========================================================================
-  // BOX 1: UNIVERSAL SALARY & WAGE CONVERTER (CORE)
+  // TAB 1: UNIVERSAL SALARY & WAGE CONVERTER (CORE)
   // =========================================================================
   const [b1Salary, setB1Salary] = useState<string>("50");
   const [b1Freq, setB1Freq] = useState<PayFrequencyUnit>("hourly");
@@ -61,8 +70,9 @@ export function SalaryCalculator() {
   const [justSavedBox1, setJustSavedBox1] = useState<boolean>(false);
 
   // =========================================================================
-  // BOX 2: NET TAKE-HOME PAY & TAX DEDUCTIONS
+  // TAB 2: NET TAKE-HOME PAY & TAX DEDUCTIONS
   // =========================================================================
+  const [b2TaxYear, setB2TaxYear] = useState<"2026" | "2025">("2026");
   const [b2GrossSalary, setB2GrossSalary] = useState<string>("104000");
   const [b2FilingStatus, setB2FilingStatus] = useState<"single" | "married" | "headOfHousehold">("single");
   const [b2StateCode, setB2StateCode] = useState<string>("TX");
@@ -72,7 +82,7 @@ export function SalaryCalculator() {
   const [justSavedBox2, setJustSavedBox2] = useState<boolean>(false);
 
   // =========================================================================
-  // BOX 3: OVERTIME & BONUS BOOSTER
+  // TAB 3: OVERTIME & BONUS BOOSTER
   // =========================================================================
   const [b3BaseRate, setB3BaseRate] = useState<string>("35");
   const [b3RegHours, setB3RegHours] = useState<string>("40");
@@ -84,7 +94,7 @@ export function SalaryCalculator() {
   const [justSavedBox3, setJustSavedBox3] = useState<boolean>(false);
 
   // =========================================================================
-  // BOX 4: BI-WEEKLY VS SEMI-MONTHLY EXPLAINER
+  // TAB 4: BI-WEEKLY VS SEMI-MONTHLY EXPLAINER
   // =========================================================================
   const [b4AnnualSalary, setB4AnnualSalary] = useState<string>("104000");
 
@@ -92,7 +102,7 @@ export function SalaryCalculator() {
   const [justSavedBox4, setJustSavedBox4] = useState<boolean>(false);
 
   // =========================================================================
-  // BOX 5: COST-OF-LIVING & RELOCATION CONVERTER
+  // TAB 5: COST-OF-LIVING & RELOCATION CONVERTER
   // =========================================================================
   const [b5Salary, setB5Salary] = useState<string>("85000");
   const [b5SourceCity, setB5SourceCity] = useState<string>("austin");
@@ -102,7 +112,7 @@ export function SalaryCalculator() {
   const [justSavedBox5, setJustSavedBox5] = useState<boolean>(false);
 
   // =========================================================================
-  // BOX 6: REVERSE SALARY & TARGET TAKE-HOME SOLVER
+  // TAB 6: REVERSE SALARY & TARGET TAKE-HOME SOLVER
   // =========================================================================
   const [b6NetMonthly, setB6NetMonthly] = useState<string>("6000");
   const [b6TaxRate, setB6TaxRate] = useState<string>("25.0");
@@ -192,13 +202,6 @@ export function SalaryCalculator() {
     } catch (e) {}
   };
 
-  const handleClearAllSavedBox1 = () => {
-    setSavedBox1([]);
-    try {
-      localStorage.removeItem("saved_sal_box1");
-    } catch (e) {}
-  };
-
   // Box 2 Calculations
   const b2Calc = useMemo(() => {
     return calculateTakeHomeTax({
@@ -206,11 +209,12 @@ export function SalaryCalculator() {
       filingStatus: b2FilingStatus,
       stateCode: b2StateCode,
       monthlyPreTaxDeductions: parseFloat(b2PreTaxDeductions) || 0,
+      taxYear: b2TaxYear,
     });
-  }, [b2GrossSalary, b2FilingStatus, b2StateCode, b2PreTaxDeductions]);
+  }, [b2GrossSalary, b2FilingStatus, b2StateCode, b2PreTaxDeductions, b2TaxYear]);
 
   const handleSaveBox2 = () => {
-    const inputsStr = `Gross: $${b2GrossSalary} | ${b2FilingStatus} | State: ${b2StateCode} | Pre-Tax: $${b2PreTaxDeductions}/mo`;
+    const inputsStr = `Tax Year: ${b2TaxYear} | Gross: $${b2GrossSalary} | ${b2FilingStatus} | State: ${b2StateCode} | Pre-Tax: $${b2PreTaxDeductions}/mo`;
     const primaryStr = `Net Annual: $${b2Calc.netTakeHomeAnnual.toLocaleString()} | Net Monthly: $${b2Calc.netTakeHomeMonthly.toLocaleString()} (Tax Rate: ${b2Calc.effectiveTaxRatePercent}%)`;
 
     const detailsList = [
@@ -247,13 +251,6 @@ export function SalaryCalculator() {
     setSavedBox2(updated);
     try {
       localStorage.setItem("saved_sal_box2", JSON.stringify(updated));
-    } catch (e) {}
-  };
-
-  const handleClearAllSavedBox2 = () => {
-    setSavedBox2([]);
-    try {
-      localStorage.removeItem("saved_sal_box2");
     } catch (e) {}
   };
 
@@ -321,13 +318,6 @@ export function SalaryCalculator() {
     } catch (e) {}
   };
 
-  const handleClearAllSavedBox3 = () => {
-    setSavedBox3([]);
-    try {
-      localStorage.removeItem("saved_sal_box3");
-    } catch (e) {}
-  };
-
   // Box 4 Calculations (Bi-Weekly vs Semi-Monthly)
   const b4Annual = parseFloat(b4AnnualSalary) || 0;
   const b4BiWeekly = Math.round((b4Annual / 26) * 100) / 100;
@@ -369,13 +359,6 @@ export function SalaryCalculator() {
     setSavedBox4(updated);
     try {
       localStorage.setItem("saved_sal_box4", JSON.stringify(updated));
-    } catch (e) {}
-  };
-
-  const handleClearAllSavedBox4 = () => {
-    setSavedBox4([]);
-    try {
-      localStorage.removeItem("saved_sal_box4");
     } catch (e) {}
   };
 
@@ -424,13 +407,6 @@ export function SalaryCalculator() {
     setSavedBox5(updated);
     try {
       localStorage.setItem("saved_sal_box5", JSON.stringify(updated));
-    } catch (e) {}
-  };
-
-  const handleClearAllSavedBox5 = () => {
-    setSavedBox5([]);
-    try {
-      localStorage.removeItem("saved_sal_box5");
     } catch (e) {}
   };
 
@@ -483,207 +459,256 @@ export function SalaryCalculator() {
     } catch (e) {}
   };
 
-  const handleClearAllSavedBox6 = () => {
-    setSavedBox6([]);
-    try {
-      localStorage.removeItem("saved_sal_box6");
-    } catch (e) {}
-  };
+  const tabs = [
+    { id: "universal", label: "Wage Converter", icon: DollarSign, desc: "Hourly to Annual Matrix" },
+    { id: "take-home", label: "Take-Home & Taxes", icon: Briefcase, desc: "Net Paycheck Estimator" },
+    { id: "overtime", label: "Overtime & Bonus", icon: TrendingUp, desc: "1.5x & 2.0x Boosted Pay" },
+    { id: "pay-schedule", label: "Bi-Weekly vs Semi-Monthly", icon: Calendar, desc: "26 vs 24 Paychecks" },
+    { id: "cost-of-living", label: "Cost of Living", icon: MapPin, desc: "Relocation & Purchasing Power" },
+    { id: "target-salary", label: "Target Salary Solver", icon: Percent, desc: "Reverse Net-to-Gross" },
+  ];
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
-      {/* =========================================================================
-          BOX 1: UNIVERSAL SALARY & WAGE CONVERTER (CORE MATRIX)
-          ========================================================================= */}
-      <div className={outerBox3DClass}>
-        <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span>Salary Calculator &amp; Universal Wage Conversion Matrix</span>
-          <button
-            type="button"
-            onClick={handleSaveBox1}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
-          >
-            <Bookmark className="w-3 h-3 text-white" />
-            <span>{justSavedBox1 ? "Saved!" : "Save"}</span>
-          </button>
-        </div>
-
-        <div className="p-4 sm:p-5 space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-            {/* INPUTS */}
-            <div className="lg:col-span-5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 space-y-3 shadow-xs">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block pb-1 border-b border-slate-200/80 dark:border-slate-800">
-                Salary &amp; Working Schedule
-              </span>
-
-              <div className="grid grid-cols-2 gap-2.5">
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Salary Amount ($)
-                  </label>
-                  <input
-                    type="number"
-                    min={0}
-                    step={1}
-                    value={b1Salary}
-                    onChange={(e) => setB1Salary(e.target.value)}
-                    className={input3DClass}
-                  />
-                </div>
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Pay Frequency
-                  </label>
-                  <select
-                    value={b1Freq}
-                    onChange={(e) => setB1Freq(e.target.value as PayFrequencyUnit)}
-                    className={select3DClass}
+      {/* 1. TOP INTERACTIVE MODE SWITCHER (RESHUFFLED FOR MAXIMUM CONVENIENCE) */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-2 sm:p-2.5 shadow-xs">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`p-2.5 sm:p-3 rounded-xl text-left transition-all flex flex-col justify-between cursor-pointer border min-h-[72px] sm:min-h-[80px] ${
+                  isActive
+                    ? "bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800/80 shadow-xs"
+                    : "bg-slate-50/70 dark:bg-slate-800/40 border-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400"
+                }`}
+              >
+                <div className="flex items-start gap-2 mb-1.5">
+                  <div
+                    className={`p-1.5 rounded-lg shrink-0 mt-0.5 ${
+                      isActive
+                        ? "bg-blue-600 text-white"
+                        : "bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300"
+                    }`}
                   >
-                    <option value="hourly">Hour</option>
-                    <option value="daily">Day</option>
-                    <option value="weekly">Week</option>
-                    <option value="biWeekly">Bi-Weekly (2 Wks)</option>
-                    <option value="semiMonthly">Semi-Monthly (2x/Mo)</option>
-                    <option value="monthly">Month</option>
-                    <option value="quarterly">Quarter</option>
-                    <option value="annually">Year</option>
-                  </select>
+                    <Icon className="h-3.5 w-3.5" />
+                  </div>
+                  <span
+                    className={`text-xs font-bold leading-snug whitespace-normal break-words ${
+                      isActive
+                        ? "text-blue-900 dark:text-blue-200"
+                        : "text-slate-800 dark:text-slate-200"
+                    }`}
+                  >
+                    {tab.label}
+                  </span>
                 </div>
-              </div>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight block whitespace-normal">
+                  {tab.desc}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-              <div className="grid grid-cols-2 gap-2.5">
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Hours per Week
-                  </label>
-                  <input
-                    type="number"
-                    min={1}
-                    max={168}
-                    value={b1HoursPerWeek}
-                    onChange={(e) => setB1HoursPerWeek(e.target.value)}
-                    className={input3DClass}
-                  />
-                </div>
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Days per Week
-                  </label>
-                  <input
-                    type="number"
-                    min={1}
-                    max={7}
-                    value={b1DaysPerWeek}
-                    onChange={(e) => setB1DaysPerWeek(e.target.value)}
-                    className={input3DClass}
-                  />
-                </div>
+      {/* =========================================================================
+          TAB 1: UNIVERSAL SALARY & WAGE CONVERTER (CORE MATRIX)
+          ========================================================================= */}
+      {activeTab === "universal" && (
+        <div className={cardClass}>
+          <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/40">
+                <DollarSign className="h-4 w-4" />
               </div>
-
-              <div className="grid grid-cols-2 gap-2.5 pt-1 border-t border-slate-200 dark:border-slate-800">
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Holidays / Year
-                  </label>
-                  <input
-                    type="number"
-                    min={0}
-                    max={100}
-                    value={b1Holidays}
-                    onChange={(e) => setB1Holidays(e.target.value)}
-                    className={input3DClass}
-                  />
-                </div>
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Vacation / PTO Days
-                  </label>
-                  <input
-                    type="number"
-                    min={0}
-                    max={100}
-                    value={b1Vacation}
-                    onChange={(e) => setB1Vacation(e.target.value)}
-                    className={input3DClass}
-                  />
-                </div>
+              <div>
+                <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                  Universal Salary & Wage Conversion Matrix
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Convert wages across Hourly, Weekly, Bi-Weekly, Semi-Monthly, Monthly, and Annual pay intervals.
+                </p>
               </div>
             </div>
+            <button
+              type="button"
+              onClick={handleSaveBox1}
+              className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+            >
+              <Bookmark className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>{justSavedBox1 ? "Saved!" : "Save"}</span>
+            </button>
+          </div>
 
-            {/* HERO RESULTS & CONVERSION MATRIX TABLE */}
-            <div className="lg:col-span-7 space-y-3">
-              {/* HERO HIGHLIGHT CARDS */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-bold font-sans tabular-nums">
-                <div className="p-2.5 bg-blue-50 dark:bg-blue-950/60 rounded-xl border border-blue-200 dark:border-blue-800 space-y-0.5">
-                  <span className="text-[10px] text-blue-600 block uppercase">Annual Salary</span>
-                  <div className="text-base font-extrabold text-blue-700 dark:text-blue-300">
-                    ${b1Calc.unadjustedAnnual.toLocaleString()}
+          <div className="p-4 sm:p-5 space-y-5">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+              {/* INPUTS */}
+              <div className="lg:col-span-5 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 block pb-1 border-b border-slate-200 dark:border-slate-700">
+                  Salary & Working Schedule
+                </span>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Salary Amount ($)
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      step={1}
+                      value={b1Salary}
+                      onChange={(e) => setB1Salary(e.target.value)}
+                      className={inputClass}
+                    />
                   </div>
-                  <div className="text-[10px] text-slate-500 font-medium">Adj: ${b1Calc.adjustedAnnual.toLocaleString()}</div>
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Pay Frequency
+                    </label>
+                    <select
+                      value={b1Freq}
+                      onChange={(e) => setB1Freq(e.target.value as PayFrequencyUnit)}
+                      className={selectClass}
+                    >
+                      <option value="hourly">Hour</option>
+                      <option value="daily">Day</option>
+                      <option value="weekly">Week</option>
+                      <option value="biWeekly">Bi-Weekly (2 Wks)</option>
+                      <option value="semiMonthly">Semi-Monthly (2x/Mo)</option>
+                      <option value="monthly">Month</option>
+                      <option value="quarterly">Quarter</option>
+                      <option value="annually">Year</option>
+                    </select>
+                  </div>
                 </div>
 
-                <div className="p-2.5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/60 dark:border-slate-700/60 space-y-0.5">
-                  <span className="text-[10px] text-slate-400 block uppercase">Monthly Pay</span>
-                  <div className="text-base font-extrabold text-slate-900 dark:text-slate-100">
-                    ${b1Calc.unadjustedMonthly.toLocaleString()}
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Hours per Week
+                    </label>
+                    <input
+                      type="number"
+                      min={1}
+                      max={168}
+                      value={b1HoursPerWeek}
+                      onChange={(e) => setB1HoursPerWeek(e.target.value)}
+                      className={inputClass}
+                    />
                   </div>
-                  <div className="text-[10px] text-slate-500 font-medium">Adj: ${b1Calc.adjustedMonthly.toLocaleString()}</div>
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Days per Week
+                    </label>
+                    <input
+                      type="number"
+                      min={1}
+                      max={7}
+                      value={b1DaysPerWeek}
+                      onChange={(e) => setB1DaysPerWeek(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
                 </div>
 
-                <div className="p-2.5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/60 dark:border-slate-700/60 space-y-0.5">
-                  <span className="text-[10px] text-slate-400 block uppercase">Bi-Weekly Pay</span>
-                  <div className="text-base font-extrabold text-slate-900 dark:text-slate-100">
-                    ${b1Calc.unadjustedBiWeekly.toLocaleString()}
+                <div className="grid grid-cols-2 gap-2.5 pt-1 border-t border-slate-200 dark:border-slate-700">
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Holidays / Year
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      max={100}
+                      value={b1Holidays}
+                      onChange={(e) => setB1Holidays(e.target.value)}
+                      className={inputClass}
+                    />
                   </div>
-                  <div className="text-[10px] text-slate-500 font-medium">Adj: ${b1Calc.adjustedBiWeekly.toLocaleString()}</div>
-                </div>
-
-                <div className="p-2.5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/60 dark:border-slate-700/60 space-y-0.5">
-                  <span className="text-[10px] text-slate-400 block uppercase">Hourly Wage</span>
-                  <div className="text-base font-extrabold text-emerald-600 dark:text-emerald-400">
-                    ${b1Calc.unadjustedHourly.toFixed(2)}
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Vacation / PTO Days
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      max={100}
+                      value={b1Vacation}
+                      onChange={(e) => setB1Vacation(e.target.value)}
+                      className={inputClass}
+                    />
                   </div>
-                  <div className="text-[10px] text-slate-500 font-medium">Adj: ${b1Calc.adjustedHourly.toFixed(2)}/hr</div>
                 </div>
               </div>
 
-              {/* FULL CONVERSION MATRIX TABLE */}
-              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xs">
-                <div className="p-2.5 bg-slate-100 dark:bg-slate-800 flex items-center justify-between border-b border-slate-200 dark:border-slate-700">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                    Complete Salary Conversion Table (All Frequencies)
-                  </span>
-                  <button
-                    type="button"
-                    onClick={handleExportBox1CSV}
-                    className="px-2 py-0.5 rounded bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-[11px] font-bold flex items-center gap-1 hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer border border-slate-300 dark:border-slate-700 transition-colors"
-                  >
-                    <Download className="w-3 h-3 text-blue-600 dark:text-blue-400" />
-                    <span>Export CSV</span>
-                  </button>
+              {/* OUTPUT HERO & SCHEDULE SUMMARY */}
+              <div className="lg:col-span-7 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                      Unadjusted (52 Wks / 260 Days)
+                    </span>
+                    <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums mt-1">
+                      ${b1Calc.unadjustedAnnual.toLocaleString()}
+                      <span className="text-xs font-normal text-slate-500 block mt-0.5">Annual Gross</span>
+                    </div>
+                    <div className="mt-3 pt-2.5 border-t border-slate-200 dark:border-slate-700 flex justify-between text-xs font-sans tabular-nums">
+                      <span>Monthly: <strong>${b1Calc.unadjustedMonthly.toLocaleString()}</strong></span>
+                      <span>Hourly: <strong>${b1Calc.unadjustedHourly.toFixed(2)}/hr</strong></span>
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 block">
+                      Paid PTO & Holidays ({b1Calc.adjustedWorkingDays} Active Days)
+                    </span>
+                    <div className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 font-sans tabular-nums mt-1">
+                      ${b1Calc.adjustedAnnual.toLocaleString()}
+                      <span className="text-xs font-normal text-slate-500 block mt-0.5">Contractual Annual Salary</span>
+                    </div>
+                    <div className="mt-3 pt-2.5 border-t border-emerald-200/60 dark:border-emerald-800/40 flex justify-between text-xs font-sans tabular-nums text-slate-700 dark:text-slate-300">
+                      <span>Active Hours: <strong>{Math.round(b1Calc.adjustedWorkingDays * (parseFloat(b1HoursPerWeek || "40") / parseFloat(b1DaysPerWeek || "5")))} hrs</strong></span>
+                      <span>Effective: <strong>${b1Calc.adjustedHourly.toFixed(2)}/hr</strong></span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="overflow-x-auto max-h-56 text-xs">
-                  <table className="w-full text-center border-collapse font-sans tabular-nums">
-                    <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 font-bold border-b border-slate-200 dark:border-slate-700">
+                {/* Conversion Matrix Table */}
+                <div className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
+                  <div className="bg-slate-100 dark:bg-slate-800 px-3.5 py-2 flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                      Complete Pay Period Conversion Matrix
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleExportBox1CSV}
+                      className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
+                    >
+                      <Download className="w-3 h-3" /> Export CSV
+                    </button>
+                  </div>
+                  <table className="w-full text-xs text-left">
+                    <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-semibold border-b border-slate-200 dark:border-slate-700">
                       <tr>
-                        <th className="p-2 text-left">Pay Period</th>
-                        <th className="p-2 text-right">Unadjusted</th>
-                        <th className="p-2 text-right">Holidays &amp; PTO Adjusted</th>
+                        <th className="p-2.5">Period</th>
+                        <th className="p-2.5">Unadjusted (52 Wks)</th>
+                        <th className="p-2.5">Adjusted (PTO)</th>
+                        <th className="p-2.5">Interval Basis</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                      {b1Calc.conversionMatrix.map((row) => (
-                        <tr key={row.period} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                          <td className="p-1.5 text-left font-bold text-slate-800 dark:text-slate-200">
-                            {row.period}
-                          </td>
-                          <td className="p-1.5 text-right font-extrabold text-blue-600 dark:text-blue-400">
-                            ${row.unadjustedAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </td>
-                          <td className="p-1.5 text-right font-bold text-slate-700 dark:text-slate-300">
-                            ${row.adjustedAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </td>
+                    <tbody className="divide-y divide-slate-200 dark:divide-slate-700 font-sans tabular-nums text-slate-700 dark:text-slate-300">
+                      {b1Calc.conversionMatrix.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+                          <td className="p-2.5 font-sans font-semibold text-slate-900 dark:text-slate-100">{row.period}</td>
+                          <td className="p-2.5 font-bold text-blue-600 dark:text-blue-400">${row.unadjustedAmount.toLocaleString()}</td>
+                          <td className="p-2.5 font-semibold text-emerald-600 dark:text-emerald-400">${row.adjustedAmount.toLocaleString()}</td>
+                          <td className="p-2.5 text-[11px] text-slate-500">{row.frequencyDescription}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -691,926 +716,674 @@ export function SalaryCalculator() {
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* SAVED CALCULATIONS INSIDE BOX 1 */}
-          {savedBox1.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2 mt-3">
-              <div className="flex items-center justify-between pb-1 border-b border-slate-200 dark:border-slate-800">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-                  <Bookmark className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Saved Salary Conversions ({savedBox1.length})</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={handleClearAllSavedBox1}
-                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
-                >
-                  <Trash2 className="w-3.5 h-3.5" /> Clear All
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                {savedBox1.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 text-xs shadow-xs space-y-1.5"
-                  >
-                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                      <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteSavedBox1(item.id)}
-                        className="text-slate-400 hover:text-red-600 p-0.5 cursor-pointer"
-                      >
-                        <Trash2 className="w-3 h-3" />
+            {/* Saved Items */}
+            {savedBox1.length > 0 && (
+              <div className="pt-3 border-t border-slate-200 dark:border-slate-700 space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-slate-700 dark:text-slate-300">Saved Wage Conversions ({savedBox1.length})</span>
+                  <button type="button" onClick={() => setSavedBox1([])} className="text-rose-500 text-[11px] hover:underline cursor-pointer">Clear All</button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  {savedBox1.map((item) => (
+                    <div key={item.id} className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                      <div>
+                        <div className="font-semibold text-slate-800 dark:text-slate-200">{item.primaryResult}</div>
+                        <div className="text-[10px] text-slate-500">{item.inputsSummary}</div>
+                      </div>
+                      <button type="button" onClick={() => handleDeleteSavedBox1(item.id)} className="text-slate-400 hover:text-rose-500 p-1 cursor-pointer">
+                        <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
-                    <div className="text-[11px] text-slate-600 dark:text-slate-400 font-sans">
-                      <span className="font-bold text-slate-700 dark:text-slate-300">Inputs: </span>
-                      {item.inputsSummary}
-                    </div>
-                    <div className="pt-1 border-t border-slate-100 dark:border-slate-800 space-y-1 text-xs font-sans tabular-nums">
-                      {item.detailsList.map((line, idx) => (
-                        <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-0.5 rounded border border-slate-200/60 dark:border-slate-700/60 text-slate-800 dark:text-slate-200">
-                          {line}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* =========================================================================
-          BOX 2: NET TAKE-HOME PAY & TAX DEDUCTION ESTIMATOR
+          TAB 2: NET TAKE-HOME PAY & TAX DEDUCTIONS
           ========================================================================= */}
-      <div className={outerBox3DClass}>
-        <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span>Net Take-Home Pay &amp; Tax Deduction Estimator (FICA, Federal &amp; State)</span>
-          <button
-            type="button"
-            onClick={handleSaveBox2}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
-          >
-            <Bookmark className="w-3 h-3 text-white" />
-            <span>{justSavedBox2 ? "Saved!" : "Save"}</span>
-          </button>
-        </div>
-
-        <div className="p-4 sm:p-5 space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-            {/* INPUTS */}
-            <div className="lg:col-span-5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 space-y-3 shadow-xs">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block pb-1 border-b border-slate-200/80 dark:border-slate-800">
-                Tax Withholding Profile
-              </span>
-
-              <div>
-                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                  Gross Annual Salary ($)
-                </label>
-                <input
-                  type="number"
-                  step={1000}
-                  value={b2GrossSalary}
-                  onChange={(e) => setB2GrossSalary(e.target.value)}
-                  className={input3DClass}
-                />
+      {activeTab === "take-home" && (
+        <div className={cardClass}>
+          <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/40">
+                <Briefcase className="h-4 w-4" />
               </div>
-
-              <div className="grid grid-cols-2 gap-2.5">
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Filing Status
-                  </label>
-                  <select
-                    value={b2FilingStatus}
-                    onChange={(e) => setB2FilingStatus(e.target.value as any)}
-                    className={select3DClass}
-                  >
-                    <option value="single">Single</option>
-                    <option value="married">Married Joint</option>
-                    <option value="headOfHousehold">Head of Household</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    State of Residence
-                  </label>
-                  <select
-                    value={b2StateCode}
-                    onChange={(e) => setB2StateCode(e.target.value)}
-                    className={select3DClass}
-                  >
-                    <option value="TX">Texas (0% State Tax)</option>
-                    <option value="FL">Florida (0% State Tax)</option>
-                    <option value="WA">Washington (0% State Tax)</option>
-                    <option value="NV">Nevada (0% State Tax)</option>
-                    <option value="TN">Tennessee (0% State Tax)</option>
-                    <option value="WY">Wyoming (0% State Tax)</option>
-                    <option value="CA">California (~6.5%)</option>
-                    <option value="NY">New York (~5.5%)</option>
-                    <option value="IL">Illinois (4.95% Flat)</option>
-                    <option value="PA">Pennsylvania (3.07% Flat)</option>
-                    <option value="NC">North Carolina (4.75%)</option>
-                    <option value="GA">Georgia (5.49%)</option>
-                    <option value="OH">Ohio (3.5%)</option>
-                    <option value="CO">Colorado (4.4%)</option>
-                    <option value="MA">Massachusetts (5.0%)</option>
-                    <option value="NJ">New Jersey (5.5%)</option>
-                    <option value="VA">Virginia (5.75%)</option>
-                  </select>
-                </div>
-              </div>
-
               <div>
-                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                  Monthly Pre-Tax Deductions ($/mo)
-                </label>
-                <input
-                  type="number"
-                  step={50}
-                  placeholder="401k, HSA, Health Insurance"
-                  value={b2PreTaxDeductions}
-                  onChange={(e) => setB2PreTaxDeductions(e.target.value)}
-                  className={input3DClass}
-                />
-                <span className="text-[10px] text-slate-400 block mt-0.5">401(k), HSA/FSA, Health Premiums</span>
+                <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                  Take-Home Paycheck & Tax Deduction Estimator
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Estimated Payroll Take-Home Model after federal taxes, state taxes, and FICA withholdings.
+                </p>
               </div>
             </div>
+            <button
+              type="button"
+              onClick={handleSaveBox2}
+              className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+            >
+              <Bookmark className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>{justSavedBox2 ? "Saved!" : "Save"}</span>
+            </button>
+          </div>
 
-            {/* RESULTS & DONUT ALLOCATION CHART */}
-            <div className="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-xs space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+          <div className="p-4 sm:p-5 space-y-5">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+              {/* INPUTS */}
+              <div className="lg:col-span-5 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 block pb-1 border-b border-slate-200 dark:border-slate-700">
+                  Salary & Tax Profile
+                </span>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Tax Year
+                    </label>
+                    <select
+                      value={b2TaxYear}
+                      onChange={(e) => setB2TaxYear(e.target.value as "2026" | "2025")}
+                      className={selectClass}
+                    >
+                      <option value="2026">2026 (Current)</option>
+                      <option value="2025">2025</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Gross Annual Salary ($)
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      step={1000}
+                      value={b2GrossSalary}
+                      onChange={(e) => setB2GrossSalary(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Filing Status
+                    </label>
+                    <select
+                      value={b2FilingStatus}
+                      onChange={(e) => setB2FilingStatus(e.target.value as any)}
+                      className={selectClass}
+                    >
+                      <option value="single">Single</option>
+                      <option value="married">Married (Joint)</option>
+                      <option value="headOfHousehold">Head of Household</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      State
+                    </label>
+                    <select
+                      value={b2StateCode}
+                      onChange={(e) => setB2StateCode(e.target.value)}
+                      className={selectClass}
+                    >
+                      <option value="TX">Texas (0% Tax)</option>
+                      <option value="FL">Florida (0% Tax)</option>
+                      <option value="WA">Washington (0% Tax)</option>
+                      <option value="NV">Nevada (0% Tax)</option>
+                      <option value="TN">Tennessee (0% Tax)</option>
+                      <option value="CA">California</option>
+                      <option value="NY">New York</option>
+                      <option value="IL">Illinois</option>
+                      <option value="PA">Pennsylvania</option>
+                      <option value="MA">Massachusetts</option>
+                      <option value="NJ">New Jersey</option>
+                      <option value="CO">Colorado</option>
+                      <option value="NC">North Carolina</option>
+                      <option value="GA">Georgia</option>
+                      <option value="VA">Virginia</option>
+                      <option value="OH">Ohio</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div>
-                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
-                    Estimated Net Take-Home Pay
-                  </span>
-                  <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 font-sans tabular-nums">
-                    ${b2Calc.netTakeHomeAnnual.toLocaleString()} <span className="text-xs font-medium text-slate-400">/ yr</span>
-                  </span>
-                </div>
-
-                <div className="text-right font-sans tabular-nums">
-                  <span className="text-[10px] text-slate-500 block uppercase font-bold">Effective Tax Rate</span>
-                  <span className="px-2 py-0.5 rounded-lg text-xs font-extrabold bg-blue-50 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 inline-block">
-                    {b2Calc.effectiveTaxRatePercent}% Total
-                  </span>
+                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                    Monthly Pre-Tax Deductions ($401k, HSA, Medical)
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    step={50}
+                    value={b2PreTaxDeductions}
+                    onChange={(e) => setB2PreTaxDeductions(e.target.value)}
+                    className={inputClass}
+                  />
                 </div>
               </div>
 
-              {/* PAYCHECK INTERVALS GRID */}
-              <div className="grid grid-cols-3 gap-2 text-xs font-bold font-sans tabular-nums">
-                <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200/60 dark:border-slate-700/60">
-                  <span className="text-[10px] text-slate-400 block uppercase">Net Monthly</span>
-                  <span className="text-blue-600 dark:text-blue-400 font-extrabold text-sm">
-                    ${b2Calc.netTakeHomeMonthly.toLocaleString()}
-                  </span>
+              {/* OUTPUT RESULTS */}
+              <div className="lg:col-span-7 space-y-4">
+                <div className="p-5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50">
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300">
+                      Estimated Annual Net Take-Home Pay
+                    </span>
+                    <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/60 px-2 py-0.5 rounded-md font-sans">
+                      {parseFloat(b2GrossSalary) > 0 ? ((b2Calc.netTakeHomeAnnual / parseFloat(b2GrossSalary)) * 100).toFixed(1) : "0.0"}% Net Retained
+                    </span>
+                  </div>
+                  <div className="text-3xl sm:text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 font-sans tabular-nums my-1">
+                    ${b2Calc.netTakeHomeAnnual.toLocaleString()}
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-emerald-200/60 dark:border-emerald-800/40 text-xs font-sans tabular-nums text-slate-700 dark:text-slate-300">
+                    <div>Monthly: <strong>${b2Calc.netTakeHomeMonthly.toLocaleString()}</strong></div>
+                    <div>Bi-Weekly: <strong>${b2Calc.netTakeHomeBiWeekly.toLocaleString()}</strong></div>
+                    <div>Weekly: <strong>${Math.round(b2Calc.netTakeHomeAnnual / 52).toLocaleString()}</strong></div>
+                  </div>
                 </div>
-                <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200/60 dark:border-slate-700/60">
-                  <span className="text-[10px] text-slate-400 block uppercase">Net Bi-Weekly</span>
-                  <span className="text-slate-900 dark:text-slate-100 font-extrabold text-sm">
-                    ${b2Calc.netTakeHomeBiWeekly.toLocaleString()}
-                  </span>
-                </div>
-                <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200/60 dark:border-slate-700/60">
-                  <span className="text-[10px] text-slate-400 block uppercase">Net Hourly</span>
-                  <span className="text-emerald-600 dark:text-emerald-400 font-extrabold text-sm">
-                    ${b2Calc.netTakeHomeHourly.toFixed(2)}/hr
-                  </span>
-                </div>
-              </div>
 
-              {/* TAX DEDUCTION BREAKDOWN LIST */}
-              <div className="p-2.5 bg-slate-50 dark:bg-slate-800/40 rounded-lg border border-slate-200/60 dark:border-slate-700/60 text-xs space-y-1 font-sans tabular-nums">
-                <div className="flex justify-between items-center text-slate-700 dark:text-slate-300">
-                  <span>Federal Income Tax Withholding:</span>
-                  <span className="font-bold text-red-600">-${b2Calc.federalIncomeTax.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-center text-slate-700 dark:text-slate-300">
-                  <span>State Income Tax ({b2StateCode}):</span>
-                  <span className="font-bold text-amber-600">-${b2Calc.stateIncomeTax.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-center text-slate-700 dark:text-slate-300">
-                  <span>FICA Taxes (Social Security + Medicare):</span>
-                  <span className="font-bold text-purple-600">-${b2Calc.totalFicaTax.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-center text-slate-700 dark:text-slate-300">
-                  <span>Pre-Tax Benefits Deductions:</span>
-                  <span className="font-bold text-slate-600 dark:text-slate-400">-${b2Calc.preTaxDeductionsAnnual.toLocaleString()}</span>
-                </div>
-              </div>
-
-              {/* 50/30/20 BUDGET RULE BAR */}
-              <div className="p-2.5 bg-slate-50 dark:bg-slate-800/30 rounded-lg border border-slate-200/60 dark:border-slate-700/60 space-y-1.5">
-                <div className="flex items-center justify-between text-xs font-bold">
-                  <span className="text-slate-700 dark:text-slate-300">50/30/20 Take-Home Budget Guide</span>
-                  <span className="text-slate-500 font-sans tabular-nums">${b2Calc.netTakeHomeMonthly.toLocaleString()} / mo</span>
-                </div>
-                <div className="h-3 w-full rounded-full overflow-hidden flex bg-slate-200 dark:bg-slate-700">
-                  <div style={{ width: "50%" }} className="bg-blue-600" title="Needs (50%)"></div>
-                  <div style={{ width: "30%" }} className="bg-amber-500" title="Wants (30%)"></div>
-                  <div style={{ width: "20%" }} className="bg-emerald-500" title="Savings (20%)"></div>
-                </div>
-                <div className="flex justify-between text-[10px] font-bold text-slate-600 dark:text-slate-400 font-sans tabular-nums">
-                  <span>Needs (50%): ${Math.round(b2Calc.netTakeHomeMonthly * 0.5).toLocaleString()}</span>
-                  <span>Wants (30%): ${Math.round(b2Calc.netTakeHomeMonthly * 0.3).toLocaleString()}</span>
-                  <span>Savings (20%): ${Math.round(b2Calc.netTakeHomeMonthly * 0.2).toLocaleString()}</span>
+                {/* Tax Breakdown Table */}
+                <div className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden text-xs">
+                  <table className="w-full text-left">
+                    <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold border-b border-slate-200 dark:border-slate-700">
+                      <tr>
+                        <th className="p-2.5">Component</th>
+                        <th className="p-2.5">Annual Amount</th>
+                        <th className="p-2.5">Monthly Share</th>
+                        <th className="p-2.5">Effective Rate</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-900 font-sans tabular-nums text-slate-700 dark:text-slate-300">
+                      <tr>
+                        <td className="p-2.5 font-sans font-semibold">Federal Income Tax</td>
+                        <td className="p-2.5 text-purple-600 dark:text-purple-400 font-bold">${b2Calc.federalIncomeTax.toLocaleString()}</td>
+                        <td className="p-2.5">${Math.round(b2Calc.federalIncomeTax / 12).toLocaleString()}</td>
+                        <td className="p-2.5 font-semibold">{(parseFloat(b2GrossSalary) > 0 ? (b2Calc.federalIncomeTax / parseFloat(b2GrossSalary) * 100).toFixed(1) : "0.0")}%</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-sans font-semibold">FICA Payroll Taxes (SS & Medicare)</td>
+                        <td className="p-2.5 text-amber-600 dark:text-amber-400 font-bold">${b2Calc.totalFicaTax.toLocaleString()}</td>
+                        <td className="p-2.5">${Math.round(b2Calc.totalFicaTax / 12).toLocaleString()}</td>
+                        <td className="p-2.5 font-semibold">7.65%</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-sans font-semibold">State Income Tax ({b2StateCode})</td>
+                        <td className="p-2.5 text-blue-600 dark:text-blue-400 font-bold">${b2Calc.stateIncomeTax.toLocaleString()}</td>
+                        <td className="p-2.5">${Math.round(b2Calc.stateIncomeTax / 12).toLocaleString()}</td>
+                        <td className="p-2.5 font-semibold">{(parseFloat(b2GrossSalary) > 0 ? (b2Calc.stateIncomeTax / parseFloat(b2GrossSalary) * 100).toFixed(1) : "0.0")}%</td>
+                      </tr>
+                      <tr className="bg-slate-50 dark:bg-slate-800/50 font-bold text-slate-900 dark:text-slate-100">
+                        <td className="p-2.5">Total Annual Taxes Withheld</td>
+                        <td className="p-2.5 text-rose-600 dark:text-rose-400">${b2Calc.totalTaxes.toLocaleString()}</td>
+                        <td className="p-2.5">${Math.round(b2Calc.totalTaxes / 12).toLocaleString()}</td>
+                        <td className="p-2.5">{b2Calc.effectiveTaxRatePercent}%</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* SAVED CALCULATIONS INSIDE BOX 2 */}
-          {savedBox2.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2 mt-3">
-              <div className="flex items-center justify-between pb-1 border-b border-slate-200 dark:border-slate-800">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-                  <Bookmark className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Saved Take-Home Tax Calculations ({savedBox2.length})</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={handleClearAllSavedBox2}
-                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
-                >
-                  <Trash2 className="w-3.5 h-3.5" /> Clear All
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                {savedBox2.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 text-xs shadow-xs space-y-1.5"
-                  >
-                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                      <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteSavedBox2(item.id)}
-                        className="text-slate-400 hover:text-red-600 p-0.5 cursor-pointer"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </button>
-                    </div>
-                    <div className="text-[11px] text-slate-600 dark:text-slate-400 font-sans">
-                      <span className="font-bold text-slate-700 dark:text-slate-300">Inputs: </span>
-                      {item.inputsSummary}
-                    </div>
-                    <div className="pt-1 border-t border-slate-100 dark:border-slate-800 space-y-1 text-xs font-sans tabular-nums">
-                      {item.detailsList.map((line, idx) => (
-                        <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-0.5 rounded border border-slate-200/60 dark:border-slate-700/60 text-slate-800 dark:text-slate-200">
-                          {line}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
-      </div>
+      )}
 
       {/* =========================================================================
-          BOX 3: OVERTIME, DOUBLE-TIME & TIP/BONUS BOOSTER
+          TAB 3: OVERTIME & BONUS BOOSTER
           ========================================================================= */}
-      <div className={outerBox3DClass}>
-        <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span>Overtime, Double-Time &amp; Bonus Pay Booster</span>
-          <button
-            type="button"
-            onClick={handleSaveBox3}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
-          >
-            <Bookmark className="w-3 h-3 text-white" />
-            <span>{justSavedBox3 ? "Saved!" : "Save"}</span>
-          </button>
-        </div>
-
-        <div className="p-4 sm:p-5 space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-            {/* INPUTS */}
-            <div className="lg:col-span-6 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 space-y-3 shadow-xs">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block pb-1 border-b border-slate-200/80 dark:border-slate-800">
-                Hourly Wage &amp; Premium Hours
-              </span>
-
-              <div className="grid grid-cols-2 gap-2.5">
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Base Hourly Rate ($/hr)
-                  </label>
-                  <input
-                    type="number"
-                    step={1}
-                    value={b3BaseRate}
-                    onChange={(e) => setB3BaseRate(e.target.value)}
-                    className={input3DClass}
-                  />
-                </div>
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Regular Hours / Wk
-                  </label>
-                  <input
-                    type="number"
-                    value={b3RegHours}
-                    onChange={(e) => setB3RegHours(e.target.value)}
-                    className={input3DClass}
-                  />
-                </div>
+      {activeTab === "overtime" && (
+        <div className={cardClass}>
+          <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/40">
+                <TrendingUp className="h-4 w-4" />
               </div>
+              <div>
+                <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                  Overtime (1.5x & 2.0x) & Bonus Compensation Booster
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Calculate premium overtime rates, double-time, performance bonuses, and effective hourly wage.
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleSaveBox3}
+              className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+            >
+              <Bookmark className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>{justSavedBox3 ? "Saved!" : "Save"}</span>
+            </button>
+          </div>
 
-              <div className="grid grid-cols-3 gap-2">
-                <div>
-                  <label className="text-[10px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Overtime (1.5x) h/wk
-                  </label>
-                  <input
-                    type="number"
-                    value={b3OtHours}
-                    onChange={(e) => setB3OtHours(e.target.value)}
-                    className={input3DClass}
-                  />
+          <div className="p-4 sm:p-5 space-y-5">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+              {/* INPUTS */}
+              <div className="lg:col-span-5 bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 block pb-1 border-b border-slate-200 dark:border-slate-700">
+                  Hourly Wage & Extra Hours
+                </span>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Base Hourly Rate ($)
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      step={0.5}
+                      value={b3BaseRate}
+                      onChange={(e) => setB3BaseRate(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Regular Hours / Wk
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      max={80}
+                      value={b3RegHours}
+                      onChange={(e) => setB3RegHours(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="text-[10px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Double (2.0x) h/wk
-                  </label>
-                  <input
-                    type="number"
-                    value={b3DtHours}
-                    onChange={(e) => setB3DtHours(e.target.value)}
-                    className={input3DClass}
-                  />
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Overtime Hrs / Wk (1.5x)
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      max={80}
+                      value={b3OtHours}
+                      onChange={(e) => setB3OtHours(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                      Double-Time Hrs / Wk (2x)
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      max={80}
+                      value={b3DtHours}
+                      onChange={(e) => setB3DtHours(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
                 </div>
+
                 <div>
-                  <label className="text-[10px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Annual Bonus ($)
+                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                    Annual Bonus & Commissions ($)
                   </label>
                   <input
                     type="number"
+                    min={0}
                     step={500}
                     value={b3Bonus}
                     onChange={(e) => setB3Bonus(e.target.value)}
-                    className={input3DClass}
+                    className={inputClass}
                   />
                 </div>
               </div>
-            </div>
 
-            {/* RESULTS */}
-            <div className="lg:col-span-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-xs space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-                <div>
-                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
-                    Total Gross Compensation
-                  </span>
-                  <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 font-sans tabular-nums">
-                    ${b3Calc.totalAnnualGross.toLocaleString()} <span className="text-xs font-medium text-slate-400">/ yr</span>
-                  </span>
+              {/* OUTPUT RESULTS */}
+              <div className="lg:col-span-7 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/50">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-800 dark:text-blue-300 block">
+                      Total Annual Compensation
+                    </span>
+                    <div className="text-3xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums mt-1">
+                      ${b3Calc.totalAnnualGross.toLocaleString()}
+                    </div>
+                    <span className="text-xs text-slate-500 block mt-1">Base + OT + Double Time + Bonus</span>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-300 block">
+                      Effective Blended Hourly Rate
+                    </span>
+                    <div className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 font-sans tabular-nums mt-1">
+                      ${b3Calc.effectiveHourlyRate.toFixed(2)}/hr
+                    </div>
+                    <span className="text-xs text-slate-500 block mt-1">Base rate was ${parseFloat(b3BaseRate || "0").toFixed(2)}/hr</span>
+                  </div>
                 </div>
 
-                <div className="text-right">
-                  <span className="text-[10px] text-slate-500 block uppercase font-bold">Effective Rate</span>
-                  <span className="px-2 py-0.5 rounded-lg text-xs font-extrabold bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 inline-block font-sans tabular-nums">
-                    ${b3Calc.effectiveHourlyRate.toFixed(2)} / hr
-                  </span>
+                {/* Breakdown Table */}
+                <div className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden text-xs">
+                  <table className="w-full text-left">
+                    <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold border-b border-slate-200 dark:border-slate-700">
+                      <tr>
+                        <th className="p-2.5">Component</th>
+                        <th className="p-2.5">Rate</th>
+                        <th className="p-2.5">Weekly Pay</th>
+                        <th className="p-2.5">Annualized</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-900 font-sans tabular-nums text-slate-700 dark:text-slate-300">
+                      <tr>
+                        <td className="p-2.5 font-sans font-semibold">Regular Base Pay</td>
+                        <td className="p-2.5">1.0x (${parseFloat(b3BaseRate || "0").toFixed(2)})</td>
+                        <td className="p-2.5 font-semibold">${b3Calc.baseWeeklyPay.toLocaleString()}</td>
+                        <td className="p-2.5 font-bold">${(b3Calc.baseWeeklyPay * 52).toLocaleString()}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-sans font-semibold">1.5x Overtime Pay</td>
+                        <td className="p-2.5 text-blue-600">1.5x (${(parseFloat(b3BaseRate || "0") * 1.5).toFixed(2)})</td>
+                        <td className="p-2.5 font-semibold text-blue-600">${b3Calc.overtimeWeeklyPay.toLocaleString()}</td>
+                        <td className="p-2.5 font-bold text-blue-600">${(b3Calc.overtimeWeeklyPay * 52).toLocaleString()}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-sans font-semibold">2.0x Double-Time Pay</td>
+                        <td className="p-2.5 text-purple-600">2.0x (${(parseFloat(b3BaseRate || "0") * 2.0).toFixed(2)})</td>
+                        <td className="p-2.5 font-semibold text-purple-600">${b3Calc.doubleTimeWeeklyPay.toLocaleString()}</td>
+                        <td className="p-2.5 font-bold text-purple-600">${(b3Calc.doubleTimeWeeklyPay * 52).toLocaleString()}</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-sans font-semibold">Annual Bonuses & Commissions</td>
+                        <td className="p-2.5">-</td>
+                        <td className="p-2.5">${Math.round(parseFloat(b3Bonus || "0") / 52).toLocaleString()}</td>
+                        <td className="p-2.5 font-bold text-emerald-600">${parseFloat(b3Bonus || "0").toLocaleString()}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2 text-xs font-bold font-sans tabular-nums">
-                <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200/60 dark:border-slate-700/60">
-                  <span className="text-[10px] text-slate-400 block uppercase">Base Weekly</span>
-                  <span className="text-slate-900 dark:text-slate-100 font-extrabold">
-                    ${b3Calc.baseWeeklyPay.toLocaleString()}
-                  </span>
-                </div>
-                <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200/60 dark:border-slate-700/60">
-                  <span className="text-[10px] text-slate-400 block uppercase">Overtime Pay</span>
-                  <span className="text-blue-600 dark:text-blue-400 font-extrabold">
-                    +${b3Calc.overtimeWeeklyPay.toLocaleString()}/wk
-                  </span>
-                </div>
-                <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200/60 dark:border-slate-700/60">
-                  <span className="text-[10px] text-slate-400 block uppercase">Double-Time Pay</span>
-                  <span className="text-purple-600 font-extrabold">
-                    +${b3Calc.doubleTimeWeeklyPay.toLocaleString()}/wk
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex justify-end pt-1">
-                <button
-                  type="button"
-                  onClick={handleExportBox3CSV}
-                  className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors border border-slate-200 dark:border-slate-700"
-                >
-                  <Download className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                  <span>Export Schedule (CSV)</span>
-                </button>
               </div>
             </div>
           </div>
-
-          {/* SAVED CALCULATIONS INSIDE BOX 3 */}
-          {savedBox3.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2 mt-3">
-              <div className="flex items-center justify-between pb-1 border-b border-slate-200 dark:border-slate-800">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-                  <Bookmark className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Saved Overtime Calculations ({savedBox3.length})</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={handleClearAllSavedBox3}
-                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
-                >
-                  <Trash2 className="w-3.5 h-3.5" /> Clear All
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                {savedBox3.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 text-xs shadow-xs space-y-1.5"
-                  >
-                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                      <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteSavedBox3(item.id)}
-                        className="text-slate-400 hover:text-red-600 p-0.5 cursor-pointer"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </button>
-                    </div>
-                    <div className="text-[11px] text-slate-600 dark:text-slate-400 font-sans">
-                      <span className="font-bold text-slate-700 dark:text-slate-300">Inputs: </span>
-                      {item.inputsSummary}
-                    </div>
-                    <div className="pt-1 border-t border-slate-100 dark:border-slate-800 space-y-1 text-xs font-sans tabular-nums">
-                      {item.detailsList.map((line, idx) => (
-                        <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-0.5 rounded border border-slate-200/60 dark:border-slate-700/60 text-slate-800 dark:text-slate-200">
-                          {line}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
-      </div>
+      )}
 
       {/* =========================================================================
-          BOX 4: BI-WEEKLY VS SEMI-MONTHLY EXPLAINER & 3-PAYCHECK FINDER
+          TAB 4: BI-WEEKLY VS SEMI-MONTHLY EXPLAINER
           ========================================================================= */}
-      <div className={outerBox3DClass}>
-        <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span>Bi-Weekly vs. Semi-Monthly Explainer &amp; &quot;3-Paycheck Month&quot; Finder</span>
-          <button
-            type="button"
-            onClick={handleSaveBox4}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
-          >
-            <Bookmark className="w-3 h-3 text-white" />
-            <span>{justSavedBox4 ? "Saved!" : "Save"}</span>
-          </button>
-        </div>
-
-        <div className="p-4 sm:p-5 space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-            {/* INPUTS */}
-            <div className="lg:col-span-5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 space-y-3 shadow-xs">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block pb-1 border-b border-slate-200/80 dark:border-slate-800">
-                Annual Compensation Input
-              </span>
-
-              <div>
-                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                  Annual Salary ($)
-                </label>
-                <input
-                  type="number"
-                  step={5000}
-                  value={b4AnnualSalary}
-                  onChange={(e) => setB4AnnualSalary(e.target.value)}
-                  className={input3DClass}
-                />
+      {activeTab === "pay-schedule" && (
+        <div className={cardClass}>
+          <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/40">
+                <Calendar className="h-4 w-4" />
               </div>
-
-              <div className="p-2.5 bg-blue-50/60 dark:bg-blue-950/40 rounded-lg border border-blue-200 dark:border-blue-900 text-xs text-slate-700 dark:text-slate-300 space-y-1">
-                <span className="font-bold block text-blue-700 dark:text-blue-300">Why Paychecks Differ:</span>
-                <p className="text-[11px] leading-relaxed">
-                  <strong>Bi-Weekly</strong> divides your salary across 26 pay periods (every 2 weeks). <strong>Semi-Monthly</strong> divides your salary across exactly 24 pay periods (twice per month).
+              <div>
+                <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                  Bi-Weekly (26 Checks) vs. Semi-Monthly (24 Checks) Explainer
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Understand why semi-monthly paychecks are larger, but bi-weekly provides two 3-paycheck magic months each year.
                 </p>
               </div>
             </div>
+            <button
+              type="button"
+              onClick={handleSaveBox4}
+              className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+            >
+              <Bookmark className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>{justSavedBox4 ? "Saved!" : "Save"}</span>
+            </button>
+          </div>
 
-            {/* RESULTS */}
-            <div className="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-xs space-y-3">
-              <div className="grid grid-cols-2 gap-3 text-xs font-bold font-sans tabular-nums">
-                <div className="p-3 bg-blue-50 dark:bg-blue-950/60 rounded-xl border border-blue-200 dark:border-blue-800 space-y-1">
-                  <span className="text-[10px] text-blue-600 block uppercase">Bi-Weekly Paycheck</span>
-                  <div className="text-xl font-extrabold text-blue-700 dark:text-blue-300">
-                    ${b4BiWeekly.toLocaleString()}
-                  </div>
-                  <div className="text-[10px] text-slate-500 font-medium">26 paychecks per year (every 2 wks)</div>
-                </div>
+          <div className="p-4 sm:p-5 space-y-5">
+            <div className="max-w-md">
+              <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                Annual Salary ($)
+              </label>
+              <input
+                type="number"
+                min={0}
+                step={1000}
+                value={b4AnnualSalary}
+                onChange={(e) => setB4AnnualSalary(e.target.value)}
+                className={inputClass}
+              />
+            </div>
 
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/60 dark:border-slate-700/60 space-y-1">
-                  <span className="text-[10px] text-slate-400 block uppercase">Semi-Monthly Paycheck</span>
-                  <div className="text-xl font-extrabold text-slate-900 dark:text-slate-100">
-                    ${b4SemiMonthly.toLocaleString()}
-                  </div>
-                  <div className="text-[10px] text-slate-500 font-medium">24 paychecks per year (1st &amp; 15th)</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+                    Bi-Weekly Schedule (Every 2 Weeks)
+                  </span>
+                  <span className="text-xs font-bold bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-md font-sans">
+                    26 Paychecks / Year
+                  </span>
                 </div>
+                <div className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 font-sans tabular-nums">
+                  ${b4BiWeekly.toLocaleString()}
+                  <span className="text-xs font-normal text-slate-500 block mt-0.5">Gross Pay per Check</span>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed pt-2 border-t border-slate-200 dark:border-slate-700">
+                  Paid every other Friday (or designated weekday). In 10 months of the year, you receive 2 paychecks. In <strong>2 magic months</strong>, you receive 3 paychecks.
+                </p>
               </div>
 
-              <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-900 text-xs space-y-1 font-sans">
-                <span className="font-extrabold text-emerald-800 dark:text-emerald-300 block">
-                  The &quot;3-Paycheck Magic Month&quot; Advantage:
-                </span>
-                <p className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed">
-                  Because bi-weekly employees receive 26 paychecks in 12 months, exactly <strong>2 months per year contain 3 paychecks</strong> instead of 2. For budgeters budgeting on 2 checks per month, those 2 extra checks function as a 100% discretionary bonus for savings or debt repayment.
+              <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+                    Semi-Monthly Schedule (2x per Month)
+                  </span>
+                  <span className="text-xs font-bold bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-md font-sans">
+                    24 Paychecks / Year
+                  </span>
+                </div>
+                <div className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 font-sans tabular-nums">
+                  ${b4SemiMonthly.toLocaleString()}
+                  <span className="text-xs font-normal text-slate-500 block mt-0.5">Gross Pay per Check</span>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed pt-2 border-t border-slate-200 dark:border-slate-700">
+                  Paid on fixed calendar dates (typically the 1st and 15th, or 15th and last day). Each paycheck is <strong>${b4CheckDelta.toLocaleString()} larger</strong>, but you always receive exactly 2 checks every month.
                 </p>
               </div>
             </div>
           </div>
-
-          {/* SAVED CALCULATIONS INSIDE BOX 4 */}
-          {savedBox4.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2 mt-3">
-              <div className="flex items-center justify-between pb-1 border-b border-slate-200 dark:border-slate-800">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-                  <Bookmark className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Saved Frequency Comparisons ({savedBox4.length})</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={handleClearAllSavedBox4}
-                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
-                >
-                  <Trash2 className="w-3.5 h-3.5" /> Clear All
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                {savedBox4.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 text-xs shadow-xs space-y-1.5"
-                  >
-                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                      <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteSavedBox4(item.id)}
-                        className="text-slate-400 hover:text-red-600 p-0.5 cursor-pointer"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </button>
-                    </div>
-                    <div className="text-[11px] text-slate-600 dark:text-slate-400 font-sans">
-                      <span className="font-bold text-slate-700 dark:text-slate-300">Inputs: </span>
-                      {item.inputsSummary}
-                    </div>
-                    <div className="pt-1 border-t border-slate-100 dark:border-slate-800 space-y-1 text-xs font-sans tabular-nums">
-                      {item.detailsList.map((line, idx) => (
-                        <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-0.5 rounded border border-slate-200/60 dark:border-slate-700/60 text-slate-800 dark:text-slate-200">
-                          {line}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
-      </div>
+      )}
 
       {/* =========================================================================
-          BOX 5: COST-OF-LIVING & RELOCATION CONVERTER
+          TAB 5: COST OF LIVING & RELOCATION CONVERTER
           ========================================================================= */}
-      <div className={outerBox3DClass}>
-        <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span>Cost-of-Living &amp; Relocation Equivalent Salary Converter</span>
-          <button
-            type="button"
-            onClick={handleSaveBox5}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
-          >
-            <Bookmark className="w-3 h-3 text-white" />
-            <span>{justSavedBox5 ? "Saved!" : "Save"}</span>
-          </button>
-        </div>
-
-        <div className="p-4 sm:p-5 space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-            {/* INPUTS */}
-            <div className="lg:col-span-6 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 space-y-3 shadow-xs">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block pb-1 border-b border-slate-200/80 dark:border-slate-800">
-                Relocation Benchmark
-              </span>
-
+      {activeTab === "cost-of-living" && (
+        <div className={cardClass}>
+          <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/40">
+                <MapPin className="h-4 w-4" />
+              </div>
               <div>
-                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                  Current Base Salary ($)
+                <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                  Cost-of-Living & Relocation Equivalent Salary Converter
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Compare city purchasing power and determine what salary is needed to maintain your standard of living.
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleSaveBox5}
+              className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+            >
+              <Bookmark className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>{justSavedBox5 ? "Saved!" : "Save"}</span>
+            </button>
+          </div>
+
+          <div className="p-4 sm:p-5 space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Current Annual Salary ($)
                 </label>
                 <input
                   type="number"
-                  step={5000}
+                  min={0}
+                  step={1000}
                   value={b5Salary}
                   onChange={(e) => setB5Salary(e.target.value)}
-                  className={input3DClass}
+                  className={inputClass}
                 />
               </div>
-
-              <div className="grid grid-cols-2 gap-2.5">
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Current City / Metro
-                  </label>
-                  <select
-                    value={b5SourceCity}
-                    onChange={(e) => setB5SourceCity(e.target.value)}
-                    className={select3DClass}
-                  >
-                    {Object.entries(CITY_COLI_INDEX).map(([key, val]) => (
-                      <option key={key} value={key}>
-                        {val.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Target Destination City
-                  </label>
-                  <select
-                    value={b5TargetCity}
-                    onChange={(e) => setB5TargetCity(e.target.value)}
-                    className={select3DClass}
-                  >
-                    {Object.entries(CITY_COLI_INDEX).map(([key, val]) => (
-                      <option key={key} value={key}>
-                        {val.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              <div>
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Current City
+                </label>
+                <select
+                  value={b5SourceCity}
+                  onChange={(e) => setB5SourceCity(e.target.value)}
+                  className={selectClass}
+                >
+                  {Object.entries(CITY_COLI_INDEX).map(([key, data]) => (
+                    <option key={key} value={key}>{data.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Destination City
+                </label>
+                <select
+                  value={b5TargetCity}
+                  onChange={(e) => setB5TargetCity(e.target.value)}
+                  className={selectClass}
+                >
+                  {Object.entries(CITY_COLI_INDEX).map(([key, data]) => (
+                    <option key={key} value={key}>{data.name}</option>
+                  ))}
+                </select>
               </div>
             </div>
 
-            {/* RESULTS */}
-            <div className="lg:col-span-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-xs space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
-                <div>
-                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
-                    Equivalent Required Salary
-                  </span>
-                  <span className="text-2xl font-extrabold text-slate-900 dark:text-slate-100 font-sans tabular-nums">
-                    ${b5Calc.equivalentSalary.toLocaleString()}
-                  </span>
-                </div>
-
-                <div className="text-right">
-                  <span className="text-[10px] text-slate-500 block uppercase font-bold">Cost Delta</span>
-                  <span
-                    className={`px-2 py-0.5 rounded-lg text-xs font-extrabold font-sans tabular-nums inline-block ${
-                      b5Calc.percentageDifference > 0
-                        ? "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300"
-                        : "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300"
-                    }`}
-                  >
-                    {b5Calc.percentageDifference > 0 ? `+${b5Calc.percentageDifference}%` : `${b5Calc.percentageDifference}%`}
-                  </span>
-                </div>
+            <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                  Equivalent Salary Needed in {b5Calc.targetCityName}
+                </span>
+                <span className={`text-xs font-bold px-2 py-0.5 rounded-md font-sans ${
+                  b5Calc.percentageDifference > 0 ? "bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300" : "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300"
+                }`}>
+                  {b5Calc.percentageDifference > 0 ? `+${b5Calc.percentageDifference}% Cost of Living` : `${b5Calc.percentageDifference}% Cost of Living`}
+                </span>
               </div>
-
-              <div className="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-lg border border-slate-200/60 dark:border-slate-700/60 text-xs space-y-1.5 font-sans">
-                <div className="flex justify-between items-center text-slate-700 dark:text-slate-300">
-                  <span>Destination Living Cost:</span>
-                  <span className="font-bold text-slate-900 dark:text-slate-100 tabular-nums">
-                    {b5Calc.percentageDifference > 0 ? `+${b5Calc.percentageDifference}% higher` : `${b5Calc.percentageDifference}% lower`}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center text-slate-700 dark:text-slate-300">
-                  <span>Housing &amp; Rent Cost Difference:</span>
-                  <span className="font-bold text-blue-600 dark:text-blue-400 tabular-nums">
-                    {b5Calc.housingDeltaPercent > 0 ? `+${b5Calc.housingDeltaPercent}%` : `${b5Calc.housingDeltaPercent}%`}
-                  </span>
-                </div>
+              <div className="text-3xl sm:text-4xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums">
+                ${b5Calc.equivalentSalary.toLocaleString()}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400">
+                <div>Housing Index Differential: <strong className="text-slate-900 dark:text-slate-100 font-sans">{b5Calc.housingDeltaPercent > 0 ? `+${b5Calc.housingDeltaPercent}%` : `${b5Calc.housingDeltaPercent}%`}</strong></div>
+                <div>Purchasing Power: <strong className="text-slate-900 dark:text-slate-100 font-sans">{b5Calc.targetCityName} is {Math.abs(b5Calc.percentageDifference)}% {b5Calc.percentageDifference > 0 ? "more expensive" : "cheaper"}</strong></div>
               </div>
             </div>
           </div>
-
-          {/* SAVED CALCULATIONS INSIDE BOX 5 */}
-          {savedBox5.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2 mt-3">
-              <div className="flex items-center justify-between pb-1 border-b border-slate-200 dark:border-slate-800">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-                  <Bookmark className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Saved Cost-of-Living Comparisons ({savedBox5.length})</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={handleClearAllSavedBox5}
-                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
-                >
-                  <Trash2 className="w-3.5 h-3.5" /> Clear All
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                {savedBox5.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 text-xs shadow-xs space-y-1.5"
-                  >
-                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                      <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteSavedBox5(item.id)}
-                        className="text-slate-400 hover:text-red-600 p-0.5 cursor-pointer"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </button>
-                    </div>
-                    <div className="text-[11px] text-slate-600 dark:text-slate-400 font-sans">
-                      <span className="font-bold text-slate-700 dark:text-slate-300">Inputs: </span>
-                      {item.inputsSummary}
-                    </div>
-                    <div className="pt-1 border-t border-slate-100 dark:border-slate-800 space-y-1 text-xs font-sans tabular-nums">
-                      {item.detailsList.map((line, idx) => (
-                        <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-0.5 rounded border border-slate-200/60 dark:border-slate-700/60 text-slate-800 dark:text-slate-200">
-                          {line}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
-      </div>
+      )}
 
       {/* =========================================================================
-          BOX 6: REVERSE SALARY & TARGET TAKE-HOME WAGE SOLVER
+          TAB 6: REVERSE SALARY & TARGET TAKE-HOME SOLVER
           ========================================================================= */}
-      <div className={outerBox3DClass}>
-        <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span>Reverse Salary Solver (Target Net Budget &rarr; Required Gross Wage)</span>
-          <button
-            type="button"
-            onClick={handleSaveBox6}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
-          >
-            <Bookmark className="w-3 h-3 text-white" />
-            <span>{justSavedBox6 ? "Saved!" : "Save"}</span>
-          </button>
-        </div>
-
-        <div className="p-4 sm:p-5 space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-            {/* INPUTS */}
-            <div className="lg:col-span-6 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 space-y-3 shadow-xs">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block pb-1 border-b border-slate-200/80 dark:border-slate-800">
-                Target Net Budget Requirements
-              </span>
-
+      {activeTab === "target-salary" && (
+        <div className={cardClass}>
+          <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/40">
+                <Percent className="h-4 w-4" />
+              </div>
               <div>
-                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                  Desired Net Take-Home ($/Month)
+                <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                  Reverse Salary & Target Take-Home Solver
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Input your target monthly net take-home pay to calculate the required gross salary and hourly wage.
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleSaveBox6}
+              className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+            >
+              <Bookmark className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+              <span>{justSavedBox6 ? "Saved!" : "Save"}</span>
+            </button>
+          </div>
+
+          <div className="p-4 sm:p-5 space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Desired Monthly Net Pay ($)
                 </label>
                 <input
                   type="number"
+                  min={0}
                   step={250}
                   value={b6NetMonthly}
                   onChange={(e) => setB6NetMonthly(e.target.value)}
-                  className={input3DClass}
+                  className={inputClass}
                 />
               </div>
-
-              <div className="grid grid-cols-2 gap-2.5">
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Estimated Tax Rate (%)
-                  </label>
-                  <input
-                    type="number"
-                    step={1}
-                    value={b6TaxRate}
-                    onChange={(e) => setB6TaxRate(e.target.value)}
-                    className={input3DClass}
-                  />
-                </div>
-                <div>
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-0.5">
-                    Hours per Week
-                  </label>
-                  <input
-                    type="number"
-                    value={b6HoursPerWeek}
-                    onChange={(e) => setB6HoursPerWeek(e.target.value)}
-                    className={input3DClass}
-                  />
-                </div>
+              <div>
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Estimated Total Tax Rate (%)
+                </label>
+                <input
+                  type="number"
+                  min={0}
+                  max={60}
+                  step={0.5}
+                  value={b6TaxRate}
+                  onChange={(e) => setB6TaxRate(e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Hours per Week
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  max={80}
+                  value={b6HoursPerWeek}
+                  onChange={(e) => setB6HoursPerWeek(e.target.value)}
+                  className={inputClass}
+                />
               </div>
             </div>
 
-            {/* RESULTS */}
-            <div className="lg:col-span-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-xs space-y-3">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block pb-1 border-b border-slate-100 dark:border-slate-800">
-                Required Pre-Tax Compensation Needed
+            <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
+                Required Gross Annual Salary
               </span>
-
-              <div className="grid grid-cols-2 gap-3 text-xs font-bold font-sans tabular-nums">
-                <div className="p-3 bg-blue-50 dark:bg-blue-950/60 rounded-xl border border-blue-200 dark:border-blue-800 space-y-1">
-                  <span className="text-[10px] text-blue-600 block uppercase">Required Gross Annual</span>
-                  <div className="text-xl font-extrabold text-blue-700 dark:text-blue-300">
-                    ${b6Calc.requiredGrossAnnual.toLocaleString()}
-                  </div>
-                  <div className="text-[10px] text-slate-500 font-medium">Gross: ${b6Calc.requiredGrossMonthly.toLocaleString()} / mo</div>
-                </div>
-
-                <div className="p-3 bg-emerald-50 dark:bg-emerald-950/60 rounded-xl border border-emerald-200 dark:border-emerald-800 space-y-1">
-                  <span className="text-[10px] text-emerald-600 block uppercase">Required Hourly Wage</span>
-                  <div className="text-xl font-extrabold text-emerald-700 dark:text-emerald-300">
-                    ${b6Calc.requiredGrossHourly.toFixed(2)} <span className="text-xs font-medium">/ hr</span>
-                  </div>
-                  <div className="text-[10px] text-slate-500 font-medium">Based on {b6HoursPerWeek} hrs/week</div>
-                </div>
+              <div className="text-3xl sm:text-4xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums">
+                ${b6Calc.requiredGrossAnnual.toLocaleString()}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-slate-200 dark:border-slate-700 text-xs font-sans tabular-nums text-slate-700 dark:text-slate-300">
+                <div>Required Hourly: <strong>${b6Calc.requiredGrossHourly.toFixed(2)}/hr</strong></div>
+                <div>Gross Monthly: <strong>${b6Calc.requiredGrossMonthly.toLocaleString()}/mo</strong></div>
+                <div>Est. Taxes: <strong>${Math.round(b6Calc.requiredGrossAnnual * (parseFloat(b6TaxRate) / 100)).toLocaleString()}/yr</strong></div>
               </div>
             </div>
           </div>
-
-          {/* SAVED CALCULATIONS INSIDE BOX 6 */}
-          {savedBox6.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-xs space-y-2 mt-3">
-              <div className="flex items-center justify-between pb-1 border-b border-slate-200 dark:border-slate-800">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-                  <Bookmark className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Saved Reverse Salary Solvers ({savedBox6.length})</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={handleClearAllSavedBox6}
-                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
-                >
-                  <Trash2 className="w-3.5 h-3.5" /> Clear All
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                {savedBox6.map((item) => (
-                  <div
-                    key={item.id}
-                    className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 text-xs shadow-xs space-y-1.5"
-                  >
-                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
-                      <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteSavedBox6(item.id)}
-                        className="text-slate-400 hover:text-red-600 p-0.5 cursor-pointer"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </button>
-                    </div>
-                    <div className="text-[11px] text-slate-600 dark:text-slate-400 font-sans">
-                      <span className="font-bold text-slate-700 dark:text-slate-300">Inputs: </span>
-                      {item.inputsSummary}
-                    </div>
-                    <div className="pt-1 border-t border-slate-100 dark:border-slate-800 space-y-1 text-xs font-sans tabular-nums">
-                      {item.detailsList.map((line, idx) => (
-                        <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-0.5 rounded border border-slate-200/60 dark:border-slate-700/60 text-slate-800 dark:text-slate-200">
-                          {line}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
-      </div>
+      )}
     </div>
   );
 }
-
-export default SalaryCalculator;

@@ -14,18 +14,20 @@ import {
 
 /**
  * 1. Universal Salary & Wage Conversion Matrix (Core Engine)
+ * Implements standard 52-week payroll conventions and paid-PTO active-hour valuation.
  */
 export function calculateUniversalSalary(inputs: UniversalSalaryInputs): UniversalSalaryResult {
   const amt = Math.abs(inputs.salaryAmount || 0);
-  const hpw = Math.max(1, inputs.hoursPerWeek || 40);
+  const hpw = Math.max(1, Math.min(168, inputs.hoursPerWeek || 40));
   const dpw = Math.max(1, Math.min(7, inputs.daysPerWeek || 5));
-  const hpd = hpw / dpw; // hours per day
-  const holidays = Math.max(0, inputs.holidaysPerYear || 10);
-  const vacation = Math.max(0, inputs.vacationDaysPerYear || 15);
+  const hpd = hpw / dpw; // hours per workday
+  const holidays = Math.max(0, inputs.holidaysPerYear || 0);
+  const vacation = Math.max(0, inputs.vacationDaysPerYear || 0);
 
   const totalWorkingDays = 52 * dpw; // 260 for 5 days/week
   const nonWorkingDays = holidays + vacation;
-  const adjustedWorkingDays = Math.max(1, totalWorkingDays - nonWorkingDays); // 235 for 10+15
+  const adjustedWorkingDays = Math.max(1, totalWorkingDays - nonWorkingDays); // active on-the-clock days
+  const activeWorkingHours = adjustedWorkingDays * hpd; // active hours worked
 
   // First determine base unadjusted hourly wage based on input frequency
   let baseUnadjustedHourly = 0;
@@ -57,7 +59,7 @@ export function calculateUniversalSalary(inputs: UniversalSalaryInputs): Univers
       break;
   }
 
-  // Unadjusted calculations (assuming full 52 weeks / 260 days)
+  // Unadjusted calculations (assuming standard full 52 weeks / 260 working days)
   const unadjustedAnnual = baseUnadjustedHourly * hpw * 52;
   const unadjustedMonthly = unadjustedAnnual / 12;
   const unadjustedQuarterly = unadjustedAnnual / 4;
@@ -67,28 +69,29 @@ export function calculateUniversalSalary(inputs: UniversalSalaryInputs): Univers
   const unadjustedDaily = baseUnadjustedHourly * hpd;
   const unadjustedHourly = baseUnadjustedHourly;
 
-  // Adjusted calculations (subtracting paid holidays and vacation)
-  const adjustedAnnual = adjustedWorkingDays * hpd * baseUnadjustedHourly;
-  const adjustedMonthly = adjustedAnnual / 12;
-  const adjustedQuarterly = adjustedAnnual / 4;
-  const adjustedSemiMonthly = adjustedAnnual / 24;
-  const adjustedBiWeekly = adjustedAnnual / 26;
-  const adjustedWeekly = adjustedAnnual / 52;
-  const adjustedDaily = adjustedAnnual / totalWorkingDays;
-  const adjustedHourly = adjustedAnnual / (totalWorkingDays * hpd);
+  // Paid PTO Model: Contractual annual salary remains 100% intact.
+  // Effective hourly compensation increases because full salary is earned over fewer active hours.
+  const adjustedAnnual = unadjustedAnnual;
+  const adjustedMonthly = unadjustedMonthly;
+  const adjustedQuarterly = unadjustedQuarterly;
+  const adjustedSemiMonthly = unadjustedSemiMonthly;
+  const adjustedBiWeekly = unadjustedBiWeekly;
+  const adjustedWeekly = unadjustedWeekly;
+  const adjustedHourly = activeWorkingHours > 0 ? unadjustedAnnual / activeWorkingHours : unadjustedHourly;
+  const adjustedDaily = adjustedWorkingDays > 0 ? unadjustedAnnual / adjustedWorkingDays : unadjustedDaily;
 
   const conversionMatrix: FrequencyConversionRow[] = [
     {
       period: "Hourly",
       unadjustedAmount: Math.round(unadjustedHourly * 100) / 100,
       adjustedAmount: Math.round(adjustedHourly * 100) / 100,
-      frequencyDescription: `${hpw} hours/week`,
+      frequencyDescription: `${hpw} hours/week standard (${Math.round(activeWorkingHours)} active hrs/yr)`,
     },
     {
       period: "Daily",
       unadjustedAmount: Math.round(unadjustedDaily * 100) / 100,
       adjustedAmount: Math.round(adjustedDaily * 100) / 100,
-      frequencyDescription: `${Math.round(hpd * 10) / 10} hours/day (${dpw} days/wk)`,
+      frequencyDescription: `${Math.round(hpd * 10) / 10} hours/day (${adjustedWorkingDays} active days/yr)`,
     },
     {
       period: "Weekly",
@@ -124,7 +127,7 @@ export function calculateUniversalSalary(inputs: UniversalSalaryInputs): Univers
       period: "Annual",
       unadjustedAmount: Math.round(unadjustedAnnual * 100) / 100,
       adjustedAmount: Math.round(adjustedAnnual * 100) / 100,
-      frequencyDescription: "52 full weeks / year",
+      frequencyDescription: "Contractual salary with paid PTO",
     },
   ];
 
@@ -133,6 +136,8 @@ export function calculateUniversalSalary(inputs: UniversalSalaryInputs): Univers
     adjustedAnnual: Math.round(adjustedAnnual * 100) / 100,
     unadjustedMonthly: Math.round(unadjustedMonthly * 100) / 100,
     adjustedMonthly: Math.round(adjustedMonthly * 100) / 100,
+    unadjustedSemiMonthly: Math.round(unadjustedSemiMonthly * 100) / 100,
+    adjustedSemiMonthly: Math.round(adjustedSemiMonthly * 100) / 100,
     unadjustedBiWeekly: Math.round(unadjustedBiWeekly * 100) / 100,
     adjustedBiWeekly: Math.round(adjustedBiWeekly * 100) / 100,
     unadjustedHourly: Math.round(unadjustedHourly * 100) / 100,
@@ -145,63 +150,114 @@ export function calculateUniversalSalary(inputs: UniversalSalaryInputs): Univers
 
 /**
  * 2. Net Take-Home Pay & Tax Deduction Estimator
+ * Updated with official 2025 and 2026 statutory Social Security wage bases and federal tax datasets.
  */
 export function calculateTakeHomeTax(inputs: TakeHomeTaxInputs): TakeHomeTaxResult {
   const gross = Math.abs(inputs.grossAnnualSalary || 0);
   const preTaxAnnual = Math.abs(inputs.monthlyPreTaxDeductions || 0) * 12;
   const taxableGross = Math.max(0, gross - preTaxAnnual);
+  const year = inputs.taxYear || "2026";
 
-  // Standard deduction for 2025/2026
+  // Statutory Standard Deductions (Rev. Proc. 2024-40 for 2025; Rev. Proc. 2025-32 for 2026)
   const standardDeductions = {
-    single: 15000,
-    married: 30000,
-    headOfHousehold: 22500,
-  };
-  const stdDeduction = standardDeductions[inputs.filingStatus] || 15000;
+    "2026": {
+      single: 16100,
+      married: 32200,
+      headOfHousehold: 24150,
+    },
+    "2025": {
+      single: 15750,
+      married: 31500,
+      headOfHousehold: 23625,
+    },
+  }[year];
+
+  const stdDeduction = standardDeductions[inputs.filingStatus] || standardDeductions.single;
   const federalTaxableIncome = Math.max(0, taxableGross - stdDeduction);
 
-  // Federal progressive tax brackets for 2025/2026
+  // Statutory Progressive Federal Tax Brackets
   let fedTax = 0;
-  if (inputs.filingStatus === "married") {
-    const brackets = [
-      { cap: 23200, rate: 0.10 },
-      { cap: 94300, rate: 0.12 },
-      { cap: 201050, rate: 0.22 },
-      { cap: 383900, rate: 0.24 },
-      { cap: 487450, rate: 0.32 },
-      { cap: 731200, rate: 0.35 },
-      { cap: Infinity, rate: 0.37 },
-    ];
-    let prev = 0;
-    for (const b of brackets) {
-      if (federalTaxableIncome > prev) {
-        const taxableInBracket = Math.min(federalTaxableIncome, b.cap) - prev;
-        fedTax += taxableInBracket * b.rate;
-        prev = b.cap;
+  if (year === "2026") {
+    if (inputs.filingStatus === "married") {
+      const brackets = [
+        { cap: 24800, rate: 0.10 },
+        { cap: 100800, rate: 0.12 },
+        { cap: 211400, rate: 0.22 },
+        { cap: 403550, rate: 0.24 },
+        { cap: 512450, rate: 0.32 },
+        { cap: 768700, rate: 0.35 },
+        { cap: Infinity, rate: 0.37 },
+      ];
+      let prev = 0;
+      for (const b of brackets) {
+        if (federalTaxableIncome > prev) {
+          const taxableInBracket = Math.min(federalTaxableIncome, b.cap) - prev;
+          fedTax += taxableInBracket * b.rate;
+          prev = b.cap;
+        }
+      }
+    } else {
+      const brackets = [
+        { cap: 12400, rate: 0.10 },
+        { cap: 50400, rate: 0.12 },
+        { cap: 105700, rate: 0.22 },
+        { cap: 201775, rate: 0.24 },
+        { cap: 256225, rate: 0.32 },
+        { cap: 640600, rate: 0.35 },
+        { cap: Infinity, rate: 0.37 },
+      ];
+      let prev = 0;
+      for (const b of brackets) {
+        if (federalTaxableIncome > prev) {
+          const taxableInBracket = Math.min(federalTaxableIncome, b.cap) - prev;
+          fedTax += taxableInBracket * b.rate;
+          prev = b.cap;
+        }
       }
     }
   } else {
-    const brackets = [
-      { cap: 11600, rate: 0.10 },
-      { cap: 47150, rate: 0.12 },
-      { cap: 100525, rate: 0.22 },
-      { cap: 191950, rate: 0.24 },
-      { cap: 243725, rate: 0.32 },
-      { cap: 609350, rate: 0.35 },
-      { cap: Infinity, rate: 0.37 },
-    ];
-    let prev = 0;
-    for (const b of brackets) {
-      if (federalTaxableIncome > prev) {
-        const taxableInBracket = Math.min(federalTaxableIncome, b.cap) - prev;
-        fedTax += taxableInBracket * b.rate;
-        prev = b.cap;
+    // 2025 Tax Brackets
+    if (inputs.filingStatus === "married") {
+      const brackets = [
+        { cap: 23850, rate: 0.10 },
+        { cap: 96950, rate: 0.12 },
+        { cap: 206700, rate: 0.22 },
+        { cap: 394600, rate: 0.24 },
+        { cap: 501050, rate: 0.32 },
+        { cap: 751600, rate: 0.35 },
+        { cap: Infinity, rate: 0.37 },
+      ];
+      let prev = 0;
+      for (const b of brackets) {
+        if (federalTaxableIncome > prev) {
+          const taxableInBracket = Math.min(federalTaxableIncome, b.cap) - prev;
+          fedTax += taxableInBracket * b.rate;
+          prev = b.cap;
+        }
+      }
+    } else {
+      const brackets = [
+        { cap: 11925, rate: 0.10 },
+        { cap: 48475, rate: 0.12 },
+        { cap: 103350, rate: 0.22 },
+        { cap: 197300, rate: 0.24 },
+        { cap: 250525, rate: 0.32 },
+        { cap: 626350, rate: 0.35 },
+        { cap: Infinity, rate: 0.37 },
+      ];
+      let prev = 0;
+      for (const b of brackets) {
+        if (federalTaxableIncome > prev) {
+          const taxableInBracket = Math.min(federalTaxableIncome, b.cap) - prev;
+          fedTax += taxableInBracket * b.rate;
+          prev = b.cap;
+        }
       }
     }
   }
 
-  // FICA: Social Security (6.2% up to $168,600) + Medicare (1.45% + 0.9% surtax over $200k)
-  const ssWageCap = 168600;
+  // Statutory Social Security Wage Base Cap: $184,500 for 2026; $176,100 for 2025
+  const ssWageCap = year === "2025" ? 176100 : 184500;
   const ssTax = Math.min(gross, ssWageCap) * 0.062;
   const medTax = gross * 0.0145 + Math.max(0, gross - 200000) * 0.009;
   const totalFica = ssTax + medTax;
@@ -287,6 +343,7 @@ export function calculateOvertimeBooster(inputs: OvertimeBoosterInputs): Overtim
 
 /**
  * 4. Cost of Living & Relocation Converter
+ * Illustrative benchmark index comparing purchasing power across major metropolitan areas.
  */
 export const CITY_COLI_INDEX: Record<string, { name: string; index: number; housingIndex: number }> = {
   national_avg: { name: "US National Average", index: 100, housingIndex: 100 },
@@ -326,11 +383,15 @@ export function calculateCostOfLiving(inputs: CostOfLivingInputs): CostOfLivingR
 
 /**
  * 5. Reverse Salary Solver
+ * Solves for required gross salary given desired net monthly pay and an assumed effective tax rate.
  */
 export function calculateReverseSalary(inputs: ReverseSalaryInputs): ReverseSalaryResult {
   const netMonthly = Math.abs(inputs.desiredNetMonthly || 0);
   const netAnnual = netMonthly * 12;
-  const taxRate = Math.min(0.8, Math.max(0, (inputs.estimatedTaxRatePercent || 25) / 100));
+  const rawTaxRate = inputs.estimatedTaxRatePercent !== undefined && !isNaN(inputs.estimatedTaxRatePercent)
+    ? inputs.estimatedTaxRatePercent
+    : 25;
+  const taxRate = Math.min(0.8, Math.max(0, rawTaxRate / 100));
 
   const requiredGrossAnnual = taxRate < 1 ? netAnnual / (1 - taxRate) : netAnnual;
   const requiredGrossMonthly = requiredGrossAnnual / 12;

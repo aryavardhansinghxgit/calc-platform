@@ -11,10 +11,10 @@ export type PayFrequencyUnit =
 export interface UniversalSalaryInputs {
   salaryAmount: number; // e.g. 50
   frequency: PayFrequencyUnit; // e.g. "hourly"
-  hoursPerWeek: number; // e.g. 40
-  daysPerWeek: number; // e.g. 5
-  holidaysPerYear: number; // e.g. 10
-  vacationDaysPerYear: number; // e.g. 15
+  hoursPerWeek?: number; // e.g. 40
+  daysPerWeek?: number; // e.g. 5
+  holidaysPerYear?: number; // e.g. 10
+  vacationDaysPerYear?: number; // e.g. 15
 }
 
 export interface FrequencyConversionRow {
@@ -29,6 +29,8 @@ export interface UniversalSalaryResult {
   adjustedAnnual: number;
   unadjustedMonthly: number;
   adjustedMonthly: number;
+  unadjustedSemiMonthly: number;
+  adjustedSemiMonthly: number;
   unadjustedBiWeekly: number;
   adjustedBiWeekly: number;
   unadjustedHourly: number;
@@ -43,6 +45,7 @@ export interface TakeHomeTaxInputs {
   filingStatus: "single" | "married" | "headOfHousehold";
   stateCode: string; // e.g. "TX", "CA", "NY", "FL", "WA", etc.
   monthlyPreTaxDeductions: number; // 401k, HSA, health insurance
+  taxYear?: "2025" | "2026";
 }
 
 export interface TakeHomeTaxResult {
@@ -95,9 +98,9 @@ export interface CostOfLivingResult {
 
 export interface ReverseSalaryInputs {
   desiredNetMonthly: number; // e.g. 5000
-  estimatedTaxRatePercent: number; // e.g. 25.0
-  hoursPerWeek: number; // e.g. 40
-  daysPerWeek: number; // e.g. 5
+  estimatedTaxRatePercent?: number; // e.g. 25.0
+  hoursPerWeek?: number; // e.g. 40
+  daysPerWeek?: number; // e.g. 5
 }
 
 export interface ReverseSalaryResult {

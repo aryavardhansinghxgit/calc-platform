@@ -59,6 +59,7 @@ import { FutureValueCalculator } from "./future-value/FutureValueCalculator";
 import { PresentValueCalculator } from "./present-value/PresentValueCalculator";
 import { IncomeTaxCalculator } from "./income-tax/IncomeTaxCalculator";
 import { IncomeTaxContent } from "./income-tax/IncomeTaxContent";
+import { SalaryContent } from "./salary/SalaryContent";
 import { GstCalculator } from "./gst/GstCalculator";
 import { VatCalculator } from "./vat/VatCalculator";
 import { SalesTaxCalculator } from "./sales-tax/SalesTaxCalculator";
@@ -510,6 +511,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
     isWindChill ? WindChillContent :
     isSleep ? SleepContent :
     isIncomeTax ? IncomeTaxContent :
+    isSalary ? SalaryContent :
     isScientific ? ScientificCalculatorContent : isBac ? BacContent : isBsa ? BsaContent : isBodyType ? BodyTypeContent : isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null
   );
   const CustomChart = definition.ChartComponent;
@@ -870,8 +872,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             )}
           </CalculatorErrorBoundary>
 
-          {/* Simple Related Calculators Links directly below calculator boxes (Suppressed for Personal Loan which has dedicated approved suite) */}
-          {!isPersonalLoan && (
+          {/* Simple Related Calculators Links directly below calculator boxes (Suppressed for Personal Loan, Salary, and Income Tax which have dedicated approved suites) */}
+          {!isPersonalLoan && !isSalary && !isIncomeTax && (
             <div className="pt-2 pb-1 space-y-1">
               <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
                 Related Calculators:
