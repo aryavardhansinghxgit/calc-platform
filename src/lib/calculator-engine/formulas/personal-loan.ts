@@ -4,9 +4,9 @@
  * 1. Loan amount, interest rate, term (years/months), start date, fee & insurance options
  * 2. Monthly payment, total payments, total interest, payoff date ($424.94 match for $20k @ 10% 5yrs)
  * 3. Annual & Monthly Amortization Schedule Generator
- * 4. Debt Consolidation vs Credit Cards Analyzer (14.284% APR match for PDF page 2 example)
+ * 4. Debt Consolidation vs Credit Cards Analyzer (14.284% APR match for PDF page 2/3 example)
  * 5. Early Payoff & Extra Payments Simulator
- * 6. Loan Affordability Target Payment Solver
+ * 6. True Actuarial TILA APR root-finding for fee-inclusive borrowing
  */
 
 import { safePmt } from "./safety";
@@ -100,32 +100,58 @@ export interface ExtraPaymentResult {
 }
 
 /**
+ * Solves for true actuarial Annual Percentage Rate (APR) under U.S. TILA / Regulation Z
+ * using bisection root-finding over discrete monthly cash flows.
+ */
+export function solveActuarialApr(netProceeds: number, monthlyPayment: number, totalPeriods: number): number {
+  if (netProceeds <= 0 || monthlyPayment <= 0 || totalPeriods <= 0) return 0;
+  if (monthlyPayment * totalPeriods <= netProceeds) return 0;
+
+  let low = 0.0;
+  let high = 5.0; // Up to 500% monthly rate (6000% APR)
+
+  for (let iter = 0; iter < 60; iter++) {
+    const mid = (low + high) / 2;
+    const pv = mid === 0 ? monthlyPayment * totalPeriods : (monthlyPayment * (1 - Math.pow(1 + mid, -totalPeriods))) / mid;
+
+    if (pv > netProceeds) {
+      low = mid; // higher discount rate decreases PV
+    } else {
+      high = mid;
+    }
+  }
+
+  const periodicRate = (low + high) / 2;
+  return Number((periodicRate * 12 * 100).toFixed(3));
+}
+
+/**
  * 1. Standard Personal Loan Calculator (Calculator.net Baseline)
  * Baseline Test: $20,000 @ 10% for 5 years (60 mos), Aug 2026 start date
  * -> Monthly pay = $424.94, Total payments = $25,496.45, Total interest = $5,496.45, Payoff = Aug 2031
  */
 export function calculatePersonalLoan(input: PersonalLoanInput): PersonalLoanResult {
-  const P = Math.max(0, Number(input.loanAmount || 20000));
-  const ratePct = Math.max(0, Number(input.interestRate || 10.0));
+  const P = Math.max(0, Number(input.loanAmount ?? 20000));
+  const ratePct = Math.max(0, Number(input.interestRate ?? 10.0));
   const r = ratePct / 100 / 12;
 
-  const years = Math.max(0, Number(input.loanTermYears || 5));
-  const months = Math.max(0, Number(input.loanTermMonths || 0));
+  const years = Math.max(0, Number(input.loanTermYears ?? 5));
+  const months = Math.max(0, Number(input.loanTermMonths ?? 0));
   const n = Math.max(1, years * 12 + months);
 
   const start = input.startDate ? new Date(input.startDate + "-01") : new Date(2026, 7, 1);
 
   // Fees
-  const origPct = input.includeFees ? Math.max(0, Number(input.originationFeePercent || 0)) / 100 : 0;
-  const upfrontFee = input.includeFees ? Math.max(0, Number(input.upfrontFeeDollar || 0)) : 0;
-  const monthlyFee = input.includeFees ? Math.max(0, Number(input.monthlyFeeDollar || 0)) : 0;
-  const insuranceFee = input.includeFees ? Math.max(0, Number(input.loanInsuranceMonthly || 0)) : 0;
+  const origPct = input.includeFees ? Math.max(0, Number(input.originationFeePercent ?? 0)) / 100 : 0;
+  const upfrontFee = input.includeFees ? Math.max(0, Number(input.upfrontFeeDollar ?? 0)) : 0;
+  const monthlyFee = input.includeFees ? Math.max(0, Number(input.monthlyFeeDollar ?? 0)) : 0;
+  const insuranceFee = input.includeFees ? Math.max(0, Number(input.loanInsuranceMonthly ?? 0)) : 0;
 
   const originationFeeAmt = P * origPct;
-  const netFinancedAmount = P; // Usually origination fee is financed or paid upfront
+  const netFinancedAmount = P;
 
   // Base PMT
-  const basePmt = safePmt(netFinancedAmount, r, n);
+  const basePmt = P === 0 ? 0 : r === 0 ? P / n : safePmt(netFinancedAmount, r, n);
   const totalMonthlyPmt = basePmt + monthlyFee + insuranceFee;
 
   let balance = netFinancedAmount;
@@ -134,8 +160,8 @@ export function calculatePersonalLoan(input: PersonalLoanInput): PersonalLoanRes
   const monthlySchedule: AmortizationRow[] = [];
 
   for (let i = 1; i <= n; i++) {
-    const interestForMonth = balance * r;
-    const principalForMonth = Math.min(balance, basePmt - interestForMonth);
+    const interestForMonth = P === 0 ? 0 : balance * r;
+    const principalForMonth = P === 0 ? 0 : Math.min(balance, basePmt - interestForMonth);
     balance = Math.max(0, balance - principalForMonth);
     accumInterest += interestForMonth;
 
@@ -186,8 +212,12 @@ export function calculatePersonalLoan(input: PersonalLoanInput): PersonalLoanRes
     }
   }
 
-  // Effective APR calculation
-  const effectiveApr = ratePct + (totalFees > 0 ? (totalFees / P / (n / 12)) * 100 : 0);
+  // Actuarial APR calculation
+  let effectiveApr = ratePct;
+  if (input.includeFees && totalFees > 0 && P > 0) {
+    const netProceeds = Math.max(1, P - originationFeeAmt - upfrontFee);
+    effectiveApr = solveActuarialApr(netProceeds, totalMonthlyPmt, n);
+  }
 
   return {
     monthlyPayment: Number(basePmt.toFixed(2)),
@@ -216,31 +246,31 @@ export function calculateDebtConsolidation(input: DebtConsolidationInput): DebtC
   const totalBal = debts.reduce((sum, d) => sum + d.balance, 0);
   const currentMonthlyPmt = debts.reduce((sum, d) => sum + d.currentMonthlyPayment, 0);
 
-  const origPct = Math.max(0, Number(input.originationFeePercent || 5.0)) / 100;
+  const origPct = Math.max(0, Number(input.originationFeePercent ?? 5.0)) / 100;
   const origAmt = totalBal * origPct;
   const newPrincipal = totalBal + origAmt;
 
-  const newRatePct = Math.max(0, Number(input.newLoanInterestRate || 12.0));
-  const newTermYears = Math.max(1, Number(input.newLoanTermYears || 5));
+  const newRatePct = Math.max(0, Number(input.newLoanInterestRate ?? 12.0));
+  const newTermYears = Math.max(1, Number(input.newLoanTermYears ?? 5));
   const n = newTermYears * 12;
   const r = newRatePct / 100 / 12;
 
-  const newPmt = safePmt(newPrincipal, r, n);
+  const newPmt = r === 0 ? newPrincipal / n : safePmt(newPrincipal, r, n);
   const newTotalPaid = newPmt * n;
   const newTotalInterest = newTotalPaid - totalBal;
 
   // Approximate current card interest (assuming 5 yr payoff)
   const currentTotalInterest = debts.reduce((sum, d) => {
     const cardR = d.interestRate / 100 / 12;
-    const pmt = safePmt(d.balance, cardR, 60);
+    const pmt = cardR === 0 ? d.balance / 60 : safePmt(d.balance, cardR, 60);
     return sum + (pmt * 60 - d.balance);
   }, 0);
 
   const monthlySavings = currentMonthlyPmt - newPmt;
   const totalInterestSavings = currentTotalInterest - newTotalInterest;
 
-  // Effective APR with origination fee included
-  const effectiveApr = newRatePct + (origPct / newTermYears) * 100;
+  // True Actuarial APR with origination fee included (Solving Net Proceeds = $15,000)
+  const effectiveApr = solveActuarialApr(totalBal, newPmt, n);
 
   return {
     totalBalance: Number(totalBal.toFixed(2)),
@@ -260,13 +290,13 @@ export function calculateDebtConsolidation(input: DebtConsolidationInput): DebtC
  * 3. Early Payoff & Extra Payments Simulator
  */
 export function calculateExtraPayments(input: ExtraPaymentInput): ExtraPaymentResult {
-  const P = Math.max(0, Number(input.loanAmount || 20000));
-  const ratePct = Math.max(0, Number(input.interestRate || 10.0));
+  const P = Math.max(0, Number(input.loanAmount ?? 20000));
+  const ratePct = Math.max(0, Number(input.interestRate ?? 10.0));
   const r = ratePct / 100 / 12;
-  const origTerm = Math.max(1, Number(input.loanTermYears || 5)) * 12;
-  const extraPmt = Math.max(0, Number(input.extraMonthlyPayment || 100));
+  const origTerm = Math.max(1, Number(input.loanTermYears ?? 5)) * 12;
+  const extraPmt = Math.max(0, Number(input.extraMonthlyPayment ?? 100));
 
-  const origPmt = safePmt(P, r, origTerm);
+  const origPmt = r === 0 ? P / origTerm : safePmt(P, r, origTerm);
   const origTotalInterest = origPmt * origTerm - P;
 
   let balance = P;
@@ -275,7 +305,7 @@ export function calculateExtraPayments(input: ExtraPaymentInput): ExtraPaymentRe
 
   while (balance > 0 && newTermMonths < 600) {
     newTermMonths++;
-    const interestForMonth = balance * r;
+    const interestForMonth = r === 0 ? 0 : balance * r;
     const totalPmtForMonth = Math.min(balance + interestForMonth, origPmt + extraPmt);
     const principalForMonth = totalPmtForMonth - interestForMonth;
 

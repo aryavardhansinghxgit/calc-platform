@@ -48,7 +48,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { PersonalLoanContent } from "./PersonalLoanContent";
 import {
   calculatePersonalLoan,
   calculateDebtConsolidation,
@@ -747,9 +746,6 @@ Payoff Date: ${loanResults.payoffDateStr}`;
 
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
-
-      {/* Educational Content & 15 FAQs */}
-      <PersonalLoanContent />
     </div>
   );
 }

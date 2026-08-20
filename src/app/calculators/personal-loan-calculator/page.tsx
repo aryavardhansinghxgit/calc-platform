@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Personal Loan Calculator – Amortization & Consolidation Suite",
+    title: "Personal Loan Calculator – Payments, APR & Fees",
     description:
-      "Free Personal Loan Calculator. Calculate monthly payments, total interest, annual and monthly amortization schedules, fee options, debt consolidation APR savings, and early payoff acceleration.",
+      "Calculate monthly personal loan payments, total interest, origination fees, actuarial APR, and amortization schedules with our free personal loan calculator.",
     slug: PERSONAL_LOAN_CALCULATOR.slug,
   });
 }

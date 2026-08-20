@@ -539,7 +539,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         <div className="min-w-0 lg:col-span-9 space-y-4">
           <div className="bg-slate-50 dark:bg-slate-900/50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
             <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
-              {isLoan ? "Loan Calculator & Amortization Payment Analyzer" : definition.title}
+              {isLoan ? "Loan Calculator & Amortization Payment Analyzer" : isPersonalLoan ? "Personal Loan Calculator & Amortization Payment Suite" : definition.title}
             </h1>
             <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 max-w-xl leading-normal font-medium">
               {definition.description}
@@ -868,13 +868,15 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             )}
           </CalculatorErrorBoundary>
 
-          {/* Simple Related Calculators Links directly below calculator boxes */}
-          <div className="pt-2 pb-1 space-y-1">
-            <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
-              Related Calculators:
-            </span>
-            <RelatedCalculators currentId={definition.id} category={definition.category} />
-          </div>
+          {/* Simple Related Calculators Links directly below calculator boxes (Suppressed for Personal Loan which has dedicated approved suite) */}
+          {!isPersonalLoan && (
+            <div className="pt-2 pb-1 space-y-1">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
+                Related Calculators:
+              </span>
+              <RelatedCalculators currentId={definition.id} category={definition.category} />
+            </div>
+          )}
         </div>
 
         {/* Right Sidebar: Quick Navigation & Search Index (Sticky Top 20) */}
@@ -945,7 +947,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3.5 shadow-xs text-slate-900 dark:text-slate-100">
         {/* Formula & Calculation Method */}
-        {definition.formulaDescription && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
+        {definition.formulaDescription && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-2">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Formula & Calculation Method
@@ -967,7 +969,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         )}
 
         {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Custom suites per AGENTS.md policy) */}
-        {definition.category !== "Math" && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
+        {definition.category !== "Math" && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
           <div className="space-y-3">
             <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               Frequently Asked Questions
