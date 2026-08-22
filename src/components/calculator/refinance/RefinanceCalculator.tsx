@@ -403,11 +403,10 @@ export function RefinanceCalculator() {
               key={goal.id}
               type="button"
               onClick={() => handleSelectGoal(goal.id as RefinanceGoal)}
-              className={`p-2.5 rounded-xl text-xs font-bold transition-all text-center border cursor-pointer ${
-                refinanceGoal === goal.id
+              className={`p-2.5 rounded-xl text-xs font-bold transition-all text-center border cursor-pointer ${refinanceGoal === goal.id
                   ? "bg-white text-blue-900 border-white shadow-md scale-[1.02]"
                   : "bg-white/10 hover:bg-white/20 border-white/20 text-white"
-              }`}
+                }`}
             >
               {goal.label}
             </button>
@@ -448,7 +447,7 @@ export function RefinanceCalculator() {
             <Copy className="h-3.5 w-3.5 text-blue-500" /> Copy
           </Button>
 
-          
+
 
           <Button
             type="button"
@@ -756,11 +755,10 @@ export function RefinanceCalculator() {
                       key={`preset-term-${term}`}
                       type="button"
                       onClick={() => setNewLoanTermYears(term)}
-                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors border cursor-pointer ${
-                        newLoanTermYears === term
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-colors border cursor-pointer ${newLoanTermYears === term
                           ? "bg-blue-600 text-white border-blue-600 shadow-xs"
                           : "bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:border-blue-400"
-                      }`}
+                        }`}
                     >
                       {term} Years
                     </button>
@@ -1033,15 +1031,14 @@ export function RefinanceCalculator() {
               <span className="text-xs text-blue-300 font-sans font-normal block text-center">/ 100</span>
             </div>
             <div className="border-l border-white/20 pl-4">
-              <span className={`px-3 py-1 rounded-full text-xs font-extrabold uppercase ${
-                results.refinanceRating === "Excellent"
+              <span className={`px-3 py-1 rounded-full text-xs font-extrabold uppercase ${results.refinanceRating === "Excellent"
                   ? "bg-emerald-500 text-white shadow-md"
                   : results.refinanceRating === "Good"
-                  ? "bg-blue-500 text-white"
-                  : results.refinanceRating === "Average"
-                  ? "bg-amber-500 text-white"
-                  : "bg-rose-500 text-white"
-              }`}>
+                    ? "bg-blue-500 text-white"
+                    : results.refinanceRating === "Average"
+                      ? "bg-amber-500 text-white"
+                      : "bg-rose-500 text-white"
+                }`}>
                 {results.refinanceRating} Rating
               </span>
             </div>
@@ -1062,22 +1059,20 @@ export function RefinanceCalculator() {
           <button
             type="button"
             onClick={() => setActiveResultsTab("analytics")}
-            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-              activeResultsTab === "analytics"
+            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${activeResultsTab === "analytics"
                 ? "bg-blue-600 text-white shadow-xs"
                 : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
-            }`}
+              }`}
           >
             <BarChart3 className="h-4 w-4" /> Financial Summary & Visual Analytics
           </button>
           <button
             type="button"
             onClick={() => setActiveResultsTab("amortization")}
-            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-              activeResultsTab === "amortization"
+            className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${activeResultsTab === "amortization"
                 ? "bg-blue-600 text-white shadow-xs"
                 : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
-            }`}
+              }`}
           >
             <TableIcon className="h-4 w-4" /> Side-by-Side Amortization Schedule
           </button>
@@ -1200,33 +1195,30 @@ export function RefinanceCalculator() {
                   <button
                     type="button"
                     onClick={() => setActiveChartTab("payment")}
-                    className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors cursor-pointer ${
-                      activeChartTab === "payment"
+                    className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors cursor-pointer ${activeChartTab === "payment"
                         ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
                         : "text-zinc-500"
-                    }`}
+                      }`}
                   >
                     <BarChart3 className="h-3 w-3" /> Monthly Payment
                   </button>
                   <button
                     type="button"
                     onClick={() => setActiveChartTab("interest")}
-                    className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors cursor-pointer ${
-                      activeChartTab === "interest"
+                    className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors cursor-pointer ${activeChartTab === "interest"
                         ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
                         : "text-zinc-500"
-                    }`}
+                      }`}
                   >
                     <PieIcon className="h-3 w-3" /> Total Interest
                   </button>
                   <button
                     type="button"
                     onClick={() => setActiveChartTab("breakeven")}
-                    className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors cursor-pointer ${
-                      activeChartTab === "breakeven"
+                    className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors cursor-pointer ${activeChartTab === "breakeven"
                         ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
                         : "text-zinc-500"
-                    }`}
+                      }`}
                   >
                     <TrendingUp className="h-3 w-3" /> Break-Even Timeline
                   </button>
