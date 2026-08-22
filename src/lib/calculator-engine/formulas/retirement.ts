@@ -5,7 +5,7 @@
  * 2. Required Savings Goal Accumulation Solver ("How can you save for retirement?")
  * 3. Post-Retirement Income & Withdrawal Solver ("How much can you withdraw?")
  * 4. Nest Egg Longevity & Depletion Solver ("How long can your money last?")
- * Includes 4% Trinity Rule benchmarking and Age-by-Age Accumulation/Decumulation schedules.
+ * Includes 4% withdrawal benchmarking and Age-by-Age Accumulation/Decumulation schedules.
  */
 
 export interface RetirementMode1Input {
@@ -90,28 +90,35 @@ export interface RetirementResult {
   schedule: AgeScheduleRow[];
 }
 
+function parseNum(val: unknown, fallback: number): number {
+  const n = Number(val);
+  return Number.isFinite(n) ? n : fallback;
+}
+
 /**
  * Mode 1: How much do you need to retire?
  */
 export function calculateRetirementMode1(input: RetirementMode1Input): RetirementResult {
-  const currentAge = Math.max(18, Number(input.currentAge) || 35);
-  const retirementAge = Math.max(currentAge + 1, Number(input.retirementAge) || 67);
-  const lifeExpectancy = Math.max(retirementAge + 1, Number(input.lifeExpectancy) || 85);
+  const currentAge = Math.max(18, parseNum(input.currentAge, 35));
+  const retirementAge = Math.max(currentAge + 1, parseNum(input.retirementAge, 67));
+  const lifeExpectancy = Math.max(retirementAge + 1, parseNum(input.lifeExpectancy, 85));
 
   const yearsToRetirement = retirementAge - currentAge;
   const yearsInRetirement = lifeExpectancy - retirementAge;
 
-  const currentIncome = Math.max(0, Number(input.currentIncome) || 70000);
-  const incomeIncreaseRate = Number(input.incomeIncreaseRate) / 100 || 0.03;
-  const replacementPct = Number(input.incomeReplacementPercent) / 100 || 0.75;
+  const currentIncome = Math.max(0, parseNum(input.currentIncome, 70000));
+  const incomeIncreaseRate = parseNum(input.incomeIncreaseRate, 3) / 100;
+  const replacementPct = parseNum(input.incomeReplacementPercent, 75) / 100;
 
-  const investmentReturn = Number(input.investmentReturn) / 100 || 0.06;
-  const retirementReturn = input.retirementReturn ? Number(input.retirementReturn) / 100 : Math.max(0.02, investmentReturn - 0.01);
-  const inflationRate = Number(input.inflationRate) / 100 || 0.03;
+  const investmentReturn = parseNum(input.investmentReturn, 6) / 100;
+  const retirementReturn = input.retirementReturn !== undefined && Number.isFinite(Number(input.retirementReturn))
+    ? Number(input.retirementReturn) / 100
+    : Math.max(0.02, investmentReturn - 0.01);
+  const inflationRate = parseNum(input.inflationRate, 3) / 100;
 
-  const otherIncomeMonthly = Math.max(0, Number(input.otherIncomeMonthly) || 0);
-  const currentSavings = Math.max(0, Number(input.currentSavings) || 30000);
-  const futureSavingsPct = Number(input.futureSavingsPercent) / 100 || 0.10;
+  const otherIncomeMonthly = Math.max(0, parseNum(input.otherIncomeMonthly, 0));
+  const currentSavings = Math.max(0, parseNum(input.currentSavings, 30000));
+  const futureSavingsPct = parseNum(input.futureSavingsPercent, 10) / 100;
 
   // Project income at retirement age
   const projectedFinalIncome = currentIncome * Math.pow(1 + incomeIncreaseRate, yearsToRetirement);
@@ -124,7 +131,7 @@ export function calculateRetirementMode1(input: RetirementMode1Input): Retiremen
 
   // Present value of annuity for retirement years at real return rate
   let targetNestEgg = 0;
-  if (realRetirementReturn === 0) {
+  if (Math.abs(realRetirementReturn) < 1e-7) {
     targetNestEgg = netAnnualNeededFromNestEgg * yearsInRetirement;
   } else {
     targetNestEgg = (netAnnualNeededFromNestEgg * (1 - Math.pow(1 + realRetirementReturn, -yearsInRetirement))) / realRetirementReturn;
@@ -214,13 +221,13 @@ export function calculateRetirementMode1(input: RetirementMode1Input): Retiremen
  * Mode 2: How can you save for retirement? (Goal Accumulation Solver)
  */
 export function calculateRetirementMode2(input: RetirementMode2Input): RetirementResult {
-  const currentAge = Math.max(18, Number(input.currentAge) || 35);
-  const retirementAge = Math.max(currentAge + 1, Number(input.retirementAge) || 67);
+  const currentAge = Math.max(18, parseNum(input.currentAge, 35));
+  const retirementAge = Math.max(currentAge + 1, parseNum(input.retirementAge, 67));
   const yearsToRetirement = retirementAge - currentAge;
 
-  const targetNestEgg = Math.max(0, Number(input.targetNestEgg) || 600000);
-  const currentSavings = Math.max(0, Number(input.currentSavings) || 30000);
-  const r = Number(input.investmentReturn) / 100 || 0.06;
+  const targetNestEgg = Math.max(0, parseNum(input.targetNestEgg, 600000));
+  const currentSavings = Math.max(0, parseNum(input.currentSavings, 30000));
+  const r = parseNum(input.investmentReturn, 6) / 100;
 
   // Future value of current savings
   const fvCurrent = currentSavings * Math.pow(1 + r, yearsToRetirement);
@@ -228,7 +235,7 @@ export function calculateRetirementMode2(input: RetirementMode2Input): Retiremen
 
   let annualContrib = 0;
   if (remainingNeeded > 0) {
-    if (r === 0) {
+    if (Math.abs(r) < 1e-7) {
       annualContrib = remainingNeeded / yearsToRetirement;
     } else {
       annualContrib = (remainingNeeded * r) / (Math.pow(1 + r, yearsToRetirement) - 1);
@@ -260,17 +267,17 @@ export function calculateRetirementMode2(input: RetirementMode2Input): Retiremen
  * Mode 3: How much can you withdraw after retirement?
  */
 export function calculateRetirementMode3(input: RetirementMode3Input): RetirementResult {
-  const currentAge = Math.max(18, Number(input.currentAge) || 35);
-  const retirementAge = Math.max(currentAge + 1, Number(input.retirementAge) || 67);
-  const lifeExpectancy = Math.max(retirementAge + 1, Number(input.lifeExpectancy) || 85);
+  const currentAge = Math.max(18, parseNum(input.currentAge, 35));
+  const retirementAge = Math.max(currentAge + 1, parseNum(input.retirementAge, 67));
+  const lifeExpectancy = Math.max(retirementAge + 1, parseNum(input.lifeExpectancy, 85));
   const yearsToRetirement = retirementAge - currentAge;
   const yearsInRetirement = lifeExpectancy - retirementAge;
 
-  const currentSavings = Math.max(0, Number(input.currentSavings) || 30000);
-  const annualContrib = Math.max(0, Number(input.annualContribution) || 0);
-  const monthlyContrib = Math.max(0, Number(input.monthlyContribution) || 500);
-  const r = Number(input.investmentReturn) / 100 || 0.06;
-  const inflation = Number(input.inflationRate) / 100 || 0.03;
+  const currentSavings = Math.max(0, parseNum(input.currentSavings, 30000));
+  const annualContrib = Math.max(0, parseNum(input.annualContribution, 0));
+  const monthlyContrib = Math.max(0, parseNum(input.monthlyContribution, 500));
+  const r = parseNum(input.investmentReturn, 6) / 100;
+  const inflation = parseNum(input.inflationRate, 3) / 100;
 
   const totalAnnualContrib = annualContrib + monthlyContrib * 12;
 
@@ -284,7 +291,7 @@ export function calculateRetirementMode3(input: RetirementMode3Input): Retiremen
   const realRetirementReturn = (1 + r) / (1 + inflation) - 1;
 
   let maxAnnualWithdrawal = 0;
-  if (realRetirementReturn === 0) {
+  if (Math.abs(realRetirementReturn) < 1e-7) {
     maxAnnualWithdrawal = nestEggAtRetirement / yearsInRetirement;
   } else {
     maxAnnualWithdrawal = (nestEggAtRetirement * realRetirementReturn) / (1 - Math.pow(1 + realRetirementReturn, -yearsInRetirement));
@@ -315,15 +322,15 @@ export function calculateRetirementMode3(input: RetirementMode3Input): Retiremen
  * Mode 4: How long can your money last? (Nest Egg Longevity Solver)
  */
 export function calculateRetirementMode4(input: RetirementMode4Input): RetirementResult {
-  const nestEgg = Math.max(0, Number(input.nestEgg) || 600000);
-  const monthlyWithdrawal = Math.max(0, Number(input.monthlyWithdrawal) || 5000);
-  const r = Number(input.investmentReturn) / 100 || 0.06;
+  const nestEgg = Math.max(0, parseNum(input.nestEgg, 600000));
+  const monthlyWithdrawal = Math.max(0, parseNum(input.monthlyWithdrawal, 5000));
+  const r = parseNum(input.investmentReturn, 6) / 100;
   const mRate = r / 12;
 
   let bal = nestEgg;
   let months = 0;
 
-  if (monthlyWithdrawal <= bal * mRate) {
+  if (mRate > 0 && monthlyWithdrawal <= bal * mRate) {
     return {
       mode: 4,
       currentAge: 67,

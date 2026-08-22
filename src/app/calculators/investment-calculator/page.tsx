@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   const baseMeta = generateCalculatorMetadata({
-    title: "Investment Calculator — Portfolio Growth & Future Value Planner",
+    title: "Investment Calculator – Portfolio Growth, Target Contributions & Return Solver",
     description:
-      "Calculate future portfolio growth with initial principal, recurring contributions, and expected rate of return.",
+      "Calculate future portfolio growth with recurring contributions, solve for required monthly deposits or return rates, and model inflation, fees, and illustrative withdrawal benchmarks.",
     slug: INVESTMENT_CALCULATOR.slug,
   });
 
@@ -16,24 +16,26 @@ export async function generateMetadata(): Promise<Metadata> {
     keywords: [
       "investment calculator",
       "portfolio growth calculator",
-      "future value investment calculator",
-      "compound investment calculator",
-      "monthly investment calculator",
       "investment return calculator",
-      "wealth building calculator",
-      "fire investment calculator",
+      "investment calculator with monthly contributions",
+      "required investment contribution calculator",
+      "required return calculator",
+      "starting investment calculator",
+      "investment calculator with inflation",
+      "investment calculator with fees",
+      "investment calculator with tax drag",
     ],
     openGraph: {
       ...baseMeta.openGraph,
-      title: "Investment Calculator — Portfolio Growth & Future Value Planner",
+      title: "Investment Calculator – Portfolio Growth, Target Contributions & Return Solver",
       description:
-        "Calculate future portfolio growth with initial principal, recurring contributions, and expected rate of return.",
+        "Calculate future portfolio growth with recurring contributions, solve for required monthly deposits or return rates, and model inflation, fees, and illustrative withdrawal benchmarks.",
     },
     twitter: {
       ...baseMeta.twitter,
-      title: "Investment Calculator — Portfolio Growth & Future Value Planner",
+      title: "Investment Calculator – Portfolio Growth, Target Contributions & Return Solver",
       description:
-        "Calculate future portfolio growth with initial principal, recurring contributions, and expected rate of return.",
+        "Calculate future portfolio growth with recurring contributions, solve for required monthly deposits or return rates, and model inflation, fees, and illustrative withdrawal benchmarks.",
     },
   };
 }
@@ -43,41 +45,71 @@ export default function InvestmentCalculatorPage() {
 
   const faqs = [
     {
-      question: "What is a good annual investment return?",
+      question: "What is a good annual investment return to assume for long-term planning?",
       answer:
-        "Historically, a broad stock market index fund (e.g. S&P 500) returns an average of 8–10% annually before inflation. Balanced portfolios with fixed-income bonds generally target 5–7% nominal annual returns.",
+        "Historical long-term U.S. equity market returns (such as the S&P 500) have averaged approximately 8% to 10% annually before inflation over multi-decade periods, though future returns vary and past performance does not guarantee future results. Balanced portfolios incorporating fixed-income bonds generally model 5% to 7% nominal returns. Conservative planning models often adjust for a 2% to 3% annual inflation rate to reflect real purchasing power.",
     },
     {
-      question: "How much should I invest monthly?",
+      question: "How much should I invest each month to reach my goal?",
       answer:
-        "Financial advisors generally recommend investing 15–20% of your gross annual income into retirement and growth portfolios to build long-term financial independence.",
+        "There is no universal monthly amount. This calculator solves for the mathematically required contribution based on your specific financial target, starting principal, return assumption, duration, and selected timing parameters.",
     },
     {
       question: "What is dollar-cost averaging (DCA)?",
       answer:
-        "Dollar-cost averaging (DCA) is the disciplined practice of investing a fixed dollar amount at recurring intervals regardless of market fluctuations, reducing timing risk and emotional volatility.",
+        "Dollar-cost averaging is the disciplined investment strategy of allocating fixed dollar amounts at regular intervals (such as monthly) regardless of market fluctuations. This approach acquires more shares when prices are lower and fewer shares when prices are higher. DCA can reduce the risk of committing a lump sum immediately before a market decline, but it does not eliminate investment or sequence risk.",
     },
     {
-      question: "Should I invest monthly or annually?",
+      question: "Should contributions be invested monthly or annually?",
       answer:
-        "Monthly contributions put capital to work faster, capturing intra-year compound returns and dollar-cost averaging benefits compared to a single annual lump-sum deposit at year-end.",
+        "Under the mathematical assumptions of compound growth, earlier periodic contributions (such as monthly deposits) provide capital with more time in the market to generate compound returns and dividend reinvestment compared to waiting for a single end-of-year lump sum deposit.",
     },
     {
-      question: "How does the FIRE number work?",
+      question: "How is the FIRE number calculated?",
       answer:
-        "Your Financial Independence, Retire Early (FIRE) number typically equals 25 times your anticipated annual living expenses, derived from the academic 4% safe withdrawal rule.",
+        "The FIRE target is commonly estimated as 25 times anticipated annual retirement living expenses. This heuristic is derived from a 4% initial annual withdrawal rate benchmark (1 / 0.04 = 25). For example, supporting $60,000 in annual retirement expenses suggests a portfolio target of approximately $1,500,000.",
     },
     {
-      question: "How does expense ratio impact portfolio growth?",
+      question: "How does an expense ratio affect total wealth accumulation?",
       answer:
-        "High management fees compound exponentially over time. An expense ratio of 1.00% versus 0.05% in low-cost index funds can erase up to 25% of total potential investment wealth over a 30-year horizon.",
+        "An expense ratio is an ongoing annual management fee deducted from fund assets. Because fees reduce net compounding returns year after year, an expense ratio of 1.00% versus 0.05% in an index fund can reduce total potential portfolio accumulation by 20% to 25% or more in long-term compounding scenarios.",
+    },
+    {
+      question: "What is the difference between nominal returns and real purchasing power?",
+      answer:
+        "Nominal return is the raw percentage gain generated by an investment portfolio before deductions. Real return adjusts nominal gains for the eroding effect of consumer price inflation. For example, an 8% nominal return in an environment with 3% annual inflation represents an approximate 4.85% to 5.0% real growth rate in purchasing power.",
+    },
+    {
+      question: "How does compounding frequency impact investment returns?",
+      answer:
+        "Compounding frequency refers to how often earned interest or returns are added to the principal to generate subsequent earnings. More frequent compounding (such as monthly or daily versus annually) produces slightly higher effective annual yields (APY) due to intra-year growth on accumulated earnings.",
+    },
+    {
+      question: "What is the 4% withdrawal benchmark for investment portfolios?",
+      answer:
+        "The 4% rule originated from empirical retirement research (including the 1998 Trinity Study), which found that an initial 4% withdrawal adjusted annually for inflation had a high historical success rate over 30-year horizons with balanced equity/bond portfolios. It is an illustrative planning benchmark, not an absolute guarantee.",
+    },
+    {
+      question: "How do taxes impact taxable investment accounts versus tax-advantaged accounts?",
+      answer:
+        "In taxable brokerage accounts, dividends, interest, and realized capital gains are subject to annual income and capital gains taxes, creating tax drag that reduces net compounding. Tax-advantaged accounts like Traditional 401(k)s, Traditional IRAs, and Roth IRAs allow investments to compound tax-deferred or tax-free.",
+    },
+    {
+      question: "What is asset allocation and why is it important?",
+      answer:
+        "Asset allocation is an important driver of an investment portfolio's risk and return characteristics. Dividing capital across asset categories (such as equities, bonds, cash, and real estate) helps manage market volatility and align portfolio growth with personal time horizons.",
+    },
+    {
+      question: "How does step-up contribution growth affect long-term investing?",
+      answer:
+        "Step-up contributions involve increasing recurring monthly or annual deposits by a fixed percentage each year (for example, 3% to 5% to match salary raises). Step-up deposits significantly increase cumulative principal invested during peak earning years without requiring an unsustainable upfront contribution.",
     },
   ];
 
   const schemas = generateJsonLdSchema({
-    title: "Investment Calculator — Portfolio Growth & Future Value Planner",
+    title: "Investment Calculator – Portfolio Growth, Target Contributions & Return Solver",
     description:
-      "Calculate future portfolio growth with initial principal, recurring contributions, and expected rate of return.",
+      "Calculate future portfolio growth with recurring contributions, solve for required monthly deposits or return rates, and model inflation, fees, and illustrative withdrawal benchmarks.",
     slug: INVESTMENT_CALCULATOR.slug,
     category: INVESTMENT_CALCULATOR.category,
     faqs: faqs,
@@ -86,7 +118,7 @@ export default function InvestmentCalculatorPage() {
   const appSchema = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "Investment Calculator — Portfolio Growth & Future Value Planner",
+    name: "Investment Calculator – Portfolio Growth, Target Contributions & Return Solver",
     url: "/calculators/investment-calculator",
     applicationCategory: "FinanceApplication",
     operatingSystem: "All",
@@ -97,7 +129,7 @@ export default function InvestmentCalculatorPage() {
       priceCurrency: "USD",
     },
     description:
-      "Calculate future portfolio growth with initial principal, recurring contributions, and expected rate of return.",
+      "Calculate future portfolio growth with recurring contributions, solve for required monthly deposits or return rates, and model inflation, fees, and illustrative withdrawal benchmarks.",
   };
 
   return (

@@ -2,14 +2,24 @@ import { CalculatorModuleDefinition } from "../../types";
 
 export const INVESTMENT_CALCULATOR: CalculatorModuleDefinition = {
   id: "investment",
-  title: "Investment Calculator",
+  title: "Investment Calculator – Portfolio Growth, Target Contributions & Return Solver",
   slug: "investment-calculator",
   category: "Finance",
   subcategory: "Investment",
-  description: "Calculate future portfolio growth with initial principal, recurring contributions, and expected rate of return.",
+  description:
+    "Calculate future portfolio growth with recurring contributions, solve for required monthly deposits or return rates, and model inflation, fees, and illustrative withdrawal benchmarks.",
   iconName: "DollarSign",
   featured: true,
   tags: ["investment", "portfolio growth", "wealth building", "future value"],
+  relatedCalculators: [
+    "compound-interest-calculator",
+    "savings-calculator",
+    "future-value-calculator",
+    "retirement-calculator",
+    "cagr-calculator",
+    "401k-calculator",
+    "sip-calculator",
+  ],
   formulaDescription: "FV = Principal × (1 + r)^n + PMT × [((1 + r)^n - 1) / r]",
   faqs: [
     {

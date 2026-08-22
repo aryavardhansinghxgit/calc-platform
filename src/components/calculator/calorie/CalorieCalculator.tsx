@@ -151,14 +151,14 @@ export function CalorieCalculator() {
   };
 
   const handleCopySummary = () => {
-    const summary = `Calorie & TDEE Assessment (${new Date().toLocaleDateString()})
+    const summary = `Calorie & TDEE Planning Summary (${new Date().toLocaleDateString()})
 Age: ${age} | Gender: ${gender} | Height: ${result.heightCm} cm | Weight: ${result.weightLbs} lbs (${result.weightKg} kg)
 BMR (${result.bmrFormulaUsed}): ${result.bmr} kcal/day
 Maintenance TDEE: ${result.tdee} kcal/day
 Mild Weight Loss (0.5 lb/wk): ${result.tiers.mildLoss.caloriesPerDay} kcal/day
 Weight Loss (1.0 lb/wk): ${result.tiers.weightLoss.caloriesPerDay} kcal/day
 Extreme Weight Loss (2.0 lb/wk): ${result.tiers.extremeLoss.caloriesPerDay} kcal/day
-Calculated via CalcPlatform Calorie Engine`;
+Calculated via CalcPlatform Nutritional Reference`;
 
     navigator.clipboard.writeText(summary);
     setCopied(true);
@@ -169,8 +169,8 @@ Calculated via CalcPlatform Calorie Engine`;
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "My Calorie & TDEE Assessment",
-          text: `My TDEE is ${result.tdee} kcal/day. Check your daily calorie target:`,
+          title: "My Calorie & TDEE Planning Summary",
+          text: `My estimated TDEE is ${result.tdee} kcal/day. Check your daily calorie target:`,
           url: window.location.href,
         });
       } catch {
@@ -199,7 +199,7 @@ Calculated via CalcPlatform Calorie Engine`;
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Clinical Caloric Expenditure Assessment Report - CalcPlatform</title>
+          <title>Personal Caloric Expenditure &amp; TDEE Planning Report - CalcPlatform</title>
           <style>
             *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
             body {
@@ -922,13 +922,13 @@ Calculated via CalcPlatform Calorie Engine`;
           <div className="border-b-2 border-emerald-600 pb-4 flex justify-between items-start">
             <div>
               <div className="text-xs font-black tracking-widest text-emerald-700 uppercase">
-                CalcPlatform Metabolic &amp; Clinical Nutrition Labs
+                CalcPlatform Nutritional Reference
               </div>
               <h1 className="text-2xl font-black text-blue-600 mt-1">
-                Clinical Caloric Expenditure &amp; TDEE Assessment Report
+                Personal Caloric Expenditure &amp; TDEE Planning Report
               </h1>
               <p className="text-xs text-zinc-500 mt-0.5">
-                Official Caloric Intake, BMR Equations, Zigzag Cycling &amp; Macronutrient Profile
+                Caloric Intake, BMR Equations, Zigzag Cycling &amp; Macronutrient Profile
               </p>
             </div>
             <div className="text-right text-xs text-zinc-500">
@@ -1094,11 +1094,11 @@ Calculated via CalcPlatform Calorie Engine`;
 
           {/* Footer Disclaimer */}
           <div className="border-t border-zinc-300 pt-4 text-[10px] text-zinc-500 space-y-1">
-            <p className="font-bold text-zinc-700">Clinical &amp; Medical Disclaimer:</p>
+            <p className="font-bold text-zinc-700">Educational Disclaimer:</p>
             <p>
-              This report is generated for informational and educational energy planning purposes based on standardized mathematical metabolic equations (Mifflin-St Jeor, Revised Harris-Benedict, Katch-McArdle). Individual metabolic rates may vary based on endocrine function, genetics, and lean body mass. Consult a licensed Registered Dietitian (RDN) or healthcare provider before initiating severe caloric restriction.
+              This report is generated for educational energy planning purposes based on standardized mathematical metabolic equations (Mifflin-St Jeor, Revised Harris-Benedict, Katch-McArdle). Individual metabolic rates may vary based on body composition, health conditions, medications, and physical activity. Consult a registered dietitian (RDN) or healthcare provider before initiating significant caloric restriction.
             </p>
-            <p className="text-zinc-400">© CalcPlatform Metabolic Labs • All Rights Reserved</p>
+            <p className="text-zinc-400">© CalcPlatform • All Rights Reserved</p>
           </div>
         </div>
       </div>

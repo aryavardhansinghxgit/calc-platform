@@ -13,7 +13,15 @@ export const calorie_calculatorConfig: CalculatorModuleDefinition = {
   featured: true,
   keywords: ["calories","tdee","bmr","weight loss","nutrition","diet"],
   priority: 1,
-  relatedCalculators: ["tdee-calculator","bmr-calculator","macro-calculator"],
+  relatedCalculators: [
+    "tdee-calculator",
+    "bmr-calculator",
+    "macro-calculator",
+    "body-fat-calculator",
+    "bmi-calculator",
+    "ideal-weight-calculator",
+    "protein-calculator",
+  ],
   formulaDescription: "BMR = 10W + 6.25H - 5A + S; TDEE = BMR × Activity",
   faqs: calorie_calculatorFaqs,
   inputs: [

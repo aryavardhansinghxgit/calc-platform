@@ -53,7 +53,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { RetirementContent } from "./RetirementContent";
 import {
   calculateRetirementMode1,
   calculateRetirementMode2,
@@ -185,7 +184,7 @@ Target Nest Egg: ${fmt(results.targetNestEggAtRetirement)}
 Projected Savings at Retirement: ${fmt(results.projectedSavingsAtRetirement)}
 Savings Gap/Surplus: ${fmt(results.savingsGapOrSurplus)}
 Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetirement)}
-4% Trinity Rule Annual Withdrawal: ${fmt(results.fourPercentRuleAnnualIncome)}/yr`;
+4% Withdrawal Benchmark: ${fmt(results.fourPercentRuleAnnualIncome)}/yr`;
 
     navigator.clipboard.writeText(text);
     setCopyNotification(true);
@@ -230,7 +229,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
     keyMetrics: [
       { label: "Target Nest Egg Needed", value: fmt(results.targetNestEggAtRetirement), subtitle: `At Age ${results.retirementAge}`, colorTheme: "blue" },
       { label: "Projected Retirement Savings", value: fmt(results.projectedSavingsAtRetirement), subtitle: `Years to retire: ${results.yearsToRetirement}`, colorTheme: results.savingsGapOrSurplus >= 0 ? "emerald" : "rose" },
-      { label: "Monthly Income Needed", value: fmt(results.monthlyIncomeNeededAtRetirement), subtitle: `4% Trinity Rule: ${fmt(results.fourPercentRuleAnnualIncome)}/yr`, colorTheme: "purple" },
+      { label: "Monthly Income Needed", value: fmt(results.monthlyIncomeNeededAtRetirement), subtitle: `4% Benchmark: ${fmt(results.fourPercentRuleAnnualIncome)}/yr`, colorTheme: "purple" },
     ],
     sections: [
       {
@@ -242,7 +241,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
           { label: "Target Nest Egg Needed", value: fmt(results.targetNestEggAtRetirement), highlight: true },
           { label: "Projected Savings at Retirement", value: fmt(results.projectedSavingsAtRetirement), highlight: true },
           { label: "Savings Gap / Surplus", value: fmt(results.savingsGapOrSurplus), highlight: true },
-          { label: "4% Trinity Rule Annual Payout", value: fmt(results.fourPercentRuleAnnualIncome) },
+          { label: "4% Benchmark Annual Payout", value: fmt(results.fourPercentRuleAnnualIncome) },
         ],
       },
     ],
@@ -543,7 +542,7 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
                   <div className="font-bold font-sans tabular-nums text-white text-sm">{fmt(results.monthlyIncomeNeededAtRetirement)}</div>
                 </div>
                 <div>
-                  <div className="text-zinc-400 text-[11px]">4% Trinity Rule</div>
+                  <div className="text-zinc-400 text-[11px]">4% Benchmark</div>
                   <div className="font-bold font-sans tabular-nums text-emerald-300 text-sm">{fmt(results.fourPercentRuleAnnualIncome)}/yr</div>
                 </div>
                 <div>
@@ -741,9 +740,6 @@ Monthly Income Needed in Retirement: ${fmt(results.monthlyIncomeNeededAtRetireme
 
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
-
-      {/* Educational Content & 20 FAQs */}
-      <RetirementContent />
     </div>
   );
 }

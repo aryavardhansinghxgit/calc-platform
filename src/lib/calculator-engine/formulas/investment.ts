@@ -91,6 +91,7 @@ export interface InvestmentFormulaResult {
   endingBalance: number;
   totalInterestEarned: number;
   effectiveAnnualReturnPercent: number;
+  effectiveGrossReturnPercent: number;
   cagrPercent: number;
   inflationAdjustedFutureValue: number;
   realPurchasingPower: number;
@@ -104,6 +105,7 @@ export interface InvestmentFormulaResult {
   requiredReturnRate: number;
   requiredStartingAmount: number;
   fireNumberTarget: number;
+  fireProgressPercent: number;
   annualSchedule: AnnualScheduleRow[];
   monthlySchedule: MonthlyScheduleRow[];
   monteCarlo: MonteCarloResult;
@@ -130,36 +132,39 @@ export function getPeriodsPerYear(freq: CompoundingFrequency): number {
   }
 }
 
-export function calculateInvestmentFormula(inputs: InvestmentFormulaInput): InvestmentFormulaResult {
-  const mode: InvestmentMode = inputs.mode || "future_value";
-  let P = Math.max(0, inputs.startingAmount ?? 20000);
-  let goal = Math.max(0, inputs.investmentGoal ?? 500000);
-  let r = Math.max(0, inputs.annualReturnRate ?? 6.0);
-  let durationVal = Math.max(0, inputs.durationValue ?? 10);
-  const durationUnit = inputs.durationUnit || "years";
-  const freq: CompoundingFrequency = inputs.compoundingFrequency || "annual";
-  let contribAmt = Math.max(0, inputs.additionalContribution ?? 1000);
-  const contribFreq: ContributionFrequency = inputs.contributionFrequency || "month";
-  const timing: ContributionTiming = inputs.contributionTiming || "end";
-  const stepUpPercent = Math.max(0, inputs.annualContributionIncrease ?? 0) / 100;
-  const inflationRate = Math.max(0, inputs.inflationRate ?? 3.0) / 100;
-  const taxRate = Math.max(0, inputs.taxRate ?? 0) / 100;
-  const expenseRatio = Math.max(0, inputs.expenseRatio ?? 0) / 100;
-  const currency = inputs.currencySymbol || "$";
-  const simCount = inputs.monteCarloSimulationsCount || 1000;
-
+/**
+ * Pure forward simulation engine that maps inputs to ending balance and schedules.
+ * Applies expense ratio and tax drag consistently exactly once.
+ */
+export function simulateForwardInvestment(
+  P: number,
+  contribAmt: number,
+  rGross: number,
+  durationVal: number,
+  durationUnit: "years" | "months",
+  freq: CompoundingFrequency,
+  contribFreq: ContributionFrequency,
+  timing: ContributionTiming,
+  stepUpPercent: number,
+  inflationRate: number,
+  taxRate: number,
+  expenseRatio: number
+) {
   const totalYears = durationUnit === "months" ? durationVal / 12 : durationVal;
   const totalMonths = Math.max(1, Math.round(totalYears * 12));
-  const rateDec = Math.max(0, (r - expenseRatio * 100) / 100);
   const periodsPerYear = getPeriodsPerYear(freq);
 
-  // Helper for compounding rate per sub-period
-  const ratePerPeriod = rateDec / periodsPerYear;
+  // Net nominal return after expense ratio (applied ONCE)
+  const netRateDec = Math.max(0, (rGross - expenseRatio * 100) / 100);
+  const netRatePerPeriod = netRateDec / periodsPerYear;
+  const netMonthlyRate = Math.pow(1 + netRatePerPeriod, periodsPerYear / 12) - 1;
 
-  // Monthly schedule simulation
+  // Gross nominal rate before expense ratio for fee tracking
+  const grossRateDec = Math.max(0, rGross / 100);
+  const grossRatePerPeriod = grossRateDec / periodsPerYear;
+  const grossMonthlyRate = Math.pow(1 + grossRatePerPeriod, periodsPerYear / 12) - 1;
+
   const monthlySchedule: MonthlyScheduleRow[] = [];
-  const annualSchedule: AnnualScheduleRow[] = [];
-
   let currentBal = P;
   let accumulatedContribs = 0;
   let accumulatedFees = 0;
@@ -170,7 +175,7 @@ export function calculateInvestmentFormula(inputs: InvestmentFormulaInput): Inve
   for (let m = 1; m <= totalMonths; m++) {
     const begBal = currentBal;
 
-    // Apply annual step-up contribution increase every 12 months
+    // Apply step-up increase every 12 months
     if (m > 1 && (m - 1) % 12 === 0 && stepUpPercent > 0) {
       currentMonthlyContrib *= 1 + stepUpPercent;
     }
@@ -185,11 +190,15 @@ export function calculateInvestmentFormula(inputs: InvestmentFormulaInput): Inve
       accumulatedContribs += mContrib;
     }
 
-    // Monthly interest calculation matching compounding frequency
-    const monthlyRate = Math.pow(1 + ratePerPeriod, periodsPerYear / 12) - 1;
-    const grossInterest = currentBal * monthlyRate;
-    const fee = currentBal * (expenseRatio / 12);
-    const netInterest = grossInterest - fee;
+    const grossInterest = currentBal * grossMonthlyRate;
+    let netInterest = currentBal * netMonthlyRate;
+    const fee = Math.max(0, grossInterest - netInterest);
+
+    if (taxRate > 0) {
+      const tax = netInterest * taxRate;
+      netInterest -= tax;
+      accumulatedTaxes += tax;
+    }
 
     currentBal += netInterest;
     accumulatedFees += fee;
@@ -209,28 +218,134 @@ export function calculateInvestmentFormula(inputs: InvestmentFormulaInput): Inve
     });
   }
 
-  const endingBalance = currentBal;
-  const totalContributions = accumulatedContribs;
+  return {
+    endingBalance: currentBal,
+    totalContributions: accumulatedContribs,
+    totalFees: accumulatedFees,
+    totalTaxes: accumulatedTaxes,
+    monthlySchedule,
+    totalMonths,
+    totalYears,
+    periodsPerYear,
+    netRatePerPeriod,
+    grossRatePerPeriod,
+  };
+}
+
+/**
+ * Numerical Root Finder solving FV(r) - Target = 0 with high precision.
+ */
+export function solveRequiredReturnRate(
+  targetGoal: number,
+  P: number,
+  pmt: number,
+  durationVal: number,
+  durationUnit: "years" | "months",
+  freq: CompoundingFrequency,
+  contribFreq: ContributionFrequency,
+  timing: ContributionTiming,
+  stepUpPercent: number,
+  inflationRate: number,
+  taxRate: number,
+  expenseRatio: number
+): number {
+  if (targetGoal <= 0) return 0;
+
+  // Check if 0% return already reaches or exceeds goal
+  const fv0 = simulateForwardInvestment(
+    P, pmt, 0, durationVal, durationUnit, freq, contribFreq, timing, stepUpPercent, inflationRate, taxRate, expenseRatio
+  ).endingBalance;
+  if (fv0 >= targetGoal) return 0;
+
+  let low = 0;
+  let high = 50.0;
+
+  // Expand bracket until upper bound exceeds target
+  while (
+    simulateForwardInvestment(
+      P, pmt, high, durationVal, durationUnit, freq, contribFreq, timing, stepUpPercent, inflationRate, taxRate, expenseRatio
+    ).endingBalance < targetGoal &&
+    high < 5000
+  ) {
+    high *= 2;
+  }
+
+  // 80 iterations of bisection ensures precision < 1e-12
+  for (let i = 0; i < 80; i++) {
+    const mid = (low + high) / 2;
+    const fv = simulateForwardInvestment(
+      P, pmt, mid, durationVal, durationUnit, freq, contribFreq, timing, stepUpPercent, inflationRate, taxRate, expenseRatio
+    ).endingBalance;
+    if (fv < targetGoal) {
+      low = mid;
+    } else {
+      high = mid;
+    }
+  }
+
+  return (low + high) / 2;
+}
+
+export function calculateInvestmentFormula(inputs: InvestmentFormulaInput): InvestmentFormulaResult {
+  const mode: InvestmentMode = inputs.mode || "future_value";
+  const parseNum = (v: number | undefined, fallback: number) =>
+    typeof v === "number" && Number.isFinite(v) ? Math.max(0, v) : fallback;
+
+  const P = parseNum(inputs.startingAmount, 20000);
+  const goal = parseNum(inputs.investmentGoal, 500000);
+  const r = parseNum(inputs.annualReturnRate, 8.0);
+  const durationVal = parseNum(inputs.durationValue, 20);
+  const durationUnit = inputs.durationUnit || "years";
+  const freq: CompoundingFrequency = inputs.compoundingFrequency || "annual";
+  const contribAmt = parseNum(inputs.additionalContribution, 500);
+  const contribFreq: ContributionFrequency = inputs.contributionFrequency || "month";
+  const timing: ContributionTiming = inputs.contributionTiming || "end";
+  const stepUpPercent = parseNum(inputs.annualContributionIncrease, 0) / 100;
+  const inflationRate = parseNum(inputs.inflationRate, 3.0) / 100;
+  const taxRate = parseNum(inputs.taxRate, 0) / 100;
+  const expenseRatio = parseNum(inputs.expenseRatio, 0.10) / 100;
+  const currency = inputs.currencySymbol || "$";
+  const simCount = inputs.monteCarloSimulationsCount || 1000;
+
+  // Run core forward simulation
+  const sim = simulateForwardInvestment(
+    P,
+    contribAmt,
+    r,
+    durationVal,
+    durationUnit,
+    freq,
+    contribFreq,
+    timing,
+    stepUpPercent,
+    inflationRate,
+    taxRate,
+    expenseRatio
+  );
+
+  const endingBalance = sim.endingBalance;
+  const totalContributions = sim.totalContributions;
   const totalPrincipal = P + totalContributions;
   const totalInterestEarned = Math.max(0, endingBalance - totalPrincipal);
 
   // Percentages for Pie Chart
-  const percentStarting = endingBalance > 0 ? (P / endingBalance) * 100 : 0;
-  const percentContrib = endingBalance > 0 ? (totalContributions / endingBalance) * 100 : 0;
+  const percentStartingAmount = endingBalance > 0 ? (P / endingBalance) * 100 : 0;
+  const percentContributions = endingBalance > 0 ? (totalContributions / endingBalance) * 100 : 0;
   const percentInterest = endingBalance > 0 ? (totalInterestEarned / endingBalance) * 100 : 0;
 
   // Aggregate into Annual Schedule
+  const annualSchedule: AnnualScheduleRow[] = [];
   let yrStartBal = P;
-  const totalYearsCount = Math.max(1, Math.ceil(totalYears));
+  const totalYearsCount = Math.max(1, Math.ceil(sim.totalYears));
 
   for (let y = 1; y <= totalYearsCount; y++) {
     const startM = (y - 1) * 12 + 1;
-    const endM = Math.min(totalMonths, y * 12);
-    const yrRows = monthlySchedule.slice(startM - 1, endM);
+    const endM = Math.min(sim.totalMonths, y * 12);
+    const yrRows = sim.monthlySchedule.slice(startM - 1, endM);
 
-    const yrContribs = yrRows.reduce((acc, r) => acc + r.contribution, 0);
-    const yrInterest = yrRows.reduce((acc, r) => acc + r.interest, 0);
-    const yrFees = yrRows.reduce((acc, r) => acc + r.fees, 0);
+    const yrContribs = yrRows.reduce((acc, row) => acc + row.contribution, 0);
+    const yrInterest = yrRows.reduce((acc, row) => acc + row.interest, 0);
+    const yrFees = yrRows.reduce((acc, row) => acc + row.fees, 0);
     const yrEndBal = yrRows.length > 0 ? yrRows[yrRows.length - 1].endingBalance : yrStartBal;
 
     const yrTax = yrInterest * taxRate;
@@ -251,53 +366,57 @@ export function calculateInvestmentFormula(inputs: InvestmentFormulaInput): Inve
   }
 
   // Key Analytics
-  const effectiveAnnualReturnPercent = (Math.pow(1 + ratePerPeriod, periodsPerYear) - 1) * 100;
+  const effectiveAnnualReturnPercent = (Math.pow(1 + sim.netRatePerPeriod, sim.periodsPerYear) - 1) * 100;
+  const effectiveGrossReturnPercent = (Math.pow(1 + sim.grossRatePerPeriod, sim.periodsPerYear) - 1) * 100;
+
   const cagrPercent =
-    totalYears > 0 && totalPrincipal > 0
-      ? (Math.pow(endingBalance / totalPrincipal, 1 / totalYears) - 1) * 100
+    sim.totalYears > 0 && totalPrincipal > 0
+      ? (Math.pow(endingBalance / totalPrincipal, 1 / sim.totalYears) - 1) * 100
       : 0;
 
-  const inflationDiscount = Math.pow(1 + inflationRate, totalYears);
+  const inflationDiscount = Math.pow(1 + inflationRate, sim.totalYears);
   const inflationAdjustedFutureValue = inflationDiscount > 0 ? endingBalance / inflationDiscount : endingBalance;
   const realPurchasingPower = inflationAdjustedFutureValue;
 
   const growthMultiple = totalPrincipal > 0 ? endingBalance / totalPrincipal : 0;
-  const estimatedPassiveIncomePerYear = endingBalance * 0.04; // 4% Safe Withdrawal Rule
+  const estimatedPassiveIncomePerYear = endingBalance * 0.04; // 4% Illustrative Benchmark
 
-  // Solve for specific modes
-  let requiredMonthlyContrib = 0;
-  let requiredAnnualContrib = 0;
-  let requiredRate = 0;
-  let requiredStarting = 0;
+  // Solve for specific modes with 100% mathematical reconciliation to forward model
+  // Mode 2: Required Monthly Contribution
+  const fvP0 = simulateForwardInvestment(
+    P, 0, r, durationVal, durationUnit, freq, contribFreq, timing, stepUpPercent, inflationRate, taxRate, expenseRatio
+  ).endingBalance;
+  const fv01 = simulateForwardInvestment(
+    0, 1, r, durationVal, durationUnit, freq, contribFreq, timing, stepUpPercent, inflationRate, taxRate, expenseRatio
+  ).endingBalance;
 
-  // Mode 2: Required Contributions
-  const r_monthly = Math.pow(1 + ratePerPeriod, periodsPerYear / 12) - 1;
-  const compoundP = P * Math.pow(1 + r_monthly, totalMonths);
-  const remGoal = Math.max(0, goal - compoundP);
-  const annuityFactor = r_monthly > 0 ? (Math.pow(1 + r_monthly, totalMonths) - 1) / r_monthly : totalMonths;
-  requiredMonthlyContrib = annuityFactor > 0 ? remGoal / annuityFactor : 0;
-  requiredAnnualContrib = requiredMonthlyContrib * 12;
+  const requiredMonthlyContribution = fv01 > 0 ? Math.max(0, (goal - fvP0) / fv01) : 0;
+  const requiredAnnualContribution = requiredMonthlyContribution * 12;
 
-  // Mode 3: Required Return Rate (Approximate)
-  if (totalYears > 0 && goal > P) {
-    requiredRate = (Math.pow(goal / Math.max(1, P + contribAmt * totalYears), 1 / totalYears) - 1) * 100;
-  }
+  // Mode 3: Required Return Rate
+  const requiredReturnRate = solveRequiredReturnRate(
+    goal, P, contribAmt, durationVal, durationUnit, freq, contribFreq, timing, stepUpPercent, inflationRate, taxRate, expenseRatio
+  );
 
   // Mode 4: Required Starting Amount
-  const annuityContribTotal = contribAmt * annuityFactor;
-  const remGoalP = Math.max(0, goal - annuityContribTotal);
-  const multTotalP = Math.pow(1 + r_monthly, totalMonths);
-  requiredStarting = multTotalP > 0 ? remGoalP / multTotalP : goal;
+  const fv0PMT = simulateForwardInvestment(
+    0, contribAmt, r, durationVal, durationUnit, freq, contribFreq, timing, stepUpPercent, inflationRate, taxRate, expenseRatio
+  ).endingBalance;
+  const fv10 = simulateForwardInvestment(
+    1, 0, r, durationVal, durationUnit, freq, contribFreq, timing, stepUpPercent, inflationRate, taxRate, expenseRatio
+  ).endingBalance;
 
-  // Mode 6: FIRE Target
-  const fireNumberTarget = Math.max(0, (contribAmt * 12) * 25);
+  const requiredStartingAmount = fv10 > 0 ? Math.max(0, (goal - fv0PMT) / fv10) : goal;
+
+  // Mode 6: FIRE Target (25x Annual Contribution Heuristic)
+  const fireNumberTarget = Math.max(0, contribAmt * 12 * 25);
+  const fireProgressPercent = fireNumberTarget > 0 ? (endingBalance / fireNumberTarget) * 100 : 100;
 
   // Monte Carlo Stochastic Simulation
   const runs: number[] = [];
-  const meanReturn = rateDec;
-  const stdDev = 0.15; // 15% annual volatility for investment portfolio
+  const meanReturn = Math.max(0, (r - expenseRatio * 100) / 100);
+  const stdDev = 0.15; // 15% annual volatility
 
-  // Pseudo-random Box-Muller generator
   const getGaussianRandom = () => {
     let u = 0, v = 0;
     while (u === 0) u = Math.random();
@@ -310,7 +429,7 @@ export function calculateInvestmentFormula(inputs: InvestmentFormulaInput): Inve
     for (let y = 1; y <= totalYearsCount; y++) {
       const yrReturn = meanReturn + stdDev * getGaussianRandom();
       const yrContrib = contribFreq === "month" ? contribAmt * 12 : contribAmt;
-      simBal = (simBal + yrContrib) * (1 + yrReturn);
+      simBal = Math.max(0, (simBal + yrContrib) * (1 + yrReturn));
     }
     runs.push(simBal);
   }
@@ -332,33 +451,33 @@ export function calculateInvestmentFormula(inputs: InvestmentFormulaInput): Inve
 
   // Goal Tracker
   const currentProgressPercent = goal > 0 ? Math.min(100, (endingBalance / goal) * 100) : 100;
-  const yearsRemainingToGoal = endingBalance >= goal ? 0 : Math.max(0, totalYears);
+  const yearsRemainingToGoal = endingBalance >= goal ? 0 : Math.max(0, sim.totalYears);
 
   const goalTracker: GoalTrackerResult = {
     targetGoal: goal,
     currentProgressPercent: Math.round(currentProgressPercent * 100) / 100,
     yearsRemainingToGoal: Math.round(yearsRemainingToGoal * 10) / 10,
-    requiredMonthlySavingsToGoal: Math.round(requiredMonthlyContrib * 100) / 100,
+    requiredMonthlySavingsToGoal: Math.round(requiredMonthlyContribution * 100) / 100,
   };
 
   // Smart Insights Engine
   const insights: SmartInsightItem[] = [
     {
       type: "positive",
-      title: "Compounding Acceleration",
-      description: `Compound growth accounts for ${percentInterest.toFixed(1)}% of your final portfolio value (${currency}${Math.round(totalInterestEarned).toLocaleString()}).`,
+      title: "Compounding Growth Proportion",
+      description: `Growth earnings represent ${percentInterest.toFixed(1)}% of your modeled ending portfolio (${currency}${Math.round(totalInterestEarned).toLocaleString()}).`,
     },
     {
       type: "info",
       title: "Real Purchasing Power",
-      description: `Adjusted for ${inputs.inflationRate ?? 3}% annual inflation, your ending balance has the purchasing power of ${currency}${Math.round(inflationAdjustedFutureValue).toLocaleString()} in today's dollars.`,
+      description: `Adjusted for ${inputs.inflationRate ?? 3}% annual inflation, your ending balance has the estimated purchasing power of ${currency}${Math.round(inflationAdjustedFutureValue).toLocaleString()} in today's dollars.`,
     },
     {
       type: "warning",
-      title: "Fee & Expense Drag",
+      title: "Expense Ratio Friction",
       description: expenseRatio > 0
-        ? `Management fees of ${(expenseRatio * 100).toFixed(2)}% cost your portfolio ${currency}${Math.round(accumulatedFees).toLocaleString()} over ${totalYearsCount} years.`
-        : "Consider keeping expense ratios low (under 0.15%) to avoid significant wealth erosion.",
+        ? `Management fees of ${(expenseRatio * 100).toFixed(2)}% reduce your total portfolio accumulation by approximately ${currency}${Math.round(sim.totalFees).toLocaleString()} over ${totalYearsCount} years.`
+        : "Maintaining low expense ratios helps maximize compound accumulation over long horizons.",
     },
   ];
 
@@ -370,21 +489,23 @@ export function calculateInvestmentFormula(inputs: InvestmentFormulaInput): Inve
     endingBalance: Math.round(endingBalance * 100) / 100,
     totalInterestEarned: Math.round(totalInterestEarned * 100) / 100,
     effectiveAnnualReturnPercent: Math.round(effectiveAnnualReturnPercent * 100) / 100,
+    effectiveGrossReturnPercent: Math.round(effectiveGrossReturnPercent * 100) / 100,
     cagrPercent: Math.round(cagrPercent * 100) / 100,
     inflationAdjustedFutureValue: Math.round(inflationAdjustedFutureValue * 100) / 100,
     realPurchasingPower: Math.round(realPurchasingPower * 100) / 100,
     growthMultiple: Math.round(growthMultiple * 100) / 100,
     estimatedPassiveIncomePerYear: Math.round(estimatedPassiveIncomePerYear * 100) / 100,
-    percentStartingAmount: Math.round(percentStarting * 100) / 100,
-    percentContributions: Math.round(percentContrib * 100) / 100,
-    percentInterest: Math.round(percentInterest * 100) / 100,
-    requiredMonthlyContribution: Math.round(requiredMonthlyContrib * 100) / 100,
-    requiredAnnualContribution: Math.round(requiredAnnualContrib * 100) / 100,
-    requiredReturnRate: Math.round(requiredRate * 100) / 100,
-    requiredStartingAmount: Math.round(requiredStarting * 100) / 100,
+    percentStartingAmount: Math.round(percentStartingAmount * 10) / 10,
+    percentContributions: Math.round(percentContributions * 10) / 10,
+    percentInterest: Math.round(percentInterest * 10) / 10,
+    requiredMonthlyContribution: Math.round(requiredMonthlyContribution * 100) / 100,
+    requiredAnnualContribution: Math.round(requiredAnnualContribution * 100) / 100,
+    requiredReturnRate: Math.round(requiredReturnRate * 10000) / 10000,
+    requiredStartingAmount: Math.round(requiredStartingAmount * 100) / 100,
     fireNumberTarget: Math.round(fireNumberTarget * 100) / 100,
+    fireProgressPercent: Math.round(fireProgressPercent * 10) / 10,
     annualSchedule,
-    monthlySchedule,
+    monthlySchedule: sim.monthlySchedule,
     monteCarlo,
     goalTracker,
     insights,

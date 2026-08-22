@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Retirement Calculator – Financial Independence Suite",
+    title: "Retirement Calculator – Nest Egg, Savings Gap & Income Planner",
     description:
-      "Free Retirement Calculator. Calculate your target retirement nest egg, annual savings gap, monthly withdrawal capacity, nest egg longevity, and test the 4% Trinity Rule.",
+      "Calculate your target retirement nest egg, projected savings gap, monthly withdrawal capacity, and portfolio longevity with a comprehensive retirement planning calculator.",
     slug: RETIREMENT_CALCULATOR.slug,
   });
 }

@@ -112,7 +112,7 @@ export function ZigzagBarChart({ result }: CalorieChartsProps) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
           <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider">7-Day Zigzag Calorie Schedule</h4>
-          <p className="text-[11px] text-zinc-500 dark:text-zinc-400">Alternating high &amp; low calorie days to prevent metabolic adaptation</p>
+          <p className="text-[11px] text-zinc-500 dark:text-zinc-400">Alternating higher- and lower-calorie days while maintaining the same weekly calorie budget.</p>
         </div>
         <div className="flex items-center gap-3 text-[10px] text-zinc-600 dark:text-zinc-400 font-semibold">
           <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-blue-500 inline-block"/>Schedule 1 (3 High/4 Low)</span>

@@ -63,7 +63,6 @@ import {
   ContributionTiming,
   calculateInvestmentFormula,
 } from "@/lib/calculator-engine/formulas/investment";
-import { InvestmentContent } from "./InvestmentContent";
 
 export function InvestmentCalculator() {
   // ==========================================
@@ -694,13 +693,13 @@ export function InvestmentCalculator() {
                 {activeMode === "retirement" && (
                   <>
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
-                      Retirement Portfolio at Maturity
+                      Retirement Horizon &amp; Withdrawal Benchmark
                     </span>
                     <div className="text-3xl sm:text-4xl lg:text-[44px] font-black text-blue-700 dark:text-blue-400 tracking-tight leading-none py-1.5">
                       {currencySymbol}{results.endingBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
                     <p className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 pt-1">
-                      Safe Passive Income (4% Rule): <strong>{currencySymbol}{(results.estimatedPassiveIncomePerYear / 12).toLocaleString(undefined, { maximumFractionDigits: 0 })}/mo</strong>
+                      Illustrative 4% Withdrawal Benchmark: <strong>{currencySymbol}{(results.estimatedPassiveIncomePerYear / 12).toLocaleString(undefined, { maximumFractionDigits: 0 })}/mo</strong>
                     </p>
                   </>
                 )}
@@ -708,13 +707,13 @@ export function InvestmentCalculator() {
                 {activeMode === "fire" && (
                   <>
                     <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
-                      FIRE Target (25x Annual Expenses)
+                      FIRE Target (25x Annual Contribution Benchmark)
                     </span>
                     <div className="text-3xl sm:text-4xl lg:text-[44px] font-black text-blue-700 dark:text-blue-400 tracking-tight leading-none py-1.5">
                       {currencySymbol}{results.fireNumberTarget.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
                     <p className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 pt-1">
-                      Progress: <strong>{results.goalTracker.currentProgressPercent.toFixed(1)}%</strong>
+                      Progress: <strong>{results.fireProgressPercent >= 100 ? `${results.fireProgressPercent.toFixed(1)}% (FIRE Target Reached)` : `${results.fireProgressPercent.toFixed(1)}% of FIRE Target`}</strong>
                     </p>
                   </>
                 )}
@@ -737,7 +736,9 @@ export function InvestmentCalculator() {
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-white dark:bg-slate-800 border border-blue-100 dark:border-slate-700 shadow-2xs space-y-1">
-                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">Effective APY</span>
+                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+                    {parsedExpenseRatio > 0 ? "Effective Net APY" : "Effective APY"}
+                  </span>
                   <span className="text-base font-black text-blue-700 dark:text-blue-400 block">
                     {results.effectiveAnnualReturnPercent.toFixed(2)}%
                   </span>
@@ -947,46 +948,6 @@ export function InvestmentCalculator() {
             </table>
           )}
         </div>
-      </div>
-
-      {/* =========================================================================
-          RELATED CALCULATORS (DIRECTLY BELOW CALCULATOR, BEFORE MAIN CONTENT)
-          ========================================================================= */}
-      <div className="pt-2 pb-1 space-y-1">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block">
-          RELATED CALCULATORS:
-        </span>
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
-          {[
-            { label: "Compound Interest Calculator", href: "/calculators/compound-interest-calculator" },
-            { label: "Savings Calculator", href: "/calculators/savings-calculator" },
-            { label: "Future Value Calculator", href: "/calculators/future-value-calculator" },
-            { label: "Retirement Calculator", href: "/calculators/retirement-calculator" },
-            { label: "CAGR Calculator", href: "/calculators/cagr-calculator" },
-            { label: "401(k) Calculator", href: "/calculators/401k-calculator" },
-            { label: "SIP Calculator", href: "/calculators/sip-calculator" },
-            { label: "Traditional IRA Calculator", href: "/calculators/traditional-ira-calculator" },
-          ].map((item, idx, arr) => (
-            <React.Fragment key={item.href}>
-              <Link
-                href={item.href}
-                className="text-blue-600 dark:text-blue-400 hover:underline font-bold transition-colors"
-              >
-                {item.label}
-              </Link>
-              {idx < arr.length - 1 && (
-                <span className="text-slate-400 dark:text-slate-600 select-none">|</span>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
-      </div>
-
-      {/* =========================================================================
-          MAIN EDUCATIONAL CONTENT & OPEN FAQS
-          ========================================================================= */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-8 shadow-xs text-slate-900 dark:text-slate-100">
-        <InvestmentContent />
       </div>
 
       {/* =========================================================================
