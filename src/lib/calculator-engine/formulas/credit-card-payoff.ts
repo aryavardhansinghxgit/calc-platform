@@ -193,7 +193,8 @@ export function calculateFixedPaymentPayoff(
 
   // Monthly interest charge on starting balance
   const firstMonthInterest = B * r;
-  if (P <= firstMonthInterest + spend) {
+  const EPSILON = 1e-7;
+  if (P <= firstMonthInterest + spend + EPSILON) {
     return {
       monthsToPayoff: Infinity,
       totalInterestPaid: Infinity,

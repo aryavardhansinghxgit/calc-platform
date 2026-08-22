@@ -198,7 +198,7 @@ export function calculateCreditCardPayoff(input: CreditCardPayoffInput): CreditC
     }
   } else if (mode === "A") {
     // Mode A: Fixed Payment
-    reqMonthlyPayment = Number(input.monthlyPayment) || 200;
+    reqMonthlyPayment = input.monthlyPayment !== undefined ? Number(input.monthlyPayment) : 200;
   } else if (mode === "C") {
     // Mode C: Minimum Payment formula for first month
     const rule = input.minPaymentRule || "1_plus_interest";

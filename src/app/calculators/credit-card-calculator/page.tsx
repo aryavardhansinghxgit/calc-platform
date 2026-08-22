@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Credit Card Calculator",
+    title: "Credit Card Calculator – Payoff, Interest & Balance Transfer",
     description:
-      "Free Credit Card Calculator. Calculate payoff months, total interest, minimum payment rules, extra monthly payments, 0% balance transfers, and Debt Avalanche vs. Snowball payoff strategies.",
+      "Calculate credit card payoff time, monthly interest, minimum payment effects, 0% balance transfer savings, Debt Avalanche vs. Snowball, and credit utilization.",
     slug: CREDIT_CARD_CALCULATOR.slug,
   });
 }

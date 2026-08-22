@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Credit Card Payoff Calculator",
+    title: "Credit Card Payoff Calculator – Payoff Time, Payments & Multi-Card Plans",
     description:
-      "Free Credit Card Payoff Calculator. Calculate multi-card Debt Avalanche vs. Debt Snowball plans, fixed monthly payment payoff timelines, target debt-free dates, and 0% balance transfer savings.",
+      "Calculate credit card payoff time, required monthly payments for target dates, multi-card Debt Avalanche vs. Snowball plans, and 0% balance transfer savings.",
     slug: CREDIT_CARD_PAYOFF_CALCULATOR.slug,
   });
 }

@@ -293,8 +293,22 @@ export function searchCalculators(query: string): CalculatorModuleDefinition[] {
 export function getRelatedCalculators(
   currentId: string,
   category?: string,
-  count: number = 3
+  count: number = 8
 ): CalculatorModuleDefinition[] {
+  const currentDef = getCalculatorDefinition(currentId);
+  if (currentDef && currentDef.relatedCalculators && currentDef.relatedCalculators.length > 0) {
+    const explicitCalcs: CalculatorModuleDefinition[] = [];
+    for (const relId of currentDef.relatedCalculators) {
+      const found = getCalculatorDefinition(relId);
+      if (found && !explicitCalcs.some((c) => c.id === found.id)) {
+        explicitCalcs.push(found);
+      }
+    }
+    if (explicitCalcs.length > 0) {
+      return explicitCalcs.slice(0, count);
+    }
+  }
+
   const filtered = ALL_CALCULATORS.filter(
     (c) =>
       c.id.toLowerCase() !== currentId.toLowerCase() &&
