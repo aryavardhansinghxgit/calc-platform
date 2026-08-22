@@ -728,9 +728,9 @@ export function AutoLoanCalculator() {
             )}
           </div>
 
-          {/* AFFORDABILITY ANALYZER (20/4/10 RULE) */}
+          {/* AFFORDABILITY ANALYZER (20/4/10 PLANNING RULE) */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Income & Vehicle Affordability Analyzer (20/4/10 Rule)
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Income & Vehicle Affordability (20/4/10 Planning Rule)
             </h3>
 
             <div className="grid grid-cols-2 gap-3">
@@ -758,7 +758,7 @@ export function AutoLoanCalculator() {
             {results.affordability && (
               <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
                 <div>
-                  <span className="text-[10px] text-zinc-500 uppercase font-bold block">Affordability Rating</span>
+                  <span className="text-[10px] text-zinc-500 uppercase font-bold block">Planning Heuristic Rating</span>
                   <span className="text-sm font-extrabold text-blue-600 dark:text-blue-400">
                     {results.affordability.rating} ({results.affordability.frontEndRatio}% of Income)
                   </span>
@@ -853,8 +853,11 @@ export function AutoLoanCalculator() {
           {/* LOAN HEALTH SCORE CARD */}
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Loan Health Score
-              </h3>
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">Calculator Loan Profile Score
+                </h3>
+                <span className="text-[10px] text-zinc-400 block">Planning heuristic; not an official credit or underwriting score</span>
+              </div>
               <Badge
                 variant="outline"
                 className={`font-bold text-xs ${
@@ -912,6 +915,7 @@ export function AutoLoanCalculator() {
                 totalInterest={results.totalInterestPaid}
                 totalSalesTax={results.totalSalesTax}
                 totalFees={results.totalFees}
+                financedFees={results.financedFees}
               />
             </div>
 
@@ -967,11 +971,6 @@ export function AutoLoanCalculator() {
         monthlySchedule={results.monthlySchedule}
         annualSchedule={results.annualSchedule}
       />
-
-      {/* ==========================================
-          6. SEO CONTENT & FAQ SECTION
-         ========================================== */}
-      <AutoLoanContentSection />
 
       {/* PRINTABLE REPORT MODAL */}
       <AutoLoanReportModal

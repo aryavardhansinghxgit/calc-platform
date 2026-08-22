@@ -67,6 +67,7 @@ export interface AutoLoanResult {
   totalSalesTax: number;
   totalFees: number;
   totalPayment: number;
+  totalCost: number;
   totalOutofPocketCost: number;
 
   // Trade-in Breakdown
@@ -310,11 +311,11 @@ export function calculateAutoLoanFormula(inputs: ExtendedAutoLoanInput): AutoLoa
     let tag = undefined;
     if (term === 60) {
       isRec = true;
-      tag = "Recommended Standard";
+      tag = "Mid-Range Term";
     } else if (term === 36) {
-      tag = "Lowest Interest";
+      tag = "Shortest Term in Comparison";
     } else if (term === 84) {
-      tag = "Lowest Payment (High Interest)";
+      tag = "Lowest Payment in Comparison";
     }
 
     return {
@@ -456,18 +457,32 @@ export function calculateAutoLoanFormula(inputs: ExtendedAutoLoanInput): AutoLoa
       maxLoan = (desiredPayment * (1 - Math.pow(1 + r, -loanTermMonths))) / r;
     }
 
-    // Work backwards to max vehicle price
-    // maxLoan = MaxVehiclePrice + Tax + Fees - DownPayment - NetEquity
-    // MaxVehiclePrice = (maxLoan + DownPayment + PositiveEquity - FinancedFees) / (1 + TaxRate)
-    const effectiveTaxRate = (allowsTradeInCredit && vehiclePrice > 0) ? (salesTaxRate / 100) : (salesTaxRate / 100);
-    const grossFinancedCapacity = maxLoan + totalUpfrontCredits - (includeFeesInLoan ? totalFees : 0);
-    const maxVehiclePrice = Math.max(0, grossFinancedCapacity / (1 + effectiveTaxRate));
-    const maxTotalCost = maxVehiclePrice + (maxVehiclePrice * effectiveTaxRate) + totalFees + (desiredPayment * loanTermMonths - maxLoan);
+    // Work backwards to maximum vehicle sticker price
+    const taxRateDecimal = salesTaxRate / 100;
+    let maxVehiclePrice = 0;
+    let computedTax = 0;
+
+    if (includeFeesInLoan) {
+      // loanAmount = Price*(1 + t) - (allowsTradeInCredit ? t*TradeIn : 0) + negEquity - totalUpfrontCredits + totalFees
+      const tradeInTaxShield = allowsTradeInCredit ? (taxRateDecimal * tradeInValue) : 0;
+      const grossFinancedCapacity = maxLoan + totalUpfrontCredits - negativeEquityRollover - totalFees + tradeInTaxShield;
+      maxVehiclePrice = Math.max(0, grossFinancedCapacity / (1 + taxRateDecimal));
+      const taxableBase = allowsTradeInCredit ? Math.max(0, maxVehiclePrice - tradeInValue) : maxVehiclePrice;
+      computedTax = taxableBase * taxRateDecimal;
+    } else {
+      // loanAmount = Price + negEquity - totalUpfrontCredits
+      maxVehiclePrice = Math.max(0, maxLoan + totalUpfrontCredits - negativeEquityRollover);
+      const taxableBase = allowsTradeInCredit ? Math.max(0, maxVehiclePrice - tradeInValue) : maxVehiclePrice;
+      computedTax = taxableBase * taxRateDecimal;
+    }
+
+    const totalInterestOnMax = Math.max(0, (desiredPayment * loanTermMonths) - maxLoan);
+    const maxTotalCost = maxVehiclePrice + computedTax + totalFees + totalInterestOnMax;
 
     affordableResult = {
-      maxVehiclePrice: Math.round(maxVehiclePrice),
-      maxLoanAmount: Math.round(maxLoan),
-      maxTotalPurchaseCost: Math.round(maxTotalCost),
+      maxVehiclePrice: Math.round(maxVehiclePrice * 100) / 100,
+      maxLoanAmount: Math.round(maxLoan * 100) / 100,
+      maxTotalPurchaseCost: Math.round(maxTotalCost * 100) / 100,
     };
   }
 
@@ -480,7 +495,9 @@ export function calculateAutoLoanFormula(inputs: ExtendedAutoLoanInput): AutoLoa
     const termB = Math.max(1, Number(scB.loanTermMonths) || 60);
     const downB = Math.max(0, Number(scB.downPayment) || 0);
 
-    const loanB = Math.max(0, priceB - downB + (includeFeesInLoan ? (priceB * salesTaxRate / 100 + totalFees) : 0));
+    const taxableBaseB = allowsTradeInCredit ? Math.max(0, priceB - tradeInValue) : priceB;
+    const taxB = taxableBaseB * (salesTaxRate / 100);
+    const loanB = Math.max(0, priceB - downB - positiveTradeInEquity + negativeEquityRollover + (includeFeesInLoan ? (taxB + totalFees) : 0));
     let pmtB = 0;
     if (loanB > 0) {
       if (rateB === 0) pmtB = loanB / termB;
@@ -491,16 +508,25 @@ export function calculateAutoLoanFormula(inputs: ExtendedAutoLoanInput): AutoLoa
     }
     const totPmtB = pmtB * termB;
     const totIntB = Math.max(0, totPmtB - loanB);
-    const totCostB = priceB + (priceB * salesTaxRate / 100) + totalFees + totIntB;
+    const totCostB = priceB + taxB + totalFees + totIntB;
 
     const intDiff = Math.abs(totalInterestPaid - totIntB);
     const pmtDiff = Math.abs(monthlyPayment - pmtB);
+    const costDiff = Math.abs(totalCost - totCostB);
 
     let recommendation = "";
     if (totalCost < totCostB) {
-      recommendation = `Scenario A is financially superior, saving $${Math.round(intDiff).toLocaleString()} in total interest compared to Scenario B.`;
+      if (totalInterestPaid <= totIntB) {
+        recommendation = `Scenario A has a lower overall acquisition cost (saving $${Math.round(costDiff).toLocaleString()}) and lower interest expense (saving $${Math.round(intDiff).toLocaleString()}) compared to Scenario B.`;
+      } else {
+        recommendation = `Scenario A has a lower overall acquisition cost (saving $${Math.round(costDiff).toLocaleString()}), though Scenario B has lower total interest charges (saving $${Math.round(intDiff).toLocaleString()} due to its lower APR).`;
+      }
     } else if (totCostB < totalCost) {
-      recommendation = `Scenario B is financially superior, saving $${Math.round(intDiff).toLocaleString()} in total interest compared to Scenario A.`;
+      if (totIntB <= totalInterestPaid) {
+        recommendation = `Scenario B has a lower overall acquisition cost (saving $${Math.round(costDiff).toLocaleString()}) and lower interest expense (saving $${Math.round(intDiff).toLocaleString()}) compared to Scenario A.`;
+      } else {
+        recommendation = `Scenario B has a lower overall acquisition cost (saving $${Math.round(costDiff).toLocaleString()}), though Scenario A has lower total interest charges (saving $${Math.round(intDiff).toLocaleString()} due to its lower APR).`;
+      }
     } else {
       recommendation = "Both scenarios have identical total borrowing costs.";
     }
@@ -529,6 +555,7 @@ export function calculateAutoLoanFormula(inputs: ExtendedAutoLoanInput): AutoLoa
     totalSalesTax: Math.round(totalSalesTax * 100) / 100,
     totalFees: Math.round(totalFees * 100) / 100,
     totalPayment: Math.round(totalPayment * 100) / 100,
+    totalCost: Math.round(totalCost * 100) / 100,
     totalOutofPocketCost: Math.round(totalOutofPocketCost * 100) / 100,
 
     netTradeInEquity: Math.round(netTradeInEquity * 100) / 100,

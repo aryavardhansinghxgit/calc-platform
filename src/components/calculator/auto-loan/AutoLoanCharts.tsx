@@ -27,6 +27,7 @@ export interface AutoLoanCostBreakdownChartProps {
   totalInterest: number;
   totalSalesTax: number;
   totalFees: number;
+  financedFees?: number;
 }
 
 export function AutoLoanCostBreakdownChart({
@@ -34,14 +35,22 @@ export function AutoLoanCostBreakdownChart({
   totalInterest,
   totalSalesTax,
   totalFees,
+  financedFees = 0,
 }: AutoLoanCostBreakdownChartProps) {
-  const grandTotal = Math.max(0.01, loanAmount + totalInterest + totalSalesTax + totalFees);
+  const isFinanced = financedFees > 0;
+  const netVehiclePrincipal = isFinanced
+    ? Math.max(0, loanAmount - totalSalesTax - totalFees)
+    : Math.max(0, loanAmount);
+
+  const financedTax = isFinanced ? totalSalesTax : 0;
+  const financedFeesAmount = isFinanced ? totalFees : 0;
+  const grandTotal = Math.max(0.01, netVehiclePrincipal + financedTax + financedFeesAmount + totalInterest);
 
   const data = [
-    { name: `Principal`, value: Math.max(0, loanAmount), color: "#3B82F6" }, // Blue
-    { name: `Interest`, value: Math.max(0, totalInterest), color: "#10B981" }, // Emerald
-    { name: `Sales Tax`, value: Math.max(0, totalSalesTax), color: "#F59E0B" }, // Amber
-    { name: `Fees`, value: Math.max(0, totalFees), color: "#8B5CF6" }, // Purple
+    { name: `Vehicle Principal`, value: netVehiclePrincipal, color: "#3B82F6" }, // Blue
+    { name: `Loan Interest`, value: Math.max(0, totalInterest), color: "#10B981" }, // Emerald
+    ...(financedTax > 0 ? [{ name: `Financed Sales Tax`, value: financedTax, color: "#F59E0B" }] : []),
+    ...(financedFeesAmount > 0 ? [{ name: `Financed Fees`, value: financedFeesAmount, color: "#8B5CF6" }] : []),
   ].filter((item) => item.value > 0);
 
   return (
@@ -92,7 +101,7 @@ export function AutoLoanCostBreakdownChart({
         {/* Center Text Badge */}
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8">
           <span className="text-[10px] uppercase font-semibold tracking-wider text-zinc-400 dark:text-zinc-500">
-            Total Vehicle Cost
+            Total Loan Payments
           </span>
           <span className="text-sm font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums">
             {formatCurrency(grandTotal)}
