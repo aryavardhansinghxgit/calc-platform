@@ -4,11 +4,11 @@ import { bmi_calculatorFaqs } from "./faq";
 
 export const bmi_calculatorConfig: CalculatorModuleDefinition = {
   id: "bmi-calculator",
-  title: "BMI Calculator – Clinical Body Mass Index Suite",
+  title: "BMI Calculator – Body Mass Index & Health Screening",
   slug: "bmi-calculator",
   category: "Health",
   subcategory: "Fitness",
-  description: "Calculate Body Mass Index (BMI), WHO weight classification, BMI Prime, Ponderal Index, Ideal Weight range, estimated Body Fat %, BMR, and TDEE calories.",
+  description: "Calculate Body Mass Index (BMI) and related body-composition estimates using standard anthropometric formulas and age-appropriate reference ranges.",
   iconName: "HeartPulse",
   featured: true,
   keywords: [
@@ -23,14 +23,15 @@ export const bmi_calculatorConfig: CalculatorModuleDefinition = {
     "BMI For Men",
     "BMI For Women"
   ],
-  priority: 1,
   relatedCalculators: [
-    "calorie-calculator",
     "body-fat-calculator",
     "ideal-weight-calculator",
+    "healthy-weight-calculator",
     "bmr-calculator",
     "tdee-calculator",
-    "healthy-weight-calculator"
+    "calorie-calculator",
+    "army-body-fat-calculator",
+    "pace-calculator"
   ],
   formulaDescription: "BMI = Weight (kg) / [Height (m)]² | Imperial: 703 × Weight (lbs) / [Height (in)]²",
   faqs: bmi_calculatorFaqs,

@@ -174,10 +174,10 @@ export function BmiCalculator() {
             <div>
               <CardTitle className="text-xl sm:text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
                 <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                Body Mass Index (BMI) Calculator
+                BMI Calculator – Body Mass Index &amp; Health Screening
               </CardTitle>
               <CardDescription className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm mt-1">
-                Enter your physical details for instant WHO &amp; CDC clinical assessment
+                Calculate BMI and related body-composition estimates using standard anthropometric formulas and age-appropriate reference ranges.
               </CardDescription>
             </div>
 
@@ -417,10 +417,14 @@ export function BmiCalculator() {
                 <div className="p-5 bg-zinc-50 dark:bg-zinc-950/80 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col justify-between h-full space-y-4">
                   <div className="flex items-start justify-between">
                     <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Calculated Body Mass Index</span>
+                      <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                        {result.isChild ? "CDC Pediatric BMI-for-Age Assessment" : "Calculated Body Mass Index"}
+                      </span>
                       <div className="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-zinc-100 mt-1 flex items-baseline gap-2">
-                        {result.bmi}
-                        <span className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">kg/m²</span>
+                        {result.isChild ? `~${result.childPercentileEstimate}th` : result.bmi}
+                        <span className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">
+                          {result.isChild ? `Percentile (BMI ${result.bmi} kg/m²)` : "kg/m²"}
+                        </span>
                       </div>
                     </div>
 
@@ -511,8 +515,11 @@ export function BmiCalculator() {
                 </div>
                 <div className="space-y-2 text-xs">
                   <div className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg flex justify-between items-center border border-zinc-200/80 dark:border-zinc-800">
-                    <span className="text-zinc-500 dark:text-zinc-400">Est. Body Fat (Deurenberg):</span>
-                    <strong className="text-sky-700 dark:text-sky-300 font-bold">{result.bodyFatPercentage}%</strong>
+                    <div className="flex flex-col">
+                      <span className="text-zinc-700 dark:text-zinc-300 font-semibold">Estimated Body Fat %:</span>
+                      <span className="text-[10px] text-zinc-500 dark:text-zinc-400">Statistical estimate (Deurenberg)</span>
+                    </div>
+                    <strong className="text-sky-700 dark:text-sky-300 font-bold text-sm">{result.bodyFatPercentage}%</strong>
                   </div>
                   <div className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg flex justify-between items-center border border-zinc-200/80 dark:border-zinc-800">
                     <span className="text-zinc-500 dark:text-zinc-400">BMR (Resting Energy):</span>
@@ -574,7 +581,7 @@ export function BmiCalculator() {
                       </strong>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-zinc-500 dark:text-zinc-400">Est. Timeline (0.5 kg/wk):</span>
+                      <span className="text-zinc-500 dark:text-zinc-400">Est. Timeline (0.5 kg/wk assumption):</span>
                       <strong className="text-emerald-700 dark:text-emerald-400">{result.goalPlanner.weeksToGoal} weeks</strong>
                     </div>
                   </div>

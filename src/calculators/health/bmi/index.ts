@@ -4,11 +4,11 @@ import { bmi_calculatorFaqs } from "@/app/calculators/bmi-calculator/faq";
 
 export const BMI_CALCULATOR: CalculatorModuleDefinition = {
   id: "bmi",
-  title: "BMI Calculator – Clinical Body Mass Index Suite",
+  title: "BMI Calculator – Body Mass Index & Health Screening",
   slug: "bmi-calculator",
   category: "Health",
   subcategory: "Fitness",
-  description: "Calculate Body Mass Index (BMI), WHO weight classification, BMI Prime, Ponderal Index, Ideal Weight range, estimated Body Fat %, BMR, and TDEE calories.",
+  description: "Calculate Body Mass Index (BMI) and related body-composition estimates using standard anthropometric formulas and age-appropriate reference ranges.",
   iconName: "HeartPulse",
   featured: true,
   tags: ["bmi", "health", "weight", "fitness", "body mass index", "bmi prime", "ponderal index"],

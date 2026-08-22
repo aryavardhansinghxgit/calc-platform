@@ -22,7 +22,7 @@ export interface BmiInput {
   targetBmi?: number;
 }
 
-export type BmiCategory =
+export type AdultBmiCategory =
   | "Severe Thinness"
   | "Moderate Thinness"
   | "Mild Thinness"
@@ -31,6 +31,14 @@ export type BmiCategory =
   | "Obese Class I"
   | "Obese Class II"
   | "Obese Class III";
+
+export type ChildBmiCategory =
+  | "Pediatric Underweight"
+  | "Pediatric Healthy Weight"
+  | "Pediatric Overweight"
+  | "Pediatric Obesity";
+
+export type BmiCategory = AdultBmiCategory | ChildBmiCategory;
 
 export interface IdealWeightBreakdown {
   devineKg: number;
@@ -47,7 +55,9 @@ export interface IdealWeightBreakdown {
 
 export interface BmiResult {
   bmi: number;
+  bmiRaw: number;
   category: BmiCategory;
+  adultCategory: AdultBmiCategory;
   categoryColor: string;
   badgeClass: string;
   bmiPrime: number;
@@ -65,11 +75,11 @@ export interface BmiResult {
   tdee: number; // Total Daily Energy Expenditure kcal
   weightDifferenceKg: number; // Positive = need to lose, Negative = need to gain
   weightDifferenceLbs: number;
-  healthRisk: "Low Risk" | "Moderate Risk" | "High Risk" | "Very High Risk" | "Extremely High Risk";
+  healthRisk: "Low Risk" | "Moderate Risk" | "High Risk" | "Very High Risk" | "Extremely High Risk" | "Healthy Pediatric Growth";
   healthRiskDescription: string;
   isChild: boolean;
   childPercentileEstimate?: number;
-  childCategory?: "Underweight" | "Healthy Weight" | "At Risk Of Overweight" | "Overweight";
+  childCategory?: "Underweight" | "Healthy Weight" | "Overweight" | "Obesity";
   goalPlanner: {
     targetBmi: number;
     targetWeightKg: number;
@@ -79,6 +89,74 @@ export interface BmiResult {
     weeksToGoal: number;
     dailyCalorieAdjustment: number;
   };
+}
+
+// CDC LMS Growth Reference Tables for BMI-for-Age (Ages 2 to 20)
+interface LmsParameters {
+  L: number;
+  M: number;
+  S: number;
+}
+
+const CDC_LMS_BOYS: Record<number, LmsParameters> = {
+  2: { L: -1.61, M: 16.57, S: 0.080 },
+  3: { L: -1.85, M: 15.93, S: 0.078 },
+  4: { L: -2.07, M: 15.52, S: 0.079 },
+  5: { L: -2.23, M: 15.34, S: 0.082 },
+  6: { L: -2.34, M: 15.37, S: 0.088 },
+  7: { L: -2.40, M: 15.58, S: 0.096 },
+  8: { L: -2.41, M: 15.92, S: 0.106 },
+  9: { L: -2.38, M: 16.37, S: 0.116 },
+  10: { L: -2.31, M: 16.90, S: 0.126 },
+  11: { L: -2.22, M: 17.48, S: 0.134 },
+  12: { L: -2.11, M: 18.10, S: 0.141 },
+  13: { L: -1.98, M: 18.74, S: 0.146 },
+  14: { L: -1.84, M: 19.39, S: 0.150 },
+  15: { L: -1.70, M: 20.03, S: 0.152 },
+  16: { L: -1.55, M: 20.65, S: 0.153 },
+  17: { L: -1.40, M: 21.24, S: 0.152 },
+  18: { L: -1.26, M: 21.80, S: 0.151 },
+  19: { L: -1.12, M: 22.31, S: 0.150 },
+  20: { L: -0.99, M: 22.78, S: 0.148 },
+};
+
+const CDC_LMS_GIRLS: Record<number, LmsParameters> = {
+  2: { L: -2.01, M: 16.43, S: 0.084 },
+  3: { L: -2.21, M: 15.80, S: 0.083 },
+  4: { L: -2.37, M: 15.36, S: 0.084 },
+  5: { L: -2.46, M: 15.22, S: 0.087 },
+  6: { L: -2.49, M: 15.26, S: 0.093 },
+  7: { L: -2.46, M: 15.48, S: 0.101 },
+  8: { L: -2.38, M: 15.84, S: 0.111 },
+  9: { L: -2.27, M: 16.32, S: 0.121 },
+  10: { L: -2.14, M: 16.88, S: 0.130 },
+  11: { L: -2.00, M: 17.51, S: 0.137 },
+  12: { L: -1.85, M: 18.17, S: 0.143 },
+  13: { L: -1.70, M: 18.84, S: 0.147 },
+  14: { L: -1.56, M: 19.49, S: 0.149 },
+  15: { L: -1.43, M: 20.09, S: 0.149 },
+  16: { L: -1.30, M: 20.62, S: 0.148 },
+  17: { L: -1.19, M: 21.07, S: 0.146 },
+  18: { L: -1.09, M: 21.43, S: 0.143 },
+  19: { L: -1.01, M: 21.68, S: 0.140 },
+  20: { L: -0.94, M: 21.84, S: 0.137 },
+};
+
+function standardNormalCDF(z: number): number {
+  const t = 1 / (1 + 0.2316419 * Math.abs(z));
+  const d = 0.3989423 * Math.exp((-z * z) / 2);
+  const p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+  return z > 0 ? 1 - p : p;
+}
+
+function calculateCdcPediatricPercentile(bmi: number, age: number, gender: Gender): number {
+  const roundedAge = Math.max(2, Math.min(20, Math.round(age)));
+  const table = gender === "female" ? CDC_LMS_GIRLS : CDC_LMS_BOYS;
+  const lms = table[roundedAge] || table[20];
+  const { L, M, S } = lms;
+  const z = (Math.pow(bmi / M, L) - 1) / (L * S);
+  const percentile = standardNormalCDF(z) * 100;
+  return Math.max(0.1, Math.min(99.9, parseFloat(percentile.toFixed(1))));
 }
 
 export function calculateBmi(input: BmiInput): BmiResult {
@@ -117,7 +195,7 @@ export function calculateBmi(input: BmiInput): BmiResult {
     }
   }
 
-  // Safety checks
+  // Safety bounds
   heightCm = Math.max(50, Math.min(250, heightCm));
   weightKg = Math.max(20, Math.min(350, weightKg));
 
@@ -125,8 +203,9 @@ export function calculateBmi(input: BmiInput): BmiResult {
   const heightInches = heightCm / 2.54;
   const weightLbs = weightKg / 0.45359237;
 
-  // Standard BMI
+  // Raw floating-point BMI for exact boundary checks
   const bmiRaw = weightKg / (heightM * heightM);
+  // Display BMI rounded to 1 decimal
   const bmi = parseFloat(bmiRaw.toFixed(1));
 
   // BMI Prime = BMI / 25
@@ -136,43 +215,107 @@ export function calculateBmi(input: BmiInput): BmiResult {
   const ponderalIndexMetric = parseFloat((weightKg / (heightM * heightM * heightM)).toFixed(1));
   const ponderalIndexImperial = parseFloat((heightInches / Math.cbrt(weightLbs)).toFixed(1));
 
-  // WHO Adult Category
-  let category: BmiCategory = "Normal weight";
-  let categoryColor = "#10b981"; // Emerald
-  let badgeClass = "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
+  // Adult WHO Category evaluation using raw unrounded BMI
+  let adultCategory: AdultBmiCategory = "Normal weight";
+  let adultCategoryColor = "#10b981"; // Emerald
+  let adultBadgeClass = "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
 
-  if (bmi < 16.0) {
-    category = "Severe Thinness";
-    categoryColor = "#3b82f6"; // Blue
-    badgeClass = "bg-blue-500/15 text-blue-400 border-blue-500/30";
-  } else if (bmi < 17.0) {
-    category = "Moderate Thinness";
-    categoryColor = "#06b6d4"; // Cyan
-    badgeClass = "bg-cyan-500/15 text-cyan-400 border-cyan-500/30";
-  } else if (bmi < 18.5) {
-    category = "Mild Thinness";
-    categoryColor = "#0ea5e9"; // Sky
-    badgeClass = "bg-sky-500/15 text-sky-400 border-sky-500/30";
-  } else if (bmi < 25.0) {
-    category = "Normal weight";
-    categoryColor = "#10b981"; // Emerald
-    badgeClass = "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
-  } else if (bmi < 30.0) {
-    category = "Overweight";
-    categoryColor = "#eab308"; // Yellow
-    badgeClass = "bg-yellow-500/15 text-yellow-400 border-yellow-500/30";
-  } else if (bmi < 35.0) {
-    category = "Obese Class I";
-    categoryColor = "#f97316"; // Orange
-    badgeClass = "bg-orange-500/15 text-orange-400 border-orange-500/30";
-  } else if (bmi < 40.0) {
-    category = "Obese Class II";
-    categoryColor = "#ef4444"; // Red
-    badgeClass = "bg-red-500/15 text-red-400 border-red-500/30";
+  if (bmiRaw < 16.0) {
+    adultCategory = "Severe Thinness";
+    adultCategoryColor = "#3b82f6";
+    adultBadgeClass = "bg-blue-500/15 text-blue-400 border-blue-500/30";
+  } else if (bmiRaw < 17.0) {
+    adultCategory = "Moderate Thinness";
+    adultCategoryColor = "#06b6d4";
+    adultBadgeClass = "bg-cyan-500/15 text-cyan-400 border-cyan-500/30";
+  } else if (bmiRaw < 18.5) {
+    adultCategory = "Mild Thinness";
+    adultCategoryColor = "#0ea5e9";
+    adultBadgeClass = "bg-sky-500/15 text-sky-400 border-sky-500/30";
+  } else if (bmiRaw < 25.0) {
+    adultCategory = "Normal weight";
+    adultCategoryColor = "#10b981";
+    adultBadgeClass = "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
+  } else if (bmiRaw < 30.0) {
+    adultCategory = "Overweight";
+    adultCategoryColor = "#eab308";
+    adultBadgeClass = "bg-yellow-500/15 text-yellow-400 border-yellow-500/30";
+  } else if (bmiRaw < 35.0) {
+    adultCategory = "Obese Class I";
+    adultCategoryColor = "#f97316";
+    adultBadgeClass = "bg-orange-500/15 text-orange-400 border-orange-500/30";
+  } else if (bmiRaw < 40.0) {
+    adultCategory = "Obese Class II";
+    adultCategoryColor = "#ef4444";
+    adultBadgeClass = "bg-red-500/15 text-red-400 border-red-500/30";
   } else {
-    category = "Obese Class III";
-    categoryColor = "#881337"; // Rose dark
-    badgeClass = "bg-rose-600/20 text-rose-300 border-rose-600/40";
+    adultCategory = "Obese Class III";
+    adultCategoryColor = "#881337";
+    adultBadgeClass = "bg-rose-600/20 text-rose-300 border-rose-600/40";
+  }
+
+  // Pediatric Evaluation for Ages 2-19
+  const isChild = age < 20;
+  let childPercentileEstimate: number | undefined = undefined;
+  let childCategory: BmiResult["childCategory"] = undefined;
+
+  let primaryCategory: BmiCategory = adultCategory;
+  let primaryCategoryColor = adultCategoryColor;
+  let primaryBadgeClass = adultBadgeClass;
+
+  let healthRisk: BmiResult["healthRisk"] = "Low Risk";
+  let healthRiskDescription = "Weight is within the optimal reference range for lowest overall health risks.";
+
+  if (isChild) {
+    childPercentileEstimate = calculateCdcPediatricPercentile(bmiRaw, age, gender);
+
+    if (childPercentileEstimate < 5.0) {
+      childCategory = "Underweight";
+      primaryCategory = "Pediatric Underweight";
+      primaryCategoryColor = "#0ea5e9"; // Sky
+      primaryBadgeClass = "bg-sky-500/15 text-sky-400 border-sky-500/30";
+      healthRisk = "Moderate Risk";
+      healthRiskDescription = "Pediatric BMI is below the 5th percentile for age and sex. Clinical evaluation for optimal nutrition and growth trajectory is recommended.";
+    } else if (childPercentileEstimate < 85.0) {
+      childCategory = "Healthy Weight";
+      primaryCategory = "Pediatric Healthy Weight";
+      primaryCategoryColor = "#10b981"; // Emerald
+      primaryBadgeClass = "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
+      healthRisk = "Healthy Pediatric Growth";
+      healthRiskDescription = "Pediatric BMI is between the 5th and 85th percentiles for age and sex, representing an optimal developmental growth trajectory.";
+    } else if (childPercentileEstimate < 95.0) {
+      childCategory = "Overweight";
+      primaryCategory = "Pediatric Overweight";
+      primaryCategoryColor = "#eab308"; // Yellow
+      primaryBadgeClass = "bg-yellow-500/15 text-yellow-400 border-yellow-500/30";
+      healthRisk = "Moderate Risk";
+      healthRiskDescription = "Pediatric BMI is between the 85th and 95th percentiles. Encouraging active physical play and nutrient-dense dietary patterns is advised.";
+    } else {
+      childCategory = "Obesity";
+      primaryCategory = "Pediatric Obesity";
+      primaryCategoryColor = "#ef4444"; // Red
+      primaryBadgeClass = "bg-red-500/15 text-red-400 border-red-500/30";
+      healthRisk = "High Risk";
+      healthRiskDescription = "Pediatric BMI is at or above the 95th percentile. Pediatrician-guided lifestyle, activity, and metabolic assessment is recommended.";
+    }
+  } else {
+    // Adult Health Risk Assessment
+    if (bmiRaw < 18.5) {
+      healthRisk = "Moderate Risk";
+      healthRiskDescription = "Increased risk of nutritional deficiency, weakened immunity, and bone density loss.";
+    } else if (bmiRaw >= 25 && bmiRaw < 30) {
+      healthRisk = "Moderate Risk";
+      healthRiskDescription = "Mildly elevated risk of cardiovascular strain, hypertension, and insulin resistance.";
+    } else if (bmiRaw >= 30 && bmiRaw < 35) {
+      healthRisk = "High Risk";
+      healthRiskDescription = "High risk of type-2 diabetes, hypertension, coronary heart disease, and sleep apnea.";
+    } else if (bmiRaw >= 35 && bmiRaw < 40) {
+      healthRisk = "Very High Risk";
+      healthRiskDescription = "Very high risk of severe metabolic disorders, joint deterioration, and cardiac complications.";
+    } else if (bmiRaw >= 40) {
+      healthRisk = "Extremely High Risk";
+      healthRiskDescription = "Extremely high risk of major organ disease, reduced longevity, and acute vascular events.";
+    }
   }
 
   // Healthy Weight Range (BMI 18.5 to 24.9)
@@ -190,7 +333,6 @@ export function calculateBmi(input: BmiInput): BmiResult {
   let hamwiKg = gender === "male" ? 48 + 2.7 * inchesOver60 : 45.5 + 2.2 * inchesOver60;
 
   if (heightInches < 60) {
-    // Scaling for height below 5ft
     const factor = heightInches / 60;
     devineKg *= factor;
     robinsonKg *= factor;
@@ -239,63 +381,14 @@ export function calculateBmi(input: BmiInput): BmiResult {
   };
   const tdee = Math.round(bmr * (multipliers[actLevel] || 1.2));
 
-  // Weight difference from healthy range midpoint (BMI 21.7)
+  // Weight difference from healthy range
   let weightDifferenceKg = 0;
   if (weightKg > maxHealthyKg) {
     weightDifferenceKg = parseFloat((weightKg - maxHealthyKg).toFixed(1));
   } else if (weightKg < minHealthyKg) {
-    weightDifferenceKg = parseFloat((weightKg - minHealthyKg).toFixed(1)); // negative means deficit
+    weightDifferenceKg = parseFloat((weightKg - minHealthyKg).toFixed(1));
   }
   const weightDifferenceLbs = parseFloat((weightDifferenceKg / 0.45359237).toFixed(1));
-
-  // Health Risk Assessment
-  let healthRisk: BmiResult["healthRisk"] = "Low Risk";
-  let healthRiskDescription = "Weight is within the optimal reference range for lowest overall health risks.";
-
-  if (bmi < 18.5) {
-    healthRisk = "Moderate Risk";
-    healthRiskDescription = "Increased risk of nutritional deficiency, weakened immunity, and bone density loss.";
-  } else if (bmi >= 25 && bmi < 30) {
-    healthRisk = "Moderate Risk";
-    healthRiskDescription = "Mildly elevated risk of cardiovascular strain, hypertension, and insulin resistance.";
-  } else if (bmi >= 30 && bmi < 35) {
-    healthRisk = "High Risk";
-    healthRiskDescription = "High risk of type-2 diabetes, hypertension, coronary heart disease, and sleep apnea.";
-  } else if (bmi >= 35 && bmi < 40) {
-    healthRisk = "Very High Risk";
-    healthRiskDescription = "Very high risk of severe metabolic disorders, joint deterioration, and cardiac complications.";
-  } else if (bmi >= 40) {
-    healthRisk = "Extremely High Risk";
-    healthRiskDescription = "Extremely high risk of major organ disease, reduced longevity, and acute vascular events.";
-  }
-
-  // Children Percentile Estimate (Age 2-19)
-  const isChild = age < 20;
-  let childPercentileEstimate = 50;
-  let childCategory: BmiResult["childCategory"] = undefined;
-
-  if (isChild) {
-    // CDC smooth curve approximation for child percentile
-    // Baseline median BMI at age: approx 15 + (age - 2) * 0.35
-    const medianBmi = 15.2 + (age - 2) * 0.38;
-    const diff = bmi - medianBmi;
-    if (diff < -3) {
-      childPercentileEstimate = 3;
-      childCategory = "Underweight";
-    } else if (diff < -1.5) {
-      childPercentileEstimate = 15;
-      childCategory = "Healthy Weight";
-    } else if (diff < 1.5) {
-      childPercentileEstimate = 50;
-      childCategory = "Healthy Weight";
-    } else if (diff < 3.5) {
-      childPercentileEstimate = 88;
-      childCategory = "At Risk Of Overweight";
-    } else {
-      childPercentileEstimate = 97;
-      childCategory = "Overweight";
-    }
-  }
 
   // Goal Planner
   const targetBmi = input.targetBmi || 22.5;
@@ -306,14 +399,15 @@ export function calculateBmi(input: BmiInput): BmiResult {
 
   // Healthy weight change rate: 0.5 kg / 1.1 lbs per week
   const weeksToGoal = Math.max(1, Math.ceil(Math.abs(weightDeltaKg) / 0.5));
-  // 0.5 kg fat = ~3850 kcal per week = 550 kcal/day adjustment
   const dailyCalorieAdjustment = weightDeltaKg > 0 ? -500 : weightDeltaKg < 0 ? 500 : 0;
 
   return {
     bmi,
-    category,
-    categoryColor,
-    badgeClass,
+    bmiRaw,
+    category: primaryCategory,
+    adultCategory,
+    categoryColor: primaryCategoryColor,
+    badgeClass: primaryBadgeClass,
     bmiPrime,
     ponderalIndexMetric,
     ponderalIndexImperial,

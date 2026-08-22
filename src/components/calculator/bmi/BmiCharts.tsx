@@ -7,19 +7,23 @@ interface BmiChartsProps {
   result: BmiResult;
 }
 
-// 1. Arch Gauge Component
+// 1. Arch Gauge Component (Supports Adult WHO Scale & Pediatric CDC Percentile Scale)
 export function BmiArchGauge({ result }: BmiChartsProps) {
+  const isChild = result.isChild;
+  const percentile = result.childPercentileEstimate || 50;
   const bmi = result.bmi;
-  
-  // Angle range: -120 deg to +120 deg (total 240 deg)
-  const minBmi = 12;
-  const maxBmi = 42;
-  const clampedBmi = Math.max(minBmi, Math.min(maxBmi, bmi));
-  const percent = (clampedBmi - minBmi) / (maxBmi - minBmi);
+
+  // Pediatric Percentile Gauge (0 to 100) vs Adult BMI Gauge (12 to 42)
+  const minVal = isChild ? 0 : 12;
+  const maxVal = isChild ? 100 : 42;
+  const currentVal = isChild ? percentile : bmi;
+
+  const clampedVal = Math.max(minVal, Math.min(maxVal, currentVal));
+  const percent = (clampedVal - minVal) / (maxVal - minVal);
   const angle = -120 + percent * 240;
 
-  // Arc segments definition: [startBmi, endBmi, color, label]
-  const segments = [
+  // Arc segments
+  const adultSegments = [
     { start: 12, end: 18.5, color: "#0284c7", label: "Underweight" },
     { start: 18.5, end: 25, color: "#10b981", label: "Normal" },
     { start: 25, end: 30, color: "#eab308", label: "Overweight" },
@@ -27,6 +31,15 @@ export function BmiArchGauge({ result }: BmiChartsProps) {
     { start: 35, end: 40, color: "#ef4444", label: "Obese II" },
     { start: 40, end: 42, color: "#be123c", label: "Obese III" },
   ];
+
+  const childSegments = [
+    { start: 0, end: 5, color: "#0284c7", label: "<5%" },
+    { start: 5, end: 85, color: "#10b981", label: "5-85%" },
+    { start: 85, end: 95, color: "#eab308", label: "85-95%" },
+    { start: 95, end: 100, color: "#ef4444", label: ">95%" },
+  ];
+
+  const segments = isChild ? childSegments : adultSegments;
 
   const polarToCartesian = (cx: number, cy: number, r: number, angleInDegrees: number) => {
     const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
@@ -58,8 +71,8 @@ export function BmiArchGauge({ result }: BmiChartsProps) {
 
           {/* Color Arc Segments */}
           {segments.map((seg, i) => {
-            const startAng = -120 + ((seg.start - minBmi) / (maxBmi - minBmi)) * 240;
-            const endAng = -120 + ((seg.end - minBmi) / (maxBmi - minBmi)) * 240;
+            const startAng = -120 + ((seg.start - minVal) / (maxVal - minVal)) * 240;
+            const endAng = -120 + ((seg.end - minVal) / (maxVal - minVal)) * 240;
             return (
               <path
                 key={i}
@@ -74,23 +87,34 @@ export function BmiArchGauge({ result }: BmiChartsProps) {
           {/* Center needle pivot */}
           <circle cx="100" cy="110" r="4" className="fill-zinc-400 dark:fill-zinc-600" />
 
-          {/* Needle Pointer (Starts at y=70 to y=38, leaving center y=70..110 clear) */}
+          {/* Needle Pointer */}
           <g transform={`rotate(${angle}, 100, 110)`} className="transition-transform duration-700 ease-out">
             <line x1="100" y1="72" x2="100" y2="38" className="stroke-zinc-900 dark:stroke-zinc-100" strokeWidth="3.5" strokeLinecap="round" />
             <polygon points="96,44 100,28 104,44" className="fill-zinc-900 dark:fill-zinc-100" />
           </g>
 
           {/* Major labels */}
-          <text x="24" y="132" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">18.5</text>
-          <text x="88" y="20" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">25</text>
-          <text x="138" y="42" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">30</text>
-          <text x="164" y="132" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">40</text>
+          {isChild ? (
+            <>
+              <text x="24" y="132" className="fill-zinc-500 dark:fill-zinc-400" fontSize="9" fontWeight="bold">0%</text>
+              <text x="48" y="48" className="fill-zinc-500 dark:fill-zinc-400" fontSize="9" fontWeight="bold">5%</text>
+              <text x="144" y="58" className="fill-zinc-500 dark:fill-zinc-400" fontSize="9" fontWeight="bold">85%</text>
+              <text x="160" y="132" className="fill-zinc-500 dark:fill-zinc-400" fontSize="9" fontWeight="bold">100%</text>
+            </>
+          ) : (
+            <>
+              <text x="24" y="132" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">18.5</text>
+              <text x="88" y="20" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">25</text>
+              <text x="138" y="42" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">30</text>
+              <text x="164" y="132" className="fill-zinc-500 dark:fill-zinc-400" fontSize="10" fontWeight="bold">40</text>
+            </>
+          )}
         </svg>
 
-        {/* Center overlay readout with solid background badge so needle never overlaps */}
+        {/* Center overlay readout */}
         <div className="absolute bottom-0 flex flex-col items-center bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md px-4 py-1 rounded-xl border border-zinc-200/90 dark:border-zinc-800 shadow-md">
           <span className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-zinc-100 tracking-tight leading-none">
-            {result.bmi}
+            {isChild ? `${percentile}th %` : result.bmi}
           </span>
           <span
             className="text-[11px] font-bold px-2 py-0.5 rounded-full mt-1 border"
@@ -107,12 +131,20 @@ export function BmiArchGauge({ result }: BmiChartsProps) {
 
       <div className="grid grid-cols-3 gap-2 w-full mt-4 text-center text-xs">
         <div className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800">
-          <div className="text-zinc-500 dark:text-zinc-400 text-[10px]">Healthy Range</div>
-          <div className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">{result.healthyWeightRangeLbs[0]} - {result.healthyWeightRangeLbs[1]} lbs</div>
+          <div className="text-zinc-500 dark:text-zinc-400 text-[10px]">
+            {isChild ? "CDC Assessment" : "Healthy Range"}
+          </div>
+          <div className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+            {isChild ? "5th - 85th %" : `${result.healthyWeightRangeLbs[0]} - ${result.healthyWeightRangeLbs[1]} lbs`}
+          </div>
         </div>
         <div className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800">
-          <div className="text-zinc-500 dark:text-zinc-400 text-[10px]">BMI Prime</div>
-          <div className="font-bold text-sky-600 dark:text-sky-400 mt-0.5">{result.bmiPrime}</div>
+          <div className="text-zinc-500 dark:text-zinc-400 text-[10px]">
+            {isChild ? "Measured BMI" : "BMI Prime"}
+          </div>
+          <div className="font-bold text-sky-600 dark:text-sky-400 mt-0.5">
+            {isChild ? `${result.bmi} kg/m²` : result.bmiPrime}
+          </div>
         </div>
         <div className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800">
           <div className="text-zinc-500 dark:text-zinc-400 text-[10px]">Ponderal Index</div>
@@ -125,52 +157,97 @@ export function BmiArchGauge({ result }: BmiChartsProps) {
 
 // 2. Linear Scale Meter
 export function BmiScaleMeter({ result }: BmiChartsProps) {
+  const isChild = result.isChild;
+  const percentile = result.childPercentileEstimate || 50;
   const bmi = result.bmi;
-  const posPercent = Math.max(0, Math.min(100, ((bmi - 12) / (42 - 12)) * 100));
+
+  const posPercent = isChild
+    ? Math.max(0, Math.min(100, percentile))
+    : Math.max(0, Math.min(100, ((bmi - 12) / (42 - 12)) * 100));
 
   return (
     <div className="w-full space-y-2 p-4 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
       <div className="flex justify-between items-center text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-        <span>BMI Category Scale</span>
-        <span style={{ color: result.categoryColor }}>Current: {result.bmi}</span>
+        <span>{isChild ? "CDC Pediatric Percentile Scale (Ages 2–19)" : "Adult BMI Category Scale"}</span>
+        <span style={{ color: result.categoryColor }}>
+          {isChild ? `Percentile: ~${percentile}th %` : `Current BMI: ${result.bmi}`}
+        </span>
       </div>
 
-      <div className="relative h-6 w-full rounded-lg overflow-hidden flex text-[10px] font-bold text-white shadow-inner">
-        <div className="h-full bg-sky-500 flex items-center justify-center" style={{ width: "21.6%" }}>
-          <span className="hidden sm:inline">Under</span>
-        </div>
-        <div className="h-full bg-emerald-500 flex items-center justify-center" style={{ width: "21.6%" }}>
-          <span>Normal</span>
-        </div>
-        <div className="h-full bg-yellow-500 flex items-center justify-center text-zinc-900" style={{ width: "16.6%" }}>
-          <span>Over</span>
-        </div>
-        <div className="h-full bg-orange-500 flex items-center justify-center" style={{ width: "16.6%" }}>
-          <span>Obese I</span>
-        </div>
-        <div className="h-full bg-rose-500 flex items-center justify-center" style={{ width: "16.6%" }}>
-          <span>Obese II</span>
-        </div>
-        <div className="h-full bg-rose-800 flex items-center justify-center text-rose-100" style={{ width: "7%" }}>
-          <span>III</span>
-        </div>
+      {isChild ? (
+        <div className="relative h-6 w-full rounded-lg overflow-hidden flex text-[10px] font-bold text-white shadow-inner">
+          <div className="h-full bg-sky-500 flex items-center justify-center" style={{ width: "5%" }}>
+            <span>&lt;5%</span>
+          </div>
+          <div className="h-full bg-emerald-500 flex items-center justify-center" style={{ width: "80%" }}>
+            <span>5% – 85% Healthy Percentile Range</span>
+          </div>
+          <div className="h-full bg-yellow-500 flex items-center justify-center text-zinc-900" style={{ width: "10%" }}>
+            <span>85-95%</span>
+          </div>
+          <div className="h-full bg-rose-500 flex items-center justify-center" style={{ width: "5%" }}>
+            <span>&gt;95%</span>
+          </div>
 
-        {/* Current position marker */}
-        <div
-          className="absolute top-0 bottom-0 w-1.5 bg-zinc-900 dark:bg-white shadow-[0_0_8px_rgba(0,0,0,0.5)] transition-all duration-500 -translate-x-1/2"
-          style={{ left: `${posPercent}%` }}
-        >
-          <div className="w-3 h-3 bg-zinc-900 dark:bg-white border-2 border-white dark:border-zinc-900 rounded-full -translate-x-[3px] -translate-y-1 shadow-md" />
+          {/* Current position marker */}
+          <div
+            className="absolute top-0 bottom-0 w-1.5 bg-zinc-900 dark:bg-white shadow-[0_0_8px_rgba(0,0,0,0.5)] transition-all duration-500 -translate-x-1/2"
+            style={{ left: `${posPercent}%` }}
+          >
+            <div className="w-3 h-3 bg-zinc-900 dark:bg-white border-2 border-white dark:border-zinc-900 rounded-full -translate-x-[3px] -translate-y-1 shadow-md" />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="relative h-6 w-full rounded-lg overflow-hidden flex text-[10px] font-bold text-white shadow-inner">
+          <div className="h-full bg-sky-500 flex items-center justify-center" style={{ width: "21.6%" }}>
+            <span className="hidden sm:inline">Under</span>
+          </div>
+          <div className="h-full bg-emerald-500 flex items-center justify-center" style={{ width: "21.6%" }}>
+            <span>Normal</span>
+          </div>
+          <div className="h-full bg-yellow-500 flex items-center justify-center text-zinc-900" style={{ width: "16.6%" }}>
+            <span>Over</span>
+          </div>
+          <div className="h-full bg-orange-500 flex items-center justify-center" style={{ width: "16.6%" }}>
+            <span>Obese I</span>
+          </div>
+          <div className="h-full bg-rose-500 flex items-center justify-center" style={{ width: "16.6%" }}>
+            <span>Obese II</span>
+          </div>
+          <div className="h-full bg-rose-800 flex items-center justify-center text-rose-100" style={{ width: "7%" }}>
+            <span>III</span>
+          </div>
+
+          {/* Current position marker */}
+          <div
+            className="absolute top-0 bottom-0 w-1.5 bg-zinc-900 dark:bg-white shadow-[0_0_8px_rgba(0,0,0,0.5)] transition-all duration-500 -translate-x-1/2"
+            style={{ left: `${posPercent}%` }}
+          >
+            <div className="w-3 h-3 bg-zinc-900 dark:bg-white border-2 border-white dark:border-zinc-900 rounded-full -translate-x-[3px] -translate-y-1 shadow-md" />
+          </div>
+        </div>
+      )}
 
       <div className="flex justify-between text-[10px] text-zinc-500 dark:text-zinc-400 font-sans tabular-nums px-0.5">
-        <span>12</span>
-        <span>18.5</span>
-        <span>25.0</span>
-        <span>30.0</span>
-        <span>35.0</span>
-        <span>40.0</span>
+        {isChild ? (
+          <>
+            <span>0%</span>
+            <span>5% (Underweight)</span>
+            <span>50% (Median)</span>
+            <span>85% (Overweight)</span>
+            <span>95% (Obesity)</span>
+            <span>100%</span>
+          </>
+        ) : (
+          <>
+            <span>12</span>
+            <span>18.5</span>
+            <span>25.0</span>
+            <span>30.0</span>
+            <span>35.0</span>
+            <span>40.0</span>
+          </>
+        )}
       </div>
     </div>
   );
@@ -232,6 +309,8 @@ export function WeightPositionIndicator({ result }: BmiChartsProps) {
 
 // 4. Interactive 2D Height-Weight Adult BMI Matrix Heatmap Chart
 export function AdultBmiHeightWeightChart({ result }: BmiChartsProps) {
+  if (result.isChild) return null;
+
   const userHeightIn = result.heightInches;
   const userWeightLb = result.weightLbs;
 
@@ -280,43 +359,40 @@ export function AdultBmiHeightWeightChart({ result }: BmiChartsProps) {
           {/* Obese Class II & III (35+) */}
           <polygon points="295,15 385,15 385,165 365,165" fill="#f87171" fillOpacity="0.65" stroke="#ef4444" strokeWidth="0.75" />
 
-          {/* Horizontal Grid lines (Heights) */}
+          {/* Horizontal Grid lines */}
           <line x1="40" y1="52.5" x2="385" y2="52.5" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
           <line x1="40" y1="90" x2="385" y2="90" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
           <line x1="40" y1="127.5" x2="385" y2="127.5" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
 
-          {/* Vertical Grid lines (Weights) */}
+          {/* Vertical Grid lines */}
           <line x1="126" y1="15" x2="126" y2="165" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
           <line x1="212" y1="15" x2="212" y2="165" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
           <line x1="298" y1="15" x2="298" y2="165" className="stroke-zinc-300 dark:stroke-zinc-800" strokeWidth="0.5" strokeDasharray="3,3" />
 
-          {/* Y-Axis Height Labels (Left) */}
+          {/* Y-Axis Height Labels */}
           <text x="35" y="18" textAnchor="end" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">6&apos;6&quot;</text>
           <text x="35" y="55.5" textAnchor="end" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">6&apos;0&quot;</text>
           <text x="35" y="93" textAnchor="end" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">5&apos;6&quot;</text>
           <text x="35" y="130.5" textAnchor="end" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">5&apos;0&quot;</text>
           <text x="35" y="168" textAnchor="end" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">4&apos;9&quot;</text>
 
-          {/* X-Axis Weight Labels (Bottom) */}
+          {/* X-Axis Weight Labels */}
           <text x="40" y="182" textAnchor="middle" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">80 lbs</text>
           <text x="126" y="182" textAnchor="middle" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">125 lbs</text>
           <text x="212" y="182" textAnchor="middle" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">170 lbs</text>
           <text x="298" y="182" textAnchor="middle" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">215 lbs</text>
           <text x="385" y="182" textAnchor="middle" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">260 lbs</text>
 
-          {/* Contour BMI Threshold Labels */}
+          {/* Contour BMI Labels */}
           <text x="120" y="156" className="fill-zinc-600 dark:fill-zinc-400" fontSize="8" fontWeight="bold">BMI 18.5</text>
           <text x="180" y="156" className="fill-zinc-600 dark:fill-zinc-400" fontSize="8" fontWeight="bold">BMI 25</text>
           <text x="255" y="156" className="fill-zinc-600 dark:fill-zinc-400" fontSize="8" fontWeight="bold">BMI 30</text>
           <text x="315" y="156" className="fill-zinc-600 dark:fill-zinc-400" fontSize="8" fontWeight="bold">BMI 35</text>
 
-          {/* Pure SVG User Projection Badge (Clamped within inner SVG canvas [48..375, 25..155]) */}
+          {/* User Marker */}
           <g transform={`translate(${svgX}, ${svgY})`}>
-            {/* Outer halo */}
             <circle r="12" fill={result.categoryColor} fillOpacity="0.25" />
-            {/* Main badge circle */}
             <circle r="8" fill={result.categoryColor} stroke="#ffffff" strokeWidth="1.5" />
-            {/* YOU label */}
             <text y="3" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="black">YOU</text>
           </g>
         </svg>
@@ -335,8 +411,8 @@ export function ChildBmiPercentileChart({ result }: BmiChartsProps) {
     <div className="w-full space-y-3 p-4 bg-white dark:bg-zinc-900 rounded-xl border border-sky-200 dark:border-sky-900/40 shadow-sm">
       <div className="flex justify-between items-center">
         <div>
-          <h4 className="text-xs font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider">CDC Child &amp; Teen Percentile Indicator</h4>
-          <p className="text-[11px] text-zinc-500 dark:text-zinc-400">BMI-for-age percentile relative to CDC growth charts</p>
+          <h4 className="text-xs font-bold text-sky-700 dark:text-sky-300 uppercase tracking-wider">CDC Child &amp; Teen Growth Assessment</h4>
+          <p className="text-[11px] text-zinc-500 dark:text-zinc-400">BMI-for-age percentile based on CDC growth standards</p>
         </div>
         <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-sky-100 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-500/40">
           ~{percentile}th Percentile
@@ -364,7 +440,7 @@ export function ChildBmiPercentileChart({ result }: BmiChartsProps) {
       </div>
 
       <p className="text-xs text-slate-800 dark:text-slate-200 font-semibold leading-relaxed">
-        For children aged 2–19, BMI is evaluated using age- and gender-specific percentiles from the CDC. A percentile between 5% and 85% indicates normal growth and healthy body weight.
+        For children and teens aged 2–19, BMI is evaluated using age- and sex-specific growth charts from the CDC. A percentile between 5% and 85% indicates an optimal pediatric development trajectory.
       </p>
     </div>
   );

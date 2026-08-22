@@ -18,21 +18,7 @@ export default function BMICalculatorPage() {
     faqs: bmi_calculatorConfig.faqs,
   });
 
-  // Additional Article & Medical WebPage Schema
-  const medicalArticleSchema = {
-    "@context": "https://schema.org",
-    "@type": "MedicalWebPage",
-    "name": "Body Mass Index (BMI) Clinical & Pediatric Assessment Suite",
-    "description": "Comprehensive clinical resource for calculating adult and pediatric Body Mass Index, WHO categories, CDC percentiles, BMI Prime, and ideal body weight.",
-    "url": "https://calculator-platform.com/calculators/bmi-calculator",
-    "aspect": ["Overview", "Calculation", "Diagnosis", "Risks"],
-    "medicalAudience": {
-      "@type": "MedicalAudience",
-      "audienceType": "General Public & Healthcare Professionals"
-    }
-  };
-
-  const allSchemas = [...baseSchemas, medicalArticleSchema];
+  const allSchemas = baseSchemas;
 
   return (
     <>
