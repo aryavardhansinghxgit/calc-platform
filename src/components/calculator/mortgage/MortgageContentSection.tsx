@@ -9,8 +9,7 @@ export function MortgageContentSection() {
     <div className="space-y-10 py-4 text-slate-900 dark:text-slate-100">
       {/* SECTION 1: Introduction */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Home className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
           Understanding Your Mortgage &amp; Total Housing Costs
         </h2>
         <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
@@ -533,8 +532,7 @@ export function MortgageContentSection() {
 
       {/* SECTION 16: Frequently Asked Questions */}
       <section className="space-y-4 pt-2">
-        <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <HelpCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+        <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
           Frequently Asked Questions
         </h3>
         <div className="space-y-3">

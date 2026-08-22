@@ -950,30 +950,34 @@ export function InvestmentCalculator() {
       </div>
 
       {/* =========================================================================
-          COMPACT RELATED CALCULATORS (DIRECTLY BELOW CALCULATOR, ABOVE CONTENT)
+          RELATED CALCULATORS (DIRECTLY BELOW CALCULATOR, BEFORE MAIN CONTENT)
           ========================================================================= */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-3">
-        <span className="font-black text-slate-900 dark:text-slate-100 uppercase tracking-wider text-xs block">
-          Related Calculators:
+      <div className="pt-2 pb-1 space-y-1">
+        <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block">
+          RELATED CALCULATORS:
         </span>
-        <div className="flex flex-wrap gap-2.5">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
           {[
-            { label: "Compound Interest", href: "/calculators/compound-interest-calculator" },
-            { label: "Savings", href: "/calculators/savings-calculator" },
-            { label: "Future Value", href: "/calculators/future-value-calculator" },
-            { label: "Retirement", href: "/calculators/retirement-calculator" },
-            { label: "CAGR", href: "/calculators/cagr-calculator" },
-            { label: "401(k)", href: "/calculators/401k-calculator" },
-            { label: "SIP", href: "/calculators/sip-calculator" },
-            { label: "Traditional IRA", href: "/calculators/traditional-ira-calculator" },
-          ].map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="px-3.5 py-2 rounded-xl bg-[#F8FAFC] dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/50 border border-slate-300/80 dark:border-slate-700 hover:border-blue-400 dark:hover:border-blue-600 text-blue-700 dark:text-blue-400 font-bold text-xs transition-all"
-            >
-              {item.label}
-            </Link>
+            { label: "Compound Interest Calculator", href: "/calculators/compound-interest-calculator" },
+            { label: "Savings Calculator", href: "/calculators/savings-calculator" },
+            { label: "Future Value Calculator", href: "/calculators/future-value-calculator" },
+            { label: "Retirement Calculator", href: "/calculators/retirement-calculator" },
+            { label: "CAGR Calculator", href: "/calculators/cagr-calculator" },
+            { label: "401(k) Calculator", href: "/calculators/401k-calculator" },
+            { label: "SIP Calculator", href: "/calculators/sip-calculator" },
+            { label: "Traditional IRA Calculator", href: "/calculators/traditional-ira-calculator" },
+          ].map((item, idx, arr) => (
+            <React.Fragment key={item.href}>
+              <Link
+                href={item.href}
+                className="text-blue-600 dark:text-blue-400 hover:underline font-bold transition-colors"
+              >
+                {item.label}
+              </Link>
+              {idx < arr.length - 1 && (
+                <span className="text-slate-400 dark:text-slate-600 select-none">|</span>
+              )}
+            </React.Fragment>
           ))}
         </div>
       </div>
@@ -981,7 +985,7 @@ export function InvestmentCalculator() {
       {/* =========================================================================
           MAIN EDUCATIONAL CONTENT & OPEN FAQS
           ========================================================================= */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/90 dark:border-slate-800 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.06)]">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-8 shadow-xs text-slate-900 dark:text-slate-100">
         <InvestmentContent />
       </div>
 

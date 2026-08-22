@@ -863,8 +863,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           {/* Simple Related Calculators Links directly below calculator boxes (Suppressed for Personal Loan, Salary, Income Tax, and Investment which have dedicated approved suites) */}
           {!isPersonalLoan && !isSalary && !isIncomeTax && !isInvestment && (
             <div className="pt-2 pb-1 space-y-1">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
-                Related Calculators:
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block">
+                RELATED CALCULATORS:
               </span>
               <RelatedCalculators currentId={definition.id} category={definition.category} />
             </div>
@@ -874,12 +874,12 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
 
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       {!isInvestment && (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 sm:p-4 space-y-3.5 shadow-xs text-slate-900 dark:text-slate-100">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-8 shadow-xs text-slate-900 dark:text-slate-100">
           {/* Formula & Calculation Method */}
           {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
-            <div className="space-y-2">
-              <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                Formula & Calculation Method
+            <div className="space-y-3">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+                Formula &amp; Calculation Method
               </h3>
               <FormulaSection
                 formula={definition.formulaDescription}
@@ -899,8 +899,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
 
           {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Custom suites per AGENTS.md policy) */}
           {definition.category !== "Math" && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && (
-            <div className="space-y-3">
-              <h3 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+            <div className="space-y-4 pt-2">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions
               </h3>
               <div className="space-y-3">
@@ -912,7 +912,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                     <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
                       {faq.question}
                     </h4>
-                    <p className="text-xs text-slate-900 dark:text-slate-100 leading-relaxed font-medium">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
                       {faq.answer}
                     </p>
                   </div>
