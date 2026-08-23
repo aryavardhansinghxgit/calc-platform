@@ -2,6 +2,7 @@ import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateTimeCalculator } from "./calculator";
 import { TimeCalculator } from "@/components/calculator/time/TimeCalculator";
 import { TimeContent } from "@/components/calculator/time/TimeContent";
+import { time_calculatorFaqs } from "./faq";
 
 export const time_calculatorConfig: CalculatorModuleDefinition = {
   id: "time-calculator",
@@ -9,23 +10,42 @@ export const time_calculatorConfig: CalculatorModuleDefinition = {
   slug: "time-calculator",
   category: "date",
   subcategory: "Date & Time",
-  description: "Add, subtract, and convert time values in days, hours, minutes, and seconds, evaluate free-text expressions, and calculate date-time shifts.",
+  description:
+    "Add and subtract time, shift dates by hours or days, evaluate time expressions, calculate work duration and convert time between days, hours, minutes and seconds.",
   iconName: "Clock",
   featured: true,
   keywords: [
     "time calculator",
-    "add hours and minutes",
     "time duration calculator",
-    "calculate time difference",
-    "add time",
-    "subtract time",
-    "time expression parser",
+    "add time calculator",
+    "subtract time calculator",
+    "hours and minutes calculator",
+    "time difference calculator",
+    "calculate hours between times",
+    "time card calculator",
+    "work hours calculator",
+    "add hours minutes seconds",
+    "subtract hours minutes seconds",
+    "date time calculator",
+    "time expression calculator",
+    "duration calculator",
+    "decimal hours calculator",
+    "time calculator with seconds",
   ],
   priority: 1,
-  relatedCalculators: ["date-calculator", "age-calculator", "time-duration-calculator", "hours-calculator", "day-counter-calculator"],
+  relatedCalculators: [
+    "date-calculator",
+    "age-calculator",
+    "time-duration-calculator",
+    "hours-calculator",
+    "day-counter-calculator",
+    "time-zone-calculator",
+    "time-card-calculator",
+  ],
   formulaDescription: "Total Time = Time 1 ± Time 2 (with sexagesimal base-60 rollover)",
   CustomComponent: TimeCalculator,
   ContentComponent: TimeContent,
+  faqs: time_calculatorFaqs,
   inputs: [
     {
       name: "h1",
