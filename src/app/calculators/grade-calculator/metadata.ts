@@ -1,8 +1,26 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
-export const grade_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Grade Calculator: Weighted Percentage & Final Exam Target Solver",
-  description: "Free Grade Calculator & Final Exam Target Solver. Calculate weighted category grades, total points, drop lowest scores, curved grades, and final exam targets.",
-  slug: "grade-calculator",
-});
+export const grade_calculatorMetadata: Metadata = {
+  title: "Grade Calculator - Weighted Grade, Final Exam Target & GPA",
+  description:
+    "Calculate weighted course grades, total points, final exam targets, dropped scores, grading curves, extra credit and illustrative letter/GPA results.",
+  keywords: [
+    "weighted grade calculator",
+    "final grade calculator",
+    "final exam grade calculator",
+    "what grade do I need on my final",
+    "current grade calculator",
+    "course grade calculator",
+    "percentage grade calculator",
+    "total points grade calculator",
+    "drop lowest grade calculator",
+    "extra credit grade calculator",
+    "grading curve calculator",
+    "letter grade calculator",
+    "GPA grade converter",
+    "calculate final course grade",
+  ],
+  alternates: {
+    canonical: "/calculators/grade-calculator",
+  },
+};

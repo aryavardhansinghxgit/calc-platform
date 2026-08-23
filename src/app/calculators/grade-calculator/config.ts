@@ -1,31 +1,49 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateGradeCalculator } from "./calculator";
 import { grade_calculatorFaqs } from "./faq";
+import { GradeCalculator } from "@/components/calculator/grade/GradeCalculator";
+import { GradeContent } from "@/components/calculator/grade/GradeContent";
 
 export const grade_calculatorConfig: CalculatorModuleDefinition = {
   id: "grade-calculator",
-  title: "Grade Calculator & Final Exam Target Solver",
+  title: "Grade Calculator - Weighted Grade, Final Exam Target & GPA",
   slug: "grade-calculator",
   category: "other",
   subcategory: "Science & Education",
-  description: "Next-Gen Grade Calculator. Calculate weighted category grades, total points, drop lowest N scores, what-if scenario simulation, and solve required final exam scores.",
+  description:
+    "Calculate weighted course grades, total points, final exam targets, dropped scores, grading curves, extra credit and illustrative letter/GPA results.",
   iconName: "FileCheck",
   featured: true,
   keywords: [
-    "grade calculator",
-    "final exam calculator",
     "weighted grade calculator",
-    "what do i need on my final exam",
+    "final grade calculator",
+    "final exam grade calculator",
+    "what grade do I need on my final",
+    "current grade calculator",
+    "course grade calculator",
+    "percentage grade calculator",
     "total points grade calculator",
-    "drop lowest score calculator",
+    "drop lowest grade calculator",
+    "extra credit grade calculator",
     "grading curve calculator",
-    "class grade calculator",
-    "gpa grade converter",
-    "syllabus grade calculator"
+    "letter grade calculator",
+    "GPA grade converter",
+    "calculate final course grade",
   ],
   priority: 1,
-  relatedCalculators: ["gpa-calculator", "hours-calculator", "percentage-calculator"],
-  formulaDescription: "Weighted Grade = Σ(Grade × Weight) / Σ(Weight) | Required Final = [Target - Current × (1 - Weight)] / Weight",
+  CustomComponent: GradeCalculator,
+  ContentComponent: GradeContent,
+  relatedCalculators: [
+    "gpa-calculator",
+    "percentage-calculator",
+    "hours-calculator",
+    "scientific-calculator",
+    "statistics-calculator",
+    "fraction-calculator",
+    "percent-error-calculator",
+  ],
+  formulaDescription:
+    "Weighted Grade = Σ(Grade × Weight) / Σ(Weight) | Required Final = [Target - Current × (1 - Weight)] / Weight",
   faqs: grade_calculatorFaqs,
   inputs: [
     {
