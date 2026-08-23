@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Student Loan Calculator – Repayment & Projection Suite",
+    title: "Student Loan Calculator – Payment, Interest, Payoff & Repayment Plans",
     description:
-      "Free Student Loan Calculator. Calculate monthly repayments, 4-way missing solvers, extra payment payoff acceleration, in-school debt projections, federal repayment plans, and refinancing savings.",
+      "Calculate student loan payments, total interest, payoff time, extra-payment savings, in-school balance projections, refinancing scenarios, and federal repayment-plan options.",
     slug: STUDENT_LOAN_CALCULATOR.slug,
   });
 }
@@ -16,7 +16,7 @@ export default function StudentLoanCalculatorPage() {
   const { calculate, ...serializableDef } = STUDENT_LOAN_CALCULATOR;
 
   const schemas = generateJsonLdSchema({
-    title: STUDENT_LOAN_CALCULATOR.title,
+    title: "Student Loan Calculator – Payment, Interest, Payoff & Repayment Plans",
     description: STUDENT_LOAN_CALCULATOR.description,
     slug: STUDENT_LOAN_CALCULATOR.slug,
     category: STUDENT_LOAN_CALCULATOR.category,

@@ -3,31 +3,17 @@
 import React, { useState, useMemo } from "react";
 import {
   GraduationCap,
-  DollarSign,
-  Calendar,
-  Sparkles,
+  TrendingUp,
+  Landmark,
+  BarChart3,
+  BookOpen,
   Printer,
-  Share2,
   AlertTriangle,
   Info,
   CheckCircle2,
-  BarChart3,
-  FileSpreadsheet,
-  Download,
-  Plus,
-  Trash2,
   Percent,
-  Landmark,
-  Heart,
-  Clock,
-  TrendingUp,
-  PieChart as PieIcon,
   Sliders,
-  Target,
-  Layers,
-  Building,
-  Table,
-  BookOpen,
+  DollarSign,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,8 +30,6 @@ import {
   PieChart,
   Pie,
   Cell,
-  LineChart,
-  Line,
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
@@ -54,6 +38,7 @@ import {
   calculateSimpleStudentLoan,
   calculateStudentLoanRepayment,
   calculateStudentLoanProjection,
+  calculateStudentLoanRefinance,
 } from "@/lib/calculator-engine/formulas/student-loan";
 
 export function StudentLoanCalculator() {
@@ -84,9 +69,12 @@ export function StudentLoanCalculator() {
   const [projRateInput, setProjRateInput] = useState<string>("6.8");
   const [payInSchool, setPayInSchool] = useState<boolean>(false);
 
-  // Modal & Notification State
+  // Tab 4 Inputs: Refinance Simulator Inputs
+  const [refiRateInput, setRefiRateInput] = useState<string>("4.5");
+  const [refiTermInput, setRefiTermInput] = useState<string>("10");
+
+  // Modal State
   const [isReportOpen, setIsReportOpen] = useState(false);
-  const [copyNotification, setCopyNotification] = useState(false);
 
   // Compute Section A Simple Solver
   const simpleResults = useMemo(() => {
@@ -130,6 +118,31 @@ export function StudentLoanCalculator() {
     payInSchool,
   ]);
 
+  // Compute Tab 4 True Refinance Results
+  const refiResults = useMemo(() => {
+    return calculateStudentLoanRefinance({
+      currentBalance: simpleResults.loanBalance || 30000,
+      currentRate: simpleResults.interestRate || 6.8,
+      remainingTermYears: simpleResults.remainingTermYears || 10,
+      refinanceRate: Number(refiRateInput) || 4.5,
+      refinanceTermYears: Number(refiTermInput) || 10,
+    });
+  }, [simpleResults.loanBalance, simpleResults.interestRate, simpleResults.remainingTermYears, refiRateInput, refiTermInput]);
+
+  // Compute Extended 25-Year Standard Plan using true amortization
+  const extendedPlanResults = useMemo(() => {
+    const p = simpleResults.loanBalance || 30000;
+    const r = (simpleResults.interestRate || 6.8) / 100 / 12;
+    const n = 25 * 12;
+    const pmt = (p * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1);
+    const totalPaid = pmt * n;
+    return {
+      monthlyPayment: pmt,
+      totalInterest: totalPaid - p,
+      totalPayments: totalPaid,
+    };
+  }, [simpleResults.loanBalance, simpleResults.interestRate]);
+
   const fmt = (val: number) =>
     `$${val.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
@@ -141,33 +154,10 @@ export function StudentLoanCalculator() {
     setSimplePmtInput("");
   };
 
-  // Copy Summary
-  const copySummary = () => {
-    const text = `Student Loan Summary:
-------------------------------------------------
-Loan Balance: ${fmt(simpleResults.loanBalance)}
-Interest Rate: ${simpleResults.interestRate}%
-Remaining Term: ${simpleResults.remainingTermYears} Years
-------------------------------------------------
-Monthly Repayment: ${fmt(simpleResults.monthlyPayment)}/month
-Total Interest Paid: ${fmt(simpleResults.totalInterestPaid)}
-Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
-
-    navigator.clipboard.writeText(text);
-    setCopyNotification(true);
-    setTimeout(() => setCopyNotification(false), 2500);
-  };
-
-  // Section A Donut Data (72% Principal, 28% Interest)
+  // Section A Donut Data
   const donutDataA = [
     { name: "Principal", value: simpleResults.loanBalance, color: "#3b82f6" },
     { name: "Total Interest", value: simpleResults.totalInterestPaid, color: "#10b981" },
-  ];
-
-  // Section C Donut Data (63% Principal, 37% Interest)
-  const donutDataC = [
-    { name: "Amount Borrowed", value: projResults.amountBorrowed, color: "#3b82f6" },
-    { name: "Total Interest", value: projResults.totalInterestPaid, color: "#10b981" },
   ];
 
   // Report Modal Data
@@ -227,7 +217,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
             onClick={() => applyPresetA(30000, 10, 6.8)}
             className="h-6 text-[10px] px-2 cursor-pointer"
           >
-            Calculator.net Baseline ($30k @ 6.8% 10Y)
+            Standard Undergraduate Baseline ($30k @ 6.8% 10Y)
           </Button>
           <Button
             type="button"
@@ -307,18 +297,30 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
         </button>
       </div>
 
-      {/* TAB 1: SIMPLE 4-WAY SOLVER (Calculator.net Section A) */}
+      {/* TAB 1: SIMPLE 4-WAY SOLVER */}
       {activeTab === "simple" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Inputs (6 Cols) */}
+          {/* Inputs */}
           <div className="lg:col-span-6 space-y-5">
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
               <div className="border-b border-zinc-100 dark:border-zinc-800 pb-2">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                   Simple Student Loan 4-Way Solver
                 </h3>
-                <span className="text-[10px] text-zinc-400">Provide any THREE values to calculate the 4th field:</span>
+                <span className="text-[10px] text-zinc-400">
+                  Provide any THREE values to automatically calculate the 4th field:
+                </span>
               </div>
+
+              {!simpleResults.isAmortizing && (
+                <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-lg text-rose-800 dark:text-rose-200 text-xs flex items-start gap-2">
+                  <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-rose-600" />
+                  <div>
+                    <span className="font-bold block">Non-Amortizing Payment Detected</span>
+                    {simpleResults.errorMessage || "The monthly payment is insufficient to pay down principal."}
+                  </div>
+                </div>
+              )}
 
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div className="space-y-1">
@@ -327,7 +329,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
                     type="number"
                     value={simpleBalInput}
                     onChange={(e) => setSimpleBalInput(e.target.value)}
-                    placeholder="e.g. 30000"
+                    placeholder={simpleBalInput === "" ? `Auto: $${simpleResults.loanBalance}` : "e.g. 30000"}
                     className="text-xs font-sans tabular-nums h-9 px-3"
                   />
                 </div>
@@ -337,7 +339,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
                     type="number"
                     value={simpleTermInput}
                     onChange={(e) => setSimpleTermInput(e.target.value)}
-                    placeholder="e.g. 10"
+                    placeholder={simpleTermInput === "" ? `Auto: ${simpleResults.remainingTermYears} Yrs` : "e.g. 10"}
                     className="text-xs font-sans tabular-nums h-9 px-3"
                   />
                 </div>
@@ -350,7 +352,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
                     type="number"
                     value={simpleRateInput}
                     onChange={(e) => setSimpleRateInput(e.target.value)}
-                    placeholder="e.g. 6.8"
+                    placeholder={simpleRateInput === "" ? `Auto: ${simpleResults.interestRate}%` : "e.g. 6.8"}
                     className="text-xs font-sans tabular-nums h-9 px-3"
                   />
                 </div>
@@ -360,36 +362,46 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
                     type="number"
                     value={simplePmtInput}
                     onChange={(e) => setSimplePmtInput(e.target.value)}
-                    placeholder="Auto calculated"
+                    placeholder={simplePmtInput === "" ? `Auto: $${simpleResults.monthlyPayment}` : "e.g. 345.24"}
                     className="text-xs font-sans tabular-nums h-9 px-3"
                   />
                 </div>
               </div>
+
+              <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 flex justify-between text-[11px] text-zinc-500">
+                <span>Solved Variable:</span>
+                <span className="font-semibold text-emerald-600 dark:text-emerald-400">
+                  {simplePmtInput === ""
+                    ? `Payment (${fmt(simpleResults.monthlyPayment)}/mo)`
+                    : simpleRateInput === ""
+                    ? `Interest Rate (${simpleResults.interestRate}%)`
+                    : simpleTermInput === ""
+                    ? `Term (${simpleResults.remainingTermYears} Years)`
+                    : `Principal (${fmt(simpleResults.loanBalance)})`}
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Results Panel (6 Cols) */}
+          {/* Results Panel */}
           <div className="lg:col-span-6 space-y-4">
             <div className="rounded-2xl p-6 shadow-md text-white relative overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs uppercase tracking-wider font-bold text-white/80">
                   REPAYMENT
                 </span>
-                <div className="flex gap-2">
-                  
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={() => setIsReportOpen(true)}
-                    className="h-7 text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold cursor-pointer"
-                  >
-                    <Printer className="h-3 w-3 mr-1" /> PDF Report
-                  </Button>
-                </div>
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => setIsReportOpen(true)}
+                  className="h-7 text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold cursor-pointer"
+                >
+                  <Printer className="h-3 w-3 mr-1" /> PDF Report
+                </Button>
               </div>
 
               <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-sans tabular-nums mb-2">
-                {fmt(simpleResults.monthlyPayment)}/month
+                {simpleResults.isAmortizing ? `${fmt(simpleResults.monthlyPayment)}/month` : "Non-Amortizing"}
               </div>
 
               <div className="grid grid-cols-2 gap-2 text-xs text-white/90 font-medium pt-2 border-t border-white/10">
@@ -402,7 +414,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
               </div>
             </div>
 
-            {/* Donut Chart (72% Principal, 28% Interest match) */}
+            {/* Donut Chart */}
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
               <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
                 Principal vs. Interest Breakdown
@@ -425,7 +437,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
         </div>
       )}
 
-      {/* TAB 2: REPAYMENT EXTRA PAYMENTS (Calculator.net Section B) */}
+      {/* TAB 2: REPAYMENT EXTRA PAYMENTS */}
       {activeTab === "repayment" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           <div className="lg:col-span-6 space-y-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
@@ -472,7 +484,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
           <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-purple-900 dark:text-purple-200 text-sm block border-b pb-1">
-                Payoff Comparison (6 yrs 2 mos Match!)
+                Accelerated Payoff Comparison
               </span>
 
               <div className="bg-white/80 dark:bg-zinc-900/80 p-3 rounded-lg border font-sans text-xs text-purple-900 dark:text-purple-200">
@@ -503,12 +515,12 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
         </div>
       )}
 
-      {/* TAB 3: PROJECTION CALCULATOR (Calculator.net Section C) */}
+      {/* TAB 3: PROJECTION CALCULATOR */}
       {activeTab === "projection" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           <div className="lg:col-span-6 space-y-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
             <h3 className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 border-b border-zinc-100 dark:border-zinc-800 pb-2">
-              In-School Projection Calculator
+              In-School Projection Calculator (FSA Periodic Accrual Model)
             </h3>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
@@ -555,7 +567,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
           <div className="lg:col-span-6 space-y-4 font-sans tabular-nums text-xs">
             <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 p-5 rounded-xl space-y-3">
               <span className="font-sans font-bold text-amber-900 dark:text-amber-200 text-sm block border-b pb-1">
-                Projection Results ($45,790.44 Match!)
+                Projection Results (Graduation &amp; Repayment)
               </span>
               <div className="flex justify-between text-base border-b pb-1 font-extrabold text-amber-600 font-sans">
                 <span>Repayment:</span>
@@ -582,27 +594,75 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
         </div>
       )}
 
-      {/* TAB 4: FEDERAL PLANS & REFINANCE */}
+      {/* TAB 4: FEDERAL PLANS & REFINANCE SIMULATOR */}
       {activeTab === "plans" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Federal Repayment Options &amp; Refinance Simulator
-          </h3>
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-100 dark:border-zinc-800 pb-3">
+            <div>
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                Federal Repayment Options &amp; Private Refinance Engine
+              </h3>
+              <p className="text-xs text-zinc-500 mt-0.5">
+                Compare standard federal repayment schedules against customized private refinancing scenarios using exact amortization mathematics.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 text-xs">
+              <span className="text-zinc-500">Refi APR:</span>
+              <Input
+                type="number"
+                value={refiRateInput}
+                onChange={(e) => setRefiRateInput(e.target.value)}
+                className="h-8 w-20 text-xs font-sans tabular-nums"
+              />
+              <span className="text-zinc-500">Refi Term:</span>
+              <Input
+                type="number"
+                value={refiTermInput}
+                onChange={(e) => setRefiTermInput(e.target.value)}
+                className="h-8 w-16 text-xs font-sans tabular-nums"
+              />
+              <span className="text-zinc-500">Yrs</span>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-sans tabular-nums">
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border space-y-1">
-              <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Standard (10 Yrs)</span>
-              <div>Monthly: {fmt(simpleResults.monthlyPayment)}</div>
-              <div>Total Interest: {fmt(simpleResults.totalInterestPaid)}</div>
+            {/* Standard Federal Plan (10Y) */}
+            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-2">
+              <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block text-sm border-b pb-1">
+                Standard Federal (10 Yrs)
+              </span>
+              <div>Monthly: <span className="font-bold text-zinc-800 dark:text-zinc-200">{fmt(simpleResults.monthlyPayment)}</span></div>
+              <div>Total Interest: <span className="font-bold text-zinc-800 dark:text-zinc-200">{fmt(simpleResults.totalInterestPaid)}</span></div>
+              <div>Total Repayment: {fmt(simpleResults.totalPayments)}</div>
+              <div className="text-[10px] text-zinc-500 pt-1 border-t">Standard fixed 120-month federal repayment.</div>
             </div>
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border space-y-1">
-              <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Extended (25 Yrs)</span>
-              <div>Monthly: {fmt(simpleResults.monthlyPayment * 0.58)}</div>
-              <div>Total Interest: {fmt(simpleResults.totalInterestPaid * 2.4)}</div>
+
+            {/* Extended Federal Plan (25Y) */}
+            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-2">
+              <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block text-sm border-b pb-1">
+                Extended Federal (25 Yrs)
+              </span>
+              <div>Monthly: <span className="font-bold text-zinc-800 dark:text-zinc-200">{fmt(extendedPlanResults.monthlyPayment)}</span></div>
+              <div>Total Interest: <span className="font-bold text-rose-600">{fmt(extendedPlanResults.totalInterest)}</span></div>
+              <div>Total Repayment: {fmt(extendedPlanResults.totalPayments)}</div>
+              <div className="text-[10px] text-zinc-500 pt-1 border-t">Lowers monthly payment but significantly increases total lifetime interest.</div>
             </div>
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border space-y-1">
-              <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Private Refinance (4.5% APR)</span>
-              <div>Monthly: {fmt(simpleResults.monthlyPayment * 0.89)}</div>
-              <div>Savings: {fmt(simpleResults.totalInterestPaid * 0.35)}</div>
+
+            {/* Private Refinance */}
+            <div className="bg-emerald-50/60 dark:bg-emerald-950/30 p-4 rounded-xl border border-emerald-200 dark:border-emerald-800 space-y-2">
+              <span className="font-sans font-bold text-emerald-900 dark:text-emerald-200 block text-sm border-b border-emerald-200 pb-1">
+                Private Refinance ({refiRateInput}% APR, {refiTermInput}Y)
+              </span>
+              <div>Monthly: <span className="font-bold text-emerald-700 dark:text-emerald-300">{fmt(refiResults.refinanceMonthlyPayment)}</span></div>
+              <div>Total Interest: <span className="font-bold text-emerald-700 dark:text-emerald-300">{fmt(refiResults.refinanceTotalInterest)}</span></div>
+              <div className="pt-1 border-t border-emerald-200 dark:border-emerald-800 space-y-1">
+                <div className="text-emerald-800 dark:text-emerald-200 font-bold">
+                  Interest Savings: {fmt(refiResults.interestSavings)}
+                </div>
+                <div className="text-[11px] text-emerald-700 dark:text-emerald-300">
+                  Monthly Savings: {fmt(refiResults.monthlySavings)}/mo
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -611,20 +671,23 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
       {/* TAB 5: VISUAL DASHBOARDS */}
       {activeTab === "charts" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Student Loan Principal vs. Total Cost Comparison
+          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+            Student Loan Principal vs. Total Repayment Breakdown
           </h3>
 
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={[
-                { name: "Loan Principal", amount: simpleResults.loanBalance, fill: "#3b82f6" },
-                { name: "Total Repayment", amount: simpleResults.totalPayments, fill: "#6366f1" },
-                { name: "Total Interest", amount: simpleResults.totalInterestPaid, fill: "#10b981" },
-              ]}>
+              <BarChart
+                data={[
+                  { name: "Loan Principal", amount: simpleResults.loanBalance, fill: "#3b82f6" },
+                  { name: "Total Repayment", amount: simpleResults.totalPayments, fill: "#6366f1" },
+                  { name: "Total Interest", amount: simpleResults.totalInterestPaid, fill: "#10b981" },
+                ]}
+              >
                 <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
                 <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-                <YAxis tick={{ fontSize: 11 }} tickFormatter={(v: number) => `$${v}`} />
-                <Tooltip formatter={(v: any) => [`$${Number(v).toLocaleString()}`, ""]} />
+                <YAxis tick={{ fontSize: 11 }} tickFormatter={(v: number) => `$${v.toLocaleString()}`} />
+                <Tooltip formatter={(v: any) => [`$${Number(v).toLocaleString()}`, "Amount"]} />
                 <Bar dataKey="amount" />
               </BarChart>
             </ResponsiveContainer>
@@ -635,7 +698,7 @@ Total Repayment Cost: ${fmt(simpleResults.totalPayments)}`;
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
-      {/* Educational Content & 15 FAQs */}
+      {/* Educational Content & 20 Authoritative FAQs */}
       <StudentLoanContent />
     </div>
   );
