@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Budget Calculator – Free 50/30/20 & Expense Breakdown Suite",
+    title: "Budget Calculator – Monthly Expenses, 50/30/20 & DTI",
     description:
-      "Free advanced Budget Calculator. Calculate gross & after-tax income, itemized housing/living expenses, Debt-to-Income (DTI) ratio, 50/30/20 rule breakdown, inflation sensitivity, and generate printable PDF financial reports.",
+      "Calculate after-tax income, monthly expenses, cash flow, debt-to-income ratios, 50/30/20 allocations, and budget stress scenarios.",
     slug: BUDGET_CALCULATOR.slug,
   });
 }
@@ -16,7 +16,7 @@ export default function BudgetCalculatorPage() {
   const { calculate, ...serializableDef } = BUDGET_CALCULATOR;
 
   const schemas = generateJsonLdSchema({
-    title: BUDGET_CALCULATOR.title,
+    title: "Budget Calculator – Monthly Expenses, 50/30/20 & DTI",
     description: BUDGET_CALCULATOR.description,
     slug: BUDGET_CALCULATOR.slug,
     category: BUDGET_CALCULATOR.category,

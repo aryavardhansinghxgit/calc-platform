@@ -281,7 +281,7 @@ export function BudgetCalculator() {
 
   // Copy Summary Handler
   const handleCopySummary = () => {
-    const summaryText = `BUDGET SUMMARY (Calculator.net Superior Suite)
+    const summaryText = `BUDGET SUMMARY (Budget & Cash Flow Suite)
 -----------------------------------------------
 Gross Income: $${results.grossMonthlyIncome.toFixed(2)}/mo ($${results.grossAnnualIncome.toLocaleString()}/yr)
 After-Tax Take Home: $${results.afterTaxMonthlyIncome.toFixed(2)}/mo
@@ -470,9 +470,6 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
           <div className="flex items-center gap-2">
             <PieIcon className="h-5 w-5 text-blue-400" />
             <h2 className="text-base font-bold tracking-tight">Budget & Cash Flow Suite</h2>
-            <Badge variant="secondary" className="bg-blue-500/20 text-blue-300 text-[10px]">
-              Calculator.net Superior
-            </Badge>
           </div>
           <p className="text-xs text-slate-400 mt-0.5">
             Real-time income, expense, 50/30/20 & DTI analytics engine
@@ -907,7 +904,7 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
                 <div className="flex items-center justify-between text-xs font-bold text-zinc-800 dark:text-zinc-200">
                   <span>Debt-to-Income (DTI) Ratios</span>
                   <Badge variant="outline" className="text-[10px]">
-                    Rating: {results.dtiRating}
+                    Budget DTI indicator: {results.dtiRating}
                   </Badge>
                 </div>
                 <div className="grid grid-cols-2 gap-3 text-xs">
@@ -926,6 +923,9 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
                     <span className="text-[10px] text-zinc-400 block mt-0.5">Housing / Gross</span>
                   </div>
                 </div>
+                <p className="text-[10px] text-zinc-400 leading-tight">
+                  Actual lender underwriting standards vary by loan program, lender, borrower, and circumstances.
+                </p>
               </div>
 
               {/* 50/30/20 Rule Benchmark Progress */}
@@ -1106,10 +1106,10 @@ Savings Rate: ${results.savingsRate.toFixed(2)}%
           {activeTab === "stresstest" && (
             <div className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-4 text-xs">
               <div>
-                <h3 className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">What-If Sensitivity Stress Test
+                <h3 className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Illustrative Sensitivity Stress Test
                 </h3>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5">
-                  Test how income drops or unexpected expense inflation affect your net monthly surplus.
+                  Simulate how hypothetical income reductions or unexpected expense inflation affect your net monthly surplus.
                 </p>
               </div>
 
