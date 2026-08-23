@@ -4,18 +4,48 @@ import { CalculatorLayout } from "@/components/calculator/CalculatorLayout";
 import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-helpers";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return generateCalculatorMetadata({
-    title: "House Affordability Calculator – How Much House Can I Afford?",
-    description: "Calculate maximum home price and loan limits based on household income, DTI ratios (Conventional 28/36, FHA 31/43, VA 41%), property taxes, and monthly budget.",
+  const baseMeta = generateCalculatorMetadata({
+    title: "House Affordability Calculator - How Much House Can I Afford?",
+    description:
+      "Estimate how much house you can afford using income, monthly debts, down payment, mortgage rate, housing costs, DTI, or a fixed monthly budget.",
     slug: HOUSE_AFFORDABILITY_CALCULATOR.slug,
   });
+
+  return {
+    ...baseMeta,
+    keywords: [
+      "house affordability calculator",
+      "how much house can I afford",
+      "home affordability calculator",
+      "house affordability calculator by income",
+      "house affordability calculator by monthly payment",
+      "mortgage affordability calculator",
+      "how much mortgage can I afford",
+      "home price affordability calculator",
+      "DTI home affordability calculator",
+      "affordable home price calculator",
+      "home buying budget calculator",
+    ],
+    openGraph: {
+      ...baseMeta.openGraph,
+      title: "House Affordability Calculator - How Much House Can I Afford?",
+      description:
+        "Estimate how much house you can afford using income, monthly debts, down payment, mortgage rate, housing costs, DTI, or a fixed monthly budget.",
+    },
+    twitter: {
+      ...baseMeta.twitter,
+      title: "House Affordability Calculator - How Much House Can I Afford?",
+      description:
+        "Estimate how much house you can afford using income, monthly debts, down payment, mortgage rate, housing costs, DTI, or a fixed monthly budget.",
+    },
+  };
 }
 
 export default function HouseAffordabilityCalculatorPage() {
   const { calculate, ...serializableDef } = HOUSE_AFFORDABILITY_CALCULATOR;
 
   const schemas = generateJsonLdSchema({
-    title: HOUSE_AFFORDABILITY_CALCULATOR.title,
+    title: "House Affordability Calculator - How Much House Can I Afford?",
     description: HOUSE_AFFORDABILITY_CALCULATOR.description,
     slug: HOUSE_AFFORDABILITY_CALCULATOR.slug,
     category: HOUSE_AFFORDABILITY_CALCULATOR.category,

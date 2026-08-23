@@ -1,349 +1,306 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   BookOpen,
   HelpCircle,
-  Calculator,
-  TrendingDown,
-  Percent,
-  CheckCircle2,
-  DollarSign,
-  AlertTriangle,
-  Building,
-  ArrowRight,
   ShieldCheck,
-  Zap,
+  ChevronDown,
 } from "lucide-react";
+import { HOUSE_AFFORDABILITY_CALCULATOR } from "@/calculators/finance/house-affordability";
 
 export function HouseAffordabilityContentSection() {
-  const faqList = [
-    {
-      question: "How much house can I afford on my annual household income?",
-      answer: "Lenders generally recommend that your total monthly housing costs (principal, interest, property taxes, insurance, HOA fees) do not exceed 28% of your gross monthly income, and total monthly debts do not exceed 36%."
-    },
-    {
-      question: "What is the 28/36 Debt-to-Income (DTI) rule?",
-      answer: "The 28/36 rule is the standard qualification benchmark used by conventional mortgage lenders. It mandates that a homebuyer spend a maximum of 28% of gross monthly income on housing costs (Front-End Ratio) and a maximum of 36% on total recurring debt obligations (Back-End Ratio)."
-    },
-    {
-      question: "What is the difference between Front-End and Back-End DTI ratio?",
-      answer: "The Front-End Ratio measures housing expenses alone (mortgage P&I, property tax, home insurance, HOA) against gross monthly income. The Back-End Ratio measures housing expenses plus all other recurring debts (auto loans, student loans, credit card minimums) against gross income."
-    },
-    {
-      question: "How do FHA loan DTI rules differ from Conventional loans?",
-      answer: "FHA loans permit higher debt-to-income limits under the 31/43 rule (31% Front-End housing limit and 43% Back-End total debt limit), making homeownership accessible for buyers with higher existing debt or lower credit scores."
-    },
-    {
-      question: "What are VA loan DTI rules for eligible veterans?",
-      answer: "VA loans do not enforce a rigid Front-End ratio limit, but instead utilize a 41% Back-End DTI benchmark. Additionally, VA lenders evaluate residual income (cash remaining after all monthly expenses) to ensure financial stability."
-    },
-    {
-      question: "How does my down payment impact house affordability?",
-      answer: "A larger down payment increases your home purchasing power dollar-for-dollar. Reaching a 20% down payment eliminates mandatory Private Mortgage Insurance (PMI), saving $100 to $300+ per month and increasing your maximum affordable price."
-    },
-    {
-      question: "What risk levels are associated with custom DTI ratios?",
-      answer: "A 20% DTI is Conservative (leaves ample cash flow for savings). A 30% DTI is Moderate (standard for most households). A 40% DTI is Aggressive (stretches monthly budgets). A 50% DTI is High Risk (creates vulnerability to unexpected financial emergencies)."
-    },
-    {
-      question: "Why might a lender approve a lower loan amount than I expected?",
-      answer: "Lenders reduce maximum loan approvals if you carry high existing monthly debt payments (credit cards, car payments), if local property tax or HOA fees are unusually high, or if your credit score falls into subprime tiers."
-    },
-    {
-      question: "How can I increase the home purchase price I can afford?",
-      answer: "You can boost affordability by: 1) Paying off existing credit cards or car loans to lower your Back-End DTI, 2) Saving a larger down payment, 3) Improving your credit score to secure a lower interest rate, or 4) Shopping in areas with lower property taxes."
-    },
-    {
-      question: "Does property tax and HOA fees affect my mortgage borrowing limit?",
-      answer: "Yes! Every dollar allocated toward property tax, home insurance, or monthly HOA fees reduces the dollar amount available for principal and interest mortgage payments under your Front-End/Back-End DTI ceiling."
-    },
-    {
-      question: "What hidden costs should I budget for when buying a home?",
-      answer: "In addition to your monthly mortgage, home buyers should budget 1% to 2% of the home price annually for ongoing home maintenance, plus closing costs (2% to 5% of loan amount) paid at purchase."
-    },
-    {
-      question: "Should I buy a home at the maximum price I am approved for?",
-      answer: "Financial experts advise against buying at your maximum loan approval limit. Spending 20% to 25% of gross income on housing provides a comfortable buffer for investments, emergency savings, and lifestyle choices."
-    }
-  ];
+  // All 12 FAQs open by default
+  const [openFaqIndices, setOpenFaqIndices] = useState<Set<number>>(
+    new Set(Array.from({ length: 12 }, (_, i) => i))
+  );
 
-  // 1. FAQ Schema
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqList.map((item) => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndices((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
       }
-    }))
+      return next;
+    });
   };
 
-  // 2. Breadcrumb Schema
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://calcplatform.com/"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "Finance",
-        "item": "https://calcplatform.com/category/finance"
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": "House Affordability Calculator",
-        "item": "https://calcplatform.com/calculators/house-affordability-calculator"
-      }
-    ]
-  };
-
-  // 3. FinancialService Schema
-  const financialServiceSchema = {
-    "@context": "https://schema.org",
-    "@type": "FinancialService",
-    "name": "CalcPlatform House Affordability Advisory",
-    "description": "Professional house affordability analysis evaluating income, DTI ratios, property taxes, HOA fees, and monthly budgets."
-  };
-
-  // 4. WebApplication Schema
-  const webAppSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "CalcPlatform House Affordability Calculator",
-    "operatingSystem": "All",
-    "applicationCategory": "FinanceApplication",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
-  };
+  const faqs = HOUSE_AFFORDABILITY_CALCULATOR.faqs || [];
 
   return (
-    <div className="space-y-10 py-4 text-zinc-700 dark:text-zinc-300">
-      {/* Inject Structured Data Schemas */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(financialServiceSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }} />
-
-      {/* Related Financial Tools Header */}
-      <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 space-y-2">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">Related Home Buying Tools
-        </h4>
+    <div className="space-y-8 py-2 text-zinc-700 dark:text-zinc-300">
+      {/* 1. SINGLE CANONICAL RELATED CALCULATORS BLOCK (Exactly 7 Verified Live Routes) */}
+      <section className="space-y-3 pt-2">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+          Related Home Buying &amp; Mortgage Calculators
+        </h2>
         <div className="flex flex-wrap gap-2 text-xs">
           <Link
             href="/calculators/mortgage-calculator"
-            className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-medium transition-colors"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
           >
             Mortgage Calculator
           </Link>
           <Link
-            href="/calculators/mortgage-payoff-calculator"
-            className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-medium transition-colors"
-          >
-            Mortgage Payoff Calculator
-          </Link>
-          <Link
             href="/calculators/refinance-calculator"
-            className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-medium transition-colors"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
           >
-            Refinancing Calculator
-          </Link>
-          <Link
-            href="/calculators/amortization-calculator"
-            className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-medium transition-colors"
-          >
-            Amortization Calculator
-          </Link>
-          <Link
-            href="/calculators/rent-vs-buy-calculator"
-            className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-medium transition-colors"
-          >
-            Rent vs Buy Calculator
+            Refinance Calculator
           </Link>
           <Link
             href="/calculators/down-payment-calculator"
-            className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-medium transition-colors"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
           >
             Down Payment Calculator
           </Link>
           <Link
-            href="/calculators/debt-to-income-calculator"
-            className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-medium transition-colors"
+            href="/calculators/rent-vs-buy-calculator"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
           >
-            Debt-To-Income Calculator
-          </Link>
-        </div>
-      </div>
-
-      {/* 1. What Is House Affordability */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">1. What Is House Affordability?
-        </h2>
-        <p className="text-sm leading-relaxed">
-          <strong>House Affordability</strong> is an evaluation of the maximum home purchase price and loan amount you can comfortably take on without straining your household finances or risking mortgage default. Lenders determine home affordability by measuring your gross household income against recurring debt obligations using <strong>Debt-to-Income (DTI) ratios</strong>.
-        </p>
-      </section>
-
-      {/* 2. Front-End Ratio Explained */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">2. Front-End Ratio (Housing Ratio) Explained
-        </h2>
-        <p className="text-sm leading-relaxed">
-          The <strong>Front-End Ratio</strong> calculates the percentage of your gross monthly income that goes toward housing expenses alone (including mortgage principal & interest, property taxes, home insurance, and HOA fees).
-        </p>
-        <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 font-sans tabular-nums text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
-          Front-End Ratio = ( Monthly Housing Costs / Monthly Gross Income ) × 100
-        </div>
-      </section>
-
-      {/* 3. Back-End Ratio Explained */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Back-End Ratio (Total Debt Ratio) Explained
-        </h2>
-        <p className="text-sm leading-relaxed">
-          The <strong>Back-End Ratio</strong> calculates the percentage of your gross monthly income required to cover housing expenses plus all other recurring debt payments (car loans, student loans, minimum credit card payments).
-        </p>
-        <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 font-sans tabular-nums text-xs sm:text-sm text-center border border-zinc-800 shadow-md">
-          Back-End Ratio = [ ( Housing Costs + Other Monthly Debts ) / Monthly Gross Income ] × 100
-        </div>
-      </section>
-
-      {/* 4. Conventional Loans and the 28/36 Rule */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">4. Conventional Loans and the 28/36 Rule
-        </h2>
-        <p className="text-sm leading-relaxed">
-          Conventional mortgage underwriters strictly enforce the <strong>28/36 Rule</strong>:
-        </p>
-        <ul className="list-disc list-inside space-y-2 text-sm pl-2">
-          <li>
-            <strong>28% Housing Limit:</strong> Total monthly housing costs should not exceed 28% of gross monthly income.
-          </li>
-          <li>
-            <strong>36% Total Debt Limit:</strong> Total monthly debt payments (housing + debt) should not exceed 36% of gross monthly income.
-          </li>
-        </ul>
-      </section>
-
-      {/* 5. FHA Loans */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">5. FHA Loans and the 31/43 Rule
-        </h2>
-        <p className="text-sm leading-relaxed">
-          Government-backed <strong>FHA loans</strong> offer more lenient debt-to-income limits under the <strong>31/43 Rule</strong> (31% Front-End housing limit and 43% Back-End total debt limit). FHA loans require an upfront Mortgage Insurance Premium (MIP) and annual MIP fees.
-        </p>
-      </section>
-
-      {/* 6. VA Loans */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">6. VA Loans and the 41% Back-End Rule
-        </h2>
-        <p className="text-sm leading-relaxed">
-          Eligible military veterans and active-duty service members can qualify for zero-down-payment <strong>VA loans</strong>. VA guidelines utilize a <strong>41% Back-End DTI benchmark</strong> without enforcing a rigid Front-End ratio cap.
-        </p>
-      </section>
-
-      {/* 7. Custom Debt-To-Income Ratios */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">7. Custom DTI Risk Levels Explained
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-          <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <strong className="text-blue-600 dark:text-blue-400">20% DTI — Conservative</strong>
-            <p className="text-slate-900 dark:text-slate-100">Leaves significant leftover income for aggressive retirement savings and investments.</p>
-          </div>
-          <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <strong className="text-blue-600 dark:text-blue-400">30% DTI — Moderate</strong>
-            <p className="text-slate-900 dark:text-slate-100">Standard balanced allocation for average household budgets.</p>
-          </div>
-          <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <strong className="text-blue-600 dark:text-blue-400">40% DTI — Aggressive</strong>
-            <p className="text-slate-900 dark:text-slate-100">Stretches monthly budgets; requires strict discipline on discretionary spending.</p>
-          </div>
-          <div className="p-3 bg-zinc-50 dark:bg-zinc-800/80 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-1">
-            <strong className="text-blue-600 dark:text-blue-400">50% DTI — High Risk</strong>
-            <p className="text-slate-900 dark:text-slate-100">Creates vulnerability to unexpected job loss or medical emergencies.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* 8. Why You May Not Afford a House */}
-      <section className="space-y-3">
-        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">8. Why You May Not Afford a House & How to Improve
-        </h2>
-        <ul className="list-disc list-inside space-y-2 text-sm pl-2">
-          <li><strong>Reduce Existing Monthly Debt:</strong> Pay off car loans or credit cards to lower your Back-End DTI.</li>
-          <li><strong>Improve Credit Score:</strong> Higher credit scores lower your mortgage interest rate, decreasing monthly payments.</li>
-          <li><strong>Increase Down Payment:</strong> Saving a larger down payment reduces your loan principal and eliminates PMI.</li>
-          <li><strong>Increase Household Income:</strong> Adding secondary income sources expands your allowable housing budget.</li>
-        </ul>
-      </section>
-
-      {/* 9. FAQs Section (12 Questions) */}
-      <section className="space-y-4">
-        <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">9. Frequently Asked Questions (FAQ)
-        </h2>
-
-        <div className="space-y-3 text-xs">
-          {faqList.map((item, idx) => (
-            <div
-              key={`faq-house-${idx}`}
-              className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 space-y-1"
-            >
-              <h3 className="font-bold text-sm text-blue-600 dark:text-blue-400">
-                {idx + 1}. {item.question}
-              </h3>
-              <p className="text-slate-900 dark:text-slate-100 leading-relaxed">
-                {item.answer}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Internal Links Grid */}
-      <div className="pt-6  dark:border-zinc-800 space-y-3">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
-          Explore Related Financial Calculators on CalcPlatform
-        </h4>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-          <Link
-            href="/calculators/mortgage-calculator"
-            className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:border-blue-500 font-semibold text-zinc-900 dark:text-zinc-100 flex items-center justify-between group transition-colors"
-          >
-            <span>Mortgage Calculator</span>
-            <ArrowRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-blue-500" />
+            Rent vs Buy Calculator
           </Link>
           <Link
-            href="/calculators/loan-calculator"
-            className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:border-blue-500 font-semibold text-zinc-900 dark:text-zinc-100 flex items-center justify-between group transition-colors"
+            href="/calculators/dti-calculator"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
           >
-            <span>Loan Calculator</span>
-            <ArrowRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-blue-500" />
+            DTI Calculator
           </Link>
           <Link
             href="/calculators/amortization-calculator"
-            className="p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:border-blue-500 font-semibold text-zinc-900 dark:text-zinc-100 flex items-center justify-between group transition-colors"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
           >
-            <span>Amortization Calculator</span>
-            <ArrowRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-blue-500" />
+            Amortization Calculator
+          </Link>
+          <Link
+            href="/calculators/fha-loan-calculator"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+          >
+            FHA Loan Calculator
           </Link>
         </div>
+      </section>
+
+      {/* 2. 12 MAIN EDUCATIONAL SECTIONS */}
+      <div className="space-y-6 text-xs sm:text-sm leading-relaxed text-slate-900 dark:text-slate-100">
+        {/* Section 1 */}
+        <section className="space-y-2">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            1. What Is House Affordability?
+          </h2>
+          <p>
+            House affordability is an estimate of the purchase price and mortgage amount supported by the income, debt, down-payment, interest-rate, term, and housing-cost assumptions entered into the calculator. A lender&apos;s qualification amount and a household&apos;s comfortable spending limit are not necessarily the same. The calculator focuses on the mathematical relationship between income, qualifying debt and recurring housing costs. It should therefore be used to compare scenarios rather than treated as an approval amount.
+          </p>
+        </section>
+
+        {/* Section 2 */}
+        <section className="space-y-2">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            2. How the Income-Based Affordability Mode Works
+          </h2>
+          <p>
+            The income-based mode converts annual household income into gross monthly income and applies the selected front-end and back-end DTI framework. The front-end ceiling is gross monthly income multiplied by the selected housing ratio. The back-end ceiling is gross monthly income multiplied by the selected total-debt ratio, less existing monthly debt. The engine uses the lower of those two housing ceilings, then solves backward for the mortgage principal and purchase price. In the validated baseline, $120,000 annual income gives $10,000 gross monthly income, a $2,800 front-end ceiling, and $3,100 of back-end housing capacity after $500 of existing debt, so the front-end ceiling controls the result.
+          </p>
+        </section>
+
+        {/* Section 3 */}
+        <section className="space-y-2">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            3. How the Monthly Mortgage Payment Is Calculated
+          </h2>
+          <p>
+            For a fixed-rate mortgage, the calculator uses standard amortization. With principal P, monthly rate r and n monthly payments, {"PMT = P × [r(1+r)^n / ((1+r)^n - 1)]"}. The engine keeps full numerical precision internally and rounds only for presentation. This means the displayed monthly payment may not reproduce the lifetime totals if a user multiplies the rounded display value manually. The validated baseline of $325,114.63 at 6.5% over 30 years produces a modeled principal-and-interest payment of about $2,054.95 per month. Explore detailed loan scenarios with our{" "}
+            <Link href="/calculators/mortgage-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              Mortgage Calculator
+            </Link>
+            .
+          </p>
+        </section>
+
+        {/* Section 4 */}
+        <section className="space-y-2">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            4. Front-End vs. Back-End DTI
+          </h2>
+          <p>
+            Front-end DTI measures qualifying housing expense relative to gross monthly income. Back-end DTI adds other qualifying debt payments to the housing expense before dividing by gross monthly income. The calculator uses the selected DTI framework as a planning model, not as a universal underwriting rule. Actual underwriting can consider credit history, reserves, loan-to-value, occupancy, automated underwriting results and other factors. Current Fannie Mae guidance illustrates that applicable DTI limits can vary by underwriting path and borrower circumstances.
+          </p>
+        </section>
+
+        {/* Section 5 */}
+        <section className="space-y-2">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            5. Conventional 28/36, FHA 31/43 and VA 41%
+          </h2>
+          <p>
+            The calculator can model commonly used DTI frameworks, but the percentages must not be interpreted as universal approval limits. A 28/36 framework can be used as a conservative planning benchmark. FHA&apos;s 31/43 ratios apply to specified manual-underwriting scenarios, while automated FHA underwriting can produce different outcomes. VA uses 41% as a DTI review threshold rather than a standalone approval cutoff, with residual income and other underwriting considerations also relevant.
+          </p>
+        </section>
+
+        {/* Section 6 */}
+        <section className="space-y-2">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            6. Property Taxes, Insurance, HOA Fees and Maintenance
+          </h2>
+          <p>
+            A purchase price that looks affordable from principal and interest alone can become less affordable once recurring ownership costs are included. The calculator can model property taxes, homeowners insurance, HOA fees and maintenance. In budget-based mode, these costs are included in the monthly affordability ceiling. The maintenance input is a planning assumption rather than an official lender requirement, and actual maintenance costs vary substantially by property age, condition, location, size and systems.
+          </p>
+        </section>
+
+        {/* Section 7 */}
+        <section className="space-y-2">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            7. How the Budget-Based Mode Works
+          </h2>
+          <p>
+            The budget-based mode starts with a target monthly housing budget and solves backward for the home price whose modeled principal and interest, property taxes, homeowners insurance, HOA fees and maintenance reserve fit inside that budget. For the validated example, a $3,500 monthly budget, 6.5% rate, 30-year term, 20% down, 1.2% property tax, 0.5% insurance, 0.5% HOA and 1% maintenance produce a $453,179.39 home price and a $3,500 total modeled monthly outflow. This mode can be useful when a household begins with a monthly comfort limit instead of a lender-style income ratio. Compare different loan amounts using our{" "}
+            <Link href="/calculators/mortgage-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              Mortgage Calculator
+            </Link>
+            .
+          </p>
+        </section>
+
+        {/* Section 8 */}
+        <section className="space-y-2">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            8. How Down Payment and Mortgage Insurance Affect Affordability
+          </h2>
+          <p>
+            A larger down payment reduces the amount financed for a given purchase price and can reduce the principal-and-interest payment. It can also change mortgage-insurance requirements and sometimes pricing, depending on the loan type and lender. A 20% down payment can avoid certain conventional PMI requirements, but mortgage-insurance rules differ across conventional, FHA and other programs. The calculator therefore treats down payment as a mathematical financing input rather than a guarantee of a particular insurance outcome. Plan your target down payment with our{" "}
+            <Link href="/calculators/down-payment-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              Down Payment Calculator
+            </Link>{" "}
+            or evaluate FHA mortgage options with our{" "}
+            <Link href="/calculators/fha-loan-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              FHA Loan Calculator
+            </Link>
+            .
+          </p>
+        </section>
+
+        {/* Section 9 */}
+        <section className="space-y-2">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            9. What Lenders Consider Beyond DTI
+          </h2>
+          <p>
+            DTI is only one component of mortgage underwriting. Lenders may verify income, employment, credit history, assets and reserves, evaluate loan-to-value and occupancy, and apply program-specific underwriting rules. Automated underwriting systems may also reach different conclusions than a simple ratio test. For that reason, an affordability result can differ from a lender&apos;s actual preapproval amount and should not be presented as a final borrowing limit. Model your overall debt obligations with our{" "}
+            <Link href="/calculators/dti-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              DTI Calculator
+            </Link>
+            .
+          </p>
+        </section>
+
+        {/* Section 10 */}
+        <section className="space-y-2">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            10. Closing Costs and Other Upfront Homebuying Costs
+          </h2>
+          <p>
+            The down payment is not the only cash required to buy a home. Closing costs can include lender fees, appraisal, title and recording charges, prepaid taxes and insurance, points, and other transaction expenses. The CFPB notes that closing costs vary by transaction and that a rough early planning estimate can be useful, but the final amount depends on the loan, lender, property, location and services selected. The calculator should therefore be used alongside an actual Loan Estimate when one is available. See how principal paydown progresses over time with our{" "}
+            <Link href="/calculators/amortization-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              Amortization Calculator
+            </Link>
+            .
+          </p>
+        </section>
+
+        {/* Section 11 */}
+        <section className="space-y-2">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            11. Why Your Affordable Price May Be Lower Than a Lender&apos;s Maximum
+          </h2>
+          <p>
+            A household may choose to spend less than the maximum supported by a lender or by this calculator. Savings goals, emergency reserves, childcare, transportation, repairs, utilities, travel and other personal priorities can make a lower housing budget more appropriate. The CFPB encourages consumers to compare the total cost of homeownership with the rest of their budget rather than focusing only on what a lender might approve. For existing homeowners evaluating refinancing options, try our{" "}
+            <Link href="/calculators/refinance-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              Refinance Calculator
+            </Link>
+            .
+          </p>
+        </section>
+
+        {/* Section 12 */}
+        <section className="space-y-2">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            12. Calculation Methodology and Disclaimer
+          </h2>
+          <p>
+            Income mode calculates an allowable housing ceiling from the selected DTI framework and existing debt, then solves backward through fixed-rate mortgage amortization and annualized housing-cost assumptions. Budget mode solves backward from a fixed monthly housing budget. Property taxes, insurance, HOA and maintenance are modeled as annual percentages of the home price and converted to monthly amounts when those inputs are enabled. Results are estimates based on user-entered assumptions. They are not lender preapproval, underwriting, legal or tax advice, and they do not guarantee that a household will find, qualify for, or comfortably sustain the resulting mortgage.
+          </p>
+        </section>
       </div>
+
+      {/* 3. FAQ SECTION (12 Approved FAQs, Open by Default) */}
+      <section className="space-y-4 pt-6 border-t border-zinc-100 dark:border-zinc-800">
+        <div className="flex items-center gap-2">
+          <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400">
+            Frequently Asked Questions
+          </h2>
+        </div>
+
+        <div className="space-y-3">
+          {faqs.map((faq, idx) => {
+            const isOpen = openFaqIndices.has(idx);
+            return (
+              <div
+                key={idx}
+                className="border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden bg-white dark:bg-zinc-900 shadow-xs"
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleFaq(idx)}
+                  className="w-full p-4 text-left text-xs sm:text-sm font-semibold text-zinc-900 dark:text-zinc-100 flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
+                >
+                  <span className="flex items-center gap-2 pr-4">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
+                      Q{idx + 1}.
+                    </span>
+                    {faq.question}
+                  </span>
+                  <ChevronDown
+                    className={`h-4 w-4 text-zinc-400 shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {isOpen && (
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 4. METHODOLOGY & FINANCIAL DISCLAIMER CARDS */}
+      <section className="space-y-4 pt-4">
+        <div className="p-4 bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-800 rounded-xl space-y-2 text-xs leading-relaxed text-slate-800 dark:text-slate-200">
+          <div className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5 text-xs uppercase tracking-wider">
+            <BookOpen className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+            Methodology
+          </div>
+          <p>
+            Income mode uses the selected DTI ceilings to establish a maximum monthly housing amount, then solves backward through fixed-rate amortization and recurring housing-cost assumptions. Budget mode solves backward from a fixed monthly housing budget. The engine uses full numerical precision internally and rounds displayed currency values for presentation.
+          </p>
+        </div>
+
+        <div className="p-4 bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 rounded-xl space-y-2 text-xs leading-relaxed text-amber-900 dark:text-amber-200">
+          <div className="font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1.5 text-xs uppercase tracking-wider">
+            <ShieldCheck className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+            Financial &amp; Underwriting Disclaimer
+          </div>
+          <p>
+            This calculator provides estimates from user-entered assumptions. It is not a lender preapproval system, underwriting engine, legal or tax service, or individualized financial advice. Actual mortgage eligibility, rates, DTI treatment, mortgage insurance, taxes, insurance, HOA fees, closing costs and maintenance expenses can differ.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }
