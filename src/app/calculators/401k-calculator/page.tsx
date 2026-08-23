@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "401(k) Calculator – Wealth & Retirement Suite",
+    title: "401(k) Calculator - Retirement Growth, Employer Match & Withdrawal",
     description:
-      "Free 401(k) Calculator. Calculate gross 401(k) retirement balance, purchasing power in today's dollars, employer match maximization, early withdrawal penalty costs, and 2025/2026 IRS contribution caps.",
+      "Estimate 401(k) growth with salary increases, employee contributions, employer matching, inflation-adjusted purchasing power and early-withdrawal scenarios.",
     slug: FOUR_ZERO_ONE_K_CALCULATOR.slug,
   });
 }

@@ -52,7 +52,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { FourZeroOneKContent } from "./FourZeroOneKContent";
 import {
   calculate401kGrowth,
   calculate401kEarlyWithdrawal,
@@ -663,9 +662,6 @@ Monthly Withdrawal Capacity: ${fmt(results.monthlyWithdrawalFixedPurchasingPower
 
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
-
-      {/* Educational Content & 20 FAQs */}
-      <FourZeroOneKContent />
     </div>
   );
 }

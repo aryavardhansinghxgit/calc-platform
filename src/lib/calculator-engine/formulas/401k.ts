@@ -1,7 +1,7 @@
 /**
  * Precision 401(k) Math Engine
  * Supports 4 Modes:
- * 1. 401(k) Growth & Purchasing Power Accumulation (with 2025/2026 IRS limits & catch-ups)
+ * 1. 401(k) Growth & Purchasing Power Accumulation (with 2026 IRS limits & catch-ups)
  * 2. Early Withdrawal Costs & IRS 10% Penalty Solver
  * 3. Employer Match Maximizer (Multi-tier match structures)
  * 4. Traditional 401(k) vs. Roth 401(k) Comparison
@@ -91,32 +91,32 @@ export interface FourZeroOneKResult {
 }
 
 /**
- * IRS 2025/2026 Contribution Caps
+ * IRS 2026 Contribution Caps
  */
-const IRS_BASE_LIMIT = 23500; // 2025 limit ($24,500 for 2026)
-const IRS_CATCHUP_LIMIT = 7500; // Age 50+ catch-up
+const IRS_BASE_LIMIT = 24500; // 2026 employee elective deferral limit ($24,500)
+const IRS_CATCHUP_LIMIT = 8000; // 2026 Age 50+ general catch-up ($8,000)
 
 /**
  * Mode 1: 401(k) Accumulation & Purchasing Power Growth
  */
 export function calculate401kGrowth(input: FourZeroOneKMode1Input): FourZeroOneKResult {
-  const currentAge = Math.max(18, Number(input.currentAge) || 30);
-  const retirementAge = Math.max(currentAge + 1, Number(input.retirementAge) || 65);
-  const lifeExpectancy = Math.max(retirementAge + 1, Number(input.lifeExpectancy) || 85);
+  const currentAge = input.currentAge !== undefined && input.currentAge !== null && !isNaN(Number(input.currentAge)) ? Math.max(18, Number(input.currentAge)) : 30;
+  const retirementAge = input.retirementAge !== undefined && input.retirementAge !== null && !isNaN(Number(input.retirementAge)) ? Math.max(currentAge + 1, Number(input.retirementAge)) : 65;
+  const lifeExpectancy = input.lifeExpectancy !== undefined && input.lifeExpectancy !== null && !isNaN(Number(input.lifeExpectancy)) ? Math.max(retirementAge + 1, Number(input.lifeExpectancy)) : 85;
 
   const yearsToRetirement = retirementAge - currentAge;
   const yearsInRetirement = lifeExpectancy - retirementAge;
 
-  const currentSalary = Math.max(0, Number(input.currentSalary) || 75000);
-  const currentBalance = Math.max(0, Number(input.currentBalance) || 35000);
+  const currentSalary = input.currentSalary !== undefined && input.currentSalary !== null && !isNaN(Number(input.currentSalary)) ? Math.max(0, Number(input.currentSalary)) : 75000;
+  const currentBalance = input.currentBalance !== undefined && input.currentBalance !== null && !isNaN(Number(input.currentBalance)) ? Math.max(0, Number(input.currentBalance)) : 35000;
 
-  const contribPct = Number(input.contributionPercent) / 100 || 0.10;
-  const matchPct = Number(input.employerMatchPercent) / 100 || 0.50;
-  const matchLimitPct = Number(input.employerMatchLimitPercent) / 100 || 0.06;
+  const contribPct = input.contributionPercent !== undefined && input.contributionPercent !== null && !isNaN(Number(input.contributionPercent)) ? Number(input.contributionPercent) / 100 : 0.10;
+  const matchPct = input.employerMatchPercent !== undefined && input.employerMatchPercent !== null && !isNaN(Number(input.employerMatchPercent)) ? Number(input.employerMatchPercent) / 100 : 0.50;
+  const matchLimitPct = input.employerMatchLimitPercent !== undefined && input.employerMatchLimitPercent !== null && !isNaN(Number(input.employerMatchLimitPercent)) ? Number(input.employerMatchLimitPercent) / 100 : 0.06;
 
-  const salaryIncrease = Number(input.salaryIncreaseRate) / 100 || 0.03;
-  const investmentReturn = Number(input.investmentReturn) / 100 || 0.06;
-  const inflationRate = Number(input.inflationRate) / 100 || 0.03;
+  const salaryIncrease = input.salaryIncreaseRate !== undefined && input.salaryIncreaseRate !== null && !isNaN(Number(input.salaryIncreaseRate)) ? Number(input.salaryIncreaseRate) / 100 : 0.03;
+  const investmentReturn = input.investmentReturn !== undefined && input.investmentReturn !== null && !isNaN(Number(input.investmentReturn)) ? Number(input.investmentReturn) / 100 : 0.06;
+  const inflationRate = input.inflationRate !== undefined && input.inflationRate !== null && !isNaN(Number(input.inflationRate)) ? Number(input.inflationRate) / 100 : 0.03;
 
   let currentBal = currentBalance;
   let runningSalary = currentSalary;
@@ -183,7 +183,7 @@ export function calculate401kGrowth(input: FourZeroOneKMode1Input): FourZeroOneK
 
   const monthlyWithdrawalNominal = (balanceAtRetirement * 0.04) / 12; // 4% Rule baseline
 
-  const rec = `EXCELLENT PROGRESS: At retirement age ${retirementAge}, your 401(k) is projected to reach $${balanceAtRetirement.toLocaleString("en-US", { maximumFractionDigits: 0 })} ($${purchasingPowerAtRetirement.toLocaleString("en-US", { maximumFractionDigits: 0 })} in today's dollars), providing a safe monthly withdrawal of $${monthlyWithdrawalFixedPurchasingPower.toFixed(2)}/mo in today's purchasing power.`;
+  const rec = `At retirement age ${retirementAge}, your 401(k) is projected to reach $${balanceAtRetirement.toLocaleString("en-US", { maximumFractionDigits: 0 })} ($${purchasingPowerAtRetirement.toLocaleString("en-US", { maximumFractionDigits: 0 })} in today's dollars), providing an illustrative monthly withdrawal capacity of $${monthlyWithdrawalFixedPurchasingPower.toFixed(2)}/mo in today's purchasing power.`;
 
   return {
     mode: 1,
@@ -207,10 +207,10 @@ export function calculate401kGrowth(input: FourZeroOneKMode1Input): FourZeroOneK
  * Mode 2: 401(k) Early Withdrawal Costs & Penalty Solver
  */
 export function calculate401kEarlyWithdrawal(input: FourZeroOneKEarlyWithdrawalInput): FourZeroOneKResult {
-  const amount = Math.max(0, Number(input.withdrawalAmount) || 10000);
-  const fedTax = Number(input.federalTaxRate) / 100 || 0.25;
-  const stateTax = Number(input.stateTaxRate) / 100 || 0.05;
-  const localTax = Number(input.localTaxRate) / 100 || 0.0;
+  const amount = input.withdrawalAmount !== undefined && input.withdrawalAmount !== null && !isNaN(Number(input.withdrawalAmount)) ? Math.max(0, Number(input.withdrawalAmount)) : 10000;
+  const fedTax = input.federalTaxRate !== undefined && input.federalTaxRate !== null && !isNaN(Number(input.federalTaxRate)) ? Number(input.federalTaxRate) / 100 : 0.25;
+  const stateTax = input.stateTaxRate !== undefined && input.stateTaxRate !== null && !isNaN(Number(input.stateTaxRate)) ? Number(input.stateTaxRate) / 100 : 0.05;
+  const localTax = input.localTaxRate !== undefined && input.localTaxRate !== null && !isNaN(Number(input.localTaxRate)) ? Number(input.localTaxRate) / 100 : 0.0;
 
   // IRS 10% Penalty applies if under 59½ and no exemption
   const isExempt = Boolean(input.hasDisability || input.hasOtherExemption);
@@ -220,7 +220,7 @@ export function calculate401kEarlyWithdrawal(input: FourZeroOneKEarlyWithdrawalI
   const totalTaxRate = fedTax + stateTax + localTax;
   const totalTaxAmount = amount * totalTaxRate;
   const netCashReceived = amount - irsPenaltyAmount - totalTaxAmount;
-  const effectiveRate = ((irsPenaltyAmount + totalTaxAmount) / amount) * 100;
+  const effectiveRate = amount > 0 ? ((irsPenaltyAmount + totalTaxAmount) / amount) * 100 : 0;
 
   return {
     mode: 2,
@@ -242,7 +242,7 @@ export function calculate401kEarlyWithdrawal(input: FourZeroOneKEarlyWithdrawalI
     netCashReceived: Number(netCashReceived.toFixed(2)),
     effectiveTaxAndPenaltyRate: Number(effectiveRate.toFixed(2)),
 
-    recommendation: `WARNING: Cashing out $${amount.toLocaleString()} early results in $${(irsPenaltyAmount + totalTaxAmount).toFixed(2)} (${effectiveRate.toFixed(1)}%) lost to taxes and penalties! You will only receive $${netCashReceived.toFixed(2)} net cash.`,
+    recommendation: `Cashing out $${amount.toLocaleString()} early results in $${(irsPenaltyAmount + totalTaxAmount).toFixed(2)} (${effectiveRate.toFixed(1)}%) in modeled taxes and penalties. Net cash received is $${netCashReceived.toFixed(2)}.`,
     schedule: [],
   };
 }
@@ -251,12 +251,12 @@ export function calculate401kEarlyWithdrawal(input: FourZeroOneKEarlyWithdrawalI
  * Mode 3: Employer Match Maximizer
  */
 export function calculate401kMatchMaximizer(input: FourZeroOneKMatchMaximizerInput): FourZeroOneKResult {
-  const currentSalary = Math.max(0, Number(input.currentSalary) || 75000);
-  const m1Pct = Number(input.match1Percent) / 100 || 0.50;
-  const m1Limit = Number(input.match1LimitPercent) / 100 || 0.06;
+  const currentSalary = input.currentSalary !== undefined && input.currentSalary !== null && !isNaN(Number(input.currentSalary)) ? Math.max(0, Number(input.currentSalary)) : 75000;
+  const m1Pct = input.match1Percent !== undefined && input.match1Percent !== null && !isNaN(Number(input.match1Percent)) ? Number(input.match1Percent) / 100 : 0.50;
+  const m1Limit = input.match1LimitPercent !== undefined && input.match1LimitPercent !== null && !isNaN(Number(input.match1LimitPercent)) ? Number(input.match1LimitPercent) / 100 : 0.06;
 
-  const m2Pct = input.match2Percent ? Number(input.match2Percent) / 100 : 0;
-  const m2Limit = input.match2LimitPercent ? Number(input.match2LimitPercent) / 100 : 0;
+  const m2Pct = input.match2Percent !== undefined && input.match2Percent !== null && !isNaN(Number(input.match2Percent)) ? Number(input.match2Percent) / 100 : 0;
+  const m2Limit = input.match2LimitPercent !== undefined && input.match2LimitPercent !== null && !isNaN(Number(input.match2LimitPercent)) ? Number(input.match2LimitPercent) / 100 : 0;
 
   const tier1Dollars = currentSalary * m1Limit * m1Pct;
   const tier2Dollars = currentSalary * m2Limit * m2Pct;
@@ -280,7 +280,7 @@ export function calculate401kMatchMaximizer(input: FourZeroOneKMatchMaximizerInp
     optimalContributionPercent: optimalContribPct,
     maxMatchDollars: Number(maxMatchDollars.toFixed(2)),
 
-    recommendation: `To capture 100% of your employer's matching money ($${maxMatchDollars.toFixed(2)}/year free money), you must contribute at least ${optimalContribPct}% of your salary ($${(currentSalary * (optimalContribPct / 100)).toFixed(2)}/year).`,
+    recommendation: `To capture your full modeled employer match ($${maxMatchDollars.toFixed(2)}/year), you must contribute at least ${optimalContribPct}% of your salary ($${(currentSalary * (optimalContribPct / 100)).toFixed(2)}/year).`,
     schedule: [],
   };
 }
