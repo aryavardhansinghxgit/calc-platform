@@ -1,54 +1,49 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateFutureValue } from "@/lib/calculator-engine/formulas/future-value";
+import { future_valueFaqs } from "./faq";
+import { FutureValueCalculator } from "@/components/calculator/future-value/FutureValueCalculator";
+import { FutureValueContent } from "@/components/calculator/future-value/FutureValueContent";
 
 export const FUTURE_VALUE_CALCULATOR: CalculatorModuleDefinition = {
   id: "future-value",
-  title: "Future Value Calculator – Advanced Wealth & Compound Growth Model",
+  title: "Future Value Calculator - Compound Growth, Contributions & Goal Planner",
   slug: "future-value-calculator",
   category: "Finance",
   subcategory: "Investment",
   description:
-    "Calculate the future value of investments, lump sums, and recurring contributions with compounding frequencies, inflation adjustment, step-up contributions, tax drag, scenario comparisons, and goal-based planning.",
+    "Calculate future value for a lump sum and recurring contributions with compounding, contribution timing, inflation, taxes, scenarios, goal planning and model-based Monte Carlo analysis.",
   iconName: "TrendingUp",
   featured: true,
+  CustomComponent: FutureValueCalculator,
+  ContentComponent: FutureValueContent,
   tags: [
     "future value calculator",
-    "fv calculator",
-    "investment growth calculator",
-    "future investment calculator",
-    "investment return calculator",
+    "future value calculator with monthly contributions",
+    "future value of investment calculator",
+    "future value formula calculator",
     "compound growth calculator",
-    "savings growth calculator",
-    "retirement growth calculator",
-    "future wealth calculator",
-    "fv formula calculator",
-    "time value of money",
-    "tvm",
-    "annuity due",
+    "annuity future value calculator",
+    "future value with recurring contributions",
+    "future value with inflation",
+    "future value goal calculator",
+    "investment growth calculator",
+    "future value comparison calculator",
+    "future value calculator with compounding frequency",
+    "future value with step-up contributions",
+    "present value vs future value",
+    "Monte Carlo investment goal calculator",
+  ],
+  relatedCalculators: [
+    "investment-calculator",
+    "savings-calculator",
+    "present-value-calculator",
+    "retirement-calculator",
+    "401k-calculator",
+    "ira-calculator",
+    "inflation-calculator",
   ],
   formulaDescription: "FV = PV × (1 + r/n)^(n×t) + PMT × [((1 + r/n)^(n×t) - 1) / (r/n)]",
-  faqs: [
-    {
-      question: "What is Future Value (FV)?",
-      answer:
-        "Future Value (FV) is a financial calculation that estimates how much an asset, lump sum, or stream of cash flows will be worth at a specific date in the future, given a specified expected rate of interest or investment growth.",
-    },
-    {
-      question: "How is Future Value calculated?",
-      answer:
-        "For a single lump sum, Future Value is calculated using FV = PV × (1 + r/n)^(n×t). For periodic deposits, annuity formulas account for recurring contributions made over time.",
-    },
-    {
-      question: "What is the difference between Present Value (PV) and Future Value (FV)?",
-      answer:
-        "Present Value (PV) represents the current worth of a future sum of money discounted at a specific rate. Future Value (FV) represents what current money will accumulate to over time when compounded.",
-    },
-    {
-      question: "How does inflation affect Future Value?",
-      answer:
-        "Inflation reduces purchasing power over time. Real Future Value discounts nominal Future Value using the annual inflation rate: FV_real = FV_nominal / (1 + i)^t.",
-    },
-  ],
+  faqs: future_valueFaqs,
   inputs: [
     { name: "initialInvestment", label: "Initial Investment (PV)", type: "currency", defaultValue: 10000, unit: "$", min: 0, max: 10000000, step: 500 },
     { name: "periodicContribution", label: "Periodic Contribution (PMT)", type: "currency", defaultValue: 500, unit: "$", min: 0, max: 100000, step: 50 },

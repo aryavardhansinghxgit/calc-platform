@@ -1,322 +1,384 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  BookOpen,
-  HelpCircle,
-  TrendingUp,
-  DollarSign,
-  PieChart as PieIcon,
-  ShieldCheck,
-  Zap,
-  Info,
-  CheckCircle2,
-  AlertTriangle,
-  ChevronDown,
-  ChevronUp,
-  Award,
-  Clock,
-  Layers,
-  ArrowRight,
-} from "lucide-react";
+import Link from "next/link";
+import { HelpCircle, ChevronDown, BookOpen, ShieldCheck } from "lucide-react";
+import { future_valueFaqs } from "@/calculators/finance/future-value/faq";
 
 export function FutureValueContent() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  // All 12 FAQs open by default
+  const [openFaqIndices, setOpenFaqIndices] = useState<Set<number>>(
+    new Set(Array.from({ length: 12 }, (_, i) => i))
+  );
 
   const toggleFaq = (index: number) => {
-    setOpenFaq(openFaq === index ? null : index);
+    setOpenFaqIndices((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
   };
 
-  const faqs = [
-    {
-      question: "What is Future Value (FV)?",
-      answer: "Future Value (FV) is a financial calculation that estimates how much an asset, lump sum, or stream of cash flows will be worth at a specific date in the future, given a specified expected rate of interest or investment growth.",
-    },
-    {
-      question: "How is Future Value calculated?",
-      answer: "For a single lump sum, Future Value is calculated using the formula FV = PV × (1 + r/n)^(n×t), where PV is Present Value, r is the annual rate, n is compounding frequency, and t is total years. For periodic deposits, annuity formulas account for contributions made over time.",
-    },
-    {
-      question: "What is the difference between Present Value (PV) and Future Value (FV)?",
-      answer: "Present Value (PV) represents the current worth of a future sum of money or stream of cash flows discounted at a specific rate. Future Value (FV) represents what current money will accumulate to over time when compounded at a given growth rate.",
-    },
-    {
-      question: "What is compound interest and why does it matter for Future Value?",
-      answer: "Compound interest is interest calculated on both the initial principal and the accumulated interest from previous periods. It creates exponential growth over time, enabling your money to generate returns on its own returns.",
-    },
-    {
-      question: "What is an Ordinary Annuity vs. an Annuity Due?",
-      answer: "In an Ordinary Annuity, periodic contributions or payments occur at the end of each payment period. In an Annuity Due, payments occur at the beginning of each period. Annuity Due yields higher Future Value because each contribution earns interest for one extra period.",
-    },
-    {
-      question: "How does inflation affect Future Value?",
-      answer: "Inflation reduces the purchasing power of money over time. While nominal Future Value shows the raw dollar total in the future, Real (Inflation-Adjusted) Future Value discounts that dollar figure back to today's purchasing power using the formula FV_real = FV_nominal / (1 + i)^t.",
-    },
-    {
-      question: "How does compounding frequency impact investment returns?",
-      answer: "More frequent compounding (e.g., daily or monthly vs. annual) generates higher total returns because interest is credited and reinvested sooner. For instance, $10,000 at 8% compounded daily yields $22,255 over 10 years, compared to $21,589 compounded annually.",
-    },
-    {
-      question: "What is the Effective Annual Rate (EAR / APY)?",
-      answer: "Effective Annual Rate (also called Annual Percentage Yield) is the actual annualized return earned on an investment when compounding frequency is accounted for. EAR = (1 + r/n)^n - 1.",
-    },
-    {
-      question: "What is tax drag and how does it reduce Future Value?",
-      answer: "Tax drag occurs when investment earnings (interest or capital gains) are taxed annually. Paying taxes each year reduces the principal balance left to compound, significantly lowering the overall Future Value compared to tax-deferred or tax-free accounts.",
-    },
-    {
-      question: "What is a step-up contribution strategy?",
-      answer: "A step-up contribution (or growing SIP) increases your periodic investment by a set percentage each year (e.g., matching salary increases). Step-up contributions dramatically accelerate portfolio growth over long horizons.",
-    },
-    {
-      question: "What is the Rule of 72?",
-      answer: "The Rule of 72 is a quick mental shortcut to estimate how many years it takes for an investment to double at a fixed annual rate. Divide 72 by the annual interest rate (e.g., 72 / 8% = 9 years).",
-    },
-    {
-      question: "Can Future Value calculations guarantee my future wealth?",
-      answer: "No. Future Value projections use assumed growth rates. Real-world market investments fluctuate, inflation rates vary, and tax laws change. Using Monte Carlo simulations helps assess probabilities rather than single fixed targets.",
-    },
-    {
-      question: "What is the difference between simple interest and compound interest?",
-      answer: "Simple interest pays interest only on the original principal balance. Compound interest pays interest on principal plus all previously earned interest, creating compounding growth.",
-    },
-    {
-      question: "How does periodic contribution frequency (monthly vs annual) affect growth?",
-      answer: "Investing monthly puts capital to work sooner than investing an equal total amount once per year. This additional time in the market allows compound interest to begin accruing immediately.",
-    },
-    {
-      question: "How does Future Value assist in retirement planning?",
-      answer: "Future Value helps project whether current 401(k), IRA, or pension savings will reach your target retirement nest egg, adjusting for inflation to ensure adequate retirement income.",
-    },
-    {
-      question: "What is a Systematic Investment Plan (SIP)?",
-      answer: "An SIP is an investment method where a fixed sum is invested regularly into mutual funds or index funds. Future Value calculations demonstrate how disciplined monthly SIPs build substantial long-term wealth.",
-    },
-    {
-      question: "How do fixed deposits (FD) use Future Value formulas?",
-      answer: "Fixed deposits promise a guaranteed annual interest rate over a fixed tenure. The Future Value formula accurately calculates your guaranteed maturity payout.",
-    },
-    {
-      question: "What common mistakes do investors make when projecting Future Value?",
-      answer: "Common mistakes include ignoring inflation, underestimating taxes and fees, assuming unrealistically high returns without accounting for market downturns, and failing to step up contributions over time.",
-    },
-    {
-      question: "How do I calculate the required monthly savings for a future goal?",
-      answer: "Use our Goal Planning Mode, which rearranges the annuity formula to solve for PMT required based on your target Future Value, target date, and expected interest rate.",
-    },
-    {
-      question: "Why should I use Monte Carlo simulations for investment growth?",
-      answer: "Unlike static average returns, Monte Carlo simulations test 500+ random market volatility scenarios to estimate your actual probability of hitting a financial target under realistic market fluctuations.",
-    },
-  ];
-
   return (
-    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
-      {/* Overview Banner */}
-      <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-lg">
-        <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
-          <BookOpen className="h-4 w-4" /> Comprehensive Financial Guide
-        </div>
-        <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-3">
-          Mastering Future Value: The Mathematics & Strategy of Wealth Building
+    <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
+      {/* 1. SINGLE CANONICAL RELATED CALCULATORS BLOCK (Exactly 7 Verified Live Routes) */}
+      <div>
+        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
+          Related Wealth &amp; Investment Tools
         </h2>
-        <p className="text-zinc-300 text-sm leading-relaxed max-w-4xl">
-          Future Value (FV) is the foundational concept of modern quantitative finance and personal wealth management. 
-          Understanding how time, compounding frequency, contribution timing, inflation, and tax drag interact allows 
-          investors, financial planners, and corporate strategists to optimize long-term capital growth.
-        </p>
-      </div>
-
-      {/* Structured Sections Grid */}
-      <div className="space-y-8 text-sm leading-relaxed">
-        {/* Section 1 & 2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
-              <TrendingUp className="h-5 w-5" /> 1. What Is Future Value?
-            </div>
-            <p>
-              <strong>Future Value (FV)</strong> measures how much a current lump sum (Present Value) or a series of periodic 
-              contributions (Annuity) will accumulate to over a specified time horizon when invested at an expected annual interest rate.
-            </p>
-            <p>
-              It incorporates the transformative power of <strong>compound interest</strong>—earning interest not only on your 
-              initial principal but also on all accumulated returns from prior compounding cycles.
-            </p>
-          </div>
-
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
-              <Zap className="h-5 w-5" /> 2. Future Value Formula Explained
-            </div>
-            <p>
-              The basic formula for lump sum Future Value is expressed mathematically as:
-            </p>
-            <div className="bg-zinc-50 dark:bg-zinc-800 p-3 rounded-lg font-sans tabular-nums text-xs text-center border border-zinc-200 dark:border-zinc-700">
-              FV = PV × (1 + r / n)^(n × t)
-            </div>
-            <ul className="text-xs space-y-1 text-slate-900 dark:text-slate-100">
-              <li>• <strong>FV:</strong> Future Value of the investment</li>
-              <li>• <strong>PV:</strong> Present Value (initial deposit)</li>
-              <li>• <strong>r:</strong> Nominal annual interest rate (decimal)</li>
-              <li>• <strong>n:</strong> Compounding frequency per year</li>
-              <li>• <strong>t:</strong> Investment duration in years</li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Section 3 & 4 */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Time Value of Money (TVM) & PV vs. FV
-          </h3>
-          <p>
-            The <strong>Time Value of Money (TVM)</strong> is the core economic principle stating that a dollar in hand today is worth 
-            more than a dollar promised at a future date. This occurs because money available today can be invested to earn interest, 
-            producing a higher total balance in the future.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-2">
-            <div className="p-4 bg-blue-50 dark:bg-blue-50/30 rounded-lg border border-emerald-200 dark:border-emerald-900">
-              <span className="font-bold text-emerald-800 dark:text-blue-400 block mb-1">Present Value (PV) Focus</span>
-              Discounts future cash flows back to today's equivalent monetary value using a discount rate. Crucial for asset valuation and bond pricing.
-            </div>
-            <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-900">
-              <span className="font-bold text-blue-800 dark:text-blue-300 block mb-1">Future Value (FV) Focus</span>
-              Compounds present balances forward into the future to determine accumulated wealth. Essential for wealth creation, savings targets, and retirement projections.
-            </div>
-          </div>
-        </div>
-
-        {/* Section 5, 6 & 7: Annuities & Timing */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">5–7. Lump Sums vs. Ordinary Annuities vs. Annuities Due
-          </h3>
-          <p>
-            When investing, cash can enter portfolio balances in two primary structures: a single upfront lump sum or recurring periodic deposits (annuities).
-          </p>
-          
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse border border-zinc-200 dark:border-zinc-800">
-              <thead>
-                <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200">
-                  <th className="p-3 border border-zinc-200 dark:border-zinc-700">Type</th>
-                  <th className="p-3 border border-zinc-200 dark:border-zinc-700">Timing of Cash Flow</th>
-                  <th className="p-3 border border-zinc-200 dark:border-zinc-700">Formula</th>
-                  <th className="p-3 border border-zinc-200 dark:border-zinc-700">Relative Yield</th>
-                </tr>
-              </thead>
-              <tbody className=" dark:divide-zinc-800">
-                <tr>
-                  <td className="p-3 font-semibold">Lump Sum</td>
-                  <td className="p-3">Single initial deposit at t=0</td>
-                  <td className="p-3 font-sans tabular-nums text-[11px]">FV = PV × (1+r/n)^(nt)</td>
-                  <td className="p-3 text-slate-900 dark:text-slate-100">Baseline growth on capital</td>
-                </tr>
-                <tr>
-                  <td className="p-3 font-semibold">Ordinary Annuity</td>
-                  <td className="p-3">Deposits at end of each period</td>
-                  <td className="p-3 font-sans tabular-nums text-[11px]">FV = PMT × [((1+i)^n - 1) / i]</td>
-                  <td className="p-3 text-slate-900 dark:text-slate-100">Standard recurring savings model</td>
-                </tr>
-                <tr>
-                  <td className="p-3 font-semibold">Annuity Due</td>
-                  <td className="p-3">Deposits at start of each period</td>
-                  <td className="p-3 font-sans tabular-nums text-[11px]">FV = FV_ordinary × (1+i)</td>
-                  <td className="p-3 text-blue-600 font-bold">+1 Extra period of interest per deposit</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Section 8, 9 & 10: Compounding, Inflation & Taxes */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">8. Compounding Frequency
-            </h4>
-            <p className="text-xs">
-              Compounding frequency dictates how often accrued interest is reinvested into the principal. 
-              Compounding daily or monthly accelerates growth compared to annual compounding.
-            </p>
-          </div>
-
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">9. Inflation Drag
-            </h4>
-            <p className="text-xs">
-              Inflation erodes purchasing power over time. A $1,000,000 nominal Future Value in 30 years with 3% annual inflation 
-              has a real purchasing power of only <strong>$411,987</strong> in today's dollars.
-            </p>
-          </div>
-
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-2">
-            <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-base flex items-center gap-1.5">10. Tax Drag Impact
-            </h4>
-            <p className="text-xs">
-              Taxes paid annually on investment growth reduce the compounding snowball effect. Utilizing tax-advantaged accounts 
-              (401k, Roth IRA, ISA) prevents annual tax drag, maximizing ultimate wealth.
-            </p>
-          </div>
-        </div>
-
-        {/* Section 11 - 15: Use Cases & Pitfalls */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">11–15. Real-World Applications & Common Mistakes
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div className="space-y-2">
-              <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Retirement & 401(k) Planning</span>
-              <p className="text-slate-900 dark:text-slate-100">
-                Future Value modeling determines the target nest egg needed for financial independence. Adding annual step-up contributions 
-                (e.g., increasing monthly savings by 5% each year) can increase final retirement capital by 40%–70%.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <span className="font-bold text-zinc-900 dark:text-zinc-100 block">Systematic Investment Plans (SIP) & FDs</span>
-              <p className="text-slate-900 dark:text-slate-100">
-                Dollar-cost averaging into index funds or committing to guaranteed Fixed Deposits (FD) relies on Future Value formulas 
-                to quantify returns across varying market conditions.
-              </p>
-            </div>
-          </div>
+        <div className="flex flex-wrap gap-2 text-xs">
+          <Link
+            href="/calculators/investment-calculator"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+          >
+            Investment Calculator
+          </Link>
+          <Link
+            href="/calculators/savings-calculator"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+          >
+            Savings Calculator
+          </Link>
+          <Link
+            href="/calculators/present-value-calculator"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+          >
+            Present Value Calculator
+          </Link>
+          <Link
+            href="/calculators/retirement-calculator"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+          >
+            Retirement Calculator
+          </Link>
+          <Link
+            href="/calculators/401k-calculator"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+          >
+            401(k) Calculator
+          </Link>
+          <Link
+            href="/calculators/ira-calculator"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+          >
+            IRA Calculator
+          </Link>
+          <Link
+            href="/calculators/inflation-calculator"
+            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+          >
+            Inflation Calculator
+          </Link>
         </div>
       </div>
 
-      {/* 20 SEO FAQs Section */}
-      <div className="space-y-6 pt-4">
-        <div className="flex items-center gap-3">
-          <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-            Frequently Asked Questions (FAQ)
-          </h3>
+      {/* 2. EXPANDED MAIN EDUCATIONAL CONTENT (17 COMPLETE SECTIONS) */}
+      <div className="space-y-8 pt-6 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+        {/* Section 1 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            1. What Is Future Value?
+          </h2>
+          <p>
+            Future value (FV) is the value that a current amount of money, plus any future contributions, is projected to reach at a specified future date under stated growth assumptions. The core idea is the time value of money: money available today can earn a return, and when earnings remain invested they can themselves generate additional earnings. For a single lump sum, the familiar compound-growth model is <code>FV = PV(1 + r/n)^(nt)</code>, where PV is the present value, r is the nominal annual rate expressed as a decimal, n is the number of compounding periods per year, and t is the number of years. For comprehensive asset allocation modeling, use our{" "}
+            <Link href="/calculators/investment-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              Investment Calculator
+            </Link>
+            .
+          </p>
+          <p>
+            Future value becomes more useful when recurring contributions are included because real savings plans rarely consist of a single deposit. A monthly contribution creates a series of future cash flows, each with a different amount of time to grow. The calculator therefore treats the initial lump sum and recurring contributions as separate components before combining them. This is also why a future-value result should always be read together with the total amount invested and the modeled growth: a large future balance can come from substantial contributions, from investment growth, or from a combination of both.
+          </p>
+        </section>
+
+        {/* Section 2 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            2. How the Future Value Formula Works
+          </h2>
+          <p>
+            For a single lump sum, the compound-growth equation is <code>FV = PV(1 + r/n)^(nt)</code>. The periodic growth rate is the nominal annual rate divided by the number of compounding periods per year. If $10,000 is invested at 8% nominal annual growth with monthly compounding for 10 years, the lump-sum component grows to about $22,196.40. The calculator then separately models recurring contributions using the ordinary-annuity expression when deposits occur at the end of each period.
+          </p>
+          <p>
+            For an ordinary annuity, <code>FV = PMT[((1+i)^N - 1)/i]</code>, where PMT is the recurring contribution, i is the contribution-period rate, and N is the number of contributions. In the validated baseline, $500 monthly for 120 months at the corresponding monthly rate produces about $91,473.02. Adding that to the $22,196.40 lump-sum component produces $113,669.42. This decomposition is valuable because it lets the user distinguish the money they contributed from the growth generated by the model. The calculator retains full precision internally and rounds displayed currency values only for presentation.
+          </p>
+        </section>
+
+        {/* Section 3 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            3. Future Value of a Lump Sum vs. Recurring Contributions
+          </h2>
+          <p>
+            A lump-sum investment and a recurring-contribution plan can both be evaluated with future-value mathematics, but they behave differently because the money is invested for different lengths of time. A lump sum entered at the start of the horizon receives the full compounding period. A monthly contribution made at the end of each month receives fewer compounding periods on average because later deposits have less time to grow. This is why a recurring contribution schedule cannot be treated as a single deposit equal to the sum of all contributions. You can also explore pure recurring schedules with our{" "}
+            <Link href="/calculators/savings-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              Savings Calculator
+            </Link>
+            .
+          </p>
+          <p>
+            The calculator explicitly separates these components in its baseline. The $10,000 initial investment grows to $22,196.40, while the $500 monthly contribution stream grows to $91,473.02. The total invested is $70,000, but the modeled future value is $113,669.42 because the model adds $43,669.42 of growth. This presentation is more useful for users than a single headline because it answers three distinct questions: how much did I put in, how much growth did the assumptions generate, and what is the projected ending balance?
+          </p>
+        </section>
+
+        {/* Section 4 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            4. Ordinary Annuity vs. Annuity Due
+          </h2>
+          <p>
+            The timing of recurring contributions changes future value. An ordinary annuity assumes contributions are made at the end of each period. An annuity due assumes contributions are made at the beginning. Because beginning-of-period contributions receive one extra period of growth in a standard setup, the annuity-due result is higher for a positive periodic rate. The calculator supports both timing modes, so the difference should be visible and mathematically traceable.
+          </p>
+          <p>
+            For the validated baseline, end-of-period contributions produce $113,669.42. Beginning-of-period contributions produce $114,279.24, a difference of $609.82. That difference is exactly the additional compounding period applied to the recurring contribution stream in the model. Future-value calculators commonly expose this same timing distinction because the answer materially depends on whether a deposit is made at the beginning or end of each period.
+          </p>
+        </section>
+
+        {/* Section 5 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            5. How Compounding Frequency Affects Future Value
+          </h2>
+          <p>
+            Compounding frequency describes how often the modeled return is applied to the balance. With a positive nominal rate and otherwise comparable assumptions, more frequent compounding generally produces a higher future value because interest or earnings are incorporated into the balance sooner. The effect is visible in the validated spectrum: annual compounding produces $108,187.97, semi-annual $112,059.88, quarterly $113,116.71, monthly $113,669.42, and daily $113,940.67.
+          </p>
+          <p>
+            The exact comparison becomes more subtle when contribution frequency and compounding frequency differ. Monthly contributions into an annually compounded model are not mathematically identical to monthly contributions into a monthly compounded model. A robust calculator must define how contribution dates map to compounding periods and then apply that convention consistently. The final content therefore explains compounding as one dimension of the model and contribution frequency as another, rather than implying that changing one automatically changes the other.
+          </p>
+        </section>
+
+        {/* Section 6 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            6. Contribution Frequency and Step-Up Contributions
+          </h2>
+          <p>
+            Recurring contributions can be monthly, quarterly, semiannual, or annual, depending on what the calculator supports. A higher contribution frequency does not automatically mean a higher annual contribution amount: the total contributed depends on both the amount per contribution and the number of contributions per year. Users should compare schedules on an annual contribution basis when evaluating strategies. The calculator&apos;s schedule and total-invested metrics make that comparison possible.
+          </p>
+          <p>
+            The step-up feature models contributions that rise over time, such as increasing a monthly savings amount by a defined percentage each year. This is a growing-annuity concept rather than a simple fixed-payment annuity. In the validated engine, a 5% annual step-up produces $137,633.24 and a 10% step-up produces $169,451.98 under the tested baseline assumptions. These are model outputs for those specific assumptions; the effect of a contribution increase depends on the starting amount, return assumption, time horizon, timing and escalation rate. It should never be presented as a universal percentage increase in retirement wealth.
+          </p>
+        </section>
+
+        {/* Section 7 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            7. Inflation-Adjusted Future Value
+          </h2>
+          <p>
+            A nominal future value is expressed in future dollars. Inflation adjustment translates that nominal amount into an estimate of purchasing power in today&apos;s dollars under a stated inflation assumption. The basic real-value relationship is <code>Real Value = Nominal Future Value / (1 + inflation)^years</code>. In the validated example, $1,000,000 received 30 years in the future under 3% annual inflation corresponds to about $411,986.76 of today&apos;s purchasing power. For broader purchasing power simulations, review our{" "}
+            <Link href="/calculators/inflation-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              Inflation Calculator
+            </Link>
+            .
+          </p>
+          <p>
+            This distinction is crucial for long-term planning. A future balance can look large in nominal terms while buying substantially less than the same number of dollars buys today. Current future-value tools commonly expose inflation adjustment because users often want to know not just the amount of money on a future statement, but what that amount might represent in today&apos;s purchasing power. Inflation itself is an assumption in the model; actual inflation can differ over time, so the real-value output should be described as an illustrative purchasing-power estimate rather than a forecast.
+          </p>
+        </section>
+
+        {/* Section 8 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            8. Tax Drag and the Limits of a Simplified Tax Model
+          </h2>
+          <p>
+            Taxes can reduce modeled compounding because money removed from an investment for taxes is money that is no longer available to compound. The effect depends on what is taxed, when it is taxed, the account structure, tax jurisdiction, tax rate, and whether gains are realized or remain unrealized. A simplified calculator can illustrate tax drag by applying the defined tax assumption to modeled growth, but that is not the same thing as reproducing an individual&apos;s actual tax return or investment tax treatment.
+          </p>
+          <p>
+            The page distinguishes the calculator&apos;s tax model from real-world tax law. Tax-advantaged accounts can alter the timing or treatment of taxes, but{" "}
+            <Link href="/calculators/401k-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              401(k) Calculator
+            </Link>
+            ,{" "}
+            <Link href="/calculators/ira-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              IRA Calculator
+            </Link>
+            , Roth IRA, ISA and other account types have different rules and are governed by different jurisdictions. The safe framing is that account type can change the tax treatment of investment growth, subject to applicable law and product rules. The calculator does not claim that any particular account universally prevents tax drag or recommend an account as the right choice for a particular user.
+          </p>
+        </section>
+
+        {/* Section 9 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            9. Effective APY vs. Nominal Annual Rate
+          </h2>
+          <p>
+            The nominal annual rate and effective annual yield are not always the same when compounding occurs more than once per year. For a nominal rate r compounded n times per year, the effective annual rate is <code>(1 + r/n)^n - 1</code>. At an 8% nominal rate compounded monthly, the calculator produces an effective annual yield of approximately 8.30%. The effective figure incorporates the intra-year compounding effect, while the nominal rate is the stated annual rate before that frequency adjustment.
+          </p>
+          <p>
+            This distinction helps users compare scenarios with different compounding conventions, although effective annual yield alone does not describe a recurring-contribution strategy. A full future-value projection also depends on when contributions are made and how frequently those contributions interact with the modeled growth process. The page therefore treats APY as a supporting metric rather than as a substitute for the complete accumulation schedule.
+          </p>
+        </section>
+
+        {/* Section 10 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            10. How Long Does It Take an Investment to Double?
+          </h2>
+          <p>
+            The calculator displays an estimated years-to-double metric based on the effective annual growth rate. Under a constant effective rate, the exact doubling period can be written as <code>ln(2) / ln(1 + effective rate)</code>. With an effective annual rate of about 8.30%, the mathematical doubling time is about 8.69 years, displayed as 8.7 years. This is an assumption-based calculation, not a statement that an investment will actually double on a fixed date.
+          </p>
+          <p>
+            The familiar Rule of 72 is a mental shortcut, not the exact equation. It can be useful for quick estimation around common rate ranges, but the logarithmic formula is more precise. The calculator labels its metric as an estimate based on the entered effective rate rather than a guarantee of future market performance.
+          </p>
+        </section>
+
+        {/* Section 11 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            11. Future Value and Goal Planning
+          </h2>
+          <p>
+            A future-value calculator can also work backward from a target. Instead of asking &quot;What will my investment become?&quot;, the user can ask &quot;How much must I contribute to reach a target?&quot; The reverse problem can solve for a required periodic contribution, initial balance, rate or horizon. The mathematical method depends on the variable being solved. Periodic contribution and initial value can be solved analytically with our{" "}
+            <Link href="/calculators/present-value-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              Present Value Calculator
+            </Link>
+            , while rate or horizon can require numerical methods. For comprehensive post-career models, explore our{" "}
+            <Link href="/calculators/retirement-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+              Retirement Calculator
+            </Link>
+            .
+          </p>
+          <p>
+            The validated goal example sets a $1,000,000 target, $10,000 starting balance, 8% rate and 10-year horizon. The modeled required monthly contribution is $5,344.77. At 0% growth, the same target requires $8,250 per month because the future-value equation becomes simple addition. A goal-solver result is conditional: it assumes the selected rate, contribution timing, horizon and other model inputs remain as specified. It is not a guarantee that the target will be reached in the real world.
+          </p>
+        </section>
+
+        {/* Section 12 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            12. Scenario Comparison and Return Assumptions
+          </h2>
+          <p>
+            Scenario comparison is useful because investment outcomes are uncertain. The calculator provides Conservative, Moderate and Aggressive scenarios around a base rate, allowing users to compare projected ending balances without changing the rest of the inputs. In the validated baseline, 5.5% produces $97,064.56, 8.0% produces $113,669.42, and 11.0% produces $138,390.57. The ordering is mathematically monotonic because the other inputs remain constant and the rate changes.
+          </p>
+          <p>
+            Scenario labels do not make the returns themselves conservative, moderate or aggressive in a universal financial sense. They are labels attached to user-selected assumptions. A preset such as S&amp;P 500 (10%), Balanced (7%) or Fixed Deposit (6.5%) must likewise be understood as illustrative return assumptions. Current financial calculators expose scenario rates precisely because users need to examine several possibilities rather than treat one rate as certain.
+          </p>
+        </section>
+
+        {/* Section 13 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            13. Monte Carlo Simulation: What the Probability Means
+          </h2>
+          <p>
+            The calculator&apos;s Monte Carlo feature uses 500 simulated paths, a stochastic return process and a deterministic seed so the result is reproducible between runs. The current implementation uses Box-Muller normal transforms and a seeded pseudo-random generator. The output in the validated baseline is 51.0% for the selected goal. Because the simulation is model-based, the correct interpretation is that 51% of simulated paths reached the target under the selected assumptions, not that the user has a factual 51% probability of investment success.
+          </p>
+          <p>
+            Monte Carlo analysis is valuable because a single fixed return assumption can hide the variability that investors actually face. At the same time, the quality of a Monte Carlo estimate depends on the assumed mean return, volatility, contribution path, horizon, distributional model and other assumptions. The calculator&apos;s probability is an output of the simulation model, not a personalized forecast.
+          </p>
+        </section>
+
+        {/* Section 14 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            14. Understanding Return Multiple, Interest Share and Growth Efficiency
+          </h2>
+          <p>
+            The calculator displays several percentages that describe growth from different denominators. Return Multiple is future value divided by total invested, so the validated 113,669.42 / 70,000 calculation produces about 1.62x. Interest Share is interest earned divided by future value, which is 43,669.42 / 113,669.42 = 38.4%. Growth Efficiency uses a different denominator: interest earned divided by total invested, producing 43,669.42 / 70,000 = 62.4%.
+          </p>
+          <p>
+            These metrics should not be conflated. Interest Share answers how much of the ending balance is growth under the model. Growth Efficiency answers how large the modeled growth is relative to the amount invested. Neither metric is a standard measure of actual portfolio performance, annualized return, or risk-adjusted efficiency. They are explanatory calculator metrics that help users interpret the relationship between contributions and modeled growth.
+          </p>
+        </section>
+
+        {/* Section 15 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            15. Reading the Accumulation Schedule
+          </h2>
+          <p>
+            The accumulation schedule is the audit trail for the future-value result. Every period contains a starting balance, contribution, interest earned and ending balance. Under the calculator&apos;s baseline timing convention, the invariant is <code>End Balance = Start Balance + Contribution + Interest Earned</code>. The yearly schedule summarizes the same monthly data, so the ten annual rows reconcile exactly to the 120 monthly rows.
+          </p>
+          <p>
+            The schedule is useful because it shows where the final balance came from instead of asking users to trust a single headline number. In the validated baseline, year 1 starts at $10,000, adds $6,000 of contributions and $1,054.96 of interest to reach $17,054.96. By year 10 the balance reaches $113,669.42. The table also supports search, monthly/yearly views and CSV export, which makes the calculation independently inspectable outside the calculator interface.
+          </p>
+        </section>
+
+        {/* Section 16 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            16. Future Value vs. Present Value
+          </h2>
+          <p>
+            Present value asks what a future amount is worth today under a stated discount or growth rate. Future value asks what a current amount or stream of contributions may become later. They are two directions of the same time-value-of-money relationship. For a single lump sum, moving forward uses compound growth; moving backward uses discounting.
+          </p>
+          <p>
+            The distinction matters when planning goals. A present-value question might be &quot;How much would I need today to have $1 million in ten years?&quot; A future-value question might be &quot;How much will $100,000 grow to in ten years?&quot; The calculator&apos;s goal solver extends the future-value framework by allowing the user to solve backward for required contribution, present balance, rate or horizon.
+          </p>
+        </section>
+
+        {/* Section 17 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            17. Methodology, Limitations and Financial Disclaimer
+          </h2>
+          <div className="space-y-3 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1.5">
+              <div className="font-bold text-slate-900 dark:text-zinc-100 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                <BookOpen className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                Methodology &amp; Model Assumptions
+              </div>
+              <p>
+                Core methodology: the calculator combines a lump-sum compound-growth component with a recurring-contribution model. Contribution timing supports ordinary-annuity and annuity-due behavior. Different compounding and contribution frequencies are aligned through the implementation&apos;s defined periodic model. Step-up contributions use an annual escalation schedule. Inflation adjustment converts nominal future value to a present-purchasing-power estimate. Tax drag applies the calculator&apos;s defined simplified tax treatment. Goal solving uses analytical inversion where available and iterative solving for rate or time. Monte Carlo uses a seeded stochastic model for reproducible scenario analysis.
+              </p>
+            </div>
+
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1.5">
+              <div className="font-bold text-slate-900 dark:text-zinc-100 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                <ShieldCheck className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                Disclaimer &amp; Privacy Notice
+              </div>
+              <p>
+                This is a mathematical planning and educational calculator, not an investment adviser, tax adviser, broker, guaranteed-return product or personalized retirement plan. Actual investment results can differ because returns vary, contributions change, inflation changes, taxes and fees vary, and real products have terms that are not represented by the model. A displayed rate, scenario or Monte Carlo probability is an assumption or model output. Calculations are performed in your browser, and saved calculation history is stored locally in your browser. Users should verify product-specific rates, fees, taxes and account rules from the relevant provider and applicable official sources before making financial decisions.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* 3. FAQ SECTION (Exactly 12 Approved FAQs, Open by Default) */}
+      <div className="pt-6">
+        <div className="flex items-center gap-2 mb-4">
+          <HelpCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+            Frequently Asked Questions
+          </h2>
         </div>
 
         <div className="space-y-3">
-          {faqs.map((faq, index) => {
-            const isOpen = openFaq === index;
+          {future_valueFaqs.map((faq, idx) => {
+            const isOpen = openFaqIndices.has(idx);
             return (
               <div
-                key={index}
-                className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden transition-all shadow-sm"
+                key={idx}
+                className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden bg-white dark:bg-zinc-900 shadow-xs"
               >
                 <button
                   type="button"
-                  onClick={() => toggleFaq(index)}
-                  className="w-full text-left p-4 flex items-center justify-between font-semibold text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors focus:outline-none"
+                  onClick={() => toggleFaq(idx)}
+                  className="w-full p-4 text-left text-xs sm:text-sm font-semibold text-zinc-900 dark:text-zinc-100 flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
-                  <span className="flex items-center gap-2">
-                    <span className="text-xs text-blue-600 dark:text-blue-400 font-bold min-w-[20px]">
-                      Q{index + 1}.
+                  <span className="flex items-center gap-2 pr-4">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
+                      Q{idx + 1}.
                     </span>
                     {faq.question}
                   </span>
-                  {isOpen ? (
-                    <ChevronUp className="h-4 w-4 text-zinc-400 flex-shrink-0" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 text-zinc-400 flex-shrink-0" />
-                  )}
+                  <ChevronDown
+                    className={`h-4 w-4 text-zinc-400 shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
                     {faq.answer}
                   </div>
                 )}
@@ -325,6 +387,8 @@ export function FutureValueContent() {
           })}
         </div>
       </div>
-    </div>
+    </article>
   );
 }
+
+export default FutureValueContent;

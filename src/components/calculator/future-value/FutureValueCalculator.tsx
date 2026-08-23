@@ -49,7 +49,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { FutureValueContent } from "./FutureValueContent";
 import {
   calculateFutureValue,
   solveGoalParameter,
@@ -1053,9 +1052,6 @@ Tax-Adjusted Net FV: ${fmt(results.taxAdjustedFV)}`;
 
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
-
-      {/* Educational Article & 20 FAQs Section */}
-      <FutureValueContent />
     </div>
   );
 }

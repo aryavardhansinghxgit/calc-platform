@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Future Value Calculator – Compound Growth, Inflation & Goal Solver",
+    title: "Future Value Calculator - Compound Growth, Contributions & Goal Planner",
     description:
-      "Free advanced Future Value Calculator. Calculate investment growth, lump sum FV, periodic contributions, inflation impact, tax drag, scenario comparisons, and goal planning.",
+      "Calculate future value for a lump sum and recurring contributions with compounding, contribution timing, inflation, taxes, scenarios, goal planning and model-based Monte Carlo analysis.",
     slug: FUTURE_VALUE_CALCULATOR.slug,
   });
 }
