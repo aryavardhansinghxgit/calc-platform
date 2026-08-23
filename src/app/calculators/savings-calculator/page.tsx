@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   const baseMeta = generateCalculatorMetadata({
-    title: "Savings Calculator — Compound Savings & Growth Planner",
+    title: "Savings Calculator - Compound Growth, Contributions & Savings Goals",
     description:
-      "Calculate how fast your savings will grow with compound interest, growing deposits, tax drag, inflation defense, goal seeking, FIRE planning, and Monte Carlo simulations.",
+      "Calculate savings growth, compound interest, recurring contributions, goal amounts, inflation-adjusted value, and retirement/FIRE projections.",
     slug: SAVINGS_CALCULATOR.slug,
   });
 
@@ -15,28 +15,30 @@ export async function generateMetadata(): Promise<Metadata> {
     ...baseMeta,
     keywords: [
       "savings calculator",
+      "savings account calculator",
+      "savings interest calculator",
       "compound savings calculator",
-      "interest calculator",
-      "future savings calculator",
+      "savings goal calculator",
       "monthly savings calculator",
-      "annual savings calculator",
+      "future value savings calculator",
+      "savings calculator with contributions",
+      "savings calculator with inflation",
+      "savings calculator with tax",
       "savings growth calculator",
-      "financial planning calculator",
       "retirement savings calculator",
-      "FIRE calculator",
-      "high yield savings calculator",
+      "emergency savings calculator",
     ],
     openGraph: {
       ...baseMeta.openGraph,
-      title: "Savings Calculator — Compound Savings & Growth Planner",
+      title: "Savings Calculator - Compound Growth, Contributions & Savings Goals",
       description:
-        "Calculate how fast your savings will grow with compound interest, growing deposits, tax drag, inflation defense, goal seeking, FIRE planning, and Monte Carlo simulations.",
+        "Calculate savings growth, compound interest, recurring contributions, goal amounts, inflation-adjusted value, and retirement/FIRE projections.",
     },
     twitter: {
       ...baseMeta.twitter,
-      title: "Savings Calculator — Compound Savings & Growth Planner",
+      title: "Savings Calculator - Compound Growth, Contributions & Savings Goals",
       description:
-        "Calculate how fast your savings will grow with compound interest, growing deposits, tax drag, inflation defense, goal seeking, FIRE planning, and Monte Carlo simulations.",
+        "Calculate savings growth, compound interest, recurring contributions, goal amounts, inflation-adjusted value, and retirement/FIRE projections.",
     },
   };
 }
@@ -45,46 +47,12 @@ export default function SavingsCalculatorPage() {
   const { calculate, ...serializableDef } = SAVINGS_CALCULATOR;
 
   const schemas = generateJsonLdSchema({
-    title: SAVINGS_CALCULATOR.title,
+    title: "Savings Calculator - Compound Growth, Contributions & Savings Goals",
     description: SAVINGS_CALCULATOR.description,
     slug: SAVINGS_CALCULATOR.slug,
     category: SAVINGS_CALCULATOR.category,
     faqs: SAVINGS_CALCULATOR.faqs,
   });
-
-  // Additional SoftwareApplication schema for Financial Calculator
-  const appSchema = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "CalcPlatform Savings Calculator Pro",
-    operatingSystem: "All",
-    applicationCategory: "FinanceApplication",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
-    },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.95",
-      ratingCount: "1280",
-    },
-  };
-
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: "Comprehensive Guide to Compound Savings and Wealth Growth",
-    description: "Learn how compound interest, recurring contribution escalation, tax drag, and inflation affect your long-term savings projections.",
-    author: {
-      "@type": "Organization",
-      name: "CalcPlatform Financial Team",
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "CalcPlatform",
-    },
-  };
 
   return (
     <>
@@ -95,14 +63,6 @@ export default function SavingsCalculatorPage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       ))}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(appSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
       <CalculatorLayout definition={serializableDef} />
     </>
   );

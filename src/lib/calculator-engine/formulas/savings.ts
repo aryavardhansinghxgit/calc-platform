@@ -133,6 +133,58 @@ export function getCompoundPeriodsPerYear(freq: CompoundFrequency): number {
 }
 
 /**
+ * Core internal simulation helper that models exact month-by-month cash flows,
+ * contributions, compound growth, and tax drag across any horizon.
+ */
+function simulateSavingsAccumulation(
+  P: number,
+  baseAnnualContrib: number,
+  annualContribStep: number,
+  baseMonthlyContrib: number,
+  monthlyContribStep: number,
+  apy: number,
+  taxRate: number,
+  years: number
+): { endBalance: number; totalContributions: number; totalInterest: number; totalTaxPaid: number } {
+  let currentBalance = P;
+  let cumulativeContribs = P;
+  let cumulativeInterest = 0;
+  let totalTaxPaid = 0;
+  const totalMonths = Math.max(1, years * 12);
+  const monthlyRate = Math.pow(1 + apy, 1 / 12) - 1;
+
+  for (let m = 1; m <= totalMonths; m++) {
+    const currentYearIndex = Math.floor((m - 1) / 12);
+    const monthInYear = ((m - 1) % 12) + 1;
+
+    const monthlyEscalated = baseMonthlyContrib * Math.pow(1 + monthlyContribStep, currentYearIndex);
+    let addedContribution = monthlyEscalated;
+    if (monthInYear === 1) {
+      const annualEscalated = baseAnnualContrib * Math.pow(1 + annualContribStep, currentYearIndex);
+      addedContribution += annualEscalated;
+    }
+
+    currentBalance += addedContribution;
+    cumulativeContribs += addedContribution;
+
+    const grossInterest = currentBalance * monthlyRate;
+    const taxOnInterest = grossInterest * taxRate;
+    const netInterest = grossInterest - taxOnInterest;
+
+    currentBalance += netInterest;
+    cumulativeInterest += netInterest;
+    totalTaxPaid += taxOnInterest;
+  }
+
+  return {
+    endBalance: currentBalance,
+    totalContributions: cumulativeContribs,
+    totalInterest: cumulativeInterest,
+    totalTaxPaid,
+  };
+}
+
+/**
  * Calculates complete savings projection with compound interest, contribution growth,
  * tax drag, inflation adjustment, schedules, scenarios, and statistical Monte Carlo simulation.
  */
@@ -275,12 +327,19 @@ export function calculateSavings(inputs: SavingsCalculatorInputs): SavingsCalcul
   const reqMonthlyContrib = Math.max(0, (targetGoal - P * compoundFactor) / annuityFactor);
   const reqAnnualContrib = reqMonthlyContrib * 12;
 
-  // Retirement & FIRE Metrics
+  // Retirement & FIRE Metrics (BUG-SAV-03 Fix: Use complete accumulation model across retirement horizon)
   const yearsToRetirement = Math.max(1, retirementAge - currentAge);
-  const retirementMonths = yearsToRetirement * 12;
-  const retirementCompoundFactor = Math.pow(1 + effectiveMonthlyRate, retirementMonths);
-  const retirementAnnuityFactor = effectiveMonthlyRate > 0 ? (retirementCompoundFactor - 1) / effectiveMonthlyRate : retirementMonths;
-  const retirementCorpus = P * retirementCompoundFactor + baseMonthlyContrib * retirementAnnuityFactor;
+  const retirementSim = simulateSavingsAccumulation(
+    P,
+    baseAnnualContrib,
+    annualContribStep,
+    baseMonthlyContrib,
+    monthlyContribStep,
+    apy,
+    taxRate,
+    yearsToRetirement
+  );
+  const retirementCorpus = retirementSim.endBalance;
   const monthlyRetirementIncome = (retirementCorpus * 0.04) / 12;
 
   const fireNumber = annualExpenses * 25;
@@ -295,14 +354,38 @@ export function calculateSavings(inputs: SavingsCalculatorInputs): SavingsCalcul
     }
   }
 
-  // Scenarios
+  // Scenarios (BUG-SAV-02 Fix: Use canonical simulation for Conservative and Aggressive to preserve contributions)
+  const apyConservative = Math.pow(1 + 0.03 / n, n) - 1;
+  const apyAggressive = Math.pow(1 + 0.08 / n, n) - 1;
+
+  const consSim = simulateSavingsAccumulation(
+    P,
+    baseAnnualContrib,
+    annualContribStep,
+    baseMonthlyContrib,
+    monthlyContribStep,
+    apyConservative,
+    taxRate,
+    years
+  );
+  const aggSim = simulateSavingsAccumulation(
+    P,
+    baseAnnualContrib,
+    annualContribStep,
+    baseMonthlyContrib,
+    monthlyContribStep,
+    apyAggressive,
+    taxRate,
+    years
+  );
+
   const scenarios: ScenarioResult[] = [
     {
       name: "Conservative (3.0%)",
       rate: 3.0,
-      endingBalance: calculateSimpleFutureValue(P, baseMonthlyContrib, 0.03 * (1 - taxRate), years),
-      totalInterest: calculateSimpleFutureValue(P, baseMonthlyContrib, 0.03 * (1 - taxRate), years) - (P + baseMonthlyContrib * 12 * years),
-      realEndingBalance: calculateSimpleFutureValue(P, baseMonthlyContrib, 0.03 * (1 - taxRate), years) / Math.pow(1 + inflationRate, years),
+      endingBalance: consSim.endBalance,
+      totalInterest: consSim.totalInterest,
+      realEndingBalance: consSim.endBalance / Math.pow(1 + inflationRate, years),
     },
     {
       name: "Moderate Current (" + (rNominal * 100).toFixed(1) + "%)",
@@ -314,32 +397,57 @@ export function calculateSavings(inputs: SavingsCalculatorInputs): SavingsCalcul
     {
       name: "Aggressive Growth (8.0%)",
       rate: 8.0,
-      endingBalance: calculateSimpleFutureValue(P, baseMonthlyContrib, 0.08 * (1 - taxRate), years),
-      totalInterest: calculateSimpleFutureValue(P, baseMonthlyContrib, 0.08 * (1 - taxRate), years) - (P + baseMonthlyContrib * 12 * years),
-      realEndingBalance: calculateSimpleFutureValue(P, baseMonthlyContrib, 0.08 * (1 - taxRate), years) / Math.pow(1 + inflationRate, years),
+      endingBalance: aggSim.endBalance,
+      totalInterest: aggSim.totalInterest,
+      realEndingBalance: aggSim.endBalance / Math.pow(1 + inflationRate, years),
     },
   ];
 
-  // Contribution Escalation Analyzer
+  // Contribution Escalation Analyzer (BUG-SAV-01 Fix: Scale actual active contributions)
   const contributionImpacts: ContributionImpactItem[] = [5, 10, 20, 50].map((pct) => {
-    const newMonthly = baseMonthlyContrib * (1 + pct / 100);
-    const newEndBal = calculateSimpleFutureValue(P, newMonthly, postTaxNominal, years);
+    const scaleFactor = 1 + pct / 100;
+    const scaledMonthly = baseMonthlyContrib * scaleFactor;
+    const scaledAnnual = baseAnnualContrib * scaleFactor;
+
+    const scaledSim = simulateSavingsAccumulation(
+      P,
+      scaledAnnual,
+      annualContribStep,
+      scaledMonthly,
+      monthlyContribStep,
+      apy,
+      taxRate,
+      years
+    );
+
+    const addWealth = Math.max(0, scaledSim.endBalance - endBalance);
+
     return {
       percentIncrease: pct,
-      newMonthlyContribution: Number(newMonthly.toFixed(2)),
-      newEndingBalance: Number(newEndBal.toFixed(2)),
-      additionalWealth: Number((newEndBal - endBalance).toFixed(2)),
+      newMonthlyContribution: Number(scaledMonthly.toFixed(2)),
+      newEndingBalance: Number(scaledSim.endBalance.toFixed(2)),
+      additionalWealth: Number(addWealth.toFixed(2)),
     };
   });
 
-  // Monte Carlo Simulation
-  const monteCarlo = runMonteCarloSimulation(P, baseMonthlyContrib, rNominal * (1 - taxRate), 0.08, years, targetGoal);
+  // Monte Carlo Simulation (BUG-SAV-03 Fix: Include full growing contribution schedule)
+  const monteCarlo = runMonteCarloSimulation(
+    P,
+    baseAnnualContrib,
+    annualContribStep,
+    baseMonthlyContrib,
+    monthlyContribStep,
+    rNominal * (1 - taxRate),
+    0.08,
+    years,
+    targetGoal
+  );
 
   // Health Score Calculation
   const growthEfficiency = totalInterest / Math.max(1, totalContribs);
   let score = 50;
   if (rNominal >= 0.04) score += 15;
-  if (baseMonthlyContrib > 0) score += 20;
+  if (baseMonthlyContrib > 0 || baseAnnualContrib > 0) score += 20;
   if (monthlyContribStep > 0 || annualContribStep > 0) score += 10;
   if (growthEfficiency > 0.3) score += 15;
   if (taxRate === 0) score += 5;
@@ -352,20 +460,20 @@ export function calculateSavings(inputs: SavingsCalculatorInputs): SavingsCalcul
   else healthRating = "Poor";
 
   const healthRecommendations: string[] = [];
-  if (baseMonthlyContrib === 0) {
-    healthRecommendations.push("Set up automated monthly contributions to leverage continuous compound growth.");
+  if (baseMonthlyContrib === 0 && baseAnnualContrib === 0) {
+    healthRecommendations.push("Set up recurring monthly or annual contributions to leverage continuous compound growth.");
   }
-  if (monthlyContribStep === 0) {
-    healthRecommendations.push("Enable a 3–5% annual contribution step-up to outpace wage inflation.");
+  if (monthlyContribStep === 0 && annualContribStep === 0) {
+    healthRecommendations.push("Enable an annual contribution step-up to outpace cost-of-living increases.");
   }
   if (rNominal < 0.04) {
-    healthRecommendations.push("Consider high-yield savings accounts or money market funds offering >4.0% APY.");
+    healthRecommendations.push("Explore competitive high-yield savings accounts or cash equivalents to maximize APY.");
   }
   if (taxRate > 0) {
-    healthRecommendations.push("Utilize tax-advantaged accounts (Roth IRA, 401k, HSA) to eliminate tax drag on interest.");
+    healthRecommendations.push("Consider tax-advantaged accounts (such as IRAs, 401(k)s, or HSAs) to reduce tax drag.");
   }
   if (healthRecommendations.length === 0) {
-    healthRecommendations.push("Your savings strategy is optimal! Rebalance annually to stay on track.");
+    healthRecommendations.push("Your savings strategy is structured soundly! Review periodically to stay aligned with goals.");
   }
 
   return {
@@ -403,17 +511,12 @@ export function calculateSavings(inputs: SavingsCalculatorInputs): SavingsCalcul
   };
 }
 
-function calculateSimpleFutureValue(P: number, PMT: number, rAnnual: number, years: number): number {
-  const rMonthly = Math.pow(1 + rAnnual, 1 / 12) - 1;
-  const totalMonths = years * 12;
-  const fvP = P * Math.pow(1 + rMonthly, totalMonths);
-  const fvAnnuity = rMonthly > 0 ? PMT * ((Math.pow(1 + rMonthly, totalMonths) - 1) / rMonthly) : PMT * totalMonths;
-  return fvP + fvAnnuity;
-}
-
 function runMonteCarloSimulation(
   P: number,
-  PMT: number,
+  baseAnnualContrib: number,
+  annualContribStep: number,
+  baseMonthlyContrib: number,
+  monthlyContribStep: number,
   meanReturn: number,
   volatility: number,
   years: number,
@@ -423,17 +526,39 @@ function runMonteCarloSimulation(
   const runs: number[][] = [];
   let successes = 0;
 
+  // Mulberry32 deterministic pseudo-random generator seeded from parameters to ensure SSR/Client hydration parity
+  let seed = Math.floor(
+    (P + 1) * 31 +
+    (baseAnnualContrib + 1) * 17 +
+    (baseMonthlyContrib + 1) * 13 +
+    Math.round(meanReturn * 10000) * 7 +
+    years * 101 +
+    targetGoal * 3
+  );
+  if (seed <= 0) seed = 123456789;
+
+  const pseudoRandom = () => {
+    let t = (seed += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+
   for (let trial = 0; trial < NUM_TRIALS; trial++) {
     const trajectory: number[] = [P];
     let bal = P;
 
     for (let y = 1; y <= years; y++) {
-      const u1 = Math.random() || 0.0001;
-      const u2 = Math.random() || 0.0001;
+      const u1 = Math.max(0.0001, pseudoRandom());
+      const u2 = Math.max(0.0001, pseudoRandom());
       const z = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
       const yearReturn = meanReturn + z * volatility;
 
-      bal = (bal + PMT * 12) * (1 + yearReturn);
+      const annualEscalated = baseAnnualContrib * Math.pow(1 + annualContribStep, y - 1);
+      const monthlyEscalated = baseMonthlyContrib * Math.pow(1 + monthlyContribStep, y - 1);
+      const totalYearContrib = annualEscalated + monthlyEscalated * 12;
+
+      bal = (bal + totalYearContrib) * (1 + yearReturn);
       trajectory.push(Math.max(0, bal));
     }
 

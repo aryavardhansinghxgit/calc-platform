@@ -821,7 +821,7 @@ export function SavingsCalculator() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
               {results.contributionImpacts.map((item, idx) => (
                 <div key={idx} className="bg-zinc-50 dark:bg-zinc-800/40 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-800">
-                  <span className="text-[10px] font-bold text-blue-600 block">+{item.percentIncrease}% Monthly</span>
+                  <span className="text-[10px] font-bold text-blue-600 block">+{item.percentIncrease}% Savings</span>
                   <span className="font-extrabold text-zinc-900 dark:text-zinc-100 block text-xs">
                     {formatCurrency(item.newEndingBalance)}
                   </span>
