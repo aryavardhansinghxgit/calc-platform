@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Roth IRA Calculator – 100% Tax-Free Retirement Growth",
+    title: "Roth IRA Calculator - Growth, Contribution Limits & Taxable Account Comparison",
     description:
-      "Free Roth IRA Calculator. Calculate tax-free growth, compare against regular taxable savings accounts, test 2025/2026 IRS contribution caps, and evaluate Backdoor Roth conversions.",
+      "Estimate Roth IRA growth, compare Roth vs taxable savings, check 2026 contribution limits and MAGI rules, model Backdoor Roth conversions, and view an annual retirement schedule.",
     slug: ROTH_IRA_CALCULATOR.slug,
   });
 }

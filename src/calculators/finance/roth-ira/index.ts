@@ -1,38 +1,47 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateRothIra } from "@/lib/calculator-engine/formulas/roth-ira";
+import { roth_ira_faqs } from "./faq";
+import { RothIraCalculator } from "@/components/calculator/roth-ira/RothIraCalculator";
+import { RothIraContent } from "@/components/calculator/roth-ira/RothIraContent";
 
 export const ROTH_IRA_CALCULATOR: CalculatorModuleDefinition = {
   id: "roth-ira",
-  title: "Roth IRA Calculator – Tax-Free Wealth Suite",
+  title: "Roth IRA Calculator - Growth, Contribution Limits & Taxable Account Comparison",
   slug: "roth-ira-calculator",
   category: "Finance",
   subcategory: "Retirement",
   description:
-    "Free Roth IRA Calculator. Calculate 100% tax-free retirement growth, compare against regular taxable savings accounts, test 2025/2026 IRS contribution caps, and evaluate Backdoor Roth conversions.",
+    "Estimate Roth IRA growth, compare Roth vs taxable savings, check 2026 contribution limits and MAGI rules, model Backdoor Roth conversions, and view an annual retirement schedule.",
   iconName: "TrendingUp",
   featured: true,
+  CustomComponent: RothIraCalculator,
+  ContentComponent: RothIraContent,
   tags: [
-    "roth ira calculator",
-    "roth ira vs taxable",
-    "backdoor roth ira",
-    "tax free growth calculator",
-    "roth ira growth",
-    "roth ira limit 2025",
+    "Roth IRA calculator",
+    "Roth IRA contribution calculator",
+    "Roth IRA growth calculator",
+    "Roth IRA retirement calculator",
+    "Roth IRA vs taxable account calculator",
+    "Backdoor Roth calculator",
+    "Roth IRA income limits",
+    "Roth IRA contribution limits",
+    "Roth IRA catch-up calculator",
+    "Saver's Credit calculator",
+    "Roth IRA withdrawal calculator",
+    "Roth IRA compound interest calculator",
   ],
   formulaDescription:
-    "Compares after-tax Roth IRA contributions compounding 100% tax-free against taxable savings accounts subjected to annual tax drag.",
-  faqs: [
-    {
-      question: "What is a Roth IRA and how does it work?",
-      answer:
-        "A Roth IRA is an individual retirement account allowing after-tax contributions to grow 100% tax-free. Qualified withdrawals in retirement are completely tax-free.",
-    },
-    {
-      question: "What are the 2025 and 2026 Roth IRA contribution limits?",
-      answer:
-        "For 2025, the annual Roth IRA contribution limit is $7,000 ($8,000 for individuals aged 50 and older). For 2026, the limit is $7,500 ($8,600 for age 50+).",
-    },
+    "Compares after-tax Roth IRA contributions compounding under qualified rules against taxable savings accounts subjected to annual modeled tax drag.",
+  relatedCalculators: [
+    "401k-calculator",
+    "retirement-calculator",
+    "investment-calculator",
+    "savings-calculator",
+    "future-value-calculator",
+    "compound-interest-calculator",
+    "inflation-calculator",
   ],
+  faqs: roth_ira_faqs,
   inputs: [
     { name: "currentBalance", label: "Current Roth Balance ($)", type: "currency", defaultValue: 30000, unit: "$", min: 0, max: 10000000, step: 5000 },
     { name: "annualContribution", label: "Annual Contribution ($)", type: "currency", defaultValue: 7500, unit: "$", min: 0, max: 1000000, step: 500 },
@@ -42,19 +51,19 @@ export const ROTH_IRA_CALCULATOR: CalculatorModuleDefinition = {
     { name: "marginalTaxRate", label: "Marginal Tax Rate (%)", type: "percentage", defaultValue: 25, unit: "%", min: 0, max: 50, step: 1 },
   ],
   outputs: [
-    { name: "rothBalanceAtRetirement", label: "Roth IRA (100% Tax-Free)", format: "currency", highlight: true },
+    { name: "rothBalanceAtRetirement", label: "Roth IRA Balance", format: "currency", highlight: true },
     { name: "taxableBalanceAtRetirement", label: "Taxable Account Balance", format: "currency" },
     { name: "totalPrincipalContributed", label: "Total Principal Contributed", format: "currency" },
-    { name: "rothAdvantageOverTaxable", label: "Net Roth Tax Savings Advantage", format: "currency", highlight: true },
+    { name: "rothAdvantageOverTaxable", label: "Modeled Roth Ending Advantage", format: "currency", highlight: true },
   ],
   calculate: (inputs) => {
     const res = calculateRothIra({
-      currentBalance: Number(inputs.currentBalance || 30000),
-      annualContribution: Number(inputs.annualContribution || 7500),
-      investmentReturn: Number(inputs.investmentReturn || 6),
-      currentAge: Number(inputs.currentAge || 30),
-      retirementAge: Number(inputs.retirementAge || 65),
-      marginalTaxRate: Number(inputs.marginalTaxRate || 25),
+      currentBalance: inputs.currentBalance !== undefined && inputs.currentBalance !== null ? Number(inputs.currentBalance) : 30000,
+      annualContribution: inputs.annualContribution !== undefined && inputs.annualContribution !== null ? Number(inputs.annualContribution) : 7500,
+      investmentReturn: inputs.investmentReturn !== undefined && inputs.investmentReturn !== null ? Number(inputs.investmentReturn) : 6,
+      currentAge: inputs.currentAge !== undefined && inputs.currentAge !== null ? Number(inputs.currentAge) : 30,
+      retirementAge: inputs.retirementAge !== undefined && inputs.retirementAge !== null ? Number(inputs.retirementAge) : 65,
+      marginalTaxRate: inputs.marginalTaxRate !== undefined && inputs.marginalTaxRate !== null ? Number(inputs.marginalTaxRate) : 25,
     });
 
     return {

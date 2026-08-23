@@ -52,7 +52,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { RothIraContent } from "./RothIraContent";
 import {
   calculateRothIra,
   calculateBackdoorRoth,
@@ -60,6 +59,8 @@ import {
   BackdoorRothResult,
   ROTH_2025_BASE_CAP,
   ROTH_2025_CATCHUP_CAP,
+  ROTH_2026_BASE_CAP,
+  ROTH_2026_CATCHUP_CAP,
 } from "@/lib/calculator-engine/formulas/roth-ira";
 
 export function RothIraCalculator() {
@@ -231,14 +232,14 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
             <Sparkles className="h-3 w-3" /> Roth IRA Engine
           </Badge>
           <span className="text-xs text-zinc-500 font-medium">Quick Presets:</span>
-          <Button type="button" size="sm" variant="outline" onClick={() => applyPreset(7000, true)} className="h-6 text-[10px] px-2 cursor-pointer">
+          <Button type="button" size="sm" variant="outline" onClick={() => applyPreset(7000, false)} className="h-6 text-[10px] px-2 cursor-pointer">
             🔒 2025 Max ($7,000/yr)
-          </Button>
-          <Button type="button" size="sm" variant="outline" onClick={() => applyPreset(8000, true)} className="h-6 text-[10px] px-2 cursor-pointer">
-            🌟 Catch-Up Age 50+ ($8,000/yr)
           </Button>
           <Button type="button" size="sm" variant="outline" onClick={() => applyPreset(7500, false)} className="h-6 text-[10px] px-2 cursor-pointer">
             🚀 2026 Max ($7,500/yr)
+          </Button>
+          <Button type="button" size="sm" variant="outline" onClick={() => applyPreset(8600, true)} className="h-6 text-[10px] px-2 cursor-pointer">
+            🌟 2026 Age 50+ ($8,600/yr)
           </Button>
         </div>
 
@@ -550,17 +551,18 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div className="bg-purple-50 dark:bg-purple-950/30 p-5 rounded-xl border border-purple-200 dark:border-purple-800 space-y-2">
-              <span className="font-bold text-purple-900 dark:text-purple-200 text-sm block">2025 MAGI Phase-Out Limits</span>
+              <span className="font-bold text-purple-900 dark:text-purple-200 text-sm block">2026 MAGI Phase-Out Limits</span>
               <p className="text-zinc-600 dark:text-zinc-400">
-                • <strong>Single Filers:</strong> $146,000 – $161,000<br />
-                • <strong>Married Filing Jointly:</strong> $230,000 – $240,000
+                • <strong>Single / Head of Household:</strong> $153,000 – $168,000<br />
+                • <strong>Married Filing Jointly:</strong> $242,000 – $252,000<br />
+                • <strong>Married Filing Separately:</strong> $0 – $10,000
               </p>
             </div>
 
             <div className="bg-emerald-50 dark:bg-emerald-950/30 p-5 rounded-xl border border-emerald-200 dark:border-emerald-800 space-y-2">
-              <span className="font-bold text-emerald-900 dark:text-emerald-200 text-sm block">IRS Form 8880 Saver's Credit</span>
+              <span className="font-bold text-emerald-900 dark:text-emerald-200 text-sm block">IRS Form 8880 Saver&apos;s Credit (2026)</span>
               <p className="text-zinc-600 dark:text-zinc-400">
-                Receive up to a 50% non-refundable tax credit on your first $2,000 contributed to a Roth IRA ($1,000 max tax credit for low-to-moderate earners).
+                Receive up to a 50%, 20%, or 10% non-refundable tax credit on your first $2,000 contributed to a Roth IRA ($1,000 max credit) for AGI up to $80,500 (MFJ), $60,375 (HoH), or $40,250 (Single/MFS).
               </p>
             </div>
           </div>
@@ -622,9 +624,6 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
 
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
-
-      {/* Educational Content & EXACTLY 10 FAQs */}
-      <RothIraContent />
     </div>
   );
 }
