@@ -2,18 +2,26 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const age_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Age Calculator — Exact Chronological Age & Date Interval Solver",
+  title: "Age Calculator — Exact Age in Years, Months & Days",
   description:
-    "Free advanced Age Calculator & Date Interval Solver. Calculate exact age in years, months, days, hours, minutes, and seconds. Includes leap year edge cases, next birthday countdown, sub-unit duration matrix, zodiac signs, and planetary ages.",
+    "Calculate your exact age in years, months and days, total days lived, next birthday, date-to-date age, business days, milestones and more.",
   slug: "age-calculator",
   keywords: [
     "age calculator",
-    "calculate age online",
+    "age calculator by date of birth",
+    "exact age calculator",
+    "how old am I calculator",
+    "age in years months days",
+    "age calculator as of date",
+    "age difference calculator",
+    "date of birth calculator",
+    "calculate age between two dates",
+    "age on a specific date",
+    "total days lived calculator",
+    "birthday countdown calculator",
+    "age calculator with leap year",
+    "date-to-date age calculator",
+    "age in days calculator",
     "chronological age calculator",
-    "days between two dates",
-    "date interval calculator",
-    "exact age in days",
-    "next birthday countdown",
-    "age on mars calculator",
   ],
 });
