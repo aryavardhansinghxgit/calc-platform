@@ -50,20 +50,15 @@ export function DateCalculator() {
   // ==========================================
   const [activeTab, setActiveTab] = useState<"duration" | "offset" | "business">("duration");
 
-  const today = new Date();
+  // Start Date Parts (Baseline 2026-08-24)
+  const [startMonth, setStartMonth] = useState<number>(7); // August (0-indexed)
+  const [startDay, setStartDay] = useState<number>(24);
+  const [startYear, setStartYear] = useState<number>(2026);
 
-  // Start Date Parts
-  const [startMonth, setStartMonth] = useState<number>(today.getMonth()); // 0-11
-  const [startDay, setStartDay] = useState<number>(today.getDate());
-  const [startYear, setStartYear] = useState<number>(today.getFullYear());
-
-  // End Date Parts (For Duration & Business tabs)
-  // Default to 30 days in the future
-  const defaultFuture = new Date();
-  defaultFuture.setDate(defaultFuture.getDate() + 30);
-  const [endMonth, setEndMonth] = useState<number>(defaultFuture.getMonth());
-  const [endDay, setEndDay] = useState<number>(defaultFuture.getDate());
-  const [endYear, setEndYear] = useState<number>(defaultFuture.getFullYear());
+  // End Date Parts (Baseline 2026-09-23)
+  const [endMonth, setEndMonth] = useState<number>(8); // September (0-indexed)
+  const [endDay, setEndDay] = useState<number>(23);
+  const [endYear, setEndYear] = useState<number>(2026);
 
   // Offset Inputs (For Add/Subtract tab)
   const [operation, setOperation] = useState<"add" | "subtract">("add");

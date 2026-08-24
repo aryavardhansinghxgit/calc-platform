@@ -1,5 +1,6 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateDateCalculator } from "./calculator";
+import { date_calculatorFaqs } from "./faq";
 import { DateCalculator } from "@/components/calculator/date/DateCalculator";
 import { DateContent } from "@/components/calculator/date/DateContent";
 
@@ -9,21 +10,38 @@ export const date_calculatorConfig: CalculatorModuleDefinition = {
   slug: "date-calculator",
   category: "date",
   subcategory: "Date & Time",
-  description: "Find the exact duration between two dates, or add/subtract days, weeks, months, years, and business days with holiday awareness.",
+  description:
+    "Calculate days between two dates, add or subtract days, weeks, months and years, and count business days with leap-year, month-end, weekend and holiday support.",
   iconName: "CalendarDays",
   featured: true,
   keywords: [
     "date calculator",
-    "days between dates",
+    "days between dates calculator",
+    "days calculator",
+    "date difference calculator",
     "add days to date",
     "subtract days from date",
-    "business day calculator",
-    "workday calculator",
-    "calendar calculator",
+    "business days calculator",
+    "working days calculator",
+    "date duration calculator",
+    "date interval calculator",
+    "days between two dates",
+    "calculate days between dates",
+    "date add/subtract calculator",
+    "holiday-aware business days calculator",
   ],
   priority: 1,
-  relatedCalculators: ["age-calculator", "time-calculator", "time-duration-calculator", "day-counter-calculator"],
+  relatedCalculators: [
+    "age-calculator",
+    "time-calculator",
+    "time-duration-calculator",
+    "day-counter-calculator",
+    "hours-calculator",
+    "day-of-the-week-calculator",
+    "due-date-calculator",
+  ],
   formulaDescription: "Days Between Dates = End Date - Start Date (with month borrowing and leap year adjustments)",
+  faqs: date_calculatorFaqs,
   CustomComponent: DateCalculator,
   ContentComponent: DateContent,
   inputs: [
@@ -31,13 +49,13 @@ export const date_calculatorConfig: CalculatorModuleDefinition = {
       name: "startDate",
       label: "Start Date",
       type: "date",
-      defaultValue: "2026-08-18",
+      defaultValue: "2026-08-24",
     },
     {
       name: "endDate",
       label: "End Date",
       type: "date",
-      defaultValue: "2026-09-17",
+      defaultValue: "2026-09-23",
     },
     {
       name: "operation",

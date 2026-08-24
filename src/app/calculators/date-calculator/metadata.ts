@@ -2,20 +2,24 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const date_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Date Calculator — Days Between Dates & Add/Subtract Days Solver",
+  title: "Date Calculator - Days Between Dates, Add/Subtract & Business Days",
   description:
-    "Free advanced Date Calculator. Calculate exact days between two dates, add or subtract days/weeks/months/years, and calculate business working days with holiday and leap year rules.",
+    "Calculate days between two dates, add or subtract days, weeks, months and years, and count business days with leap-year, month-end, weekend and holiday support.",
   slug: "date-calculator",
   keywords: [
     "date calculator",
-    "days between dates",
+    "days between dates calculator",
+    "days calculator",
+    "date difference calculator",
     "add days to date",
     "subtract days from date",
-    "business day calculator",
+    "business days calculator",
     "working days calculator",
-    "date difference calculator",
-    "calendar calculator",
-    "how many days until",
-    "add business days to date",
+    "date duration calculator",
+    "date interval calculator",
+    "days between two dates",
+    "calculate days between dates",
+    "date add/subtract calculator",
+    "holiday-aware business days calculator",
   ],
 });
