@@ -2,18 +2,24 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const hours_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Hours Calculator — Calculate Hours Between Two Times & Dates",
+  title: "Hours Calculator - Hours Between Times, Work Hours & Overtime",
   description:
-    "Free advanced Hours Calculator. Calculate exact hours and minutes between two times, compute multi-day date durations, deduct unpaid breaks, and calculate overtime pay.",
+    "Calculate hours between times or dates, subtract unpaid breaks, handle overnight shifts, convert decimal hours, and estimate regular and overtime pay.",
   slug: "hours-calculator",
   keywords: [
     "hours calculator",
-    "calculate hours between two times",
-    "work hours calculator",
-    "hours and minutes finder",
-    "time card calculator",
+    "hours between two times",
     "hours between dates",
-    "overtime hours calculator",
+    "calculate hours worked",
+    "time card calculator",
+    "work hours calculator",
+    "overtime calculator",
+    "hours and minutes calculator",
     "decimal hours calculator",
+    "hours to minutes calculator",
+    "minutes to decimal hours",
+    "overnight shift calculator",
+    "payroll hours calculator",
+    "timecard hours calculator",
   ],
 });

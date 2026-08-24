@@ -206,6 +206,8 @@ import { RomanNumeralCalculator } from "./roman/RomanNumeralCalculator";
 import { RomanNumeralContent } from "./roman/RomanNumeralContent";
 import { DateCalculator } from "./date/DateCalculator";
 import { DateContent } from "./date/DateContent";
+import { HoursCalculator } from "./hours/HoursCalculator";
+import { HoursContent } from "./hours/HoursContent";
 import { AutoLoanContentSection } from "./auto-loan/AutoLoanContentSection";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
@@ -434,6 +436,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isLove = idLower === "love-calculator" || slugLower === "love-calculator";
   const isGPA = idLower === "gpa-calculator" || slugLower === "gpa-calculator";
   const isDate = idLower === "date-calculator" || slugLower === "date-calculator";
+  const isHours = idLower === "hours-calculator" || slugLower === "hours-calculator";
   const isGrade = idLower === "grade-calculator" || slugLower === "grade-calculator";
   const isMolarity = idLower === "molarity-calculator" || slugLower === "molarity-calculator";
   const isMolecularWeight = idLower === "molecular-weight-calculator" || slugLower === "molecular-weight-calculator";
@@ -499,12 +502,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                                                           isGrade ? GradeContent :
                                                             isGPA ? GPAContent :
                                                               isDate ? DateContent :
-                                                                isLove ? LoveContent :
-                                                                  isDiceRoller ? DiceRollerContent :
-                                                                    isTireSize ? TireSizeContent :
-                                                                      isMileage ? MileageContent :
-                                                                        isEngineHorsepower ? EngineHorsepowerContent :
-                                                                          isHorsepower ? HorsepowerContent :
+                                                                isHours ? HoursContent :
+                                                                  isLove ? LoveContent :
+                                                                    isDiceRoller ? DiceRollerContent :
+                                                                      isTireSize ? TireSizeContent :
+                                                                        isMileage ? MileageContent :
+                                                                          isEngineHorsepower ? EngineHorsepowerContent :
+                                                                            isHorsepower ? HorsepowerContent :
                                                                             isGasMileage ? GasMileageContent :
                                                                               isFuelCost ? FuelCostContent :
                                                                                 isDewPoint ? DewPointContent :
@@ -563,6 +567,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             <GPACalculator />
           ) : isDate ? (
             <DateCalculator />
+          ) : isHours ? (
+            <HoursCalculator />
           ) : isLove ? (
             <LoveCalculator />
           ) : isDiceRoller ? (
@@ -876,8 +882,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
         </CalculatorErrorBoundary>
 
-        {/* Simple Related Calculators Links directly below calculator boxes (Suppressed for Personal Loan, Salary, Income Tax, Student Loan, Budget, Savings, House Affordability, Time, Age, Amortization, Grade, Future Value, 401(k), Date, and Roth IRA which have dedicated suites) */}
-        {!isPersonalLoan && !isSalary && !isIncomeTax && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra && !isDate && (
+        {/* Simple Related Calculators Links directly below calculator boxes (Suppressed for Personal Loan, Salary, Income Tax, Student Loan, Budget, Savings, House Affordability, Time, Age, Amortization, Grade, Future Value, 401(k), Date, Hours, and Roth IRA which have dedicated suites) */}
+        {!isPersonalLoan && !isSalary && !isIncomeTax && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra && !isDate && !isHours && (
           <div className="pt-2 pb-1 space-y-1">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block">
               RELATED CALCULATORS:
@@ -891,7 +897,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-8 shadow-xs text-slate-900 dark:text-slate-100">
         {/* Formula & Calculation Method */}
-        {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra && !isDate && (
+        {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra && !isDate && !isHours && (
           <div className="space-y-3">
             <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
               Formula &amp; Calculation Method

@@ -71,20 +71,17 @@ export function HoursCalculator() {
   const [overtimeThreshold, setOvertimeThreshold] = useState<number>(8);
   const [overtimeMultiplier, setOvertimeMultiplier] = useState<number>(1.5);
 
-  // --- TAB 2: CROSS-DATE ---
-  const today = new Date();
-  const [cStartMonth, setCStartMonth] = useState<number>(today.getMonth());
-  const [cStartDay, setCStartDay] = useState<number>(today.getDate());
-  const [cStartYear, setCStartYear] = useState<number>(today.getFullYear());
+  // --- TAB 2: CROSS-DATE (Baseline 2026-08-24 to 2026-08-29) ---
+  const [cStartMonth, setCStartMonth] = useState<number>(7); // August (0-indexed)
+  const [cStartDay, setCStartDay] = useState<number>(24);
+  const [cStartYear, setCStartYear] = useState<number>(2026);
   const [cStartHour, setCStartHour] = useState<number>(8);
   const [cStartMin, setCStartMin] = useState<number>(30);
   const [cStartMeridiem, setCStartMeridiem] = useState<"AM" | "PM">("AM");
 
-  const future = new Date();
-  future.setDate(future.getDate() + 5);
-  const [cEndMonth, setCEndMonth] = useState<number>(future.getMonth());
-  const [cEndDay, setCEndDay] = useState<number>(future.getDate());
-  const [cEndYear, setCEndYear] = useState<number>(future.getFullYear());
+  const [cEndMonth, setCEndMonth] = useState<number>(7); // August (0-indexed)
+  const [cEndDay, setCEndDay] = useState<number>(29);
+  const [cEndYear, setCEndYear] = useState<number>(2026);
   const [cEndHour, setCEndHour] = useState<number>(5);
   const [cEndMin, setCEndMin] = useState<number>(30);
   const [cEndMeridiem, setCEndMeridiem] = useState<"AM" | "PM">("PM");

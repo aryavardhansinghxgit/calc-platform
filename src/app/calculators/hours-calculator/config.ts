@@ -1,5 +1,6 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateHoursCalculator } from "./calculator";
+import { hours_calculatorFaqs } from "./faq";
 import { HoursCalculator } from "@/components/calculator/hours/HoursCalculator";
 import { HoursContent } from "@/components/calculator/hours/HoursContent";
 
@@ -9,20 +10,39 @@ export const hours_calculatorConfig: CalculatorModuleDefinition = {
   slug: "hours-calculator",
   category: "date",
   subcategory: "Date & Time",
-  description: "Calculate total hours and minutes between two times, track multi-day durations, and compute timecard hours with break deductions and overtime.",
+  description:
+    "Calculate hours between times or dates, subtract unpaid breaks, handle overnight shifts, convert decimal hours, and estimate regular and overtime pay.",
   iconName: "Timer",
   featured: true,
   keywords: [
     "hours calculator",
-    "calculate hours between two times",
+    "hours between two times",
+    "hours between dates",
+    "calculate hours worked",
+    "time card calculator",
     "work hours calculator",
-    "hours and minutes finder",
-    "timecard calculator",
     "overtime calculator",
+    "hours and minutes calculator",
+    "decimal hours calculator",
+    "hours to minutes calculator",
+    "minutes to decimal hours",
+    "overnight shift calculator",
+    "payroll hours calculator",
+    "timecard hours calculator",
   ],
   priority: 1,
-  relatedCalculators: ["time-card-calculator", "time-calculator", "time-duration-calculator", "date-calculator", "day-counter-calculator"],
-  formulaDescription: "Total Hours = (End Time - Start Time - Unpaid Breaks) / 60",
+  relatedCalculators: [
+    "time-calculator",
+    "time-duration-calculator",
+    "date-calculator",
+    "age-calculator",
+    "day-counter-calculator",
+    "time-card-calculator",
+    "time-zone-calculator",
+  ],
+  formulaDescription:
+    "Total Hours = (End Time - Start Time - Unpaid Breaks) / 60 (with 24h rollover and decimal hours conversion)",
+  faqs: hours_calculatorFaqs,
   CustomComponent: HoursCalculator,
   ContentComponent: HoursContent,
   inputs: [
