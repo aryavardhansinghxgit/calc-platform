@@ -502,11 +502,20 @@ export function computeHypothesisTest(
 
   // Approximate p-value for Z / T
   const absStat = Math.abs(stat);
-  let pOneTail = 0.5 * (1 - approximateNormCDF(absStat));
-  if (pOneTail < 0) pOneTail = 0;
+  const pOneTail = Math.max(0, 1 - approximateNormCDF(absStat));
 
-  let pValue = tail === "two" ? pOneTail * 2 : tail === "left" ? (stat <= 0 ? pOneTail : 1 - pOneTail) : (stat >= 0 ? pOneTail : 1 - pOneTail);
+  let pValue =
+    tail === "two"
+      ? pOneTail * 2
+      : tail === "left"
+      ? stat <= 0
+        ? pOneTail
+        : 1 - pOneTail
+      : stat >= 0
+      ? pOneTail
+      : 1 - pOneTail;
   if (pValue > 1) pValue = 1;
+  if (pValue < 0) pValue = 0;
 
   const critZ = approximateNormInv(1 - (tail === "two" ? alpha / 2 : alpha));
   const decision = pValue < alpha ? "Reject H0" : "Fail to Reject H0";

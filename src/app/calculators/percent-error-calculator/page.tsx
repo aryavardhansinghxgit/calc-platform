@@ -7,13 +7,18 @@ import { generateJsonLdSchema } from "@/lib/seo-helpers";
 export const metadata: Metadata = percent_error_calculatorMetadata;
 
 export default function PercentErrorCalculatorPage() {
-  const { calculate, ...serializableDef } = percent_error_calculatorConfig;
+  const { calculate, CustomComponent, ContentComponent, ...serializableDef } =
+    percent_error_calculatorConfig;
   void calculate;
+  void CustomComponent;
+  void ContentComponent;
+
   const schemas = generateJsonLdSchema({
     title: percent_error_calculatorConfig.title,
     description: percent_error_calculatorConfig.description,
     slug: percent_error_calculatorConfig.slug,
     category: percent_error_calculatorConfig.category,
+    faqs: percent_error_calculatorConfig.faqs,
   });
 
   return (
