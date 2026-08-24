@@ -378,23 +378,54 @@ export function FHACalculator() {
     } catch (e) {}
   }, []);
 
+  const handleResetDefaults = () => {
+    setHomePrice("350000");
+    setDownPaymentPct("3.5");
+    setCreditScoreBand("580+");
+    setLoanTermYears("30");
+    setInterestRate("6.5");
+    setFinanceUfmip(true);
+    setPropertyTaxAnnual("3600");
+    setHomeInsuranceAnnual("1400");
+    setHoaDuesMonthly("0");
+    setClosingCostsPct("3.0");
+    setConvCreditScore("700");
+    setConvRate("6.75");
+    setPropType("Single Family");
+    setDtiGrossIncome("7500");
+    setDtiOtherDebt("600");
+    setKRepairBudget("35000");
+    setKContingencyPct("15");
+    setKArv("420000");
+    setExtraPayment("150");
+  };
+
   return (
     <div className="space-y-8 max-w-7xl mx-auto font-sans">
-      {/* Simple Currency Selector Header */}
-      <div className="flex items-center justify-end gap-2 text-xs font-bold">
-        <label htmlFor="fha-currency" className="text-slate-500 font-medium">Currency:</label>
-        <select
-          id="fha-currency"
-          value={currencySymbol}
-          onChange={(e) => setCurrencySymbol(e.target.value)}
-          className="h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans font-bold cursor-pointer"
+      {/* Currency Selector & Reset Defaults Header */}
+      <div className="flex items-center justify-between gap-2 text-xs font-bold">
+        <button
+          type="button"
+          onClick={handleResetDefaults}
+          className="h-8 px-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 font-sans font-bold transition-colors cursor-pointer"
         >
-          <option value="$">USD ($)</option>
-          <option value="€">EUR (€)</option>
-          <option value="£">GBP (£)</option>
-          <option value="₹">INR (₹)</option>
-          <option value="¥">JPY (¥)</option>
-        </select>
+          Reset Defaults
+        </button>
+        <div className="flex items-center gap-2">
+          <label htmlFor="fha-currency" className="text-slate-500 font-medium">Currency:</label>
+          <select
+            id="fha-currency"
+            value={currencySymbol}
+            onChange={(e) => setCurrencySymbol(e.target.value)}
+            className="h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans font-bold cursor-pointer"
+          >
+            <option value="$">USD ($)</option>
+            <option value="€">EUR (€)</option>
+            <option value="£">GBP (£)</option>
+            <option value="₹">INR (₹)</option>
+            <option value="¥">JPY (¥)</option>
+          </select>
+        </div>
       </div>
 
       {/* ========================================================================= */}

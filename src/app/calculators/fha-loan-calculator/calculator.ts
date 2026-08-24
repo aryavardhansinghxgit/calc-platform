@@ -15,33 +15,31 @@ import {
 } from "./types";
 
 export function calculateFHALoan(input: FHALoanInput): FHALoanResult {
-  const {
-    homePrice = 350000,
-    downPaymentPct = 3.5,
-    creditScoreBand = "580+",
-    loanTermYears = 30,
-    interestRate = 6.5,
-    financeUfmip = true,
-    propertyTaxAnnual = 3600,
-    homeInsuranceAnnual = 1400,
-    hoaDuesMonthly = 0,
-    estimatedClosingCostsPct = 3.0,
-    sellerConcessionsPct = 0,
-  } = input;
+  const homePrice = Math.max(0, input.homePrice ?? 350000);
+  const rawDownPct = Math.max(0, input.downPaymentPct ?? 3.5);
+  const creditScoreBand = input.creditScoreBand || "580+";
+  const loanTermYears = Math.max(1, input.loanTermYears ?? 30);
+  const interestRate = Math.max(0, input.interestRate ?? 6.5);
+  const financeUfmip = input.financeUfmip !== undefined ? input.financeUfmip : true;
+  const propertyTaxAnnual = Math.max(0, input.propertyTaxAnnual ?? 3600);
+  const homeInsuranceAnnual = Math.max(0, input.homeInsuranceAnnual ?? 1400);
+  const hoaDuesMonthly = Math.max(0, input.hoaDuesMonthly ?? 0);
+  const estimatedClosingCostsPct = Math.max(0, input.estimatedClosingCostsPct ?? 3.0);
+  const sellerConcessionsPct = Math.max(0, input.sellerConcessionsPct ?? 0);
 
   // Enforce minimum down payment rules based on credit score
   const minDownPct = creditScoreBand === "500-579" ? 10.0 : 3.5;
-  const effectiveDownPaymentPct = Math.max(downPaymentPct, minDownPct);
+  const effectiveDownPaymentPct = Math.min(100, Math.max(rawDownPct, minDownPct));
 
   const downPaymentAmount = Math.round((homePrice * effectiveDownPaymentPct) / 100);
   const baseLoanAmount = Math.max(0, homePrice - downPaymentAmount);
 
-  // Upfront MIP (UFMIP) = 1.75%
+  // Upfront MIP (UFMIP) = 1.75% of base loan
   const ufmipRate = 1.75;
   const ufmipAmount = Math.round((baseLoanAmount * ufmipRate) / 100);
   const totalFinancedLoanAmount = financeUfmip ? baseLoanAmount + ufmipAmount : baseLoanAmount;
 
-  // Annual MIP Rate Determination
+  // Annual MIP Rate Determination (HUD Official Guidelines)
   let annualMipRate = 0.55;
   let mipDurationYears: number | "Life of Loan" = "Life of Loan";
 
@@ -64,17 +62,23 @@ export function calculateFHALoan(input: FHALoanInput): FHALoanResult {
     }
   }
 
+  // Monthly MIP is calculated based on BASE loan amount
   const monthlyMipAmount = Math.round((baseLoanAmount * (annualMipRate / 100)) / 12);
 
   // Monthly Principal & Interest Payment
   const monthlyRate = interestRate / 100 / 12;
   const totalMonths = loanTermYears * 12;
 
-  const monthlyPrincipalAndInterest =
-    totalFinancedLoanAmount > 0 && monthlyRate > 0 && totalMonths > 0
-      ? (totalFinancedLoanAmount * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) /
-        (Math.pow(1 + monthlyRate, totalMonths) - 1)
-      : 0;
+  let monthlyPrincipalAndInterest = 0;
+  if (totalFinancedLoanAmount > 0 && totalMonths > 0) {
+    if (monthlyRate === 0) {
+      monthlyPrincipalAndInterest = totalFinancedLoanAmount / totalMonths;
+    } else {
+      monthlyPrincipalAndInterest =
+        (totalFinancedLoanAmount * monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) /
+        (Math.pow(1 + monthlyRate, totalMonths) - 1);
+    }
+  }
 
   const monthlyPropertyTax = Math.round(propertyTaxAnnual / 12);
   const monthlyHomeInsurance = Math.round(homeInsuranceAnnual / 12);
@@ -91,7 +95,7 @@ export function calculateFHALoan(input: FHALoanInput): FHALoanResult {
   );
 
   const totalPaymentsOverTerm = Math.round(monthlyPrincipalAndInterest * totalMonths);
-  const totalInterestOverTerm = Math.round(totalPaymentsOverTerm - totalFinancedLoanAmount);
+  const totalInterestOverTerm = Math.max(0, Math.round(totalPaymentsOverTerm - totalFinancedLoanAmount));
 
   // Build Monthly and Annual Amortization Schedules for FHA Loan
   const monthlyAmortization: AmortizationRow[] = [];
@@ -110,7 +114,7 @@ export function calculateFHALoan(input: FHALoanInput): FHALoanResult {
   for (let m = 1; m <= totalMonths; m++) {
     if (balance <= 0.01) break;
 
-    const mInterest = balance * monthlyRate;
+    const mInterest = monthlyRate > 0 ? balance * monthlyRate : 0;
     let mPmt = monthlyPrincipalAndInterest;
     if (mPmt > balance + mInterest) mPmt = balance + mInterest;
 
@@ -181,7 +185,11 @@ export function calculateFHALoan(input: FHALoanInput): FHALoanResult {
 }
 
 export function calculateFHAVsConv(input: FHAVsConvInput): FHAVsConvResult {
-  const { homePrice, downPaymentPct, creditScore, interestRateFHA, interestRateConv } = input;
+  const homePrice = Math.max(0, input.homePrice || 350000);
+  const downPaymentPct = Math.max(0, input.downPaymentPct || 3.5);
+  const creditScore = Math.max(300, input.creditScore || 700);
+  const interestRateFHA = Math.max(0, input.interestRateFHA || 6.5);
+  const interestRateConv = Math.max(0, input.interestRateConv || 6.75);
 
   const fhaCalc = calculateFHALoan({
     homePrice,
@@ -203,10 +211,12 @@ export function calculateFHAVsConv(input: FHAVsConvInput): FHAVsConvResult {
   const convLoan = homePrice - convDown;
   const convMonthlyRate = interestRateConv / 100 / 12;
   const convPmt =
-    (convLoan * convMonthlyRate * Math.pow(1 + convMonthlyRate, 360)) /
-    (Math.pow(1 + convMonthlyRate, 360) - 1);
+    convLoan > 0 && convMonthlyRate > 0
+      ? (convLoan * convMonthlyRate * Math.pow(1 + convMonthlyRate, 360)) /
+        (Math.pow(1 + convMonthlyRate, 360) - 1)
+      : convLoan / 360;
 
-  // Conventional PMI rate based on credit score (approx 0.75% for 680, 0.45% for 740+)
+  // Conventional PMI rate based on credit score (approx 0.45% for 740+, 0.75% for 680-739, 1.15% for <680)
   const pmiRate = creditScore >= 740 ? 0.45 : creditScore >= 680 ? 0.75 : 1.15;
   const convMonthlyPMI = (convLoan * (pmiRate / 100)) / 12;
 
@@ -215,22 +225,25 @@ export function calculateFHAVsConv(input: FHAVsConvInput): FHAVsConvResult {
   );
   const convUpfrontCash = Math.round(convDown + homePrice * 0.03);
 
-  // Conventional PMI cancels at 80% LTV (~Year 8 or 9)
+  // Conventional PMI cancels at 80% LTV (~Month 96 / Year 8)
   const convPMICancelMonth = 96;
-  const convTotal30YrCost = Math.round(convPmt * 360 + convMonthlyPMI * convPMICancelMonth + (homePrice * 0.012) * 30 + 1200 * 30);
+  const convTotal30YrCost = Math.round(
+    convPmt * 360 + convMonthlyPMI * convPMICancelMonth + (homePrice * 0.012) * 30 + 1200 * 30
+  );
   const fhaTotal30YrCost = Math.round(fhaCalc.totalMonthlyPiti * 360);
 
   // Find Crossover Month where Conventional total cost catches up/exceeds or stays cheaper
-  let crossoverMonth = 72; // default ~6 years
-  if (convMonthlyPiti < fhaCalc.totalMonthlyPiti) {
-    crossoverMonth = 1; // Immediately cheaper
+  let crossoverMonth = 79;
+  const monthlyDiff = convMonthlyPiti - fhaCalc.totalMonthlyPiti;
+  if (monthlyDiff <= 0) {
+    crossoverMonth = 1;
   } else {
-    crossoverMonth = Math.round((fhaCalc.ufmipAmount / Math.abs(convMonthlyPiti - fhaCalc.totalMonthlyPiti)));
+    crossoverMonth = Math.min(360, Math.max(1, Math.round(fhaCalc.ufmipAmount / monthlyDiff)));
   }
 
   const recommendation =
     creditScore >= 720 && downPaymentPct >= 5.0
-      ? "Conventional is Recommended (Lower total lifetime cost & cancellable PMI)"
+      ? "Conventional is Recommended (Lower lifetime cost & cancellable PMI)"
       : "FHA is Recommended (Lower interest rate & flexible underwriting limits)";
 
   return {
@@ -240,15 +253,15 @@ export function calculateFHAVsConv(input: FHAVsConvInput): FHAVsConvResult {
     convMonthlyPiti,
     convUpfrontCash,
     convTotal30YrCost,
-    crossoverMonth: Math.min(360, Math.max(1, crossoverMonth)),
+    crossoverMonth,
     recommendation,
   };
 }
 
 export function calculateCountyLimit(input: CountyLimitInput): CountyLimitResult {
-  const { propertyType = "Single Family", customLimit, proposedLoanAmount } = input;
+  const { propertyType = "Single Family", customLimit, proposedLoanAmount = 0 } = input;
 
-  // 2024 Baseline FHA Floor & Ceiling by Property Type
+  // 2024 Baseline FHA Floor & Ceiling by Property Type (Time-Sensitive HUD benchmark data)
   const limits: Record<string, { floor: number; ceiling: number }> = {
     "Single Family": { floor: 498257, ceiling: 1149825 },
     Duplex: { floor: 637950, ceiling: 1472250 },
@@ -257,7 +270,7 @@ export function calculateCountyLimit(input: CountyLimitInput): CountyLimitResult
   };
 
   const current = limits[propertyType] || limits["Single Family"];
-  const appliedLimit = customLimit || current.floor;
+  const appliedLimit = customLimit && customLimit > 0 ? customLimit : current.floor;
 
   const isWithinLimit = proposedLoanAmount <= appliedLimit;
   const statusMessage = isWithinLimit
@@ -274,7 +287,9 @@ export function calculateCountyLimit(input: CountyLimitInput): CountyLimitResult
 }
 
 export function calculateFHADTI(input: FHADTIInput): FHADTIResult {
-  const { grossMonthlyIncome, proposedHousingPayment, existingMonthlyDebt } = input;
+  const grossMonthlyIncome = Math.max(0, input.grossMonthlyIncome || 0);
+  const proposedHousingPayment = Math.max(0, input.proposedHousingPayment || 0);
+  const existingMonthlyDebt = Math.max(0, input.existingMonthlyDebt || 0);
 
   if (grossMonthlyIncome <= 0) {
     return {
@@ -293,7 +308,7 @@ export function calculateFHADTI(input: FHADTIInput): FHADTIResult {
   const meetsStandard31_43 = frontEndDTI <= 31.0 && backEndDTI <= 43.0;
   const meetsAUS_46_56 = frontEndDTI <= 46.9 && backEndDTI <= 56.9;
 
-  let statusBadge = "Exceeds Maximum DTI";
+  let statusBadge = "Above Maximum DTI Limit";
   if (meetsStandard31_43) {
     statusBadge = "Likely Approved (Meets 31/43 Standard)";
   } else if (meetsAUS_46_56) {
@@ -310,11 +325,14 @@ export function calculateFHADTI(input: FHADTIInput): FHADTIResult {
 }
 
 export function calculateFHA203k(input: FHA203kInput): FHA203kResult {
-  const { purchasePrice, repairEscrowBudget, contingencyPct = 15, arv } = input;
+  const purchasePrice = Math.max(0, input.purchasePrice || 350000);
+  const repairEscrowBudget = Math.max(0, input.repairEscrowBudget || 0);
+  const contingencyPct = Math.max(0, input.contingencyPct ?? 15);
 
   const contingencyAmount = (repairEscrowBudget * contingencyPct) / 100;
   const totalRenovationBudget = Math.round(repairEscrowBudget + contingencyAmount);
-  const base203kLoanAmount = Math.round((purchasePrice + totalRenovationBudget) * 0.965); // 3.5% down
+  const totalProjectCost = purchasePrice + totalRenovationBudget;
+  const base203kLoanAmount = Math.round(totalProjectCost * 0.965); // 3.5% down
 
   const ufmipAmount = Math.round(base203kLoanAmount * 0.0175);
   const totalFinancedLoanAmount = base203kLoanAmount + ufmipAmount;
@@ -336,13 +354,24 @@ export function calculateFHA203k(input: FHA203kInput): FHA203kResult {
 }
 
 export function calculateFHAPrepayment(input: FHAPrepaymentInput): FHAPrepaymentResult {
-  const { baseLoanAmount, interestRate, loanTermYears, extraMonthlyPayment } = input;
+  const baseLoanAmount = Math.max(0, input.baseLoanAmount || 0);
+  const interestRate = Math.max(0, input.interestRate || 6.5);
+  const loanTermYears = Math.max(1, input.loanTermYears || 30);
+  const extraMonthlyPayment = Math.max(0, input.extraMonthlyPayment || 0);
 
   const monthlyRate = interestRate / 100 / 12;
   const originalMonths = loanTermYears * 12;
-  const basePmt =
-    (baseLoanAmount * monthlyRate * Math.pow(1 + monthlyRate, originalMonths)) /
-    (Math.pow(1 + monthlyRate, originalMonths) - 1);
+
+  let basePmt = 0;
+  if (baseLoanAmount > 0 && originalMonths > 0) {
+    if (monthlyRate === 0) {
+      basePmt = baseLoanAmount / originalMonths;
+    } else {
+      basePmt =
+        (baseLoanAmount * monthlyRate * Math.pow(1 + monthlyRate, originalMonths)) /
+        (Math.pow(1 + monthlyRate, originalMonths) - 1);
+    }
+  }
 
   const newMonthlyPmt = basePmt + extraMonthlyPayment;
   let balance = baseLoanAmount;
@@ -351,7 +380,7 @@ export function calculateFHAPrepayment(input: FHAPrepaymentInput): FHAPrepayment
 
   while (balance > 0.01 && newMonths < originalMonths) {
     newMonths++;
-    const mInterest = balance * monthlyRate;
+    const mInterest = monthlyRate > 0 ? balance * monthlyRate : 0;
     let pay = newMonthlyPmt;
     if (pay > balance + mInterest) pay = balance + mInterest;
     const pPaid = pay - mInterest;
@@ -359,7 +388,7 @@ export function calculateFHAPrepayment(input: FHAPrepaymentInput): FHAPrepayment
     balance = Math.max(0, balance - pPaid);
   }
 
-  const originalTotalInterest = basePmt * originalMonths - baseLoanAmount;
+  const originalTotalInterest = Math.max(0, basePmt * originalMonths - baseLoanAmount);
   const monthsSaved = Math.max(0, originalMonths - newMonths);
   const interestSaved = Math.max(0, Math.round(originalTotalInterest - newTotalInterest));
   const mipSaved = Math.round(((baseLoanAmount * 0.0055) / 12) * monthsSaved);
@@ -377,12 +406,13 @@ export function calculateFHALoanCalculator(inputs: Record<string, any>): Record<
   const homePrice = parseFloat(inputs.homePrice) || 350000;
   const downPaymentPct = parseFloat(inputs.downPaymentPct) || 3.5;
   const interestRate = parseFloat(inputs.interestRate) || 6.5;
+  const loanTermYears = parseFloat(inputs.loanTermYears) || 30;
 
   const res = calculateFHALoan({
     homePrice,
     downPaymentPct,
     creditScoreBand: "580+",
-    loanTermYears: 30,
+    loanTermYears,
     interestRate,
     financeUfmip: true,
     propertyTaxAnnual: 3600,

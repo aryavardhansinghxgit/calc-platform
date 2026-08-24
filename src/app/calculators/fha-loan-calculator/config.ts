@@ -6,32 +6,41 @@ import { FHAContent } from "@/components/calculator/fha/FHAContent";
 
 export const fha_loanConfig: CalculatorModuleDefinition = {
   id: "fha-loan-calculator",
-  title: "FHA Loan Calculator — Monthly Payments, MIP & Qualification",
+  title: "FHA Loan Calculator",
   slug: "fha-loan-calculator",
   category: "Finance",
   subcategory: "Mortgage and Real Estate",
   description:
-    "Free FHA Loan Calculator & Mortgage Qualification Suite. Calculate total monthly PITI payments, 1.75% Upfront MIP & annual MIP schedules, compare FHA vs Conventional 97, verify county limits, and check DTI ratios.",
+    "Estimate FHA mortgage P&I, property taxes, insurance, monthly MIP, UFMIP, total PITI, amortization, DTI, 203(k) financing and FHA vs. Conventional scenarios.",
   iconName: "ShieldCheck",
   featured: true,
   keywords: [
-    "fha loan calculator",
-    "fha mortgage calculator",
-    "fha monthly payment calculator",
-    "fha mip calculator",
-    "fha vs conventional calculator",
-    "fha loan requirements",
-    "fha down payment calculator"
+    "FHA loan calculator",
+    "FHA mortgage calculator",
+    "FHA payment calculator",
+    "FHA loan payment calculator",
+    "FHA MIP calculator",
+    "FHA PITI calculator",
+    "FHA mortgage insurance calculator",
+    "FHA UFMIP calculator",
+    "FHA monthly payment calculator",
+    "FHA loan qualification calculator",
+    "FHA 203(k) calculator",
+    "FHA vs conventional calculator",
+    "FHA DTI calculator"
   ],
   priority: 1,
   relatedCalculators: [
     "mortgage-calculator",
     "dti-calculator",
     "house-affordability-calculator",
-    "rent-calculator"
+    "rent-calculator",
+    "down-payment-calculator",
+    "amortization-calculator",
+    "loan-calculator"
   ],
   formulaDescription:
-    "Base Loan = Home Price - Down Payment. Financed Loan = Base Loan + 1.75% UFMIP. Monthly MIP = (Base Loan × Annual MIP Rate) / 12.",
+    "Base Loan = Home Price - Down Payment. Financed Loan = Base Loan + 1.75% UFMIP. Monthly MIP = (Base Loan × Annual MIP Rate) / 12. Total PITI = P&I + Taxes/12 + Insurance/12 + Monthly MIP + HOA.",
   faqs: fha_loanFaqs,
   inputs: [
     {

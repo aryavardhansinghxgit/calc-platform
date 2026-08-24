@@ -7,51 +7,61 @@ export const fha_loanFaqs: FHAFAQItem[] = [
   {
     question: "What is an FHA loan and how does it work?",
     answer:
-      "An FHA loan is a government-backed mortgage insured by the Federal Housing Administration (HUD). Because the federal government guarantees a portion of the loan against borrower default, approved private lenders can offer low down payments (from 3.5%) and flexible credit score requirements (down to 500).",
+      "An FHA loan is a mortgage insured through the FHA program and made by an approved lender. The calculator models the purchase price, down payment, mortgage payment, mortgage insurance, taxes, insurance, and other selected costs to estimate the monthly payment.",
   },
   {
-    question: "How is the FHA monthly mortgage insurance premium (MIP) calculated?",
+    question: "What is the minimum down payment for an FHA loan?",
     answer:
-      "FHA annual MIP is calculated as a percentage of the base loan amount and divided into 12 monthly payments. For standard 30-year mortgages with less than 10% down, the annual MIP rate is 0.55% (e.g. $1,925/yr or $160.42/mo on a $350,000 base loan). For down payments of 10% or more, the annual MIP rate drops to 0.50%.",
+      "The calculator's encoded reference scenario uses 3.5% down for the 580+ credit-score band and 10% for the 500-579 band. These are program-reference assumptions in the model, not a guarantee that every lender will approve every borrower on those terms.",
   },
   {
-    question: "Can FHA mortgage insurance ever be removed?",
+    question: "What credit score is needed for an FHA loan?",
     answer:
-      "If you put down 10% or more at closing, FHA annual MIP automatically drops off after 11 years. If you put down less than 10% (such as 3.5%), the annual MIP remains for the entire life of the loan unless you refinance into a Conventional mortgage once you reach 20% equity.",
+      "The calculator distinguishes a 580+ scenario from a 500-579 scenario. Actual underwriting can include lender overlays, documentation requirements and other factors, so the calculator should be treated as an educational planning model.",
   },
   {
-    question: "What is the minimum credit score required for an FHA loan?",
+    question: "What is FHA Upfront Mortgage Insurance Premium (UFMIP)?",
     answer:
-      "Borrowers with a credit score of 580 or higher qualify for the minimum 3.5% down payment. Borrowers with credit scores between 500 and 579 qualify for an FHA loan with a minimum 10% down payment.",
+      "The calculator models UFMIP as 1.75% of the base loan under its encoded assumptions. It can be modeled as cash paid at closing or financed into the mortgage.",
   },
   {
-    question: "What is Upfront MIP (UFMIP) and should I finance it into the loan?",
+    question: "How is the FHA monthly MIP calculated?",
     answer:
-      "Upfront Mortgage Insurance Premium (UFMIP) is a one-time fee equal to 1.75% of your base loan amount charged by the FHA at closing. Over 95% of FHA borrowers choose to finance UFMIP directly into their total loan balance rather than paying it out-of-pocket in cash at closing.",
+      "The calculator uses the base loan amount, multiplies it by the selected annual MIP rate, and divides by 12. The applicable rate depends on the term and down-payment scenario encoded in the model.",
   },
   {
-    question: "How much are FHA loan limits in my county?",
+    question: "How long does FHA mortgage insurance last?",
     answer:
-      "FHA loan limits are updated annually by HUD based on local median home prices. For 2024, the national single-family low-cost floor is $498,257, while the high-cost ceiling (in areas like California or NYC) is $1,149,825.",
+      "The calculator's encoded schedule distinguishes life-of-loan and 11-year MIP scenarios based on loan term and down payment. These values are policy-sensitive and should be verified against current FHA requirements.",
   },
   {
-    question: "Can I buy a multi-unit property (duplex, triplex, fourplex) with an FHA loan?",
+    question: "How is the FHA monthly PITI payment calculated?",
     answer:
-      "Yes! You can purchase up to a 4-unit multi-family property with an FHA loan using only 3.5% down, provided you live in one of the units as your primary residence for at least 12 months. Rental income from the other units can be used to qualify for the loan.",
+      "PITI is modeled as principal and interest plus monthly property taxes, insurance, monthly MIP and HOA. The exact result depends on the inputs you enter.",
   },
   {
-    question: "How much can a seller contribute toward closing costs on an FHA loan?",
+    question: "Can FHA UFMIP be financed into the loan?",
     answer:
-      "FHA guidelines permit sellers to contribute up to 6% of the home sale price toward buyer closing costs, prepaid items, and discount points, significantly lowering the out-of-pocket cash needed at closing.",
+      "Yes, the calculator supports both cash and financed UFMIP scenarios. Financing UFMIP increases the loan balance and modeled P&I while reducing the cash required at closing.",
   },
   {
-    question: "When should I choose a Conventional loan over an FHA loan?",
+    question: "What are FHA loan limits and how are they checked?",
     answer:
-      "Choose a Conventional loan if you have a credit score of 720+ and at least 3%–5% down payment. Conventional private mortgage insurance (PMI) is cheaper for high credit scores and automatically cancels once you reach 20% home equity, saving thousands compared to permanent FHA MIP.",
+      "The calculator includes a county-limit reference tool. The supplied reference uses 2024 HUD values, so those figures are time-sensitive and should be checked against current HUD/FHA county limits before relying on them.",
   },
   {
-    question: "What is an FHA 203(k) renovation loan?",
+    question: "Can I use an FHA 203(k) loan for renovations?",
     answer:
-      "An FHA 203(k) loan allows home buyers to combine the purchase price of a fixer-upper home and its renovation costs into a single 30-year mortgage with just 3.5% down based on the After-Repair Value (ARV).",
+      "The calculator's 203(k) module models a renovation budget, contingency reserve and resulting financed loan. Actual 203(k) eligibility, contractor requirements and project rules depend on the applicable FHA program requirements.",
+  },
+  {
+    question: "How do extra mortgage payments affect FHA interest and MIP?",
+    answer:
+      "Additional payments can shorten the modeled payoff period and reduce future interest. They may also reduce modeled MIP if the extra payment changes the period over which MIP is charged. Savings depend on the specific loan and timing.",
+  },
+  {
+    question: "How does an FHA loan compare with a Conventional loan?",
+    answer:
+      "The calculator provides a scenario comparison using its selected FHA and Conventional assumptions. The result should be interpreted as a model comparison, not a universal statement that FHA or Conventional is always cheaper or better.",
   },
 ];
