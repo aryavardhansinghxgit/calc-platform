@@ -150,6 +150,8 @@ import { PercentErrorCalculator } from "./percent-error/PercentErrorCalculator";
 import { PercentErrorContent } from "./percent-error/PercentErrorContent";
 import { DownPaymentCalculator } from "./down-payment/DownPaymentCalculator";
 import { DownPaymentContent } from "./down-payment/DownPaymentContent";
+import { RentVsBuyCalculator } from "./rent-vs-buy/RentVsBuyCalculator";
+import { RentVsBuyContent } from "./rent-vs-buy/RentVsBuyContent";
 import { HorsepowerCalculator } from "./horsepower/HorsepowerCalculator";
 import { HorsepowerContent } from "./horsepower/HorsepowerContent";
 import { GasMileageCalculator } from "./gas-mileage/GasMileageCalculator";
@@ -447,6 +449,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isStatistics = idLower === "statistics-calculator" || slugLower === "statistics-calculator";
   const isPercentError = idLower === "percent-error-calculator" || slugLower === "percent-error-calculator";
   const isDownPayment = idLower === "down-payment-calculator" || slugLower === "down-payment-calculator";
+  const isRentVsBuy = idLower === "rent-vs-buy-calculator" || slugLower === "rent-vs-buy-calculator";
   const isDate = idLower === "date-calculator" || slugLower === "date-calculator";
   const isHours = idLower === "hours-calculator" || slugLower === "hours-calculator";
   const isGrade = idLower === "grade-calculator" || slugLower === "grade-calculator";
@@ -530,7 +533,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                                                                                       isIncomeTax ? IncomeTaxContent :
                                                                                         isSalary ? SalaryContent :
                                                                                            isAutoLoan ? AutoLoanContentSection :
-                                                                                             isScientific ? ScientificCalculatorContent : isFraction ? FractionContent : isStatistics ? StatisticsContent : isPercentError ? PercentErrorContent : isDownPayment ? DownPaymentContent : isBac ? BacContent : isBsa ? BsaContent : isBodyType ? BodyTypeContent : isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null
+                                                                                             isScientific ? ScientificCalculatorContent : isFraction ? FractionContent : isStatistics ? StatisticsContent : isPercentError ? PercentErrorContent : isDownPayment ? DownPaymentContent : isRentVsBuy ? RentVsBuyContent : isBac ? BacContent : isBsa ? BsaContent : isBodyType ? BodyTypeContent : isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null
   );
   const CustomChart = definition.ChartComponent;
 
@@ -591,6 +594,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             <PercentErrorCalculator />
           ) : isDownPayment ? (
             <DownPaymentCalculator />
+          ) : isRentVsBuy ? (
+            <RentVsBuyCalculator />
           ) : isLove ? (
             <LoveCalculator />
           ) : isDiceRoller ? (

@@ -1,32 +1,32 @@
 export type TaxFilingStatus = "single" | "married_joint" | "married_separate" | "head_of_household";
 
 export interface RentVsBuyInput {
-  homePrice: number;
-  downPaymentPct: number;
-  interestRate: number;
-  loanTermYears: number;
-  buyingClosingCostsPct: number;
-  propertyTaxPct: number;
-  propertyTaxAnnual: number;
-  propertyTaxGrowthPct: number;
-  homeInsuranceAnnual: number;
-  hoaFeeAnnual: number;
-  maintenancePct: number;
-  homeAppreciationPct: number;
-  costInsuranceIncreasePct: number;
-  sellingClosingCostsPct: number;
+  homePrice?: number;
+  downPaymentPct?: number;
+  interestRate?: number;
+  loanTermYears?: number;
+  buyingClosingCostsPct?: number;
+  propertyTaxPct?: number;
+  propertyTaxAnnual?: number;
+  propertyTaxGrowthPct?: number;
+  homeInsuranceAnnual?: number;
+  hoaFeeAnnual?: number;
+  maintenancePct?: number;
+  homeAppreciationPct?: number;
+  costInsuranceIncreasePct?: number;
+  sellingClosingCostsPct?: number;
 
-  monthlyRent: number;
-  annualRentIncreasePct: number;
-  renterInsuranceMonthly: number;
-  securityDeposit: number;
-  upfrontRentalFees: number;
+  monthlyRent?: number;
+  annualRentIncreasePct?: number;
+  renterInsuranceMonthly?: number;
+  securityDeposit?: number;
+  upfrontRentalFees?: number;
 
-  investmentReturnRatePct: number;
-  marginalFederalTaxRate: number;
-  marginalStateTaxRate: number;
-  taxFilingStatus: TaxFilingStatus;
-  currencySymbol: string;
+  investmentReturnRatePct?: number;
+  marginalFederalTaxRate?: number;
+  marginalStateTaxRate?: number;
+  taxFilingStatus?: TaxFilingStatus;
+  currencySymbol?: string;
 }
 
 export interface AverageCostRow {
@@ -68,11 +68,11 @@ export interface RentVsBuyResult {
 }
 
 export interface NetWorthComparisonInput {
-  homePrice: number;
-  downPaymentAmount: number;
-  appreciationRate: number;
-  investmentReturnRate: number;
-  years: number;
+  homePrice?: number;
+  downPaymentAmount?: number;
+  appreciationRate?: number;
+  investmentReturnRate?: number;
+  years?: number;
 }
 
 export interface NetWorthComparisonResult {
@@ -84,25 +84,25 @@ export interface NetWorthComparisonResult {
 }
 
 export interface PriceToRentInput {
-  homePrice: number;
-  monthlyRent: number;
+  homePrice?: number;
+  monthlyRent?: number;
 }
 
 export interface PriceToRentResult {
   ratio: number;
-  category: "Buy Favored (1-15)" | "Neutral (16-20)" | "Rent Favored (21+)";
+  category: string;
   badgeColor: string;
   explanation: string;
 }
 
 export interface TaxShieldInput {
-  homePrice: number;
-  mortgageBalance: number;
-  interestRate: number;
-  propertyTaxAnnual: number;
-  filingStatus: TaxFilingStatus;
-  marginalFederalTaxRate: number;
-  marginalStateTaxRate: number;
+  homePrice?: number;
+  mortgageBalance?: number;
+  interestRate?: number;
+  propertyTaxAnnual?: number;
+  filingStatus?: TaxFilingStatus;
+  marginalFederalTaxRate?: number;
+  marginalStateTaxRate?: number;
 }
 
 export interface TaxShieldResult {
@@ -116,10 +116,10 @@ export interface TaxShieldResult {
 }
 
 export interface BenFelixInput {
-  homePrice: number;
-  interestRate: number;
-  propertyTaxPct: number;
-  maintenancePct: number;
+  homePrice?: number;
+  interestRate?: number;
+  propertyTaxPct?: number;
+  maintenancePct?: number;
 }
 
 export interface BenFelixResult {
@@ -130,10 +130,10 @@ export interface BenFelixResult {
 }
 
 export interface RelocationPenaltyInput {
-  homePrice: number;
-  plannedStayYears: number;
-  buyingCostsPct: number;
-  sellingCostsPct: number;
+  homePrice?: number;
+  plannedStayYears?: number;
+  buyingCostsPct?: number;
+  sellingCostsPct?: number;
 }
 
 export interface RelocationPenaltyResult {

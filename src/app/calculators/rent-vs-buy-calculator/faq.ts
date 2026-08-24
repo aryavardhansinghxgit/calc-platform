@@ -1,57 +1,64 @@
-export interface RentVsBuyFAQItem {
-  question: string;
-  answer: string;
-}
+import { CalculatorFAQ } from "@/calculators/types";
 
-export const rentVsBuyFaqs: RentVsBuyFAQItem[] = [
+export const rentVsBuyFaqs: CalculatorFAQ[] = [
   {
-    question: "How many years do I need to stay in a home to make buying worth it?",
+    question: "How does a rent vs. buy calculator work?",
     answer:
-      "For most housing markets, the breakeven point between renting and buying is typically 4 to 7 years. Over shorter stays (1 to 3 years), the massive upfront buying closing costs (2%-3%) and selling commission fees (6%-7%) outweigh home appreciation and principal payoff.",
+      "It compares modeled ownership and renting economics over time, including the configured mortgage, principal buildup, taxes, insurance, maintenance, transaction costs, rent growth, appreciation, opportunity cost and tax assumptions.",
   },
   {
-    question: "What is the 5% rule when deciding whether to rent or buy?",
+    question: "How many years should I plan to stay before buying a home?",
     answer:
-      "Popularized by financial analyst Ben Felix, the 5% Rule estimates the annual unrecoverable cost of homeownership as 5% of the property value: 3% for mortgage interest/cost of capital, 1% for property taxes, and 1% for maintenance. If monthly rent for a comparable home is less than (Home Value × 5% / 12), renting is mathematically superior.",
+      "The calculator estimates a breakeven horizon under your assumptions. The result is scenario-specific and should not be treated as a universal minimum ownership period.",
   },
   {
-    question: "How does the price-to-rent ratio help decide between renting and buying?",
+    question: "What costs are included when comparing renting and buying?",
     answer:
-      "The Price-to-Rent Ratio is calculated as: Home Purchase Price ÷ Annual Rent. A ratio of 15 or less signals that buying is favored; 16 to 20 represents a neutral market; and 21 or higher indicates that renting and investing the surplus capital yields greater long-term wealth.",
+      "The model includes the configured mortgage, property taxes, insurance, maintenance, HOA, purchase and selling costs, rent, rent growth, renter-side costs and the selected investment and tax assumptions.",
   },
   {
-    question: "Is buying always better than renting in the long run?",
+    question: "What is the price-to-rent ratio?",
     answer:
-      "No. Renting can build equal or greater wealth if the renter strictly invests the initial down payment, closing costs, and monthly cash flow savings into low-cost index funds (e.g. S&P 500 averaging 8-10% CAGR) rather than spending it.",
+      "It is the home price divided by annual rent. It is a quick screening heuristic, not a complete buy-or-rent decision rule.",
   },
   {
-    question: "How do closing costs and selling fees affect the breakeven point?",
+    question: "What is the 5% rule for renting vs. buying?",
     answer:
-      "Transaction fees create a significant financial hurdle. Buying closing costs add 2%-4% upfront, while real estate agent commissions and transfer taxes consume 6%-8% upon sale. A homeowner must accumulate enough home appreciation to absorb these friction fees before breakeven occurs.",
+      "It is an unrecoverable-cost heuristic. This calculator uses a dynamic implementation based on selected ownership-cost assumptions, so the result should be treated as a model-specific screening measure.",
   },
   {
-    question: "How does the opportunity cost of a down payment affect the calculation?",
+    question: "How do mortgage interest and principal affect the comparison?",
     answer:
-      "When you use $100,000 as a home down payment, that capital is locked in home equity rather than earning compound interest in stock market index funds. Our calculator models this opportunity cost to provide a true net worth comparison.",
+      "Interest is generally a financing cost, while principal repayment reduces the outstanding mortgage and builds modeled home equity. The amortization schedule separates the two.",
   },
   {
-    question: "Can I deduct my mortgage interest and property taxes on my tax return?",
+    question: "How does home appreciation affect the rent-vs-buy decision?",
     answer:
-      "Under current IRS rules (Tax Cuts and Jobs Act), mortgage interest and property taxes are deductible ONLY IF your itemized deductions exceed the standard deduction ($15,000 Single / $30,000 Married). Additionally, property tax write-offs are capped at $10,000 under the SALT limit.",
+      "Higher modeled appreciation generally increases the future value of the owned property and can improve modeled buying-side net worth. Actual appreciation is uncertain.",
   },
   {
-    question: "What percentage should I budget for home maintenance and repairs each year?",
+    question: "How does rent inflation affect the comparison?",
     answer:
-      "Financial planners recommend budgeting 1% to 1.5% of the home's total value annually for routine maintenance, repairs, and long-term capital expenditures (e.g., roof replacement, HVAC, plumbing).",
+      "The calculator escalates rent according to the selected annual growth assumption. Higher rent growth increases the modeled long-term cost of renting.",
   },
   {
-    question: "What happens to the rent vs. buy equation during periods of high inflation or interest rates?",
+    question: "How does the opportunity cost of a down payment affect the result?",
     answer:
-      "High mortgage interest rates increase the unrecoverable cost of owning, pushing the breakeven horizon further out. However, high general inflation also drives up annual rent increases, which makes fixed-rate homeownership more protective over 10 to 30 years.",
+      "Money used as a down payment cannot also remain invested under the same scenario. The calculator models that alternative investment growth using the selected return assumption.",
   },
   {
-    question: "Why is renting often considered 'buying flexibility' rather than 'throwing money away'?",
+    question: "How do closing costs and selling costs affect the breakeven point?",
     answer:
-      "Renting provides geographic mobility, zero responsibility for major emergency repairs, and liquid capital. In high-cost metro areas, renting allows individuals to live in desirable locations without taking on concentrated real estate leverage.",
+      "Transaction costs create friction. Higher purchase or selling costs generally make shorter holding periods less attractive under the model.",
+  },
+  {
+    question: "Does the calculator include mortgage-interest or property-tax benefits?",
+    answer:
+      "Yes, the current model contains a simplified illustrative tax-benefit calculation. Tax rules and eligibility can vary, so the result is not a personalized tax determination.",
+  },
+  {
+    question: "Why can the calculator say buying wins in one scenario and renting wins in another?",
+    answer:
+      "Because the result depends on the assumptions. Changing appreciation, rent growth, rates, transaction costs, investment return or holding period can materially change the modeled outcome.",
   },
 ];

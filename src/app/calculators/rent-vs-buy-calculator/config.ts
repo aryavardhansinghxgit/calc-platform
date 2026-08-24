@@ -23,7 +23,7 @@ export const rentVsBuyConfig: CalculatorModuleDefinition = {
     "True Cost of Homeownership Calculator",
     "Opportunity Cost Rent vs Buy",
     "Rent vs Buy Comparison Table",
-    "Housing Affordability Rent vs Buy"
+    "Housing Affordability Rent vs Buy",
   ],
   priority: 1,
   relatedCalculators: [
@@ -31,7 +31,9 @@ export const rentVsBuyConfig: CalculatorModuleDefinition = {
     "rent-calculator",
     "house-affordability-calculator",
     "down-payment-calculator",
-    "rental-property-calculator"
+    "rental-property-calculator",
+    "refinance-calculator",
+    "loan-calculator",
   ],
   formulaDescription:
     "Breakeven occurs when Net Buying Cost (Initial Outlay + Cumulative Payments - Tax Shield - Net Sale Proceeds) < Net Renting Cost (Cumulative Rent - Stock Portfolio Growth).",

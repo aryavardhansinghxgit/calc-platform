@@ -1,25 +1,28 @@
 import { Metadata } from "next";
 
 export const rentVsBuyMetadata: Metadata = {
-  title: "Rent vs. Buy Calculator — Should You Buy a Home or Rent?",
+  title: "Rent vs Buy Calculator — Compare Costs, Breakeven, Equity & Net Worth",
   description:
-    "Free Rent vs. Buy Calculator. Model breakeven timeline horizons, unrecoverable costs, opportunity costs, Price-to-Rent ratios, Ben Felix 5% rule, and 30-year net worth divergence.",
+    "Compare renting and buying with mortgage costs, rent growth, home appreciation, taxes, maintenance, investment opportunity cost, breakeven horizon and modeled net worth.",
   keywords: [
-    "Rent vs Buy Calculator",
-    "Should I Rent or Buy a House Calculator",
-    "Rent vs Buy Breakeven Calculator",
-    "Is It Better to Rent or Buy a Home",
-    "Price to Rent Ratio Calculator",
-    "True Cost of Homeownership Calculator",
-    "Opportunity Cost Rent vs Buy",
-    "Rent vs Buy Comparison Table",
-    "Housing Affordability Rent vs Buy"
+    "rent vs buy calculator",
+    "rent vs. buy calculator",
+    "rent or buy calculator",
+    "should I rent or buy",
+    "renting vs buying a house",
+    "buy vs rent calculator",
+    "rent versus mortgage calculator",
+    "break-even rent vs buy",
+    "price to rent ratio calculator",
+    "5% rule rent vs buy",
+    "home ownership vs renting",
+    "rent vs buy analysis",
   ],
   authors: [{ name: "Calculator Platform Real Estate Financial Engineering Team" }],
   openGraph: {
-    title: "Rent vs. Buy Calculator — Housing Investment Decision Suite",
+    title: "Rent vs Buy Calculator — Compare Costs, Breakeven, Equity & Net Worth",
     description:
-      "Calculate your exact breakeven stay horizon, unrecoverable housing costs, Price-to-Rent ratio, tax deductions, and stock market opportunity costs.",
+      "Compare renting and buying with mortgage costs, rent growth, home appreciation, taxes, maintenance, investment opportunity cost, breakeven horizon and modeled net worth.",
     type: "website",
     url: "https://calculator-platform.com/calculators/rent-vs-buy-calculator",
   },
