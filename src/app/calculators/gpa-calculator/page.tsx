@@ -7,7 +7,7 @@ import { generateJsonLdSchema } from "@/lib/seo-helpers";
 export const metadata: Metadata = gpa_calculatorMetadata;
 
 export default function GPACalculatorPage() {
-  const { calculate, ...serializableDef } = gpa_calculatorConfig;
+  const { calculate, CustomComponent, ContentComponent, ...serializableDef } = gpa_calculatorConfig as any;
   const schemas = generateJsonLdSchema({
     title: gpa_calculatorConfig.title,
     description: gpa_calculatorConfig.description,

@@ -1,32 +1,49 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateGPACalculator } from "./calculator";
 import { gpa_calculatorFaqs } from "./faq";
+import { GPACalculator } from "@/components/calculator/gpa/GPACalculator";
+import { GPAContent } from "@/components/calculator/gpa/GPAContent";
 
 export const gpa_calculatorConfig: CalculatorModuleDefinition = {
   id: "gpa-calculator",
-  title: "GPA Calculator & Academic Standing Planner",
+  title: "GPA Calculator",
   slug: "gpa-calculator",
   category: "other",
   subcategory: "Science & Education",
-  description: "Next-Gen College & High School GPA Calculator. Multi-term semester tracking, AP/IB weighted 5.0 scales, grade forgiveness retakes, Target GPA solver, and international grade converter.",
+  description: "Calculate semester and cumulative GPA, weighted high school GPA, target GPA requirements, and illustrative international scale conversions with a detailed academic planning calculator.",
   iconName: "GraduationCap",
   featured: true,
   keywords: [
-    "gpa calculator",
-    "college gpa calculator",
-    "weighted gpa calculator",
-    "target gpa calculator",
-    "cumulative gpa calculator",
-    "high school gpa calculator",
-    "raise my gpa planner",
-    "cgpa to gpa converter",
-    "dean's list gpa calculator",
-    "latin honors gpa scale"
+    "GPA calculator",
+    "college GPA calculator",
+    "cumulative GPA calculator",
+    "semester GPA calculator",
+    "weighted GPA calculator",
+    "high school GPA calculator",
+    "5.0 GPA calculator",
+    "target GPA calculator",
+    "GPA improvement calculator",
+    "GPA calculator with credits",
+    "international GPA calculator",
+    "GPA conversion calculator",
+    "4.0 GPA calculator",
+    "cumulative GPA planner",
+    "required GPA calculator"
   ],
   priority: 1,
-  relatedCalculators: ["grade-calculator", "gpa-calculator", "hours-calculator"],
+  relatedCalculators: [
+    "grade-calculator",
+    "hours-calculator",
+    "scientific-calculator",
+    "statistics-calculator",
+    "percentage-calculator",
+    "fraction-calculator",
+    "ratio-calculator"
+  ],
   formulaDescription: "Quality Points = Grade Point Value × Credit Hours | Semester GPA = Total Quality Points / Total Graded Credits",
   faqs: gpa_calculatorFaqs,
+  CustomComponent: GPACalculator,
+  ContentComponent: GPAContent,
   inputs: [
     {
       name: "mode",

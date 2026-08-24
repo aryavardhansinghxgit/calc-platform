@@ -2,53 +2,63 @@ import { CalculatorFAQ } from "@/calculators/types";
 
 export const gpa_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "How is college GPA calculated?",
+    question: "What is a GPA and how is it calculated?",
     answer:
-      "College GPA is calculated by multiplying each course's numerical grade point value (e.g., A = 4.0, B = 3.0) by its credit hours to determine Quality Points. Total quality points earned across all courses are then divided by the total number of graded credit hours.",
+      "GPA is a credit-weighted average of grade points. Each course contributes grade points multiplied by its credits, and the total quality points are divided by total graded credits under the selected grading model.",
   },
   {
-    question: "What is the difference between Semester GPA and Cumulative GPA?",
+    question: "How do I calculate my semester GPA?",
     answer:
-      "Semester GPA (Term GPA) measures academic performance strictly within a single academic term or semester. Cumulative GPA (CGPA) encompasses your total academic history, combining quality points and graded credit hours earned across all completed semesters.",
+      "Enter each course, its grade and its credits. The calculator multiplies each grade-point value by the course credits, totals the quality points, divides by graded credits and rounds the displayed result to the calculator's configured precision.",
   },
   {
-    question: "What is the difference between a weighted and unweighted GPA?",
+    question: "How is cumulative GPA different from semester GPA?",
     answer:
-      "An unweighted GPA measures raw course grades on a strict 4.0 ceiling regardless of course difficulty. A weighted GPA awards extra grade point bonuses for challenging courses—typically adding +0.5 for Honors classes (4.5 scale) and +1.0 for Advanced Placement (AP) or International Baccalaureate (IB) classes (5.0 scale).",
+      "Semester GPA covers the selected term. Cumulative GPA combines prior academic history and current or additional terms using total quality points divided by total graded credits. It is not a simple average of semester GPAs.",
   },
   {
-    question: "Do Pass/Fail (P/F) or Withdrawn (W) classes affect your GPA?",
+    question: "How does a GPA calculator handle prior credits and prior GPA?",
     answer:
-      "No. Standard Pass/Fail (P/NP), Satisfactory/Unsatisfactory (S/U), Incomplete (I), and Official Withdrawal (W) grades carry zero grade points and are excluded from the GPA credit hour denominator. Earned credits count toward graduation totals without impacting GPA averages.",
+      "The calculator converts the prior GPA and prior graded credits into prior quality points, then combines those points with the current term's quality points and credits. A larger prior-credit history generally makes the cumulative GPA less responsive to one new term.",
   },
   {
-    question: "How do retaking classes and grade forgiveness work?",
+    question: "What is a weighted high school GPA?",
     answer:
-      "Many universities offer grade forgiveness or course retake policies where repeating a failed or low-graded course replaces the prior low grade point value in your cumulative GPA calculation with the new grade earned, though both attempts usually remain visible on official transcripts.",
+      "A weighted GPA adds configured course-level modifiers to selected advanced classes such as honors or AP/IB courses. The exact weighting policy varies by school, so the calculator's 5.0-style model should be treated as an illustrative framework.",
   },
   {
-    question: "What is considered a \"good\" GPA in college and high school?",
+    question: "How does the Target GPA Solver work?",
     answer:
-      "In high school and college, a 3.0 GPA represents a solid B average (good standing). A 3.5 or higher qualifies students for the Dean's List and merit scholarships, while a 3.7 to 4.0 is highly competitive for top graduate programs, medical school, and law school admissions.",
+      "It calculates the average GPA required across your future graded credits to reach a selected cumulative target using the current quality points, current credits and future credits. If the required future GPA exceeds the configured grading scale, the target is flagged as mathematically unreachable under those assumptions.",
   },
   {
-    question: "Why is it harder to raise your GPA during junior and senior years?",
+    question: "Can I raise my cumulative GPA to 4.0?",
     answer:
-      "This occurs due to mathematical credit hour inertia. As you accumulate 60+ credit hours during freshman and sophomore years, each new 3-credit course represents a progressively smaller fraction of your total credit denominator, requiring significantly more high-grade credits to shift your cumulative average.",
+      "It depends on your current GPA, completed credits, remaining graded credits and the maximum grade point available on your scale. The Target GPA Solver shows the required future GPA so you can see whether the goal is mathematically achievable.",
   },
   {
-    question: "What are \"Quality Points\" in academic grading?",
+    question: "How are international GPA conversions calculated?",
     answer:
-      "Quality Points are the product of multiplying a course's numerical grade value by its assigned credit hour weight. For example, earning an A (4.0 points) in a 4-credit calculus course yields 16.0 Quality Points (4.0 × 4).",
+      "The International Scale mode uses the calculator's configured conversion tables to provide illustrative equivalents for selected grading systems. These are not official credential evaluations, and universities or credential evaluators may use different conversion methods.",
   },
   {
-    question: "How do you convert a 10.0 CGPA scale to a 4.0 US GPA?",
+    question: "Does a 3.3 GPA always equal the same international GPA?",
     answer:
-      "While official credential evaluators (like WES) perform course-by-course transcript conversions, a standard direct linear conversion divides Indian CGPA by 2.5 (e.g., 8.0 CGPA / 2.5 = 3.2 US GPA) or converts percentage ranges directly to US letter grade scales.",
+      "No. International GPA equivalence depends on the grading system, institution, country, program and evaluation method. A calculator can provide a reference estimate, but an official credential evaluation may produce a different result.",
   },
   {
-    question: "What GPA is required for Latin Honors (Cum Laude, Magna Cum Laude, Summa Cum Laude)?",
+    question: "How are honors, Dean's List and academic standing determined?",
     answer:
-      "Latin Honors thresholds vary by university, but standard guidelines require: Cum Laude (Honor) ~3.50–3.69, Magna Cum Laude (High Honor) ~3.70–3.89, and Summa Cum Laude (Highest Honor) ~3.90–4.00.",
+      "The calculator uses configured GPA thresholds to display planning labels. Official academic standing, honors and Latin-honor eligibility depend on the institution, program and applicable academic policy.",
+  },
+  {
+    question: "Do repeated courses, withdrawals and pass/fail grades affect GPA?",
+    answer:
+      "They can, but the treatment varies by institution. Some schools replace grades, some average attempts, and some exclude particular non-graded categories. Use the calculator's supported model and verify your school's official policy.",
+  },
+  {
+    question: "Why can my calculated GPA differ from my official transcript?",
+    answer:
+      "Your institution may use a different grade-point scale, rounding method, repeated-course policy, treatment of special grades, credit definitions or transfer rules. The calculator is a mathematical planning model and does not replace the institution's official transcript calculation.",
   },
 ];

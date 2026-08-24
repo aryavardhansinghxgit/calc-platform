@@ -32,7 +32,7 @@ export const GRADE_POINTS_UNWEIGHTED: Record<GradeLetter, number | null> = {
   W: null,
 };
 
-// Course Level Weight Additions
+// Course Level Weight Additions (Standard 5.0 High School Scale)
 export const LEVEL_WEIGHT_ADDITIONS: Record<GradeLevel, number> = {
   regular: 0.0,
   honors: 0.5,
@@ -61,16 +61,19 @@ export function calculateCoursesGPA(courses: CourseEntry[], isWeighted: boolean 
 
   for (const course of courses) {
     const points = getGradePoints(course.grade, course.level, isWeighted);
-    if (points !== null && course.credits > 0) {
-      totalQualityPoints += points * course.credits;
-      totalGradedCredits += course.credits;
+    const credits = Math.max(0, Number(course.credits) || 0);
+    if (points !== null && credits > 0) {
+      totalQualityPoints += points * credits;
+      totalGradedCredits += credits;
     }
   }
 
   const gpa = totalGradedCredits > 0 ? totalQualityPoints / totalGradedCredits : 0;
   return {
     gpa: parseFloat(gpa.toFixed(2)),
-    totalQualityPoints: parseFloat(totalQualityPoints.toFixed(2)),
+    exactGpa: gpa,
+    totalQualityPoints: parseFloat(totalQualityPoints.toFixed(4)),
+    exactQualityPoints: totalQualityPoints,
     totalGradedCredits,
   };
 }
@@ -82,14 +85,15 @@ export function solveTargetGPA(
   currentGpa: number,
   currentCredits: number,
   targetGpa: number,
-  additionalCredits: number
+  additionalCredits: number,
+  exactCurrentQualityPoints?: number
 ): TargetSolverResult {
   if (additionalCredits <= 0) {
     return {
       targetGpa,
-      currentGpa,
+      currentGpa: parseFloat(currentGpa.toFixed(2)),
       currentCredits,
-      additionalCredits,
+      additionalCredits: 0,
       requiredGpa: 0,
       isAchievable: false,
       recommendedGradeMix: "Additional credit hours must be greater than 0.",
@@ -98,15 +102,19 @@ export function solveTargetGPA(
 
   const totalFutureCredits = currentCredits + additionalCredits;
   const totalRequiredPoints = targetGpa * totalFutureCredits;
-  const currentPoints = currentGpa * currentCredits;
+  const currentPoints = exactCurrentQualityPoints !== undefined ? exactCurrentQualityPoints : currentGpa * currentCredits;
   const requiredPointsForNewTerm = totalRequiredPoints - currentPoints;
   const requiredGpa = requiredPointsForNewTerm / additionalCredits;
 
   const roundedRequiredGpa = parseFloat(requiredGpa.toFixed(2));
-  const isAchievable = roundedRequiredGpa <= 4.0 && roundedRequiredGpa >= 0;
+  const isAchievable = roundedRequiredGpa <= 4.0 && targetGpa <= 4.0;
 
   let recommendedGradeMix = "Requires an average grade of A/A+ across upcoming courses.";
-  if (roundedRequiredGpa <= 2.0) {
+  if (targetGpa > 4.0) {
+    recommendedGradeMix = "Target GPA is above the maximum possible 4.0 scale ceiling.";
+  } else if (roundedRequiredGpa <= 0) {
+    recommendedGradeMix = "Target GPA is already achieved; maintain passing grades.";
+  } else if (roundedRequiredGpa <= 2.0) {
     recommendedGradeMix = "Maintain a C average (2.0 GPA) or higher.";
   } else if (roundedRequiredGpa <= 3.0) {
     recommendedGradeMix = "Maintain a B average (3.0 GPA) or higher.";
@@ -120,7 +128,7 @@ export function solveTargetGPA(
 
   return {
     targetGpa,
-    currentGpa,
+    currentGpa: parseFloat(currentGpa.toFixed(2)),
     currentCredits,
     additionalCredits,
     requiredGpa: roundedRequiredGpa,
@@ -133,7 +141,7 @@ export function solveTargetGPA(
  * Convert US 4.0 GPA to International Scales
  */
 export function convertInternationalGPA(usGpa: number): InternationalConversion {
-  const gpa = Math.max(0, Math.min(4.0, usGpa));
+  const gpa = Math.max(0, Math.min(4.0, Number(usGpa) || 0));
 
   const mitScale5 = parseFloat((gpa * 1.25).toFixed(2));
   const canadianScale433 = parseFloat(((gpa / 4.0) * 4.33).toFixed(2));
@@ -179,49 +187,77 @@ export function evaluateAcademicStanding(gpa: number): { standing: string; color
  */
 export function calculateGPACalculator(inputs: Record<string, any>): GPACalculatorOutputs {
   const mode = String(inputs.mode || "college");
-  const priorGpa = Number(inputs.priorGpa || 0);
-  const priorCredits = Number(inputs.priorCredits || 0);
+  const priorGpa = Math.max(0, Math.min(4.0, Number(inputs.priorGpa) || 0));
+  const priorCredits = Math.max(0, Number(inputs.priorCredits) || 0);
 
-  // Parse courses array or construct default courses
+  // Handle courses and multi-term semesters
+  let semesters: SemesterEntry[] = Array.isArray(inputs.semesters) ? inputs.semesters : [];
   let courses: CourseEntry[] = Array.isArray(inputs.courses) ? inputs.courses : [];
-  if (courses.length === 0) {
+
+  if (semesters.length === 0 && courses.length === 0) {
     courses = [
-      { id: "1", name: "Mathematics", grade: "A", credits: 4, level: "ap_ib" },
-      { id: "2", name: "English Literature", grade: "A-", credits: 3, level: "honors" },
-      { id: "3", name: "Biology", grade: "B+", credits: 4, level: "regular" },
-      { id: "4", name: "History", grade: "B", credits: 3, level: "regular" },
+      { id: "1", name: "Calculus I", grade: "A", credits: 4, level: "ap_ib" },
+      { id: "2", name: "English Composition", grade: "A-", credits: 3, level: "honors" },
+      { id: "3", name: "General Chemistry", grade: "B+", credits: 4, level: "regular" },
+      { id: "4", name: "World History", grade: "B", credits: 3, level: "regular" },
     ];
+    semesters = [{ id: "sem-1", name: "Fall Semester", courses }];
+  } else if (semesters.length > 0 && courses.length === 0) {
+    courses = semesters[0].courses || [];
+  }
+
+  // Calculate active term
+  const unweightedResult = calculateCoursesGPA(courses, false);
+  const weightedResult = calculateCoursesGPA(courses, true);
+
+  // Calculate all terms combined
+  let totalAllQualityPoints = 0;
+  let totalAllGradedCredits = 0;
+
+  if (semesters.length > 0) {
+    for (const sem of semesters) {
+      const semResult = calculateCoursesGPA(sem.courses, false);
+      totalAllQualityPoints += semResult.exactQualityPoints;
+      totalAllGradedCredits += semResult.totalGradedCredits;
+    }
+  } else {
+    totalAllQualityPoints = unweightedResult.exactQualityPoints;
+    totalAllGradedCredits = unweightedResult.totalGradedCredits;
   }
 
   // Handle Course Retake & Grade Forgiveness
   let adjustedPriorPoints = priorGpa * priorCredits;
   let adjustedPriorCredits = priorCredits;
 
-  for (const course of courses) {
+  const allCoursesToCheck = semesters.length > 0 ? semesters.flatMap((s) => s.courses) : courses;
+  for (const course of allCoursesToCheck) {
     if (course.isRetake && course.oldGrade) {
       const oldPts = getGradePoints(course.oldGrade, course.level, mode === "weighted_hs");
-      if (oldPts !== null && course.credits > 0) {
-        adjustedPriorPoints = Math.max(0, adjustedPriorPoints - oldPts * course.credits);
+      const credits = Math.max(0, Number(course.credits) || 0);
+      if (oldPts !== null && credits > 0) {
+        adjustedPriorPoints = Math.max(0, adjustedPriorPoints - oldPts * credits);
       }
     }
   }
 
-  // Calculate current term unweighted & weighted
-  const unweightedResult = calculateCoursesGPA(courses, false);
-  const weightedResult = calculateCoursesGPA(courses, true);
-
-  // Calculate Cumulative GPA
-  const totalCumulativePoints = adjustedPriorPoints + unweightedResult.totalQualityPoints;
-  const totalCumulativeCredits = adjustedPriorCredits + unweightedResult.totalGradedCredits;
-  const cumulativeGpa =
-    totalCumulativeCredits > 0 ? parseFloat((totalCumulativePoints / totalCumulativeCredits).toFixed(2)) : unweightedResult.gpa;
+  // Calculate Cumulative GPA using exact full-precision sums
+  const totalCumulativePoints = adjustedPriorPoints + totalAllQualityPoints;
+  const totalCumulativeCredits = adjustedPriorCredits + totalAllGradedCredits;
+  const exactCumulativeGpa = totalCumulativeCredits > 0 ? totalCumulativePoints / totalCumulativeCredits : unweightedResult.exactGpa;
+  const cumulativeGpa = parseFloat(exactCumulativeGpa.toFixed(2));
 
   // Target Solver Mode
   let targetResult: TargetSolverResult | undefined;
   if (mode === "target") {
-    const targetGpa = Number(inputs.targetGpa || 3.5);
-    const additionalCredits = Number(inputs.additionalCredits || 15);
-    targetResult = solveTargetGPA(cumulativeGpa, totalCumulativeCredits, targetGpa, additionalCredits);
+    const targetGpa = Number(inputs.targetGpa !== undefined ? inputs.targetGpa : 3.6);
+    const additionalCredits = Number(inputs.additionalCredits !== undefined ? inputs.additionalCredits : 15);
+    targetResult = solveTargetGPA(
+      exactCumulativeGpa,
+      totalCumulativeCredits,
+      targetGpa,
+      additionalCredits,
+      totalCumulativePoints
+    );
   }
 
   // International Conversion

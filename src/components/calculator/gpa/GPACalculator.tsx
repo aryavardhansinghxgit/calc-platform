@@ -140,6 +140,45 @@ export function GPACalculator() {
     setActiveSemId(newSem.id);
   };
 
+  // Load saved transcript on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("user_gpa_transcript");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.semesters && Array.isArray(parsed.semesters) && parsed.semesters.length > 0) {
+          setSemesters(parsed.semesters);
+          setActiveSemId(parsed.semesters[0].id);
+        }
+        if (typeof parsed.priorGpa === "number") setPriorGpa(parsed.priorGpa);
+        if (typeof parsed.priorCredits === "number") setPriorCredits(parsed.priorCredits);
+      }
+    } catch (e) {}
+  }, []);
+
+  // Reset to initial baseline
+  const handleReset = () => {
+    setMode("college");
+    setPriorGpa(3.2);
+    setPriorCredits(30);
+    setTargetGpa(3.6);
+    setAdditionalCredits(15);
+    const initialSemesters: SemesterEntry[] = [
+      {
+        id: "sem-1",
+        name: "Fall Semester",
+        courses: [
+          { id: "c1", name: "Calculus I", grade: "A", credits: 4, level: "ap_ib" },
+          { id: "c2", name: "English Composition", grade: "A-", credits: 3, level: "honors" },
+          { id: "c3", name: "General Chemistry", grade: "B+", credits: 4, level: "regular" },
+          { id: "c4", name: "World History", grade: "B", credits: 3, level: "regular" },
+        ],
+      },
+    ];
+    setSemesters(initialSemesters);
+    setActiveSemId("sem-1");
+  };
+
   // Calculation Results
   const result: GPACalculatorOutputs = useMemo(() => {
     return calculateGPACalculator({
@@ -149,8 +188,9 @@ export function GPACalculator() {
       targetGpa,
       additionalCredits,
       courses,
+      semesters,
     });
-  }, [mode, priorGpa, priorCredits, targetGpa, additionalCredits, courses]);
+  }, [mode, priorGpa, priorCredits, targetGpa, additionalCredits, courses, semesters]);
 
   // Save Transcript to Local Storage
   const handleSaveTranscript = () => {
@@ -201,6 +241,15 @@ export function GPACalculator() {
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleReset}
+            className="px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-zinc-800 hover:bg-slate-300 dark:hover:bg-zinc-700 text-xs font-bold text-slate-800 dark:text-zinc-200 flex items-center gap-1.5 transition-all cursor-pointer"
+            title="Reset calculator to defaults"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            <span>Reset</span>
+          </button>
           <button
             type="button"
             onClick={handleSaveTranscript}
@@ -579,7 +628,7 @@ export function GPACalculator() {
               onClick={() => setShowReportModal(true)}
               className="w-full py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-xs font-extrabold text-white flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs"
             >
-              <FileText className="h-4 w-4" /> Download Official Transcript PDF Report
+              <FileText className="h-4 w-4" /> Download Academic Summary PDF Report
             </button>
           </div>
         </div>
