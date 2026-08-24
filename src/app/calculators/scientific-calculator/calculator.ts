@@ -8,11 +8,19 @@ export function calculateScientificCalculator(inputs: Record<string, any>): Scie
     ? Number(inputs.value2)
     : 2;
   const op = inputs.operation || "sin";
-  const unit = (inputs.angleUnit || "deg") as "deg" | "rad";
+  const unit = (inputs.angleUnit || "deg") as "deg" | "rad" | "grad";
 
-  const toRad = (val: number) => (unit === "deg" ? (val * Math.PI) / 180 : val);
-  const toAngleOut = (radVal: number) => (unit === "deg" ? (radVal * 180) / Math.PI : radVal);
-  const unitLabel = unit === "deg" ? "°" : " rad";
+  const toRad = (val: number) => {
+    if (unit === "deg") return (val * Math.PI) / 180;
+    if (unit === "grad") return (val * Math.PI) / 200;
+    return val;
+  };
+  const toAngleOut = (radVal: number) => {
+    if (unit === "deg") return (radVal * 180) / Math.PI;
+    if (unit === "grad") return (radVal * 200) / Math.PI;
+    return radVal;
+  };
+  const unitLabel = unit === "deg" ? "°" : unit === "grad" ? " grad" : " rad";
 
   let resultNum: number = 0;
   let explanation: string = "";

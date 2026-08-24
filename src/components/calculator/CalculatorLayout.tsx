@@ -569,6 +569,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             <DateCalculator />
           ) : isHours ? (
             <HoursCalculator />
+          ) : isScientific ? (
+            <ScientificCalculator />
           ) : isLove ? (
             <LoveCalculator />
           ) : isDiceRoller ? (
@@ -882,8 +884,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
         </CalculatorErrorBoundary>
 
-        {/* Simple Related Calculators Links directly below calculator boxes (Suppressed for Personal Loan, Salary, Income Tax, Student Loan, Budget, Savings, House Affordability, Time, Age, Amortization, Grade, Future Value, 401(k), Date, Hours, and Roth IRA which have dedicated suites) */}
-        {!isPersonalLoan && !isSalary && !isIncomeTax && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra && !isDate && !isHours && (
+        {/* Simple Related Calculators Links directly below calculator boxes (Suppressed for Personal Loan, Salary, Income Tax, Student Loan, Budget, Savings, House Affordability, Time, Age, Amortization, Grade, Future Value, 401(k), Date, Hours, Scientific, and Roth IRA which have dedicated suites) */}
+        {!isPersonalLoan && !isSalary && !isIncomeTax && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra && !isDate && !isHours && !isScientific && (
           <div className="pt-2 pb-1 space-y-1">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block">
               RELATED CALCULATORS:
@@ -897,7 +899,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-8 shadow-xs text-slate-900 dark:text-slate-100">
         {/* Formula & Calculation Method */}
-        {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra && !isDate && !isHours && (
+        {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra && !isDate && !isHours && !isScientific && (
           <div className="space-y-3">
             <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
               Formula &amp; Calculation Method

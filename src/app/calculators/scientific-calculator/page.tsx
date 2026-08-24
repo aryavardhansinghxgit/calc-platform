@@ -7,7 +7,8 @@ import { generateJsonLdSchema } from "@/lib/seo-helpers";
 export const metadata: Metadata = scientific_calculatorMetadata;
 
 export default function ScientificCalculatorPage() {
-  const { calculate, ...serializableDef } = scientific_calculatorConfig;
+  const { calculate, CustomComponent, ContentComponent, ...serializableDef } =
+    scientific_calculatorConfig;
   const schemas = generateJsonLdSchema({
     title: scientific_calculatorConfig.title,
     description: scientific_calculatorConfig.description,

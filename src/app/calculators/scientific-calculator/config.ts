@@ -1,5 +1,8 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateScientificCalculator } from "./calculator";
+import { scientific_calculatorFaqs } from "./faq";
+import { ScientificCalculator } from "@/components/calculator/scientific/ScientificCalculator";
+import { ScientificCalculatorContent } from "@/components/calculator/scientific/ScientificCalculatorContent";
 
 export const scientific_calculatorConfig: CalculatorModuleDefinition = {
   id: "scientific-calculator",
@@ -7,13 +10,43 @@ export const scientific_calculatorConfig: CalculatorModuleDefinition = {
   slug: "scientific-calculator",
   category: "Math",
   subcategory: "General Math",
-  description: "Perform advanced scientific calculations including trigonometry, logarithms, factorials, roots, and exponents.",
+  description:
+    "Use a scientific calculator for trigonometry, logarithms, powers, roots, factorials, scientific notation and multi-step expressions with DEG, RAD and GRAD modes.",
   iconName: "Calculator",
   featured: true,
-  keywords: ["scientific calculator", "trigonometry", "logarithm", "sin cos tan", "math solver", "exponents"],
+  keywords: [
+    "scientific calculator",
+    "online scientific calculator",
+    "scientific calculator online",
+    "scientific calculator how to use",
+    "scientific calculator buttons",
+    "scientific calculator functions",
+    "scientific calculator trig",
+    "scientific calculator degrees radians",
+    "scientific calculator logarithms",
+    "scientific calculator exponents",
+    "scientific calculator roots",
+    "scientific calculator factorial",
+    "scientific calculator equation calculations",
+    "algebra calculator",
+    "engineering calculator",
+    "scientific notation calculator",
+  ],
   priority: 1,
-  relatedCalculators: ["exponent-calculator", "log-calculator", "root-calculator", "pythagorean-theorem-calculator"],
-  formulaDescription: "Evaluates trigonometric ratios, logarithmic base transforms, factorials, and exponential series.",
+  relatedCalculators: [
+    "exponent-calculator",
+    "log-calculator",
+    "root-calculator",
+    "fraction-calculator",
+    "percentage-calculator",
+    "triangle-calculator",
+    "pythagorean-theorem-calculator",
+  ],
+  formulaDescription:
+    "Evaluates trigonometric ratios, logarithmic base transforms, factorials, and exponential series.",
+  faqs: scientific_calculatorFaqs,
+  CustomComponent: ScientificCalculator,
+  ContentComponent: ScientificCalculatorContent,
   inputs: [
     {
       name: "value1",
@@ -22,7 +55,7 @@ export const scientific_calculatorConfig: CalculatorModuleDefinition = {
       defaultValue: 45,
       min: -1000000000,
       max: 1000000000,
-      step: 1
+      step: 1,
     },
     {
       name: "operation",
@@ -50,8 +83,8 @@ export const scientific_calculatorConfig: CalculatorModuleDefinition = {
         { label: "Factorial (X!)", value: "factorial" },
         { label: "Absolute Value (|X|)", value: "abs" },
         { label: "Reciprocal (1/X)", value: "recip" },
-        { label: "Modulo (X mod Y)", value: "mod" }
-      ]
+        { label: "Modulo (X mod Y)", value: "mod" },
+      ],
     },
     {
       name: "value2",
@@ -60,7 +93,7 @@ export const scientific_calculatorConfig: CalculatorModuleDefinition = {
       defaultValue: 2,
       min: -1000000000,
       max: 1000000000,
-      step: 1
+      step: 1,
     },
     {
       name: "angleUnit",
@@ -69,27 +102,28 @@ export const scientific_calculatorConfig: CalculatorModuleDefinition = {
       defaultValue: "deg",
       options: [
         { label: "Degrees (°)", value: "deg" },
-        { label: "Radians (rad)", value: "rad" }
-      ]
-    }
+        { label: "Radians (rad)", value: "rad" },
+        { label: "Gradians (grad)", value: "grad" },
+      ],
+    },
   ],
   outputs: [
     {
       name: "result",
       label: "Calculated Result",
       format: "text",
-      highlight: true
+      highlight: true,
     },
     {
       name: "explanation",
       label: "Operation Summary & Step",
-      format: "text"
+      format: "text",
     },
     {
       name: "domainNote",
       label: "Domain & Mathematical Boundary Note",
-      format: "text"
-    }
+      format: "text",
+    },
   ],
   calculate: calculateScientificCalculator,
 };
