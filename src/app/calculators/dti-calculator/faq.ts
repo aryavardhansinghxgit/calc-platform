@@ -5,53 +5,63 @@ export interface DTIFAQItem {
 
 export const dti_calculatorFaqs: DTIFAQItem[] = [
   {
-    question: "What is a good debt-to-income (DTI) ratio to buy a house?",
+    question: "What is a debt-to-income (DTI) ratio?",
     answer:
-      "A Debt-to-Income (DTI) ratio of 35% or lower is considered ideal by mortgage underwriters. Ratios between 36% and 43% are manageable and qualify for most Conventional, FHA, and VA home loans. Underwriters may approve ratios up to 45%–50% if you have compensating factors such as a high credit score, cash reserves, or a substantial down payment.",
+      "DTI compares recurring monthly debt obligations with gross monthly income. The calculator reports both front-end DTI for housing and back-end DTI for housing plus supported recurring debts.",
   },
   {
-    question: "How is DTI calculated if I have student loans on an Income-Driven Repayment (IDR) plan?",
+    question: "How do you calculate front-end and back-end DTI?",
     answer:
-      "For Conventional Fannie Mae loans, underwriters accept your documented $0 or reduced IDR monthly payment. For FHA loans, underwriters accept the documented IDR payment if greater than $0; if the payment is $0, FHA requires underwriters to calculate 0.5% of the total outstanding loan balance as the monthly debt obligation.",
+      "Front-end DTI is housing costs divided by gross monthly income. Back-end DTI is housing costs plus recurring debt, divided by gross monthly income. Both are expressed as percentages.",
   },
   {
-    question: "What is the maximum DTI ratio allowed for an FHA loan?",
+    question: "What is a good DTI ratio for a mortgage?",
     answer:
-      "The standard benchmark DTI ratio for FHA loans is 31% Front-End (housing) and 43% Back-End (total debt). However, through automated underwriting systems (TOTAL Scorecard), FHA guidelines allow Back-End DTI ratios up to 46.9% Front-End and 56.9% Back-End for applicants with strong credit scores and cash reserves.",
+      "There is no single universal 'good' DTI for every loan program or borrower. The calculator uses planning bands and program-specific benchmarks, while actual lender requirements can differ based on the full application.",
   },
   {
-    question: "Does my credit score affect the maximum DTI ratio lenders will accept?",
+    question: "What debts are included in DTI?",
     answer:
-      "Yes. Automated Underwriting Systems (AUS) evaluate DTI in tandem with your credit score and liquid assets. Higher credit scores (740+) trigger higher DTI approval ceilings (up to 50% on Conventional loans), whereas lower credit scores (620–660) restrict approval to strict baseline DTI caps (36% to 43%).",
+      "The calculator includes the recurring debt fields available in its interface, such as auto loans, student loans and credit-card minimum payments. Always use the current input fields as the authoritative definition of the modeled debt set.",
   },
   {
-    question: "Why do mortgage lenders use gross income instead of net take-home pay?",
+    question: "Do utilities, groceries and insurance count toward DTI?",
     answer:
-      "Lenders evaluate Gross Income (pre-tax) because it provides a standardized, objective baseline uninfluenced by individual tax withholding preferences, voluntary 401(k) contributions, or health insurance deductions. Underwriting benchmarks (such as the 28/36 rule) were specifically engineered based on gross income statistics.",
+      "DTI is a debt-to-income measure rather than a full household budget. Ordinary living expenses are not automatically treated as recurring debt unless the calculator explicitly provides them as debt-related inputs.",
   },
   {
-    question: "How do co-signed loans affect my debt-to-income ratio?",
+    question: "How do student loans affect DTI?",
     answer:
-      "If you co-signed a car loan, student loan, or mortgage for someone else, the full monthly payment is included in your DTI calculation unless you can provide 12 consecutive months of canceled checks or bank statements proving the primary borrower paid the obligation in full without your assistance.",
+      "A supported student-loan payment contributes to the debt numerator. The exact underwriting treatment of very low or zero payments can vary by loan program and documentation.",
   },
   {
-    question: "Do utility bills, groceries, or car insurance count toward my DTI?",
+    question: "Does credit score affect DTI eligibility?",
     answer:
-      "No. Non-debt monthly living costs—such as electric, gas, water, internet, groceries, health insurance, and auto insurance premiums—are excluded from DTI calculations. Underwriters only include legally binding credit obligations (housing costs, loans, credit card minimums, and court-ordered child support/alimony).",
+      "Credit score and DTI are separate measures. This calculator uses credit score as an input to its modeled program-matrix logic, but a lender may use different rules and underwriting factors.",
   },
   {
-    question: "What are compensating factors and how can they help approve a high DTI?",
+    question: "What DTI ratios are used for Conventional, FHA, VA and USDA loans?",
     answer:
-      "Compensating factors are positive financial attributes that offset a high DTI ratio (above 43%). Key compensating factors include significant post-closing cash reserves (3 to 6 months of housing payments), a high credit score (740+), low loan-to-value (LTV) ratio with a large down payment, or minimal increase in monthly housing expense compared to current rent.",
+      "The calculator displays program-specific benchmark values for planning and comparison. These are not universal approval guarantees; actual underwriting can depend on automated systems, documentation, credit, reserves, residual income and other factors.",
   },
   {
-    question: "How quickly can I lower my DTI ratio before applying for a mortgage?",
+    question: "How does paying off debt lower DTI?",
     answer:
-      "You can lower your DTI instantly by paying off small installment balances or credit cards with high minimum monthly payments. For example, paying off a car loan with 4 remaining payments of $350/mo immediately reduces your monthly debt by $350, boosting your borrowing capacity by up to $50,000.",
+      "Paying off a recurring debt reduces the monthly debt amount in the DTI numerator. With income and housing unchanged, removing a monthly obligation generally lowers back-end DTI.",
   },
   {
-    question: "What is the difference between front-end DTI and back-end DTI?",
+    question: "How much income do I need to qualify for a target DTI?",
     answer:
-      "Front-End DTI (Housing Ratio) measures housing costs alone (Principal, Interest, Property Taxes, Hazard Insurance, PMI, HOA) divided by gross monthly income. Back-End DTI (Total Debt Ratio) measures housing costs PLUS all recurring monthly debt payments divided by gross monthly income. Back-End DTI is the primary metric used for loan approval.",
+      "The reverse solver divides modeled housing plus existing debt by the target DTI expressed as a decimal. For example, $2,400 of combined obligations at a 36% target produces about $6,666.67 monthly income, or $80,000 annually.",
+  },
+  {
+    question: "How much housing payment can I afford at a target DTI?",
+    answer:
+      "The maximum-housing solver multiplies gross monthly income by the selected target DTI and subtracts existing recurring debt. The result is a modeled housing-payment ceiling, not a lender approval.",
+  },
+  {
+    question: "Why does my DTI calculator result differ from a lender's calculation?",
+    answer:
+      "Lenders may use different income documentation, debt treatment, student-loan rules, program limits, automated-underwriting systems, reserves, credit requirements and other factors. This calculator is a planning model, not an underwriting system.",
   },
 ];

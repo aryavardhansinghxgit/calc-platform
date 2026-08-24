@@ -1,27 +1,28 @@
 import { Metadata } from "next";
 
 export const dti_calculatorMetadata: Metadata = {
-  title: "Debt-to-Income (DTI) Ratio Calculator — Check Mortgage Qualification",
+  title: "DTI Calculator - Calculate Front-End & Back-End Debt-to-Income Ratio",
   description:
-    "Free Debt-to-Income (DTI) Ratio Calculator & Mortgage Qualification Suite. Calculate Front-End & Back-End DTI ratios, compare Conventional, FHA, VA, USDA & Jumbo eligibility, solve required income, and simulate debt payoff impacts.",
+    "Calculate front-end and back-end DTI, test mortgage scenarios, find required income, estimate maximum housing payment, and model debt-payoff improvements.",
   keywords: [
-    "debt to income ratio calculator",
-    "dti calculator",
-    "front end vs back end dti",
-    "mortgage dti calculator",
-    "how to calculate debt to income ratio",
-    "what is a good dti ratio for a mortgage",
-    "fha dti limits",
-    "conventional loan dti limits",
-    "debt to income ratio for home loan",
-    "max dti ratio for mortgage approval",
-    "how to lower dti ratio"
+    "DTI calculator",
+    "debt-to-income ratio calculator",
+    "debt to income calculator",
+    "DTI ratio calculator",
+    "front-end DTI calculator",
+    "back-end DTI calculator",
+    "mortgage DTI calculator",
+    "mortgage qualification calculator",
+    "DTI calculator for home loan",
+    "how to calculate DTI",
+    "maximum housing payment calculator",
+    "required income for DTI"
   ],
   authors: [{ name: "Calculator Platform Mortgage Underwriting Engineering Team" }],
   openGraph: {
-    title: "Debt-to-Income (DTI) Ratio Calculator — Mortgage Qualification Suite",
+    title: "DTI Calculator - Calculate Front-End & Back-End Debt-to-Income Ratio",
     description:
-      "Calculate your Front-End and Back-End DTI ratios, check live loan program approval limits (Conventional, FHA, VA, USDA, Jumbo), and simulate debt reduction impacts.",
+      "Calculate front-end and back-end DTI, test mortgage scenarios, find required income, estimate maximum housing payment, and model debt-payoff improvements.",
     type: "website",
     url: "https://calculator-platform.com/calculators/dti-calculator",
   },

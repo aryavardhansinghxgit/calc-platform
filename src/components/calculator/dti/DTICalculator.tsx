@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { Bookmark, Trash2, ChevronDown, ChevronUp, Check, Plus, Minus } from "lucide-react";
+import { Bookmark, Trash2, ChevronDown, ChevronUp, RotateCcw } from "lucide-react";
 import {
   calculateStandardDTI,
   evaluateMortgageEligibility,
@@ -44,6 +44,66 @@ export function DTICalculator() {
   const [savedBox1Items, setSavedBox1Items] = useState<SavedDTIItem[]>([]);
   const [justSavedBox1, setJustSavedBox1] = useState<boolean>(false);
   const [showHistoryBox1, setShowHistoryBox1] = useState<boolean>(false);
+
+  // Frequency toggle handler with intelligent numerical synchronization
+  const handleFreqChange = (newFreq: IncomeFrequency) => {
+    if (newFreq === incomeFreq) return;
+    if (newFreq === "monthly") {
+      setPrimarySalary((prev) => {
+        const v = parseFloat(prev);
+        return !isNaN(v) && v > 0 ? (v % 12 === 0 ? (v / 12).toFixed(0) : (v / 12).toFixed(2)) : prev;
+      });
+      setCoBorrowerIncome((prev) => {
+        const v = parseFloat(prev);
+        return !isNaN(v) && v > 0 ? (v % 12 === 0 ? (v / 12).toFixed(0) : (v / 12).toFixed(2)) : prev;
+      });
+      setBonusesCommissions((prev) => {
+        const v = parseFloat(prev);
+        return !isNaN(v) && v > 0 ? (v % 12 === 0 ? (v / 12).toFixed(0) : (v / 12).toFixed(2)) : prev;
+      });
+      setDividendsAlimonyOther((prev) => {
+        const v = parseFloat(prev);
+        return !isNaN(v) && v > 0 ? (v % 12 === 0 ? (v / 12).toFixed(0) : (v / 12).toFixed(2)) : prev;
+      });
+    } else {
+      setPrimarySalary((prev) => {
+        const v = parseFloat(prev);
+        return !isNaN(v) && v > 0 ? (v * 12).toFixed(0) : prev;
+      });
+      setCoBorrowerIncome((prev) => {
+        const v = parseFloat(prev);
+        return !isNaN(v) && v > 0 ? (v * 12).toFixed(0) : prev;
+      });
+      setBonusesCommissions((prev) => {
+        const v = parseFloat(prev);
+        return !isNaN(v) && v > 0 ? (v * 12).toFixed(0) : prev;
+      });
+      setDividendsAlimonyOther((prev) => {
+        const v = parseFloat(prev);
+        return !isNaN(v) && v > 0 ? (v * 12).toFixed(0) : prev;
+      });
+    }
+    setIncomeFreq(newFreq);
+  };
+
+  const handleResetBox1 = () => {
+    setIncomeFreq("annual");
+    setPrimarySalary("75000");
+    setCoBorrowerIncome("0");
+    setBonusesCommissions("0");
+    setDividendsAlimonyOther("0");
+    setMortgageRentPI("1800");
+    setPropertyTaxes("200");
+    setHazardInsurance("100");
+    setPmiMip("0");
+    setHoaFees("0");
+    setAutoLoansLeases("350");
+    setStudentLoans("250");
+    setCreditCardMinimums("150");
+    setPersonalLoans("0");
+    setAlimonyChildSupportPaid("0");
+    setOtherDebts("0");
+  };
 
   const standardCalc = useMemo(() => {
     return calculateStandardDTI({
@@ -117,7 +177,7 @@ export function DTICalculator() {
   // =========================================================================
   // BOX 2: MORTGAGE PROGRAM ELIGIBILITY MATRIX STATES
   // =========================================================================
-  const [creditScoreBand, setCreditScoreBand] = useState<string>("720+");
+  const [creditScoreBand, setCreditScoreBand] = useState<string>("740+");
   const [savedBox2Items, setSavedBox2Items] = useState<SavedDTIItem[]>([]);
   const [justSavedBox2, setJustSavedBox2] = useState<boolean>(false);
   const [showHistoryBox2, setShowHistoryBox2] = useState<boolean>(false);
@@ -169,7 +229,7 @@ export function DTICalculator() {
     const newItem: SavedDTIItem = {
       id: Date.now().toString(),
       title: "Reverse Target Income Solver",
-      inputsSummary: `Housing: ${currencySymbol}${parseFloat(targetHousingCost).toLocaleString()}/mo | Debt: ${currencySymbol}${parseFloat(targetExistingDebt).toLocaleString()}/mo | Target DTI: ${targetDTIPct}%`,
+      inputsSummary: `Housing: ${currencySymbol}${parseFloat(targetHousingCost || "0").toLocaleString()}/mo | Debt: ${currencySymbol}${parseFloat(targetExistingDebt || "0").toLocaleString()}/mo | Target DTI: ${targetDTIPct}%`,
       primaryResult: `Required Salary: ${currencySymbol}${targetIncomeCalc.requiredAnnualGross.toLocaleString()}/yr`,
       detailsList: [
         `Required Gross Monthly Income: ${currencySymbol}${targetIncomeCalc.requiredMonthlyGross.toLocaleString()}/mo`,
@@ -209,7 +269,7 @@ export function DTICalculator() {
     const newItem: SavedDTIItem = {
       id: Date.now().toString(),
       title: "Maximum Housing Budget Solver",
-      inputsSummary: `Monthly Gross: ${currencySymbol}${parseFloat(maxGrossIncome).toLocaleString()} | Debt: ${currencySymbol}${parseFloat(maxExistingDebt).toLocaleString()} | DTI Cap: ${maxTargetDTIPct}%`,
+      inputsSummary: `Monthly Gross: ${currencySymbol}${parseFloat(maxGrossIncome || "0").toLocaleString()} | Debt: ${currencySymbol}${parseFloat(maxExistingDebt || "0").toLocaleString()} | DTI Cap: ${maxTargetDTIPct}%`,
       primaryResult: `Max Housing Payment: ${currencySymbol}${maxHousingCalc.maxAllowableHousingPayment.toLocaleString()}/mo`,
       detailsList: [
         `Max Allowable Monthly Payment: ${currencySymbol}${maxHousingCalc.maxAllowableHousingPayment.toLocaleString()}/mo`,
@@ -259,7 +319,7 @@ export function DTICalculator() {
     const newItem: SavedDTIItem = {
       id: Date.now().toString(),
       title: "Debt Payoff Impact Simulation",
-      inputsSummary: `Income: ${currencySymbol}${parseFloat(simIncome).toLocaleString()} | Housing: ${currencySymbol}${parseFloat(simHousing).toLocaleString()} | Payoffs: ${debtItems.filter((d) => d.paidOff).map((d) => d.label).join(", ") || "None"}`,
+      inputsSummary: `Income: ${currencySymbol}${parseFloat(simIncome || "0").toLocaleString()} | Housing: ${currencySymbol}${parseFloat(simHousing || "0").toLocaleString()} | Payoffs: ${debtItems.filter((d) => d.paidOff).map((d) => d.label).join(", ") || "None"}`,
       primaryResult: `DTI Reduced: ${debtSimCalc.currentBackEndDTI}% → ${debtSimCalc.simulatedBackEndDTI}% (-${debtSimCalc.dtiReduction}%)`,
       detailsList: [
         `Monthly Debt Saved: ${currencySymbol}${debtSimCalc.monthlyDebtSaved.toLocaleString()}/mo`,
@@ -338,8 +398,8 @@ export function DTICalculator() {
 
   // SVG Speedometer / Risk Gauge
   const svgRiskGauge = useMemo(() => {
-    const ratio = Math.min(65, Math.max(10, standardCalc.backEndRatio));
-    const pctNorm = (ratio - 10) / 55;
+    const ratio = Math.min(65, Math.max(0, standardCalc.backEndRatio));
+    const pctNorm = Math.min(1, Math.max(0, ratio / 65));
     const angleRad = Math.PI - pctNorm * Math.PI;
     const radius = 65;
     const cx = 90;
@@ -363,21 +423,31 @@ export function DTICalculator() {
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto font-sans">
-      {/* Simple Currency Selector Header */}
-      <div className="flex items-center justify-end gap-2 text-xs font-bold">
-        <label htmlFor="dti-currency" className="text-slate-500 font-medium">Currency:</label>
-        <select
-          id="dti-currency"
-          value={currencySymbol}
-          onChange={(e) => setCurrencySymbol(e.target.value)}
-          className="h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans font-bold cursor-pointer"
+      {/* Currency Selector & Quick Controls */}
+      <div className="flex items-center justify-between gap-2 text-xs font-bold">
+        <button
+          type="button"
+          onClick={handleResetBox1}
+          className="flex items-center gap-1 text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer transition-colors"
         >
-          <option value="$">USD ($)</option>
-          <option value="€">EUR (€)</option>
-          <option value="£">GBP (£)</option>
-          <option value="₹">INR (₹)</option>
-          <option value="¥">JPY (¥)</option>
-        </select>
+          <RotateCcw className="w-3.5 h-3.5" />
+          <span>Reset Defaults</span>
+        </button>
+        <div className="flex items-center gap-2">
+          <label htmlFor="dti-currency" className="text-slate-500 font-medium">Currency:</label>
+          <select
+            id="dti-currency"
+            value={currencySymbol}
+            onChange={(e) => setCurrencySymbol(e.target.value)}
+            className="h-8 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans font-bold cursor-pointer"
+          >
+            <option value="$">USD ($)</option>
+            <option value="€">EUR (€)</option>
+            <option value="£">GBP (£)</option>
+            <option value="₹">INR (₹)</option>
+            <option value="¥">JPY (¥)</option>
+          </select>
+        </div>
       </div>
 
       {/* ========================================================================= */}
@@ -385,7 +455,7 @@ export function DTICalculator() {
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">Standard & Itemized DTI Calculator</span>
+          <span className="font-extrabold text-sm">Standard &amp; Itemized DTI Calculator</span>
           <button
             type="button"
             onClick={handleSaveBox1}
@@ -396,22 +466,30 @@ export function DTICalculator() {
           </button>
         </div>
 
-        <div className="p-5 space-y-6">
+        <div className="p-4 sm:p-5 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             {/* Left Col Inputs */}
-            <div className="lg:col-span-7 space-y-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs text-xs">
+            <div className="lg:col-span-7 space-y-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xs text-xs">
               <div className="flex items-center justify-between mb-2">
-                <span className="font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">Income & Expense Details</span>
+                <span className="font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                  Income &amp; Expense Details
+                </span>
                 <div className="flex bg-slate-200 dark:bg-slate-800 p-0.5 rounded-lg font-bold">
                   <button
-                    onClick={() => setIncomeFreq("annual")}
-                    className={`px-2.5 py-1 rounded-md cursor-pointer ${incomeFreq === "annual" ? "bg-blue-600 text-white" : "text-slate-700 dark:text-slate-300"}`}
+                    type="button"
+                    onClick={() => handleFreqChange("annual")}
+                    className={`px-2.5 py-1 rounded-md cursor-pointer transition-colors ${
+                      incomeFreq === "annual" ? "bg-blue-600 text-white shadow-xs" : "text-slate-700 dark:text-slate-300"
+                    }`}
                   >
                     Annual
                   </button>
                   <button
-                    onClick={() => setIncomeFreq("monthly")}
-                    className={`px-2.5 py-1 rounded-md cursor-pointer ${incomeFreq === "monthly" ? "bg-blue-600 text-white" : "text-slate-700 dark:text-slate-300"}`}
+                    type="button"
+                    onClick={() => handleFreqChange("monthly")}
+                    className={`px-2.5 py-1 rounded-md cursor-pointer transition-colors ${
+                      incomeFreq === "monthly" ? "bg-blue-600 text-white shadow-xs" : "text-slate-700 dark:text-slate-300"
+                    }`}
                   >
                     Monthly
                   </button>
@@ -420,69 +498,133 @@ export function DTICalculator() {
 
               {/* Income Streams */}
               <div className="space-y-2">
-                <span className="font-bold text-slate-700 dark:text-slate-300 block">Gross Income Streams ({currencySymbol})</span>
-                <div className="grid grid-cols-2 gap-2">
+                <span className="font-bold text-slate-700 dark:text-slate-300 block">
+                  Gross Income Streams ({currencySymbol} / {incomeFreq === "annual" ? "year" : "month"})
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
-                    <label className="text-[11px] text-slate-500 block">Primary Salary</label>
-                    <input type="number" value={primarySalary} onChange={(e) => setPrimarySalary(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                    <label className="text-[11px] text-slate-500 block">
+                      Primary Salary ({incomeFreq === "annual" ? "Annual" : "Monthly"})
+                    </label>
+                    <input
+                      type="number"
+                      value={primarySalary}
+                      onChange={(e) => setPrimarySalary(e.target.value)}
+                      className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                    />
                   </div>
                   <div>
-                    <label className="text-[11px] text-slate-500 block">Co-Borrower Income</label>
-                    <input type="number" value={coBorrowerIncome} onChange={(e) => setCoBorrowerIncome(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                    <label className="text-[11px] text-slate-500 block">
+                      Co-Borrower Income ({incomeFreq === "annual" ? "Annual" : "Monthly"})
+                    </label>
+                    <input
+                      type="number"
+                      value={coBorrowerIncome}
+                      onChange={(e) => setCoBorrowerIncome(e.target.value)}
+                      className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                    />
                   </div>
                   <div>
-                    <label className="text-[11px] text-slate-500 block">Bonuses / Commissions</label>
-                    <input type="number" value={bonusesCommissions} onChange={(e) => setBonusesCommissions(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                    <label className="text-[11px] text-slate-500 block">
+                      Bonuses / Commissions ({incomeFreq === "annual" ? "Annual" : "Monthly"})
+                    </label>
+                    <input
+                      type="number"
+                      value={bonusesCommissions}
+                      onChange={(e) => setBonusesCommissions(e.target.value)}
+                      className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                    />
                   </div>
                   <div>
-                    <label className="text-[11px] text-slate-500 block">Dividends / Alimony</label>
-                    <input type="number" value={dividendsAlimonyOther} onChange={(e) => setDividendsAlimonyOther(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                    <label className="text-[11px] text-slate-500 block">
+                      Dividends / Alimony ({incomeFreq === "annual" ? "Annual" : "Monthly"})
+                    </label>
+                    <input
+                      type="number"
+                      value={dividendsAlimonyOther}
+                      onChange={(e) => setDividendsAlimonyOther(e.target.value)}
+                      className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                    />
                   </div>
                 </div>
               </div>
 
               {/* Housing Costs */}
               <div className="space-y-2 pt-1 border-t border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-slate-700 dark:text-slate-300 block">Monthly Housing Costs ({currencySymbol})</span>
-                <div className="grid grid-cols-3 gap-2">
+                <span className="font-bold text-slate-700 dark:text-slate-300 block">
+                  Monthly Housing Costs ({currencySymbol} / mo)
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <div>
-                    <label className="text-[11px] text-slate-500 block">Mortgage / Rent P&I</label>
-                    <input type="number" value={mortgageRentPI} onChange={(e) => setMortgageRentPI(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                    <label className="text-[11px] text-slate-500 block">Mortgage / Rent P&amp;I</label>
+                    <input
+                      type="number"
+                      value={mortgageRentPI}
+                      onChange={(e) => setMortgageRentPI(e.target.value)}
+                      className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                    />
                   </div>
                   <div>
                     <label className="text-[11px] text-slate-500 block">Property Taxes</label>
-                    <input type="number" value={propertyTaxes} onChange={(e) => setPropertyTaxes(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                    <input
+                      type="number"
+                      value={propertyTaxes}
+                      onChange={(e) => setPropertyTaxes(e.target.value)}
+                      className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                    />
                   </div>
                   <div>
                     <label className="text-[11px] text-slate-500 block">Hazard Insurance</label>
-                    <input type="number" value={hazardInsurance} onChange={(e) => setHazardInsurance(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                    <input
+                      type="number"
+                      value={hazardInsurance}
+                      onChange={(e) => setHazardInsurance(e.target.value)}
+                      className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                    />
                   </div>
                 </div>
               </div>
 
               {/* Recurring Debts */}
               <div className="space-y-2 pt-1 border-t border-slate-200 dark:border-slate-800">
-                <span className="font-bold text-slate-700 dark:text-slate-300 block">Recurring Monthly Debts ({currencySymbol})</span>
-                <div className="grid grid-cols-3 gap-2">
+                <span className="font-bold text-slate-700 dark:text-slate-300 block">
+                  Recurring Monthly Debts ({currencySymbol} / mo)
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                   <div>
                     <label className="text-[11px] text-slate-500 block">Auto Loans</label>
-                    <input type="number" value={autoLoansLeases} onChange={(e) => setAutoLoansLeases(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                    <input
+                      type="number"
+                      value={autoLoansLeases}
+                      onChange={(e) => setAutoLoansLeases(e.target.value)}
+                      className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                    />
                   </div>
                   <div>
                     <label className="text-[11px] text-slate-500 block">Student Loans</label>
-                    <input type="number" value={studentLoans} onChange={(e) => setStudentLoans(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                    <input
+                      type="number"
+                      value={studentLoans}
+                      onChange={(e) => setStudentLoans(e.target.value)}
+                      className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                    />
                   </div>
                   <div>
                     <label className="text-[11px] text-slate-500 block">Credit Cards (Min)</label>
-                    <input type="number" value={creditCardMinimums} onChange={(e) => setCreditCardMinimums(e.target.value)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                    <input
+                      type="number"
+                      value={creditCardMinimums}
+                      onChange={(e) => setCreditCardMinimums(e.target.value)}
+                      className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                    />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Simple Result Card */}
+            {/* Result Summary Card */}
             <div className="lg:col-span-5 space-y-4">
-              <div className="bg-blue-50/60 dark:bg-slate-900/80 border border-blue-200 dark:border-blue-900/50 rounded-2xl p-5 shadow-xs space-y-4">
+              <div className="bg-blue-50/60 dark:bg-slate-900/80 border border-blue-200 dark:border-blue-900/50 rounded-2xl p-4 sm:p-5 shadow-xs space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">
                     Debt-to-Income Summary
@@ -513,15 +655,21 @@ export function DTICalculator() {
                 <div className="grid grid-cols-3 gap-2 text-center text-xs">
                   <div className="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 font-sans tabular-nums">
                     <span className="text-[10px] text-slate-400 font-bold block uppercase">Monthly Gross</span>
-                    <span className="font-extrabold text-slate-800 dark:text-slate-200">{currencySymbol}{standardCalc.grossMonthlyIncome.toLocaleString()}</span>
+                    <span className="font-extrabold text-slate-800 dark:text-slate-200">
+                      {currencySymbol}{standardCalc.grossMonthlyIncome.toLocaleString()}
+                    </span>
                   </div>
                   <div className="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 font-sans tabular-nums">
                     <span className="text-[10px] text-slate-400 font-bold block uppercase">Total Debt</span>
-                    <span className="font-extrabold text-slate-800 dark:text-slate-200">{currencySymbol}{standardCalc.totalMonthlyDebt.toLocaleString()}</span>
+                    <span className="font-extrabold text-slate-800 dark:text-slate-200">
+                      {currencySymbol}{standardCalc.totalMonthlyDebt.toLocaleString()}
+                    </span>
                   </div>
                   <div className="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 font-sans tabular-nums">
                     <span className="text-[10px] text-slate-400 font-bold block uppercase">Leftover Buffer</span>
-                    <span className="font-extrabold text-emerald-600 dark:text-emerald-400">{currencySymbol}{standardCalc.disposableIncome.toLocaleString()}</span>
+                    <span className="font-extrabold text-emerald-600 dark:text-emerald-400">
+                      {currencySymbol}{standardCalc.disposableIncome.toLocaleString()}
+                    </span>
                   </div>
                 </div>
 
@@ -535,9 +683,29 @@ export function DTICalculator() {
           {/* Derivation Box */}
           <div className="p-4 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl text-xs space-y-2 font-mono">
             <span className="font-bold text-blue-600 dark:text-blue-400 block font-sans">Underwriting Ratio Formulas:</span>
-            <div className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1 text-slate-700 dark:text-slate-300">
-              <div>{"Front-End DTI = (Housing Costs / Gross Monthly Income) × 100% = (" + currencySymbol + standardCalc.totalMonthlyHousing.toLocaleString() + " / " + currencySymbol + standardCalc.grossMonthlyIncome.toLocaleString() + ") × 100% = " + standardCalc.frontEndRatio + "%"}</div>
-              <div>{"Back-End DTI = ((Housing + Debt) / Gross Monthly Income) × 100% = (" + currencySymbol + standardCalc.totalMonthlyOutflow.toLocaleString() + " / " + currencySymbol + standardCalc.grossMonthlyIncome.toLocaleString() + ") × 100% = " + standardCalc.backEndRatio + "%"}</div>
+            <div className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1 text-slate-700 dark:text-slate-300 break-all sm:break-normal">
+              <div>
+                {"Front-End DTI = (Housing Costs / Gross Monthly Income) × 100% = (" +
+                  currencySymbol +
+                  standardCalc.totalMonthlyHousing.toLocaleString() +
+                  " / " +
+                  currencySymbol +
+                  standardCalc.grossMonthlyIncome.toLocaleString() +
+                  ") × 100% = " +
+                  standardCalc.frontEndRatio +
+                  "%"}
+              </div>
+              <div>
+                {"Back-End DTI = ((Housing + Debt) / Gross Monthly Income) × 100% = (" +
+                  currencySymbol +
+                  standardCalc.totalMonthlyOutflow.toLocaleString() +
+                  " / " +
+                  currencySymbol +
+                  standardCalc.grossMonthlyIncome.toLocaleString() +
+                  ") × 100% = " +
+                  standardCalc.backEndRatio +
+                  "%"}
+              </div>
             </div>
           </div>
 
@@ -545,6 +713,7 @@ export function DTICalculator() {
           {savedBox1Items.length > 0 && (
             <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
               <button
+                type="button"
                 onClick={() => setShowHistoryBox1(!showHistoryBox1)}
                 className="flex items-center justify-between w-full text-xs font-bold text-blue-600 dark:text-blue-400 cursor-pointer"
               >
@@ -560,7 +729,14 @@ export function DTICalculator() {
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-normal text-slate-400">{item.timestamp}</span>
                           <button
-                            onClick={() => setSavedBox1Items(savedBox1Items.filter((i) => i.id !== item.id))}
+                            type="button"
+                            onClick={() => {
+                              const filtered = savedBox1Items.filter((i) => i.id !== item.id);
+                              setSavedBox1Items(filtered);
+                              try {
+                                localStorage.setItem("saved_dti_box1", JSON.stringify(filtered));
+                              } catch (e) {}
+                            }}
                             className="text-red-500 hover:text-red-700 cursor-pointer"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -600,7 +776,7 @@ export function DTICalculator() {
           </button>
         </div>
 
-        <div className="p-5 space-y-6">
+        <div className="p-4 sm:p-5 space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-4 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
             <div>
               <span className="font-bold text-slate-700 dark:text-slate-300 mr-2">Evaluated DTI:</span>
@@ -611,7 +787,7 @@ export function DTICalculator() {
               <select
                 value={creditScoreBand}
                 onChange={(e) => setCreditScoreBand(e.target.value)}
-                className="h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900"
+                className="h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 cursor-pointer"
               >
                 <option value="740+">740+ (Excellent)</option>
                 <option value="680-739">680 - 739 (Good)</option>
@@ -622,7 +798,7 @@ export function DTICalculator() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-xs text-left border-collapse font-sans">
+            <table className="w-full text-xs text-left border-collapse font-sans min-w-[550px]">
               <thead>
                 <tr className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold border-b border-slate-200 dark:border-slate-700">
                   <th className="p-3">Loan Program</th>
@@ -634,12 +810,15 @@ export function DTICalculator() {
               <tbody className="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900">
                 {matrixCalc.map((m, idx) => (
                   <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                    <td className="p-3 font-bold text-slate-900 dark:text-slate-100">{m.programName}</td>
+                    <td className="p-3 font-bold text-slate-900 dark:text-slate-100">
+                      <div>{m.programName}</div>
+                      <div className="text-[10px] font-normal text-slate-500 mt-0.5">{m.notes}</div>
+                    </td>
                     <td className="p-3 font-mono">{m.benchmarkFrontEnd} / {m.benchmarkBackEnd}</td>
                     <td className="p-3 font-mono">{m.maxBackEndWithAUS}</td>
                     <td className="p-3">
                       <span
-                        className="px-2.5 py-1 rounded-md text-[11px] font-extrabold text-white inline-block"
+                        className="px-2.5 py-1 rounded-md text-[11px] font-extrabold text-white inline-block whitespace-nowrap"
                         style={{ backgroundColor: m.statusColor }}
                       >
                         {m.status}
@@ -655,6 +834,7 @@ export function DTICalculator() {
           {savedBox2Items.length > 0 && (
             <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
               <button
+                type="button"
                 onClick={() => setShowHistoryBox2(!showHistoryBox2)}
                 className="flex items-center justify-between w-full text-xs font-bold text-blue-600 dark:text-blue-400 cursor-pointer"
               >
@@ -670,7 +850,14 @@ export function DTICalculator() {
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-normal text-slate-400">{item.timestamp}</span>
                           <button
-                            onClick={() => setSavedBox2Items(savedBox2Items.filter((i) => i.id !== item.id))}
+                            type="button"
+                            onClick={() => {
+                              const filtered = savedBox2Items.filter((i) => i.id !== item.id);
+                              setSavedBox2Items(filtered);
+                              try {
+                                localStorage.setItem("saved_dti_box2", JSON.stringify(filtered));
+                              } catch (e) {}
+                            }}
                             className="text-red-500 hover:text-red-700 cursor-pointer"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -710,25 +897,44 @@ export function DTICalculator() {
           </button>
         </div>
 
-        <div className="p-5 space-y-6">
+        <div className="p-4 sm:p-5 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             <div className="lg:col-span-6 space-y-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
               <div>
-                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Desired Monthly Housing Cost ({currencySymbol})</label>
-                <input type="number" value={targetHousingCost} onChange={(e) => setTargetHousingCost(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Desired Monthly Housing Cost ({currencySymbol})
+                </label>
+                <input
+                  type="number"
+                  value={targetHousingCost}
+                  onChange={(e) => setTargetHousingCost(e.target.value)}
+                  className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                />
               </div>
               <div>
-                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Existing Monthly Debt ({currencySymbol})</label>
-                <input type="number" value={targetExistingDebt} onChange={(e) => setTargetExistingDebt(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Existing Monthly Debt ({currencySymbol})
+                </label>
+                <input
+                  type="number"
+                  value={targetExistingDebt}
+                  onChange={(e) => setTargetExistingDebt(e.target.value)}
+                  className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                />
               </div>
               <div>
-                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Target DTI Benchmark</label>
+                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Target DTI Benchmark
+                </label>
                 <div className="grid grid-cols-4 gap-1 bg-slate-200 dark:bg-slate-800 p-1 rounded-xl font-bold">
                   {[28, 36, 43, 50].map((pct) => (
                     <button
                       key={pct}
+                      type="button"
                       onClick={() => setTargetDTIPct(pct)}
-                      className={`py-1 rounded-lg cursor-pointer ${targetDTIPct === pct ? "bg-blue-600 text-white" : "text-slate-700 dark:text-slate-300"}`}
+                      className={`py-1 rounded-lg cursor-pointer transition-colors ${
+                        targetDTIPct === pct ? "bg-blue-600 text-white shadow-xs" : "text-slate-700 dark:text-slate-300"
+                      }`}
                     >
                       {pct}%
                     </button>
@@ -737,17 +943,23 @@ export function DTICalculator() {
               </div>
             </div>
 
-            {/* Simple Result Card */}
-            <div className="lg:col-span-6 space-y-3 bg-blue-50/60 dark:bg-slate-900/80 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">Required Gross Salary to Qualify</span>
+            {/* Result Card */}
+            <div className="lg:col-span-6 space-y-3 bg-blue-50/60 dark:bg-slate-900/80 p-4 sm:p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">
+                Required Gross Salary to Qualify
+              </span>
               <div className="text-3xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums mt-1">
                 {currencySymbol}{targetIncomeCalc.requiredAnnualGross.toLocaleString()}
                 <span className="text-xs font-normal text-slate-500"> / year</span>
               </div>
 
               <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
-                <span className="text-[10px] text-slate-400 font-bold uppercase block">Required Monthly Gross Income</span>
-                <span className="font-extrabold text-base text-slate-800 dark:text-slate-200">{currencySymbol}{targetIncomeCalc.requiredMonthlyGross.toLocaleString()}/mo</span>
+                <span className="text-[10px] text-slate-400 font-bold uppercase block">
+                  Required Monthly Gross Income
+                </span>
+                <span className="font-extrabold text-base text-slate-800 dark:text-slate-200">
+                  {currencySymbol}{targetIncomeCalc.requiredMonthlyGross.toLocaleString()}/mo
+                </span>
               </div>
             </div>
           </div>
@@ -756,6 +968,7 @@ export function DTICalculator() {
           {savedBox3Items.length > 0 && (
             <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
               <button
+                type="button"
                 onClick={() => setShowHistoryBox3(!showHistoryBox3)}
                 className="flex items-center justify-between w-full text-xs font-bold text-blue-600 dark:text-blue-400 cursor-pointer"
               >
@@ -771,7 +984,14 @@ export function DTICalculator() {
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-normal text-slate-400">{item.timestamp}</span>
                           <button
-                            onClick={() => setSavedBox3Items(savedBox3Items.filter((i) => i.id !== item.id))}
+                            type="button"
+                            onClick={() => {
+                              const filtered = savedBox3Items.filter((i) => i.id !== item.id);
+                              setSavedBox3Items(filtered);
+                              try {
+                                localStorage.setItem("saved_dti_box3", JSON.stringify(filtered));
+                              } catch (e) {}
+                            }}
                             className="text-red-500 hover:text-red-700 cursor-pointer"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -811,25 +1031,44 @@ export function DTICalculator() {
           </button>
         </div>
 
-        <div className="p-5 space-y-6">
+        <div className="p-4 sm:p-5 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             <div className="lg:col-span-6 space-y-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
               <div>
-                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Gross Monthly Income ({currencySymbol})</label>
-                <input type="number" value={maxGrossIncome} onChange={(e) => setMaxGrossIncome(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Gross Monthly Income ({currencySymbol})
+                </label>
+                <input
+                  type="number"
+                  value={maxGrossIncome}
+                  onChange={(e) => setMaxGrossIncome(e.target.value)}
+                  className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                />
               </div>
               <div>
-                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Existing Monthly Debt ({currencySymbol})</label>
-                <input type="number" value={maxExistingDebt} onChange={(e) => setMaxExistingDebt(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Existing Monthly Debt ({currencySymbol})
+                </label>
+                <input
+                  type="number"
+                  value={maxExistingDebt}
+                  onChange={(e) => setMaxExistingDebt(e.target.value)}
+                  className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                />
               </div>
               <div>
-                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Target DTI Cap</label>
+                <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  Target DTI Cap
+                </label>
                 <div className="grid grid-cols-3 gap-1 bg-slate-200 dark:bg-slate-800 p-1 rounded-xl font-bold">
                   {[36, 43, 50].map((pct) => (
                     <button
                       key={pct}
+                      type="button"
                       onClick={() => setMaxTargetDTIPct(pct)}
-                      className={`py-1 rounded-lg cursor-pointer ${maxTargetDTIPct === pct ? "bg-blue-600 text-white" : "text-slate-700 dark:text-slate-300"}`}
+                      className={`py-1 rounded-lg cursor-pointer transition-colors ${
+                        maxTargetDTIPct === pct ? "bg-blue-600 text-white shadow-xs" : "text-slate-700 dark:text-slate-300"
+                      }`}
                     >
                       {pct}%
                     </button>
@@ -838,17 +1077,23 @@ export function DTICalculator() {
               </div>
             </div>
 
-            {/* Simple Result Card */}
-            <div className="lg:col-span-6 space-y-3 bg-blue-50/60 dark:bg-slate-900/80 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">Maximum Allowable Housing Payment</span>
+            {/* Result Card */}
+            <div className="lg:col-span-6 space-y-3 bg-blue-50/60 dark:bg-slate-900/80 p-4 sm:p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">
+                Maximum Allowable Housing Payment
+              </span>
               <div className="text-3xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums mt-1">
                 {currencySymbol}{maxHousingCalc.maxAllowableHousingPayment.toLocaleString()}
                 <span className="text-xs font-normal text-slate-500"> / month</span>
               </div>
 
               <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
-                <span className="text-[10px] text-slate-400 font-bold uppercase block">Estimated Purchase Price Ceiling</span>
-                <span className="font-extrabold text-base text-slate-800 dark:text-slate-200">~{currencySymbol}{maxHousingCalc.estimatedHomePrice.toLocaleString()}</span>
+                <span className="text-[10px] text-slate-400 font-bold uppercase block">
+                  Estimated Purchase Price Ceiling
+                </span>
+                <span className="font-extrabold text-base text-slate-800 dark:text-slate-200">
+                  ~{currencySymbol}{maxHousingCalc.estimatedHomePrice.toLocaleString()}
+                </span>
               </div>
             </div>
           </div>
@@ -857,6 +1102,7 @@ export function DTICalculator() {
           {savedBox4Items.length > 0 && (
             <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
               <button
+                type="button"
                 onClick={() => setShowHistoryBox4(!showHistoryBox4)}
                 className="flex items-center justify-between w-full text-xs font-bold text-blue-600 dark:text-blue-400 cursor-pointer"
               >
@@ -872,7 +1118,14 @@ export function DTICalculator() {
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-normal text-slate-400">{item.timestamp}</span>
                           <button
-                            onClick={() => setSavedBox4Items(savedBox4Items.filter((i) => i.id !== item.id))}
+                            type="button"
+                            onClick={() => {
+                              const filtered = savedBox4Items.filter((i) => i.id !== item.id);
+                              setSavedBox4Items(filtered);
+                              try {
+                                localStorage.setItem("saved_dti_box4", JSON.stringify(filtered));
+                              } catch (e) {}
+                            }}
                             className="text-red-500 hover:text-red-700 cursor-pointer"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -901,7 +1154,7 @@ export function DTICalculator() {
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span className="font-extrabold text-sm">Debt Payoff & DTI Reduction Impact Simulator</span>
+          <span className="font-extrabold text-sm">Debt Payoff &amp; DTI Reduction Impact Simulator</span>
           <button
             type="button"
             onClick={handleSaveBox5}
@@ -912,17 +1165,31 @@ export function DTICalculator() {
           </button>
         </div>
 
-        <div className="p-5 space-y-6">
+        <div className="p-4 sm:p-5 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             <div className="lg:col-span-6 space-y-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Monthly Gross ({currencySymbol})</label>
-                  <input type="number" value={simIncome} onChange={(e) => setSimIncome(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                    Monthly Gross ({currencySymbol})
+                  </label>
+                  <input
+                    type="number"
+                    value={simIncome}
+                    onChange={(e) => setSimIncome(e.target.value)}
+                    className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                  />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Proposed Housing ({currencySymbol})</label>
-                  <input type="number" value={simHousing} onChange={(e) => setSimHousing(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                    Proposed Housing ({currencySymbol})
+                  </label>
+                  <input
+                    type="number"
+                    value={simHousing}
+                    onChange={(e) => setSimHousing(e.target.value)}
+                    className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                  />
                 </div>
               </div>
 
@@ -930,40 +1197,53 @@ export function DTICalculator() {
                 <span className="font-bold text-slate-700 dark:text-slate-300 block">Check Debts to Pay Off:</span>
                 <div className="space-y-1.5">
                   {debtItems.map((item) => (
-                    <label key={item.id} className="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 cursor-pointer font-bold">
+                    <label
+                      key={item.id}
+                      className="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 cursor-pointer font-bold"
+                    >
                       <div className="flex items-center gap-2">
                         <input
                           type="checkbox"
                           checked={item.paidOff}
                           onChange={() => toggleDebtItem(item.id)}
-                          className="rounded text-blue-600"
+                          className="rounded text-blue-600 cursor-pointer"
                         />
                         <span>{item.label}</span>
                       </div>
-                      <span className="text-slate-600 dark:text-slate-400 font-mono">{currencySymbol}{item.monthlyAmount}/mo</span>
+                      <span className="text-slate-600 dark:text-slate-400 font-mono">
+                        {currencySymbol}{item.monthlyAmount}/mo
+                      </span>
                     </label>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* Simple Result Card */}
-            <div className="lg:col-span-6 space-y-3 bg-blue-50/60 dark:bg-slate-900/80 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">Simulated DTI Reduction</span>
+            {/* Result Card */}
+            <div className="lg:col-span-6 space-y-3 bg-blue-50/60 dark:bg-slate-900/80 p-4 sm:p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">
+                Simulated DTI Reduction
+              </span>
 
               <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums mt-1">
                 {debtSimCalc.currentBackEndDTI}% → {debtSimCalc.simulatedBackEndDTI}%
-                <span className="text-xs font-normal text-emerald-600 block mt-0.5">(-{debtSimCalc.dtiReduction}% DTI Reduction)</span>
+                <span className="text-xs font-normal text-emerald-600 block mt-0.5">
+                  (-{debtSimCalc.dtiReduction}% DTI Reduction)
+                </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs pt-1">
                 <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
                   <span className="text-[10px] text-slate-400 font-bold uppercase block">Monthly Debt Saved</span>
-                  <span className="font-extrabold text-emerald-600">{currencySymbol}{debtSimCalc.monthlyDebtSaved.toLocaleString()}/mo</span>
+                  <span className="font-extrabold text-emerald-600">
+                    {currencySymbol}{debtSimCalc.monthlyDebtSaved.toLocaleString()}/mo
+                  </span>
                 </div>
                 <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
                   <span className="text-[10px] text-slate-400 font-bold uppercase block">Extra Housing Capacity</span>
-                  <span className="font-extrabold text-blue-600">+{currencySymbol}{debtSimCalc.increasedHousingCapacity.toLocaleString()}/mo</span>
+                  <span className="font-extrabold text-blue-600">
+                    +{currencySymbol}{debtSimCalc.increasedHousingCapacity.toLocaleString()}/mo
+                  </span>
                 </div>
               </div>
             </div>
@@ -973,6 +1253,7 @@ export function DTICalculator() {
           {savedBox5Items.length > 0 && (
             <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
               <button
+                type="button"
                 onClick={() => setShowHistoryBox5(!showHistoryBox5)}
                 className="flex items-center justify-between w-full text-xs font-bold text-blue-600 dark:text-blue-400 cursor-pointer"
               >
@@ -988,7 +1269,14 @@ export function DTICalculator() {
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-normal text-slate-400">{item.timestamp}</span>
                           <button
-                            onClick={() => setSavedBox5Items(savedBox5Items.filter((i) => i.id !== item.id))}
+                            type="button"
+                            onClick={() => {
+                              const filtered = savedBox5Items.filter((i) => i.id !== item.id);
+                              setSavedBox5Items(filtered);
+                              try {
+                                localStorage.setItem("saved_dti_box5", JSON.stringify(filtered));
+                              } catch (e) {}
+                            }}
                             className="text-red-500 hover:text-red-700 cursor-pointer"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -1028,49 +1316,83 @@ export function DTICalculator() {
           </button>
         </div>
 
-        <div className="p-5 space-y-6">
+        <div className="p-4 sm:p-5 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             <div className="lg:col-span-6 space-y-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Year 1 Net Schedule C ({currencySymbol})</label>
-                  <input type="number" value={y1Net} onChange={(e) => setY1Net(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                    Year 1 Net Schedule C ({currencySymbol})
+                  </label>
+                  <input
+                    type="number"
+                    value={y1Net}
+                    onChange={(e) => setY1Net(e.target.value)}
+                    className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                  />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Year 2 Net Schedule C ({currencySymbol})</label>
-                  <input type="number" value={y2Net} onChange={(e) => setY2Net(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                    Year 2 Net Schedule C ({currencySymbol})
+                  </label>
+                  <input
+                    type="number"
+                    value={y2Net}
+                    onChange={(e) => setY2Net(e.target.value)}
+                    className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                  />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Year 1 Depreciation Add-back ({currencySymbol})</label>
-                  <input type="number" value={y1Dep} onChange={(e) => setY1Dep(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                    Year 1 Depreciation Add-back ({currencySymbol})
+                  </label>
+                  <input
+                    type="number"
+                    value={y1Dep}
+                    onChange={(e) => setY1Dep(e.target.value)}
+                    className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                  />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Year 2 Depreciation Add-back ({currencySymbol})</label>
-                  <input type="number" value={y2Dep} onChange={(e) => setY2Dep(e.target.value)} className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold" />
+                  <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                    Year 2 Depreciation Add-back ({currencySymbol})
+                  </label>
+                  <input
+                    type="number"
+                    value={y2Dep}
+                    onChange={(e) => setY2Dep(e.target.value)}
+                    className="w-full h-9 px-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                  />
                 </div>
               </div>
             </div>
 
-            {/* Simple Result Card */}
-            <div className="lg:col-span-6 space-y-3 bg-blue-50/60 dark:bg-slate-900/80 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">Qualifying Monthly Income</span>
+            {/* Result Card */}
+            <div className="lg:col-span-6 space-y-3 bg-blue-50/60 dark:bg-slate-900/80 p-4 sm:p-5 rounded-2xl border border-blue-200 dark:border-blue-900/50 text-center">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400">
+                Qualifying Monthly Income
+              </span>
 
               <div className="text-3xl font-extrabold text-blue-600 dark:text-blue-400 font-sans tabular-nums mt-1">
                 {currencySymbol}{selfEmployedCalc.qualifyingMonthlyIncome.toLocaleString()}
                 <span className="text-xs font-normal text-slate-500"> / month</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs pt-1">
                 <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
                   <span className="text-[10px] text-slate-400 font-bold uppercase block">Qualifying Annual</span>
-                  <span className="font-extrabold text-slate-800 dark:text-slate-200">{currencySymbol}{selfEmployedCalc.qualifyingAnnualIncome.toLocaleString()}/yr</span>
+                  <span className="font-extrabold text-slate-800 dark:text-slate-200">
+                    {currencySymbol}{selfEmployedCalc.qualifyingAnnualIncome.toLocaleString()}/yr
+                  </span>
                 </div>
                 <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
                   <span className="text-[10px] text-slate-400 font-bold uppercase block">Trend Status</span>
-                  <span className="font-extrabold text-emerald-600">{selfEmployedCalc.trendStatus}</span>
+                  <span className={`font-extrabold ${selfEmployedCalc.trendStatus === "Stable / Growing" ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}`}>
+                    {selfEmployedCalc.trendStatus}
+                  </span>
                 </div>
               </div>
             </div>
@@ -1080,6 +1402,7 @@ export function DTICalculator() {
           {savedBox6Items.length > 0 && (
             <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
               <button
+                type="button"
                 onClick={() => setShowHistoryBox6(!showHistoryBox6)}
                 className="flex items-center justify-between w-full text-xs font-bold text-blue-600 dark:text-blue-400 cursor-pointer"
               >
@@ -1095,7 +1418,14 @@ export function DTICalculator() {
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] font-normal text-slate-400">{item.timestamp}</span>
                           <button
-                            onClick={() => setSavedBox6Items(savedBox6Items.filter((i) => i.id !== item.id))}
+                            type="button"
+                            onClick={() => {
+                              const filtered = savedBox6Items.filter((i) => i.id !== item.id);
+                              setSavedBox6Items(filtered);
+                              try {
+                                localStorage.setItem("saved_dti_box6", JSON.stringify(filtered));
+                              } catch (e) {}
+                            }}
                             className="text-red-500 hover:text-red-700 cursor-pointer"
                           >
                             <Trash2 className="w-3.5 h-3.5" />

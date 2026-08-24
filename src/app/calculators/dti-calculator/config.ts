@@ -6,32 +6,40 @@ import { DTIContent } from "@/components/calculator/dti/DTIContent";
 
 export const dti_calculatorConfig: CalculatorModuleDefinition = {
   id: "dti-calculator",
-  title: "Debt-to-Income (DTI) Ratio Calculator — Check Mortgage Qualification",
+  title: "DTI Calculator",
   slug: "dti-calculator",
   category: "Finance",
   subcategory: "Mortgage and Real Estate",
   description:
-    "Free Debt-to-Income (DTI) Ratio Calculator & Mortgage Qualification Suite. Calculate Front-End & Back-End DTI ratios, compare Conventional, FHA, VA, USDA & Jumbo approval limits, solve required income, and simulate debt payoff impacts.",
+    "Calculate front-end and back-end DTI, test mortgage scenarios, find required income, estimate maximum housing payment, and model debt-payoff improvements.",
   iconName: "PieChart",
   featured: true,
   keywords: [
-    "debt to income ratio calculator",
-    "dti calculator",
-    "front end vs back end dti",
-    "mortgage dti calculator",
-    "how to calculate debt to income ratio",
-    "fha dti limits",
-    "conventional loan dti limits"
+    "DTI calculator",
+    "debt-to-income ratio calculator",
+    "debt to income calculator",
+    "DTI ratio calculator",
+    "front-end DTI calculator",
+    "back-end DTI calculator",
+    "mortgage DTI calculator",
+    "mortgage qualification calculator",
+    "DTI calculator for home loan",
+    "how to calculate DTI",
+    "maximum housing payment calculator",
+    "required income for DTI"
   ],
   priority: 1,
   relatedCalculators: [
     "house-affordability-calculator",
     "mortgage-calculator",
     "rent-calculator",
-    "debt-payoff-calculator"
+    "debt-payoff-calculator",
+    "loan-calculator",
+    "down-payment-calculator",
+    "refinance-calculator"
   ],
   formulaDescription:
-    "Front-End DTI = (Total Housing / Gross Income) × 100%. Back-End DTI = ((Total Housing + Total Debt) / Gross Income) × 100%.",
+    "Front-End DTI = (Total Monthly Housing Costs / Gross Monthly Income) × 100. Back-End DTI = ((Total Monthly Housing Costs + Total Recurring Debt) / Gross Monthly Income) × 100.",
   faqs: dti_calculatorFaqs,
   inputs: [
     {
@@ -52,7 +60,7 @@ export const dti_calculatorConfig: CalculatorModuleDefinition = {
     },
     {
       name: "mortgageRentPI",
-      label: "Housing Costs (Mortgage/Rent)",
+      label: "Housing Costs (Mortgage/Rent P&I)",
       type: "number",
       defaultValue: 1800,
     },

@@ -1,297 +1,431 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 
 export function DTIContent() {
   return (
     <div className="space-y-10 text-slate-800 dark:text-slate-200 font-medium leading-relaxed max-w-4xl mx-auto">
-      {/* SECTION 1: INTRODUCTION */}
+      {/* SECTION 2: WHAT IT MEASURES */}
       <section className="space-y-4">
         <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          1. Introduction: What is Debt-to-Income (DTI) & Why Underwriters Care
+          2. DTI Calculator: What It Measures
         </h2>
         <p className="text-sm leading-relaxed">
-          The <strong>Debt-to-Income (DTI) ratio</strong> is a foundational financial metric used by mortgage underwriters, banks, and lending institutions to measure a borrower’s ability to manage monthly payments and repay borrowed debt. Expressed as a percentage, DTI compares your total monthly recurring debt obligations to your gross monthly income (pre-tax).
+          A debt-to-income ratio, commonly abbreviated DTI, compares monthly debt obligations with gross monthly income. It is one of the most common ratios used when evaluating household debt relative to income, and mortgage underwriting often considers DTI alongside credit history, assets, loan-to-value, reserves, property details, loan program rules and automated-underwriting results. A DTI calculator helps you organize the inputs and see how the ratio changes before you approach a lender.
         </p>
         <p className="text-sm leading-relaxed">
-          Along with your credit score, employment history, and liquid cash reserves, DTI is one of the three primary pillars of residential mortgage qualification. A low DTI ratio signals strong financial health and cash-flow flexibility, whereas a high DTI ratio indicates potential over-leverage and heightened risk of default during unexpected economic downturns.
+          This calculator separates housing-related obligations from other recurring debts. That distinction allows it to calculate both a front-end DTI and a back-end DTI. It also includes reverse-planning tools: you can solve for the income needed to reach a target DTI, estimate a maximum housing budget from an assumed DTI, simulate how paying off a debt changes the ratio, and explore a two-year self-employed income calculation.
         </p>
+        <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 text-xs text-slate-700 dark:text-slate-300 space-y-1">
+          <p>
+            <strong>Planning Notice:</strong> The result is a planning estimate, not a loan approval. A lender can calculate a different qualifying ratio because lender guidelines, loan programs, documentation, debt treatment, income treatment, automated underwriting, and borrower circumstances can differ. Use the calculator to understand the arithmetic and test scenarios, not to assume that a particular DTI guarantees approval.
+          </p>
+        </div>
+      </section>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs pt-2">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
-            <h3 className="font-extrabold text-blue-600 dark:text-blue-400">For Homebuyers</h3>
-            <p className="text-slate-600 dark:text-slate-400 font-normal">
-              Determines maximum home purchasing budget and mortgage loan qualification thresholds across Conventional, FHA, VA, and Jumbo programs.
-            </p>
+      {/* SECTION 3: HOW TO USE */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          3. How to Use the DTI Calculator
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-blue-600 dark:text-blue-400">1. Income Frequency</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">Choose whether your income inputs are being entered as annual or monthly figures.</p>
           </div>
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
-            <h3 className="font-extrabold text-blue-600 dark:text-blue-400">For Underwriters</h3>
-            <p className="text-slate-600 dark:text-slate-400 font-normal">
-              Provides standardized risk assessment benchmarks enforced by Fannie Mae, Freddie Mac, FHA TOTAL Scorecard, and VA guidelines.
-            </p>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-blue-600 dark:text-blue-400">2. Gross Income Streams</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">Enter your primary income and any supported co-borrower, bonus/commission, or dividend/alimony income.</p>
           </div>
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
-            <h3 className="font-extrabold text-blue-600 dark:text-blue-400">For Debt Planning</h3>
-            <p className="text-slate-600 dark:text-slate-400 font-normal">
-              Evaluates the exact monthly debt reduction required to qualify for target loan balances or lower interest rate tiers.
-            </p>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-blue-600 dark:text-blue-400">3. Monthly Housing Costs</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">Enter monthly housing costs, such as mortgage or rent, property taxes, and hazard insurance.</p>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-blue-600 dark:text-blue-400">4. Recurring Monthly Debts</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">Enter recurring monthly debt obligations, including supported auto loans, student loans and credit-card minimums.</p>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-blue-600 dark:text-blue-400">5. Review Ratios</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">Review the front-end DTI and back-end DTI shown in the results area.</p>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-blue-600 dark:text-blue-400">6. Underwriting Matrix</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">Open the underwriting or program-comparison section to review the calculator's modeled benchmarks.</p>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-blue-600 dark:text-blue-400">7. Reverse Income Solver</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">Use the reverse income solver when you know your target DTI and want to estimate the gross income required.</p>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-blue-600 dark:text-blue-400">8. Maximum Housing Budget</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">Use the maximum housing-budget solver when you know your income, existing debt and target DTI and want to estimate a housing-payment ceiling.</p>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-blue-600 dark:text-blue-400">9. Debt Payoff Simulator</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">Use the debt-payoff simulator to see how removing one or more monthly debt obligations changes your back-end DTI.</p>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-blue-600 dark:text-blue-400">10. Self-Employed Averaging</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">Use the self-employed income tool when you need the calculator's two-year averaging model.</p>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-blue-600 dark:text-blue-400">11. Save Scenario</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">Save the scenario when you want to compare it with another income, housing, or debt configuration.</p>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-blue-600 dark:text-blue-400">12. Re-run Sensitivity</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">Re-run the scenario after changing one assumption at a time so you can see which variable has the largest effect.</p>
           </div>
         </div>
       </section>
 
-      {/* SECTION 2: MATHEMATICAL CONCEPT */}
+      {/* SECTION 4: ANNUAL VS MONTHLY TOGGLE */}
       <section className="space-y-4">
         <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          2. Front-End vs. Back-End DTI Ratios: Core Definitions
+          4. Annual vs Monthly Income: Use the Toggle Correctly
         </h2>
         <p className="text-sm leading-relaxed">
-          Mortgage underwriting evaluates two distinct DTI metrics—the Front-End Ratio and the Back-End Ratio:
+          Income frequency matters because DTI is calculated using gross monthly income. The calculator includes an annual/monthly toggle so the same income can be entered in either form without changing its underlying economic meaning. When annual income is selected, the engine converts the amount to a monthly equivalent by dividing by 12. When monthly income is selected, it converts the amount to an annual equivalent by multiplying by 12.
         </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
+          <p className="font-mono text-blue-600 dark:text-blue-400">
+            For example, $75,000 per year corresponds to $6,250 per month. Conversely, $6,250 per month corresponds to $75,000 per year.
+          </p>
+          <p className="text-slate-600 dark:text-slate-400 font-normal">
+            The calculator was specifically tested for bidirectional, lossless conversion so switching the toggle does not leave stale values or create a hidden twelve-times error.
+          </p>
+          <p className="text-slate-600 dark:text-slate-400 font-normal">
+            This distinction is particularly important because a value of $75,000 entered as monthly income would represent $900,000 of annual income. That is a completely different DTI scenario from $75,000 annual income. Always confirm the input label before interpreting the result.
+          </p>
+        </div>
+      </section>
 
+      {/* SECTION 5: FRONT-END VS BACK-END */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          5. Front-End DTI vs Back-End DTI
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="p-5 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 space-y-2">
-            <h3 className="font-bold text-blue-700 dark:text-blue-400 text-sm">1. Front-End DTI (Housing Ratio)</h3>
+            <h3 className="font-bold text-blue-700 dark:text-blue-400 text-sm">5.1 Front-End DTI</h3>
             <p className="text-slate-700 dark:text-slate-300 font-normal leading-relaxed">
-              Measures proposed monthly housing expenses alone relative to gross monthly income. Housing expenses consist of Principal, Interest, Property Taxes, Hazard Insurance, PMI/MIP, and HOA fees (collectively known as <strong>PITI</strong>).
+              Front-end DTI focuses on housing-related monthly costs. In the calculator's model, the ratio is calculated as total monthly housing costs divided by gross monthly income, multiplied by 100. It answers a simple question: what share of gross monthly income is being allocated to housing under the selected inputs?
             </p>
-            <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 font-mono text-[11px] font-bold text-blue-600">
-              Front-End = (Total Housing Costs / Gross Income) × 100%
+            <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 font-mono text-[11px] font-bold text-blue-600 dark:text-blue-400">
+              Front-End DTI = (Total Monthly Housing Costs / Gross Monthly Income) × 100
             </div>
           </div>
 
           <div className="p-5 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 space-y-2">
-            <h3 className="font-bold text-blue-700 dark:text-blue-400 text-sm">2. Back-End DTI (Total Debt Ratio)</h3>
+            <h3 className="font-bold text-blue-700 dark:text-blue-400 text-sm">5.2 Back-End DTI</h3>
             <p className="text-slate-700 dark:text-slate-300 font-normal leading-relaxed">
-              Measures proposed housing expenses PLUS all recurring minimum debt payments relative to gross monthly income. Back-End DTI is the ultimate binding constraint in mortgage approval.
+              Back-end DTI adds recurring non-housing debt obligations to the housing costs. It therefore captures a broader measure of the household's monthly debt burden. In the calculator's model, this includes the supported debt inputs entered in the debt section.
             </p>
-            <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 font-mono text-[11px] font-bold text-blue-600">
-              Back-End = ((Housing + All Recurring Debts) / Gross Income) × 100%
+            <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 font-mono text-[11px] font-bold text-blue-600 dark:text-blue-400">
+              Back-End DTI = ((Total Monthly Housing Costs + Total Recurring Debt) / Gross Monthly Income) × 100
             </div>
           </div>
         </div>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">
+          <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-1">5.3 Why Both Ratios Matter</h3>
+          <p className="text-slate-600 dark:text-slate-400 font-normal">
+            Two households can have the same housing payment and very different back-end DTI ratios if one household has substantially more car loans, student loans or credit-card minimum payments. Looking at only housing can therefore miss an important part of the overall monthly debt burden.
+          </p>
+        </div>
       </section>
 
-      {/* SECTION 3: FORMULAS */}
+      {/* SECTION 6: WORKED EXAMPLE */}
       <section className="space-y-4">
         <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          3. Core Underwriting Formulas & Variables
+          6. Worked Example: $75,000 Annual Income
         </h2>
-        <div className="space-y-3 text-xs font-mono">
+        <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3 text-xs">
+          <p className="text-slate-700 dark:text-slate-300">
+            Consider the validated baseline with $75,000 of annual gross income. Converting the income to monthly terms gives $6,250 per month.
+          </p>
+          <div className="font-mono bg-white dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1.5 text-[11px]">
+            <div>Gross Monthly Income = $75,000 / 12 = $6,250.00/mo</div>
+            <div>Monthly Housing Costs: Mortgage/Rent P&amp;I ($1,800) + Property Taxes ($200) + Hazard Insurance ($100) = $2,100.00/mo</div>
+            <div>Recurring Monthly Debt: Auto Loan ($350) + Student Loans ($250) + Credit Card Minimums ($150) = $750.00/mo</div>
+            <div className="pt-1 text-blue-600 dark:text-blue-400 font-bold">Front-End DTI = ($2,100 / $6,250) × 100 = 33.60%</div>
+            <div className="text-blue-600 dark:text-blue-400 font-bold">Back-End DTI = (($2,100 + $750) / $6,250) × 100 = 45.60%</div>
+          </div>
+          <p className="text-slate-600 dark:text-slate-400 font-normal">
+            These values illustrate why the front-end and back-end ratios should be read together. Housing consumes 33.6% of gross monthly income in the modeled scenario, while housing plus recurring debt consumes 45.6%.
+          </p>
+        </div>
+      </section>
+
+      {/* SECTION 7 & 8: HOUSING COSTS & RECURRING DEBT */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          7. What Counts as Housing Cost? &amp; 8. What Counts as Recurring Debt?
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
-            <div className="font-bold text-blue-600 font-sans text-sm">Front-End Ratio Equation</div>
-            <div className="p-3 bg-white dark:bg-slate-950 rounded-lg text-center font-bold text-sm text-blue-600 dark:text-blue-400">
-              {"Front-End DTI = \\frac{P + I + T + I_{hazard} + PMI + HOA}{Gross \\ Monthly \\ Income} \\times 100\\%"}
-            </div>
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm">7. What Counts as Housing Cost?</h3>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              The calculator aggregates the housing inputs available in the interface. These may include the mortgage or rent payment, property taxes, hazard insurance, and other supported housing obligations such as HOA costs or mortgage insurance when the implementation exposes them. Always use the calculator's current input fields as the authoritative definition of what is included in its modeled housing total.
+            </p>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              This matters because mortgage principal and interest alone are not the same thing as the complete housing obligation. A DTI calculation that intentionally includes taxes and insurance can produce a meaningfully different result from a calculation based only on principal and interest.
+            </p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
-            <div className="font-bold text-blue-600 font-sans text-sm">Back-End Ratio Equation</div>
-            <div className="p-3 bg-white dark:bg-slate-950 rounded-lg text-center font-bold text-sm text-blue-600 dark:text-blue-400">
-              {"Back-End DTI = \\frac{PITI + Debt_{auto} + Debt_{student} + Debt_{cards} + Debt_{other}}{Gross \\ Monthly \\ Income} \\times 100\\%"}
-            </div>
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm">8. What Counts as Recurring Debt?</h3>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              The debt side of the calculator is designed for recurring monthly obligations that contribute to the modeled back-end DTI. The standard inputs include auto loans, student loans and credit-card minimum payments, with additional supported debt fields depending on the current interface.
+            </p>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Do not add ordinary living expenses simply because they leave your bank account every month. DTI is a debt-to-income measure, not a complete household-budget ratio. Expenses such as groceries, utilities, subscriptions or everyday insurance may be important to affordability, but they are not automatically interchangeable with recurring debt obligations in a DTI calculation.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* SECTION 4: HOW CALCULATION WORKS */}
+      {/* SECTION 9: HOW TO CALCULATE DTI MANUALLY */}
       <section className="space-y-4">
         <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          4. How the Calculation Works: Step-by-Step Execution
+          9. How to Calculate DTI Manually
+        </h2>
+        <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
+          <p className="text-slate-700 dark:text-slate-300">
+            The calculation is straightforward once the inputs are normalized to monthly amounts. First, convert annual income to monthly gross income if necessary. Next, add the monthly housing obligations. Then add the recurring debt obligations. Finally, divide the appropriate total by gross monthly income and multiply by 100.
+          </p>
+          <p className="text-slate-600 dark:text-slate-400 font-normal">
+            For example, if gross monthly income is $6,250 and housing is $2,100, the front-end ratio is 33.6%. If recurring debt adds another $750, the back-end ratio becomes 45.6%. The calculator automates those steps, but understanding the formula helps you audit the result and identify input errors.
+          </p>
+        </div>
+      </section>
+
+      {/* SECTION 10 & 11: REVERSE SOLVERS */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          10. Reverse Income Solver &amp; 11. Maximum Housing Budget Solver
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">10. Reverse Income Solver</h3>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              The reverse income solver works backward from a desired DTI. If your monthly housing cost and recurring debt are known, the required gross monthly income can be estimated by dividing the total modeled debt burden by the target DTI expressed as a decimal.
+            </p>
+            <div className="p-3 bg-white dark:bg-slate-950 rounded-lg font-mono text-[11px]">
+              <div>Housing: $1,800 | Debt: $600 | Target DTI: 36%</div>
+              <div className="font-bold text-blue-600 dark:text-blue-400 mt-1">Required Income = ($1,800 + $600) / 0.36 = $6,666.67/mo ($80,000/yr)</div>
+            </div>
+            <p className="text-slate-500 font-normal text-[11px] italic">
+              This is a mathematical target under the selected ratio. It does not mean a lender will approve a borrower solely because income reaches this figure. Actual underwriting can involve additional requirements.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm">11. Maximum Housing Budget Solver</h3>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              The maximum housing-budget solver reverses the DTI equation in another direction. Given gross monthly income, existing recurring debt and a target DTI, it estimates how much monthly housing cost remains available within that target.
+            </p>
+            <div className="p-3 bg-white dark:bg-slate-950 rounded-lg font-mono text-[11px]">
+              <div>Gross Income: $6,500 | Debt: $500 | Target DTI: 43%</div>
+              <div className="font-bold text-blue-600 dark:text-blue-400 mt-1">Max Housing = ($6,500 × 0.43) - $500 = $2,795 - $500 = $2,295/mo</div>
+            </div>
+            <p className="text-slate-500 font-normal text-[11px] italic">
+              This is a planning ceiling based on the chosen ratio. It is not a lender approval limit.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 12, 13, 14: PRICE CEILING, DEBT PAYOFF, SELF-EMPLOYED */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          12. Price Ceiling, 13. Debt Payoff Simulator, &amp; 14. Self-Employed Averaging
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100">12. Estimated Purchase Price Ceiling</h3>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              The calculator also uses a purchase-price factor to translate a modeled housing-payment budget into an estimated home-price ceiling. In the validated example, a $2,295 monthly housing budget and a factor of $6.50 per month per $1,000 borrowed produce approximately $353,077.
+            </p>
+            <p className="text-slate-500 font-normal text-[11px] italic">
+              This conversion is an approximation tied to the calculator's selected assumptions. A different interest rate, loan term, down payment, tax amount, insurance amount, or mortgage insurance assumption can materially change the relationship between a monthly housing budget and a home purchase price.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100">13. Debt Payoff Simulator</h3>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              The debt-payoff simulator is useful when you want to understand the effect of eliminating a monthly obligation. In the validated example, gross monthly income is $6,500, housing is $1,800, and debts are $350 auto + $250 student + $150 credit card.
+            </p>
+            <div className="p-2.5 bg-white dark:bg-slate-950 rounded-lg font-mono text-[11px]">
+              <div>Before: $2,550 / $6,500 = 39.23%</div>
+              <div>After paying $150: $2,400 / $6,500 = 36.92%</div>
+              <div className="text-emerald-600 font-bold mt-0.5">DTI Reduction: 2.31 percentage points</div>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100">14. Self-Employed Averaging</h3>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Income documentation can be more complex for self-employed borrowers, and the calculator includes a simplified two-year averaging tool. In the validated example, Year 1 net income is $85,000 with a $5,000 add-back, while Year 2 is $92,000 with a $6,000 add-back.
+            </p>
+            <div className="p-2.5 bg-white dark:bg-slate-950 rounded-lg font-mono text-[11px]">
+              <div>Modeled Annual: ($90,000 + $98,000) / 2 = $94,000</div>
+              <div className="text-blue-600 font-bold">Monthly: $7,833/mo</div>
+            </div>
+            <p className="text-slate-500 font-normal text-[11px] italic">
+              This is the calculator's mathematical model and should not be treated as a complete underwriting determination.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 15, 16, 17, 18, 19, 20: BENCHMARKS, CREDIT SCORE, STUDENT LOANS, CO-SIGNED, AFFORDABILITY, LABELS */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          15. DTI and Mortgage Program Benchmarks &amp; 16. Credit Score Impact
         </h2>
         <div className="space-y-3 text-xs">
-          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
-            <span className="font-extrabold text-blue-600">Step 1: Calculate Standardized Gross Monthly Income</span>
-            <p className="text-slate-600 dark:text-slate-400">
-              Aggregate primary salary, co-borrower income, 2-year averaged bonuses/commissions, dividends, and alimony received into gross monthly income.
-            </p>
-          </div>
-          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
-            <span className="font-extrabold text-blue-600">Step 2: Aggregate Total PITI Housing Expenses</span>
-            <p className="text-slate-600 dark:text-slate-400">
-              Sum mortgage principal & interest (or rent), property taxes, hazard insurance, mortgage insurance (PMI/MIP), and monthly HOA dues.
-            </p>
-          </div>
-          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
-            <span className="font-extrabold text-blue-600">Step 3: Itemize Minimum Monthly Recurring Debts</span>
-            <p className="text-slate-600 dark:text-slate-400">
-              Add minimum payments for auto loans, student loans, credit card minimums, installment loans, and court-ordered obligations.
-            </p>
-          </div>
-          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
-            <span className="font-extrabold text-blue-600">Step 4: Compute Ratios & Evaluate Program Matrix</span>
-            <p className="text-slate-600 dark:text-slate-400">
-              Divide housing costs and total obligations by gross income to compute Front-End and Back-End DTI ratios, then evaluate against Conventional, FHA, VA, USDA, and Jumbo guidelines.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 5: WORKED EXAMPLES */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          5. Worked Real-World Underwriting Examples
-        </h2>
-
-        <div className="space-y-4 text-xs">
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
-            <h3 className="font-extrabold text-sm text-blue-600 dark:text-blue-400">
-              Scenario A: Strong Applicant ($6,500 Monthly Gross, $1,800 Housing, $750 Debt)
-            </h3>
-            <div className="font-mono bg-white dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1 text-[11px]">
-              <div>Gross Monthly Income = $6,500/mo</div>
-              <div>Front-End DTI = ($1,800 / $6,500) × 100% = 27.69% (Under 28% benchmark)</div>
-              <div>Total Monthly Outflow = $1,800 + $750 = $2,550/mo</div>
-              <div>Back-End DTI = ($2,550 / $6,500) × 100% = 39.23% (Under 43% cap)</div>
-              <div><strong>Status:</strong> Fully eligible for Conventional, FHA, and VA financing.</div>
-            </div>
-          </div>
-
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
-            <h3 className="font-extrabold text-sm text-blue-600 dark:text-blue-400">
-              Scenario B: High-Debt Applicant ($5,000 Monthly Gross, $1,700 Housing, $1,000 Debt)
-            </h3>
-            <div className="font-mono bg-white dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1 text-[11px]">
-              <div>Gross Monthly Income = $5,000/mo</div>
-              <div>Front-End DTI = ($1,700 / $5,000) × 100% = 34.00%</div>
-              <div>Total Outflow = $1,700 + $1,000 = $2,700/mo</div>
-              <div>Back-End DTI = ($2,700 / $5,000) × 100% = 54.00%</div>
-              <div><strong>Status:</strong> Exceeds Conventional 45% limit. Requires FHA loan with AUS approval or paying off $500/mo of credit card debt to drop Back-End DTI below 44%.</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 6: PROGRAM MATRIX TABLE */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          6. Mortgage Program DTI Guidelines Comparison Matrix
-        </h2>
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs text-left border-collapse font-sans">
-            <thead>
-              <tr className="bg-blue-600 text-white font-bold">
-                <th className="p-3 rounded-tl-xl">Loan Type</th>
-                <th className="p-3">Benchmark Front-End</th>
-                <th className="p-3">Benchmark Back-End</th>
-                <th className="p-3 rounded-tr-xl">Max Cap with AUS Compensating Factors</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-800 bg-white dark:bg-slate-900 font-medium">
-              <tr>
-                <td className="p-3 font-bold text-blue-600">Conventional (Fannie/Freddie)</td>
-                <td className="p-3 font-mono">28%</td>
-                <td className="p-3 font-mono">36%</td>
-                <td className="p-3 font-bold">45% (Up to 50% with AUS approval)</td>
-              </tr>
-              <tr className="bg-slate-50/50 dark:bg-slate-800/40">
-                <td className="p-3 font-bold text-blue-600">FHA Loan</td>
-                <td className="p-3 font-mono">31%</td>
-                <td className="p-3 font-mono">43%</td>
-                <td className="p-3 font-bold">46.9% / 56.9% (TOTAL Scorecard)</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-bold text-blue-600">VA Loan</td>
-                <td className="p-3 font-mono">No Cap</td>
-                <td className="p-3 font-mono">41%</td>
-                <td className="p-3 font-bold">Flexible (Requires VA Residual Income test)</td>
-              </tr>
-              <tr className="bg-slate-50/50 dark:bg-slate-800/40">
-                <td className="p-3 font-bold text-blue-600">USDA Rural Loan</td>
-                <td className="p-3 font-mono">29%</td>
-                <td className="p-3 font-mono">41%</td>
-                <td className="p-3 font-bold">44% (With high credit score & reserves)</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-bold text-blue-600">Jumbo / Non-Conforming</td>
-                <td className="p-3 font-mono">28%</td>
-                <td className="p-3 font-mono">38% - 43%</td>
-                <td className="p-3 font-bold">Strict 43% Max Limit</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* SECTION 7: INCLUDED VS EXCLUDED DEBTS */}
-      <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          7. Included vs. Excluded Debts in DTI Calculations
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 space-y-2">
-            <h3 className="font-bold text-emerald-700 dark:text-emerald-400 text-sm">Included Obligations</h3>
-            <ul className="space-y-1 text-slate-700 dark:text-slate-300 list-disc list-inside font-normal">
-              <li>Auto loan & lease payments</li>
-              <li>Student loan monthly minimums (or 0.5% FHA rule)</li>
-              <li>Credit card minimum monthly payments</li>
-              <li>Personal installment loans & co-signed debts</li>
-              <li>Court-ordered child support & alimony paid</li>
-            </ul>
-          </div>
-
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
-            <h3 className="font-bold text-slate-700 dark:text-slate-300 text-sm">Excluded Expenses</h3>
-            <ul className="space-y-1 text-slate-600 dark:text-slate-400 list-disc list-inside font-normal">
-              <li>Utilities (electricity, gas, water, internet)</li>
-              <li>Auto and health insurance premiums</li>
-              <li>Cell phone bills & subscription services</li>
-              <li>Groceries and daily living expenses</li>
-              <li>401(k) retirement loan repayments</li>
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm">15. Mortgage Program Benchmarks</h3>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Mortgage programs may publish or use different DTI benchmarks, and automated underwriting systems can evaluate a broader set of risk factors than a simple ratio table. The calculator therefore presents its program matrix as a modeled underwriting reference rather than a guarantee of approval.
+            </p>
+            <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400 font-normal">
+              <li><strong>Conventional:</strong> the calculator uses 28% / 36% as a benchmark and may show higher automated-underwriting ranges in supported scenarios.</li>
+              <li><strong>FHA:</strong> the calculator displays 31% / 43% as a benchmark and recognizes that automated underwriting may evaluate higher ratios depending on the overall file.</li>
+              <li><strong>VA:</strong> the calculator treats the back-end ratio as a guideline context and separately recognizes residual-income considerations.</li>
+              <li><strong>USDA:</strong> the calculator includes program-specific benchmark values that should be treated as model inputs rather than universal approval rules.</li>
+              <li><strong>Jumbo / non-conforming:</strong> the calculator may display broader DTI ranges depending on the modeled program assumptions.</li>
             </ul>
+            <p className="text-slate-500 font-normal text-[11px] italic">
+              The correct way to read these values is: they are useful reference points within the calculator. They are not promises that a lender will approve a borrower at a given DTI. Mortgage underwriting can incorporate credit history, reserves, loan-to-value, property characteristics, loan type, automated-underwriting findings and other compensating factors.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100">16. Does Credit Score Affect DTI?</h3>
+              <p className="text-slate-600 dark:text-slate-400 font-normal">
+                Credit score and DTI are different risk measures. A credit score reflects credit-history factors, while DTI measures debt obligations relative to gross income. The calculator's program-matrix logic uses credit score as an active input in its modeled eligibility classification, but users should not interpret that as a universal rule that one credit score automatically changes every lender's allowable DTI.
+              </p>
+            </div>
+            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100">17. Student Loans and DTI</h3>
+              <p className="text-slate-600 dark:text-slate-400 font-normal">
+                Student-loan obligations can affect DTI because a recurring monthly payment may be included in the debt numerator. The exact treatment of a student loan can vary by loan program and underwriting method, especially when a documented payment is very low or zero. The calculator's educational content distinguishes program-specific treatment such as documented $0 income-driven repayment treatment under one framework and percentage-of-balance under another.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100">18. Co-Signed Debt &amp; VA Residual</h3>
+              <p className="text-slate-600 dark:text-slate-400 font-normal">
+                A co-signed debt can create a special underwriting question when another borrower makes the payment. The calculator presents this as educational context rather than an automatic exclusion. Similarly, VA underwriting considers residual income in addition to DTI.
+              </p>
+            </div>
+            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100">19. DTI vs Affordability</h3>
+              <p className="text-slate-600 dark:text-slate-400 font-normal">
+                DTI is not the same thing as household affordability. DTI focuses on debt obligations relative to gross income, whereas a true affordability analysis may also include groceries, utilities, transportation, childcare, savings, emergency reserves, and other living costs.
+              </p>
+            </div>
+            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100">20. Boundaries &amp; Risk Labels</h3>
+              <p className="text-slate-600 dark:text-slate-400 font-normal">
+                The calculator uses configurable risk tiers for planning. The validated classification includes a Borderline / Stretched band for DTI above 43% through 49%. These labels are explanatory, not legal or underwriting guarantees.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* SECTION 8: COMMON MISTAKES */}
+      {/* SECTION 21: COMMON MISTAKES */}
       <section className="space-y-4">
         <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          8. Common DTI Misconceptions & Underwriting Pitfalls
+          21. Common DTI Calculation Mistakes
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
-            <h3 className="font-extrabold text-rose-600 dark:text-rose-400">Assuming Net Income is Used</h3>
-            <p className="text-slate-600 dark:text-slate-400 font-normal">
-              Underwriters always use pre-tax Gross Monthly Income, not net take-home pay, when calculating official qualification DTI ratios.
-            </p>
-          </div>
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
-            <h3 className="font-extrabold text-rose-600 dark:text-rose-400">Ignoring Student Loan Rules</h3>
-            <p className="text-slate-600 dark:text-slate-400 font-normal">
-              Deferred student loans or $0 IDR payments are calculated using agency specific rules (0.5% balance for FHA if $0, or documented IDR for Fannie Mae).
-            </p>
-          </div>
+        <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-700 dark:text-slate-300 list-disc list-inside font-normal">
+            <li>Entering annual income as though it were monthly income.</li>
+            <li>Forgetting to convert annual salary into a monthly gross amount.</li>
+            <li>Using net take-home pay instead of gross income.</li>
+            <li>Leaving out recurring debt payments that the selected model includes.</li>
+            <li>Adding ordinary living expenses to DTI simply because they are monthly expenses.</li>
+            <li>Counting the same debt twice.</li>
+            <li>Assuming credit score and DTI are interchangeable.</li>
+            <li>Treating a program benchmark as a guaranteed approval limit.</li>
+            <li>Ignoring student-loan treatment differences across underwriting models.</li>
+            <li>Interpreting a reverse-income or maximum-housing result as an actual lender approval.</li>
+          </ul>
         </div>
       </section>
 
-      {/* SECTION 9: RELATED CONCEPTS */}
+      {/* SECTION 22: DTI CALCULATION METHODOLOGY */}
       <section className="space-y-4">
         <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          9. Related Underwriting Metrics: LTV & Residual Income
+          22. DTI Calculation Methodology
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
-            <h3 className="font-extrabold text-blue-600">Loan-to-Value (LTV) Ratio</h3>
-            <p className="text-slate-600 dark:text-slate-400 font-normal">
-              Measures loan amount relative to appraised home value. Lower LTV (larger down payment) provides compensating strength for higher DTIs.
-            </p>
+        <div className="space-y-3 text-xs font-mono">
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <div className="font-bold text-blue-600 dark:text-blue-400 font-sans">Front-End DTI Formula</div>
+            <div className="p-2.5 bg-white dark:bg-slate-950 rounded-lg text-center font-bold">
+              Front-End DTI = (Housing Costs / Gross Monthly Income) × 100
+            </div>
           </div>
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
-            <h3 className="font-extrabold text-blue-600">VA Residual Income Benchmark</h3>
-            <p className="text-slate-600 dark:text-slate-400 font-normal">
-              Measures net discretionary dollars remaining for family living costs after all housing, taxes, and debt payments are made.
-            </p>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <div className="font-bold text-blue-600 dark:text-blue-400 font-sans">Back-End DTI Formula</div>
+            <div className="p-2.5 bg-white dark:bg-slate-950 rounded-lg text-center font-bold">
+              Back-End DTI = ((Housing Costs + Recurring Debt) / Gross Monthly Income) × 100
+            </div>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <div className="font-bold text-blue-600 dark:text-blue-400 font-sans">Reverse Target Income Formula</div>
+            <div className="p-2.5 bg-white dark:bg-slate-950 rounded-lg text-center font-bold">
+              Required Gross Monthly Income = (Housing Costs + Existing Debt) / Target DTI
+            </div>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <div className="font-bold text-blue-600 dark:text-blue-400 font-sans">Maximum Housing Budget Formula</div>
+            <div className="p-2.5 bg-white dark:bg-slate-950 rounded-lg text-center font-bold">
+              Maximum Housing Budget = (Gross Monthly Income × Target DTI) - Existing Debt
+            </div>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+            <div className="font-bold text-blue-600 dark:text-blue-400 font-sans">Self-Employed Two-Year Average Formula</div>
+            <div className="p-2.5 bg-white dark:bg-slate-950 rounded-lg text-center font-bold">
+              Qualifying Annual Income = (Year 1 Income + Year 1 Add-backs + Year 2 Income + Year 2 Add-backs) / 2
+            </div>
           </div>
         </div>
-      </section>
-
-      {/* SECTION 10: SUMMARY */}
-      <section className="p-6 rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 space-y-2 text-xs">
-        <h2 className="font-extrabold text-sm text-blue-700 dark:text-blue-300">
-          10. Educational Summary
-        </h2>
-        <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
-          A healthy Debt-to-Income ratio is the key gateway to securing mortgage approval and favorable interest rates. Keeping your Front-End DTI under 28% and Back-End DTI under 36% ensures maximum eligibility across Conventional, FHA, VA, USDA, and Jumbo mortgage programs while maintaining strong long-term financial stability.
+        <p className="text-[11px] text-slate-500 font-normal italic">
+          These formulas describe the calculator's mathematical model. They do not replace a lender's underwriting methodology, which may apply additional rules.
         </p>
+      </section>
+
+      {/* SECTION 25 & 29: APPROVED BASELINE FACTS & INTERNAL LINKING STRATEGY */}
+      <section className="p-6 rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 space-y-4 text-xs">
+        <div>
+          <h3 className="font-extrabold text-sm text-blue-700 dark:text-blue-300 mb-1">
+            25. Internal Planning Links
+          </h3>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-700 dark:text-slate-300 font-medium">
+            <li>• <Link href="/calculators/house-affordability-calculator" className="text-blue-600 hover:underline font-bold">House Affordability</Link>: connect debt burden with maximum home-price planning.</li>
+            <li>• <Link href="/calculators/mortgage-calculator" className="text-blue-600 hover:underline font-bold">Mortgage Calculator</Link>: move from ratio analysis to payment and amortization details.</li>
+            <li>• <Link href="/calculators/debt-payoff-calculator" className="text-blue-600 hover:underline font-bold">Debt Payoff</Link>: explore how reducing recurring debt changes monthly obligations.</li>
+            <li>• <Link href="/calculators/down-payment-calculator" className="text-blue-600 hover:underline font-bold">Down Payment</Link>: connect cash contribution with mortgage and housing planning.</li>
+            <li>• <Link href="/calculators/refinance-calculator" className="text-blue-600 hover:underline font-bold">Refinance</Link>: examine how changing loan terms may change the monthly payment.</li>
+            <li>• <Link href="/calculators/loan-calculator" className="text-blue-600 hover:underline font-bold">Loan Calculator</Link>: compare general debt-service scenarios.</li>
+            <li>• <Link href="/calculators/rent-calculator" className="text-blue-600 hover:underline font-bold">Rent Calculator</Link>: evaluate housing cost independently from mortgage underwriting.</li>
+          </ul>
+        </div>
+        <div className="pt-2 border-t border-blue-200 dark:border-blue-900/60 text-slate-600 dark:text-slate-400 font-normal">
+          <p>
+            <strong>Validated Baseline Facts:</strong> $75,000 annual gross income converts to $6,250 monthly; housing totals $2,100; recurring debt totals $750; front-end DTI is 33.60%; and back-end DTI is 45.60%. The reverse-income baseline requires $6,666.67 monthly or $80,000 annual income for $1,800 housing plus $600 debt at a 36% target DTI. The maximum-housing baseline produces $2,295 monthly from $6,500 gross income, $500 existing debt and a 43% target DTI. The validated self-employed model averages $94,000 annual qualifying income from the two-year example. These are calculator scenarios, not individualized underwriting decisions.
+          </p>
+        </div>
       </section>
     </div>
   );
