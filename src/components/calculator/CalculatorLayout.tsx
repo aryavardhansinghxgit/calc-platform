@@ -142,6 +142,8 @@ import { BacCalculator } from "./bac/BacCalculator";
 import { BacContent } from "./bac/BacContent";
 import { ScientificCalculator } from "./scientific/ScientificCalculator";
 import { ScientificCalculatorContent } from "./scientific/ScientificCalculatorContent";
+import { FractionCalculator } from "./fraction/FractionCalculator";
+import { FractionContent } from "./fraction/FractionContent";
 import { HorsepowerCalculator } from "./horsepower/HorsepowerCalculator";
 import { HorsepowerContent } from "./horsepower/HorsepowerContent";
 import { GasMileageCalculator } from "./gas-mileage/GasMileageCalculator";
@@ -435,6 +437,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isDiceRoller = idLower === "dice-roller" || slugLower === "dice-roller" || idLower === "dice-roller-calculator" || slugLower === "dice-roller-calculator";
   const isLove = idLower === "love-calculator" || slugLower === "love-calculator";
   const isGPA = idLower === "gpa-calculator" || slugLower === "gpa-calculator";
+  const isFraction = idLower === "fraction-calculator" || slugLower === "fraction-calculator";
   const isDate = idLower === "date-calculator" || slugLower === "date-calculator";
   const isHours = idLower === "hours-calculator" || slugLower === "hours-calculator";
   const isGrade = idLower === "grade-calculator" || slugLower === "grade-calculator";
@@ -517,8 +520,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                                                                                       isSleep ? SleepContent :
                                                                                       isIncomeTax ? IncomeTaxContent :
                                                                                         isSalary ? SalaryContent :
-                                                                                          isAutoLoan ? AutoLoanContentSection :
-                                                                                            isScientific ? ScientificCalculatorContent : isBac ? BacContent : isBsa ? BsaContent : isBodyType ? BodyTypeContent : isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null
+                                                                                           isAutoLoan ? AutoLoanContentSection :
+                                                                                             isScientific ? ScientificCalculatorContent : isFraction ? FractionContent : isBac ? BacContent : isBsa ? BsaContent : isBodyType ? BodyTypeContent : isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null
   );
   const CustomChart = definition.ChartComponent;
 
@@ -571,6 +574,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             <HoursCalculator />
           ) : isScientific ? (
             <ScientificCalculator />
+          ) : isFraction ? (
+            <FractionCalculator />
           ) : isLove ? (
             <LoveCalculator />
           ) : isDiceRoller ? (
@@ -884,8 +889,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
         </CalculatorErrorBoundary>
 
-        {/* Simple Related Calculators Links directly below calculator boxes (Suppressed for Personal Loan, Salary, Income Tax, Student Loan, Budget, Savings, House Affordability, Time, Age, Amortization, Grade, Future Value, 401(k), Date, Hours, Scientific, and Roth IRA which have dedicated suites) */}
-        {!isPersonalLoan && !isSalary && !isIncomeTax && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra && !isDate && !isHours && !isScientific && (
+        {/* Simple Related Calculators Links directly below calculator boxes (Suppressed for Personal Loan, Salary, Income Tax, Student Loan, Budget, Savings, House Affordability, Time, Age, Amortization, Grade, Future Value, 401(k), Date, Hours, Scientific, Fraction, and Roth IRA which have dedicated suites) */}
+        {!isPersonalLoan && !isSalary && !isIncomeTax && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra && !isDate && !isHours && !isScientific && !isFraction && (
           <div className="pt-2 pb-1 space-y-1">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block">
               RELATED CALCULATORS:
@@ -899,7 +904,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators */}
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-8 shadow-xs text-slate-900 dark:text-slate-100">
         {/* Formula & Calculation Method */}
-        {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra && !isDate && !isHours && !isScientific && (
+        {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra && !isDate && !isHours && !isScientific && !isFraction && (
           <div className="space-y-3">
             <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
               Formula &amp; Calculation Method

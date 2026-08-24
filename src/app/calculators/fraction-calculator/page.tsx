@@ -7,7 +7,8 @@ import { generateJsonLdSchema } from "@/lib/seo-helpers";
 export const metadata: Metadata = fraction_calculatorMetadata;
 
 export default function FractionCalculatorPage() {
-  const { calculate, ...serializableDef } = fraction_calculatorConfig;
+  const { calculate, CustomComponent, ContentComponent, ...serializableDef } =
+    fraction_calculatorConfig;
   const schemas = generateJsonLdSchema({
     title: fraction_calculatorConfig.title,
     description: fraction_calculatorConfig.description,
