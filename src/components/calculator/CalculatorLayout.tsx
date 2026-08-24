@@ -906,17 +906,19 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
         )}
 
-        {/* 10 High-Quality Frequently Asked Questions (Excluded for Math & Custom suites per AGENTS.md policy) */}
-        {definition.category !== "Math" && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra && (
+        {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
+        {((definition.faqs && definition.faqs.length > 0) ||
+          (definition.category !== "Math" && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isFourZeroOneK && !isRothIra)
+        ) && (
           <div className="space-y-4 pt-2">
             <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
               Frequently Asked Questions
             </h3>
             <div className="space-y-3">
-              {(definition.faqs && definition.faqs.length >= 5
+              {(definition.faqs && definition.faqs.length > 0
                 ? definition.faqs
-                : getTenHighQualityFaqs(definition.title, definition.category)
-              ).slice(0, 10).map((faq, idx) => (
+                : getTenHighQualityFaqs(definition.title, definition.category).slice(0, 10)
+              ).map((faq, idx) => (
                 <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
                   <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
                     {faq.question}

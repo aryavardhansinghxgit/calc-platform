@@ -85,8 +85,8 @@ export function PercentageCalculator() {
 
     if (hasP && hasV1) {
       const res = (p / 100) * v1;
-      const resFormatted = Number.isInteger(res) ? res.toString() : parseFloat(res.toFixed(6)).toString();
-      const dec = p / 100;
+      const resFormatted = Number.isInteger(res) ? res.toString() : parseFloat(res.toFixed(8)).toString();
+      const dec = Number.isInteger(p / 100) ? (p / 100).toString() : parseFloat((p / 100).toFixed(8)).toString();
       return {
         resultStr: resFormatted,
         summaryText: <span>{p}% of {v1} = <strong className="text-blue-600 dark:text-blue-400 font-bold">{resFormatted}</strong></span>,
@@ -94,25 +94,39 @@ export function PercentageCalculator() {
         stepText: `${p}% of ${v1} = ${dec} × ${v1} = ${resFormatted}`
       };
     } else if (hasV2 && hasV1) {
-      if (v1 === 0) return null;
+      if (v1 === 0) {
+        return {
+          resultStr: "Undefined",
+          summaryText: <span>{v2} is <strong className="text-red-600 font-bold">Undefined</strong> (division by zero).</span>,
+          summaryRawText: `${v2} is Undefined of ${v1}`,
+          stepText: `${v2} ÷ 0 × 100 = Undefined (division by zero)`
+        };
+      }
       const resP = (v2 / v1) * 100;
-      const resFormatted = (Number.isInteger(resP) ? resP.toString() : parseFloat(resP.toFixed(6)).toString()) + "%";
+      const resFormatted = (Number.isInteger(resP) ? resP.toString() : parseFloat(resP.toFixed(8)).toString()) + "%";
       const ratio = v2 / v1;
       return {
         resultStr: resFormatted,
         summaryText: <span>{v2} is <strong className="text-blue-600 dark:text-blue-400 font-bold">{resFormatted}</strong> of {v1}.</span>,
         summaryRawText: `${v2} is ${resFormatted} of ${v1}`,
-        stepText: `${v2} ÷ ${v1} = ${parseFloat(ratio.toFixed(6))} = ${resFormatted}`
+        stepText: `${v2} ÷ ${v1} = ${parseFloat(ratio.toFixed(8))} = ${resFormatted}`
       };
     } else if (hasV2 && hasP) {
-      if (p === 0) return null;
+      if (p === 0) {
+        return {
+          resultStr: "Undefined",
+          summaryText: <span>{v2} is 0% of <strong className="text-red-600 font-bold">Undefined</strong> (division by zero).</span>,
+          summaryRawText: `${v2} is 0% of Undefined`,
+          stepText: `${v2} ÷ 0% = Undefined (division by zero)`
+        };
+      }
       const resV1 = v2 / (p / 100);
-      const resFormatted = Number.isInteger(resV1) ? resV1.toString() : parseFloat(resV1.toFixed(6)).toString();
+      const resFormatted = Number.isInteger(resV1) ? resV1.toString() : parseFloat(resV1.toFixed(8)).toString();
       return {
         resultStr: resFormatted,
         summaryText: <span>{v2} is {p}% of <strong className="text-blue-600 dark:text-blue-400 font-bold">{resFormatted}</strong>.</span>,
         summaryRawText: `${v2} is ${p}% of ${resFormatted}`,
-        stepText: `${v2} ÷ ${p}% = ${resFormatted}`
+        stepText: `${v2} ÷ (${p} / 100) = ${v2} ÷ ${parseFloat((p / 100).toFixed(8))} = ${resFormatted}`
       };
     }
     return null;
@@ -124,10 +138,10 @@ export function PercentageCalculator() {
   };
 
   const handleS1Clear = () => {
-    setS1P("");
-    setS1V1("");
+    setS1P("4");
+    setS1V1("6");
     setS1V2("");
-    setS1Result(null);
+    setS1Result(computeS1("4", "6", ""));
   };
 
 
@@ -139,24 +153,18 @@ export function PercentageCalculator() {
   // =========================================================================
   const [s2R1P, setS2R1P] = useState<string>("5");
   const [s2R1V1, setS2R1V1] = useState<string>("8");
-  const [s2R1Result, setS2R1Result] = useState<{
-    resultStr: string;
-    summaryText: React.ReactNode;
-    summaryRawText: string;
-    stepText: string;
-  } | null>(() => computeS2R1("5", "8"));
 
   function computeS2R1(pStr: string, v1Str: string) {
     const p = parseFloat(pStr);
     const v1 = parseFloat(v1Str);
     if (Number.isNaN(p) || Number.isNaN(v1)) return null;
     const res = (p / 100) * v1;
-    const resFormatted = Number.isInteger(res) ? res.toString() : parseFloat(res.toFixed(6)).toString();
+    const resFormatted = Number.isInteger(res) ? res.toString() : parseFloat(res.toFixed(8)).toString();
     return {
       resultStr: resFormatted,
       summaryText: <span><strong className="text-blue-600 dark:text-blue-400 font-bold">{resFormatted}</strong> is {p}% of {v1}.</span>,
       summaryRawText: `${resFormatted} is ${p}% of ${v1}`,
-      stepText: `${p}% × ${v1} = ${resFormatted}`
+      stepText: `${p}% × ${v1} = (${p} / 100) × ${v1} = ${resFormatted}`
     };
   }
 
@@ -171,15 +179,23 @@ export function PercentageCalculator() {
   function computeS2R2(v2Str: string, v1Str: string) {
     const v2 = parseFloat(v2Str);
     const v1 = parseFloat(v1Str);
-    if (Number.isNaN(v2) || Number.isNaN(v1) || v1 === 0) return null;
+    if (Number.isNaN(v2) || Number.isNaN(v1)) return null;
+    if (v1 === 0) {
+      return {
+        resultStr: "Undefined",
+        summaryText: <span>{v2} is <strong className="text-red-600 font-bold">Undefined</strong> of {v1} (division by zero).</span>,
+        summaryRawText: `${v2} is Undefined of ${v1}`,
+        stepText: `${v2} ÷ 0 × 100 = Undefined (division by zero)`
+      };
+    }
     const resP = (v2 / v1) * 100;
-    const resFormatted = (Number.isInteger(resP) ? resP.toString() : parseFloat(resP.toFixed(6)).toString()) + "%";
+    const resFormatted = (Number.isInteger(resP) ? resP.toString() : parseFloat(resP.toFixed(8)).toString()) + "%";
     const ratio = v2 / v1;
     return {
       resultStr: resFormatted,
       summaryText: <span>{v2} is <strong className="text-blue-600 dark:text-blue-400 font-bold">{resFormatted}</strong> of {v1}.</span>,
       summaryRawText: `${v2} is ${resFormatted} of ${v1}`,
-      stepText: `${v2} ÷ ${v1} = ${parseFloat(ratio.toFixed(6))} = ${resFormatted}`
+      stepText: `${v2} ÷ ${v1} × 100 = ${parseFloat(ratio.toFixed(8))} × 100 = ${resFormatted}`
     };
   }
 
@@ -194,14 +210,22 @@ export function PercentageCalculator() {
   function computeS2R3(v2Str: string, pStr: string) {
     const v2 = parseFloat(v2Str);
     const p = parseFloat(pStr);
-    if (Number.isNaN(v2) || Number.isNaN(p) || p === 0) return null;
+    if (Number.isNaN(v2) || Number.isNaN(p)) return null;
+    if (p === 0) {
+      return {
+        resultStr: "Undefined",
+        summaryText: <span>{v2} is 0% of <strong className="text-red-600 font-bold">Undefined</strong> (division by zero).</span>,
+        summaryRawText: `${v2} is 0% of Undefined`,
+        stepText: `${v2} ÷ (0 / 100) = Undefined (division by zero)`
+      };
+    }
     const resV1 = v2 / (p / 100);
-    const resFormatted = Number.isInteger(resV1) ? resV1.toString() : parseFloat(resV1.toFixed(6)).toString();
+    const resFormatted = Number.isInteger(resV1) ? resV1.toString() : parseFloat(resV1.toFixed(8)).toString();
     return {
       resultStr: resFormatted,
       summaryText: <span>{v2} is {p}% of <strong className="text-blue-600 dark:text-blue-400 font-bold">{resFormatted}</strong>.</span>,
       summaryRawText: `${v2} is ${p}% of ${resFormatted}`,
-      stepText: `${v2} ÷ ${p}% = ${resFormatted}`
+      stepText: `${v2} ÷ (${p} / 100) = ${v2} ÷ ${parseFloat((p / 100).toFixed(8))} = ${resFormatted}`
     };
   }
 
@@ -242,18 +266,44 @@ export function PercentageCalculator() {
 
     const diff = Math.abs(v1 - v2);
     const avg = (v1 + v2) / 2;
-    if (avg === 0) return null;
-    const pDiff = (diff / avg) * 100;
-    const resFormatted = pDiff.toString();
+    const avgMag = (Math.abs(v1) + Math.abs(v2)) / 2;
+
+    if (v1 === 0 && v2 === 0) {
+      return {
+        v1,
+        v2,
+        diff: 0,
+        avg: 0,
+        pDiff: 0,
+        resultStr: "0%",
+        summaryRawText: "Difference of 0 and 0 is 0%"
+      };
+    }
+
+    const denom = avg !== 0 ? avg : avgMag;
+    if (denom === 0) {
+      return {
+        v1,
+        v2,
+        diff,
+        avg: 0,
+        pDiff: 0,
+        resultStr: "Undefined",
+        summaryRawText: `Difference of ${v1} and ${v2} is Undefined`
+      };
+    }
+
+    const pDiff = (diff / denom) * 100;
+    const resFormatted = Number.isInteger(pDiff) ? pDiff.toString() : pDiff.toString();
 
     return {
       v1,
       v2,
       diff,
-      avg,
+      avg: denom,
       pDiff,
       resultStr: `${resFormatted}%`,
-      summaryRawText: `Difference of ${v1} and ${v2} are ${resFormatted}%`
+      summaryRawText: `Difference of ${v1} and ${v2} is ${resFormatted}%`
     };
   }
 
@@ -263,9 +313,9 @@ export function PercentageCalculator() {
   };
 
   const handleS3Clear = () => {
-    setS3V1("");
-    setS3V2("");
-    setS3Result(null);
+    setS3V1("5");
+    setS3V2("9");
+    setS3Result(computeS3("5", "9"));
   };
 
 
@@ -299,8 +349,8 @@ export function PercentageCalculator() {
     if (hasV1 && hasP) {
       const factor = mode === "Increase" ? 1 + p / 100 : 1 - p / 100;
       const resV2 = v1 * factor;
-      const resFormatted = Number.isInteger(resV2) ? resV2.toString() : parseFloat(resV2.toFixed(6)).toString();
-      const decP = p / 100;
+      const resFormatted = Number.isInteger(resV2) ? resV2.toString() : parseFloat(resV2.toFixed(8)).toString();
+      const decP = Number.isInteger(p / 100) ? (p / 100).toString() : parseFloat((p / 100).toFixed(8)).toString();
       const sign = mode === "Increase" ? "+" : "-";
 
       return {
@@ -313,12 +363,22 @@ export function PercentageCalculator() {
         stepText: `${v1} ${mode.toLowerCase()} ${p}% = ${v1} × (1 ${sign} ${p}%) = ${v1} × (1 ${sign} ${decP}) = ${resFormatted}`
       };
     } else if (hasV1 && hasV2) {
-      if (v1 === 0) return null;
+      if (v1 === 0) {
+        return {
+          v1,
+          p: NaN,
+          v2,
+          mode,
+          resultStr: "Undefined",
+          summaryRawText: `Change from 0 to ${v2} is Undefined`,
+          stepText: `(${v2} - 0) ÷ 0 × 100% = Undefined (division by zero)`
+        };
+      }
       const diff = v2 - v1;
-      const pctChange = (diff / v1) * 100;
+      const pctChange = (diff / Math.abs(v1)) * 100;
       const calculatedMode: "Increase" | "Decrease" = pctChange >= 0 ? "Increase" : "Decrease";
       const absP = Math.abs(pctChange);
-      const pFormatted = (Number.isInteger(absP) ? absP.toString() : parseFloat(absP.toFixed(6)).toString()) + "%";
+      const pFormatted = (Number.isInteger(absP) ? absP.toString() : parseFloat(absP.toFixed(8)).toString()) + "%";
 
       return {
         v1,
@@ -327,7 +387,7 @@ export function PercentageCalculator() {
         mode: calculatedMode,
         resultStr: pFormatted,
         summaryRawText: `${v1} to ${v2} is a ${pFormatted} ${calculatedMode.toLowerCase()}`,
-        stepText: `|${v2} - ${v1}| ÷ ${v1} × 100% = ${pFormatted}`
+        stepText: `(${v2} - ${v1}) ÷ |${v1}| × 100% = ${pFormatted}`
       };
     }
 
@@ -340,11 +400,11 @@ export function PercentageCalculator() {
   };
 
   const handleS4Clear = () => {
-    setS4V1("");
+    setS4V1("5");
     setS4Mode("Increase");
-    setS4P("");
+    setS4P("8");
     setS4V2("");
-    setS4Result(null);
+    setS4Result(computeS4("5", "Increase", "8", ""));
   };
 
   return (
@@ -637,7 +697,7 @@ export function PercentageCalculator() {
               </div>
               <div className="bg-white dark:bg-slate-900 p-3.5 text-xs font-sans space-y-3">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                  Difference of {s3Result.v1} and {s3Result.v2} are <strong className="text-blue-600 dark:text-blue-400 font-bold">{s3Result.resultStr}</strong>
+                  Difference of {s3Result.v1} and {s3Result.v2} is <strong className="text-blue-600 dark:text-blue-400 font-bold">{s3Result.resultStr}</strong>
                 </div>
 
                 <div className="pt-1 border-t border-slate-100 dark:border-slate-800 space-y-2">
