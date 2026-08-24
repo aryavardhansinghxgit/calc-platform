@@ -24,7 +24,7 @@ export const downPaymentConfig: CalculatorModuleDefinition = {
     "FHA vs conventional down payment",
     "minimum down payment for first-time home buyer",
     "cash to close calculator",
-    "cost of waiting to buy a home"
+    "cost of waiting to buy a home",
   ],
   priority: 1,
   relatedCalculators: [
@@ -32,7 +32,9 @@ export const downPaymentConfig: CalculatorModuleDefinition = {
     "house-affordability-calculator",
     "fha-loan-calculator",
     "va-mortgage-calculator",
-    "home-equity-loan-calculator"
+    "refinance-calculator",
+    "home-equity-loan-calculator",
+    "loan-calculator",
   ],
   formulaDescription:
     "Down Payment = Home Price × Down %. Loan Amount = Home Price - Down Payment. Monthly P&I = P × [r(1+r)^n / ((1+r)^n - 1)]. PMI cancels at 78% LTV.",

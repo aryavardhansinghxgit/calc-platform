@@ -2,18 +2,18 @@ export type CalculationMode = "home_price" | "upfront_cash";
 export type LoanPresetType = "conventional" | "fha" | "va" | "usda" | "jumbo";
 
 export interface DownPaymentInput {
-  calculationMode: CalculationMode;
-  homePrice: number;
-  downPaymentPct: number;
-  upfrontCashAvailable: number;
-  loanTermYears: number;
-  interestRate: number;
-  propertyTaxAnnual: number;
-  homeInsuranceAnnual: number;
-  pmiRatePct: number;
-  hoaDuesMonthly: number;
-  closingCostsPct: number;
-  currencySymbol: string;
+  calculationMode?: CalculationMode;
+  homePrice?: number;
+  downPaymentPct?: number;
+  upfrontCashAvailable?: number;
+  loanTermYears?: number;
+  interestRate?: number;
+  propertyTaxAnnual?: number;
+  homeInsuranceAnnual?: number;
+  pmiRatePct?: number;
+  hoaDuesMonthly?: number;
+  closingCostsPct?: number;
+  currencySymbol?: string;
 }
 
 export interface AmortizationRow {
@@ -65,12 +65,12 @@ export interface DownPaymentComparisonResult {
 }
 
 export interface OpportunityCostInput {
-  homePrice: number;
-  baseDownPct: number;
-  largerDownPct: number;
-  interestRate: number;
-  investmentReturnRate: number;
-  years: number;
+  homePrice?: number;
+  baseDownPct?: number;
+  largerDownPct?: number;
+  interestRate?: number;
+  investmentReturnRate?: number;
+  years?: number;
 }
 
 export interface OpportunityCostResult {
@@ -82,14 +82,14 @@ export interface OpportunityCostResult {
 }
 
 export interface CashToCloseInput {
-  homePrice: number;
-  downPaymentAmount: number;
-  originationFeePct: number;
-  appraisalFee: number;
-  titleInsuranceFee: number;
-  escrowPrepaidMonths: number;
-  propertyTaxAnnual: number;
-  homeInsuranceAnnual: number;
+  homePrice?: number;
+  downPaymentAmount?: number;
+  originationFeePct?: number;
+  appraisalFee?: number;
+  titleInsuranceFee?: number;
+  escrowPrepaidMonths?: number;
+  propertyTaxAnnual?: number;
+  homeInsuranceAnnual?: number;
 }
 
 export interface CashToCloseResult {
@@ -97,6 +97,9 @@ export interface CashToCloseResult {
   originationFee: number;
   appraisalFee: number;
   titleInsuranceFee: number;
+  escrowPrepaidMonths?: number;
+  propertyTaxAnnual?: number;
+  homeInsuranceAnnual?: number;
   escrowPrepaids: number;
   totalClosingCosts: number;
   totalCashToClose: number;
@@ -119,10 +122,10 @@ export interface LoanProgramResult {
 }
 
 export interface SavingsGoalInput {
-  targetCashGoal: number;
-  currentSavings: number;
-  monthlySavings: number;
-  savingsInterestRate: number;
+  targetCashGoal?: number;
+  currentSavings?: number;
+  monthlySavings?: number;
+  savingsInterestRate?: number;
 }
 
 export interface SavingsGoalResult {
