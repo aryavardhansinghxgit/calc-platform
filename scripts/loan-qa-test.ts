@@ -337,7 +337,7 @@ for (const tc of diffCases) {
     const pmt = tc.input.desiredPayment!;
     const r = (tc.input.interestRate || 0) / 100 / 12;
     const oracleN = Math.log(pmt / (pmt - P * r)) / Math.log(1 + r);
-    const appTotalM = res.requiredTermYears * 12 + res.requiredTermMonths;
+    const appTotalM = (res.requiredTermYears ?? 0) * 12 + (res.requiredTermMonths ?? 0);
     const diff = Math.abs(appTotalM - Math.ceil(oracleN));
     assert(diff <= 1, `Diff #${tc.id} [Mode: Loan Term] Oracle=${Math.ceil(oracleN)} mos, App=${appTotalM} mos`);
   } else if (tc.input.mode === "interest-rate") {

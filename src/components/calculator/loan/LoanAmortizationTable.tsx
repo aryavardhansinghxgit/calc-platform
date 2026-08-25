@@ -4,18 +4,21 @@ import React, { useState, useMemo } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Download, Search, FileSpreadsheet, ArrowUpDown, ChevronUp, ChevronDown } from "lucide-react";
-import { LoanAmortizationRow } from "@/modules/loan/types";
+import { Download, Search, FileSpreadsheet, ArrowUpDown, ChevronUp, ChevronDown, Calendar, Layers } from "lucide-react";
+import { LoanAmortizationRow, AnnualAmortizationRow } from "@/modules/loan/types";
 import { formatCurrency } from "@/lib/calculator-engine/formatters";
 
 export interface LoanAmortizationTableProps {
   schedule: LoanAmortizationRow[];
+  annualSchedule?: AnnualAmortizationRow[];
 }
 
-type SortField = "paymentNumber" | "paymentDate" | "beginningBalance" | "paymentAmount" | "principalPaid" | "interestPaid" | "endingBalance";
+type ScheduleView = "monthly" | "annual";
+type SortField = "paymentNumber" | "paymentDate" | "beginningBalance" | "paymentAmount" | "principalPaid" | "interestPaid" | "extraPaid" | "endingBalance";
 type SortDirection = "asc" | "desc";
 
-export function LoanAmortizationTable({ schedule }: LoanAmortizationTableProps) {
+export function LoanAmortizationTable({ schedule, annualSchedule = [] }: LoanAmortizationTableProps) {
+  const [view, setView] = useState<ScheduleView>("monthly");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(12);
@@ -31,7 +34,7 @@ export function LoanAmortizationTable({ schedule }: LoanAmortizationTableProps) 
     }
   };
 
-  const processedRows = useMemo(() => {
+  const processedMonthlyRows = useMemo(() => {
     const q = searchTerm.trim().toLowerCase();
     let rows = [...schedule];
 
@@ -58,33 +61,44 @@ export function LoanAmortizationTable({ schedule }: LoanAmortizationTableProps) 
     return rows;
   }, [schedule, searchTerm, sortField, sortDirection]);
 
-  const totalPages = Math.ceil(processedRows.length / itemsPerPage) || 1;
+  const totalPages = Math.ceil(processedMonthlyRows.length / itemsPerPage) || 1;
 
-  const paginatedRows = useMemo(() => {
-    if (itemsPerPage === -1) return processedRows;
+  const paginatedMonthlyRows = useMemo(() => {
+    if (itemsPerPage === -1) return processedMonthlyRows;
     const start = (currentPage - 1) * itemsPerPage;
-    return processedRows.slice(start, start + itemsPerPage);
-  }, [processedRows, currentPage, itemsPerPage]);
+    return processedMonthlyRows.slice(start, start + itemsPerPage);
+  }, [processedMonthlyRows, currentPage, itemsPerPage]);
 
   const handleExportCsv = () => {
-    const headers = "Payment Number,Date,Beginning Balance,Payment Amount,Principal Paid,Interest Paid,Remaining Balance\n";
-    const csvLines = schedule.map(
-      (r) =>
-        `${r.paymentNumber},"${r.paymentDate}",${r.beginningBalance.toFixed(2)},${r.paymentAmount.toFixed(2)},${r.principalPaid.toFixed(2)},${r.interestPaid.toFixed(2)},${r.endingBalance.toFixed(2)}`
-    );
-
-    const csvContent = "data:text/csv;charset=utf-8," + headers + csvLines.join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `loan_amortization_schedule.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const handleExportExcel = () => {
-    handleExportCsv();
+    if (view === "annual" && annualSchedule.length > 0) {
+      const headers = "Year,Beginning Balance,Total Payment,Principal Paid,Interest Paid,Extra Principal,Ending Balance,Cumulative Interest,Cumulative Principal\n";
+      const csvLines = annualSchedule.map(
+        (r) =>
+          `${r.year},${r.beginningBalance.toFixed(2)},${r.totalPayment.toFixed(2)},${r.principalPaid.toFixed(2)},${r.interestPaid.toFixed(2)},${r.extraPaid.toFixed(2)},${r.endingBalance.toFixed(2)},${r.cumulativeInterest.toFixed(2)},${r.cumulativePrincipal.toFixed(2)}`
+      );
+      const csvContent = "data:text/csv;charset=utf-8," + headers + csvLines.join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `loan_annual_amortization_schedule.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      const headers = "Payment Number,Date,Beginning Balance,Payment Amount,Principal Paid,Interest Paid,Extra Principal,Remaining Balance,Cumulative Interest,Cumulative Principal\n";
+      const csvLines = schedule.map(
+        (r) =>
+          `${r.paymentNumber},"${r.paymentDate}",${r.beginningBalance.toFixed(2)},${r.paymentAmount.toFixed(2)},${r.principalPaid.toFixed(2)},${r.interestPaid.toFixed(2)},${r.extraPaid.toFixed(2)},${r.endingBalance.toFixed(2)},${r.cumulativeInterest.toFixed(2)},${r.cumulativePrincipal.toFixed(2)}`
+      );
+      const csvContent = "data:text/csv;charset=utf-8," + headers + csvLines.join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `loan_monthly_amortization_schedule.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   };
 
   const renderSortIcon = (field: SortField) => {
@@ -100,20 +114,52 @@ export function LoanAmortizationTable({ schedule }: LoanAmortizationTableProps) 
 
   return (
     <div className="space-y-4">
-      {/* Controls Header: Search & Export */}
+      {/* Controls Header: View Switcher, Search & Export */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-zinc-50 dark:bg-zinc-800/60 p-3 rounded-xl border border-zinc-200 dark:border-zinc-700/80">
-        <div className="relative flex-1 sm:max-w-xs">
-          <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-400" />
-          <Input
-            placeholder="Search payment or date..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="pl-8 h-8 text-xs bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700"
-          />
+        <div className="flex items-center gap-2">
+          <div className="inline-flex rounded-lg bg-zinc-200/80 dark:bg-zinc-700/80 p-0.5 text-xs font-semibold">
+            <button
+              type="button"
+              onClick={() => {
+                setView("monthly");
+                setCurrentPage(1);
+              }}
+              className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                view === "monthly"
+                  ? "bg-white dark:bg-zinc-900 text-blue-600 dark:text-blue-400 shadow-xs"
+                  : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+              }`}
+            >
+              <Calendar className="h-3.5 w-3.5 inline mr-1" /> Monthly Schedule
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("annual")}
+              className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                view === "annual"
+                  ? "bg-white dark:bg-zinc-900 text-blue-600 dark:text-blue-400 shadow-xs"
+                  : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+              }`}
+            >
+              <Layers className="h-3.5 w-3.5 inline mr-1" /> Annual Summary
+            </button>
+          </div>
         </div>
+
+        {view === "monthly" && (
+          <div className="relative flex-1 sm:max-w-xs">
+            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-400" />
+            <Input
+              placeholder="Search payment #, date..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="pl-8 h-8 text-xs bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700"
+            />
+          </div>
+        )}
 
         <div className="flex items-center gap-2">
           <Button
@@ -121,161 +167,219 @@ export function LoanAmortizationTable({ schedule }: LoanAmortizationTableProps) 
             variant="outline"
             size="sm"
             onClick={handleExportCsv}
-            className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1 bg-white dark:bg-zinc-900"
+            className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1 bg-white dark:bg-zinc-900 cursor-pointer"
           >
-            <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> CSV
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleExportExcel}
-            className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1 bg-white dark:bg-zinc-900"
-          >
-            <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> Excel
+            <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Export CSV
           </Button>
         </div>
       </div>
 
       {/* Table Container */}
-      <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-x-auto max-h-[480px] overflow-y-auto shadow-xs">
-        <Table>
-          <TableHeader className="sticky top-0 z-10 bg-zinc-100/90 dark:bg-zinc-800/90 backdrop-blur-xs">
-            <TableRow className="border-zinc-200 dark:border-zinc-800">
-              <TableHead
-                onClick={() => handleSort("paymentNumber")}
-                className="text-xs font-bold text-zinc-700 dark:text-zinc-300 cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
-              >
-                Payment # {renderSortIcon("paymentNumber")}
-              </TableHead>
-              <TableHead
-                onClick={() => handleSort("paymentDate")}
-                className="text-xs font-bold text-zinc-700 dark:text-zinc-300 cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
-              >
-                Date {renderSortIcon("paymentDate")}
-              </TableHead>
-              <TableHead
-                onClick={() => handleSort("beginningBalance")}
-                className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
-              >
-                Beginning Balance {renderSortIcon("beginningBalance")}
-              </TableHead>
-              <TableHead
-                onClick={() => handleSort("paymentAmount")}
-                className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
-              >
-                Payment {renderSortIcon("paymentAmount")}
-              </TableHead>
-              <TableHead
-                onClick={() => handleSort("principalPaid")}
-                className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
-              >
-                Principal {renderSortIcon("principalPaid")}
-              </TableHead>
-              <TableHead
-                onClick={() => handleSort("interestPaid")}
-                className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
-              >
-                Interest {renderSortIcon("interestPaid")}
-              </TableHead>
-              <TableHead
-                onClick={() => handleSort("endingBalance")}
-                className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
-              >
-                Remaining Balance {renderSortIcon("endingBalance")}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {paginatedRows.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} className="text-center text-xs text-zinc-500 py-8">
-                  No payment entries found matching "{searchTerm}".
-                </TableCell>
+      {view === "annual" ? (
+        <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-x-auto max-h-[480px] overflow-y-auto shadow-xs">
+          <Table>
+            <TableHeader className="sticky top-0 z-10 bg-zinc-100/90 dark:bg-zinc-800/90 backdrop-blur-xs">
+              <TableRow className="border-zinc-200 dark:border-zinc-800">
+                <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Year</TableHead>
+                <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Beginning Balance</TableHead>
+                <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Annual Payment</TableHead>
+                <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Principal Paid</TableHead>
+                <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Interest Paid</TableHead>
+                <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Extra Principal</TableHead>
+                <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Ending Balance</TableHead>
               </TableRow>
-            ) : (
-              paginatedRows.map((row) => (
-                <TableRow
-                  key={`loan-period-${row.paymentNumber}`}
-                  className="border-zinc-100 dark:border-zinc-800/60 hover:bg-blue-50/50 dark:hover:bg-blue-950/20 transition-colors"
-                >
-                  <TableCell className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                    {row.paymentNumber}
-                  </TableCell>
-                  <TableCell className="text-xs text-zinc-500 dark:text-zinc-400 font-sans tabular-nums">
-                    {row.paymentDate}
-                  </TableCell>
-                  <TableCell className="text-xs font-sans tabular-nums text-zinc-600 dark:text-zinc-400 text-right">
-                    {formatCurrency(row.beginningBalance)}
-                  </TableCell>
-                  <TableCell className="text-xs font-sans tabular-nums font-semibold text-zinc-900 dark:text-zinc-100 text-right">
-                    {formatCurrency(row.paymentAmount)}
-                  </TableCell>
-                  <TableCell className="text-xs font-sans tabular-nums text-emerald-600 dark:text-emerald-400 font-medium text-right">
-                    {formatCurrency(row.principalPaid)}
-                  </TableCell>
-                  <TableCell className="text-xs font-sans tabular-nums text-amber-600 dark:text-amber-400 font-medium text-right">
-                    {formatCurrency(row.interestPaid)}
-                  </TableCell>
-                  <TableCell className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400 text-right">
-                    {formatCurrency(row.endingBalance)}
+            </TableHeader>
+            <TableBody>
+              {annualSchedule.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center text-xs text-zinc-500 py-8">
+                    No annual schedule data available.
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
-
-      {/* Pagination Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-        <div className="flex items-center gap-2 text-xs text-zinc-500">
-          <span>Rows per page:</span>
-          <select
-            value={itemsPerPage}
-            onChange={(e) => {
-              setItemsPerPage(Number(e.target.value));
-              setCurrentPage(1);
-            }}
-            className="h-7 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-xs px-2 text-zinc-900 dark:text-zinc-100"
-          >
-            <option value={12}>12 rows</option>
-            <option value={24}>24 rows</option>
-            <option value={50}>50 rows</option>
-            <option value={-1}>All rows ({processedRows.length})</option>
-          </select>
+              ) : (
+                annualSchedule.map((row) => (
+                  <TableRow
+                    key={`loan-year-${row.year}`}
+                    className="border-zinc-100 dark:border-zinc-800/60 hover:bg-blue-50/50 dark:hover:bg-blue-950/20 transition-colors"
+                  >
+                    <TableCell className="text-xs font-bold text-zinc-900 dark:text-zinc-100 font-mono">
+                      {row.year}
+                    </TableCell>
+                    <TableCell className="text-xs font-mono text-zinc-600 dark:text-zinc-400 text-right">
+                      {formatCurrency(row.beginningBalance)}
+                    </TableCell>
+                    <TableCell className="text-xs font-mono font-semibold text-zinc-900 dark:text-zinc-100 text-right">
+                      {formatCurrency(row.totalPayment)}
+                    </TableCell>
+                    <TableCell className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-medium text-right">
+                      {formatCurrency(row.principalPaid)}
+                    </TableCell>
+                    <TableCell className="text-xs font-mono text-amber-600 dark:text-amber-400 font-medium text-right">
+                      {formatCurrency(row.interestPaid)}
+                    </TableCell>
+                    <TableCell className="text-xs font-mono text-purple-600 dark:text-purple-400 font-medium text-right">
+                      {formatCurrency(row.extraPaid)}
+                    </TableCell>
+                    <TableCell className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400 text-right">
+                      {formatCurrency(row.endingBalance)}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
         </div>
+      ) : (
+        <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-x-auto max-h-[480px] overflow-y-auto shadow-xs">
+          <Table>
+            <TableHeader className="sticky top-0 z-10 bg-zinc-100/90 dark:bg-zinc-800/90 backdrop-blur-xs">
+              <TableRow className="border-zinc-200 dark:border-zinc-800">
+                <TableHead
+                  onClick={() => handleSort("paymentNumber")}
+                  className="text-xs font-bold text-zinc-700 dark:text-zinc-300 cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
+                >
+                  # {renderSortIcon("paymentNumber")}
+                </TableHead>
+                <TableHead
+                  onClick={() => handleSort("paymentDate")}
+                  className="text-xs font-bold text-zinc-700 dark:text-zinc-300 cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
+                >
+                  Date {renderSortIcon("paymentDate")}
+                </TableHead>
+                <TableHead
+                  onClick={() => handleSort("beginningBalance")}
+                  className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
+                >
+                  Beginning Balance {renderSortIcon("beginningBalance")}
+                </TableHead>
+                <TableHead
+                  onClick={() => handleSort("paymentAmount")}
+                  className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
+                >
+                  Payment {renderSortIcon("paymentAmount")}
+                </TableHead>
+                <TableHead
+                  onClick={() => handleSort("principalPaid")}
+                  className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
+                >
+                  Principal {renderSortIcon("principalPaid")}
+                </TableHead>
+                <TableHead
+                  onClick={() => handleSort("interestPaid")}
+                  className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
+                >
+                  Interest {renderSortIcon("interestPaid")}
+                </TableHead>
+                <TableHead
+                  onClick={() => handleSort("extraPaid")}
+                  className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
+                >
+                  Extra {renderSortIcon("extraPaid")}
+                </TableHead>
+                <TableHead
+                  onClick={() => handleSort("endingBalance")}
+                  className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
+                >
+                  Remaining Balance {renderSortIcon("endingBalance")}
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {paginatedMonthlyRows.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="text-center text-xs text-zinc-500 py-8">
+                    No payment entries found matching &ldquo;{searchTerm}&rdquo;.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                paginatedMonthlyRows.map((row) => (
+                  <TableRow
+                    key={`loan-period-${row.paymentNumber}`}
+                    className="border-zinc-100 dark:border-zinc-800/60 hover:bg-blue-50/50 dark:hover:bg-blue-950/20 transition-colors"
+                  >
+                    <TableCell className="text-xs font-bold text-zinc-900 dark:text-zinc-100 font-mono">
+                      {row.paymentNumber}
+                    </TableCell>
+                    <TableCell className="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+                      {row.paymentDate}
+                    </TableCell>
+                    <TableCell className="text-xs font-mono text-zinc-600 dark:text-zinc-400 text-right">
+                      {formatCurrency(row.beginningBalance)}
+                    </TableCell>
+                    <TableCell className="text-xs font-mono font-semibold text-zinc-900 dark:text-zinc-100 text-right">
+                      {formatCurrency(row.paymentAmount)}
+                    </TableCell>
+                    <TableCell className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-medium text-right">
+                      {formatCurrency(row.principalPaid)}
+                    </TableCell>
+                    <TableCell className="text-xs font-mono text-amber-600 dark:text-amber-400 font-medium text-right">
+                      {formatCurrency(row.interestPaid)}
+                    </TableCell>
+                    <TableCell className="text-xs font-mono text-purple-600 dark:text-purple-400 font-medium text-right">
+                      {formatCurrency(row.extraPaid)}
+                    </TableCell>
+                    <TableCell className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400 text-right">
+                      {formatCurrency(row.endingBalance)}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      )}
 
-        {itemsPerPage !== -1 && totalPages > 1 && (
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-zinc-500 font-sans tabular-nums">
-              Page {currentPage} of {totalPages} ({processedRows.length} total payments)
-            </span>
-            <div className="flex items-center gap-1.5">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                className="h-7 text-xs px-2.5 border-zinc-200 dark:border-zinc-700"
-              >
-                Previous
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                className="h-7 text-xs px-2.5 border-zinc-200 dark:border-zinc-700"
-              >
-                Next
-              </Button>
-            </div>
+      {/* Pagination Controls for Monthly view */}
+      {view === "monthly" && (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="flex items-center gap-2 text-xs text-zinc-500">
+            <span>Rows per page:</span>
+            <select
+              value={itemsPerPage}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="h-7 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-xs px-2 text-zinc-900 dark:text-zinc-100"
+            >
+              <option value={12}>12 rows</option>
+              <option value={24}>24 rows</option>
+              <option value={50}>50 rows</option>
+              <option value={-1}>All rows ({processedMonthlyRows.length})</option>
+            </select>
           </div>
-        )}
-      </div>
+
+          {itemsPerPage !== -1 && totalPages > 1 && (
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-zinc-500 font-mono">
+                Page {currentPage} of {totalPages} ({processedMonthlyRows.length} total payments)
+              </span>
+              <div className="flex items-center gap-1.5">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  className="h-7 text-xs px-2.5 border-zinc-200 dark:border-zinc-700 cursor-pointer"
+                >
+                  Previous
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  className="h-7 text-xs px-2.5 border-zinc-200 dark:border-zinc-700 cursor-pointer"
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

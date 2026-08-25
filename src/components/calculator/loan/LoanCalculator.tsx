@@ -3,16 +3,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import {
   DollarSign,
   Percent,
   Clock,
@@ -21,7 +11,6 @@ import {
   Trash2,
   RotateCcw,
   Check,
-  X,
   Share2,
   AlertCircle,
   FolderOpen,
@@ -30,17 +19,37 @@ import {
   BarChart3,
   Zap,
   Printer,
+  Calendar,
+  Layers,
+  ArrowRight,
+  ShieldCheck,
+  Scale,
+  Plus,
+  Info,
+  TrendingDown,
 } from "lucide-react";
-import { calculateLoanModule } from "@/modules/loan/formula";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import {
   LoanInput,
   LoanOutput,
   LoanCalculatorMode,
   PaymentFrequency,
+  CompoundingFrequency,
   SavedLoanCalculation,
 } from "@/modules/loan/types";
+import { calculateLoanModule } from "@/modules/loan/formula";
 import { formatCurrency } from "@/lib/calculator-engine/formatters";
 import LoanAmortizationTable from "./LoanAmortizationTable";
+import LoanContentSection from "./LoanContentSection";
 import ReportModal from "@/components/report/ReportModal";
 import { generateLoanReportData } from "@/lib/report-generator/loan-report";
 
@@ -51,7 +60,7 @@ const LoanBreakdownDoughnutChart = dynamic(
     ssr: false,
     loading: () => (
       <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
-        Loading doughnut chart...
+        Loading breakdown chart...
       </div>
     ),
   }
@@ -69,108 +78,101 @@ const LoanBalanceLineChart = dynamic(
   }
 );
 
-const LoanPrincipalInterestChart = dynamic(
-  () => import("../charts/LoanPrincipalInterestChart").then((m) => m.LoanPrincipalInterestChart),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-56 flex items-center justify-center text-xs text-zinc-400 font-sans tabular-nums">
-        Loading principal vs interest chart...
-      </div>
-    ),
-  }
-);
-
 export function LoanCalculator() {
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
 
-  // Active Mode Tab
-  const [mode, setMode] = useState<LoanCalculatorMode>("monthly-payment");
+  // Active Module Mode Tab
+  const [mode, setMode] = useState<LoanCalculatorMode>("standard");
 
-  // Core State
-  const [loanAmount, setLoanAmount] = useState<number>(25000);
-  const [interestRate, setInterestRate] = useState<number>(7.5);
-  const [loanTermYears, setLoanTermYears] = useState<number>(5);
+  // Currency Selector
+  const [currencySymbol, setCurrencySymbol] = useState<string>("$");
+
+  // Standard Loan Inputs
+  const [loanAmount, setLoanAmount] = useState<number>(100000);
+  const [interestRate, setInterestRate] = useState<number>(6.0);
+  const [loanTermYears, setLoanTermYears] = useState<number>(10);
   const [loanTermMonths, setLoanTermMonths] = useState<number>(0);
-  const [desiredPayment, setDesiredPayment] = useState<number>(500);
   const [paymentFrequency, setPaymentFrequency] = useState<PaymentFrequency>("monthly");
+  const [compoundingFrequency, setCompoundingFrequency] = useState<CompoundingFrequency>("monthly");
+
+  // Fees & Balloon
+  const [originationFeePct, setOriginationFeePct] = useState<number>(0);
+  const [upfrontFeesDollar, setUpfrontFeesDollar] = useState<number>(0);
+  const [pointsPct, setPointsPct] = useState<number>(0);
+  const [balloonAmount, setBalloonAmount] = useState<number>(0);
+
+  // Extra Payments
   const [extraMonthlyPayment, setExtraMonthlyPayment] = useState<number>(0);
+  const [extraAnnualPayment, setExtraAnnualPayment] = useState<number>(0);
+  const [oneTimeLumpSum, setOneTimeLumpSum] = useState<number>(0);
+  const [oneTimeLumpSumMonth, setOneTimeLumpSumMonth] = useState<number>(12);
 
-  // Error & Chart Tabs State
-  const [validationError, setValidationError] = useState<string>("");
-  const [activeChartTab, setActiveChartTab] = useState<"doughnut" | "balance" | "principal-interest">("doughnut");
+  // Start Date
+  const [startMonth, setStartMonth] = useState<number>(currentMonth);
+  const [startYear, setStartYear] = useState<number>(currentYear);
 
-  // Save & Share State
-  const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
-  const [isReportModalOpen, setIsReportModalOpen] = useState<boolean>(false);
-  const [saveName, setSaveName] = useState<string>("");
+  // Solvers Inputs
+  const [desiredPayment, setDesiredPayment] = useState<number>(1110.21);
+
+  // Deferred & Bond Specific
+  const [faceValue, setFaceValue] = useState<number>(100000);
+
+  // Refinance Specific
+  const [currentBalance, setCurrentBalance] = useState<number>(200000);
+  const [currentRate, setCurrentRate] = useState<number>(6.5);
+  const [currentRemainingMonths, setCurrentRemainingMonths] = useState<number>(180);
+  const [refinanceRate, setRefinanceRate] = useState<number>(5.25);
+  const [refinanceTermYears, setRefinanceTermYears] = useState<number>(15);
+  const [refinanceClosingCosts, setRefinanceClosingCosts] = useState<number>(3000);
+  const [cashOutAmount, setCashOutAmount] = useState<number>(0);
+
+  // Saved calculations & Modal
   const [savedCalculations, setSavedCalculations] = useState<SavedLoanCalculation[]>([]);
-  const [saveSuccessMsg, setSaveSuccessMsg] = useState<string>("");
-  const [shareSuccessMsg, setShareSuccessMsg] = useState<string>("");
+  const [showSavedNotification, setShowSavedNotification] = useState<boolean>(false);
+  const [showReportModal, setShowReportModal] = useState<boolean>(false);
+  const [activeChartTab, setActiveChartTab] = useState<"breakdown" | "balance">("breakdown");
 
-  // Load URL query params & saved calculations on mount
+  // Load saved calculations on mount
   useEffect(() => {
     try {
-      if (typeof window !== "undefined") {
-        const params = new URLSearchParams(window.location.search);
-        if (params.has("mode")) setMode(params.get("mode") as LoanCalculatorMode);
-        if (params.has("amount")) setLoanAmount(Number(params.get("amount")));
-        if (params.has("rate")) setInterestRate(Number(params.get("rate")));
-        if (params.has("years")) setLoanTermYears(Number(params.get("years")));
-        if (params.has("months")) setLoanTermMonths(Number(params.get("months")));
-        if (params.has("payment")) setDesiredPayment(Number(params.get("payment")));
-        if (params.has("extra")) setExtraMonthlyPayment(Number(params.get("extra")));
-
-        const stored = localStorage.getItem("calcplatform_saved_loan");
-        if (stored) {
-          setSavedCalculations(JSON.parse(stored));
-        }
+      const saved = localStorage.getItem("saved_loan_calculations_v2");
+      if (saved) {
+        setSavedCalculations(JSON.parse(saved));
       }
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) {}
   }, []);
 
-  // Quick Preset Handlers
-  const handleApplyPreset = (preset: "personal" | "auto" | "mortgage") => {
-    setMode("monthly-payment");
-    setExtraMonthlyPayment(0);
-    if (preset === "personal") {
-      setLoanAmount(10000);
-      setLoanTermYears(3);
-      setLoanTermMonths(0);
-      setInterestRate(8.5);
-    } else if (preset === "auto") {
-      setLoanAmount(50000);
-      setLoanTermYears(5);
-      setLoanTermMonths(0);
-      setInterestRate(6.0);
-    } else if (preset === "mortgage") {
-      setLoanAmount(250000);
-      setLoanTermYears(30);
-      setLoanTermMonths(0);
-      setInterestRate(6.5);
-    }
-    setValidationError("");
-  };
-
-  // Perform calculations
-  const results: LoanOutput = useMemo(() => {
-    const input: LoanInput = {
+  // Primary Calculation Execution
+  const calculationResult: LoanOutput = useMemo(() => {
+    return calculateLoanModule({
       mode,
-      loanAmount: Math.max(0, loanAmount),
-      interestRate: Math.max(0, interestRate),
-      loanTermYears: Math.max(0, loanTermYears),
-      loanTermMonths: Math.max(0, loanTermMonths),
-      desiredPayment: Math.max(0, desiredPayment),
+      loanAmount,
+      interestRate,
+      loanTermYears,
+      loanTermMonths,
+      desiredPayment,
       paymentFrequency,
-      extraMonthlyPayment: Math.max(0, extraMonthlyPayment),
-      startMonth: currentMonth,
-      startYear: currentYear,
-    };
-
-    return calculateLoanModule(input);
+      compoundingFrequency,
+      originationFeePct,
+      upfrontFeesDollar,
+      pointsPct,
+      balloonAmount,
+      extraMonthlyPayment,
+      extraAnnualPayment,
+      oneTimeLumpSum,
+      oneTimeLumpSumMonth,
+      startMonth,
+      startYear,
+      faceValue,
+      currentBalance,
+      currentRate,
+      currentRemainingMonths,
+      refinanceRate,
+      refinanceTermYears,
+      refinanceClosingCosts,
+      cashOutAmount,
+    });
   }, [
     mode,
     loanAmount,
@@ -179,724 +181,813 @@ export function LoanCalculator() {
     loanTermMonths,
     desiredPayment,
     paymentFrequency,
+    compoundingFrequency,
+    originationFeePct,
+    upfrontFeesDollar,
+    pointsPct,
+    balloonAmount,
     extraMonthlyPayment,
-    currentMonth,
-    currentYear,
+    extraAnnualPayment,
+    oneTimeLumpSum,
+    oneTimeLumpSumMonth,
+    startMonth,
+    startYear,
+    faceValue,
+    currentBalance,
+    currentRate,
+    currentRemainingMonths,
+    refinanceRate,
+    refinanceTermYears,
+    refinanceClosingCosts,
+    cashOutAmount,
   ]);
 
-  const reportData = useMemo(() => {
-    return generateLoanReportData(
-      { mode, loanAmount, interestRate, loanTermYears, loanTermMonths, desiredPayment, paymentFrequency, extraMonthlyPayment },
-      { monthlyPayment: results.periodicPayment, totalInterest: results.totalInterest, totalPayment: results.totalRepayment }
-    );
-  }, [mode, loanAmount, interestRate, loanTermYears, loanTermMonths, desiredPayment, paymentFrequency, extraMonthlyPayment, results]);
-
-  // Handle Clear / Reset
-  const handleClear = () => {
-    setLoanAmount(25000);
-    setInterestRate(7.5);
-    setLoanTermYears(5);
+  // Quick Presets
+  const applyPreset = (amt: number, yrs: number, rate: number, freq: PaymentFrequency = "monthly") => {
+    setLoanAmount(amt);
+    setLoanTermYears(yrs);
     setLoanTermMonths(0);
-    setDesiredPayment(500);
-    setPaymentFrequency("monthly");
+    setInterestRate(rate);
+    setPaymentFrequency(freq);
     setExtraMonthlyPayment(0);
-    setValidationError("");
+    setExtraAnnualPayment(0);
+    setOneTimeLumpSum(0);
+    setBalloonAmount(0);
   };
 
-  // Handle Save
-  const handleSaveCalculation = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newSave: SavedLoanCalculation = {
-      id: `loan-${Date.now()}`,
-      name: saveName.trim() || `Loan ($${loanAmount.toLocaleString()})`,
-      dateSaved: new Date().toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      }),
+  // Reset to Default
+  const handleReset = () => {
+    setLoanAmount(100000);
+    setInterestRate(6.0);
+    setLoanTermYears(10);
+    setLoanTermMonths(0);
+    setPaymentFrequency("monthly");
+    setCompoundingFrequency("monthly");
+    setOriginationFeePct(0);
+    setUpfrontFeesDollar(0);
+    setPointsPct(0);
+    setBalloonAmount(0);
+    setExtraMonthlyPayment(0);
+    setExtraAnnualPayment(0);
+    setOneTimeLumpSum(0);
+    setDesiredPayment(1110.21);
+    setFaceValue(100000);
+    setCurrentBalance(200000);
+    setCurrentRate(6.5);
+    setCurrentRemainingMonths(180);
+    setRefinanceRate(5.25);
+    setRefinanceTermYears(15);
+    setRefinanceClosingCosts(3000);
+    setCashOutAmount(0);
+  };
+
+  // Save Scenario
+  const handleSaveCalculation = () => {
+    const newSaved: SavedLoanCalculation = {
+      id: Date.now().toString(),
+      name: `${currencySymbol}${loanAmount.toLocaleString()} @ ${interestRate}% (${loanTermYears}y - ${mode})`,
+      dateSaved: new Date().toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }),
       inputs: {
         mode,
         loanAmount,
         interestRate,
         loanTermYears,
         loanTermMonths,
-        desiredPayment,
         paymentFrequency,
+        compoundingFrequency,
         extraMonthlyPayment,
       },
-      periodicPayment: results.periodicPayment,
+      periodicPayment: calculationResult.periodicPayment,
+      totalInterest: calculationResult.totalInterest,
+      totalCost: calculationResult.totalCost,
     };
 
-    const updated = [newSave, ...savedCalculations].slice(0, 50);
+    const updated = [newSaved, ...savedCalculations].slice(0, 10);
     setSavedCalculations(updated);
     try {
-      localStorage.setItem("calcplatform_saved_loan", JSON.stringify(updated));
-    } catch (err) {
-      console.error(err);
-    }
+      localStorage.setItem("saved_loan_calculations_v2", JSON.stringify(updated));
+    } catch (e) {}
 
-    setSaveSuccessMsg("Loan calculation saved successfully!");
-    setTimeout(() => {
-      setSaveSuccessMsg("");
-      setIsSaveModalOpen(false);
-      setSaveName("");
-    }, 1200);
+    setShowSavedNotification(true);
+    setTimeout(() => setShowSavedNotification(false), 2500);
   };
 
-  // Restore Saved Calculation
-  const handleLoadCalculation = (saved: SavedLoanCalculation) => {
-    const inp = saved.inputs;
-    if (!inp) return;
-    if (inp.mode) setMode(inp.mode);
-    setLoanAmount(inp.loanAmount ?? 25000);
-    setInterestRate(inp.interestRate ?? 7.5);
-    setLoanTermYears(inp.loanTermYears ?? 5);
-    setLoanTermMonths(inp.loanTermMonths ?? 0);
-    setDesiredPayment(inp.desiredPayment ?? 500);
-    setPaymentFrequency(inp.paymentFrequency ?? "monthly");
-    setExtraMonthlyPayment(inp.extraMonthlyPayment ?? 0);
-    setIsSaveModalOpen(false);
-  };
-
-  // Delete Saved Calculation
-  const handleDeleteSavedCalculation = (id: string) => {
+  // Delete Saved Item
+  const handleDeleteSaved = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
     const updated = savedCalculations.filter((c) => c.id !== id);
     setSavedCalculations(updated);
     try {
-      localStorage.setItem("calcplatform_saved_loan", JSON.stringify(updated));
-    } catch (err) {
-      console.error(err);
-    }
+      localStorage.setItem("saved_loan_calculations_v2", JSON.stringify(updated));
+    } catch (e) {}
   };
 
-  // Share URL Generator
-  const handleShareUrl = () => {
-    const params = new URLSearchParams();
-    params.set("mode", mode);
-    params.set("amount", loanAmount.toString());
-    params.set("rate", interestRate.toString());
-    params.set("years", loanTermYears.toString());
-    params.set("months", loanTermMonths.toString());
-    if (desiredPayment > 0) params.set("payment", desiredPayment.toString());
-    if (extraMonthlyPayment > 0) params.set("extra", extraMonthlyPayment.toString());
-
-    const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
-
-    if (navigator.share) {
-      navigator.share({
-        title: "Loan Calculation",
-        text: `Check out this loan calculation on CalcPlatform`,
-        url: shareUrl,
-      });
-    } else {
-      navigator.clipboard.writeText(shareUrl);
-      setShareSuccessMsg("Shareable link copied to clipboard!");
-      setTimeout(() => setShareSuccessMsg(""), 2000);
-    }
+  // Restore Saved Scenario
+  const handleRestoreSaved = (saved: SavedLoanCalculation) => {
+    if (saved.inputs.mode) setMode(saved.inputs.mode);
+    if (saved.inputs.loanAmount) setLoanAmount(saved.inputs.loanAmount);
+    if (saved.inputs.interestRate) setInterestRate(saved.inputs.interestRate);
+    if (saved.inputs.loanTermYears) setLoanTermYears(saved.inputs.loanTermYears);
+    if (saved.inputs.paymentFrequency) setPaymentFrequency(saved.inputs.paymentFrequency);
+    if (saved.inputs.compoundingFrequency) setCompoundingFrequency(saved.inputs.compoundingFrequency);
+    if (saved.inputs.extraMonthlyPayment) setExtraMonthlyPayment(saved.inputs.extraMonthlyPayment);
   };
+
+  // Report Generator data
+  const reportData = useMemo(() => {
+    return generateLoanReportData(
+      {
+        loanAmount: calculationResult.loanAmount,
+        interestRate: calculationResult.nominalRate,
+        loanTermYears,
+        loanTermMonths,
+      },
+      {
+        monthlyPayment: calculationResult.monthlyEquivalentPayment,
+        periodicPayment: calculationResult.periodicPayment,
+        totalInterest: calculationResult.totalInterest,
+        totalPayment: calculationResult.totalCost,
+        payoffDate: calculationResult.payoffDate,
+        amortizationSchedule: calculationResult.amortizationSchedule,
+      }
+    );
+  }, [calculationResult, loanTermYears, loanTermMonths]);
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
-      {/* Top Action Bar & Quick Preset Scenarios */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
-        {/* Quick Loan Scenarios */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
-            Quick Scenarios:
-          </span>
-          <button
-            type="button"
-            onClick={() => handleApplyPreset("personal")}
-            className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all cursor-pointer"
-          >
-            $10,000 Personal Loan
-          </button>
-          <button
-            type="button"
-            onClick={() => handleApplyPreset("auto")}
-            className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all cursor-pointer"
-          >
-            $50,000 Auto Loan
-          </button>
-          <button
-            type="button"
-            onClick={() => handleApplyPreset("mortgage")}
-            className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all cursor-pointer"
-          >
-            $300,000 Mortgage
-          </button>
-        </div>
-
-        <div className="flex items-center gap-2">
-          
-          <button
-            type="button"
-            onClick={() => setIsReportModalOpen(true)}
-            className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-3 py-1.5 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
-          >
-            <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsSaveModalOpen(true)}
-            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl px-4 py-1.5 text-xs shadow-md shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center gap-1.5 cursor-pointer"
-          >
-            <Bookmark className="h-3.5 w-3.5" /> Save Setup
-          </button>
-        </div>
+    <div className="space-y-6">
+      {/* 1. TOP MODULE NAVIGATION TABS */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+        {[
+          { id: "standard", label: "Standard Loan", icon: DollarSign },
+          { id: "extra-payment", label: "Extra Payments & Payoff", icon: Zap },
+          { id: "comparison", label: "3-Loan Comparison", icon: Scale },
+          { id: "affordability", label: "Affordability Solver", icon: Sparkles },
+          { id: "duration", label: "Duration Solver", icon: Clock },
+          { id: "refinance", label: "Refinance Analysis", icon: RotateCcw },
+          { id: "deferred", label: "Deferred Loan", icon: Layers },
+          { id: "bond", label: "Bond / Lump Sum", icon: ShieldCheck },
+        ].map((tab) => {
+          const Icon = tab.icon;
+          const isActive = mode === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setMode(tab.id as LoanCalculatorMode)}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                isActive
+                  ? "bg-blue-600 text-white shadow-sm shadow-blue-500/20"
+                  : "bg-white dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700/60"
+              }`}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
 
-      {/* Main Grid: Left Controls (Col 5) | Right Results & Charts (Col 7) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Inputs Panel (Col 5) */}
+      {/* 2. MAIN TWO-COLUMN DASHBOARD */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* LEFT COLUMN: INPUTS PANEL */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-xs p-5 sm:p-6 space-y-5">
-            {/* 4 Mode Tabs Header */}
-            <div className="inline-flex w-full p-1 bg-slate-200/80 dark:bg-slate-800 rounded-xl">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 w-full">
-                <button
-                  type="button"
-                  onClick={() => setMode("monthly-payment")}
-                  className={`py-1.5 px-2 text-xs font-semibold rounded-lg transition-all ${
-                    mode === "monthly-payment"
-                      ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
-                  }`}
-                >
-                  Payment
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode("loan-amount")}
-                  className={`py-1.5 px-2 text-xs font-semibold rounded-lg transition-all ${
-                    mode === "loan-amount"
-                      ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
-                  }`}
-                >
-                  Loan Amount
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode("loan-term")}
-                  className={`py-1.5 px-2 text-xs font-semibold rounded-lg transition-all ${
-                    mode === "loan-term"
-                      ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
-                  }`}
-                >
-                  Loan Term
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode("interest-rate")}
-                  className={`py-1.5 px-2 text-xs font-semibold rounded-lg transition-all ${
-                    mode === "interest-rate"
-                      ? "bg-white dark:bg-slate-700 text-blue-700 dark:text-blue-400 shadow-xs"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900"
-                  }`}
-                >
-                  Interest Rate
-                </button>
-              </div>
-            </div>
+          <Card className="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xs">
+            <CardHeader className="pb-3 border-b border-zinc-100 dark:border-zinc-800">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                    <DollarSign className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                    {mode === "standard" && "Standard Loan Parameters"}
+                    {mode === "extra-payment" && "Extra Payment Planner"}
+                    {mode === "comparison" && "Loan Offer Comparison"}
+                    {mode === "affordability" && "Affordability / Max Borrowing"}
+                    {mode === "duration" && "Loan Duration Solver"}
+                    {mode === "refinance" && "Refinance Analysis Parameters"}
+                    {mode === "deferred" && "Deferred Payment Loan (Lump Sum)"}
+                    {mode === "bond" && "Bond / Lump Sum Maturity (PV)"}
+                  </CardTitle>
+                  <CardDescription className="text-xs text-zinc-500 mt-0.5">
+                    Adjust borrowing variables to dynamically calculate payments and schedules.
+                  </CardDescription>
+                </div>
 
-            <div className="space-y-4 text-xs">
-              {validationError && (
-                <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl text-rose-700 dark:text-rose-300 text-xs flex items-center gap-2">
-                  <AlertCircle className="h-4 w-4 text-rose-500 shrink-0" />
-                  <span>{validationError}</span>
+                {/* Currency Selector */}
+                <select
+                  value={currencySymbol}
+                  onChange={(e) => setCurrencySymbol(e.target.value)}
+                  className="h-7 text-xs rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 px-2 font-semibold text-zinc-800 dark:text-zinc-200"
+                >
+                  <option value="$">$ (USD/CAD/AUD)</option>
+                  <option value="£">£ (GBP)</option>
+                  <option value="€">€ (EUR)</option>
+                  <option value="¥">¥ (JPY/CNY)</option>
+                  <option value="₹">₹ (INR)</option>
+                </select>
+              </div>
+            </CardHeader>
+
+            <CardContent className="p-4 sm:p-5 space-y-4">
+              {/* Presets for Standard & Extra Payment */}
+              {(mode === "standard" || mode === "extra-payment") && (
+                <div>
+                  <Label className="text-[11px] font-bold text-zinc-500 uppercase tracking-wider block mb-1.5">
+                    Quick Scenario Presets
+                  </Label>
+                  <div className="flex flex-wrap gap-1.5 text-xs">
+                    <button
+                      type="button"
+                      onClick={() => applyPreset(100000, 10, 6.0)}
+                      className="px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 text-xs font-medium cursor-pointer border border-zinc-200 dark:border-zinc-700"
+                    >
+                      $100k · 10y · 6%
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => applyPreset(200000, 15, 6.0)}
+                      className="px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 text-xs font-medium cursor-pointer border border-zinc-200 dark:border-zinc-700"
+                    >
+                      $200k · 15y · 6%
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => applyPreset(300000, 30, 6.5)}
+                      className="px-2.5 py-1 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 text-xs font-medium cursor-pointer border border-zinc-200 dark:border-zinc-700"
+                    >
+                      $300k · 30y · 6.5%
+                    </button>
+                  </div>
                 </div>
               )}
 
-              {/* Dynamic Form Inputs based on Mode */}
-              <div className="space-y-3">
-                {/* Loan Amount Input (for Monthly Payment, Loan Term, Interest Rate modes) */}
-                {mode !== "loan-amount" && (
+              {/* Mode-Specific Input Fields */}
+              {mode === "bond" ? (
+                <div>
+                  <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
+                    Predetermined Due Amount / Face Value ({currencySymbol})
+                  </Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={faceValue}
+                    onChange={(e) => setFaceValue(Number(e.target.value))}
+                    className="font-mono text-sm font-semibold h-9"
+                  />
+                </div>
+              ) : mode === "refinance" ? (
+                <div className="space-y-3">
                   <div>
-                    <Label htmlFor="loanAmount" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                      Loan Amount ($)
+                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
+                      Current Loan Balance ({currencySymbol})
                     </Label>
-                    <div className="relative mt-1">
-                      <DollarSign className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-400" />
-                      <Input
-                        id="loanAmount"
-                        type="number"
-                        min={0}
-                        step={1000}
-                        value={loanAmount}
-                        onChange={(e) => setLoanAmount(Math.max(0, Number(e.target.value)))}
-                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
-                      />
-                    </div>
+                    <Input
+                      type="number"
+                      min={0}
+                      value={currentBalance}
+                      onChange={(e) => setCurrentBalance(Number(e.target.value))}
+                      className="font-mono text-sm font-semibold h-9"
+                    />
                   </div>
-                )}
-
-                {/* Desired Monthly Payment Input (for Loan Amount, Loan Term, Interest Rate modes) */}
-                {mode !== "monthly-payment" && (
-                  <div>
-                    <Label htmlFor="desiredPayment" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                      {mode === "loan-amount" ? "Desired Monthly Payment ($)" : "Monthly Payment ($)"}
-                    </Label>
-                    <div className="relative mt-1">
-                      <DollarSign className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-400" />
-                      <Input
-                        id="desiredPayment"
-                        type="number"
-                        min={0}
-                        step={50}
-                        value={desiredPayment}
-                        onChange={(e) => setDesiredPayment(Math.max(0, Number(e.target.value)))}
-                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Interest Rate Input (for Monthly Payment, Loan Amount, Loan Term modes) */}
-                {mode !== "interest-rate" && (
-                  <div>
-                    <Label htmlFor="interestRate" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                      Interest Rate (%)
-                    </Label>
-                    <div className="relative mt-1">
-                      <Percent className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-400" />
-                      <Input
-                        id="interestRate"
-                        type="number"
-                        step={0.1}
-                        min={0}
-                        max={100}
-                        value={interestRate}
-                        onChange={(e) => setInterestRate(Math.max(0, Number(e.target.value)))}
-                        className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Loan Term Input (for Monthly Payment, Loan Amount, Interest Rate modes) */}
-                {mode !== "loan-term" && (
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <Label htmlFor="loanTermYears" className="text-zinc-700 dark:text-zinc-300 font-medium">
+                      <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
+                        Current Rate (%)
+                      </Label>
+                      <Input
+                        type="number"
+                        step={0.05}
+                        value={currentRate}
+                        onChange={(e) => setCurrentRate(Number(e.target.value))}
+                        className="font-mono text-sm h-9"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
+                        Remaining Months
+                      </Label>
+                      <Input
+                        type="number"
+                        min={1}
+                        value={currentRemainingMonths}
+                        onChange={(e) => setCurrentRemainingMonths(Number(e.target.value))}
+                        className="font-mono text-sm h-9"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+                    <div>
+                      <Label className="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-1 block">
+                        New Refinance Rate (%)
+                      </Label>
+                      <Input
+                        type="number"
+                        step={0.05}
+                        value={refinanceRate}
+                        onChange={(e) => setRefinanceRate(Number(e.target.value))}
+                        className="font-mono text-sm h-9"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-1 block">
+                        New Term (Years)
+                      </Label>
+                      <Input
+                        type="number"
+                        min={1}
+                        value={refinanceTermYears}
+                        onChange={(e) => setRefinanceTermYears(Number(e.target.value))}
+                        className="font-mono text-sm h-9"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
+                        Closing Costs ({currencySymbol})
+                      </Label>
+                      <Input
+                        type="number"
+                        min={0}
+                        value={refinanceClosingCosts}
+                        onChange={(e) => setRefinanceClosingCosts(Number(e.target.value))}
+                        className="font-mono text-sm h-9"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
+                        Cash-Out Amount ({currencySymbol})
+                      </Label>
+                      <Input
+                        type="number"
+                        min={0}
+                        value={cashOutAmount}
+                        onChange={(e) => setCashOutAmount(Number(e.target.value))}
+                        className="font-mono text-sm h-9"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : mode === "affordability" ? (
+                <div>
+                  <Label className="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-1 block">
+                    Target Monthly Payment Budget ({currencySymbol})
+                  </Label>
+                  <Input
+                    type="number"
+                    min={1}
+                    value={desiredPayment}
+                    onChange={(e) => setDesiredPayment(Number(e.target.value))}
+                    className="font-mono text-sm font-semibold h-9"
+                  />
+                </div>
+              ) : (
+                <div>
+                  <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
+                    Loan Amount / Principal ({currencySymbol})
+                  </Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={loanAmount}
+                    onChange={(e) => setLoanAmount(Number(e.target.value))}
+                    className="font-mono text-sm font-semibold h-9"
+                  />
+                </div>
+              )}
+
+              {/* Term & Rate Inputs for non-refinance modes */}
+              {mode !== "refinance" && (
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
                         Loan Term (Years)
                       </Label>
                       <Input
-                        id="loanTermYears"
                         type="number"
                         min={0}
                         max={50}
                         value={loanTermYears}
-                        onChange={(e) => setLoanTermYears(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
+                        onChange={(e) => setLoanTermYears(Number(e.target.value))}
+                        className="font-mono text-sm h-9"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="loanTermMonths" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                        Loan Term (Months)
+                      <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
+                        Months
                       </Label>
                       <Input
-                        id="loanTermMonths"
                         type="number"
                         min={0}
                         max={11}
                         value={loanTermMonths}
-                        onChange={(e) => setLoanTermMonths(Math.max(0, Number(e.target.value)))}
-                        className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
+                        onChange={(e) => setLoanTermMonths(Number(e.target.value))}
+                        className="font-mono text-sm h-9"
                       />
                     </div>
                   </div>
-                )}
 
-                {/* Payment Frequency Selector */}
-                <div>
-                  <Label htmlFor="paymentFrequency" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                    Payment Frequency
-                  </Label>
-                  <select
-                    id="paymentFrequency"
-                    value={paymentFrequency}
-                    onChange={(e) => setPaymentFrequency(e.target.value as PaymentFrequency)}
-                    className="mt-1 w-full h-9 rounded-md bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 px-3 text-xs text-zinc-900 dark:text-zinc-100 font-medium"
-                  >
-                    <option value="monthly">Monthly (12/yr)</option>
-                    <option value="biweekly">Biweekly (26/yr)</option>
-                    <option value="weekly">Weekly (52/yr)</option>
-                  </select>
-                </div>
-
-                {/* Extra Monthly Payment */}
-                <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800">
-                  <Label htmlFor="extraMonthlyPayment" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                    Extra Monthly Payment ($)
-                  </Label>
-                  <div className="relative mt-1">
-                    <DollarSign className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-400" />
+                  <div>
+                    <div className="flex justify-between items-center mb-1">
+                      <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                        Interest Rate (% APR)
+                      </Label>
+                      <span className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">
+                        {interestRate}%
+                      </span>
+                    </div>
                     <Input
-                      id="extraMonthlyPayment"
                       type="number"
+                      step={0.1}
                       min={0}
-                      step={50}
-                      value={extraMonthlyPayment}
-                      onChange={(e) => setExtraMonthlyPayment(Math.max(0, Number(e.target.value)))}
-                      className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
+                      max={50}
+                      value={interestRate}
+                      onChange={(e) => setInterestRate(Number(e.target.value))}
+                      className="font-mono text-sm h-9"
                     />
                   </div>
-                </div>
 
-                {/* Clear Action Button */}
-                <div className="pt-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleClear}
-                    className="w-full h-9 text-xs font-semibold border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 bg-white dark:bg-zinc-900"
-                  >
-                    <RotateCcw className="h-3.5 w-3.5 mr-1" /> Reset Inputs
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                  {/* Compounding & Payment Frequency */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
+                        Compounding
+                      </Label>
+                      <select
+                        value={compoundingFrequency}
+                        onChange={(e) => setCompoundingFrequency(e.target.value as CompoundingFrequency)}
+                        className="w-full h-9 rounded-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-xs px-2 text-zinc-900 dark:text-zinc-100 font-medium"
+                      >
+                        <option value="monthly">Monthly (APR)</option>
+                        <option value="annually">Annually (APY)</option>
+                        <option value="semi-annually">Semi-Annually</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="daily">Daily</option>
+                      </select>
+                    </div>
 
-        {/* Right Results Panel (Col 7) */}
-        <div className="lg:col-span-7 space-y-5">
-          {/* Large Result Summary Cards */}
-          <Card className="border border-blue-100 dark:border-blue-900/50 bg-gradient-to-br from-blue-50/70 via-white to-indigo-50/50 dark:from-zinc-900 dark:via-zinc-900 dark:to-blue-950/30 shadow-md">
-            <CardContent className="p-6 space-y-4">
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs uppercase font-bold tracking-wider text-blue-600 dark:text-blue-400">
-                    {mode === "loan-amount"
-                      ? "Maximum Affordable Loan Amount"
-                      : mode === "loan-term"
-                      ? "Time Required To Repay Loan"
-                      : mode === "interest-rate"
-                      ? "Estimated Interest Rate (p.a.)"
-                      : `${paymentFrequency.charAt(0).toUpperCase() + paymentFrequency.slice(1)} Payment`}
-                  </span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsSaveModalOpen(true)}
-                    className="h-6 text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-100/50 dark:hover:bg-blue-950 gap-1 px-2"
-                  >
-                    <Bookmark className="h-3 w-3" /> Save
-                  </Button>
-                </div>
+                    <div>
+                      <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
+                        Payment Frequency
+                      </Label>
+                      <select
+                        value={paymentFrequency}
+                        onChange={(e) => setPaymentFrequency(e.target.value as PaymentFrequency)}
+                        className="w-full h-9 rounded-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-xs px-2 text-zinc-900 dark:text-zinc-100 font-medium"
+                      >
+                        <option value="monthly">Monthly</option>
+                        <option value="biweekly">Biweekly (26/yr)</option>
+                        <option value="accelerated-biweekly">Accelerated Biweekly</option>
+                        <option value="weekly">Weekly (52/yr)</option>
+                        <option value="accelerated-weekly">Accelerated Weekly</option>
+                        <option value="semi-monthly">Semi-Monthly (24/yr)</option>
+                        <option value="quarterly">Quarterly</option>
+                      </select>
+                    </div>
+                  </div>
+                </>
+              )}
 
-                <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums mt-2 tracking-tight">
-                  {mode === "loan-amount"
-                    ? formatCurrency(results.maxLoanAmount)
-                    : mode === "loan-term"
-                    ? `${results.requiredTermYears} yrs ${results.requiredTermMonths} mos`
-                    : mode === "interest-rate"
-                    ? `${results.estimatedInterestRate}%`
-                    : formatCurrency(results.periodicPayment)}
+              {/* Advanced Extra Payments (when in Extra Payment mode) */}
+              {mode === "extra-payment" && (
+                <div className="p-3.5 bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800/60 rounded-xl space-y-3">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-blue-700 dark:text-blue-300">
+                    <Zap className="h-4 w-4" /> Prepayment &amp; Payoff Accelerator
+                  </div>
+                  <div>
+                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
+                      Extra Monthly Payment ({currencySymbol})
+                    </Label>
+                    <Input
+                      type="number"
+                      min={0}
+                      value={extraMonthlyPayment}
+                      onChange={(e) => setExtraMonthlyPayment(Number(e.target.value))}
+                      className="font-mono text-sm h-9 bg-white dark:bg-zinc-900"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-400 mb-1 block">
+                        Extra Annual ({currencySymbol})
+                      </Label>
+                      <Input
+                        type="number"
+                        min={0}
+                        value={extraAnnualPayment}
+                        onChange={(e) => setExtraAnnualPayment(Number(e.target.value))}
+                        className="font-mono text-xs h-8 bg-white dark:bg-zinc-900"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-400 mb-1 block">
+                        One-Time Lump Sum ({currencySymbol})
+                      </Label>
+                      <Input
+                        type="number"
+                        min={0}
+                        value={oneTimeLumpSum}
+                        onChange={(e) => setOneTimeLumpSum(Number(e.target.value))}
+                        className="font-mono text-xs h-8 bg-white dark:bg-zinc-900"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* Grid Summary Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-3 border-t border-blue-100 dark:border-zinc-800">
-                <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Total Repayment</span>
-                  <span className="text-sm font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
-                    {formatCurrency(results.totalRepayment)}
-                  </span>
-                </div>
-                <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Total Interest</span>
-                  <span className="text-sm font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
-                    {formatCurrency(results.totalInterest)}
-                  </span>
-                </div>
-                <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Interest Share</span>
-                  <span className="text-sm font-bold font-sans tabular-nums text-amber-600 dark:text-amber-400">
-                    {results.interestPercentage}%
-                  </span>
-                </div>
-                <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Number of Payments</span>
-                  <span className="text-sm font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
-                    {results.totalPaymentsCount}
-                  </span>
-                </div>
-                <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Payoff Date</span>
-                  <span className="text-sm font-bold font-sans tabular-nums text-blue-600 dark:text-blue-400 truncate block">
-                    {results.payoffDate}
-                  </span>
-                </div>
-                <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Nominal APR (Fee-Free)</span>
-                  <span className="text-sm font-bold font-sans tabular-nums text-purple-600 dark:text-purple-400">
-                    {results.estimatedApr}%
-                  </span>
-                </div>
+              {/* Action Buttons: Save & Reset */}
+              <div className="flex items-center gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSaveCalculation}
+                  className="flex-1 text-xs border-zinc-200 dark:border-zinc-700 gap-1.5 h-8 cursor-pointer"
+                >
+                  {showSavedNotification ? (
+                    <>
+                      <Check className="h-3.5 w-3.5 text-emerald-600" /> Saved!
+                    </>
+                  ) : (
+                    <>
+                      <Bookmark className="h-3.5 w-3.5 text-blue-600" /> Save Scenario
+                    </>
+                  )}
+                </Button>
+
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleReset}
+                  className="text-xs text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 h-8 gap-1 cursor-pointer"
+                >
+                  <RotateCcw className="h-3 w-3" /> Reset
+                </Button>
               </div>
             </CardContent>
           </Card>
+        </div>
 
-          {/* Extra Payment Analysis & Comparison Table */}
-          {extraMonthlyPayment > 0 && (results.interestSaved > 0 || results.timeSavedMonths > 0) && (
-            <Card className="border border-emerald-200 dark:border-emerald-900 bg-emerald-50/60 dark:bg-emerald-950/20 shadow-xs">
-              <CardContent className="p-4 space-y-3">
-                <div className="flex items-center justify-between border-b border-emerald-200 dark:border-emerald-900/60 pb-2">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-xs uppercase font-bold text-emerald-900 dark:text-emerald-200">
-                      Extra Payment Impact & Savings Analysis
-                    </span>
-                  </div>
+        {/* RIGHT COLUMN: RESULTS & VISUAL DASHBOARD */}
+        <div className="lg:col-span-7 space-y-4">
+          {/* Main Primary Result Card */}
+          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-5 sm:p-6 text-white shadow-lg space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/20 pb-3">
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-wider text-blue-100">
+                  {mode === "deferred"
+                    ? "Amount Due at Loan Maturity"
+                    : mode === "bond"
+                    ? "Amount Received When Loan Starts"
+                    : mode === "affordability"
+                    ? "Maximum Affordable Loan Principal"
+                    : mode === "duration"
+                    ? "Required Repayment Term"
+                    : mode === "refinance"
+                    ? "New Refinanced Monthly Payment"
+                    : `Payment Every ${paymentFrequency === "monthly" ? "Month" : paymentFrequency}`}
+                </span>
+                <div className="text-3xl sm:text-4xl font-extrabold tracking-tight font-mono">
+                  {mode === "deferred"
+                    ? `${currencySymbol}${calculationResult.maturityAmount?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                    : mode === "bond"
+                    ? `${currencySymbol}${calculationResult.initialAmountReceived?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                    : mode === "affordability"
+                    ? `${currencySymbol}${calculationResult.maxAffordableLoan?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                    : mode === "duration"
+                    ? `${calculationResult.requiredTermYears} Yrs ${calculationResult.requiredTermMonths} Mos`
+                    : `${currencySymbol}${calculationResult.periodicPayment.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                 </div>
+              </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                  <div className="p-3 bg-white/80 dark:bg-zinc-900/80 rounded-xl border border-emerald-100 dark:border-emerald-900 space-y-1">
-                    <span className="font-semibold text-zinc-700 dark:text-zinc-300 block">
-                      Total Interest Comparison
-                    </span>
-                    <div className="flex items-center justify-between font-sans tabular-nums">
-                      <span className="text-zinc-500 line-through">
-                        {formatCurrency(results.baselineTotalInterest)}
-                      </span>
-                      <span className="font-bold text-emerald-600 dark:text-emerald-400">
-                        {formatCurrency(results.totalInterest)}
-                      </span>
-                    </div>
-                    <div className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 pt-1 border-t border-zinc-100 dark:border-zinc-800">
-                      Interest Saved: {formatCurrency(results.interestSaved)}
-                    </div>
-                  </div>
+              {/* Header Badge */}
+              <div className="bg-white/15 px-3 py-1.5 rounded-xl backdrop-blur-xs text-xs font-medium self-start sm:self-auto font-mono">
+                {mode === "deferred" || mode === "bond" ? (
+                  <span>Effective Yield: {calculationResult.effectiveAnnualRate.toFixed(2)}%</span>
+                ) : (
+                  <span>Effective APR: {calculationResult.effectiveApr.toFixed(2)}%</span>
+                )}
+              </div>
+            </div>
 
-                  <div className="p-3 bg-white/80 dark:bg-zinc-900/80 rounded-xl border border-emerald-100 dark:border-emerald-900 space-y-1">
-                    <span className="font-semibold text-zinc-700 dark:text-zinc-300 block">
-                      Loan Payoff Date Comparison
-                    </span>
-                    <div className="flex items-center justify-between font-sans tabular-nums">
-                      <span className="text-zinc-500 line-through">
-                        {results.baselinePayoffDate}
-                      </span>
-                      <span className="font-bold text-emerald-600 dark:text-emerald-400">
-                        {results.payoffDate}
-                      </span>
+            {/* Sub-Metrics Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1 text-xs">
+              <div className="bg-white/10 rounded-xl p-3 space-y-0.5 backdrop-blur-xs">
+                <span className="text-blue-100 block text-[11px]">Total Interest</span>
+                <span className="font-bold font-mono text-sm">
+                  {currencySymbol}{calculationResult.totalInterest.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+              </div>
+
+              <div className="bg-white/10 rounded-xl p-3 space-y-0.5 backdrop-blur-xs">
+                <span className="text-blue-100 block text-[11px]">Total Amount Paid</span>
+                <span className="font-bold font-mono text-sm">
+                  {currencySymbol}{calculationResult.totalCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </span>
+              </div>
+
+              <div className="bg-white/10 rounded-xl p-3 space-y-0.5 backdrop-blur-xs">
+                <span className="text-blue-100 block text-[11px]">Payoff Date</span>
+                <span className="font-bold font-mono text-sm">
+                  {calculationResult.payoffDate}
+                </span>
+              </div>
+
+              <div className="bg-white/10 rounded-xl p-3 space-y-0.5 backdrop-blur-xs">
+                <span className="text-blue-100 block text-[11px]">Total Payments</span>
+                <span className="font-bold font-mono text-sm">
+                  {calculationResult.totalPaymentsCount} Payments
+                </span>
+              </div>
+            </div>
+
+            {/* Extra Payment Savings Callout */}
+            {mode === "extra-payment" && calculationResult.interestSaved > 0 && (
+              <div className="bg-emerald-500/30 border border-emerald-300/40 rounded-xl p-3 flex items-center justify-between text-xs">
+                <span className="flex items-center gap-1.5 font-semibold">
+                  <Zap className="h-4 w-4 text-emerald-200" />
+                  Accelerated Payoff Savings:
+                </span>
+                <span className="font-mono font-bold text-emerald-100 text-sm">
+                  Saves {currencySymbol}{calculationResult.interestSaved.toLocaleString()} &amp; {calculationResult.timeSavedMonths} Months
+                </span>
+              </div>
+            )}
+
+            {/* Refinance Benefit Callout */}
+            {mode === "refinance" && calculationResult.refinanceAnalysis && (
+              <div className="bg-white/15 border border-white/20 rounded-xl p-3 text-xs space-y-1">
+                <div className="flex justify-between font-bold">
+                  <span>Monthly Payment Reduction:</span>
+                  <span className="font-mono text-emerald-300">
+                    +{currencySymbol}{calculationResult.refinanceAnalysis.monthlySavings.toFixed(2)}/mo
+                  </span>
+                </div>
+                <div className="flex justify-between text-blue-100 text-[11px]">
+                  <span>Net Lifetime Savings (after fees):</span>
+                  <span className="font-mono font-bold text-white">
+                    {currencySymbol}{calculationResult.refinanceAnalysis.netLifetimeSavings.toLocaleString()} (Break-even in {calculationResult.refinanceAnalysis.breakEvenMonths} mos)
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Side-by-Side Comparison Module Display */}
+          {mode === "comparison" && calculationResult.comparisonOffers && (
+            <Card className="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xs">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-bold flex items-center gap-2">
+                  <Scale className="h-4 w-4 text-blue-600" /> 3-Offer Side-by-Side Comparison
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4 pt-0">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                  {calculationResult.comparisonOffers.map((offer) => (
+                    <div
+                      key={offer.id}
+                      className={`p-3.5 rounded-xl border space-y-2 ${
+                        offer.id === "A"
+                          ? "bg-blue-50/50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800"
+                          : "bg-zinc-50 dark:bg-zinc-800/60 border-zinc-200 dark:border-zinc-700"
+                      }`}
+                    >
+                      <span className="font-bold text-zinc-900 dark:text-zinc-100 block">{offer.name}</span>
+                      <div className="space-y-1 font-mono text-xs text-zinc-600 dark:text-zinc-400">
+                        <div>Rate: <span className="font-bold text-zinc-900 dark:text-zinc-100">{offer.interestRate}%</span></div>
+                        <div>Payment: <span className="font-bold text-blue-600 dark:text-blue-400">{currencySymbol}{offer.periodicPayment}/mo</span></div>
+                        <div>Interest: <span className="font-bold">{currencySymbol}{offer.totalInterest.toLocaleString()}</span></div>
+                        <div>Total Cost: <span className="font-bold">{currencySymbol}{offer.totalCost.toLocaleString()}</span></div>
+                      </div>
                     </div>
-                    <div className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 pt-1 border-t border-zinc-100 dark:border-zinc-800">
-                      Time Saved: {results.timeSavedYears} Years ({results.timeSavedMonths} Months)
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
           )}
 
-          {/* Visual Charts Container (3 Charts) */}
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-xs space-y-3">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2.5 gap-2">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
-                Visual Analytics & Charts
-              </h3>
-              <div className="flex flex-wrap items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-zinc-200 dark:border-zinc-700">
-                <button
-                  type="button"
-                  onClick={() => setActiveChartTab("doughnut")}
-                  className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors ${
-                    activeChartTab === "doughnut"
-                      ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
-                      : "text-zinc-500"
-                  }`}
-                >
-                  <PieIcon className="h-3 w-3" /> Breakdown
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveChartTab("balance")}
-                  className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors ${
-                    activeChartTab === "balance"
-                      ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
-                      : "text-zinc-500"
-                  }`}
-                >
-                  <TrendingUp className="h-3 w-3" /> Balance
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveChartTab("principal-interest")}
-                  className={`flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded-md transition-colors ${
-                    activeChartTab === "principal-interest"
-                      ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
-                      : "text-zinc-500"
-                  }`}
-                >
-                  <BarChart3 className="h-3 w-3" /> Principal vs Interest
-                </button>
-              </div>
-            </div>
+          {/* Interactive Chart Visualizations */}
+          {mode !== "deferred" && mode !== "bond" && (
+            <Card className="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xs">
+              <CardHeader className="pb-2 border-b border-zinc-100 dark:border-zinc-800">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setActiveChartTab("breakdown")}
+                      className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+                        activeChartTab === "breakdown"
+                          ? "bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300"
+                          : "text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
+                      }`}
+                    >
+                      <PieIcon className="h-3.5 w-3.5 inline mr-1" /> Cost Breakdown
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveChartTab("balance")}
+                      className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+                        activeChartTab === "balance"
+                          ? "bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300"
+                          : "text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
+                      }`}
+                    >
+                      <TrendingUp className="h-3.5 w-3.5 inline mr-1" /> Balance Curve
+                    </button>
+                  </div>
 
-            <div className="pt-1">
-              {activeChartTab === "doughnut" ? (
-                <LoanBreakdownDoughnutChart
-                  totalPrincipal={results.maxLoanAmount}
-                  totalInterest={results.totalInterest}
-                />
-              ) : activeChartTab === "balance" ? (
-                <LoanBalanceLineChart schedule={results.amortizationSchedule} />
-              ) : (
-                <LoanPrincipalInterestChart schedule={results.amortizationSchedule} />
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Amortization Schedule Section (Full Width) */}
-      <Card className="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xs">
-        <CardHeader className="pb-3 border-b border-zinc-100 dark:border-zinc-800">
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                Loan Amortization Schedule
-              </CardTitle>
-              <CardDescription className="text-xs text-zinc-500">
-                Payment-by-payment breakdown with search, sorting, pagination, and CSV / Excel / Print export
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-4">
-          <LoanAmortizationTable schedule={results.amortizationSchedule} />
-        </CardContent>
-      </Card>
-
-      {/* Save Modal Dialog */}
-      {isSaveModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-2xl max-w-lg w-full p-6 space-y-4 relative">
-            <button
-              type="button"
-              onClick={() => setIsSaveModalOpen(false)}
-              className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
-            >
-              <X className="h-5 w-5" />
-            </button>
-
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400">
-                <Bookmark className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
-                  Save Loan Setup
-                </h3>
-                <p className="text-xs text-zinc-500">
-                  Store calculation inputs locally to reload anytime
-                </p>
-              </div>
-            </div>
-
-            {saveSuccessMsg ? (
-              <div className="p-3 bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 rounded-lg text-xs font-semibold flex items-center gap-2">
-                <Check className="h-4 w-4" /> {saveSuccessMsg}
-              </div>
-            ) : (
-              <form onSubmit={handleSaveCalculation} className="space-y-3 pt-1">
-                <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700/80 text-xs">
-                  <span className="text-zinc-500 block">Calculation Summary:</span>
-                  <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-sans tabular-nums">
-                    Payment: {formatCurrency(results.periodicPayment)} / {paymentFrequency}
-                  </span>
-                  <span className="text-[11px] text-zinc-500">
-                    ${loanAmount.toLocaleString()} loan, {loanTermYears} yrs @ {interestRate}% interest
-                  </span>
-                </div>
-
-                <div>
-                  <Label htmlFor="saveName" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                    Setup Name
-                  </Label>
-                  <Input
-                    id="saveName"
-                    type="text"
-                    placeholder="e.g. 5-Yr Auto Loan Option"
-                    value={saveName}
-                    onChange={(e) => setSaveName(e.target.value)}
-                    className="mt-1 text-xs bg-zinc-50 dark:bg-zinc-800"
-                  />
-                </div>
-
-                <div className="flex items-center justify-between pt-2">
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => setIsSaveModalOpen(false)}
-                    className="h-8 text-xs"
+                    size="sm"
+                    onClick={() => setShowReportModal(true)}
+                    className="h-7 text-xs border-zinc-200 dark:border-zinc-700 gap-1 cursor-pointer"
                   >
-                    Cancel
-                  </Button>
-                  <Button type="submit" className="h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white">
-                    Save Loan Setup
+                    <Printer className="h-3.5 w-3.5" /> Printable Report
                   </Button>
                 </div>
-              </form>
-            )}
-
-            {/* Saved Calculations List */}
-            {savedCalculations.length > 0 && (
-              <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
-                <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
-                  <FolderOpen className="h-3.5 w-3.5 text-blue-500" /> Saved Setups ({savedCalculations.length})
-                </span>
-                <div className="max-h-48 overflow-y-auto space-y-2 pr-1">
-                  {savedCalculations.map((item) => (
-                    <div
-                      key={item.id}
-                      className="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 flex items-center justify-between text-xs"
-                    >
-                      <div>
-                        <span className="font-bold text-zinc-900 dark:text-zinc-100 block">
-                          {item.name}
-                        </span>
-                        <span className="text-[10px] text-zinc-400 block font-sans tabular-nums">
-                          {formatCurrency(item.periodicPayment)} • {item.dateSaved}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleLoadCalculation(item)}
-                          className="h-6 text-[10px] px-2 text-blue-600 dark:text-blue-400"
-                        >
-                          Restore
-                        </Button>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteSavedCalculation(item.id)}
-                          className="p-1 text-zinc-400 hover:text-red-500"
-                          title="Delete saved setup"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+              </CardHeader>
+              <CardContent className="p-4">
+                {activeChartTab === "breakdown" ? (
+                  <LoanBreakdownDoughnutChart
+                    totalPrincipal={calculationResult.totalPrincipal}
+                    totalInterest={calculationResult.totalInterest}
+                  />
+                ) : (
+                  <LoanBalanceLineChart schedule={calculationResult.amortizationSchedule} />
+                )}
+              </CardContent>
+            </Card>
+          )}
         </div>
+      </div>
+
+      {/* 3. AMORTIZATION SCHEDULE TABLE */}
+      {mode !== "deferred" && mode !== "bond" && (
+        <Card className="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xs">
+          <CardHeader className="pb-3 border-b border-zinc-100 dark:border-zinc-800">
+            <CardTitle className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              Complete Loan Amortization Schedule
+            </CardTitle>
+            <CardDescription className="text-xs text-zinc-500">
+              Inspect payment allocation, cumulative interest charges, and remaining principal balance over time.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-4 sm:p-5">
+            <LoanAmortizationTable
+              schedule={calculationResult.amortizationSchedule}
+              annualSchedule={calculationResult.annualSchedule}
+            />
+          </CardContent>
+        </Card>
       )}
 
-      {/* Executive Report Modal */}
+      {/* 4. SAVED SCENARIOS TRAY */}
+      {savedCalculations.length > 0 && (
+        <Card className="border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xs">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider flex items-center gap-1.5">
+              <Bookmark className="h-3.5 w-3.5 text-blue-600" /> Saved Scenarios History ({savedCalculations.length})
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 pt-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+              {savedCalculations.map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => handleRestoreSaved(item)}
+                  className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all cursor-pointer flex justify-between items-center text-xs"
+                >
+                  <div>
+                    <span className="font-bold text-zinc-900 dark:text-zinc-100 block">{item.name}</span>
+                    <span className="text-[11px] text-blue-600 dark:text-blue-400 font-mono">
+                      {currencySymbol}{item.periodicPayment.toFixed(2)}/mo
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => handleDeleteSaved(item.id, e)}
+                    className="text-zinc-400 hover:text-red-500 p-1 cursor-pointer"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* 5. PRINTABLE REPORT MODAL */}
       <ReportModal
-        isOpen={isReportModalOpen}
-        onClose={() => setIsReportModalOpen(false)}
-        reportData={reportData}
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        data={reportData}
       />
+
+      {/* 6. EDUCATIONAL CHAPTERS & 12 CANONICAL FAQS */}
+      <LoanContentSection />
     </div>
   );
 }
