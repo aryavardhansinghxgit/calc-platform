@@ -4,52 +4,62 @@ export const cdFaqs: CalculatorFAQ[] = [
   {
     question: "How does a Certificate of Deposit (CD) work?",
     answer:
-      "A Certificate of Deposit (CD) is a low-risk time deposit account offered by banks and credit unions. You deposit a fixed sum of money for a specified period (ranging from 3 months to 5 years). In exchange for keeping your money untouched until maturity, the institution pays a guaranteed, fixed interest rate that is usually higher than standard savings rates.",
+      "A CD is a time-deposit product in which money is committed for a specified term in exchange for a stated or otherwise defined return. The exact rate, compounding method and withdrawal rules depend on the product.",
   },
   {
     question: "What is the difference between APR and APY on a CD?",
     answer:
-      "APR (Annual Percentage Rate) is the simple annual interest rate without taking intra-year compounding into account. APY (Annual Percentage Yield) reflects the true effective annual rate of return, including the compounding frequency (daily, monthly, or quarterly). Banks advertise APY because compounding causes your actual dollar earnings to exceed the simple APR.",
+      "APY reflects the effective annual yield after compounding. A nominal interest rate does not by itself include the full effect of intra-year compounding.",
   },
   {
     question: "What happens when a CD reaches its maturity date?",
     answer:
-      "When a CD matures, the bank opens a 7-to-10 day 'grace period.' During this window, you can withdraw your principal plus earned interest, transfer the funds to another account, or roll the balance into a new CD term. If you take no action, most financial institutions automatically renew the CD for the same term length at the current prevailing interest rate.",
+      "At maturity, the principal and earned interest can generally be withdrawn or handled according to the account's renewal instructions. Exact maturity and grace-period rules depend on the institution and CD contract.",
   },
   {
     question: "How does a CD ladder work and why is it beneficial?",
     answer:
-      "A CD ladder is a fixed-income strategy where you divide your total investment capital into equal tranches across varying maturities (e.g., 1-year, 2-year, 3-year, 4-year, and 5-year CDs). As each CD matures every year, you gain liquidity or reinvest the funds into a top-tier 5-year CD. This captures higher long-term yields while ensuring annual liquidity access.",
+      "A CD ladder distributes money among CDs with different maturity dates. This can create recurring liquidity opportunities while allowing part of the capital to remain in longer-term products.",
   },
   {
-    question: "How is the early withdrawal penalty calculated if I cash out early?",
+    question: "How is the early-withdrawal penalty calculated if I cash out early?",
     answer:
-      "If you withdraw principal before the CD maturity date, banks charge an early withdrawal penalty equal to a set number of days of simple interest (e.g., 90 days of interest for terms up to 12 months, or 180 days of interest for terms from 1 to 3 years). If you exit early enough, the penalty can exceed earned interest and erode a small portion of your initial principal.",
+      "The penalty depends on the CD contract. The calculator uses the selected penalty assumption to estimate accrued interest, penalty cost and net early payout.",
   },
   {
     question: "Is CD interest taxable every year even if I don't withdraw it?",
     answer:
-      "Yes. Interest earned on CDs in standard taxable accounts is subject to federal and state income taxes in the year it is credited by the bank, even if the CD has not matured and interest remains locked inside the account (often called 'Phantom Income'). The bank issues a Form 1099-INT annually reporting your taxable interest.",
+      "Interest from taxable CD accounts can be subject to tax under applicable rules, and certain interest may be reportable before maturity. The calculator's tax input is an illustrative assumption rather than a personal tax determination.",
   },
   {
-    question: "Are CDs safer than stock market index funds and bonds?",
+    question: "Are CDs safer than stock market index funds or bonds?",
     answer:
-      "CDs are significantly safer than stocks and corporate bonds because they offer guaranteed principal protection backed by federal insurance. Deposits at banks are insured by the FDIC up to $250,000 per depositor, per institution, and credit union CDs are insured by the NCUA up to the same limit.",
-  },
-  {
-    question: "What is a No-Penalty CD and how does its APY compare to standard CDs?",
-    answer:
-      "A No-Penalty (or Liquid) CD allows you to withdraw your full principal and earned interest anytime after the initial 7 days without incurring early withdrawal fees. In exchange for this liquidity, No-Penalty CDs usually offer a slightly lower APY (typically 0.20% to 0.40% less) than fixed standard CDs.",
+      "CDs have different risk and return characteristics from stocks and bonds. Safety depends on product type, issuer, deposit protection eligibility and other factors, while the calculator focuses on modeled CD cash flows.",
   },
   {
     question: "Can I add more money to an existing CD after opening it?",
     answer:
-      "Generally, no. Standard fixed-rate CDs only accept a single lump-sum initial deposit at account opening. However, some banks offer specialty 'Add-On CDs' that permit additional periodic contributions during the term.",
+      "Many standard CDs do not allow additional deposits after opening, but some specialized products may. The actual CD agreement controls.",
   },
   {
-    question: "Is it better to choose a CD or a High-Yield Savings Account (HYSA) when interest rates are dropping?",
+    question: "Is it better to choose a higher APY or a longer term?",
     answer:
-      "When central banks are expected to cut interest rates, a CD is generally superior because it locks in your high APY for the full term. In contrast, HYSA interest rates are variable and drop automatically whenever market rates decline, reducing your ongoing yield.",
+      "Not necessarily. A higher APY can increase projected earnings, while a longer term can improve rate certainty but reduce liquidity. The better choice depends on rates, cash needs and expected holding period.",
+  },
+  {
+    question: "What is a no-penalty CD and how does its APY compare?",
+    answer:
+      "A no-penalty CD generally offers more flexible withdrawals after applicable conditions are met, but its APY may be lower than a standard fixed CD. The calculator can quantify that trade-off under selected assumptions.",
+  },
+  {
+    question: "How do I calculate how much I need to deposit today to reach a CD goal?",
+    answer:
+      "The maturity-goal solver works backward from the target balance, APY and term to estimate the starting principal required today under the calculator's growth assumptions.",
+  },
+  {
+    question: "Is a CD always better than a high-yield savings account?",
+    answer:
+      "No. A CD may offer a fixed rate for a defined term, while a HYSA can provide greater liquidity and may benefit if future rates remain high. The better result depends on the selected assumptions and the depositor's liquidity needs.",
   },
 ];
 

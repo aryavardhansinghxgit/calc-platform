@@ -1,212 +1,372 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
+import { ShieldCheck, Info } from "lucide-react";
 
 export function CdContent() {
   return (
-    <div className="space-y-3 text-black dark:text-white font-medium leading-normal max-w-4xl mx-auto text-xs">
-      {/* H1 Title */}
-      <div className="border-b border-slate-300 dark:border-slate-700 pb-2">
-        <h1 className="text-xl font-black text-black dark:text-white tracking-tight">
-          CD Calculator — Certificate of Deposit Interest & APY Growth
+    <div className="space-y-12 text-slate-800 dark:text-slate-200 font-medium leading-relaxed max-w-4xl mx-auto">
+      {/* 1. H1 TITLE & INTRO */}
+      <div className="border-b border-slate-200 dark:border-slate-800 pb-6 space-y-3">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          CD Calculator
         </h1>
-        <p className="text-xs text-black dark:text-white mt-0.5">
-          Fixed-Income CD Engine, Rolling Multi-Tier Ladder Builder, HYSA Yield Comparator, Early Exit Penalty Solver & Fisher Inflation Drag Analysis.
+        <p className="text-base text-slate-600 dark:text-slate-400 leading-normal font-normal">
+          Calculate CD maturity value, interest, APY, after-tax growth, inflation-adjusted value, early-withdrawal penalties, CD ladder results and CD vs HYSA comparisons.
         </p>
       </div>
 
-      {/* SECTION 1: WHAT IS A CD & FDIC INSURANCE */}
-      <section className="space-y-2">
-        <h2 className="text-base font-bold text-black dark:text-white tracking-tight">
-          What is a Certificate of Deposit (CD)? How CDs Work
+      {/* 2. WHAT IS A CD CALCULATOR? */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          1. What Is a CD Calculator?
         </h2>
-        <p className="leading-relaxed">
-          A <strong>Certificate of Deposit (CD)</strong> is a low-risk time-deposit financial contract issued by commercial banks and credit unions. When an investor deposits capital into a CD, they agree to leave the principal untouched for a pre-determined duration (ranging from 3 months to 5 years). In exchange for this commitment, the financial institution guarantees a fixed interest rate that significantly outperforms basic savings accounts.
+        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          A CD calculator estimates how a certificate of deposit can grow over a defined term using the starting deposit, annual rate or APY, compounding frequency, and other assumptions. A more advanced CD calculator goes beyond the maturity balance to estimate after-tax interest, inflation-adjusted purchasing power, CD ladder outcomes, early-withdrawal costs, break-even periods, and the starting deposit required to reach a target balance.
         </p>
-        <p className="leading-relaxed">
-          CDs are backed by government-sponsored insurance protections up to <strong>$250,000 per depositor, per insured institution</strong> through the Federal Deposit Insurance Corporation (FDIC) for banks or the National Credit Union Administration (NCUA) for credit unions. This makes CDs virtually risk-free from credit default.
+        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          A certificate of deposit is generally a time-deposit product where money is committed for a specified period in exchange for a stated or otherwise defined return. The trade-off is usually liquidity: a conventional CD can provide a predictable return under the selected assumptions, while accessing the money before maturity may involve product-specific penalties or restrictions.
+        </p>
+        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          For a broader comparison of flexible savings strategies, the{" "}
+          <Link href="/calculators/savings-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            Savings Calculator
+          </Link>{" "}
+          can be used alongside this calculator. For pure return comparisons across different asset classes, our{" "}
+          <Link href="/calculators/roi-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            ROI Calculator
+          </Link>{" "}
+          provides a useful companion scenario.
         </p>
       </section>
 
-      {/* SECTION 2: MATHEMATICAL FORMULAS */}
-      <section className="space-y-2">
-        <h2 className="text-base font-bold text-black dark:text-white tracking-tight">
-          How to Calculate CD Earnings (Step-by-Step Mathematical Guide)
+      {/* 3. HOW TO USE THE CD CALCULATOR */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          2. How to Use the CD Calculator
         </h2>
-        <p className="leading-relaxed">
-          The future balance of a CD depends on the principal $P$, the nominal interest rate $r$, the compounding frequency $n$, and the term duration $t$ in years:
+        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          Start by entering the amount you plan to deposit. Then select the CD term, enter the rate or APY used by the model, and choose the compounding frequency.
         </p>
-
-        <div className="p-2.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 space-y-2 font-mono">
-          <div>
-            <div className="font-bold text-black dark:text-white text-xs font-sans">1. Compound Interest Balance Formula</div>
-            <div className="p-2 bg-white dark:bg-slate-950 rounded text-xs font-bold text-black dark:text-white text-center mt-1">
-              {"A = P \\cdot \\left(1 + \\frac{r}{n}\\right)^{n \\cdot t}"}
-            </div>
-          </div>
-
-          <div>
-            <div className="font-bold text-black dark:text-white text-xs font-sans">2. APY to Nominal Rate (r) Conversion</div>
-            <div className="p-2 bg-white dark:bg-slate-950 rounded text-xs font-bold text-black dark:text-white text-center mt-1">
-              {"r = n \\cdot \\left[ (1 + \\text{APY})^{1/n} - 1 \\right]"}
-            </div>
-          </div>
-
-          <div>
-            <div className="font-bold text-black dark:text-white text-xs font-sans">3. Net After-Tax Interest Earned</div>
-            <div className="p-2 bg-white dark:bg-slate-950 rounded text-xs font-bold text-black dark:text-white text-center mt-1">
-              {"\\text{Net Interest} = (A - P) \\cdot (1 - \\text{Tax Rate})"}
-            </div>
-          </div>
-
-          <div>
-            <div className="font-bold text-black dark:text-white text-xs font-sans">4. Inflation-Adjusted Real Value (Purchasing Power)</div>
-            <div className="p-2 bg-white dark:bg-slate-950 rounded text-xs font-bold text-black dark:text-white text-center mt-1">
-              {"\\text{Real Value} = \\frac{\\text{After-Tax Balance}}{(1 + \\text{Inflation Rate})^t}"}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 3: APY VS APR */}
-      <section className="space-y-2">
-        <h2 className="text-base font-bold text-black dark:text-white tracking-tight">
-          Understanding APY vs. Interest Rate (APR) in Fixed-Income Accounts
-        </h2>
-        <p className="leading-relaxed">
-          It is critical to distinguish between stated interest rate (APR) and Annual Percentage Yield (APY):
-        </p>
-        <ul className="list-disc pl-4 space-y-1">
-          <li><strong>Annual Percentage Rate (APR / Nominal Rate):</strong> The simple annual rate earned without compounding.</li>
-          <li><strong>Annual Percentage Yield (APY):</strong> The true effective annual return including intra-year compounding. Because most CDs compound daily or monthly, APY is slightly higher than APR.</li>
-          <li><strong>Compounding Impact:</strong> On a 5.00% APY CD with daily compounding, the underlying nominal rate is approximately 4.879%. Daily compounding yields higher dollar returns than monthly or annual compounding over identical terms.</li>
-        </ul>
-      </section>
-
-      {/* SECTION 4: TYPES OF CDS EXPLAINED */}
-      <section className="space-y-2">
-        <h2 className="text-base font-bold text-black dark:text-white tracking-tight">
-          Complete Certificate of Deposit Types Explained
-        </h2>
-
-        <div className="space-y-2">
-          <div className="p-2 bg-slate-100 dark:bg-slate-900 rounded border border-slate-300 dark:border-slate-700">
-            <h3 className="font-bold text-black dark:text-white">1. Traditional Fixed-Rate CDs</h3>
-            <p className="text-black dark:text-white text-[11px] pt-0.5">
-              Standard time deposit paying a fixed APY for a set duration (e.g. 12 or 60 months). Early withdrawal incurs a fixed interest penalty.
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Fixed-CD Maturity Growth</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Review final balance, gross pre-tax interest, effective APY, tax drag, net after-tax return, and real purchasing-power balance.
             </p>
           </div>
-
-          <div className="p-2 bg-slate-100 dark:bg-slate-900 rounded border border-slate-300 dark:border-slate-700">
-            <h3 className="font-bold text-black dark:text-white">2. No-Penalty (Liquid) CDs</h3>
-            <p className="text-black dark:text-white text-[11px] pt-0.5">
-              Allows penalty-free withdrawal of full principal and interest after 7 days from funding. APY is typically 0.20% to 0.40% lower than standard CDs.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Multi-Tier CD Ladder</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Spread capital across multiple staggered maturities to balance long-term yields with annual liquidity events.
             </p>
           </div>
-
-          <div className="p-2 bg-slate-100 dark:bg-slate-900 rounded border border-slate-300 dark:border-slate-700">
-            <h3 className="font-bold text-black dark:text-white">3. Bump-Up and Step-Up CDs</h3>
-            <p className="text-black dark:text-white text-[11px] pt-0.5">
-              Provides the option to exercise a one-time rate bump if interest rates rise during the term.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">CD vs. HYSA Comparator</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Test rate-lock protection against a modeled decaying savings account yield path during central bank rate cuts.
             </p>
           </div>
-
-          <div className="p-2 bg-slate-100 dark:bg-slate-900 rounded border border-slate-300 dark:border-slate-700">
-            <h3 className="font-bold text-black dark:text-white">4. Brokered CDs vs. Bank CDs</h3>
-            <p className="text-black dark:text-white text-[11px] pt-0.5">
-              Purchased through brokerage accounts (e.g., Fidelity, Schwab). Can be traded on the secondary market prior to maturity without bank early exit penalties.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Early Withdrawal Penalty</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Calculate accrued interest, penalty deductions, net early payout, and break-even months for switching to a higher rate.
             </p>
           </div>
-
-          <div className="p-2 bg-slate-100 dark:bg-slate-900 rounded border border-slate-300 dark:border-slate-700">
-            <h3 className="font-bold text-black dark:text-white">5. Jumbo CDs and Specialty Terms</h3>
-            <p className="text-black dark:text-white text-[11px] pt-0.5">
-              High-denomination CDs (typically $100,000 minimum deposit) offering premium APY tiers.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Target Savings Goal Solver</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Work backward from a target maturity sum to find the exact initial principal required today.
+            </p>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Specialty CD Simulator</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Compare No-Penalty liquid CDs and Bump-Up CDs against traditional fixed-rate certificates.
             </p>
           </div>
         </div>
       </section>
 
-      {/* SECTION 5: THE CD LADDER STRATEGY */}
-      <section className="space-y-2">
-        <h2 className="text-base font-bold text-black dark:text-white tracking-tight">
-          The CD Ladder Strategy: Maximizing Liquidity and Yield
+      {/* 4. HOW CD INTEREST IS CALCULATED */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          3. How CD Interest Is Calculated
         </h2>
-        <p className="leading-relaxed">
-          A <strong>CD Ladder</strong> is a fixed-income portfolio strategy where total capital is divided equally across multiple maturities (e.g., 1-year, 2-year, 3-year, 4-year, and 5-year CDs).
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          For a standard fixed-rate compound-growth model:
         </p>
-        <p className="leading-relaxed font-mono text-[11px]">
-          Example: Investing $25,000 by placing $5,000 into each of 5 CD terms. Every 12 months, one CD matures, giving you $5,000+ in annual liquidity. You then reinvest the matured funds into a new top-tier 5-year CD. Within 5 years, your entire portfolio earns peak 5-year yields while providing 20% annual liquidity.
-        </p>
-      </section>
-
-      {/* SECTION 6: EARLY WITHDRAWAL PENALTIES */}
-      <section className="space-y-2">
-        <h2 className="text-base font-bold text-black dark:text-white tracking-tight">
-          Early Withdrawal Penalties and How to Avoid Them
-        </h2>
-        <p className="leading-relaxed">
-          Financial institutions enforce interest penalties for early withdrawal prior to maturity:
-        </p>
-        <ul className="list-disc pl-4 space-y-1">
-          <li><strong>Terms &le; 12 Months:</strong> Typically 90 days of simple interest.</li>
-          <li><strong>Terms 12 to 36 Months:</strong> Typically 180 days of simple interest.</li>
-          <li><strong>Terms &gt; 36 Months:</strong> Typically 270 to 360 days of simple interest.</li>
-        </ul>
-        <p className="leading-relaxed">
-          If a CD is cashed out shortly after opening, the penalty can exceed earned interest, causing a slight loss of initial principal.
-        </p>
-      </section>
-
-      {/* SECTION 7: TAXATION ON CD EARNINGS */}
-      <section className="space-y-2">
-        <h2 className="text-base font-bold text-black dark:text-white tracking-tight">
-          Tax Rules on CD Earnings: 1099-INT and Phantom Income
-        </h2>
-        <p className="leading-relaxed">
-          Interest earned on CDs in taxable accounts is taxed as ordinary income at your marginal federal and state tax rates. Under IRS rules, interest is taxable in the year it is credited by the bank, even if the CD has not matured (known as <em>Phantom Income</em>). Placing CDs inside Traditional or Roth IRA accounts eliminates or defers this annual tax drag.
-        </p>
-      </section>
-
-      {/* SECTION 8: WORKED MATHEMATICAL CASE STUDIES */}
-      <section className="space-y-2">
-        <h2 className="text-base font-bold text-black dark:text-white tracking-tight">
-          Real-World Case Studies: 1-Year CD vs. 5-Year Ladder vs. HYSA
-        </h2>
-
-        <div className="space-y-2 text-xs">
-          <div className="p-2.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 space-y-1">
-            <h3 className="font-bold text-xs text-black dark:text-white">
-              Case Study 1: $10,000 in a 1-Year CD @ 5.0% APY (Daily Compounding)
-            </h3>
-            <p className="text-black dark:text-white leading-relaxed font-mono text-[11px]">
-              Ending Balance = $10,000 * (1 + 0.05)^1 = $10,500.00. Pre-tax interest = $500.00.
-            </p>
-            <p className="text-black dark:text-white leading-relaxed">
-              At a 24% marginal tax bracket, tax drag = $120.00, yielding a net take-home balance of $10,380.00.
-            </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>{"A = P × (1 + r/n)^(n×t)"}</div>
+          <div className="text-[11px] text-slate-500 pt-1">
+            Where: A = maturity balance, P = starting principal, r = nominal annual rate, n = compounding periods per year (365 for daily, 12 for monthly), t = time in years.
           </div>
+        </div>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          A daily-compounded CD uses 365 compounding intervals per year, producing slightly higher terminal growth than monthly or annual compounding under the same nominal rate.
+        </p>
+      </section>
 
-          <div className="p-2.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 space-y-1">
-            <h3 className="font-bold text-xs text-black dark:text-white">
-              Case Study 2: Early Exit Penalty Deduction on $15,000 2-Year CD broken at Month 6
-            </h3>
-            <p className="text-black dark:text-white leading-relaxed font-mono text-[11px]">
-              Gross interest earned at month 6 = $360.00. 180-day simple penalty = $355.07. Net payout = $15,004.93.
-            </p>
-          </div>
+      {/* 5. VALIDATED BASELINE */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          4. Validated Baseline: $10,000 CD at 5.0%
+        </h2>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>• Starting Deposit: $10,000 | Term: 12 Months | Nominal Rate: 5.0% (Daily Compounding)</div>
+          <div>• Marginal Tax Rate: 24% | Expected Inflation Rate: 2.5%</div>
+          <div>• Compound Maturity Balance: <strong>$10,512.67</strong></div>
+          <div>• Gross Pre-Tax Total Interest: <strong>+$512.67</strong></div>
+          <div>• Effective Annual Percentage Yield (APY): <strong>5.127%</strong></div>
+          <div>• Modeled Tax Drag (24%): <strong>-$123.04</strong></div>
+          <div>• Net After-Tax Interest: <strong>+$389.63</strong> | Net After-Tax Balance: <strong>$10,389.63</strong></div>
+          <div>• Real Inflation-Adjusted Balance: <strong>$10,136.23</strong> {"($10,389.63 ÷ 1.025)"}</div>
         </div>
       </section>
 
-      {/* SECTION 9: SUMMARY */}
-      <section className="p-3 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 space-y-1">
-        <h2 className="font-bold text-xs text-black dark:text-white">
-          Educational Summary
+      {/* 6. APY VS NOMINAL CD RATE */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          5. APY vs. Nominal CD Rate
         </h2>
-        <p className="text-black dark:text-white leading-relaxed font-medium">
-          Certificates of Deposit provide guaranteed, risk-free compounding returns protected by federal FDIC insurance. Evaluating APY vs. APR, inflation drag, tax liability, and CD laddering strategies enables optimal fixed-income capital allocation.
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          A CD&apos;s nominal rate and APY are related, but they are not identical metrics. The nominal annual rate does not reflect intra-year compounding, while APY reflects the true effective annual yield:
+        </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>{"APY = (1 + r/n)^n - 1"}</div>
+          <div>• With a 5.0% nominal rate compounded daily: <strong>APY ≈ 5.127%</strong></div>
+          <div>• With a 5.0% nominal rate compounded monthly: <strong>APY ≈ 5.116%</strong></div>
+        </div>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          When comparing CD offers across different banks, always verify whether quotes represent nominal APR or APY. For general rate conversions, use our{" "}
+          <Link href="/calculators/interest-rate-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            Interest Rate Calculator
+          </Link>.
+        </p>
+      </section>
+
+      {/* 7. AFTER-TAX CD GROWTH */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          6. After-Tax CD Growth & Tax Drag
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          Interest earned on CDs held in standard taxable accounts is subject to federal and state income tax as ordinary income in the year it is credited.
+        </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>• Gross Interest: $512.67 | Tax Rate: 24%</div>
+          <div>• Modeled Tax Drag: <strong>$123.04</strong> ($512.67 × 0.24)</div>
+          <div>• Net Take-Home Interest: <strong>$389.63</strong> | Net Balance: <strong>$10,389.63</strong></div>
+        </div>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          Holding CDs inside tax-advantaged accounts (such as Traditional or Roth IRAs) defers or eliminates this annual tax drag.
+        </p>
+      </section>
+
+      {/* 8. INFLATION-ADJUSTED CD VALUE */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          7. Inflation-Adjusted CD Value & Purchasing Power
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          A CD can grow in nominal dollars while adding much less purchasing power in real terms:
+        </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>{"Real Purchasing Power Balance = After-Tax Balance ÷ (1 + Inflation)^t"}</div>
+          <div>{"$10,389.63 ÷ 1.025^1 = "}<strong>$10,136.23</strong></div>
+          <div>• Real Net Purchasing Power Gain: <strong>+$136.23</strong></div>
+        </div>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          For standalone purchasing power analyses across historical and custom inflation scenarios, explore the{" "}
+          <Link href="/calculators/inflation-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            Inflation Calculator
+          </Link>.
+        </p>
+      </section>
+
+      {/* 9. MONTHLY CD SCHEDULE */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          8. Month-by-Month CD Compounding Progression
+        </h2>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>• Month 1: Beg Bal: $10,000.00 | Interest: +$41.75 | End Bal: $10,041.75 | Real: $10,011.11</div>
+          <div>• Month 2: Beg Bal: $10,041.75 | Interest: +$41.93 | End Bal: $10,083.68 | Real: $10,022.26</div>
+          <div>• Month 3: Beg Bal: $10,083.68 | Interest: +$42.10 | End Bal: $10,125.78 | Real: $10,033.46</div>
+          <div>• Month 6: Beg Bal: $10,210.50 | Interest: +$42.63 | End Bal: $10,253.13 | Real: $10,067.32</div>
+          <div>• Month 12: Terminal Ending Balance: <strong>$10,512.67</strong> | Cumulative Tax: $123.04 | Real: <strong>$10,136.23</strong></div>
+        </div>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          For amortized loan schedules where balances decrease rather than compound upward, see the{" "}
+          <Link href="/calculators/amortization-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            Amortization Calculator
+          </Link>.
+        </p>
+      </section>
+
+      {/* 10. WHAT IS A CD LADDER */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          9. What Is a CD Ladder Strategy?
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          A CD ladder divides a larger cash balance across several CDs with staggered maturity dates (e.g. 1-year, 2-year, 3-year, 4-year, and 5-year CDs). This provides predictable annual cash liquidity while capturing higher long-term fixed rates.
+        </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>• Total Ladder Capital: $25,000 across 5 Stages ($5,000 per tranche)</div>
+          <div>• Tranche 1 (1 Yr @ 4.25% APY): Maturity = <strong>$5,212.50</strong></div>
+          <div>• Tranche 2 (2 Yr @ 4.50% APY): Maturity = <strong>$5,460.12</strong></div>
+          <div>• Tranche 3 (3 Yr @ 4.75% APY): Maturity = <strong>$5,746.88</strong></div>
+          <div>• Tranche 4 (4 Yr @ 5.00% APY): Maturity = <strong>$6,077.53</strong></div>
+          <div>• Tranche 5 (5 Yr @ 5.25% APY): Maturity = <strong>$6,457.74</strong></div>
+          <div>• Compounded 5-Year Ladder Total: <strong>$28,954.78</strong> | Blended Average APY: <strong>4.75%</strong></div>
+          <div>• Annual Cash Liquidity Event: <strong>$5,000.00</strong></div>
+        </div>
+      </section>
+
+      {/* 11. CD VS HYSA COMPARISON */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          10. CD vs. High-Yield Savings Account (HYSA) Yield Comparator
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          When central banks cut interest rates, variable HYSA yields drop automatically, whereas a fixed CD locks in guaranteed interest:
+        </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>• Deposit Amount: $20,000 | Term: 24 Months</div>
+          <div>• Fixed CD @ 5.25% APY: Ending Return = <strong>$22,155.13</strong></div>
+          <div>• Variable HYSA (4.50% starting with 1.0%/yr drop): Ending Return = <strong>$21,465.75</strong></div>
+          <div>• <strong>CD Rate-Lock Advantage: +$689.38 (+3.45%)</strong></div>
+        </div>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          For flexible deposits where liquidity is paramount, compare with the{" "}
+          <Link href="/calculators/savings-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            Savings Calculator
+          </Link>.
+        </p>
+      </section>
+
+      {/* 12. EARLY WITHDRAWAL PENALTY & BREAK-EVEN */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          11. Early Withdrawal Penalties & Break-Even Timeline
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          Breaking a CD before maturity triggers early withdrawal penalties (typically 90 to 180 days of simple interest):
+        </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>• Principal: $15,000 | Term: 24 Months | CD Rate: 4.8% APY | Penalty: 180 Days</div>
+          <div>• Exit at Month 6: Gross Interest Earned = +$355.78</div>
+          <div>• Penalty Deduction: -$355.07 {"($15,000 × 0.048/365 × 180)"}</div>
+          <div>• Net Interest Received: <strong>+$0.71</strong> | Net Payout: <strong>$15,000.71</strong></div>
+          <div>• Break-Even for 5.8% Replacement Rate: <strong>29 Months</strong></div>
+        </div>
+      </section>
+
+      {/* 13. TARGET SAVINGS GOAL SOLVER */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          12. CD Maturity Goal Solver
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          Solve backward to determine how much capital must be deposited today to achieve a specific future balance:
+        </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>{"P = Target ÷ (1 + APY)^t"}</div>
+          <div>• Target: $50,000 | APY: 5.0% | Term: 3 Years</div>
+          <div>• Required Initial Principal Deposit: <strong>$43,191.88</strong></div>
+          <div>• Modeled Total Interest Earned: <strong>+$6,808.12</strong> (Growth: +15.76%)</div>
+        </div>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          For recurring contribution schedules, model projections with the{" "}
+          <Link href="/calculators/future-value-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            Future Value Calculator
+          </Link>.
+        </p>
+      </section>
+
+      {/* 14. SPECIALTY CDS */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          13. Specialty CDs: No-Penalty & Bump-Up Structures
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">No-Penalty (Liquid) CD</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Allows penalty-free withdrawals after 7 days from funding in exchange for a modest yield spread ($10,000 at 4.75% standard vs 4.50% liquid yields $10,450 vs $10,475, a -$25 liquidity cost).
+            </p>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Bump-Up CD</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Permits a one-time interest rate increase if prevailing market yields rise during the term, providing upside protection in rising-rate environments.
+            </p>
+          </div>
+        </div>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          For international or country-specific fixed-term bank deposits, see our{" "}
+          <Link href="/calculators/fd-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            FD Calculator
+          </Link>.
+        </p>
+      </section>
+
+      {/* 15. COMMON MISTAKES */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          14. Common CD Mistakes to Avoid
+        </h2>
+        <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 text-xs text-slate-700 dark:text-slate-300">
+          <ul className="space-y-1.5 list-disc list-inside">
+            <li><strong>Comparing CD APY directly with nominal savings APR:</strong> APY includes compounding; nominal APR does not.</li>
+            <li><strong>Ignoring the compounding frequency:</strong> Daily compounding yields more than quarterly or annual compounding.</li>
+            <li><strong>Forgetting tax drag on credited interest:</strong> Ordinary income taxes reduce net yield every year.</li>
+            <li><strong>Ignoring inflation drag:</strong> High inflation can erode real purchasing power despite positive nominal interest.</li>
+            <li><strong>Assuming early exit is cost-free:</strong> Penalties can exceed accrued interest and erode principal if withdrawn too early.</li>
+            <li><strong>Assuming penalty terms are identical across institutions:</strong> Penalty days vary significantly by bank and term.</li>
+            <li><strong>Locking emergency reserves into non-liquid long-term CDs:</strong> Maintain liquid emergency funds before locking cash.</li>
+            <li><strong>Assuming the highest APY is universally best:</strong> Longer terms reduce liquidity and create reinvestment risk.</li>
+            <li><strong>Assuming CD ladders always outperform single CDs:</strong> Ladders trade maximum yield for staggered liquidity.</li>
+            <li><strong>Assuming No-Penalty CDs are always superior:</strong> Lower APYs reduce total interest over full holding periods.</li>
+            <li><strong>Treating HYSA rate decline comparisons as guaranteed forecasts:</strong> Market rate paths fluctuate based on central bank policy.</li>
+            <li><strong>Assuming deposit insurance coverage is unlimited:</strong> FDIC/NCUA coverage applies up to $250,000 per depositor, per institution.</li>
+            <li><strong>Treating calculator tax output as personal tax advice:</strong> Individual tax situations vary based on state and bracket.</li>
+            <li><strong>Prematurely rounding intermediate numbers:</strong> Retain full floating-point precision when modeling multi-year growth.</li>
+          </ul>
+        </div>
+      </section>
+
+      {/* 16. CORE FORMULAS */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          15. Core CD Formulas Reference
+        </h2>
+        <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 font-mono text-xs text-slate-700 dark:text-slate-300">
+          <div>{"• Fixed-Rate Compound Growth: A = P(1 + r/n)^(nt)"}</div>
+          <div>{"• Annual Percentage Yield: APY = (1 + r/n)^n - 1"}</div>
+          <div>{"• Tax Drag: Tax Drag = Pre-Tax Interest × Marginal Tax Rate"}</div>
+          <div>{"• Net After-Tax Balance: After-Tax Balance = Principal + Pre-Tax Interest - Tax Drag"}</div>
+          <div>{"• Real Inflation-Adjusted Balance: Real Balance = After-Tax Balance ÷ (1 + Inflation)^t"}</div>
+          <div>{"• Goal Solver Required Principal: P = Target ÷ (1 + APY)^t"}</div>
+          <div>{"• CD Ladder Tranche: Maturity = Tranche Principal × (1 + Tranche APY)^Term"}</div>
+          <div>{"• Early Exit Penalty: Penalty = Principal × (APY / 365) × PenaltyDays"}</div>
+        </div>
+      </section>
+
+      {/* 17. YMYL AND REGULATORY NOTICE */}
+      <section className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 text-xs text-slate-600 dark:text-slate-400">
+        <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+          <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+          <span>Deposit Insurance & Financial Planning Notice</span>
+        </div>
+        <p>
+          This CD calculator is an educational mathematical modeling tool. Eligible deposits at participating banks and credit unions may qualify for deposit insurance through the FDIC or NCUA subject to applicable $250,000 coverage limits and ownership-category rules. Exact CD terms, early-withdrawal penalties, renewal grace periods, and tax obligations depend on your specific financial institution and individual tax circumstances.
         </p>
       </section>
     </div>
   );
 }
+
+export default CdContent;

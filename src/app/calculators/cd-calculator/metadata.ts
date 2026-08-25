@@ -1,26 +1,34 @@
 import { Metadata } from "next";
 
 export const cdMetadata: Metadata = {
-  title: "CD Calculator — Certificate of Deposit Interest & APY Growth",
+  title: "CD Calculator — Maturity Value, Interest, APY, Tax & CD Ladder",
   description:
-    "Free CD Calculator. Calculate Certificate of Deposit interest returns, effective APY, tax drag, inflation purchasing power, CD ladder strategies, early withdrawal penalties, and CD vs HYSA comparisons.",
+    "Calculate CD maturity value, interest, APY, after-tax growth, inflation-adjusted value, early-withdrawal penalties, CD ladder results and CD vs HYSA comparisons.",
   keywords: [
-    "CD Calculator",
-    "Certificate of Deposit Calculator",
-    "CD Interest Calculator",
-    "CD APY Calculator",
-    "CD Ladder Calculator",
-    "CD Early Withdrawal Penalty Calculator",
-    "Best CD Rates Calculator",
-    "CD vs High Yield Savings Calculator",
-    "Compound Interest CD Calculator",
-    "Certificate of Deposit Return Calculator",
+    "CD calculator",
+    "certificate of deposit calculator",
+    "CD interest calculator",
+    "CD maturity calculator",
+    "CD APY calculator",
+    "CD earnings calculator",
+    "CD growth calculator",
+    "CD ladder calculator",
+    "CD early withdrawal penalty calculator",
+    "CD vs HYSA calculator",
+    "CD tax calculator",
+    "CD break-even calculator",
+    "CD goal calculator",
+    "CD rate comparison calculator",
   ],
   openGraph: {
-    title: "CD Calculator — Certificate of Deposit Interest & APY Growth",
+    title: "CD Calculator — Maturity Value, Interest, APY, Tax & CD Ladder",
     description:
-      "Model fixed CD earnings, multi-tier rolling ladders, early withdrawal break-even timelines, and inflation/tax drag. Includes dynamic compounding area charts and month-by-month schedules.",
+      "Calculate CD maturity value, interest, APY, after-tax growth, inflation-adjusted value, early-withdrawal penalties, CD ladder results and CD vs HYSA comparisons.",
     type: "website",
+    url: "https://calculator-platform.com/calculators/cd-calculator",
+  },
+  alternates: {
+    canonical: "/calculators/cd-calculator",
   },
 };
 
