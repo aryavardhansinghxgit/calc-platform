@@ -14,20 +14,7 @@ export default function PaymentCalculatorPage() {
     description: payment_calculatorConfig.description,
     slug: payment_calculatorConfig.slug,
     category: payment_calculatorConfig.category,
-    faqs: [
-      {
-        question: "How is my monthly loan payment calculated?",
-        answer: "Monthly loan payments are calculated using standard amortization mathematics factoring in your principal balance, annual interest rate divided by 12, and the total number of monthly payments across the loan term.",
-      },
-      {
-        question: "What is the difference between principal and interest in a loan payment?",
-        answer: "Principal represents the actual borrowed money you are returning to the lender, while interest is the finance charge fee paid to the lender for borrowing those funds.",
-      },
-      {
-        question: "What is an accelerated bi-weekly payment and how does it save money?",
-        answer: "Accelerated bi-weekly payments divide your regular monthly payment in half and charge it every 14 days, resulting in 13 full monthly payments per year instead of 12.",
-      },
-    ],
+    faqs: payment_calculatorConfig.faqs,
   });
 
   const appSchema = {

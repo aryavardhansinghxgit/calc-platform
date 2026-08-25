@@ -76,6 +76,7 @@ import { PensionCalculator } from "./pension/PensionCalculator";
 import { SocialSecurityCalculator } from "./social-security/SocialSecurityCalculator";
 import { AnnuityCalculator } from "./annuity/AnnuityCalculator";
 import { AnnuityPayoutCalculator } from "./annuity-payout/AnnuityPayoutCalculator";
+import { PaymentCalculator } from "./payment/PaymentCalculator";
 import { MarginCalculator } from "./margin/MarginCalculator";
 import { DiscountCalculator } from "./discount/DiscountCalculator";
 import { CommissionCalculator } from "./commission/CommissionCalculator";
@@ -375,6 +376,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isSocialSecurity = definition.id === "social-security" || definition.slug === "social-security-calculator";
   const isAnnuity = definition.id === "annuity" || definition.slug === "annuity-calculator";
   const isAnnuityPayout = definition.id === "annuity-payout" || definition.slug === "annuity-payout-calculator";
+  const isPayment = definition.id === "payment" || definition.id === "payment-calculator" || definition.slug === "payment-calculator";
   const isMargin = definition.id === "margin" || definition.slug === "margin-calculator";
   const isDiscount = definition.id === "discount" || definition.slug === "discount-calculator";
   const isCommission = definition.id === "commission" || definition.slug === "commission-calculator";
@@ -481,7 +483,6 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isMarriageTax = idLower === "marriage-tax-calculator" || slugLower === "marriage-tax-calculator" || idLower === "marriage-tax" || slugLower === "marriage-tax";
   const isEstateTax = idLower === "estate-tax-calculator" || slugLower === "estate-tax-calculator" || idLower === "estate-tax" || slugLower === "estate-tax";
   const isTakeHomePay = idLower === "take-home-pay-calculator" || slugLower === "take-home-pay-calculator" || idLower === "take-home-pay" || slugLower === "take-home-pay";
-  const isPayment = idLower === "payment-calculator" || slugLower === "payment-calculator" || idLower === "payment" || slugLower === "payment";
   const isRepaymentMatch = idLower === "repayment-calculator" || slugLower === "repayment-calculator" || idLower === "repayment" || slugLower === "repayment";
   const isCurrency = idLower === "currency-calculator" || slugLower === "currency-calculator" || idLower === "currency" || slugLower === "currency";
   const isInflation = idLower === "inflation-calculator" || slugLower === "inflation-calculator" || idLower === "inflation" || slugLower === "inflation";
@@ -698,6 +699,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             <AnnuityPayoutCalculator />
           ) : isAnnuity ? (
             <AnnuityCalculator />
+          ) : isPayment ? (
+            <PaymentCalculator />
           ) : isSocialSecurity ? (
             <SocialSecurityCalculator />
           ) : isPension ? (
@@ -921,8 +924,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       </div>
 
 
-      {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators (Suppressed for calculators with dedicated full content suites like Annuity, Present Value, Future Value, 401(k), and Roth IRA) */}
-      {!isFutureValue && !isPresentValue && !isAnnuity && !isFourZeroOneK && !isRothIra && (
+      {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators (Suppressed for calculators with dedicated full content suites like Payment, Annuity, Present Value, Future Value, 401(k), and Roth IRA) */}
+      {!isFutureValue && !isPresentValue && !isAnnuity && !isPayment && !isFourZeroOneK && !isRothIra && (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-8 shadow-xs text-slate-900 dark:text-slate-100">
           {/* Formula & Calculation Method */}
           {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDate && !isHours && !isScientific && !isFraction && !isStatistics && (

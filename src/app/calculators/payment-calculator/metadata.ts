@@ -3,33 +3,36 @@ import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const payment_calculatorMetadata: Metadata = {
   ...generateCalculatorMetadata({
-    title: "Payment Calculator: Calculate Monthly Loan Payments & Amortization",
+    title: "Payment Calculator — Monthly Loan Payment, Amortization & Payoff",
     description:
-      "Calculate monthly loan payments, multi-frequency bi-weekly savings, payoff schedules, and interest with our free payment calculator.",
+      "Calculate monthly loan payments, total interest, amortization schedules, payoff time, affordable borrowing, biweekly savings, extra-payment savings and fee-adjusted borrowing costs.",
     slug: "payment-calculator",
   }),
   keywords: [
-    "payment calculator",
+    "Payment Calculator",
     "loan payment calculator",
     "monthly payment calculator",
-    "calculate loan payments",
+    "installment loan calculator",
+    "loan amortization calculator",
+    "payment schedule calculator",
+    "loan payment formula",
+    "how to calculate monthly loan payment",
+    "loan affordability calculator",
+    "maximum loan calculator",
+    "extra payment loan calculator",
+    "biweekly payment calculator",
     "loan payoff calculator",
-    "amortization schedule calculator",
-    "biweekly loan payment calculator",
-    "car loan payment calculator",
-    "personal loan payment calculator",
-    "how to calculate monthly loan payments",
   ],
   openGraph: {
-    title: "Payment Calculator: Calculate Monthly Loan Payments & Amortization",
+    title: "Payment Calculator — Monthly Loan Payment, Amortization & Payoff",
     description:
-      "Calculate monthly loan payments, multi-frequency bi-weekly savings, payoff schedules, and interest.",
+      "Calculate monthly loan payments, total interest, amortization schedules, payoff time, affordable borrowing, biweekly savings, extra-payment savings and fee-adjusted borrowing costs.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Payment Calculator: Calculate Monthly Loan Payments & Amortization",
+    title: "Payment Calculator — Monthly Loan Payment, Amortization & Payoff",
     description:
-      "Calculate monthly loan payments, multi-frequency bi-weekly savings, payoff schedules, and interest.",
+      "Calculate monthly loan payments, total interest, amortization schedules, payoff time, affordable borrowing, biweekly savings, extra-payment savings and fee-adjusted borrowing costs.",
   },
 };

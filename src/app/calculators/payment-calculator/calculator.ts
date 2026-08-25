@@ -155,12 +155,32 @@ export function calculateFixedTermPayment(inputs: FixedTermPaymentInputs): Fixed
   const interestSavedWithExtra = Math.max(0, baselineTotalInterest - totalInterestPaid);
   const monthsShavedOff = Math.max(0, totalMonths - month);
 
-  // True APR calculation accounting for upfront closing costs / discount points
-  const netLoanProceeds = Math.max(1, principal - (inputs.upfrontFees || 0));
+  // True Actuarial APR calculation accounting for upfront closing costs / discount points
   let trueAprPercent = inputs.interestRate || 0;
   if (inputs.upfrontFees && inputs.upfrontFees > 0) {
-    // Approximate APR
-    trueAprPercent = ((totalInterestPaid + inputs.upfrontFees) / (principal * (totalMonths / 12))) * 100;
+    const netProceeds = Math.max(1, principal - inputs.upfrontFees);
+    let r = Math.max(0.0001, (annualRate > 0 ? annualRate : 0.06) / 12);
+    for (let iter = 0; iter < 50; iter++) {
+      const pv = baseMonthlyPayment * ((1 - Math.pow(1 + r, -totalMonths)) / r);
+      const diff = pv - netProceeds;
+      if (Math.abs(diff) < 1e-6) break;
+      const dpv =
+        baseMonthlyPayment *
+        ((totalMonths * Math.pow(1 + r, -totalMonths - 1)) / r -
+          (1 - Math.pow(1 + r, -totalMonths)) / (r * r));
+      if (Math.abs(dpv) < 1e-12) break;
+      const nextR = r - diff / dpv;
+      if (nextR <= 0) {
+        r = r / 2;
+      } else {
+        if (Math.abs(nextR - r) < 1e-9) {
+          r = nextR;
+          break;
+        }
+        r = nextR;
+      }
+    }
+    trueAprPercent = r * 12 * 100;
   }
 
   return {

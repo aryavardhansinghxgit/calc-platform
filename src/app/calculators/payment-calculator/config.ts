@@ -2,6 +2,7 @@ import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateFixedTermPayment } from "./calculator";
 import { PaymentCalculator } from "@/components/calculator/payment/PaymentCalculator";
 import { PaymentContent } from "@/components/calculator/payment/PaymentContent";
+import { paymentFaqs } from "./faq";
 
 export const payment_calculatorConfig: CalculatorModuleDefinition = {
   id: "payment-calculator",
@@ -26,6 +27,7 @@ export const payment_calculatorConfig: CalculatorModuleDefinition = {
     "how to calculate monthly loan payments",
   ],
   priority: 1,
+  faqs: paymentFaqs,
   relatedCalculators: [
     "loan-calculator",
     "mortgage-calculator",
