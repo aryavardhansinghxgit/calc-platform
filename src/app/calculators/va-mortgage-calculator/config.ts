@@ -6,32 +6,41 @@ import { VAMortgageContent } from "@/components/calculator/va/VAMortgageContent"
 
 export const va_mortgageConfig: CalculatorModuleDefinition = {
   id: "va-mortgage-calculator",
-  title: "VA Mortgage Calculator — Funding Fee, Entitlement & Payments",
+  title: "VA Mortgage Calculator - Payment, Funding Fee, Entitlement & Refinance",
   slug: "va-mortgage-calculator",
   category: "Finance",
   subcategory: "Mortgage and Real Estate",
   description:
-    "Free VA Mortgage Calculator with 2026 Funding Fee logic & Amortization. Calculate monthly PITI payments, 0% down entitlement, VA vs Conventional vs FHA comparison, bi-weekly savings, and IRRRL refinancing.",
+    "Estimate VA mortgage payments, funding fees, PITI, entitlement, bi-weekly savings, extra-payment payoff, IRRRL refinance savings and VA vs FHA/Conventional scenarios.",
   iconName: "Award",
   featured: true,
   keywords: [
-    "va mortgage calculator",
-    "va home loan payment calculator",
-    "va funding fee calculator 2026",
-    "va loan amortization schedule",
-    "va loan limit calculator",
-    "va vs conventional loan calculator",
-    "zero down va mortgage calculator"
+    "VA mortgage calculator",
+    "VA loan calculator",
+    "VA mortgage payment calculator",
+    "VA funding fee calculator",
+    "VA home loan calculator",
+    "VA PITI calculator",
+    "VA entitlement calculator",
+    "VA funding fee 2026",
+    "VA vs FHA vs conventional calculator",
+    "VA biweekly mortgage calculator",
+    "VA extra payment calculator",
+    "VA IRRRL calculator",
+    "VA refinance calculator",
   ],
   priority: 1,
   relatedCalculators: [
     "mortgage-calculator",
     "fha-loan-calculator",
     "dti-calculator",
-    "house-affordability-calculator"
+    "house-affordability-calculator",
+    "down-payment-calculator",
+    "refinance-calculator",
+    "amortization-calculator",
   ],
   formulaDescription:
-    "Base Loan = Home Price - Down Payment. Financed Loan = Base Loan + VA Funding Fee. Monthly PITI = P&I + Property Tax + Hazard Insurance + HOA (0% Monthly Mortgage Insurance).",
+    "Base Loan = Home Price - Down Payment. Financed Loan = Base Loan + VA Funding Fee (when financed). Monthly P&I = P × [r(1+r)^n] / [(1+r)^n - 1]. Total Monthly PITI = P&I + Property Taxes/12 + Insurance/12 + HOA ($0 Monthly PMI).",
   faqs: va_mortgageFaqs,
   inputs: [
     {

@@ -5,53 +5,63 @@ export interface VAFAQItem {
 
 export const va_mortgageFaqs: VAFAQItem[] = [
   {
-    question: "Is there a maximum limit on a VA loan?",
+    question: "What is a VA loan and who can use one?",
     answer:
-      "For eligible veterans and active-duty service members with full entitlement, there is NO maximum VA loan limit. You can borrow as much as a lender will approve with $0 down payment. Loan limits only apply if you have remaining partial entitlement from a previous active VA loan.",
+      "A VA-backed mortgage is designed for eligible borrowers who meet applicable service, entitlement and other requirements. The calculator estimates payment scenarios but does not issue a Certificate of Eligibility or guarantee approval.",
   },
   {
-    question: "Can the VA funding fee be refunded or waived?",
+    question: "How does a VA mortgage payment get calculated?",
     answer:
-      "The VA funding fee is automatically waived (0%) for veterans receiving VA disability compensation (10% rating or higher), active-duty Purple Heart recipients, and surviving spouses of veterans who died in service or from service-connected disabilities. If a disability rating is awarded retroactively to the loan closing date, the fee can be refunded.",
+      "The calculator uses standard fixed-rate amortization for principal and interest, then adds property taxes, homeowners insurance and HOA. The funding fee can change the financed balance when it is financed.",
   },
   {
-    question: "Does a VA loan require monthly mortgage insurance (PMI)?",
+    question: "How much is the VA funding fee?",
     answer:
-      "No! Unlike FHA loans (which require permanent MIP) or Conventional loans (which require PMI with under 20% down), VA loans NEVER charge ongoing monthly mortgage insurance. This saves VA borrowers hundreds of dollars each month.",
+      "The calculator uses different rates based on down-payment tier and whether the borrower has used a VA loan before. Its current encoded model uses 2.15% and 3.30% for the under-5%-down first-use and subsequent-use scenarios, with lower rates at 5% and 10% down.",
   },
   {
-    question: "Can you have two active VA loans at the same time?",
+    question: "Can the VA funding fee be financed into the loan?",
     answer:
-      "Yes. If you relocate due to Permanent Change of Station (PCS) orders or family expansion without selling your previous VA-financed home, you can use your remaining secondary entitlement to acquire a second home with $0 or low down payment.",
+      "Yes. When financing is selected, the fee is added to the base loan. Paying the fee in cash keeps the financed balance lower but increases upfront cash.",
   },
   {
-    question: "How is the VA funding fee calculated for first-time vs. subsequent use?",
+    question: "Who may qualify for a VA funding-fee exemption?",
     answer:
-      "For purchase loans with $0 down payment, the VA funding fee is 2.15% for first-time use and 3.30% for subsequent use. If you put down 5% to 9.99%, the fee drops to 1.50%. For down payments of 10% or more, the fee drops to 1.25% regardless of prior usage.",
+      "The calculator includes an exemption state that sets the modeled fee to zero. Actual exemption eligibility depends on the applicable VA determination and documentation.",
   },
   {
-    question: "Can the VA funding fee be financed into the loan balance?",
+    question: "Does a VA loan require monthly PMI?",
     answer:
-      "Yes. Over 90% of VA borrowers finance the funding fee directly into their total loan balance rather than paying it upfront in cash at closing.",
+      "The calculator's VA model uses $0 monthly PMI. VA financing uses a separate funding-fee structure rather than the monthly mortgage-insurance structure used by FHA and many conventional loans.",
   },
   {
-    question: "What is a Certificate of Eligibility (COE) and how do I get it?",
+    question: "How does first-time versus subsequent VA use affect the funding fee?",
     answer:
-      "A Certificate of Eligibility (COE) is an official VA document verifying to lenders that you satisfy military service requirements for a VA-backed home loan. Lenders can pull your COE electronically in minutes using the VA WebLGY system.",
+      "Under the current calculator assumptions, the under-5%-down rate is 2.15% for first use and 3.30% for subsequent use. That difference can change the financed loan and monthly payment.",
   },
   {
-    question: "What is a VA IRRRL Streamline Refinance?",
+    question: "What is VA entitlement and how does remaining entitlement affect borrowing?",
     answer:
-      "The VA Interest Rate Reduction Refinance Loan (IRRRL) is a simplified refinance program allowing existing VA loan holders to lower their interest rate and monthly payment with no home appraisal, minimal documentation, and a reduced 0.5% funding fee.",
+      "The calculator uses a simplified guaranty model based on the county-limit input and prior used entitlement. Actual entitlement should be verified through VA records and a Certificate of Eligibility.",
   },
   {
-    question: "How do seller concessions work on a VA home purchase?",
+    question: "Can you have more than one VA loan at the same time?",
     answer:
-      "VA rules allow sellers to pay all reasonable buyer closing costs plus up to 4% of the purchase price in extra concessions (such as paying off buyer credit cards or funding escrow reserves).",
+      "The calculator's educational model discusses additional VA financing through remaining entitlement. Actual simultaneous VA loans depend on entitlement, occupancy, lender underwriting and applicable VA rules.",
   },
   {
-    question: "How does paying bi-weekly shorten a VA loan term?",
+    question: "What is a VA IRRRL refinance?",
     answer:
-      "By making half-payments every two weeks (26 half-payments per year), you effectively make 13 full monthly payments each year instead of 12. On a 30-year VA loan, this extra payment shaves 4 to 5 years off your term and saves tens of thousands in interest.",
+      "An IRRRL is a VA interest-rate reduction refinance scenario. The calculator estimates payment savings, funding fee, closing costs, break-even time and five-year net savings under selected assumptions.",
+  },
+  {
+    question: "How does paying bi-weekly or extra payments affect a VA mortgage?",
+    answer:
+      "The calculator models 26 bi-weekly half-payments per year and can also test fixed extra monthly principal. Earlier principal reduction generally lowers modeled interest and shortens payoff.",
+  },
+  {
+    question: "How does a VA loan compare with FHA or Conventional financing?",
+    answer:
+      "The calculator compares modeled payment structures, mortgage insurance and upfront costs under selected assumptions. The result is scenario-specific; no program is universally cheaper or better.",
   },
 ];

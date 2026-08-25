@@ -1,28 +1,33 @@
 import { Metadata } from "next";
 
 export const va_mortgageMetadata: Metadata = {
-  title: "VA Mortgage Calculator — Funding Fee, Entitlement & Payments",
+  title: "VA Mortgage Calculator - Payment, Funding Fee, Entitlement & Refinance",
   description:
-    "Free VA Mortgage Calculator with 2026 Funding Fee logic & Amortization. Calculate monthly PITI payments, 0% down entitlement, VA vs Conventional vs FHA comparison, bi-weekly savings, and IRRRL refinancing.",
+    "Estimate VA mortgage payments, funding fees, PITI, entitlement, bi-weekly savings, extra-payment payoff, IRRRL refinance savings and VA vs FHA/Conventional scenarios.",
   keywords: [
-    "va mortgage calculator",
-    "va home loan payment calculator",
-    "va funding fee calculator 2026",
-    "va loan amortization schedule",
-    "va loan limit calculator",
-    "va vs conventional loan calculator",
-    "zero down va mortgage calculator",
-    "va certificate of eligibility loan limits"
+    "VA mortgage calculator",
+    "VA loan calculator",
+    "VA mortgage payment calculator",
+    "VA funding fee calculator",
+    "VA home loan calculator",
+    "VA PITI calculator",
+    "VA entitlement calculator",
+    "VA funding fee 2026",
+    "VA vs FHA vs conventional calculator",
+    "VA biweekly mortgage calculator",
+    "VA extra payment calculator",
+    "VA IRRRL calculator",
+    "VA refinance calculator",
   ],
   authors: [{ name: "Calculator Platform Military Mortgage Analytics Team" }],
   openGraph: {
-    title: "VA Mortgage Calculator — Military Home Loan Suite",
+    title: "VA Mortgage Calculator - Payment, Funding Fee, Entitlement & Refinance",
     description:
-      "Calculate 0% down VA mortgage payments, VA funding fees with disability exemptions, entitlement purchasing power, and 3-way loan comparisons.",
+      "Estimate VA mortgage payments, funding fees, PITI, entitlement, bi-weekly savings, extra-payment payoff, IRRRL refinance savings and VA vs FHA/Conventional scenarios.",
     type: "website",
     url: "https://calculator-platform.com/calculators/va-mortgage-calculator",
   },
   alternates: {
-    canonical: "https://calculator-platform.com/calculators/va-mortgage-calculator",
+    canonical: "/calculators/va-mortgage-calculator",
   },
 };
