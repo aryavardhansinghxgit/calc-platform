@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Present Value Calculator – Discounted Cash Flow & NPV Model",
+    title: "Present Value Calculator — PV, Annuity, NPV & Discounted Cash Flow",
     description:
-      "Free advanced Present Value Calculator. Calculate present value of future lump sums, annuities, growing cash flows, NPV, and discount rate sensitivity analysis.",
+      "Calculate present value of future lump sums and recurring cash flows, compare annuities, evaluate NPV, test discount-rate sensitivity, and understand the time value of money.",
     slug: PRESENT_VALUE_CALCULATOR.slug,
   });
 }

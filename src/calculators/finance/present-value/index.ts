@@ -1,14 +1,15 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculatePresentValue } from "@/lib/calculator-engine/formulas/present-value";
+import { present_valueFaqs } from "./faq";
 
 export const PRESENT_VALUE_CALCULATOR: CalculatorModuleDefinition = {
   id: "present-value",
-  title: "Present Value Calculator – Discounted Cash Flow & NPV Model",
+  title: "Present Value Calculator — PV, Annuity, NPV & Discounted Cash Flow",
   slug: "present-value-calculator",
   category: "Finance",
   subcategory: "Investment",
   description:
-    "Calculate the Present Value (PV) of future lump sums, periodic annuities, growing cash flows, and Net Present Value (NPV) with discount rate sensitivity analysis.",
+    "Calculate present value of future lump sums and recurring cash flows, compare annuities, evaluate NPV, test discount-rate sensitivity, and understand the time value of money.",
   iconName: "DollarSign",
   featured: true,
   tags: [
@@ -24,28 +25,7 @@ export const PRESENT_VALUE_CALCULATOR: CalculatorModuleDefinition = {
     "annuity due",
   ],
   formulaDescription: "PV = FV / (1 + r/n)^(n×t) + PMT × [1 - (1 + r/n)^(-n×t)] / (r/n)",
-  faqs: [
-    {
-      question: "What is Present Value (PV)?",
-      answer:
-        "Present Value (PV) is the current worth of a future sum of money or stream of cash flows, given a specified discount rate of return.",
-    },
-    {
-      question: "How is Present Value calculated?",
-      answer:
-        "For a lump sum, PV = FV / (1 + r/n)^(n×t). For periodic deposits, annuity formulas account for recurring cash flows discounted over time.",
-    },
-    {
-      question: "What is the difference between Present Value and Future Value?",
-      answer:
-        "Future Value (FV) calculates what today's money will compound into in the future. Present Value (PV) discounts future money back to today's purchasing power.",
-    },
-    {
-      question: "What is Net Present Value (NPV)?",
-      answer:
-        "Net Present Value (NPV) is the sum of discounted future cash inflows minus initial capital outlays. A positive NPV indicates a profitable investment.",
-    },
-  ],
+  faqs: present_valueFaqs,
   inputs: [
     { name: "futureValue", label: "Future Value (FV)", type: "currency", defaultValue: 50000, unit: "$", min: 0, max: 10000000, step: 1000 },
     { name: "periodicPayment", label: "Periodic Payment (PMT)", type: "currency", defaultValue: 500, unit: "$", min: 0, max: 100000, step: 50 },
