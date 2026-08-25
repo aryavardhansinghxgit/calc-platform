@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Annuity Calculator – Growth, Accumulation & Target Planner",
+    title: "Annuity Calculator — Growth, Accumulation, Annuity Due & Target Planner",
     description:
-      "Free Annuity Calculator. Calculate accumulation growth for Ordinary Annuities and Annuities Due. Features compounding frequencies, Target Balance Planner, 4-plan scenario comparison, Recharts dashboards, and downloadable annual/monthly schedules.",
+      "Calculate annuity growth, compare ordinary and due timing, solve contributions needed for a target balance, model monthly or annual deposits, compare scenarios, and see inflation-adjusted results.",
     slug: ANNUITY_CALCULATOR.slug,
   });
 }

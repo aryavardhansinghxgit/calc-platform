@@ -921,8 +921,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       </div>
 
 
-      {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators (Suppressed for calculators with dedicated full content suites like Present Value, Future Value, 401(k), and Roth IRA) */}
-      {!isFutureValue && !isPresentValue && !isFourZeroOneK && !isRothIra && (
+      {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators (Suppressed for calculators with dedicated full content suites like Annuity, Present Value, Future Value, 401(k), and Roth IRA) */}
+      {!isFutureValue && !isPresentValue && !isAnnuity && !isFourZeroOneK && !isRothIra && (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-8 shadow-xs text-slate-900 dark:text-slate-100">
           {/* Formula & Calculation Method */}
           {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDate && !isHours && !isScientific && !isFraction && !isStatistics && (

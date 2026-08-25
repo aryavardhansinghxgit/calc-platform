@@ -1,14 +1,15 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateAnnuity } from "@/lib/calculator-engine/formulas/annuity";
+import { annuityFaqs } from "./faq";
 
 export const ANNUITY_CALCULATOR: CalculatorModuleDefinition = {
   id: "annuity",
-  title: "Annuity Calculator – Growth, Accumulation & Target Planner",
+  title: "Annuity Calculator — Growth, Accumulation, Annuity Due & Target Planner",
   slug: "annuity-calculator",
   category: "Finance",
   subcategory: "Retirement",
   description:
-    "Free Annuity Calculator. Calculate accumulation growth for Ordinary Annuities and Annuities Due. Features compounding frequencies, Target Balance Planner, 4-plan scenario comparison, Recharts dashboards, and downloadable annual/monthly schedules.",
+    "Calculate annuity growth, compare ordinary and due timing, solve contributions needed for a target balance, model monthly or annual deposits, compare scenarios, and see inflation-adjusted results.",
   iconName: "Shield",
   featured: true,
   tags: [
@@ -22,18 +23,7 @@ export const ANNUITY_CALCULATOR: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Annuity Due: FV = P(1+r)^n + PMT × [((1+r)^n - 1) / r] × (1+r). Ordinary Annuity: FV = P(1+r)^n + PMT × [((1+r)^n - 1) / r].",
-  faqs: [
-    {
-      question: "What is the difference between an Ordinary Annuity and an Annuity Due?",
-      answer:
-        "In an Ordinary Annuity, contributions are made at the end of each period, so the first deposit earns no interest in the first period. In an Annuity Due, contributions are made at the beginning of each period, earning interest for the entire period and producing a higher final balance.",
-    },
-    {
-      question: "How does compounding frequency impact annuity growth?",
-      answer:
-        "More frequent compounding (such as daily or monthly instead of annual) allows earned interest to generate its own returns faster, accelerating exponential compound growth over long time horizons.",
-    },
-  ],
+  faqs: annuityFaqs,
   inputs: [
     { name: "startingPrincipal", label: "Starting Principal ($)", type: "currency", defaultValue: 20000, unit: "$", min: 0, max: 10000000, step: 5000 },
     { name: "annualContribution", label: "Annual Contribution ($)", type: "currency", defaultValue: 10000, unit: "$", min: 0, max: 500000, step: 1000 },
