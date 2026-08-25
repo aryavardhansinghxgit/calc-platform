@@ -1,29 +1,31 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateHistoricalInflation } from "./calculator";
+import { inflationFaqs } from "./faq";
 import { InflationCalculator } from "@/components/calculator/inflation/InflationCalculator";
 import { InflationContent } from "@/components/calculator/inflation/InflationContent";
 
 export const inflation_calculatorConfig: CalculatorModuleDefinition = {
   id: "inflation-calculator",
-  title: "Inflation Calculator — CPI Purchasing Power & Future Value Suite",
+  title: "Inflation Calculator — CPI, Purchasing Power, Future Inflation & Real Returns",
   slug: "inflation-calculator",
   category: "Finance",
   subcategory: "Others",
   description:
-    "Calculate historical purchasing power using US BLS CPI-U data from 1913 to present, project future inflation decay, adjust real wages, and model real investment returns.",
+    "Calculate historical CPI purchasing power, future inflation, salary-adjusted value, real investment returns, personal inflation and purchasing-power loss.",
   iconName: "TrendingUp",
   featured: true,
   keywords: [
     "inflation calculator",
-    "cpi inflation calculator",
+    "CPI inflation calculator",
     "purchasing power calculator",
-    "us inflation calculator 1913 to present",
-    "future value inflation calculator",
     "historical inflation calculator",
-    "calculate inflation rate",
-    "real value of dollar calculator",
-    "cost of living inflation calculator",
-    "cumulative inflation rate calculator",
+    "future inflation calculator",
+    "inflation-adjusted salary calculator",
+    "real return calculator",
+    "inflation impact calculator",
+    "CPI calculator",
+    "salary inflation calculator",
+    "personal inflation calculator",
   ],
   priority: 1,
   relatedCalculators: [
@@ -37,6 +39,7 @@ export const inflation_calculatorConfig: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Target Value = Starting Amount × (Target CPI / Start CPI), where CPI is the official Bureau of Labor Statistics Consumer Price Index for All Urban Consumers (CPI-U).",
+  faqs: inflationFaqs,
   inputs: [
     {
       name: "amount",

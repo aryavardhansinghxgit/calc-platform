@@ -14,20 +14,7 @@ export default function InflationCalculatorPage() {
     description: inflation_calculatorConfig.description,
     slug: inflation_calculatorConfig.slug,
     category: inflation_calculatorConfig.category,
-    faqs: [
-      {
-        question: "How does the inflation calculator use the Consumer Price Index (CPI) to calculate dollar purchasing power?",
-        answer: "The calculator computes the ratio between target period CPI and baseline CPI: Target Value = Amount × (Target CPI / Start CPI).",
-      },
-      {
-        question: "What is the difference between headline CPI and Core CPI?",
-        answer: "Headline CPI includes all consumer items, while Core CPI excludes volatile food and energy components to identify underlying inflation trends.",
-      },
-      {
-        question: "What is the Rule of 72 for inflation?",
-        answer: "The Rule of 72 estimates how many years it takes for money to lose half its purchasing power: Years to Halve = 72 / Annual Inflation Rate (%).",
-      },
-    ],
+    faqs: inflation_calculatorConfig.faqs,
   });
 
   const appSchema = {
@@ -80,10 +67,13 @@ export default function InflationCalculatorPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemas) }}
-      />
+      {schemas.map((schema, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(appSchema) }}

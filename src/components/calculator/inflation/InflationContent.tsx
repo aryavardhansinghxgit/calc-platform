@@ -1,244 +1,311 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
+import { ShieldCheck, TrendingUp, Info } from "lucide-react";
 
 export function InflationContent() {
   return (
-    <div className="space-y-10 text-black dark:text-slate-100 font-medium leading-relaxed">
-      {/* 1. WHAT IS INFLATION */}
-      <section className="space-y-3">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
-          1. What is Inflation? (Definitions &amp; Purchasing Power Erosion)
-        </h2>
-        <p className="text-sm leading-relaxed text-black dark:text-slate-100">
-          <strong>Inflation</strong> is the quantitative economic measure of the rate at which the aggregate price level of a standardized basket of consumer goods and services in an economy increases over a given time horizon.
+    <div className="space-y-12 text-slate-800 dark:text-slate-200 font-medium leading-relaxed max-w-4xl mx-auto">
+      {/* 1. H1 TITLE & INTRO */}
+      <div className="border-b border-slate-200 dark:border-slate-800 pb-6 space-y-3">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          Inflation Calculator
+        </h1>
+        <p className="text-base text-slate-600 dark:text-slate-400 leading-normal font-normal">
+          Calculate historical CPI purchasing power, future inflation projections, salary-adjusted values, real investment returns (Fisher Equation), personal lifestyle basket inflation, and cash purchasing-power decay.
         </p>
-        <p className="text-sm leading-relaxed text-black dark:text-slate-100">
-          Because currency notes possess no intrinsic physical value beyond legal sovereign decree (fiat), as general price levels rise, each unit of currency buys a progressively smaller quantity of real goods. Inflation is fundamentally the <em>inverse reciprocal of currency purchasing power</em>.
+      </div>
+
+      {/* 2. WHAT IS AN INFLATION CALCULATOR? */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          1. What Is an Inflation Calculator?
+        </h2>
+        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          An inflation calculator estimates how the purchasing power of money changes over time as the general price level changes. Depending on the mode, the calculator can answer several distinct financial questions:
+        </p>
+        <ul className="list-disc list-inside space-y-1.5 text-sm text-slate-700 dark:text-slate-300 pl-2">
+          <li>How much would a past dollar amount be worth in today&apos;s purchasing power?</li>
+          <li>How much will today&apos;s money need to grow to buy the identical basket of goods in the future?</li>
+          <li>What would today&apos;s money have been worth under a constant historical flat-rate inflation assumption?</li>
+          <li>Did my salary increase faster or slower than cumulative inflation?</li>
+          <li>What is my investment&apos;s real rate of return after accounting for inflation and tax drag?</li>
+          <li>How does inflation affect my specific household spending pattern?</li>
+        </ul>
+        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          The historical CPI mode uses an empirical Consumer Price Index (CPI-U) comparison, while the forward and backward flat-rate modes use a user-selected annual rate assumption. For broader multi-year wealth accumulation, pair this tool with the{" "}
+          <Link href="/calculators/future-value-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            Future Value Calculator
+          </Link>{" "}
+          or the{" "}
+          <Link href="/calculators/present-value-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            Present Value Calculator
+          </Link>.
         </p>
       </section>
 
-      {/* 2. THE THREE MAIN TYPES */}
+      {/* 3. WHAT THIS INFLATION CALCULATOR CAN DO */}
       <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
-          2. The Three Primary Macroeconomic Causes of Inflation
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          2. What This Inflation Calculator Can Do
         </h2>
-        <div className="space-y-3 text-xs font-medium">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              1. Demand-Pull Inflation (&quot;Too Much Money Chasing Too Few Goods&quot;)
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              Occurs when aggregate economic demand for goods and services outpaces an economy&apos;s productive capacity. During periods of rapid fiscal stimulus, low interest rates, or consumer credit expansion, buyers compete vigorously for fixed supply, bidding up market equilibrium prices.
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Historical CPI Purchasing Power</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Compares dollar purchasing power across any two historical periods from 1913 through 2026 using official BLS CPI-U data.
             </p>
           </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              2. Cost-Push Inflation (Supply-Side Disruptions &amp; Commodity Spikes)
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              Occurs when aggregate supply decreases due to sharp increases in the costs of production inputs—such as crude oil shocks, agricultural fertilizer shortages, or international maritime supply chain bottlenecks. Businesses pass these elevated production costs directly onto consumers.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Forward Future Inflation</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Projects future costs and calculates the eroding real purchasing power of uninvested cash under compound inflation.
             </p>
           </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              3. Built-In Inflation (The Wage-Price Spiral)
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              Driven by circular adaptive expectations. When workers anticipate ongoing price inflation, they demand higher nominal wages to preserve their living standards. Employers pay these higher wages and subsequently raise product retail prices to maintain corporate operating margins, perpetuating a continuous upward spiral.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Backward Flat-Rate Purchasing Power</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Determines what today&apos;s money would have represented in past equivalent purchasing power under a constant annual rate.
+            </p>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Real Wage &amp; Salary Adjustment</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Tests whether nominal pay raises outpaced inflation by converting past compensation into current real dollars.
+            </p>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Real Rate of Return (Fisher Equation)</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Separates nominal portfolio returns from tax drag and inflation drag to isolate real purchasing-power wealth creation.
+            </p>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Personal Lifestyle Basket Estimator</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Applies category-specific inflation rates to custom household budget weights (housing, food, energy, healthcare).
             </p>
           </div>
         </div>
       </section>
 
-      {/* 3. QUANTITY THEORY OF MONEY */}
+      {/* 4. HISTORICAL CPI PURCHASING POWER */}
       <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
-          3. Monetary Policy &amp; The Equation of Exchange ($MV = PY$)
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          3. Historical CPI Purchasing Power Baseline
         </h2>
-        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2 text-xs font-medium">
-          <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-            The Classical Quantity Theory of Money
-          </h3>
-          <p className="text-black dark:text-slate-100">
-            Monetarist economic theory (pioneered by Milton Friedman) establishes that inflation is ultimately a monetary phenomenon dictated by the <strong>Equation of Exchange</strong>:
-          </p>
-          <div className="p-2.5 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 font-mono text-center font-bold text-sm text-black dark:text-slate-100">
-            M &times; V = P &times; Y
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          The historical CPI mode uses the official Bureau of Labor Statistics (BLS) Consumer Price Index for All Urban Consumers (CPI-U) dataset:
+        </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>{"Target Amount = Start Amount × (Target CPI / Start CPI)"}</div>
+          <div className="text-[11px] text-slate-500 pt-1">
+            Audited Baseline: $100 in Average 2016 (CPI = 240.007) to July 2026 (CPI = 333.918)
           </div>
-          <p className="text-black dark:text-slate-100">
-            Where <strong>M</strong> is the total Money Supply (e.g. M2), <strong>V</strong> is the Velocity of Money circulation, <strong>P</strong> is the Price Level, and <strong>Y</strong> is Real Economic Output (Real GDP). If central banks expand the money supply ($M$) at a pace exceeding real productivity growth ($Y$) while velocity ($V$) remains stable, the general price level ($P$) must mathematically increase to balance the equation.
-          </p>
+          <div>• Equivalent Purchasing Power: <strong>$139.13</strong></div>
+          <div>• Cumulative Inflation: <strong>+39.13%</strong> {"((333.918 - 240.007) / 240.007 × 100)"}</div>
+          <div>• Annualized Inflation Rate: <strong>3.18% / year</strong> (over 10.54 years)</div>
+          <div>• Cash Purchasing Power Loss: <strong>-28.12%</strong> {"((1 - 240.007 / 333.918) × 100)"}</div>
+        </div>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          Notice that cumulative inflation (+39.13%) and purchasing-power loss (-28.12%) are not identical percentages. A 39.13% price increase corresponds to a 28.12% reduction in what an uninvested dollar can purchase.
+        </p>
+      </section>
+
+      {/* 5. FORWARD FUTURE INFLATION */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          4. Forward Future Inflation &amp; Purchasing Power Decay
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          When projecting into the future, compound inflation increases the future dollar cost of goods while diminishing the purchasing power of cash:
+        </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>{"• Future Cost = Current Amount × (1 + Inflation)^Years"}</div>
+          <div>{"• Cash Purchasing Power = Current Amount ÷ (1 + Inflation)^Years"}</div>
+          <div>• Baseline ($100 @ 3.0%/yr for 10 Years): Future Cost = <strong>$134.39</strong> (+34.4% increase)</div>
+          <div>• Real Purchasing Power of $100 Cash: <strong>$74.41</strong></div>
+        </div>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          The backward flat-rate solver satisfies the exact round-trip invariant:{" "}
+          <span className="font-mono text-xs font-bold">$74.41 × 1.03^10 = $100.00</span>.
+        </p>
+      </section>
+
+      {/* 6. REAL WAGE & SALARY ADJUSTER */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          5. Real Wage &amp; Salary Growth Adjuster
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          A nominal wage increase does not necessarily translate into higher purchasing power if general price levels rose faster during the same period:
+        </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>• Past Salary: $50,000 in 2015 (CPI = 237.017) vs. Current Salary: $75,000 in 2026 (CPI = 333.918)</div>
+          <div>• Past Salary in Today&apos;s Dollars: <strong>$70,442.00</strong> {"($50,000 × 333.918 / 237.017)"}</div>
+          <div>• Nominal Salary Raise: <strong>+$25,000 (+50.0%)</strong></div>
+          <div>• Real Purchasing Power Change: <strong>+$4,558.00 / year</strong></div>
+          <div>• Real Percentage Shift: <strong>+6.5% real raise above inflation</strong></div>
+        </div>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          For detailed monthly paycheck and tax breakdowns, explore the{" "}
+          <Link href="/calculators/salary-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            Salary Calculator
+          </Link>{" "}
+          and the{" "}
+          <Link href="/calculators/take-home-pay-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            Take-Home Paycheck Calculator
+          </Link>.
+        </p>
+      </section>
+
+      {/* 7. REAL RATE OF RETURN (FISHER EQUATION) */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          6. Real Rate of Return &amp; Investment Inflation Drag
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          Nominal investment growth can be deceptive when inflation and capital gains taxes erode wealth. The exact Fisher relationship isolates real purchasing-power growth:
+        </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>{"Real Return = [ (1 + After-Tax Nominal Return) ÷ (1 + Inflation) ] - 1"}</div>
+          <div>• Principal: $100,000 | Nominal Return: 10.0% | Inflation: 3.5% | Tax Rate: 15.0% | Term: 20 Years</div>
+          <div>• Nominal Future Balance (Pre-Tax): <strong>$672,750.00</strong></div>
+          <div>• After-Tax Nominal Return: 10.0% × (1 - 0.15) = <strong>8.50%</strong></div>
+          <div>• Real Annual Return (Fisher): (1.085 / 1.035) - 1 = <strong>4.83% ≈ 4.8% / year</strong></div>
+          <div>• Real Purchasing Power Wealth: <strong>$256,914.00</strong> {"($100,000 × 1.0483^20)"}</div>
+          <div>• Tax Drag Breakdown: <strong>-$161,545.00</strong> | Inflation Drag Breakdown: <strong>-$254,291.00</strong></div>
         </div>
       </section>
 
-      {/* 4. HOW CPI IS MEASURED */}
+      {/* 8. PERSONAL LIFESTYLE BASKET INFLATION */}
       <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
-          4. How the Consumer Price Index (CPI) is Measured by the BLS
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          7. Personal Lifestyle Basket Inflation Estimator
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          Official CPI measures a broad national average. Households spending a larger portion of income on rapidly inflating categories (such as housing or healthcare) experience a different personal inflation rate:
+        </p>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 space-y-1">
+          <div>• Housing (35% @ 4.8%) + Food (20% @ 3.2%) + Energy (10% @ 2.5%)</div>
+          <div>• Transport (15% @ 3.0%) + Healthcare (10% @ 4.2%) + Education (10% @ 4.5%)</div>
+          <div>• <strong>Weighted Personal Inflation Rate: 3.9% / year</strong></div>
+          <div>• Official Headline CPI Benchmark: ~3.0% / year (Lifestyle Variance: <strong>+0.9%</strong>)</div>
+        </div>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          To build an accurate household budget before assigning category weights, use the{" "}
+          <Link href="/calculators/budget-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+            Budget Calculator
+          </Link>.
+        </p>
+      </section>
+
+      {/* 9. MACROECONOMIC CONCEPTS */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          8. Macroeconomic Dynamics: CPI, Core CPI &amp; Causes of Inflation
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-medium">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              CPI-U (All Urban Consumers)
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              The headline index published monthly by the U.S. Bureau of Labor Statistics (BLS). It samples approximately 80,000 price quotes across 8 major spending categories representing ~93% of the U.S. population: Housing (~44%), Transportation (~17%), Food &amp; Beverages (~15%), Medical Care (~8%), Recreation (~6%), Education (~3%), Apparel (~3%), and Other (~4%).
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 className="font-extrabold text-sm text-blue-600">Headline CPI vs. Core CPI</h3>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              <strong>Headline CPI</strong> samples ~80,000 consumer price quotes across 8 major expenditure categories. <strong>Core CPI</strong> strips out volatile food and energy prices to give central banks a clearer picture of underlying structural inflation trends.
             </p>
           </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-2">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              Core CPI (CPILFENS)
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              Excludes volatile Food and Energy components from the calculation. Because oil and agricultural produce fluctuate wildly due to geopolitics and unseasonal weather, central banks utilize Core CPI to gauge underlying structural macroeconomic inflation trends.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 className="font-extrabold text-sm text-blue-600">The Equation of Exchange ($MV = PY$)</h3>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Classical monetary theory establishes that Money Supply ($M$) &times; Velocity ($V$) = Price Level ($P$) &times; Real Output ($Y$). If money supply expands faster than real economic output while velocity remains stable, general price levels rise.
             </p>
           </div>
         </div>
       </section>
 
-      {/* 5. STRATEGIES TO BEAT INFLATION */}
+      {/* 10. INFLATION HEDGES & FIXED DEBT */}
       <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
-          5. Proven Strategies to Protect Wealth Against Inflation Drag
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          9. Inflation Hedges &amp; Fixed-Rate Debt Dynamics
         </h2>
-        <ul className="list-disc list-inside space-y-1.5 text-xs text-black dark:text-slate-100">
-          <li><strong>Equities &amp; Index Funds (S&amp;P 500):</strong> Productive corporations possess pricing power, enabling them to raise product prices to match inflation and deliver historic long-term real returns of 6.5%–7.0% above inflation.</li>
-          <li><strong>Real Estate &amp; Physical Land:</strong> Real property provides dual inflation protection through asset appreciation and periodic rental income increases.</li>
-          <li><strong>Treasury Inflation-Protected Securities (TIPS):</strong> U.S. government bonds whose principal balance adjusts semi-annually in direct tandem with changes in the CPI-U index.</li>
-          <li><strong>Fixed-Rate Long-Term Debt:</strong> Borrowers with fixed 30-year low-interest mortgages repay their fixed nominal debt balances over time using inflated, cheaper future dollars.</li>
-        </ul>
-      </section>
-
-      {/* 6. FAQS (12 FAQS) */}
-      <section className="space-y-4 pt-6 border-t border-slate-200 dark:border-slate-800">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-black dark:text-slate-100 tracking-tight">
-          Frequently Asked Questions (FAQ)
-        </h2>
-        <div className="space-y-3 text-xs leading-relaxed text-black dark:text-slate-100">
-          {/* FAQ 1 */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              1. How does the inflation calculator use the Consumer Price Index (CPI) to calculate dollar purchasing power?
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              The calculator computes the ratio between the target period CPI and start period CPI: Target Value = Amount &times; (Target CPI &divide; Start CPI). This reflects the exact dollar amount required today to match the real purchasing power of the baseline sum.
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Equities, Real Estate &amp; TIPS</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Productive companies possess pricing power, real estate benefits from rent escalation, and TIPS adjust principal directly with CPI-U. For international currency conversions, use our{" "}
+              <Link href="/calculators/currency-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+                Currency Calculator
+              </Link>.
             </p>
           </div>
-
-          {/* FAQ 2 */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              2. What is the difference between headline CPI and Core CPI?
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              Headline CPI tracks all goods in the consumer basket including food and energy. Core CPI strips out food and energy due to their extreme short-term commodity price volatility, providing monetary policymakers with a clearer signal of long-term underlying inflation.
-            </p>
-          </div>
-
-          {/* FAQ 3 */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              3. What is the Rule of 72 and how does it calculate the halving time of purchasing power?
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              The Rule of 72 estimates how many years it takes for cash purchasing power to lose 50% of its real value: Years to Halve = 72 &divide; Annual Inflation Rate (%). For example, at a 3% inflation rate, money loses half its buying power in approximately 24 years (72 &divide; 3 = 24).
-            </p>
-          </div>
-
-          {/* FAQ 4 */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              4. Why is inflation called the &quot;hidden tax&quot; on cash savings?
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              Inflation diminishes the real purchasing power of uninvested currency sitting in cash accounts without requiring an explicit legislative tax bill. Holding $100,000 cash at 4% annual inflation results in a silent $4,000 loss in real economic purchasing power every year.
-            </p>
-          </div>
-
-          {/* FAQ 5 */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              5. What is the difference between inflation, deflation, disinflation, and stagflation?
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              Inflation is rising prices; deflation is falling price levels; disinflation is a slowing rate of positive inflation (e.g. dropping from 8% to 3%); and stagflation is the toxic combination of high inflation coupled with stagnant GDP growth and high unemployment.
-            </p>
-          </div>
-
-          {/* FAQ 6 */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              6. How does the Federal Reserve control inflation through interest rate hikes?
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              By raising the Federal Funds Rate, the central bank increases borrowing costs for mortgages, auto loans, and corporate debt. This slows consumer spending and business capital investment, reducing aggregate demand and cooling price pressures.
-            </p>
-          </div>
-
-          {/* FAQ 7 */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              7. What causes hyperinflation and how is it different from normal inflation?
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              Hyperinflation is defined as price increases exceeding 50% per month. It occurs when a government monetizes extreme deficits by printing excessive quantities of unbacked money, triggering a complete collapse in confidence in the sovereign currency (e.g. Weimar Germany, Zimbabwe).
-            </p>
-          </div>
-
-          {/* FAQ 8 */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              8. How do I calculate if my salary raise kept pace with inflation?
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              Calculate your percentage nominal salary raise and subtract the cumulative CPI inflation percentage over the same period. If your salary rose by 4% while inflation was 6%, your real purchasing power experienced a net 2% decline (a real wage cut).
-            </p>
-          </div>
-
-          {/* FAQ 9 */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              9. What assets historically serve as the best hedge against high inflation?
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              Historically, diversified broad-market equities (S&amp;P 500), real estate properties with adjustable rents, Treasury Inflation-Protected Securities (TIPS), and energy/industrial commodities have provided the most durable inflation protection.
-            </p>
-          </div>
-
-          {/* FAQ 10 */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              10. Why do central banks target a 2% inflation rate instead of 0%?
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              A 2% inflation target provides a safety buffer against economic deflation (which triggers recessionary spending freezes and debt defaults) and allows central banks room to adjust real interest rates during economic downturns.
-            </p>
-          </div>
-
-          {/* FAQ 11 */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              11. What is the Fisher Equation and why does real return matter for investors?
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              The Fisher Equation states that Real Return = (1 + Nominal Return) &divide; (1 + Inflation Rate) &minus; 1. It reveals that an investment yielding 8% nominal return in a 5% inflation environment generates only ~2.86% in true real wealth accumulation.
-            </p>
-          </div>
-
-          {/* FAQ 12 */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 space-y-1.5">
-            <h3 className="font-extrabold text-sm text-black dark:text-slate-100">
-              12. How does inflation affect fixed-rate mortgage borrowers vs lenders?
-            </h3>
-            <p className="text-black dark:text-slate-100">
-              Inflation strongly benefits fixed-rate mortgage borrowers because their monthly payment remains nominal and constant while household wages typically inflate over time, reducing the real economic burden of servicing the debt.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600">Fixed-Rate Mortgages</span>
+            <p className="text-slate-600 dark:text-slate-400 font-normal">
+              Borrowers repay fixed nominal mortgage payments over time with inflated, cheaper future dollars. Model loan obligations with the{" "}
+              <Link href="/calculators/payment-calculator" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+                Payment Calculator
+              </Link>.
             </p>
           </div>
         </div>
+      </section>
+
+      {/* 11. RULE OF 72 */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          10. The Rule of 72 Purchasing Power Halving Heuristic
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          {"The Rule of 72 provides a quick mental approximation for how long it takes cash purchasing power to decline by half: Years to Halve ≈ 72 ÷ Annual Inflation Rate. At 3.0% inflation, purchasing power is halved in approximately 72 ÷ 3 = 24 years. At 6.0% inflation, purchasing power is cut in half in just 12 years."}
+        </p>
+      </section>
+
+      {/* 12. COMMON MISTAKES */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          11. Common Inflation Calculator Mistakes to Avoid
+        </h2>
+        <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 text-xs text-slate-700 dark:text-slate-300">
+          <ul className="space-y-1.5 list-disc list-inside">
+            <li><strong>Treating official national CPI as identical to your household&apos;s inflation:</strong> Spending weights vary significantly between families.</li>
+            <li><strong>Confusing cumulative price increases with purchasing-power loss:</strong> A 50% price increase equals a 33.3% loss in cash buying power.</li>
+            <li><strong>Using a flat future rate as a guaranteed forecast:</strong> Actual inflation rates fluctuate based on economic and monetary cycles.</li>
+            <li><strong>Comparing nominal salary raises without adjusting for inflation:</strong> A 5% raise during 7% inflation is a 1.9% real wage reduction.</li>
+            <li><strong>Evaluating investment returns on a nominal basis alone:</strong> Inflation drag and tax drag substantially reduce real wealth accumulation.</li>
+            <li><strong>Treating the Rule of 72 as an exact formula:</strong> It is a simplified mental heuristic.</li>
+            <li><strong>Assuming central bank interest rate hikes instantly reduce inflation:</strong> Monetary transmission lags and supply factors affect real-world outcomes.</li>
+            <li><strong>Treating stocks, real estate, or TIPS as guaranteed hedges:</strong> Asset returns fluctuate across different market environments.</li>
+            <li><strong>Assuming inflation universally benefits fixed-rate borrowers:</strong> Benefits depend on whether household wages keep pace with inflation.</li>
+            <li><strong>Treating personal basket results as official government CPI data:</strong> Lifestyle baskets are personalized budgeting models.</li>
+          </ul>
+        </div>
+      </section>
+
+      {/* 13. CORE FORMULAS */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
+          12. Core Inflation Formulas Reference
+        </h2>
+        <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 font-mono text-xs text-slate-700 dark:text-slate-300">
+          <div>{"• Historical Purchasing Power: Target Value = Amount × (Target CPI ÷ Start CPI)"}</div>
+          <div>{"• Cumulative Inflation Rate: Cumulative % = ( (Target CPI - Start CPI) ÷ Start CPI ) × 100"}</div>
+          <div>{"• Cash Purchasing Power Loss: Loss % = ( 1 - Start CPI ÷ Target CPI ) × 100"}</div>
+          <div>{"• Future Basket Cost: Future Cost = Current Amount × (1 + Inflation)^Years"}</div>
+          <div>{"• Future Cash Buying Power: Real Value = Current Amount ÷ (1 + Inflation)^Years"}</div>
+          <div>{"• Adjusted Historical Salary: Adjusted Salary = Past Salary × (Current CPI ÷ Past CPI)"}</div>
+          <div>{"• Fisher Real Return: Real Return = [ (1 + After-Tax Nominal Return) ÷ (1 + Inflation) ] - 1"}</div>
+          <div>{"• Personal Lifestyle Inflation: Weighted Rate = Σ ( Category Weight × Category Inflation ) ÷ Total Weight"}</div>
+        </div>
+      </section>
+
+      {/* 14. YMYL AND REGULATORY NOTICE */}
+      <section className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 text-xs text-slate-600 dark:text-slate-400">
+        <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+          <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+          <span>Macroeconomic &amp; Financial Guidance Notice</span>
+        </div>
+        <p>
+          This inflation calculator is an educational mathematical modeling tool. Historical calculations use official Bureau of Labor Statistics (BLS) Consumer Price Index (CPI-U) data. Forward projections, tax drag models, and personal budget estimates represent hypothetical scenarios and do not constitute formal economic forecasts or individualized investment advice.
+        </p>
       </section>
     </div>
   );
