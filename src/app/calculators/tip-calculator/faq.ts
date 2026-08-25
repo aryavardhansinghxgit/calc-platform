@@ -3,42 +3,52 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 export const tip_calculatorFaqs: CalculatorFAQ[] = [
   {
     question: "Should I calculate a tip before or after tax?",
-    answer: "Standard tipping etiquette recommends calculating your tip percentage on the pre-tax food and beverage subtotal rather than the final gross bill. Sales tax is a government levy, not a service provided by restaurant staff. However, tipping on the post-tax total is common for convenience when using quick credit card terminal presets."
+    answer:
+      "The calculator supports both conventions. Pre-tax tipping applies the selected percentage to the subtotal. Post-tax tipping applies it to the tax-inclusive base.",
   },
   {
     question: "What is the standard tip percentage in restaurants in the United States?",
-    answer: "In the United States, 15% to 20% of the pre-tax bill is the standard customary tipping range for table service. 15% is standard for adequate service, 18% is typical for good service, and 20% or higher is customary for great or exceptional service."
+    answer:
+      "The reference presents 15%-20% as a common table-service range, with 15% for adequate service, 18% as typical for good service, and 20% or more for very good or exceptional service. These are etiquette benchmarks, not universal legal requirements.",
   },
   {
     question: "How do you split a restaurant bill evenly among friends with tip included?",
-    answer: "To split a bill evenly, calculate your total cost by adding your food subtotal, sales tax, and total tip amount. Then divide the final grand total by the number of people in your party: Cost Per Person = (Subtotal + Tax + Tip) / Number of Diners."
+    answer:
+      "Calculate subtotal, tax, and tip, add them to get the grand total, and divide by the number of diners. A reliable calculator then distributes any remainder cents so the displayed shares still reconcile to the displayed total.",
   },
   {
     question: "What is the difference between a tip and a mandatory service charge?",
-    answer: "A tip (gratuity) is a voluntary payment made directly by the customer to reward service staff. A mandatory service charge is a compulsory fee added by the restaurant (often for large groups of 6+ guests or room service). Legally, mandatory service charges belong to the business establishment, though reputable venues distribute them to servers."
+    answer:
+      "A tip is normally discretionary. A mandatory service charge or automatic gratuity is added by the business under the terms shown on the receipt. Check the bill carefully before adding another tip.",
   },
   {
     question: "Is tipping considered offensive in Japan and other countries?",
-    answer: "Yes, in Japan and South Korea, tipping is not part of the culture and can be considered confusing, insulting, or offensive. Japanese hospitality (Omotenashi) assumes exceptional service is already built into the standard price. Leaving cash on a table in Japan may cause staff to chase you down to return forgotten money."
+    answer:
+      "Tipping customs vary by country and service context. The reference notes that tipping can be uncommon or culturally inappropriate in some places while being customary elsewhere. Local norms should guide the decision.",
   },
   {
-    question: "How much should you tip for food delivery services (e.g., DoorDash, UberEats)?",
-    answer: "For food delivery services, tip 15% to 20% of your order total, with a recommended minimum base tip of $3 to $5. For long distances, severe weather, heavy orders, or late hours, consider increasing the tip to account for the driver's extra gas and effort."
+    question: "How much should you tip for food delivery services?",
+    answer:
+      "The reference gives 15%-20% as a common benchmark and also mentions a minimum suggested base amount. Actual practice depends on local custom, distance, order size, weather, service quality, and personal preference.",
   },
   {
     question: "How do I quickly calculate a 20% tip in my head?",
-    answer: "To quickly calculate a 20% tip in your head, move the decimal point of your bill subtotal one space to the left to find 10%, then double that number. For example, on a $45.00 bill: 10% is $4.50, and doubling $4.50 gives a 20% tip of $9.00."
+    answer:
+      "Find 10% by moving the decimal point one place left, then double it. For example, 10% of $45 is $4.50, so 20% is $9.00.",
   },
   {
     question: "What should I do if a restaurant automatically adds gratuity to the bill?",
-    answer: "If automatic gratuity is added to your bill, check your receipt line item carefully. The line will usually be marked as 'Auto Gratuity' or 'Service Charge'. You do not need to add an additional tip unless you wish to give extra cash for exceptional service."
+    answer:
+      "Check the receipt line by line. If an automatic gratuity or service charge is already present, do not automatically add another identical tip.",
   },
   {
-    question: "How much should you tip hotel housekeeping and bellhops?",
-    answer: "For hotel bellhops, tip $2 to $5 per bag handled. For hotel housekeeping, tip $2 to $5 per night, left daily in a clearly marked envelope or note on the nightstand, as housekeeping shifts change daily."
+    question: "How much should I tip hotel housekeeping and bellhops?",
+    answer:
+      "The reference gives example ranges for those services, but they are etiquette benchmarks and can vary by local practice and hotel policy.",
   },
   {
     question: "Do I need to tip on takeout and counter-service orders?",
-    answer: "Tipping on takeout and counter-service pickup orders is voluntary. While 0% is acceptable for basic quick pickups, tipping 10% to 15% is appreciated if the staff carefully packed large orders, added extra condiments, or provided friendly service."
-  }
+    answer:
+      "The reference treats takeout and counter-service tipping as voluntary and context-dependent. Local custom and the level of service can influence the choice.",
+  },
 ];

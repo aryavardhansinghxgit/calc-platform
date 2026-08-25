@@ -36,6 +36,7 @@ import {
 } from "@/app/calculators/tip-calculator/calculator";
 import { ReportModal } from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
+import { TipContent } from "./TipContent";
 
 export function TipCalculator() {
   // Mode selection
@@ -666,6 +667,9 @@ export function TipCalculator() {
         onClose={() => setShowReportModal(false)}
         data={reportData}
       />
+
+      {/* Educational Guide & 10 Canonical FAQs */}
+      <TipContent />
     </div>
   );
 }

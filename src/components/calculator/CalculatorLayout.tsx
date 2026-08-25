@@ -77,6 +77,7 @@ import { SocialSecurityCalculator } from "./social-security/SocialSecurityCalcul
 import { AnnuityCalculator } from "./annuity/AnnuityCalculator";
 import { AnnuityPayoutCalculator } from "./annuity-payout/AnnuityPayoutCalculator";
 import { PaymentCalculator } from "./payment/PaymentCalculator";
+import { TipCalculator } from "./tip/TipCalculator";
 import { MarginCalculator } from "./margin/MarginCalculator";
 import { DiscountCalculator } from "./discount/DiscountCalculator";
 import { CommissionCalculator } from "./commission/CommissionCalculator";
@@ -343,6 +344,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isAutoLoan = definition.id === "auto-loan" || definition.slug === "auto-loan-calculator";
   const isAutoLease = definition.id === "auto-lease" || definition.slug === "auto-lease-calculator";
   const isLease = idLower === "lease-calculator" || slugLower === "lease-calculator" || idLower === "lease" || slugLower === "lease";
+  const isTip = idLower === "tip-calculator" || slugLower === "tip-calculator" || idLower === "tip" || slugLower === "tip";
   const isCollegeCost = idLower === "college-cost-calculator" || slugLower === "college-cost-calculator" || idLower === "college-cost" || slugLower === "college-cost" || idLower === "college-calculator" || slugLower === "college-calculator";
   const isDepreciation = idLower === "depreciation-calculator" || slugLower === "depreciation-calculator" || idLower === "depreciation" || slugLower === "depreciation";
   const isBoatLoan = idLower === "boat-loan-calculator" || slugLower === "boat-loan-calculator" || idLower === "boat-loan" || slugLower === "boat-loan" || idLower === "boat-calculator" || slugLower === "boat-calculator";
@@ -703,6 +705,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             <PaymentCalculator />
           ) : isLease ? (
             <LeaseCalculator />
+          ) : isTip ? (
+            <TipCalculator />
           ) : isSocialSecurity ? (
             <SocialSecurityCalculator />
           ) : isPension ? (
@@ -926,8 +930,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       </div>
 
 
-      {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators (Suppressed for calculators with dedicated full content suites like Lease, Payment, Annuity, Present Value, Future Value, 401(k), and Roth IRA) */}
-      {!isFutureValue && !isPresentValue && !isAnnuity && !isPayment && !isLease && !isFourZeroOneK && !isRothIra && (
+      {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators (Suppressed for calculators with dedicated full content suites like Lease, Tip, Payment, Annuity, Present Value, Future Value, 401(k), and Roth IRA) */}
+      {!isFutureValue && !isPresentValue && !isAnnuity && !isPayment && !isLease && !isTip && !isFourZeroOneK && !isRothIra && (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-8 shadow-xs text-slate-900 dark:text-slate-100">
           {/* Formula & Calculation Method */}
           {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDate && !isHours && !isScientific && !isFraction && !isStatistics && (

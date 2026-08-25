@@ -2,7 +2,8 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const tip_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Tip Calculator — Split Bills, Pre-Tax Tipping & Global Matrix",
-  description: "Free online tip calculator. Calculate tips pre-tax or post-tax, split restaurant bills evenly or itemized by diner, and inspect global tipping customs across 50+ countries.",
+  title: "Tip Calculator — Calculate Tip, Tax, Split Bills & Itemized Shares",
+  description:
+    "Calculate tips before or after tax, split restaurant bills evenly or by item, share appetizers, apply smart rounding, and generate a clear receipt summary.",
   slug: "tip-calculator",
 });
