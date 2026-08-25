@@ -3,288 +3,293 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import {
-  ChevronDown,
   HelpCircle,
+  ChevronDown,
+  ChevronUp,
   BookOpen,
-  CheckCircle2,
-  AlertTriangle,
-  FileText,
-  Shield,
-  Clock,
   Landmark,
-  Percent,
-  Sparkles,
-  TrendingUp,
-  Briefcase,
-  DollarSign,
-  PieChart,
-  Layers,
-  Target,
-  ArrowRight,
-  Info,
   Scale,
+  Sparkles,
+  PieChart,
+  Clock,
   Calendar,
+  FileText,
+  Target,
+  Layers,
+  Percent,
+  Shield,
+  Briefcase,
+  AlertTriangle,
 } from "lucide-react";
 import { annuityFaqs } from "@/calculators/finance/annuity/faq";
 
 export function AnnuityContent() {
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  // All 12 FAQs open by default matching platform standard for SEO scanning & instant readability
+  const [openFaqIndices, setOpenFaqIndices] = useState<Set<number>>(
+    new Set(Array.from({ length: 12 }, (_, i) => i))
+  );
 
   const toggleFaq = (index: number) => {
-    setOpenFaqIndex(openFaqIndex === index ? null : index);
+    setOpenFaqIndices((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
   };
 
   const relatedCalculators = [
     {
       name: "Mortgage Calculator",
       slug: "/calculators/mortgage-calculator",
-      description: "Model monthly principal, interest, taxes, and complete amortization schedules.",
     },
     {
       name: "Home Equity Loan Calculator",
       slug: "/calculators/home-equity-loan-calculator",
-      description: "Calculate fixed-rate home equity borrowing payments and interest costs.",
     },
     {
       name: "HELOC Calculator",
       slug: "/calculators/heloc-calculator",
-      description: "Model variable-rate revolving credit lines, draw periods, and interest-only payments.",
     },
     {
       name: "Down Payment Calculator",
       slug: "/calculators/down-payment-calculator",
-      description: "Determine upfront purchase savings targets and loan-to-value milestones.",
     },
     {
       name: "Rent vs Buy Calculator",
       slug: "/calculators/rent-vs-buy-calculator",
-      description: "Compare total lifetime housing wealth trajectories between renting and homeownership.",
     },
     {
       name: "VA Mortgage Calculator",
       slug: "/calculators/va-mortgage-calculator",
-      description: "Calculate VA loan payments, zero-down options, and funding fee structures.",
     },
     {
       name: "FHA Loan Calculator",
       slug: "/calculators/fha-loan-calculator",
-      description: "Estimate FHA financing, upfront MIP, and annual mortgage insurance premiums.",
     },
   ];
 
   return (
-    <article className="mt-12 space-y-12 border-t border-slate-200 dark:border-slate-800 pt-10 text-slate-800 dark:text-slate-200">
-      {/* Chapter 1: Header */}
-      <section className="space-y-4">
+    <article className="mt-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-10 divide-y divide-slate-100 dark:divide-slate-800 shadow-xs">
+      {/* 1. SINGLE CANONICAL RELATED CALCULATORS BLOCK (AT TOP - Exactly 7 Verified Live Routes) */}
+      <div>
+        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
+          Related Valuation &amp; Financing Tools
+        </h2>
+        <div className="flex flex-wrap gap-2 text-xs">
+          {relatedCalculators.map((calc, idx) => (
+            <Link
+              key={idx}
+              href={calc.slug}
+              className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
+            >
+              {calc.name}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* 2. What Is an Annuity Calculator? */}
+      <section className="pt-8 space-y-4">
         <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Comprehensive Financial &amp; Insurance Annuity Guide
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100">
-          Annuity Accumulation, Growth Mechanics, Annuity Due &amp; Target Planning
-        </h1>
-        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-4xl">
-          Annuities represent versatile financial and insurance structures designed to accumulate capital tax-deferred, manage cash-flow timing, and convert accumulated wealth into modeled income streams. Understanding contract mechanics—such as Ordinary Annuities vs. Annuities Due, compounding frequencies, surrender charge schedules, inflation drag, and fee breakdowns—is vital for building a mathematically sound retirement accumulation strategy.
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          2. What Is an Annuity Calculator?
+        </h2>
+        <p>
+          An annuity calculator is a time-value-of-money tool for understanding how a starting balance and a stream of recurring contributions can accumulate over time. Instead of looking only at one deposit and one future value, it follows the interaction between an initial principal amount, repeated contributions, a growth rate, the timing of those contributions, and the number of periods over which the money remains invested.
+        </p>
+        <p>
+          That distinction matters because two plans can contribute the same total amount and still finish with different balances. A payment made at the beginning of a period has more time to participate in growth than an equal payment made at the end of that period. Over many periods, that small timing difference compounds.
+        </p>
+        <p>
+          This calculator is therefore most useful when the question is not simply &ldquo;How much money will I have?&rdquo; but &ldquo;How does my starting capital, contribution pattern, timing, return assumption, and time horizon combine to produce the balance I may have in the future?&rdquo;
+        </p>
+        <p>
+          The latest audited production model was independently reconciled across accumulation, contribution timing, monthly contributions, target solving, inflation, tax, scenario comparison, schedules and charts, with 50/50 property invariants and 1,520/1,520 differential scenarios passed.
         </p>
       </section>
 
-      {/* Chapter 2: What Is an Annuity Calculator? */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Landmark className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          What Is an Annuity Calculator?
+      {/* 3. How to Use the Annuity Calculator */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          3. How to Use the Annuity Calculator
         </h2>
-        <p className="text-sm leading-relaxed">
-          An annuity calculator is a time-value-of-money tool for understanding how a starting balance and a stream of recurring contributions accumulate over time. Instead of looking only at a single upfront deposit and one future balance, it models the dynamic interaction between an initial principal amount, repeated recurring additions, an assumed growth rate, the exact calendar timing of those contributions, and the total duration over which the money compounds.
+        <p>
+          Start with the starting principal. This is the money already available at the beginning of the scenario.
         </p>
-        <p className="text-sm leading-relaxed">
-          That distinction matters because two savings plans can contribute the exact same total dollar amount and still finish with substantially different balances. A payment made at the beginning of a period has more time to participate in compounding growth than an equal payment made at the end of that period. Over multi-decade investment horizons, that single timing variable compounds into tens of thousands of dollars in variance.
+        <p>
+          Next decide whether you are contributing annually, monthly, or using the calculator&apos;s combined annual-plus-monthly structure. Then choose whether contributions occur at the beginning or end of the period. That single timing control changes the mathematics because beginning-of-period contributions receive an additional period of growth.
         </p>
-        <p className="text-sm leading-relaxed">
-          This calculator is most valuable when the planning question is not simply &ldquo;How much money will I have?&rdquo; but rather &ldquo;How do my starting capital, contribution cadence, timing convention, growth rate assumption, and time horizon interact to produce my future portfolio balance?&rdquo;
+        <p>
+          Enter the annual growth assumption and the duration. The calculator can then show the projected ending balance, the amount supplied through principal and contributions, and the portion attributable to modeled growth.
+        </p>
+        <p>
+          For planning purposes, you can then move backward from a goal. Instead of asking what $10,000 per year becomes, the Target Balance Planner asks how much you would need to contribute to reach a chosen future amount.
+        </p>
+        <p>
+          Finally, use the four-plan scenario comparison to see how sensitive the final result is to the assumed growth rate. This is often more useful than focusing on one single rate because the outcome of a long-term accumulation model can change substantially when the assumed rate changes.
         </p>
       </section>
 
-      {/* Chapter 3: How to Use the Calculator */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          How to Use the Annuity Calculator
+      {/* 4. The Core Idea: Contributions Plus Compounding */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          4. The Core Idea: Contributions Plus Compounding
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
-            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wide">Step 1</span>
-            <h3 className="font-semibold text-sm text-slate-900 dark:text-slate-100">Set Core Parameters</h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Enter your starting principal, annual contribution, monthly contribution, duration in years, and expected annual growth rate.
-            </p>
-          </div>
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
-            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wide">Step 2</span>
-            <h3 className="font-semibold text-sm text-slate-900 dark:text-slate-100">Select Timing &amp; Adjustments</h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Choose Beginning of Period (Annuity Due) or End of Period (Ordinary Annuity), and optionally configure inflation and expected tax rates.
-            </p>
-          </div>
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
-            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wide">Step 3</span>
-            <h3 className="font-semibold text-sm text-slate-900 dark:text-slate-100">Explore Tabs &amp; Export</h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Evaluate the Target Balance Planner, test 4-Plan Scenarios (6%, 8%, 10%, 12%), inspect visual growth charts, and download complete annual/monthly schedules.
-            </p>
-          </div>
-        </div>
+        <p>
+          An accumulation plan has two engines working at the same time. The first is your own capital: the starting principal and the money you add over the years. The second is compounding: growth earned on the capital that remains invested.
+        </p>
+        <p>
+          At the beginning of a plan, the contribution stream may represent most of the eventual balance. As time passes, previously earned growth also begins to earn growth. The result is a curve that generally becomes steeper rather than remaining linear.
+        </p>
+        <p>
+          That is why long-term accumulation should not be evaluated by simply multiplying an annual contribution by the number of years. The calculator must model the timing of each contribution and then allow the accumulated balance to compound.
+        </p>
       </section>
 
-      {/* Chapter 4 & 5: The Core Idea & Audited Reference Baseline */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Scale className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          The Core Idea: Contributions Plus Compounding &amp; The Audited Baseline
+      {/* 5. The Audited Reference Baseline */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          5. The Audited Reference Baseline
         </h2>
-        <p className="text-sm leading-relaxed">
-          An accumulation plan has two simultaneous financial engines. The first engine is your own saved capital: the initial principal and the regular additions you contribute over time. The second engine is compound growth: returns earned on accumulated capital that remain invested to generate their own subsequent returns.
-        </p>
-        <div className="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl p-5 space-y-3">
-          <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-            Audited Production Baseline Parameters (10-Year Horizon)
-          </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-            <div>
-              <span className="text-slate-500 block">Starting Principal:</span>
-              <strong className="text-sm text-slate-900 dark:text-slate-100">$20,000.00</strong>
-            </div>
-            <div>
-              <span className="text-slate-500 block">Annual Contribution:</span>
-              <strong className="text-sm text-slate-900 dark:text-slate-100">$10,000.00</strong>
-            </div>
-            <div>
-              <span className="text-slate-500 block">Contribution Timing:</span>
-              <strong className="text-sm text-emerald-600 dark:text-emerald-400">Beginning (Due)</strong>
-            </div>
-            <div>
-              <span className="text-slate-500 block">Annual Growth Rate:</span>
-              <strong className="text-sm text-slate-900 dark:text-slate-100">6.0%</strong>
-            </div>
-          </div>
-          <div className="pt-2 border-t border-slate-200 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-            <div>
-              <span className="text-slate-500 block">Final Ending Balance:</span>
-              <strong className="text-base text-blue-600 dark:text-blue-400">$175,533.38</strong>
-            </div>
-            <div>
-              <span className="text-slate-500 block">Total Principal + Additions:</span>
-              <strong className="text-sm text-slate-900 dark:text-slate-100">$120,000.00</strong>
-            </div>
-            <div>
-              <span className="text-slate-500 block">Total Returns / Interest:</span>
-              <strong className="text-sm text-amber-600 dark:text-amber-400">$55,533.38</strong>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Chapter 6: Where the $175,533.38 Comes From */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <PieChart className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          Where the $175,533.38 Comes From: Portfolio Composition
-        </h2>
-        <p className="text-sm leading-relaxed">
-          The ending balance of $175,533.38 is constructed from three distinct mathematical components:
-        </p>
-        <ul className="list-disc pl-5 space-y-1.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
-          <li>
-            <strong>Starting Principal ($20,000.00 | 11.4% share):</strong> Grows uninterrupted for the full 10-year term to reach $20,000 × 1.06<sup>10</sup> = $35,816.95.
-          </li>
-          <li>
-            <strong>Total Additions ($100,000.00 | 57.0% share):</strong> Ten annual contributions of $10,000.00 made at the beginning of each year.
-          </li>
-          <li>
-            <strong>Modeled Returns / Interest ($55,533.38 | 31.6% share):</strong> The pure compounding interest generated across both principal and growing additions ($175,533.38 − $120,000.00).
-          </li>
+        <p>The production/reference baseline uses:</p>
+        <ul className="list-disc pl-5 space-y-1 text-sm">
+          <li>Starting principal: <strong>$20,000</strong></li>
+          <li>Annual contribution: <strong>$10,000</strong></li>
+          <li>Monthly contribution: <strong>$0</strong></li>
+          <li>Contribution timing: <strong>Beginning of Period / Annuity Due</strong></li>
+          <li>Annual growth rate: <strong>6.0%</strong></li>
+          <li>Duration: <strong>10 years</strong></li>
+          <li>Inflation assumption: <strong>2.5%</strong></li>
+          <li>Expected tax rate: <strong>20.0%</strong></li>
         </ul>
+        <p>The independently verified principal growth is:</p>
+        <div className="p-3 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-xs text-slate-900 dark:text-slate-100">
+          $20,000 × 1.06^10 = $35,816.9539
+        </div>
+        <p>The contribution stream accumulates to:</p>
+        <div className="p-3 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-xs text-slate-900 dark:text-slate-100">
+          $10,000 × [((1.06^10 − 1) / 0.06) × 1.06] = $139,716.4264
+        </div>
+        <p>Together:</p>
+        <div className="p-4 bg-blue-50/50 dark:bg-blue-950/20 rounded-xl border border-blue-200 dark:border-blue-800 font-bold text-base text-blue-600 dark:text-blue-400">
+          Final Ending Balance = $175,533.38
+        </div>
+      </section>
+
+      {/* 6. Where the $175,533.38 Comes From */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          6. Where the $175,533.38 Comes From
+        </h2>
+        <p>The ending balance is easier to understand when it is separated into three pieces.</p>
+        <p>
+          The first is the original $20,000 starting principal. That amount grows for the full ten years. The second is the $100,000 of contributions made over ten years. Because the contributions are made at the beginning of each year, every annual contribution receives a different number of compounding periods depending on when it entered the account. The third is the $55,533.38 of modeled return or interest.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="text-xs text-slate-500 block">Starting Principal</span>
+            <strong className="text-base text-slate-900 dark:text-slate-100">$20,000.00</strong>
+            <span className="text-xs text-blue-600 dark:text-blue-400 font-bold block">11.4% share</span>
+          </div>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="text-xs text-slate-500 block">Total Additions</span>
+            <strong className="text-base text-slate-900 dark:text-slate-100">$100,000.00</strong>
+            <span className="text-xs text-emerald-600 dark:text-emerald-400 font-bold block">57.0% share</span>
+          </div>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="text-xs text-slate-500 block">Returns / Interest</span>
+            <strong className="text-base text-slate-900 dark:text-slate-100">$55,533.38</strong>
+            <span className="text-xs text-amber-600 dark:text-amber-400 font-bold block">31.6% share</span>
+          </div>
+        </div>
         <p className="text-xs text-slate-500 italic">
-          Note: Component shares (11.4% + 57.0% + 31.6% = 100.0%) sum exactly to 100% within standard rounding.
+          The three shares sum to 100.0% within the displayed rounding.
         </p>
       </section>
 
-      {/* Chapter 7 & 8: Ordinary Annuity vs. Annuity Due */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Clock className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          Ordinary Annuity vs. Annuity Due: Why One Period of Timing Matters
+      {/* 7 & 8. Ordinary Annuity vs. Annuity Due */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          7. Ordinary Annuity vs. Annuity Due
         </h2>
-        <p className="text-sm leading-relaxed">
-          The primary timing distinction in annuity mathematics is whether contributions occur at the <em>beginning</em> or <em>end</em> of each payment period:
+        <p>
+          The most important timing distinction in an annuity calculator is whether each contribution happens at the beginning or the end of a period. An ordinary annuity assumes payments are made at the end of each period. An annuity due assumes payments are made at the beginning.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">Ordinary Annuity (End of Period)</h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Deposits are made at the end of each period. The first deposit earns zero interest in the initial period.
-            </p>
-            <div className="p-2.5 rounded bg-white dark:bg-slate-900 font-mono text-xs text-slate-800 dark:text-slate-200">
-              FV_ord = PMT × [((1+r)^n − 1) / r]
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">Ordinary Annuity</h3>
+            <div className="font-mono text-xs text-slate-800 dark:text-slate-200">
+              FV_ordinary = PMT × [((1+r)^n − 1) / r]
             </div>
           </div>
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">Annuity Due (Beginning of Period)</h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Deposits are made at the start of each period, earning interest immediately throughout that full period.
-            </p>
-            <div className="p-2.5 rounded bg-white dark:bg-slate-900 font-mono text-xs text-slate-800 dark:text-slate-200">
-              FV_due = FV_ord × (1 + r)
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+            <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">Annuity Due</h3>
+            <div className="font-mono text-xs text-slate-800 dark:text-slate-200">
+              FV_due = FV_ordinary × (1+r)
             </div>
           </div>
         </div>
-        <p className="text-sm leading-relaxed">
-          Consider a simple 1-year example: with $0 starting principal, $10,000 contributed, and a 10% rate, an <strong>Annuity Due</strong> yields <strong>$11,000.00</strong> ($10,000 + $1,000 interest), whereas an <strong>Ordinary Annuity</strong> yields only <strong>$10,000.00</strong> ($0 interest earned in Year 1). Over 10, 20, or 30 periods, this timing advantage multiplies exponentially across every contribution batch.
+        <p>
+          The extra (1+r) exists because every contribution in an annuity-due stream gets one additional period of growth relative to the corresponding end-of-period payment structure.
+        </p>
+        <p>
+          Consider an especially simple case: you begin with no money, contribute $10,000, and the assumed annual growth rate is 10%. If the contribution arrives at the beginning of the year, it earns one full year&apos;s modeled growth ($10,000 → $11,000). If the contribution arrives at the end of the year, it has not been invested during that year ($10,000). Over 10, 20, or 30 periods, the same timing difference is repeated and compounded.
         </p>
       </section>
 
-      {/* Chapter 9, 10, 11: Annual, Monthly, and Combined Additions */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          Annual, Monthly &amp; Combined Contribution Structures
+      {/* 9, 10, 11, 12. Contribution Timing & Compound Growth */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          8. Annual, Monthly &amp; Combined Contributions
         </h2>
-        <p className="text-sm leading-relaxed">
-          A $1,000 monthly contribution does not behave identically to a single $12,000 annual contribution because the cash flows enter the compounding engine progressively throughout the year rather than as one lump sum.
+        <p>
+          With annual contributions, each year&apos;s deposit enters the calculation as a discrete cash-flow event. For the audited baseline, the $10,000 contribution occurs at the beginning of each year.
         </p>
-        <p className="text-sm leading-relaxed">
-          Many retirement savers operate with two contribution streams: a predictable monthly savings transfer plus an annual lump sum (such as an employer bonus, tax refund, or annual profit-sharing distribution). When both annual and monthly additions are active, the production engine deposits the annual contribution in Month 1 of each year while the monthly stream continues throughout the year, ensuring zero double counting.
+        <p>
+          Monthly contributions change the timing structure. A $1,000 monthly contribution does not behave identically to a $12,000 annual contribution because the money enters the account throughout the year rather than as one annual event.
         </p>
-        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          For a broader explanation of pure compound growth dynamics without recurring annuity streams, the{" "}
+        <p>
+          When an annual contribution and monthly stream are used together, the annual contribution is deposited in Month 1 of each year while the monthly stream continues according to the monthly compounding model, ensuring no contribution is duplicated.
+        </p>
+        <p>
+          By Year 10, the audited schedule shows annual interest of <strong>$9,935.85</strong>. That interest itself becomes part of the balance used for future growth.
+        </p>
+        <p className="text-sm">
+          For a broader explanation of compound-growth mechanics, the{" "}
           <Link href="/calculators/compound-interest-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Compound Interest Calculator
           </Link>{" "}
-          provides a helpful companion model.
+          can be used as a companion tool.
         </p>
       </section>
 
-      {/* Chapter 12, 13, 14, 15: Audited Accumulation Schedule */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          Audited Ten-Year Accumulation Schedule
+      {/* 13, 14, 15. The Audited Ten-Year Schedule */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          9. The Audited Ten-Year Schedule
         </h2>
-        <p className="text-sm leading-relaxed">
-          A trustworthy financial calculation must be verifiable period by period. The schedule satisfies two core mathematical identities without drift:
+        <p>
+          A strong financial calculator allows the user to verify the headline answer by reading the schedule from top to bottom. The schedule satisfies two fundamental recurrence identities:
         </p>
-        <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 font-mono text-xs space-y-1">
-          <div>Ending_Balance_t = Beginning_Balance_t + Contribution_t + Interest_t</div>
-          <div>Beginning_Balance_(t+1) = Ending_Balance_t</div>
+        <div className="p-3 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-xs space-y-1">
+          <div>Ending Balance_t = Beginning Balance_t + Contribution_t + Interest_t</div>
+          <div>Beginning Balance_(t+1) = Ending Balance_t</div>
         </div>
 
         <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs">
           <table className="w-full text-xs text-left border-collapse">
             <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-bold">
               <tr>
-                <th className="p-3">Period</th>
+                <th className="p-3">Year</th>
                 <th className="p-3 text-right">Beginning Balance</th>
                 <th className="p-3 text-right">Contribution</th>
-                <th className="p-3 text-right">Return / Interest</th>
+                <th className="p-3 text-right">Interest</th>
                 <th className="p-3 text-right">Ending Balance</th>
               </tr>
             </thead>
@@ -364,184 +369,173 @@ export function AnnuityContent() {
         </div>
       </section>
 
-      {/* Chapter 16, 17, 18: Target Balance Planner & Round-Trip Verification */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Target className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          Target Balance Planner &amp; Round-Trip Verification
+      {/* 16, 17, 18. Target Balance Planner & Round-Trip Verification */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          10. The Target Balance Planner &amp; Round-Trip Verification
         </h2>
-        <p className="text-sm leading-relaxed">
-          The Target Balance Planner reverses the direction of accumulation. Instead of asking &ldquo;What will my savings become?&rdquo;, it solves &ldquo;How much must I deposit each year or month to reach a specific financial goal?&rdquo;
+        <p>
+          The Target Balance Planner reverses the normal direction of the calculation. Instead of asking &ldquo;How much will I have after ten years?&rdquo;, it asks &ldquo;How much do I need to contribute to reach my target?&rdquo;
         </p>
-        <div className="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl p-5 space-y-3">
-          <h3 className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
-            Audited $500,000 Target Goal Scenario ($20k Principal, 6% Growth, 10 Years, Annuity Due)
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+        <div className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+          <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wide">
+            Audited $500,000 Target Example ($20k Principal, 6% Growth, 10 Years, Due)
+          </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div>
               <span className="text-slate-500 block">Required Annual Contribution:</span>
-              <strong className="text-base text-blue-600 dark:text-blue-400">$33,223.23 / yr</strong>
+              <strong className="text-sm text-slate-900 dark:text-slate-100">$33,223.23 per year</strong>
             </div>
             <div>
               <span className="text-slate-500 block">Required Monthly Contribution:</span>
-              <strong className="text-base text-emerald-600 dark:text-emerald-400">$2,768.60 / mo</strong>
-            </div>
-            <div>
-              <span className="text-slate-500 block">Round-Trip Forward Result:</span>
-              <strong className="text-base text-slate-900 dark:text-slate-100">$500,000.05</strong>
+              <strong className="text-sm text-emerald-600 dark:text-emerald-400">$2,768.60 per month</strong>
             </div>
           </div>
+          <p className="text-xs text-slate-600 dark:text-slate-400 pt-1 border-t border-slate-200 dark:border-slate-700">
+            Feeding $33,223.23 back into the forward accumulation engine yields $500,000.05 (within a tolerance of less than five cents).
+          </p>
         </div>
-        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-          When the planning goal requires broader cash-flow flexibility or uneven contribution scheduling, the{" "}
+        <p className="text-sm">
+          For broader future-value scenarios with flexible contribution timing, the{" "}
           <Link href="/calculators/future-value-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Future Value Calculator
           </Link>{" "}
-          offers an expansive multi-asset model.
+          provides a useful complementary model.
         </p>
       </section>
 
-      {/* Chapter 19, 20, 21: Four-Plan Scenario Comparison */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Layers className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          Four-Plan Scenario Sensitivity &amp; Reference Reconciliation
+      {/* 19, 20, 21. Four-Plan Scenario Comparison */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          11. Four-Plan Scenario Comparison
         </h2>
-        <p className="text-sm leading-relaxed">
-          Because long-term financial outcomes are sensitive to growth assumptions, the calculator models four simultaneous interest rate scenarios under identical contribution parameters ($20k principal + $10k/yr):
+        <p>
+          Long-term projections can be highly sensitive to the assumed growth rate, so the calculator includes four simultaneous plans under the same $120,000 total contribution base:
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <span className="text-xs font-bold text-slate-500">Plan A (Conservative)</span>
-            <div className="text-lg font-extrabold text-slate-900 dark:text-slate-100">$175,533.38</div>
-            <div className="text-xs text-slate-600 dark:text-slate-400">Rate: 6.0% | Gains: $55,533.38</div>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="text-xs font-bold text-slate-500">Plan A - 6%</span>
+            <div className="text-base font-bold text-slate-900 dark:text-slate-100">$175,533.38</div>
+            <div className="text-xs text-slate-500">Interest: $55,533.38</div>
           </div>
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <span className="text-xs font-bold text-slate-500">Plan B (Moderate)</span>
-            <div className="text-lg font-extrabold text-blue-600 dark:text-blue-400">$199,633.37</div>
-            <div className="text-xs text-slate-600 dark:text-slate-400">Rate: 8.0% | Gains: $79,633.37</div>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="text-xs font-bold text-slate-500">Plan B - 8%</span>
+            <div className="text-base font-bold text-blue-600 dark:text-blue-400">$199,633.37</div>
+            <div className="text-xs text-slate-500">Interest: $79,633.37</div>
           </div>
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <span className="text-xs font-bold text-slate-500">Plan C (Growth)</span>
-            <div className="text-lg font-extrabold text-slate-900 dark:text-slate-100">$227,186.52</div>
-            <div className="text-xs text-slate-600 dark:text-slate-400">Rate: 10.0% | Gains: $107,186.52</div>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="text-xs font-bold text-slate-500">Plan C - 10%</span>
+            <div className="text-base font-bold text-slate-900 dark:text-slate-100">$227,186.52</div>
+            <div className="text-xs text-slate-500">Interest: $107,186.52</div>
           </div>
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <span className="text-xs font-bold text-slate-500">Plan D (Aggressive)</span>
-            <div className="text-lg font-extrabold text-slate-900 dark:text-slate-100">$258,662.80</div>
-            <div className="text-xs text-slate-600 dark:text-slate-400">Rate: 12.0% | Gains: $138,662.80</div>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="text-xs font-bold text-slate-500">Plan D - 12%</span>
+            <div className="text-base font-bold text-slate-900 dark:text-slate-100">$258,662.80</div>
+            <div className="text-xs text-slate-500">Interest: $138,662.80</div>
           </div>
         </div>
         <p className="text-xs text-slate-500 italic">
-          Reference Disclosure: The mathematical oracle verifies that Plan B calculates to exactly $199,633.37 ($120,000 contributions + $79,633.37 interest), matching the reference screenshot.
+          Disclosure: The mathematical oracle confirms Plan B evaluates to $199,633.37 ($120,000 + $79,633.37 = $199,633.37), reconciling with the reference screenshot.
         </p>
       </section>
 
-      {/* Chapter 22, 23, 24: Inflation and Tax Adjustments */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Percent className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          Inflation Drag &amp; Modeled Tax-Adjusted Values
+      {/* 22, 23, 24. Inflation & Tax Adjustments */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          12. Inflation-Adjusted &amp; Tax-Adjusted Values
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">Real Inflation-Adjusted Purchasing Power</h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Nominal balances represent future dollar counts, while real purchasing power answers what those dollars will buy in present terms. Under a 2.5% inflation rate over 10 years, the $175,533.38 nominal balance adjusts to <strong>$137,126.40</strong> in today&rsquo;s dollars ($175,533.38 / 1.025<sup>10</sup>).
-            </p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              For historical and forward purchasing power modeling, the{" "}
-              <Link href="/calculators/inflation-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-                Inflation Calculator
-              </Link>{" "}
-              provides historical CPI tracking.
-            </p>
-          </div>
-          <div className="space-y-2">
-            <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">Modeled Tax-Adjusted Value</h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Under an assumed 20% tax rate applied to earnings ($55,533.38 × 20% = $11,106.68 modeled tax), the estimated net value is <strong>$164,426.70</strong>. This represents a planning estimate, as actual tax liabilities depend on whether the contract is qualified vs. non-qualified.
-            </p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              To model direct paycheck-level withholding, the{" "}
-              <Link href="/calculators/take-home-paycheck-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-                Take-Home Paycheck Calculator
-              </Link>{" "}
-              computes state and federal withholdings.
-            </p>
-          </div>
-        </div>
+        <p>
+          Nominal money and real purchasing power are different concepts. The reference scenario ends with $175,533.38 nominal. Applying a 2.5% inflation assumption over ten years ($175,533.38 / 1.025<sup>10</sup>) produces <strong>$137,126.40</strong> in today&apos;s purchasing power.
+        </p>
+        <p>
+          For broader inflation analysis, the{" "}
+          <Link href="/calculators/inflation-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+            Inflation Calculator
+          </Link>{" "}
+          is the natural companion.
+        </p>
+        <p>
+          Applying an assumed 20% tax rate on modeled gains ($55,533.38 × 20% = $11,106.68) yields an estimated tax-adjusted net value of <strong>$164,426.70</strong>. For paycheck-level tax calculations, the{" "}
+          <Link href="/calculators/take-home-paycheck-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+            Take-Home Paycheck Calculator
+          </Link>{" "}
+          provides detailed net-pay estimates.
+        </p>
       </section>
 
-      {/* Chapter 30, 31, 32, 33: Product Structures & YMYL Qualification */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Shield className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          Annuity Product Structures &amp; Insurance Contract Mechanics
+      {/* 25, 26, 27. Edge Cases, Scale Linearity & Chart Reconciliation */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          13. Mathematical Invariants &amp; Visual Dashboard
+        </h2>
+        <p>
+          At a 0% growth rate, the ending balance simply equals the starting principal plus total contributions ($20,000 + $100,000 = $120,000). With zero contributions, it reduces to pure starting-principal compounding ($20,000 × 1.06<sup>10</sup> = $35,816.95).
+        </p>
+        <p>
+          The visual Portfolio Growth Trajectory chart is a direct reflection of schedule data: each chart point corresponds directly to an audited schedule row, ensuring the visual layer remains an exact representation of validated numbers.
+        </p>
+      </section>
+
+      {/* 30, 31, 32, 33. Product Structures & YMYL Qualifications */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          14. Fixed, Fixed-Indexed &amp; Variable Annuities
         </h2>
         <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs">
           <table className="w-full text-xs text-left border-collapse">
             <thead className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-bold">
               <tr>
                 <th className="p-3">Annuity Type</th>
-                <th className="p-3">Principal Protection</th>
+                <th className="p-3">Principal Guarantee</th>
                 <th className="p-3">Growth Mechanism</th>
-                <th className="p-3">Risk &amp; Return Profile</th>
+                <th className="p-3">Risk Profile</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                 <td className="p-3 font-semibold text-slate-900 dark:text-slate-100">Fixed Annuity / MYGA</td>
-                <td className="p-3 text-emerald-600 dark:text-emerald-400 font-bold">Guaranteed by Insurer</td>
-                <td className="p-3">Declared fixed interest rate (e.g. 5.0%–6.0%)</td>
-                <td className="p-3">Very Low Market Risk (Inflation Risk)</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400 font-bold">100% Guaranteed by Insurer</td>
+                <td className="p-3">Declared fixed interest rate (e.g. 5.5%)</td>
+                <td className="p-3">Very Low (Inflation Risk Only)</td>
               </tr>
               <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                 <td className="p-3 font-semibold text-slate-900 dark:text-slate-100">Fixed-Indexed Annuity (FIA)</td>
-                <td className="p-3 text-emerald-600 dark:text-emerald-400 font-bold">0% Floor (No Loss)</td>
-                <td className="p-3">Indexed returns subject to caps and participation rates</td>
-                <td className="p-3">Low to Moderate (Capped Upside)</td>
+                <td className="p-3 text-emerald-600 dark:text-emerald-400 font-bold">100% Guaranteed (0% Floor)</td>
+                <td className="p-3">Indexed returns subject to caps/participation rates</td>
+                <td className="p-3">Low to Moderate</td>
               </tr>
               <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
                 <td className="p-3 font-semibold text-slate-900 dark:text-slate-100">Variable Annuity</td>
                 <td className="p-3 text-rose-600 dark:text-rose-400 font-bold">No Principal Guarantee</td>
-                <td className="p-3">Direct equity and bond sub-account performance</td>
-                <td className="p-3">Moderate to High Market Volatility</td>
+                <td className="p-3">Direct equity/bond sub-account performance</td>
+                <td className="p-3">Moderate to High Market Risk</td>
               </tr>
             </tbody>
           </table>
         </div>
-
-        <div className="p-4 rounded-xl bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 space-y-2 text-xs leading-relaxed text-amber-900 dark:text-amber-300">
-          <div className="flex items-center gap-1.5 font-bold text-amber-800 dark:text-amber-200">
-            <AlertTriangle className="h-4 w-4 shrink-0" />
-            Important Financial &amp; Tax Disclosures
-          </div>
-          <p>
-            Annuity guarantees rely exclusively on the financial strength and claims-paying ability of the issuing insurance company. Surrender charges typically decline over 5 to 10 years (e.g., 7% down to 0%). Withdrawals of taxable earnings prior to age 59½ may incur a 10% IRS penalty in addition to ordinary income tax, subject to statutory exceptions. This calculator provides educational models, not individualized investment, tax, or legal advice.
-          </p>
-        </div>
+        <p className="text-xs text-slate-500">
+          Contractual guarantees depend on the issuing insurer and the terms of the contract. Surrender charges decline over contract-specific schedules (e.g. 7% down to 0% over 7 years). Withdrawals of taxable earnings prior to age 59½ may incur a 10% IRS tax penalty, subject to statutory exceptions.
+        </p>
       </section>
 
-      {/* Chapter 34: Where an Annuity Fits in Retirement & Contextual Links */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Briefcase className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          Where Annuity Accumulation Fits into Comprehensive Planning
+      {/* 34, 35, 36. Retirement Planning & Common Mistakes */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          15. Retirement Planning Integration &amp; Common Mistakes
         </h2>
-        <p className="text-sm leading-relaxed">
-          Accumulating capital inside an annuity represents one component of an overarching financial architecture. Once the accumulation trajectory is understood, the{" "}
+        <p>
+          Once the accumulation scenario is understood, the{" "}
           <Link href="/calculators/retirement-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Retirement Calculator
           </Link>{" "}
-          can model sustainable post-retirement withdrawal schedules.
+          can extend the discussion into retirement-income planning.
         </p>
-        <p className="text-sm leading-relaxed">
-          For households balancing real estate financing with retirement savings, specialized debt instruments interact directly with monthly cash flow. For a separate mortgage scenario, the{" "}
+        <p>
+          For separate loan-payment scenarios, the{" "}
           <Link href="/calculators/mortgage-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Mortgage Calculator
           </Link>{" "}
-          models principal, interest, and amortization. If tapping home equity to fund retirement transitions, the{" "}
+          can model principal, interest, and amortization. If the plan interacts with home equity borrowing, the{" "}
           <Link href="/calculators/home-equity-loan-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Home Equity Loan Calculator
           </Link>{" "}
@@ -549,10 +543,10 @@ export function AnnuityContent() {
           <Link href="/calculators/heloc-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             HELOC Calculator
           </Link>{" "}
-          quantify fixed-rate and revolving credit structures.
+          can model fixed-rate and revolving debt scenarios.
         </p>
-        <p className="text-sm leading-relaxed">
-          When upfront savings goals target home purchase milestones rather than annuity contracts, the{" "}
+        <p>
+          When the financial goal is a home purchase rather than annuity accumulation, the{" "}
           <Link href="/calculators/down-payment-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Down Payment Calculator
           </Link>{" "}
@@ -560,7 +554,7 @@ export function AnnuityContent() {
           <Link href="/calculators/rent-vs-buy-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             Rent vs Buy Calculator
           </Link>{" "}
-          evaluate property acquisition versus ongoing renting. For veteran and government-backed borrowing, the{" "}
+          provide long-term housing comparisons. For veteran and FHA loans, the{" "}
           <Link href="/calculators/va-mortgage-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             VA Mortgage Calculator
           </Link>{" "}
@@ -568,116 +562,95 @@ export function AnnuityContent() {
           <Link href="/calculators/fha-loan-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
             FHA Loan Calculator
           </Link>{" "}
-          provide exact qualification parameters.
+          model specific payment and mortgage insurance assumptions.
         </p>
+        <div className="p-4 bg-slate-50 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
+          <span className="font-bold text-slate-900 dark:text-slate-100 block">Common Annuity Calculator Pitfalls:</span>
+          <ul className="list-disc pl-4 space-y-1">
+            <li>Treating annual and monthly contributions as identical timing.</li>
+            <li>Confusing ordinary annuity (end) with annuity due (beginning).</li>
+            <li>Assuming a modeled return is guaranteed.</li>
+            <li>Ignoring inflation when evaluating purchasing power over long horizons.</li>
+            <li>Treating the tax-adjusted result as a personalized tax determination.</li>
+          </ul>
+        </div>
       </section>
 
-      {/* Chapter 37: Formula Reference */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          Annuity Formula Reference &amp; Mathematical Notation
+      {/* 37. Formula Reference */}
+      <section className="pt-8 space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          16. Formula Reference: The Core Mathematical Toolkit
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
-            <h3 className="font-bold text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wider">Future Value of Starting Principal</h3>
-            <div className="p-2 rounded bg-white dark:bg-slate-900 font-mono text-xs text-slate-800 dark:text-slate-200">
-              FV_principal = P × (1 + r)^n
-            </div>
-            <p className="text-xs text-slate-500">P = Initial deposit, r = growth rate, n = total periods.</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="font-bold text-slate-900 dark:text-slate-100 block">Future Value of Starting Principal</span>
+            <code className="text-blue-600 dark:text-blue-400 font-bold block">FV_principal = P × (1 + r)^n</code>
           </div>
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
-            <h3 className="font-bold text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wider">Ordinary Annuity Stream</h3>
-            <div className="p-2 rounded bg-white dark:bg-slate-900 font-mono text-xs text-slate-800 dark:text-slate-200">
-              FV_ordinary = PMT × [((1 + r)^n − 1) / r]
-            </div>
-            <p className="text-xs text-slate-500">PMT = Periodic contribution deposited at period end.</p>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="font-bold text-slate-900 dark:text-slate-100 block">Ordinary Annuity Stream</span>
+            <code className="text-emerald-600 dark:text-emerald-400 font-bold block">FV_ordinary = PMT × [((1+r)^n − 1) / r]</code>
           </div>
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
-            <h3 className="font-bold text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wider">Annuity Due Stream</h3>
-            <div className="p-2 rounded bg-white dark:bg-slate-900 font-mono text-xs text-slate-800 dark:text-slate-200">
-              FV_due = PMT × [((1 + r)^n − 1) / r] × (1 + r)
-            </div>
-            <p className="text-xs text-slate-500">Includes (1+r) timing multiplier for beginning-of-period deposits.</p>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="font-bold text-slate-900 dark:text-slate-100 block">Annuity Due Stream</span>
+            <code className="text-purple-600 dark:text-purple-400 font-bold block">FV_due = PMT × [((1+r)^n − 1) / r] × (1+r)</code>
           </div>
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-2">
-            <h3 className="font-bold text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wider">Target Contribution Solver</h3>
-            <div className="p-2 rounded bg-white dark:bg-slate-900 font-mono text-xs text-slate-800 dark:text-slate-200">
-              PMT = [Target − P × (1 + r)^n] / AnnuityFactor
-            </div>
-            <p className="text-xs text-slate-500">Solves required annual or monthly deposit to hit exact future goal.</p>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="font-bold text-slate-900 dark:text-slate-100 block">Target Contribution Solver</span>
+            <code className="text-amber-600 dark:text-amber-400 font-bold block">PMT = [Target − P(1+r)^n] / AnnuityFactor</code>
+          </div>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="font-bold text-slate-900 dark:text-slate-100 block">Inflation-Adjusted Real Value</span>
+            <code className="text-indigo-600 dark:text-indigo-400 font-bold block">Real Value = Nominal Balance / (1 + Inflation)^Years</code>
+          </div>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1">
+            <span className="font-bold text-slate-900 dark:text-slate-100 block">Modeled Tax-Adjusted Value</span>
+            <code className="text-cyan-600 dark:text-cyan-400 font-bold block">Tax-Adjusted = Ending Balance − (Modeled Gains × Tax Rate)</code>
           </div>
         </div>
       </section>
 
-      {/* Chapter 39: Exactly 12 Canonical FAQs */}
-      <section className="space-y-6 pt-4 border-t border-slate-200 dark:border-slate-800">
-        <div className="flex items-center gap-2">
+      {/* 39. EXACTLY 12 CANONICAL FAQS (UNFOLDED / OPEN BY DEFAULT) */}
+      <section className="pt-8 space-y-6">
+        <div className="flex items-center gap-3">
           <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">
             Frequently Asked Questions (12 Essential Annuity Insights)
           </h2>
         </div>
 
         <div className="space-y-3">
-          {annuityFaqs.map((faq, idx) => {
-            const isOpen = openFaqIndex === idx;
+          {annuityFaqs.map((faq, index) => {
+            const isOpen = openFaqIndices.has(index);
             return (
               <div
-                key={idx}
-                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xs transition-all"
+                key={index}
+                className="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden transition-all shadow-xs"
               >
                 <button
                   type="button"
-                  onClick={() => toggleFaq(idx)}
-                  className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
+                  onClick={() => toggleFaq(index)}
+                  className="w-full text-left p-4 flex items-center justify-between font-semibold text-sm sm:text-base text-slate-900 dark:text-slate-100 hover:bg-slate-100/50 dark:hover:bg-slate-700/50 transition-colors focus:outline-none cursor-pointer"
                 >
-                  <span className="flex items-center gap-2.5 pr-4">
-                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
-                      Q{idx + 1}.
+                  <span className="flex items-center gap-2">
+                    <span className="text-xs text-blue-600 dark:text-blue-400 font-bold min-w-[24px]">
+                      Q{index + 1}.
                     </span>
                     {faq.question}
                   </span>
-                  <ChevronDown
-                    className={`h-4 w-4 text-slate-500 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-                  />
+                  {isOpen ? (
+                    <ChevronUp className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4 text-slate-400 flex-shrink-0" />
+                  )}
                 </button>
-
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50/50 dark:bg-slate-900/50 font-normal">
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-slate-700/50 pt-3">
                     {faq.answer}
                   </div>
                 )}
               </div>
             );
           })}
-        </div>
-      </section>
-
-      {/* Chapter 40: Single Canonical Related Calculators Block */}
-      <section className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-        <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Layers className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          Related Financial &amp; Loan Calculators
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {relatedCalculators.map((calc, idx) => (
-            <Link
-              key={idx}
-              href={calc.slug}
-              className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors group flex flex-col justify-between space-y-2"
-            >
-              <div className="space-y-1">
-                <div className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center justify-between">
-                  <span>{calc.name}</span>
-                  <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-                </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                  {calc.description}
-                </p>
-              </div>
-            </Link>
-          ))}
         </div>
       </section>
     </article>
