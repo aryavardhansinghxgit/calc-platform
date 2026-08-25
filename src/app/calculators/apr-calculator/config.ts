@@ -6,28 +6,38 @@ import { APRContent } from "@/components/calculator/apr/APRContent";
 
 export const apr_calculatorConfig: CalculatorModuleDefinition = {
   id: "apr-calculator",
-  title: "APR Calculator — Calculate Annual Percentage Rate & Loan Comparison",
+  title: "APR Calculator — Real APR, Loan Fees, Mortgage Points & Loan Comparison",
   slug: "apr-calculator",
   category: "Finance",
   subcategory: "Mortgage and Real Estate",
   description:
-    "Free APR Calculator. Calculate exact Annual Percentage Rate (APR), compare mortgage & auto loan offers with fees, analyze credit card payoff schedules, and solve target loan capacity.",
+    "Calculate real APR from loan rates and upfront fees, compare mortgage offers, model credit-card payoff, solve borrowing capacity, and analyze early-payoff APR.",
   iconName: "Percent",
   featured: true,
   keywords: [
-    "apr calculator",
-    "calculate annual percentage rate",
-    "loan apr calculator",
-    "apr vs interest rate calculator",
-    "mortgage apr calculator with fees",
-    "auto loan apr comparison"
+    "APR calculator",
+    "annual percentage rate calculator",
+    "APR calculator with fees",
+    "real APR calculator",
+    "loan APR calculator",
+    "mortgage APR calculator",
+    "APR vs interest rate calculator",
+    "APR comparison calculator",
+    "credit card APR calculator",
+    "APR payment calculator",
+    "true APR calculator",
+    "APR with closing costs",
+    "loan comparison APR calculator",
   ],
   priority: 1,
   relatedCalculators: [
     "loan-calculator",
     "mortgage-calculator",
     "credit-card-payoff-calculator",
-    "auto-loan-calculator"
+    "auto-loan-calculator",
+    "refinance-calculator",
+    "amortization-calculator",
+    "interest-rate-calculator",
   ],
   formulaDescription:
     "Amount Financed = Loan Amount - Upfront Fees. APR is solved via Newton-Raphson where Amount Financed = Σ (Payment_t / (1 + r)^t).",

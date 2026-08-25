@@ -5,53 +5,63 @@ export interface APRFAQItem {
 
 export const apr_calculatorFaqs: APRFAQItem[] = [
   {
-    question: "What is the difference between APR and interest rate?",
+    question: "What is APR and how is it different from an interest rate?",
     answer:
-      "The interest rate is the percentage cost of borrowing the principal loan balance. The Annual Percentage Rate (APR) includes both the interest rate AND all mandatory upfront financing fees (such as origination fees, closing costs, and points). APR provides a standardized baseline for comparing the true cost of different loan offers.",
+      "The nominal interest rate measures the periodic interest charged on the loan balance. APR is a broader annualized borrowing-cost metric that incorporates the interest rate and qualifying finance charges under the calculator's modeled methodology.",
+  },
+  {
+    question: "How does an APR calculator calculate real APR?",
+    answer:
+      "The calculator determines the amount financed after modeled upfront fees and then solves a present-value equation for the periodic rate that makes the discounted future payments equal that amount. The engine uses Newton-Raphson numerical solving.",
+  },
+  {
+    question: "What fees are included in APR?",
+    answer:
+      "The calculator's educational model includes specified financing charges such as modeled origination/processing fees and discount points. Actual disclosure treatment depends on the applicable rules and transaction details.",
+  },
+  {
+    question: "Why can APR be higher than the nominal interest rate?",
+    answer:
+      "When upfront financing fees reduce the net amount received while the contractual payments remain unchanged, the annualized borrowing cost becomes higher than the nominal rate.",
+  },
+  {
+    question: "Can APR be lower than the interest rate?",
+    answer:
+      "Under some financing structures, lender credits or negative points can reduce the modeled amount of finance charges enough for an effective APR to be lower than the nominal rate. The actual outcome depends on the exact cash flows and fee treatment.",
+  },
+  {
+    question: "How do mortgage points affect APR?",
+    answer:
+      "Points are upfront charges based on the loan amount. Increasing points increases the modeled financing fees and can therefore increase APR unless the associated reduction in nominal interest is also modeled.",
+  },
+  {
+    question: "How does loan term affect APR?",
+    answer:
+      "With the same upfront fee, a shorter term can produce a higher APR because the fee is spread across fewer payment periods. APR comparisons across different terms should therefore be interpreted carefully.",
+  },
+  {
+    question: "What happens to APR if I pay off or refinance a loan early?",
+    answer:
+      "Early payoff can materially change the realized borrowing cost because upfront fees are effectively spread over fewer months. The calculator's prepayment simulator models this through a realized APR calculation.",
+  },
+  {
+    question: "How is credit card APR different from installment-loan APR?",
+    answer:
+      "Credit cards are revolving accounts with changing balances and minimum-payment rules, while installment loans normally use fixed scheduled payments over a defined term. The cash-flow models are therefore different.",
+  },
+  {
+    question: "How can I compare APRs across different loan offers?",
+    answer:
+      "Use the APR calculator to compare modeled APR, fees, monthly payment and total cost under identical assumptions. APR is especially useful when nominal rates differ because of upfront fees, but expected holding period also matters.",
   },
   {
     question: "What is the difference between APR and APY?",
     answer:
-      "APR (Annual Percentage Rate) reflects the annualized cost of borrowing debt without compounding interest within the year. APY (Annual Percentage Yield) reflects the total compounding interest earned or paid over a full year. Because APY accounts for compounding frequency (e.g. monthly or daily), APY is always slightly higher than APR for the same rate.",
+      "APR is an annualized borrowing-cost measure used for debt, while APY generally measures annualized yield on savings or investments and incorporates compounding.",
   },
   {
-    question: "What fees are included in mortgage APR calculations under TILA?",
+    question: "Is calculator APR the same as the APR disclosed by a lender?",
     answer:
-      "Under the federal Truth in Lending Act (TILA), mortgage APR includes origination fees, discount points, processing fees, underwriting fees, escrow fees, and private mortgage insurance (PMI). Optional fees—such as appraisal fees, title search, home inspections, and attorney fees—are typically excluded.",
-  },
-  {
-    question: "Why does APR increase when the loan term is shortened?",
-    answer:
-      "Upfront financing fees (such as $3,000 in closing costs) are amortized over the life of the loan. When spread over a 15-year loan term instead of a 30-year term, the annual fee allocation is doubled, causing a wider spread between the nominal interest rate and the calculated APR.",
-  },
-  {
-    question: "Can an APR be lower than the interest rate?",
-    answer:
-      "Yes. If a lender offers negative points (lender credits) that offset your closing costs or lower your principal, the effective amount financed can exceed the loan amount, resulting in an APR lower than the nominal interest rate.",
-  },
-  {
-    question: "How does paying off a loan early impact the actual realized APR?",
-    answer:
-      "If you pay off a loan early (e.g. refinancing a 30-year mortgage after 5 years), the upfront fees are condensed over a much shorter period. This significantly increases your effective realized APR compared to holding the loan for the full 30 years.",
-  },
-  {
-    question: "What is a good APR for an auto loan vs. credit card?",
-    answer:
-      "Auto loan APRs for prime borrowers (740+ credit score) typically range between 4.5% and 7.5%. Credit card APRs are significantly higher, averaging between 18.99% and 24.99% for variable revolving lines of credit.",
-  },
-  {
-    question: "How do discount points lower my APR on a mortgage?",
-    answer:
-      "One mortgage point equals 1% of your loan amount paid upfront to buy down your interest rate (e.g. lowering your rate by 0.25%). Buying points increases upfront fees but reduces monthly interest payments. If you hold the mortgage long enough to break even, points lower your overall APR.",
-  },
-  {
-    question: "How does credit card APR calculation differ from installment loan APR?",
-    answer:
-      "Installment loans (mortgages, auto loans) calculate APR based on fixed equal monthly payments amortizing principal and interest over a fixed term. Credit cards use daily periodic rates applied to average daily balances, with fluctuating minimum payments and variable rates tied to the Prime Rate.",
-  },
-  {
-    question: "What steps can I take to negotiate a lower APR with lenders?",
-    answer:
-      "To lower your APR: 1) Boost your credit score above 740 before applying, 2) Shop and compare loan estimates from at least 3 to 5 lenders, 3) Ask lenders to match lower competitor origination fees, 4) Consider buying discount points if you plan to stay in the home long-term, and 5) Increase your down payment to eliminate private mortgage insurance (PMI).",
+      "No. The calculator produces a mathematical estimate under selected assumptions. An official lender APR disclosure depends on the lender's actual fees, transaction details and applicable regulatory disclosure methodology.",
   },
 ];
