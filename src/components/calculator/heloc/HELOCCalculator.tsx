@@ -589,8 +589,11 @@ export function HELOCCalculator() {
             <span className="font-bold text-blue-600 dark:text-blue-400 block font-sans">HELOC Underwriting & Payment Formulas:</span>
             <div className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1 text-slate-700 dark:text-slate-300">
               <div>{"Max Allowable Debt (" + cltvLimitPct + "% Cap) = " + currencySymbol + parseFloat(homeValue).toLocaleString() + " × " + cltvLimitPct + "% = " + currencySymbol + Math.round((parseFloat(homeValue) * parseFloat(cltvLimitPct)) / 100).toLocaleString()}</div>
-              <div>{"Max HELOC Credit Line = " + currencySymbol + Math.round((parseFloat(homeValue) * parseFloat(cltvLimitPct)) / 100).toLocaleString() + " - 1st Mortgage (" + currencySymbol + parseFloat(currentBalance).toLocaleString() + ") = " + currencySymbol + helocCalc.maxBorrowableCreditLine.toLocaleString()}</div>
-              <div>{"Draw Phase IO Monthly Payment = " + currencySymbol + helocCalc.actualCreditLine.toLocaleString() + " × (" + interestRate + "% / 12) = " + currencySymbol + helocCalc.drawPeriodMonthlyPayment.toLocaleString() + "/mo"}</div>
+              {drawPaymentStructure === "interest_only" ? (
+                <div>{"Draw Phase IO Monthly Payment = " + currencySymbol + helocCalc.actualCreditLine.toLocaleString() + " × (" + interestRate + "% / 12) = " + currencySymbol + helocCalc.drawPeriodMonthlyPayment.toLocaleString() + "/mo"}</div>
+              ) : (
+                <div>{"Draw Phase P&I Monthly Payment = " + currencySymbol + helocCalc.actualCreditLine.toLocaleString() + " × 1.5% = " + currencySymbol + helocCalc.drawPeriodMonthlyPayment.toLocaleString() + "/mo"}</div>
+              )}
               <div>{"Repay Phase P&I Monthly Payment (" + repaymentPeriodYears + " Yrs) = " + currencySymbol + helocCalc.repaymentPeriodMonthlyPayment.toLocaleString() + "/mo"}</div>
             </div>
           </div>

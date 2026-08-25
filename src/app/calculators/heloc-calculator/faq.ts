@@ -5,53 +5,63 @@ export interface HELOCFAQItem {
 
 export const helocFaqs: HELOCFAQItem[] = [
   {
-    question: "How does a HELOC work and what are the draw and repayment periods?",
+    question: "What is a HELOC and how does it work?",
     answer:
-      "A Home Equity Line of Credit (HELOC) is a revolving credit line secured by your home's equity. During the initial Draw Period (typically 10 years), you can borrow funds up to your credit limit as needed and make interest-only minimum payments. When the Draw Period ends, the Repayment Period begins (typically 20 years), during which the draw window closes and you must make monthly principal and interest payments to fully amortize the balance.",
+      "A HELOC is a revolving line of credit secured by home equity. The calculator models available credit, draw-phase payments, repayment-phase payments, rate scenarios, fees, and total modeled interest.",
   },
   {
-    question: "How is the minimum monthly payment calculated during the draw period?",
+    question: "How is a HELOC credit limit calculated?",
     answer:
-      "During the draw period, most lenders require interest-only payments calculated as: Monthly Payment = Drawn Balance × (Annual Interest Rate / 12). For example, on a $50,000 balance at an 8.0% interest rate, the draw-period payment is $333.33/month ($50,000 × 0.08 / 12).",
+      "The calculator multiplies home value by the selected maximum CLTV and subtracts the existing first-mortgage balance. A negative result is safely clamped to zero.",
   },
   {
-    question: "What is HELOC payment shock and how can I prepare for it?",
+    question: "What is CLTV and why does it matter for a HELOC?",
     answer:
-      "HELOC payment shock is the abrupt monthly payment increase that occurs when transitioning from the interest-only draw period to the amortizing repayment period. Because you begin paying back principal alongside interest over 20 years, your payment can jump significantly (often 25% to 50%+ higher). You can prepare by making voluntary principal payments during the draw period to reduce your balance.",
+      "CLTV compares the combined first mortgage and HELOC balance with the home's market value. It is used in the calculator to estimate the maximum borrowing amount and the percentage of the property value secured by debt.",
   },
   {
-    question: "Is a HELOC interest rate fixed or variable?",
+    question: "How are HELOC draw-period and repayment-period payments calculated?",
     answer:
-      "Most HELOCs carry variable interest rates tied to a benchmark index (typically the Wall Street Journal Prime Rate) plus a fixed lender margin (e.g. WSJ Prime + 1.0%). As the Prime Rate fluctuates, your monthly interest rate and payment adjust accordingly.",
+      "Interest-only draw payments are based on the HELOC balance and rate. The repayment phase uses amortizing payment mathematics over the selected repayment term. The calculator also supports a principal-and-interest draw structure.",
   },
   {
-    question: "How much can I borrow on a HELOC based on my home equity?",
+    question: "What is HELOC payment shock?",
     answer:
-      "Most lenders cap maximum combined borrowing at 80% to 85% Combined Loan-to-Value (CLTV). The formula is: Max HELOC Credit Line = (Home Value × Max CLTV %) - Outstanding 1st Mortgage Balance. For example, on a $500,000 home with an 80% cap ($400,000) and a $260,000 1st mortgage, your maximum HELOC line is $140,000.",
+      "Payment shock is the positive increase between the repayment payment and the draw payment. The calculator clamps negative values to zero, so a repayment payment lower than the draw payment is shown as no upward payment shock.",
   },
   {
-    question: "Is the interest on a HELOC tax-deductible?",
+    question: "How do variable HELOC interest rates and rate caps work?",
     answer:
-      "Under current IRS tax rules (Tax Cuts and Jobs Act), interest paid on a HELOC is tax-deductible ONLY if the borrowed funds are used to buy, build, or substantially improve the home securing the loan. Interest is NOT deductible if used for debt consolidation, credit card payoff, or personal expenses.",
+      "The calculator models a benchmark plus lender margin and allows a stress increase subject to a lifetime cap. The current benchmark assumptions are model inputs and should not be treated as a permanent market rate.",
   },
   {
-    question: "Can a lender freeze or reduce my HELOC credit limit?",
+    question: "Can I make extra principal payments on a HELOC?",
     answer:
-      "Yes. Under federal regulations, a lender may temporarily freeze or reduce your HELOC credit line if the value of your home drops significantly below its appraised value at loan origination, or if your financial situation changes drastically affecting your ability to repay.",
+      "Yes. The lifecycle simulator allows extra principal payments and models their effect on the outstanding balance, later repayment payment, and interest.",
   },
   {
-    question: "What are the upfront and ongoing fees associated with a HELOC?",
+    question: "How does a HELOC compare with a fixed home equity loan?",
     answer:
-      "Upfront fees may include appraisal, title search, origination, and application fees ($500 to $2,000). Ongoing fees often include annual maintenance or inactivity fees ($50 to $100/year) if the credit line remains unused.",
+      "A HELOC is revolving and can have variable-rate behavior, while a fixed home equity loan is generally modeled as a lump-sum installment loan. The appropriate choice depends on the amount needed, timing, rate structure, fees, and repayment preferences.",
   },
   {
-    question: "What happens if I sell my home while having an active HELOC balance?",
+    question: "How does a HELOC compare with a cash-out refinance?",
     answer:
-      "When you sell your property, the active HELOC balance—alongside your primary mortgage—must be paid off in full from the proceeds at closing before you receive any remaining net proceeds.",
+      "A cash-out refinance replaces the existing first mortgage with a new mortgage, while a HELOC keeps the first mortgage in place. The calculator's comparison is scenario-specific and should consider the rate and balance of the existing first mortgage.",
   },
   {
-    question: "Is it better to choose a HELOC or a fixed-rate home equity loan?",
+    question: "Is HELOC interest tax-deductible?",
     answer:
-      "A HELOC is ideal if you need flexible, ongoing access to capital over multiple years (e.g. multi-stage home renovations or emergency funds) and prefer paying interest only on what you use. A fixed-rate home equity loan is better if you require a single lump-sum payout with fixed interest rate and payment predictability.",
+      "The calculator includes an illustrative tax estimator for qualifying home-use assumptions. Tax treatment depends on applicable law, the use of the proceeds, filing circumstances, and other factors, so the result is not tax advice.",
+  },
+  {
+    question: "What happens to a HELOC when I sell my home?",
+    answer:
+      "An outstanding HELOC balance generally must be satisfied as part of the sale because the line is secured by the property. The calculator can estimate the balance but cannot determine final settlement requirements.",
+  },
+  {
+    question: "What fees and risks should I understand before opening a HELOC?",
+    answer:
+      "Users should consider closing costs, annual fees, variable-rate risk, payment shock, the possibility of credit-line changes, and the fact that the home secures the debt. Actual fees and lender rights vary by product and lender.",
   },
 ];
