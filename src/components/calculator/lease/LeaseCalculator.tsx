@@ -16,6 +16,7 @@ import {
   classifyCommercialLease,
   estimateAssetResidual,
 } from "@/lib/calculator-engine/formulas/lease";
+import { LeaseContent } from "./LeaseContent";
 
 export interface SavedLeaseItem {
   id: string;
@@ -1693,6 +1694,11 @@ export function LeaseCalculator() {
           )}
         </div>
       </div>
+
+      {/* Educational Guide & 12 Canonical FAQs */}
+      <LeaseContent />
     </div>
   );
 }
+
+export default LeaseCalculator;

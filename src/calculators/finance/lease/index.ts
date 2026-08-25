@@ -1,5 +1,6 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateLeaseFixedRate } from "@/lib/calculator-engine/formulas/lease";
+import { leaseFaqs } from "./faq";
 
 export const LEASE_CALCULATOR: CalculatorModuleDefinition = {
   id: "lease",
@@ -23,28 +24,7 @@ export const LEASE_CALCULATOR: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Monthly Lease Payment = Monthly Depreciation [(Asset Value - Residual) / Term] + Monthly Rent Charge [(Asset Value + Residual) × Money Factor] + Monthly Sales Tax",
-  faqs: [
-    {
-      question: "What is a lease and how does it work?",
-      answer:
-        "A lease is a contract where the asset owner (lessor) grants a lessee the right to use an asset for a set term in exchange for periodic payments. Rather than buying the whole asset, you finance only the asset's depreciation plus finance rent charges.",
-    },
-    {
-      question: "How is a monthly lease payment calculated?",
-      answer:
-        "Monthly payment = Monthly Depreciation [(Net Cap Cost - Residual) / Term] + Monthly Rent Charge [(Net Cap Cost + Residual) × Money Factor] + Monthly Sales Tax.",
-    },
-    {
-      question: "What is Money Factor and how do I convert it to APR?",
-      answer:
-        "Money Factor (or lease factor) is the fractional interest rate used on leases. Multiply Money Factor by 2,400 to get the equivalent APR (e.g., 0.0025 × 2,400 = 6.0% APR).",
-    },
-    {
-      question: "What is Residual Value?",
-      answer:
-        "Residual value is the predetermined wholesale value of the asset at the end of the lease. A higher residual value means lower monthly depreciation and lower monthly lease payments.",
-    },
-  ],
+  faqs: leaseFaqs,
   inputs: [
     {
       name: "assetValue",
