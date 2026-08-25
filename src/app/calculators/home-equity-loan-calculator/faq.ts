@@ -5,53 +5,63 @@ export interface HomeEquityFAQItem {
 
 export const home_equityFaqs: HomeEquityFAQItem[] = [
   {
-    question: "Are home equity loan interest payments tax deductible?",
+    question: "What is a home equity loan and how does it work?",
     answer:
-      "Under current IRS rules (Tax Cuts and Jobs Act), interest paid on a home equity loan is tax-deductible ONLY if the funds are used to buy, build, or substantially improve the home that secures the loan (e.g. major renovations, room additions, or roof replacement). Interest is NOT deductible if used for debt consolidation or personal expenses.",
-  },
-  {
-    question: "What happens if home prices fall below the mortgage and equity loan balance?",
-    answer:
-      "If property values decline significantly, you may owe more in total mortgage debt than your home is worth (known as being 'underwater' or having negative equity). While your monthly payments remain unchanged, you will not be able to sell or refinance without bringing cash to closing to pay off the remaining balance.",
-  },
-  {
-    question: "Can you pay off a home equity loan early without prepayment penalties?",
-    answer:
-      "Most modern home equity loans do not charge prepayment penalties, allowing you to make extra principal payments or pay off the entire loan balance early to save on interest.",
-  },
-  {
-    question: "What are typical closing costs on a second mortgage?",
-    answer:
-      "Closing costs typically range from 2% to 5% of the loan amount ($1,500 to $4,000), covering appraisal fees, origination, title search, and credit reporting fees. You can pay these upfront in cash, deduct them from proceeds, or finance them into your loan balance.",
+      "A home equity loan is a fixed second mortgage that allows a homeowner to borrow against available equity and repay the balance through scheduled installments. The calculator models the loan amount, rate, term, CLTV and closing-cost assumptions.",
   },
   {
     question: "How much can I borrow with a home equity loan?",
     answer:
-      "Most lenders allow you to borrow up to 80% to 85% of your home's appraised market value, minus your existing first mortgage balance. For example, on a $500,000 home with a $275,000 1st mortgage, an 80% CLTV cap allows up to $125,000 ($500,000 × 0.80 - $275,000).",
+      "The calculator estimates maximum borrowing capacity by multiplying home value by the selected CLTV limit and subtracting the existing first-mortgage balance. Actual lender limits vary.",
   },
   {
-    question: "What is the difference between a home equity loan and a HELOC?",
+    question: "What is CLTV and how is it calculated?",
     answer:
-      "A home equity loan provides a fixed lump-sum payout with a fixed interest rate and fixed monthly payments over 5 to 30 years. A HELOC (Home Equity Line of Credit) functions like a revolving credit line with a variable interest rate during a 10-year draw period.",
+      "CLTV is the combined loan-to-value ratio. It is calculated as the first-mortgage balance plus the second-mortgage balance, divided by the home's value, multiplied by 100.",
   },
   {
-    question: "What credit score is needed to qualify for a home equity loan?",
+    question: "How is a home equity loan monthly payment calculated?",
     answer:
-      "Most lenders require a minimum credit score of 620 to 680. Borrowers with credit scores of 740 or higher qualify for the lowest interest rates and highest CLTV borrowing caps (up to 85% or 90%).",
+      "The calculator uses the standard fixed-rate amortization formula using the loan amount, monthly interest rate and number of payments. Closing costs can affect APR and, when financed, can also affect the payment.",
   },
   {
-    question: "What is Combined Loan-to-Value (CLTV) and how is it calculated?",
+    question: "What credit score is needed for a home equity loan?",
     answer:
-      "CLTV is the ratio of all mortgage debts secured by your home divided by its current appraised value: CLTV = (1st Mortgage Balance + 2nd Mortgage Balance) / Home Appraised Value.",
+      "The calculator's educational material uses credit-score ranges such as 620-680 and 740+ as lender-dependent benchmarks. Actual minimum scores and CLTV limits vary by lender and product.",
   },
   {
-    question: "How long does it take to get approved and funded for a home equity loan?",
+    question: "How does a home equity loan compare with a HELOC?",
     answer:
-      "Processing typically takes 2 to 6 weeks from application to funding, as the lender must complete a title search, verify income and DTI ratios, and conduct an appraisal.",
+      "A home equity loan is generally a fixed lump-sum installment loan, while a HELOC is a revolving credit line that may have a variable rate and separate draw and repayment phases.",
   },
   {
-    question: "Is it better to take out a home equity loan or do a cash-out refinance?",
+    question: "How does a home equity loan compare with a cash-out refinance?",
     answer:
-      "If your existing first mortgage has a very low interest rate (e.g. 3% to 4%), a Home Equity Loan is usually better because it preserves that low rate. A Cash-Out Refinance replaces your entire first mortgage, which may significantly increase your monthly payment if current rates are higher.",
+      "A home equity loan adds a second lien while leaving the existing first mortgage in place. A cash-out refinance replaces the first mortgage with a new, larger mortgage. The better result depends on rates, balances, fees and the homeowner's goals.",
+  },
+  {
+    question: "Are home equity loan interest payments tax-deductible?",
+    answer:
+      "The calculator's tax estimator models potentially deductible interest when its qualifying-use state indicates that proceeds are used to buy, build or substantially improve the securing residence. Actual tax treatment depends on applicable law and individual circumstances.",
+  },
+  {
+    question: "Can I pay off a home equity loan early?",
+    answer:
+      "Many home equity loan products may permit early payoff, but prepayment terms are loan-specific. The actual contract should be checked for penalties or restrictions.",
+  },
+  {
+    question: "What are typical closing costs for a second mortgage?",
+    answer:
+      "The reference uses a 2%-5% educational range for illustrative second-mortgage closing costs. Actual costs depend on lender, property, state, loan amount and transaction structure.",
+  },
+  {
+    question: "What happens if home values fall and I owe more than the property is worth?",
+    answer:
+      "You may have negative or underwater equity. That can make selling or refinancing more difficult because the property's value may not fully cover the secured debt.",
+  },
+  {
+    question: "How long does it usually take to get a home equity loan approved and funded?",
+    answer:
+      "The reference uses an illustrative 2-6 week range, but actual processing depends on appraisal, title, documentation, underwriting and lender workload.",
   },
 ];

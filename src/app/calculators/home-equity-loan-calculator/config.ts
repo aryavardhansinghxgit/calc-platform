@@ -6,21 +6,26 @@ import { HomeEquityContent } from "@/components/calculator/home-equity/HomeEquit
 
 export const home_equityConfig: CalculatorModuleDefinition = {
   id: "home-equity-loan-calculator",
-  title: "Home Equity Loan Calculator — Monthly Payments & Borrowing Power",
+  title: "Home Equity Loan Calculator - Payment, CLTV, APR & Borrowing Power",
   slug: "home-equity-loan-calculator",
   category: "Finance",
   subcategory: "Mortgage and Real Estate",
   description:
-    "Free Home Equity Loan & Borrowing Capacity Suite. Calculate monthly payments, maximum CLTV borrowing limits, compare HELOC vs Cash-Out Refinance, DTI qualification, and IRS 2026 tax deductibility.",
+    "Calculate home equity loan payments, maximum borrowing power, CLTV, true APR, amortization, extra-payment savings, DTI, tax estimates and home-renovation equity.",
   iconName: "Home",
   featured: true,
   keywords: [
     "home equity loan calculator",
-    "calculate home equity borrowing limit",
-    "cltv calculator",
-    "second mortgage monthly payment",
-    "heloc vs home equity loan calculator",
-    "home equity loan amortization schedule"
+    "home equity loan payment calculator",
+    "home equity loan calculator with CLTV",
+    "second mortgage calculator",
+    "home equity borrowing calculator",
+    "home equity loan amortization calculator",
+    "home equity loan vs HELOC calculator",
+    "home equity loan vs cash-out refinance",
+    "home equity payment calculator",
+    "second mortgage payment calculator",
+    "home equity loan APR calculator",
   ],
   priority: 1,
   relatedCalculators: [
@@ -28,7 +33,9 @@ export const home_equityConfig: CalculatorModuleDefinition = {
     "fha-loan-calculator",
     "va-mortgage-calculator",
     "dti-calculator",
-    "house-affordability-calculator"
+    "house-affordability-calculator",
+    "refinance-calculator",
+    "amortization-calculator",
   ],
   formulaDescription:
     "Max Debt = Home Value × CLTV Limit. Max Borrowable Equity = Max Debt - Existing Mortgage Balance. Monthly Payment = Fixed Amortization P&I.",
