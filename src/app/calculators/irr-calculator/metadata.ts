@@ -3,9 +3,9 @@ import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const irr_calculatorMetadata: Metadata = {
   ...generateCalculatorMetadata({
-    title: "IRR Calculator — Internal Rate of Return, MIRR & NPV Capital Budgeting",
+    title: "IRR Calculator — Internal Rate of Return, MIRR, NPV & Project Analysis",
     description:
-      "Advanced Capital Budgeting & IRR Calculator. Calculate exact Internal Rate of Return (IRR), Modified IRR (MIRR), Net Present Value (NPV), Profitability Index, and Discounted Payback Period.",
+      "Calculate IRR, MIRR, NPV, profitability index, discounted payback and project returns. Analyze monthly cash flows, multiple IRRs, Fisher crossover and capital budgeting scenarios.",
     slug: "irr-calculator",
   }),
   keywords: [
@@ -23,15 +23,15 @@ export const irr_calculatorMetadata: Metadata = {
     "wacc hurdle rate calculator",
   ],
   openGraph: {
-    title: "IRR Calculator — Internal Rate of Return, MIRR & NPV Capital Budgeting",
+    title: "IRR Calculator — Internal Rate of Return, MIRR, NPV & Project Analysis",
     description:
-      "Advanced Capital Budgeting & IRR Calculator. Solve IRR, MIRR, NPV Profiles, and Compare Multi-Project Capital Investments.",
+      "Calculate IRR, MIRR, NPV, profitability index, discounted payback and project returns. Analyze monthly cash flows, multiple IRRs, Fisher crossover and capital budgeting scenarios.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "IRR Calculator — Internal Rate of Return, MIRR & NPV Capital Budgeting",
+    title: "IRR Calculator — Internal Rate of Return, MIRR, NPV & Project Analysis",
     description:
-      "Advanced Capital Budgeting & IRR Calculator. Solve IRR, MIRR, NPV Profiles, and Compare Multi-Project Capital Investments.",
+      "Calculate IRR, MIRR, NPV, profitability index, discounted payback and project returns. Analyze monthly cash flows, multiple IRRs, Fisher crossover and capital budgeting scenarios.",
   },
 };

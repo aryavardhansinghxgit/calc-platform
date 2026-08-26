@@ -5,12 +5,12 @@ import { IrrContent } from "@/components/calculator/irr/IrrContent";
 
 export const irr_calculatorConfig: CalculatorModuleDefinition = {
   id: "irr-calculator",
-  title: "IRR Calculator — Internal Rate of Return, MIRR & NPV Capital Budgeting",
+  title: "IRR Calculator — Internal Rate of Return, MIRR, NPV & Project Analysis",
   slug: "irr-calculator",
   category: "Finance",
   subcategory: "Investment",
   description:
-    "Calculate Internal Rate of Return (IRR), Modified IRR (MIRR), Net Present Value (NPV), Profitability Index (PI), and Discounted Payback Period for capital budgeting projects.",
+    "Calculate IRR, MIRR, NPV, profitability index, discounted payback and project returns. Analyze monthly cash flows, multiple IRRs, Fisher crossover and capital budgeting scenarios.",
   iconName: "TrendingUp",
   featured: true,
   keywords: [
