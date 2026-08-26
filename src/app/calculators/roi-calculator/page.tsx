@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   const baseMeta = generateCalculatorMetadata({
-    title: "ROI Calculator — Return on Investment & Profitability Planner",
+    title: "ROI Calculator — Return on Investment, Annualized ROI & Real Return",
     description:
-      "Calculate Return on Investment (ROI) percentage, annualized ROI, net dollar gain, inflation-adjusted real return, and capital gains tax impact.",
+      "Calculate ROI, annualized return, net profit, post-tax value, real purchasing power, target ROI, investment scenarios, benchmarks, and return sensitivity.",
     slug: ROI_CALCULATOR.slug,
   });
 
@@ -17,23 +17,25 @@ export async function generateMetadata(): Promise<Metadata> {
       "roi calculator",
       "return on investment calculator",
       "annualized roi calculator",
+      "real return calculator",
       "investment return calculator",
       "profitability calculator",
       "capital gain calculator",
       "real estate roi calculator",
       "stock roi calculator",
+      "what-if roi matrix",
     ],
     openGraph: {
       ...baseMeta.openGraph,
-      title: "ROI Calculator — Return on Investment & Profitability Planner",
+      title: "ROI Calculator — Return on Investment, Annualized ROI & Real Return",
       description:
-        "Calculate Return on Investment (ROI) percentage, annualized ROI, net dollar gain, inflation-adjusted real return, and capital gains tax impact.",
+        "Calculate ROI, annualized return, net profit, post-tax value, real purchasing power, target ROI, investment scenarios, benchmarks, and return sensitivity.",
     },
     twitter: {
       ...baseMeta.twitter,
-      title: "ROI Calculator — Return on Investment & Profitability Planner",
+      title: "ROI Calculator — Return on Investment, Annualized ROI & Real Return",
       description:
-        "Calculate Return on Investment (ROI) percentage, annualized ROI, net dollar gain, inflation-adjusted real return, and capital gains tax impact.",
+        "Calculate ROI, annualized return, net profit, post-tax value, real purchasing power, target ROI, investment scenarios, benchmarks, and return sensitivity.",
     },
   };
 }
