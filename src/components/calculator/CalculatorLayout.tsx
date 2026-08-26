@@ -957,8 +957,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
 
           {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
-          {((definition.faqs && definition.faqs.length > 0) ||
-            (definition.category !== "Math" && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation)
+          {!isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && (
+            (Boolean(definition.faqs && definition.faqs.length > 0)) ||
+            (definition.category !== "Math")
           ) && (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">

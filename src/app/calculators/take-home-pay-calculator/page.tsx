@@ -14,20 +14,7 @@ export default function TakeHomePayCalculatorPage() {
     description: take_home_pay_calculatorConfig.description,
     slug: take_home_pay_calculatorConfig.slug,
     category: take_home_pay_calculatorConfig.category,
-    faqs: [
-      {
-        question: "How is my net take-home paycheck calculated from my gross salary?",
-        answer: "Your net pay equals gross earnings minus pre-tax deductions (401k, insurance), federal income tax withholding, FICA taxes (6.2% Social Security + 1.45% Medicare), and state/local wage taxes.",
-      },
-      {
-        question: "What is FICA tax and why is it deducted from every paycheck?",
-        answer: "FICA funds federal Social Security (6.2%) and Medicare (1.45%) programs, matched equally by employers.",
-      },
-      {
-        question: "Which US states have no state income tax deducted from paychecks?",
-        answer: "Texas, Florida, Washington, Nevada, Tennessee, Wyoming, South Dakota, and Alaska impose 0% state wage tax.",
-      },
-    ],
+    faqs: take_home_pay_calculatorConfig.faqs,
   });
 
   const appSchema = {

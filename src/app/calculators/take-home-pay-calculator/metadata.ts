@@ -3,9 +3,9 @@ import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const take_home_pay_calculatorMetadata: Metadata = {
   ...generateCalculatorMetadata({
-    title: "Take-Home Paycheck Calculator: Calculate Net Pay & Taxes",
+    title: "Take-Home Paycheck Calculator — Estimate Your Net Pay After Taxes",
     description:
-      "Calculate your net take-home paycheck after federal, state, FICA taxes, pre-tax 401(k) deductions, and Form W-4 adjustments with our free paycheck tool.",
+      "Calculate your estimated take-home pay from salary or hourly wages after federal tax, Social Security, Medicare, state and local taxes, benefits, retirement contributions, overtime, bonuses, and other deductions.",
     slug: "take-home-pay-calculator",
   }),
   keywords: [
@@ -22,15 +22,15 @@ export const take_home_pay_calculatorMetadata: Metadata = {
     "state paycheck tax calculator",
   ],
   openGraph: {
-    title: "Take-Home Paycheck Calculator: Calculate Net Pay & Taxes",
+    title: "Take-Home Paycheck Calculator — Estimate Your Net Pay After Taxes",
     description:
-      "Calculate your net take-home paycheck after federal, state, FICA taxes, pre-tax 401(k) deductions, and Form W-4 adjustments.",
+      "Calculate your estimated take-home pay from salary or hourly wages after federal tax, Social Security, Medicare, state and local taxes, benefits, retirement contributions, overtime, bonuses, and other deductions.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Take-Home Paycheck Calculator: Calculate Net Pay & Taxes",
+    title: "Take-Home Paycheck Calculator — Estimate Your Net Pay After Taxes",
     description:
-      "Calculate your net take-home paycheck after federal, state, FICA taxes, pre-tax 401(k) deductions, and Form W-4 adjustments.",
+      "Calculate your estimated take-home pay from salary or hourly wages after federal tax, Social Security, Medicare, state and local taxes, benefits, retirement contributions, overtime, bonuses, and other deductions.",
   },
 };
