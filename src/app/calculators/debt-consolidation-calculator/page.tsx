@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Debt Consolidation Calculator – Real APR & Refinance Suite",
+    title: "Debt Consolidation Calculator — Compare Loans, APR, Fees & Savings",
     description:
-      "Free Debt Consolidation Calculator. Calculate whether consolidating debts saves money, solve Real Effective APR with origination fees, test fee sensitivity thresholds, and compare 0% balance transfer cards.",
+      "Compare your current debts with a consolidation loan, calculate weighted APR, real effective APR, monthly savings, total interest, fees, balance-transfer costs, and payoff schedules.",
     slug: DEBT_CONSOLIDATION_CALCULATOR.slug,
   });
 }

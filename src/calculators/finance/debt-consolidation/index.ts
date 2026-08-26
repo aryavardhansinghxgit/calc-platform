@@ -3,37 +3,27 @@ import { calculateDebtConsolidation } from "@/lib/calculator-engine/formulas/deb
 
 export const DEBT_CONSOLIDATION_CALCULATOR: CalculatorModuleDefinition = {
   id: "debt-consolidation",
-  title: "Debt Consolidation Calculator – Real APR & Refinance Suite",
+  title: "Debt Consolidation Calculator — Compare Loans, APR, Fees & Savings",
   slug: "debt-consolidation-calculator",
   category: "Finance",
   subcategory: "Others",
   description:
-    "Calculate whether consolidating your credit cards and loans into a single lower-rate loan saves money. Solves Real Effective APR accounting for upfront origination fees, fee sensitivity thresholds, and 0% balance transfer card options.",
+    "Compare your current debts with a consolidation loan, calculate weighted APR, real effective APR, monthly savings, total interest, fees, balance-transfer costs, and payoff schedules.",
   iconName: "Landmark",
   featured: true,
   tags: [
     "debt consolidation calculator",
-    "real apr calculator",
-    "effective apr calculator",
+    "debt consolidation loan calculator",
+    "debt consolidation savings calculator",
     "credit card consolidation calculator",
-    "personal loan refinance",
-    "0 balance transfer calculator",
-    "origination fee impact",
+    "debt refinance calculator",
+    "debt consolidation comparison",
+    "debt payoff consolidation calculator",
+    "consolidation loan apr calculator",
+    "balance transfer vs consolidation loan",
   ],
   formulaDescription:
     "Solves Real Effective APR including upfront origination fees using Newton-Raphson method; compares current multi-debt schedule vs consolidation loan amortization schedule.",
-  faqs: [
-    {
-      question: "What is Real APR (Effective APR) vs. Nominal APR?",
-      answer:
-        "Nominal APR is the advertised interest rate on the loan. Real APR (Effective APR) includes upfront origination fees or points amortized over the loan term, giving you the true total borrowing cost.",
-    },
-    {
-      question: "Will consolidating my debt hurt my credit score?",
-      answer:
-        "Applying for a consolidation loan causes a temporary 3 to 5 point drop from a hard inquiry. However, paying off revolving credit cards lowers your credit utilization ratio (30% of FICO score), often raising your score by 30 to 80+ points within 60 days.",
-    },
-  ],
   inputs: [
     { name: "balance1", label: "Credit Card #1 Balance ($)", type: "currency", defaultValue: 10000, unit: "$", min: 0, max: 1000000, step: 500 },
     { name: "balance2", label: "Credit Card #2 Balance ($)", type: "currency", defaultValue: 7500, unit: "$", min: 0, max: 1000000, step: 500 },

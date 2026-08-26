@@ -55,7 +55,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { DebtConsolidationContent } from "./DebtConsolidationContent";
 import {
   calculateDebtConsolidation,
   ExistingDebtItem,
@@ -690,9 +689,6 @@ Recommendation: ${results.recommendation}`;
 
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
-
-      {/* Educational Content & 20 FAQs */}
-      <DebtConsolidationContent />
     </div>
   );
 }
