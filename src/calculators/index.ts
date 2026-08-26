@@ -9,44 +9,66 @@ import { OTHER_CALCULATORS } from "./other";
 
 export * from "./types";
 
-// Combine all category registries
-const RAW_CALCULATORS: CalculatorModuleDefinition[] = [
-  ...FINANCE_CALCULATORS,
-  ...MATH_CALCULATORS,
-  ...HEALTH_CALCULATORS,
-  ...DATE_CALCULATORS,
-  ...CONSTRUCTION_CALCULATORS,
-  ...CONVERTERS_CALCULATORS,
-  ...OTHER_CALCULATORS,
-];
+let _allCalculators: CalculatorModuleDefinition[] | null = null;
+let _registryMap: Record<string, CalculatorModuleDefinition> | null = null;
 
-// Deduplicate calculators by id to guarantee uniqueness
-export const ALL_CALCULATORS: CalculatorModuleDefinition[] = Array.from(
-  new Map(
-    RAW_CALCULATORS.filter((c) => {
-      if (!c) return false;
-      if (!c.id || !c.slug) {
-        console.error("Found invalid calculator definition missing id/slug:", c);
-        return false;
+function getRegistry(): { all: CalculatorModuleDefinition[]; map: Record<string, CalculatorModuleDefinition> } {
+  if (!_allCalculators || _allCalculators.length === 0) {
+    const raw = [
+      ...(FINANCE_CALCULATORS || []),
+      ...(MATH_CALCULATORS || []),
+      ...(HEALTH_CALCULATORS || []),
+      ...(DATE_CALCULATORS || []),
+      ...(CONSTRUCTION_CALCULATORS || []),
+      ...(CONVERTERS_CALCULATORS || []),
+      ...(OTHER_CALCULATORS || []),
+    ];
+
+    _allCalculators = Array.from(
+      new Map(
+        raw
+          .filter((c) => c && c.id && c.slug)
+          .map((calc) => [calc.id.toLowerCase(), calc])
+      ).values()
+    );
+
+    _registryMap = {};
+    _allCalculators.forEach((calc) => {
+      if (_registryMap) {
+        _registryMap[calc.id.toLowerCase()] = calc;
+        _registryMap[calc.slug.toLowerCase()] = calc;
       }
-      return true;
-    }).map((calc) => [calc.id.toLowerCase(), calc])
-  ).values()
-);
+    });
+  }
+  return { all: _allCalculators, map: _registryMap || {} };
+}
 
-// Map lookup table for O(1) slug/id resolution
-const CALCULATOR_REGISTRY: Record<string, CalculatorModuleDefinition> = {};
-
-ALL_CALCULATORS.forEach((calc) => {
-  CALCULATOR_REGISTRY[calc.id.toLowerCase()] = calc;
-  CALCULATOR_REGISTRY[calc.slug.toLowerCase()] = calc;
+// Deduplicate calculators by id to guarantee uniqueness - proxy allows lazy evaluation on property access
+export const ALL_CALCULATORS: CalculatorModuleDefinition[] = new Proxy([] as CalculatorModuleDefinition[], {
+  get(target, prop, receiver) {
+    const { all } = getRegistry();
+    return Reflect.get(all, prop, receiver);
+  },
+  has(target, prop) {
+    const { all } = getRegistry();
+    return Reflect.has(all, prop);
+  },
+  ownKeys() {
+    const { all } = getRegistry();
+    return Reflect.ownKeys(all);
+  },
+  getOwnPropertyDescriptor(target, prop) {
+    const { all } = getRegistry();
+    return Reflect.getOwnPropertyDescriptor(all, prop);
+  },
 });
 
 export function getCalculatorDefinition(idOrSlug: string): CalculatorModuleDefinition | undefined {
   if (!idOrSlug) return undefined;
   const key = idOrSlug.toLowerCase().trim();
-  if (CALCULATOR_REGISTRY[key]) return CALCULATOR_REGISTRY[key];
-  return ALL_CALCULATORS.find((c) => c && (c.id?.toLowerCase() === key || c.slug?.toLowerCase() === key));
+  const { all, map } = getRegistry();
+  if (map[key]) return map[key];
+  return all.find((c) => c && (c.id?.toLowerCase() === key || c.slug?.toLowerCase() === key));
 }
 
 export function getAllCalculatorDefinitions(): CalculatorModuleDefinition[] {

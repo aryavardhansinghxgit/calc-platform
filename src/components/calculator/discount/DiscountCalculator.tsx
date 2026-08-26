@@ -48,7 +48,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { DiscountContent } from "./DiscountContent";
 import {
   calculateDiscountSolver,
   calculateStackedDiscounts,
@@ -628,9 +627,6 @@ You Saved: ${fmt(solverResults.youSaved)} (${solverResults.effectiveDiscountPerc
 
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
-
-      {/* Educational Content & 15 FAQs */}
-      <DiscountContent />
     </div>
   );
 }

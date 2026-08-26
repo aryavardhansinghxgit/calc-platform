@@ -79,11 +79,11 @@ export interface TaxDiscountResult {
  * Solves for missing fields given ANY TWO of: Original Price, Discount %, Final Price, You Saved
  */
 export function calculateDiscountSolver(input: DiscountSolverInput): DiscountSolverResult {
-  let orig = input.originalPrice !== undefined && !isNaN(input.originalPrice) ? input.originalPrice : null;
-  let disc = input.discountValue !== undefined && !isNaN(input.discountValue) ? input.discountValue : null;
+  let orig = input.originalPrice !== undefined && !isNaN(input.originalPrice) ? Number(input.originalPrice) : null;
+  let disc = input.discountValue !== undefined && !isNaN(input.discountValue) ? Number(input.discountValue) : null;
   let type = input.discountType || "percent";
-  let finalP = input.finalPrice !== undefined && !isNaN(input.finalPrice) ? input.finalPrice : null;
-  let saved = input.youSaved !== undefined && !isNaN(input.youSaved) ? input.youSaved : null;
+  let finalP = input.finalPrice !== undefined && !isNaN(input.finalPrice) ? Number(input.finalPrice) : null;
+  let saved = input.youSaved !== undefined && !isNaN(input.youSaved) ? Number(input.youSaved) : null;
 
   // Defaults if empty
   if (orig === null && disc === null && finalP === null && saved === null) {
@@ -122,14 +122,14 @@ export function calculateDiscountSolver(input: DiscountSolverInput): DiscountSol
     }
   }
 
-  const finalOrig = Math.max(0, orig || 59.99);
-  const finalSaved = Math.max(0, saved || 9.00);
+  const finalOrig = Math.max(0, orig !== null ? orig : 59.99);
+  const finalSaved = Math.max(0, saved !== null ? saved : 9.00);
   const finalPrice = Math.max(0, finalP !== null ? finalP : finalOrig - finalSaved);
   const effectiveDiscountPercent = finalOrig > 0 ? Number(((finalSaved / finalOrig) * 100).toFixed(2)) : 0;
 
   return {
     originalPrice: Number(finalOrig.toFixed(2)),
-    discountValue: Number((disc || 15).toFixed(2)),
+    discountValue: Number((disc !== null ? disc : 15).toFixed(2)),
     discountType: type,
     finalPrice: Number(finalPrice.toFixed(2)),
     youSaved: Number(finalSaved.toFixed(2)),
@@ -142,10 +142,10 @@ export function calculateDiscountSolver(input: DiscountSolverInput): DiscountSol
  * 2. Stacked / Multiple Discount Solver (e.g. 20% off + 10% off)
  */
 export function calculateStackedDiscounts(input: StackedDiscountInput): StackedDiscountResult {
-  const P = Math.max(0, Number(input.originalPrice || 100));
-  const d1 = Math.max(0, Number(input.discount1Percent || 20)) / 100;
-  const d2 = Math.max(0, Number(input.discount2Percent || 10)) / 100;
-  const d3 = Math.max(0, Number(input.discount3Percent || 0)) / 100;
+  const P = Math.max(0, input.originalPrice !== undefined && !isNaN(Number(input.originalPrice)) ? Number(input.originalPrice) : 100);
+  const d1 = Math.max(0, input.discount1Percent !== undefined && !isNaN(Number(input.discount1Percent)) ? Number(input.discount1Percent) : 20) / 100;
+  const d2 = Math.max(0, input.discount2Percent !== undefined && !isNaN(Number(input.discount2Percent)) ? Number(input.discount2Percent) : 10) / 100;
+  const d3 = Math.max(0, input.discount3Percent !== undefined && !isNaN(Number(input.discount3Percent)) ? Number(input.discount3Percent) : 0) / 100;
 
   const step1Price = P * (1 - d1);
   const step2Price = step1Price * (1 - d2);
@@ -168,9 +168,9 @@ export function calculateStackedDiscounts(input: StackedDiscountInput): StackedD
  * 3. Coupon Stack Calculator (Percent Off + Fixed Coupon)
  */
 export function calculateCouponDiscount(input: CouponDiscountInput): CouponDiscountResult {
-  const P = Math.max(0, Number(input.originalPrice || 100));
-  const pct = Math.max(0, Number(input.percentOff || 20)) / 100;
-  const coupon = Math.max(0, Number(input.fixedCoupon || 10));
+  const P = Math.max(0, input.originalPrice !== undefined && !isNaN(Number(input.originalPrice)) ? Number(input.originalPrice) : 100);
+  const pct = Math.max(0, input.percentOff !== undefined && !isNaN(Number(input.percentOff)) ? Number(input.percentOff) : 20) / 100;
+  const coupon = Math.max(0, input.fixedCoupon !== undefined && !isNaN(Number(input.fixedCoupon)) ? Number(input.fixedCoupon) : 10);
 
   const percentSavings = P * pct;
   const afterPercent = P - percentSavings;
@@ -194,9 +194,9 @@ export function calculateCouponDiscount(input: CouponDiscountInput): CouponDisco
  * 4. Sales Tax + Discount Calculator
  */
 export function calculateTaxDiscount(input: TaxDiscountInput): TaxDiscountResult {
-  const P = Math.max(0, Number(input.originalPrice || 100));
-  const discPct = Math.max(0, Number(input.discountPercent || 20)) / 100;
-  const taxPct = Math.max(0, Number(input.taxRatePercent || 8.0)) / 100;
+  const P = Math.max(0, input.originalPrice !== undefined && !isNaN(Number(input.originalPrice)) ? Number(input.originalPrice) : 100);
+  const discPct = Math.max(0, input.discountPercent !== undefined && !isNaN(Number(input.discountPercent)) ? Number(input.discountPercent) : 20) / 100;
+  const taxPct = Math.max(0, input.taxRatePercent !== undefined && !isNaN(Number(input.taxRatePercent)) ? Number(input.taxRatePercent) : 8.0) / 100;
   const isBeforeTax = input.taxTiming === "before_tax";
 
   let discountAmount = 0;

@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Discount Calculator – Stacked Savings & Coupon Suite",
+    title: "Discount Calculator — Calculate Sale Price, Stacked Discounts & Coupons",
     description:
-      "Free Discount Calculator. Calculate final sale price after single or stacked percentage discounts, fixed coupons, sales tax, and reverse list price solvers.",
+      "Calculate discounts, final sale prices, stacked percentage discounts, fixed coupons, and sales tax after discounts. Compare savings and solve reverse discount problems.",
     slug: DISCOUNT_CALCULATOR.slug,
   });
 }
