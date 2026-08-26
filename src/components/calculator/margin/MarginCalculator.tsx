@@ -49,7 +49,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { MarginContent } from "./MarginContent";
 import {
   calculateProfitMargin,
   calculateStockMargin,
@@ -666,9 +665,6 @@ Stock Deposit Required (100 shares @ $18.30 @ 30% margin): ${fmt(stockResults.re
 
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
-
-      {/* Educational Content & 15 FAQs */}
-      <MarginContent />
     </div>
   );
 }

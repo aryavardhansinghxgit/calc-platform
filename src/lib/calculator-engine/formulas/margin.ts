@@ -74,10 +74,10 @@ export function calculateProfitMargin(input: ProfitMarginInput): ProfitMarginRes
   // Solve based on available pairs
   if (c !== null && r !== null) {
     p = r - c;
-    m = r > 0 ? (p / r) * 100 : 0;
+    m = r !== 0 ? (p / r) * 100 : 0;
   } else if (c !== null && m !== null) {
     const marginDec = m / 100;
-    r = marginDec < 1 ? c / (1 - marginDec) : c;
+    r = marginDec !== 1 ? c / (1 - marginDec) : 0;
     p = r - c;
   } else if (r !== null && m !== null) {
     const marginDec = m / 100;
@@ -85,19 +85,19 @@ export function calculateProfitMargin(input: ProfitMarginInput): ProfitMarginRes
     c = r - p;
   } else if (c !== null && p !== null) {
     r = c + p;
-    m = r > 0 ? (p / r) * 100 : 0;
+    m = r !== 0 ? (p / r) * 100 : 0;
   } else if (r !== null && p !== null) {
     c = r - p;
-    m = r > 0 ? (p / r) * 100 : 0;
+    m = r !== 0 ? (p / r) * 100 : 0;
   }
 
-  const finalCost = Math.max(0, c || 120);
-  const finalRevenue = Math.max(0, r || 160);
+  const finalCost = c !== null ? c : 120;
+  const finalRevenue = r !== null ? r : 160;
   const finalProfit = Number((finalRevenue - finalCost).toFixed(2));
-  const finalMargin = finalRevenue > 0 ? Number(((finalProfit / finalRevenue) * 100).toFixed(2)) : 0;
-  const finalMarkup = finalCost > 0 ? Number(((finalProfit / finalCost) * 100).toFixed(2)) : 0;
+  const finalMargin = finalRevenue !== 0 ? Number(((finalProfit / finalRevenue) * 100).toFixed(2)) : 0;
+  const finalMarkup = finalCost !== 0 ? Number(((finalProfit / finalCost) * 100).toFixed(2)) : 0;
 
-  const totalSum = finalRevenue > 0 ? finalRevenue : 1;
+  const totalSum = finalRevenue > 0 ? finalRevenue : (finalCost > 0 ? finalCost : 1);
   const costPercentage = Number(((finalCost / totalSum) * 100).toFixed(1));
   const marginPercentage = Number(((finalProfit / totalSum) * 100).toFixed(1));
 
@@ -116,10 +116,10 @@ export function calculateProfitMargin(input: ProfitMarginInput): ProfitMarginRes
  * 2. Stock Trading Margin & Margin Call Solver (Calculator.net Sub-Calc 2)
  */
 export function calculateStockMargin(input: StockMarginInput): StockMarginResult {
-  const price = Math.max(0.01, Number(input.stockPrice || 18.30));
-  const shares = Math.max(1, Number(input.numberOfShares || 100));
-  const initMarginPct = Math.max(1, Math.min(100, Number(input.initialMarginPercent || 30))) / 100;
-  const maintMarginPct = Math.max(1, Math.min(99, Number(input.maintenanceMarginPercent || 25))) / 100;
+  const price = input.stockPrice !== undefined && !isNaN(input.stockPrice) ? input.stockPrice : 18.30;
+  const shares = input.numberOfShares !== undefined && !isNaN(input.numberOfShares) ? input.numberOfShares : 100;
+  const initMarginPct = (input.initialMarginPercent !== undefined && !isNaN(input.initialMarginPercent) ? input.initialMarginPercent : 30) / 100;
+  const maintMarginPct = (input.maintenanceMarginPercent !== undefined && !isNaN(input.maintenanceMarginPercent) ? input.maintenanceMarginPercent : 25) / 100;
 
   const totalPositionValue = Number((price * shares).toFixed(2));
   const requiredDeposit = Number((totalPositionValue * initMarginPct).toFixed(2));
@@ -128,7 +128,7 @@ export function calculateStockMargin(input: StockMarginInput): StockMarginResult
 
   // Margin Call Trigger Price formula: Price_call = Loan / (Shares * (1 - Maintenance%))
   let marginCallPrice = 0;
-  if (1 - maintMarginPct > 0) {
+  if (shares > 0 && 1 - maintMarginPct > 0) {
     marginCallPrice = Number((borrowedAmount / (shares * (1 - maintMarginPct))).toFixed(2));
   }
 
@@ -148,12 +148,12 @@ export function calculateStockMargin(input: StockMarginInput): StockMarginResult
  * 3. Currency Exchange / Forex Margin Calculator (Calculator.net Sub-Calc 3)
  */
 export function calculateForexMargin(input: ForexMarginInput): ForexMarginResult {
-  const rate = Math.max(0.0001, Number(input.exchangeRate || 1.30));
-  const leverage = Math.max(1, Number(input.leverageRatio || 20));
-  const units = Math.max(1, Number(input.units || 100));
+  const rate = input.exchangeRate !== undefined && !isNaN(input.exchangeRate) ? input.exchangeRate : 1.30;
+  const leverage = input.leverageRatio !== undefined && !isNaN(input.leverageRatio) && input.leverageRatio > 0 ? input.leverageRatio : 20;
+  const units = input.units !== undefined && !isNaN(input.units) ? input.units : 100;
 
   const totalNotionalValue = rate * units;
-  const requiredMarginDeposit = Number((totalNotionalValue / leverage).toFixed(3));
+  const requiredMarginDeposit = Number((totalNotionalValue / leverage).toFixed(2));
 
   return {
     totalNotionalValue: Number(totalNotionalValue.toFixed(2)),
@@ -169,14 +169,16 @@ export function generateMarginSensitivityMatrix(baseCost: number, baseRevenue: n
   const multipliers = [0.8, 0.9, 1.0, 1.1, 1.2];
   return multipliers.map((m) => {
     const rev = baseRevenue * m;
-    const res = calculateProfitMargin({ cost: baseCost, revenue: rev });
+    const profit = Number((rev - baseCost).toFixed(2));
+    const marginPercent = rev !== 0 ? Number(((profit / rev) * 100).toFixed(2)) : 0;
+    const markupPercent = baseCost !== 0 ? Number(((profit / baseCost) * 100).toFixed(2)) : 0;
     return {
       scenarioLabel: `${Math.round(m * 100)}% Revenue Price`,
       cost: baseCost,
       revenue: Number(rev.toFixed(2)),
-      profit: res.profit,
-      marginPercent: res.marginPercent,
-      markupPercent: res.markupPercent,
+      profit,
+      marginPercent,
+      markupPercent,
     };
   });
 }

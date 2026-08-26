@@ -188,7 +188,7 @@ export function BusinessLoanContent() {
         <div className="flex items-center gap-2">
           <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           <h2 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
-            Frequently Asked Questions (15 Key Business Loan Insights)
+            Frequently Asked Questions
           </h2>
         </div>
 

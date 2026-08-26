@@ -424,120 +424,36 @@ export function DiscountContent() {
         </div>
       </section>
 
-      {/* SECTION 9: 15 AUDITED DOMAIN FAQS */}
+      {/* SECTION 9: FREQUENTLY ASKED QUESTIONS */}
       <section className="space-y-6 pt-4">
         <div className="flex items-center gap-2">
           <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           <h2 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
-            Frequently Asked Questions (15 Key Discount Insights)
+            Frequently Asked Questions
           </h2>
         </div>
 
         <div className="space-y-3">
-          {faqs.map((faq, idx) => {
-            const isOpen = openFaqIndex === idx;
-            return (
-              <div
-                key={idx}
-                className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-xs transition-all"
-              >
-                <button
-                  type="button"
-                  onClick={() => toggleFaq(idx)}
-                  className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
-                >
-                  <span className="flex items-center gap-2 pr-4">
-                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
-                      Q{idx + 1}.
-                    </span>
-                    {faq.q}
-                  </span>
-                  <ChevronDown
-                    className={`h-4 w-4 text-slate-900 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-                  />
-                </button>
-
-                {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          {faqs.map((faq, idx) => (
+            <div
+              key={idx}
+              className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 sm:p-5 shadow-xs space-y-2"
+            >
+              <h3 className="font-bold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 flex items-start gap-2">
+                <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums font-bold shrink-0">
+                  Q{idx + 1}.
+                </span>
+                <span>{faq.q}</span>
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-normal pl-6">
+                {faq.a}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* SECTION 10: CANONICAL RELATED CALCULATORS */}
-      <section className="bg-slate-50 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 rounded-2xl p-4 sm:p-6 space-y-3">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-          RELATED FINANCIAL &amp; SHOPPING CALCULATORS
-        </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 text-xs font-medium">
-          <Link
-            href="/calculators/percentage-calculator"
-            className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 font-bold transition-colors"
-          >
-            Percentage Calculator
-          </Link>
-          <Link
-            href="/calculators/sales-tax-calculator"
-            className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 font-bold transition-colors"
-          >
-            Sales Tax Calculator
-          </Link>
-          <Link
-            href="/calculators/margin-calculator"
-            className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 font-bold transition-colors"
-          >
-            Profit Margin Calculator
-          </Link>
-          <Link
-            href="/calculators/mortgage-calculator"
-            className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 font-bold transition-colors"
-          >
-            Mortgage Calculator
-          </Link>
-          <Link
-            href="/calculators/home-equity-loan-calculator"
-            className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 font-bold transition-colors"
-          >
-            Home Equity Loan Calculator
-          </Link>
-          <Link
-            href="/calculators/heloc-calculator"
-            className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 font-bold transition-colors"
-          >
-            HELOC Calculator
-          </Link>
-          <Link
-            href="/calculators/down-payment-calculator"
-            className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 font-bold transition-colors"
-          >
-            Down Payment Calculator
-          </Link>
-          <Link
-            href="/calculators/gst-calculator"
-            className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 font-bold transition-colors"
-          >
-            GST Calculator
-          </Link>
-          <Link
-            href="/calculators/vat-calculator"
-            className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 font-bold transition-colors"
-          >
-            VAT Calculator
-          </Link>
-          <Link
-            href="/calculators/rent-vs-buy-calculator"
-            className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 font-bold transition-colors"
-          >
-            Rent vs. Buy Calculator
-          </Link>
-        </div>
-      </section>
-
-      {/* SECTION 11: RESEARCH & JURISDICTIONAL TAX BASIS */}
+      {/* SECTION 10: RESEARCH & JURISDICTIONAL TAX BASIS */}
       <section className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-500 dark:text-zinc-400 space-y-1.5">
         <div className="font-bold flex items-center gap-1.5 text-zinc-700 dark:text-zinc-300">
           <Info className="h-3.5 w-3.5" /> Research Basis for Tax &amp; Coupon Computations

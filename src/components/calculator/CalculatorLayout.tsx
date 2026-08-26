@@ -79,9 +79,11 @@ import { AnnuityCalculator } from "./annuity/AnnuityCalculator";
 import { AnnuityPayoutCalculator } from "./annuity-payout/AnnuityPayoutCalculator";
 import { PaymentCalculator } from "./payment/PaymentCalculator";
 import { TipCalculator } from "./tip/TipCalculator";
-import { MarginCalculator } from "./margin/MarginCalculator";
-import { DiscountCalculator } from "./discount/DiscountCalculator";
 import { CommissionCalculator } from "./commission/CommissionCalculator";
+import { MarginCalculator } from "./margin/MarginCalculator";
+import { MarginContent } from "./margin/MarginContent";
+import { DiscountCalculator } from "./discount/DiscountCalculator";
+import { DiscountContent } from "./discount/DiscountContent";
 import { PersonalLoanCalculator } from "./personal-loan/PersonalLoanCalculator";
 import { BusinessLoanCalculator } from "./business-loan/BusinessLoanCalculator";
 import { StudentLoanCalculator } from "./student-loan/StudentLoanCalculator";
@@ -536,6 +538,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                                                                                       isSleep ? SleepContent :
                                                                                       isIncomeTax ? IncomeTaxContent :
                                                                                         isSalary ? SalaryContent :
+                                                                                           isMargin ? MarginContent :
+                                                                                           isDiscount ? DiscountContent :
                                                                                            isAutoLoan ? AutoLoanContentSection :
                                                                                               isDebtConsolidation ? DebtConsolidationContent : isScientific ? ScientificCalculatorContent : isFraction ? FractionContent : isStatistics ? StatisticsContent : isPercentError ? PercentErrorContent : isDownPayment ? DownPaymentContent : isRentVsBuy ? RentVsBuyContent : isBac ? BacContent : isBsa ? BsaContent : isBodyType ? BodyTypeContent : isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null
   );
@@ -919,19 +923,17 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
         </CalculatorErrorBoundary>
 
-        {/* Simple Related Calculators Links directly below calculator boxes (Suppressed for Personal Loan, Loan, Salary, Income Tax, Student Loan, Budget, Savings, House Affordability, Time, Age, Amortization, Grade, Future Value, 401(k), Date, Hours, Scientific, Fraction, Statistics, Present Value, and Roth IRA which have dedicated suites) */}
-        {!isPersonalLoan && !isLoan && !isSalary && !isIncomeTax && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isFutureValue && !isPresentValue && !isFourZeroOneK && !isRothIra && !isDate && !isHours && !isScientific && !isFraction && !isStatistics && (
-          <div className="pt-2 pb-1 space-y-1">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block">
-              RELATED CALCULATORS:
-            </span>
-            <RelatedCalculators
-              currentId={definition.id}
-              category={definition.category}
-              explicitRelated={definition.relatedCalculators}
-            />
-          </div>
-        )}
+        {/* Related Calculators Links directly below calculator box */}
+        <div className="pt-2 pb-1 space-y-1">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block">
+            RELATED CALCULATORS:
+          </span>
+          <RelatedCalculators
+            currentId={definition.id}
+            category={definition.category}
+            explicitRelated={definition.relatedCalculators}
+          />
+        </div>
       </div>
 
 
@@ -939,7 +941,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {!isFutureValue && !isPresentValue && !isAnnuity && !isPayment && !isLease && !isTip && !isLoan && !isFourZeroOneK && !isRothIra && (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-8 shadow-xs text-slate-900 dark:text-slate-100">
           {/* Formula & Calculation Method */}
-          {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDate && !isHours && !isScientific && !isFraction && !isStatistics && !isDebtConsolidation && (
+          {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDate && !isHours && !isScientific && !isFraction && !isStatistics && !isDebtConsolidation && (
             <div className="space-y-3">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Formula &amp; Calculation Method
@@ -961,7 +963,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
 
           {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
-          {!isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && (
+          {!isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && (
             (Boolean(definition.faqs && definition.faqs.length > 0)) ||
             (definition.category !== "Math")
           ) && (

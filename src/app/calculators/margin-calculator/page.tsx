@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Margin Calculator – Profit, Stock & Forex Leverage Suite",
+    title: "Margin Calculator — Profit Margin, Markup, Stock & Forex Margin",
     description:
-      "Free Margin Calculator. Calculate gross profit margin, markup percentage, stock trading margin requirements, margin call trigger prices, and forex leverage requirements.",
+      "Calculate profit margin and markup, stock margin requirements, margin-call prices, forex margin, leverage, and pricing sensitivity with detailed formulas and examples.",
     slug: MARGIN_CALCULATOR.slug,
   });
 }

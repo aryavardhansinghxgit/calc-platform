@@ -202,9 +202,9 @@ export function PensionContent() {
       <section className="space-y-6  dark:border-zinc-800 pt-8">
         <div className="flex items-center gap-2">
           <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          <h3 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
-            Frequently Asked Questions (15 Key Pension Insights)
-          </h3>
+          <h2 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
+            Frequently Asked Questions
+          </h2>
         </div>
 
         <div className="space-y-3">
