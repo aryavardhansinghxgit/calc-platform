@@ -10,7 +10,7 @@ export const payback_period_calculatorConfig: CalculatorModuleDefinition = {
   category: "Finance",
   subcategory: "Investment",
   description:
-    "Calculate the exact Simple Payback Period (years, months, days), Discounted Payback Period (DPP), Net Present Value (NPV), and Capital Recovery Schedules for capital budgeting investments.",
+    "Calculate simple and discounted payback periods for annual or monthly cash flows. Compare projects with NPV, IRR, profitability index, target payback and sensitivity analysis.",
   iconName: "Clock",
   featured: true,
   keywords: [

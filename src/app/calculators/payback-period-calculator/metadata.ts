@@ -5,7 +5,7 @@ export const payback_period_calculatorMetadata: Metadata = {
   ...generateCalculatorMetadata({
     title: "Payback Period Calculator — Simple & Discounted Payback Analysis",
     description:
-      "Advanced Payback Period and Discounted Payback Period (DPP) Calculator. Calculate exact breakeven duration in years, months, and days, Net Present Value (NPV), and Capital Recovery Schedules.",
+      "Calculate simple and discounted payback periods for annual or monthly cash flows. Compare projects with NPV, IRR, profitability index, target payback and sensitivity analysis.",
     slug: "payback-period-calculator",
   }),
   keywords: [
@@ -24,13 +24,13 @@ export const payback_period_calculatorMetadata: Metadata = {
   openGraph: {
     title: "Payback Period Calculator — Simple & Discounted Payback Analysis",
     description:
-      "Advanced Capital Recovery & Payback Calculator. Calculate Simple Payback, Discounted Payback (DPP), NPV, IRR, and Side-by-Side Capital Projects.",
+      "Calculate simple and discounted payback periods for annual or monthly cash flows. Compare projects with NPV, IRR, profitability index, target payback and sensitivity analysis.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Payback Period Calculator — Simple & Discounted Payback Analysis",
     description:
-      "Advanced Capital Recovery & Payback Calculator. Calculate Simple Payback, Discounted Payback (DPP), NPV, IRR, and Side-by-Side Capital Projects.",
+      "Calculate simple and discounted payback periods for annual or monthly cash flows. Compare projects with NPV, IRR, profitability index, target payback and sensitivity analysis.",
   },
 };
