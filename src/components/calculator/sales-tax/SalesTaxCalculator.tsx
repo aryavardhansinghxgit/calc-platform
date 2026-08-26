@@ -52,7 +52,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { SalesTaxContent } from "./SalesTaxContent";
 import {
   solveSalesTax,
   calculateReceipt,
@@ -911,9 +910,6 @@ Final Total Price: ${fmt(results.afterTaxPrice)}`;
 
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
-
-      {/* Educational Content & 20 FAQs */}
-      <SalesTaxContent />
     </div>
   );
 }

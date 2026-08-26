@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Sales Tax Calculator – U.S. State & Local Tax Estimator",
+    title: "Sales Tax Calculator — Calculate Tax, Final Price & State Sales Tax",
     description:
-      "Free U.S. Sales Tax Calculator. Calculate state and local sales taxes, 5-way solving (Modes A–E), 50 US state tax rate directory, multi-item receipt builder, business tax collection solver, and what-if state tax savings comparison.",
+      "Calculate sales tax in five ways, split taxable and exempt items, extract tax from gross business receipts, compare U.S. state rates, and estimate state-by-state tax differences.",
     slug: SALES_TAX_CALCULATOR.slug,
   });
 }
