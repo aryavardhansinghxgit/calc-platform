@@ -25,59 +25,8 @@ export function FourZeroOneKContent() {
 
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
-      {/* 1. SINGLE CANONICAL RELATED CALCULATORS BLOCK (Exactly 7 Verified Live Routes) */}
-      <div>
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
-          Related Retirement &amp; Wealth Tools
-        </h2>
-        <div className="flex flex-wrap gap-2 text-xs">
-          <Link
-            href="/calculators/retirement-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Retirement Calculator
-          </Link>
-          <Link
-            href="/calculators/investment-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Investment Calculator
-          </Link>
-          <Link
-            href="/calculators/savings-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Savings Calculator
-          </Link>
-          <Link
-            href="/calculators/ira-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            IRA Calculator
-          </Link>
-          <Link
-            href="/calculators/future-value-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Future Value Calculator
-          </Link>
-          <Link
-            href="/calculators/compound-interest-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Compound Interest Calculator
-          </Link>
-          <Link
-            href="/calculators/inflation-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Inflation Calculator
-          </Link>
-        </div>
-      </div>
-
-      {/* 2. EXPANDED MAIN EDUCATIONAL CONTENT (17 COMPLETE SECTIONS) */}
-      <div className="space-y-8 pt-6 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+      {/* 1. EXPANDED MAIN EDUCATIONAL CONTENT (17 COMPLETE SECTIONS) */}
+      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
         {/* Section 1 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
