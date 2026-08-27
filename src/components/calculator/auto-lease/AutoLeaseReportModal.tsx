@@ -83,9 +83,9 @@ export function AutoLeaseReportModal({ isOpen, onClose, inputs, results }: AutoL
                 <div>
                   <div className="flex items-center gap-2">
                     <Car className="h-6 w-6 text-blue-600" />
-                    <h1 className="text-xl font-extrabold tracking-tight text-blue-600">
+                    <h2 className="text-xl font-extrabold tracking-tight text-blue-600">
                       Auto Lease Financial Executive Report
-                    </h1>
+                    </h2>
                   </div>
                   <p className="text-xs text-zinc-500 mt-1">
                     Prepared by CalcPlatform Vehicle Lease Financial Engine

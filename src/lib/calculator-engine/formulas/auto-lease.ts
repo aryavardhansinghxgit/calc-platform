@@ -167,7 +167,10 @@ export function calculateAutoLeaseFormula(inputs: ExtendedAutoLeaseInput): AutoL
   let moneyFactor = 0.0025; // default 6% APR
   let effectiveAprPercent = 6.0;
 
-  if (inputs.interestInputType === "apr" && inputs.aprPercent !== undefined) {
+  if (inputs.interestInputType === "moneyFactor" && inputs.moneyFactor !== undefined) {
+    moneyFactor = Math.max(0, Number(inputs.moneyFactor));
+    effectiveAprPercent = moneyFactorToApr(moneyFactor);
+  } else if (inputs.aprPercent !== undefined) {
     effectiveAprPercent = Math.max(0, Number(inputs.aprPercent));
     moneyFactor = aprToMoneyFactor(effectiveAprPercent);
   } else if (inputs.moneyFactor !== undefined) {

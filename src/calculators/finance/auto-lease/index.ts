@@ -1,14 +1,15 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateAutoLeaseFormula } from "@/lib/calculator-engine/formulas/auto-lease";
+import { AUTO_LEASE_FAQS } from "./faq";
 
 export const AUTO_LEASE_CALCULATOR: CalculatorModuleDefinition = {
   id: "auto-lease",
-  title: "Auto Lease Calculator",
+  title: "Auto Lease Calculator – Monthly Payment, Lease Cost & Money Factor",
   slug: "auto-lease-calculator",
   category: "Finance",
   subcategory: "Auto",
   description:
-    "Estimate monthly lease payments, total lease cost, depreciation charges, finance charges (money factor), taxes, mileage penalties, and compare leasing vs buying.",
+    "Use this Auto Lease Calculator to estimate monthly lease payments, depreciation, money factor, residual value, taxes, fees, mileage penalties, total lease cost, and lease vs. buy savings.",
   iconName: "Car",
   featured: true,
   tags: [
@@ -22,83 +23,7 @@ export const AUTO_LEASE_CALCULATOR: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Monthly Lease Payment = Monthly Depreciation [(Net Cap Cost - Residual) / Term] + Monthly Rent Charge [(Net Cap Cost + Residual) × Money Factor] + Monthly Tax",
-  faqs: [
-    {
-      question: "What is Money Factor in an auto lease and how is it converted to APR?",
-      answer:
-        "Money Factor (also known as the rent charge or lease factor) is the fractional interest rate applied by lessors. To convert Money Factor to an equivalent APR percentage, multiply by 2,400 (e.g., 0.0025 Money Factor × 2,400 = 6.0% APR). Conversely, divide APR by 2,400 to get Money Factor.",
-    },
-    {
-      question: "How is a monthly auto lease payment calculated?",
-      answer:
-        "A monthly lease payment consists of three parts: 1) Depreciation Charge = (Net Cap Cost - Residual Value) / Lease Term; 2) Finance/Rent Charge = (Net Cap Cost + Residual Value) × Money Factor; and 3) Monthly Sales Tax = (Depreciation + Rent Charge) × Local Sales Tax Rate.",
-    },
-    {
-      question: "What is Residual Value and how does it affect lease payments?",
-      answer:
-        "Residual value is the estimated wholesale market value of the vehicle at the end of the lease term (usually expressed as a percentage of MSRP). A higher residual value means you pay for less depreciation, resulting in lower monthly lease payments.",
-    },
-    {
-      question: "What is Capitalized Cost (Cap Cost)?",
-      answer:
-        "Gross Capitalized Cost is the agreed-upon vehicle price plus any rolled-over fees or negative trade-in equity. Adjusted (Net) Capitalized Cost equals Gross Cap Cost minus down payments, trade-in equity, and manufacturer lease rebates.",
-    },
-    {
-      question: "What happens if I exceed the annual lease mileage limit?",
-      answer:
-        "Most auto leases specify an annual mileage allowance (e.g. 10,000, 12,000, or 15,000 miles/yr). Exceeding this limit incurs an excess mileage fee at lease return, typically between $0.15 and $0.30 per excess mile.",
-    },
-    {
-      question: "Is it better to lease or buy a car?",
-      answer:
-        "Leasing offers lower monthly payments and warranty coverage for new cars every 3 years, but leaves you with zero ownership equity at term end. Buying requires higher monthly payments but builds vehicle asset equity that you own free and clear once paid off.",
-    },
-    {
-      question: "Should I make a large down payment on a car lease?",
-      answer:
-        "Financial experts advise making $0 or minimal down payment on a lease. If the leased vehicle is totaled or stolen shortly after driving off the lot, insurance pays the lessor, but your upfront down payment cash is lost forever.",
-    },
-    {
-      question: "Can I buy the leased car at the end of the lease?",
-      answer:
-        "Yes, almost all lease contracts contain a Purchase Option Clause allowing you to purchase the vehicle at the predetermined Residual Value price plus any lease disposition or purchase option fees.",
-    },
-    {
-      question: "Can I negotiate a car lease price (Capitalized Cost)?",
-      answer:
-        "Yes! The vehicle selling price (Capitalized Cost) is fully negotiable just like buying a car. Lowering the agreed-upon vehicle price directly reduces your monthly depreciation charge.",
-    },
-    {
-      question: "What is a lease acquisition fee and disposition fee?",
-      answer:
-        "The acquisition fee (usually $595–$995) is charged by the financing bank to originate the lease. The disposition fee (usually $350–$495) covers bank reconditioning and auction costs when you return the vehicle at lease end.",
-    },
-    {
-      question: "What is the difference between normal and excess wear and tear?",
-      answer:
-        "Normal wear and tear includes minor scuffs, light tire tread wear, and small door dings under 2 inches. Excess wear includes deep scratches, cracked glass, torn seats, bald tires, or mechanical damage, which incur penalties upon vehicle return.",
-    },
-    {
-      question: "Can I terminate an auto lease early?",
-      answer:
-        "Early lease termination carries heavy penalty fees. Common alternatives include lease transfers (via services like Swapalease), dealer lease buyouts, or trading in the leased car for a new vehicle.",
-    },
-    {
-      question: "How is sales tax calculated on a leased car?",
-      answer:
-        "In most US states, sales tax is applied only to the monthly lease payment. However, states like Texas, Illinois, and Virginia charge sales tax on the full vehicle purchase price upfront.",
-    },
-    {
-      question: "What is Lease Gap Insurance and is it required?",
-      answer:
-        "GAP insurance covers the financial difference between what your auto insurance pays if the car is totaled and what you still owe on the lease. Most captive lease contracts (e.g. Honda Financial, Toyota Financial) automatically include GAP insurance.",
-    },
-    {
-      question: "How do manufacturer lease cash rebates work?",
-      answer:
-        "Lease cash rebates are factory incentives applied directly to reduce the Capitalized Cost of the lease, lowering your monthly depreciation charge without requiring out-of-pocket cash.",
-    },
-  ],
+  faqs: AUTO_LEASE_FAQS,
   inputs: [
     {
       name: "autoPrice",
