@@ -94,6 +94,13 @@ export function convertYearsToTimeUnit(years: number, unit: TimeUnit): number {
   }
 }
 
+function formatMoneyDisplay(val: number, currency: string = "$"): string {
+  if (Number.isInteger(val)) {
+    return `${currency}${val.toLocaleString()}`;
+  }
+  return `${currency}${val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
 export function calculateSimpleInterestFormula(
   inputs: SimpleInterestFormulaInput
 ): SimpleInterestFormulaResult {
@@ -120,22 +127,22 @@ export function calculateSimpleInterestFormula(
     derivationSteps.push({
       title: "Step 1: Calculate Total Simple Interest (I = P × r × t)",
       formula: "I = P × (r / 100) × t",
-      substitution: `I = ${currency}${P.toLocaleString()} × (${r}% / 100) × ${termInYears.toFixed(4)} yrs`,
-      result: `I = ${currency}${Math.round(totalInterest).toLocaleString()}`,
+      substitution: `I = ${formatMoneyDisplay(P, currency)} × (${r}% / 100) × ${termInYears.toFixed(4)} yrs`,
+      result: `I = ${formatMoneyDisplay(totalInterest, currency)}`,
     });
 
     derivationSteps.push({
       title: "Step 2: Calculate Final Ending Balance (A = P + I)",
       formula: "A = P + I",
-      substitution: `A = ${currency}${P.toLocaleString()} + ${currency}${Math.round(totalInterest).toLocaleString()}`,
-      result: `A = ${currency}${Math.round(finalBalance).toLocaleString()}`,
+      substitution: `A = ${formatMoneyDisplay(P, currency)} + ${formatMoneyDisplay(totalInterest, currency)}`,
+      result: `A = ${formatMoneyDisplay(finalBalance, currency)}`,
     });
   }
   // ==========================================
   // MODE 2: CALCULATE PRINCIPAL
   // ==========================================
   else if (mode === "principal") {
-    if (inputs.targetInterest && inputs.targetInterest > 0) {
+    if (inputs.targetInterest !== undefined && inputs.targetInterest > 0) {
       totalInterest = inputs.targetInterest;
       const rateDecimal = r / 100;
       P = termInYears > 0 && rateDecimal > 0 ? totalInterest / (rateDecimal * termInYears) : 0;
@@ -144,8 +151,8 @@ export function calculateSimpleInterestFormula(
       derivationSteps.push({
         title: "Step 1: Calculate Required Principal (P = I / (r × t))",
         formula: "P = I / ((r / 100) × t)",
-        substitution: `P = ${currency}${totalInterest.toLocaleString()} / ((${r}% / 100) × ${termInYears.toFixed(4)} yrs)`,
-        result: `P = ${currency}${Math.round(P).toLocaleString()}`,
+        substitution: `P = ${formatMoneyDisplay(totalInterest, currency)} / ((${r}% / 100) × ${termInYears.toFixed(4)} yrs)`,
+        result: `P = ${formatMoneyDisplay(P, currency)}`,
       });
     } else {
       finalBalance = Math.max(0, inputs.targetFinalBalance ?? 26000);
@@ -157,8 +164,8 @@ export function calculateSimpleInterestFormula(
       derivationSteps.push({
         title: "Step 1: Calculate Required Principal from Ending Balance (P = A / (1 + r × t))",
         formula: "P = A / (1 + (r / 100) × t)",
-        substitution: `P = ${currency}${finalBalance.toLocaleString()} / (1 + (${r}% / 100) × ${termInYears.toFixed(4)} yrs)`,
-        result: `P = ${currency}${Math.round(P).toLocaleString()}`,
+        substitution: `P = ${formatMoneyDisplay(finalBalance, currency)} / (1 + (${r}% / 100) × ${termInYears.toFixed(4)} yrs)`,
+        result: `P = ${formatMoneyDisplay(P, currency)}`,
       });
     }
   }
@@ -166,7 +173,7 @@ export function calculateSimpleInterestFormula(
   // MODE 3: CALCULATE INTEREST RATE
   // ==========================================
   else if (mode === "rate") {
-    if (inputs.targetInterest && inputs.targetInterest > 0) {
+    if (inputs.targetInterest !== undefined && inputs.targetInterest > 0) {
       totalInterest = inputs.targetInterest;
       finalBalance = P + totalInterest;
     } else {
@@ -180,7 +187,7 @@ export function calculateSimpleInterestFormula(
     derivationSteps.push({
       title: "Step 1: Calculate Required Annual Interest Rate (r = I / (P × t))",
       formula: "r = (I / (P × t)) × 100%",
-      substitution: `r = (${currency}${totalInterest.toLocaleString()} / (${currency}${P.toLocaleString()} × ${termInYears.toFixed(4)} yrs)) × 100%`,
+      substitution: `r = (${formatMoneyDisplay(totalInterest, currency)} / (${formatMoneyDisplay(P, currency)} × ${termInYears.toFixed(4)} yrs)) × 100%`,
       result: `r = ${r.toFixed(4)}%`,
     });
   }
@@ -188,7 +195,7 @@ export function calculateSimpleInterestFormula(
   // MODE 4: CALCULATE TERM
   // ==========================================
   else if (mode === "term") {
-    if (inputs.targetInterest && inputs.targetInterest > 0) {
+    if (inputs.targetInterest !== undefined && inputs.targetInterest > 0) {
       totalInterest = inputs.targetInterest;
       finalBalance = P + totalInterest;
     } else {
@@ -204,12 +211,12 @@ export function calculateSimpleInterestFormula(
     derivationSteps.push({
       title: "Step 1: Calculate Required Time Horizon (t = I / (P × r))",
       formula: "t_years = I / (P × (r / 100))",
-      substitution: `t_years = ${currency}${totalInterest.toLocaleString()} / (${currency}${P.toLocaleString()} × (${r}% / 100))`,
+      substitution: `t_years = ${formatMoneyDisplay(totalInterest, currency)} / (${formatMoneyDisplay(P, currency)} × (${r}% / 100))`,
       result: `t = ${termInYears.toFixed(4)} Years (${termInput.toFixed(2)} ${timeUnit})`,
     });
   }
 
-  // Round values
+  // Round display metrics to 2 decimal places
   totalInterest = Math.round(totalInterest * 100) / 100;
   finalBalance = Math.round(finalBalance * 100) / 100;
   P = Math.round(P * 100) / 100;
@@ -221,20 +228,23 @@ export function calculateSimpleInterestFormula(
   const principalPercentOfBalance = finalBalance > 0 ? (P / finalBalance) * 100 : 0;
 
   // Periodic earnings
-  const safeTermYears = Math.max(termInYears, 1 / 365);
-  const interestPerYear = totalInterest / safeTermYears;
-  const interestPerMonth = totalInterest / (safeTermYears * 12);
-  const interestPerDay = totalInterest / (safeTermYears * 365);
+  const interestPerYear = termInYears > 0 ? totalInterest / termInYears : 0;
+  const interestPerMonth = termInYears > 0 ? totalInterest / (termInYears * 12) : 0;
+  const interestPerDay = termInYears > 0 ? totalInterest / (termInYears * 365) : 0;
 
   // Generate Yearly Schedule
   const schedule: ScheduleRow[] = [];
   const totalYearsCount = Math.max(1, Math.min(Math.ceil(termInYears), 50));
-  const annualInterestAmount = totalInterest / safeTermYears;
+  const annualInterestAmount = termInYears > 0 ? totalInterest / termInYears : 0;
 
   let currentOpening = P;
   for (let yr = 1; yr <= totalYearsCount; yr++) {
-    const interestThisYear = annualInterestAmount;
-    const currentClosing = currentOpening + interestThisYear;
+    let fraction = 1;
+    if (yr === totalYearsCount && termInYears > 0 && totalYearsCount > termInYears) {
+      fraction = termInYears - (totalYearsCount - 1);
+    }
+    const interestThisYear = annualInterestAmount * fraction;
+    const currentClosing = yr === totalYearsCount ? finalBalance : currentOpening + interestThisYear;
     schedule.push({
       year: yr,
       openingBalance: Math.round(currentOpening * 100) / 100,
@@ -249,7 +259,7 @@ export function calculateSimpleInterestFormula(
   const simpleFinal = P + totalInterest;
 
   // Monthly compound interest comparison
-  const compoundFinal = P * Math.pow(1 + rateDec / 12, 12 * safeTermYears);
+  const compoundFinal = termInYears > 0 ? P * Math.pow(1 + rateDec / 12, 12 * termInYears) : P;
   const compoundInterestTotal = Math.max(0, compoundFinal - P);
   const interestDiff = Math.max(0, compoundInterestTotal - totalInterest);
   const additionalWealthPercent = totalInterest > 0 ? (interestDiff / totalInterest) * 100 : 0;
@@ -257,7 +267,7 @@ export function calculateSimpleInterestFormula(
   const comparison: SimpleVsCompoundComparison = {
     principal: P,
     annualRatePercent: r,
-    years: safeTermYears,
+    years: termInYears,
     simpleInterestTotal: Math.round(totalInterest * 100) / 100,
     simpleFinalBalance: Math.round(simpleFinal * 100) / 100,
     compoundInterestTotal: Math.round(compoundInterestTotal * 100) / 100,

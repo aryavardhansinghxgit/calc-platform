@@ -59,6 +59,21 @@ import {
   calculateSimpleInterestFormula,
 } from "@/lib/calculator-engine/formulas/simple-interest";
 
+interface SavedSimpleScenario {
+  id: string;
+  name: string;
+  result: string;
+  date: string;
+  mode: SimpleInterestMode;
+  currencySymbol: string;
+  principalInput: string;
+  rateInput: string;
+  termInput: string;
+  timeUnit: TimeUnit;
+  targetInterestInput: string;
+  targetBalanceInput: string;
+}
+
 export function SimpleInterestCalculator() {
   // ==========================================
   // STATE MANAGEMENT
@@ -74,7 +89,8 @@ export function SimpleInterestCalculator() {
 
   const [showFormulaPanel, setShowFormulaPanel] = useState<boolean>(true);
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
-  const [savedScenarios, setSavedScenarios] = useState<{ name: string; result: string; date: string }[]>([]);
+  const [savedScenarios, setSavedScenarios] = useState<SavedSimpleScenario[]>([]);
+  const [showSavedList, setShowSavedList] = useState<boolean>(false);
   const [shareToast, setShareToast] = useState<boolean>(false);
 
   // Parse numeric values safely
@@ -221,21 +237,68 @@ export function SimpleInterestCalculator() {
     document.body.removeChild(link);
   };
 
-  const handleSaveScenario = () => {
-    const newSaved = [
-      ...savedScenarios,
-      {
-        name: `Simple Interest (${currencySymbol}${results.principal.toLocaleString()} @ ${results.annualRatePercent}%)`,
-        result: `${currencySymbol}${results.finalBalance.toLocaleString()}`,
-        date: new Date().toLocaleDateString(),
-      },
-    ];
-    setSavedScenarios(newSaved);
+  const handleReset = () => {
+    setActiveMode("balance");
+    setCurrencySymbol("$");
+    setPrincipalInput("20000");
+    setRateInput("3.0");
+    setTermInput("10");
+    setTimeUnit("years");
+    setTargetInterestInput("6000");
+    setTargetBalanceInput("26000");
   };
 
-  const handleShare = () => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
+  const handleSaveScenario = () => {
+    const newSaved: SavedSimpleScenario = {
+      id: `si_${Date.now()}`,
+      name: `Simple Interest (${currencySymbol}${results.principal.toLocaleString()} @ ${results.annualRatePercent}%, ${results.term} ${results.timeUnit})`,
+      result: `${currencySymbol}${results.finalBalance.toLocaleString()}`,
+      date: new Date().toLocaleDateString(),
+      mode: activeMode,
+      currencySymbol,
+      principalInput,
+      rateInput,
+      termInput,
+      timeUnit,
+      targetInterestInput,
+      targetBalanceInput,
+    };
+    setSavedScenarios([newSaved, ...savedScenarios]);
+    setShowSavedList(true);
+  };
+
+  const handleRestoreScenario = (sc: SavedSimpleScenario) => {
+    setActiveMode(sc.mode);
+    setCurrencySymbol(sc.currencySymbol);
+    setPrincipalInput(sc.principalInput);
+    setRateInput(sc.rateInput);
+    setTermInput(sc.termInput);
+    setTimeUnit(sc.timeUnit);
+    setTargetInterestInput(sc.targetInterestInput);
+    setTargetBalanceInput(sc.targetBalanceInput);
+  };
+
+  const handleDeleteScenario = (id: string) => {
+    setSavedScenarios(savedScenarios.filter((s) => s.id !== id));
+  };
+
+  const handleCopySummary = () => {
+    const summary = [
+      `Simple Interest Calculation Summary`,
+      `----------------------------------`,
+      `Mode: ${activeMode.toUpperCase()}`,
+      `Principal: ${currencySymbol}${results.principal.toLocaleString()}`,
+      `Annual Interest Rate: ${results.annualRatePercent}%`,
+      `Term Duration: ${results.term} ${results.timeUnit}`,
+      `Total Simple Interest: ${currencySymbol}${results.totalInterest.toLocaleString()}`,
+      `Final Ending Balance: ${currencySymbol}${results.finalBalance.toLocaleString()}`,
+      `Return on Investment (ROI): ${results.roiPercent.toFixed(2)}%`,
+      `Interest / Year: ${currencySymbol}${results.interestPerYear.toFixed(2)}`,
+      `Interest / Month: ${currencySymbol}${results.interestPerMonth.toFixed(2)}`,
+      `Interest / Day: ${currencySymbol}${results.interestPerDay.toFixed(2)}/day`,
+    ].join("\n");
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(summary);
       setShareToast(true);
       setTimeout(() => setShareToast(false), 3000);
     }
@@ -260,9 +323,9 @@ export function SimpleInterestCalculator() {
           </div>
 
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+            <div className="text-2xl sm:text-3xl font-black tracking-tight text-white">
               Simple Interest Calculator
-            </h1>
+            </div>
             <p className="text-xs sm:text-sm text-blue-100/80 mt-1 max-w-3xl leading-relaxed">
               Calculate simple interest earned or paid, solve for Principal, Rate, or Term, auto-convert time units, view step-by-step mathematical solutions, export schedule tables, and compare simple vs compound growth.
             </p>
@@ -320,10 +383,28 @@ export function SimpleInterestCalculator() {
           <Button
             variant="outline"
             size="sm"
+            onClick={handleReset}
+            className="h-8 text-xs font-semibold gap-1.5"
+          >
+            <RotateCcw className="h-3.5 w-3.5 text-zinc-500" /> Reset
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleCopySummary}
+            className="h-8 text-xs font-semibold gap-1.5"
+          >
+            <Share2 className="h-3.5 w-3.5 text-blue-500" /> Copy
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
             onClick={handleSaveScenario}
             className="h-8 text-xs font-semibold gap-1.5"
           >
-            <Bookmark className="h-3.5 w-3.5 text-indigo-500" /> Save
+            <Bookmark className="h-3.5 w-3.5 text-indigo-500" /> Save {savedScenarios.length > 0 ? `(${savedScenarios.length})` : ""}
           </Button>
           
           <Button
@@ -337,9 +418,41 @@ export function SimpleInterestCalculator() {
         </div>
       </div>
 
+      {/* SAVED SCENARIOS DRAWER */}
+      {savedScenarios.length > 0 && showSavedList && (
+        <div className="p-4 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-indigo-950 dark:text-indigo-200 flex items-center gap-1.5">
+              <Bookmark className="h-3.5 w-3.5 text-indigo-600" /> Saved Scenarios ({savedScenarios.length})
+            </span>
+            <Button variant="ghost" size="sm" onClick={() => setShowSavedList(false)} className="h-6 text-xs text-zinc-500">
+              Hide
+            </Button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            {savedScenarios.map((sc) => (
+              <div key={sc.id} className="p-2.5 rounded-lg bg-white dark:bg-zinc-900 border border-indigo-100 dark:border-indigo-900/50 flex items-center justify-between text-xs">
+                <div>
+                  <div className="font-bold text-zinc-900 dark:text-zinc-100">{sc.name}</div>
+                  <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">{sc.result}</div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Button size="sm" variant="ghost" onClick={() => handleRestoreScenario(sc)} className="h-6 text-xs text-blue-600">
+                    Restore
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => handleDeleteScenario(sc.id)} className="h-6 text-xs text-rose-500">
+                    ×
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {shareToast && (
         <div className="p-3 bg-emerald-500 text-white text-xs font-bold rounded-lg shadow-md flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4" /> Link copied to clipboard!
+          <CheckCircle2 className="h-4 w-4" /> Summary copied to clipboard!
         </div>
       )}
 
@@ -860,7 +973,7 @@ export function SimpleInterestCalculator() {
               <div className="flex justify-between items-center text-xs border-t border-zinc-200 dark:border-zinc-800 pt-2">
                 <span className="text-zinc-600 dark:text-zinc-400">Compounding Advantage:</span>
                 <span className="font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400 text-sm">
-                  +{currencySymbol}{results.comparison.interestDifference.toLocaleString()} (+{results.comparison.additionalWealthPercent.toFixed(1)}%)
+                  +{currencySymbol}{results.comparison.interestDifference.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (+{results.comparison.additionalWealthPercent.toFixed(2)}%)
                 </span>
               </div>
             </div>
@@ -886,10 +999,6 @@ export function SimpleInterestCalculator() {
       </div>
 
       {/* ==========================================
-          SECTION 5: EDUCATIONAL CONTENT & FAQS COMPONENT
-         ========================================== */}
-
-      {/* ==========================================
           EXECUTIVE PRINT / PDF REPORT MODAL
          ========================================== */}
       {isReportOpen && (
@@ -902,3 +1011,5 @@ export function SimpleInterestCalculator() {
     </div>
   );
 }
+
+export default SimpleInterestCalculator;
