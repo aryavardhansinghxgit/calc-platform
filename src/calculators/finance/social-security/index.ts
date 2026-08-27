@@ -1,39 +1,31 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateSocialSecuritySuite } from "@/lib/calculator-engine/formulas/social-security";
+import { SOCIAL_SECURITY_FAQS } from "./faq";
 
 export const SOCIAL_SECURITY_CALCULATOR: CalculatorModuleDefinition = {
   id: "social-security",
-  title: "Social Security Calculator – Ideal Claiming Age & Benefits Suite",
+  title: "Social Security Calculator",
   slug: "social-security-calculator",
   category: "Finance",
   subcategory: "Retirement",
   description:
-    "Free Social Security Benefits Calculator. Determine your ideal claiming age (62 vs FRA vs 70), compare two application ages, calculate Full Retirement Age (FRA) credits, estimate spousal/survivor benefits, and optimize taxation.",
+    "Use our Social Security Calculator to compare claiming ages 62–70, estimate monthly and lifetime benefits, calculate Full Retirement Age, COLA growth, break-even age, spousal benefits and taxability.",
   iconName: "Shield",
   featured: true,
   tags: [
-    "social security",
     "social security calculator",
-    "claiming age calculator",
-    "fra calculator",
+    "social security benefits",
+    "claiming age 62 vs 70",
+    "full retirement age",
+    "social security break even",
     "spousal benefits",
     "survivor benefits",
-    "social security taxability",
+    "social security taxation",
+    "cola adjustment",
   ],
   formulaDescription:
-    "Calculates Primary Insurance Amount (PIA) reductions for early claiming at age 62 (up to 30%) or delayed credits up to age 70 (+8%/yr), incorporating compounding COLA and combined income tax thresholds.",
-  faqs: [
-    {
-      question: "What is my Full Retirement Age (FRA)?",
-      answer:
-        "Full Retirement Age (FRA) is the age at which you are entitled to 100% of your unreduced Social Security primary insurance amount. For anyone born in 1960 or later, your FRA is 67. For those born between 1943 and 1954, FRA is 66.",
-    },
-    {
-      question: "How much does claiming early at age 62 reduce my monthly check?",
-      answer:
-        "Claiming benefits at the earliest age of 62 permanently reduces your monthly check by 25% to 30% compared to your Full Retirement Age benefit, depending on your birth year.",
-    },
-  ],
+    "Calculates Primary Insurance Amount (PIA) reductions for early claiming at age 62 (up to 30%) or delayed credits up to age 70 (+8%/yr), incorporating compounding COLA, life expectancy horizons, spousal/survivor rules, and IRS combined income tax thresholds.",
+  faqs: SOCIAL_SECURITY_FAQS,
   inputs: [
     { name: "birthYear", label: "Your Year of Birth", type: "number", defaultValue: 1970, min: 1930, max: 2010, step: 1 },
     { name: "lifeExpectancy", label: "Your Life Expectancy", type: "number", defaultValue: 83, min: 65, max: 105, step: 1 },

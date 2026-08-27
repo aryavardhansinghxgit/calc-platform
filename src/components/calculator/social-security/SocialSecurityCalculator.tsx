@@ -126,6 +126,25 @@ export function SocialSecurityCalculator() {
   const fmt = (val: number) =>
     `$${val.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
+  // Reset Defaults
+  const resetDefaults = () => {
+    setBirthYearInput("1970");
+    setLifeExpInput("83");
+    setFraBenefitInput("2200");
+    setReturnRateInput("5.0");
+    setColaInput("3.0");
+    setOptAAgeInput("62");
+    setOptAMonthlyInput("1600");
+    setOptBAgeInput("70");
+    setOptBMonthlyInput("2810");
+    setCompareReturnInput("5.0");
+    setCompareColaInput("3.0");
+    setWorkerFraInput("2500");
+    setSpouseAgeInput("67");
+    setFilingStatus("married_joint");
+    setOtherIncomeInput("35000");
+  };
+
   // Quick Presets
   const applyPreset = (bYear: number, fraBen: number, lifeE: number) => {
     setBirthYearInput(bYear.toString());
@@ -159,8 +178,10 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
       "Year",
       "Age",
       "Option A Monthly ($)",
+      "Option A Annual ($)",
       "Option A Cumulative ($)",
       "Option B Monthly ($)",
+      "Option B Annual ($)",
       "Option B Cumulative ($)",
     ];
 
@@ -168,14 +189,22 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
       r.year,
       r.age,
       r.monthlyBenefitA,
+      r.annualBenefitA,
       r.cumulativeBenefitA,
       r.monthlyBenefitB || "",
+      r.annualBenefitB || "",
       r.cumulativeBenefitB || "",
     ]);
 
     const csvContent =
       "data:text/csv;charset=utf-8," +
-      [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
+      [
+        `# Social Security Projection Schedule`,
+        `# Birth Year: ${birthYearInput} | FRA: ${results.fraDetails.fraDisplay} | PIA: $${fraBenefitInput}/mo`,
+        `# COLA: ${colaInput}% | Investment Return: ${returnRateInput}% | Life Expectancy: ${lifeExpInput}`,
+        headers.join(","),
+        ...rows.map((e) => e.join(",")),
+      ].join("\n");
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
@@ -242,6 +271,10 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
     ],
   };
 
+  const factor62 = getBenefitAdjustmentFactor(62, results.fraDetails.fullRetirementAgeYears);
+  const factor65 = getBenefitAdjustmentFactor(65, results.fraDetails.fullRetirementAgeYears);
+  const factor70 = getBenefitAdjustmentFactor(70, results.fraDetails.fullRetirementAgeYears);
+
   return (
     <div className="space-y-6">
       {/* Top Quick Presets Toolbar */}
@@ -280,6 +313,15 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
             className="h-6 text-[10px] px-2 cursor-pointer"
           >
             Born 1955 / $1.8k FRA / Age 78
+          </Button>
+          <Button
+            type="button"
+            size="sm"
+            variant="ghost"
+            onClick={resetDefaults}
+            className="h-6 text-[10px] px-2 text-zinc-500 hover:text-rose-600 cursor-pointer"
+          >
+            Reset
           </Button>
         </div>
 
@@ -439,7 +481,6 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
                   RECOMMENDED CLAIMING AGE
                 </span>
                 <div className="flex gap-2">
-                  
                   <Button
                     type="button"
                     size="sm"
@@ -549,7 +590,8 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
       {activeTab === "fraScale" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-5">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Full Retirement Age (FRA) &amp; Monthly Benefit Scale
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+              Full Retirement Age (FRA) &amp; Monthly Benefit Scale
             </h3>
             <p className="text-xs text-zinc-500 mt-0.5">
               Your exact FRA is <strong>{results.fraDetails.fraDisplay}</strong> based on your birth year {results.fraDetails.birthYear}.
@@ -559,26 +601,26 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
           <div className="grid grid-cols-4 gap-4 text-xs font-sans tabular-nums">
             <div className="bg-rose-50 dark:bg-rose-950/30 p-4 rounded-xl border border-rose-200 dark:border-rose-800">
               <span className="font-sans font-bold text-rose-900 dark:text-rose-200 block text-xs">Age 62 (Early)</span>
-              <span className="text-xl font-extrabold text-rose-600">{fmt((Number(fraBenefitInput) || 2200) * getBenefitAdjustmentFactor(62, results.fraDetails.fullRetirementAgeYears))}</span>
-              <span className="font-sans text-[10px] text-zinc-500 block mt-1">70% of FRA Benefit</span>
+              <span className="text-xl font-extrabold text-rose-600">{fmt((Number(fraBenefitInput) || 2200) * factor62)}</span>
+              <span className="font-sans text-[10px] text-zinc-500 block mt-1">{(factor62 * 100).toFixed(1)}% of FRA Benefit</span>
             </div>
 
             <div className="bg-amber-50 dark:bg-amber-950/30 p-4 rounded-xl border border-amber-200 dark:border-amber-800">
               <span className="font-sans font-bold text-amber-900 dark:text-amber-200 block text-xs">Age 65</span>
-              <span className="text-xl font-extrabold text-amber-600">{fmt((Number(fraBenefitInput) || 2200) * getBenefitAdjustmentFactor(65, results.fraDetails.fullRetirementAgeYears))}</span>
-              <span className="font-sans text-[10px] text-zinc-500 block mt-1">86.7% of FRA Benefit</span>
+              <span className="text-xl font-extrabold text-amber-600">{fmt((Number(fraBenefitInput) || 2200) * factor65)}</span>
+              <span className="font-sans text-[10px] text-zinc-500 block mt-1">{(factor65 * 100).toFixed(1)}% of FRA Benefit</span>
             </div>
 
             <div className="bg-indigo-50 dark:bg-indigo-950/30 p-4 rounded-xl border border-indigo-200 dark:border-indigo-800">
               <span className="font-sans font-bold text-indigo-900 dark:text-indigo-200 block text-xs">FRA (Baseline)</span>
               <span className="text-xl font-extrabold text-indigo-600">{fmt(Number(fraBenefitInput) || 2200)}</span>
-              <span className="font-sans text-[10px] text-zinc-500 block mt-1">100% of FRA Benefit</span>
+              <span className="font-sans text-[10px] text-zinc-500 block mt-1">100.0% of FRA Benefit</span>
             </div>
 
             <div className="bg-emerald-50 dark:bg-emerald-950/30 p-4 rounded-xl border border-emerald-200 dark:border-emerald-800">
               <span className="font-sans font-bold text-emerald-900 dark:text-emerald-200 block text-xs">Age 70 (Delayed)</span>
-              <span className="text-xl font-extrabold text-emerald-600">{fmt((Number(fraBenefitInput) || 2200) * getBenefitAdjustmentFactor(70, results.fraDetails.fullRetirementAgeYears))}</span>
-              <span className="font-sans text-[10px] text-zinc-500 block mt-1">124% of FRA Benefit</span>
+              <span className="text-xl font-extrabold text-emerald-600">{fmt((Number(fraBenefitInput) || 2200) * factor70)}</span>
+              <span className="font-sans text-[10px] text-zinc-500 block mt-1">{(factor70 * 100).toFixed(1)}% of FRA Benefit</span>
             </div>
           </div>
         </div>
@@ -588,7 +630,8 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
       {activeTab === "spousalTax" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Spousal, Survivor &amp; Benefit Taxability Suite
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+              Spousal, Survivor &amp; Benefit Taxability Suite
             </h3>
           </div>
 
@@ -628,20 +671,25 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
                 Spousal &amp; Taxability Breakdown
               </span>
               <div className="flex justify-between">
-                <span>Max Spousal Benefit (50%):</span>
+                <span>Max Spousal Benefit (50% of PIA):</span>
                 <span className="font-bold">{fmt(results.spousalAndTax.maxSpousalMonthly)}/mo</span>
               </div>
               <div className="flex justify-between">
-                <span>Actual Spousal Check:</span>
+                <span>Actual Spousal Check (Age {spouseAgeInput}):</span>
                 <span className="font-bold text-indigo-600">{fmt(results.spousalAndTax.actualSpousalMonthly)}/mo</span>
               </div>
               <div className="flex justify-between border-t pt-1">
-                <span>Survivor Benefit (100%):</span>
+                <span>Survivor Benefit (100% Baseline Estimate):</span>
                 <span className="font-bold text-rose-600">{fmt(results.spousalAndTax.survivorMonthlyEstimate)}/mo</span>
               </div>
-              <div className="flex justify-between border-t pt-2 font-bold text-emerald-600 text-sm">
-                <span>Taxable Benefit Percentage:</span>
-                <span>{results.spousalAndTax.taxablePercentage}% Taxable</span>
+              <div className="border-t pt-2 space-y-1">
+                <div className="flex justify-between font-bold text-emerald-600 text-sm">
+                  <span>Taxable Benefit Bracket / Cap:</span>
+                  <span>{results.spousalAndTax.taxablePercentage}% Taxable</span>
+                </div>
+                <p className="text-[10px] text-zinc-500 leading-tight">
+                  Based on IRS combined income of {fmt(results.spousalAndTax.combinedIncome)}. Up to {results.spousalAndTax.taxablePercentage}% of your Social Security benefits may be included in taxable income (subject to ordinary income tax rates, not an {results.spousalAndTax.taxablePercentage}% tax rate).
+                </p>
               </div>
             </div>
           </div>

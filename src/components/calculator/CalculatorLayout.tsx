@@ -77,6 +77,7 @@ import { RothIraContent } from "./roth-ira/RothIraContent";
 import { RmdCalculator } from "./rmd/RmdCalculator";
 import { PensionCalculator } from "./pension/PensionCalculator";
 import { SocialSecurityCalculator } from "./social-security/SocialSecurityCalculator";
+import { SocialSecurityContent } from "./social-security/SocialSecurityContent";
 import { AnnuityCalculator } from "./annuity/AnnuityCalculator";
 import { AnnuityPayoutCalculator } from "./annuity-payout/AnnuityPayoutCalculator";
 import { PaymentCalculator } from "./payment/PaymentCalculator";
@@ -497,6 +498,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isTimeDuration = idLower === "time-duration-calculator" || slugLower === "time-duration-calculator" || idLower === "time-duration" || slugLower === "time-duration";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isSocialSecurity ? SocialSecurityContent :
     isInterest ? InterestContent :
     isRothIra ? RothIraContent :
     isTimeDuration ? TimeDurationContent :
@@ -987,7 +989,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                 ))}
               </div>
             </div>
-          ) : !isInterest && !isRothIra && !isTimeDuration && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isRoi && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && definition.category !== "Math" ? (
+          ) : !isSocialSecurity && !isInterest && !isRothIra && !isTimeDuration && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isRoi && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && definition.category !== "Math" ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions

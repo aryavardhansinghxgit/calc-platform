@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Social Security Calculator – Ideal Claiming Age & Benefits Suite",
+    title: "Social Security Calculator – Estimate Benefits, Claiming Age & Break-Even",
     description:
-      "Free Social Security Benefits Calculator. Determine your ideal claiming age (62 vs FRA vs 70), compare two application ages, calculate Full Retirement Age (FRA) credits, estimate spousal/survivor benefits, and optimize taxation.",
+      "Use our Social Security Calculator to compare claiming ages 62–70, estimate monthly and lifetime benefits, calculate Full Retirement Age, COLA growth, break-even age, spousal benefits and taxability.",
     slug: SOCIAL_SECURITY_CALCULATOR.slug,
   });
 }
