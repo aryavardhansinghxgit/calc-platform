@@ -48,7 +48,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { CommissionContent } from "./CommissionContent";
 import {
   calculateSimpleCommission,
   calculateTieredCommission,
@@ -637,7 +636,6 @@ Company Net Revenue: ${fmt(simpleResults.companyNetRevenue)}`;
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
       {/* Educational Content & 15 FAQs */}
-      <CommissionContent />
     </div>
   );
 }

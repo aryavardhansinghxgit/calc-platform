@@ -58,7 +58,6 @@ import {
   TimeUnit,
   calculateSimpleInterestFormula,
 } from "@/lib/calculator-engine/formulas/simple-interest";
-import { SimpleInterestContent } from "./SimpleInterestContent";
 
 export function SimpleInterestCalculator() {
   // ==========================================
@@ -889,7 +888,6 @@ export function SimpleInterestCalculator() {
       {/* ==========================================
           SECTION 5: EDUCATIONAL CONTENT & FAQS COMPONENT
          ========================================== */}
-      <SimpleInterestContent />
 
       {/* ==========================================
           EXECUTIVE PRINT / PDF REPORT MODAL

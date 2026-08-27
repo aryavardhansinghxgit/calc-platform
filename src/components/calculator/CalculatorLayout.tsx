@@ -72,6 +72,7 @@ import { RetirementContent } from "./retirement/RetirementContent";
 import { FourZeroOneKCalculator } from "./401k/FourZeroOneKCalculator";
 import { IraCalculator } from "./ira/IraCalculator";
 import { RothIraCalculator } from "./roth-ira/RothIraCalculator";
+import { RothIraContent } from "./roth-ira/RothIraContent";
 import { RmdCalculator } from "./rmd/RmdCalculator";
 import { PensionCalculator } from "./pension/PensionCalculator";
 import { SocialSecurityCalculator } from "./social-security/SocialSecurityCalculator";
@@ -223,6 +224,7 @@ import { DateCalculator } from "./date/DateCalculator";
 import { DateContent } from "./date/DateContent";
 import { HoursCalculator } from "./hours/HoursCalculator";
 import { HoursContent } from "./hours/HoursContent";
+import { TimeDurationContent } from "./time-duration/TimeDurationContent";
 import { AutoLoanContentSection } from "./auto-loan/AutoLoanContentSection";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
@@ -491,8 +493,11 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isRepaymentMatch = idLower === "repayment-calculator" || slugLower === "repayment-calculator" || idLower === "repayment" || slugLower === "repayment";
   const isCurrency = idLower === "currency-calculator" || slugLower === "currency-calculator" || idLower === "currency" || slugLower === "currency";
   const isInflation = idLower === "inflation-calculator" || slugLower === "inflation-calculator" || idLower === "inflation" || slugLower === "inflation";
+  const isTimeDuration = idLower === "time-duration-calculator" || slugLower === "time-duration-calculator" || idLower === "time-duration" || slugLower === "time-duration";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isRothIra ? RothIraContent :
+    isTimeDuration ? TimeDurationContent :
     isInvestment ? InvestmentContent :
       isRetirement ? RetirementContent :
         isGdp ? GDPContent :
@@ -570,7 +575,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       <div className="w-full min-w-0 space-y-4">
         <div className="bg-slate-50 dark:bg-slate-900/50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
           <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
-            {isLoan ? "Loan Calculator & Amortization Payment Analyzer" : isPersonalLoan ? "Personal Loan Calculator & Amortization Payment Suite" : definition.title}
+            {isLoan ? "Loan Calculator & Amortization Payment Analyzer" : isPersonalLoan ? "Personal Loan Calculator & Amortization Payment Suite" : isTimeDuration ? "Time Duration Calculator – Calculate Elapsed Time Between Two Times and Dates" : definition.title}
           </h1>
           <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 max-w-xl leading-normal font-medium">
             {definition.description}
@@ -924,8 +929,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         </CalculatorErrorBoundary>
 
         {/* Related Calculators Links directly below calculator box */}
-        <div className="pt-2 pb-1 space-y-1">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 block">
+        <div className="pt-3 pb-1 space-y-1.5 border-t border-slate-200/60 dark:border-slate-800">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
             RELATED CALCULATORS:
           </span>
           <RelatedCalculators
@@ -937,21 +942,20 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       </div>
 
 
-      {/* 3. Full-Width Connected Educational Resource: Formula + Content + Related Calculators (Suppressed for calculators with dedicated full content suites like Lease, Tip, Payment, Annuity, Loan, Present Value, Future Value, 401(k), and Roth IRA) */}
-      {!isFutureValue && !isPresentValue && !isAnnuity && !isPayment && !isLease && !isTip && !isLoan && !isFourZeroOneK && !isRothIra && (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-8 shadow-xs text-slate-900 dark:text-slate-100">
-          {/* Formula & Calculation Method */}
-          {definition.formulaDescription && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isRoi && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDate && !isHours && !isScientific && !isFraction && !isStatistics && !isDebtConsolidation && (
-            <div className="space-y-3">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
-                Formula &amp; Calculation Method
-              </h3>
-              <FormulaSection
-                formula={definition.formulaDescription}
-                explanation={`How ${definition.title} calculations work.`}
-              />
-            </div>
-          )}
+      {/* 3. Full-Width Educational Resource: Long Content + FAQs */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 space-y-8 shadow-xs text-slate-900 dark:text-slate-100">
+        {/* Formula & Calculation Method (Fallback for calculators without a dedicated CustomContent component) */}
+        {definition.formulaDescription && !CustomContent && (
+          <div className="space-y-3">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+              Formula &amp; Calculation Method
+            </h3>
+            <FormulaSection
+              formula={definition.formulaDescription}
+              explanation={`How ${definition.title} calculations work.`}
+            />
+          </div>
+        )}
 
           {/* Educational Content & Examples */}
           {CustomContent && (
@@ -963,19 +967,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
 
           {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
-          {!isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isRoi && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && (
-            (Boolean(definition.faqs && definition.faqs.length > 0)) ||
-            (definition.category !== "Math")
-          ) && (
+          {Boolean(definition.faqs && definition.faqs.length > 0) ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions
               </h3>
               <div className="space-y-3">
-                {(definition.faqs && definition.faqs.length > 0
-                  ? definition.faqs
-                  : getTenHighQualityFaqs(definition.title, definition.category).slice(0, 10)
-                ).map((faq, idx) => (
+                {definition.faqs!.map((faq, idx) => (
                   <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
                     <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
                       {faq.question}
@@ -987,9 +985,26 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                 ))}
               </div>
             </div>
-          )}
+          ) : !isRothIra && !isTimeDuration && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isRoi && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && definition.category !== "Math" ? (
+            <div className="space-y-4 pt-2">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+                Frequently Asked Questions
+              </h3>
+              <div className="space-y-3">
+                {getTenHighQualityFaqs(definition.title, definition.category).slice(0, 10).map((faq, idx) => (
+                  <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                    <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                      {faq.question}
+                    </h4>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
+                      {faq.answer}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
-      )}
 
       {/* Generic Report Modal */}
       <ReportModal

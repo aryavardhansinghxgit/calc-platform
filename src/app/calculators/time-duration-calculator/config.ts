@@ -3,26 +3,30 @@ import { calculateTimeDurationCalculator } from "./calculator";
 import { TimeDurationCalculator } from "@/components/calculator/time-duration/TimeDurationCalculator";
 import { TimeDurationContent } from "@/components/calculator/time-duration/TimeDurationContent";
 
+import { time_duration_calculatorFaqs } from "./faq";
+
 export const time_duration_calculatorConfig: CalculatorModuleDefinition = {
   id: "time-duration-calculator",
   title: "Time Duration Calculator",
   slug: "time-duration-calculator",
   category: "date",
   subcategory: "Date & Time",
-  description: "Calculate exact elapsed time between two times, dates, or multiple intervals with step-by-step sexagesimal borrowing.",
+  description: "Calculate elapsed time between two times or dates, add multiple time intervals, handle midnight and date changes, and convert durations into hours, minutes, and seconds.",
   iconName: "Clock",
   featured: true,
   keywords: [
     "time duration calculator",
     "calculate hours between two times",
+    "calculate elapsed time between two times and dates",
     "elapsed time calculator",
     "how to calculate time difference",
     "time interval calculator",
     "hours minutes seconds duration",
   ],
   priority: 1,
-  relatedCalculators: ["hours-calculator", "time-calculator", "time-card-calculator", "date-calculator", "day-counter-calculator"],
+  relatedCalculators: ["time-calculator", "hours-calculator", "date-calculator", "time-card-calculator", "day-counter-calculator", "day-of-the-week-calculator"],
   formulaDescription: "Duration = End Time - Start Time (using sexagesimal base-60 subtraction)",
+  faqs: time_duration_calculatorFaqs,
   CustomComponent: TimeDurationCalculator,
   ContentComponent: TimeDurationContent,
   inputs: [

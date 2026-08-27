@@ -7,7 +7,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
     title: "Roth IRA Calculator - Growth, Contribution Limits & Taxable Account Comparison",
     description:
-      "Estimate Roth IRA growth, compare Roth vs taxable savings, check 2026 contribution limits and MAGI rules, model Backdoor Roth conversions, and view an annual retirement schedule.",
+      "Estimate Roth IRA growth, compare Roth and taxable investing, check 2026 contribution limits and MAGI phase-outs, and explore Backdoor Roth conversion scenarios.",
     slug: ROTH_IRA_CALCULATOR.slug,
   });
 }

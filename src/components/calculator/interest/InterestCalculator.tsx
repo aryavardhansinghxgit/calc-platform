@@ -60,7 +60,6 @@ import {
   ContributionTiming,
   calculateInterestFormula,
 } from "@/lib/calculator-engine/formulas/interest";
-import { InterestContent } from "./InterestContent";
 
 export function InterestCalculator() {
   // ==========================================
@@ -894,7 +893,6 @@ export function InterestCalculator() {
       {/* ==========================================
           SECTION 6: EDUCATIONAL CONTENT & FAQS COMPONENT
          ========================================== */}
-      <InterestContent />
 
       {/* ==========================================
           EXECUTIVE PRINT / PDF REPORT MODAL

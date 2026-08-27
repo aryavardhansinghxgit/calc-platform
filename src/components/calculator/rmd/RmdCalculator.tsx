@@ -41,7 +41,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { RmdContent } from "./RmdContent";
 import {
   calculateRmd,
   AccountItem,
@@ -850,7 +849,6 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
       {/* Educational Content & 15 FAQs */}
-      <RmdContent />
     </div>
   );
 }

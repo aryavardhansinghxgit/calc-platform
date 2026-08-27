@@ -33,7 +33,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { StudentLoanContent } from "./StudentLoanContent";
 import {
   calculateSimpleStudentLoan,
   calculateStudentLoanRepayment,
@@ -699,7 +698,6 @@ export function StudentLoanCalculator() {
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
       {/* Educational Content & 20 Authoritative FAQs */}
-      <StudentLoanContent />
     </div>
   );
 }

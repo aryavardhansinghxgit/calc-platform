@@ -1,8 +1,6 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateRothIra } from "@/lib/calculator-engine/formulas/roth-ira";
 import { roth_ira_faqs } from "./faq";
-import { RothIraCalculator } from "@/components/calculator/roth-ira/RothIraCalculator";
-import { RothIraContent } from "@/components/calculator/roth-ira/RothIraContent";
 
 export const ROTH_IRA_CALCULATOR: CalculatorModuleDefinition = {
   id: "roth-ira",
@@ -11,11 +9,9 @@ export const ROTH_IRA_CALCULATOR: CalculatorModuleDefinition = {
   category: "Finance",
   subcategory: "Retirement",
   description:
-    "Estimate Roth IRA growth, compare Roth vs taxable savings, check 2026 contribution limits and MAGI rules, model Backdoor Roth conversions, and view an annual retirement schedule.",
+    "Estimate Roth IRA growth, compare Roth and taxable investing, check 2026 contribution limits and MAGI phase-outs, and explore Backdoor Roth conversion scenarios.",
   iconName: "TrendingUp",
   featured: true,
-  CustomComponent: RothIraCalculator,
-  ContentComponent: RothIraContent,
   tags: [
     "Roth IRA calculator",
     "Roth IRA contribution calculator",

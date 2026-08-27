@@ -43,7 +43,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { PensionContent } from "./PensionContent";
 import { calculatePensionSuite } from "@/lib/calculator-engine/formulas/pension";
 
 export function PensionCalculator() {
@@ -747,7 +746,6 @@ export function PensionCalculator() {
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
       {/* Educational Content & 15 FAQs */}
-      <PensionContent />
     </div>
   );
 }

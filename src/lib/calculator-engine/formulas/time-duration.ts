@@ -83,6 +83,8 @@ export interface MultiSegmentResult {
   totalHours: number;
   totalMinutes: number;
   totalSeconds: number;
+  totalCumulativeSeconds: number;
+  percentOfDay: number;
   totalDurationHms: string;
   totalDecimalHours: number;
   totalDecimalMinutes: number;
@@ -174,7 +176,7 @@ export function calculateSameDayDuration(params: SameDayDurationParams): Duratio
     borrowExplanation = `2. Direct Subtraction (No borrowing required):\n   • ${endStr} - ${startStr}`;
   }
 
-  const step3 = `3. Final Result:\n   • Hours: ${bEndH} - ${sH24} = ${hours}h\n   • Minutes: ${bEndM} - ${sM} = ${minutes}m\n   • Seconds: ${bEndS} - sS = ${seconds}s\n   → ${formattedHms} (${totalDecimalHours} decimal hours)`;
+  const step3 = `3. Final Result:\n   • Hours: ${bEndH} - ${sH24} = ${hours}h\n   • Minutes: ${bEndM} - ${sM} = ${minutes}m\n   • Seconds: ${bEndS} - ${sS} = ${seconds}s\n   → ${formattedHms} (${totalDecimalHours} decimal hours)`;
 
   return {
     formattedHms,
@@ -294,6 +296,8 @@ export function calculateMultiSegmentDuration(segments: TimeSegmentInput[]): Mul
     totalHours: hours,
     totalMinutes: minutes,
     totalSeconds: seconds,
+    totalCumulativeSeconds: totalSec,
+    percentOfDay: parseFloat(((totalSec / 86400) * 100).toFixed(2)),
     totalDurationHms,
     totalDecimalHours,
     totalDecimalMinutes,

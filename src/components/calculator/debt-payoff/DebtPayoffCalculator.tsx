@@ -52,7 +52,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { DebtPayoffContent } from "./DebtPayoffContent";
 import {
   calculateDebtPayoff,
   evaluateConsolidationLoan,
@@ -867,7 +866,6 @@ Total Amount Paid: ${fmt(results.totalAmountPaid)}`;
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
       {/* Educational Content & 20 FAQs */}
-      <DebtPayoffContent />
     </div>
   );
 }

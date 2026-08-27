@@ -50,7 +50,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { AnnuityContent } from "./AnnuityContent";
 import {
   calculateAnnuity,
   calculateTargetPlanner,
@@ -798,7 +797,6 @@ CAGR: ${results.cagr}% | Effective Yield: ${results.effectiveAnnualYield}%`;
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
       {/* Educational Content & 25 FAQs */}
-      <AnnuityContent />
     </div>
   );
 }

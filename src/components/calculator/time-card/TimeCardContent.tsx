@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export function TimeCardContent() {
   return (
-    <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-6 divide-y divide-slate-100 dark:divide-slate-800">
+    <article className="text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-6 divide-y divide-slate-100 dark:divide-slate-800">
       {/* 1. INTRODUCTION */}
       <div>
         <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-2">
@@ -191,48 +191,6 @@ export function TimeCardContent() {
         </ul>
       </div>
 
-      {/* 8. RELATED CALCULATORS */}
-      <div className="pt-6">
-        <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white mb-2">
-          Related Calculators
-        </h2>
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs sm:text-sm font-semibold">
-          <Link
-            href="/calculators/hours-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
-          >
-            Hours Calculator
-          </Link>
-          <span className="text-slate-300 dark:text-slate-700">|</span>
-          <Link
-            href="/calculators/time-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
-          >
-            Time Calculator
-          </Link>
-          <span className="text-slate-300 dark:text-slate-700">|</span>
-          <Link
-            href="/calculators/time-duration-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
-          >
-            Time Duration Calculator
-          </Link>
-          <span className="text-slate-300 dark:text-slate-700">|</span>
-          <Link
-            href="/calculators/date-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
-          >
-            Date Calculator
-          </Link>
-          <span className="text-slate-300 dark:text-slate-700">|</span>
-          <Link
-            href="/calculators/day-counter-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
-          >
-            Day Counter Calculator
-          </Link>
-        </div>
-      </div>
     </article>
   );
 }

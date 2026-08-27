@@ -27,7 +27,6 @@ import {
   PaymentFrequency,
   SavedPaymentItem,
 } from "@/app/calculators/payment-calculator/types";
-import { PaymentContent } from "./PaymentContent";
 
 export function PaymentCalculator() {
   const input3DClass =
@@ -1574,7 +1573,6 @@ export function PaymentCalculator() {
       </div>
 
       {/* Educational Guide & 12 FAQs */}
-      <PaymentContent />
     </div>
   );
 }

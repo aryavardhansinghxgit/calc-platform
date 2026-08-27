@@ -49,7 +49,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { GstContent } from "./GstContent";
 import {
   calculateSingleGst,
   calculateMultiItemInvoice,
@@ -855,7 +854,6 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
       {/* Educational Content & 20 FAQs */}
-      <GstContent />
     </div>
   );
 }

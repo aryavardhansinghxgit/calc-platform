@@ -54,8 +54,8 @@ export function runTimeDurationCalculatorTests() {
     { id: "3", hours: 0, minutes: 55, seconds: 30 },
   ];
   const resSeg = calculateMultiSegmentDuration(segs);
-  if (resSeg.totalHours !== 5 || resSeg.totalMinutes !== 10 || resSeg.totalSeconds !== 30) {
-    throw new Error(`Expected 5h 10m 30s, got ${resSeg.totalDurationHms}`);
+  if (resSeg.totalHours !== 5 || resSeg.totalMinutes !== 10 || resSeg.totalSeconds !== 30 || resSeg.totalCumulativeSeconds !== 18630) {
+    throw new Error(`Expected 5h 10m 30s (18630s), got ${resSeg.totalDurationHms} (${resSeg.totalCumulativeSeconds}s)`);
   }
 
   // Test 5: Cross-Date Duration (Aug 1 08:00 to Aug 7 17:30 = 6 days, 9 hours, 30 minutes)

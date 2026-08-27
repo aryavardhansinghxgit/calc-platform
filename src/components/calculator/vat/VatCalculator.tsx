@@ -49,7 +49,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { VatContent } from "./VatContent";
 import {
   solveVat,
   calculateSupplyChainVat,
@@ -738,7 +737,6 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
       {/* Educational Content & 20 FAQs */}
-      <VatContent />
     </div>
   );
 }

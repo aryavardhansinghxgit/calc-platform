@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export function DayCounterContent() {
   return (
-    <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-6 divide-y divide-slate-100 dark:divide-slate-800">
+    <article className="text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-6 divide-y divide-slate-100 dark:divide-slate-800">
       {/* 1. INTRODUCTION */}
       <div>
         <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-2">

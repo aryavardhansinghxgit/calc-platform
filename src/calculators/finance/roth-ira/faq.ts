@@ -2,63 +2,63 @@ import { CalculatorFAQ } from "@/calculators/types";
 
 export const roth_ira_faqs: CalculatorFAQ[] = [
   {
-    question: "How does a Roth IRA calculator estimate retirement growth?",
+    question: "What is a Roth IRA calculator?",
     answer:
-      "It projects a Roth IRA balance from the entered current balance, annual contribution, investment-return assumption, current age and retirement age. This calculator uses beginning-of-year contribution timing and shows the resulting annual schedule.",
+      "A Roth IRA calculator is a planning tool that estimates how a Roth IRA could grow from a starting balance and future contributions under an assumed investment return. A comprehensive calculator can also compare the modeled result with a taxable account, test contribution limits and income thresholds, and show an annual schedule so the headline result can be audited.",
   },
   {
-    question: "What is the 2026 Roth IRA contribution limit?",
+    question: "How much can I contribute to a Roth IRA in 2026?",
     answer:
-      "For 2026, the regular IRA contribution limit is $7,500. The limit is shared across an individual's traditional and Roth IRAs, and the amount can be lower if taxable compensation is lower.",
+      "For 2026, the IRS says the combined annual contribution limit for an individual's Traditional and Roth IRAs is $7,500, or $8,600 if the individual is age 50 or older, subject to the taxable-compensation limitation if compensation is lower. The limit is shared across Traditional and Roth IRAs rather than being a separate $7,500 allowance for each account.",
   },
   {
-    question: "What is the Roth IRA age-50+ catch-up contribution?",
+    question: "What is the Roth IRA income limit for 2026?",
     answer:
-      "For 2026, the IRA catch-up contribution is $1,100, making the general age-50-and-over combined IRA limit $8,600. The $8,000 catch-up that applies to many 401(k) plans is not the IRA catch-up.",
+      "For 2026, the Roth IRA MAGI phase-out range is $153,000 to $168,000 for single filers and heads of household, $242,000 to $252,000 for married filing jointly, and $0 to $10,000 for married filing separately under the applicable rule. The exact contribution treatment depends on filing status and MAGI calculation, so the calculator should be used as an estimate rather than a complete tax-return determination.",
   },
   {
-    question: "How do Roth IRA income limits affect direct contributions?",
+    question: "Can I contribute $7,500 to both a Traditional IRA and a Roth IRA?",
     answer:
-      "For 2026, the direct Roth IRA contribution phase-out range is $153,000 to $168,000 for single filers and heads of household, $242,000 to $252,000 for married filing jointly, and $0 to $10,000 for married filing separately. A user's actual eligibility depends on the applicable filing-status and MAGI rules.",
+      "Not under the ordinary 2026 annual IRA limit. The IRS limit applies to total contributions across all of your Traditional and Roth IRAs. You can split the $7,500 between the accounts, but you generally cannot contribute $7,500 to each and treat the combined $15,000 as within the annual limit.",
   },
   {
-    question: "What is the difference between a Roth IRA and a taxable account?",
+    question: "What happens if I am age 50 or older?",
     answer:
-      "A Roth IRA uses after-tax contributions and can receive tax-free qualified distributions, while a taxable account can generate taxable investment income and realized gains under applicable tax rules. This calculator compares them using a simplified taxable-account tax-drag model.",
+      "For 2026, the IRA catch-up contribution amount is $1,100. That raises the general combined IRA contribution limit from $7,500 to $8,600 for an eligible individual age 50 or older, subject to the same taxable-compensation constraint.",
   },
   {
-    question: "When are Roth IRA withdrawals tax-free?",
+    question: "How does a Roth IRA compound?",
     answer:
-      "Qualified Roth IRA distributions generally require the applicable five-year period plus a qualifying condition such as age 59 1/2, disability, death or the qualified first-home exception. Not every Roth IRA withdrawal is automatically tax-free.",
+      "The account compounds when investment returns are earned on the existing balance and those returns remain invested. In a recurring-contribution model, each contribution also gets its own period of growth. The timing convention matters: a beginning-of-year contribution receives one more compounding interval than an otherwise identical end-of-year contribution.",
   },
   {
-    question: "Can I withdraw Roth IRA contributions before retirement?",
+    question: "What is the difference between a Roth IRA and a taxable investment account?",
     answer:
-      "Roth IRA distributions generally follow ordering rules under which regular contributions come out before conversion amounts and earnings. The treatment of conversion amounts and earnings can differ, so a specific withdrawal may require analysis of the account's contribution and conversion history.",
+      "The primary modeled difference is tax treatment. A Roth IRA can provide tax-free qualified distributions, while a taxable account may create taxes during the investment period or at realization depending on the income and transaction. This calculator uses a simplified taxable-account model, so its “Roth advantage” is conditional on the stated assumptions rather than a universal guarantee.",
   },
   {
     question: "What is a Backdoor Roth IRA?",
     answer:
-      "A Backdoor Roth generally involves a nondeductible traditional IRA contribution followed by a Roth conversion. This calculator models the conversion using a simplified tax-rate assumption; it does not determine a taxpayer's complete conversion tax liability.",
+      "A Backdoor Roth is generally a strategy involving a Traditional IRA contribution followed by a Roth IRA conversion. The tax result depends on the amount that is taxable and on the taxpayer’s broader IRA situation. The IRS confirms that previously untaxed amounts converted from a Traditional IRA to a Roth IRA can be included in gross income.",
   },
   {
-    question: "How can the pro-rata rule affect a Backdoor Roth conversion?",
+    question: "Does a Roth conversion create taxes?",
     answer:
-      "Other pre-tax traditional, SEP and SIMPLE IRA balances can affect the taxable portion of a Roth conversion under the applicable pro-rata rules. Because the calculator does not collect every tax-return fact needed for a full pro-rata calculation, its conversion result is an illustrative model.",
+      "It can. The taxable portion of a Traditional IRA amount converted to a Roth IRA is generally included in gross income. The exact tax result depends on basis and the taxpayer’s broader tax situation, so a simple percentage-times-conversion estimate should be treated as a planning illustration rather than an exact tax bill.",
   },
   {
-    question: "What is the Roth IRA Saver's Credit?",
+    question: "What is the Roth IRA five-year rule?",
     answer:
-      "The Saver's Credit is a federal tax credit for eligible retirement contributions when the taxpayer meets the applicable income, age, student, dependency and other requirements. The credit percentage depends on filing status and income; the calculator is an eligibility model rather than a filed Form 8880.",
+      "For qualified Roth IRA distributions, the IRS generally requires that the five-year period beginning with the first tax year for which the Roth IRA was established and contributed to has been satisfied, along with an applicable qualifying event such as reaching age 59 1/2, disability, death, or the first-home exception under its rules.",
   },
   {
-    question: "Does a Roth IRA have required minimum distributions for the original owner?",
+    question: "Are Roth IRA withdrawals always tax-free?",
     answer:
-      "An original Roth IRA owner generally is not required to take lifetime RMDs under current federal rules. Inherited Roth IRAs are different and generally have beneficiary distribution requirements.",
+      "No. Qualified Roth IRA distributions can be tax-free, but not every distribution is automatically qualified. The tax treatment depends on the type of amount being distributed, the five-year rules, age, and other qualifying conditions. The IRS provides a specific test for determining whether a Roth distribution is qualified.",
   },
   {
-    question: "Why can this calculator differ from my actual Roth IRA results?",
+    question: "How accurate is a Roth IRA calculator?",
     answer:
-      "The calculator uses fixed assumptions for returns, annual contribution timing and taxable-account tax drag. Real investments have changing returns, fees, different contribution timing and more complex tax treatment. The Backdoor Roth, MAGI and Saver's Credit modes are also simplified models of rules that can depend on additional taxpayer facts.",
+      "A calculator can be mathematically accurate for the assumptions it uses, but the future investment result is still a projection. Returns, inflation, tax laws, contribution eligibility, and personal circumstances can change. The best use of the calculator is to compare scenarios and inspect the assumptions rather than treat one projected balance as a guaranteed outcome.",
   },
 ];

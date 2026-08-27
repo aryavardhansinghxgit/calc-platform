@@ -52,7 +52,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { IraContent } from "./IraContent";
 import {
   calculateIra,
   IraResult,
@@ -585,7 +584,6 @@ Total Principal Invested: ${fmt(results.totalPrincipalInvested)}`;
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
       {/* Educational Content & EXACTLY 10 FAQs */}
-      <IraContent />
     </div>
   );
 }

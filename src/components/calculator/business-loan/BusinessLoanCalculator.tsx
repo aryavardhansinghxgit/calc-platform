@@ -49,7 +49,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { BusinessLoanContent } from "./BusinessLoanContent";
 import {
   calculateBusinessLoan,
   calculateSbaLoan,
@@ -675,7 +674,6 @@ Real Rate (APR): ${loanResults.realAprPercent}%`;
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
       {/* Educational Content & 15 FAQs */}
-      <BusinessLoanContent />
     </div>
   );
 }

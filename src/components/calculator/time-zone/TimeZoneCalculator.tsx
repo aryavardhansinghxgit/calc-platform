@@ -30,7 +30,6 @@ import {
   formatOffsetString,
   ConvertTimeZoneResult,
 } from "@/lib/calculator-engine/formulas/time-zone";
-import { TimeZoneContent } from "./TimeZoneContent";
 
 interface SavedTimeZoneRecord {
   id: string;
@@ -910,7 +909,6 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
       {/* ========================================================================= */}
       {/* 4. EDUCATIONAL KNOWLEDGE BASE */}
       {/* ========================================================================= */}
-      <TimeZoneContent />
     </div>
   );
 }

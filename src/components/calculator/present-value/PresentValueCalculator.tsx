@@ -51,7 +51,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { PresentValueContent } from "./PresentValueContent";
 import {
   calculatePresentValue,
   CompoundingFrequency,
@@ -1032,7 +1031,6 @@ Real Inflation-Adjusted PV: ${fmt(results.realPresentValue)}`;
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
       {/* Educational Content & 20 FAQs */}
-      <PresentValueContent />
     </div>
   );
 }

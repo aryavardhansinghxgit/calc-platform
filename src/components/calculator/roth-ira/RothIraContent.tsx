@@ -1,392 +1,361 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { HelpCircle, ChevronDown, BookOpen, ShieldCheck } from "lucide-react";
-import { roth_ira_faqs } from "@/calculators/finance/roth-ira/faq";
+import { BookOpen, ShieldCheck, Calculator, Table, Percent, CheckCircle2, TrendingUp, AlertTriangle } from "lucide-react";
 
 export function RothIraContent() {
-  // All 12 FAQs open by default
-  const [openFaqIndices, setOpenFaqIndices] = useState<Set<number>>(
-    new Set(Array.from({ length: 12 }, (_, i) => i))
-  );
-
-  const toggleFaq = (index: number) => {
-    setOpenFaqIndices((prev) => {
-      const next = new Set(prev);
-      if (next.has(index)) {
-        next.delete(index);
-      } else {
-        next.add(index);
-      }
-      return next;
-    });
-  };
-
   return (
-    <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
-      {/* 1. SINGLE CANONICAL RELATED CALCULATORS BLOCK (Exactly 7 Verified Live Routes) */}
-      <div>
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
-          Related Retirement &amp; Wealth Tools
+    <article className="text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8">
+      {/* Editorial Overview Section */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          Roth IRA Calculator: How Growth, Contributions, Taxes, and Eligibility Fit Together
         </h2>
-        <div className="flex flex-wrap gap-2 text-xs">
-          <Link
-            href="/calculators/401k-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
+        <p>
+          A Roth IRA can be difficult to evaluate from a single headline number because several different questions are mixed together: how much can be contributed, whether direct contributions are allowed at a particular income level, how investment growth compounds over decades, and how the eventual tax treatment compares with a taxable account. A useful Roth IRA calculator should separate those questions instead of treating &ldquo;Roth IRA value&rdquo; as a single formula. This calculator is designed around that separation. You can project the growth of a current Roth balance plus future contributions, compare the modeled result with a taxable investment account, test a Backdoor Roth conversion scenario, review 2026 contribution and income thresholds, and inspect an annual schedule showing how the balances evolve over time. The result is intended to function as a planning model: it helps you understand the mathematical consequences of contribution rate, time horizon, investment return, and taxes before you make a retirement decision.
+        </p>
+        <p>
+          The central idea is compounding. Money that remains invested can generate returns, and those returns can themselves participate in subsequent growth. For a recurring-contribution projection, the future balance depends on the starting balance, the contribution amount, the assumed rate of return, the number of periods, and when each contribution is added. A calculator therefore needs a precise timing convention. In this tool, the growth model uses beginning-of-period annual contributions for the main Roth projection, which is an annuity-due convention. That matters because a contribution invested at the beginning of a year receives one more compounding interval than the same contribution invested at the end. The calculator&rsquo;s annual schedule is the best place to verify the convention because each row carries the prior ending balance into the next year&rsquo;s starting balance while adding the new contribution and modeled growth.
+        </p>
+        <p>
+          The tax side is equally important. A Roth IRA is funded with money that generally does not receive an upfront income-tax deduction, and qualified distributions from a Roth IRA can be tax-free. The IRS states that a qualified Roth IRA distribution generally requires that the five-year period beginning with the first tax year for which the Roth IRA was established for the taxpayer has been satisfied and that an applicable qualifying event, such as reaching age 59 &frac12;, disability, death, or the first-home exception, applies. That means the calculator should not describe every Roth withdrawal as automatically tax-free. The distinction between contributions, earnings, conversions, and qualified distributions is part of what makes the Roth model useful rather than merely promotional.
+        </p>
+      </section>
+
+      {/* Section: How a Roth IRA Grows Over Time */}
+      <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          How a Roth IRA Grows Over Time
+        </h2>
+        <p>
+          The most powerful variable in a retirement projection is usually not a single contribution; it is the combination of time and compounding. Suppose an investor begins with a Roth IRA balance, adds a fixed amount every year, and earns a constant assumed return. Each contribution becomes its own investment stream, while the existing balance continues to compound. Over a long horizon, this creates a curve that is often much steeper than a simple &ldquo;contributions added together&rdquo; calculation. That is why a Roth IRA calculator should show both total principal contributed and the amount of modeled growth. A future balance by itself can look impressive, but separating principal from growth reveals how much of the ending value came from the investor&rsquo;s own deposits versus the assumed return on capital.
+        </p>
+        <p>
+          For a beginning-of-period annual contribution model, the future value can be represented as the starting balance grown for the full horizon plus the future value of the annual contribution stream. In standard notation, for a starting principal <span className="font-serif italic">P</span>, annual contribution <span className="font-serif italic">C</span>, periodic rate <span className="font-serif italic">r</span>, and <span className="font-serif italic">n</span> periods, the annuity-due form is:
+        </p>
+        <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/60 font-mono text-xs sm:text-sm text-center">
+          FV = P(1 + r)<sup>n</sup> + C &middot; [((1 + r)<sup>n</sup> &minus; 1) / r] &middot; (1 + r)
+        </div>
+        <p>
+          With the zero-rate case handled separately as <span className="font-mono text-xs">FV = P + C &middot; n</span>. The exact implementation retains full precision internally and rounds only the displayed currency values. This prevents a common error where a rounded annual result is fed back into the next year and causes cumulative drift. The calculator&rsquo;s schedule always reconciles year <span className="font-serif italic">N</span> ending balance with year <span className="font-serif italic">N+1</span> beginning balance.
+        </p>
+        <p>
+          The effect of time can be understood through a simple example. Consider a person who starts with $30,000, contributes $7,500 at the beginning of each year, and assumes a 6% annual return from age 30 through age 65. Under the calculator&rsquo;s beginning-of-year convention, the total principal is $292,500, while the modeled Roth balance is approximately $1.116 million. The difference is not &ldquo;free money&rdquo;; it is the mathematical consequence of repeated compounding under a constant return assumption. A different contribution timing convention would produce a different answer, which is why it is useful to display the convention explicitly rather than leaving users to infer it.
+        </p>
+        <p>
+          The projection is most helpful when treated as a sensitivity tool rather than a promise. A 6% constant annual return is not guaranteed in actual markets, and real investments experience volatility, fees, taxes outside the Roth, and periods of negative performance. The calculator is therefore best used to compare assumptions: what changes if the annual contribution is lower, if retirement occurs earlier, or if the return assumption is reduced? For a broader accumulation model, the{" "}
+          <Link href="/calculators/retirement-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+            Retirement Calculator
+          </Link>{" "}
+          can be used alongside the Roth projection to examine the retirement horizon from a larger portfolio perspective.
+        </p>
+      </section>
+
+      {/* Section: 2026 Limits and Combined IRA Rule */}
+      <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          2026 Roth IRA Contribution Limits and the Combined IRA Rule
+        </h2>
+        <p>
+          Contribution limits are easy to misinterpret because the annual limit applies across an individual&rsquo;s Traditional and Roth IRAs rather than creating a separate full limit for each account. For 2026, the IRS states that the total contribution an individual makes to all Traditional and Roth IRAs is limited to $7,500, or $8,600 for an individual age 50 or older, subject to a lower limit if taxable compensation is less. This means a person generally cannot contribute $7,500 to a Roth IRA and another $7,500 to a Traditional IRA and claim that the full $15,000 is permitted under the ordinary annual IRA limit. The contribution ceiling is a combined IRA limit.
+        </p>
+        <p>
+          The age-50 catch-up amount is an additional $1,100 for 2026, bringing the general age-50-and-over limit to $8,600. The IRS explains that these dollar amounts are adjusted periodically for cost-of-living changes, which is why the calculator labels the year rather than using a timeless &ldquo;maximum contribution&rdquo; number. The page&rsquo;s preset controls therefore remain explicit about the tax year: a 2025 maximum of $7,000 and an age-50-and-over amount of $8,000 belong to 2025, while the corresponding 2026 figures are $7,500 and $8,600.
+        </p>
+        <p>
+          There is another practical limitation that matters when planning maximum contributions: the combined annual IRA limit does not override the taxable-compensation requirement. The IRS states that 2026 contributions are limited to $7,500 ($8,600 at age 50 or older) or, if less, the individual&rsquo;s taxable compensation for the year. A projection calculator may still allow a user to enter a hypothetical contribution for modeling, but the educational copy should distinguish a mathematical scenario from a contribution amount the taxpayer is actually eligible to make. This distinction is important for trust because a future-value calculation is not the same thing as a tax-form eligibility determination.
+        </p>
+        <p>
+          A practical way to use the calculator is to start with the statutory limit, then ask whether taxable compensation, filing status, MAGI, or other rules constrain the contribution. Once those questions are separated, the growth model becomes easier to understand. Users who want to examine accumulation in a tax-advantaged workplace plan can also compare the result with the{" "}
+          <Link href="/calculators/401k-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
             401(k) Calculator
           </Link>
-          <Link
-            href="/calculators/retirement-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Retirement Calculator
-          </Link>
-          <Link
-            href="/calculators/investment-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Investment Calculator
-          </Link>
-          <Link
-            href="/calculators/savings-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
+          , while users focused on general savings accumulation can use the{" "}
+          <Link href="/calculators/savings-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
             Savings Calculator
           </Link>
-          <Link
-            href="/calculators/future-value-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
+          .
+        </p>
+      </section>
+
+      {/* Section: MAGI Phase-Outs */}
+      <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          Roth IRA Income Limits and the 2026 MAGI Phase-Out
+        </h2>
+        <p>
+          Unlike a simple &ldquo;contribute or do not contribute&rdquo; rule, Roth IRA eligibility can change gradually across an income phase-out range. For 2026, the IRS lists a Roth IRA modified adjusted gross income phase-out range of $153,000 to $168,000 for single filers and heads of household. For married couples filing jointly, the range is $242,000 to $252,000. For a married individual filing separately who lived with their spouse at any time during the year, the phase-out range remains $0 to $10,000. These are tax-year thresholds, so a calculator should display the applicable year and should not recycle an older year&rsquo;s values without warning.
+        </p>
+        <p>
+          The phrase &ldquo;MAGI phase-out&rdquo; matters because the calculation is not based simply on salary or gross income. Modified adjusted gross income for Roth purposes follows specific tax rules, and the taxpayer&rsquo;s filing status changes the applicable threshold. That makes a generic one-number eligibility test insufficient for serious planning. A good calculator can flag whether the entered MAGI is below, inside, or above the published range, but it should not imply that the result replaces a complete tax-return calculation. The role of the tool is to make the threshold structure understandable and to give the user a consistent planning reference point.
+        </p>
+        <p>
+          Boundary testing is particularly important. At a threshold of $153,000 for a single filer, the behavior immediately below the threshold should differ from the behavior within the phase-out range, and the behavior at or above $168,000 should reflect the upper boundary. The same principle applies at $242,000 and $252,000 for married filing jointly. Testing those boundaries is more valuable than testing another arbitrary middle value because it verifies that the implementation handles the exact points at which eligibility changes. The calculator should also avoid the common mistake of using 2025 thresholds after displaying 2026 in the interface.
+        </p>
+        <p>
+          Users comparing retirement-account options may find it useful to run their Roth scenario and then review the broader{" "}
+          <Link href="/calculators/traditional-ira-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+            Traditional IRA Calculator
+          </Link>{" "}
+          to understand how pre-tax contribution treatment changes the planning question. A comparison with the{" "}
+          <Link href="/calculators/investment-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+            Investment Calculator
+          </Link>{" "}
+          can also show the difference between account-specific tax assumptions and a general investment-growth model.
+        </p>
+      </section>
+
+      {/* Section: Roth vs Taxable Account */}
+      <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          Roth IRA vs. a Taxable Investment Account
+        </h2>
+        <p>
+          Comparing a Roth IRA with a taxable account is not simply a matter of applying a tax percentage to the final balance. The timing of taxes is part of the model. A Roth IRA can allow qualified withdrawals of both contributions and investment earnings without federal income tax, while a taxable account may incur taxes during the investment period or at realization depending on the type of income and transaction. A calculator therefore needs to explain exactly what its taxable-account scenario represents. In this model, the taxable side is a simplified planning comparison designed to illustrate modeled tax drag; it is not a complete simulation of every dividend, capital-gain realization, loss offset, holding period, or state tax rule.
+        </p>
+        <p>
+          The advantage of using the comparison module is that the user can see the same starting assumptions pushed through two different tax treatments. If the starting balance, annual contributions, return assumption, and time horizon are held constant, the gap between the projected Roth balance and taxable balance represents the modeled effect of the different tax assumptions. This is more informative than saying that one account is &ldquo;better&rdquo; in every situation. A taxable account can provide flexibility and access that may matter outside retirement-account rules, while a Roth IRA can provide a particularly attractive tax structure for qualified retirement distributions.
+        </p>
+        <p>
+          The calculator should also distinguish &ldquo;modeled tax avoided&rdquo; from an actual future tax bill. The amount shown as a tax difference is the output of the assumptions entered into the model. It is not a guarantee of what a taxpayer will owe or save because actual tax outcomes depend on future laws, income sources, investment turnover, tax rates, deductions, basis, and the eventual transaction pattern. The right way to read the chart is therefore: &ldquo;Under these assumptions, the model produces this difference.&rdquo; That wording preserves the educational value without turning a projection into a promise.
+        </p>
+        <p>
+          The comparison becomes particularly useful when combined with scenario testing. Reduce the assumed return, shorten the time horizon, or change the marginal tax assumption and observe how the gap changes. When the user wants a general future-value computation without Roth-specific eligibility rules, the{" "}
+          <Link href="/calculators/future-value-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
             Future Value Calculator
-          </Link>
-          <Link
-            href="/calculators/compound-interest-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
+          </Link>{" "}
+          is a useful companion. The{" "}
+          <Link href="/calculators/compound-interest-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
             Compound Interest Calculator
-          </Link>
-          <Link
-            href="/calculators/inflation-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
+          </Link>{" "}
+          can also isolate the compounding effect itself, making it easier to understand how much of the result comes from time and reinvested growth rather than account type.
+        </p>
+      </section>
+
+      {/* Section: Backdoor Roth Conversions */}
+      <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          Backdoor Roth Conversions: What the Calculator Can and Cannot Show
+        </h2>
+        <p>
+          A Backdoor Roth strategy generally describes a sequence in which money is contributed to a Traditional IRA and then converted to a Roth IRA when the taxpayer is not eligible or chooses not to make a direct Roth contribution. The tax consequence depends on the tax status of the amount converted. The IRS explains that converting an amount from a Traditional IRA to a Roth IRA generally causes previously untaxed amounts to be included in gross income and reported for tax purposes. The conversion itself is not the same thing as a regular annual Roth IRA contribution.
+        </p>
+        <p>
+          For a simplified planning example, suppose a user models a $50,000 conversion and enters a 25% tax assumption. The calculator may display $12,500 as modeled upfront conversion tax and then project the converted Roth amount under the chosen investment assumptions. That arithmetic is intentionally simple: $50,000 &times; 25% = $12,500. The actual federal tax result can be different because the tax treatment of a conversion depends on the amount that is taxable, basis, other IRA balances, filing status, other income, and the taxpayer&rsquo;s broader return.
+        </p>
+        <p>
+          One of the most important limitations is the pro-rata rule. A taxpayer who has pre-tax amounts in Traditional, SEP, or SIMPLE IRAs can have the taxable amount of a Roth conversion determined under rules that take the taxpayer&rsquo;s aggregate IRA balances and basis into account. The calculator should therefore label the Backdoor Roth output as a simplified scenario unless it actually models those details. The IRS also confirms that Traditional, SEP, and SIMPLE IRA amounts have specific conversion and reporting rules.
+        </p>
+        <p>
+          Another important distinction is that the conversion tax and the future investment growth are separate events. Paying tax on a conversion does not itself determine the future performance of the converted assets. The calculator should therefore show the conversion amount, the modeled tax at conversion, the projected Roth value, and the comparison result as separate numbers. This makes the decision easier to audit and avoids the misleading impression that the tax cost somehow disappears inside the investment-return assumption. The{" "}
+          <Link href="/calculators/income-tax-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+            Income Tax Calculator
+          </Link>{" "}
+          can provide broader income-tax context, while the{" "}
+          <Link href="/calculators/retirement-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+            Retirement Calculator
+          </Link>{" "}
+          can be used to place the converted amount into a wider retirement plan.
+        </p>
+      </section>
+
+      {/* Section: Five-Year Rule & Qualified Distributions */}
+      <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          Roth IRA Withdrawals, the Five-Year Rule, and Qualified Distributions
+        </h2>
+        <p>
+          One reason Roth IRA projections can look different from taxable-account projections is the potential tax treatment of qualified distributions. The IRS states that a Roth IRA distribution is qualified when the five-year period beginning with the first tax year for which the taxpayer established and contributed to a Roth IRA has been satisfied and the distribution is made after age 59 &frac12;, because of disability, to a beneficiary or estate after death, or under the first-home exception subject to its rules. This means age alone is not the entire test.
+        </p>
+        <p>
+          The five-year concept also illustrates why retirement-account planning requires more than a future-value formula. A projection can estimate how large an account might become, but the tax character of a withdrawal depends on the reason for the distribution, the age of the taxpayer, the history of the Roth IRA, and whether the amount being withdrawn represents regular contributions, conversion amounts, or earnings. The calculator therefore should use precise language such as &ldquo;projected tax-free value under qualified-distribution assumptions&rdquo; rather than claiming that all future withdrawals are automatically tax-free.
+        </p>
+        <p>
+          For users who are primarily interested in accessible retirement capital, it is also useful to separate contributions from investment earnings. Roth IRA regular contributions have different distribution treatment from earnings, and conversion amounts have their own ordering and five-year considerations. Those details are outside a simple growth projection unless the calculator explicitly models them. The purpose of the educational content is to make that boundary visible so users know when the calculator is a planning illustration and when professional or tax-specific analysis may be necessary.
+        </p>
+        <p>
+          The most useful workflow is therefore to use the calculator in layers: first determine the projected account value, then examine the contribution and tax-year limits that apply, and finally consider whether the planned withdrawal strategy fits the qualified-distribution rules. For general retirement planning, the{" "}
+          <Link href="/calculators/401k-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+            401(k) Calculator
+          </Link>{" "}
+          and{" "}
+          <Link href="/calculators/retirement-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+            Retirement Calculator
+          </Link>{" "}
+          can be used as complementary tools rather than treating the Roth projection as a complete retirement plan.
+        </p>
+      </section>
+
+      {/* Section: Annual Schedule & Chart */}
+      <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          How to Read the Roth IRA Annual Schedule and Growth Chart
+        </h2>
+        <p>
+          A long-term retirement balance is easier to trust when the calculator shows how it was built. The annual schedule should therefore be treated as the audit trail for the headline result. Each row represents an age or year, beginning with the prior ending balance, adding the new contribution according to the stated timing convention, applying the modeled return, and producing a new ending balance. A valid schedule has an important invariant: the ending balance for one row becomes the beginning balance for the next row. If that continuity breaks, the headline result cannot be considered reliable.
+        </p>
+        <p>
+          The schedule also helps users understand why the curve accelerates. Early in the projection, a large portion of the ending balance may come directly from the investor&rsquo;s contributions because the account has had relatively little time to compound. Later, the annual growth amount can become larger because the account itself has become larger. In a constant-return illustration, the chart may therefore steepen as retirement approaches even though the contribution amount remains unchanged. That visual does not mean future returns will actually follow the same path; it shows the arithmetic consequence of the assumptions entered.
+        </p>
+        <p>
+          The Roth-versus-taxable chart should use the same underlying schedule values instead of creating separate display-only calculations. This matters because a chart that uses different rounding, tax logic, or timing from the table can produce a visually convincing but mathematically inconsistent page. A production-quality calculator should have one authoritative calculation state and derive the headline cards, annual table, comparison, and chart from that same state. Users should be able to change one input and see every dependent output update together.
+        </p>
+        <p>
+          The schedule is also the right place to inspect total principal. In the example with a $30,000 starting balance and $7,500 annual contribution over 35 years, the modeled principal total is $292,500. The remaining difference between that principal and the projected ending value is modeled investment growth. Because the calculator preserves full internal precision and rounds only for presentation, the displayed table and the downloadable schedule should reconcile to the same underlying result.
+        </p>
+      </section>
+
+      {/* Section: Using without Overestimating */}
+      <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+          Using the Roth IRA Calculator Without Overestimating the Result
+        </h2>
+        <p>
+          The best way to use a retirement calculator is to compare scenarios rather than to search for one &ldquo;correct&rdquo; future balance. Start with a realistic current balance and contribution amount, use a return assumption that you can explain, and then test a lower-return case. Repeat the calculation with an earlier retirement age and a later retirement age. If the result changes dramatically, that sensitivity is useful information: it tells you that the plan is strongly dependent on time horizon or return assumptions.
+        </p>
+        <p>
+          It is also helpful to separate legal limits from investment assumptions. The 2026 contribution limit is an external rule published by the IRS, while a 6% expected return is an assumption supplied by the user. The first is a tax-year fact that should be refreshed when the IRS publishes new cost-of-living adjustments. The second is a modeling input that should never be presented as guaranteed. Keeping those two categories visually separate makes the calculator easier to understand and easier to update.
+        </p>
+        <p>
+          Finally, treat the Roth advantage shown by the calculator as conditional. It depends on the assumptions used for contribution amounts, tax rates, return, time horizon, and taxable-account tax treatment. A result such as &ldquo;Roth advantage: $337,739&rdquo; is not an intrinsic property of every Roth IRA; it is the difference produced by that scenario. The right question is not whether the number is universally true, but whether the assumptions are visible, internally consistent, and appropriate for the user&rsquo;s planning question.
+        </p>
+        <p>
+          For readers moving from account-specific retirement planning to broader investment analysis, the{" "}
+          <Link href="/calculators/investment-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+            Investment Calculator
+          </Link>{" "}
+          can model a general investment trajectory, the{" "}
+          <Link href="/calculators/savings-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
+            Savings Calculator
+          </Link>{" "}
+          can focus on savings accumulation, and the{" "}
+          <Link href="/calculators/inflation-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
             Inflation Calculator
-          </Link>
+          </Link>{" "}
+          can help explain how future nominal dollars compare with today&rsquo;s purchasing power. Those tools answer adjacent questions without changing the Roth-specific tax and eligibility logic on this page.
+        </p>
+      </section>
+
+      {/* 2026 Roth IRA Reference Table */}
+      <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex items-center gap-2">
+          <Table className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+            2026 Roth IRA Reference Table
+          </h2>
         </div>
-      </div>
+        <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+          <table className="w-full text-left text-xs sm:text-sm border-collapse">
+            <thead>
+              <tr className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-semibold">
+                <th className="p-3 border-b border-slate-200 dark:border-slate-700">Rule</th>
+                <th className="p-3 border-b border-slate-200 dark:border-slate-700">2026 Value / Explanation</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-sans">
+              <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td className="p-3 font-medium text-slate-900 dark:text-slate-200">Annual IRA contribution limit</td>
+                <td className="p-3 text-slate-700 dark:text-slate-300 font-semibold text-emerald-600 dark:text-emerald-400">$7,500 total across Traditional + Roth IRAs</td>
+              </tr>
+              <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td className="p-3 font-medium text-slate-900 dark:text-slate-200">Age 50+ catch-up</td>
+                <td className="p-3 text-slate-700 dark:text-slate-300">$1,100; general combined limit becomes $8,600</td>
+              </tr>
+              <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td className="p-3 font-medium text-slate-900 dark:text-slate-200">Taxable compensation rule</td>
+                <td className="p-3 text-slate-700 dark:text-slate-300">Contribution is limited to $7,500 / $8,600 or taxable compensation, if less</td>
+              </tr>
+              <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td className="p-3 font-medium text-slate-900 dark:text-slate-200">Roth MAGI phase-out &ndash; Single / Head of Household</td>
+                <td className="p-3 text-slate-700 dark:text-slate-300">$153,000 to $168,000</td>
+              </tr>
+              <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td className="p-3 font-medium text-slate-900 dark:text-slate-200">Roth MAGI phase-out &ndash; Married Filing Jointly</td>
+                <td className="p-3 text-slate-700 dark:text-slate-300">$242,000 to $252,000</td>
+              </tr>
+              <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td className="p-3 font-medium text-slate-900 dark:text-slate-200">Roth MAGI phase-out &ndash; Married Filing Separately</td>
+                <td className="p-3 text-slate-700 dark:text-slate-300">$0 to $10,000</td>
+              </tr>
+              <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td className="p-3 font-medium text-slate-900 dark:text-slate-200">Saver&rsquo;s Credit income limit &ndash; Married Filing Jointly</td>
+                <td className="p-3 text-slate-700 dark:text-slate-300">$80,500</td>
+              </tr>
+              <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td className="p-3 font-medium text-slate-900 dark:text-slate-200">Saver&rsquo;s Credit income limit &ndash; Head of Household</td>
+                <td className="p-3 text-slate-700 dark:text-slate-300">$60,375</td>
+              </tr>
+              <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                <td className="p-3 font-medium text-slate-900 dark:text-slate-200">Saver&rsquo;s Credit income limit &ndash; Single / MFS</td>
+                <td className="p-3 text-slate-700 dark:text-slate-300">$40,250</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-slate-500 dark:text-slate-400">
+          Source note: the contribution limits, Roth MAGI ranges, and Saver&rsquo;s Credit thresholds above are current 2026 figures published by the IRS and should be treated as year-specific data rather than permanent rules.
+        </p>
+      </section>
 
-      {/* 2. EXPANDED MAIN EDUCATIONAL CONTENT (17 COMPLETE SECTIONS) */}
-      <div className="space-y-8 pt-6 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
-        {/* Section 1 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            1. What Is a Roth IRA Calculator?
+      {/* Section: Roth IRA Formulas Used in a Growth Projection */}
+      <section className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex items-center gap-2">
+          <Calculator className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+            Roth IRA Formulas Used in a Growth Projection
           </h2>
-          <p>
-            A Roth IRA calculator is a planning tool that estimates how a Roth IRA balance could grow from a current balance and recurring contributions over a selected time horizon. Because Roth IRA contributions are made with after-tax dollars, the calculator can be useful for comparing the projected account value with a taxable account under a specified tax-drag assumption. In this calculator, contributions are modeled at the beginning of each year, so each annual contribution participates in the modeled year&apos;s growth. The annual schedule then carries the ending balance forward into the next year.
-          </p>
-          <p>
-            The calculator goes beyond a simple future-value formula. It also checks contribution limits, models a simplified Backdoor Roth conversion, evaluates Roth contribution phase-out ranges by filing status and tax year, estimates a Form 8880 Saver&apos;s Credit under its implemented rules, and produces a side-by-side annual schedule. These tools answer different questions, so the page describes each mode separately rather than implying that one headline balance represents every Roth decision a user might make.
-          </p>
-        </section>
+        </div>
 
-        {/* Section 2 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            2. How Roth IRA Compound Growth Works
-          </h2>
-          <p>
-            Roth growth is driven by the starting balance, the contribution stream, the investment-return assumption and the number of years invested. In the validated baseline, a $30,000 starting balance and $7,500 annual contribution are projected from age 30 through age 65 using a 6% return assumption and beginning-of-year contribution timing. The resulting Roth balance is $1,116,488.75. Total principal is $292,500, leaving $823,988.75 of modeled growth.
-          </p>
-          <p>
-            The word modeled matters. A calculator using a 6% annual return assumes the account compounds at that rate according to its defined timing convention; an actual Roth IRA experiences changing market returns and investment expenses. Real-world results may therefore be higher or lower. The calculator&apos;s purpose is to make the effect of assumptions visible. Users can change the contribution amount, return assumption and retirement age to understand sensitivity instead of treating one scenario as a guaranteed outcome.
-          </p>
-        </section>
-
-        {/* Section 3 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            3. Roth IRA Contributions and the Shared IRA Limit
-          </h2>
-          <p>
-            Roth IRA contributions are subject to an annual IRA contribution limit that is shared with traditional IRA contributions. For 2026, the IRS says the total amount an individual contributes to all of their traditional IRAs and Roth IRAs generally cannot exceed $7,500, or $8,600 for someone age 50 or older, or the individual&apos;s taxable compensation if that amount is lower. The 2026 Roth IRA contribution limit itself is therefore $7,500 before the age-50 catch-up, while the catch-up is $1,100. The combined age-50-and-over maximum is $8,600. For comprehensive multi-pillar retirement modeling, explore our{" "}
-            <Link href="/calculators/retirement-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
-              Retirement Calculator
-            </Link>
-            .
-          </p>
-          <p>
-            The distinction between the Roth limit and the shared IRA limit is important. A person cannot contribute $7,500 to a Roth IRA and another $7,500 to a traditional IRA simply because both accounts exist. The contribution limit applies across the traditional and Roth IRA accounts together. Rollovers and certain other transactions are treated differently from ordinary annual contributions, so users should not try to infer their eligibility for every IRA transaction from the annual contribution field alone.
-          </p>
-        </section>
-
-        {/* Section 4 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            4. 2025 vs. 2026 Roth IRA Limits
-          </h2>
-          <p>
-            The calculator supports separate 2025 and 2026 IRA limit scenarios. For 2025, the regular IRA contribution limit is $7,000 and the age-50-and-over catch-up is $1,000, producing a maximum of $8,000. For 2026, the regular contribution limit rises to $7,500 and the IRA catch-up rises to $1,100, producing a maximum age-50-and-over contribution of $8,600. These values should always be displayed with the relevant tax year because IRS cost-of-living adjustments can change the amounts in future years.
-          </p>
-          <p>
-            The calculator does not present the $8,000 2025 total or the $7,000 2025 base as if they are current 2026 rules. Likewise, the 2026 IRA catch-up is $1,100, not the $8,000 catch-up that applies to most 401(k) plans in 2026. The IRS explicitly lists the IRA catch-up separately from 401(k) catch-up limits.
-          </p>
-        </section>
-
-        {/* Section 5 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            5. Roth IRA Income Limits and MAGI Phase-Outs
-          </h2>
-          <p>
-            A direct Roth IRA contribution can be affected by modified adjusted gross income and filing status. For 2026, the Roth IRA phase-out range is $153,000 to $168,000 for single taxpayers and heads of household, $242,000 to $252,000 for married couples filing jointly, and $0 to $10,000 for a married individual filing separately. The calculator therefore distinguishes direct Roth contribution eligibility from the annual dollar contribution limit. Someone can have enough compensation to contribute but still have a reduced or eliminated direct Roth contribution because of the applicable income phase-out.
-          </p>
-          <p>
-            A MAGI checker is also not the same thing as a complete federal tax-return MAGI calculation unless the product collects and calculates all of the relevant inputs. If the calculator uses MAGI as an entered value, it says that clearly. The tool can then compare that entered MAGI against the applicable threshold, but it does not imply that salary alone determines Roth IRA MAGI or that a simplified checker replaces a tax return or tax professional&apos;s calculation.
-          </p>
-        </section>
-
-        {/* Section 6 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            6. Roth IRA vs. Taxable Account
-          </h2>
-          <p>
-            The calculator compares a Roth IRA with a taxable account by holding the contribution path and investment-return assumption constant and applying a simplified annual tax-drag model to the taxable account. Under the validated baseline, the Roth balance reaches $1,116,488.75 while the taxable model reaches $778,750.04, a difference of $337,738.71. The taxable model also reports $162,083.35 of modeled tax drag over the 35-year horizon.
-          </p>
-          <p>
-            This comparison is intentionally a model, not a full U.S. brokerage tax simulator. Actual taxable investing can generate different tax consequences depending on interest, qualified and nonqualified dividends, realized capital gains, holding periods, tax-loss activity, asset location, state taxes and the investor&apos;s personal tax circumstances. The page therefore calls the result a modeled ending-balance difference or modeled tax drag, rather than implying that the displayed difference equals a guaranteed tax savings figure for a real taxpayer.
-          </p>
-        </section>
-
-        {/* Section 7 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            7. How the Calculator Handles Beginning-of-Year Contributions
-          </h2>
-          <p>
-            The Roth engine uses beginning-of-year contribution timing. In the baseline, age 30 starts with $30,000, adds the $7,500 annual contribution at the beginning of the period, and then applies the 6% return assumption to the combined $37,500, producing $2,250 of modeled growth and a $39,750 year-end Roth balance. That convention continues for the full schedule. Because the timing is explicit, the first year&apos;s contribution gets a full year of modeled growth. To inspect mathematical compounding equations, check our{" "}
-            <Link href="/calculators/compound-interest-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
-              Compound Interest Calculator
-            </Link>
-            .
-          </p>
-          <p>
-            This convention is different from a model in which a contribution arrives at the end of the year. The purpose is not to claim that every employer or brokerage deposits money on January 1; it is to provide a consistent annual planning model. Actual contribution timing can vary by payroll schedule, brokerage processing and account activity. The methodology section therefore identifies beginning-of-year timing so that users understand why results can differ from a monthly or paycheck-level simulation.
-          </p>
-        </section>
-
-        {/* Section 8 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            8. What Is a Backdoor Roth IRA?
-          </h2>
-          <p>
-            A Backdoor Roth is generally a strategy involving a nondeductible contribution to a traditional IRA followed by a conversion to a Roth IRA when the taxpayer&apos;s circumstances make a direct Roth contribution unavailable or less suitable. The calculator includes a simplified Backdoor Roth conversion mode that takes a conversion amount, an entered marginal tax rate, a return assumption and a time horizon. It computes modeled conversion tax as conversion amount multiplied by the entered tax rate and then projects the converted balance using the calculator&apos;s compound-growth model.
-          </p>
-          <p>
-            That is useful for scenario analysis, but it is deliberately narrower than an actual tax calculation. A real conversion can be affected by the taxpayer&apos;s other traditional, SEP and SIMPLE IRA balances, basis in nondeductible contributions, other income, filing status, tax brackets, state taxes and timing. A user should therefore understand the Backdoor Roth output as a simplified scenario. It is not a determination of what the taxpayer will owe when Form 8606 and the federal return are completed.
-          </p>
-        </section>
-
-        {/* Section 9 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            9. The Backdoor Roth Pro-Rata Rule
-          </h2>
-          <p>
-            The pro-rata rule is one of the most important limitations to mention when discussing Backdoor Roth strategies. If a taxpayer has other pre-tax traditional, SEP or SIMPLE IRA balances, the tax treatment of a conversion may not be determined by looking only at the one nondeductible contribution that was converted. The IRS rules generally require the taxpayer to consider the IRA balances and basis together when determining the taxable portion of the distribution or conversion.
-          </p>
-          <p>
-            The calculator does not collect every fact required to determine a taxpayer&apos;s actual pro-rata tax result. It therefore does not say that a conversion creates zero tax simply because the contribution was converted immediately. The safer explanation is that the tool shows the arithmetic under its selected conversion-tax assumption, while actual conversion taxation can depend on other IRA balances and the applicable pro-rata rules. This distinction is especially important because users often search for Backdoor Roth calculators expecting the output to be a complete tax determination.
-          </p>
-        </section>
-
-        {/* Section 10 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            10. Roth IRA Distribution Ordering Rules
-          </h2>
-          <p>
-            Roth IRA distributions are not treated as one undifferentiated pool of dollars. For tax purposes, the ordering rules generally treat regular contributions as coming out first, followed by conversion and rollover amounts, with earnings considered last. This distinction matters because the tax and additional-tax treatment can be different for contributions, converted amounts and earnings. A calculator that projects accumulation does not automatically become a distribution calculator simply because it explains these rules.
-          </p>
-          <p>
-            The page avoids broad statements such as &quot;you can withdraw any amount at any time tax-free.&quot; Regular Roth contributions generally have different treatment from earnings, and conversion amounts can have their own rules relevant to the additional 10% tax. The correct educational approach is to explain the ordering framework and then state that specific distributions can require an analysis of contribution history, conversion history, five-year periods and qualifying exceptions.
-          </p>
-        </section>
-
-        {/* Section 11 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            11. When Roth IRA Distributions Are Qualified
-          </h2>
-          <p>
-            A qualified Roth IRA distribution is generally one that occurs after the five-year period that begins with the first tax year for which the individual made a Roth IRA contribution for the applicable rule and also meets a qualifying condition such as reaching age 59 1/2, disability, death, or the qualified first-home exception within the applicable lifetime limit. The IRS describes the five-year requirement separately from the qualifying event; reaching age 59 1/2 by itself does not turn every Roth distribution into a qualified distribution.
-          </p>
-          <p>
-            This distinction is critical to the page&apos;s language. The calculator explains when qualified Roth IRA distributions can be tax-free under current rules, but it never promises that every withdrawal is tax-free. Actual treatment depends on what type of amount is distributed, the individual&apos;s five-year history, age and the applicable exception. The IRS&apos;s publications and current guidance remain the authoritative source for distribution rules.
-          </p>
-        </section>
-
-        {/* Section 12 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            12. Roth IRA RMDs and the Original Owner vs. Beneficiary
-          </h2>
-          <p>
-            Original owners of Roth IRAs generally do not have to take lifetime required minimum distributions while they are alive under current federal rules. Beneficiaries of inherited Roth IRAs are treated differently and are generally subject to inherited-account distribution requirements. The IRS explicitly distinguishes original owners from beneficiaries for RMD purposes.
-          </p>
-          <p>
-            This distinction is worth keeping in the educational content because the phrase &quot;Roth IRA has no RMDs&quot; can be misleading if it is not qualified. The accurate statement is that an original Roth IRA owner is generally not subject to lifetime RMDs, while an inherited Roth IRA is subject to beneficiary rules. The calculator does not model inherited-account distribution schedules, so the page avoids implying that the tool calculates beneficiary RMDs.
-          </p>
-        </section>
-
-        {/* Section 13 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            13. Saver&apos;s Credit and Roth IRA Contributions
-          </h2>
-          <p>
-            The Saver&apos;s Credit, also called the Retirement Savings Contributions Credit, can provide a federal tax credit for eligible retirement contributions for taxpayers who meet the applicable income, age, student and dependency requirements. For 2026, the AGI ceiling is $80,500 for married couples filing jointly, $60,375 for heads of household, and $40,250 for single or married-filing-separately filers. The actual credit percentage depends on filing status and AGI, and the credit is capped by the applicable contribution base and tax rules. For basic disciplined savings projections, test our{" "}
-            <Link href="/calculators/savings-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
-              Savings Calculator
-            </Link>
-            .
-          </p>
-          <p>
-            The calculator&apos;s Saver&apos;s Credit checker is described as an eligibility model based on its inputs, not as a filed Form 8880 or a guaranteed credit amount. A user&apos;s final credit can depend on details that are not captured in a simplified calculator, including whether the person is a full-time student, whether another taxpayer can claim them, and other eligibility requirements. The page also distinguishes the current Saver&apos;s Credit rules from the separate Saver&apos;s Match program that applies to future tax years rather than using the programs interchangeably.
-          </p>
-        </section>
-
-        {/* Section 14 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            14. Roth IRA Compensation Limits
-          </h2>
-          <p>
-            The annual Roth IRA contribution limit is also constrained by taxable compensation. For 2026, the IRS states that total contributions to all traditional and Roth IRAs generally cannot exceed $7,500, or $8,600 for someone age 50 or older, or the person&apos;s taxable compensation for the year if that is lower. A user therefore cannot simply contribute the full statutory limit when eligible compensation is lower. To compare with employer-sponsored payroll plans, see our{" "}
-            <Link href="/calculators/401k-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
-              401(k) Calculator
-            </Link>
-            .
-          </p>
-          <p>
-            This is an important distinction from account balance. Having $30,000 already in a Roth IRA does not by itself create more annual contribution room, and investment income inside the account is not the same thing as taxable compensation for purposes of making the ordinary annual contribution. The calculator therefore preserves its compensation constraint and describes it as a modeled eligibility limit rather than as a complete determination of every form of eligible IRA transaction.
-          </p>
-        </section>
-
-        {/* Section 15 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            15. Why the Roth-vs-Taxable Advantage Is a Model Output
-          </h2>
-          <p>
-            The headline difference between the Roth and taxable account projections is useful because it illustrates how different tax assumptions can affect long-term accumulation. In the validated baseline, the Roth ends at $1,116,488.75 while the taxable model ends at $778,750.04. The displayed advantage of $337,738.71 is the difference between those two modeled ending balances. For customized asset allocation comparisons, explore our{" "}
-            <Link href="/calculators/investment-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
-              Investment Calculator
-            </Link>
-            .
-          </p>
-          <p>
-            It is not presented as a universal tax savings figure. The taxable model applies an annual tax-drag approximation to growth, while actual taxable investing can produce a mixture of interest income, dividend income and realized capital gains at different rates and times. Likewise, qualified Roth treatment depends on the applicable rules. The result is therefore best understood as a side-by-side scenario showing what happens under the calculator&apos;s assumptions. Users can change the inputs to explore sensitivity rather than treating the comparison as a prediction of the tax result for their brokerage account.
-          </p>
-        </section>
-
-        {/* Section 16 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            16. Backdoor Roth Conversion Tax as a Simplified Scenario
-          </h2>
-          <p>
-            In the validated Backdoor Roth baseline, the calculator takes a $50,000 conversion amount and a 25% entered tax rate and computes $12,500 of modeled upfront conversion tax. It then projects the $50,000 converted amount at 6% for 35 years to arrive at approximately $384,304.18. The modeled taxable comparison reaches approximately $233,367.09, producing a calculated net advantage of $138,437.09 after subtracting the $12,500 modeled conversion tax. For lump-sum TVM formulas, see our{" "}
-            <Link href="/calculators/future-value-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
-              Future Value Calculator
-            </Link>
-            .
-          </p>
-          <p>
-            These numbers are internally consistent with the calculator&apos;s formula, but the tax assumption is intentionally simple. The calculator does not establish a taxpayer&apos;s actual conversion tax because that can depend on other IRA balances, basis, income, filing status, state tax, deductions and other facts. The page uses phrases such as &quot;modeled conversion tax&quot; and &quot;modeled advantage under these assumptions&quot; rather than &quot;your tax bill&quot; or &quot;your guaranteed tax savings.&quot;
-          </p>
-        </section>
-
-        {/* Section 17 */}
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
-            17. Calculation Methodology and Tax Disclaimer
-          </h2>
-          <div className="space-y-3 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
-            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1.5">
-              <div className="font-bold text-slate-900 dark:text-zinc-100 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
-                <BookOpen className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-                Calculation Methodology
-              </div>
-              <p>
-                Core methodology: the Roth engine projects a beginning-of-year contribution plus the prior balance and then applies the annual return assumption. The taxable-account comparison uses a simplified annual tax-drag model. The Backdoor Roth mode calculates a simplified conversion tax from the entered marginal rate and compounds the converted amount over the selected horizon. The MAGI checker evaluates the entered filing status, tax year and MAGI against the configured phase-out ranges. The Saver&apos;s Credit mode applies the configured Form 8880-style tiers and eligibility inputs. The annual schedule is derived from the same underlying calculation engine rather than from an independent chart-only approximation. For inflation impact adjustments, check our{" "}
-                <Link href="/calculators/inflation-calculator" className="text-blue-600 dark:text-blue-400 font-medium underline">
-                  Inflation Calculator
-                </Link>
-                .
-              </p>
+        <div className="space-y-4 text-xs sm:text-sm">
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm">
+              Beginning-of-period annual contribution model
+            </h3>
+            <p className="text-slate-600 dark:text-slate-400">
+              For annual contributions made at the beginning of each period:
+            </p>
+            <div className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 font-mono text-center text-xs sm:text-sm">
+              FV = P(1 + r)<sup>n</sup> + C &middot; [((1 + r)<sup>n</sup> &minus; 1) / r] &middot; (1 + r)
             </div>
-
-            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1.5">
-              <div className="font-bold text-slate-900 dark:text-zinc-100 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
-                <ShieldCheck className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-                Tax Disclaimer &amp; Privacy Notice
-              </div>
-              <p>
-                This calculator is an educational planning model, not a tax-return preparer, legal determination, individualized tax recommendation or guarantee of investment performance. Roth IRA eligibility and distribution rules can depend on tax year, filing status, MAGI, compensation, contribution history, conversion history, other IRA balances, five-year periods and other facts. Calculations are performed in your browser, and saved calculation history is stored locally in your browser. Verify current rules with the IRS and consider professional advice for circumstances such as a Backdoor Roth conversion, complex pro-rata basis issues or a large taxable distribution.
-              </p>
-            </div>
+            <p className="text-slate-600 dark:text-slate-400">
+              Where <span className="font-serif italic">P</span> is the starting balance, <span className="font-serif italic">C</span> is the annual contribution, <span className="font-serif italic">r</span> is the annual growth rate expressed as a decimal, and <span className="font-serif italic">n</span> is the number of contribution periods. At <span className="font-mono text-xs">r = 0</span>, the formula becomes <span className="font-mono text-xs">FV = P + C &middot; n</span>.
+            </p>
           </div>
-        </section>
-      </div>
 
-      {/* 3. FAQ SECTION (Exactly 12 Approved FAQs, Open by Default) */}
-      <div className="pt-6">
-        <div className="flex items-center gap-2 mb-4">
-          <HelpCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
-            Frequently Asked Questions
-          </h2>
-        </div>
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm">
+              Modeled taxable-account comparison
+            </h3>
+            <p className="text-slate-600 dark:text-slate-400">
+              The taxable comparison uses the implementation&rsquo;s documented tax-drag assumption. The page explicitly labels this as a model rather than implying that every taxable brokerage account incurs tax in exactly the same way. Actual tax results depend on the type and timing of income, realization events, basis, filing status, and applicable tax rules.
+            </p>
+          </div>
 
-        <div className="space-y-3">
-          {roth_ira_faqs.map((faq, idx) => {
-            const isOpen = openFaqIndices.has(idx);
-            return (
-              <div
-                key={idx}
-                className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden bg-white dark:bg-zinc-900 shadow-xs"
-              >
-                <button
-                  type="button"
-                  onClick={() => toggleFaq(idx)}
-                  className="w-full p-4 text-left text-xs sm:text-sm font-semibold text-zinc-900 dark:text-zinc-100 flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
-                >
-                  <span className="flex items-center gap-2 pr-4">
-                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
-                      Q{idx + 1}.
-                    </span>
-                    {faq.question}
-                  </span>
-                  <ChevronDown
-                    className={`h-4 w-4 text-zinc-400 shrink-0 transition-transform duration-200 ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
-                    {faq.answer}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm">
+              Simple conversion-tax illustration
+            </h3>
+            <div className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 font-mono text-center text-xs sm:text-sm">
+              Modeled conversion tax = Conversion Amount &times; Assumed Tax Rate
+            </div>
+            <p className="text-slate-600 dark:text-slate-400">
+              Example: $50,000 &times; 25% = $12,500. This is an illustrative assumption, not a substitute for an individualized tax-return calculation. The IRS confirms that previously untaxed amounts converted from a Traditional IRA to a Roth IRA can be included in gross income.
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Section: Important Planning Disclosure */}
+      <section className="pt-4 border-t border-slate-100 dark:border-slate-800">
+        <div className="p-4 bg-blue-50/70 dark:bg-blue-950/30 rounded-xl border border-blue-200 dark:border-blue-800/60 space-y-2">
+          <div className="flex items-center gap-2 font-bold text-blue-900 dark:text-blue-200 text-sm">
+            <ShieldCheck className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            Important Planning Disclosure
+          </div>
+          <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+            This calculator is an educational planning model and does not provide tax, investment, legal, or retirement advice. Current-year contribution limits and income thresholds should be verified against the latest IRS guidance before filing or contributing. Investment returns shown by the calculator are assumptions, not guarantees. Roth conversion and distribution taxation can depend on facts that are not captured by a simplified model, including basis, other IRA balances, filing status, taxable income, and the timing and purpose of distributions. For tax-specific decisions, users should verify the result with current IRS guidance or a qualified tax professional.
+          </p>
+        </div>
+      </section>
     </article>
   );
 }

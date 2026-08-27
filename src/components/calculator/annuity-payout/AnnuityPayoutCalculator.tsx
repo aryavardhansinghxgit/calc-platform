@@ -52,7 +52,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { AnnuityPayoutContent } from "./AnnuityPayoutContent";
 import {
   calculateFixedLengthPayout,
   calculateFixedPaymentPayout,
@@ -777,7 +776,6 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
       {/* Educational Content & 15 FAQs */}
-      <AnnuityPayoutContent />
     </div>
   );
 }

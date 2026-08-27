@@ -324,7 +324,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
                     type="number"
                     min="0"
                     disabled={maximizeContributions}
-                    value={maximizeContributions ? (Number(currentAgeInput) >= 50 ? "8000" : "7000") : annualContributionInput}
+                    value={maximizeContributions ? (Number(currentAgeInput) >= 50 ? "8600" : "7500") : annualContributionInput}
                     onChange={(e) => setAnnualContributionInput(e.target.value)}
                     className="text-xs font-sans tabular-nums h-8 px-2 text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
@@ -335,7 +335,7 @@ Net Roth IRA Advantage: ${fmt(results.rothAdvantageOverTaxable)}`;
               <div className="flex items-center justify-between p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-700 text-xs">
                 <div className="space-y-0.5">
                   <span className="font-bold text-zinc-800 dark:text-zinc-200">Maximize Contributions?</span>
-                  <p className="text-[11px] text-zinc-500">Automatically sets to max IRS annual cap ($7,000 / $8,000)</p>
+                  <p className="text-[11px] text-zinc-500">Automatically sets to max IRS annual cap ($7,500 / $8,600)</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <label className="flex items-center gap-1 cursor-pointer">

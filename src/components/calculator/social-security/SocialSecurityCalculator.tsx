@@ -43,7 +43,6 @@ import {
 } from "recharts";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
-import { SocialSecurityContent } from "./SocialSecurityContent";
 import {
   calculateSocialSecuritySuite,
   getBenefitAdjustmentFactor,
@@ -681,7 +680,6 @@ Recommended Plan: ${results.compareTwoAges.recommendedOption} (Advantage: ${fmt(
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
 
       {/* Educational Content & 20 FAQs */}
-      <SocialSecurityContent />
     </div>
   );
 }
