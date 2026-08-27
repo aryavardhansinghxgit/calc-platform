@@ -264,9 +264,9 @@ export function InterestCalculator() {
           </div>
 
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
               Interest Calculator
-            </h1>
+            </h2>
             <p className="text-xs sm:text-sm text-blue-100/80 mt-1 max-w-3xl leading-relaxed">
               Calculate compound interest growth with initial deposits, annual or monthly contributions, timing selection, 7 compounding frequencies, tax & inflation adjustments, Rule of 72 analytics, target wealth planning, and exportable schedules.
             </p>

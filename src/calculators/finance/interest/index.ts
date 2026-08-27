@@ -1,4 +1,5 @@
 import { CalculatorModuleDefinition } from "../../types";
+import { INTEREST_FAQS } from "./faq";
 
 export const INTEREST_CALCULATOR: CalculatorModuleDefinition = {
   id: "interest",
@@ -6,17 +7,12 @@ export const INTEREST_CALCULATOR: CalculatorModuleDefinition = {
   slug: "interest-calculator",
   category: "Finance",
   subcategory: "Investment",
-  description: "Calculate simple and compound interest earned over daily, monthly, quarterly, or annual compounding periods.",
+  description: "Calculate compound and simple interest growth with initial deposits, recurring contributions, 7 compounding frequencies, tax & inflation adjustments, and Rule of 72 analytics.",
   iconName: "TrendingUp",
-  featured: false,
-  tags: ["interest", "compound interest", "simple interest", "growth"],
-  formulaDescription: "Compound Interest: A = P(1 + r/n)^(nt). Simple Interest: A = P(1 + rt).",
-  faqs: [
-    {
-      question: "What is compounding frequency?",
-      answer: "Compounding frequency determines how often accumulated interest is added back to the principal balance to earn interest on interest.",
-    },
-  ],
+  featured: true,
+  tags: ["interest", "compound interest", "simple interest", "growth", "apy", "apr", "investment"],
+  formulaDescription: "Compound Interest: A = P(1 + r/n)^(nt). Continuous: A = P*e^(rt). Simple Interest: A = P(1 + rt).",
+  faqs: INTEREST_FAQS,
   inputs: [
     { name: "principal", label: "Initial Principal Amount", type: "currency", defaultValue: 10000, unit: "$", min: 100, max: 10000000, step: 500 },
     { name: "interestRate", label: "Annual Interest Rate", type: "percentage", defaultValue: 7.0, unit: "%", min: 0.1, max: 30, step: 0.1 },
