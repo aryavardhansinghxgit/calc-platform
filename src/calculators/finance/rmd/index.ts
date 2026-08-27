@@ -1,40 +1,33 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateRmd } from "@/lib/calculator-engine/formulas/rmd";
+import { RMD_FAQS } from "./faq";
 
 export const RMD_CALCULATOR: CalculatorModuleDefinition = {
   id: "rmd",
-  title: "RMD Calculator – IRS Required Minimum Distribution Estimator",
+  title: "RMD Calculator – Required Minimum Distribution, Tax & QCD Planning",
   slug: "rmd-calculator",
   category: "Finance",
   subcategory: "Retirement",
   description:
-    "Calculate IRS Required Minimum Distributions (RMD) from Traditional IRAs, 401(k)s, and 403(b)s. Updated for SECURE Act 2.0 starting ages (73 & 75) with Pub 590-B tables, QCD tax savings, penalty calculators, and lifetime projection schedules.",
+    "Calculate required minimum distributions (RMDs) from IRAs and retirement accounts using IRS life-expectancy factors. Estimate RMD taxes, QCD savings, deadlines and future account balances.",
   iconName: "Shield",
   featured: true,
   tags: [
-    "rmd",
-    "required minimum distribution",
-    "ira distribution",
-    "irs rmd",
-    "secure act 2.0",
-    "qcd calculator",
-    "publication 590-b",
-    "401k rmd",
+    "RMD calculator",
+    "required minimum distribution calculator",
+    "RMD calculation",
+    "RMD tax calculator",
+    "IRA RMD calculator",
+    "RMD table",
+    "RMD age",
+    "RMD formula",
+    "QCD calculator",
+    "required minimum distribution 2026",
+    "RMD withdrawal calculator",
   ],
   formulaDescription:
     "RMD = Prior Year-End Account Balance / IRS Distribution Period Factor (Uniform Lifetime Table III or Joint Life Table II).",
-  faqs: [
-    {
-      question: "What is a Required Minimum Distribution (RMD)?",
-      answer:
-        "A Required Minimum Distribution (RMD) is the mandatory annual withdrawal that account owners must make from tax-deferred retirement accounts—such as Traditional IRAs, 401(k)s, 403(b)s, and SEP IRAs—once reaching the IRS mandated starting age (age 73 under SECURE Act 2.0).",
-    },
-    {
-      question: "What age do RMDs start under SECURE Act 2.0?",
-      answer:
-        "Under SECURE Act 2.0, if you turn 72 in 2023 or later, your RMD starting age is 73. If you were born in 1960 or later, your RMD starting age increases to 75 (effective 2033).",
-    },
-  ],
+  faqs: RMD_FAQS,
   inputs: [
     { name: "birthYear", label: "Your Year of Birth", type: "number", defaultValue: 1951, min: 1920, max: 2010, step: 1 },
     { name: "rmdYear", label: "Year of RMD", type: "number", defaultValue: 2026, min: 2020, max: 2075, step: 1 },

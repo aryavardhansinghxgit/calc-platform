@@ -35,9 +35,24 @@ export interface LifetimeScheduleRow {
   endBalance: number;
 }
 
+export const QCD_ANNUAL_LIMIT_2026 = 111000;
+
+export function getQcdAnnualLimit(taxYear: number): number {
+  if (taxYear <= 2023) return 100000;
+  if (taxYear === 2024) return 105000;
+  if (taxYear === 2025) return 108000;
+  return 111000; // 2026+ per SECURE 2.0 inflation indexing (IRS Notice)
+}
+
 export interface RmdResult {
   currentAge: number;
   rmdStartingAge: number;
+  firstRmdYear: number;
+  firstRmdDeadline: string;
+  currentRmdDeadline: string;
+  subsequentRmdDeadline: string;
+  timelineStatus: "before_first_rmd" | "first_rmd_year" | "after_first_rmd";
+  isDoubleDistributionYear: boolean;
   isRmdRequiredThisYear: boolean;
   rmdYear: number;
   priorYearBalance: number;
@@ -46,6 +61,7 @@ export interface RmdResult {
   annualRmd: number;
   monthlyRmd: number;
   qcdAmount: number;
+  qcdAnnualLimit: number;
   taxableRmd: number;
   estimatedTaxPaid: number;
   netAfterTaxRmd: number;
@@ -164,10 +180,12 @@ export function calculateRmd(input: RmdInput): RmdResult {
   const startingAge = getRmdStartingAge(birthYear);
   const isRmdRequired = currentAge >= startingAge;
 
-  const totalBalance = Math.max(0, Number(input.priorYearBalance || 0));
-  const growthRate = Math.max(-20, Math.min(30, Number(input.growthRatePercent || 5.0))) / 100;
-  const taxRate = Math.max(0, Math.min(60, Number(input.estimatedTaxRatePercent || 22.0))) / 100;
-  const qcdInput = Math.max(0, Number(input.qcdAmount || 0));
+  const totalBalance = Math.max(0, Number(input.priorYearBalance ?? 0));
+  const rawGrowth = input.growthRatePercent !== undefined && input.growthRatePercent !== null ? Number(input.growthRatePercent) : 5.0;
+  const growthRate = Math.max(-20, Math.min(30, rawGrowth)) / 100;
+  const rawTax = input.estimatedTaxRatePercent !== undefined && input.estimatedTaxRatePercent !== null ? Number(input.estimatedTaxRatePercent) : 22.0;
+  const taxRate = Math.max(0, Math.min(60, rawTax)) / 100;
+  const qcdInput = input.qcdAmount !== undefined && input.qcdAmount !== null ? Math.max(0, Number(input.qcdAmount)) : 0;
 
   // Determine Distribution Factor Table
   let factor = 0;
@@ -193,8 +211,9 @@ export function calculateRmd(input: RmdInput): RmdResult {
   const annualRmd = Number(rawAnnualRmd.toFixed(2));
   const monthlyRmd = Number((annualRmd / 12).toFixed(2));
 
-  // QCD & Tax Math (Max QCD allowed by IRS is $105,000 per tax year)
-  const qcdAmount = Math.min(annualRmd, Math.min(105000, qcdInput));
+  // QCD & Tax Math (2026 IRS annual cap is $111,000 per tax year; indexed for inflation)
+  const qcdMaxLimit = getQcdAnnualLimit(rmdYear);
+  const qcdAmount = Math.min(annualRmd, Math.min(qcdMaxLimit, qcdInput));
   const taxableRmd = Math.max(0, Number((annualRmd - qcdAmount).toFixed(2)));
   const estimatedTaxPaid = Number((taxableRmd * taxRate).toFixed(2));
   const netAfterTaxRmd = Number((annualRmd - estimatedTaxPaid).toFixed(2));
@@ -226,6 +245,27 @@ export function calculateRmd(input: RmdInput): RmdResult {
       aggregationGroup,
     };
   });
+
+  // Required Beginning Date (RBD) & Timeline details
+  const firstRmdYear = birthYear + startingAge;
+  const firstRmdDeadline = `April 1, ${firstRmdYear + 1}`;
+  const subsequentRmdDeadline = "December 31 annually";
+
+  let timelineStatus: RmdResult["timelineStatus"] = "after_first_rmd";
+  let currentRmdDeadline = `December 31, ${rmdYear}`;
+
+  if (rmdYear < firstRmdYear) {
+    timelineStatus = "before_first_rmd";
+    currentRmdDeadline = `No RMD required for ${rmdYear}`;
+  } else if (rmdYear === firstRmdYear) {
+    timelineStatus = "first_rmd_year";
+    currentRmdDeadline = `Generally April 1, ${firstRmdYear + 1}`;
+  } else {
+    timelineStatus = "after_first_rmd";
+    currentRmdDeadline = `December 31, ${rmdYear}`;
+  }
+
+  const isDoubleDistributionYear = rmdYear === firstRmdYear + 1;
 
   // Generate Lifetime Schedule up to Age 120
   const lifetimeSchedule: LifetimeScheduleRow[] = [];
@@ -280,6 +320,12 @@ export function calculateRmd(input: RmdInput): RmdResult {
   return {
     currentAge,
     rmdStartingAge: startingAge,
+    firstRmdYear,
+    firstRmdDeadline,
+    currentRmdDeadline,
+    subsequentRmdDeadline,
+    timelineStatus,
+    isDoubleDistributionYear,
     isRmdRequiredThisYear: isRmdRequired,
     rmdYear,
     priorYearBalance: totalBalance,
@@ -288,6 +334,7 @@ export function calculateRmd(input: RmdInput): RmdResult {
     annualRmd,
     monthlyRmd,
     qcdAmount,
+    qcdAnnualLimit: qcdMaxLimit,
     taxableRmd,
     estimatedTaxPaid,
     netAfterTaxRmd,

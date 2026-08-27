@@ -148,12 +148,16 @@ export function RmdCalculator() {
     const text = `Required Minimum Distribution (RMD) Summary (${results.rmdYear}):
 ------------------------------------------------
 Birth Year: ${birthYearInput} (Age in ${results.rmdYear}: ${results.currentAge})
-IRS RMD Starting Age: ${results.rmdStartingAge} (${results.isRmdRequiredThisYear ? "RMD Required" : "RMD Not Required Yet"})
+Applicable RMD Age: ${results.rmdStartingAge} (${results.isRmdRequiredThisYear ? "RMD Required" : "RMD Not Required Yet"})
+First RMD Deadline (RBD): ${results.firstRmdDeadline}
+Subsequent Annual Deadline: ${results.subsequentRmdDeadline}
 Account Balance (Dec 31 Prior Year): ${fmt(results.priorYearBalance)}
 IRS Distribution Factor: ${results.distributionPeriod > 0 ? results.distributionPeriod : "N/A"} (${results.tableUsed})
 ------------------------------------------------
 Annual RMD Amount: ${fmt(results.annualRmd)}
 Monthly Equivalent: ${fmt(results.monthlyRmd)}
+QCD Donation (2026 Cap: ${fmt(results.qcdAnnualLimit)}): ${fmt(results.qcdAmount)}
+Taxable RMD: ${fmt(results.taxableRmd)}
 Estimated Federal + State Tax: ${fmt(results.estimatedTaxPaid)}
 Net After-Tax Income: ${fmt(results.netAfterTaxRmd)}
 ------------------------------------------------
@@ -252,12 +256,16 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
           { label: "Year of Birth", value: birthYearInput },
           { label: "RMD Tax Year", value: rmdYearInput },
           { label: "Age in RMD Year", value: `${results.currentAge}` },
-          { label: "SECURE Act 2.0 Starting Age", value: `${results.rmdStartingAge}` },
+          { label: "Applicable RMD Age (SECURE 2.0)", value: `Age ${results.rmdStartingAge}` },
+          { label: "First RMD Year", value: `${results.firstRmdYear}` },
+          { label: "First RMD Deadline (RBD)", value: results.firstRmdDeadline },
+          { label: `Current RMD Deadline (${results.rmdYear})`, value: results.currentRmdDeadline },
+          { label: "Subsequent Annual Deadline", value: results.subsequentRmdDeadline },
           { label: "RMD Required Status", value: results.isRmdRequiredThisYear ? "Mandatory" : "Not Required Yet", highlight: true },
           { label: "IRS Table Applied", value: results.tableUsed },
           { label: "Distribution Factor", value: `${results.distributionPeriod}` },
           { label: "Annual RMD Amount", value: fmt(results.annualRmd), highlight: true },
-          { label: "QCD Charitable Amount", value: fmt(results.qcdAmount) },
+          { label: "QCD Charitable Amount (2026 Limit: $111,000)", value: fmt(results.qcdAmount) },
           { label: "Taxable RMD Amount", value: fmt(results.taxableRmd) },
           { label: "25% Late Excise Penalty Risk", value: fmt(results.penalty25Percent) },
           { label: "10% Corrected Penalty Risk", value: fmt(results.penalty10Percent) },
@@ -307,11 +315,27 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
           </Button>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
-          <span>Starting RMD Age:</span>
-          <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums text-sm">
-            Age {results.rmdStartingAge}
-          </span>
+        <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-zinc-600 dark:text-zinc-400">
+          <div className="flex items-center gap-1.5">
+            <span>Applicable RMD Age:</span>
+            <span className="text-indigo-600 dark:text-indigo-400 font-sans tabular-nums font-bold text-sm">
+              Age {results.rmdStartingAge}
+            </span>
+          </div>
+          <span className="text-zinc-300 dark:text-zinc-700">|</span>
+          <div className="flex items-center gap-1.5">
+            <span>First RMD Year:</span>
+            <span className="text-zinc-800 dark:text-zinc-200 font-sans font-bold">
+              {results.firstRmdYear}
+            </span>
+          </div>
+          <span className="text-zinc-300 dark:text-zinc-700">|</span>
+          <div className="flex items-center gap-1.5">
+            <span>{results.rmdYear === results.firstRmdYear ? "Initial Deadline (RBD):" : `Current ${results.rmdYear} Deadline:`}</span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-sans font-bold">
+              {results.currentRmdDeadline}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -574,7 +598,8 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
 
             {/* Late Penalty Risk Callout Card */}
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3 text-xs">
-              <h4 className="font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider text-[11px] flex items-center gap-1.5">SECURE 2.0 Late Withdrawal Excise Penalty Risk
+              <h4 className="font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+                SECURE 2.0 Late Withdrawal Excise Penalty Risk
               </h4>
               <div className="grid grid-cols-2 gap-3 font-sans tabular-nums">
                 <div className="bg-amber-50 dark:bg-amber-950/30 p-3 rounded-lg border border-amber-200 dark:border-amber-800">
@@ -586,6 +611,49 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                   <span className="text-lg font-bold text-emerald-700 dark:text-emerald-300">{fmt(results.penalty10Percent)}</span>
                 </div>
               </div>
+            </div>
+
+            {/* IRS Distribution Timeline & Deadlines Card */}
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3 text-xs">
+              <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2">
+                <div className="flex items-center gap-2 font-bold text-zinc-900 dark:text-zinc-100 text-xs">
+                  <Clock className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                  IRS Distribution Timeline &amp; Deadlines
+                </div>
+                <Badge variant="outline" className="text-[10px] font-sans font-medium">
+                  {results.timelineStatus === "before_first_rmd" ? "Pre-RMD Phase" : results.timelineStatus === "first_rmd_year" ? "Initial First-RMD Year" : "Ongoing Annual Phase"}
+                </Badge>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-sans tabular-nums">
+                <div className="bg-slate-50 dark:bg-slate-800/40 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                  <span className="text-[10px] text-zinc-500 uppercase font-bold block">First RMD Year</span>
+                  <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{results.firstRmdYear} (Age {results.rmdStartingAge})</span>
+                  <span className="text-[10px] text-zinc-500 block">RBD: {results.firstRmdDeadline}</span>
+                </div>
+                <div className="bg-slate-50 dark:bg-slate-800/40 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                  <span className="text-[10px] text-zinc-500 uppercase font-bold block">Current {results.rmdYear} Deadline</span>
+                  <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">{results.currentRmdDeadline}</span>
+                  <span className="text-[10px] text-zinc-500 block">{results.rmdYear === results.firstRmdYear ? "Initial grace period" : results.rmdYear < results.firstRmdYear ? "No distribution due" : "Standard Dec 31 rule"}</span>
+                </div>
+                <div className="bg-slate-50 dark:bg-slate-800/40 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                  <span className="text-[10px] text-zinc-500 uppercase font-bold block">Subsequent Deadlines</span>
+                  <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">Dec 31 Annually</span>
+                  <span className="text-[10px] text-zinc-500 block">All following tax years</span>
+                </div>
+              </div>
+
+              {/* Double Distribution Warning if applicable */}
+              {results.isDoubleDistributionYear && (
+                <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-[11px] space-y-1">
+                  <div className="flex items-center gap-1.5 font-bold text-amber-800 dark:text-amber-300">
+                    <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+                    Important Tax-Planning Caveat: Delayed First RMD
+                  </div>
+                  <p className="text-amber-900 dark:text-amber-200 leading-relaxed">
+                    If you delay your initial {results.firstRmdYear} RMD until {results.firstRmdDeadline}, you may have two RMDs to take in calendar year {results.rmdYear} (your deferred {results.firstRmdYear} RMD by April 1 and your {results.rmdYear} RMD by December 31). Having two RMDs in one calendar year can increase taxable income and may affect your marginal tax rate or other income-based considerations.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -709,10 +777,11 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
       {activeTab === "qcdTax" && (
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-4">
-            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Qualified Charitable Distribution (QCD) Tax Optimizer
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+              Qualified Charitable Distribution (QCD) Tax Optimizer
             </h3>
             <p className="text-xs text-zinc-500 mt-1">
-              Transfer up to $105,000 directly from your IRA to a qualifying charity starting at age 70½ to satisfy RMDs completely tax-free.
+              Transfer up to {fmt(results.qcdAnnualLimit)} (2026 IRS Limit: $111,000) directly from your Traditional IRA to a qualifying 501(c)(3) charity starting at age 70½ to satisfy RMDs without adding to Adjusted Gross Income (AGI).
             </p>
           </div>
 
@@ -720,12 +789,12 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
             <div className="space-y-4">
               <div className="space-y-1">
                 <label className="font-semibold text-zinc-700 dark:text-zinc-300">
-                  Annual QCD Donation Amount ($) (Max $105,000/yr)
+                  Annual QCD Donation Amount ($) (2026 Limit: {fmt(results.qcdAnnualLimit)}/yr)
                 </label>
                 <Input
                   type="number"
                   min="0"
-                  max="105000"
+                  max={results.qcdAnnualLimit.toString()}
                   step="1000"
                   value={qcdInput}
                   onChange={(e) => setQcdInput(e.target.value)}
@@ -738,7 +807,7 @@ Reduced Penalty (10% Corrected Window): ${fmt(results.penalty10Percent)}`;
                   💡 How QCDs Save Taxes:
                 </span>
                 <p className="text-zinc-600 dark:text-zinc-400 text-[11px] leading-relaxed">
-                  QCDs count toward your RMD requirement but are excluded from your Adjusted Gross Income (AGI). This prevents increases in your taxable income and protects you from Medicare IRMAA surcharges.
+                  QCD eligibility begins at exact <strong>age 70½</strong> (independent of your SECURE 2.0 RMD starting age of 73 or 75). Direct transfers from an IRA satisfy your RMD dollar-for-dollar and are 100% excluded from your AGI, helping avoid higher Medicare IRMAA surcharges and Social Security taxability.
                 </p>
               </div>
             </div>

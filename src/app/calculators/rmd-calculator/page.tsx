@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "RMD Calculator – IRS Required Minimum Distribution & SECURE 2.0 Planner",
+    title: "RMD Calculator – Required Minimum Distribution, Tax & QCD Calculator",
     description:
-      "Free IRS RMD Calculator. Calculate Required Minimum Distributions from Traditional IRAs, 401(k)s, and 403(b)s under SECURE Act 2.0 (starting ages 73 & 75). Features Pub 590-B tables, multi-account aggregator, QCD tax saver, late penalty estimators, and lifetime schedule charts.",
+      "Calculate required minimum distributions (RMDs) from IRAs and retirement accounts using IRS life-expectancy factors. Estimate RMD taxes, QCD savings, deadlines and future account balances.",
     slug: RMD_CALCULATOR.slug,
   });
 }
