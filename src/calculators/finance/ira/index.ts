@@ -22,18 +22,6 @@ export const IRA_CALCULATOR: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Compares pre-tax deductible Traditional IRA growth (taxed at retirement rate) against post-tax Roth IRA growth (100% tax-free) and taxable savings (annual tax drag).",
-  faqs: [
-    {
-      question: "What is the difference between a Traditional IRA and a Roth IRA?",
-      answer:
-        "Traditional IRAs allow tax-deductible contributions today, lowering your taxable income now, but withdrawals in retirement are taxed. Roth IRAs are funded with after-tax dollars today, but all future growth and withdrawals are 100% tax-free.",
-    },
-    {
-      question: "What are the 2025 and 2026 IRA contribution limits?",
-      answer:
-        "For 2025, the total combined IRA annual contribution limit is $7,000 across all Traditional and Roth IRAs ($8,000 for individuals aged 50 and older).",
-    },
-  ],
   inputs: [
     { name: "currentBalance", label: "Current Balance ($)", type: "currency", defaultValue: 30000, unit: "$", min: 0, max: 10000000, step: 5000 },
     { name: "annualContribution", label: "Annual Before-Tax Contrib ($)", type: "currency", defaultValue: 7500, unit: "$", min: 0, max: 1000000, step: 500 },
@@ -51,13 +39,13 @@ export const IRA_CALCULATOR: CalculatorModuleDefinition = {
   ],
   calculate: (inputs) => {
     const res = calculateIra({
-      currentBalance: Number(inputs.currentBalance || 30000),
-      annualContribution: Number(inputs.annualContribution || 7500),
-      investmentReturn: Number(inputs.investmentReturn || 6),
-      currentAge: Number(inputs.currentAge || 30),
-      retirementAge: Number(inputs.retirementAge || 65),
-      currentTaxRate: Number(inputs.currentTaxRate || 25),
-      retirementTaxRate: Number(inputs.retirementTaxRate || 15),
+      currentBalance: inputs.currentBalance !== undefined && !isNaN(Number(inputs.currentBalance)) ? Number(inputs.currentBalance) : 30000,
+      annualContribution: inputs.annualContribution !== undefined && !isNaN(Number(inputs.annualContribution)) ? Number(inputs.annualContribution) : 7500,
+      investmentReturn: inputs.investmentReturn !== undefined && !isNaN(Number(inputs.investmentReturn)) ? Number(inputs.investmentReturn) : 6,
+      currentAge: inputs.currentAge !== undefined && !isNaN(Number(inputs.currentAge)) ? Number(inputs.currentAge) : 30,
+      retirementAge: inputs.retirementAge !== undefined && !isNaN(Number(inputs.retirementAge)) ? Number(inputs.retirementAge) : 65,
+      currentTaxRate: inputs.currentTaxRate !== undefined && !isNaN(Number(inputs.currentTaxRate)) ? Number(inputs.currentTaxRate) : 25,
+      retirementTaxRate: inputs.retirementTaxRate !== undefined && !isNaN(Number(inputs.retirementTaxRate)) ? Number(inputs.retirementTaxRate) : 15,
     });
 
     return {

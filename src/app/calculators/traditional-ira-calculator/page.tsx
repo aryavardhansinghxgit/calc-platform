@@ -1,32 +1,25 @@
 import { Metadata } from "next";
-import { IRA_CALCULATOR } from "@/calculators/finance/ira";
+import { TRADITIONAL_IRA_CALCULATOR } from "@/calculators/finance/traditional-ira";
 import { CalculatorLayout } from "@/components/calculator/CalculatorLayout";
 import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-helpers";
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Traditional IRA Calculator – Pre-Tax Growth & Tax Optimizer",
-    description:
-      "Free Traditional IRA Calculator. Calculate pre-tax growth, after-tax retirement payouts, compare against Roth IRA and taxable savings side-by-side.",
-    slug: "traditional-ira-calculator",
+    title: TRADITIONAL_IRA_CALCULATOR.title,
+    description: TRADITIONAL_IRA_CALCULATOR.description,
+    slug: TRADITIONAL_IRA_CALCULATOR.slug,
   });
 }
 
 export default function TraditionalIraCalculatorPage() {
-  const { calculate, ...serializableDef } = IRA_CALCULATOR;
-
-  const customDef = {
-    ...serializableDef,
-    title: "Traditional IRA Calculator",
-    slug: "traditional-ira-calculator",
-  };
+  const { calculate, ...serializableDef } = TRADITIONAL_IRA_CALCULATOR;
 
   const schemas = generateJsonLdSchema({
-    title: customDef.title,
-    description: customDef.description,
-    slug: customDef.slug,
-    category: customDef.category,
-    faqs: customDef.faqs,
+    title: TRADITIONAL_IRA_CALCULATOR.title,
+    description: TRADITIONAL_IRA_CALCULATOR.description,
+    slug: TRADITIONAL_IRA_CALCULATOR.slug,
+    category: TRADITIONAL_IRA_CALCULATOR.category,
+    faqs: TRADITIONAL_IRA_CALCULATOR.faqs,
   });
 
   return (
@@ -38,7 +31,7 @@ export default function TraditionalIraCalculatorPage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       ))}
-      <CalculatorLayout definition={customDef} />
+      <CalculatorLayout definition={serializableDef} />
     </>
   );
 }
