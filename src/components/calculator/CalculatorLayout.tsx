@@ -511,6 +511,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isTimeDuration = idLower === "time-duration-calculator" || slugLower === "time-duration-calculator" || idLower === "time-duration" || slugLower === "time-duration";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isBudget ? BudgetContent :
     isBusinessLoan ? BusinessLoanContent :
     isCommission ? CommissionContent :
     isAnnuityPayout ? AnnuityPayoutContent :
@@ -992,7 +993,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
 
           {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
-          {Boolean(definition.faqs && definition.faqs.length > 0) && !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan ? (
+          {Boolean(definition.faqs && definition.faqs.length > 0) && !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions

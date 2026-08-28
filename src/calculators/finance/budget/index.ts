@@ -28,6 +28,16 @@ export const BUDGET_CALCULATOR: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Net Cash Flow = After-Tax Income - Total Expenses. Back-End DTI = Total Monthly Debt / Gross Monthly Income. 50/30/20 Rule: 50% Needs, 30% Wants, 20% Savings.",
+  relatedCalculators: [
+    "loan",
+    "personal-loan",
+    "debt-payoff",
+    "credit-card-payoff",
+    "student-loan",
+    "refinance",
+    "salary",
+    "take-home-pay",
+  ],
   faqs: [
     {
       question: "What is a budget calculator?",
