@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Business Loan Calculator – Real APR & Commercial Suite",
+    title: "Business Loan Calculator – Payment, Interest, Fees, APR & Commercial Loan Analysis",
     description:
-      "Free Business Loan Calculator. Calculate monthly payback, total interest, origination and documentation fees, Real Rate (APR), SBA loan options, DSCR cash flow coverage, and amortization schedules.",
+      "Calculate business loan monthly payments, total interest, commercial fees, actuarial APR, SBA loan options, amortization schedules, and DSCR cash-flow coverage.",
     slug: BUSINESS_LOAN_CALCULATOR.slug,
   });
 }

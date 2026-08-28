@@ -1,250 +1,461 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import {
-  ChevronDown,
   HelpCircle,
+  ChevronDown,
   BookOpen,
-  CheckCircle2,
-  AlertTriangle,
-  FileText,
-  Shield,
-  Clock,
-  Landmark,
-  Percent,
-  Sparkles,
-  TrendingUp,
-  Heart,
+  ShieldCheck,
   Briefcase,
   DollarSign,
-  PieChart,
-  Tag,
+  Layers,
   Building,
   Target,
+  TrendingUp,
+  Percent,
+  Calculator,
+  ArrowRight,
+  Scale,
+  Award,
+  AlertTriangle,
+  Landmark,
 } from "lucide-react";
-import Link from "next/link";
+import { businessLoanFaqs } from "@/calculators/finance/business-loan/faq";
 
 export function BusinessLoanContent() {
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  // All 15 FAQs open by default (matching 401(k) / Traditional IRA / Pension standard)
+  const [openFaqIndices, setOpenFaqIndices] = useState<Set<number>>(
+    new Set(Array.from({ length: businessLoanFaqs.length }, (_, i) => i))
+  );
 
   const toggleFaq = (index: number) => {
-    setOpenFaqIndex(openFaqIndex === index ? null : index);
+    setOpenFaqIndices((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
   };
 
-  const faqs = [
-    {
-      q: "What is a business loan?",
-      a: "A business loan is a debt financing arrangement between a commercial lender and a business entity to fund working capital, equipment purchases, expansion, real estate acquisition, or debt refinancing.",
-    },
-    {
-      q: "What is the Real Rate (APR) on a business loan?",
-      a: "The Real Rate (APR) incorporates upfront fees—such as origination fees, documentation fees, and underwriting charges—into the nominal interest rate, reflecting the true cost of commercial capital.",
-    },
-    {
-      q: "What is an SBA 7(a) loan?",
-      a: "An SBA 7(a) loan is the U.S. Small Business Administration's flagship financing program, offering up to $5 million for working capital, equipment, or real estate backed by a 75% to 85% federal government guarantee.",
-    },
-    {
-      q: "What is Debt Service Coverage Ratio (DSCR)?",
-      a: "DSCR is Net Operating Income (NOI) divided by total annual debt service. Lenders typically require a minimum DSCR of 1.25x to ensure sufficient cash flow to cover debt payments.",
-    },
-    {
-      q: "What is an origination fee on a business loan?",
-      a: "An origination fee is an upfront administrative fee charged by lenders to cover processing and underwriting costs, typically ranging from 1% to 6% of the total loan amount.",
-    },
-    {
-      q: "What is the difference between an SBA 7(a) and an SBA CDC/504 loan?",
-      a: "SBA 7(a) loans are versatile working capital and equipment loans up to 10 years. SBA CDC/504 loans provide long-term, fixed-rate financing specifically for commercial real estate and heavy machinery up to 25 years.",
-    },
-    {
-      q: "What credit score is needed for a business loan?",
-      a: "Traditional bank and SBA loans generally require a personal credit score of 680+ and business credit history. Online fintech lenders offer working capital loans for credit scores of 600+.",
-    },
-    {
-      q: "What is a Merchant Cash Advance (MCA)?",
-      a: "An MCA provides upfront capital in exchange for a percentage of daily credit card sales or daily bank account debits. MCAs carry high factor rates and short terms.",
-    },
-    {
-      q: "Are business loan interest payments tax-deductible?",
-      a: "Yes. Business loan interest is generally deductible as a tax expense under U.S. tax regulations, subject to statutory business interest expense limitation rules.",
-    },
-    {
-      q: "How does compound frequency affect business loan cost?",
-      a: "Compounding frequency determines how interest accrues. Compounding monthly, quarterly, or daily increases cumulative interest costs compared to simple interest.",
-    },
-    {
-      q: "What documentation is required for a commercial loan application?",
-      a: "Lenders require 2–3 years of business tax returns, personal tax returns, balance sheets, profit & loss (P&L) statements, bank statements, and business debt schedules.",
-    },
-    {
-      q: "Can I get a business loan with no revenue or startup phase?",
-      a: "Startup business options include SBA Microloans (up to $50,000), business credit cards, personal loans for business, or equipment financing backed by equipment collateral.",
-    },
-    {
-      q: "What is a prepayment penalty on a commercial loan?",
-      a: "A prepayment penalty is a fee charged if you pay off the loan before maturity. Common commercial structures include yield maintenance, defeasance, or step-down penalty percentages (5-4-3-2-1%).",
-    },
-    {
-      q: "What is an interest-only business loan?",
-      a: "An interest-only loan requires paying only monthly interest charges for an initial period (e.g. 1–3 years), after which monthly payments rise to amortize the principal.",
-    },
-    {
-      q: "How does business loan term impact total interest?",
-      a: "Shorter loan terms require higher monthly payments but reduce total interest paid. Longer loan terms lower monthly payments but increase total interest expenses over time.",
-    },
-  ];
-
   return (
-    <div className="mt-12 space-y-12  dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
-      {/* Article Header */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
-          <BookOpen className="h-4 w-4" /> Complete Commercial Financing &amp; Loan Guide
-        </div>
-        <h1 className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
-          Business Loan Calculator Guide: Commercial Financing, Fees &amp; Real APR
-        </h1>
-        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
-          Securing business capital requires a thorough understanding of loan terms, origination fees, documentation costs, real effective APR, and Debt Service Coverage Ratios (DSCR). Evaluating these metrics ensures your company selects the optimal financing structure.
-        </p>
-      </section>
-
-      {/* Main Educational Content with Required Headings */}
-      <div className="space-y-8 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
-        <section className="space-y-2">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">What Is a Business Loan?</h2>
+    <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
+      {/* 1. EXPANDED MAIN EDUCATIONAL CONTENT */}
+      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+        
+        {/* Section 1: Title & Introduction */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Business Loan Calculator – Payment, Interest, Fees, APR &amp; Commercial Loan Analysis
+          </h2>
           <p>
-            A business loan is a debt product provided by commercial banks, credit unions, SBA lenders, or online alternative finance companies to fund enterprise operations, equipment purchases, inventory, or expansion.
+            A business loan can look inexpensive when you compare only its advertised interest rate. The actual cost can be materially different once the repayment term, origination charges, documentation fees, and other financing costs are included. A useful business loan analysis therefore needs to answer several questions at the same time: What will the monthly payment be? How much interest will the business pay? How much do fees add to the cost? What is the annualized cost of the financing? And can the business cash flow support the debt?
+          </p>
+          <p>
+            This Business Loan Calculator brings those calculations together in one place. Enter the loan amount, interest rate, term, and applicable fees to estimate the periodic payment, total interest, total financing cost, and amortization schedule. The calculator also includes an SBA loan estimator, a debt service coverage ratio (DSCR) analysis, and visual tools for understanding how the balance changes over time.
+          </p>
+          <p>
+            The results are estimates for planning and comparison. Actual loan pricing, fees, eligibility, repayment terms, SBA charges, collateral requirements, and underwriting decisions depend on the lender, loan product, borrower, transaction, and applicable rules.
           </p>
         </section>
 
-        <section className="space-y-2">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">How Business Loans Work</h2>
+        {/* Section 2: What Is a Business Loan? */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            What Is a Business Loan?
+          </h2>
           <p>
-            Commercial loans feature specified principal amounts, interest rates, repayment schedules (monthly, quarterly, weekly), and upfront fees. Amortization payments cover interest charges and principal reduction over time.
+            A business loan is financing obtained primarily for commercial purposes such as working capital, equipment, inventory, expansion, real estate, acquisition, renovation, refinancing eligible business debt, or other operating needs.
+          </p>
+          <p>
+            Business financing can take many forms. A traditional commercial term loan generally provides a fixed amount that is repaid through scheduled installments. A line of credit allows a business to draw funds as needed, while SBA-backed financing uses government guarantees to reduce lender risk on qualifying transactions. SBA&apos;s 7(a) program, for example, can support working capital, real estate, equipment, business acquisition, refinancing of eligible debt, and other permitted business purposes.
+          </p>
+          <p>
+            The financing structure matters because two loans with the same principal and nominal interest rate can have different economic costs when their fees, payment frequencies, terms, or cash-flow characteristics differ.
           </p>
         </section>
 
-        <section className="space-y-4">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Business Loan &amp; Real APR Formulas</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
-              <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Monthly Payback Formula</span>
-              <div>PMT = [ Principal × r × (1 + r)^n ] / [ (1 + r)^n - 1 ]</div>
+        {/* Section 3: How Payment Is Calculated & Formulas */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            How a Business Loan Payment Is Calculated
+          </h2>
+          <p>
+            For a fully amortizing loan with equal periodic payments, the payment is based on the present value of an annuity. The standard payment formula is:
+          </p>
+          <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 font-mono text-center text-xs sm:text-sm">
+            PMT = [ P &times; r &times; (1 + r)<sup>n</sup> ] / [ (1 + r)<sup>n</sup> &minus; 1 ]
+          </div>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            Where: <strong>P</strong> = original loan principal, <strong>r</strong> = periodic interest rate (Annual Rate &divide; 12), <strong>n</strong> = total number of payments (Loan Term in Years &times; 12), and <strong>PMT</strong> = periodic payment.
+          </p>
+          <p>
+            This means the repayment term is just as important as the interest rate. Extending the term generally reduces the required payment but increases the amount of interest paid over the life of the loan.
+          </p>
+          <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1.5 text-xs">
+            <strong className="text-slate-900 dark:text-slate-100 font-bold block">
+              Worked Example: $10,000 Loan @ 10% for 5 Years (60 Monthly Payments)
+            </strong>
+            <ul className="list-disc list-inside space-y-1 pl-1 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
+              <li><strong>Monthly Payment (PMT):</strong> approximately <strong>$212.47 per month</strong></li>
+              <li><strong>Total Scheduled Payments (60 months):</strong> 60 &times; $212.4704 = <strong>$12,748.23</strong></li>
+              <li><strong>Principal Repaid:</strong> $10,000.00</li>
+              <li><strong>Total Interest Paid:</strong> $2,748.23</li>
+            </ul>
+          </div>
+        </section>
+
+        {/* Section 4: Total Cost Is More Than Interest */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Total Business Loan Cost Is More Than Interest
+          </h2>
+          <p>
+            One of the most important distinctions in commercial borrowing is the difference between interest expense and total financing cost. A lender may charge: origination fees, documentation fees, underwriting or processing charges, guarantee-related fees for certain government-backed programs, and other transaction-specific costs.
+          </p>
+          <div className="overflow-x-auto border border-slate-200 dark:border-zinc-800 rounded-xl">
+            <table className="w-full text-left text-xs border-collapse font-sans tabular-nums">
+              <thead className="bg-slate-100 dark:bg-zinc-800 font-semibold text-slate-900 dark:text-slate-100">
+                <tr>
+                  <th className="p-2.5 border-b">Cost Component</th>
+                  <th className="p-2.5 border-b text-right">Amount ($)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-zinc-800 text-slate-700 dark:text-slate-300">
+                <tr>
+                  <td className="p-2.5 font-bold">Principal</td>
+                  <td className="p-2.5 text-right">$10,000.00</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5">Total Interest Paid</td>
+                  <td className="p-2.5 text-right text-rose-600 font-semibold">$2,748.23</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5">Origination Fee (5.0%)</td>
+                  <td className="p-2.5 text-right text-amber-600">$500.00</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5">Documentation Fee</td>
+                  <td className="p-2.5 text-right text-amber-600">$750.00</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5">Other Fees</td>
+                  <td className="p-2.5 text-right">$0.00</td>
+                </tr>
+                <tr className="bg-slate-50 dark:bg-zinc-800/60 font-bold text-slate-900 dark:text-slate-100">
+                  <td className="p-2.5">Total Commercial Fees:</td>
+                  <td className="p-2.5 text-right text-amber-600">$1,250.00</td>
+                </tr>
+                <tr className="bg-slate-50 dark:bg-zinc-800/60 font-bold text-slate-900 dark:text-slate-100">
+                  <td className="p-2.5">Total Financing Cost (Interest + Fees):</td>
+                  <td className="p-2.5 text-right text-indigo-600">$3,998.23</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            Thus, although the nominal interest rate is 10%, the financing produces approximately $3,998.23 of interest and fees combined over the modeled term. This is why comparing loans by interest rate alone can be misleading.
+          </p>
+        </section>
+
+        {/* Section 5: Nominal Rate vs Actuarial Cost (APR) */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Business Loan APR: Nominal Rate vs. Effective Financing Cost
+          </h2>
+          <p>
+            APR terminology needs particular care for commercial financing. The calculator distinguishes two measurements:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-2 text-xs">
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1.5">
+              <strong className="text-slate-900 dark:text-slate-100 font-bold block text-xs flex items-center gap-1.5">
+                <Scale className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                Nominal Interest Rate (10.00%)
+              </strong>
+              <p className="text-slate-600 dark:text-slate-400">
+                This is the quoted annual interest rate applied to the outstanding loan balance according to the loan&apos;s repayment schedule.
+              </p>
             </div>
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
-              <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Real Rate (APR) Formula</span>
-              <div>Real APR = Interest Rate % + [ (Total Fees / Principal / Term Yrs) × 100 ]</div>
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1.5">
+              <strong className="text-slate-900 dark:text-slate-100 font-bold block text-xs flex items-center gap-1.5">
+                <Calculator className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                Actuarial Annualized Cost (15.933%)
+              </strong>
+              <p className="text-slate-600 dark:text-slate-400">
+                The calculator&apos;s actuarial APR calculation treats the actual funds received by the borrower ($8,750 net proceeds) and the scheduled repayments ($212.47/mo for 60 months) as cash flows and solves for the annualized rate (IRR) that makes those cash flows economically equivalent.
+              </p>
             </div>
           </div>
-        </section>
-
-        <section className="space-y-2">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Baseline Calculation Example ($10,000 @ 10% for 5 Years + Fees)</h2>
-          <p>
-            For a $10,000 business loan at 10.0% APR over 5 years (60 monthly payments) with a 5% origination fee ($500) and a $750 documentation fee ($1,250 total fees):
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            Those two numbers are deliberately shown separately from the simplified fee-load rate (12.500%) because the fee-load approximation is not the same thing as a cash-flow IRR calculation.
           </p>
-          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
-            <div>• Payback Every Month: $212.47</div>
-            <div>• Total of 60 Loan Payments: $12,748.23</div>
-            <div>• Total Interest Paid: $2,748.23</div>
-            <div>• Interest + Fee Total: $3,998.23</div>
-            <div>• Real Rate (APR): 15.931% (Exact match with Calculator.net baseline!)</div>
-          </div>
-        </section>
-
-        <section className="space-y-2">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">SBA Loans Explained (7(a), CDC/504, Microloans)</h2>
-          <p>
-            SBA loans offer competitive interest rates backed by a partial government guarantee. 7(a) loans suit working capital up to $5 million, while CDC/504 loans provide long-term real estate financing up to 25 years.
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            This distinction is especially important for business borrowing because Regulation Z generally exempts credit primarily for business, commercial, agricultural, or organizational purposes from its consumer-credit provisions. The existence and required disclosure of an APR therefore depends on the transaction and applicable law; the calculator&apos;s actuarial figure should be understood as an annualized financing-cost comparison, not as a claim that every commercial loan is subject to consumer APR disclosure requirements.
           </p>
         </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-y border-zinc-200 dark:border-zinc-800 py-6 text-xs">
-          <div>
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">DSCR Ratio (≥ 1.25x)</h3>
-            <p>Net operating income divided by annual debt service; commercial benchmark for loan approval.</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Origination &amp; Doc Fees</h3>
-            <p>Upfront processing costs that increase effective APR above nominal interest rates.</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Conventional vs SBA</h3>
-            <p>SBA loans offer lower down payments and longer terms; conventional loans close faster.</p>
-          </div>
-        </div>
-
-        <section className="space-y-2">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Common Business Loan Mistakes to Avoid</h2>
+        {/* Section 6: How Amortization Works */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            How Commercial Loan Amortization Works
+          </h2>
           <p>
-            Avoid underestimating total fees, borrowing short-term merchant cash advances for long-term growth, failing to check DSCR coverage, or applying without complete financial statements.
+            Amortization describes how each payment is divided between interest and principal. At the beginning of a fully amortizing loan, the outstanding balance is larger, so the interest portion of the payment is generally larger. As principal is repaid, the balance falls and subsequent interest charges decline:
           </p>
+          <div className="overflow-x-auto border border-slate-200 dark:border-zinc-800 rounded-xl">
+            <table className="w-full text-left text-xs border-collapse font-sans tabular-nums">
+              <thead className="bg-slate-100 dark:bg-zinc-800 font-semibold text-slate-900 dark:text-slate-100">
+                <tr>
+                  <th className="p-2.5 border-b">Period</th>
+                  <th className="p-2.5 border-b">Beginning Balance</th>
+                  <th className="p-2.5 border-b text-rose-600">Interest Portion</th>
+                  <th className="p-2.5 border-b text-emerald-600">Principal Reduction</th>
+                  <th className="p-2.5 border-b">Ending Balance</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-zinc-800 text-slate-700 dark:text-slate-300">
+                <tr>
+                  <td className="p-2.5 font-bold">Month 1</td>
+                  <td className="p-2.5">$10,000.00</td>
+                  <td className="p-2.5 text-rose-600 font-semibold">$83.33</td>
+                  <td className="p-2.5 text-emerald-600 font-semibold">$129.14</td>
+                  <td className="p-2.5 font-bold">$9,870.86</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 font-bold">Month 2</td>
+                  <td className="p-2.5">$9,870.86</td>
+                  <td className="p-2.5 text-rose-600 font-semibold">$82.26</td>
+                  <td className="p-2.5 text-emerald-600 font-semibold">$130.21</td>
+                  <td className="p-2.5 font-bold">$9,740.65</td>
+                </tr>
+                <tr>
+                  <td className="p-2.5 font-bold">Month 3</td>
+                  <td className="p-2.5">$9,740.65</td>
+                  <td className="p-2.5 text-rose-600 font-semibold">$81.17</td>
+                  <td className="p-2.5 text-emerald-600 font-semibold">$131.30</td>
+                  <td className="p-2.5 font-bold">$9,609.35</td>
+                </tr>
+                <tr className="bg-slate-50 dark:bg-zinc-800/60 font-bold text-slate-900 dark:text-slate-100">
+                  <td className="p-2.5">Month 60 (Final)</td>
+                  <td className="p-2.5">$210.71</td>
+                  <td className="p-2.5 text-rose-600 font-semibold">$1.76</td>
+                  <td className="p-2.5 text-emerald-600 font-semibold">$210.71</td>
+                  <td className="p-2.5 font-bold text-emerald-600">$0.00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            By the final scheduled payment, the modeled balance reaches $0.00. The calculator verifies that the beginning balance of each period equals the ending balance of the preceding period, and that cumulative principal and interest reconcile with the loan totals.
+          </p>
+        </section>
+
+        {/* Section 7: Shorter Term vs Longer Term */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Shorter Term vs. Longer Term Business Loan
+          </h2>
+          <p>
+            The loan term changes both cash flow and total borrowing cost:
+          </p>
+          <ul className="list-disc list-inside space-y-1 pl-2 text-slate-700 dark:text-slate-300 text-xs">
+            <li><strong>Shorter loan term:</strong> Higher periodic payments + lower total interest paid.</li>
+            <li><strong>Longer loan term:</strong> Lower periodic payments + higher total interest paid over the life of the loan.</li>
+          </ul>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            The best term depends on the business&apos;s cash generation, liquidity requirements, expected return on the financed asset, and tolerance for debt-service pressure. A business should not automatically choose the longest available term simply because it produces the lowest monthly payment.
+          </p>
+        </section>
+
+        {/* Section 8: What Is DSCR? */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            What Is Debt Service Coverage Ratio (DSCR)?
+          </h2>
+          <p>
+            Debt Service Coverage Ratio (DSCR) measures the relationship between the cash flow available for debt service and annual debt obligations:
+          </p>
+          <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 font-mono text-center text-xs sm:text-sm">
+            DSCR = Net Operating Income (NOI) / Annual Debt Service
+          </div>
+          <p>
+            For example, suppose a business has: Annual NOI of $150,000, existing annual debt service of $30,000, and new loan annual debt service of $25,000:
+          </p>
+          <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1 font-sans tabular-nums text-xs">
+            <p><strong>Total Annual Debt Service:</strong> $30,000 + $25,000 = <strong>$55,000.00/yr</strong></p>
+            <p><strong>Calculated DSCR:</strong> $150,000 &divide; $55,000 = <strong>2.73x</strong></p>
+            <p><strong>Maximum Annual Debt Service (at 1.25x threshold):</strong> $150,000 &divide; 1.25 = <strong>$120,000.00/yr</strong></p>
+          </div>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            A higher DSCR generally indicates more operating cash flow relative to required debt payments. However, 1.25&times; should be treated as an analytical benchmark, not as a universal underwriting requirement. Actual lender requirements vary by product, institution, property/business characteristics, and risk profile.
+          </p>
+        </section>
+
+        {/* Section 9: Small Business Administration (SBA) Loans */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            How an SBA Business Loan Differs (7(a), CDC/504 &amp; Microloans)
+          </h2>
+          <p>
+            The U.S. Small Business Administration does not simply operate as a conventional bank. In programs such as 7(a), SBA generally provides a guarantee to participating lenders, helping lenders extend credit to qualifying small businesses:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-2 text-xs">
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1">
+              <strong className="text-slate-900 dark:text-slate-100 font-bold block">SBA 7(a) Program</strong>
+              <p className="text-slate-600 dark:text-slate-400">
+                Primary business loan program up to $5M for working capital, equipment, real estate, acquisitions, and debt refinancing.
+              </p>
+            </div>
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1">
+              <strong className="text-slate-900 dark:text-slate-100 font-bold block">SBA 504 Real Estate</strong>
+              <p className="text-slate-600 dark:text-slate-400">
+                Long-term, fixed-rate financing up to $5.5M for major fixed assets delivered through Certified Development Companies (CDCs).
+              </p>
+            </div>
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1">
+              <strong className="text-slate-900 dark:text-slate-100 font-bold block">SBA Microloans</strong>
+              <p className="text-slate-600 dark:text-slate-400">
+                Designed for smaller funding needs up to $50,000 administered through approved intermediary lenders.
+              </p>
+            </div>
+          </div>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            For 7(a) loans, lenders pay an upfront guarantee fee to the SBA and may pass that cost on to the borrower. The calculator&apos;s SBA module is best used as an estimate and planning tool, not as an official SBA eligibility determination or lender quotation.
+          </p>
+        </section>
+
+        {/* Section 10: Common Mistakes */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Common Business Loan Calculation Mistakes
+          </h2>
+          <ul className="list-disc list-inside space-y-1 pl-2 text-slate-700 dark:text-slate-300 text-xs">
+            <li><strong>Comparing only nominal interest rates:</strong> Fees can materially change the economics of otherwise similar loans.</li>
+            <li><strong>Ignoring the loan term:</strong> A lower monthly payment can result from a longer term, not a cheaper loan.</li>
+            <li><strong>Treating every APR figure as equivalent:</strong> An actuarial cash-flow annualized rate, a fee-load approximation, and a legally disclosed consumer APR are not necessarily the same metric.</li>
+            <li><strong>Assuming a benchmark DSCR is universal:</strong> Different lenders and financing products apply different underwriting standards.</li>
+            <li><strong>Forgetting that SBA rules change:</strong> SBA programs, guarantee fees, and eligibility requirements are updated periodically.</li>
+          </ul>
+        </section>
+
+        {/* Section 11: Related Calculators */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Related Business &amp; Loan Calculators
+          </h2>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            Explore these companion financial tools for comprehensive commercial planning:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+            <Link
+              href="/calculators/loan-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Loan Calculator</span>
+              <span className="text-slate-500 text-[11px]">General loan amortization &amp; payment modeling.</span>
+            </Link>
+            <Link
+              href="/calculators/personal-loan-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Personal Loan</span>
+              <span className="text-slate-500 text-[11px]">Compare consumer loans &amp; personal debt.</span>
+            </Link>
+            <Link
+              href="/calculators/mortgage-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Mortgage Calculator</span>
+              <span className="text-slate-500 text-[11px]">Commercial &amp; residential real estate loans.</span>
+            </Link>
+            <Link
+              href="/calculators/auto-loan-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Auto Loan</span>
+              <span className="text-slate-500 text-[11px]">Vehicle fleet and commercial auto financing.</span>
+            </Link>
+            <Link
+              href="/calculators/roi-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">ROI Calculator</span>
+              <span className="text-slate-500 text-[11px]">Evaluate business capital return on investment.</span>
+            </Link>
+            <Link
+              href="/calculators/payback-period-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Payback Period</span>
+              <span className="text-slate-500 text-[11px]">Determine breakeven time on capital projects.</span>
+            </Link>
+            <Link
+              href="/calculators/margin-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Margin Calculator</span>
+              <span className="text-slate-500 text-[11px]">Calculate profit margins &amp; cost markup.</span>
+            </Link>
+            <Link
+              href="/calculators/compound-interest-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Compound Interest</span>
+              <span className="text-slate-500 text-[11px]">Model commercial investment compounding.</span>
+            </Link>
+          </div>
         </section>
       </div>
 
-      {/* 15+ FAQ Accordion Section */}
-      <section className="space-y-6  dark:border-zinc-800 pt-8">
-        <div className="flex items-center gap-2">
-          <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          <h2 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
+      {/* 2. FAQ SECTION (All 15 FAQs, Open by Default) */}
+      <div className="pt-6">
+        <div className="flex items-center gap-2 mb-4">
+          <HelpCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
             Frequently Asked Questions
           </h2>
         </div>
 
         <div className="space-y-3">
-          {faqs.map((faq, idx) => {
-            const isOpen = openFaqIndex === idx;
+          {businessLoanFaqs.map((faq, idx) => {
+            const isOpen = openFaqIndices.has(idx);
             return (
               <div
                 key={idx}
-                className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm transition-all"
+                className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden bg-white dark:bg-zinc-900 shadow-xs"
               >
                 <button
                   type="button"
                   onClick={() => toggleFaq(idx)}
-                  className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
+                  className="w-full p-4 text-left text-xs sm:text-sm font-semibold text-zinc-900 dark:text-zinc-100 flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
                     <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
-                    {faq.q}
+                    {faq.question}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 text-slate-900 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 text-zinc-400 shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
-
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed  dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
-                    {faq.a}
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                    {faq.answer}
                   </div>
                 )}
               </div>
             );
           })}
         </div>
-      </section>
-
-      {/* Related Calculators */}
-      <section className="space-y-3  dark:border-zinc-800 pt-6">
-        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400">Related Commercial &amp; Financial Calculators</h2>
-        <div className="flex flex-wrap gap-2 text-xs">
-          <Link href="/calculators/loan-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-            Loan Calculator
-          </Link>
-          <Link href="/calculators/margin-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-            Profit Margin Calculator
-          </Link>
-          <Link href="/calculators/roi-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-            ROI Calculator
-          </Link>
-          <Link href="/calculators/cagr-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-            CAGR Calculator
-          </Link>
-        </div>
-      </section>
-    </div>
+      </div>
+    </article>
   );
 }
+
+export default BusinessLoanContent;

@@ -96,6 +96,7 @@ import { DiscountCalculator } from "./discount/DiscountCalculator";
 import { DiscountContent } from "./discount/DiscountContent";
 import { PersonalLoanCalculator } from "./personal-loan/PersonalLoanCalculator";
 import { BusinessLoanCalculator } from "./business-loan/BusinessLoanCalculator";
+import { BusinessLoanContent } from "./business-loan/BusinessLoanContent";
 import { StudentLoanCalculator } from "./student-loan/StudentLoanCalculator";
 import { BudgetCalculator } from "./budget/BudgetCalculator";
 import { BudgetContent } from "./budget/BudgetContent";
@@ -510,6 +511,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isTimeDuration = idLower === "time-duration-calculator" || slugLower === "time-duration-calculator" || idLower === "time-duration" || slugLower === "time-duration";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isBusinessLoan ? BusinessLoanContent :
     isCommission ? CommissionContent :
     isAnnuityPayout ? AnnuityPayoutContent :
     isPension ? PensionContent :
@@ -990,7 +992,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
 
           {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
-          {Boolean(definition.faqs && definition.faqs.length > 0) && !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission ? (
+          {Boolean(definition.faqs && definition.faqs.length > 0) && !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions
@@ -1008,7 +1010,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                 ))}
               </div>
             </div>
-          ) : !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isRmd && !isAutoLease && !isSimpleInterest && !isSocialSecurity && !isInterest && !isRothIra && !isTimeDuration && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isRoi && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && definition.category !== "Math" ? (
+          ) : !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isRmd && !isAutoLease && !isSimpleInterest && !isSocialSecurity && !isInterest && !isRothIra && !isTimeDuration && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isRoi && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && definition.category !== "Math" ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions
