@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Annuity Payout Calculator – Guaranteed Retirement Income Suite",
+    title: "Annuity Payout Calculator – Calculate Monthly Income, Payout Duration & Retirement Withdrawals",
     description:
-      "Free Annuity Payout Calculator. Calculate guaranteed monthly income payouts for fixed length terms, fixed payments, single/joint life expectancy, inflation adjustments, and immediate vs deferred comparisons.",
+      "Use this Annuity Payout Calculator to estimate monthly retirement income, fixed length payouts, fund depletion schedules, life expectancy projections, and immediate vs deferred comparisons.",
     slug: ANNUITY_PAYOUT_CALCULATOR.slug,
   });
 }

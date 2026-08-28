@@ -1,9 +1,10 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateFixedLengthPayout } from "@/lib/calculator-engine/formulas/annuity-payout";
+import { annuityPayoutFaqs } from "./faq";
 
 export const ANNUITY_PAYOUT_CALCULATOR: CalculatorModuleDefinition = {
   id: "annuity-payout",
-  title: "Annuity Payout Calculator – Guaranteed Retirement Income Suite",
+  title: "Annuity Payout Calculator – Calculate Monthly Income, Payout Duration & Retirement Withdrawals",
   slug: "annuity-payout-calculator",
   category: "Finance",
   subcategory: "Retirement",
@@ -21,21 +22,20 @@ export const ANNUITY_PAYOUT_CALCULATOR: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Fixed Length Payout: PMT = [P × r × (1+r)^n] / [(1+r)^n - 1]. Fixed Payment Depletion: n = ln(PMT / (PMT - P×r)) / ln(1+r).",
-  faqs: [
-    {
-      question: "What is the difference between a Fixed Length Payout and a Fixed Payment Payout?",
-      answer:
-        "A Fixed Length Payout guarantees monthly payments for a specific period of time (e.g. 10 or 20 years), automatically calculating the monthly amount. A Fixed Payment Payout lets you choose your desired monthly check (e.g. $5,000/mo) and calculates how long your funds will last.",
-    },
-    {
-      question: "What is the 1035 Exchange rule for annuities?",
-      answer:
-        "A 1035 Exchange allows policyholders to transfer funds tax-free from an existing annuity to a new annuity contract without incurring immediate income taxes on accumulated gains.",
-    },
+  faqs: annuityPayoutFaqs,
+  relatedCalculators: [
+    "pension",
+    "retirement",
+    "401k",
+    "traditional-ira",
+    "roth-ira",
+    "social-security",
+    "rmd",
+    "compound-interest",
   ],
   inputs: [
-    { name: "startingPrincipal", label: "Starting Principal ($)", type: "currency", defaultValue: 500000, unit: "$", min: 10000, max: 10000000, step: 25000 },
-    { name: "interestRatePercent", label: "Annual Interest/Return Rate (%)", type: "number", defaultValue: 6.0, min: 0.1, max: 20, step: 0.25 },
+    { name: "startingPrincipal", label: "Starting Principal ($)", type: "currency", defaultValue: 500000, unit: "$", min: 0, max: 10000000, step: 25000 },
+    { name: "interestRatePercent", label: "Annual Interest/Return Rate (%)", type: "number", defaultValue: 6.0, min: 0, max: 25, step: 0.25 },
     { name: "yearsToPayout", label: "Years to Payout", type: "number", defaultValue: 10, min: 1, max: 50, step: 1 },
     {
       name: "payoutFrequency",
@@ -58,9 +58,9 @@ export const ANNUITY_PAYOUT_CALCULATOR: CalculatorModuleDefinition = {
   ],
   calculate: (inputs) => {
     const res = calculateFixedLengthPayout({
-      startingPrincipal: Number(inputs.startingPrincipal || 500000),
-      interestRatePercent: Number(inputs.interestRatePercent || 6.0),
-      yearsToPayout: Number(inputs.yearsToPayout || 10),
+      startingPrincipal: Number(inputs.startingPrincipal !== undefined && inputs.startingPrincipal !== "" ? inputs.startingPrincipal : 500000),
+      interestRatePercent: Number(inputs.interestRatePercent !== undefined && inputs.interestRatePercent !== "" ? inputs.interestRatePercent : 6.0),
+      yearsToPayout: Number(inputs.yearsToPayout !== undefined && inputs.yearsToPayout !== "" ? inputs.yearsToPayout : 10),
       payoutFrequency: (inputs.payoutFrequency as any) || "monthly",
     });
 

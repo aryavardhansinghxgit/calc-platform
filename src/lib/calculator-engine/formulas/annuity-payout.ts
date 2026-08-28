@@ -1,12 +1,11 @@
 /**
  * Annuity Payout Formula Engine
- * Fully implementing Calculator.net's baseline payout math:
- * Mode 1: Fixed Length Payout ($500k @ 6% for 10 yrs -> $5,511.20/mo)
- * Mode 2: Fixed Payment Amount Depletion Solver
- * Mode 3: Life Expectancy Payout (Actuarial Table)
- * Mode 4: Joint Life Payout (Primary + Spouse)
- * Mode 5: Inflation Adjusted Income & Purchasing Power Erosion
- * Mode 6: Immediate vs Deferred Annuity Comparison
+ * Fully implementing 5 core payout modules:
+ * Mode 1: Fixed Length Payout ($500k @ 6% for 10 yrs -> $5,551.03/mo)
+ * Mode 2: Fixed Payment Amount Depletion Solver ($500k @ 6%, $5,000/mo -> 11.6 yrs / 139 mos)
+ * Mode 3: Life Expectancy Payout (Actuarial Table, male age 65 -> 18 yrs, $3,790.81/mo)
+ * Mode 4: Joint Life Payout (Primary 65 + Spouse 63 -> 26 yrs, end age 91, $3,168.38/mo)
+ * Mode 5: Immediate vs Deferred Annuity Comparison ($500k @ 6%, 10 yr deferral -> $9,941.04/mo, Advantage $526,801.85)
  * Smart Financial Insights Engine & Schedule Generator
  */
 
@@ -115,16 +114,28 @@ export interface SmartInsight {
   description: string;
 }
 
+function safeNum(val: number | undefined | null, fallback: number): number {
+  if (val !== undefined && val !== null && !isNaN(Number(val))) {
+    return Number(val);
+  }
+  return fallback;
+}
+
 /**
  * Payout Frequency Helper
  */
 export function getPaymentsPerYear(freq: string): number {
   switch (freq) {
-    case "monthly": return 12;
-    case "quarterly": return 4;
-    case "semiannual": return 2;
-    case "annual": return 1;
-    default: return 12;
+    case "monthly":
+      return 12;
+    case "quarterly":
+      return 4;
+    case "semiannual":
+      return 2;
+    case "annual":
+      return 1;
+    default:
+      return 12;
   }
 }
 
@@ -137,22 +148,22 @@ export function getActuarialLifeExpectancy(age: number, gender: "male" | "female
 }
 
 /**
- * MODE 1: Fixed Length Payout Solver (Calculator.net Tab 1 Baseline)
+ * MODE 1: Fixed Length Payout Solver
+ * Formula: PMT = [P * r * (1+r)^n] / [(1+r)^n - 1]
  */
 export function calculateFixedLengthPayout(input: FixedLengthPayoutInput): FixedLengthPayoutResult {
-  const P = Math.max(0, Number(input.startingPrincipal || 500000));
-  const rAnnual = Math.max(0, Number(input.interestRatePercent || 6.0)) / 100;
-  const years = Math.max(1, Number(input.yearsToPayout || 10));
+  const P = Math.max(0, safeNum(input.startingPrincipal, 500000));
+  const rAnnual = Math.max(0, safeNum(input.interestRatePercent, 6.0)) / 100;
+  const years = Math.max(1, safeNum(input.yearsToPayout, 10));
   const m = getPaymentsPerYear(input.payoutFrequency);
   const totalN = years * m;
   const rPeriod = rAnnual / m;
 
-  // Financial PMT Formula: PMT = [P * r * (1+r)^n] / [(1+r)^n - 1]
   let pmt = 0;
   if (rPeriod > 0) {
     pmt = (P * rPeriod * Math.pow(1 + rPeriod, totalN)) / (Math.pow(1 + rPeriod, totalN) - 1);
   } else {
-    pmt = P / totalN;
+    pmt = totalN > 0 ? P / totalN : 0;
   }
 
   const periodicWithdrawal = Number(pmt.toFixed(2));
@@ -166,13 +177,13 @@ export function calculateFixedLengthPayout(input: FixedLengthPayoutInput): Fixed
   const interestPercentage = Number(((totalInterestEarned / totalSum) * 100).toFixed(1));
 
   const withdrawalRatePercent = P > 0 ? Number(((annualWithdrawal / P) * 100).toFixed(2)) : 0;
-  const effectiveYieldPercent = Number((((Math.pow(1 + rPeriod, m) - 1)) * 100).toFixed(2));
+  const effectiveYieldPercent = Number(((Math.pow(1 + rPeriod, m) - 1) * 100).toFixed(2));
 
   let sustainabilityScore: "Safe" | "Moderate" | "Aggressive" = "Safe";
   if (withdrawalRatePercent > 8) sustainabilityScore = "Aggressive";
   else if (withdrawalRatePercent > 5) sustainabilityScore = "Moderate";
 
-  // Schedule Generation (Year-by-Year breakdown for UI display)
+  // Year-by-Year Schedule
   const schedule: AnnuityPayoutScheduleRow[] = [];
   let currentBal = P;
 
@@ -217,19 +228,19 @@ export function calculateFixedLengthPayout(input: FixedLengthPayoutInput): Fixed
 }
 
 /**
- * MODE 2: Fixed Payment Payout Solver (Calculator.net Tab 2 Baseline)
+ * MODE 2: Fixed Payment Payout Solver
+ * Formula: n = ln(PMT / (PMT - P*r)) / ln(1+r)
  */
 export function calculateFixedPaymentPayout(input: FixedPaymentPayoutInput): FixedPaymentPayoutResult {
-  const P = Math.max(0, Number(input.startingPrincipal || 500000));
-  const rAnnual = Math.max(0, Number(input.interestRatePercent || 6.0)) / 100;
-  const desiredPmt = Math.max(1, Number(input.desiredPaymentAmount || 5000));
+  const P = Math.max(0, safeNum(input.startingPrincipal, 500000));
+  const rAnnual = Math.max(0, safeNum(input.interestRatePercent, 6.0)) / 100;
+  const desiredPmt = Math.max(1, safeNum(input.desiredPaymentAmount, 5000));
   const m = getPaymentsPerYear(input.payoutFrequency);
   const rPeriod = rAnnual / m;
 
-  // Interest earned in first period
   const firstPeriodInterest = P * rPeriod;
-  if (firstPeriodInterest >= desiredPmt) {
-    // Principal never depletes (infinite payout)
+  if (P > 0 && firstPeriodInterest >= desiredPmt) {
+    // Interest meets or exceeds desired withdrawal -> funds will never deplete
     return {
       monthsUntilDepleted: 999,
       yearsUntilDepleted: 99,
@@ -242,7 +253,6 @@ export function calculateFixedPaymentPayout(input: FixedPaymentPayoutInput): Fix
     };
   }
 
-  // Depletion Solver: n = ln(PMT / (PMT - P*r)) / ln(1+r)
   let nPeriods = 0;
   if (rPeriod > 0) {
     nPeriods = Math.log(desiredPmt / (desiredPmt - P * rPeriod)) / Math.log(1 + rPeriod);
@@ -254,7 +264,7 @@ export function calculateFixedPaymentPayout(input: FixedPaymentPayoutInput): Fix
   const monthsUntilDepleted = Math.round(nPeriods * (12 / m));
   const yearsUntilDepleted = Number((monthsUntilDepleted / 12).toFixed(1));
 
-  // Schedule & Depletion simulation
+  // Schedule simulation
   const schedule: AnnuityPayoutScheduleRow[] = [];
   let currentBal = P;
   let accumulatedInterest = 0;
@@ -306,18 +316,18 @@ export function calculateFixedPaymentPayout(input: FixedPaymentPayoutInput): Fix
  * MODE 3: Life Expectancy Payout Solver
  */
 export function calculateLifeExpectancyPayout(input: LifeExpectancyPayoutInput): LifeExpectancyPayoutResult {
-  const age = Math.max(50, Math.min(95, Number(input.currentAge || 65)));
+  const age = Math.max(50, Math.min(95, safeNum(input.currentAge, 65)));
   const lifeExpYears = getActuarialLifeExpectancy(age, input.gender);
   const endAge = age + lifeExpYears;
 
   const res = calculateFixedLengthPayout({
-    startingPrincipal: input.startingPrincipal,
-    interestRatePercent: input.expectedReturnPercent,
+    startingPrincipal: safeNum(input.startingPrincipal, 500000),
+    interestRatePercent: safeNum(input.expectedReturnPercent, 6.0),
     yearsToPayout: lifeExpYears,
     payoutFrequency: "monthly",
   });
 
-  const inflationRate = Number(input.inflationRatePercent || 2.5) / 100;
+  const inflationRate = safeNum(input.inflationRatePercent, 2.5) / 100;
   const purchasingPowerLoss = Number(((1 - 1 / Math.pow(1 + inflationRate, lifeExpYears)) * 100).toFixed(1));
 
   return {
@@ -333,19 +343,19 @@ export function calculateLifeExpectancyPayout(input: LifeExpectancyPayoutInput):
  * MODE 4: Joint Life Payout Solver
  */
 export function calculateJointLifePayout(input: JointLifePayoutInput): JointLifePayoutResult {
-  const primaryAge = Math.max(50, Math.min(95, Number(input.primaryAge || 65)));
-  const spouseAge = Math.max(50, Math.min(95, Number(input.spouseAge || 63)));
+  const primaryAge = Math.max(50, Math.min(95, safeNum(input.primaryAge, 65)));
+  const spouseAge = Math.max(50, Math.min(95, safeNum(input.spouseAge, 63)));
 
   const primaryRemaining = getActuarialLifeExpectancy(primaryAge, "male");
   const spouseRemaining = getActuarialLifeExpectancy(spouseAge, "female");
 
-  // Joint life expectancy extends to the longer of the two lifespans
-  const jointLifeYears = Math.max(primaryRemaining, spouseRemaining) + 3; // +3 buffer for joint survival
+  // Joint survival buffer (+3 years over longer lifespan)
+  const jointLifeYears = Math.max(primaryRemaining, spouseRemaining) + 3;
   const jointEndAge = Math.max(primaryAge, spouseAge) + jointLifeYears;
 
   const res = calculateFixedLengthPayout({
-    startingPrincipal: input.startingPrincipal,
-    interestRatePercent: input.expectedReturnPercent,
+    startingPrincipal: safeNum(input.startingPrincipal, 500000),
+    interestRatePercent: safeNum(input.expectedReturnPercent, 6.0),
     yearsToPayout: jointLifeYears,
     payoutFrequency: "monthly",
   });
@@ -359,14 +369,14 @@ export function calculateJointLifePayout(input: JointLifePayoutInput): JointLife
 }
 
 /**
- * MODE 6: Immediate vs Deferred Annuity Comparison Solver
+ * MODE 5: Immediate vs Deferred Annuity Comparison Solver
  */
 export function calculateImmediateVsDeferred(input: ImmediateVsDeferredInput): ImmediateVsDeferredResult {
-  const P = Number(input.startingPrincipal || 300000);
-  const deferYears = Number(input.deferralYears || 10);
-  const deferGrowthRate = Number(input.growthDuringDeferralPercent || 6.0) / 100;
-  const payoutRate = Number(input.payoutReturnPercent || 5.5);
-  const payoutYears = Number(input.payoutYears || 20);
+  const P = safeNum(input.startingPrincipal, 500000);
+  const deferYears = safeNum(input.deferralYears, 10);
+  const deferGrowthRate = safeNum(input.growthDuringDeferralPercent, 6.0) / 100;
+  const payoutRate = safeNum(input.payoutReturnPercent, 6.0);
+  const payoutYears = safeNum(input.payoutYears, 10);
 
   // Immediate Annuity
   const immediateRes = calculateFixedLengthPayout({
@@ -376,8 +386,8 @@ export function calculateImmediateVsDeferred(input: ImmediateVsDeferredInput): I
     payoutFrequency: "monthly",
   });
 
-  // Deferred Annuity: Grows during deferral period
-  const deferredBalance = P * Math.pow(1 + deferGrowthRate, deferYears);
+  // Deferred Annuity: Compounded balance during deferral
+  const deferredBalance = Number((P * Math.pow(1 + deferGrowthRate, deferYears)).toFixed(2));
   const deferredRes = calculateFixedLengthPayout({
     startingPrincipal: deferredBalance,
     interestRatePercent: payoutRate,
@@ -385,15 +395,15 @@ export function calculateImmediateVsDeferred(input: ImmediateVsDeferredInput): I
     payoutFrequency: "monthly",
   });
 
-  const advantage = deferredRes.totalAmountWithdrawn - immediateRes.totalAmountWithdrawn;
+  const advantage = Number((deferredRes.totalAmountWithdrawn - immediateRes.totalAmountWithdrawn).toFixed(2));
 
   return {
     immediateMonthlyIncome: immediateRes.monthlyWithdrawal,
     immediateTotalLifetime: immediateRes.totalAmountWithdrawn,
-    deferredAccumulatedBalance: Number(deferredBalance.toFixed(2)),
+    deferredAccumulatedBalance: deferredBalance,
     deferredMonthlyIncome: deferredRes.monthlyWithdrawal,
     deferredTotalLifetime: deferredRes.totalAmountWithdrawn,
-    deferredAdvantage: Number(advantage.toFixed(2)),
+    deferredAdvantage: advantage,
   };
 }
 
@@ -406,7 +416,6 @@ export function generateSmartInsights(
 ): SmartInsight[] {
   const insights: SmartInsight[] = [];
 
-  // Withdrawal Rate Insight
   if (payoutRes.withdrawalRatePercent > 8) {
     insights.push({
       type: "warning",
@@ -421,14 +430,12 @@ export function generateSmartInsights(
     });
   }
 
-  // Interest Contribution Insight
   insights.push({
     type: "info",
     title: "Interest Compound Growth Factor",
     description: `Interest earnings generate ${payoutRes.interestPercentage}% ($${payoutRes.totalInterestEarned.toLocaleString()}) of your total lifetime payout income!`,
   });
 
-  // Inflation Erosion Insight
   const years = payoutRes.schedule.length;
   const inflationLoss = (1 - 1 / Math.pow(1 + inflationRatePercent / 100, years)) * 100;
   insights.push({

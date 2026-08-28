@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Shield,
   DollarSign,
@@ -28,6 +28,11 @@ import {
   Layers,
   Users,
   Award,
+  RotateCcw,
+  Copy,
+  Check,
+  Bookmark,
+  History,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,6 +66,31 @@ import {
   generateSmartInsights,
 } from "@/lib/calculator-engine/formulas/annuity-payout";
 
+export interface SavedAnnuityScenario {
+  id: string;
+  name: string;
+  date: string;
+  principal: string;
+  rate: string;
+  years: string;
+  frequency: "monthly" | "quarterly" | "semiannual" | "annual";
+  desiredPayment: string;
+  currentAge: string;
+  spouseAge: string;
+  gender: "male" | "female";
+  inflation: string;
+  deferralYears: string;
+  deferralGrowth: string;
+  activeTab: "fixedLength" | "fixedPayment" | "lifeExpectancy" | "jointLife" | "immVsDef" | "charts" | "schedule";
+}
+
+function parseNum(val: string, fallback: number): number {
+  if (val !== "" && !isNaN(Number(val))) {
+    return Number(val);
+  }
+  return fallback;
+}
+
 export function AnnuityPayoutCalculator() {
   // Navigation Tabs: 'fixedLength' | 'fixedPayment' | 'lifeExpectancy' | 'jointLife' | 'immVsDef' | 'charts' | 'schedule'
   const [activeTab, setActiveTab] = useState<
@@ -82,23 +112,59 @@ export function AnnuityPayoutCalculator() {
   const [genderInput, setGenderInput] = useState<"male" | "female">("male");
   const [inflationInput, setInflationInput] = useState<string>("2.5");
 
-  // Mode 6: Immediate vs Deferred Inputs
+  // Mode 5: Immediate vs Deferred Inputs
   const [deferralYearsInput, setDeferralYearsInput] = useState<string>("10");
   const [deferralGrowthInput, setDeferralGrowthInput] = useState<string>("6.0");
 
-  // Schedule Search
-  const [tableSearch, setTableSearch] = useState("");
-
-  // Modal & Notification State
+  // State Management: Saved Scenarios & UI Notifications
+  const [savedScenarios, setSavedScenarios] = useState<SavedAnnuityScenario[]>([]);
+  const [scenarioNameInput, setScenarioNameInput] = useState<string>("");
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [copyNotification, setCopyNotification] = useState(false);
+  const [shareNotification, setShareNotification] = useState(false);
+
+  // Load Saved Scenarios & URL Query Parameters on Mount
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("saved_annuity_payout_scenarios");
+      if (stored) {
+        setSavedScenarios(JSON.parse(stored));
+      }
+    } catch {
+      // Ignore
+    }
+
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has("p")) setPrincipalInput(params.get("p")!);
+      if (params.has("r")) setRateInput(params.get("r")!);
+      if (params.has("y")) setYearsInput(params.get("y")!);
+      if (params.has("freq")) setFrequencyInput(params.get("freq") as any);
+      if (params.has("pmt")) setDesiredPaymentInput(params.get("pmt")!);
+      if (params.has("age")) setCurrentAgeInput(params.get("age")!);
+      if (params.has("tab")) {
+        const t = params.get("tab");
+        if (
+          t === "fixedLength" ||
+          t === "fixedPayment" ||
+          t === "lifeExpectancy" ||
+          t === "jointLife" ||
+          t === "immVsDef" ||
+          t === "charts" ||
+          t === "schedule"
+        ) {
+          setActiveTab(t);
+        }
+      }
+    }
+  }, []);
 
   // Compute Mode 1 Results (Fixed Length Baseline)
   const mode1Results = useMemo(() => {
     return calculateFixedLengthPayout({
-      startingPrincipal: Number(principalInput) || 500000,
-      interestRatePercent: Number(rateInput) || 6.0,
-      yearsToPayout: Number(yearsInput) || 10,
+      startingPrincipal: parseNum(principalInput, 500000),
+      interestRatePercent: parseNum(rateInput, 6.0),
+      yearsToPayout: parseNum(yearsInput, 10),
       payoutFrequency: frequencyInput,
     });
   }, [principalInput, rateInput, yearsInput, frequencyInput]);
@@ -106,9 +172,9 @@ export function AnnuityPayoutCalculator() {
   // Compute Mode 2 Results (Fixed Payment Depletion)
   const mode2Results = useMemo(() => {
     return calculateFixedPaymentPayout({
-      startingPrincipal: Number(principalInput) || 500000,
-      interestRatePercent: Number(rateInput) || 6.0,
-      desiredPaymentAmount: Number(desiredPaymentInput) || 5000,
+      startingPrincipal: parseNum(principalInput, 500000),
+      interestRatePercent: parseNum(rateInput, 6.0),
+      desiredPaymentAmount: parseNum(desiredPaymentInput, 5000),
       payoutFrequency: frequencyInput,
     });
   }, [principalInput, rateInput, desiredPaymentInput, frequencyInput]);
@@ -116,39 +182,39 @@ export function AnnuityPayoutCalculator() {
   // Compute Mode 3 Results (Life Expectancy)
   const mode3Results = useMemo(() => {
     return calculateLifeExpectancyPayout({
-      currentAge: Number(currentAgeInput) || 65,
+      currentAge: parseNum(currentAgeInput, 65),
       gender: genderInput,
-      startingPrincipal: Number(principalInput) || 500000,
-      expectedReturnPercent: Number(rateInput) || 6.0,
-      inflationRatePercent: Number(inflationInput) || 2.5,
+      startingPrincipal: parseNum(principalInput, 500000),
+      expectedReturnPercent: parseNum(rateInput, 6.0),
+      inflationRatePercent: parseNum(inflationInput, 2.5),
     });
   }, [currentAgeInput, genderInput, principalInput, rateInput, inflationInput]);
 
   // Compute Mode 4 Results (Joint Life)
   const mode4Results = useMemo(() => {
     return calculateJointLifePayout({
-      primaryAge: Number(currentAgeInput) || 65,
-      spouseAge: Number(spouseAgeInput) || 63,
-      startingPrincipal: Number(principalInput) || 500000,
-      expectedReturnPercent: Number(rateInput) || 6.0,
+      primaryAge: parseNum(currentAgeInput, 65),
+      spouseAge: parseNum(spouseAgeInput, 63),
+      startingPrincipal: parseNum(principalInput, 500000),
+      expectedReturnPercent: parseNum(rateInput, 6.0),
     });
   }, [currentAgeInput, spouseAgeInput, principalInput, rateInput]);
 
-  // Compute Mode 6 Results (Immediate vs Deferred)
-  const mode6Results = useMemo(() => {
+  // Compute Mode 5 Results (Immediate vs Deferred)
+  const mode5Results = useMemo(() => {
     return calculateImmediateVsDeferred({
-      startingPrincipal: Number(principalInput) || 500000,
-      currentAge: Number(currentAgeInput) || 65,
-      deferralYears: Number(deferralYearsInput) || 10,
-      growthDuringDeferralPercent: Number(deferralGrowthInput) || 6.0,
-      payoutReturnPercent: Number(rateInput) || 6.0,
-      payoutYears: Number(yearsInput) || 10,
+      startingPrincipal: parseNum(principalInput, 500000),
+      currentAge: parseNum(currentAgeInput, 65),
+      deferralYears: parseNum(deferralYearsInput, 10),
+      growthDuringDeferralPercent: parseNum(deferralGrowthInput, 6.0),
+      payoutReturnPercent: parseNum(rateInput, 6.0),
+      payoutYears: parseNum(yearsInput, 10),
     });
   }, [principalInput, currentAgeInput, deferralYearsInput, deferralGrowthInput, rateInput, yearsInput]);
 
   // Compute Smart Insights
   const smartInsights = useMemo(() => {
-    return generateSmartInsights(mode1Results, Number(inflationInput) || 2.5);
+    return generateSmartInsights(mode1Results, parseNum(inflationInput, 2.5));
   }, [mode1Results, inflationInput]);
 
   const fmt = (val: number) =>
@@ -162,22 +228,142 @@ export function AnnuityPayoutCalculator() {
     if (pmt) setDesiredPaymentInput(pmt.toString());
   };
 
+  // Reset to Defaults
+  const resetToDefaults = () => {
+    setPrincipalInput("500000");
+    setRateInput("6.0");
+    setYearsInput("10");
+    setFrequencyInput("monthly");
+    setDesiredPaymentInput("5000");
+    setCurrentAgeInput("65");
+    setSpouseAgeInput("63");
+    setGenderInput("male");
+    setInflationInput("2.5");
+    setDeferralYearsInput("10");
+    setDeferralGrowthInput("6.0");
+    setActiveTab("fixedLength");
+  };
+
+  // Save Scenario
+  const saveScenario = () => {
+    const name = scenarioNameInput.trim() || `Annuity Plan #${savedScenarios.length + 1}`;
+    const newScenario: SavedAnnuityScenario = {
+      id: Date.now().toString(),
+      name,
+      date: new Date().toLocaleDateString(),
+      principal: principalInput,
+      rate: rateInput,
+      years: yearsInput,
+      frequency: frequencyInput,
+      desiredPayment: desiredPaymentInput,
+      currentAge: currentAgeInput,
+      spouseAge: spouseAgeInput,
+      gender: genderInput,
+      inflation: inflationInput,
+      deferralYears: deferralYearsInput,
+      deferralGrowth: deferralGrowthInput,
+      activeTab,
+    };
+
+    const updated = [newScenario, ...savedScenarios.slice(0, 7)];
+    setSavedScenarios(updated);
+    setScenarioNameInput("");
+    try {
+      localStorage.setItem("saved_annuity_payout_scenarios", JSON.stringify(updated));
+    } catch {
+      // Ignore
+    }
+  };
+
+  // Restore Scenario
+  const restoreScenario = (sc: SavedAnnuityScenario) => {
+    setPrincipalInput(sc.principal);
+    setRateInput(sc.rate);
+    setYearsInput(sc.years);
+    setFrequencyInput(sc.frequency);
+    setDesiredPaymentInput(sc.desiredPayment);
+    setCurrentAgeInput(sc.currentAge);
+    setSpouseAgeInput(sc.spouseAge);
+    setGenderInput(sc.gender);
+    setInflationInput(sc.inflation);
+    setDeferralYearsInput(sc.deferralYears);
+    setDeferralGrowthInput(sc.deferralGrowth);
+    setActiveTab(sc.activeTab);
+  };
+
+  // Delete Scenario
+  const deleteScenario = (id: string) => {
+    const updated = savedScenarios.filter((s) => s.id !== id);
+    setSavedScenarios(updated);
+    try {
+      localStorage.setItem("saved_annuity_payout_scenarios", JSON.stringify(updated));
+    } catch {
+      // Ignore
+    }
+  };
+
   // Copy Summary
   const copySummary = () => {
-    const text = `Annuity Payout Summary:
+    const text = `Annuity Payout Analysis Summary:
 ------------------------------------------------
 Starting Principal: ${fmt(mode1Results.startingPrincipal)}
 Interest/Return Rate: ${rateInput}%
 Years to Payout: ${yearsInput} Years (${frequencyInput})
 ------------------------------------------------
-Monthly Payout Check: ${fmt(mode1Results.monthlyWithdrawal)}/mo
-Total Amount Withdrawn: ${fmt(mode1Results.totalAmountWithdrawn)}
-Total Interest Earned: ${fmt(mode1Results.totalInterestEarned)}
-Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustainabilityScore})`;
+1. Fixed Length Payout:
+   Monthly Payout: ${fmt(mode1Results.monthlyWithdrawal)}/mo
+   Total Payments: ${mode1Results.totalPaymentsCount}
+   Total Amount Received: ${fmt(mode1Results.totalAmountWithdrawn)}
+   Total Interest Earned: ${fmt(mode1Results.totalInterestEarned)}
+   Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustainabilityScore})
+   Effective Yield: ${mode1Results.effectiveYieldPercent}%
+------------------------------------------------
+2. Fixed Payment Payout ($${desiredPaymentInput}/mo):
+   Depletion Time: ${mode2Results.isInfinite ? "Never (Infinite)" : `${mode2Results.yearsUntilDepleted} Years (${mode2Results.monthsUntilDepleted} Months)`}
+   Total Amount Withdrawn: ${fmt(mode2Results.totalAmountWithdrawn)}
+------------------------------------------------
+3. Life Expectancy (${currentAgeInput} yr old ${genderInput}):
+   Actuarial Duration: ${mode3Results.estimatedLifeExpectancyYears} Years (End Age: ${mode3Results.estimatedEndAge})
+   Sustainable Monthly: ${fmt(mode3Results.sustainableMonthlyIncome)}/mo
+   Purchasing Power Loss: -${mode3Results.purchasingPowerLossPercent}%
+------------------------------------------------
+4. Joint Life (Age ${currentAgeInput} + Spouse ${spouseAgeInput}):
+   Joint Duration: ${mode4Results.jointLifeExpectancyYears} Years (End Age: ${mode4Results.jointEndAge})
+   Joint Monthly Income: ${fmt(mode4Results.sustainableMonthlyIncome)}/mo
+------------------------------------------------
+5. Immediate vs. Deferred (10 Yr Deferral @ ${deferralGrowthInput}%):
+   Immediate Monthly: ${fmt(mode5Results.immediateMonthlyIncome)}/mo
+   Deferred Monthly: ${fmt(mode5Results.deferredMonthlyIncome)}/mo
+   Accumulated Balance: ${fmt(mode5Results.deferredAccumulatedBalance)}
+   Modeled Advantage: +${fmt(mode5Results.deferredAdvantage)}
+Disclaimer: This calculator is a financial planning model, not a contract quote.`;
 
-    navigator.clipboard.writeText(text);
-    setCopyNotification(true);
-    setTimeout(() => setCopyNotification(false), 2500);
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopyNotification(true);
+      setTimeout(() => setCopyNotification(false), 2500);
+    }
+  };
+
+  // Share URL with Query Parameters
+  const shareCalculation = () => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams({
+        p: principalInput,
+        r: rateInput,
+        y: yearsInput,
+        freq: frequencyInput,
+        pmt: desiredPaymentInput,
+        age: currentAgeInput,
+        tab: activeTab,
+      });
+      const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareUrl);
+        setShareNotification(true);
+        setTimeout(() => setShareNotification(false), 2500);
+      }
+    }
   };
 
   // Export CSV Schedule
@@ -192,10 +378,10 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
 
     const rows = mode1Results.schedule.map((r) => [
       r.period,
-      r.beginningBalance,
-      r.interestEarned,
-      r.withdrawals,
-      r.endingBalance,
+      r.beginningBalance.toFixed(2),
+      r.interestEarned.toFixed(2),
+      r.withdrawals.toFixed(2),
+      r.endingBalance.toFixed(2),
     ]);
 
     const csvContent =
@@ -211,7 +397,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
     document.body.removeChild(link);
   };
 
-  // Recharts Donut Data
+  // Donut Chart Data
   const donutData = [
     { name: "Starting Principal", value: mode1Results.startingPrincipal, color: "#3b82f6" },
     { name: "Interest / Return", value: mode1Results.totalInterestEarned, color: "#10b981" },
@@ -220,8 +406,8 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
   // Report Modal Data
   const reportData: CalculatorReportData = {
     meta: {
-      calculatorName: "Annuity Payout & Income Strategy Suite",
-      reportTitle: "Annuity Payout Analysis Report",
+      calculatorName: "Annuity Payout Calculator – Guaranteed Retirement Income Suite",
+      reportTitle: "Annuity Payout & Income Strategy Report",
       generatedDate: new Date().toLocaleDateString(),
       generatedTime: new Date().toLocaleTimeString(),
       currencySymbol: "$",
@@ -234,21 +420,21 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
         colorTheme: "emerald",
       },
       {
-        label: "Total Amount Withdrawn",
+        label: "Total Amount Received",
         value: fmt(mode1Results.totalAmountWithdrawn),
-        subtitle: `${mode1Results.totalPaymentsCount} total payments`,
+        subtitle: `${mode1Results.totalPaymentsCount} total scheduled payments`,
         colorTheme: "blue",
       },
       {
         label: "Total Interest Earned",
         value: fmt(mode1Results.totalInterestEarned),
-        subtitle: `${mode1Results.interestPercentage}% generated from growth`,
+        subtitle: `${mode1Results.interestPercentage}% generated from compound interest`,
         colorTheme: "purple",
       },
     ],
     sections: [
       {
-        title: "Fixed Length Payout Summary",
+        title: "1. Fixed Length Payout Summary",
         items: [
           { label: "Starting Principal", value: fmt(mode1Results.startingPrincipal) },
           { label: "Interest / Return Rate", value: `${rateInput}%` },
@@ -256,15 +442,52 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
           { label: "Payout Frequency", value: frequencyInput },
           { label: "Monthly Withdrawal", value: fmt(mode1Results.monthlyWithdrawal), highlight: true },
           { label: "Annual Withdrawal", value: fmt(mode1Results.annualWithdrawal), highlight: true },
-          { label: "Total Amount Withdrawn", value: fmt(mode1Results.totalAmountWithdrawn) },
+          { label: "Total Amount Received", value: fmt(mode1Results.totalAmountWithdrawn) },
           { label: "Total Interest Earned", value: fmt(mode1Results.totalInterestEarned) },
+          { label: "Withdrawal Rate", value: `${mode1Results.withdrawalRatePercent}% (${mode1Results.sustainabilityScore})` },
+          { label: "Effective Yield", value: `${mode1Results.effectiveYieldPercent}%` },
+        ],
+      },
+      {
+        title: "2. Fixed Payment Payout Summary",
+        items: [
+          { label: "Desired Monthly Check", value: fmt(parseNum(desiredPaymentInput, 5000)) },
+          { label: "Funds Depletion Time", value: mode2Results.isInfinite ? "Never Depletes" : `${mode2Results.yearsUntilDepleted} Years (${mode2Results.monthsUntilDepleted} Months)`, highlight: true },
+          { label: "Total Amount Withdrawn", value: fmt(mode2Results.totalAmountWithdrawn) },
+          { label: "Total Interest Earned", value: fmt(mode2Results.totalInterestEarned) },
+        ],
+      },
+      {
+        title: "3. Life Expectancy Payout Summary",
+        items: [
+          { label: "Current Age & Gender", value: `Age ${currentAgeInput} (${genderInput})` },
+          { label: "Actuarial Life Expectancy", value: `${mode3Results.estimatedLifeExpectancyYears} Years (End Age: ${mode3Results.estimatedEndAge})` },
+          { label: "Sustainable Monthly Income", value: fmt(mode3Results.sustainableMonthlyIncome), highlight: true },
+          { label: "Purchasing Power Loss", value: `-${mode3Results.purchasingPowerLossPercent}%` },
+        ],
+      },
+      {
+        title: "4. Joint Life Payout Summary",
+        items: [
+          { label: "Primary & Spouse Age", value: `Primary: ${currentAgeInput} | Spouse: ${spouseAgeInput}` },
+          { label: "Joint Life Duration", value: `${mode4Results.jointLifeExpectancyYears} Years (End Age: ${mode4Results.jointEndAge})` },
+          { label: "Joint Monthly Income", value: fmt(mode4Results.sustainableMonthlyIncome), highlight: true },
+        ],
+      },
+      {
+        title: "5. Immediate vs. Deferred Comparison",
+        items: [
+          { label: "Immediate Monthly Income", value: fmt(mode5Results.immediateMonthlyIncome) },
+          { label: "Deferred Monthly Income (10 Yrs)", value: fmt(mode5Results.deferredMonthlyIncome), highlight: true },
+          { label: "Accumulated Deferred Balance", value: fmt(mode5Results.deferredAccumulatedBalance) },
+          { label: "Deferred Advantage", value: `+${fmt(mode5Results.deferredAdvantage)}`, highlight: true },
         ],
       },
     ],
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" id="annuity-payout-calculator-app">
       {/* Top Quick Presets Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
@@ -280,7 +503,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
             size="sm"
             variant="outline"
             onClick={() => applyPreset(500000, 6.0, 10)}
-            className="h-6 text-[10px] px-2 cursor-pointer"
+            className="h-6 text-[10px] px-2 cursor-pointer hover:border-indigo-400"
           >
             Calculator.net Baseline ($500k @ 6% for 10 Yrs)
           </Button>
@@ -289,7 +512,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
             size="sm"
             variant="outline"
             onClick={() => applyPreset(300000, 5.0, 20)}
-            className="h-6 text-[10px] px-2 cursor-pointer"
+            className="h-6 text-[10px] px-2 cursor-pointer hover:border-indigo-400"
           >
             $300k @ 5% for 20 Yrs
           </Button>
@@ -298,7 +521,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
             size="sm"
             variant="outline"
             onClick={() => applyPreset(750000, 7.0, 15)}
-            className="h-6 text-[10px] px-2 cursor-pointer"
+            className="h-6 text-[10px] px-2 cursor-pointer hover:border-indigo-400"
           >
             $750k @ 7% for 15 Yrs
           </Button>
@@ -306,16 +529,24 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
 
         <div className="flex items-center gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-400">
           <span>Monthly Check:</span>
-          <span className="text-emerald-600 dark:text-emerald-400 font-sans tabular-nums text-sm">
+          <span className="text-emerald-600 dark:text-emerald-400 font-sans tabular-nums text-sm font-extrabold">
             {fmt(mode1Results.monthlyWithdrawal)}/mo
           </span>
         </div>
       </div>
 
-      {/* Navigation Tabs for all 6 Calculation Modes */}
-      <div className="flex flex-wrap border-b border-zinc-200 dark:border-zinc-800">
+      {/* Navigation Tabs for all 5 Calculation Modes + Dashboards + Schedule */}
+      <div
+        className="flex flex-wrap border-b border-zinc-200 dark:border-zinc-800 gap-1"
+        role="tablist"
+        aria-label="Annuity Payout Calculator Modes"
+      >
         <button
           type="button"
+          role="tab"
+          id="tab-fixedLength"
+          aria-selected={activeTab === "fixedLength"}
+          aria-controls="panel-fixedLength"
           onClick={() => setActiveTab("fixedLength")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
             activeTab === "fixedLength"
@@ -327,6 +558,10 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
         </button>
         <button
           type="button"
+          role="tab"
+          id="tab-fixedPayment"
+          aria-selected={activeTab === "fixedPayment"}
+          aria-controls="panel-fixedPayment"
           onClick={() => setActiveTab("fixedPayment")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
             activeTab === "fixedPayment"
@@ -338,6 +573,10 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
         </button>
         <button
           type="button"
+          role="tab"
+          id="tab-lifeExpectancy"
+          aria-selected={activeTab === "lifeExpectancy"}
+          aria-controls="panel-lifeExpectancy"
           onClick={() => setActiveTab("lifeExpectancy")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
             activeTab === "lifeExpectancy"
@@ -349,6 +588,10 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
         </button>
         <button
           type="button"
+          role="tab"
+          id="tab-jointLife"
+          aria-selected={activeTab === "jointLife"}
+          aria-controls="panel-jointLife"
           onClick={() => setActiveTab("jointLife")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
             activeTab === "jointLife"
@@ -360,6 +603,10 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
         </button>
         <button
           type="button"
+          role="tab"
+          id="tab-immVsDef"
+          aria-selected={activeTab === "immVsDef"}
+          aria-controls="panel-immVsDef"
           onClick={() => setActiveTab("immVsDef")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
             activeTab === "immVsDef"
@@ -371,6 +618,10 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
         </button>
         <button
           type="button"
+          role="tab"
+          id="tab-charts"
+          aria-selected={activeTab === "charts"}
+          aria-controls="panel-charts"
           onClick={() => setActiveTab("charts")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
             activeTab === "charts"
@@ -382,6 +633,10 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
         </button>
         <button
           type="button"
+          role="tab"
+          id="tab-schedule"
+          aria-selected={activeTab === "schedule"}
+          aria-controls="panel-schedule"
           onClick={() => setActiveTab("schedule")}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
             activeTab === "schedule"
@@ -393,21 +648,22 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
         </button>
       </div>
 
-      {/* MODE 1: FIXED LENGTH PAYOUT (Calculator.net Tab 1) */}
+      {/* MODE 1: FIXED LENGTH PAYOUT */}
       {activeTab === "fixedLength" && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div id="panel-fixedLength" role="tabpanel" aria-labelledby="tab-fixedLength" className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Inputs (6 Cols) */}
-          <div className="lg:col-span-6 space-y-5">
+          <div className="lg:col-span-6 space-y-4">
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 border-b border-zinc-100 dark:border-zinc-800 pb-2">
                 Fixed Length Payout Inputs
               </h3>
 
               <div className="space-y-1 text-xs">
-                <label className="font-semibold text-zinc-700 dark:text-zinc-300">Starting Principal ($)</label>
+                <label htmlFor="annuity-principal" className="font-semibold text-zinc-700 dark:text-zinc-300">Starting Principal ($)</label>
                 <Input
+                  id="annuity-principal"
                   type="number"
-                  min="10000"
+                  min="0"
                   step="25000"
                   value={principalInput}
                   onChange={(e) => setPrincipalInput(e.target.value)}
@@ -417,11 +673,12 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
 
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div className="space-y-1">
-                  <label className="font-semibold text-zinc-700 dark:text-zinc-300">Interest/Return Rate (%)</label>
+                  <label htmlFor="annuity-rate" className="font-semibold text-zinc-700 dark:text-zinc-300">Interest/Return Rate (%)</label>
                   <Input
+                    id="annuity-rate"
                     type="number"
-                    min="0.1"
-                    max="20"
+                    min="0"
+                    max="25"
                     step="0.25"
                     value={rateInput}
                     onChange={(e) => setRateInput(e.target.value)}
@@ -430,8 +687,9 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-zinc-700 dark:text-zinc-300">Years to Payout</label>
+                  <label htmlFor="annuity-years" className="font-semibold text-zinc-700 dark:text-zinc-300">Years to Payout</label>
                   <Input
+                    id="annuity-years"
                     type="number"
                     min="1"
                     max="50"
@@ -443,11 +701,12 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
               </div>
 
               <div className="space-y-1 text-xs">
-                <label className="font-semibold text-zinc-700 dark:text-zinc-300">Payout Frequency</label>
+                <label htmlFor="annuity-frequency" className="font-semibold text-zinc-700 dark:text-zinc-300">Payout Frequency</label>
                 <select
+                  id="annuity-frequency"
                   value={frequencyInput}
                   onChange={(e) => setFrequencyInput(e.target.value as any)}
-                  className="w-full h-8 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 text-xs"
+                  className="w-full h-8 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 text-xs cursor-pointer"
                 >
                   <option value="monthly">Monthly</option>
                   <option value="quarterly">Quarterly</option>
@@ -455,6 +714,109 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
                   <option value="annual">Annual</option>
                 </select>
               </div>
+            </div>
+
+            {/* Action Bar: Reset, Save, Copy, Share */}
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3.5 shadow-sm space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 flex-1 min-w-[200px]">
+                  <Input
+                    type="text"
+                    placeholder="Scenario Name (e.g. 10-Yr Plan)"
+                    value={scenarioNameInput}
+                    onChange={(e) => setScenarioNameInput(e.target.value)}
+                    className="text-xs h-8 px-2"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={saveScenario}
+                    className="h-8 text-xs gap-1 cursor-pointer"
+                  >
+                    <Bookmark className="h-3.5 w-3.5 text-blue-600" /> Save
+                  </Button>
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={resetToDefaults}
+                    className="h-8 text-xs gap-1 cursor-pointer text-zinc-600 dark:text-zinc-400"
+                    title="Reset to Defaults"
+                  >
+                    <RotateCcw className="h-3.5 w-3.5" /> Reset
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={copySummary}
+                    className="h-8 text-xs gap-1 cursor-pointer text-zinc-700 dark:text-zinc-300"
+                  >
+                    {copyNotification ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
+                    {copyNotification ? "Copied!" : "Copy"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={shareCalculation}
+                    className="h-8 text-xs gap-1 cursor-pointer text-zinc-700 dark:text-zinc-300"
+                  >
+                    {shareNotification ? <Check className="h-3.5 w-3.5 text-indigo-500" /> : <Share2 className="h-3.5 w-3.5 text-indigo-500" />}
+                    {shareNotification ? "Link Copied!" : "Share"}
+                  </Button>
+                </div>
+              </div>
+
+              {/* Saved Scenarios List */}
+              {savedScenarios.length > 0 && (
+                <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 space-y-1.5">
+                  <div className="flex items-center justify-between text-[11px] font-bold text-zinc-700 dark:text-zinc-300">
+                    <span className="flex items-center gap-1">
+                      <History className="w-3 h-3 text-indigo-500" /> Saved Scenarios ({savedScenarios.length})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSavedScenarios([]);
+                        localStorage.removeItem("saved_annuity_payout_scenarios");
+                      }}
+                      className="text-[10px] text-zinc-400 hover:text-red-500 font-medium cursor-pointer"
+                    >
+                      Clear All
+                    </button>
+                  </div>
+                  <div className="space-y-1 max-h-32 overflow-y-auto">
+                    {savedScenarios.map((sc) => (
+                      <div
+                        key={sc.id}
+                        className="p-1.5 bg-zinc-50 dark:bg-zinc-800/60 rounded-lg border border-zinc-200 dark:border-zinc-700 flex items-center justify-between text-xs"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => restoreScenario(sc)}
+                          className="text-left font-bold text-indigo-600 dark:text-indigo-400 hover:underline truncate cursor-pointer"
+                        >
+                          {sc.name} <span className="text-[10px] text-zinc-400 font-normal">({sc.date})</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => deleteScenario(sc.id)}
+                          className="text-zinc-400 hover:text-red-500 p-0.5 cursor-pointer"
+                          title="Delete Scenario"
+                          aria-label="Delete Scenario"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -465,17 +827,14 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
                 <span className="text-xs uppercase tracking-wider font-bold text-white/80">
                   GUARANTEED MONTHLY CHECK
                 </span>
-                <div className="flex gap-2">
-                  
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={() => setIsReportOpen(true)}
-                    className="h-7 text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold cursor-pointer"
-                  >
-                    <Printer className="h-3 w-3 mr-1" /> PDF Report
-                  </Button>
-                </div>
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => setIsReportOpen(true)}
+                  className="h-7 text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold cursor-pointer"
+                >
+                  <Printer className="h-3 w-3 mr-1" /> PDF Report
+                </Button>
               </div>
 
               <div className="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-400 font-sans tabular-nums mb-2">
@@ -503,7 +862,7 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
               </div>
             </div>
 
-            {/* Principal vs Interest Donut Chart matching Calculator.net */}
+            {/* Principal vs Interest Donut Chart */}
             <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
               <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
                 Starting Principal vs. Interest Return Breakdown
@@ -534,27 +893,27 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
         </div>
       )}
 
-      {/* MODE 2: FIXED PAYMENT PAYOUT (Calculator.net Tab 2) */}
+      {/* MODE 2: FIXED PAYMENT PAYOUT */}
       {activeTab === "fixedPayment" && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div id="panel-fixedPayment" role="tabpanel" aria-labelledby="tab-fixedPayment" className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           <div className="lg:col-span-6 space-y-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm">
             <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 border-b border-zinc-100 dark:border-zinc-800 pb-2">
               Fixed Payment Payout Inputs
             </h3>
 
             <div className="space-y-1 text-xs">
-              <label className="font-semibold text-zinc-700 dark:text-zinc-300">Starting Principal ($)</label>
-              <Input type="number" value={principalInput} onChange={(e) => setPrincipalInput(e.target.value)} className="text-xs font-sans tabular-nums h-9 px-3" />
+              <label htmlFor="annuity-p2" className="font-semibold text-zinc-700 dark:text-zinc-300">Starting Principal ($)</label>
+              <Input id="annuity-p2" type="number" value={principalInput} onChange={(e) => setPrincipalInput(e.target.value)} className="text-xs font-sans tabular-nums h-9 px-3" />
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="space-y-1">
-                <label className="font-semibold text-zinc-700 dark:text-zinc-300">Interest Rate (%)</label>
-                <Input type="number" value={rateInput} onChange={(e) => setRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
+                <label htmlFor="annuity-r2" className="font-semibold text-zinc-700 dark:text-zinc-300">Interest Rate (%)</label>
+                <Input id="annuity-r2" type="number" value={rateInput} onChange={(e) => setRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
               <div className="space-y-1">
-                <label className="font-semibold text-zinc-700 dark:text-zinc-300">Desired Monthly Check ($)</label>
-                <Input type="number" value={desiredPaymentInput} onChange={(e) => setDesiredPaymentInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
+                <label htmlFor="annuity-desired-pmt" className="font-semibold text-zinc-700 dark:text-zinc-300">Desired Monthly Check ($)</label>
+                <Input id="annuity-desired-pmt" type="number" value={desiredPaymentInput} onChange={(e) => setDesiredPaymentInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
               </div>
             </div>
           </div>
@@ -588,9 +947,10 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
 
       {/* MODE 3: LIFE EXPECTANCY PAYOUT */}
       {activeTab === "lifeExpectancy" && (
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
+        <div id="panel-lifeExpectancy" role="tabpanel" aria-labelledby="tab-lifeExpectancy" className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Single Life Expectancy Payout Solver
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+              Single Life Expectancy Payout Solver
             </h3>
           </div>
 
@@ -598,15 +958,16 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="font-semibold text-zinc-700 dark:text-zinc-300">Your Current Age</label>
-                  <Input type="number" min="50" max="95" value={currentAgeInput} onChange={(e) => setCurrentAgeInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
+                  <label htmlFor="annuity-age" className="font-semibold text-zinc-700 dark:text-zinc-300">Your Current Age</label>
+                  <Input id="annuity-age" type="number" min="50" max="95" value={currentAgeInput} onChange={(e) => setCurrentAgeInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
                 <div className="space-y-1">
-                  <label className="font-semibold text-zinc-700 dark:text-zinc-300">Gender</label>
+                  <label htmlFor="annuity-gender" className="font-semibold text-zinc-700 dark:text-zinc-300">Gender</label>
                   <select
+                    id="annuity-gender"
                     value={genderInput}
                     onChange={(e) => setGenderInput(e.target.value as any)}
-                    className="w-full h-8 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 text-xs"
+                    className="w-full h-8 rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 text-xs cursor-pointer"
                   >
                     <option value="male">Male (Base 83 Yrs)</option>
                     <option value="female">Female (Base 86 Yrs)</option>
@@ -616,12 +977,12 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="font-semibold text-zinc-700 dark:text-zinc-300">Expected Return (%)</label>
-                  <Input type="number" value={rateInput} onChange={(e) => setRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
+                  <label htmlFor="annuity-r3" className="font-semibold text-zinc-700 dark:text-zinc-300">Expected Return (%)</label>
+                  <Input id="annuity-r3" type="number" value={rateInput} onChange={(e) => setRateInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
                 <div className="space-y-1">
-                  <label className="font-semibold text-zinc-700 dark:text-zinc-300">Inflation Rate (%)</label>
-                  <Input type="number" value={inflationInput} onChange={(e) => setInflationInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
+                  <label htmlFor="annuity-inf3" className="font-semibold text-zinc-700 dark:text-zinc-300">Inflation Rate (%)</label>
+                  <Input id="annuity-inf3" type="number" value={inflationInput} onChange={(e) => setInflationInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
               </div>
             </div>
@@ -649,9 +1010,10 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
 
       {/* MODE 4: JOINT LIFE PAYOUT */}
       {activeTab === "jointLife" && (
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
+        <div id="panel-jointLife" role="tabpanel" aria-labelledby="tab-jointLife" className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Joint Life Payout Solver (Primary Worker + Spouse)
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+              Joint Life Payout Solver (Primary Worker + Spouse)
             </h3>
           </div>
 
@@ -659,12 +1021,12 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="font-semibold text-zinc-700 dark:text-zinc-300">Primary Age</label>
-                  <Input type="number" value={currentAgeInput} onChange={(e) => setCurrentAgeInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
+                  <label htmlFor="annuity-primary-age" className="font-semibold text-zinc-700 dark:text-zinc-300">Primary Age</label>
+                  <Input id="annuity-primary-age" type="number" value={currentAgeInput} onChange={(e) => setCurrentAgeInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
                 <div className="space-y-1">
-                  <label className="font-semibold text-zinc-700 dark:text-zinc-300">Spouse Age</label>
-                  <Input type="number" value={spouseAgeInput} onChange={(e) => setSpouseAgeInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
+                  <label htmlFor="annuity-spouse-age" className="font-semibold text-zinc-700 dark:text-zinc-300">Spouse Age</label>
+                  <Input id="annuity-spouse-age" type="number" value={spouseAgeInput} onChange={(e) => setSpouseAgeInput(e.target.value)} className="text-xs font-sans tabular-nums h-8 px-2" />
                 </div>
               </div>
             </div>
@@ -688,24 +1050,25 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
 
       {/* MODE 5: IMMEDIATE VS DEFERRED COMPARISON */}
       {activeTab === "immVsDef" && (
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
+        <div id="panel-immVsDef" role="tabpanel" aria-labelledby="tab-immVsDef" className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
-            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Immediate vs. Deferred Annuity Payout Comparison
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+              Immediate vs. Deferred Annuity Payout Comparison
             </h3>
           </div>
 
           <div className="grid grid-cols-2 gap-4 text-xs font-sans tabular-nums">
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border">
+            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700">
               <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block text-sm">Immediate Annuity (Start Now)</span>
-              <div className="mt-2 text-xl font-extrabold text-indigo-600">{fmt(mode6Results.immediateMonthlyIncome)}/mo</div>
-              <div className="font-sans text-[10px] text-zinc-500 mt-1">Total Lifetime: {fmt(mode6Results.immediateTotalLifetime)}</div>
+              <div className="mt-2 text-xl font-extrabold text-indigo-600">{fmt(mode5Results.immediateMonthlyIncome)}/mo</div>
+              <div className="font-sans text-[10px] text-zinc-500 mt-1">Total Lifetime: {fmt(mode5Results.immediateTotalLifetime)}</div>
             </div>
 
             <div className="bg-amber-50 dark:bg-amber-950/30 p-4 rounded-xl border border-amber-200 dark:border-amber-800">
               <span className="font-sans font-bold text-amber-900 dark:text-amber-200 block text-sm">Deferred Annuity (Defer 10 Yrs)</span>
-              <div className="mt-2 text-xl font-extrabold text-amber-600">{fmt(mode6Results.deferredMonthlyIncome)}/mo</div>
-              <div className="font-sans text-[10px] text-zinc-500 mt-1">Accumulated Balance: {fmt(mode6Results.deferredAccumulatedBalance)}</div>
-              <div className="font-sans text-[11px] font-bold text-emerald-600 mt-1">Advantage: +{fmt(mode6Results.deferredAdvantage)}</div>
+              <div className="mt-2 text-xl font-extrabold text-amber-600">{fmt(mode5Results.deferredMonthlyIncome)}/mo</div>
+              <div className="font-sans text-[10px] text-zinc-500 mt-1">Accumulated Balance: {fmt(mode5Results.deferredAccumulatedBalance)}</div>
+              <div className="font-sans text-[11px] font-bold text-emerald-600 mt-1">Advantage: +{fmt(mode5Results.deferredAdvantage)}</div>
             </div>
           </div>
         </div>
@@ -713,8 +1076,9 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
 
       {/* TAB 6: VISUAL DASHBOARDS */}
       {activeTab === "charts" && (
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
-          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Balance Depletion &amp; Interest Growth Charts
+        <div id="panel-charts" role="tabpanel" aria-labelledby="tab-charts" className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
+          <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+            Balance Depletion &amp; Interest Growth Charts
           </h3>
 
           <div className="h-72 w-full">
@@ -735,9 +1099,10 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
 
       {/* TAB 7: SCHEDULES & EXPORT */}
       {activeTab === "schedule" && (
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
+        <div id="panel-schedule" role="tabpanel" aria-labelledby="tab-schedule" className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Amortization Style Payout Schedule
+            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+              Amortization Style Payout Schedule
             </h3>
 
             <Button type="button" size="sm" variant="outline" onClick={exportCSV} className="h-8 text-xs cursor-pointer">
@@ -745,18 +1110,18 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
             </Button>
           </div>
 
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto border border-zinc-200 dark:border-zinc-800 rounded-xl">
             <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-semibold">
-                  <th className="p-2.5">Year</th>
-                  <th className="p-2.5 text-right">Beginning Balance</th>
-                  <th className="p-2.5 text-right text-emerald-600">Interest Earned</th>
-                  <th className="p-2.5 text-right text-rose-600">Withdrawals</th>
-                  <th className="p-2.5 text-right text-indigo-600">Ending Balance</th>
+              <thead className="bg-zinc-100 dark:bg-zinc-800 font-semibold text-zinc-900 dark:text-zinc-100">
+                <tr>
+                  <th className="p-2.5 border-b border-zinc-200 dark:border-zinc-700">Year</th>
+                  <th className="p-2.5 text-right border-b border-zinc-200 dark:border-zinc-700">Beginning Balance</th>
+                  <th className="p-2.5 text-right text-emerald-600 border-b border-zinc-200 dark:border-zinc-700">Interest Earned</th>
+                  <th className="p-2.5 text-right text-rose-600 border-b border-zinc-200 dark:border-zinc-700">Withdrawals</th>
+                  <th className="p-2.5 text-right text-indigo-600 border-b border-zinc-200 dark:border-zinc-700">Ending Balance</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px] font-sans tabular-nums">
+              <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 font-sans tabular-nums">
                 {mode1Results.schedule.map((row) => (
                   <tr key={row.period} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="p-2.5 font-bold font-sans text-zinc-800 dark:text-zinc-200">{row.label}</td>
@@ -774,8 +1139,8 @@ Withdrawal Rate: ${mode1Results.withdrawalRatePercent}% (${mode1Results.sustaina
 
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
-
-      {/* Educational Content & 15 FAQs */}
     </div>
   );
 }
+
+export default AnnuityPayoutCalculator;
