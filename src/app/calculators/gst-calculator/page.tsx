@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "GST Calculator – Indian Goods & Services Tax Inclusive & Exclusive Estimator",
+    title: "GST Calculator India – Inclusive, Exclusive, CGST, SGST & IGST Calculator",
     description:
-      "Free GST Calculator India. Calculate GST inclusive & exclusive amounts, reverse GST, CGST, SGST, IGST inter-state splits, multi-item tax invoices, and composition scheme tax savings.",
+      "Free GST Calculator India. Calculate GST inclusive and exclusive prices, reverse GST, CGST, SGST, IGST, multi-item invoices and applicable cess using the rate you enter.",
     slug: GST_CALCULATOR.slug,
   });
 }

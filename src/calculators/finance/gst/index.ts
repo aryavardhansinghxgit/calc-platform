@@ -1,56 +1,59 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateSingleGst } from "@/lib/calculator-engine/formulas/gst";
+import { gstFaqs } from "./faq";
 
 export const GST_CALCULATOR: CalculatorModuleDefinition = {
   id: "gst",
-  title: "GST Calculator – Indian Goods & Services Tax Estimator",
+  title: "GST Calculator – Indian Goods & Services Tax Calculator",
   slug: "gst-calculator",
   category: "Finance",
   subcategory: "Tax and Salary",
   description:
-    "Calculate Indian GST inclusive & exclusive amounts, reverse GST, CGST/SGST/IGST inter-state splits, multi-item tax invoices, and composition scheme tax savings.",
+    "Free GST Calculator India. Calculate GST inclusive and exclusive prices, reverse GST, CGST, SGST, IGST, multi-item invoices and applicable cess using the rate you enter.",
   iconName: "Receipt",
   featured: true,
   tags: [
     "gst calculator",
-    "online gst calculator",
+    "gst calculator india",
     "gst inclusive calculator",
     "gst exclusive calculator",
     "reverse gst calculator",
-    "cgst sgst igst calculator",
+    "cgst sgst calculator",
+    "igst calculator",
+    "gst invoice calculator",
     "gst rate slabs india",
     "multi item gst invoice",
     "composition scheme gst",
   ],
   formulaDescription:
-    "GST Exclusive = Base × (Rate / 100). GST Inclusive = Base = Total / (1 + Rate / 100). CGST & SGST are 50/50 intra-state split.",
-  faqs: [
-    {
-      question: "What is the difference between GST inclusive and exclusive?",
-      answer:
-        "GST Inclusive means tax is already included in the advertised price. GST Exclusive means tax is added on top of the net base price.",
-    },
-    {
-      question: "How are CGST, SGST, and IGST calculated?",
-      answer:
-        "For intra-state sales (within same state), GST is split 50/50 between CGST and SGST. For inter-state sales, full tax is collected as IGST.",
-    },
+    "GST Exclusive = Base × (Rate / 100). GST Inclusive = Base = Total / (1 + Rate / 100). CGST & SGST are 50/50 intra-state split. IGST is 100% inter-state levy.",
+  relatedCalculators: [
+    "sales-tax",
+    "vat",
+    "income-tax",
+    "salary",
+    "take-home-pay",
+    "budget",
+    "currency",
+    "compound-interest",
   ],
+  faqs: gstFaqs,
   inputs: [
-    { name: "amount", label: "Transaction Amount", type: "currency", defaultValue: 10000, unit: "₹", min: 1, max: 100000000, step: 500 },
+    { name: "amount", label: "Transaction Amount", type: "currency", defaultValue: 10000, unit: "₹", min: 0, max: 100000000, step: 500 },
     {
       name: "gstRate",
       label: "GST Tax Slab",
       type: "select",
       defaultValue: 18,
       options: [
-        { label: "0% (NIL)", value: 0 },
-        { label: "0.25% (Diamonds)", value: 0.25 },
-        { label: "3% (Gold)", value: 3 },
-        { label: "5% (Basic)", value: 5 },
-        { label: "12% (Electronics)", value: 12 },
-        { label: "18% (Standard)", value: 18 },
-        { label: "28% (Luxury)", value: 28 },
+        { label: "0% (Nil / Exempted)", value: 0 },
+        { label: "0.25% (Concessional / Precious Stones)", value: 0.25 },
+        { label: "3% (Precious Metals / Jewellery)", value: 3 },
+        { label: "5% (Common Rate)", value: 5 },
+        { label: "12% (Specified Supplies)", value: 12 },
+        { label: "18% (General / Standard Rate)", value: 18 },
+        { label: "28% (Specified Luxury / Demerit)", value: 28 },
+        { label: "40% (Special Rate for Specified Goods)", value: 40 },
       ],
     },
     {
@@ -59,9 +62,9 @@ export const GST_CALCULATOR: CalculatorModuleDefinition = {
       type: "select",
       defaultValue: "exclusive",
       options: [
-        { label: "GST Exclusive (Add Tax)", value: "exclusive" },
-        { label: "GST Inclusive (Extract Tax)", value: "inclusive" },
-        { label: "Reverse GST (From Tax Amount)", value: "reverse_tax" },
+        { label: "GST Exclusive (Add Tax to Base)", value: "exclusive" },
+        { label: "GST Inclusive (Extract Tax from Total)", value: "inclusive" },
+        { label: "Reverse GST (From Known Tax Amount)", value: "reverse_tax" },
       ],
     },
   ],
@@ -74,8 +77,8 @@ export const GST_CALCULATOR: CalculatorModuleDefinition = {
   ],
   calculate: (inputs) => {
     const res = calculateSingleGst({
-      amount: Number(inputs.amount || 10000),
-      gstRate: Number(inputs.gstRate || 18),
+      amount: Number(inputs.amount !== undefined && inputs.amount !== "" ? inputs.amount : 10000),
+      gstRate: Number(inputs.gstRate !== undefined && inputs.gstRate !== "" ? inputs.gstRate : 18),
       calculationType: (inputs.gstType as any) || "exclusive",
       supplyType: "intra_state",
     });

@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Receipt,
   DollarSign,
   PieChart as PieIcon,
-  Clock,
   Sparkles,
   Printer,
   Share2,
@@ -14,7 +13,6 @@ import {
   AlertTriangle,
   Info,
   CheckCircle2,
-  Sliders,
   ChevronDown,
   ChevronUp,
   RotateCcw,
@@ -23,13 +21,11 @@ import {
   Search,
   Download,
   FileSpreadsheet,
-  Target,
   Zap,
   ShieldCheck,
-  Percent,
   Globe,
-  Plus,
   Trash2,
+  Copy,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -56,6 +52,17 @@ import {
   VatCountryPreset,
 } from "@/lib/calculator-engine/formulas/vat";
 
+interface SavedVatScenario {
+  id: string;
+  name: string;
+  date: string;
+  vatRate: string;
+  netPrice: string;
+  grossPrice: string;
+  taxAmount: string;
+  currencySymbol: string;
+}
+
 export function VatCalculator() {
   // Tabs: 'solver' | 'supply_chain' | 'rates_table' | 'compare'
   const [activeTab, setActiveTab] = useState<"solver" | "supply_chain" | "rates_table" | "compare">("solver");
@@ -74,16 +81,34 @@ export function VatCalculator() {
   const [wholesalerValueAdd, setWholesalerValueAdd] = useState<number>(15);
   const [retailerValueAdd, setRetailerValueAdd] = useState<number>(20);
 
-  // Modal & Copy State
+  // Scenarios State
+  const [savedScenarios, setSavedScenarios] = useState<SavedVatScenario[]>([]);
+  const [scenarioNameInput, setScenarioNameInput] = useState<string>("");
+  const [showScenarioManager, setShowScenarioManager] = useState<boolean>(false);
+
+  // Modal & Notification State
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [copyNotification, setCopyNotification] = useState(false);
+  const [shareNotification, setShareNotification] = useState(false);
+
+  // Load scenarios from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("saved_vat_scenarios");
+      if (saved) {
+        setSavedScenarios(JSON.parse(saved));
+      }
+    } catch {
+      // Ignore localStorage errors
+    }
+  }, []);
 
   // 1. Solve 4-Way Universal VAT
   const results = useMemo(() => {
-    const rate = vatRateInput !== "" ? Number(vatRateInput) : 0;
-    const net = netPriceInput !== "" ? Number(netPriceInput) : 0;
-    const gross = grossPriceInput !== "" ? Number(grossPriceInput) : 0;
-    const tax = taxAmountInput !== "" ? Number(taxAmountInput) : 0;
+    const rate = vatRateInput !== "" ? Number(vatRateInput) : undefined;
+    const net = netPriceInput !== "" ? Number(netPriceInput) : undefined;
+    const gross = grossPriceInput !== "" ? Number(grossPriceInput) : undefined;
+    const tax = taxAmountInput !== "" ? Number(taxAmountInput) : undefined;
 
     return solveVat({
       vatRate: rate,
@@ -120,30 +145,93 @@ export function VatCalculator() {
   // Clear / Reset Inputs
   const handleReset = () => {
     setVatRateInput("20");
-    setNetPriceInput("100");
+    setNetPriceInput("1200");
     setGrossPriceInput("");
     setTaxAmountInput("");
     setCurrencySymbol("£");
   };
 
+  // Save Scenario
+  const handleSaveScenario = () => {
+    const name = scenarioNameInput.trim() || `VAT ${results.vatRate}% (${fmt(results.netPrice)})`;
+    const newScenario: SavedVatScenario = {
+      id: String(Date.now()),
+      name,
+      date: new Date().toLocaleDateString(),
+      vatRate: vatRateInput,
+      netPrice: netPriceInput,
+      grossPrice: grossPriceInput,
+      taxAmount: taxAmountInput,
+      currencySymbol,
+    };
+    const updated = [newScenario, ...savedScenarios.slice(0, 9)];
+    setSavedScenarios(updated);
+    setScenarioNameInput("");
+    try {
+      localStorage.setItem("saved_vat_scenarios", JSON.stringify(updated));
+    } catch {
+      // Ignore storage errors
+    }
+  };
+
+  // Load Scenario
+  const handleLoadScenario = (sc: SavedVatScenario) => {
+    setVatRateInput(sc.vatRate);
+    setNetPriceInput(sc.netPrice);
+    setGrossPriceInput(sc.grossPrice);
+    setTaxAmountInput(sc.taxAmount);
+    setCurrencySymbol(sc.currencySymbol);
+    setActiveTab("solver");
+  };
+
+  // Delete Scenario
+  const handleDeleteScenario = (id: string) => {
+    const updated = savedScenarios.filter((s) => s.id !== id);
+    setSavedScenarios(updated);
+    try {
+      localStorage.setItem("saved_vat_scenarios", JSON.stringify(updated));
+    } catch {
+      // Ignore storage errors
+    }
+  };
+
+  // Share URL Generator
+  const handleShare = () => {
+    const params = new URLSearchParams();
+    if (vatRateInput) params.set("rate", vatRateInput);
+    if (netPriceInput) params.set("net", netPriceInput);
+    if (grossPriceInput) params.set("gross", grossPriceInput);
+    if (taxAmountInput) params.set("tax", taxAmountInput);
+    if (currencySymbol) params.set("curr", currencySymbol);
+    params.set("tab", activeTab);
+
+    const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+    navigator.clipboard.writeText(shareUrl);
+    setShareNotification(true);
+    setTimeout(() => setShareNotification(false), 2500);
+  };
+
   // Filtered Presets Table
   const filteredPresets = useMemo(() => {
     if (!countrySearch.trim()) return GLOBAL_VAT_PRESETS;
+    const q = countrySearch.toLowerCase();
     return GLOBAL_VAT_PRESETS.filter(
       (p) =>
-        p.country.toLowerCase().includes(countrySearch.toLowerCase()) ||
-        p.code.toLowerCase().includes(countrySearch.toLowerCase())
+        p.country.toLowerCase().includes(q) ||
+        p.code.toLowerCase().includes(q) ||
+        p.taxType.toLowerCase().includes(q)
     );
   }, [countrySearch]);
 
   // Copy Summary
   const copySummary = () => {
-    const text = `Value-Added Tax (VAT) Calculation:
-------------------------------------------------
+    const text = `Value-Added Tax (VAT) Calculation Summary:
+--------------------------------------------------
 VAT Rate: ${results.vatRate}%
 Net Base Price: ${fmt(results.netPrice)}
 VAT Tax Amount: ${fmt(results.taxAmount)}
-Gross Total Price: ${fmt(results.grossPrice)}`;
+Gross Total Price: ${fmt(results.grossPrice)}
+Solved: ${results.solvedField1} & ${results.solvedField2}`;
 
     navigator.clipboard.writeText(text);
     setCopyNotification(true);
@@ -158,9 +246,12 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
       [
         headers.join(","),
         ["VAT Rate (%)", `${results.vatRate}%`].join(","),
-        ["Net Price (Exclusive)", results.netPrice].join(","),
+        ["Net Base Price (Exclusive)", results.netPrice].join(","),
         ["VAT Tax Amount", results.taxAmount].join(","),
-        ["Gross Price (Inclusive)", results.grossPrice].join(","),
+        ["Gross Total Price (Inclusive)", results.grossPrice].join(","),
+        ["Currency", currencySymbol].join(","),
+        ["Solved Parameter 1", results.solvedField1].join(","),
+        ["Solved Parameter 2", results.solvedField2].join(","),
       ].join("\n");
 
     const encodedUri = encodeURI(csvContent);
@@ -179,10 +270,10 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
   ];
 
   // Supply Chain Bar Chart Data
-  const barData = supplyChainResults.stages.map((s) => ({
-    name: s.stageName.split(" ")[1] || s.stageName,
-    taxRemitted: s.netVatRemitted,
-    valueAdded: s.valueAdded,
+  const supplyChainBarData = supplyChainResults.stages.map((s) => ({
+    name: s.stageName.split(". ")[1] || s.stageName,
+    "Value Added": s.valueAdded,
+    "Tax Remitted": s.netVatRemitted,
   }));
 
   // Report Data
@@ -195,8 +286,8 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
       currencySymbol,
     },
     keyMetrics: [
-      { label: "Gross Total Price", value: fmt(results.grossPrice), subtitle: "VAT Inclusive Price", colorTheme: "emerald" },
-      { label: "Net Base Price", value: fmt(results.netPrice), subtitle: "Price Before Tax", colorTheme: "blue" },
+      { label: "Gross Total Price", value: fmt(results.grossPrice), subtitle: "VAT Inclusive Total", colorTheme: "emerald" },
+      { label: "Net Base Price", value: fmt(results.netPrice), subtitle: "Pre-Tax Base Amount", colorTheme: "blue" },
       { label: "VAT Tax Amount", value: fmt(results.taxAmount), subtitle: `Effective Rate: ${results.vatRate}%`, colorTheme: "purple" },
     ],
     sections: [
@@ -217,7 +308,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
   return (
     <div className="space-y-6">
       {/* Top Presets & Currency Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-xs">
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800 gap-1 text-xs">
             <Sparkles className="h-3 w-3" /> Universal 4-Way Solver
@@ -231,7 +322,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                 type="button"
                 onClick={() => setCurrencySymbol(curr)}
                 className={`px-2 py-0.5 rounded font-bold transition-all cursor-pointer ${
-                  currencySymbol === curr ? "bg-blue-600 text-white shadow-sm" : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
+                  currencySymbol === curr ? "bg-blue-600 text-white shadow-xs" : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900"
                 }`}
               >
                 {curr}
@@ -257,11 +348,11 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-zinc-200 dark:border-zinc-800">
+      <div className="flex border-b border-zinc-200 dark:border-zinc-800 overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab("solver")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 whitespace-nowrap cursor-pointer ${
             activeTab === "solver"
               ? "border-blue-600 text-blue-600 dark:text-blue-400"
               : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
@@ -272,7 +363,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
         <button
           type="button"
           onClick={() => setActiveTab("supply_chain")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 whitespace-nowrap cursor-pointer ${
             activeTab === "supply_chain"
               ? "border-blue-600 text-blue-600 dark:text-blue-400"
               : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
@@ -283,7 +374,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
         <button
           type="button"
           onClick={() => setActiveTab("rates_table")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 whitespace-nowrap cursor-pointer ${
             activeTab === "rates_table"
               ? "border-blue-600 text-blue-600 dark:text-blue-400"
               : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
@@ -294,7 +385,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
         <button
           type="button"
           onClick={() => setActiveTab("compare")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 whitespace-nowrap cursor-pointer ${
             activeTab === "compare"
               ? "border-blue-600 text-blue-600 dark:text-blue-400"
               : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
@@ -308,7 +399,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
       {activeTab === "solver" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Input Controls (5 Cols) */}
-          <div className="lg:col-span-5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-4">
+          <div className="lg:col-span-5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-xs space-y-4">
             <div>
               <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400 border-b border-zinc-100 dark:border-zinc-800 pb-2">
                 Provide Any 2 Values (Engine Solves Remaining 2)
@@ -348,7 +439,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                   type="number"
                   min="0"
                   step="10"
-                  placeholder="e.g. 100"
+                  placeholder="e.g. 1200"
                   value={netPriceInput}
                   onChange={(e) => setNetPriceInput(e.target.value)}
                   className="pl-7 text-xs font-sans tabular-nums"
@@ -368,7 +459,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                   type="number"
                   min="0"
                   step="10"
-                  placeholder="e.g. 120"
+                  placeholder="e.g. 1440"
                   value={grossPriceInput}
                   onChange={(e) => setGrossPriceInput(e.target.value)}
                   className="pl-7 text-xs font-sans tabular-nums"
@@ -388,7 +479,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                   type="number"
                   min="0"
                   step="5"
-                  placeholder="e.g. 20"
+                  placeholder="e.g. 240"
                   value={taxAmountInput}
                   onChange={(e) => setTaxAmountInput(e.target.value)}
                   className="pl-7 text-xs font-sans tabular-nums"
@@ -417,18 +508,109 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                 <RotateCcw className="h-3.5 w-3.5 mr-1" /> Clear
               </Button>
             </div>
+
+            {/* Scenario Manager Section */}
+            <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
+              <button
+                type="button"
+                onClick={() => setShowScenarioManager(!showScenarioManager)}
+                className="w-full flex items-center justify-between text-xs font-semibold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 cursor-pointer"
+              >
+                <span className="flex items-center gap-1.5">
+                  <Bookmark className="h-3.5 w-3.5 text-blue-600" />
+                  Saved VAT Scenarios ({savedScenarios.length})
+                </span>
+                {showScenarioManager ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+              </button>
+
+              {showScenarioManager && (
+                <div className="space-y-2 pt-1 text-xs">
+                  <div className="flex gap-1.5">
+                    <Input
+                      type="text"
+                      placeholder="Scenario label..."
+                      value={scenarioNameInput}
+                      onChange={(e) => setScenarioNameInput(e.target.value)}
+                      className="text-xs h-7"
+                    />
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={handleSaveScenario}
+                      className="h-7 text-xs bg-blue-600 text-white font-semibold cursor-pointer shrink-0"
+                    >
+                      Save
+                    </Button>
+                  </div>
+
+                  {savedScenarios.length > 0 ? (
+                    <div className="space-y-1.5 max-h-36 overflow-y-auto">
+                      {savedScenarios.map((sc) => (
+                        <div
+                          key={sc.id}
+                          className="flex items-center justify-between p-1.5 bg-zinc-50 dark:bg-zinc-800/60 rounded border border-zinc-200 dark:border-zinc-700 text-[11px]"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => handleLoadScenario(sc)}
+                            className="text-left font-medium text-blue-600 hover:underline truncate mr-2 cursor-pointer"
+                          >
+                            {sc.name} ({sc.date})
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteScenario(sc.id)}
+                            className="text-zinc-400 hover:text-red-500 p-0.5 cursor-pointer"
+                            title="Delete scenario"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-[11px] text-zinc-400">No saved scenarios yet.</p>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Right Results Dashboard (7 Cols) */}
           <div id="vat-results-dashboard" className="lg:col-span-7 space-y-4">
             {/* Primary Highlight Card */}
             <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 rounded-2xl p-6 shadow-md text-white relative overflow-hidden">
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                 <span className="text-xs uppercase tracking-wider font-bold text-white/80">
                   GROSS TOTAL PRICE (VAT INCLUSIVE)
                 </span>
-                <div className="flex gap-2">
-                  
+                <div className="flex items-center gap-1.5">
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={copySummary}
+                    className="h-7 text-xs bg-white/10 hover:bg-white/20 text-white font-medium cursor-pointer"
+                  >
+                    <Copy className="h-3 w-3 mr-1" />
+                    {copyNotification ? "Copied!" : "Copy"}
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleShare}
+                    className="h-7 text-xs bg-white/10 hover:bg-white/20 text-white font-medium cursor-pointer"
+                  >
+                    <Share2 className="h-3 w-3 mr-1" />
+                    {shareNotification ? "Link Copied!" : "Share"}
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={exportCSV}
+                    className="h-7 text-xs bg-white/10 hover:bg-white/20 text-white font-medium cursor-pointer"
+                  >
+                    <FileSpreadsheet className="h-3 w-3 mr-1" /> CSV
+                  </Button>
                   <Button
                     type="button"
                     size="sm"
@@ -466,7 +648,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
             </div>
 
             {/* Donut Chart Visualization */}
-            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm space-y-3">
+            <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-xs space-y-3">
               <h4 className="text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center justify-between">
                 <span>Net Price vs. VAT Tax Share</span>
                 <span className="text-[10px] text-zinc-400">Recharts Visualization</span>
@@ -481,6 +663,7 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                       ))}
                     </Pie>
                     <Tooltip formatter={(v: any) => [`${currencySymbol}${Number(v).toLocaleString()}`, "Amount"]} />
+                    <Legend />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -491,10 +674,11 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
 
       {/* TAB 2: MULTI-STAGE SUPPLY CHAIN VAT MAP */}
       {activeTab === "supply_chain" && (
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-xs space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Multi-Stage Production Supply Chain Map
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                Multi-Stage Production Supply Chain Map
               </h3>
               <p className="text-xs text-zinc-500">
                 Visualize how VAT is collected incrementally at each production stage (Farmer &rarr; Roaster &rarr; Wholesaler &rarr; Cafe).
@@ -550,15 +734,35 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
             </table>
           </div>
 
-          {/* Supply Chain Summary & Bar Chart */}
-          <div className="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-200 dark:border-zinc-700 flex flex-wrap justify-between items-center gap-4 text-xs font-sans tabular-nums">
-            <div>
-              <span className="text-zinc-500 block text-[10px] uppercase font-semibold">Total Value Added</span>
-              <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">{fmt(supplyChainResults.totalValueAdded)}</span>
+          {/* Supply Chain Chart & Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            <div className="h-56 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={supplyChainBarData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                  <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 10 }} />
+                  <Tooltip formatter={(v: any) => [`${currencySymbol}${Number(v).toFixed(2)}`, ""]} />
+                  <Legend wrapperStyle={{ fontSize: 11 }} />
+                  <Bar dataKey="Value Added" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="Tax Remitted" fill="#10b981" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
-            <div className="bg-blue-600 text-white px-4 py-2 rounded-lg text-right">
-              <span className="text-blue-100 block text-[10px] uppercase font-semibold">Total Tax Remitted to Govt</span>
-              <span className="text-base font-extrabold">{fmt(supplyChainResults.totalVatCollectedByGovt)}</span>
+
+            <div className="bg-zinc-50 dark:bg-zinc-800/50 p-5 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-4 font-sans tabular-nums text-xs">
+              <div className="flex justify-between items-center pb-2 border-b border-zinc-200 dark:border-zinc-700">
+                <span className="text-zinc-500 font-semibold uppercase text-[10px]">Total Value Added</span>
+                <span className="text-base font-bold text-zinc-900 dark:text-zinc-100">{fmt(supplyChainResults.totalValueAdded)}</span>
+              </div>
+              <div className="flex justify-between items-center pb-2 border-b border-zinc-200 dark:border-zinc-700">
+                <span className="text-zinc-500 font-semibold uppercase text-[10px]">Final Consumer Price</span>
+                <span className="text-base font-bold text-blue-600">{fmt(supplyChainResults.stages[3]?.saleNetPrice || 0)}</span>
+              </div>
+              <div className="bg-blue-600 text-white p-3.5 rounded-lg flex justify-between items-center">
+                <span className="text-blue-100 font-semibold uppercase text-[11px]">Total Tax Remitted to Govt</span>
+                <span className="text-lg font-extrabold">{fmt(supplyChainResults.totalVatCollectedByGovt)}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -566,16 +770,22 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
 
       {/* TAB 3: GLOBAL COUNTRY RATE TABLE */}
       {activeTab === "rates_table" && (
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-xs space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Searchable Global VAT / GST Rate Directory
-            </h3>
+            <div>
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                Searchable Global VAT / GST Rate Directory
+              </h3>
+              <p className="text-xs text-zinc-500">
+                Browse verified statutory tax rates and classification notes across major international jurisdictions.
+              </p>
+            </div>
 
             <div className="relative">
               <Search className="h-3.5 w-3.5 absolute left-2.5 top-2.5 text-zinc-400" />
               <input
                 type="text"
-                placeholder="Search country..."
+                placeholder="Search country or type..."
                 value={countrySearch}
                 onChange={(e) => setCountrySearch(e.target.value)}
                 className="pl-8 pr-3 py-1 text-xs bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
@@ -589,9 +799,10 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                 <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-semibold">
                   <th className="p-2.5">Country</th>
                   <th className="p-2.5">Code</th>
+                  <th className="p-2.5">Tax Type</th>
                   <th className="p-2.5">Standard Rate %</th>
                   <th className="p-2.5">Reduced Rate %</th>
-                  <th className="p-2.5">Currency</th>
+                  <th className="p-2.5">Notes</th>
                   <th className="p-2.5 text-right">Apply Preset</th>
                 </tr>
               </thead>
@@ -602,9 +813,14 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                       <span>{preset.flag}</span> <span>{preset.country}</span>
                     </td>
                     <td className="p-2.5 font-sans tabular-nums text-zinc-500">{preset.code}</td>
+                    <td className="p-2.5">
+                      <Badge variant="outline" className="text-[10px] bg-slate-50 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-300">
+                        {preset.taxType}
+                      </Badge>
+                    </td>
                     <td className="p-2.5 font-sans tabular-nums font-bold text-blue-600">{preset.standardRate}%</td>
                     <td className="p-2.5 font-sans tabular-nums text-zinc-500">{preset.reducedRate ? `${preset.reducedRate}%` : "—"}</td>
-                    <td className="p-2.5 font-sans tabular-nums">{preset.currencySymbol}</td>
+                    <td className="p-2.5 text-zinc-500 max-w-xs truncate" title={preset.notes}>{preset.notes || "—"}</td>
                     <td className="p-2.5 text-right">
                       <Button
                         type="button"
@@ -629,10 +845,11 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
 
       {/* TAB 4: VAT vs. SALES TAX COMPARISON TOOL */}
       {activeTab === "compare" && (
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-xs space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Interactive VAT vs. Sales Tax Side-by-Side Comparison
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                Interactive VAT vs. Sales Tax Side-by-Side Comparison
               </h3>
               <p className="text-xs text-zinc-500">
                 Compare multi-stage Value-Added Tax (with Input Tax Credit) against single-stage Retail Sales Tax across supply chain tiers.
@@ -648,56 +865,47 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                 <span className="font-bold text-sm text-blue-900 dark:text-blue-200">Value-Added Tax (VAT)</span>
                 <Badge className="bg-blue-600 text-white text-[10px]">Multi-Stage</Badge>
               </div>
-              <ul className="text-xs space-y-2 text-slate-800 dark:text-slate-200 font-semibold">
-                <li className="flex items-start gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-blue-600 shrink-0 mt-0.5" />
-                  <span><strong>Collected incrementally:</strong> Tax paid at every production &amp; distribution stage.</span>
+              <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+                  <span><strong>Collected Incrementally:</strong> Tax paid at every production and distribution stage.</span>
                 </li>
-                <li className="flex items-start gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-blue-600 shrink-0 mt-0.5" />
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
                   <span><strong>Input Tax Credit (ITC):</strong> Businesses deduct tax paid on purchases, preventing double taxation.</span>
                 </li>
-                <li className="flex items-start gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-blue-600 shrink-0 mt-0.5" />
-                  <span><strong>Global Adoption:</strong> Used in over 160 countries including UK, EU, Australia, Japan, UAE.</span>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+                  <span><strong>Global Standard:</strong> Used in over 160 countries including the UK, EU, Australia, and Japan.</span>
                 </li>
               </ul>
-              <div className="pt-3 border-t border-blue-200/60 dark:border-blue-800/60 flex justify-between items-center text-xs font-sans tabular-nums">
-                <span className="text-zinc-500">Effective Tax Burden on Consumer</span>
-                <span className="font-bold text-blue-700 dark:text-blue-300 text-sm">{results.vatRate}%</span>
-              </div>
             </div>
 
             {/* Sales Tax Card */}
             <div className="bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-xl p-5 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-sm text-amber-900 dark:text-amber-200">Retail Sales Tax</span>
+                <span className="font-bold text-sm text-amber-900 dark:text-amber-200">Retail Sales Tax (RST)</span>
                 <Badge className="bg-amber-600 text-white text-[10px]">Single-Stage</Badge>
               </div>
-              <ul className="text-xs space-y-2 text-slate-800 dark:text-slate-200 font-semibold">
-                <li className="flex items-start gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-amber-600 shrink-0 mt-0.5" />
+              <ul className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
                   <span><strong>Collected at Retail:</strong> Tax is charged only at the final point of purchase by end consumers.</span>
                 </li>
-                <li className="flex items-start gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-amber-600 shrink-0 mt-0.5" />
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
                   <span><strong>Resale Certificates:</strong> B2B purchases are tax-exempt using reseller exemption certificates.</span>
                 </li>
-                <li className="flex items-start gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-amber-600 shrink-0 mt-0.5" />
-                  <span><strong>Primary Adoption:</strong> Standard system used across United States (state/city level).</span>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+                  <span><strong>Primary US System:</strong> Standard system used across United States (state and municipal levels).</span>
                 </li>
               </ul>
-              <div className="pt-3 border-t border-amber-200/60 dark:border-amber-800/60 flex justify-between items-center text-xs font-sans tabular-nums">
-                <span className="text-zinc-500">Typical US Sales Tax Range</span>
-                <span className="font-bold text-amber-700 dark:text-amber-300 text-sm">4.00% &ndash; 9.50%</span>
-              </div>
             </div>
           </div>
 
-          {/* Key Feature Differences Matrix */}
+          {/* Comparison Matrix */}
           <div className="overflow-x-auto">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-3">Feature Comparison Matrix</h4>
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-semibold">
@@ -707,24 +915,24 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-[11px]">
-                <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
+                <tr>
                   <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">Point of Collection</td>
-                  <td className="p-2.5 text-blue-600 font-semibold">All stages (Raw material &rarr; Retail)</td>
-                  <td className="p-2.5 text-amber-600 font-semibold">Final retail sale to end consumer only</td>
+                  <td className="p-2.5 text-blue-600 font-medium">All stages (Raw material &rarr; Retail)</td>
+                  <td className="p-2.5 text-amber-600 font-medium">Final retail sale to end consumer only</td>
                 </tr>
-                <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
+                <tr>
                   <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">Input Tax Offset Mechanism</td>
-                  <td className="p-2.5 text-emerald-600 font-semibold">Yes (Input Tax Credit / Reclaim)</td>
-                  <td className="p-2.5 text-zinc-400">No (Uses Resale Exemption Certificate)</td>
+                  <td className="p-2.5 text-emerald-600 font-medium">Yes (Input Tax Credit / Reclaim)</td>
+                  <td className="p-2.5 text-zinc-500">No (Uses Resale Exemption Certificate)</td>
                 </tr>
-                <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
+                <tr>
                   <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">Double Taxation Risk</td>
-                  <td className="p-2.5 text-emerald-600 font-semibold">None (Prevented by ITC offset)</td>
-                  <td className="p-2.5 text-amber-600 font-semibold">High if exemption certificate missing</td>
+                  <td className="p-2.5 text-emerald-600 font-medium">None (Prevented by ITC offset)</td>
+                  <td className="p-2.5 text-amber-600">High if exemption certificate is missing</td>
                 </tr>
-                <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
+                <tr>
                   <td className="p-2.5 font-bold text-zinc-800 dark:text-zinc-200">Audit &amp; Compliance Trail</td>
-                  <td className="p-2.5 text-blue-600 font-semibold">Self-enforcing cross-matching invoices</td>
+                  <td className="p-2.5 text-blue-600 font-medium">Self-enforcing cross-matching invoices</td>
                   <td className="p-2.5 text-zinc-500">Relies on retail store reporting</td>
                 </tr>
               </tbody>
@@ -733,10 +941,14 @@ Gross Total Price: ${fmt(results.grossPrice)}`;
         </div>
       )}
 
-      {/* PDF REPORT MODAL */}
-      <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
-
-      {/* Educational Content & 20 FAQs */}
+      {/* Dynamic PDF Report Modal */}
+      <ReportModal
+        isOpen={isReportOpen}
+        onClose={() => setIsReportOpen(false)}
+        reportData={reportData}
+      />
     </div>
   );
 }
+
+export default VatCalculator;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Receipt,
   DollarSign,
@@ -30,6 +30,8 @@ import {
   Plus,
   Trash2,
   Building,
+  Copy,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,6 +60,22 @@ import {
   GstInvoiceItem,
 } from "@/lib/calculator-engine/formulas/gst";
 
+interface SavedGstScenario {
+  id: string;
+  name: string;
+  date: string;
+  activeTab: "single" | "multi" | "supply" | "composition";
+  amount: number;
+  gstRate: number;
+  calculationType: GstCalculationType;
+  supplyType: SupplyType;
+  cessRate: number;
+  invoiceItems: GstInvoiceItem[];
+  annualTurnover: number;
+  businessType: "trader" | "manufacturer" | "restaurant" | "service";
+  totalPurchases: number;
+}
+
 export function GstCalculator() {
   // Tabs: 'single' | 'multi' | 'supply' | 'composition'
   const [activeTab, setActiveTab] = useState<"single" | "multi" | "supply" | "composition">("single");
@@ -73,7 +91,7 @@ export function GstCalculator() {
   const [invoiceItems, setInvoiceItems] = useState<GstInvoiceItem[]>([
     { id: "1", name: "IT Services / Consulting", quantity: 1, unitPrice: 25000, gstRate: 18, cessRate: 0 },
     { id: "2", name: "Office Hardware / PC", quantity: 2, unitPrice: 15000, gstRate: 12, cessRate: 0 },
-    { id: "3", name: "Executive Leather Goods", quantity: 1, unitPrice: 5000, gstRate: 28, cessRate: 12 },
+    { id: "3", name: "Executive Leather Goods", quantity: 1, unitPrice: 5000, gstRate: 28, cessRate: 0 },
   ]);
 
   // Composition Scheme State
@@ -81,19 +99,35 @@ export function GstCalculator() {
   const [businessType, setBusinessType] = useState<"trader" | "manufacturer" | "restaurant" | "service">("trader");
   const [totalPurchases, setTotalPurchases] = useState<number>(3000000); // ₹30 Lakhs
 
-  // Modal & Copy State
+  // Modal, Copy & Saved Scenarios State
   const [isReportOpen, setIsReportOpen] = useState(false);
-  const [copyNotification, setCopyNotification] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
+  const [savedScenarios, setSavedScenarios] = useState<SavedGstScenario[]>([]);
+  const [scenarioName, setScenarioName] = useState("");
 
-  // Quick Preset GST Slabs
+  // Load scenarios from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("saved_gst_scenarios");
+      if (saved) {
+        setSavedScenarios(JSON.parse(saved));
+      }
+    } catch {
+      // Ignore localStorage errors
+    }
+  }, []);
+
+  // Quick Preset GST Slabs (Legally defensible current 2026 formulations)
   const presetRates = [
-    { label: "0% (NIL)", value: 0 },
-    { label: "0.25% (Diamonds)", value: 0.25 },
-    { label: "3% (Gold)", value: 3 },
-    { label: "5% (Basic)", value: 5 },
-    { label: "12% (Electronics)", value: 12 },
-    { label: "18% (Standard)", value: 18 },
-    { label: "28% (Luxury)", value: 28 },
+    { label: "0% (Nil / Exempted)", value: 0 },
+    { label: "0.25% (Concessional)", value: 0.25 },
+    { label: "3% (Precious Metals)", value: 3 },
+    { label: "5% (Common Rate)", value: 5 },
+    { label: "12% (Specified)", value: 12 },
+    { label: "18% (General / Standard)", value: 18 },
+    { label: "28% (Specified Luxury / Demerit)", value: 28 },
+    { label: "40% (Special Rate)", value: 40 },
   ];
 
   // 1. Single Item Calculation
@@ -162,29 +196,127 @@ export function GstCalculator() {
     );
   };
 
-  // Reset Single Item Inputs
+  // Reset Single Item Inputs to Default
   const handleReset = () => {
     setAmountInput(10000);
     setGstRate(18);
     setCalculationType("exclusive");
     setSupplyType("intra_state");
     setCessRate(0);
+    setAnnualTurnover(5000000);
+    setBusinessType("trader");
+    setTotalPurchases(3000000);
+    setInvoiceItems([
+      { id: "1", name: "IT Services / Consulting", quantity: 1, unitPrice: 25000, gstRate: 18, cessRate: 0 },
+      { id: "2", name: "Office Hardware / PC", quantity: 2, unitPrice: 15000, gstRate: 12, cessRate: 0 },
+      { id: "3", name: "Executive Leather Goods", quantity: 1, unitPrice: 5000, gstRate: 28, cessRate: 0 },
+    ]);
+  };
+
+  // Save Scenario
+  const handleSaveScenario = () => {
+    const name = scenarioName.trim() || `GST Scenario ${savedScenarios.length + 1}`;
+    const newScenario: SavedGstScenario = {
+      id: String(Date.now()),
+      name,
+      date: new Date().toLocaleDateString(),
+      activeTab,
+      amount: amountInput,
+      gstRate,
+      calculationType,
+      supplyType,
+      cessRate,
+      invoiceItems,
+      annualTurnover,
+      businessType,
+      totalPurchases,
+    };
+
+    const updated = [newScenario, ...savedScenarios.slice(0, 4)];
+    setSavedScenarios(updated);
+    setScenarioName("");
+    try {
+      localStorage.setItem("saved_gst_scenarios", JSON.stringify(updated));
+    } catch {
+      // Ignore
+    }
+  };
+
+  // Restore Scenario
+  const handleRestoreScenario = (sc: SavedGstScenario) => {
+    setActiveTab(sc.activeTab);
+    setAmountInput(sc.amount);
+    setGstRate(sc.gstRate);
+    setCalculationType(sc.calculationType);
+    setSupplyType(sc.supplyType);
+    setCessRate(sc.cessRate || 0);
+    if (sc.invoiceItems) setInvoiceItems(sc.invoiceItems);
+    if (sc.annualTurnover) setAnnualTurnover(sc.annualTurnover);
+    if (sc.businessType) setBusinessType(sc.businessType);
+    if (sc.totalPurchases) setTotalPurchases(sc.totalPurchases);
+  };
+
+  // Delete Scenario
+  const handleDeleteScenario = (id: string) => {
+    const updated = savedScenarios.filter((s) => s.id !== id);
+    setSavedScenarios(updated);
+    try {
+      localStorage.setItem("saved_gst_scenarios", JSON.stringify(updated));
+    } catch {
+      // Ignore
+    }
   };
 
   // Copy Summary
   const copySummary = () => {
-    const text = `GST Tax Breakdown:
+    let text = "";
+    if (activeTab === "single" || activeTab === "supply") {
+      text = `Indian GST Tax Summary:
 ------------------------------------------------
-GST Calculation Mode: ${calculationType.toUpperCase()}
-Supply Location: ${supplyType === "intra_state" ? "Intra-State (CGST + SGST)" : "Inter-State (IGST)"}
-Net Base Amount: ${fmt(singleResults.netAmount)}
-GST Tax Amount (${singleResults.effectiveGstRate}%): ${fmt(singleResults.gstAmount)}
-${supplyType === "intra_state" ? `CGST (50%): ${fmt(singleResults.cgstAmount)}\nSGST (50%): ${fmt(singleResults.sgstAmount)}` : `IGST (100%): ${fmt(singleResults.igstAmount)}`}
+Mode: ${calculationType.toUpperCase()}
+Supply: ${supplyType === "intra_state" ? "Intra-State (CGST + SGST)" : "Inter-State (IGST)"}
+Net Taxable Base: ${fmt(singleResults.netAmount)}
+GST Rate: ${singleResults.effectiveGstRate}%
+GST Amount: ${fmt(singleResults.gstAmount)}
+${supplyType === "intra_state" ? `CGST (${singleResults.cgstRate}%): ${fmt(singleResults.cgstAmount)}\nSGST (${singleResults.sgstRate}%): ${fmt(singleResults.sgstAmount)}` : `IGST (${singleResults.igstRate}%): ${fmt(singleResults.igstAmount)}`}
 ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%): ${fmt(singleResults.cessAmount)}\n` : ""}Final Invoice Total: ${fmt(singleResults.grandTotalWithCess)}`;
+    } else if (activeTab === "multi") {
+      text = `Multi-Item GST Invoice Summary:
+------------------------------------------------
+Items: ${multiInvoiceResults.items.length}
+Subtotal Net Base: ${fmt(multiInvoiceResults.totalNetBase)}
+Total GST: ${fmt(multiInvoiceResults.totalGst)}
+CGST (50%): ${fmt(multiInvoiceResults.totalCgst)}
+SGST (50%): ${fmt(multiInvoiceResults.totalSgst)}
+Grand Total: ${fmt(multiInvoiceResults.grandTotal)}`;
+    } else {
+      text = `GST Composition Scheme Illustrative Analysis:
+------------------------------------------------
+Annual Turnover: ${fmt(compositionResults.annualTurnover)}
+Category: ${businessType.toUpperCase()} (${compositionResults.compositionTaxRate}%)
+Composition Flat Tax: ${fmt(compositionResults.compositionTaxPayable)}
+Regular Net GST (Output - ITC): ${fmt(compositionResults.regularNetGstPayable)}
+Estimated Tax Difference: ${fmt(compositionResults.taxSavingsUnderComposition)}
+Recommendation: ${compositionResults.recommendedScheme.toUpperCase()} SCHEME (Subject to statutory eligibility conditions)`;
+    }
 
     navigator.clipboard.writeText(text);
-    setCopyNotification(true);
-    setTimeout(() => setCopyNotification(false), 2500);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Share URL
+  const handleShare = () => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("amount", String(amountInput));
+    url.searchParams.set("rate", String(gstRate));
+    url.searchParams.set("type", calculationType);
+    url.searchParams.set("supply", supplyType);
+    url.searchParams.set("tab", activeTab);
+    navigator.clipboard.writeText(url.toString());
+    setShareCopied(true);
+    setTimeout(() => setShareCopied(false), 2000);
   };
 
   // Export Invoice CSV
@@ -227,29 +359,31 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
   // Report Data
   const reportData: CalculatorReportData = {
     meta: {
-      calculatorName: "GST Tax Calculator",
-      reportTitle: "Goods & Services Tax (GST) Invoice Analysis",
+      calculatorName: "GST Calculator (India)",
+      reportTitle: "Goods & Services Tax (GST) Calculation & Invoice Report",
       generatedDate: new Date().toLocaleDateString(),
       generatedTime: new Date().toLocaleTimeString(),
       currencySymbol: "₹",
     },
     keyMetrics: [
-      { label: "Final Invoice Amount", value: fmt(singleResults.grandTotalWithCess), subtitle: "Tax Inclusive Total", colorTheme: "emerald" },
+      { label: "Final Invoice Total", value: fmt(singleResults.grandTotalWithCess), subtitle: "Tax Inclusive Gross", colorTheme: "emerald" },
       { label: "Net Taxable Base", value: fmt(singleResults.netAmount), subtitle: "Base Price Before Tax", colorTheme: "blue" },
-      { label: "Total GST Amount", value: fmt(singleResults.gstAmount), subtitle: `Effective GST Rate: ${singleResults.effectiveGstRate}%`, colorTheme: "purple" },
+      { label: "Total GST Tax", value: fmt(singleResults.gstAmount), subtitle: `Effective GST Rate: ${singleResults.effectiveGstRate}%`, colorTheme: "purple" },
     ],
     sections: [
       {
-        title: "GST Tax Breakdown & Supply Details",
+        title: "Tax Head Apportionment & Supply Type",
         items: [
           { label: "Calculation Mode", value: calculationType.toUpperCase() },
           { label: "Supply Type", value: supplyType === "intra_state" ? "Intra-State (CGST + SGST)" : "Inter-State (IGST)" },
-          { label: "Net Base Amount", value: fmt(singleResults.netAmount), highlight: true },
+          { label: "Net Taxable Base", value: fmt(singleResults.netAmount), highlight: true },
           { label: "GST Rate Applied", value: `${singleResults.effectiveGstRate}%` },
           { label: "CGST (Central Tax)", value: fmt(singleResults.cgstAmount) },
           { label: "SGST (State Tax)", value: fmt(singleResults.sgstAmount) },
           { label: "IGST (Integrated Tax)", value: fmt(singleResults.igstAmount) },
-          { label: "Grand Total Invoice Value", value: fmt(singleResults.grandTotalWithCess), highlight: true },
+          { label: "Compensation Cess", value: fmt(singleResults.cessAmount) },
+          { label: "Final Total Value", value: fmt(singleResults.grandTotalWithCess), highlight: true },
+          { label: "Disclaimer", value: "Illustrative calculation. Official taxability and HSN/SAC rate classification depend on CBIC statutory notifications." },
         ],
       },
     ],
@@ -286,11 +420,11 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-zinc-200 dark:border-zinc-800">
+      <div className="flex border-b border-zinc-200 dark:border-zinc-800 overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab("single")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 whitespace-nowrap cursor-pointer ${
             activeTab === "single"
               ? "border-blue-600 text-blue-600 dark:text-blue-400"
               : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
@@ -301,7 +435,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
         <button
           type="button"
           onClick={() => setActiveTab("multi")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 whitespace-nowrap cursor-pointer ${
             activeTab === "multi"
               ? "border-blue-600 text-blue-600 dark:text-blue-400"
               : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
@@ -312,18 +446,18 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
         <button
           type="button"
           onClick={() => setActiveTab("supply")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 whitespace-nowrap cursor-pointer ${
             activeTab === "supply"
               ? "border-blue-600 text-blue-600 dark:text-blue-400"
               : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
           }`}
         >
-          <BarChart3 className="h-4 w-4 text-purple-500" /> CGST, SGST & IGST Split
+          <BarChart3 className="h-4 w-4 text-purple-500" /> CGST, SGST &amp; IGST Split
         </button>
         <button
           type="button"
           onClick={() => setActiveTab("composition")}
-          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 cursor-pointer ${
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold transition-all border-b-2 whitespace-nowrap cursor-pointer ${
             activeTab === "composition"
               ? "border-blue-600 text-blue-600 dark:text-blue-400"
               : "border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
@@ -416,7 +550,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
               <input
                 type="range"
                 min="0"
-                max="28"
+                max="40"
                 step="0.25"
                 value={gstRate}
                 onChange={(e) => setGstRate(Number(e.target.value))}
@@ -448,7 +582,9 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
 
             {/* Compensation Cess */}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Compensation Cess Rate (%)</label>
+              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                Applicable Compensation Cess Rate (%)
+              </label>
               <Input
                 type="number"
                 min="0"
@@ -457,8 +593,11 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                 value={cessRate}
                 onChange={(e) => setCessRate(Math.max(0, Number(e.target.value)))}
                 className="text-xs font-sans tabular-nums"
-                placeholder="0% (For sin/luxury goods)"
+                placeholder="0% (Applicable on specified luxury/sin goods)"
               />
+              <p className="text-[10px] text-zinc-400">
+                Cess applies only to specified goods (such as motor vehicles, aerated beverages, tobacco) and is not a universal charge.
+              </p>
             </div>
 
             {/* Action Buttons */}
@@ -493,7 +632,24 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                   FINAL INVOICE TOTAL (TAX INCLUSIVE)
                 </span>
                 <div className="flex gap-2">
-                  
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={copySummary}
+                    className="h-7 text-xs bg-white/10 hover:bg-white/20 text-white font-semibold cursor-pointer border border-white/20"
+                  >
+                    {copied ? <Check className="h-3 w-3 mr-1 text-emerald-400" /> : <Copy className="h-3 w-3 mr-1" />}
+                    {copied ? "Copied" : "Copy"}
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleShare}
+                    className="h-7 text-xs bg-white/10 hover:bg-white/20 text-white font-semibold cursor-pointer border border-white/20"
+                  >
+                    {shareCopied ? <Check className="h-3 w-3 mr-1 text-emerald-400" /> : <Share2 className="h-3 w-3 mr-1" />}
+                    {shareCopied ? "Link Copied" : "Share"}
+                  </Button>
                   <Button
                     type="button"
                     size="sm"
@@ -591,19 +747,26 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">Multi-Item Tax Invoice Builder
+              <h3 className="text-base font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                Multi-Item Tax Invoice Builder
               </h3>
               <p className="text-xs text-zinc-500">
-                Add multiple items with mixed GST rates (5%, 12%, 18%, 28%) and generate a B2B/B2C itemized tax invoice.
+                Add multiple items with mixed GST rates (5%, 12%, 18%, 28%, 40%) and generate an illustrative itemized invoice.
               </p>
             </div>
-
-            
+            <div className="flex gap-2">
+              <Button type="button" size="sm" onClick={addInvoiceItem} className="text-xs bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
+                <Plus className="h-3.5 w-3.5 mr-1" /> Add Line Item
+              </Button>
+              <Button type="button" size="sm" variant="outline" onClick={exportInvoiceCSV} className="text-xs cursor-pointer">
+                <Download className="h-3.5 w-3.5 mr-1" /> Export CSV
+              </Button>
+            </div>
           </div>
 
           {/* Line Items Table Inputs */}
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
+            <table className="w-full text-left text-xs border-collapse min-w-[600px]">
               <thead>
                 <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-semibold">
                   <th className="p-2.5">Item Description</th>
@@ -658,6 +821,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                         <option value="12">12%</option>
                         <option value="18">18%</option>
                         <option value="28">28%</option>
+                        <option value="40">40%</option>
                       </select>
                     </td>
                     <td className="p-2 font-bold text-zinc-900 dark:text-zinc-100">{fmt(item.netTotal)}</td>
@@ -714,7 +878,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                 Inter-State vs. Intra-State Supply Tax Split
               </h3>
               <p className="text-xs text-zinc-500">
-                Compare CGST + SGST intra-state split vs. IGST inter-state single tax collection.
+                Mathematical demonstration of CGST + SGST intra-state split versus IGST inter-state single tax levy.
               </p>
             </div>
           </div>
@@ -777,7 +941,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                 Composition Scheme vs. Regular GST Scheme Comparison
               </h3>
               <p className="text-xs text-zinc-500">
-                Determine whether your small business saves more under the flat Composition Scheme or Regular Scheme with Input Tax Credit (ITC).
+                Illustrative planning comparison based on selected assumptions (Section 10 of CGST Act).
               </p>
             </div>
           </div>
@@ -795,6 +959,9 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                   onChange={(e) => setAnnualTurnover(Math.max(0, Number(e.target.value)))}
                   className="font-sans tabular-nums text-xs"
                 />
+                <p className="text-[10px] text-zinc-400">
+                  Statutory threshold: Up to ₹1.5 Crore for goods (₹75 Lakhs for Special Category States) / ₹50 Lakhs for services under Sec 10(2A).
+                </p>
               </div>
 
               <div className="space-y-1">
@@ -804,10 +971,10 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
                   onChange={(e) => setBusinessType(e.target.value as any)}
                   className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-md p-2.5 font-medium cursor-pointer"
                 >
-                  <option value="trader">Trader / Retailer (1% Tax)</option>
-                  <option value="manufacturer">Manufacturer (1% Tax)</option>
+                  <option value="trader">Trader / Retailer (1% Tax on Taxable Turnover)</option>
+                  <option value="manufacturer">Manufacturer (1% Tax on Turnover)</option>
                   <option value="restaurant">Restaurant (Non-Alcohol 5% Tax)</option>
-                  <option value="service">Service Provider (6% Tax)</option>
+                  <option value="service">Service Provider (6% Tax under Section 10(2A))</option>
                 </select>
               </div>
 
@@ -827,7 +994,7 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
             {/* Results Comparison Card */}
             <div className="bg-zinc-50 dark:bg-zinc-800/50 p-5 rounded-xl border border-zinc-200 dark:border-zinc-700 space-y-4">
               <Badge className="bg-amber-600 text-white text-xs">
-                Recommended: {compositionResults.recommendedScheme.toUpperCase()} SCHEME
+                Modeled Recommendation: {compositionResults.recommendedScheme.toUpperCase()} SCHEME
               </Badge>
 
               <div className="space-y-2 font-sans tabular-nums text-xs border-b pb-3">
@@ -842,18 +1009,72 @@ ${singleResults.cessAmount > 0 ? `Compensation Cess (${singleResults.cessRate}%)
               </div>
 
               <div className="text-sm font-bold text-zinc-900 dark:text-zinc-100 flex justify-between">
-                <span>Tax Savings Under Composition:</span>
+                <span>Estimated Tax Difference:</span>
                 <span className="text-emerald-600 font-sans tabular-nums">{fmt(compositionResults.taxSavingsUnderComposition)}</span>
+              </div>
+
+              <div className="text-[11px] text-zinc-500 bg-amber-50/50 dark:bg-amber-950/20 p-2.5 rounded-lg border border-amber-200 dark:border-amber-900/30 space-y-1">
+                <div className="font-semibold text-amber-800 dark:text-amber-300">Statutory Notice:</div>
+                <p>
+                  Composition taxpayers cannot collect GST from buyers, cannot issue tax invoices (only Bill of Supply), cannot claim Input Tax Credit, and cannot make inter-state outward supplies.
+                </p>
               </div>
             </div>
           </div>
         </div>
       )}
 
+      {/* Scenario Manager */}
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-sm text-xs space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider flex items-center gap-1.5 text-[11px]">
+            <Bookmark className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+            Saved GST Scenarios
+          </span>
+          <div className="flex gap-2">
+            <Input
+              type="text"
+              placeholder="Scenario Name..."
+              value={scenarioName}
+              onChange={(e) => setScenarioName(e.target.value)}
+              className="h-7 text-xs w-36 sm:w-48"
+            />
+            <Button type="button" size="sm" onClick={handleSaveScenario} className="h-7 text-xs bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
+              Save
+            </Button>
+          </div>
+        </div>
+
+        {savedScenarios.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-1">
+            {savedScenarios.map((sc) => (
+              <div key={sc.id} className="p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/40 flex items-center justify-between">
+                <div className="space-y-0.5 truncate pr-2">
+                  <div className="font-semibold text-zinc-900 dark:text-zinc-100 truncate">{sc.name}</div>
+                  <div className="text-[10px] text-zinc-500 font-sans tabular-nums">
+                    {fmt(sc.amount)} @ {sc.gstRate}% ({sc.calculationType})
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 shrink-0">
+                  <Button type="button" size="sm" variant="ghost" onClick={() => handleRestoreScenario(sc)} className="h-6 px-2 text-[11px] text-blue-600 hover:text-blue-700">
+                    Load
+                  </Button>
+                  <button type="button" onClick={() => handleDeleteScenario(sc.id)} className="text-zinc-400 hover:text-rose-600 p-1">
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-zinc-400 text-[11px] italic">No saved scenarios yet. Enter values above and click Save.</div>
+        )}
+      </div>
+
       {/* PDF REPORT MODAL */}
       <ReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} reportData={reportData} />
-
-      {/* Educational Content & 20 FAQs */}
     </div>
   );
 }
+
+export default GstCalculator;

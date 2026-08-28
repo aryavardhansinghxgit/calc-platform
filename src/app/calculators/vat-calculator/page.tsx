@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "VAT Calculator – Global Value-Added Tax Inclusive & Exclusive Estimator",
+    title: "VAT Calculator – Calculate VAT Inclusive, Exclusive & Reverse VAT",
     description:
-      "Free VAT Calculator. Calculate VAT inclusive & exclusive amounts, reverse VAT, universal 4-way bi-directional solving, multi-stage supply chain tax maps, and global country rate presets.",
+      "Calculate VAT inclusive and exclusive prices, reverse VAT, tax amounts, supply-chain VAT and compare VAT with sales tax using our free global VAT calculator.",
     slug: VAT_CALCULATOR.slug,
   });
 }
