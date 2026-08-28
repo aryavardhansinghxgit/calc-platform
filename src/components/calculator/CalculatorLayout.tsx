@@ -89,6 +89,7 @@ import { AnnuityPayoutContent } from "./annuity-payout/AnnuityPayoutContent";
 import { PaymentCalculator } from "./payment/PaymentCalculator";
 import { TipCalculator } from "./tip/TipCalculator";
 import { CommissionCalculator } from "./commission/CommissionCalculator";
+import { CommissionContent } from "./commission/CommissionContent";
 import { MarginCalculator } from "./margin/MarginCalculator";
 import { MarginContent } from "./margin/MarginContent";
 import { DiscountCalculator } from "./discount/DiscountCalculator";
@@ -509,6 +510,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isTimeDuration = idLower === "time-duration-calculator" || slugLower === "time-duration-calculator" || idLower === "time-duration" || slugLower === "time-duration";
 
   const CustomContent = (definition as any).ContentComponent || (
+    isCommission ? CommissionContent :
     isAnnuityPayout ? AnnuityPayoutContent :
     isPension ? PensionContent :
     isIra ? TraditionalIraContent :
@@ -988,7 +990,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
 
           {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
-          {Boolean(definition.faqs && definition.faqs.length > 0) && !is401k && !isIra && !isPension && !isAnnuityPayout ? (
+          {Boolean(definition.faqs && definition.faqs.length > 0) && !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions
@@ -1006,7 +1008,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                 ))}
               </div>
             </div>
-          ) : !is401k && !isIra && !isPension && !isAnnuityPayout && !isRmd && !isAutoLease && !isSimpleInterest && !isSocialSecurity && !isInterest && !isRothIra && !isTimeDuration && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isRoi && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && definition.category !== "Math" ? (
+          ) : !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isRmd && !isAutoLease && !isSimpleInterest && !isSocialSecurity && !isInterest && !isRothIra && !isTimeDuration && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isRoi && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isBudget && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && definition.category !== "Math" ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions

@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Commission Calculator – Tiered & Sales Compensation Suite",
+    title: "Commission Calculator – Sales Commission, Tiered Pay & Real Estate Split Calculator",
     description:
-      "Free Commission Calculator. Calculate sales commission payout, 3-way missing solvers, base salary plus commission, graduated tiered brackets, real estate splits, and target sales goal planners.",
+      "Calculate sales commission, commission rates, tiered payouts, real estate agent splits, base salary plus commission, and the sales needed to reach an earnings goal.",
     slug: COMMISSION_CALCULATOR.slug,
   });
 }

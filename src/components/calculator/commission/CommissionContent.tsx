@@ -1,251 +1,382 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import {
-  ChevronDown,
   HelpCircle,
+  ChevronDown,
   BookOpen,
-  CheckCircle2,
-  AlertTriangle,
-  FileText,
-  Shield,
-  Clock,
-  Landmark,
-  Percent,
-  Sparkles,
-  TrendingUp,
-  Heart,
+  ShieldCheck,
   Briefcase,
   DollarSign,
-  PieChart,
-  Tag,
+  Layers,
   Building,
   Target,
+  TrendingUp,
+  Percent,
+  Calculator,
+  ArrowRight,
+  Scale,
+  Award,
+  AlertTriangle,
 } from "lucide-react";
-import Link from "next/link";
+import { commissionFaqs } from "@/calculators/finance/commission/faq";
 
 export function CommissionContent() {
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  // All 15 FAQs open by default (matching 401(k) / Traditional IRA / Pension calculator layout)
+  const [openFaqIndices, setOpenFaqIndices] = useState<Set<number>>(
+    new Set(Array.from({ length: commissionFaqs.length }, (_, i) => i))
+  );
 
   const toggleFaq = (index: number) => {
-    setOpenFaqIndex(openFaqIndex === index ? null : index);
+    setOpenFaqIndices((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
   };
 
-  const faqs = [
-    {
-      q: "How is sales commission calculated?",
-      a: "Sales commission is calculated by multiplying total sales revenue by the agreed commission percentage rate. For example, a 3% commission on a $200,000 transaction equals $6,000.",
-    },
-    {
-      q: "How does a graduated tiered commission work?",
-      a: "In a graduated tiered commission structure, sales volume is divided into brackets. Higher commission rates apply only to sales exceeding specified threshold amounts. For example, 3% on the first $20k, 5% on $20k–$25k, and 10% above $25k.",
-    },
-    {
-      q: "What is the difference between revenue commission and profit margin commission?",
-      a: "Revenue commission is based on gross transaction value. Profit margin commission is calculated on net profit after deducting product cost of goods sold (COGS), encouraging sales reps to protect profit margins.",
-    },
-    {
-      q: "How do real estate commission splits work between agents and brokerages?",
-      a: "In real estate, a typical 6% total commission is divided 50/50 between the listing broker ($15,000 on a $500k home) and buyer's broker ($15,000). Each agent then shares their portion with their sponsoring brokerage according to their split agreement (e.g., 80% agent / 20% brokerage).",
-    },
-    {
-      q: "What is a base salary plus commission plan?",
-      a: "A base salary plus commission plan guarantees a fixed monthly or annual salary while providing variable incentive compensation based on sales achieved.",
-    },
-    {
-      q: "What is a commission cap?",
-      a: "A commission cap limits the maximum dollar amount an agent or broker pays to their brokerage per year (e.g. $20,000 cap). Once the cap is met, the agent retains 100% of their commission payouts.",
-    },
-    {
-      q: "How do you calculate required sales volume to hit a target income goal?",
-      a: "Required Sales Volume = (Target Earnings - Base Salary) / Commission Rate. To earn $10,000 commission at a 5% rate, required sales volume equals $10,000 / 0.05 = $200,000.",
-    },
-    {
-      q: "What is a draw against commission?",
-      a: "A draw is an advance payment made to a salesperson against anticipated future commission earnings. Recoverable draws must be paid back if future sales fall short, while non-recoverable draws act as a guaranteed minimum payout.",
-    },
-    {
-      q: "Are sales commissions taxable?",
-      a: "Yes. In the United States and most jurisdictions, commissions are treated as supplemental wages subject to federal income tax withholding, FICA tax, and state taxes.",
-    },
-    {
-      q: "What is a clawback provision in sales compensation?",
-      a: "A clawback allows an employer to reclaim paid commissions if a customer cancels a deal, requests a refund, or defaults on payment within a specified timeframe (e.g., 90 days).",
-    },
-    {
-      q: "How does decelerated vs accelerated tiered commission function?",
-      a: "Accelerated commission increases payout rates as sales quotas are exceeded (e.g., 5% up to quota, 8% above quota). Decelerated commission lowers percentage rates on ultra-high volumes to manage corporate commission budgets.",
-    },
-    {
-      q: "What is an effective commission rate?",
-      a: "Effective commission rate is total commission earnings divided by total gross sales volume, expressed as a percentage.",
-    },
-    {
-      q: "What is the standard commission rate in commercial real estate?",
-      a: "Commercial real estate commissions typically range from 4% to 8% for property sales, or 3% to 6% of total lease value over the primary lease term.",
-    },
-    {
-      q: "How do B2B SaaS software sales commission structures work?",
-      a: "B2B SaaS companies usually pay 8% to 12% of Annual Contract Value (ACV) or Total Contract Value (TCV), often with accelerators for multi-year deals.",
-    },
-    {
-      q: "Why use tiered commission structures?",
-      a: "Tiered structures motivate salespeople to exceed minimum targets and reach higher performance tiers, driving revenue growth for the enterprise.",
-    },
-  ];
-
   return (
-    <div className="mt-12 space-y-12  dark:border-zinc-800 pt-10 text-zinc-800 dark:text-zinc-200">
-      {/* Article Header */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
-          <BookOpen className="h-4 w-4" /> Comprehensive Sales Compensation &amp; Commission Guide
-        </div>
-        <h1 className="text-3xl font-extrabold text-blue-600 dark:text-blue-400">
-          Commission Calculator Guide: Tiered Structures &amp; Sales Compensation Mechanics
-        </h1>
-        <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed max-w-4xl">
-          Sales commission is a vital compensation model used across real estate, retail, automotive, B2B software, and financial services. Understanding simple commission rates, base salary blends, graduated tiered brackets, and real estate brokerage splits ensures accurate financial planning and transparent earnings projections.
-        </p>
-      </section>
-
-      {/* Main Educational Content with Required Headings */}
-      <div className="space-y-8 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
-        <section className="space-y-2">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">What Is a Commission?</h2>
+    <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
+      {/* 1. EXPANDED MAIN EDUCATIONAL CONTENT */}
+      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+        
+        {/* Section 1: Title & Introduction */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Commission Calculator – Sales Commission, Tiered Pay &amp; Real Estate Split Guide
+          </h2>
           <p>
-            A commission is a fee or financial reward paid to a salesperson, broker, or agent for negotiating or completing a commercial transaction. Commissions align representative incentives directly with organizational revenue generation.
+            Commission is one of the simplest compensation concepts mathematically, but the amount a salesperson or agent actually earns can become complicated when a deal includes different commission rates, progressive sales tiers, a base salary, brokerage splits, or an earnings target.
+          </p>
+          <p>
+            This commission calculator lets you work through those situations using several related calculation models. You can calculate a basic sales commission, solve backward for a commission rate or sales price, model graduated commission brackets, estimate real-estate agent and brokerage distributions, and determine how much sales volume is required to reach a target income.
+          </p>
+          <p>
+            The calculator is designed to answer both straightforward questions such as <em>&ldquo;What is 3% of $200,000?&rdquo;</em> and more involved questions such as <em>&ldquo;How much do I need to sell to earn $10,000 when I receive a $2,000 salary and a 5% commission?&rdquo;</em>
+          </p>
+          <p>
+            For real-estate calculations, the result should be treated as a mathematical model rather than a universal industry rule. Brokerage agreements, listing agreements, buyer agreements, transaction structure, and local requirements determine how compensation is actually divided. Broker compensation is not set by law and is negotiable.
           </p>
         </section>
 
-        <section className="space-y-2">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">How Commissions Work</h2>
+        {/* Section 2: What Is a Commission? */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            What Is a Commission?
+          </h2>
           <p>
-            Commissions are calculated as a percentage of gross sales price or net profit margin. Payouts can be structured as commission-only, base salary plus commission, or graduated tiered commission rates.
+            A commission is compensation calculated from a sale, transaction, or other measurable business activity. In a percentage-based arrangement, the commission is normally calculated by multiplying the relevant sales amount by the agreed commission rate.
+          </p>
+          <p>
+            For example, suppose a salesperson generates $200,000 in sales and receives a 3% commission:
+          </p>
+          <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 font-mono text-xs sm:text-sm text-center">
+            Commission = $200,000 &times; 3% = $6,000 | Company Net Revenue = $200,000 &minus; $6,000 = $194,000
+          </div>
+          <p>
+            So the salesperson earns $6,000 in commission, while the company receives $194,000 before considering other costs, fees, taxes, refunds, chargebacks, or other adjustments.
+          </p>
+          <p>
+            The important point is that a commission percentage is applied to a defined commission base. The agreement should determine exactly what counts as the commissionable amount.
           </p>
         </section>
 
-        <section className="space-y-4">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Simple &amp; Graduated Tiered Commission Formulas</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
-              <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Simple Commission Formula</span>
-              <div>Commission Amount = Sales Price × (Commission Rate / 100)</div>
-              <div>Company Net Revenue = Sales Price - Commission Amount</div>
+        {/* Section 3: How to Calculate Commission & Formulas */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            How to Calculate Commission
+          </h2>
+          <p>The basic commission formula is:</p>
+          <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 font-mono text-center text-xs sm:text-sm">
+            C = S &times; (r / 100)
+          </div>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            Where: <strong>C</strong> = commission amount, <strong>S</strong> = sales amount, and <strong>r</strong> = commission rate in percent.
+          </p>
+          <p><strong>Example: 3% Commission on $200,000</strong></p>
+          <div className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 font-mono text-xs text-center">
+            C = 200,000 &times; (3 / 100) = $6,000
+          </div>
+          <p>When you know the sale and commission but do not know the rate:</p>
+          <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 font-mono text-center text-xs sm:text-sm">
+            r = (C / S) &times; 100 &rarr; (6,000 / 200,000) &times; 100 = 3%
+          </div>
+          <p>The calculator therefore works in both directions instead of requiring you to perform the algebra manually.</p>
+        </section>
+
+        {/* Section 4: What Each Mode Does */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Commission Calculator: What Each Mode Does
+          </h2>
+          <div className="space-y-2.5">
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1">
+              <strong className="text-slate-900 dark:text-slate-100 font-bold block text-xs">1. Simple 3-Way Commission Solver</strong>
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                Calculates the missing value when you know any two of: Sales Price, Commission Rate, or Commission Amount. For example, a $6,000 commission can result from $200k @ 3%, $150k @ 4%, or $300k @ 2%.
+              </p>
             </div>
-            <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
-              <span className="font-sans font-bold text-zinc-900 dark:text-zinc-100 block">Graduated Tiered Commission Formula</span>
-              <div>Total Commission = ∑ [ (Tier Sales) × (Tier Rate / 100) ]</div>
-              <div>Total Compensation = Base Salary + Total Commission</div>
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1">
+              <strong className="text-slate-900 dark:text-slate-100 font-bold block text-xs">2. Graduated &amp; Tiered Commission Calculations</strong>
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                Divides sales volume into progressive brackets. Each marginal rate applies only to the amount that falls inside that specific bracket rather than applying the top rate to the entire volume.
+              </p>
+            </div>
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1">
+              <strong className="text-slate-900 dark:text-slate-100 font-bold block text-xs">3. Real Estate Splits &amp; Brokerage Distributions</strong>
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                Models multi-party real estate transactions, allocating gross commission between listing-side and buyer-side brokerages, and splitting each side between the agent and brokerage.
+              </p>
+            </div>
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1">
+              <strong className="text-slate-900 dark:text-slate-100 font-bold block text-xs">4. Target Goal Seek Planner</strong>
+              <p className="text-xs text-slate-600 dark:text-slate-400">
+                Reverses the commission formula to determine the exact required sales volume needed to hit a target total earnings goal after accounting for guaranteed base salary.
+              </p>
             </div>
           </div>
         </section>
 
-        <section className="space-y-2">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Graduated Tiered Brackets Example</h2>
+        {/* Section 5: Commission vs Markup */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Commission vs. Markup: Do Not Confuse Them
+          </h2>
           <p>
-            For a salesperson generating $27,000 in monthly sales with the following tiered bracket structure:
+            Commission and markup both use percentages, but they describe entirely different concepts:
           </p>
-          <div className="bg-zinc-50 dark:bg-zinc-800/40 p-4 rounded-xl border font-sans tabular-nums text-xs space-y-1">
-            <div>• Tier 1 ($0 to $20,000 @ 3%): $20,000 × 0.03 = $600.00</div>
-            <div>• Tier 2 ($20,000 to $25,000 @ 5%): $5,000 × 0.05 = $250.00</div>
-            <div>• Tier 3 ($25,000+ @ 10%): $2,000 × 0.10 = $200.00</div>
-            <div>Total Commission Earned = $600 + $250 + $200 = $1,050.00</div>
-          </div>
-        </section>
-
-        <section className="space-y-2">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Real Estate Agent &amp; Brokerage Split Mechanics</h2>
-          <p>
-            Real estate commissions are split between the listing broker and buyer broker (e.g. 50/50 split of a 6% total commission). Each agent then splits their share with their sponsoring brokerage (e.g. 80% agent / 20% brokerage) until annual cap thresholds are achieved.
+          <ul className="list-disc list-inside space-y-1 pl-2 text-slate-700 dark:text-slate-300">
+            <li><strong>Commission:</strong> Compensation associated with generating a sale or transaction (e.g. 5% on a $125 sale = $6.25).</li>
+            <li><strong>Markup:</strong> The percentage added to wholesale cost to determine selling price (e.g. $100 cost sold at $125 is a 25% markup).</li>
+          </ul>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            The markup belongs to the pricing structure; the commission belongs to the compensation structure.
           </p>
         </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-y border-zinc-200 dark:border-zinc-800 py-6 text-xs">
-          <div>
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Commission Only</h3>
-            <p>High reward potential with zero base pay safety net, standard in real estate and automotive sales.</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Base Salary + Commission</h3>
-            <p>Provides income stability alongside sales performance incentives, popular in B2B SaaS sales.</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-1">Draw Against Commission</h3>
-            <p>Advance pay against future commission earnings to protect reps during long sales cycles.</p>
-          </div>
-        </div>
-
-        <section className="space-y-2">
-          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">Quota &amp; Target Goal Seek Planning</h2>
+        {/* Section 6: Progressive Tiered Example */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Graduated Tiered Commission Mechanics ($27,000 Example)
+          </h2>
           <p>
-            Calculating required sales volume helps sales representatives and managers establish weekly and monthly activity targets needed to achieve specific compensation goals.
+            Consider a tiered plan with: First $20,000 @ 3%, $20,000–$25,000 @ 5%, and Amount above $25,000 @ 10%. On $27,000 in total sales:
           </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-2 text-xs font-mono">
+            <div className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60">
+              <span className="text-slate-500 block">Tier 1 ($0–$20k @ 3%)</span>
+              <strong className="text-sm font-bold text-emerald-600">$20,000 &times; 3% = $600</strong>
+            </div>
+            <div className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60">
+              <span className="text-slate-500 block">Tier 2 ($20k–$25k @ 5%)</span>
+              <strong className="text-sm font-bold text-emerald-600">$5,000 &times; 5% = $250</strong>
+            </div>
+            <div className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60">
+              <span className="text-slate-500 block">Tier 3 ($25k+ @ 10%)</span>
+              <strong className="text-sm font-bold text-emerald-600">$2,000 &times; 10% = $200</strong>
+            </div>
+          </div>
+          <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1 text-xs">
+            <p><strong>Total Tiered Commission:</strong> $600 + $250 + $200 = <strong>$1,050.00</strong></p>
+            <p><strong>Effective Commission Rate:</strong> ($1,050 / $27,000) &times; 100 = <strong>3.89%</strong></p>
+            <p><strong>With $500 Base Salary:</strong> Total Compensation = $500 + $1,050 = <strong>$1,550.00</strong></p>
+          </div>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            <strong>Tiered vs. Flat Top-Tier:</strong> A progressive tiered plan applies each rate only to the sales within that bracket ($1,050 commission). A flat top-tier attainment plan awarding 10% on the entire $27,000 would pay $2,700. Always check your written agreement.
+          </p>
+        </section>
+
+        {/* Section 7: Real Estate Commission Splits */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Real Estate Commission &amp; Brokerage Split Structure
+          </h2>
+          <p>
+            Suppose a property sells for $500,000 with a 6% total transaction commission ($30,000 gross). In a 50/50 listing/buyer split with an 80/20 agent/brokerage split:
+          </p>
+          <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1.5 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div><strong>Listing Agent Net (80%):</strong> $12,000.00</div>
+              <div><strong>Buyer Agent Net (80%):</strong> $12,000.00</div>
+              <div><strong>Brokerage Retained Share:</strong> $6,000.00</div>
+            </div>
+            <p className="text-slate-500 text-[11px] pt-1">
+              Note: Since August 2024, NAR MLS policy changes require written buyer agreements with objectively ascertainable compensation. Real estate commission is not set by law and is fully negotiable.
+            </p>
+          </div>
+        </section>
+
+        {/* Section 8: Goal Planning & Reverse Solving */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Target Earnings Goal Planning Formula
+          </h2>
+          <p>
+            To reach a target total compensation <em>T</em> with base salary <em>B</em> and commission rate <em>r</em>:
+          </p>
+          <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 font-mono text-center text-xs sm:text-sm">
+            Required Sales S = (Target Total Earnings &minus; Base Salary) / (Commission Rate / 100)
+          </div>
+          <p>
+            To earn $10,000 total with a $2,000 base salary at a 5% commission rate: ($10,000 &minus; $2,000) &divide; 0.05 = <strong>$160,000.00 in required sales volume</strong>.
+          </p>
+        </section>
+
+        {/* Section 9: Taxation & Gross Revenue vs Profit */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Taxes, Withholding &amp; Company Net Revenue vs. Profit
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-2 text-xs">
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1">
+              <strong className="text-slate-900 dark:text-slate-100 font-bold block">Tax Withholding on Commissions</strong>
+              <p className="text-slate-600 dark:text-slate-400">
+                The IRS treats commissions as supplemental wages with a standard 22% federal withholding rate (37% over $1M). Withholding is an advance estimate, not final tax liability.
+              </p>
+            </div>
+            <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1">
+              <strong className="text-slate-900 dark:text-slate-100 font-bold block">Company Net Revenue &ne; Company Profit</strong>
+              <p className="text-slate-600 dark:text-slate-400">
+                On $200k sales with $6k commission, company net revenue is $194,000. Operating costs, inventory, rent, and overhead must be subtracted before finding actual business profit.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 10: Common Mistakes */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Common Commission Calculation Mistakes
+          </h2>
+          <ul className="list-disc list-inside space-y-1 pl-2 text-slate-700 dark:text-slate-300 text-xs">
+            <li><strong>Applying the highest tier to all sales:</strong> Substantially overstates earnings in progressive bracket plans.</li>
+            <li><strong>Confusing commission with profit:</strong> Commission is a compensation expense, not net business profit.</li>
+            <li><strong>Forgetting the commission base:</strong> A percentage requires an exact base (gross revenue, collected cash, or net of discounts).</li>
+            <li><strong>Ignoring refunds and chargebacks:</strong> Cancelled sales or customer defaults often trigger contractual commission clawbacks.</li>
+            <li><strong>Treating a real estate split as universal:</strong> Real estate compensation is negotiable and varies by brokerage contract.</li>
+          </ul>
+        </section>
+
+        {/* Section 11: Related Calculators */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            Related Income &amp; Financial Calculators
+          </h2>
+          <p className="text-xs text-slate-600 dark:text-slate-400">
+            Explore these companion financial tools for comprehensive compensation and business planning:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+            <Link
+              href="/calculators/salary-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Salary Calculator</span>
+              <span className="text-slate-500 text-[11px]">Convert hourly wages to annual pay.</span>
+            </Link>
+            <Link
+              href="/calculators/take-home-pay-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Take-Home Pay</span>
+              <span className="text-slate-500 text-[11px]">Estimate net paycheck deductions.</span>
+            </Link>
+            <Link
+              href="/calculators/margin-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Margin Calculator</span>
+              <span className="text-slate-500 text-[11px]">Calculate profit margins &amp; markup.</span>
+            </Link>
+            <Link
+              href="/calculators/discount-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Discount Calculator</span>
+              <span className="text-slate-500 text-[11px]">Model promotional price reductions.</span>
+            </Link>
+            <Link
+              href="/calculators/sales-tax-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Sales Tax Calculator</span>
+              <span className="text-slate-500 text-[11px]">Calculate state &amp; local sales taxes.</span>
+            </Link>
+            <Link
+              href="/calculators/income-tax-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Income Tax</span>
+              <span className="text-slate-500 text-[11px]">Estimate federal &amp; state tax brackets.</span>
+            </Link>
+            <Link
+              href="/calculators/roi-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">ROI Calculator</span>
+              <span className="text-slate-500 text-[11px]">Evaluate sales campaign returns.</span>
+            </Link>
+            <Link
+              href="/calculators/payback-period-calculator"
+              className="p-3 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 hover:border-blue-500 transition-colors block"
+            >
+              <span className="font-bold text-blue-600 dark:text-blue-400 block">Payback Period</span>
+              <span className="text-slate-500 text-[11px]">Model investment break-even timing.</span>
+            </Link>
+          </div>
         </section>
       </div>
 
-      {/* 15+ FAQ Accordion Section */}
-      <section className="space-y-6  dark:border-zinc-800 pt-8">
-        <div className="flex items-center gap-2">
-          <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          <h2 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
+      {/* 2. FAQ SECTION (All 15 FAQs, Open by Default) */}
+      <div className="pt-6">
+        <div className="flex items-center gap-2 mb-4">
+          <HelpCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
             Frequently Asked Questions
           </h2>
         </div>
 
         <div className="space-y-3">
-          {faqs.map((faq, idx) => {
-            const isOpen = openFaqIndex === idx;
+          {commissionFaqs.map((faq, idx) => {
+            const isOpen = openFaqIndices.has(idx);
             return (
               <div
                 key={idx}
-                className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden shadow-sm transition-all"
+                className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden bg-white dark:bg-zinc-900 shadow-xs"
               >
                 <button
                   type="button"
                   onClick={() => toggleFaq(idx)}
-                  className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
+                  className="w-full p-4 text-left text-xs sm:text-sm font-semibold text-zinc-900 dark:text-zinc-100 flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 pr-4">
                     <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
                       Q{idx + 1}.
                     </span>
-                    {faq.q}
+                    {faq.question}
                   </span>
                   <ChevronDown
-                    className={`h-4 w-4 text-slate-900 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 text-zinc-400 shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
-
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed  dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
-                    {faq.a}
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                    {faq.answer}
                   </div>
                 )}
               </div>
             );
           })}
         </div>
-      </section>
-
-      {/* Related Calculators */}
-      <section className="space-y-3  dark:border-zinc-800 pt-6">
-        <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400">Related Financial &amp; Business Calculators</h2>
-        <div className="flex flex-wrap gap-2 text-xs">
-          <Link href="/calculators/margin-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-            Profit Margin Calculator
-          </Link>
-          <Link href="/calculators/discount-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-            Discount Calculator
-          </Link>
-          <Link href="/calculators/income-tax-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-            Income Tax Calculator
-          </Link>
-          <Link href="/calculators/roi-calculator" className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-            ROI Calculator
-          </Link>
-        </div>
-      </section>
-    </div>
+      </div>
+    </article>
   );
 }
+
+export default CommissionContent;
