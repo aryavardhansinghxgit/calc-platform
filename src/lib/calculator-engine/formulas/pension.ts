@@ -1,10 +1,11 @@
 /**
  * Pension Calculator Engine
- * Fully implementing Calculator.net's 3 reference sub-calculators:
- * 1. Lump Sum Payout vs. Monthly Pension Income
+ * Fully implementing the 4 core pension modules:
+ * 1. Lump Sum Payout vs. Monthly Pension Income (with PV & Breakeven)
  * 2. Single-Life vs. Joint-and-Survivor Pension Payout
- * 3. Work Longer vs. Retire Earlier Comparison
- * Plus Defined Benefit Multiplier Formula & Longevity Projection Schedule.
+ * 3. Work Longer vs. Retire Earlier Trade-Offs
+ * 4. Defined Benefit Multiplier Formula Helper
+ * Plus Complete Age-by-Age Longevity Projection Schedule.
  */
 
 export interface LumpSumVsPensionInput {
@@ -99,12 +100,23 @@ export interface PensionResult {
     incomeReplacementRatio: number;
   };
 
-  // Projection Schedule for Charts
+  // Projection Schedule for Charts & Tables
   projectionSchedule: ScheduleRow[];
 }
 
 /**
- * Present Value of Annuity with COLA & Discount Rate
+ * Zero-safe number extraction
+ */
+function safeNum(val: number | undefined | null, fallback: number): number {
+  if (val !== undefined && val !== null && !isNaN(Number(val))) {
+    return Number(val);
+  }
+  return fallback;
+}
+
+/**
+ * Present Value of Annuity with Annual COLA & Discount Rate
+ * PV = Σ [PMT * 12 * (1 + COLA)^(t-1) / (1 + r)^t] for t = 1..years
  */
 export function calculatePresentValueAnnuity(
   monthlyIncome: number,
@@ -118,7 +130,7 @@ export function calculatePresentValueAnnuity(
 
   for (let t = 1; t <= years; t++) {
     const annualIncome = monthlyIncome * 12 * Math.pow(1 + c, t - 1);
-    const discountedValue = annualIncome / Math.pow(1 + r, t);
+    const discountedValue = r === 0 ? annualIncome : annualIncome / Math.pow(1 + r, t);
     pv += discountedValue;
   }
 
@@ -126,7 +138,7 @@ export function calculatePresentValueAnnuity(
 }
 
 /**
- * Main Pension Calculation Function
+ * Main Pension Calculation Suite Function
  */
 export function calculatePensionSuite(
   lumpSumInput: LumpSumVsPensionInput,
@@ -137,14 +149,15 @@ export function calculatePensionSuite(
   // -------------------------------------------------------------
   // 1. SUB-CALCULATOR #1: Lump Sum vs Monthly Pension Income
   // -------------------------------------------------------------
-  const retAge1 = Math.max(50, Math.min(80, Number(lumpSumInput.retirementAge || 65)));
-  const lifeExp1 = Math.max(retAge1 + 1, Math.min(105, Number(lumpSumInput.lifeExpectancy || 85)));
-  const pensionYears1 = lifeExp1 - retAge1;
+  const retAge1 = Math.max(18, Math.min(100, safeNum(lumpSumInput.retirementAge, 65)));
+  const rawLifeExp1 = safeNum(lumpSumInput.lifeExpectancy, 85);
+  const lifeExp1 = Math.max(retAge1, Math.min(115, rawLifeExp1));
+  const pensionYears1 = Math.max(0, lifeExp1 - retAge1);
 
-  const lumpSumAmt = Math.max(0, Number(lumpSumInput.lumpSumAmount || 800000));
-  const monthlyPen1 = Math.max(0, Number(lumpSumInput.monthlyPension || 5000));
-  const returnRate1 = Math.max(0, Math.min(20, Number(lumpSumInput.investmentReturnPercent || 5.0)));
-  const cola1 = Math.max(0, Math.min(15, Number(lumpSumInput.colaPercent || 3.5)));
+  const lumpSumAmt = Math.max(0, safeNum(lumpSumInput.lumpSumAmount, 800000));
+  const monthlyPen1 = Math.max(0, safeNum(lumpSumInput.monthlyPension, 5000));
+  const returnRate1 = Math.max(0, Math.min(100, safeNum(lumpSumInput.investmentReturnPercent, 5.0)));
+  const cola1 = Math.max(0, Math.min(50, safeNum(lumpSumInput.colaPercent, 3.5)));
 
   const pvPension1 = calculatePresentValueAnnuity(monthlyPen1, pensionYears1, returnRate1, cola1);
   const fvLumpSum1 = Number((lumpSumAmt * Math.pow(1 + returnRate1 / 100, pensionYears1)).toFixed(2));
@@ -158,23 +171,27 @@ export function calculatePensionSuite(
   }
   totalLifetimePension = Number(totalLifetimePension.toFixed(2));
 
-  // Breakeven Age where invested lump sum returns match lifetime pension
+  // Breakeven Crossover Age where cumulative pension surpasses invested lump sum balance
   let breakevenAge1 = retAge1;
   let simLumpSum = lumpSumAmt;
   let cumulativePensionSim = 0;
   let simAnnualP = monthlyPen1 * 12;
+  let foundBreakeven = false;
 
-  for (let age = retAge1; age <= 110; age++) {
+  for (let age = retAge1; age <= 115; age++) {
     simLumpSum = simLumpSum * (1 + returnRate1 / 100);
     cumulativePensionSim += simAnnualP;
     simAnnualP *= (1 + cola1 / 100);
 
-    if (cumulativePensionSim >= simLumpSum && breakevenAge1 === retAge1) {
+    if (cumulativePensionSim >= simLumpSum && !foundBreakeven) {
       breakevenAge1 = age;
+      foundBreakeven = true;
     }
   }
 
-  if (breakevenAge1 === retAge1) breakevenAge1 = retAge1 + 22; // Fallback estimate
+  if (!foundBreakeven) {
+    breakevenAge1 = retAge1 + 22; // Fallback reference age
+  }
 
   const rec1 = totalLifetimePension > lumpSumAmt ? "Monthly Pension" : "Lump Sum Payout";
   const advantage1 = Math.abs(totalLifetimePension - lumpSumAmt);
@@ -182,18 +199,20 @@ export function calculatePensionSuite(
   // -------------------------------------------------------------
   // 2. SUB-CALCULATOR #2: Single Life vs Joint Survivor Pension Payout
   // -------------------------------------------------------------
-  const retAge2 = Math.max(50, Math.min(80, Number(singleVsJointInput.retirementAge || 65)));
-  const retireeLifeExp2 = Math.max(retAge2 + 1, Math.min(105, Number(singleVsJointInput.retireeLifeExpectancy || 77)));
-  const spouseAge2 = Math.max(40, Math.min(85, Number(singleVsJointInput.spouseAgeAtRetirement || 62)));
-  const spouseLifeExp2 = Math.max(spouseAge2 + 1, Math.min(105, Number(singleVsJointInput.spouseLifeExpectancy || 82)));
+  const retAge2 = Math.max(18, Math.min(100, safeNum(singleVsJointInput.retirementAge, 65)));
+  const rawRetLifeExp2 = safeNum(singleVsJointInput.retireeLifeExpectancy, 77);
+  const retireeLifeExp2 = Math.max(retAge2, Math.min(115, rawRetLifeExp2));
+  const spouseAge2 = Math.max(18, Math.min(100, safeNum(singleVsJointInput.spouseAgeAtRetirement, 62)));
+  const rawSpouseLifeExp2 = safeNum(singleVsJointInput.spouseLifeExpectancy, 82);
+  const spouseLifeExp2 = Math.max(spouseAge2, Math.min(115, rawSpouseLifeExp2));
 
-  const singleMonthly2 = Math.max(0, Number(singleVsJointInput.singleLifeMonthly || 5000));
-  const jointMonthly2 = Math.max(0, Number(singleVsJointInput.jointSurvivorMonthly || 3000));
-  const survivorPct2 = Math.max(50, Math.min(100, Number(singleVsJointInput.survivorBenefitPercent || 100))) / 100;
-  const returnRate2 = Math.max(0, Math.min(20, Number(singleVsJointInput.investmentReturnPercent || 5.0)));
-  const cola2 = Math.max(0, Math.min(15, Number(singleVsJointInput.colaPercent || 3.5)));
+  const singleMonthly2 = Math.max(0, safeNum(singleVsJointInput.singleLifeMonthly, 5000));
+  const jointMonthly2 = Math.max(0, safeNum(singleVsJointInput.jointSurvivorMonthly, 3000));
+  const survivorPct2 = Math.max(0, Math.min(100, safeNum(singleVsJointInput.survivorBenefitPercent, 100))) / 100;
+  const returnRate2 = Math.max(0, Math.min(100, safeNum(singleVsJointInput.investmentReturnPercent, 5.0)));
+  const cola2 = Math.max(0, Math.min(50, safeNum(singleVsJointInput.colaPercent, 3.5)));
 
-  const retireeYears2 = retireeLifeExp2 - retAge2;
+  const retireeYears2 = Math.max(0, retireeLifeExp2 - retAge2);
   const spouseSurvivorYears2 = Math.max(0, spouseLifeExp2 - (spouseAge2 + retireeYears2));
 
   // Single Life Cumulative Income (Stops at retiree death)
@@ -204,7 +223,7 @@ export function calculatePensionSuite(
     currentSingleAnnual *= (1 + cola2 / 100);
   }
 
-  // Joint Survivor Cumulative Income (Retiree years + Spouse survivor years)
+  // Joint Survivor Cumulative Income (Retiree lifetime + Spouse survivor lifetime)
   let jointTotalIncome = 0;
   let currentJointAnnual = jointMonthly2 * 12;
 
@@ -222,28 +241,36 @@ export function calculatePensionSuite(
   }
 
   const singleLifePV = calculatePresentValueAnnuity(singleMonthly2, retireeYears2, returnRate2, cola2);
-  const jointSurvivorPV = calculatePresentValueAnnuity(jointMonthly2, retireeYears2 + spouseSurvivorYears2, returnRate2, cola2);
+  const jointSurvivorPV = calculatePresentValueAnnuity(
+    jointMonthly2,
+    retireeYears2 + spouseSurvivorYears2,
+    returnRate2,
+    cola2
+  );
 
   const diff2 = Number((jointTotalIncome - singleTotalIncome).toFixed(2));
   const rec2 = jointTotalIncome >= singleTotalIncome ? "Joint & Survivor Pension" : "Single Life Pension";
-  const survivorProtectionScore = Math.min(100, Math.round((jointMonthly2 / singleMonthly2) * 100));
+  const survivorProtectionScore =
+    singleMonthly2 > 0 ? Math.min(100, Math.round((jointMonthly2 / singleMonthly2) * 100)) : 0;
 
   // -------------------------------------------------------------
   // 3. SUB-CALCULATOR #3: Work Longer vs Retire Earlier Comparison
   // -------------------------------------------------------------
-  const optAAge = Math.max(50, Math.min(75, Number(workLongerInput.optionAAge || 60)));
-  const optAMonthly = Math.max(0, Number(workLongerInput.optionAMonthly || 2500));
-  const optBAge = Math.max(optAAge + 1, Math.min(80, Number(workLongerInput.optionBAge || 65)));
-  const optBMonthly = Math.max(0, Number(workLongerInput.optionBMonthly || 3800));
+  const optAAge = Math.max(18, Math.min(99, safeNum(workLongerInput.optionAAge, 60)));
+  const optAMonthly = Math.max(0, safeNum(workLongerInput.optionAMonthly, 2500));
+  const rawOptBAge = safeNum(workLongerInput.optionBAge, 65);
+  const optBAge = Math.max(optAAge, Math.min(100, rawOptBAge));
+  const optBMonthly = Math.max(0, safeNum(workLongerInput.optionBMonthly, 3800));
 
-  const returnRate3 = Math.max(0, Math.min(20, Number(workLongerInput.investmentReturnPercent || 5.0)));
-  const cola3 = Math.max(0, Math.min(15, Number(workLongerInput.colaPercent || 3.5)));
-  const maxLife3 = Math.max(optBAge + 1, Math.min(105, Number(workLongerInput.lifeExpectancy || 85)));
+  const returnRate3 = Math.max(0, Math.min(100, safeNum(workLongerInput.investmentReturnPercent, 5.0)));
+  const cola3 = Math.max(0, Math.min(50, safeNum(workLongerInput.colaPercent, 3.5)));
+  const rawMaxLife3 = safeNum(workLongerInput.lifeExpectancy, 85);
+  const maxLife3 = Math.max(optBAge, Math.min(115, rawMaxLife3));
 
   const additionalMonthly = Number((optBMonthly - optAMonthly).toFixed(2));
   const lostYears = optBAge - optAAge;
 
-  // Foregone early pension income during extra working years
+  // Foregone early pension income during extra working years (Option A collected while Option B works)
   let foregoneIncome = 0;
   let tempAnnualA = optAMonthly * 12;
   for (let y = 0; y < lostYears; y++) {
@@ -274,6 +301,7 @@ export function calculatePensionSuite(
   let cumB = 0;
   let curA = optAMonthly * 12;
   let curB = optBMonthly * 12;
+  let foundCrossover = false;
 
   for (let age = optAAge; age <= 100; age++) {
     cumA += curA;
@@ -284,20 +312,21 @@ export function calculatePensionSuite(
       curB *= (1 + cola3 / 100);
     }
 
-    if (cumB >= cumA && crossoverAge === optBAge) {
+    if (cumB >= cumA && !foundCrossover) {
       crossoverAge = age;
+      foundCrossover = true;
     }
   }
 
-  const rec3 = optionBTotal > optionATotal ? "Work Longer (Option B)" : "Retire Earlier (Option A)";
+  const rec3 = optionBTotal >= optionATotal ? "Work Longer (Option B)" : "Retire Earlier (Option A)";
   const netBenefit3 = Math.abs(optionBTotal - optionATotal);
 
   // -------------------------------------------------------------
   // 4. DEFINED BENEFIT MULTIPLIER HELPER
   // -------------------------------------------------------------
-  const fas = Math.max(0, Number(dbInput.finalSalary || 80000));
-  const serviceYrs = Math.max(0, Number(dbInput.yearsOfService || 25));
-  const multPct = Math.max(0, Number(dbInput.multiplierPercent || 2.0)) / 100;
+  const fas = Math.max(0, safeNum(dbInput.finalSalary, 80000));
+  const serviceYrs = Math.max(0, safeNum(dbInput.yearsOfService, 25));
+  const multPct = Math.max(0, safeNum(dbInput.multiplierPercent, 2.0)) / 100;
 
   const dbAnnual = Number((fas * serviceYrs * multPct).toFixed(2));
   const dbMonthly = Number((dbAnnual / 12).toFixed(2));

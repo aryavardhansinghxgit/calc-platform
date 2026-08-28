@@ -5,9 +5,9 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 export async function generateMetadata(): Promise<Metadata> {
   return generateCalculatorMetadata({
-    title: "Pension Calculator – Lump Sum, Joint Survivor & Early Retirement Suite",
+    title: "Pension Calculator – Lump Sum, Monthly Pension, Survivor & Retirement Comparison",
     description:
-      "Free Pension Calculator. Compare Lump Sum Payout vs Monthly Pension, Single-Life vs Joint-and-Survivor annuities, and Work Longer vs Retire Earlier trade-offs with COLA, present value math, and interactive charts.",
+      "Use this Pension Calculator to compare a lump sum vs monthly pension, calculate present value, breakeven age, single-life vs joint survivor payouts, and defined benefit formulas.",
     slug: PENSION_CALCULATOR.slug,
   });
 }
