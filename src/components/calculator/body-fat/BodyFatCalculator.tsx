@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Activity,
   Award,
@@ -16,6 +16,10 @@ import {
   Target,
   ShieldCheck,
   User,
+  Trash2,
+  RotateCcw,
+  Table,
+  AlertTriangle,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -36,6 +40,33 @@ import {
 } from "./BodyFatCharts";
 
 import { BodyFatTables } from "./BodyFatTables";
+
+interface SavedScenario {
+  id: string;
+  timestamp: string;
+  title: string;
+  unitSystem: UnitSystem;
+  gender: Gender;
+  age: number;
+  heightFeet: number;
+  heightInches: number;
+  weightLbs: number;
+  neckInches: number;
+  waistInches: number;
+  hipInches: number;
+  heightCm: number;
+  weightKg: number;
+  neckCm: number;
+  waistCm: number;
+  hipCm: number;
+  heightMeters: number;
+  weightKgOther: number;
+  targetBfpGoal: string;
+  bfp: number;
+  category: string;
+  fatMassLbs: number;
+  leanMassLbs: number;
+}
 
 export function BodyFatCalculator() {
   // Input states
@@ -58,14 +89,94 @@ export function BodyFatCalculator() {
   const [waistCm, setWaistCm] = useState<number>(80);
   const [hipCm, setHipCm] = useState<number>(96);
 
+  // Other Inputs
+  const [heightMeters, setHeightMeters] = useState<number>(1.78);
+  const [weightKgOther, setWeightKgOther] = useState<number>(69);
+
   // Target BFP Goal state
   const [targetBfpGoal, setTargetBfpGoal] = useState<string>("");
 
-  // Saved calculations
-  const [savedCalculations, setSavedCalculations] = useState<
-    Array<{ id: string; timestamp: string; title: string; bfp: number; category: string }>
-  >([]);
+  // Saved calculations & action states
+  const [savedCalculations, setSavedCalculations] = useState<SavedScenario[]>([]);
   const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
+
+  // Hydrate from localStorage on client mount
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("body_fat_saved_scenarios");
+      if (raw) {
+        setSavedCalculations(JSON.parse(raw));
+      }
+    } catch (e) {
+      console.error("Failed to load saved scenarios from localStorage", e);
+    }
+  }, []);
+
+  // Hydrate from URL parameters
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("gender")) {
+      const g = params.get("gender");
+      if (g === "male" || g === "female") setGender(g);
+    }
+    if (params.has("unit")) {
+      const u = params.get("unit");
+      if (u === "us" || u === "metric" || u === "other") setUnitSystem(u);
+    }
+    if (params.has("age")) {
+      const a = Number(params.get("age"));
+      if (!isNaN(a) && a >= 2 && a <= 120) setAge(a);
+    }
+    if (params.has("hCm")) {
+      const v = Number(params.get("hCm"));
+      if (!isNaN(v) && v > 0) setHeightCm(v);
+    }
+    if (params.has("wKg")) {
+      const v = Number(params.get("wKg"));
+      if (!isNaN(v) && v > 0) setWeightKg(v);
+    }
+    if (params.has("nCm")) {
+      const v = Number(params.get("nCm"));
+      if (!isNaN(v) && v > 0) setNeckCm(v);
+    }
+    if (params.has("waistCm")) {
+      const v = Number(params.get("waistCm"));
+      if (!isNaN(v) && v > 0) setWaistCm(v);
+    }
+    if (params.has("hipCm")) {
+      const v = Number(params.get("hipCm"));
+      if (!isNaN(v) && v > 0) setHipCm(v);
+    }
+    if (params.has("hFt")) {
+      const v = Number(params.get("hFt"));
+      if (!isNaN(v) && v >= 0) setHeightFeet(v);
+    }
+    if (params.has("hIn")) {
+      const v = Number(params.get("hIn"));
+      if (!isNaN(v) && v >= 0) setHeightInches(v);
+    }
+    if (params.has("wLbs")) {
+      const v = Number(params.get("wLbs"));
+      if (!isNaN(v) && v > 0) setWeightLbs(v);
+    }
+    if (params.has("nIn")) {
+      const v = Number(params.get("nIn"));
+      if (!isNaN(v) && v > 0) setNeckInches(v);
+    }
+    if (params.has("wIn")) {
+      const v = Number(params.get("wIn"));
+      if (!isNaN(v) && v > 0) setWaistInches(v);
+    }
+    if (params.has("hipIn")) {
+      const v = Number(params.get("hipIn"));
+      if (!isNaN(v) && v > 0) setHipInches(v);
+    }
+    if (params.has("target")) {
+      setTargetBfpGoal(params.get("target") || "");
+    }
+  }, []);
 
   // Unit system change handler
   const handleUnitSystemChange = (newSystem: UnitSystem) => {
@@ -89,6 +200,9 @@ export function BodyFatCalculator() {
       setNeckInches(parseFloat((neckCm / 2.54).toFixed(1)));
       setWaistInches(parseFloat((waistCm / 2.54).toFixed(1)));
       setHipInches(parseFloat((hipCm / 2.54).toFixed(1)));
+    } else if (newSystem === "other") {
+      setHeightMeters(parseFloat((heightCm / 100).toFixed(2)));
+      setWeightKgOther(weightKg);
     }
   };
 
@@ -107,6 +221,8 @@ export function BodyFatCalculator() {
     setNeckCm(38);
     setWaistCm(80);
     setHipCm(96);
+    setHeightMeters(1.78);
+    setWeightKgOther(69);
     setTargetBfpGoal("");
   };
 
@@ -128,6 +244,8 @@ export function BodyFatCalculator() {
       neckCm,
       waistCm,
       hipCm,
+      heightMeters,
+      weightKgOther,
       targetBfpGoal: targetBfpNum,
     });
   }, [
@@ -145,18 +263,75 @@ export function BodyFatCalculator() {
     neckCm,
     waistCm,
     hipCm,
+    heightMeters,
+    weightKgOther,
     targetBfpGoal,
   ]);
 
   const handleSaveCalculation = () => {
-    const newItem = {
+    const newItem: SavedScenario = {
       id: Date.now().toString(),
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       title: `${age}y/o ${gender === "male" ? "Male" : "Female"} (${result.navyBfp}%)`,
+      unitSystem,
+      gender,
+      age,
+      heightFeet,
+      heightInches,
+      weightLbs,
+      neckInches,
+      waistInches,
+      hipInches,
+      heightCm,
+      weightKg,
+      neckCm,
+      waistCm,
+      hipCm,
+      heightMeters,
+      weightKgOther,
+      targetBfpGoal,
       bfp: result.navyBfp,
       category: result.categoryInfo.category,
+      fatMassLbs: result.fatMassLbs,
+      leanMassLbs: result.leanMassLbs,
     };
-    setSavedCalculations([newItem, ...savedCalculations]);
+    const updated = [newItem, ...savedCalculations].slice(0, 10);
+    setSavedCalculations(updated);
+    try {
+      localStorage.setItem("body_fat_saved_scenarios", JSON.stringify(updated));
+    } catch (e) {
+      console.error("Failed to persist scenario", e);
+    }
+  };
+
+  const handleRestoreScenario = (sc: SavedScenario) => {
+    setUnitSystem(sc.unitSystem);
+    setGender(sc.gender);
+    setAge(sc.age);
+    setHeightFeet(sc.heightFeet);
+    setHeightInches(sc.heightInches);
+    setWeightLbs(sc.weightLbs);
+    setNeckInches(sc.neckInches);
+    setWaistInches(sc.waistInches);
+    setHipInches(sc.hipInches);
+    setHeightCm(sc.heightCm);
+    setWeightKg(sc.weightKg);
+    setNeckCm(sc.neckCm);
+    setWaistCm(sc.waistCm);
+    setHipCm(sc.hipCm);
+    setHeightMeters(sc.heightMeters || 1.78);
+    setWeightKgOther(sc.weightKgOther || 69);
+    setTargetBfpGoal(sc.targetBfpGoal || "");
+  };
+
+  const handleDeleteScenario = (id: string) => {
+    const updated = savedCalculations.filter((item) => item.id !== id);
+    setSavedCalculations(updated);
+    try {
+      localStorage.setItem("body_fat_saved_scenarios", JSON.stringify(updated));
+    } catch (e) {
+      console.error("Failed to update localStorage", e);
+    }
   };
 
   const handleCopySummary = () => {
@@ -176,19 +351,121 @@ Calculated via CalcPlatform Health Engine`;
   };
 
   const handleShare = async () => {
+    const params = new URLSearchParams();
+    params.set("gender", gender);
+    params.set("unit", unitSystem);
+    params.set("age", age.toString());
+    if (unitSystem === "metric" || unitSystem === "other") {
+      params.set("hCm", heightCm.toString());
+      params.set("wKg", weightKg.toString());
+      params.set("nCm", neckCm.toString());
+      params.set("waistCm", waistCm.toString());
+      if (gender === "female") params.set("hipCm", hipCm.toString());
+    } else {
+      params.set("hFt", heightFeet.toString());
+      params.set("hIn", heightInches.toString());
+      params.set("wLbs", weightLbs.toString());
+      params.set("nIn", neckInches.toString());
+      params.set("wIn", waistInches.toString());
+      if (gender === "female") params.set("hipIn", hipInches.toString());
+    }
+    if (targetBfpGoal) params.set("target", targetBfpGoal);
+
+    const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "My Body Fat Assessment",
-          text: `My Body Fat is ${result.navyBfp}% (${result.categoryInfo.category}). Calculate your body fat percentage:`,
-          url: window.location.href,
+          title: "My Body Fat Assessment - CalcPlatform",
+          text: `My estimated Body Fat is ${result.navyBfp}% (${result.categoryInfo.category}). Calculate yours:`,
+          url: shareUrl,
         });
+        return;
       } catch {
-        handleCopySummary();
+        // Fallback to clipboard
       }
-    } else {
-      handleCopySummary();
     }
+
+    navigator.clipboard.writeText(shareUrl);
+    setShared(true);
+    setTimeout(() => setShared(false), 2500);
+  };
+
+  const handleExportCSV = () => {
+    const dateStr = new Date().toISOString().split("T")[0];
+    const rows = [
+      ["Body Fat Assessment Report", "CalcPlatform Health Engine"],
+      ["Date", dateStr],
+      ["", ""],
+      ["--- SUBJECT PROFILE & MEASUREMENTS ---", ""],
+      ["Biological Gender", gender === "male" ? "Male" : "Female"],
+      ["Age", `${age} years`],
+      ["Active Unit System", unitSystem.toUpperCase()],
+      ["Height (cm)", `${result.heightCm} cm`],
+      ["Height (in)", `${result.heightInches} in`],
+      ["Weight (kg)", `${result.weightKg} kg`],
+      ["Weight (lbs)", `${result.weightLbs} lbs`],
+      [
+        "Neck Circumference",
+        unitSystem === "us"
+          ? `${neckInches} in (${(neckInches * 2.54).toFixed(1)} cm)`
+          : `${neckCm} cm (${(neckCm / 2.54).toFixed(1)} in)`,
+      ],
+      [
+        "Waist Circumference",
+        unitSystem === "us"
+          ? `${waistInches} in (${(waistInches * 2.54).toFixed(1)} cm)`
+          : `${waistCm} cm (${(waistCm / 2.54).toFixed(1)} in)`,
+      ],
+      [
+        "Hip Circumference",
+        gender === "female"
+          ? unitSystem === "us"
+            ? `${hipInches} in (${(hipInches * 2.54).toFixed(1)} cm)`
+            : `${hipCm} cm (${(hipCm / 2.54).toFixed(1)} in)`
+          : "N/A (Male)",
+      ],
+      ["", ""],
+      ["--- PRIMARY BODY COMPOSITION RESULTS ---", ""],
+      ["U.S. Navy Body Fat Percentage", `${result.navyBfp}%`],
+      ["ACE Category Classification", result.categoryInfo.category],
+      ["Fat Mass (lbs)", `${result.fatMassLbs} lbs`],
+      ["Fat Mass (kg)", `${result.fatMassKg} kg`],
+      ["Lean Body Mass (lbs)", `${result.leanMassLbs} lbs`],
+      ["Lean Body Mass (kg)", `${result.leanMassKg} kg`],
+      ["", ""],
+      ["--- SECONDARY & COMPARATIVE METRICS ---", ""],
+      ["BMI Method Body Fat Percentage", `${result.bmiBfp}%`],
+      ["Body Mass Index (BMI)", `${result.bmi}`],
+      ["Fat-Free Mass Index (FFMI)", `${result.ffmi}`],
+      ["Normalized FFMI (1.8m standardized)", `${result.ffmiNormalized}`],
+      ["Jackson & Pollock Ideal BFP (Age Standard)", `${result.idealBfpJacksonPollock}%`],
+      ["Target Weight for Ideal BFP (lbs)", `${result.targetWeightForIdealLbs} lbs`],
+      ["Fat Difference to Ideal (lbs)", `${result.fatDifferenceLbs} lbs`],
+      ["", ""],
+      ["--- TARGET GOAL & FAT LOSS TIMELINE ---", ""],
+      ["Goal Target BFP", `${result.customTargetBfp}%`],
+      ["Target Body Weight (lbs)", `${result.customTargetWeightLbs} lbs`],
+      ["Fat to Lose (lbs)", `${result.customFatToLoseLbs} lbs`],
+      ["Conservative (0.5 lb/wk) Timeline", `${Math.ceil(Math.max(0, result.customFatToLoseLbs) / 0.5)} weeks (-250 kcal/day)`],
+      ["Standard (1.0 lb/wk) Timeline", `${Math.ceil(Math.max(0, result.customFatToLoseLbs))} weeks (-500 kcal/day)`],
+      ["Aggressive (1.5 lbs/wk) Timeline", `${Math.ceil(Math.max(0, result.customFatToLoseLbs) / 1.5)} weeks (-750 kcal/day)`],
+      ["Maximum (2.0 lbs/wk) Timeline", `${Math.ceil(Math.max(0, result.customFatToLoseLbs) / 2.0)} weeks (-1000 kcal/day)`],
+    ];
+
+    const csvContent = rows
+      .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+      .join("\r\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `body-fat-assessment-${gender}-${age}y-${dateStr}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // Dedicated Print Engine
@@ -303,20 +580,18 @@ Calculated via CalcPlatform Health Engine`;
   };
 
   return (
-    <div className="space-y-6">
-      {/* Printable Report Styles */}
+    <div className="w-full space-y-8">
+      {/* Print stylesheet */}
       <style jsx global>{`
         @media print {
-          body {
-            background: white !important;
-            color: black !important;
+          body * {
+            visibility: hidden;
           }
-          .body-fat-calculator-main-ui, nav, header, footer, sidebar {
-            display: none !important;
+          #body-fat-print-report,
+          #body-fat-print-report * {
+            visibility: visible;
           }
           #body-fat-print-report {
-            display: block !important;
-            visibility: visible !important;
             position: static !important;
             width: 100% !important;
             background: white !important;
@@ -372,15 +647,16 @@ Calculated via CalcPlatform Health Engine`;
               {/* Global Demographics: Age & Gender */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5 p-4 bg-zinc-50 dark:bg-zinc-950/60 rounded-xl border border-zinc-200 dark:border-zinc-800/80">
                 <div>
-                  <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                  <Label htmlFor="bf-age" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
                     Age (ages 2 – 120)
                   </Label>
                   <Input
+                    id="bf-age"
                     type="number"
                     min={2}
                     max={120}
                     value={age}
-                    onChange={(e) => setAge(Math.max(2, Math.min(120, Number(e.target.value) || 25)))}
+                    onChange={(e) => setAge(Number(e.target.value))}
                     className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 font-semibold"
                   />
                 </div>
@@ -425,31 +701,71 @@ Calculated via CalcPlatform Health Engine`;
               <TabsContent value="us" className="space-y-4 m-0">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Height</Label>
+                    <Label htmlFor="bf-us-height-ft" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                      Height
+                    </Label>
                     <div className="grid grid-cols-2 gap-2">
                       <div className="relative">
-                        <Input type="number" min={3} max={8} value={heightFeet} onChange={(e) => setHeightFeet(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                        <Input
+                          id="bf-us-height-ft"
+                          type="number"
+                          min={3}
+                          max={8}
+                          value={heightFeet}
+                          onChange={(e) => setHeightFeet(Number(e.target.value))}
+                          className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                        />
                         <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">ft</span>
                       </div>
                       <div className="relative">
-                        <Input type="number" step={0.5} min={0} max={11.5} value={heightInches} onChange={(e) => setHeightInches(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                        <Input
+                          id="bf-us-height-in"
+                          type="number"
+                          step={0.5}
+                          min={0}
+                          max={11.5}
+                          value={heightInches}
+                          onChange={(e) => setHeightInches(Number(e.target.value))}
+                          className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                        />
                         <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">in</span>
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Weight (lbs)</Label>
+                    <Label htmlFor="bf-us-weight" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                      Weight (lbs)
+                    </Label>
                     <div className="relative">
-                      <Input type="number" min={50} max={800} value={weightLbs} onChange={(e) => setWeightLbs(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                      <Input
+                        id="bf-us-weight"
+                        type="number"
+                        min={50}
+                        max={800}
+                        value={weightLbs}
+                        onChange={(e) => setWeightLbs(Number(e.target.value))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
                       <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">lbs</span>
                     </div>
                   </div>
 
                   <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Neck Circumference</Label>
+                    <Label htmlFor="bf-us-neck" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                      Neck Circumference
+                    </Label>
                     <div className="relative">
-                      <Input type="number" step={0.25} min={8} max={30} value={neckInches} onChange={(e) => setNeckInches(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                      <Input
+                        id="bf-us-neck"
+                        type="number"
+                        step={0.25}
+                        min={8}
+                        max={30}
+                        value={neckInches}
+                        onChange={(e) => setNeckInches(Number(e.target.value))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
                       <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">in</span>
                     </div>
                   </div>
@@ -457,22 +773,40 @@ Calculated via CalcPlatform Health Engine`;
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                   <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                    <Label htmlFor="bf-us-waist" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
                       Waist Circumference (at navel)
                     </Label>
                     <div className="relative">
-                      <Input type="number" step={0.25} min={15} max={80} value={waistInches} onChange={(e) => setWaistInches(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                      <Input
+                        id="bf-us-waist"
+                        type="number"
+                        step={0.25}
+                        min={15}
+                        max={80}
+                        value={waistInches}
+                        onChange={(e) => setWaistInches(Number(e.target.value))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
                       <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">in</span>
                     </div>
                   </div>
 
                   {gender === "female" && (
                     <div>
-                      <Label className="text-xs font-semibold text-rose-700 dark:text-rose-400 mb-1.5 block">
+                      <Label htmlFor="bf-us-hip" className="text-xs font-semibold text-rose-700 dark:text-rose-400 mb-1.5 block">
                         Hip Circumference (widest point - Required for Women)
                       </Label>
                       <div className="relative">
-                        <Input type="number" step={0.25} min={20} max={90} value={hipInches} onChange={(e) => setHipInches(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-rose-300 dark:border-rose-800 text-xs font-semibold" />
+                        <Input
+                          id="bf-us-hip"
+                          type="number"
+                          step={0.25}
+                          min={20}
+                          max={90}
+                          value={hipInches}
+                          onChange={(e) => setHipInches(Number(e.target.value))}
+                          className="bg-white dark:bg-zinc-900 border-rose-300 dark:border-rose-800 text-xs font-semibold"
+                        />
                         <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">in</span>
                       </div>
                     </div>
@@ -484,25 +818,57 @@ Calculated via CalcPlatform Health Engine`;
               <TabsContent value="metric" className="space-y-4 m-0">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Height (cm)</Label>
+                    <Label htmlFor="bf-metric-height" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                      Height (cm)
+                    </Label>
                     <div className="relative">
-                      <Input type="number" min={90} max={250} value={heightCm} onChange={(e) => setHeightCm(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                      <Input
+                        id="bf-metric-height"
+                        type="number"
+                        min={90}
+                        max={250}
+                        value={heightCm}
+                        onChange={(e) => setHeightCm(Number(e.target.value))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
                       <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">cm</span>
                     </div>
                   </div>
 
                   <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Weight (kg)</Label>
+                    <Label htmlFor="bf-metric-weight" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                      Weight (kg)
+                    </Label>
                     <div className="relative">
-                      <Input type="number" step={0.5} min={25} max={350} value={weightKg} onChange={(e) => setWeightKg(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                      <Input
+                        id="bf-metric-weight"
+                        type="number"
+                        step={0.5}
+                        min={25}
+                        max={350}
+                        value={weightKg}
+                        onChange={(e) => setWeightKg(Number(e.target.value))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
                       <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">kg</span>
                     </div>
                   </div>
 
                   <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Neck (cm)</Label>
+                    <Label htmlFor="bf-metric-neck" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                      Neck (cm)
+                    </Label>
                     <div className="relative">
-                      <Input type="number" step={0.5} min={20} max={80} value={neckCm} onChange={(e) => setNeckCm(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                      <Input
+                        id="bf-metric-neck"
+                        type="number"
+                        step={0.5}
+                        min={20}
+                        max={80}
+                        value={neckCm}
+                        onChange={(e) => setNeckCm(Number(e.target.value))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
                       <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">cm</span>
                     </div>
                   </div>
@@ -510,18 +876,152 @@ Calculated via CalcPlatform Health Engine`;
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                   <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Waist (cm)</Label>
+                    <Label htmlFor="bf-metric-waist" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                      Waist (cm)
+                    </Label>
                     <div className="relative">
-                      <Input type="number" step={0.5} min={40} max={200} value={waistCm} onChange={(e) => setWaistCm(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                      <Input
+                        id="bf-metric-waist"
+                        type="number"
+                        step={0.5}
+                        min={40}
+                        max={200}
+                        value={waistCm}
+                        onChange={(e) => setWaistCm(Number(e.target.value))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
                       <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">cm</span>
                     </div>
                   </div>
 
                   {gender === "female" && (
                     <div>
-                      <Label className="text-xs font-semibold text-rose-700 dark:text-rose-400 mb-1.5 block">Hip (cm - Required for Women)</Label>
+                      <Label htmlFor="bf-metric-hip" className="text-xs font-semibold text-rose-700 dark:text-rose-400 mb-1.5 block">
+                        Hip (cm - Required for Women)
+                      </Label>
                       <div className="relative">
-                        <Input type="number" step={0.5} min={40} max={200} value={hipCm} onChange={(e) => setHipCm(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-rose-300 dark:border-rose-800 text-xs font-semibold" />
+                        <Input
+                          id="bf-metric-hip"
+                          type="number"
+                          step={0.5}
+                          min={40}
+                          max={200}
+                          value={hipCm}
+                          onChange={(e) => setHipCm(Number(e.target.value))}
+                          className="bg-white dark:bg-zinc-900 border-rose-300 dark:border-rose-800 text-xs font-semibold"
+                        />
+                        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">cm</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </TabsContent>
+
+              {/* OTHER UNITS INPUTS (m, kg) */}
+              <TabsContent value="other" className="space-y-4 m-0">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <Label htmlFor="bf-other-height" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                      Height (meters)
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="bf-other-height"
+                        type="number"
+                        step={0.01}
+                        min={0.9}
+                        max={2.5}
+                        value={heightMeters}
+                        onChange={(e) => {
+                          const val = Number(e.target.value);
+                          setHeightMeters(val);
+                          setHeightCm(Math.round(val * 100));
+                        }}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
+                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">m</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="bf-other-weight" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                      Weight (kg)
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="bf-other-weight"
+                        type="number"
+                        step={0.5}
+                        min={25}
+                        max={350}
+                        value={weightKgOther}
+                        onChange={(e) => {
+                          const val = Number(e.target.value);
+                          setWeightKgOther(val);
+                          setWeightKg(val);
+                        }}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
+                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">kg</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="bf-other-neck" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                      Neck (cm)
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="bf-other-neck"
+                        type="number"
+                        step={0.5}
+                        min={20}
+                        max={80}
+                        value={neckCm}
+                        onChange={(e) => setNeckCm(Number(e.target.value))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
+                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">cm</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                  <div>
+                    <Label htmlFor="bf-other-waist" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                      Waist (cm)
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="bf-other-waist"
+                        type="number"
+                        step={0.5}
+                        min={40}
+                        max={200}
+                        value={waistCm}
+                        onChange={(e) => setWaistCm(Number(e.target.value))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
+                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">cm</span>
+                    </div>
+                  </div>
+
+                  {gender === "female" && (
+                    <div>
+                      <Label htmlFor="bf-other-hip" className="text-xs font-semibold text-rose-700 dark:text-rose-400 mb-1.5 block">
+                        Hip (cm - Required for Women)
+                      </Label>
+                      <div className="relative">
+                        <Input
+                          id="bf-other-hip"
+                          type="number"
+                          step={0.5}
+                          min={40}
+                          max={200}
+                          value={hipCm}
+                          onChange={(e) => setHipCm(Number(e.target.value))}
+                          className="bg-white dark:bg-zinc-900 border-rose-300 dark:border-rose-800 text-xs font-semibold"
+                        />
                         <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">cm</span>
                       </div>
                     </div>
@@ -533,11 +1033,12 @@ Calculated via CalcPlatform Health Engine`;
             {/* Target BFP Scenario Planner Bar */}
             <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex-1">
-                <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
+                <Label htmlFor="bf-target-goal" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1 block">
                   Custom Goal Target BFP % (Optional Scenario Planner)
                 </Label>
                 <div className="relative max-w-xs">
                   <Input
+                    id="bf-target-goal"
                     type="number"
                     step={0.5}
                     placeholder={`Ideal for Age: ${result.idealBfpJacksonPollock}%`}
@@ -555,18 +1056,121 @@ Calculated via CalcPlatform Health Engine`;
               </div>
             </div>
 
-            {/* Action Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-              
+            {/* Responsive Action Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-2.5 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopySummary}
+                  className="text-xs h-8 gap-1.5 bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                >
+                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copied ? "Copied!" : "Copy Summary"}
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleShare}
+                  className="text-xs h-8 gap-1.5 bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                >
+                  {shared ? <Check className="w-3.5 h-3.5 text-blue-600" /> : <Share2 className="w-3.5 h-3.5" />}
+                  {shared ? "Link Copied!" : "Share"}
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSaveCalculation}
+                  className="text-xs h-8 gap-1.5 bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                >
+                  <Bookmark className="w-3.5 h-3.5 text-purple-600" />
+                  Save Calculation
+                </Button>
+              </div>
 
               <div className="flex items-center gap-2">
-                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handlePrint}
+                  className="text-xs h-8 gap-1.5 bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                >
+                  <Printer className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400" />
+                  Print / PDF Report
+                </Button>
 
-                
+                <Button
+                  size="sm"
+                  onClick={handleExportCSV}
+                  className="text-xs h-8 gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-xs"
+                >
+                  <Table className="w-3.5 h-3.5" />
+                  Export CSV
+                </Button>
               </div>
             </div>
+
+            {/* Saved Calculations Drawer */}
+            {savedCalculations.length > 0 && (
+              <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
+                <span className="text-[11px] font-bold text-zinc-500 uppercase tracking-wider block">
+                  Saved Calculation History ({savedCalculations.length})
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {savedCalculations.map((item) => (
+                    <div
+                      key={item.id}
+                      className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs"
+                    >
+                      <div>
+                        <div className="font-bold text-zinc-900 dark:text-zinc-100">
+                          {item.title}
+                        </div>
+                        <div className="text-[10px] text-zinc-500">
+                          {item.timestamp} &bull; Fat: {item.fatMassLbs} lbs &bull; Lean: {item.leanMassLbs} lbs
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleRestoreScenario(item)}
+                          className="h-7 px-2 text-[11px] text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950/40"
+                          title="Restore inputs"
+                        >
+                          <RotateCcw className="w-3 h-3 mr-1" />
+                          Restore
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteScenario(item.id)}
+                          className="h-7 px-1.5 text-zinc-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                          title="Delete scenario"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
+
+        {/* Validation Warning Alert */}
+        {!result.isValid && (
+          <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 text-amber-800 dark:text-amber-200 text-xs flex items-center gap-2.5">
+            <AlertTriangle className="w-5 h-5 shrink-0 text-amber-600" />
+            <div>
+              <strong className="font-bold block">Input Notice:</strong>
+              {result.errorMessage || "Please enter valid non-zero physical measurements."}
+            </div>
+          </div>
+        )}
 
         {/* Results Dashboard */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -583,37 +1187,53 @@ Calculated via CalcPlatform Health Engine`;
                   Body Composition &amp; Assessment Summary
                 </h4>
                 <span className="text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2.5 py-1 rounded-full border border-blue-200 dark:border-blue-800">
-                  {result.categoryInfo.category}
+                  {result.isValid ? result.categoryInfo.category : "Awaiting Input"}
                 </span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
                   <span className="text-zinc-500 text-[10px] block font-semibold">U.S. Navy Body Fat</span>
-                  <strong className="text-xl font-black text-blue-600 dark:text-blue-400 block mt-0.5">{result.navyBfp}%</strong>
+                  <strong className="text-xl font-black text-blue-600 dark:text-blue-400 block mt-0.5">
+                    {result.isValid ? `${result.navyBfp}%` : "--"}
+                  </strong>
                 </div>
 
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
                   <span className="text-zinc-500 text-[10px] block font-semibold">BMI Method Fat</span>
-                  <strong className="text-xl font-black text-sky-600 dark:text-sky-400 block mt-0.5">{result.bmiBfp}%</strong>
+                  <strong className="text-xl font-black text-sky-600 dark:text-sky-400 block mt-0.5">
+                    {result.isValid ? `${result.bmiBfp}%` : "--"}
+                  </strong>
                 </div>
 
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
                   <span className="text-zinc-500 text-[10px] block font-semibold">Fat-Free Mass Index</span>
-                  <strong className="text-xl font-black text-purple-600 dark:text-purple-400 block mt-0.5">{result.ffmi}</strong>
-                  <span className="text-[9px] text-zinc-400 block mt-0.5">Norm: {result.ffmiNormalized}</span>
+                  <strong className="text-xl font-black text-purple-600 dark:text-purple-400 block mt-0.5">
+                    {result.isValid ? result.ffmi : "--"}
+                  </strong>
+                  <span className="text-[9px] text-zinc-400 block mt-0.5">
+                    Norm: {result.isValid ? result.ffmiNormalized : "--"}
+                  </span>
                 </div>
 
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
                   <span className="text-zinc-500 text-[10px] block font-semibold">Ideal BFP (Age {age})</span>
-                  <strong className="text-xl font-black text-emerald-600 dark:text-emerald-400 block mt-0.5">{result.idealBfpJacksonPollock}%</strong>
+                  <strong className="text-xl font-black text-emerald-600 dark:text-emerald-400 block mt-0.5">
+                    {result.isValid ? `${result.idealBfpJacksonPollock}%` : "--"}
+                  </strong>
                 </div>
               </div>
 
               {/* Interpretation Note */}
               <div className="p-3 bg-blue-50/60 dark:bg-blue-950/20 rounded-xl border border-blue-200 dark:border-blue-900/40 text-xs text-zinc-700 dark:text-zinc-300">
                 <strong className="text-blue-900 dark:text-blue-200 font-bold block mb-1">Clinical Interpretation:</strong>
-                {result.categoryInfo.description}. Based on the Jackson &amp; Pollock age standards, your ideal body fat target is <strong>{result.idealBfpJacksonPollock}%</strong> (ideal target weight: <strong>{result.targetWeightForIdealLbs} lbs</strong>).
+                {result.isValid ? (
+                  <>
+                    {result.categoryInfo.description}. Based on Jackson &amp; Pollock age standards, your ideal body fat target is <strong>{result.idealBfpJacksonPollock}%</strong> (ideal target weight: <strong>{result.targetWeightForIdealLbs} lbs</strong>).
+                  </>
+                ) : (
+                  result.errorMessage || "Please enter valid measurements to evaluate body fat percentage."
+                )}
               </div>
             </div>
 
@@ -631,9 +1251,9 @@ Calculated via CalcPlatform Health Engine`;
               <div className="text-xs font-black tracking-widest text-blue-700 uppercase">
                 CalcPlatform Clinical Health &amp; Anthropometrics Lab
               </div>
-              <h1 className="text-2xl font-black text-blue-600 mt-1">
+              <h2 className="text-2xl font-black text-blue-600 mt-1">
                 Clinical Body Fat &amp; Composition Assessment Report
-              </h1>
+              </h2>
               <p className="text-xs text-zinc-500 mt-0.5">
                 U.S. Navy Method, BMI Equations, FFMI &amp; ACE Category Classification
               </p>
@@ -701,10 +1321,12 @@ Calculated via CalcPlatform Health Engine`;
             <p>
               This report is generated based on standard Navy circumference equations (Hodgdon &amp; Beckett 1984) and Deurenberg BMI formulas. Individual muscle density and bone mass variations may alter estimates. Consult a medical professional before starting any body composition modification program.
             </p>
-            <p className="text-zinc-400">© CalcPlatform Anthropometrics Lab • All Rights Reserved</p>
+            <p className="text-zinc-400">&copy; CalcPlatform Anthropometrics Lab &bull; All Rights Reserved</p>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+export default BodyFatCalculator;

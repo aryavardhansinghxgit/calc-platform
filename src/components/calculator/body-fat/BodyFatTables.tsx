@@ -28,6 +28,14 @@ export function BodyFatTables({ result }: BodyFatTablesProps) {
     { age: "55", women: "26.3%", men: "20.9%" },
   ];
 
+  if (!result.isValid) {
+    return (
+      <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 text-amber-800 dark:text-amber-200 text-xs">
+        <strong>Assessment Notice:</strong> Enter valid positive physical measurements to generate the fat loss timeline and age comparison tables.
+      </div>
+    );
+  }
+
   const fatToLose = Math.max(0, result.customFatToLoseLbs);
 
   return (
