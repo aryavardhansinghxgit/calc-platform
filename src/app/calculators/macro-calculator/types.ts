@@ -12,7 +12,14 @@ export type MacroCalculationMode =
 
 export type UnitSystem = "us" | "metric";
 export type Gender = "male" | "female";
-export type ActivityLevel = "sedentary" | "light" | "moderate" | "active" | "very-active";
+export type ActivityLevel =
+  | "sedentary"
+  | "light"
+  | "moderate"
+  | "active"
+  | "very-active"
+  | "extra-active";
+
 export type FitnessGoal =
   | "maintain"
   | "mild-loss"
@@ -31,7 +38,13 @@ export type BmrFormulaType =
   | "cunningham"
   | "schofield";
 
-export type DietStyleType = "balanced" | "low-carb" | "high-protein" | "keto" | "custom";
+export type DietStyleType =
+  | "balanced"
+  | "low-carb"
+  | "high-protein"
+  | "keto"
+  | "athlete"
+  | "custom";
 
 export interface MacroInputParams {
   unitSystem: UnitSystem;
@@ -108,7 +121,7 @@ export interface MacroCalculationResults {
   recommendations: string[];
 }
 
-export interface MacroCalculatorOutputs extends Record<string, any> {
+export interface MacroCalculatorOutputs {
   targetCalories: number;
   bmr: number;
   tdee: number;

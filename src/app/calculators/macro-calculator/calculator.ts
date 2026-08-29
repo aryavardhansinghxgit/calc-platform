@@ -1,84 +1,106 @@
 import {
-  MacroInputParams,
   MacroCalculationResults,
   MacroNutrientOutput,
   BodyCompositionOutput,
   WeightTrajectoryPoint,
   FoodDatabaseItem,
   MacroCalculatorOutputs,
+  ActivityLevel,
+  BmrFormulaType,
+  DietStyleType,
+  FitnessGoal,
+  MacroCalculationMode,
+  UnitSystem,
+  Gender,
 } from "./types";
 
 export function calculateMacroCalculator(
   inputs: Record<string, any>
 ): MacroCalculationResults {
-  const unitSystem = inputs.unitSystem || "us";
-  const mode = inputs.calculationMode || "standard";
-  const age = Number(inputs.age) || 25;
-  const gender = inputs.gender || "male";
+  const unitSystem: UnitSystem = inputs.unitSystem === "metric" ? "metric" : "us";
+  const mode: MacroCalculationMode = inputs.calculationMode || "standard";
+  const age = Math.max(15, Math.min(100, Number(inputs.age) || 25));
+  const gender: Gender = inputs.gender === "female" ? "female" : "male";
 
   // Height & Weight Conversions
-  let heightCm = 175;
-  let weightKg = 75;
+  let heightCm = 177.8;
+  let weightKg = 74.842741;
   let weightLbs = 165;
 
   if (unitSystem === "us") {
-    const feet = Number(inputs.heightFeet) || 5;
-    const inches = Number(inputs.heightInches) || 10;
-    const totalInches = feet * 12 + inches;
+    const feet = Math.max(0, Number(inputs.heightFeet) || 0);
+    const inches = Math.max(0, Number(inputs.heightInches) || 0);
+    const totalInches = feet * 12 + inches > 0 ? feet * 12 + inches : 70;
     heightCm = totalInches * 2.54;
 
-    weightLbs = Number(inputs.weightLbs) || 165;
-    weightKg = weightLbs / 2.20462;
+    const lbs = Math.max(0, Number(inputs.weightLbs) || 0);
+    weightLbs = lbs > 0 ? lbs : 165;
+    weightKg = weightLbs * 0.45359237;
   } else {
-    heightCm = Number(inputs.heightCm) || 175;
-    weightKg = Number(inputs.weightKg) || 75;
-    weightLbs = weightKg * 2.20462;
+    heightCm = Math.max(0, Number(inputs.heightCm) || 178);
+    weightKg = Math.max(0, Number(inputs.weightKg) || 75);
+    weightLbs = parseFloat((weightKg / 0.45359237).toFixed(1));
   }
 
-  const bodyFatPct = Number(inputs.bodyFat) || 20;
+  // Clamps
+  heightCm = Math.max(80, Math.min(250, heightCm));
+  weightKg = Math.max(25, Math.min(350, weightKg));
+
+  const heightM = heightCm / 100;
+  const bmi = Number((weightKg / (heightM * heightM)).toFixed(1));
+
+  // Body Fat %
+  let bodyFatPct = Number(inputs.bodyFat);
+  if (isNaN(bodyFatPct) || bodyFatPct <= 0) {
+    const genderVal = gender === "male" ? 1 : 0;
+    bodyFatPct = parseFloat(Math.max(4, Math.min(60, 1.2 * bmi + 0.23 * age - 10.8 * genderVal - 5.4)).toFixed(1));
+  } else {
+    bodyFatPct = Math.max(3, Math.min(65, bodyFatPct));
+  }
+
   const lbmKg = weightKg * (1 - bodyFatPct / 100);
-  const lbmLbs = lbmKg * 2.20462;
-  const fatMassLbs = weightLbs - lbmLbs;
+  const lbmLbs = parseFloat((weightLbs * (1 - bodyFatPct / 100)).toFixed(1));
+  const fatMassLbs = parseFloat((weightLbs - lbmLbs).toFixed(1));
 
   // BMR Formula Selection
-  const formula = inputs.bmrFormula || "mifflin";
-  let bmr = 0;
+  const formula: BmrFormulaType = inputs.bmrFormula || "mifflin";
+  let bmrValue = 0;
   let formulaUsedName = "Mifflin-St Jeor";
 
   switch (formula) {
     case "katch": {
-      bmr = 370 + 21.6 * lbmKg;
+      bmrValue = 370 + 21.6 * lbmKg;
       formulaUsedName = "Katch-McArdle (LBM Based)";
+      break;
+    }
+    case "cunningham": {
+      bmrValue = 500 + 22 * lbmKg;
+      formulaUsedName = "Cunningham (Athletic LBM)";
       break;
     }
     case "harris": {
       if (gender === "male") {
-        bmr = 66.5 + 13.75 * weightKg + 5.003 * heightCm - 6.755 * age;
+        bmrValue = 66.5 + 13.75 * weightKg + 5.003 * heightCm - 6.755 * age;
       } else {
-        bmr = 655.1 + 9.563 * weightKg + 1.85 * heightCm - 4.676 * age;
+        bmrValue = 655.1 + 9.563 * weightKg + 1.85 * heightCm - 4.676 * age;
       }
-      formulaUsedName = "Original Harris-Benedict";
+      formulaUsedName = "Original Harris-Benedict (1919)";
       break;
     }
     case "revised-harris": {
       if (gender === "male") {
-        bmr = 88.362 + 13.397 * weightKg + 4.799 * heightCm - 5.677 * age;
+        bmrValue = 88.362 + 13.397 * weightKg + 4.799 * heightCm - 5.677 * age;
       } else {
-        bmr = 447.593 + 9.247 * weightKg + 3.098 * heightCm - 4.330 * age;
+        bmrValue = 447.593 + 9.247 * weightKg + 3.098 * heightCm - 4.330 * age;
       }
-      formulaUsedName = "Revised Harris-Benedict";
-      break;
-    }
-    case "cunningham": {
-      bmr = 500 + 22 * lbmKg;
-      formulaUsedName = "Cunningham (Athletic LBM)";
+      formulaUsedName = "Revised Harris-Benedict (1984)";
       break;
     }
     case "schofield": {
       if (gender === "male") {
-        bmr = age < 30 ? 15.057 * weightKg + 679 : 11.6 * weightKg + 879;
+        bmrValue = age < 30 ? 15.057 * weightKg + 679 : 11.6 * weightKg + 879;
       } else {
-        bmr = age < 30 ? 14.7 * weightKg + 496 : 8.7 * weightKg + 829;
+        bmrValue = age < 30 ? 14.7 * weightKg + 496 : 8.7 * weightKg + 829;
       }
       formulaUsedName = "Schofield Equation";
       break;
@@ -86,42 +108,40 @@ export function calculateMacroCalculator(
     case "mifflin":
     default: {
       if (gender === "male") {
-        bmr = 10 * weightKg + 6.25 * heightCm - 5 * age + 5;
+        bmrValue = 10 * weightKg + 6.25 * heightCm - 5 * age + 5;
       } else {
-        bmr = 10 * weightKg + 6.25 * heightCm - 5 * age - 161;
+        bmrValue = 10 * weightKg + 6.25 * heightCm - 5 * age - 161;
       }
-      formulaUsedName = "Mifflin-St Jeor (Standard Gold Standard)";
+      formulaUsedName = "Mifflin-St Jeor";
       break;
     }
   }
 
   // Activity Multipliers
-  const activityLevel = inputs.activityLevel || "moderate";
-  let activityMultiplier = 1.55;
-  switch (activityLevel) {
-    case "sedentary":
-      activityMultiplier = 1.2;
-      break;
-    case "light":
-      activityMultiplier = 1.375;
-      break;
-    case "moderate":
-      activityMultiplier = 1.55;
-      break;
-    case "active":
-      activityMultiplier = 1.725;
-      break;
-    case "very-active":
-      activityMultiplier = 1.9;
-      break;
-  }
-
-  const tdee = Math.round(bmr * activityMultiplier);
+  const activityLevel: ActivityLevel = inputs.activityLevel || "moderate";
+  const multipliers: Record<ActivityLevel, number> = {
+    sedentary: 1.2,
+    light: 1.375,
+    moderate: 1.55,
+    active: 1.725,
+    "very-active": 1.9,
+    "extra-active": 2.0,
+  };
+  const activityMultiplier = multipliers[activityLevel] || 1.55;
+  const tdee = Math.round(bmrValue * activityMultiplier);
 
   // Goal Calorie Target Adjustments
-  const goal = inputs.goal || "maintain";
+  let goal: FitnessGoal = inputs.goal || "maintain";
   let calorieAdjustment = 0;
   let weeklyWeightDeltaLbs = 0;
+
+  // Sync mode defaults if goal was not specifically overridden
+  if (inputs.goal === undefined || inputs.goal === null) {
+    if (mode === "cutting") goal = "loss";
+    else if (mode === "bulking") goal = "gain";
+    else if (mode === "recomp") goal = "recomp";
+    else if (mode === "maintenance") goal = "maintain";
+  }
 
   switch (goal) {
     case "mild-loss":
@@ -159,28 +179,37 @@ export function calculateMacroCalculator(
       break;
   }
 
-  const targetCalories = Math.max(1200, Math.round(tdee + calorieAdjustment));
+  const targetCalories = Math.max(1000, Math.round(tdee + calorieAdjustment));
   const weeklyCalories = targetCalories * 7;
 
   // Diet Style & Macro Splits
-  const dietStyle = inputs.dietStyle || "balanced";
+  let dietStyle: DietStyleType = inputs.dietStyle || "balanced";
   let pPct = 30;
   let cPct = 40;
   let fPct = 30;
 
-  if (dietStyle === "low-carb" || mode === "cutting") {
-    pPct = 40;
-    cPct = 20;
-    fPct = 40;
-  } else if (dietStyle === "high-protein" || mode === "high-protein") {
-    pPct = 45;
-    cPct = 35;
-    fPct = 20;
-  } else if (dietStyle === "keto" || mode === "keto") {
+  // Handle mode-specific diet styles
+  if (mode === "keto" || dietStyle === "keto") {
     pPct = 25;
     cPct = 5;
     fPct = 70;
-  } else if (dietStyle === "custom") {
+  } else if (mode === "high-protein" || dietStyle === "high-protein") {
+    pPct = 45;
+    cPct = 35;
+    fPct = 20;
+  } else if (mode === "recomp") {
+    pPct = 35;
+    cPct = 40;
+    fPct = 25;
+  } else if (mode === "athlete" || dietStyle === "athlete") {
+    pPct = 25;
+    cPct = 55;
+    fPct = 20;
+  } else if (dietStyle === "low-carb" || (mode === "cutting" && inputs.dietStyle === "low-carb")) {
+    pPct = 40;
+    cPct = 20;
+    fPct = 40;
+  } else if (dietStyle === "custom" || mode === "custom") {
     pPct = Number(inputs.customProteinPct) || 30;
     cPct = Number(inputs.customCarbsPct) || 40;
     fPct = Number(inputs.customFatPct) || 30;
@@ -210,8 +239,6 @@ export function calculateMacroCalculator(
   };
 
   // Body Composition Metrics
-  const heightM = heightCm / 100;
-  const bmi = Number((weightKg / (heightM * heightM)).toFixed(1));
   const ffmi = Number(((lbmKg / (heightM * heightM)) + 6.1 * (1.8 - heightM)).toFixed(1));
 
   let healthScore = 90;
@@ -237,16 +264,16 @@ export function calculateMacroCalculator(
   // 12-Week Weight Trajectory
   const weightTrajectory: WeightTrajectoryPoint[] = [];
   for (let w = 0; w <= 12; w++) {
-    const estLbs = weightLbs + weeklyWeightDeltaLbs * w;
+    const estLbs = Math.max(30, weightLbs + weeklyWeightDeltaLbs * w);
     weightTrajectory.push({
       week: w,
       weekLabel: `Wk ${w}`,
       estimatedWeightLbs: Number(estLbs.toFixed(1)),
-      estimatedWeightKg: Number((estLbs / 2.20462).toFixed(1)),
+      estimatedWeightKg: Number((estLbs * 0.45359237).toFixed(1)),
     });
   }
 
-  // 40+ Food Database Array (Reference from PDF + Extended)
+  // 40+ Food Database Array
   const foodDatabase: FoodDatabaseItem[] = [
     { id: "f1", name: "Apple", category: "Fruits", servingSize: "1 (4 oz.)", protein: 0.27, carbs: 14.36, fat: 0.18, calories: 59 },
     { id: "f2", name: "Banana", category: "Fruits", servingSize: "1 (6 oz.)", protein: 1.85, carbs: 38.85, fat: 0.56, calories: 168 },
@@ -284,9 +311,9 @@ export function calculateMacroCalculator(
 
   // Smart Insights & Recommendations
   const insights: string[] = [
-    `Your daily TDEE is ${tdee} kcal calculated via ${formulaUsedName}.`,
+    `Your estimated daily TDEE is ${tdee} kcal calculated via ${formulaUsedName}.`,
     `For your goal (${goal}), your recommended daily energy target is ${targetCalories} kcal.`,
-    `Your daily protein target is ${proteinOutput.grams}g (${proteinOutput.calories} kcal, ${pPct}% of total calories).`,
+    `Your daily protein target is ${proteinOutput.grams}g (${proteinOutput.calories} kcal, ${pPct}% of total energy).`,
   ];
 
   if (goal.includes("loss")) {
@@ -298,15 +325,15 @@ export function calculateMacroCalculator(
   const recommendations: string[] = [
     `Divide your daily macro target of ${proteinOutput.grams}g protein into 3 to 5 meals spaced 3 to 4 hours apart.`,
     `Prioritize high-quality protein sources: chicken breast, egg whites, lean beef, fish, tofu, and non-fat Greek yogurt.`,
-    `Track your body weight weekly under identical conditions (morning, fasted) to adjust calorie targets.`,
-    `Drink at least 3 to 4 liters of water daily to support nutrient absorption and metabolic function.`,
+    `Track your body weight weekly under identical conditions (morning, fasted) to evaluate trend lines.`,
+    `Drink adequate water (3 to 4 liters daily) to support nutrient transport and hydration.`,
   ];
 
   return {
     mode,
     unitSystem,
-    bmr: Math.round(bmr),
-    rmr: Math.round(bmr * 1.05),
+    bmr: Math.round(bmrValue),
+    rmr: Math.round(bmrValue * 1.05),
     tdee,
     targetCalories,
     weeklyCalories,
@@ -336,4 +363,3 @@ export function calculateMacroOutputs(inputs: Record<string, any>): MacroCalcula
 }
 
 export default calculateMacroCalculator;
-
