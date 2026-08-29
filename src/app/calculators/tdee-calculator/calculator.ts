@@ -19,32 +19,75 @@ export function calculateTdeeCalculator(
   const unitSystem: UnitSystem = inputs.unitSystem || "us";
   const energyUnit: EnergyUnit = inputs.energyUnit || "kcal";
   const mode: TdeeCalculationMode = inputs.calculationMode || "tdee";
-  const age = Number(inputs.age) || 25;
-  const gender: Gender = inputs.gender || "male";
+  const gender: Gender = inputs.gender === "female" ? "female" : "male";
+
+  // Safe extraction of age
+  const rawAge = inputs.age !== undefined && !isNaN(Number(inputs.age)) ? Number(inputs.age) : 25;
 
   // Height & Weight Conversions
-  let heightCm = 175;
-  let weightKg = 72;
-  let weightLbs = 160;
+  let heightCm = 177.8;
+  let weightKg = 74.8428;
+  let weightLbs = 165;
+  let heightFeet = 5;
+  let heightInches = 10;
 
   if (unitSystem === "us") {
-    const feet = Number(inputs.heightFeet) || 5;
-    const inches = Number(inputs.heightInches) || 10;
-    const totalInches = feet * 12 + inches;
+    heightFeet = inputs.heightFeet !== undefined && !isNaN(Number(inputs.heightFeet)) ? Number(inputs.heightFeet) : 5;
+    heightInches = inputs.heightInches !== undefined && !isNaN(Number(inputs.heightInches)) ? Number(inputs.heightInches) : 10;
+    const totalInches = heightFeet * 12 + heightInches;
     heightCm = totalInches * 2.54;
 
-    weightLbs = Number(inputs.weightLbs) || 160;
+    weightLbs = inputs.weightLbs !== undefined && !isNaN(Number(inputs.weightLbs)) ? Number(inputs.weightLbs) : 165;
     weightKg = weightLbs / 2.20462;
   } else {
-    heightCm = Number(inputs.heightCm) || 175;
-    weightKg = Number(inputs.weightKg) || 72;
+    heightCm = inputs.heightCm !== undefined && !isNaN(Number(inputs.heightCm)) ? Number(inputs.heightCm) : 178;
+    weightKg = inputs.weightKg !== undefined && !isNaN(Number(inputs.weightKg)) ? Number(inputs.weightKg) : 75;
     weightLbs = weightKg * 2.20462;
+    const totalInches = heightCm / 2.54;
+    heightFeet = Math.floor(totalInches / 12);
+    heightInches = parseFloat((totalInches % 12).toFixed(1));
   }
 
-  const bodyFatPct = Number(inputs.bodyFat) || 20;
+  // Input Validation
+  const isAgeValid = rawAge >= 2 && rawAge <= 120;
+  const isHeightValid = heightCm > 0 && !isNaN(heightCm);
+  const isWeightValid = weightKg > 0 && !isNaN(weightKg);
+
+  if (!isAgeValid || !isHeightValid || !isWeightValid) {
+    let errMsg = "Please enter valid non-zero physical measurements.";
+    if (!isAgeValid) errMsg = "Age must be between 2 and 120 years.";
+    else if (!isHeightValid) errMsg = "Height must be a positive number greater than zero.";
+    else if (!isWeightValid) errMsg = "Weight must be a positive number greater than zero.";
+
+    return {
+      isValid: false,
+      errorMessage: errMsg,
+      mode,
+      unitSystem,
+      energyUnit,
+      bmr: 0,
+      tdee: 0,
+      targetCalories: 0,
+      formulaUsed: "N/A",
+      components: { bmrCalories: 0, eatCalories: 0, neatCalories: 0, tefCalories: 0 },
+      timeframeTotals: { daily: 0, weekly: 0, monthly: 0, annual: 0 },
+      goalPlan: { maintenance: 0, mildLoss: 0, moderateLoss: 0, extremeLoss: 0, leanBulk: 0, moderateGain: 0, extremeGain: 0 },
+      weightProjections: [],
+      activityBurnTable: [],
+      formulaComparisons: [],
+      bodyComposition: { leanBodyMassLbs: 0, fatMassLbs: 0, bodyFatPct: 0, ffmi: 0, bmi: 0, healthScore: 0 },
+      insights: [errMsg],
+      recommendations: ["Ensure all measurements are positive numbers."],
+    };
+  }
+
+  const age = rawAge;
+  const bodyFatPct = inputs.bodyFat !== undefined && !isNaN(Number(inputs.bodyFat))
+    ? Math.max(2, Math.min(65, Number(inputs.bodyFat)))
+    : 18;
   const lbmKg = weightKg * (1 - bodyFatPct / 100);
   const lbmLbs = lbmKg * 2.20462;
-  const fatMassLbs = weightLbs - lbmLbs;
+  const fatMassLbs = Math.max(0, weightLbs - lbmLbs);
 
   // BMR Formula Selection (7 Clinical Formulas)
   const formula: BmrFormulaType = inputs.bmrFormula || "mifflin";
@@ -65,10 +108,14 @@ export function calculateTdeeCalculator(
         return 500 + 22 * lbmKg;
       case "schofield":
         if (gender === "male") {
+          if (age < 10) return 22.7 * weightKg + 495;
+          if (age < 18) return 17.5 * weightKg + 651;
           if (age < 30) return 15.057 * weightKg + 679;
           if (age < 60) return 11.6 * weightKg + 879;
           return 13.5 * weightKg + 487;
         } else {
+          if (age < 10) return 22.5 * weightKg + 499;
+          if (age < 18) return 12.2 * weightKg + 746;
           if (age < 30) return 14.7 * weightKg + 496;
           if (age < 60) return 8.7 * weightKg + 829;
           return 10.5 * weightKg + 596;
@@ -91,7 +138,7 @@ export function calculateTdeeCalculator(
   if (formula === "revised-harris") formulaUsedName = "Revised Harris-Benedict";
   if (formula === "cunningham") formulaUsedName = "Cunningham (Athletic LBM)";
   if (formula === "schofield") formulaUsedName = "Schofield (WHO Equation)";
-  if (formula === "owen") formulaUsedName = "Owen (Lean Mass Equation)";
+  if (formula === "owen") formulaUsedName = "Owen Equation";
 
   // Activity Level Multipliers
   const activityLevel: ActivityLevel = inputs.activityLevel || "moderate";
@@ -118,14 +165,28 @@ export function calculateTdeeCalculator(
   }
 
   // Step Count Bonus Adjustment
-  const dailySteps = Number(inputs.dailySteps) || 7500;
+  const dailySteps = inputs.dailySteps !== undefined && !isNaN(Number(inputs.dailySteps))
+    ? Math.max(0, Number(inputs.dailySteps))
+    : 7500;
   let stepBonusKcal = 0;
   if (dailySteps >= 15000) stepBonusKcal = 450;
   else if (dailySteps >= 12500) stepBonusKcal = 350;
   else if (dailySteps >= 10000) stepBonusKcal = 250;
   else if (dailySteps >= 7500) stepBonusKcal = 100;
 
-  const baseTdeeKcal = Math.round(bmrKcal * activityMultiplier + stepBonusKcal);
+  const workoutFreq = inputs.workoutFrequency !== undefined && !isNaN(Number(inputs.workoutFrequency))
+    ? Math.max(0, Number(inputs.workoutFrequency))
+    : 4;
+  const workoutMin = inputs.workoutDuration !== undefined && !isNaN(Number(inputs.workoutDuration))
+    ? Math.max(0, Number(inputs.workoutDuration))
+    : 45;
+  const eatKcal = Math.round((workoutFreq * workoutMin * (weightKg * 0.08)) / 7); // Exercise Activity
+  const bmrRounded = Math.round(bmrKcal);
+
+  // Reconciled Base TDEE: higher of standard PAL activity estimate or physiological lower bound (BMR + EAT + TEF)
+  const palTdee = Math.round(bmrKcal * activityMultiplier + stepBonusKcal);
+  const minRequiredTdee = Math.ceil((bmrRounded + eatKcal) / 0.9);
+  const baseTdeeKcal = Math.max(palTdee, minRequiredTdee);
 
   // Goal & Mode Calorie Adjustments
   const goal: FitnessGoal = inputs.goal || "maintain";
@@ -142,7 +203,7 @@ export function calculateTdeeCalculator(
   } else if (mode === "athlete") {
     calorieAdjustment = 300;
   } else if (mode === "custom") {
-    calorieAdjustment = Number(inputs.customDelta) || 0;
+    calorieAdjustment = inputs.customDelta !== undefined && !isNaN(Number(inputs.customDelta)) ? Number(inputs.customDelta) : 0;
   } else {
     switch (goal) {
       case "mild-loss":
@@ -177,10 +238,8 @@ export function calculateTdeeCalculator(
 
   // TDEE Energy Component Breakdown
   const tefKcal = Math.round(baseTdeeKcal * 0.1); // ~10% Thermic Effect of Food
-  const workoutFreq = Number(inputs.workoutFrequency) || 4;
-  const workoutMin = Number(inputs.workoutDuration) || 45;
-  const eatKcal = Math.round((workoutFreq * workoutMin * (weightKg * 0.08)) / 7); // Exercise Activity
-  const neatKcal = Math.max(0, baseTdeeKcal - Math.round(bmrKcal) - eatKcal - tefKcal); // Non-Exercise Activity
+  // Reconciled NEAT guaranteeing exact sum: bmr + neat + eat + tef === baseTdeeKcal
+  const neatKcal = Math.max(0, baseTdeeKcal - bmrRounded - eatKcal - tefKcal);
 
   // Kilojoule Conversion (1 kcal = 4.184 kJ)
   const unitMultiplier = energyUnit === "kj" ? 4.184 : 1.0;
@@ -213,7 +272,8 @@ export function calculateTdeeCalculator(
   const weightProjections: WeightProjectionPoint[] = [];
 
   for (let w = 0; w <= 12; w++) {
-    const projLbs = Number((weightLbs + weeklyChangeLbs * w).toFixed(1));
+    const rawProjLbs = weightLbs + weeklyChangeLbs * w;
+    const projLbs = Number(Math.max(30, rawProjLbs).toFixed(1));
     weightProjections.push({
       week: w,
       weightLbs: projLbs,
@@ -279,6 +339,7 @@ export function calculateTdeeCalculator(
   ];
 
   return {
+    isValid: true,
     mode,
     unitSystem,
     energyUnit,
@@ -326,4 +387,3 @@ export function calculateTdeeOutputs(inputs: Record<string, any>): TdeeCalculato
 }
 
 export const calculateTDEECalculator = calculateTdeeCalculator;
-

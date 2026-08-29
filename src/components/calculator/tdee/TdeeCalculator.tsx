@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Activity,
   Sparkles,
   Flame,
   Scale,
   TrendingUp,
-  Search,
   Download,
   Printer,
   Copy,
+  Check,
   Info,
   CheckCircle2,
   Sliders,
@@ -18,11 +18,10 @@ import {
   Zap,
   Award,
   Layers,
-  Footprints,
-  Calendar,
-  ChevronRight,
-  PieChart as PieIcon,
-  LineChart as LineIcon,
+  Share2,
+  Bookmark,
+  Trash2,
+  RefreshCw,
 } from "lucide-react";
 import {
   PieChart,
@@ -51,13 +50,36 @@ import {
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
 
+interface SavedTdeeScenario {
+  id: string;
+  timestamp: string;
+  mode: TdeeCalculationMode;
+  unitSystem: UnitSystem;
+  energyUnit: EnergyUnit;
+  age: number;
+  gender: Gender;
+  heightFeet: number;
+  heightInches: number;
+  heightCm: number;
+  weightLbs: number;
+  weightKg: number;
+  activityLevel: ActivityLevel;
+  goal: FitnessGoal;
+  bmrFormula: BmrFormulaType;
+  dailySteps: number;
+  workoutFrequency: number;
+  tdee: number;
+  bmr: number;
+  targetCalories: number;
+}
+
 export function TdeeCalculator() {
   // Mode & Unit State
   const [calculationMode, setCalculationMode] = useState<TdeeCalculationMode>("tdee");
   const [unitSystem, setUnitSystem] = useState<UnitSystem>("us");
   const [energyUnit, setEnergyUnit] = useState<EnergyUnit>("kcal");
 
-  // Basic Inputs State
+  // Basic Inputs State (Canonical Reference Baseline: 25M, 5ft 10in, 165 lbs)
   const [age, setAge] = useState<number>(25);
   const [gender, setGender] = useState<Gender>("male");
   const [heightFeet, setHeightFeet] = useState<number>(5);
@@ -79,22 +101,135 @@ export function TdeeCalculator() {
   // Active View Tab
   const [activeTab, setActiveTab] = useState<
     | "components"
-    | "timeframes"
     | "goal-plan"
     | "projections"
     | "bmr-formulas"
     | "activity-burn"
-    | "body-comp"
   >("components");
 
-  // Modal, Copy & Hydration Mounted State
+  // Modal, Copy, Share & Persistence State
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [savedScenarios, setSavedScenarios] = useState<SavedTdeeScenario[]>([]);
 
-  React.useEffect(() => {
+  // Client hydration from localStorage
+  useEffect(() => {
     setIsMounted(true);
+    try {
+      const stored = localStorage.getItem("tdee_saved_scenarios");
+      if (stored) {
+        setSavedScenarios(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.error("Failed to load saved scenarios from localStorage", e);
+    }
   }, []);
+
+  // Client hydration from URL query parameters
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.has("unit")) {
+      const u = params.get("unit");
+      if (u === "us" || u === "metric") setUnitSystem(u);
+    }
+    if (params.has("energy")) {
+      const e = params.get("energy");
+      if (e === "kcal" || e === "kj") setEnergyUnit(e);
+    }
+    if (params.has("mode")) {
+      const m = params.get("mode") as TdeeCalculationMode;
+      if (m) setCalculationMode(m);
+    }
+    if (params.has("age")) {
+      const a = Number(params.get("age"));
+      if (!isNaN(a) && a >= 2 && a <= 120) setAge(a);
+    }
+    if (params.has("gender")) {
+      const g = params.get("gender");
+      if (g === "male" || g === "female") setGender(g);
+    }
+    if (params.has("hFt")) {
+      const v = Number(params.get("hFt"));
+      if (!isNaN(v) && v >= 0) setHeightFeet(v);
+    }
+    if (params.has("hIn")) {
+      const v = Number(params.get("hIn"));
+      if (!isNaN(v) && v >= 0) setHeightInches(v);
+    }
+    if (params.has("hCm")) {
+      const v = Number(params.get("hCm"));
+      if (!isNaN(v) && v > 0) setHeightCm(v);
+    }
+    if (params.has("wLbs")) {
+      const v = Number(params.get("wLbs"));
+      if (!isNaN(v) && v > 0) setWeightLbs(v);
+    }
+    if (params.has("wKg")) {
+      const v = Number(params.get("wKg"));
+      if (!isNaN(v) && v > 0) setWeightKg(v);
+    }
+    if (params.has("act")) {
+      const act = params.get("act") as ActivityLevel;
+      if (act) setActivityLevel(act);
+    }
+    if (params.has("goal")) {
+      const g = params.get("goal") as FitnessGoal;
+      if (g) setGoal(g);
+    }
+    if (params.has("formula")) {
+      const f = params.get("formula") as BmrFormulaType;
+      if (f) setBmrFormula(f);
+    }
+    if (params.has("steps")) {
+      const s = Number(params.get("steps"));
+      if (!isNaN(s) && s >= 0) setDailySteps(s);
+    }
+    if (params.has("wf")) {
+      const w = Number(params.get("wf"));
+      if (!isNaN(w) && w >= 0) setWorkoutFrequency(w);
+    }
+  }, []);
+
+  // Sync unit changes
+  const handleUnitSystemChange = (newUnit: UnitSystem) => {
+    setUnitSystem(newUnit);
+    if (newUnit === "metric") {
+      const totalInches = heightFeet * 12 + heightInches;
+      setHeightCm(Math.round(totalInches * 2.54));
+      setWeightKg(Math.round(weightLbs / 2.20462));
+    } else {
+      const totalInches = heightCm / 2.54;
+      setHeightFeet(Math.floor(totalInches / 12));
+      setHeightInches(Math.round(totalInches % 12));
+      setWeightLbs(Math.round(weightKg * 2.20462));
+    }
+  };
+
+  // Reset to canonical baseline defaults
+  const handleReset = () => {
+    setCalculationMode("tdee");
+    setUnitSystem("us");
+    setEnergyUnit("kcal");
+    setAge(25);
+    setGender("male");
+    setHeightFeet(5);
+    setHeightInches(10);
+    setHeightCm(178);
+    setWeightLbs(165);
+    setWeightKg(75);
+    setActivityLevel("moderate");
+    setGoal("maintain");
+    setBmrFormula("mifflin");
+    setBodyFat(18);
+    setDailySteps(7500);
+    setWorkoutFrequency(4);
+    setWorkoutDuration(45);
+    setCustomDelta(0);
+  };
 
   // Results Calculation Memo
   const results = useMemo(() => {
@@ -163,12 +298,6 @@ export function TdeeCalculator() {
     { name: "TEF (Digestion)", value: results.components.tefCalories, color: "#8b5cf6" },
   ];
 
-  // Timeframe Expenditure Bar Data
-  const timeframeBarData = [
-    { name: "Daily", Expenditure: results.timeframeTotals.daily },
-    { name: "Weekly / 7", Expenditure: Math.round(results.timeframeTotals.weekly / 7) },
-  ];
-
   // Goal Strategy Bar Data
   const goalPlanBarData = [
     { name: "Extreme Loss", Target: results.goalPlan.extremeLoss },
@@ -181,41 +310,167 @@ export function TdeeCalculator() {
 
   // CSV Export Handler
   const handleExportCSV = () => {
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Category,Parameter,Value\n";
-    csvContent += `Mode,${results.mode}\n`;
-    csvContent += `BMR Formula,${results.formulaUsed}\n`;
-    csvContent += `Energy Unit,${results.energyUnit}\n`;
-    csvContent += `BMR (Basal Metabolic Rate),${results.bmr} ${unitLabel}\n`;
-    csvContent += `TDEE (Total Expenditure),${results.tdee} ${unitLabel}\n`;
-    csvContent += `Target Calorie Goal,${results.targetCalories} ${unitLabel}\n`;
-    csvContent += `Weekly Target,${results.timeframeTotals.weekly.toLocaleString()} ${unitLabel}\n\n`;
+    let csv = "Category,Parameter,Value\n";
+    csv += `Metadata,Exported At,"${new Date().toISOString()}"\n`;
+    csv += `Metadata,Calculation Mode,"${results.mode}"\n`;
+    csv += `Profile,Age,${age}\n`;
+    csv += `Profile,Gender,"${gender}"\n`;
+    csv += `Profile,Unit System,"${unitSystem}"\n`;
+    csv += `Profile,Energy Unit,"${energyUnit}"\n`;
+    if (unitSystem === "us") {
+      csv += `Profile,Height,"${heightFeet} ft ${heightInches} in"\n`;
+      csv += `Profile,Weight,"${weightLbs} lbs"\n`;
+    } else {
+      csv += `Profile,Height,"${heightCm} cm"\n`;
+      csv += `Profile,Weight,"${weightKg} kg"\n`;
+    }
+    csv += `Profile,Activity Level,"${activityLevel}"\n`;
+    csv += `Profile,Daily Steps,${dailySteps}\n`;
+    csv += `Profile,Workouts,"${workoutFrequency} sessions/wk"\n`;
+    csv += `Results,BMR Formula,"${results.formulaUsed}"\n`;
+    csv += `Results,Basal Metabolic Rate (BMR),${results.bmr} ${unitLabel}\n`;
+    csv += `Results,Total Daily Energy Expenditure (TDEE),${results.tdee} ${unitLabel}\n`;
+    csv += `Results,Target Calorie Goal,${results.targetCalories} ${unitLabel}\n`;
+    csv += `Results,NEAT Movement,${results.components.neatCalories} ${unitLabel}\n`;
+    csv += `Results,EAT Exercise,${results.components.eatCalories} ${unitLabel}\n`;
+    csv += `Results,TEF Digestion,${results.components.tefCalories} ${unitLabel}\n\n`;
 
-    csvContent += "Week,Projected Weight (lbs),Projected Weight (kg)\n";
+    csv += "12-Week Weight Projection\nWeek,Projected Weight (lbs),Projected Weight (kg)\n";
     results.weightProjections.forEach((p) => {
-      csvContent += `${p.week},${p.weightLbs},${p.weightKg}\n`;
+      csv += `${p.week},${p.weightLbs},${p.weightKg}\n`;
+    });
+    csv += "\n";
+
+    csv += "7 Clinical BMR Formulas Comparison\nFormula,BMR Value,Estimated TDEE,Variance vs Current\n";
+    results.formulaComparisons.forEach((fc) => {
+      csv += `"${fc.formulaName}",${fc.bmrValue},${fc.tdeeValue},${fc.difference}\n`;
     });
 
-    const encodedUri = encodeURI(csvContent);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `tdee_plan_${results.targetCalories}${unitLabel}.csv`);
+    link.href = url;
+    link.download = `tdee_assessment_${results.targetCalories}${unitLabel}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // Copy Summary Handler
   const handleCopy = () => {
-    const summaryText = `TDEE Calculator Results:\n• Total Daily Energy Expenditure (TDEE): ${results.tdee} ${unitLabel}\n• Target Calorie Goal: ${results.targetCalories} ${unitLabel}/day (${results.timeframeTotals.weekly.toLocaleString()} ${unitLabel}/week)\n• Basal Metabolic Rate (BMR): ${results.bmr} ${unitLabel}\n• Components: BMR (${results.components.bmrCalories} ${unitLabel}), NEAT (${results.components.neatCalories} ${unitLabel}), EAT (${results.components.eatCalories} ${unitLabel}), TEF (${results.components.tefCalories} ${unitLabel})\nCalculated at Calculator Platform.`;
+    const summaryText = `TDEE Assessment Summary:
+• Total Daily Energy Expenditure (TDEE): ${results.tdee} ${unitLabel}/day
+• Target Calorie Goal: ${results.targetCalories} ${unitLabel}/day
+• Basal Metabolic Rate (BMR): ${results.bmr} ${unitLabel}/day (${results.formulaUsed})
+• Energy Components:
+  - BMR: ${results.components.bmrCalories} ${unitLabel}
+  - NEAT: ${results.components.neatCalories} ${unitLabel} (${dailySteps.toLocaleString()} steps)
+  - EAT: ${results.components.eatCalories} ${unitLabel} (${workoutFrequency} workouts/wk)
+  - TEF: ${results.components.tefCalories} ${unitLabel} (~10% of TDEE)
+Calculated with Calculator Platform TDEE Suite.`;
+
     navigator.clipboard.writeText(summaryText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
 
+  // Share URL Handler
+  const handleShare = () => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.origin + window.location.pathname);
+    url.searchParams.set("unit", unitSystem);
+    url.searchParams.set("energy", energyUnit);
+    url.searchParams.set("mode", calculationMode);
+    url.searchParams.set("age", age.toString());
+    url.searchParams.set("gender", gender);
+    if (unitSystem === "us") {
+      url.searchParams.set("hFt", heightFeet.toString());
+      url.searchParams.set("hIn", heightInches.toString());
+      url.searchParams.set("wLbs", weightLbs.toString());
+    } else {
+      url.searchParams.set("hCm", heightCm.toString());
+      url.searchParams.set("wKg", weightKg.toString());
+    }
+    url.searchParams.set("act", activityLevel);
+    url.searchParams.set("goal", goal);
+    url.searchParams.set("formula", bmrFormula);
+    url.searchParams.set("steps", dailySteps.toString());
+    url.searchParams.set("wf", workoutFrequency.toString());
+
+    window.history.replaceState({}, "", url.toString());
+    navigator.clipboard.writeText(url.toString());
+    setShared(true);
+    setTimeout(() => setShared(false), 2500);
+  };
+
+  // Save Scenario to localStorage
+  const handleSaveScenario = () => {
+    const scenario: SavedTdeeScenario = {
+      id: "tdee-" + Date.now(),
+      timestamp: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+      mode: calculationMode,
+      unitSystem,
+      energyUnit,
+      age,
+      gender,
+      heightFeet,
+      heightInches,
+      heightCm,
+      weightLbs,
+      weightKg,
+      activityLevel,
+      goal,
+      bmrFormula,
+      dailySteps,
+      workoutFrequency,
+      tdee: results.tdee,
+      bmr: results.bmr,
+      targetCalories: results.targetCalories,
+    };
+
+    const updated = [scenario, ...savedScenarios.slice(0, 9)];
+    setSavedScenarios(updated);
+    try {
+      localStorage.setItem("tdee_saved_scenarios", JSON.stringify(updated));
+    } catch (e) {
+      console.error("Failed to save scenario to localStorage", e);
+    }
+  };
+
+  // Restore Scenario
+  const handleRestoreScenario = (sc: SavedTdeeScenario) => {
+    setCalculationMode(sc.mode);
+    setUnitSystem(sc.unitSystem);
+    setEnergyUnit(sc.energyUnit);
+    setAge(sc.age);
+    setGender(sc.gender);
+    setHeightFeet(sc.heightFeet);
+    setHeightInches(sc.heightInches);
+    setHeightCm(sc.heightCm);
+    setWeightLbs(sc.weightLbs);
+    setWeightKg(sc.weightKg);
+    setActivityLevel(sc.activityLevel);
+    setGoal(sc.goal);
+    setBmrFormula(sc.bmrFormula);
+    setDailySteps(sc.dailySteps);
+    setWorkoutFrequency(sc.workoutFrequency);
+  };
+
+  // Delete Scenario
+  const handleDeleteScenario = (id: string) => {
+    const filtered = savedScenarios.filter((s) => s.id !== id);
+    setSavedScenarios(filtered);
+    try {
+      localStorage.setItem("tdee_saved_scenarios", JSON.stringify(filtered));
+    } catch (e) {
+      console.error("Failed to delete scenario from localStorage", e);
+    }
+  };
+
   // Print Handler
   const handlePrint = () => {
-    window.print();
+    setIsReportOpen(true);
   };
 
   // Report Modal Data Structure
@@ -324,8 +579,9 @@ export function TdeeCalculator() {
             return (
               <button
                 key={m.id}
+                type="button"
                 onClick={() => setCalculationMode(m.id)}
-                className={`flex items-center gap-2.5 p-2.5 rounded-xl transition-all duration-200 text-left ${
+                className={`flex items-center gap-2.5 p-2.5 rounded-xl transition-all duration-200 text-left cursor-pointer ${
                   isSelected
                     ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-md shadow-cyan-500/20 font-semibold scale-[1.01]"
                     : "bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-slate-900 border border-slate-200/80"
@@ -350,20 +606,22 @@ export function TdeeCalculator() {
         </div>
       </div>
 
-      {/* Main Calculation & Inputs Grid (Light Theme) */}
+      {/* Main Calculation & Inputs Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Inputs Form */}
         <div className="lg:col-span-5 space-y-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm print:hidden">
           <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-            <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">Personal Parameters
+            <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">
+              Personal Parameters
             </h2>
             
             {/* Unit System & Energy Unit Toggles */}
             <div className="flex items-center gap-2">
               <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
                 <button
-                  onClick={() => setUnitSystem("us")}
-                  className={`px-2 py-1 rounded-lg font-bold transition-all ${
+                  type="button"
+                  onClick={() => handleUnitSystemChange("us")}
+                  className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${
                     unitSystem === "us"
                       ? "bg-white text-cyan-700 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
@@ -372,8 +630,9 @@ export function TdeeCalculator() {
                   US
                 </button>
                 <button
-                  onClick={() => setUnitSystem("metric")}
-                  className={`px-2 py-1 rounded-lg font-bold transition-all ${
+                  type="button"
+                  onClick={() => handleUnitSystemChange("metric")}
+                  className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${
                     unitSystem === "metric"
                       ? "bg-white text-cyan-700 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
@@ -385,8 +644,9 @@ export function TdeeCalculator() {
 
               <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
                 <button
+                  type="button"
                   onClick={() => setEnergyUnit("kcal")}
-                  className={`px-2 py-1 rounded-lg font-bold transition-all ${
+                  className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${
                     energyUnit === "kcal"
                       ? "bg-white text-emerald-700 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
@@ -395,8 +655,9 @@ export function TdeeCalculator() {
                   kcal
                 </button>
                 <button
+                  type="button"
                   onClick={() => setEnergyUnit("kj")}
-                  className={`px-2 py-1 rounded-lg font-bold transition-all ${
+                  className={`px-2 py-1 rounded-lg font-bold transition-all cursor-pointer ${
                     energyUnit === "kj"
                       ? "bg-white text-emerald-700 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
@@ -405,19 +666,37 @@ export function TdeeCalculator() {
                   kJ
                 </button>
               </div>
+
+              <button
+                type="button"
+                onClick={handleReset}
+                title="Reset Defaults"
+                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors cursor-pointer"
+              >
+                <RefreshCw className="w-4 h-4" />
+              </button>
             </div>
           </div>
+
+          {/* Validation Warning */}
+          {!results.isValid && (
+            <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs flex items-center gap-2">
+              <Info className="w-4 h-4 shrink-0 text-rose-600" />
+              <span>{results.errorMessage}</span>
+            </div>
+          )}
 
           {/* Basic Input Fields */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">
+              <label htmlFor="tdee-age" className="block text-sm font-semibold text-slate-700 mb-1">
                 Age (Years)
               </label>
               <input
+                id="tdee-age"
                 type="number"
-                min={15}
-                max={80}
+                min={2}
+                max={120}
                 value={age}
                 onChange={(e) => setAge(Number(e.target.value))}
                 className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
@@ -425,13 +704,14 @@ export function TdeeCalculator() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">
+              <label htmlFor="tdee-gender" className="block text-sm font-semibold text-slate-700 mb-1">
                 Gender
               </label>
               <select
+                id="tdee-gender"
                 value={gender}
                 onChange={(e) => setGender(e.target.value as Gender)}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white cursor-pointer"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -443,23 +723,25 @@ export function TdeeCalculator() {
           {unitSystem === "us" ? (
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label htmlFor="tdee-height-ft" className="block text-xs font-semibold text-slate-700 mb-1">
                   Height (Feet)
                 </label>
                 <input
+                  id="tdee-height-ft"
                   type="number"
-                  min={4}
-                  max={7}
+                  min={1}
+                  max={8}
                   value={heightFeet}
                   onChange={(e) => setHeightFeet(Number(e.target.value))}
                   className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label htmlFor="tdee-height-in" className="block text-xs font-semibold text-slate-700 mb-1">
                   Height (Inches)
                 </label>
                 <input
+                  id="tdee-height-in"
                   type="number"
                   min={0}
                   max={11}
@@ -469,13 +751,14 @@ export function TdeeCalculator() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label htmlFor="tdee-weight-lbs" className="block text-xs font-semibold text-slate-700 mb-1">
                   Weight (lbs)
                 </label>
                 <input
+                  id="tdee-weight-lbs"
                   type="number"
-                  min={70}
-                  max={400}
+                  min={30}
+                  max={800}
                   value={weightLbs}
                   onChange={(e) => setWeightLbs(Number(e.target.value))}
                   className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
@@ -485,26 +768,28 @@ export function TdeeCalculator() {
           ) : (
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">
+                <label htmlFor="tdee-height-cm" className="block text-sm font-semibold text-slate-700 mb-1">
                   Height (cm)
                 </label>
                 <input
+                  id="tdee-height-cm"
                   type="number"
-                  min={120}
-                  max={220}
+                  min={50}
+                  max={250}
                   value={heightCm}
                   onChange={(e) => setHeightCm(Number(e.target.value))}
                   className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">
+                <label htmlFor="tdee-weight-kg" className="block text-sm font-semibold text-slate-700 mb-1">
                   Weight (kg)
                 </label>
                 <input
+                  id="tdee-weight-kg"
                   type="number"
-                  min={35}
-                  max={200}
+                  min={15}
+                  max={350}
                   value={weightKg}
                   onChange={(e) => setWeightKg(Number(e.target.value))}
                   className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
@@ -516,51 +801,54 @@ export function TdeeCalculator() {
           {/* Activity & Goal Selection */}
           <div className="space-y-4 border-t border-slate-100 pt-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label htmlFor="tdee-activity" className="block text-xs font-semibold text-slate-700 mb-1">
                 Activity Level
               </label>
               <select
+                id="tdee-activity"
                 value={activityLevel}
                 onChange={(e) => setActivityLevel(e.target.value as ActivityLevel)}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white cursor-pointer"
               >
-                <option value="sedentary">Sedentary (desk job, &lt;5k steps)</option>
-                <option value="light">Light Active (exercise 1-3 times/week)</option>
-                <option value="moderate">Moderate Active (exercise 4-5 times/week)</option>
-                <option value="active">Active (exercise 6-7 times/week)</option>
-                <option value="very-active">Very Active (2+ hrs intense daily)</option>
-                <option value="athlete">Competitive Athlete (2+ sessions/day)</option>
+                <option value="sedentary">Sedentary (desk job, &lt;5k steps/day) — 1.20</option>
+                <option value="light">Light Active (exercise 1-3 times/week) — 1.375</option>
+                <option value="moderate">Moderate Active (exercise 4-5 times/week) — 1.55</option>
+                <option value="active">Active (exercise 6-7 times/week) — 1.725</option>
+                <option value="very-active">Very Active (2+ hrs intense daily) — 1.90</option>
+                <option value="athlete">Competitive Athlete (2+ sessions/day) — 2.10</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label htmlFor="tdee-goal" className="block text-xs font-semibold text-slate-700 mb-1">
                 Fitness Goal
               </label>
               <select
+                id="tdee-goal"
                 value={goal}
                 onChange={(e) => setGoal(e.target.value as FitnessGoal)}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white cursor-pointer"
               >
-                <option value="maintain">Maintain Weight</option>
-                <option value="mild-loss">Mild Weight Loss (-0.5 lb/week)</option>
-                <option value="loss">Weight Loss (-1.0 lb/week)</option>
-                <option value="extreme-loss">Extreme Weight Loss (-2.0 lb/week)</option>
-                <option value="mild-gain">Mild Lean Bulk (+0.5 lb/week)</option>
-                <option value="gain">Weight Gain (+1.0 lb/week)</option>
-                <option value="extreme-gain">Fast Muscle Gain (+2.0 lb/week)</option>
+                <option value="maintain">Maintain Weight (Equilibrium)</option>
+                <option value="mild-loss">Mild Weight Loss (-0.5 lb/week, -250 kcal)</option>
+                <option value="loss">Weight Loss (-1.0 lb/week, -500 kcal)</option>
+                <option value="extreme-loss">Extreme Weight Loss (-2.0 lb/week, -1000 kcal)</option>
+                <option value="mild-gain">Mild Lean Bulk (+0.5 lb/week, +250 kcal)</option>
+                <option value="gain">Weight Gain (+1.0 lb/week, +500 kcal)</option>
+                <option value="extreme-gain">Fast Muscle Gain (+2.0 lb/week, +1000 kcal)</option>
                 <option value="recomp">Body Recomposition (-200 kcal)</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label htmlFor="tdee-bmr-formula" className="block text-xs font-semibold text-slate-700 mb-1">
                 Clinical BMR Formula (7 Equations)
               </label>
               <select
+                id="tdee-bmr-formula"
                 value={bmrFormula}
                 onChange={(e) => setBmrFormula(e.target.value as BmrFormulaType)}
-                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white cursor-pointer"
               >
                 <option value="mifflin">Mifflin-St Jeor (Standard Clinical Default)</option>
                 <option value="katch">Katch-McArdle (Requires Body Fat %)</option>
@@ -568,25 +856,61 @@ export function TdeeCalculator() {
                 <option value="revised-harris">Revised Harris-Benedict (1984)</option>
                 <option value="cunningham">Cunningham (Athletic LBM)</option>
                 <option value="schofield">Schofield (WHO Equation)</option>
-                <option value="owen">Owen (Lean Mass Equation)</option>
+                <option value="owen">Owen Equation</option>
               </select>
             </div>
+
+            {(bmrFormula === "katch" || bmrFormula === "cunningham") && (
+              <div>
+                <label htmlFor="tdee-body-fat" className="block text-xs font-semibold text-slate-700 mb-1">
+                  Body Fat Percentage (%)
+                </label>
+                <input
+                  id="tdee-body-fat"
+                  type="number"
+                  min={2}
+                  max={65}
+                  value={bodyFat}
+                  onChange={(e) => setBodyFat(Number(e.target.value))}
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
+                />
+              </div>
+            )}
+
+            {calculationMode === "custom" && (
+              <div>
+                <label htmlFor="tdee-custom-delta" className="block text-xs font-semibold text-slate-700 mb-1">
+                  Custom Deficit / Surplus ({unitLabel})
+                </label>
+                <input
+                  id="tdee-custom-delta"
+                  type="number"
+                  step={50}
+                  value={customDelta}
+                  onChange={(e) => setCustomDelta(Number(e.target.value))}
+                  placeholder="-500 for loss, +300 for surplus"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
+                />
+              </div>
+            )}
           </div>
 
-          {/* Daily Steps & Workout Frequency */}
+          {/* Daily Steps & Workout Frequency Sliders */}
           <div className="space-y-4 border-t border-slate-100 pt-4">
-            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Step Count & Workout Frequency
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">
+              Step Count &amp; Workout Frequency
             </h3>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1">
+                <label htmlFor="tdee-daily-steps" className="block text-xs font-medium text-slate-600 mb-1">
                   Daily Steps: <span className="text-cyan-700 font-bold">{dailySteps.toLocaleString()}</span>
                 </label>
                 <input
+                  id="tdee-daily-steps"
                   type="range"
-                  min={2000}
-                  max={20000}
+                  min={0}
+                  max={25000}
                   step={500}
                   value={dailySteps}
                   onChange={(e) => setDailySteps(Number(e.target.value))}
@@ -595,10 +919,11 @@ export function TdeeCalculator() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1">
+                <label htmlFor="tdee-workout-freq" className="block text-xs font-medium text-slate-600 mb-1">
                   Workouts: <span className="text-cyan-700 font-bold">{workoutFrequency}x / wk</span>
                 </label>
                 <input
+                  id="tdee-workout-freq"
                   type="range"
                   min={0}
                   max={7}
@@ -609,6 +934,95 @@ export function TdeeCalculator() {
               </div>
             </div>
           </div>
+
+          {/* Complete Responsive Action Bar */}
+          <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold border border-slate-200 transition-colors cursor-pointer"
+              >
+                {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                {copied ? "Copied!" : "Copy Summary"}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleShare}
+                className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold border border-slate-200 transition-colors cursor-pointer"
+              >
+                {shared ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
+                {shared ? "Link Copied!" : "Share"}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleSaveScenario}
+                className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold border border-slate-200 transition-colors cursor-pointer"
+              >
+                <Bookmark className="w-3.5 h-3.5" />
+                Save Scenario
+              </button>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5">
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold border border-slate-200 transition-colors cursor-pointer"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                Print
+              </button>
+
+              <button
+                type="button"
+                onClick={handleExportCSV}
+                className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold border border-slate-200 transition-colors cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5" />
+                CSV
+              </button>
+            </div>
+          </div>
+
+          {/* Saved Scenarios History Drawer */}
+          {savedScenarios.length > 0 && (
+            <div className="pt-4 border-t border-slate-100 space-y-2">
+              <div className="text-xs font-bold text-slate-700 flex items-center justify-between">
+                <span>Saved Calculations ({savedScenarios.length})</span>
+                <span className="text-[10px] text-slate-400 font-normal">Click to restore</span>
+              </div>
+              <div className="space-y-1.5 max-h-36 overflow-y-auto">
+                {savedScenarios.map((sc) => (
+                  <div
+                    key={sc.id}
+                    className="flex items-center justify-between p-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs transition-colors"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => handleRestoreScenario(sc)}
+                      className="text-left flex-1 cursor-pointer"
+                    >
+                      <div className="font-bold text-slate-800">
+                        {sc.tdee} {sc.energyUnit} — {sc.age}y {sc.gender.toUpperCase()} ({sc.activityLevel})
+                      </div>
+                      <div className="text-[10px] text-slate-500">{sc.timestamp} • Target: {sc.targetCalories} {sc.energyUnit}</div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteScenario(sc.id)}
+                      className="text-slate-400 hover:text-rose-600 p-1 transition-colors cursor-pointer"
+                      title="Delete Scenario"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right Column: Sticky Results & Interactive Visualizations */}
@@ -619,13 +1033,13 @@ export function TdeeCalculator() {
               <div>
                 <div className="text-xs uppercase tracking-wider text-cyan-100 font-bold flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
-                  Total Daily Energy Expenditure (TDEE)
+                  Estimated Total Daily Energy Expenditure (TDEE)
                 </div>
                 <div className="text-3xl lg:text-4xl font-extrabold text-white mt-1">
                   {results.tdee} <span className="text-lg font-normal text-cyan-100">{unitLabel}/day</span>
                 </div>
                 <div className="text-xs text-cyan-100 mt-1">
-                  Basal Rate (BMR): <span className="text-white font-bold">{results.bmr} {unitLabel}</span> | Formula: {results.formulaUsed}
+                  Estimated Basal Rate (BMR): <span className="text-white font-bold">{results.bmr} {unitLabel}</span> | Formula: {results.formulaUsed}
                 </div>
               </div>
 
@@ -641,29 +1055,38 @@ export function TdeeCalculator() {
             {/* Sub-Metrics Cards Grid */}
             <div className="grid grid-cols-3 gap-3">
               <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20 text-center">
-                <div className="text-[11px] text-cyan-100 font-semibold uppercase">NEAT Movement</div>
+                <div className="text-[11px] text-cyan-100 font-semibold uppercase">Modeled NEAT</div>
                 <div className="text-xl font-black text-white mt-0.5">{results.components.neatCalories} {unitLabel}</div>
                 <div className="text-[10px] text-cyan-100">{dailySteps.toLocaleString()} steps</div>
               </div>
 
               <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20 text-center">
-                <div className="text-[11px] text-cyan-100 font-semibold uppercase">EAT Workouts</div>
+                <div className="text-[11px] text-cyan-100 font-semibold uppercase">Modeled EAT</div>
                 <div className="text-xl font-black text-white mt-0.5">{results.components.eatCalories} {unitLabel}</div>
                 <div className="text-[10px] text-cyan-100">{workoutFrequency} sessions/wk</div>
               </div>
 
               <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20 text-center">
-                <div className="text-[11px] text-cyan-100 font-semibold uppercase">TEF Digestion</div>
+                <div className="text-[11px] text-cyan-100 font-semibold uppercase">Modeled TEF</div>
                 <div className="text-xl font-black text-white mt-0.5">{results.components.tefCalories} {unitLabel}</div>
-                <div className="text-[10px] text-cyan-100">~10% of TDEE</div>
+                <div className="text-[10px] text-cyan-100">~10% modeled</div>
               </div>
+            </div>
+
+            {/* Methodology Transparency Notice */}
+            <div className="bg-white/10 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/20 text-[11px] text-cyan-50 flex items-center gap-2">
+              <Info className="w-4 h-4 shrink-0 text-amber-200" />
+              <span>
+                This calculator provides an estimate based on predictive equations and activity assumptions. Actual energy expenditure varies between individuals.
+              </span>
             </div>
 
             {/* Action Toolbar */}
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/20 pt-4 print:hidden">
               <button
+                type="button"
                 onClick={() => setIsReportOpen(true)}
-                className="flex items-center gap-2 bg-white text-cyan-800 hover:bg-cyan-50 px-4 py-2 rounded-xl text-xs font-bold shadow-md transition-all"
+                className="flex items-center gap-2 bg-white text-cyan-800 hover:bg-cyan-50 px-4 py-2 rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer"
               >
                 <Download className="w-4 h-4 text-cyan-600" />
                 Generate PDF Report
@@ -671,8 +1094,9 @@ export function TdeeCalculator() {
 
               <div className="flex items-center gap-2">
                 <button
+                  type="button"
                   onClick={handleExportCSV}
-                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
+                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all cursor-pointer"
                   title="Export CSV Data"
                 >
                   <FileSpreadsheet className="w-4 h-4" />
@@ -680,26 +1104,26 @@ export function TdeeCalculator() {
                 </button>
 
                 <button
+                  type="button"
                   onClick={handleCopy}
-                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
+                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all cursor-pointer"
                   title="Copy Summary"
                 >
                   <Copy className="w-4 h-4" />
                   {copied ? "Copied!" : "Copy"}
                 </button>
-
-                
               </div>
             </div>
           </div>
 
-          {/* Interactive Visualizations Container (Light Theme) */}
+          {/* Interactive Visualizations Container */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6 print:hidden">
             {/* View Switcher Tabs */}
             <div className="flex items-center gap-1.5 bg-slate-100 p-1.5 rounded-xl overflow-x-auto text-xs">
               <button
+                type="button"
                 onClick={() => setActiveTab("components")}
-                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   activeTab === "components"
                     ? "bg-white text-cyan-700 shadow-sm"
                     : "text-slate-600 hover:text-slate-900"
@@ -709,8 +1133,9 @@ export function TdeeCalculator() {
               </button>
 
               <button
+                type="button"
                 onClick={() => setActiveTab("goal-plan")}
-                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   activeTab === "goal-plan"
                     ? "bg-white text-cyan-700 shadow-sm"
                     : "text-slate-600 hover:text-slate-900"
@@ -720,8 +1145,9 @@ export function TdeeCalculator() {
               </button>
 
               <button
+                type="button"
                 onClick={() => setActiveTab("projections")}
-                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   activeTab === "projections"
                     ? "bg-white text-cyan-700 shadow-sm"
                     : "text-slate-600 hover:text-slate-900"
@@ -731,8 +1157,9 @@ export function TdeeCalculator() {
               </button>
 
               <button
+                type="button"
                 onClick={() => setActiveTab("bmr-formulas")}
-                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   activeTab === "bmr-formulas"
                     ? "bg-white text-cyan-700 shadow-sm"
                     : "text-slate-600 hover:text-slate-900"
@@ -742,8 +1169,9 @@ export function TdeeCalculator() {
               </button>
 
               <button
+                type="button"
                 onClick={() => setActiveTab("activity-burn")}
-                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                className={`px-3 py-2 rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   activeTab === "activity-burn"
                     ? "bg-white text-cyan-700 shadow-sm"
                     : "text-slate-600 hover:text-slate-900"
@@ -757,13 +1185,14 @@ export function TdeeCalculator() {
             {activeTab === "components" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">TDEE Metabolic Energy Component Breakdown
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">
+                    TDEE Metabolic Energy Component Breakdown
                   </h3>
                   <span className="text-xs text-slate-500 font-medium">Total: {results.tdee} {unitLabel}</span>
                 </div>
 
                 <div className="h-64 w-full flex items-center justify-center">
-                  {isMounted ? (
+                  {isMounted && results.isValid ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
@@ -791,7 +1220,9 @@ export function TdeeCalculator() {
                       </PieChart>
                     </ResponsiveContainer>
                   ) : (
-                    <div className="h-64 w-full bg-slate-50/50 rounded-xl animate-pulse flex items-center justify-center text-xs text-slate-400">Loading visualization...</div>
+                    <div className="h-64 w-full bg-slate-50/50 rounded-xl flex items-center justify-center text-xs text-slate-400">
+                      {results.isValid ? "Loading visualization..." : "Please enter valid measurements to view breakdown."}
+                    </div>
                   )}
                 </div>
 
@@ -823,12 +1254,13 @@ export function TdeeCalculator() {
             {activeTab === "goal-plan" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Goal Strategy Comparison ({unitLabel}/day)
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">
+                    Goal Strategy Comparison ({unitLabel}/day)
                   </h3>
                 </div>
 
                 <div className="h-64 w-full">
-                  {isMounted ? (
+                  {isMounted && results.isValid ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={goalPlanBarData}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
@@ -846,7 +1278,9 @@ export function TdeeCalculator() {
                       </BarChart>
                     </ResponsiveContainer>
                   ) : (
-                    <div className="h-64 w-full bg-slate-50/50 rounded-xl animate-pulse flex items-center justify-center text-xs text-slate-400">Loading strategy chart...</div>
+                    <div className="h-64 w-full bg-slate-50/50 rounded-xl flex items-center justify-center text-xs text-slate-400">
+                      {results.isValid ? "Loading strategy chart..." : "Please enter valid measurements to view strategies."}
+                    </div>
                   )}
                 </div>
               </div>
@@ -856,13 +1290,14 @@ export function TdeeCalculator() {
             {activeTab === "projections" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">12-Week Projected Weight Trajectory
+                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">
+                    12-Week Projected Weight Trajectory
                   </h3>
-                  <span className="text-xs text-slate-500 font-medium">Target: {results.targetCalories} {unitLabel}/day</span>
+                  <span className="text-xs text-slate-500 font-medium">Target: {results.targetCalories} {unitLabel}/day • Simplified model assuming static expenditure</span>
                 </div>
 
                 <div className="h-64 w-full">
-                  {isMounted ? (
+                  {isMounted && results.isValid ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={results.weightProjections}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
@@ -881,7 +1316,9 @@ export function TdeeCalculator() {
                       </LineChart>
                     </ResponsiveContainer>
                   ) : (
-                    <div className="h-64 w-full bg-slate-50/50 rounded-xl animate-pulse flex items-center justify-center text-xs text-slate-400">Loading projection chart...</div>
+                    <div className="h-64 w-full bg-slate-50/50 rounded-xl flex items-center justify-center text-xs text-slate-400">
+                      {results.isValid ? "Loading projection chart..." : "Please enter valid measurements to view trajectory."}
+                    </div>
                   )}
                 </div>
               </div>
@@ -890,7 +1327,8 @@ export function TdeeCalculator() {
             {/* TAB 4: 7 BMR Clinical Equations Table */}
             {activeTab === "bmr-formulas" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">7 Clinical BMR Formulas Comparison
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">
+                  7 Clinical BMR Formulas Comparison
                 </h3>
 
                 <div className="overflow-x-auto border border-slate-200 rounded-xl max-h-64">
@@ -921,7 +1359,8 @@ export function TdeeCalculator() {
             {/* TAB 5: Exercise Calorie Burn Table */}
             {activeTab === "activity-burn" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Calorie Burn Reference Table (per 30 mins)
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">
+                  Calorie Burn Reference Table (per 30 mins)
                 </h3>
 
                 <div className="overflow-x-auto border border-slate-200 rounded-xl max-h-64">
@@ -950,7 +1389,8 @@ export function TdeeCalculator() {
 
           {/* Smart Insights & Personalized Recommendations */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 print:hidden">
-            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Smart Insights & Metabolic Strategy
+            <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">
+              Smart Insights &amp; Metabolic Strategy
             </h3>
 
             <div className="space-y-2.5">

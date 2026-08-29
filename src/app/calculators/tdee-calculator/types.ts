@@ -81,6 +81,8 @@ export interface WeightProjectionPoint {
 }
 
 export interface TdeeCalculationResults {
+  isValid: boolean;
+  errorMessage?: string;
   mode: TdeeCalculationMode;
   unitSystem: UnitSystem;
   energyUnit: EnergyUnit;
