@@ -1,9 +1,32 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
-export const ideal_weight_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Ideal Weight Calculator — Devine, Robinson, Miller, Hamwi & WHO Standards",
+export const ideal_weight_calculatorMetadata: Metadata = {
+  title: "Ideal Weight Calculator – Multiple IBW Formulas, BMI Range & Healthy Weight Guide | CalcPlatform",
   description:
-    "Free clinical Ideal Body Weight (IBW) calculator. Compare 5 medical formulas (Devine, Robinson, Miller, Hamwi, Lemmens), adjust for bone frame size (±10%), and analyze WHO healthy BMI weight ranges.",
-  slug: "ideal-weight-calculator",
-});
+    "Calculate ideal body weight using Devine, Robinson, Miller, Hamwi and Lemmens formulas. Compare multiple IBW estimates, view a BMI-based healthy weight range, frame-size adjustment and weight-target planning.",
+  keywords: [
+    "Ideal Weight Calculator",
+    "IBW Calculator",
+    "Devine Formula",
+    "Robinson Formula",
+    "Miller Formula",
+    "Hamwi Formula",
+    "Lemmens Formula",
+    "Healthy BMI Range",
+    "Body Frame Size",
+  ],
+  authors: [{ name: "Calculator Platform Clinical Nutrition Team" }],
+  openGraph: {
+    title: "Ideal Weight Calculator – Multiple IBW Formulas, BMI Range & Healthy Weight Guide | CalcPlatform",
+    description:
+      "Calculate ideal body weight using Devine, Robinson, Miller, Hamwi and Lemmens formulas. Compare multiple IBW estimates, view a BMI-based healthy weight range, frame-size adjustment and weight-target planning.",
+    type: "website",
+    url: "https://calculator-platform.com/calculators/ideal-weight-calculator",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ideal Weight Calculator – Multiple IBW Formulas, BMI Range & Healthy Weight Guide | CalcPlatform",
+    description:
+      "Calculate ideal body weight using Devine, Robinson, Miller, Hamwi and Lemmens formulas. Compare multiple IBW estimates, view a BMI-based healthy weight range, frame-size adjustment and weight-target planning.",
+  },
+};

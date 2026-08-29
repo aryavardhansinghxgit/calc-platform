@@ -2,22 +2,15 @@
 
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 import {
-  Scale,
-  Award,
   Download,
   Trash2,
   FileSpreadsheet,
   Copy,
   Check,
   RefreshCw,
-  Info,
-  Calendar,
   Target,
-  ShieldCheck,
-  User,
-  Activity,
-  HeartPulse,
-  Sparkles,
+  Share2,
+  AlertCircle,
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
@@ -31,6 +24,7 @@ import {
   UnitSystem,
   Gender,
   FrameSize,
+  FrameMode,
   IdealWeightResult,
 } from "@/lib/formulas/idealWeight";
 
@@ -197,12 +191,14 @@ function SavedDrawer<T>({
         </span>
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={exportCsv}
             className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-0.5 cursor-pointer"
           >
             <Download className="w-3 h-3" /> CSV
           </button>
           <button
+            type="button"
             onClick={clear}
             className="text-[10px] text-zinc-400 hover:text-red-500 cursor-pointer"
           >
@@ -223,6 +219,7 @@ function SavedDrawer<T>({
               <span className="text-zinc-400 ml-1.5">({item.inputSummary})</span>
             </div>
             <button
+              type="button"
               onClick={() => remove(item.id)}
               className="text-zinc-400 hover:text-red-500 p-0.5 cursor-pointer"
               title="Delete"
@@ -328,7 +325,8 @@ export function IdealWeightCalculator() {
   const [currentWeightKg, setCurrentWeightKg] = useState<string>("79.4");
   const [wristCm, setWristCm] = useState<string>("17.8");
 
-  // Frame size state
+  // Frame size state & mode model (P1 fix)
+  const [frameMode, setFrameMode] = useState<FrameMode>("auto");
   const [frameSize, setFrameSize] = useState<FrameSize>("medium");
 
   // Card Saves
@@ -336,7 +334,39 @@ export function IdealWeightCalculator() {
   const card1Saved = useCardSaved<IdealWeightResult>("saved_ideal_weight_main");
 
   const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
+
+  // Restore scenario from URL query params on initial mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (!params.toString()) return;
+
+    if (params.get("gender") === "female" || params.get("gender") === "male") {
+      setGender(params.get("gender") as Gender);
+    }
+    if (params.get("age")) {
+      const a = Number(params.get("age"));
+      if (a >= 2 && a <= 120) setAge(a);
+    }
+    if (params.get("units") === "metric" || params.get("units") === "us") {
+      setUnitSystem(params.get("units") as UnitSystem);
+    }
+    if (params.get("heightFt")) setHeightFeet(Number(params.get("heightFt")));
+    if (params.get("heightIn")) setHeightInches(Number(params.get("heightIn")));
+    if (params.get("heightCm")) setHeightCm(Number(params.get("heightCm")));
+    if (params.get("weightLbs")) setCurrentWeightLbs(params.get("weightLbs")!);
+    if (params.get("weightKg")) setCurrentWeightKg(params.get("weightKg")!);
+    if (params.get("wristIn")) setWristInches(params.get("wristIn")!);
+    if (params.get("wristCm")) setWristCm(params.get("wristCm")!);
+    if (params.get("frameMode") === "manual" || params.get("frameMode") === "auto") {
+      setFrameMode(params.get("frameMode") as FrameMode);
+    }
+    if (params.get("frame") === "small" || params.get("frame") === "medium" || params.get("frame") === "large") {
+      setFrameSize(params.get("frame") as FrameSize);
+    }
+  }, []);
 
   // Synchronized Unit System Switcher
   const handleUnitSystemChange = (newSystem: UnitSystem) => {
@@ -378,7 +408,11 @@ export function IdealWeightCalculator() {
     setHeightCm(178);
     setCurrentWeightKg("79.4");
     setWristCm("17.8");
+    setFrameMode("auto");
     setFrameSize("medium");
+    if (typeof window !== "undefined") {
+      window.history.replaceState({}, "", window.location.pathname);
+    }
   };
 
   // Calculation Result
@@ -400,6 +434,7 @@ export function IdealWeightCalculator() {
       currentWeightKg: wKg,
       wristCm: wrCm,
       frameSize,
+      frameMode,
     });
   }, [
     unitSystem,
@@ -413,23 +448,126 @@ export function IdealWeightCalculator() {
     currentWeightKg,
     wristCm,
     frameSize,
+    frameMode,
   ]);
+
+  // Keep frameSize in sync when in auto mode
+  const effectiveCalculatedHeightCm = unitSystem === "us" ? (heightFeet * 12 + heightInches) * 2.54 : heightCm;
+
+  const handleWristChange = (valStr: string) => {
+    const val = Number(valStr);
+    if (unitSystem === "us") {
+      setWristInches(valStr);
+      if (frameMode === "auto" && val > 0) {
+        setFrameSize(evaluateFrameSizeFromWrist(gender, effectiveCalculatedHeightCm, undefined, val));
+      }
+    } else {
+      setWristCm(valStr);
+      if (frameMode === "auto" && val > 0) {
+        setFrameSize(evaluateFrameSizeFromWrist(gender, effectiveCalculatedHeightCm, val, undefined));
+      }
+    }
+  };
+
+  const handleFrameDropdownChange = (newFrame: FrameSize) => {
+    setFrameSize(newFrame);
+    setFrameMode("manual"); // Explicit user choice switches to manual
+  };
+
+  const handleToggleFrameMode = (mode: FrameMode) => {
+    setFrameMode(mode);
+    if (mode === "auto") {
+      const wIn = unitSystem === "us" ? Number(wristInches) : undefined;
+      const wCm = unitSystem === "metric" ? Number(wristCm) : undefined;
+      setFrameSize(evaluateFrameSizeFromWrist(gender, effectiveCalculatedHeightCm, wCm, wIn));
+    }
+  };
 
   // Copy Summary
   const handleCopySummary = () => {
     const summary = `Ideal Body Weight Clinical Assessment:
 • Gender: ${gender === "male" ? "Male" : "Female"}, Age: ${age}
-• Height: ${unitSystem === "us" ? `${heightFeet}'${heightInches}"` : `${heightCm} cm`}, Frame: ${frameSize}
+• Height: ${unitSystem === "us" ? `${heightFeet}'${heightInches}"` : `${heightCm} cm`}, Frame: ${frameSize} (${frameMode})
 • Consensus Ideal Weight: ${result.consensusLbs} lbs (${result.consensusKg} kg)
-• WHO Healthy Range (BMI 18.5–24.9): ${result.whoMinLbs}–${result.whoMaxLbs} lbs (${result.whoMinKg}–${result.whoMaxKg} kg)
-• Devine: ${result.devine.weightLbs} lbs | Robinson: ${result.robinson.weightLbs} lbs | Miller: ${result.miller.weightLbs} lbs | Hamwi: ${result.hamwi.weightLbs} lbs`;
+• WHO BMI-based Healthy Range (18.5–24.9): ${result.whoMinLbs}–${result.whoMaxLbs} lbs (${result.whoMinKg}–${result.whoMaxKg} kg)
+• Devine: ${result.devine.weightLbs} lbs | Robinson: ${result.robinson.weightLbs} lbs | Miller: ${result.miller.weightLbs} lbs | Hamwi: ${result.hamwi.weightLbs} lbs | Lemmens: ${result.lemmens.weightLbs} lbs`;
 
     navigator.clipboard.writeText(summary);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Report Data
+  // Direct CSV Export
+  const handleExportCsv = () => {
+    const headers = [
+      "Parameter",
+      "Value",
+      "Unit",
+    ];
+    const dataRows = [
+      ["Gender", gender === "male" ? "Male" : "Female", ""],
+      ["Age", age.toString(), "years"],
+      ["Height (US)", `${heightFeet} ft ${heightInches} in`, ""],
+      ["Height (Metric)", `${result.heightCm}`, "cm"],
+      ["Current Weight", result.currentWeightLbs ? `${result.currentWeightLbs}` : "N/A", "lbs"],
+      ["Wrist Circumference", unitSystem === "us" ? `${wristInches} in` : `${wristCm} cm`, ""],
+      ["Bone Frame Mode", frameMode, ""],
+      ["Bone Frame Size", frameSize, ""],
+      ["Frame Multiplier", `${result.frameMultiplier}x`, ""],
+      ["Consensus Ideal Body Weight (Lbs)", `${result.consensusLbs}`, "lbs"],
+      ["Consensus Ideal Body Weight (Kg)", `${result.consensusKg}`, "kg"],
+      ["WHO Normal Weight Min (Lbs)", `${result.whoMinLbs}`, "lbs"],
+      ["WHO Normal Weight Max (Lbs)", `${result.whoMaxLbs}`, "lbs"],
+      ["WHO Normal Weight Min (Kg)", `${result.whoMinKg}`, "kg"],
+      ["WHO Normal Weight Max (Kg)", `${result.whoMaxKg}`, "kg"],
+      ["Devine Formula", `${result.devine.weightLbs} lbs (${result.devine.weightKg} kg)`, ""],
+      ["Robinson Formula", `${result.robinson.weightLbs} lbs (${result.robinson.weightKg} kg)`, ""],
+      ["Miller Formula", `${result.miller.weightLbs} lbs (${result.miller.weightKg} kg)`, ""],
+      ["Hamwi Formula", `${result.hamwi.weightLbs} lbs (${result.hamwi.weightKg} kg)`, ""],
+      ["Lemmens Formula", `${result.lemmens.weightLbs} lbs (${result.lemmens.weightKg} kg)`, ""],
+      ["Weight Delta to Consensus", `${result.weightDeltaLbs} lbs`, ""],
+      ["Timeline (1.0 lb/week)", `${result.weeksAtOneLbPerWk} weeks`, ""],
+      ["Timeline (1.5 lbs/week)", `${result.weeksAtOneAndHalfLbPerWk} weeks`, ""],
+    ];
+
+    const csvContent = [headers.join(","), ...dataRows.map((r) => r.map((cell) => `"${cell}"`).join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `ideal_weight_assessment_${gender}_${age}y.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Share URL with Query Params
+  const handleShareUrl = () => {
+    const params = new URLSearchParams();
+    params.set("gender", gender);
+    params.set("age", age.toString());
+    params.set("units", unitSystem);
+    if (unitSystem === "us") {
+      params.set("heightFt", heightFeet.toString());
+      params.set("heightIn", heightInches.toString());
+      if (currentWeightLbs) params.set("weightLbs", currentWeightLbs);
+      if (wristInches) params.set("wristIn", wristInches);
+    } else {
+      params.set("heightCm", heightCm.toString());
+      if (currentWeightKg) params.set("weightKg", currentWeightKg);
+      if (wristCm) params.set("wristCm", wristCm);
+    }
+    params.set("frame", frameSize);
+    params.set("frameMode", frameMode);
+
+    const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState({}, "", shareUrl);
+    navigator.clipboard.writeText(shareUrl);
+    setShared(true);
+    setTimeout(() => setShared(false), 2000);
+  };
+
+  // Report Data for PDF
   const reportData: CalculatorReportData = useMemo(() => {
     return {
       meta: {
@@ -440,8 +578,8 @@ export function IdealWeightCalculator() {
       },
       keyMetrics: [
         { label: "Consensus Ideal Weight", value: `${result.consensusLbs} lbs (${result.consensusKg} kg)`, highlight: true },
-        { label: "WHO Healthy Range", value: `${result.whoMinLbs} – ${result.whoMaxLbs} lbs` },
-        { label: "Skeletal Frame Multiplier", value: `${result.frameMultiplier > 1 ? "+" : ""}${Math.round((result.frameMultiplier - 1) * 100)}% (${result.frameSize})` },
+        { label: "WHO Healthy Range (BMI 18.5-24.9)", value: `${result.whoMinLbs} – ${result.whoMaxLbs} lbs` },
+        { label: "Skeletal Frame Multiplier", value: `${result.frameMultiplier > 1 ? "+" : ""}${Math.round((result.frameMultiplier - 1) * 100)}% (${result.frameSize}, ${result.frameMode})` },
       ],
       sections: [
         {
@@ -468,16 +606,26 @@ export function IdealWeightCalculator() {
 
   return (
     <div className="space-y-4">
+      {/* Sub-5-Foot Clinical Domain Notice */}
+      {result.isSub5Feet && (
+        <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl flex items-start gap-2.5 text-xs text-amber-900 dark:text-amber-200">
+          <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
+          <p className="leading-relaxed">
+            <strong>Clinical Stature Note:</strong> Historical linear IBW formulas (Devine, Robinson, Miller, Hamwi) were originally derived for skeletally mature adults 5 feet (60 inches / 152.4 cm) and taller. For statures under 5 feet, the engine uses linear downward continuation; results should be evaluated cautiously alongside pediatric or clinical stature benchmarks.
+          </p>
+        </div>
+      )}
+
       {/* ═══════════════════ CARD 1: PRIMARY IDEAL WEIGHT SOLVER ═══════════════════ */}
       <CardWrapper
-        title="Ideal Body Weight &amp; Multi-Formula Engine"
+        title="Ideal Body Weight & Multi-Formula Engine"
         hasResult={!!result}
         isSaved={card1SaveSuccess}
         savedCount={card1Saved.saved.length}
         onToggleSaved={() => card1Saved.setIsOpen(!card1Saved.isOpen)}
         onSave={() => {
           card1Saved.save(
-            `${gender.toUpperCase()}, ${age}y, ${unitSystem === "us" ? `${heightFeet}'${heightInches}"` : `${heightCm}cm`}, Frame: ${frameSize} -> IBW: ${result.consensusLbs} lbs (${result.consensusKg} kg)`,
+            `${gender.toUpperCase()}, ${age}y, ${unitSystem === "us" ? `${heightFeet}'${heightInches}"` : `${heightCm}cm`}, Frame: ${frameSize} (${frameMode}) -> IBW: ${result.consensusLbs} lbs (${result.consensusKg} kg)`,
             result
           );
           flashSave(setCard1SaveSuccess);
@@ -488,10 +636,13 @@ export function IdealWeightCalculator() {
           <div className="flex flex-wrap items-center justify-between gap-2 pb-1 border-b border-zinc-100 dark:border-zinc-800 text-xs">
             {/* Gender Switcher */}
             <div className="flex items-center gap-1.5">
-              <span className="font-semibold text-zinc-600 dark:text-zinc-400">Gender:</span>
-              <div className="inline-flex rounded-md bg-zinc-100 dark:bg-zinc-800 p-0.5">
+              <label htmlFor="ideal-weight-gender" className="font-semibold text-zinc-600 dark:text-zinc-400">
+                Gender:
+              </label>
+              <div id="ideal-weight-gender" className="inline-flex rounded-md bg-zinc-100 dark:bg-zinc-800 p-0.5">
                 <button
                   type="button"
+                  id="ideal-weight-gender-male"
                   onClick={() => setGender("male")}
                   className={`px-3 py-0.5 rounded text-xs font-bold transition-all cursor-pointer ${
                     gender === "male"
@@ -503,6 +654,7 @@ export function IdealWeightCalculator() {
                 </button>
                 <button
                   type="button"
+                  id="ideal-weight-gender-female"
                   onClick={() => setGender("female")}
                   className={`px-3 py-0.5 rounded text-xs font-bold transition-all cursor-pointer ${
                     gender === "female"
@@ -517,10 +669,13 @@ export function IdealWeightCalculator() {
 
             {/* Unit System Switcher */}
             <div className="flex items-center gap-1.5">
-              <span className="font-semibold text-zinc-600 dark:text-zinc-400">Units:</span>
-              <div className="inline-flex rounded-md bg-zinc-100 dark:bg-zinc-800 p-0.5">
+              <label htmlFor="ideal-weight-unit" className="font-semibold text-zinc-600 dark:text-zinc-400">
+                Units:
+              </label>
+              <div id="ideal-weight-unit" className="inline-flex rounded-md bg-zinc-100 dark:bg-zinc-800 p-0.5">
                 <button
                   type="button"
+                  id="ideal-weight-units-us"
                   onClick={() => handleUnitSystemChange("us")}
                   className={`px-2.5 py-0.5 rounded text-xs font-bold transition-all cursor-pointer ${
                     unitSystem === "us"
@@ -532,6 +687,7 @@ export function IdealWeightCalculator() {
                 </button>
                 <button
                   type="button"
+                  id="ideal-weight-units-metric"
                   onClick={() => handleUnitSystemChange("metric")}
                   className={`px-2.5 py-0.5 rounded text-xs font-bold transition-all cursor-pointer ${
                     unitSystem === "metric"
@@ -549,8 +705,11 @@ export function IdealWeightCalculator() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-3 text-xs">
             {/* Age */}
             <div className="md:col-span-3 space-y-1">
-              <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Age (Years)</label>
+              <label htmlFor="ideal-weight-age" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+                Age (Years)
+              </label>
               <Input
+                id="ideal-weight-age"
                 type="number"
                 value={age}
                 onChange={(e) => setAge(Math.max(18, Math.min(120, Number(e.target.value) || 28)))}
@@ -560,13 +719,14 @@ export function IdealWeightCalculator() {
 
             {/* Height */}
             <div className="md:col-span-5 space-y-1">
-              <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+              <label htmlFor={unitSystem === "us" ? "ideal-weight-height-ft" : "ideal-weight-height-cm"} className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
                 Height ({unitSystem === "us" ? "Feet & Inches" : "Centimeters"})
               </label>
               {unitSystem === "us" ? (
                 <div className="grid grid-cols-2 gap-1.5">
                   <div className="flex items-center gap-1">
                     <Input
+                      id="ideal-weight-height-ft"
                       type="number"
                       value={heightFeet}
                       onChange={(e) => setHeightFeet(Number(e.target.value) || 5)}
@@ -576,6 +736,7 @@ export function IdealWeightCalculator() {
                   </div>
                   <div className="flex items-center gap-1">
                     <Input
+                      id="ideal-weight-height-in"
                       type="number"
                       value={heightInches}
                       onChange={(e) => setHeightInches(Number(e.target.value) || 0)}
@@ -587,6 +748,7 @@ export function IdealWeightCalculator() {
               ) : (
                 <div className="flex items-center gap-1">
                   <Input
+                    id="ideal-weight-height-cm"
                     type="number"
                     value={heightCm}
                     onChange={(e) => setHeightCm(Number(e.target.value) || 178)}
@@ -597,14 +759,41 @@ export function IdealWeightCalculator() {
               )}
             </div>
 
-            {/* Frame Size */}
+            {/* Frame Size & Frame Mode Selector */}
             <div className="md:col-span-4 space-y-1">
-              <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
-                Bone Frame Size
-              </label>
+              <div className="flex items-center justify-between">
+                <label htmlFor="ideal-weight-frame" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+                  Bone Frame Size
+                </label>
+                <div className="flex items-center gap-1 text-[9px]">
+                  <button
+                    type="button"
+                    onClick={() => handleToggleFrameMode("auto")}
+                    className={`px-1.5 py-0.5 rounded cursor-pointer font-semibold ${
+                      frameMode === "auto"
+                        ? "bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 font-bold"
+                        : "text-zinc-500 hover:text-zinc-800"
+                    }`}
+                  >
+                    Auto
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleFrameMode("manual")}
+                    className={`px-1.5 py-0.5 rounded cursor-pointer font-semibold ${
+                      frameMode === "manual"
+                        ? "bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 font-bold"
+                        : "text-zinc-500 hover:text-zinc-800"
+                    }`}
+                  >
+                    Manual
+                  </button>
+                </div>
+              </div>
               <select
+                id="ideal-weight-frame"
                 value={frameSize}
-                onChange={(e) => setFrameSize(e.target.value as FrameSize)}
+                onChange={(e) => handleFrameDropdownChange(e.target.value as FrameSize)}
                 className="w-full h-7 text-xs rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-1 font-sans text-zinc-700 dark:text-zinc-300"
               >
                 <option value="small">Small (-10% baseline)</option>
@@ -615,11 +804,12 @@ export function IdealWeightCalculator() {
 
             {/* Current Weight (Optional) */}
             <div className="md:col-span-6 space-y-1">
-              <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+              <label htmlFor="ideal-weight-current-weight" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
                 Current Weight (Optional for delta tracking)
               </label>
               <div className="flex items-center gap-1.5">
                 <Input
+                  id="ideal-weight-current-weight"
                   type="number"
                   value={unitSystem === "us" ? currentWeightLbs : currentWeightKg}
                   onChange={(e) => {
@@ -637,23 +827,15 @@ export function IdealWeightCalculator() {
 
             {/* Wrist Circumference (Optional auto frame) */}
             <div className="md:col-span-6 space-y-1">
-              <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
-                Wrist Circumference (Auto-detect frame size)
+              <label htmlFor="ideal-weight-wrist" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+                Wrist Circumference {frameMode === "auto" ? "(Auto-detects frame)" : "(Manual frame locked)"}
               </label>
               <div className="flex items-center gap-1.5">
                 <Input
+                  id="ideal-weight-wrist"
                   type="number"
                   value={unitSystem === "us" ? wristInches : wristCm}
-                  onChange={(e) => {
-                    const val = Number(e.target.value);
-                    if (unitSystem === "us") {
-                      setWristInches(e.target.value);
-                      if (val > 0) setFrameSize(evaluateFrameSizeFromWrist(gender, result.heightCm, undefined, val));
-                    } else {
-                      setWristCm(e.target.value);
-                      if (val > 0) setFrameSize(evaluateFrameSizeFromWrist(gender, result.heightCm, val, undefined));
-                    }
-                  }}
+                  onChange={(e) => handleWristChange(e.target.value)}
                   placeholder={unitSystem === "us" ? "e.g. 7.0" : "e.g. 17.8"}
                   className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                 />
@@ -683,22 +865,41 @@ export function IdealWeightCalculator() {
                 </div>
               </div>
 
-              <div className="flex gap-2">
+              {/* Complete Action Bar */}
+              <div className="flex flex-wrap items-center gap-1.5">
+                <Button
+                  variant="outline"
+                  onClick={handleExportCsv}
+                  className="h-7 text-xs font-semibold gap-1 bg-white dark:bg-zinc-800 cursor-pointer"
+                  title="Direct RFC 4180 CSV export of active assessment"
+                >
+                  <Download className="w-3.5 h-3.5 text-emerald-600" /> Export CSV
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleShareUrl}
+                  className="h-7 text-xs font-semibold gap-1 bg-white dark:bg-zinc-800 cursor-pointer"
+                  title="Share current scenario URL"
+                >
+                  {shared ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Share2 className="w-3.5 h-3.5 text-blue-500" />}
+                  {shared ? "Link Copied" : "Share"}
+                </Button>
                 <Button
                   variant="outline"
                   onClick={handleCopySummary}
                   className="h-7 text-xs font-semibold gap-1 bg-white dark:bg-zinc-800 cursor-pointer"
+                  title="Copy plain text summary"
                 >
                   {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-zinc-400" />}
-                  {copied ? "Copied" : "Copy Summary"}
+                  {copied ? "Copied" : "Copy"}
                 </Button>
                 <Button
                   variant="outline"
                   onClick={handleReset}
                   className="h-7 text-xs font-semibold gap-1 bg-white dark:bg-zinc-800 cursor-pointer"
+                  title="Reset to canonical baseline"
                 >
-                  <RefreshCw className="w-3.5 h-3.5 text-zinc-400" />
-                  Reset
+                  <RefreshCw className="w-3.5 h-3.5 text-zinc-400" /> Reset
                 </Button>
               </div>
             </div>
@@ -716,10 +917,10 @@ export function IdealWeightCalculator() {
       </CardWrapper>
 
       {/* ═══════════════════ CARD 2: MULTI-FORMULA COMPARISON ═══════════════════ */}
-      <CardWrapper title="Medical &amp; Pharmacopeial Formula Comparison Matrix">
+      <CardWrapper title="Medical & Pharmacopeial Formula Comparison Matrix">
         <div className="space-y-2 text-xs">
           <p className="text-zinc-600 dark:text-zinc-400 text-[11px]">
-            Comparison across clinical guidelines adjusted for {result.gender} ({result.heightInches}&quot; / {result.heightCm} cm) and {result.frameSize} bone frame:
+            Comparison across clinical guidelines adjusted for {result.gender} ({result.heightInches}&quot; / {result.heightCm} cm) and {result.frameSize} bone frame ({result.frameMode} mode):
           </p>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse border border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs">
@@ -776,7 +977,7 @@ export function IdealWeightCalculator() {
 
       {/* ═══════════════════ CARD 3: TARGET TRAJECTORY & DELTA ═══════════════════ */}
       {result.currentWeightLbs && (
-        <CardWrapper title="Target Weight Trajectory &amp; Deficit Planning">
+        <CardWrapper title="Target Weight Trajectory & Deficit Planning">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
             <div className="p-2.5 bg-slate-50 dark:bg-zinc-800/40 rounded border border-slate-200 dark:border-zinc-700 text-center">
               <span className="text-[10px] text-zinc-500 block font-medium">Difference to Consensus IBW</span>
@@ -835,3 +1036,5 @@ export function IdealWeightCalculator() {
     </div>
   );
 }
+
+export default IdealWeightCalculator;

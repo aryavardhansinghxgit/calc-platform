@@ -1,6 +1,7 @@
 export type UnitSystem = "us" | "metric" | "other";
 export type Gender = "male" | "female";
 export type FrameSize = "small" | "medium" | "large";
+export type FrameMode = "auto" | "manual";
 
 export interface IdealWeightInput {
   unitSystem?: UnitSystem;
@@ -15,8 +16,9 @@ export interface IdealWeightInput {
   heightCm?: number;
   currentWeightKg?: number;
   wristCm?: number;
-  // Frame option
+  // Frame options
   frameSize?: FrameSize;
+  frameMode?: FrameMode;
 }
 
 export interface IdealWeightFormulaResult {
@@ -33,7 +35,9 @@ export interface IdealWeightResult {
   gender: Gender;
   age: number;
   frameSize: FrameSize;
+  frameMode: FrameMode;
   frameMultiplier: number;
+  isSub5Feet: boolean;
   // Formulas
   hamwi: IdealWeightFormulaResult;
   devine: IdealWeightFormulaResult;
@@ -43,7 +47,7 @@ export interface IdealWeightResult {
   // Consensus Average
   consensusKg: number;
   consensusLbs: number;
-  // WHO Healthy BMI Range (18.5 - 25.0)
+  // WHO Healthy BMI Range (18.5 - 24.99) - Unscaled by frame size
   whoMinKg: number;
   whoMinLbs: number;
   whoMaxKg: number;
@@ -100,13 +104,20 @@ export function evaluateFrameSizeFromWrist(
 
 export function calculateIdealWeight(input: IdealWeightInput): IdealWeightResult {
   const gender: Gender = input.gender === "female" ? "female" : "male";
-  const age = Math.max(2, Math.min(120, Number(input.age) || 25));
+  const age = Math.max(2, Math.min(120, Number(input.age) || 28));
   const unitSystem = input.unitSystem || "us";
 
   let heightCm = 178;
   let currentWeightKg = 0;
 
-  if (unitSystem === "us") {
+  if (input.heightCm && (!input.heightFeet || unitSystem === "metric")) {
+    heightCm = Number(input.heightCm);
+    if (input.currentWeightKg && input.currentWeightKg > 0) {
+      currentWeightKg = input.currentWeightKg;
+    } else if (input.currentWeightLbs && input.currentWeightLbs > 0) {
+      currentWeightKg = input.currentWeightLbs * 0.45359237;
+    }
+  } else if (unitSystem === "us") {
     const feet = Number(input.heightFeet) || 5;
     const inches = Number(input.heightInches) || 10;
     heightCm = (feet * 12 + inches) * 2.54;
@@ -123,37 +134,55 @@ export function calculateIdealWeight(input: IdealWeightInput): IdealWeightResult
     if (input.currentWeightKg && input.currentWeightKg > 0) currentWeightKg = input.currentWeightKg;
   }
 
-  // Safety clamps
+  // Safety clamps (e.g. 90 cm to 250 cm)
   heightCm = Math.max(90, Math.min(250, heightCm));
-  const heightInches = parseFloat((heightCm / 2.54).toFixed(1));
+  const rawInches = heightCm / 2.54;
+  const heightInches = parseFloat(rawInches.toFixed(1));
   const heightM = heightCm / 100;
-  const inchesOver60 = Math.max(0, heightInches - 60);
+  
+  // Height relative to 5-foot (60-inch / 152.4 cm) baseline
+  const isSub5Feet = heightCm < 152.4 || rawInches < 60;
+  const inchesDiffFrom60 = rawInches - 60;
 
-  // Evaluate Frame Size
+  // Frame Size Model: Manual selection is authoritative when frameMode === "manual"
+  const frameMode: FrameMode = input.frameMode || "manual";
   let frameSize: FrameSize = input.frameSize || "medium";
-  if (input.wristInches || input.wristCm) {
+
+  if (frameMode === "auto" && (input.wristInches || input.wristCm)) {
     frameSize = evaluateFrameSizeFromWrist(gender, heightCm, input.wristCm, input.wristInches);
   }
 
   const frameMultiplier = frameSize === "small" ? 0.9 : frameSize === "large" ? 1.1 : 1.0;
 
   // 1. Hamwi Formula (1964)
-  const hamwiBaseKg = gender === "male" ? 48.0 + 2.7 * inchesOver60 : 45.5 + 2.2 * inchesOver60;
+  const hamwiBaseKg = Math.max(
+    15,
+    gender === "male" ? 48.0 + 2.7 * inchesDiffFrom60 : 45.5 + 2.2 * inchesDiffFrom60
+  );
   const hamwiKg = parseFloat((hamwiBaseKg * frameMultiplier).toFixed(1));
   const hamwiLbs = parseFloat((hamwiKg / 0.45359237).toFixed(1));
 
   // 2. Devine Formula (1974)
-  const devineBaseKg = gender === "male" ? 50.0 + 2.3 * inchesOver60 : 45.5 + 2.3 * inchesOver60;
+  const devineBaseKg = Math.max(
+    15,
+    gender === "male" ? 50.0 + 2.3 * inchesDiffFrom60 : 45.5 + 2.3 * inchesDiffFrom60
+  );
   const devineKg = parseFloat((devineBaseKg * frameMultiplier).toFixed(1));
   const devineLbs = parseFloat((devineKg / 0.45359237).toFixed(1));
 
   // 3. Robinson Formula (1983)
-  const robinsonBaseKg = gender === "male" ? 52.0 + 1.9 * inchesOver60 : 49.0 + 1.7 * inchesOver60;
+  const robinsonBaseKg = Math.max(
+    15,
+    gender === "male" ? 52.0 + 1.9 * inchesDiffFrom60 : 49.0 + 1.7 * inchesDiffFrom60
+  );
   const robinsonKg = parseFloat((robinsonBaseKg * frameMultiplier).toFixed(1));
   const robinsonLbs = parseFloat((robinsonKg / 0.45359237).toFixed(1));
 
   // 4. Miller Formula (1983)
-  const millerBaseKg = gender === "male" ? 56.2 + 1.41 * inchesOver60 : 53.1 + 1.36 * inchesOver60;
+  const millerBaseKg = Math.max(
+    15,
+    gender === "male" ? 56.2 + 1.41 * inchesDiffFrom60 : 53.1 + 1.36 * inchesDiffFrom60
+  );
   const millerKg = parseFloat((millerBaseKg * frameMultiplier).toFixed(1));
   const millerLbs = parseFloat((millerKg / 0.45359237).toFixed(1));
 
@@ -166,14 +195,14 @@ export function calculateIdealWeight(input: IdealWeightInput): IdealWeightResult
   const consensusKg = parseFloat(((hamwiKg + devineKg + robinsonKg + millerKg + lemmensKg) / 5).toFixed(1));
   const consensusLbs = parseFloat((consensusKg / 0.45359237).toFixed(1));
 
-  // WHO Healthy BMI Range (18.5 - 25.0)
-  const whoMinKg = parseFloat((18.5 * heightM * heightM * frameMultiplier).toFixed(1));
+  // WHO Healthy BMI Range (18.5 - 24.99) — STRICTLY INDEPENDENT of frame multiplier!
+  const whoMinKg = parseFloat((18.5 * heightM * heightM).toFixed(1));
   const whoMinLbs = parseFloat((whoMinKg / 0.45359237).toFixed(1));
 
-  const whoMaxKg = parseFloat((25.0 * heightM * heightM * frameMultiplier).toFixed(1));
+  const whoMaxKg = parseFloat((24.99 * heightM * heightM).toFixed(1));
   const whoMaxLbs = parseFloat((whoMaxKg / 0.45359237).toFixed(1));
 
-  const whoPrimeKg = parseFloat((21.75 * heightM * heightM * frameMultiplier).toFixed(1));
+  const whoPrimeKg = parseFloat((21.75 * heightM * heightM).toFixed(1));
   const whoPrimeLbs = parseFloat((whoPrimeKg / 0.45359237).toFixed(1));
 
   // Current Weight Comparison
@@ -207,7 +236,9 @@ export function calculateIdealWeight(input: IdealWeightInput): IdealWeightResult
     gender,
     age,
     frameSize,
+    frameMode,
     frameMultiplier,
+    isSub5Feet,
     hamwi: {
       name: "Hamwi Formula",
       year: "1964",

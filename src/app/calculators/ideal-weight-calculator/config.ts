@@ -7,8 +7,8 @@ export const ideal_weight_calculatorConfig: CalculatorModuleDefinition = {
   title: "Ideal Weight Calculator",
   slug: "ideal-weight-calculator",
   category: "Health",
-  subcategory: "Fitness",
-  description: "Find your ideal body weight based on height and gender using Devine, Robinson, Miller, and Hamwi formulas.",
+  description:
+    "Calculate an estimated ideal body weight using five established formulas, compare the results, and see how your current weight relates to a BMI-based healthy weight range.",
   iconName: "Target",
   featured: true,
   keywords: ["ideal weight","healthy weight","bmi","target weight"],
