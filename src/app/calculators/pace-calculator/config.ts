@@ -8,12 +8,20 @@ export const pace_calculatorConfig: CalculatorModuleDefinition = {
   slug: "pace-calculator",
   category: "Health",
   subcategory: "Fitness",
-  description: "Calculate running or cycling pace per km, per mile, and total speed from distance and time.",
+  description:
+    "Calculate running and cycling pace from distance and time, convert pace between kilometers and miles, estimate speed, analyze race splits, predict finish times, and calculate age-based heart-rate training zones.",
   iconName: "Timer",
   featured: true,
-  keywords: ["running pace","pace calculator","speed","marathon","running"],
+  keywords: ["running pace", "pace calculator", "speed", "marathon", "running", "race predictor", "heart rate zones"],
   priority: 1,
-  relatedCalculators: ["calories-burned-calculator","target-heart-rate-calculator"],
+  relatedCalculators: [
+    "target-heart-rate-calculator",
+    "calories-burned-calculator",
+    "calorie-calculator",
+    "speed-calculator",
+    "distance-calculator",
+    "bmi-calculator",
+  ],
   formulaDescription: "Pace = Total Time / Distance",
   faqs: pace_calculatorFaqs,
   inputs: [

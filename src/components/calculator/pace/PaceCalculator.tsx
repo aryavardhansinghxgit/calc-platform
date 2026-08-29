@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Activity,
   Award,
@@ -18,6 +18,9 @@ import {
   Trash2,
   Zap,
   Table,
+  Download,
+  History,
+  AlertTriangle,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -44,6 +47,26 @@ import {
 } from "./PaceCharts";
 
 import { PaceTables } from "./PaceTables";
+
+export interface SavedPaceScenario {
+  id: string;
+  timestamp: string;
+  title: string;
+  paceMile: string;
+  paceKm: string;
+  calcMode: CalculationMode;
+  presetEvent: PresetEvent;
+  timeHours: number;
+  timeMinutes: number;
+  timeSeconds: number;
+  distanceValue: number;
+  distanceUnit: DistanceUnit;
+  paceMinutes: number;
+  paceSeconds: number;
+  paceUnit: PaceUnit;
+  age: number;
+  splitSegments: SplitSegmentInput[];
+}
 
 export function PaceCalculator() {
   // Main Sub-Tool Tab state
@@ -111,10 +134,39 @@ export function PaceCalculator() {
   ]);
 
   // Saved calculations
-  const [savedCalculations, setSavedCalculations] = useState<
-    Array<{ id: string; timestamp: string; title: string; paceMile: string; paceKm: string }>
-  >([]);
+  const [savedCalculations, setSavedCalculations] = useState<SavedPaceScenario[]>([]);
   const [copied, setCopied] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
+  const [savedNotice, setSavedNotice] = useState(false);
+
+  // Initialize saved calculations and URL parameters on mount
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("pace_calc_saved_scenarios");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) setSavedCalculations(parsed);
+      }
+    } catch (e) {
+      console.error("Could not load saved scenarios from localStorage", e);
+    }
+
+    if (typeof window !== "undefined" && window.location.search) {
+      const p = new URLSearchParams(window.location.search);
+      if (p.has("mode")) setCalcMode(p.get("mode") as CalculationMode);
+      if (p.has("preset")) setPresetEvent(p.get("preset") as PresetEvent);
+      if (p.has("dist")) setDistanceValue(Number(p.get("dist")));
+      if (p.has("unit")) setDistanceUnit(p.get("unit") as DistanceUnit);
+      if (p.has("th")) setTimeHours(Number(p.get("th")));
+      if (p.has("tm")) setTimeMinutes(Number(p.get("tm")));
+      if (p.has("ts")) setTimeSeconds(Number(p.get("ts")));
+      if (p.has("pm")) setPaceMinutes(Number(p.get("pm")));
+      if (p.has("ps")) setPaceSeconds(Number(p.get("ps")));
+      if (p.has("punit")) setPaceUnit(p.get("punit") as PaceUnit);
+      if (p.has("age")) setAge(Number(p.get("age")));
+      if (p.has("tab")) setActiveTab(p.get("tab")!);
+    }
+  }, []);
 
   const handleReset = () => {
     setCalcMode("calculate_pace");
@@ -169,6 +221,15 @@ export function PaceCalculator() {
     return calculateMultipointSplits(splitSegments);
   }, [splitSegments]);
 
+  // Solved values for input reflections
+  const solvedTimeHours = Math.floor(result.totalTimeSeconds / 3600);
+  const solvedTimeMinutes = Math.floor((result.totalTimeSeconds % 3600) / 60);
+  const solvedTimeSeconds = result.totalTimeSeconds % 60;
+
+  const solvedPaceSecs = paceUnit === "min_km" ? result.paceSecondsPerKm : result.paceSecondsPerMile;
+  const solvedPaceMinutes = Math.floor(solvedPaceSecs / 60);
+  const solvedPaceSeconds = Math.round(solvedPaceSecs % 60);
+
   const handleAddSegment = () => {
     if (splitSegments.length >= 12) return;
     const newId = Date.now().toString();
@@ -198,14 +259,61 @@ export function PaceCalculator() {
   };
 
   const handleSaveCalculation = () => {
-    const newItem = {
+    const newItem: SavedPaceScenario = {
       id: Date.now().toString(),
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       title: `${result.totalDistanceKm} km in ${result.totalTimeFormatted}`,
       paceMile: result.pacePerMileFormatted,
       paceKm: result.pacePerKmFormatted,
+      calcMode,
+      presetEvent,
+      timeHours,
+      timeMinutes,
+      timeSeconds,
+      distanceValue,
+      distanceUnit,
+      paceMinutes,
+      paceSeconds,
+      paceUnit,
+      age,
+      splitSegments: JSON.parse(JSON.stringify(splitSegments)),
     };
-    setSavedCalculations([newItem, ...savedCalculations]);
+    const updated = [newItem, ...savedCalculations];
+    setSavedCalculations(updated);
+    setSavedNotice(true);
+    setTimeout(() => setSavedNotice(false), 2500);
+    try {
+      localStorage.setItem("pace_calc_saved_scenarios", JSON.stringify(updated));
+    } catch (e) {
+      console.error("Failed to persist scenario", e);
+    }
+  };
+
+  const handleRestoreCalculation = (sc: SavedPaceScenario) => {
+    setCalcMode(sc.calcMode);
+    setPresetEvent(sc.presetEvent);
+    setTimeHours(sc.timeHours);
+    setTimeMinutes(sc.timeMinutes);
+    setTimeSeconds(sc.timeSeconds);
+    setDistanceValue(sc.distanceValue);
+    setDistanceUnit(sc.distanceUnit);
+    setPaceMinutes(sc.paceMinutes);
+    setPaceSeconds(sc.paceSeconds);
+    setPaceUnit(sc.paceUnit);
+    setAge(sc.age);
+    if (sc.splitSegments && sc.splitSegments.length > 0) {
+      setSplitSegments(sc.splitSegments);
+    }
+  };
+
+  const handleDeleteSavedCalculation = (id: string) => {
+    const updated = savedCalculations.filter((s) => s.id !== id);
+    setSavedCalculations(updated);
+    try {
+      localStorage.setItem("pace_calc_saved_scenarios", JSON.stringify(updated));
+    } catch (e) {
+      console.error("Failed to delete saved scenario", e);
+    }
   };
 
   const handleCopySummary = () => {
@@ -215,6 +323,7 @@ Total Time: ${result.totalTimeFormatted}
 Pace per Mile: ${result.pacePerMileFormatted} /mi
 Pace per Kilometer: ${result.pacePerKmFormatted} /km
 Speed: ${result.speedMph} mph (${result.speedKmh} km/h)
+Velocity: ${result.speedMs} m/s
 Predicted Marathon Time (Riegel): ${result.riegelPredictions[3]?.predictedTimeFormatted || "N/A"}
 Max Heart Rate (Age ${age}): ${result.maxHeartRateFox} bpm
 Calculated via CalcPlatform Health Engine`;
@@ -225,19 +334,124 @@ Calculated via CalcPlatform Health Engine`;
   };
 
   const handleShare = async () => {
+    const p = new URLSearchParams();
+    p.set("mode", calcMode);
+    p.set("preset", presetEvent);
+    p.set("dist", String(distanceValue));
+    p.set("unit", distanceUnit);
+    p.set("th", String(timeHours));
+    p.set("tm", String(timeMinutes));
+    p.set("ts", String(timeSeconds));
+    p.set("pm", String(paceMinutes));
+    p.set("ps", String(paceSeconds));
+    p.set("punit", paceUnit);
+    p.set("age", String(age));
+    p.set("tab", activeTab);
+
+    const shareUrl = `${window.location.origin}${window.location.pathname}?${p.toString()}`;
+
     if (navigator.share) {
       try {
         await navigator.share({
           title: "My Athletic Pace Assessment",
           text: `My Pace is ${result.pacePerKmFormatted} /km (${result.pacePerMileFormatted} /mi). Calculate your pace splits:`,
-          url: window.location.href,
+          url: shareUrl,
         });
+        return;
       } catch {
-        handleCopySummary();
+        // fallback to clipboard
       }
-    } else {
-      handleCopySummary();
     }
+
+    navigator.clipboard.writeText(shareUrl);
+    setShareCopied(true);
+    setTimeout(() => setShareCopied(false), 2500);
+  };
+
+  const handleExportCsv = () => {
+    const rows: string[][] = [
+      ["CalcPlatform Clinical Athletic & Sports Physiology Lab - Pace Assessment Report"],
+      ["Generated Date", new Date().toISOString().split("T")[0]],
+      ["Subject Age", String(age)],
+      ["Max Heart Rate (Fox 220-Age)", `${result.maxHeartRateFox} bpm`],
+      ["Max Heart Rate (Tanaka 208-0.7*Age)", `${result.maxHeartRateTanaka} bpm`],
+      [],
+      ["--- PRIMARY PACE & PERFORMANCE PARAMETERS ---"],
+      ["Calculation Mode", calcMode],
+      ["Distance (KM)", String(result.totalDistanceKm)],
+      ["Distance (Miles)", String(result.totalDistanceMiles)],
+      ["Total Time", result.totalTimeFormatted],
+      ["Pace per KM", `${result.pacePerKmFormatted} /km`],
+      ["Pace per Mile", `${result.pacePerMileFormatted} /mi`],
+      ["Speed (MPH)", `${result.speedMph} mph`],
+      ["Speed (KMH)", `${result.speedKmh} km/h`],
+      ["Velocity (M/S)", `${result.speedMs} m/s`],
+      ["400m Track Split", result.pace400mFormatted],
+      ["100m Dash Split", result.pace100mFormatted],
+      [],
+      ["--- PETER RIEGEL RACE FINISH TIME PREDICTIONS (T2 = T1 * (D2/D1)^1.06) ---"],
+      ["Target Race Distance", "Predicted Finish Time", "Required Pace (/mile)", "Required Pace (/km)"],
+      ...result.riegelPredictions.map(r => [
+        r.eventName,
+        r.predictedTimeFormatted,
+        r.predictedPacePerMileFormatted,
+        r.predictedPacePerKmFormatted,
+      ]),
+      [],
+      ["--- MULTIPOINT SEGMENT SPLITS ---"],
+      ["Leg #", "Distance (km)", "Distance (mi)", "Time", "Pace (/km)", "Pace (/mile)"],
+      ...multipointResult.segments.map(s => [
+        `Leg #${s.segmentNumber}`,
+        String(s.distanceKm),
+        String(s.distanceMiles),
+        s.timeFormatted,
+        s.pacePerKmFormatted,
+        s.pacePerMileFormatted,
+      ]),
+      [
+        "Cumulative Totals",
+        String(multipointResult.cumulativeDistanceKm),
+        String(multipointResult.cumulativeDistanceMiles),
+        multipointResult.cumulativeTimeFormatted,
+        multipointResult.overallAveragePacePerKmFormatted,
+        multipointResult.overallAveragePacePerMileFormatted,
+      ],
+      [],
+      ["--- HEART RATE TRAINING INTENSITY ZONES ---"],
+      ["Zone", "Zone Name", "Percentage Range", "Min BPM", "Max BPM", "Clinical Description"],
+      ...result.hrZones.map(z => [
+        `Zone ${z.zoneNumber}`,
+        z.name,
+        z.percentRange,
+        String(z.minBpm),
+        String(z.maxBpm),
+        z.description,
+      ]),
+    ];
+
+    const csvContent = rows
+      .map(row =>
+        row
+          .map(cell => {
+            const str = cell ?? "";
+            if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+              return `"${str.replace(/"/g, '""')}"`;
+            }
+            return str;
+          })
+          .join(",")
+      )
+      .join("\r\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `pace_performance_report_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // Dedicated Standalone Popup Print Engine
@@ -301,7 +515,7 @@ Calculated via CalcPlatform Health Engine`;
             .gap-3 { gap: 0.75rem; }
             .text-center { text-align: center; }
             .text-right { text-align: right; }
-            .text-left { text-left: left; }
+            .text-left { text-align: left; }
             .text-xs { font-size: 0.75rem; line-height: 1rem; }
             .text-2xl { font-size: 1.5rem; line-height: 2rem; }
             .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
@@ -310,7 +524,7 @@ Calculated via CalcPlatform Health Engine`;
             .font-bold { font-weight: 700; }
             .font-semibold { font-weight: 600; }
             .font-black { font-weight: 900; }
-            .font-sans tabular-nums { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+            .font-sans.tabular-nums { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
             .text-zinc-900 { color: #18181b; }
             .text-zinc-800 { color: #27272a; }
             .text-zinc-700 { color: #3f3f46; }
@@ -404,6 +618,14 @@ Calculated via CalcPlatform Health Engine`;
           </CardHeader>
 
           <CardContent className="p-4 sm:p-6 space-y-6">
+            {/* Validation Banner if Invalid */}
+            {!result.isValid && result.errorMessage && (
+              <div className="p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 rounded-xl text-xs text-amber-800 dark:text-amber-300 font-semibold flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>{result.errorMessage}</span>
+              </div>
+            )}
+
             {/* Top Tool Suite Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid grid-cols-2 sm:grid-cols-5 bg-zinc-100 dark:bg-zinc-950 p-1 border border-zinc-200 dark:border-zinc-800 rounded-xl mb-6">
@@ -428,12 +650,12 @@ Calculated via CalcPlatform Health Engine`;
               <TabsContent value="pace_calc" className="space-y-5 m-0">
                 <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
                   <div className="flex items-center gap-2">
-                    <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200">Calculation Goal:</Label>
-                    <div className="flex gap-1.5">
+                    <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">Calculation Goal:</span>
+                    <div className="flex gap-1.5" role="group" aria-label="Calculation Goal">
                       <button
                         type="button"
                         onClick={() => setCalcMode("calculate_pace")}
-                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                           calcMode === "calculate_pace" ? "bg-blue-600 text-white" : "bg-white dark:bg-zinc-900 text-zinc-600 border border-zinc-200 dark:border-zinc-800"
                         }`}
                       >
@@ -442,7 +664,7 @@ Calculated via CalcPlatform Health Engine`;
                       <button
                         type="button"
                         onClick={() => setCalcMode("calculate_time")}
-                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                           calcMode === "calculate_time" ? "bg-blue-600 text-white" : "bg-white dark:bg-zinc-900 text-zinc-600 border border-zinc-200 dark:border-zinc-800"
                         }`}
                       >
@@ -451,7 +673,7 @@ Calculated via CalcPlatform Health Engine`;
                       <button
                         type="button"
                         onClick={() => setCalcMode("calculate_distance")}
-                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                           calcMode === "calculate_distance" ? "bg-blue-600 text-white" : "bg-white dark:bg-zinc-900 text-zinc-600 border border-zinc-200 dark:border-zinc-800"
                         }`}
                       >
@@ -461,8 +683,9 @@ Calculated via CalcPlatform Health Engine`;
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200">Preset Event:</Label>
+                    <Label htmlFor="pace-preset-event" className="text-xs font-bold text-zinc-800 dark:text-zinc-200">Preset Event:</Label>
                     <select
+                      id="pace-preset-event"
                       value={presetEvent}
                       onChange={(e) => handlePresetEventChange(e.target.value as PresetEvent)}
                       className="h-8 px-2 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
@@ -482,24 +705,62 @@ Calculated via CalcPlatform Health Engine`;
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {/* Time Input */}
-                  <div className={`p-3 rounded-xl border ${calcMode === "calculate_time" ? "bg-blue-50/50 border-blue-200" : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"}`}>
-                    <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1.5 block">Time (hh:mm:ss)</Label>
+                  <div className={`p-3 rounded-xl border ${calcMode === "calculate_time" ? "bg-blue-50/50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800" : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"}`}>
+                    <Label htmlFor="pace-time-hours" className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1.5 block">
+                      Time (hh:mm:ss) {calcMode === "calculate_time" && <span className="text-[10px] text-blue-600 dark:text-blue-400 font-semibold">(Solved)</span>}
+                    </Label>
                     <div className="grid grid-cols-3 gap-1.5">
-                      <Input type="number" min={0} placeholder="hh" value={timeHours} onChange={(e) => setTimeHours(Number(e.target.value))} className="text-xs font-sans tabular-nums font-bold" readOnly={calcMode === "calculate_time"} />
-                      <Input type="number" min={0} max={59} placeholder="mm" value={timeMinutes} onChange={(e) => setTimeMinutes(Number(e.target.value))} className="text-xs font-sans tabular-nums font-bold" readOnly={calcMode === "calculate_time"} />
-                      <Input type="number" min={0} max={59} placeholder="ss" value={timeSeconds} onChange={(e) => setTimeSeconds(Number(e.target.value))} className="text-xs font-sans tabular-nums font-bold" readOnly={calcMode === "calculate_time"} />
+                      <Input
+                        id="pace-time-hours"
+                        aria-label="Time Hours"
+                        type="number"
+                        min={0}
+                        placeholder="hh"
+                        value={calcMode === "calculate_time" ? (result.isValid ? solvedTimeHours : 0) : timeHours}
+                        onChange={(e) => setTimeHours(Math.max(0, Number(e.target.value)))}
+                        className="text-xs font-sans tabular-nums font-bold"
+                        readOnly={calcMode === "calculate_time"}
+                      />
+                      <Input
+                        id="pace-time-minutes"
+                        aria-label="Time Minutes"
+                        type="number"
+                        min={0}
+                        max={59}
+                        placeholder="mm"
+                        value={calcMode === "calculate_time" ? (result.isValid ? solvedTimeMinutes : 0) : timeMinutes}
+                        onChange={(e) => setTimeMinutes(Math.max(0, Math.min(59, Number(e.target.value))))}
+                        className="text-xs font-sans tabular-nums font-bold"
+                        readOnly={calcMode === "calculate_time"}
+                      />
+                      <Input
+                        id="pace-time-seconds"
+                        aria-label="Time Seconds"
+                        type="number"
+                        min={0}
+                        max={59}
+                        placeholder="ss"
+                        value={calcMode === "calculate_time" ? (result.isValid ? solvedTimeSeconds : 0) : timeSeconds}
+                        onChange={(e) => setTimeSeconds(Math.max(0, Math.min(59, Number(e.target.value))))}
+                        className="text-xs font-sans tabular-nums font-bold"
+                        readOnly={calcMode === "calculate_time"}
+                      />
                     </div>
                   </div>
 
                   {/* Distance Input */}
-                  <div className={`p-3 rounded-xl border ${calcMode === "calculate_distance" ? "bg-blue-50/50 border-blue-200" : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"}`}>
-                    <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1.5 block">Distance</Label>
+                  <div className={`p-3 rounded-xl border ${calcMode === "calculate_distance" ? "bg-blue-50/50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800" : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"}`}>
+                    <Label htmlFor="pace-distance" className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1.5 block">
+                      Distance {calcMode === "calculate_distance" && <span className="text-[10px] text-blue-600 dark:text-blue-400 font-semibold">(Solved)</span>}
+                    </Label>
                     <div className="grid grid-cols-2 gap-1.5">
                       <Input
+                        id="pace-distance"
+                        aria-label="Distance Value"
                         type="number"
                         step={0.01}
                         min={0.01}
-                        value={calcMode === "calculate_distance" ? convertValue(result.totalDistanceMeters, "meters", distanceUnit) : distanceValue}
+                        value={calcMode === "calculate_distance" ? (result.isValid ? convertValue(result.totalDistanceMeters, "meters", distanceUnit) : 0) : distanceValue}
                         onChange={(e) => {
                           setDistanceValue(Number(e.target.value));
                           setPresetEvent("custom");
@@ -508,6 +769,8 @@ Calculated via CalcPlatform Health Engine`;
                         readOnly={calcMode === "calculate_distance"}
                       />
                       <select
+                        id="pace-distance-unit"
+                        aria-label="Distance Unit"
                         value={distanceUnit}
                         onChange={(e) => handleDistanceUnitChange(e.target.value as DistanceUnit)}
                         className="h-10 px-2 rounded-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
@@ -521,12 +784,42 @@ Calculated via CalcPlatform Health Engine`;
                   </div>
 
                   {/* Pace Input */}
-                  <div className={`p-3 rounded-xl border ${calcMode === "calculate_pace" ? "bg-blue-50/50 border-blue-200" : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"}`}>
-                    <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1.5 block">Pace (mm:ss)</Label>
+                  <div className={`p-3 rounded-xl border ${calcMode === "calculate_pace" ? "bg-blue-50/50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800" : "bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800"}`}>
+                    <Label htmlFor="pace-minutes" className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1.5 block">
+                      Pace (mm:ss) {calcMode === "calculate_pace" && <span className="text-[10px] text-blue-600 dark:text-blue-400 font-semibold">(Solved)</span>}
+                    </Label>
                     <div className="grid grid-cols-3 gap-1.5">
-                      <Input type="number" min={0} placeholder="mm" value={paceMinutes} onChange={(e) => setPaceMinutes(Number(e.target.value))} className="text-xs font-sans tabular-nums font-bold" readOnly={calcMode === "calculate_pace"} />
-                      <Input type="number" min={0} max={59} placeholder="ss" value={paceSeconds} onChange={(e) => setPaceSeconds(Number(e.target.value))} className="text-xs font-sans tabular-nums font-bold" readOnly={calcMode === "calculate_pace"} />
-                      <select value={paceUnit} onChange={(e) => setPaceUnit(e.target.value as PaceUnit)} className="h-10 px-1 rounded-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[11px] font-semibold" disabled={calcMode === "calculate_pace"}>
+                      <Input
+                        id="pace-minutes"
+                        aria-label="Pace Minutes"
+                        type="number"
+                        min={0}
+                        placeholder="mm"
+                        value={calcMode === "calculate_pace" ? (result.isValid ? solvedPaceMinutes : 0) : paceMinutes}
+                        onChange={(e) => setPaceMinutes(Math.max(0, Number(e.target.value)))}
+                        className="text-xs font-sans tabular-nums font-bold"
+                        readOnly={calcMode === "calculate_pace"}
+                      />
+                      <Input
+                        id="pace-seconds"
+                        aria-label="Pace Seconds"
+                        type="number"
+                        min={0}
+                        max={59}
+                        placeholder="ss"
+                        value={calcMode === "calculate_pace" ? (result.isValid ? solvedPaceSeconds : 0) : paceSeconds}
+                        onChange={(e) => setPaceSeconds(Math.max(0, Math.min(59, Number(e.target.value))))}
+                        className="text-xs font-sans tabular-nums font-bold"
+                        readOnly={calcMode === "calculate_pace"}
+                      />
+                      <select
+                        id="pace-unit"
+                        aria-label="Pace Unit"
+                        value={paceUnit}
+                        onChange={(e) => setPaceUnit(e.target.value as PaceUnit)}
+                        className="h-10 px-1 rounded-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[11px] font-semibold"
+                        disabled={calcMode === "calculate_pace"}
+                      >
                         <option value="min_km">/ km</option>
                         <option value="min_mile">/ mile</option>
                       </select>
@@ -542,7 +835,7 @@ Calculated via CalcPlatform Health Engine`;
                     <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase">Multipoint Segment Split Entry (Up to 12 Legs)</h4>
                     <p className="text-[11px] text-zinc-500">Calculate segment pace per lap and overall cumulative performance</p>
                   </div>
-                  <Button size="sm" onClick={handleAddSegment} disabled={splitSegments.length >= 12} className="bg-emerald-600 text-white text-xs gap-1">
+                  <Button size="sm" onClick={handleAddSegment} disabled={splitSegments.length >= 12} className="bg-emerald-600 text-white text-xs gap-1 cursor-pointer hover:bg-emerald-700">
                     <Plus className="w-3.5 h-3.5" /> Add Leg Split
                   </Button>
                 </div>
@@ -553,8 +846,23 @@ Calculated via CalcPlatform Health Engine`;
                       <span className="sm:col-span-1 font-bold text-zinc-500">Leg #{idx + 1}</span>
 
                       <div className="sm:col-span-4 flex items-center gap-1">
-                        <Input type="number" step={0.1} min={0.1} value={s.distanceValue} onChange={(e) => handleUpdateSegment(s.id, "distanceValue", Number(e.target.value))} className="h-8 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900" />
-                        <select value={s.distanceUnit} onChange={(e) => handleUpdateSegment(s.id, "distanceUnit", e.target.value)} className="h-8 px-2 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs">
+                        <Input
+                          id={`pace-seg-${s.id}-dist`}
+                          aria-label={`Leg ${idx + 1} Distance`}
+                          type="number"
+                          step={0.1}
+                          min={0.1}
+                          value={s.distanceValue}
+                          onChange={(e) => handleUpdateSegment(s.id, "distanceValue", Number(e.target.value))}
+                          className="h-8 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
+                        />
+                        <select
+                          id={`pace-seg-${s.id}-unit`}
+                          aria-label={`Leg ${idx + 1} Distance Unit`}
+                          value={s.distanceUnit}
+                          onChange={(e) => handleUpdateSegment(s.id, "distanceUnit", e.target.value)}
+                          className="h-8 px-2 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs"
+                        >
                           <option value="km">km</option>
                           <option value="miles">mi</option>
                           <option value="meters">m</option>
@@ -562,15 +870,51 @@ Calculated via CalcPlatform Health Engine`;
                       </div>
 
                       <div className="sm:col-span-5 flex items-center gap-1">
-                        <Input type="number" min={0} placeholder="hh" value={s.timeHours} onChange={(e) => handleUpdateSegment(s.id, "timeHours", Number(e.target.value))} className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900" />
+                        <Input
+                          id={`pace-seg-${s.id}-h`}
+                          aria-label={`Leg ${idx + 1} Hours`}
+                          type="number"
+                          min={0}
+                          placeholder="hh"
+                          value={s.timeHours}
+                          onChange={(e) => handleUpdateSegment(s.id, "timeHours", Number(e.target.value))}
+                          className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
+                        />
                         <span>:</span>
-                        <Input type="number" min={0} max={59} placeholder="mm" value={s.timeMinutes} onChange={(e) => handleUpdateSegment(s.id, "timeMinutes", Number(e.target.value))} className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900" />
+                        <Input
+                          id={`pace-seg-${s.id}-m`}
+                          aria-label={`Leg ${idx + 1} Minutes`}
+                          type="number"
+                          min={0}
+                          max={59}
+                          placeholder="mm"
+                          value={s.timeMinutes}
+                          onChange={(e) => handleUpdateSegment(s.id, "timeMinutes", Number(e.target.value))}
+                          className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
+                        />
                         <span>:</span>
-                        <Input type="number" min={0} max={59} placeholder="ss" value={s.timeSeconds} onChange={(e) => handleUpdateSegment(s.id, "timeSeconds", Number(e.target.value))} className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900" />
+                        <Input
+                          id={`pace-seg-${s.id}-s`}
+                          aria-label={`Leg ${idx + 1} Seconds`}
+                          type="number"
+                          min={0}
+                          max={59}
+                          placeholder="ss"
+                          value={s.timeSeconds}
+                          onChange={(e) => handleUpdateSegment(s.id, "timeSeconds", Number(e.target.value))}
+                          className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
+                        />
                       </div>
 
                       <div className="sm:col-span-2 flex justify-end">
-                        <Button variant="ghost" size="sm" onClick={() => handleRemoveSegment(s.id)} disabled={splitSegments.length <= 1} className="h-8 w-8 p-0 text-rose-500 hover:bg-rose-50">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleRemoveSegment(s.id)}
+                          disabled={splitSegments.length <= 1}
+                          className="h-8 w-8 p-0 text-rose-500 hover:bg-rose-50 cursor-pointer"
+                          aria-label={`Delete Leg ${idx + 1}`}
+                        >
                           <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
@@ -682,8 +1026,17 @@ Calculated via CalcPlatform Health Engine`;
                       <p className="text-[11px] text-zinc-500">Fox &amp; Haskell (220 - Age) &amp; Tanaka (208 - 0.7 × Age) formulas</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Label className="text-xs font-semibold">Subject Age:</Label>
-                      <Input type="number" min={10} max={90} value={age} onChange={(e) => setAge(Math.max(10, Math.min(90, Number(e.target.value) || 30)))} className="w-16 h-8 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900" />
+                      <Label htmlFor="pace-age" className="text-xs font-semibold">Subject Age:</Label>
+                      <Input
+                        id="pace-age"
+                        aria-label="Subject Age"
+                        type="number"
+                        min={10}
+                        max={90}
+                        value={age}
+                        onChange={(e) => setAge(Math.max(10, Math.min(90, Number(e.target.value) || 30)))}
+                        className="w-16 h-8 text-xs font-sans tabular-nums font-bold bg-white dark:bg-zinc-900"
+                      />
                     </div>
                   </div>
 
@@ -702,16 +1055,122 @@ Calculated via CalcPlatform Health Engine`;
               </TabsContent>
             </Tabs>
 
-            {/* Action Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-              
+            {/* RESTORED ACTION BAR */}
+            <div className="flex flex-wrap items-center justify-between gap-2.5 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopySummary}
+                  className="text-xs gap-1.5 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 cursor-pointer"
+                  aria-label="Copy Summary to Clipboard"
+                >
+                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-zinc-500" />}
+                  {copied ? "Copied!" : "Copy Summary"}
+                </Button>
 
-              <div className="flex items-center gap-2">
-                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleShare}
+                  className="text-xs gap-1.5 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 cursor-pointer"
+                  aria-label="Share Calculation Link"
+                >
+                  {shareCopied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5 text-zinc-500" />}
+                  {shareCopied ? "Link Copied!" : "Share"}
+                </Button>
 
-                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSaveCalculation}
+                  className="text-xs gap-1.5 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 cursor-pointer"
+                  aria-label="Save Current Calculation"
+                >
+                  {savedNotice ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Bookmark className="w-3.5 h-3.5 text-zinc-500" />}
+                  {savedNotice ? "Saved!" : "Save Calculation"}
+                </Button>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handlePrint}
+                  className="text-xs gap-1.5 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 cursor-pointer"
+                  aria-label="Print or Export PDF Report"
+                >
+                  <Printer className="w-3.5 h-3.5 text-zinc-500" />
+                  Print / PDF Report
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportCsv}
+                  className="text-xs gap-1.5 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900/50 cursor-pointer"
+                  aria-label="Export Data to CSV"
+                >
+                  <Download className="w-3.5 h-3.5 text-emerald-600" />
+                  Export CSV
+                </Button>
               </div>
             </div>
+
+            {/* SAVED SCENARIOS PANEL */}
+            {savedCalculations.length > 0 && (
+              <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
+                <div className="flex items-center justify-between pb-1 border-b border-zinc-200 dark:border-zinc-800 text-xs">
+                  <span className="font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+                    <History className="w-3.5 h-3.5 text-blue-500" />
+                    Saved Scenarios ({savedCalculations.length})
+                  </span>
+                  <button
+                    onClick={() => {
+                      setSavedCalculations([]);
+                      localStorage.removeItem("pace_calc_saved_scenarios");
+                    }}
+                    className="text-[11px] text-zinc-400 hover:text-rose-500 font-medium cursor-pointer"
+                  >
+                    Clear All
+                  </button>
+                </div>
+                <div className="space-y-1.5 max-h-40 overflow-y-auto">
+                  {savedCalculations.map((sc) => (
+                    <div
+                      key={sc.id}
+                      className="p-2 bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-bold text-zinc-800 dark:text-zinc-200">{sc.title}</span>
+                        <span className="text-[10px] text-zinc-500">
+                          {sc.paceKm} /km ({sc.paceMile} /mi) • {sc.timestamp}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleRestoreCalculation(sc)}
+                          className="h-6 text-[10px] px-2 bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-900 hover:bg-blue-100 cursor-pointer"
+                          aria-label={`Restore scenario ${sc.title}`}
+                        >
+                          Restore
+                        </Button>
+                        <button
+                          onClick={() => handleDeleteSavedCalculation(sc.id)}
+                          className="text-zinc-400 hover:text-rose-500 p-1 cursor-pointer"
+                          title="Delete scenario"
+                          aria-label={`Delete scenario ${sc.title}`}
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -762,7 +1221,7 @@ Calculated via CalcPlatform Health Engine`;
         </div>
       </div>
 
-      {/* Standalone Printable PDF Report Section */}
+      {/* Standalone Printable PDF Report Section - Uses h2 to avoid duplicate h1 */}
       <div id="pace-print-report" className="hidden">
         <div className="p-8 max-w-4xl mx-auto space-y-6 bg-white text-zinc-900 font-sans">
           <div className="border-b-2 border-blue-600 pb-4 flex justify-between items-start">
@@ -770,9 +1229,9 @@ Calculated via CalcPlatform Health Engine`;
               <div className="text-xs font-black tracking-widest text-blue-700 uppercase">
                 CalcPlatform Clinical Athletic &amp; Sports Physiology Lab
               </div>
-              <h1 className="text-2xl font-black text-blue-600 mt-1">
+              <h2 className="text-2xl font-black text-blue-600 mt-1">
                 Clinical Athletic Pace &amp; Performance Report
-              </h1>
+              </h2>
               <p className="text-xs text-zinc-500 mt-0.5">
                 Pace/Time/Distance, Riegel Race Predictor &amp; Heart Rate Training Zones
               </p>

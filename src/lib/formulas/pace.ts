@@ -53,6 +53,8 @@ export interface HeartRateZoneInfo {
 }
 
 export interface PaceResult {
+  isValid: boolean;
+  errorMessage?: string;
   // Primary Pace
   totalTimeSeconds: number;
   totalTimeFormatted: string;
@@ -86,7 +88,8 @@ export interface PaceResult {
 
 // Helpers
 export function formatTimeHHMMSS(totalSecs: number): string {
-  const s = Math.max(0, Math.round(totalSecs));
+  if (isNaN(totalSecs) || totalSecs <= 0 || !isFinite(totalSecs)) return "00:00";
+  const s = Math.round(totalSecs);
   const hrs = Math.floor(s / 3600);
   const mins = Math.floor((s % 3600) / 60);
   const secs = s % 60;
@@ -98,6 +101,7 @@ export function formatTimeHHMMSS(totalSecs: number): string {
 }
 
 export function convertDistanceToMeters(value: number, unit: DistanceUnit): number {
+  if (isNaN(value) || value <= 0) return 0;
   switch (unit) {
     case "miles":
       return value * 1609.344;
@@ -134,38 +138,86 @@ export function calculatePace(input: PaceInput): PaceResult {
   const calcMode = input.calcMode || "calculate_pace";
   const presetEvent = input.presetEvent || "custom";
 
-  let totalMeters = 0;
-  let totalTimeSecs = 0;
+  const age = Math.max(10, Math.min(90, Number(input.age) || 30));
+  const mhrFox = 220 - age;
+  const mhrTanaka = Math.round(208 - 0.7 * age);
 
-  // Determine Distance in meters
+  const hrZones: HeartRateZoneInfo[] = [
+    { zoneNumber: 1, name: "Zone 1 — Active Recovery", percentRange: "50% – 60%", minBpm: Math.round(mhrFox * 0.5), maxBpm: Math.round(mhrFox * 0.6), color: "#38bdf8", description: "Very light effort for warm-up, active recovery, and fat oxidation baseline" },
+    { zoneNumber: 2, name: "Zone 2 — Aerobic / Base Endurance", percentRange: "60% – 70%", minBpm: Math.round(mhrFox * 0.6), maxBpm: Math.round(mhrFox * 0.7), color: "#34d399", description: "Comfortable conversational pace building mitochondrial density and lipid metabolism" },
+    { zoneNumber: 3, name: "Zone 3 — Tempo / Aerobic Power", percentRange: "70% – 80%", minBpm: Math.round(mhrFox * 0.7), maxBpm: Math.round(mhrFox * 0.8), color: "#10b981", description: "Moderate endurance effort improving cardiovascular capacity and glycogen efficiency" },
+    { zoneNumber: 4, name: "Zone 4 — Lactate Threshold / Hardcore", percentRange: "80% – 90%", minBpm: Math.round(mhrFox * 0.8), maxBpm: Math.round(mhrFox * 0.9), color: "#facc15", description: "Sustainable hard effort near lactate accumulation threshold (10K pace)" },
+    { zoneNumber: 5, name: "Zone 5 — VO2 Max / Anaerobic Sprint", percentRange: "90% – 100%", minBpm: Math.round(mhrFox * 0.9), maxBpm: mhrFox, color: "#f87171", description: "Maximum exertion for short interval sprints and neuromuscular speed" },
+  ];
+
+  const emptyRiegel = [
+    { eventName: "5K", distanceMiles: 3.11, predictedTimeSeconds: 0, predictedTimeFormatted: "--:--", predictedPacePerMileFormatted: "--:--", predictedPacePerKmFormatted: "--:--" },
+    { eventName: "10K", distanceMiles: 6.21, predictedTimeSeconds: 0, predictedTimeFormatted: "--:--", predictedPacePerMileFormatted: "--:--", predictedPacePerKmFormatted: "--:--" },
+    { eventName: "Half Marathon (13.1 mi)", distanceMiles: 13.11, predictedTimeSeconds: 0, predictedTimeFormatted: "--:--", predictedPacePerMileFormatted: "--:--", predictedPacePerKmFormatted: "--:--" },
+    { eventName: "Marathon (26.2 mi)", distanceMiles: 26.22, predictedTimeSeconds: 0, predictedTimeFormatted: "--:--", predictedPacePerMileFormatted: "--:--", predictedPacePerKmFormatted: "--:--" },
+  ];
+
+  const makeInvalid = (msg: string): PaceResult => ({
+    isValid: false,
+    errorMessage: msg,
+    totalTimeSeconds: 0,
+    totalTimeFormatted: "--:--",
+    totalDistanceMiles: 0,
+    totalDistanceKm: 0,
+    totalDistanceMeters: 0,
+    paceSecondsPerMile: 0,
+    pacePerMileFormatted: "--:--",
+    paceSecondsPerKm: 0,
+    pacePerKmFormatted: "--:--",
+    speedMph: 0,
+    speedKmh: 0,
+    pace400mFormatted: "--:--",
+    pace100mFormatted: "--:--",
+    speedMs: 0,
+    riegelPredictions: emptyRiegel,
+    maxHeartRateFox: mhrFox,
+    maxHeartRateTanaka: mhrTanaka,
+    hrZones,
+  });
+
+  let totalMeters = 0;
   if (presetEvent !== "custom") {
     totalMeters = getPresetEventMeters(presetEvent);
   } else {
-    const distVal = Number(input.distanceValue) || 5;
-    const distUnit = input.distanceUnit || "miles";
-    totalMeters = convertDistanceToMeters(distVal, distUnit);
+    const rawDist = input.distanceValue !== undefined && input.distanceValue !== null ? Number(input.distanceValue) : NaN;
+    if (isNaN(rawDist) || rawDist <= 0) {
+      if (calcMode !== "calculate_distance") {
+        return makeInvalid("Enter a distance greater than 0");
+      }
+    } else {
+      const distUnit = input.distanceUnit || "km";
+      totalMeters = convertDistanceToMeters(rawDist, distUnit);
+    }
   }
-  totalMeters = Math.max(1, totalMeters);
 
   // Time in seconds
   const inputHrs = Number(input.timeHours) || 0;
   const inputMins = Number(input.timeMinutes) || 0;
   const inputSecs = Number(input.timeSeconds) || 0;
-  totalTimeSecs = inputHrs * 3600 + inputMins * 60 + inputSecs;
+  let totalTimeSecs = inputHrs * 3600 + inputMins * 60 + inputSecs;
 
   // Pace input in seconds per mile/km
-  const pMins = Number(input.paceMinutes) || 8;
+  const pMins = Number(input.paceMinutes) || 0;
   const pSecs = Number(input.paceSeconds) || 0;
   const inputPaceSecs = pMins * 60 + pSecs;
-  const pUnit = input.paceUnit || "min_mile";
+  const pUnit = input.paceUnit || "min_km";
 
-  let paceSecsPerMile = 480; // default 8:00 min/mile
+  let paceSecsPerMile = 0;
 
   if (calcMode === "calculate_pace") {
-    totalTimeSecs = Math.max(1, totalTimeSecs);
+    if (totalMeters <= 0) return makeInvalid("Enter a distance greater than 0");
+    if (totalTimeSecs <= 0) return makeInvalid("Enter a time greater than 0");
     const miles = totalMeters / 1609.344;
     paceSecsPerMile = totalTimeSecs / miles;
   } else if (calcMode === "calculate_time") {
+    if (totalMeters <= 0) return makeInvalid("Enter a distance greater than 0");
+    if (inputPaceSecs <= 0) return makeInvalid("Enter a pace greater than 0");
+
     if (pUnit === "min_mile") paceSecsPerMile = inputPaceSecs;
     else if (pUnit === "min_km") paceSecsPerMile = inputPaceSecs * 1.609344;
     else if (pUnit === "mph") paceSecsPerMile = (3600 / Math.max(0.1, Number(input.paceMinutes) || 7));
@@ -174,17 +226,21 @@ export function calculatePace(input: PaceInput): PaceResult {
     const miles = totalMeters / 1609.344;
     totalTimeSecs = Math.round(paceSecsPerMile * miles);
   } else if (calcMode === "calculate_distance") {
-    totalTimeSecs = Math.max(1, totalTimeSecs);
-    if (pUnit === "min_mile") paceSecsPerMile = Math.max(1, inputPaceSecs);
-    else if (pUnit === "min_km") paceSecsPerMile = Math.max(1, inputPaceSecs * 1.609344);
-    else paceSecsPerMile = Math.max(1, inputPaceSecs);
+    if (totalTimeSecs <= 0) return makeInvalid("Enter a time greater than 0");
+    if (inputPaceSecs <= 0) return makeInvalid("Enter a pace greater than 0");
+
+    if (pUnit === "min_mile") paceSecsPerMile = inputPaceSecs;
+    else if (pUnit === "min_km") paceSecsPerMile = inputPaceSecs * 1.609344;
+    else paceSecsPerMile = inputPaceSecs;
 
     const miles = totalTimeSecs / paceSecsPerMile;
     totalMeters = miles * 1609.344;
   }
 
-  // Safety bounds
-  paceSecsPerMile = Math.max(60, Math.min(3600, paceSecsPerMile)); // 1 min/mi to 60 min/mi
+  if (paceSecsPerMile <= 0 || !isFinite(paceSecsPerMile)) {
+    return makeInvalid("Unable to calculate with given parameters");
+  }
+
   const totalMiles = parseFloat((totalMeters / 1609.344).toFixed(3));
   const totalKm = parseFloat((totalMeters / 1000).toFixed(3));
 
@@ -220,20 +276,8 @@ export function calculatePace(input: PaceInput): PaceResult {
     };
   });
 
-  // Heart Rate Zones
-  const age = Math.max(10, Math.min(90, Number(input.age) || 30));
-  const mhrFox = 220 - age;
-  const mhrTanaka = Math.round(208 - 0.7 * age);
-
-  const hrZones: HeartRateZoneInfo[] = [
-    { zoneNumber: 1, name: "Zone 1 — Active Recovery", percentRange: "50% – 60%", minBpm: Math.round(mhrFox * 0.5), maxBpm: Math.round(mhrFox * 0.6), color: "#38bdf8", description: "Very light effort for warm-up, active recovery, and fat oxidation baseline" },
-    { zoneNumber: 2, name: "Zone 2 — Aerobic / Base Endurance", percentRange: "60% – 70%", minBpm: Math.round(mhrFox * 0.6), maxBpm: Math.round(mhrFox * 0.7), color: "#34d399", description: "Comfortable conversational pace building mitochondrial density and lipid metabolism" },
-    { zoneNumber: 3, name: "Zone 3 — Tempo / Aerobic Power", percentRange: "70% – 80%", minBpm: Math.round(mhrFox * 0.7), maxBpm: Math.round(mhrFox * 0.8), color: "#10b981", description: "Moderate endurance effort improving cardiovascular capacity and glycogen efficiency" },
-    { zoneNumber: 4, name: "Zone 4 — Lactate Threshold / Hardcore", percentRange: "80% – 90%", minBpm: Math.round(mhrFox * 0.8), maxBpm: Math.round(mhrFox * 0.9), color: "#facc15", description: "Sustainable hard effort near lactate accumulation threshold (10K pace)" },
-    { zoneNumber: 5, name: "Zone 5 — VO2 Max / Anaerobic Sprint", percentRange: "90% – 100%", minBpm: Math.round(mhrFox * 0.9), maxBpm: mhrFox, color: "#f87171", description: "Maximum exertion for short interval sprints and neuromuscular speed" },
-  ];
-
   return {
+    isValid: true,
     totalTimeSeconds: totalTimeSecs,
     totalTimeFormatted: formatTimeHHMMSS(totalTimeSecs),
     totalDistanceMiles: totalMiles,
