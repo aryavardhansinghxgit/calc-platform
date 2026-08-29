@@ -9,7 +9,7 @@ export const protein_calculatorConfig: CalculatorModuleDefinition = {
   category: "Health",
   subcategory: "Nutrition & Health",
   description:
-    "Calculate your exact daily protein requirements, per-meal targets, leucine trigger, and essential amino acid breakdown across 10 modes and 5 BMR formulas. Features searchable high-protein food database.",
+    "Calculate estimated daily protein needs for maintenance, muscle building, fat loss, athletes, older adults, pregnancy and plant-based diets, with per-meal and calorie targets.",
   iconName: "Dumbbell",
   featured: true,
   keywords: [

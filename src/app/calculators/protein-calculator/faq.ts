@@ -5,163 +5,78 @@ export interface FAQItem {
 
 export const protein_calculatorFaqs: FAQItem[] = [
   {
-    question: "What is a protein calculator?",
-    answer: "A protein calculator is an advanced nutrition tool that estimates your total daily energy expenditure (TDEE) and determines your optimal daily protein intake in grams, grams per pound/kg of body weight, and per-meal targets based on your age, gender, activity level, and fitness goals."
-  },
-  {
     question: "How much protein do I need per day?",
-    answer: "Protein requirements depend on physical activity and fitness goals. The RDA baseline is 0.8 grams per kg of body weight (0.36g/lb). For active individuals and lifters, evidence-based recommendations range from 1.6 to 2.4 grams per kg (0.8 to 1.1g/lb) per day."
+    answer:
+      "There is no single protein number that is ideal for everyone. The adult RDA is approximately 0.8 g/kg/day, while people who exercise regularly commonly use higher targets. Sports-nutrition guidance frequently falls around 1.2–2.0 g/kg/day, depending on the person and activity.",
   },
   {
-    question: "What is the difference between RDA and optimal protein intake?",
-    answer: "The Recommended Dietary Allowance (RDA) of 0.8g/kg is the minimum intake required to prevent nutritional deficiency in sedentary adults. Optimal protein intake for muscle building, athletic performance, and fat loss is 1.6 to 2.4g/kg."
+    question: "Is 0.8 g/kg enough protein?",
+    answer:
+      "The 0.8 g/kg/day RDA is the established adult population reference for healthy adults. It should not be interpreted as a maximum or necessarily as the best target for athletes, people dieting, or other groups with different nutritional objectives.",
   },
   {
-    question: "What is the Leucine Trigger for Muscle Protein Synthesis (MPS)?",
-    answer: "Leucine is the key essential amino acid that initiates the mTOR signaling pathway for Muscle Protein Synthesis. Consuming 2.5 to 3.5 grams of Leucine per meal (typically ~30–40g of high-quality protein) triggers maximal anabolic muscle building."
+    question: "How much protein should I eat to build muscle?",
+    answer:
+      "Resistance-trained people often use protein intakes above the adult RDA. A commonly cited range for exercising individuals is roughly 1.4–2.0 g/kg/day, although the appropriate amount depends on training, energy intake, body composition and individual circumstances.",
   },
   {
-    question: "What are complete vs incomplete proteins?",
-    answer: "Complete proteins contain all 9 essential amino acids (EAAs) in adequate proportions (animal meats, poultry, fish, eggs, dairy, soy, quinoa). Incomplete proteins lack one or more essential amino acids (nuts, grains, vegetables)."
-  },
-  {
-    question: "What are the 9 Essential Amino Acids (EAAs)?",
-    answer: "The 9 EAAs that the human body cannot synthesize internally are Leucine, Isoleucine, Valine, Lysine, Methionine, Phenylalanine, Threonine, Tryptophan, and Histidine."
-  },
-  {
-    question: "How much extra protein is needed during pregnancy?",
-    answer: "Dietary guidelines recommend an additional +1g/day in Trimester 1, +10g/day in Trimester 2, and +31g/day in Trimester 3 to support maternal tissue expansion and fetal growth."
-  },
-  {
-    question: "How much extra protein is needed during lactation?",
-    answer: "Lactating mothers require an additional +19g of protein per day during the first 6 months of breastfeeding, and +13g of protein per day after 6 months to maintain milk production and lean tissue."
-  },
-  {
-    question: "Why do seniors and older adults need more protein?",
-    answer: "Older adults experience anabolic resistance and age-related muscle loss (sarcopenia). Consuming 1.2 to 1.5g/kg of protein per day helps maintain muscle mass, bone density, and functional mobility."
-  },
-  {
-    question: "Do vegans need to eat more protein?",
-    answer: "Yes. Plant proteins generally have lower digestibility (DIAAS scores) and lower essential amino acid concentrations. Increasing plant protein intake by ~10% to 15% compensates for lower bioavailability."
+    question: "Should I eat more protein when losing weight?",
+    answer:
+      "A higher protein intake is commonly used during calorie restriction to help support retention of lean tissue, particularly when combined with resistance training. The exact amount depends on the person's body composition, calorie deficit, training and health status.",
   },
   {
     question: "How much protein should I eat per meal?",
-    answer: "Spacing protein intake into 3 to 5 meals of 30 to 45 grams per meal (or 0.4g/kg per meal) optimizes Muscle Protein Synthesis throughout the day."
+    answer:
+      "A simple planning method is to divide the daily target by the number of meals. For example, 120 g/day divided across four meals gives 30 g per meal. The calculator performs this division automatically.",
   },
   {
-    question: "Can eating too much protein damage healthy kidneys?",
-    answer: "In healthy individuals with normal renal function, high-protein diets up to 2.8g/kg (1.3g/lb) show no adverse effects on kidney function. Individuals with pre-existing kidney disease must follow clinical protein restriction."
+    question: "What is the leucine target?",
+    answer:
+      "Leucine is an essential amino acid involved in signaling associated with muscle protein synthesis. The calculator provides a simplified per-meal leucine estimate based on its protein model. The displayed value should be treated as a planning estimate rather than a guarantee of a particular muscle-building response.",
   },
   {
-    question: "What is the Thermic Effect of Protein (TEF)?",
-    answer: "Protein has a high Thermic Effect of Food (TEF ~20% to 30%), meaning 20-30% of the calories in protein are consumed during digestion and metabolization, aiding fat loss."
+    question: "Is more protein always better?",
+    answer:
+      "No. Protein is important, but increasing protein indefinitely does not automatically improve health or muscle growth. The useful target depends on total diet, energy intake, exercise, body composition and individual health.",
   },
   {
-    question: "What are the best high-protein foods?",
-    answer: "Top sources include chicken breast (26g per 3oz), lean beef (22g per 3oz), salmon (22g per 3oz), Greek yogurt (23g per cup), cottage cheese (28g per cup), eggs (6.3g per egg), tofu (11g per 4oz), and seitan."
+    question: "Do older adults need more protein?",
+    answer:
+      "Older adults may benefit from higher protein intake than the adult RDA, particularly when maintaining muscle and physical function is a priority. ESPEN guidance recommends at least 1.0 g/kg/day for older adults and notes commonly suggested ranges around 1.0–1.2 g/kg/day for healthy older people.",
   },
   {
-    question: "Is whey protein better than plant protein?",
-    answer: "Whey protein is a fast-digesting complete protein with high Leucine content (~11%). Plant protein blends (e.g. pea + rice) match whey's anabolic effect when consumed in equivalent Leucine doses."
+    question: "Do athletes need more protein than sedentary adults?",
+    answer:
+      "Often, yes. Exercise increases the need for tissue repair and adaptation, and sports-nutrition organizations commonly recommend higher protein intakes for exercising individuals than the sedentary-adult RDA.",
   },
   {
-    question: "How much protein do I need for fat loss (cutting)?",
-    answer: "During a calorie deficit, protein requirements increase to 2.2–2.6g/kg (1.0–1.2g/lb) of body weight to preserve lean muscle tissue and maintain satiety."
+    question: "Can I get enough protein from plant foods?",
+    answer:
+      "Yes. A varied plant-based diet can provide adequate protein. Soy foods, legumes, grains, nuts, seeds and other plant foods can contribute substantially to total intake. The overall amino-acid and protein quality of the dietary pattern matters more than labeling individual foods simply as 'complete' or 'incomplete.'",
   },
   {
-    question: "How much protein do I need for muscle building (hypertrophy)?",
-    answer: "For muscle hypertrophy in resistance-trained lifters, 1.6 to 2.2g/kg (0.8 to 1.0g/lb) of body weight per day is optimal."
+    question: "How many calories are in protein?",
+    answer:
+      "Protein provides approximately 4 kcal per gram. Therefore, 100 g of protein contributes about 400 kcal.",
   },
   {
-    question: "What is nitrogen balance?",
-    answer: "Nitrogen balance measures protein metabolism by comparing dietary nitrogen intake against nitrogen excretion. Positive nitrogen balance indicates muscle growth, while negative balance indicates muscle catabolism."
+    question: "Should I use my total body weight or lean body mass?",
+    answer:
+      "For many general protein calculations, body weight is the simplest input. In people with substantially different body composition, a lean-mass-based approach may sometimes be more informative, but it depends on the population and the purpose of the calculation. There is no single body-weight method that is optimal for every person.",
   },
   {
-    question: "Should I drink a protein shake immediately after working out?",
-    answer: "While the 'anabolic window' is wider than previously thought (1–2 hours post-workout), consuming 30–40g of fast-digesting protein post-workout supports rapid recovery."
+    question: "Does protein timing matter?",
+    answer:
+      "Total daily protein intake is an important foundation. Distributing protein across the day can also be useful, especially for people trying to support muscle maintenance or growth. Meal timing should be viewed as part of an overall nutrition strategy rather than as a substitute for adequate daily intake.",
   },
   {
-    question: "How does protein help with weight loss?",
-    answer: "Protein boosts satiety hormones (PYY, GLP-1), reduces hunger hormones (ghrelin), increases daily calorie burning via TEF, and preserves metabolic muscle mass during a deficit."
+    question: "Should I recalculate my protein target after losing weight?",
+    answer:
+      "Usually, it is sensible to review the calculation after a meaningful change in body weight, training volume or goal. Because many protein formulas scale with body weight, a substantial weight change can alter the resulting target.",
   },
   {
-    question: "What is BCAA and do I need to supplement it?",
-    answer: "BCAAs (Branch-Chain Amino Acids: Leucine, Isoleucine, Valine) trigger MPS. If you consume sufficient whole complete protein, BCAA supplementation is unnecessary."
+    question: "Is this calculator a medical or clinical protein prescription?",
+    answer:
+      "No. It is an educational planning calculator. Its output is an estimate based on mathematical and nutritional assumptions and should not replace individualized medical or dietetic advice.",
   },
-  {
-    question: "How many calories are in 1 gram of protein?",
-    answer: "1 gram of protein yields 4 calories (kcal) of energy."
-  },
-  {
-    question: "What happens if I don't eat enough protein?",
-    answer: "Inadequate protein intake leads to muscle atrophy, slower recovery, weakened immunity, hair/skin degradation, and reduced metabolic rate."
-  },
-  {
-    question: "How much protein do endurance runners need?",
-    answer: "Endurance runners require 1.4 to 1.8g/kg (0.6 to 0.8g/lb) per day to repair oxidative muscle damage and replenish mitochondrial enzymes."
-  },
-  {
-    question: "How much protein do strength lifters need?",
-    answer: "Powerlifters and bodybuilders require 1.8 to 2.4g/kg (0.8 to 1.1g/lb) of body weight per day for maximal strength gains."
-  },
-  {
-    question: "Can excess protein be stored as body fat?",
-    answer: "Excess protein calories can theoretically be converted to fatty acids via de novo lipogenesis, but this process is metabolically inefficient compared to excess carbs or fats."
-  },
-  {
-    question: "How do I combine incomplete plant proteins?",
-    answer: "Combine grains (low in Lysine, high in Methionine) with legumes (high in Lysine, low in Methionine)—for example, rice and beans, or peanut butter on whole wheat toast."
-  },
-  {
-    question: "Is protein intake calculated on total body weight or lean body mass?",
-    answer: "For individuals with average body fat, total body weight is standard. For individuals with obesity (BMI > 30), protein should be calculated based on target or lean body mass (LBM)."
-  },
-  {
-    question: "What is casein protein?",
-    answer: "Casein is a slow-digesting dairy protein that forms a gel in the stomach, releasing amino acids slowly over 6 to 8 hours (ideal for pre-bedtime consumption)."
-  },
-  {
-    question: "What is DIAAS (Digestible Indispensable Amino Acid Score)?",
-    answer: "DIAAS is the modern gold-standard method for evaluating protein quality based on ileal amino acid digestibility."
-  },
-  {
-    question: "Does drinking water help digest protein?",
-    answer: "Yes. Water supports liver urea synthesis and renal filtration of nitrogenous waste produced during amino acid breakdown."
-  },
-  {
-    question: "How does age affect protein absorption?",
-    answer: "Aging reduces digestive enzyme secretion and muscle anabolic sensitivity, requiring higher per-meal protein doses (35-45g) to trigger MPS."
-  },
-  {
-    question: "Can I get all my protein from food without supplements?",
-    answer: "Absolutely! Whole foods provide complete amino acid profiles along with vitamins, minerals, and healthy fats."
-  },
-  {
-    question: "What is the protein content of eggs?",
-    answer: "One large egg contains approximately 6.3 grams of high-bioavailability complete protein (3.6g in the white, 2.7g in the yolk)."
-  },
-  {
-    question: "What is the protein content of chicken breast?",
-    answer: "A 3-ounce (85g) cooked chicken breast contains approximately 26 grams of complete protein and 2.3 grams of Leucine."
-  },
-  {
-    question: "How does sleep affect muscle protein synthesis?",
-    answer: "Growth hormone peak secretion occurs during deep stage-3 sleep, facilitating muscle repair when amino acids are present in the bloodstream."
-  },
-  {
-    question: "How do I track raw vs cooked meat protein?",
-    answer: "3 ounces of cooked meat equals roughly 4 ounces of raw meat due to water loss during cooking."
-  },
-  {
-    question: "What is the difference between BMR and TDEE?",
-    answer: "BMR is your baseline calories burned at rest. TDEE includes BMR plus calories burned through physical exercise and daily movement."
-  },
-  {
-    question: "How often should I recalculate my protein targets?",
-    answer: "Recalculate protein targets every time your body weight changes by 5 to 10 lbs or when your workout training volume changes."
-  },
-  {
-    question: "Why is Calculator.net's protein calculator less comprehensive than this platform?",
-    answer: "Calculator.net provides static formulas with basic outputs. Our suite offers 10 modes, 5 BMR formulas, Leucine & EAA profiling, pregnancy trimester additions, senior sarcopenia guidelines, searchable 40+ food database, and downloadable PDF reports."
-  }
 ];

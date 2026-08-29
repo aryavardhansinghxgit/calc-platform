@@ -12,7 +12,14 @@ export type ProteinCalculationMode =
 
 export type UnitSystem = "us" | "metric";
 export type Gender = "male" | "female";
-export type ActivityLevel = "sedentary" | "light" | "moderate" | "active" | "very-active";
+export type ActivityLevel =
+  | "sedentary"
+  | "light"
+  | "moderate"
+  | "active"
+  | "very-active"
+  | "extra-active";
+
 export type FitnessGoal =
   | "maintain"
   | "mild-loss"
@@ -28,7 +35,8 @@ export type BmrFormulaType =
   | "katch"
   | "harris"
   | "revised-harris"
-  | "cunningham";
+  | "cunningham"
+  | "schofield";
 
 export type PregnancyStatusType =
   | "none"
