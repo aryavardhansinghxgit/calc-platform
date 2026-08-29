@@ -1,22 +1,18 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
-  Activity,
   Flame,
-  Scale,
   Bookmark,
   Share2,
   Printer,
   Copy,
   Check,
   RefreshCw,
-  Info,
-  Calendar,
-  Target,
-  Droplet,
-  ShieldCheck,
-  Zap,
+  Download,
+  Trash2,
+  X,
+  ExternalLink,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -42,7 +38,31 @@ import {
 
 import { BmrTables } from "./BmrTables";
 
+interface SavedBmrScenario {
+  id: string;
+  name: string;
+  date: string;
+  unitSystem: UnitSystem;
+  gender: Gender;
+  age: number;
+  heightFeet: number;
+  heightInches: number;
+  weightLbs: number;
+  heightCm: number;
+  weightKg: number;
+  heightMeters: number;
+  weightKgOther: number;
+  bmrFormula: BmrFormula;
+  bodyFatPercentage: string;
+  activityLevel: ActivityLevel;
+  selectedGoal: SmartGoal;
+  bmr: number;
+  tdee: number;
+}
+
 export function BmrCalculator() {
+  const [mounted, setMounted] = useState(false);
+
   // Input states
   const [unitSystem, setUnitSystem] = useState<UnitSystem>("us");
   const [gender, setGender] = useState<Gender>("male");
@@ -55,7 +75,11 @@ export function BmrCalculator() {
 
   // Metric Inputs
   const [heightCm, setHeightCm] = useState<number>(178);
-  const [weightKg, setWeightKg] = useState<number>(72.5);
+  const [weightKg, setWeightKg] = useState<number>(72.6);
+
+  // Other Units (m, kg)
+  const [heightMeters, setHeightMeters] = useState<number>(1.78);
+  const [weightKgOther, setWeightKgOther] = useState<number>(72.6);
 
   // Formula & Activity Level & Goal
   const [bmrFormula, setBmrFormula] = useState<BmrFormula>("mifflin");
@@ -63,30 +87,118 @@ export function BmrCalculator() {
   const [activityLevel, setActivityLevel] = useState<ActivityLevel>("moderate");
   const [selectedGoal, setSelectedGoal] = useState<SmartGoal>("maintain");
 
-  // Scenario Comparison Inputs
-  const [scenarioGoalWeightLbs, setScenarioGoalWeightLbs] = useState<number>(150);
-  const [scenarioGoalActivity, setScenarioGoalActivity] = useState<ActivityLevel>("moderate");
-
-  // Saved calculations
-  const [savedCalculations, setSavedCalculations] = useState<
-    Array<{ id: string; timestamp: string; title: string; bmr: number; tdee: number }>
-  >([]);
+  // Feedback states
   const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
 
-  // Unit system change handler
-  const handleUnitSystemChange = (newSystem: UnitSystem) => {
-    setUnitSystem(newSystem);
-    if (newSystem === "metric") {
-      const cm = Math.round((heightFeet * 12 + heightInches) * 2.54);
-      const kg = parseFloat((weightLbs * 0.45359237).toFixed(1));
-      setHeightCm(cm);
-      setWeightKg(kg);
-    } else if (newSystem === "us") {
-      const totalInches = Math.round(heightCm / 2.54);
-      setHeightFeet(Math.floor(totalInches / 12));
-      setHeightInches(parseFloat((totalInches % 12).toFixed(1)));
-      setWeightLbs(Math.round(weightKg / 0.45359237));
+  // Saved scenarios state
+  const [savedScenarios, setSavedScenarios] = useState<SavedBmrScenario[]>([]);
+  const [isSavedDrawerOpen, setIsSavedDrawerOpen] = useState(false);
+
+  // Read URL params and localStorage on mount
+  useEffect(() => {
+    setMounted(true);
+    try {
+      const stored = localStorage.getItem("bmr_saved_scenarios");
+      if (stored) {
+        setSavedScenarios(JSON.parse(stored));
+      }
+    } catch {
+      // Ignore storage errors
     }
+
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const urlUnit = params.get("unit");
+      const urlGender = params.get("gender");
+      const urlAge = params.get("age");
+      const urlHt = params.get("ht");
+      const urlWt = params.get("wt");
+      const urlFormula = params.get("formula");
+      const urlAct = params.get("act");
+      const urlGoal = params.get("goal");
+      const urlBf = params.get("bf");
+
+      if (urlUnit === "us" || urlUnit === "metric" || urlUnit === "other") setUnitSystem(urlUnit);
+      if (urlGender === "male" || urlGender === "female") setGender(urlGender);
+      if (urlAge && !isNaN(Number(urlAge))) setAge(Number(urlAge));
+      if (urlFormula === "mifflin" || urlFormula === "harris" || urlFormula === "katch") setBmrFormula(urlFormula);
+      if (urlAct && ["sedentary", "light", "moderate", "active", "very_active", "extra_active"].includes(urlAct)) {
+        setActivityLevel(urlAct as ActivityLevel);
+      }
+      if (urlGoal && ["aggressive_cut", "slow_cut", "maintain", "slow_bulk", "aggressive_bulk", "performance"].includes(urlGoal)) {
+        setSelectedGoal(urlGoal as SmartGoal);
+      }
+      if (urlBf && !isNaN(Number(urlBf))) setBodyFatPercentage(urlBf);
+
+      if (urlUnit === "metric") {
+        if (urlHt && !isNaN(Number(urlHt))) setHeightCm(Number(urlHt));
+        if (urlWt && !isNaN(Number(urlWt))) setWeightKg(Number(urlWt));
+      } else if (urlUnit === "other") {
+        if (urlHt && !isNaN(Number(urlHt))) setHeightMeters(Number(urlHt));
+        if (urlWt && !isNaN(Number(urlWt))) setWeightKgOther(Number(urlWt));
+      } else {
+        if (urlHt && !isNaN(Number(urlHt))) {
+          const totIn = Number(urlHt);
+          setHeightFeet(Math.floor(totIn / 12));
+          setHeightInches(totIn % 12);
+        }
+        if (urlWt && !isNaN(Number(urlWt))) setWeightLbs(Number(urlWt));
+      }
+    }
+  }, []);
+
+  // Save to localStorage when updated
+  const persistScenarios = (scenarios: SavedBmrScenario[]) => {
+    setSavedScenarios(scenarios);
+    try {
+      localStorage.setItem("bmr_saved_scenarios", JSON.stringify(scenarios));
+    } catch {
+      // Ignore storage errors
+    }
+  };
+
+  // Unit system change handler with robust 3-way synchronization
+  const handleUnitSystemChange = (newSystem: UnitSystem) => {
+    if (newSystem === unitSystem) return;
+
+    if (newSystem === "metric") {
+      if (unitSystem === "us") {
+        const cm = Math.round((heightFeet * 12 + heightInches) * 2.54);
+        const kg = parseFloat((weightLbs * 0.45359237).toFixed(1));
+        setHeightCm(cm);
+        setWeightKg(kg);
+      } else if (unitSystem === "other") {
+        const cm = Math.round(heightMeters * 100);
+        const kg = weightKgOther;
+        setHeightCm(cm);
+        setWeightKg(kg);
+      }
+    } else if (newSystem === "us") {
+      if (unitSystem === "metric") {
+        const totalInches = heightCm / 2.54;
+        setHeightFeet(Math.floor(totalInches / 12));
+        setHeightInches(parseFloat((totalInches % 12).toFixed(1)));
+        setWeightLbs(Math.round(weightKg / 0.45359237));
+      } else if (unitSystem === "other") {
+        const totalInches = (heightMeters * 100) / 2.54;
+        setHeightFeet(Math.floor(totalInches / 12));
+        setHeightInches(parseFloat((totalInches % 12).toFixed(1)));
+        setWeightLbs(Math.round(weightKgOther / 0.45359237));
+      }
+    } else if (newSystem === "other") {
+      if (unitSystem === "us") {
+        const cm = (heightFeet * 12 + heightInches) * 2.54;
+        const kg = parseFloat((weightLbs * 0.45359237).toFixed(1));
+        setHeightMeters(parseFloat((cm / 100).toFixed(2)));
+        setWeightKgOther(kg);
+      } else if (unitSystem === "metric") {
+        setHeightMeters(parseFloat((heightCm / 100).toFixed(2)));
+        setWeightKgOther(weightKg);
+      }
+    }
+
+    setUnitSystem(newSystem);
   };
 
   const handleReset = () => {
@@ -97,13 +209,13 @@ export function BmrCalculator() {
     setHeightInches(10);
     setWeightLbs(160);
     setHeightCm(178);
-    setWeightKg(72.5);
+    setWeightKg(72.6);
+    setHeightMeters(1.78);
+    setWeightKgOther(72.6);
     setBmrFormula("mifflin");
     setBodyFatPercentage("");
     setActivityLevel("moderate");
     setSelectedGoal("maintain");
-    setScenarioGoalWeightLbs(150);
-    setScenarioGoalActivity("moderate");
   };
 
   // Calculation Engine Call
@@ -118,12 +230,12 @@ export function BmrCalculator() {
       weightLbs,
       heightCm,
       weightKg,
+      heightMeters,
+      weightKgOther,
       bmrFormula,
       bodyFatPercentage: bfNum,
       activityLevel,
       selectedGoal,
-      scenarioGoalWeightLbs,
-      scenarioGoalActivity,
     });
   }, [
     unitSystem,
@@ -134,55 +246,172 @@ export function BmrCalculator() {
     weightLbs,
     heightCm,
     weightKg,
+    heightMeters,
+    weightKgOther,
     bmrFormula,
     bodyFatPercentage,
     activityLevel,
     selectedGoal,
-    scenarioGoalWeightLbs,
-    scenarioGoalActivity,
   ]);
 
-  const handleSaveCalculation = () => {
-    const newItem = {
+  // Save current scenario
+  const handleSaveScenario = () => {
+    const newScenario: SavedBmrScenario = {
       id: Date.now().toString(),
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      title: `${age}y/o ${gender === "male" ? "Male" : "Female"} (${result.selectedBmr} BMR / ${result.tdee} TDEE)`,
+      name: `${age}y ${gender === "male" ? "Male" : "Female"} (${result.selectedBmr} BMR / ${result.tdee} TDEE)`,
+      date: new Date().toLocaleDateString(),
+      unitSystem,
+      gender,
+      age,
+      heightFeet,
+      heightInches,
+      weightLbs,
+      heightCm,
+      weightKg,
+      heightMeters,
+      weightKgOther,
+      bmrFormula,
+      bodyFatPercentage,
+      activityLevel,
+      selectedGoal,
       bmr: result.selectedBmr,
       tdee: result.tdee,
     };
-    setSavedCalculations([newItem, ...savedCalculations]);
+    persistScenarios([newScenario, ...savedScenarios]);
+    setIsSavedDrawerOpen(true);
   };
 
+  // Restore saved scenario
+  const handleRestoreScenario = (s: SavedBmrScenario) => {
+    setUnitSystem(s.unitSystem);
+    setGender(s.gender);
+    setAge(s.age);
+    setHeightFeet(s.heightFeet);
+    setHeightInches(s.heightInches);
+    setWeightLbs(s.weightLbs);
+    setHeightCm(s.heightCm);
+    setWeightKg(s.weightKg);
+    setHeightMeters(s.heightMeters || 1.78);
+    setWeightKgOther(s.weightKgOther || 72.6);
+    setBmrFormula(s.bmrFormula);
+    setBodyFatPercentage(s.bodyFatPercentage);
+    setActivityLevel(s.activityLevel);
+    setSelectedGoal(s.selectedGoal);
+    setIsSavedDrawerOpen(false);
+  };
+
+  // Delete saved scenario
+  const handleDeleteScenario = (id: string) => {
+    persistScenarios(savedScenarios.filter((s) => s.id !== id));
+  };
+
+  // Copy Summary to Clipboard
   const handleCopySummary = () => {
-    const summary = `BMR & TDEE Metabolic Assessment Report (${new Date().toLocaleDateString()})
-Age: ${age} | Gender: ${gender} | Height: ${result.heightCm} cm | Weight: ${result.weightLbs} lbs (${result.weightKg} kg)
+    const summary = `BMR & TDEE Metabolic Assessment Report
+Age: ${age} | Gender: ${gender} | Height: ${result.heightCm} cm (${result.heightInches} in) | Weight: ${result.weightLbs} lbs (${result.weightKg} kg)
 Selected Formula: ${result.formulaUsedName}
 Basal Metabolic Rate (BMR): ${result.selectedBmr} kcal/day
-Total Daily Energy Expenditure (TDEE): ${result.tdee} kcal/day (${result.activityMultiplier}× multiplier)
+Maintenance TDEE: ${result.tdee} kcal/day (${result.activityMultiplier}× multiplier)
 Smart Goal (${result.smartGoalInfo.label}): ${result.smartGoalInfo.targetCalories} kcal/day
-Protein: ${result.smartGoalInfo.proteinGrams}g | Carbs: ${result.smartGoalInfo.carbsGrams}g | Fat: ${result.smartGoalInfo.fatGrams}g
+Macro Split: Protein ${result.smartGoalInfo.proteinGrams}g | Carbs ${result.smartGoalInfo.carbsGrams}g | Fat ${result.smartGoalInfo.fatGrams}g
 Hydration Target: ${result.hydration.waterLiters} L / ${result.hydration.waterCups} cups per day
-Calculated via CalcPlatform Health Engine`;
+Calculated via CalcPlatform BMR Engine`;
 
     navigator.clipboard.writeText(summary);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
 
+  // Share URL with state parameters
   const handleShare = async () => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.origin + window.location.pathname);
+    url.searchParams.set("unit", unitSystem);
+    url.searchParams.set("gender", gender);
+    url.searchParams.set("age", age.toString());
+    url.searchParams.set("formula", bmrFormula);
+    url.searchParams.set("act", activityLevel);
+    url.searchParams.set("goal", selectedGoal);
+    if (bodyFatPercentage) url.searchParams.set("bf", bodyFatPercentage);
+
+    if (unitSystem === "metric") {
+      url.searchParams.set("ht", heightCm.toString());
+      url.searchParams.set("wt", weightKg.toString());
+    } else if (unitSystem === "other") {
+      url.searchParams.set("ht", heightMeters.toString());
+      url.searchParams.set("wt", weightKgOther.toString());
+    } else {
+      url.searchParams.set("ht", (heightFeet * 12 + heightInches).toString());
+      url.searchParams.set("wt", weightLbs.toString());
+    }
+
+    const shareUrl = url.toString();
+
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "My BMR & TDEE Metabolic Assessment",
-          text: `My Basal Metabolic Rate (BMR) is ${result.selectedBmr} kcal/day and TDEE is ${result.tdee} kcal/day. Calculate yours:`,
-          url: window.location.href,
+          title: "BMR & TDEE Metabolic Assessment",
+          text: `My Basal Metabolic Rate is ${result.selectedBmr} kcal/day and TDEE is ${result.tdee} kcal/day.`,
+          url: shareUrl,
         });
+        return;
       } catch {
-        handleCopySummary();
+        // Fallback to clipboard
       }
-    } else {
-      handleCopySummary();
     }
+
+    navigator.clipboard.writeText(shareUrl);
+    setShared(true);
+    setTimeout(() => setShared(false), 2500);
+  };
+
+  // CSV Export (RFC 4180 compliant)
+  const handleExportCsv = () => {
+    const headers = [
+      "Parameter",
+      "Value",
+      "Unit / Notes",
+    ];
+
+    const rows = [
+      ["Age", age.toString(), "years"],
+      ["Biological Gender", gender, ""],
+      ["Unit System", unitSystem, ""],
+      ["Height", `${result.heightCm}`, "cm"],
+      ["Height (US)", `${result.heightInches}`, "inches"],
+      ["Weight", `${result.weightKg}`, "kg"],
+      ["Weight (US)", `${result.weightLbs}`, "lbs"],
+      ["Body Mass Index (BMI)", `${result.bmi}`, "kg/m²"],
+      ["Estimated Body Fat %", `${result.estimatedBfp}`, "%"],
+      ["Lean Body Mass", `${result.leanMassLbs}`, "lbs"],
+      ["Fat-Free Mass Index (FFMI)", `${result.ffmi}`, ""],
+      ["Selected Formula", result.formulaUsedName, ""],
+      ["Mifflin-St Jeor BMR", `${result.mifflinBmr}`, "kcal/day"],
+      ["Revised Harris-Benedict BMR", `${result.harrisBmr}`, "kcal/day"],
+      ["Katch-McArdle BMR", `${result.katchBmr}`, "kcal/day"],
+      ["Selected BMR", `${result.selectedBmr}`, "kcal/day"],
+      ["Activity Level", activityLevel, `${result.activityMultiplier}×`],
+      ["Maintenance TDEE", `${result.tdee}`, "kcal/day"],
+      ["Selected Goal", result.smartGoalInfo.label, ""],
+      ["Goal Caloric Target", `${result.smartGoalInfo.targetCalories}`, "kcal/day"],
+      ["Protein Target", `${result.smartGoalInfo.proteinGrams}`, "grams/day"],
+      ["Carbohydrate Target", `${result.smartGoalInfo.carbsGrams}`, "grams/day"],
+      ["Dietary Fat Target", `${result.smartGoalInfo.fatGrams}`, "grams/day"],
+      ["Hydration Target", `${result.hydration.waterLiters}`, "liters/day"],
+      ["", "", ""],
+      ["ACTIVITY COMPARISON TIERS", "", ""],
+      ["Activity Level", "Multiplier", "Maintenance TDEE (kcal/day)"],
+      ...result.activityTiers.map((t) => [t.label, `${t.multiplier}×`, `${t.tdee}`]),
+    ];
+
+    const csvContent = "data:text/csv;charset=utf-8," + rows.map((r) => r.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(",")).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `bmr-assessment-${age}y-${gender}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   // Dedicated Standalone Popup Print Engine
@@ -340,7 +569,7 @@ Calculated via CalcPlatform Health Engine`;
                 variant="outline"
                 size="sm"
                 onClick={handleReset}
-                className="self-start sm:self-auto bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-xs gap-1.5"
+                className="self-start sm:self-auto bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-xs gap-1.5 cursor-pointer"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 Reset Defaults
@@ -352,13 +581,25 @@ Calculated via CalcPlatform Health Engine`;
             {/* Unit System Navigation Tabs */}
             <Tabs value={unitSystem} onValueChange={(val) => handleUnitSystemChange(val as UnitSystem)}>
               <TabsList className="grid grid-cols-3 bg-zinc-100 dark:bg-zinc-950 p-1 border border-zinc-200 dark:border-zinc-800 rounded-xl mb-6">
-                <TabsTrigger value="us" className="text-xs sm:text-sm font-bold data-[state=active]:bg-white data-[state=active]:dark:bg-zinc-900 data-[state=active]:text-blue-700 data-[state=active]:dark:text-blue-400 shadow-sm">
+                <TabsTrigger
+                  id="bmr-unit-us"
+                  value="us"
+                  className="text-xs sm:text-sm font-bold data-[state=active]:bg-white data-[state=active]:dark:bg-zinc-900 data-[state=active]:text-blue-700 data-[state=active]:dark:text-blue-400 shadow-sm cursor-pointer"
+                >
                   US Units (ft/in, lbs)
                 </TabsTrigger>
-                <TabsTrigger value="metric" className="text-xs sm:text-sm font-bold data-[state=active]:bg-white data-[state=active]:dark:bg-zinc-900 data-[state=active]:text-emerald-700 data-[state=active]:dark:text-emerald-400 shadow-sm">
+                <TabsTrigger
+                  id="bmr-unit-metric"
+                  value="metric"
+                  className="text-xs sm:text-sm font-bold data-[state=active]:bg-white data-[state=active]:dark:bg-zinc-900 data-[state=active]:text-emerald-700 data-[state=active]:dark:text-emerald-400 shadow-sm cursor-pointer"
+                >
                   Metric Units (cm, kg)
                 </TabsTrigger>
-                <TabsTrigger value="other" className="text-xs sm:text-sm font-bold data-[state=active]:bg-white data-[state=active]:dark:bg-zinc-900 data-[state=active]:text-purple-700 data-[state=active]:dark:text-purple-400 shadow-sm">
+                <TabsTrigger
+                  id="bmr-unit-other"
+                  value="other"
+                  className="text-xs sm:text-sm font-bold data-[state=active]:bg-white data-[state=active]:dark:bg-zinc-900 data-[state=active]:text-purple-700 data-[state=active]:dark:text-purple-400 shadow-sm cursor-pointer"
+                >
                   Other Units (m, kg)
                 </TabsTrigger>
               </TabsList>
@@ -366,10 +607,11 @@ Calculated via CalcPlatform Health Engine`;
               {/* Demographics: Age & Gender */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5 p-4 bg-zinc-50 dark:bg-zinc-950/60 rounded-xl border border-zinc-200 dark:border-zinc-800/80">
                 <div>
-                  <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                  <Label htmlFor="bmr-age" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
                     Age (ages 15 – 120)
                   </Label>
                   <Input
+                    id="bmr-age"
                     type="number"
                     min={15}
                     max={120}
@@ -381,16 +623,19 @@ Calculated via CalcPlatform Health Engine`;
 
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+                    <Label htmlFor="bmr-gender-male" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
                       Biological Gender
                     </Label>
                     <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase">
                       {gender === "male" ? "♂ Male Selected" : "♀ Female Selected"}
                     </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Biological Gender">
                     <button
                       type="button"
+                      id="bmr-gender-male"
+                      role="radio"
+                      aria-checked={gender === "male"}
                       onClick={() => setGender("male")}
                       className={`py-2 px-3 rounded-lg text-xs font-black transition-all border flex items-center justify-center gap-1.5 cursor-pointer ${
                         gender === "male"
@@ -402,6 +647,9 @@ Calculated via CalcPlatform Health Engine`;
                     </button>
                     <button
                       type="button"
+                      id="bmr-gender-female"
+                      role="radio"
+                      aria-checked={gender === "female"}
                       onClick={() => setGender("female")}
                       className={`py-2 px-3 rounded-lg text-xs font-black transition-all border flex items-center justify-center gap-1.5 cursor-pointer ${
                         gender === "female"
@@ -419,23 +667,48 @@ Calculated via CalcPlatform Health Engine`;
               <TabsContent value="us" className="space-y-4 m-0">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Height</Label>
+                    <Label htmlFor="bmr-height-ft" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Height</Label>
                     <div className="grid grid-cols-2 gap-2">
                       <div className="relative">
-                        <Input type="number" min={3} max={8} value={heightFeet} onChange={(e) => setHeightFeet(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                        <Input
+                          id="bmr-height-ft"
+                          type="number"
+                          min={3}
+                          max={8}
+                          value={heightFeet}
+                          onChange={(e) => setHeightFeet(Math.max(0, Number(e.target.value)))}
+                          className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                        />
                         <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">ft</span>
                       </div>
                       <div className="relative">
-                        <Input type="number" step={0.5} min={0} max={11.5} value={heightInches} onChange={(e) => setHeightInches(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                        <Input
+                          id="bmr-height-in"
+                          type="number"
+                          step={0.5}
+                          min={0}
+                          max={11.5}
+                          value={heightInches}
+                          onChange={(e) => setHeightInches(Math.max(0, Number(e.target.value)))}
+                          className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                        />
                         <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">in</span>
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Weight (lbs)</Label>
+                    <Label htmlFor="bmr-weight-lbs" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Weight (lbs)</Label>
                     <div className="relative">
-                      <Input type="number" min={50} max={800} value={weightLbs} onChange={(e) => setWeightLbs(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                      <Input
+                        id="bmr-weight-lbs"
+                        type="number"
+                        min={50}
+                        max={800}
+                        value={weightLbs}
+                        onChange={(e) => setWeightLbs(Math.max(0, Number(e.target.value)))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
                       <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">lbs</span>
                     </div>
                   </div>
@@ -446,17 +719,73 @@ Calculated via CalcPlatform Health Engine`;
               <TabsContent value="metric" className="space-y-4 m-0">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Height (cm)</Label>
+                    <Label htmlFor="bmr-height-cm" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Height (cm)</Label>
                     <div className="relative">
-                      <Input type="number" min={90} max={250} value={heightCm} onChange={(e) => setHeightCm(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                      <Input
+                        id="bmr-height-cm"
+                        type="number"
+                        min={90}
+                        max={250}
+                        value={heightCm}
+                        onChange={(e) => setHeightCm(Math.max(0, Number(e.target.value)))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
                       <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">cm</span>
                     </div>
                   </div>
 
                   <div>
-                    <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Weight (kg)</Label>
+                    <Label htmlFor="bmr-weight-kg" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Weight (kg)</Label>
                     <div className="relative">
-                      <Input type="number" step={0.5} min={25} max={350} value={weightKg} onChange={(e) => setWeightKg(Number(e.target.value))} className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold" />
+                      <Input
+                        id="bmr-weight-kg"
+                        type="number"
+                        step={0.1}
+                        min={25}
+                        max={350}
+                        value={weightKg}
+                        onChange={(e) => setWeightKg(Math.max(0, Number(e.target.value)))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
+                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">kg</span>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              {/* OTHER UNITS INPUTS (m, kg) */}
+              <TabsContent value="other" className="space-y-4 m-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="bmr-height-m" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Height (meters)</Label>
+                    <div className="relative">
+                      <Input
+                        id="bmr-height-m"
+                        type="number"
+                        step={0.01}
+                        min={0.8}
+                        max={2.5}
+                        value={heightMeters}
+                        onChange={(e) => setHeightMeters(Math.max(0, Number(e.target.value)))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
+                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">m</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="bmr-weight-other" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">Weight (kg)</Label>
+                    <div className="relative">
+                      <Input
+                        id="bmr-weight-other"
+                        type="number"
+                        step={0.1}
+                        min={25}
+                        max={350}
+                        value={weightKgOther}
+                        onChange={(e) => setWeightKgOther(Math.max(0, Number(e.target.value)))}
+                        className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-xs font-semibold"
+                      />
                       <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-zinc-400">kg</span>
                     </div>
                   </div>
@@ -467,13 +796,14 @@ Calculated via CalcPlatform Health Engine`;
             {/* Formula & Activity Selectors */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
               <div>
-                <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                <Label htmlFor="bmr-formula" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
                   BMR Equation Formula
                 </Label>
                 <select
+                  id="bmr-formula"
                   value={bmrFormula}
                   onChange={(e) => setBmrFormula(e.target.value as BmrFormula)}
-                  className="w-full h-10 px-3 rounded-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100"
+                  className="w-full h-10 px-3 rounded-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100 cursor-pointer"
                 >
                   <option value="mifflin">Mifflin-St Jeor (Clinical Standard)</option>
                   <option value="harris">Revised Harris-Benedict (1984)</option>
@@ -482,31 +812,35 @@ Calculated via CalcPlatform Health Engine`;
               </div>
 
               <div>
-                <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                <Label htmlFor="bmr-activity" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
                   Physical Activity Level
                 </Label>
                 <select
+                  id="bmr-activity"
                   value={activityLevel}
                   onChange={(e) => setActivityLevel(e.target.value as ActivityLevel)}
-                  className="w-full h-10 px-3 rounded-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100"
+                  className="w-full h-10 px-3 rounded-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold text-zinc-900 dark:text-zinc-100 cursor-pointer"
                 >
-                  <option value="sedentary">Sedentary (little or no exercise)</option>
-                  <option value="light">Lightly Active (1–3 days/wk)</option>
-                  <option value="moderate">Moderately Active (4–5 days/wk)</option>
-                  <option value="active">Very Active (daily or intense 3-4x/wk)</option>
-                  <option value="very_active">Athlete / Intense (6–7 days/wk)</option>
-                  <option value="extra_active">Extra Active (physical job/training)</option>
+                  <option value="sedentary">Sedentary (little or no exercise) (1.2×)</option>
+                  <option value="light">Lightly Active (1–3 days/wk) (1.375×)</option>
+                  <option value="moderate">Moderately Active (4–5 days/wk) (1.55×)</option>
+                  <option value="active">Very Active (daily or intense 3-4x/wk) (1.725×)</option>
+                  <option value="very_active">Athlete / Intense (6–7 days/wk) (1.9×)</option>
+                  <option value="extra_active">Extra Active (physical job/training) (2.0×)</option>
                 </select>
               </div>
 
               <div>
-                <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
+                <Label htmlFor="bmr-body-fat" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5 block">
                   Body Fat % (Optional for Katch-McArdle)
                 </Label>
                 <div className="relative">
                   <Input
+                    id="bmr-body-fat"
                     type="number"
                     step={0.5}
+                    min={3}
+                    max={65}
                     placeholder={`Estimated: ${result.estimatedBfp}%`}
                     value={bodyFatPercentage}
                     onChange={(e) => setBodyFatPercentage(e.target.value)}
@@ -522,7 +856,7 @@ Calculated via CalcPlatform Health Engine`;
               <Label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block">
                 Smart Goals System Selector
               </Label>
-              <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-6 gap-2" role="radiogroup" aria-label="Smart Goals System">
                 {[
                   { key: "aggressive_cut", label: "Aggressive Cut" },
                   { key: "slow_cut", label: "Slow Cut" },
@@ -534,6 +868,8 @@ Calculated via CalcPlatform Health Engine`;
                   <button
                     key={g.key}
                     type="button"
+                    role="radio"
+                    aria-checked={selectedGoal === g.key}
                     onClick={() => setSelectedGoal(g.key as SmartGoal)}
                     className={`py-2 px-2 rounded-lg text-xs font-bold transition-all border text-center cursor-pointer ${
                       selectedGoal === g.key
@@ -547,18 +883,124 @@ Calculated via CalcPlatform Health Engine`;
               </div>
             </div>
 
-            {/* Action Bar */}
+            {/* Action Bar (Copy, Share, Save, CSV, PDF Report) */}
             <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-              
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopySummary}
+                  className="text-xs gap-1.5 cursor-pointer bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                >
+                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copied ? "Copied!" : "Copy Summary"}
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleShare}
+                  className="text-xs gap-1.5 cursor-pointer bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                >
+                  {shared ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
+                  {shared ? "URL Copied!" : "Share URL"}
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSaveScenario}
+                  className="text-xs gap-1.5 cursor-pointer bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                >
+                  <Bookmark className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                  Save Scenario ({savedScenarios.length})
+                </Button>
+              </div>
 
               <div className="flex items-center gap-2">
-                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportCsv}
+                  className="text-xs gap-1.5 cursor-pointer bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                >
+                  <Download className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  Export CSV
+                </Button>
 
-                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handlePrint}
+                  className="text-xs gap-1.5 cursor-pointer bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/50"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  Generate PDF Report
+                </Button>
               </div>
             </div>
           </CardContent>
         </Card>
+
+        {/* Saved Scenarios Drawer / Modal */}
+        {isSavedDrawerOpen && (
+          <div className="p-4 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/50 dark:bg-blue-950/30 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-blue-900 dark:text-blue-200 flex items-center gap-2">
+                <Bookmark className="w-4 h-4 text-blue-600" />
+                Saved Metabolic Scenarios ({savedScenarios.length})
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsSavedDrawerOpen(false)}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs p-1"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {savedScenarios.length === 0 ? (
+              <p className="text-xs text-slate-500">No saved scenarios yet. Click &quot;Save Scenario&quot; to bookmark current inputs.</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {savedScenarios.map((item) => (
+                  <div
+                    key={item.id}
+                    className="p-3 bg-white dark:bg-zinc-900 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1.5 text-xs shadow-xs"
+                  >
+                    <div className="flex justify-between items-start">
+                      <strong className="font-bold text-slate-900 dark:text-slate-100">{item.name}</strong>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteScenario(item.id)}
+                        className="text-rose-500 hover:text-rose-700 ml-1 cursor-pointer"
+                        title="Delete scenario"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    <div className="text-slate-500 dark:text-slate-400 text-[11px]">
+                      Saved: {item.date} • {item.bmrFormula.toUpperCase()}
+                    </div>
+                    <div className="flex justify-between items-center pt-1">
+                      <span className="font-mono text-emerald-600 dark:text-emerald-400 font-bold">
+                        {item.bmr} BMR / {item.tdee} TDEE
+                      </span>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleRestoreScenario(item)}
+                        className="h-6 px-2 text-[11px] text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50 cursor-pointer"
+                      >
+                        Restore
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Results Dashboard */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -611,7 +1053,7 @@ Calculated via CalcPlatform Health Engine`;
         </div>
       </div>
 
-      {/* Standalone Printable PDF Report Section */}
+      {/* Standalone Printable PDF Report Section (Single H1 compliance: uses styled div) */}
       <div id="bmr-print-report" className="hidden">
         <div className="p-8 max-w-4xl mx-auto space-y-6 bg-white text-zinc-900 font-sans">
           <div className="border-b-2 border-blue-600 pb-4 flex justify-between items-start">
@@ -619,17 +1061,17 @@ Calculated via CalcPlatform Health Engine`;
               <div className="text-xs font-black tracking-widest text-blue-700 uppercase">
                 CalcPlatform Clinical Health &amp; Metabolism Lab
               </div>
-              <h1 className="text-2xl font-black text-blue-600 mt-1">
+              <div className="text-2xl font-black text-blue-600 mt-1" role="heading" aria-level={2}>
                 Clinical BMR &amp; Metabolic Assessment Report
-              </h1>
+              </div>
               <p className="text-xs text-zinc-500 mt-0.5">
                 Mifflin-St Jeor, Harris-Benedict &amp; Katch-McArdle Energy Expenditure Analysis
               </p>
             </div>
             <div className="text-right text-xs text-zinc-500">
-              <p className="font-bold text-zinc-800" suppressHydrationWarning>Date: {new Date().toLocaleDateString()}</p>
-              <p suppressHydrationWarning>Time: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
-              <p className="font-sans tabular-nums text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #BMR-{Date.now().toString().slice(-6)}</p>
+              <p className="font-bold text-zinc-800">Date: {mounted ? new Date().toLocaleDateString() : "26/08/2026"}</p>
+              <p>Time: {mounted ? new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "09:07"}</p>
+              <p className="font-sans tabular-nums text-[10px] text-zinc-400 mt-1">Ref ID: #BMR-450065</p>
             </div>
           </div>
 
@@ -657,9 +1099,9 @@ Calculated via CalcPlatform Health Engine`;
           </div>
 
           <div className="space-y-2">
-            <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
+            <div className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1" role="heading" aria-level={3}>
               1. Subject Demographics &amp; Parameters
-            </h3>
+            </div>
             <table className="w-full text-xs text-left border border-zinc-200 border-collapse">
               <tbody>
                 <tr className="border-b border-zinc-200 bg-zinc-50">
@@ -696,3 +1138,5 @@ Calculated via CalcPlatform Health Engine`;
     </div>
   );
 }
+
+export default BmrCalculator;

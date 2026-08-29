@@ -95,7 +95,7 @@ export function BmrTables({ result }: BmrTablesProps) {
           <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-xl border border-blue-200 dark:border-blue-900/40">
             <span className="text-blue-700 dark:text-blue-400 font-bold block text-[10px]">Mifflin-St Jeor</span>
             <strong className="text-xl font-black text-blue-900 dark:text-blue-200 block mt-0.5">{result.mifflinBmr} kcal</strong>
-            <span className="text-[10px] text-zinc-500 block mt-0.5">Clinical Standard (±5% accuracy)</span>
+            <span className="text-[10px] text-zinc-500 block mt-0.5">Clinical Standard (Validated Predictive Formula)</span>
           </div>
 
           <div className="p-3 bg-purple-50 dark:bg-purple-950/20 rounded-xl border border-purple-200 dark:border-purple-900/40">

@@ -13,7 +13,15 @@ export const bmr_calculatorConfig: CalculatorModuleDefinition = {
   featured: true,
   keywords: ["bmr","basal metabolic rate","metabolism","calories","tdee"],
   priority: 1,
-  relatedCalculators: ["calorie-calculator","tdee-calculator","bmi-calculator"],
+  relatedCalculators: [
+    "calorie-calculator",
+    "tdee-calculator",
+    "bmi-calculator",
+    "body-fat-calculator",
+    "macro-calculator",
+    "protein-calculator",
+    "ideal-weight-calculator",
+  ],
   formulaDescription: "Mifflin-St Jeor: 10W + 6.25H - 5A + S",
   faqs: bmr_calculatorFaqs,
   inputs: [

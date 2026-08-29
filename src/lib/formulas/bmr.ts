@@ -94,23 +94,27 @@ export function calculateBmr(input: BmrInput): BmrResult {
   const unitSystem = input.unitSystem || "us";
   const bmrFormula = input.bmrFormula || "mifflin";
 
-  let heightCm = 178;
-  let weightKg = 72.5;
+  let heightCm = 177.8;
+  let weightKg = 72.5747792;
 
   if (unitSystem === "us") {
-    const feet = Number(input.heightFeet) || 5;
-    const inches = Number(input.heightInches) || 10;
-    heightCm = (feet * 12 + inches) * 2.54;
-    weightKg = (Number(input.weightLbs) || 160) * 0.45359237;
+    const feet = Math.max(0, Number(input.heightFeet) || 0);
+    const inches = Math.max(0, Number(input.heightInches) || 0);
+    const totalInches = feet * 12 + inches;
+    heightCm = (totalInches > 0 ? totalInches : 70) * 2.54;
+    const lbs = Math.max(0, Number(input.weightLbs) || 0);
+    weightKg = (lbs > 0 ? lbs : 160) * 0.45359237;
   } else if (unitSystem === "metric") {
-    heightCm = Number(input.heightCm) || 178;
-    weightKg = Number(input.weightKg) || 72.5;
+    heightCm = Math.max(0, Number(input.heightCm) || 178);
+    weightKg = Math.max(0, Number(input.weightKg) || 72.6);
   } else if (unitSystem === "other") {
-    if (input.heightMeters && input.heightMeters > 0) heightCm = input.heightMeters * 100;
-    if (input.weightKgOther && input.weightKgOther > 0) weightKg = input.weightKgOther;
+    const m = Math.max(0, Number(input.heightMeters) || 0);
+    heightCm = (m > 0 ? m : 1.78) * 100;
+    const wOther = Math.max(0, Number(input.weightKgOther) || 0);
+    weightKg = wOther > 0 ? wOther : 72.6;
   }
 
-  // Safety clamps
+  // Physiological clamps
   heightCm = Math.max(80, Math.min(250, heightCm));
   weightKg = Math.max(25, Math.min(350, weightKg));
 
@@ -119,36 +123,39 @@ export function calculateBmr(input: BmrInput): BmrResult {
   const heightM = heightCm / 100;
   const bmi = parseFloat((weightKg / (heightM * heightM)).toFixed(1));
 
-  // Body Fat % Estimation (Deurenberg)
+  // Body Fat % Estimation (Deurenberg Adult Formula or user input clamped to 3%-65%)
   const genderVal = gender === "male" ? 1 : 0;
-  let estimatedBfp = input.bodyFatPercentage && input.bodyFatPercentage > 0 ? input.bodyFatPercentage : 0;
-  if (!estimatedBfp) {
+  let estimatedBfp = 0;
+  if (input.bodyFatPercentage !== undefined && !isNaN(Number(input.bodyFatPercentage)) && Number(input.bodyFatPercentage) > 0) {
+    estimatedBfp = parseFloat(Math.max(3, Math.min(65, Number(input.bodyFatPercentage))).toFixed(1));
+  } else {
     estimatedBfp = parseFloat(Math.max(4, Math.min(60, 1.2 * bmi + 0.23 * age - 10.8 * genderVal - 5.4)).toFixed(1));
   }
 
   const fatMassLbs = parseFloat(((weightLbs * estimatedBfp) / 100).toFixed(1));
   const leanMassLbs = parseFloat((weightLbs - fatMassLbs).toFixed(1));
-  const leanMassKg = parseFloat((weightKg * (1 - estimatedBfp / 100)).toFixed(1));
+  const leanMassKgExact = weightKg * (1 - estimatedBfp / 100);
+  const leanMassKg = parseFloat(leanMassKgExact.toFixed(1));
 
-  // FFMI
+  // FFMI (Fat-Free Mass Index)
   const ffmi = parseFloat((leanMassKg / (heightM * heightM)).toFixed(1));
   const ffmiNormalized = parseFloat((ffmi + 6.1 * (1.8 - heightM)).toFixed(1));
 
-  // 1. Mifflin-St Jeor Equation
+  // 1. Mifflin-St Jeor Equation (1990)
   const mifflinBase = 10 * weightKg + 6.25 * heightCm - 5 * age;
   const mifflinBmr = Math.round(gender === "male" ? mifflinBase + 5 : mifflinBase - 161);
 
-  // 2. Revised Harris-Benedict Equation
+  // 2. Revised Harris-Benedict Equation (Roza & Shizgal 1984)
   let harrisBmr = 0;
   if (gender === "male") {
     harrisBmr = 88.362 + 13.397 * weightKg + 4.799 * heightCm - 5.677 * age;
   } else {
-    harrisBmr = 447.593 + 9.247 * weightKg + 3.098 * heightCm - 4.33 * age;
+    harrisBmr = 447.593 + 9.247 * weightKg + 3.098 * heightCm - 4.330 * age;
   }
   harrisBmr = Math.round(harrisBmr);
 
-  // 3. Katch-McArdle Formula
-  const katchBmr = Math.round(370 + 21.6 * leanMassKg);
+  // 3. Katch-McArdle Formula (Lean Mass Based)
+  const katchBmr = Math.round(370 + 21.6 * leanMassKgExact);
 
   // Selected BMR
   let selectedBmr = mifflinBmr;
@@ -227,7 +234,7 @@ export function calculateBmr(input: BmrInput): BmrResult {
       desc = "High-carbohydrate energy availability for intense athletic conditioning.";
     }
 
-    const targetCals = Math.max(1200, Math.round(baseTdee + delta));
+    const targetCals = Math.max(1000, Math.round(baseTdee + delta));
     const pCal = Math.round(targetCals * (pPct / 100));
     const cCal = Math.round(targetCals * (cPct / 100));
     const fCal = Math.round(targetCals * (fPct / 100));
