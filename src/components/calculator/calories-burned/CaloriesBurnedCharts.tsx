@@ -85,7 +85,7 @@ export function CaloriesBurnedGauge({ result }: CaloriesBurnedChartsProps) {
           <div className="font-bold text-amber-600 dark:text-amber-400 mt-0.5">{result.caloriesPerMinute} kcal / min</div>
         </div>
         <div className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800">
-          <div className="text-zinc-500 dark:text-zinc-400 text-[10px]">Fat Mass Burned</div>
+          <div className="text-zinc-500 dark:text-zinc-400 text-[10px]">Fat-Equivalent Energy</div>
           <div className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">{result.fatMassLossLbs} lbs ({result.fatMassLossGrams} g)</div>
         </div>
       </div>

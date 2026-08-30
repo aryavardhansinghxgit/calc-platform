@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import {
   Flame,
   Bookmark,
@@ -9,15 +9,12 @@ import {
   Copy,
   Check,
   RefreshCw,
-  Info,
-  Scale,
-  Activity,
-  Layers,
-  Timer,
-  Navigation,
+  Download,
+  Trash2,
+  ExternalLink,
+  ChevronRight,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -36,6 +33,26 @@ import {
 
 import { CaloriesBurnedTables } from "./CaloriesBurnedTables";
 
+interface SavedScenario {
+  id: string;
+  timestamp: string;
+  title: string;
+  mode: "duration" | "distance";
+  unitSystem: UnitSystem;
+  activityId: string;
+  distanceActivityId: string;
+  durationHours: number;
+  durationMinutes: number;
+  distanceMiles: number;
+  distanceKm: number;
+  speedMph: number;
+  speedKmh: number;
+  weightLbs: number;
+  weightKg: number;
+  caloriesBurned: number;
+  met: number;
+}
+
 export function CaloriesBurnedCalculator() {
   // Mode & Unit System
   const [mode, setMode] = useState<"duration" | "distance">("duration");
@@ -51,17 +68,81 @@ export function CaloriesBurnedCalculator() {
   const [distanceMiles, setDistanceMiles] = useState<number>(5);
   const [distanceKm, setDistanceKm] = useState<number>(8);
   const [speedMph, setSpeedMph] = useState<number>(6.0);
+  const [speedKmh, setSpeedKmh] = useState<number>(9.7);
 
   // Weight inputs
   const [weightLbs, setWeightLbs] = useState<number>(160);
-  const [weightKg, setWeightKg] = useState<number>(72.5);
+  const [weightKg, setWeightKg] = useState<number>(72.6);
 
-  // Saved calculations & copy state
-  const [savedCalculations, setSavedCalculations] = useState<
-    Array<{ id: string; timestamp: string; title: string; caloriesBurned: number; met: number }>
-  >([]);
+  // Saved scenarios & action feedbacks
+  const [savedScenarios, setSavedScenarios] = useState<SavedScenario[]>([]);
   const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
+  const [savedSuccess, setSavedSuccess] = useState(false);
 
+  // Hydrate state from URL query parameters on initial client mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const qMode = params.get("mode");
+      const qUnit = params.get("unit");
+      const qAct = params.get("activity");
+      const qWeight = params.get("weight");
+      const qHours = params.get("hours");
+      const qMins = params.get("mins");
+      const qDist = params.get("dist");
+      const qSpeed = params.get("speed");
+
+      if (qMode === "distance" || qMode === "duration") setMode(qMode);
+      if (qUnit === "metric" || qUnit === "imperial") setUnitSystem(qUnit);
+
+      if (qAct && ACTIVITIES_DATABASE.some((a) => a.id === qAct)) {
+        if (qMode === "distance") setDistanceActivityId(qAct);
+        else setActivityId(qAct);
+      }
+
+      if (qWeight && !isNaN(Number(qWeight))) {
+        const numW = Number(qWeight);
+        if (qUnit === "metric") {
+          setWeightKg(numW);
+          setWeightLbs(parseFloat((numW * 2.20462262).toFixed(1)));
+        } else {
+          setWeightLbs(numW);
+          setWeightKg(parseFloat((numW / 2.20462262).toFixed(1)));
+        }
+      }
+
+      if (qHours && !isNaN(Number(qHours))) setDurationHours(Math.max(0, Number(qHours)));
+      if (qMins && !isNaN(Number(qMins))) setDurationMinutes(Math.max(0, Number(qMins)));
+
+      if (qDist && !isNaN(Number(qDist))) {
+        const numD = Number(qDist);
+        if (qUnit === "metric") {
+          setDistanceKm(numD);
+          setDistanceMiles(parseFloat((numD / 1.609344).toFixed(1)));
+        } else {
+          setDistanceMiles(numD);
+          setDistanceKm(parseFloat((numD * 1.609344).toFixed(1)));
+        }
+      }
+
+      if (qSpeed && !isNaN(Number(qSpeed))) {
+        const numS = Number(qSpeed);
+        if (qUnit === "metric") {
+          setSpeedKmh(numS);
+          setSpeedMph(parseFloat((numS / 1.609344).toFixed(1)));
+        } else {
+          setSpeedMph(numS);
+          setSpeedKmh(parseFloat((numS * 1.609344).toFixed(1)));
+        }
+      }
+    } catch {
+      // Fail safe on malformed URL parameters
+    }
+  }, []);
+
+  // Canonical baseline reset
   const handleReset = () => {
     setMode("duration");
     setUnitSystem("imperial");
@@ -72,18 +153,22 @@ export function CaloriesBurnedCalculator() {
     setDistanceMiles(5);
     setDistanceKm(8);
     setSpeedMph(6.0);
+    setSpeedKmh(9.7);
     setWeightLbs(160);
-    setWeightKg(72.5);
+    setWeightKg(72.6);
   };
 
+  // True unit system conversion with mathematical scaling
   const handleUnitSystemToggle = (newSys: UnitSystem) => {
     if (newSys === unitSystem) return;
     if (newSys === "metric") {
-      setWeightKg(parseFloat((weightLbs / 2.20462).toFixed(1)));
-      setDistanceKm(parseFloat((distanceMiles * 1.60934).toFixed(1)));
+      setWeightKg(parseFloat((weightLbs / 2.20462262).toFixed(1)));
+      setDistanceKm(parseFloat((distanceMiles * 1.609344).toFixed(1)));
+      setSpeedKmh(parseFloat((speedMph * 1.609344).toFixed(1)));
     } else {
-      setWeightLbs(parseFloat((weightKg * 2.20462).toFixed(1)));
-      setDistanceMiles(parseFloat((distanceKm / 1.60934).toFixed(1)));
+      setWeightLbs(parseFloat((weightKg * 2.20462262).toFixed(1)));
+      setDistanceMiles(parseFloat((distanceKm / 1.609344).toFixed(1)));
+      setSpeedMph(parseFloat((speedKmh / 1.609344).toFixed(1)));
     }
     setUnitSystem(newSys);
   };
@@ -100,174 +185,191 @@ export function CaloriesBurnedCalculator() {
       distanceMiles,
       distanceKm,
       speedMph,
+      speedKmh,
       weightLbs,
       weightKg,
     });
-  }, [mode, unitSystem, activityId, distanceActivityId, totalDurationMinutesCombined, distanceMiles, distanceKm, speedMph, weightLbs, weightKg]);
+  }, [
+    mode,
+    unitSystem,
+    activityId,
+    distanceActivityId,
+    totalDurationMinutesCombined,
+    distanceMiles,
+    distanceKm,
+    speedMph,
+    speedKmh,
+    weightLbs,
+    weightKg,
+  ]);
 
+  // Save Full Calculation Scenario
   const handleSaveCalculation = () => {
-    const newItem = {
+    const newScenario: SavedScenario = {
       id: Date.now().toString(),
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      title: `${result.activityName} - ${result.caloriesBurned} kcal`,
+      title: `${result.activityName} (${result.caloriesBurned} kcal)`,
+      mode,
+      unitSystem,
+      activityId,
+      durationHours,
+      durationMinutes,
+      distanceActivityId,
+      distanceMiles,
+      distanceKm,
+      speedMph,
+      speedKmh,
+      weightLbs,
+      weightKg,
       caloriesBurned: result.caloriesBurned,
       met: result.met,
     };
-    setSavedCalculations([newItem, ...savedCalculations]);
+    setSavedScenarios((prev) => [newScenario, ...prev.slice(0, 9)]);
+    setSavedSuccess(true);
+    setTimeout(() => setSavedSuccess(false), 2000);
   };
 
+  // Restore Saved Scenario
+  const handleRestoreScenario = (sc: SavedScenario) => {
+    setMode(sc.mode);
+    setUnitSystem(sc.unitSystem);
+    setActivityId(sc.activityId);
+    setDurationHours(sc.durationHours);
+    setDurationMinutes(sc.durationMinutes);
+    setDistanceActivityId(sc.distanceActivityId);
+    setDistanceMiles(sc.distanceMiles);
+    setDistanceKm(sc.distanceKm);
+    setSpeedMph(sc.speedMph);
+    setSpeedKmh(sc.speedKmh);
+    setWeightLbs(sc.weightLbs);
+    setWeightKg(sc.weightKg);
+  };
+
+  const handleDeleteScenario = (id: string) => {
+    setSavedScenarios((prev) => prev.filter((s) => s.id !== id));
+  };
+
+  // Copy Clean Text Summary
   const handleCopySummary = () => {
-    const summary = `Clinical Calories Burned Assessment Report (${new Date().toLocaleDateString()})
+    const summary = `Exercise Calorie Burn Assessment Report (${new Date().toLocaleDateString()})
 Activity: ${result.activityName} (MET ${result.met})
+Mode: ${result.mode.toUpperCase()}
 Duration: ${result.durationMinutes} minutes
 Body Weight: ${result.weightLbs} lbs (${result.weightKg} kg)
 Total Calories Burned: ${result.caloriesBurned} kcal
-Burn Rate: ${result.caloriesPerMinute} kcal/min (${result.caloriesPerHour} kcal/hr)
-Fat Mass Burned: ${result.fatMassLossLbs} lbs (${result.fatMassLossGrams} g)
-Food Equivalent: ${result.foodEquivalents.pizzaSlices} slices of pizza (${result.foodEquivalents.bananas} bananas)
-Calculated via CalcPlatform Clinical Health Engine`;
+Burn Rate: ${result.caloriesPerMinute} kcal/min (${result.caloriesPerHour} kcal/hour)
+Fat-Equivalent Energy: ${result.fatMassLossLbs} lbs (${result.fatMassLossGrams} g)
+Food Equivalent: ${result.foodEquivalents.pizzaSlices} slices of pepperoni pizza (~280 kcal/slice)
+Disclaimer: MET calculations represent population-level bioenergetic estimates.
+Calculated via CalcPlatform Exercise Energetics Lab`;
 
     navigator.clipboard.writeText(summary);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
 
+  // True State Serialization Share URL
   const handleShare = async () => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.origin + window.location.pathname);
+    url.searchParams.set("mode", mode);
+    url.searchParams.set("unit", unitSystem);
+    url.searchParams.set("activity", mode === "duration" ? activityId : distanceActivityId);
+    url.searchParams.set("weight", unitSystem === "imperial" ? weightLbs.toString() : weightKg.toString());
+
+    if (mode === "duration") {
+      url.searchParams.set("hours", durationHours.toString());
+      url.searchParams.set("mins", durationMinutes.toString());
+    } else {
+      url.searchParams.set("dist", unitSystem === "imperial" ? distanceMiles.toString() : distanceKm.toString());
+      url.searchParams.set("speed", unitSystem === "imperial" ? speedMph.toString() : speedKmh.toString());
+    }
+
+    const shareUrl = url.toString();
     if (navigator.share) {
       try {
         await navigator.share({
           title: "My Calories Burned Assessment",
-          text: `I burned ${result.caloriesBurned} kcal doing ${result.activityName}! Calculate your workout calorie burn:`,
-          url: window.location.href,
+          text: `I burned ${result.caloriesBurned} kcal doing ${result.activityName}! Check your workout calorie expenditure:`,
+          url: shareUrl,
         });
       } catch {
-        handleCopySummary();
+        navigator.clipboard.writeText(shareUrl);
+        setShared(true);
+        setTimeout(() => setShared(false), 2500);
       }
     } else {
-      handleCopySummary();
+      navigator.clipboard.writeText(shareUrl);
+      setShared(true);
+      setTimeout(() => setShared(false), 2500);
     }
   };
 
-  // Dedicated Standalone Popup Print Engine
+  // RFC-Compliant CSV Export
+  const handleExportCsv = () => {
+    const headers = [
+      "Activity Name",
+      "Category",
+      "MET Value",
+      "Body Weight (lbs)",
+      "Body Weight (kg)",
+      "Calculation Mode",
+      "Duration (mins)",
+      "Distance (miles)",
+      "Speed (mph)",
+      "Calories Burned (kcal)",
+      "Calories Per Minute (kcal/min)",
+      "Calories Per Hour (kcal/hr)",
+      "Fat Mass Equivalent (lbs)",
+      "Fat Mass Equivalent (grams)",
+      "Pizza Slices Equivalent",
+      "Bananas Equivalent",
+    ];
+
+    const values = [
+      `"${result.activityName.replace(/"/g, '""')}"`,
+      `"${result.category}"`,
+      result.met,
+      result.weightLbs,
+      result.weightKg,
+      `"${result.mode.toUpperCase()}"`,
+      result.durationMinutes,
+      mode === "distance" ? distanceMiles : "N/A",
+      mode === "distance" ? speedMph : "N/A",
+      result.caloriesBurned,
+      result.caloriesPerMinute,
+      result.caloriesPerHour,
+      result.fatMassLossLbs,
+      result.fatMassLossGrams,
+      result.foodEquivalents.pizzaSlices,
+      result.foodEquivalents.bananas,
+    ];
+
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), values.join(",")].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `calories_burned_${result.activityName.toLowerCase().replace(/[^a-z0-9]/g, "_")}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Dedicated direct print handler without popup blocker reliance
   const handlePrint = () => {
-    const reportEl = document.getElementById("cb-print-report");
-    if (!reportEl) {
-      window.print();
-      return;
-    }
-
-    const printWindow = window.open("", "_blank", "width=900,height=1100");
-    if (!printWindow) {
-      window.print();
-      return;
-    }
-
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Clinical Exercise Calorie Expenditure Report - CalcPlatform</title>
-          <style>
-            *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-            body {
-              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-              background-color: #ffffff !important;
-              color: #18181b !important;
-              padding: 24px;
-              line-height: 1.5;
-            }
-            .p-8 { padding: 1.5rem; }
-            .max-w-4xl { max-width: 56rem; margin-left: auto; margin-right: auto; }
-            .space-y-6 > * + * { margin-top: 1.5rem; }
-            .space-y-4 > * + * { margin-top: 1rem; }
-            .space-y-2 > * + * { margin-top: 0.5rem; }
-            .space-y-1 > * + * { margin-top: 0.25rem; }
-            .bg-white { background-color: #ffffff; }
-            .bg-zinc-50 { background-color: #fafafa; }
-            .bg-zinc-100 { background-color: #f4f4f5; }
-            .border { border: 1px solid #e4e4e7; }
-            .border-b { border-bottom: 1px solid #e4e4e7; }
-            .border-b-2 { border-bottom: 2px solid; }
-            .border-t { border-top: 1px solid #e4e4e7; }
-            .border-r { border-right: 1px solid #e4e4e7; }
-            .border-zinc-200 { border-color: #e4e4e7; }
-            .border-zinc-300 { border-color: #d4d4d8; }
-            .border-amber-600 { border-color: #d97706; }
-            .rounded-xl { border-radius: 0.75rem; }
-            .p-4 { padding: 1rem; }
-            .p-2 { padding: 0.5rem; }
-            .pb-4 { padding-bottom: 1rem; }
-            .pb-1 { padding-bottom: 0.25rem; }
-            .pt-4 { padding-top: 1rem; }
-            .mt-1 { margin-top: 0.25rem; }
-            .mt-0\\.5 { margin-top: 0.125rem; }
-            .flex { display: flex; }
-            .justify-between { justify-content: space-between; }
-            .items-start { align-items: flex-start; }
-            .grid { display: grid; }
-            .grid-cols-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-            .gap-3 { gap: 0.75rem; }
-            .text-center { text-align: center; }
-            .text-right { text-align: right; }
-            .text-left { text-left: left; }
-            .text-xs { font-size: 0.75rem; line-height: 1rem; }
-            .text-2xl { font-size: 1.5rem; line-height: 2rem; }
-            .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
-            .text-\\[10px\\] { font-size: 10px; }
-            .text-\\[9px\\] { font-size: 9px; }
-            .font-bold { font-weight: 700; }
-            .font-semibold { font-weight: 600; }
-            .font-black { font-weight: 900; }
-            .font-sans tabular-nums { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-            .text-zinc-900 { color: #18181b; }
-            .text-zinc-800 { color: #27272a; }
-            .text-zinc-700 { color: #3f3f46; }
-            .text-zinc-500 { color: #71717a; }
-            .text-zinc-400 { color: #a1a1aa; }
-            .text-amber-700 { color: #b45309; }
-            .text-blue-700 { color: #1d4ed8; }
-            .text-emerald-700 { color: #047857; }
-            .uppercase { text-transform: uppercase; }
-            .tracking-wider { letter-spacing: 0.05em; }
-            .tracking-widest { letter-spacing: 0.1em; }
-            .w-full { width: 100%; }
-            .w-1\\/4 { width: 25%; }
-            .border-collapse { border-collapse: collapse; }
-            table { width: 100%; border-collapse: collapse; }
-            th, td { padding: 6px 10px; border: 1px solid #e4e4e7; }
-            th { background-color: #f4f4f5; font-weight: 700; }
-            @page {
-              size: A4;
-              margin: 10mm;
-            }
-          </style>
-        </head>
-        <body>
-          ${reportEl.innerHTML}
-          <script>
-            window.onload = function() {
-              setTimeout(function() {
-                window.print();
-                window.close();
-              }, 300);
-            };
-          </script>
-        </body>
-      </html>
-    `);
-    printWindow.document.close();
+    window.print();
   };
 
   return (
     <div className="space-y-6">
-      {/* Printable Report Styles */}
+      {/* High-Fidelity Print Engine Styles */}
       <style jsx global>{`
         @media print {
           body {
             background: white !important;
             color: black !important;
           }
-          .cb-calculator-main-ui, nav, header, footer, sidebar {
+          .cb-calculator-main-ui, nav, header, footer, sidebar, .no-print {
             display: none !important;
           }
           #cb-print-report {
@@ -294,7 +396,7 @@ Calculated via CalcPlatform Clinical Health Engine`;
                   Calories Burned Calculator &amp; MET Suite
                 </CardTitle>
                 <CardDescription className="text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm mt-1">
-                  50+ ACSM MET Physical Activity Database (Duration &amp; Distance Modes)
+                  50+ Compendium MET Physical Activity Database (Duration &amp; Distance Modes)
                 </CardDescription>
               </div>
 
@@ -302,55 +404,72 @@ Calculated via CalcPlatform Clinical Health Engine`;
                 variant="outline"
                 size="sm"
                 onClick={handleReset}
-                className="self-start sm:self-auto bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-xs gap-1.5"
+                className="text-xs font-semibold self-start sm:self-auto cursor-pointer"
+                title="Reset to default baseline"
               >
-                <RefreshCw className="w-3.5 h-3.5" />
+                <RefreshCw className="w-3.5 h-3.5 mr-1.5" />
                 Reset Defaults
               </Button>
             </div>
           </CardHeader>
 
-          <CardContent className="p-4 sm:p-6 space-y-6">
-            {/* Top Controls: Calculation Mode & Unit System */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-              {/* Mode Tabs */}
-              <div className="w-full sm:w-auto">
-                <Label className="text-[11px] font-bold uppercase text-zinc-500 dark:text-zinc-400 mb-1 block">Calculation Mode</Label>
-                <div className="grid grid-cols-2 gap-1 bg-white dark:bg-zinc-900 p-1 rounded-lg border border-zinc-200 dark:border-zinc-800 text-xs font-bold">
+          <CardContent className="pt-5 space-y-5">
+            {/* Mode & Unit System Selectors */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4 border-b border-zinc-100 dark:border-zinc-800">
+              <div>
+                <Label className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block mb-1.5">
+                  Calculation Mode
+                </Label>
+                <div className="flex items-center gap-2 bg-zinc-100 dark:bg-zinc-800/80 p-1 rounded-lg">
                   <button
                     type="button"
                     onClick={() => setMode("duration")}
-                    className={`py-1 px-3 rounded transition-all flex items-center justify-center gap-1.5 ${mode === "duration" ? "bg-amber-600 text-white" : "text-zinc-600 dark:text-zinc-400"}`}
+                    className={`flex-1 py-1.5 px-3 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                      mode === "duration"
+                        ? "bg-amber-600 text-white shadow-xs"
+                        : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    }`}
                   >
-                    <Timer className="w-3.5 h-3.5" />
                     By Duration
                   </button>
                   <button
                     type="button"
                     onClick={() => setMode("distance")}
-                    className={`py-1 px-3 rounded transition-all flex items-center justify-center gap-1.5 ${mode === "distance" ? "bg-amber-600 text-white" : "text-zinc-600 dark:text-zinc-400"}`}
+                    className={`flex-1 py-1.5 px-3 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                      mode === "distance"
+                        ? "bg-amber-600 text-white shadow-xs"
+                        : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    }`}
                   >
-                    <Navigation className="w-3.5 h-3.5" />
                     By Distance
                   </button>
                 </div>
               </div>
 
-              {/* Unit System */}
-              <div className="w-full sm:w-auto">
-                <Label className="text-[11px] font-bold uppercase text-zinc-500 dark:text-zinc-400 mb-1 block">Unit System</Label>
-                <div className="grid grid-cols-2 gap-1 bg-white dark:bg-zinc-900 p-1 rounded-lg border border-zinc-200 dark:border-zinc-800 text-xs font-bold">
+              <div>
+                <Label className="text-xs font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider block mb-1.5">
+                  Unit System
+                </Label>
+                <div className="flex items-center gap-2 bg-zinc-100 dark:bg-zinc-800/80 p-1 rounded-lg">
                   <button
                     type="button"
                     onClick={() => handleUnitSystemToggle("imperial")}
-                    className={`py-1 px-3 rounded transition-all ${unitSystem === "imperial" ? "bg-blue-600 text-white" : "text-zinc-600 dark:text-zinc-400"}`}
+                    className={`flex-1 py-1.5 px-3 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                      unitSystem === "imperial"
+                        ? "bg-blue-600 text-white shadow-xs"
+                        : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    }`}
                   >
                     US Units (lbs/mi)
                   </button>
                   <button
                     type="button"
                     onClick={() => handleUnitSystemToggle("metric")}
-                    className={`py-1 px-3 rounded transition-all ${unitSystem === "metric" ? "bg-blue-600 text-white" : "text-zinc-600 dark:text-zinc-400"}`}
+                    className={`flex-1 py-1.5 px-3 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                      unitSystem === "metric"
+                        ? "bg-blue-600 text-white shadow-xs"
+                        : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    }`}
                   >
                     Metric (kg/km)
                   </button>
@@ -358,16 +477,19 @@ Calculated via CalcPlatform Clinical Health Engine`;
               </div>
             </div>
 
-            {/* Mode-Specific Inputs */}
+            {/* Input Fields */}
             {mode === "duration" ? (
+              /* Duration Mode Inputs */
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {/* Activity Selector */}
                 <div className="sm:col-span-2">
-                  <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">Physical Activity</Label>
+                  <Label htmlFor="cb-activity-select" className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">
+                    Physical Activity (50+ Database)
+                  </Label>
                   <select
+                    id="cb-activity-select"
                     value={activityId}
                     onChange={(e) => setActivityId(e.target.value)}
-                    className="w-full h-9 px-3 text-xs font-bold bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    className="w-full h-9 px-3 text-xs font-bold bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md text-zinc-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                   >
                     {ACTIVITIES_DATABASE.map((act) => (
                       <option key={act.id} value={act.id}>
@@ -377,33 +499,59 @@ Calculated via CalcPlatform Clinical Health Engine`;
                   </select>
                 </div>
 
-                {/* Body Weight */}
                 <div>
-                  <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">Body Weight ({unitSystem === "imperial" ? "lbs" : "kg"})</Label>
+                  <Label htmlFor="cb-weight-input" className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">
+                    Body Weight ({unitSystem === "imperial" ? "lbs" : "kg"})
+                  </Label>
                   <Input
+                    id="cb-weight-input"
                     type="number"
                     step={0.1}
-                    min={30}
+                    min={20}
                     max={600}
                     value={unitSystem === "imperial" ? weightLbs : weightKg}
                     onChange={(e) => {
-                      const val = Number(e.target.value);
-                      if (unitSystem === "imperial") setWeightLbs(val);
-                      else setWeightKg(val);
+                      const val = Math.max(0, Number(e.target.value));
+                      if (unitSystem === "imperial") {
+                        setWeightLbs(val);
+                        setWeightKg(parseFloat((val / 2.20462262).toFixed(1)));
+                      } else {
+                        setWeightKg(val);
+                        setWeightLbs(parseFloat((val * 2.20462262).toFixed(1)));
+                      }
                     }}
                     className="text-xs font-sans tabular-nums font-bold"
                   />
                 </div>
 
-                {/* Duration Hours & Minutes */}
-                <div className="sm:col-span-3 grid grid-cols-2 gap-3">
+                <div className="sm:col-span-3 grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">Duration (Hours)</Label>
-                    <Input type="number" min={0} max={24} value={durationHours} onChange={(e) => setDurationHours(Number(e.target.value))} className="text-xs font-sans tabular-nums font-bold" />
+                    <Label htmlFor="cb-duration-hours" className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">
+                      Duration (Hours)
+                    </Label>
+                    <Input
+                      id="cb-duration-hours"
+                      type="number"
+                      min={0}
+                      max={24}
+                      value={durationHours}
+                      onChange={(e) => setDurationHours(Math.max(0, Number(e.target.value)))}
+                      className="text-xs font-sans tabular-nums font-bold"
+                    />
                   </div>
                   <div>
-                    <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">Duration (Minutes)</Label>
-                    <Input type="number" min={0} max={59} value={durationMinutes} onChange={(e) => setDurationMinutes(Number(e.target.value))} className="text-xs font-sans tabular-nums font-bold" />
+                    <Label htmlFor="cb-duration-minutes" className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">
+                      Duration (Minutes)
+                    </Label>
+                    <Input
+                      id="cb-duration-minutes"
+                      type="number"
+                      min={0}
+                      max={59}
+                      value={durationMinutes}
+                      onChange={(e) => setDurationMinutes(Math.max(0, Number(e.target.value)))}
+                      className="text-xs font-sans tabular-nums font-bold"
+                    />
                   </div>
                 </div>
               </div>
@@ -411,77 +559,199 @@ Calculated via CalcPlatform Clinical Health Engine`;
               /* Distance Mode Inputs */
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">Activity Type</Label>
+                  <Label htmlFor="cb-distance-activity-select" className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">
+                    Activity Type
+                  </Label>
                   <select
+                    id="cb-distance-activity-select"
                     value={distanceActivityId}
                     onChange={(e) => setDistanceActivityId(e.target.value)}
-                    className="w-full h-9 px-3 text-xs font-bold bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md"
+                    className="w-full h-9 px-3 text-xs font-bold bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md text-zinc-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                   >
-                    <option value="walk-mod">Walking</option>
-                    <option value="run-6mph">Running</option>
-                    <option value="bike-mod">Bicycling</option>
+                    <option value="walk-mod">Walking (General)</option>
+                    <option value="run-6mph">Running (General)</option>
+                    <option value="bike-mod">Cycling / Biking</option>
                   </select>
                 </div>
 
                 <div>
-                  <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">Distance ({unitSystem === "imperial" ? "miles" : "km"})</Label>
+                  <Label htmlFor="cb-distance-input" className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">
+                    Distance ({unitSystem === "imperial" ? "miles" : "km"})
+                  </Label>
                   <Input
+                    id="cb-distance-input"
                     type="number"
                     step={0.1}
                     min={0.1}
-                    max={200}
+                    max={300}
                     value={unitSystem === "imperial" ? distanceMiles : distanceKm}
                     onChange={(e) => {
-                      const val = Number(e.target.value);
-                      if (unitSystem === "imperial") setDistanceMiles(val);
-                      else setDistanceKm(val);
+                      const val = Math.max(0.1, Number(e.target.value));
+                      if (unitSystem === "imperial") {
+                        setDistanceMiles(val);
+                        setDistanceKm(parseFloat((val * 1.609344).toFixed(1)));
+                      } else {
+                        setDistanceKm(val);
+                        setDistanceMiles(parseFloat((val / 1.609344).toFixed(1)));
+                      }
                     }}
                     className="text-xs font-sans tabular-nums font-bold"
                   />
                 </div>
 
                 <div>
-                  <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">Body Weight ({unitSystem === "imperial" ? "lbs" : "kg"})</Label>
+                  <Label htmlFor="cb-dist-weight-input" className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">
+                    Body Weight ({unitSystem === "imperial" ? "lbs" : "kg"})
+                  </Label>
                   <Input
+                    id="cb-dist-weight-input"
                     type="number"
                     step={0.1}
-                    min={30}
+                    min={20}
                     max={600}
                     value={unitSystem === "imperial" ? weightLbs : weightKg}
                     onChange={(e) => {
-                      const val = Number(e.target.value);
-                      if (unitSystem === "imperial") setWeightLbs(val);
-                      else setWeightKg(val);
+                      const val = Math.max(0, Number(e.target.value));
+                      if (unitSystem === "imperial") {
+                        setWeightLbs(val);
+                        setWeightKg(parseFloat((val / 2.20462262).toFixed(1)));
+                      } else {
+                        setWeightKg(val);
+                        setWeightLbs(parseFloat((val * 2.20462262).toFixed(1)));
+                      }
                     }}
                     className="text-xs font-sans tabular-nums font-bold"
                   />
                 </div>
 
                 <div className="sm:col-span-3">
-                  <Label className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">Speed ({unitSystem === "imperial" ? "mph" : "km/h"})</Label>
+                  <Label htmlFor="cb-speed-input" className="text-xs font-bold text-zinc-800 dark:text-zinc-200 mb-1 block">
+                    Speed ({unitSystem === "imperial" ? "mph" : "km/h"})
+                  </Label>
                   <Input
+                    id="cb-speed-input"
                     type="number"
                     step={0.1}
                     min={0.5}
-                    max={30}
-                    value={speedMph}
-                    onChange={(e) => setSpeedMph(Number(e.target.value))}
+                    max={50}
+                    value={unitSystem === "imperial" ? speedMph : speedKmh}
+                    onChange={(e) => {
+                      const val = Math.max(0.5, Number(e.target.value));
+                      if (unitSystem === "imperial") {
+                        setSpeedMph(val);
+                        setSpeedKmh(parseFloat((val * 1.609344).toFixed(1)));
+                      } else {
+                        setSpeedKmh(val);
+                        setSpeedMph(parseFloat((val / 1.609344).toFixed(1)));
+                      }
+                    }}
                     className="text-xs font-sans tabular-nums font-bold max-w-xs"
                   />
                 </div>
               </div>
             )}
 
-            {/* Action Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-              
+            {/* ACTION BAR (FULLY RESTORED & WIRED) */}
+            <div className="flex flex-wrap items-center justify-between gap-2.5 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSaveCalculation}
+                  className="text-xs font-semibold cursor-pointer"
+                  title="Save this calculation scenario"
+                >
+                  <Bookmark className={`w-3.5 h-3.5 mr-1.5 ${savedSuccess ? "text-emerald-600" : ""}`} />
+                  {savedSuccess ? "Saved!" : "Save Scenario"}
+                </Button>
 
-              <div className="flex items-center gap-2">
-                
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopySummary}
+                  className="text-xs font-semibold cursor-pointer"
+                  title="Copy formatted summary to clipboard"
+                >
+                  {copied ? <Check className="w-3.5 h-3.5 mr-1.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 mr-1.5" />}
+                  {copied ? "Copied!" : "Copy Summary"}
+                </Button>
 
-                
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleShare}
+                  className="text-xs font-semibold cursor-pointer"
+                  title="Share link with preserved calculation parameters"
+                >
+                  <Share2 className="w-3.5 h-3.5 mr-1.5" />
+                  {shared ? "Link Copied!" : "Share"}
+                </Button>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportCsv}
+                  className="text-xs font-semibold cursor-pointer"
+                  title="Download CSV spreadsheet"
+                >
+                  <Download className="w-3.5 h-3.5 mr-1.5 text-blue-600" />
+                  Export CSV
+                </Button>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handlePrint}
+                  className="text-xs font-semibold cursor-pointer"
+                  title="Print clinical assessment report"
+                >
+                  <Printer className="w-3.5 h-3.5 mr-1.5 text-amber-600" />
+                  Print / PDF
+                </Button>
               </div>
             </div>
+
+            {/* Saved Scenarios Drawer / Pills */}
+            {savedScenarios.length > 0 && (
+              <div className="p-3.5 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
+                <span className="text-[11px] font-bold text-zinc-500 uppercase tracking-wider block">
+                  Saved Scenarios ({savedScenarios.length})
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {savedScenarios.map((sc) => (
+                    <div
+                      key={sc.id}
+                      className="flex items-center gap-1.5 px-2.5 py-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-xs"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => handleRestoreScenario(sc)}
+                        className="font-semibold text-zinc-800 dark:text-zinc-200 hover:text-amber-600 dark:hover:text-amber-400 cursor-pointer flex items-center gap-1"
+                        title="Click to restore this calculation"
+                      >
+                        <span>{sc.title}</span>
+                        <ChevronRight className="w-3 h-3 text-zinc-400" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteScenario(sc.id)}
+                        className="text-zinc-400 hover:text-rose-600 cursor-pointer ml-1"
+                        title="Delete saved scenario"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -507,37 +777,45 @@ Calculated via CalcPlatform Clinical Health Engine`;
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
                   <span className="text-zinc-500 text-[10px] block font-semibold">Total Calories Burned</span>
-                  <strong className="text-xl font-black text-amber-600 dark:text-amber-400 block mt-0.5">{result.caloriesBurned} kcal</strong>
-                  <span className="text-[10px] text-zinc-400 block">{result.durationMinutes} mins</span>
+                  <strong className="text-xl font-black text-amber-600 dark:text-amber-400 block mt-0.5 font-sans tabular-nums">
+                    {result.caloriesBurned} kcal
+                  </strong>
+                  <span className="text-[10px] text-zinc-400 block font-sans tabular-nums">{result.durationMinutes} mins</span>
                 </div>
 
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
                   <span className="text-zinc-500 text-[10px] block font-semibold">Burn Rate</span>
-                  <strong className="text-xl font-black text-blue-600 dark:text-blue-400 block mt-0.5">{result.caloriesPerMinute} kcal/min</strong>
-                  <span className="text-[10px] text-zinc-400 block">{result.caloriesPerHour} kcal / hour</span>
+                  <strong className="text-xl font-black text-blue-600 dark:text-blue-400 block mt-0.5 font-sans tabular-nums">
+                    {result.caloriesPerMinute} kcal/min
+                  </strong>
+                  <span className="text-[10px] text-zinc-400 block font-sans tabular-nums">{result.caloriesPerHour} kcal / hour</span>
                 </div>
 
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] block font-semibold">Fat Mass Loss</span>
-                  <strong className="text-xl font-black text-emerald-600 dark:text-emerald-400 block mt-0.5">{result.fatMassLossLbs} lbs</strong>
-                  <span className="text-[10px] text-zinc-400 block">{result.fatMassLossGrams} grams</span>
+                  <span className="text-zinc-500 text-[10px] block font-semibold">Fat-Equivalent Energy</span>
+                  <strong className="text-xl font-black text-emerald-600 dark:text-emerald-400 block mt-0.5 font-sans tabular-nums">
+                    {result.fatMassLossLbs} lbs
+                  </strong>
+                  <span className="text-[10px] text-zinc-400 block font-sans tabular-nums">{result.fatMassLossGrams} grams</span>
                 </div>
 
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
                   <span className="text-zinc-500 text-[10px] block font-semibold">Pizza Slice Equivalent</span>
-                  <strong className="text-xl font-black text-purple-600 dark:text-purple-400 block mt-0.5">{result.foodEquivalents.pizzaSlices} Slices</strong>
+                  <strong className="text-xl font-black text-purple-600 dark:text-purple-400 block mt-0.5 font-sans tabular-nums">
+                    {result.foodEquivalents.pizzaSlices} Slices
+                  </strong>
                   <span className="text-[10px] text-zinc-400 block">~280 kcal/slice</span>
                 </div>
               </div>
             </div>
 
-            {/* Auxiliary Tables */}
+            {/* Auxiliary Tables (Dynamic 1-Hr Matrix + Searchable 50+ DB) */}
             <CaloriesBurnedTables result={result} />
           </div>
         </div>
       </div>
 
-      {/* Standalone Printable PDF Report Section */}
+      {/* Standalone Printable PDF Report Section (Single H1 compliance: uses H2) */}
       <div id="cb-print-report" className="hidden">
         <div className="p-8 max-w-4xl mx-auto space-y-6 bg-white text-zinc-900 font-sans">
           <div className="border-b-2 border-amber-600 pb-4 flex justify-between items-start">
@@ -545,11 +823,11 @@ Calculated via CalcPlatform Clinical Health Engine`;
               <div className="text-xs font-black tracking-widest text-amber-700 uppercase">
                 CalcPlatform Clinical Sports Physiology &amp; Energetics Lab
               </div>
-              <h1 className="text-2xl font-black text-blue-600 mt-1">
+              <h2 className="text-2xl font-black text-blue-600 mt-1">
                 Clinical Exercise Calorie Expenditure Assessment
-              </h1>
+              </h2>
               <p className="text-xs text-zinc-500 mt-0.5">
-                ACSM Compendium of Physical Activities MET Model Analysis
+                Physical Activity MET Model Analysis
               </p>
             </div>
             <div className="text-right text-xs text-zinc-500">
@@ -576,7 +854,7 @@ Calculated via CalcPlatform Clinical Health Engine`;
               <span className="text-[9px] text-zinc-500 block">{result.caloriesPerHour} kcal/hr</span>
             </div>
             <div className="p-2">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Fat Mass Loss</span>
+              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Fat Equivalent</span>
               <strong className="text-xl font-black text-purple-700 block mt-1">{result.fatMassLossLbs} lbs</strong>
               <span className="text-[9px] text-zinc-500 block">{result.fatMassLossGrams} grams</span>
             </div>
@@ -613,7 +891,7 @@ Calculated via CalcPlatform Clinical Health Engine`;
           <div className="border-t border-zinc-300 pt-4 text-[10px] text-zinc-500 space-y-1">
             <p className="font-bold text-zinc-700">Clinical &amp; Medical Disclaimer:</p>
             <p>
-              This report is generated using the Compendium of Physical Activities MET equations. Actual exercise calorie expenditure varies based on individual muscle mass, movement efficiency, and ambient temperature.
+              This report is generated using standard MET bioenergetic equations. Actual exercise calorie expenditure varies based on individual muscle mass, movement efficiency, elevation, and ambient temperature.
             </p>
             <p className="text-zinc-400">© CalcPlatform Clinical Health Lab • All Rights Reserved</p>
           </div>
@@ -622,3 +900,5 @@ Calculated via CalcPlatform Clinical Health Engine`;
     </div>
   );
 }
+
+export default CaloriesBurnedCalculator;
