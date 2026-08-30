@@ -69,15 +69,15 @@ export function HealthyWeightGauge({ result }: HealthyWeightChartsProps) {
           </g>
 
           {/* Labels */}
-          <text x="24" y="132" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">{minLbs} lbs</text>
+          <text x="24" y="132" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">{minLbs.toFixed(1)} lbs</text>
           <text x="94" y="20" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">Healthy</text>
-          <text x="165" y="132" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">{maxLbs} lbs</text>
+          <text x="165" y="132" className="fill-zinc-500 dark:fill-zinc-400" fontSize="8" fontWeight="bold">{maxLbs.toFixed(1)} lbs</text>
         </svg>
 
         {/* Center overlay readout */}
         <div className="absolute bottom-0 flex flex-col items-center bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md px-4 py-1.5 rounded-xl border border-zinc-200/90 dark:border-zinc-800 shadow-md">
           <span className={`text-2xl sm:text-3xl font-black tracking-tight leading-none ${isHealthy ? "text-emerald-600 dark:text-emerald-400" : currentLbs > maxLbs ? "text-rose-600 dark:text-rose-400" : "text-sky-600 dark:text-sky-400"}`}>
-            {result.currentWeightLbs} LBS
+            {result.currentWeightLbs.toFixed(1)} LBS
           </span>
           <span className={`text-[10px] font-bold uppercase tracking-wider mt-0.5 ${isHealthy ? "text-emerald-700 dark:text-emerald-400" : currentLbs > maxLbs ? "text-rose-700 dark:text-rose-400" : "text-sky-700 dark:text-sky-400"}`}>
             BMI {result.bmi} ({result.bmiCategory})
@@ -88,11 +88,11 @@ export function HealthyWeightGauge({ result }: HealthyWeightChartsProps) {
       <div className="grid grid-cols-2 gap-2 w-full mt-4 text-center text-xs">
         <div className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800">
           <div className="text-zinc-500 dark:text-zinc-400 text-[10px]">Healthy Range</div>
-          <div className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">{result.minHealthyWeightLbs} – {result.maxHealthyWeightLbs} lbs</div>
+          <div className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">{result.minHealthyWeightLbs.toFixed(1)} – {result.maxHealthyWeightLbs.toFixed(1)} lbs</div>
         </div>
         <div className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800">
           <div className="text-zinc-500 dark:text-zinc-400 text-[10px]">Prime Target Weight</div>
-          <div className="font-bold text-blue-600 dark:text-blue-400 mt-0.5">{result.targetHealthyWeightLbs} lbs ({result.targetHealthyWeightKg} kg)</div>
+          <div className="font-bold text-blue-600 dark:text-blue-400 mt-0.5">{result.targetHealthyWeightLbs.toFixed(1)} lbs ({result.targetHealthyWeightKg.toFixed(1)} kg)</div>
         </div>
       </div>
     </div>
@@ -109,10 +109,10 @@ export function HealthyWeightMethodBarChart({ result }: HealthyWeightChartsProps
     <div className="w-full space-y-3 p-4 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
       <div className="flex justify-between items-center text-xs">
         <div>
-          <h4 className="font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Clinical Ideal Weight Method Comparison</h4>
-          <p className="text-[11px] text-zinc-500">WHO vs Hamwi vs Devine vs Robinson vs Miller vs Peterson</p>
+          <h4 className="font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">Multi-Formula Reference Comparison</h4>
+          <p className="text-[11px] text-zinc-500">Hamwi, Devine, Robinson, Miller, Peterson (BMI 22) &amp; WHO Target</p>
         </div>
-        <span className="font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Mean: {result.consensusIdealWeightLbs} lbs</span>
+        <span className="font-sans tabular-nums font-bold text-emerald-600 dark:text-emerald-400">Reference Average: {result.consensusIdealWeightLbs.toFixed(1)} lbs</span>
       </div>
 
       <div className="space-y-2 pt-1 text-xs">
@@ -122,7 +122,7 @@ export function HealthyWeightMethodBarChart({ result }: HealthyWeightChartsProps
             <div key={idx} className="space-y-1">
               <div className="flex justify-between items-center text-[11px]">
                 <span className="font-semibold text-zinc-800 dark:text-zinc-200">{m.methodName}</span>
-                <span className="font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">{m.idealWeightLbs} lbs ({m.idealWeightKg} kg)</span>
+                <span className="font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400">{m.idealWeightLbs.toFixed(1)} lbs ({m.idealWeightKg.toFixed(1)} kg)</span>
               </div>
               <div className="h-3 w-full bg-zinc-100 dark:bg-zinc-950 rounded-full overflow-hidden border border-zinc-200 dark:border-zinc-800">
                 <div

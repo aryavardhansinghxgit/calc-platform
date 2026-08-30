@@ -1,17 +1,21 @@
 export type UnitSystem = "imperial" | "metric";
 export type Gender = "male" | "female";
 export type BodyFrame = "small" | "medium" | "large";
+export type FrameMode = "auto" | "manual";
 export type ActivityLevel = "sedentary" | "light" | "moderate" | "active" | "athlete";
 
 export interface HealthyWeightInput {
   unitSystem: UnitSystem;
   gender: Gender;
   bodyFrame?: BodyFrame;
+  frameMode?: FrameMode;
   age: number;
   heightInches?: number; // imperial
   heightCm?: number; // metric
   weightLbs?: number; // imperial
   weightKg?: number; // metric
+  wristInches?: number;
+  wristCm?: number;
   activityLevel?: ActivityLevel;
   isPregnant?: boolean;
 }
@@ -31,14 +35,19 @@ export interface HealthyWeightResult {
   bmi: number;
   bmiPrime: number;
   bmiCategory: "Underweight" | "Normal Weight" | "Overweight" | "Obese Class I" | "Obese Class II" | "Obese Class III";
-  // WHO Range
+  isSub5Feet: boolean;
+  frameMode: FrameMode;
+  detectedFrame: BodyFrame;
+  // WHO Range (strictly unscaled by frame size)
   minHealthyWeightLbs: number;
   minHealthyWeightKg: number;
   maxHealthyWeightLbs: number;
   maxHealthyWeightKg: number;
   targetHealthyWeightLbs: number;
   targetHealthyWeightKg: number;
-  // Frame-adjusted Target
+  // Frame-adjusted Reference Target (Consensus IBW scaled by frame size)
+  frameAdjustedTargetLbs: number;
+  frameAdjustedTargetKg: number;
   frameAdjustedMinWeightLbs: number;
   frameAdjustedMaxWeightLbs: number;
   frameMultiplier: number;
@@ -59,18 +68,46 @@ export interface HealthyWeightResult {
   methods: MethodWeightResult[];
 }
 
+export function evaluateFrameSizeFromWrist(
+  gender: Gender,
+  heightCm: number,
+  wristCm?: number,
+  wristInches?: number
+): BodyFrame {
+  let wIn = wristInches && wristInches > 0 ? wristInches : 0;
+  if (!wIn && wristCm && wristCm > 0) {
+    wIn = wristCm / 2.54;
+  }
+  if (!wIn) return "medium";
+
+  const heightIn = heightCm / 2.54;
+
+  if (gender === "female") {
+    if (heightIn < 62) {
+      if (wIn < 5.5) return "small";
+      if (wIn <= 5.75) return "medium";
+      return "large";
+    } else if (heightIn <= 65) {
+      if (wIn < 6.0) return "small";
+      if (wIn <= 6.25) return "medium";
+      return "large";
+    } else {
+      if (wIn < 6.25) return "small";
+      if (wIn <= 6.5) return "medium";
+      return "large";
+    }
+  } else {
+    if (wIn < 6.5) return "small";
+    if (wIn <= 7.5) return "medium";
+    return "large";
+  }
+}
+
 export function calculateHealthyWeight(input: HealthyWeightInput): HealthyWeightResult {
   const gender = input.gender;
   const unitSystem = input.unitSystem;
-  const frame = input.bodyFrame || "medium";
+  const frameMode: FrameMode = input.frameMode || "manual";
   const age = Math.max(18, Math.min(100, Number(input.age) || 30));
-
-  let weightKg = 70;
-  if (unitSystem === "imperial") {
-    weightKg = (Number(input.weightLbs) || 160) / 2.20462;
-  } else {
-    weightKg = Number(input.weightKg) || 72.5;
-  }
 
   let heightCm = 175;
   if (unitSystem === "imperial") {
@@ -78,13 +115,25 @@ export function calculateHealthyWeight(input: HealthyWeightInput): HealthyWeight
   } else {
     heightCm = Number(input.heightCm) || 175;
   }
-
-  weightKg = Math.max(20, Math.min(350, weightKg));
   heightCm = Math.max(100, Math.min(250, heightCm));
+
+  let frame: BodyFrame = input.bodyFrame || "medium";
+  if (frameMode === "auto") {
+    frame = evaluateFrameSizeFromWrist(gender, heightCm, input.wristCm, input.wristInches);
+  }
+
+  let weightKg = 70;
+  if (unitSystem === "imperial") {
+    weightKg = (Number(input.weightLbs) || 160) / 2.20462;
+  } else {
+    weightKg = Number(input.weightKg) || 72.5;
+  }
+  weightKg = Math.max(20, Math.min(350, weightKg));
 
   const heightM = heightCm / 100;
   const heightInchesTotal = heightCm / 2.54;
   const inchesOver60 = Math.max(0, heightInchesTotal - 60);
+  const isSub5Feet = heightInchesTotal < 60;
 
   // 1. BMI & BMI Prime
   const bmi = parseFloat((weightKg / (heightM * heightM)).toFixed(1));
@@ -98,7 +147,7 @@ export function calculateHealthyWeight(input: HealthyWeightInput): HealthyWeight
   else if (bmi <= 39.9) bmiCategory = "Obese Class II";
   else bmiCategory = "Obese Class III";
 
-  // 2. WHO Healthy Weight Range (BMI 18.5 – 24.9)
+  // 2. WHO Healthy Weight Range (BMI 18.5 – 24.9) — strictly frame-independent
   const minHealthyKg = 18.5 * heightM * heightM;
   const maxHealthyKg = 24.9 * heightM * heightM;
   const targetHealthyKg = 21.7 * heightM * heightM;
@@ -112,6 +161,7 @@ export function calculateHealthyWeight(input: HealthyWeightInput): HealthyWeight
   if (frame === "small") frameMultiplier = 0.90;
   else if (frame === "large") frameMultiplier = 1.10;
 
+  // Legacy compatibility fields (deprecated in UI)
   const frameAdjustedMinLbs = parseFloat((minHealthyLbs * frameMultiplier).toFixed(1));
   const frameAdjustedMaxLbs = parseFloat((maxHealthyLbs * frameMultiplier).toFixed(1));
 
@@ -124,8 +174,12 @@ export function calculateHealthyWeight(input: HealthyWeightInput): HealthyWeight
   const robinsonKg = (gender === "male" ? 52.0 + 1.9 * inchesOver60 : 49.0 + 1.7 * inchesOver60) * frameMultiplier;
   // Miller (1983)
   const millerKg = (gender === "male" ? 56.2 + 1.41 * inchesOver60 : 53.1 + 1.36 * inchesOver60) * frameMultiplier;
-  // Peterson (2016)
-  const petersonKg = (22.0 * heightM * heightM + 0.75 * (heightM - 1.5) * 22.0 * heightM * heightM) * frameMultiplier;
+  // Peterson Universal Formula (2016) - Peterson CM, Thomas DM, Blackburn GL, Heymsfield SB. Am J Clin Nutr 2016;103:1197-203.
+  // Universal equation at Target BMI = 22.0 kg/m²:
+  // Metric: Weight (kg) = 2.2 * BMI + 3.5 * BMI * (Height(m) - 1.5)
+  // Imperial equivalent: Weight (lb) = 5 * BMI + (BMI / 5) * (Height(in) - 60)
+  const petersonTargetBmi = 22.0;
+  const petersonKg = (2.2 * petersonTargetBmi + 3.5 * petersonTargetBmi * (heightM - 1.5)) * frameMultiplier;
 
   const currentWeightLbs = parseFloat((weightKg * 2.20462).toFixed(1));
 
@@ -152,7 +206,7 @@ export function calculateHealthyWeight(input: HealthyWeightInput): HealthyWeight
       idealWeightLbs: parseFloat((devineKg * 2.20462).toFixed(1)),
       differenceLbs: parseFloat((currentWeightLbs - devineKg * 2.20462).toFixed(1)),
       status: currentWeightLbs > devineKg * 2.20462 + 5 ? "Above Target" : currentWeightLbs < devineKg * 2.20462 - 5 ? "Below Target" : "Inside Healthy Range",
-      description: "Clinical gold standard widely used for clearance calculations",
+      description: "Widely used clinical reference benchmark for pharmacokinetic clearance",
     },
     {
       methodName: "Robinson Formula (1983)",
@@ -171,19 +225,23 @@ export function calculateHealthyWeight(input: HealthyWeightInput): HealthyWeight
       description: "Modern empirical formula tailored for average height adults",
     },
     {
-      methodName: "Peterson Formula (2016)",
+      methodName: "Peterson Universal Formula (2016)",
       idealWeightKg: parseFloat(petersonKg.toFixed(1)),
-      idealWeightLbs: parseFloat((petersonKg * 2.20462).toFixed(1)),
-      differenceLbs: parseFloat((currentWeightLbs - petersonKg * 2.20462).toFixed(1)),
-      status: currentWeightLbs > petersonKg * 2.20462 + 5 ? "Above Target" : currentWeightLbs < petersonKg * 2.20462 - 5 ? "Below Target" : "Inside Healthy Range",
-      description: "Target formula matching 22.0 target BMI with height non-linear scaling",
+      idealWeightLbs: parseFloat((petersonKg * 2.2046226218).toFixed(1)),
+      differenceLbs: parseFloat((currentWeightLbs - petersonKg * 2.2046226218).toFixed(1)),
+      status: currentWeightLbs > petersonKg * 2.2046226218 + 5 ? "Above Target" : currentWeightLbs < petersonKg * 2.2046226218 - 5 ? "Below Target" : "Inside Healthy Range",
+      description: "Published 2016 universal equation by Peterson et al. linking target body weight to a target BMI of 22.0",
     },
   ];
 
-  // Consensus IBW
+  // Multi-Formula Reference Average (averaging 5 IBW equations + WHO BMI 21.7 Target)
   const avgIbwKg = (hamwiKg + devineKg + robinsonKg + millerKg + petersonKg + targetHealthyKg) / 6;
   const consensusIdealWeightKg = parseFloat(avgIbwKg.toFixed(1));
-  const consensusIdealWeightLbs = parseFloat((consensusIdealWeightKg * 2.20462).toFixed(1));
+  const consensusIdealWeightLbs = parseFloat((avgIbwKg * 2.2046226218).toFixed(1));
+
+  // Frame-adjusted Reference Target (Consensus scaled by frame)
+  const frameAdjustedTargetKg = parseFloat((avgIbwKg * frameMultiplier).toFixed(1));
+  const frameAdjustedTargetLbs = parseFloat((avgIbwKg * frameMultiplier * 2.2046226218).toFixed(1));
 
   const diffFromTargetLbs = parseFloat((currentWeightLbs - targetHealthyLbs).toFixed(1));
   const diffFromTargetKg = parseFloat((weightKg - targetHealthyKg).toFixed(1));
@@ -222,12 +280,17 @@ export function calculateHealthyWeight(input: HealthyWeightInput): HealthyWeight
     bmi,
     bmiPrime,
     bmiCategory,
+    isSub5Feet,
+    frameMode,
+    detectedFrame: frame,
     minHealthyWeightLbs: minHealthyLbs,
     minHealthyWeightKg: parseFloat(minHealthyKg.toFixed(1)),
     maxHealthyWeightLbs: maxHealthyLbs,
     maxHealthyWeightKg: parseFloat(maxHealthyKg.toFixed(1)),
     targetHealthyWeightLbs: targetHealthyLbs,
     targetHealthyWeightKg: parseFloat(targetHealthyKg.toFixed(1)),
+    frameAdjustedTargetLbs,
+    frameAdjustedTargetKg,
     frameAdjustedMinWeightLbs: frameAdjustedMinLbs,
     frameAdjustedMaxWeightLbs: frameAdjustedMaxLbs,
     frameMultiplier,

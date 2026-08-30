@@ -42,9 +42,9 @@ export function HealthyWeightTables({ result }: HealthyWeightTablesProps) {
               {result.methods.map((m, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2.5 px-3 font-bold text-zinc-900 dark:text-zinc-100">{m.methodName}</td>
-                  <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-blue-700 dark:text-blue-400">{m.idealWeightLbs} lbs ({m.idealWeightKg} kg)</td>
+                  <td className="py-2.5 px-3 font-sans tabular-nums font-bold text-blue-700 dark:text-blue-400">{m.idealWeightLbs.toFixed(1)} lbs ({m.idealWeightKg.toFixed(1)} kg)</td>
                   <td className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">
-                    {m.differenceLbs > 0 ? `+${m.differenceLbs} lbs` : `${m.differenceLbs} lbs`}
+                    {m.differenceLbs > 0 ? `+${m.differenceLbs.toFixed(1)} lbs` : `${m.differenceLbs.toFixed(1)} lbs`}
                   </td>
                   <td className="py-2.5 px-3">
                     <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${m.status === "Inside Healthy Range" ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300" : "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300"}`}>
