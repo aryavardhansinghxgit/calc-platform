@@ -1,5 +1,6 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateBsaCalculator } from "./calculator";
+import { bsaFaqs } from "./faq";
 
 export const body_surface_area_calculatorConfig: CalculatorModuleDefinition = {
   id: "body-surface-area-calculator",
@@ -7,7 +8,7 @@ export const body_surface_area_calculatorConfig: CalculatorModuleDefinition = {
   title: "Body Surface Area (BSA) Calculator",
   description:
     "Clinical Body Surface Area (BSA) suite supporting Mosteller, Du Bois, Haycock, Schlich 3D, Chemotherapy dosing, Cardiac Index, GFR normalization, and 9-formula comparison.",
-  category: "health",
+  category: "Health",
   subcategory: "Nutrition & Health",
   iconName: "Activity",
   tags: [
@@ -20,6 +21,9 @@ export const body_surface_area_calculatorConfig: CalculatorModuleDefinition = {
     "gfr normalization",
     "haycock",
   ],
+  formulaDescription:
+    "BSA (m²) calculated via Mosteller, Du Bois & Du Bois, Haycock, Gehan & George, Boyd, Fujimoto, Takahira, Schlich 3D, and Costeff equations.",
+  faqs: bsaFaqs,
   modes: [
     { id: "mosteller-clinical", name: "Mosteller Clinical Standard", description: "Gold standard oncology & clinical equation" },
     { id: "dubois-classic", name: "Du Bois & Du Bois", description: "Classic historical metabolic equation (1916)" },

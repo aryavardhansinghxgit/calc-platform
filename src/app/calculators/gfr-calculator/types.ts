@@ -6,6 +6,7 @@ export type GfrCalculationMode =
   | "cockcroft-gault"
   | "pediatric-schwartz"
   | "cystatin-c"
+  | "cystatin-c-alone"
   | "kdigo-risk"
   | "comparison"
   | "custom";
@@ -39,6 +40,7 @@ export interface GfrInputParameters {
 export interface FormulaComparisonItem {
   formulaName: string;
   egfrValue: number;
+  unit: string;
   ckdStage: string;
   differenceFromDefault: number;
   notes: string;

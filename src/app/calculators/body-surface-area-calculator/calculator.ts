@@ -125,11 +125,11 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
     gender,
     unitSystem,
     ageYears,
-    heightFeet = 5,
-    heightInches = 10,
-    weightLbs = 160,
-    heightCm: inputHeightCm = 170,
-    weightKg: inputWeightKg = 70,
+    heightFeet: inputHeightFeet,
+    heightInches: inputHeightInches,
+    weightLbs: inputWeightLbs,
+    heightCm: inputHeightCm,
+    weightKg: inputWeightKg,
     targetChemoDoseMgM2 = 100,
     capObeseBsaAt2m2 = false,
     targetCarboplatinAuc = 5,
@@ -139,16 +139,22 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
     unadjustedGfrMlMin = 90,
   } = inputs;
 
+  const rawHtFt = inputHeightFeet !== undefined && inputHeightFeet !== null && !isNaN(inputHeightFeet) ? inputHeightFeet : 5;
+  const rawHtIn = inputHeightInches !== undefined && inputHeightInches !== null && !isNaN(inputHeightInches) ? inputHeightInches : 10;
+  const rawWtLb = inputWeightLbs !== undefined && inputWeightLbs !== null && !isNaN(inputWeightLbs) ? inputWeightLbs : 160;
+  const rawHtCm = inputHeightCm !== undefined && inputHeightCm !== null && !isNaN(inputHeightCm) ? inputHeightCm : 170;
+  const rawWtKg = inputWeightKg !== undefined && inputWeightKg !== null && !isNaN(inputWeightKg) ? inputWeightKg : 70;
+
   // 1. Height & Weight Standardization
-  let heightCm = inputHeightCm;
-  let weightKg = inputWeightKg;
-  let heightInchesTotal = heightFeet * 12 + heightInches;
+  let heightCm = Math.max(0, rawHtCm);
+  let weightKg = Math.max(0, rawWtKg);
+  let heightInchesTotal = Math.max(0, rawHtFt * 12 + rawHtIn);
 
   if (unitSystem === "us") {
-    heightCm = heightInchesTotal * 2.54;
-    weightKg = weightLbs * 0.45359237;
+    heightCm = Math.max(0, heightInchesTotal * 2.54);
+    weightKg = Math.max(0, rawWtLb * 0.45359237);
   } else {
-    heightInchesTotal = heightCm / 2.54;
+    heightInchesTotal = heightCm > 0 ? heightCm / 2.54 : 0;
   }
 
   // 2. BMI & Anthropometrics
@@ -278,8 +284,18 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
   const primaryBsaFt2 = Number(convertToFt2(primaryBsaM2).toFixed(2));
   const bsaM2Rounded = Number(primaryBsaM2.toFixed(2));
 
-  // Min, Max, Average across formulas
-  const allBsaVals = [mostellerVal, duBoisVal, haycockVal, gehanGeorgeVal, boydVal, fujimotoVal, takahiraVal, schlichVal];
+  // Min, Max, Average across all 9 formulas
+  const allBsaVals = [
+    mostellerVal,
+    duBoisVal,
+    haycockVal,
+    gehanGeorgeVal,
+    boydVal,
+    fujimotoVal,
+    takahiraVal,
+    schlichVal,
+    costeffVal,
+  ];
   const minBsaM2 = Number(Math.min(...allBsaVals).toFixed(2));
   const maxBsaM2 = Number(Math.max(...allBsaVals).toFixed(2));
   const averageBsaM2 = Number((allBsaVals.reduce((a, b) => a + b, 0) / allBsaVals.length).toFixed(2));
@@ -303,7 +319,7 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
 
     let guidance = "Standard BSA-based therapeutic dosing applied.";
     if (isCapped) {
-      guidance = "BSA capped at 2.0 m² for toxicity mitigation in severe obesity as per ASCO clinical practice guidelines.";
+      guidance = "Empirical BSA capping at 2.0 m² applied; note that ASCO guidelines generally recommend full weight-based cytotoxic dosing without empirical capping unless required by specific drug protocols.";
     }
 
     chemoDosing = {
@@ -404,8 +420,8 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
   const clinicalRecommendations: string[] = [
     `Calculated BSA of ${bsaM2Rounded} m² (${primaryBsaFt2} ft²) using ${primaryFormulaUsed}.`,
     `Body Mass Index (BMI) is ${bmi} kg/m² (${bmiCategory}). Ideal Body Weight (Devine) is ${idealBodyWeightKg} kg.`,
-    `Formula variance across 8 clinical equations ranges from ${minBsaM2} m² to ${maxBsaM2} m² (average: ${averageBsaM2} m²).`,
-    `For chemotherapy dosing, Mosteller and Haycock are ASCO-recommended gold standards.`,
+    `Formula variance across 9 clinical equations ranges from ${minBsaM2} m² to ${maxBsaM2} m² (average: ${averageBsaM2} m²).`,
+    `For chemotherapy dosing, Mosteller is the most widely adopted clinical reference equation in oncology protocols.`,
   ];
 
   const actionPlan: string[] = [

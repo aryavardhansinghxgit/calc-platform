@@ -9,7 +9,7 @@ export const gfr_calculatorConfig: CalculatorModuleDefinition = {
   category: "Health",
   subcategory: "Nutrition & Health",
   description:
-    "Calculate estimated Glomerular Filtration Rate (eGFR), CKD Stages 1-5, and KDIGO prognosis risk using CKD-EPI 2021 (race-free), CKD-EPI 2009, MDRD, Mayo, Cockcroft-Gault, and Bedside Schwartz Pediatric equations.",
+    "Calculate estimated GFR (eGFR) using CKD-EPI 2021, creatinine-cystatin C, cystatin C and other equations. Explore CKD G stages, uACR risk categories and kidney function guidance.",
   iconName: "Activity",
   featured: true,
   keywords: [
