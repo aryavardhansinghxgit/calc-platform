@@ -32,7 +32,7 @@ export const fat_intake_calculatorConfig: CalculatorModuleDefinition = {
     "body-fat-calculator",
   ],
   formulaDescription:
-    "Fat Target (g) = (Daily Target Calories × Fat Percentage) / 9. Saturated Fat Limit < 10% (or < 7% for AHA Heart Health).",
+    "Fat Target (g) = (Daily Target Calories × Fat Percentage) / 9. General Saturated Fat Reference < 10% (or < 6% for AHA Heart Health Reference).",
   faqs: fat_intake_calculatorFaqs,
   inputs: [
     {
@@ -56,10 +56,10 @@ export const fat_intake_calculatorConfig: CalculatorModuleDefinition = {
         { label: "Weight Gain Fat Calculator (32% Surplus Energy)", value: "gain" },
         { label: "Maintenance Fat Calculator (28% Balance)", value: "maintenance" },
         { label: "Athlete Fat Calculator (22% Carb Focus)", value: "athlete" },
-        { label: "Heart Health Fat Calculator (Sat Fat <7% Target)", value: "heart-health" },
+        { label: "Heart Health Reference (Moderate Fat, Sat Fat <6% Target)", value: "heart-health" },
         { label: "Keto Fat Calculator (75% Fat for Ketosis)", value: "keto" },
         { label: "Low Fat Diet Calculator (18% Strict Low Fat)", value: "low-fat" },
-        { label: "Bodybuilding Fat Calculator (Hormone Safety Min)", value: "bodybuilding" },
+        { label: "Bodybuilding Fat Calculator (0.35g/lb Target)", value: "bodybuilding" },
         { label: "Custom Fat Ratio Calculator", value: "custom" },
       ],
     },

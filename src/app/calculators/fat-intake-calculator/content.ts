@@ -55,7 +55,7 @@ Dietary fats are categorized based on the presence and number of double carbon-t
 ### 1. Saturated Fatty Acids (SFAs)
 - **Structure**: No double carbon bonds; fully saturated with hydrogen atoms. Typically solid at room temperature.
 - **Sources**: Butter, lard, coconut oil, palm oil, fatty beef, pork, full-fat dairy, cheese.
-- **Clinical Guidelines**: Limit saturated fat to **< 10% of total daily calories** (or **< 5-7%** for individuals with elevated LDL cholesterol or heart disease risk according to the American Heart Association).
+- **Clinical Guidelines**: General guidelines recommend limiting saturated fat to **< 10% of total daily calories**, while the American Heart Association (AHA) recommends limiting saturated fat to **< 6% of total calories** within a heart-healthy dietary pattern.
 
 ### 2. Monounsaturated Fatty Acids (MUFAs)
 - **Structure**: Contains one double carbon bond in the cis configuration.
@@ -122,5 +122,5 @@ In a Ketogenic (Keto) diet, dietary fat becomes the primary fuel source, replaci
 
 ## 32. Summary
 
-Dietary fat is an essential macronutrient vital for life, hormone production, brain health, and nutrient absorption. By calculating your daily fat target within the 20–35% AMDR range (or 70–75% for Keto), capping saturated fat under 10% (or <7% for heart health), eliminating trans fats, and emphasizing monounsaturated and Omega-3 rich foods, you support lifelong cardiovascular and metabolic health.
+Dietary fat is an essential macronutrient vital for life, hormone production, brain health, and nutrient absorption. By calculating your daily fat target within the 20–35% AMDR range (or 70–75% for Keto), capping saturated fat under 10% (or <6% for heart health reference), eliminating trans fats, and emphasizing monounsaturated and Omega-3 rich foods, you support lifelong cardiovascular and metabolic health.
 `;

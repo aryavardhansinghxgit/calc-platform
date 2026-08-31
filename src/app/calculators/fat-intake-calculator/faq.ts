@@ -18,7 +18,7 @@ export const fat_intake_calculatorFaqs: FAQItem[] = [
   },
   {
     question: "How much saturated fat should I consume per day?",
-    answer: "The USDA dietary guidelines recommend limiting saturated fat to less than 10% of daily calories (< 22g for a 2,000-calorie diet). The American Heart Association recommends limiting saturated fat to less than 5% to 7% (< 13g) for individuals at elevated risk of cardiovascular disease."
+    answer: "The Dietary Guidelines for Americans recommend limiting saturated fat to less than 10% of daily calories (< 22g for a 2,000-calorie diet). The American Heart Association recommends limiting saturated fat to less than 6% of total calories, particularly within a heart-healthy dietary pattern."
   },
   {
     question: "What are trans fats and why are they dangerous?",
@@ -46,7 +46,7 @@ export const fat_intake_calculatorFaqs: FAQItem[] = [
   },
   {
     question: "Can eating low fat harm testosterone and hormone levels?",
-    answer: "Yes. Dietary fats are essential precursors for steroid hormone synthesis (including testosterone and estrogen). Dropping fat intake below 15-20% of calories or < 0.3g per pound of body weight can impair endocrine function."
+    answer: "Dietary fats provide essential precursors for steroid hormone synthesis (including testosterone and estrogen). In sports nutrition and clinical research, maintaining an evidence-informed fat intake planning floor around 15% to 20% of total calories (or approximately 0.3g to 0.35g per pound of body weight) is recommended to support normal endocrine function and fat-soluble vitamin absorption."
   },
   {
     question: "What are the best healthy fat food sources?",
@@ -117,8 +117,8 @@ export const fat_intake_calculatorFaqs: FAQItem[] = [
     answer: "Low-fat diets reduce total cholesterol and LDL, while low-carb/keto diets reduce triglycerides and increase HDL cholesterol. Both diets improve cardiovascular risk markers when composed of whole foods."
   },
   {
-    question: "Why does Calculator.net's fat calculator lack advanced features?",
-    answer: "Calculator.net provides static formulas with basic outputs. Our suite offers 10 modes, 5 BMR formulas, fatty acid sub-type breakdown, heart-health risk warnings, searchable 35+ food database, and PDF reports."
+    question: "How should MUFA and PUFA fit into a daily fat target?",
+    answer: "Monounsaturated fatty acids (MUFAs) and polyunsaturated fatty acids (PUFAs) should comprise the vast majority of your daily fat intake. Major cardiovascular guidelines emphasize replacing saturated fats with unsaturated fats from extra virgin olive oil, avocados, nuts, seeds, and cold-water fish to support healthy arterial function and lipid profiles."
   },
   {
     question: "What are the 4 fat-soluble vitamins?",
