@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Apple,
   Activity,
@@ -24,6 +24,11 @@ import {
   Utensils,
   ChevronRight,
   PieChart as PieIcon,
+  RotateCcw,
+  Share2,
+  Bookmark,
+  Trash2,
+  Check,
 } from "lucide-react";
 import {
   PieChart,
@@ -48,6 +53,31 @@ import {
 } from "@/app/calculators/carbohydrate-calculator/types";
 import ReportModal from "@/components/report/ReportModal";
 import { CalculatorReportData } from "@/components/report/types";
+
+export interface SavedCarbScenario {
+  id: string;
+  name: string;
+  date: string;
+  unitSystem: UnitSystem;
+  calculationMode: CarbCalculationMode;
+  age: number;
+  gender: Gender;
+  heightFeet: number;
+  heightInches: number;
+  heightCm: number;
+  weightLbs: number;
+  weightKg: number;
+  activityLevel: ActivityLevel;
+  goal: FitnessGoal;
+  bmrFormula: BmrFormulaType;
+  bodyFat: number;
+  dailyFiberGrams: number;
+  sugarAlcoholsGrams: number;
+  customCarbPct: number;
+  targetCalories: number;
+  totalCarbGrams: number;
+  netCarbGrams: number;
+}
 
 export function CarbohydrateCalculator() {
   // Mode & Unit State
@@ -75,6 +105,8 @@ export function CarbohydrateCalculator() {
   // Searchable Food GI Database State
   const [foodQuery, setFoodQuery] = useState<string>("");
   const [foodCategoryTab, setFoodCategoryTab] = useState<string>("All");
+  const [selectedFoodId, setSelectedFoodId] = useState<string | null>(null);
+  const [servingCount, setServingCount] = useState<number>(1);
 
   // Active View Tab
   const [activeTab, setActiveTab] = useState<
@@ -87,9 +119,14 @@ export function CarbohydrateCalculator() {
     | "body-comp"
   >("distribution");
 
-  // Modal & Copy State
+  // Modal, Copy & Share State
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
+
+  // Saved Scenarios state
+  const [savedScenarios, setSavedScenarios] = useState<SavedCarbScenario[]>([]);
+  const [isSavedDrawerOpen, setIsSavedDrawerOpen] = useState(false);
 
   // Results Calculation Memo
   const results = useMemo(() => {
@@ -110,6 +147,8 @@ export function CarbohydrateCalculator() {
       dailyFiberGrams,
       sugarAlcoholsGrams,
       customCarbPct,
+      selectedFoodId,
+      servingCount,
     });
   }, [
     unitSystem,
@@ -128,6 +167,8 @@ export function CarbohydrateCalculator() {
     dailyFiberGrams,
     sugarAlcoholsGrams,
     customCarbPct,
+    selectedFoodId,
+    servingCount,
   ]);
 
   // Modes Configuration
@@ -165,6 +206,216 @@ export function CarbohydrateCalculator() {
     });
   }, [results.foodGiDatabase, foodCategoryTab, foodQuery]);
 
+  // Load Saved Scenarios from localStorage
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem("calc_carb_saved_scenarios");
+      if (stored) setSavedScenarios(JSON.parse(stored));
+    } catch {}
+  }, []);
+
+  const persistScenarios = (list: SavedCarbScenario[]) => {
+    setSavedScenarios(list);
+    try {
+      localStorage.setItem("calc_carb_saved_scenarios", JSON.stringify(list));
+    } catch {}
+  };
+
+  // URL Hydration on Mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const m = params.get("mode");
+      if (m) setCalculationMode(m as CarbCalculationMode);
+
+      const u = params.get("unit");
+      if (u === "us" || u === "metric") setUnitSystem(u);
+
+      const a = params.get("age");
+      if (a) setAge(Number(a));
+
+      const g = params.get("gender");
+      if (g === "male" || g === "female") setGender(g as Gender);
+
+      const ht = params.get("ht");
+      if (ht) {
+        const val = Number(ht);
+        if (u === "metric") {
+          setHeightCm(val);
+        } else {
+          setHeightFeet(Math.floor(val / 12));
+          setHeightInches(Math.round(val % 12));
+        }
+      }
+
+      const wt = params.get("wt");
+      if (wt) {
+        const val = Number(wt);
+        if (u === "metric") setWeightKg(val);
+        else setWeightLbs(val);
+      }
+
+      const act = params.get("act");
+      if (act) setActivityLevel(act as ActivityLevel);
+
+      const goalParam = params.get("goal");
+      if (goalParam) setGoal(goalParam as FitnessGoal);
+
+      const f = params.get("formula");
+      if (f) setBmrFormula(f as BmrFormulaType);
+
+      const fiber = params.get("fiber");
+      if (fiber) setDailyFiberGrams(Number(fiber));
+
+      const polyol = params.get("polyol");
+      if (polyol) setSugarAlcoholsGrams(Number(polyol));
+
+      const custom = params.get("customCarb");
+      if (custom) setCustomCarbPct(Number(custom));
+
+      const bf = params.get("bf");
+      if (bf) setBodyFat(Number(bf));
+
+      const foodParam = params.get("food");
+      if (foodParam) setSelectedFoodId(foodParam);
+
+      const servingsParam = params.get("servings");
+      if (servingsParam) setServingCount(Number(servingsParam));
+    } catch {}
+  }, []);
+
+  // Unit System Toggle preserving physical height and weight
+  const handleUnitSystemToggle = (newSys: UnitSystem) => {
+    if (newSys === unitSystem) return;
+    if (newSys === "metric") {
+      const totalInches = heightFeet * 12 + heightInches;
+      setHeightCm(Math.round(totalInches * 2.54));
+      setWeightKg(Math.round(weightLbs / 2.20462));
+    } else {
+      const totalInches = heightCm / 2.54;
+      setHeightFeet(Math.floor(totalInches / 12));
+      setHeightInches(Math.round(totalInches % 12));
+      setWeightLbs(Math.round(weightKg * 2.20462));
+    }
+    setUnitSystem(newSys);
+  };
+
+  // Reset to Baseline State
+  const handleReset = () => {
+    setCalculationMode("daily");
+    setUnitSystem("us");
+    setAge(25);
+    setGender("male");
+    setHeightFeet(5);
+    setHeightInches(10);
+    setHeightCm(178);
+    setWeightLbs(160);
+    setWeightKg(72);
+    setActivityLevel("light");
+    setGoal("maintain");
+    setBmrFormula("mifflin");
+    setBodyFat(20);
+    setDailyFiberGrams(28);
+    setSugarAlcoholsGrams(0);
+    setCustomCarbPct(50);
+    setFoodQuery("");
+    setFoodCategoryTab("All");
+    setSelectedFoodId(null);
+    setServingCount(1);
+    setActiveTab("distribution");
+  };
+
+  // Share Calculation URL
+  const handleShare = async () => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.origin + window.location.pathname);
+    url.searchParams.set("mode", calculationMode);
+    url.searchParams.set("unit", unitSystem);
+    url.searchParams.set("age", age.toString());
+    url.searchParams.set("gender", gender);
+    if (unitSystem === "metric") {
+      url.searchParams.set("ht", heightCm.toString());
+      url.searchParams.set("wt", weightKg.toString());
+    } else {
+      url.searchParams.set("ht", (heightFeet * 12 + heightInches).toString());
+      url.searchParams.set("wt", weightLbs.toString());
+    }
+    url.searchParams.set("act", activityLevel);
+    url.searchParams.set("goal", goal);
+    url.searchParams.set("formula", bmrFormula);
+    url.searchParams.set("fiber", dailyFiberGrams.toString());
+    url.searchParams.set("polyol", sugarAlcoholsGrams.toString());
+    url.searchParams.set("customCarb", customCarbPct.toString());
+    url.searchParams.set("bf", bodyFat.toString());
+    if (selectedFoodId) {
+      url.searchParams.set("food", selectedFoodId);
+      url.searchParams.set("servings", servingCount.toString());
+    }
+
+    const shareUrl = url.toString();
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(shareUrl);
+      setShared(true);
+      setTimeout(() => setShared(false), 2500);
+    }
+  };
+
+  // Scenario Save / Restore / Delete
+  const handleSaveScenario = () => {
+    const newScenario: SavedCarbScenario = {
+      id: Date.now().toString(),
+      name: `${age}y ${gender.toUpperCase()} • ${results.totalCarbGrams}g Carbs (${calculationMode})`,
+      date: new Date().toLocaleDateString(),
+      unitSystem,
+      calculationMode,
+      age,
+      gender,
+      heightFeet,
+      heightInches,
+      heightCm,
+      weightLbs,
+      weightKg,
+      activityLevel,
+      goal,
+      bmrFormula,
+      bodyFat,
+      dailyFiberGrams,
+      sugarAlcoholsGrams,
+      customCarbPct,
+      targetCalories: results.targetCalories,
+      totalCarbGrams: results.totalCarbGrams,
+      netCarbGrams: results.netCarbGrams,
+    };
+    persistScenarios([newScenario, ...savedScenarios.slice(0, 9)]);
+    setIsSavedDrawerOpen(true);
+  };
+
+  const handleRestoreScenario = (s: SavedCarbScenario) => {
+    setUnitSystem(s.unitSystem);
+    setCalculationMode(s.calculationMode);
+    setAge(s.age);
+    setGender(s.gender);
+    setHeightFeet(s.heightFeet);
+    setHeightInches(s.heightInches);
+    setHeightCm(s.heightCm);
+    setWeightLbs(s.weightLbs);
+    setWeightKg(s.weightKg);
+    setActivityLevel(s.activityLevel);
+    setGoal(s.goal);
+    setBmrFormula(s.bmrFormula);
+    setBodyFat(s.bodyFat);
+    setDailyFiberGrams(s.dailyFiberGrams);
+    setSugarAlcoholsGrams(s.sugarAlcoholsGrams);
+    setCustomCarbPct(s.customCarbPct);
+    setIsSavedDrawerOpen(false);
+  };
+
+  const handleDeleteScenario = (id: string) => {
+    persistScenarios(savedScenarios.filter((s) => s.id !== id));
+  };
+
   // CSV Export Handler
   const handleExportCSV = () => {
     let csvContent = "data:text/csv;charset=utf-8,";
@@ -177,7 +428,11 @@ export function CarbohydrateCalculator() {
     csvContent += `Total Carbohydrates,${results.totalCarbGrams} g (${results.totalCarbCalories} kcal)\n`;
     csvContent += `Dietary Fiber,${results.fiberGrams} g\n`;
     csvContent += `Net Carbohydrates,${results.netCarbGrams} g\n`;
-    csvContent += `Glycemic Load,${results.glycemicLoad} (${results.glycemicRating})\n\n`;
+    csvContent += `Selected Food,${results.selectedFood ? results.selectedFood.name : "N/A"}\n`;
+    csvContent += `Serving,${results.selectedFood ? `${results.selectedFood.servingCount} x ${results.selectedFood.servingSize}` : "N/A"}\n`;
+    csvContent += `Available Carbs (g),${results.selectedFood ? results.selectedFood.netCarbs : "N/A"}\n`;
+    csvContent += `Glycemic Index (GI),${results.selectedFood ? results.selectedFood.gi : "N/A"}\n`;
+    csvContent += `Glycemic Load (GL),${results.selectedFood ? results.selectedFood.gl : "N/A"}\n\n`;
 
     csvContent += "Food Item,Category,Serving Size,Total Carbs (g),Fiber (g),Net Carbs (g),Calories (kcal),Glycemic Index (GI),GI Category,Glycemic Load (GL)\n";
     results.foodGiDatabase.forEach((food) => {
@@ -195,7 +450,11 @@ export function CarbohydrateCalculator() {
 
   // Copy Summary Handler
   const handleCopy = () => {
-    const summaryText = `Carbohydrate Calculator Results:\n• Target Daily Carbs: ${results.totalCarbGrams}g (${results.totalCarbCalories} kcal, ${results.carbPercentage}% of calories)\n• Net Carbs: ${results.netCarbGrams}g (after ${results.fiberGrams}g fiber)\n• Glycemic Load: ${results.glycemicLoad} (${results.glycemicRating})\n• Target Calories: ${results.targetCalories} kcal/day | TDEE: ${results.tdee} kcal\nCalculated at Calculator Platform.`;
+    const glLine = results.selectedFood
+      ? `• Selected Food: ${results.selectedFood.name} (${results.selectedFood.servingCount} × ${results.selectedFood.servingSize})\n• Available Carbs: ${results.selectedFood.netCarbs}g | GI: ${results.selectedFood.gi} (${results.selectedFood.giCategory})\n• Glycemic Load: ${results.selectedFood.gl} (${results.selectedFood.glCategory})`
+      : `• Glycemic Load: N/A (food serving not selected)`;
+
+    const summaryText = `Carbohydrate Calculator Results:\n• Target Daily Carbs: ${results.totalCarbGrams}g (${results.totalCarbCalories} kcal, ${results.carbPercentage}% of calories)\n• Net Carbs: ${results.netCarbGrams}g (after ${results.fiberGrams}g fiber)\n${glLine}\n• Target Calories: ${results.targetCalories} kcal/day | TDEE: ${results.tdee} kcal\nCalculated at Calculator Platform.`;
     navigator.clipboard.writeText(summaryText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
@@ -236,8 +495,10 @@ export function CarbohydrateCalculator() {
       },
       {
         label: "Glycemic Load",
-        value: `${results.glycemicLoad}`,
-        subtitle: results.glycemicRating,
+        value: results.selectedFood ? `${results.selectedFood.gl}` : "N/A",
+        subtitle: results.selectedFood
+          ? `${results.selectedFood.glCategory} (${results.selectedFood.name})`
+          : "N/A (food serving not selected)",
         colorTheme: "purple",
       },
       {
@@ -259,6 +520,16 @@ export function CarbohydrateCalculator() {
           { label: "Basal Metabolic Rate (BMR)", value: `${results.bmr} kcal` },
           { label: "Total Energy Expenditure (TDEE)", value: `${results.tdee} kcal` },
           { label: "Carb Range Target", value: `${results.targetCarbRangeMin}g - ${results.targetCarbRangeMax}g / day` },
+        ],
+      },
+      {
+        title: "Selected Food Glycemic Profile",
+        items: [
+          { label: "Food Selected", value: results.selectedFood ? results.selectedFood.name : "N/A (No food selected)" },
+          { label: "Serving Count & Size", value: results.selectedFood ? `${results.selectedFood.servingCount} × ${results.selectedFood.servingSize}` : "N/A" },
+          { label: "Available Carbs Basis", value: results.selectedFood ? `${results.selectedFood.netCarbs} g` : "N/A" },
+          { label: "Glycemic Index (GI)", value: results.selectedFood ? `${results.selectedFood.gi} (${results.selectedFood.giCategory})` : "N/A" },
+          { label: "Glycemic Load (GL)", value: results.selectedFood ? `${results.selectedFood.gl} (${results.selectedFood.glCategory})` : "N/A" },
         ],
       },
       {
@@ -347,7 +618,7 @@ export function CarbohydrateCalculator() {
             {/* Unit System Toggle */}
             <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
               <button
-                onClick={() => setUnitSystem("us")}
+                onClick={() => handleUnitSystemToggle("us")}
                 className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
                   unitSystem === "us"
                     ? "bg-white text-cyan-700 shadow-xs"
@@ -357,7 +628,7 @@ export function CarbohydrateCalculator() {
                 US (lbs/ft)
               </button>
               <button
-                onClick={() => setUnitSystem("metric")}
+                onClick={() => handleUnitSystemToggle("metric")}
                 className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
                   unitSystem === "metric"
                     ? "bg-white text-cyan-700 shadow-xs"
@@ -372,10 +643,11 @@ export function CarbohydrateCalculator() {
           {/* Basic Input Fields */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">
+              <label htmlFor="carb-age" className="block text-sm font-semibold text-slate-700 mb-1">
                 Age (Years)
               </label>
               <input
+                id="carb-age"
                 type="number"
                 min={15}
                 max={80}
@@ -386,10 +658,11 @@ export function CarbohydrateCalculator() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">
+              <label htmlFor="carb-gender" className="block text-sm font-semibold text-slate-700 mb-1">
                 Gender
               </label>
               <select
+                id="carb-gender"
                 value={gender}
                 onChange={(e) => setGender(e.target.value as Gender)}
                 className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
@@ -404,10 +677,11 @@ export function CarbohydrateCalculator() {
           {unitSystem === "us" ? (
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label htmlFor="carb-ht-ft" className="block text-xs font-semibold text-slate-700 mb-1">
                   Height (Feet)
                 </label>
                 <input
+                  id="carb-ht-ft"
                   type="number"
                   min={4}
                   max={7}
@@ -417,10 +691,11 @@ export function CarbohydrateCalculator() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label htmlFor="carb-ht-in" className="block text-xs font-semibold text-slate-700 mb-1">
                   Height (Inches)
                 </label>
                 <input
+                  id="carb-ht-in"
                   type="number"
                   min={0}
                   max={11}
@@ -430,10 +705,11 @@ export function CarbohydrateCalculator() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label htmlFor="carb-wt-lbs" className="block text-xs font-semibold text-slate-700 mb-1">
                   Weight (lbs)
                 </label>
                 <input
+                  id="carb-wt-lbs"
                   type="number"
                   min={70}
                   max={400}
@@ -446,10 +722,11 @@ export function CarbohydrateCalculator() {
           ) : (
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">
+                <label htmlFor="carb-ht-cm" className="block text-sm font-semibold text-slate-700 mb-1">
                   Height (cm)
                 </label>
                 <input
+                  id="carb-ht-cm"
                   type="number"
                   min={120}
                   max={220}
@@ -459,10 +736,11 @@ export function CarbohydrateCalculator() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">
+                <label htmlFor="carb-wt-kg" className="block text-sm font-semibold text-slate-700 mb-1">
                   Weight (kg)
                 </label>
                 <input
+                  id="carb-wt-kg"
                   type="number"
                   min={35}
                   max={200}
@@ -477,10 +755,11 @@ export function CarbohydrateCalculator() {
           {/* Activity & Goal Selection */}
           <div className="space-y-4 border-t border-slate-100 pt-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label htmlFor="carb-activity" className="block text-xs font-semibold text-slate-700 mb-1">
                 Activity Level
               </label>
               <select
+                id="carb-activity"
                 value={activityLevel}
                 onChange={(e) => setActivityLevel(e.target.value as ActivityLevel)}
                 className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
@@ -494,10 +773,11 @@ export function CarbohydrateCalculator() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label htmlFor="carb-goal" className="block text-xs font-semibold text-slate-700 mb-1">
                 Fitness Goal
               </label>
               <select
+                id="carb-goal"
                 value={goal}
                 onChange={(e) => setGoal(e.target.value as FitnessGoal)}
                 className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white"
@@ -521,10 +801,11 @@ export function CarbohydrateCalculator() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1">
+                <label htmlFor="carb-fiber" className="block text-xs font-medium text-slate-600 mb-1">
                   Daily Fiber (g)
                 </label>
                 <input
+                  id="carb-fiber"
                   type="number"
                   min={10}
                   max={80}
@@ -535,10 +816,11 @@ export function CarbohydrateCalculator() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-600 mb-1">
+                <label htmlFor="carb-polyol" className="block text-xs font-medium text-slate-600 mb-1">
                   Sugar Alcohols (g)
                 </label>
                 <input
+                  id="carb-polyol"
                   type="number"
                   min={0}
                   max={50}
@@ -573,7 +855,9 @@ export function CarbohydrateCalculator() {
                 <span
                   className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white/20 backdrop-blur-md text-white border border-white/30 shadow-sm"
                 >
-                  GL: {results.glycemicLoad} ({results.glycemicRating})
+                  {results.selectedFood
+                    ? `GL: ${results.selectedFood.gl} (${results.selectedFood.glCategory} — ${results.selectedFood.name})`
+                    : "GL: N/A (Select Food Below)"}
                 </span>
               </div>
             </div>
@@ -583,7 +867,7 @@ export function CarbohydrateCalculator() {
               <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20 text-center">
                 <div className="text-[11px] text-cyan-100 font-semibold uppercase">Net Carbs</div>
                 <div className="text-xl font-black text-white mt-0.5">{results.netCarbGrams} g</div>
-                <div className="text-[10px] text-cyan-100">Excludes {results.fiberGrams}g fiber</div>
+                <div className="text-[10px] text-cyan-100">Dietary Tracking Convention</div>
               </div>
 
               <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20 text-center">
@@ -603,16 +887,16 @@ export function CarbohydrateCalculator() {
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/20 pt-4 print:hidden">
               <button
                 onClick={() => setIsReportOpen(true)}
-                className="flex items-center gap-2 bg-white text-cyan-800 hover:bg-cyan-50 px-4 py-2 rounded-xl text-xs font-bold shadow-md transition-all"
+                className="flex items-center gap-2 bg-white text-cyan-800 hover:bg-cyan-50 px-4 py-2 rounded-xl text-xs font-bold shadow-md transition-all cursor-pointer"
               >
                 <Download className="w-4 h-4 text-cyan-600" />
                 Generate PDF Report
               </button>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={handleExportCSV}
-                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
+                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all cursor-pointer"
                   title="Export CSV Data"
                 >
                   <FileSpreadsheet className="w-4 h-4" />
@@ -621,14 +905,39 @@ export function CarbohydrateCalculator() {
 
                 <button
                   onClick={handleCopy}
-                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
+                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all cursor-pointer"
                   title="Copy Summary"
                 >
-                  <Copy className="w-4 h-4" />
+                  {copied ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
                   {copied ? "Copied!" : "Copy"}
                 </button>
 
-                
+                <button
+                  onClick={handleShare}
+                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all cursor-pointer"
+                  title="Share Calculation URL"
+                >
+                  {shared ? <Check className="w-4 h-4 text-emerald-300" /> : <Share2 className="w-4 h-4" />}
+                  {shared ? "Link Copied!" : "Share"}
+                </button>
+
+                <button
+                  onClick={handleSaveScenario}
+                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all cursor-pointer"
+                  title="Save Scenario"
+                >
+                  <Bookmark className="w-4 h-4" />
+                  Save {savedScenarios.length > 0 ? `(${savedScenarios.length})` : ""}
+                </button>
+
+                <button
+                  onClick={handleReset}
+                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all cursor-pointer"
+                  title="Reset to Defaults"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Reset
+                </button>
               </div>
             </div>
           </div>
@@ -855,13 +1164,78 @@ export function CarbohydrateCalculator() {
                   </div>
                 </div>
 
+                {/* Active Food & Glycemic Load Calculation Card */}
+                {results.selectedFood ? (
+                  <div className="p-4 bg-cyan-50/80 rounded-xl border border-cyan-200 text-xs space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-cyan-200/60 pb-2">
+                      <div className="font-bold text-cyan-950 text-sm flex items-center gap-2">
+                        <span>Selected Food:</span>
+                        <span className="text-cyan-700 font-extrabold">{results.selectedFood.name}</span>
+                        <span className="text-[10px] bg-cyan-200/60 text-cyan-800 px-2 py-0.5 rounded-full font-semibold">
+                          {results.selectedFood.category}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => setSelectedFoodId(null)}
+                        className="text-xs text-rose-600 hover:text-rose-800 font-semibold underline cursor-pointer"
+                      >
+                        Clear Selection (Reset GL to N/A)
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      <div className="bg-white p-2.5 rounded-lg border border-cyan-200/60">
+                        <label htmlFor="carb-servings" className="block text-[10px] uppercase font-bold text-slate-500 mb-1">
+                          Servings Count
+                        </label>
+                        <div className="flex items-center gap-1.5">
+                          <input
+                            id="carb-servings"
+                            type="number"
+                            min={0.25}
+                            max={10}
+                            step={0.25}
+                            value={servingCount}
+                            onChange={(e) => setServingCount(Math.max(0.25, Number(e.target.value)))}
+                            className="w-16 bg-slate-50 border border-slate-300 rounded px-2 py-1 text-xs font-bold text-slate-900"
+                          />
+                          <span className="text-[10px] text-slate-500 truncate">{results.selectedFood.servingSize}</span>
+                        </div>
+                      </div>
+
+                      <div className="bg-white p-2.5 rounded-lg border border-cyan-200/60">
+                        <div className="text-[10px] uppercase font-bold text-slate-500">Available Carbs</div>
+                        <div className="text-sm font-extrabold text-cyan-700 mt-0.5">{results.selectedFood.netCarbs} g</div>
+                        <div className="text-[10px] text-slate-400">Total: {results.selectedFood.totalCarbs}g, Fiber: {results.selectedFood.fiber}g</div>
+                      </div>
+
+                      <div className="bg-white p-2.5 rounded-lg border border-cyan-200/60">
+                        <div className="text-[10px] uppercase font-bold text-slate-500">Glycemic Index (GI)</div>
+                        <div className="text-sm font-extrabold text-slate-900 mt-0.5">{results.selectedFood.gi}</div>
+                        <div className="text-[10px] text-emerald-600 font-semibold">{results.selectedFood.giCategory} GI</div>
+                      </div>
+
+                      <div className="bg-cyan-600 text-white p-2.5 rounded-lg border border-cyan-700">
+                        <div className="text-[10px] uppercase font-bold text-cyan-100">Calculated GL</div>
+                        <div className="text-base font-black mt-0.5">{results.selectedFood.gl}</div>
+                        <div className="text-[10px] text-cyan-100 font-semibold">{results.selectedFood.glCategory} Glycemic Load</div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 text-xs text-slate-600 flex items-center justify-between">
+                    <span>Click any food in the table below to calculate its portion-specific Glycemic Load.</span>
+                    <span className="font-semibold text-slate-400 bg-slate-200/60 px-2 py-0.5 rounded text-[11px]">GL: N/A</span>
+                  </div>
+                )}
+
                 {/* Category Filter Tabs */}
                 <div className="flex items-center gap-1.5 overflow-x-auto text-xs pb-1">
                   {["All", "Fruits", "Vegetables", "Whole Grains", "Legumes", "Snacks & Beverages"].map((cat) => (
                     <button
                       key={cat}
                       onClick={() => setFoodCategoryTab(cat)}
-                      className={`px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                      className={`px-3 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-all cursor-pointer ${
                         foodCategoryTab === cat
                           ? "bg-cyan-600 text-white shadow-xs"
                           : "bg-slate-100 text-slate-600 hover:text-slate-900"
@@ -887,29 +1261,43 @@ export function CarbohydrateCalculator() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-200">
-                      {filteredFoods.map((item) => (
-                        <tr key={item.id} className="hover:bg-cyan-50/40">
-                          <td className="p-3 font-bold text-slate-900">{item.name}</td>
-                          <td className="p-3 text-slate-600">{item.servingSize}</td>
-                          <td className="p-3 font-bold text-cyan-700">{item.totalCarbs} g</td>
-                          <td className="p-3 font-bold text-emerald-700">{item.fiber} g</td>
-                          <td className="p-3 font-bold text-blue-700">{item.netCarbs} g</td>
-                          <td className="p-3 font-bold">
-                            <span
-                              className={`px-2 py-0.5 rounded-full text-[10px] ${
-                                item.giCategory === "Low"
-                                  ? "bg-emerald-100 text-emerald-800"
-                                  : item.giCategory === "Medium"
-                                  ? "bg-amber-100 text-amber-800"
-                                  : "bg-rose-100 text-rose-800"
-                              }`}
-                            >
-                              {item.gi} ({item.giCategory})
-                            </span>
-                          </td>
-                          <td className="p-3 font-bold text-slate-900">{item.gl}</td>
-                        </tr>
-                      ))}
+                      {filteredFoods.map((item) => {
+                        const isSelected = selectedFoodId === item.id || (results.selectedFood && results.selectedFood.id === item.id);
+                        return (
+                          <tr
+                            key={item.id}
+                            onClick={() => setSelectedFoodId(isSelected ? null : item.id)}
+                            className={`cursor-pointer transition-colors ${
+                              isSelected ? "bg-cyan-50/90 font-bold border-l-4 border-cyan-500" : "hover:bg-cyan-50/40"
+                            }`}
+                          >
+                            <td className="p-3 text-slate-900 flex items-center gap-2">
+                              <span className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${isSelected ? "border-cyan-600 bg-cyan-600 text-white" : "border-slate-300"}`}>
+                                {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
+                              </span>
+                              {item.name}
+                            </td>
+                            <td className="p-3 text-slate-600">{item.servingSize}</td>
+                            <td className="p-3 font-bold text-cyan-700">{item.totalCarbs} g</td>
+                            <td className="p-3 font-bold text-emerald-700">{item.fiber} g</td>
+                            <td className="p-3 font-bold text-blue-700">{item.netCarbs} g</td>
+                            <td className="p-3 font-bold">
+                              <span
+                                className={`px-2 py-0.5 rounded-full text-[10px] ${
+                                  item.giCategory === "Low"
+                                    ? "bg-emerald-100 text-emerald-800"
+                                    : item.giCategory === "Medium"
+                                    ? "bg-amber-100 text-amber-800"
+                                    : "bg-rose-100 text-rose-800"
+                                }`}
+                              >
+                                {item.gi} ({item.giCategory})
+                              </span>
+                            </td>
+                            <td className="p-3 font-bold text-slate-900">{item.gl}</td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -988,6 +1376,55 @@ export function CarbohydrateCalculator() {
               ))}
             </div>
           </div>
+
+          {/* Saved Scenarios Panel */}
+          {savedScenarios.length > 0 && (
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 print:hidden">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">
+                  <Bookmark className="w-4 h-4 text-cyan-600" />
+                  Saved Calculations ({savedScenarios.length})
+                </h3>
+                <button
+                  onClick={() => persistScenarios([])}
+                  className="text-xs text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
+                >
+                  Clear All
+                </button>
+              </div>
+
+              <div className="space-y-2 max-h-60 overflow-y-auto">
+                {savedScenarios.map((sc) => (
+                  <div
+                    key={sc.id}
+                    className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between gap-3 text-xs"
+                  >
+                    <div>
+                      <div className="font-bold text-slate-900">{sc.name}</div>
+                      <div className="text-[11px] text-slate-500">
+                        {sc.date} • {sc.totalCarbGrams}g Carbs ({sc.targetCalories} kcal) • Net: {sc.netCarbGrams}g
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={() => handleRestoreScenario(sc)}
+                        className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-lg transition-colors cursor-pointer"
+                      >
+                        Restore
+                      </button>
+                      <button
+                        onClick={() => handleDeleteScenario(sc.id)}
+                        className="p-1 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
+                        title="Delete Scenario"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

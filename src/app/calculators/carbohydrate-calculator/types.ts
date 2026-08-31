@@ -47,6 +47,8 @@ export interface CarbInputParams {
   dailyFiberGrams?: number;
   sugarAlcoholsGrams?: number;
   customCarbPct?: number;
+  selectedFoodId?: string | null;
+  servingCount?: number;
 }
 
 export interface MacroNutrientSummary {
@@ -78,6 +80,21 @@ export interface FoodGiDatabaseItem {
   gl: number;
 }
 
+export interface SelectedFoodMetrics {
+  id: string;
+  name: string;
+  category: string;
+  servingSize: string;
+  servingCount: number;
+  totalCarbs: number;
+  fiber: number;
+  netCarbs: number;
+  gi: number;
+  giCategory: "Low" | "Medium" | "High";
+  gl: number;
+  glCategory: string;
+}
+
 export interface CarbohydrateCalculationResults {
   mode: CarbCalculationMode;
   unitSystem: UnitSystem;
@@ -95,8 +112,9 @@ export interface CarbohydrateCalculationResults {
   netCarbGrams: number;
   targetCarbRangeMin: number;
   targetCarbRangeMax: number;
-  glycemicLoad: number;
-  glycemicRating: "Low Glycemic Impact" | "Moderate Glycemic Impact" | "High Glycemic Impact";
+  glycemicLoad: number | null;
+  glycemicRating: string;
+  selectedFood: SelectedFoodMetrics | null;
 
   // Protein & Fat Splits
   protein: MacroNutrientSummary;
@@ -123,7 +141,8 @@ export interface CarbohydrateCalculatorOutputs extends Record<string, any> {
   targetCalories: number;
   totalCarbGrams: number;
   netCarbGrams: number;
-  glycemicLoad: number;
+  glycemicLoad: number | null;
   tdee: number;
   bmr: number;
+  selectedFood?: SelectedFoodMetrics | null;
 }

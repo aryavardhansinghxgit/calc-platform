@@ -5,163 +5,123 @@ export interface FAQItem {
 
 export const carbohydrate_calculatorFaqs: FAQItem[] = [
   {
-    question: "What is a carbohydrate calculator?",
-    answer: "A carbohydrate calculator is an advanced nutrition tool that estimates your total daily energy expenditure (TDEE) and determines your recommended daily intake of carbohydrates in grams, calories, and percentage share tailored to your fitness goals."
+    question: "How many carbs should I eat per day?",
+    answer:
+      "There is no single carbohydrate target that applies to everyone. A useful starting point depends on your calorie requirement, activity level, fitness goal and chosen macronutrient distribution. This calculator estimates grams from those inputs.",
   },
   {
-    question: "How many grams of carbohydrates should I eat per day?",
-    answer: "The Acceptable Macronutrient Distribution Range (AMDR) recommends that carbohydrates comprise 45% to 65% of total daily calories for standard healthy adults (typically 225 to 325 grams/day on a 2,000 kcal diet). Active athletes may require 5 to 10g per kg of body weight."
+    question: "How does a carbohydrate calculator work?",
+    answer:
+      "The calculator first estimates energy needs, applies the selected goal and carbohydrate allocation, and converts the resulting carbohydrate calories into grams using approximately 4 kcal per gram.",
   },
   {
-    question: "What are net carbs?",
-    answer: "Net carbs represent the digestible carbohydrates that directly impact blood sugar and insulin levels. They are calculated as: Net Carbs = Total Carbohydrates - Dietary Fiber - Sugar Alcohols."
+    question: "How many carbs should I eat to lose weight?",
+    answer:
+      "Weight loss generally requires a sustained calorie deficit. The carbohydrate portion of that calorie intake can vary. Some people prefer lower carbohydrate intake, while others perform better with moderate or higher carbohydrate intake. The calculator lets you model different approaches.",
   },
   {
-    question: "What is Glycemic Index (GI)?",
-    answer: "The Glycemic Index (GI) ranks carbohydrate-containing foods on a scale from 0 to 100 based on how rapidly they raise blood glucose levels compared to pure glucose (GI 100)."
+    question: "How many carbs should I eat to gain muscle?",
+    answer:
+      "Muscle gain usually involves adequate energy, protein, resistance training and recovery. Carbohydrates can provide useful training fuel, particularly when training volume is high. Your carbohydrate target can therefore be increased while maintaining an appropriate overall calorie and protein plan.",
   },
   {
-    question: "What is Glycemic Load (GL)?",
-    answer: "Glycemic Load (GL) measures both the quality (GI) and the quantity of carbohydrates in a serving. It is calculated as: GL = (Glycemic Index × Net Carbs in grams) / 100."
+    question: "What is the difference between total carbs and net carbs?",
+    answer:
+      "Total carbohydrate is the carbohydrate quantity reported on the Nutrition Facts label. “Net carbs” is a commonly used tracking convention that often subtracts fiber and some sugar alcohols from total carbohydrate. The term does not have a legal standardized definition.",
   },
   {
-    question: "What is the difference between simple and complex carbohydrates?",
-    answer: "Simple carbohydrates (sugars) consist of 1 or 2 sugar molecules and digest rapidly, spiking blood sugar. Complex carbohydrates (starches and fibers) consist of long molecular chains that digest slowly, providing sustained energy."
+    question: "Is 130 grams of carbs per day the ideal amount?",
+    answer:
+      "No. The 130 g/day adult carbohydrate RDA is a Dietary Reference Intake value, not a universal personalized target. Individual needs can be higher or lower depending on energy intake, activity and other factors.",
   },
   {
-    question: "What are good carbs vs bad carbs?",
-    answer: "Good carbs are whole, unrefined foods rich in fiber, vitamins, and minerals (oats, legumes, berries, sweet potatoes). 'Bad' or refined carbs are heavily processed foods stripped of fiber (white flour, sugary sodas, candy)."
+    question: "What is the 45–65% carbohydrate range?",
+    answer:
+      "The 45–65% range is the traditional adult Acceptable Macronutrient Distribution Range in the U.S. Dietary Reference Intake framework. It describes a population-level distribution range, not a requirement that every person consume carbohydrates within that exact percentage.",
   },
   {
-    question: "Are carbohydrates essential for survival?",
-    answer: "Technically, carbohydrates are not essential nutrients because the liver can produce glucose from amino acids and glycerol through gluconeogenesis. However, carbohydrates are the most efficient fuel source for brain function and high-intensity exercise."
+    question: "What is the FDA Daily Value for carbohydrates?",
+    answer:
+      "The FDA currently lists 275 g as the Daily Value for total carbohydrate, based on a 2,000-calorie reference diet. Individual calorie and nutrient needs may be different.",
   },
   {
-    question: "How many carbs should I eat for weight loss?",
-    answer: "For weight loss, a moderate carb reduction (30% to 40% of calories, or 100 to 150g/day) or a low-carb diet (50 to 100g/day) helps lower baseline insulin, promoting fat oxidation while maintaining satiety."
+    question: "What is glycemic load?",
+    answer:
+      "Glycemic load combines a food's glycemic index with the amount of available carbohydrate in the serving. A commonly used equation is GI × available carbohydrate ÷ 100.",
   },
   {
-    question: "How many carbs do athletes need?",
-    answer: "Endurance and strength athletes require 5 to 8 grams of carbs per kg of body weight per day (and up to 8 to 12g/kg for extreme endurance events) to maintain muscle glycogen stores and peak athletic output."
+    question: "Does glycemic load depend on serving size?",
+    answer:
+      "Yes. Because GL incorporates the amount of available carbohydrate consumed, changing the serving amount can change GL even when the food's GI remains the same.",
   },
   {
-    question: "What is carb cycling?",
-    answer: "Carb cycling is an eating strategy that alternates between high-carb days (on heavy workout days), medium-carb days, and low-carb days (on rest days) to optimize insulin sensitivity, fat loss, and muscle recovery."
+    question: "Does this calculator assign one glycemic load to my whole diet?",
+    answer:
+      "No. Glycemic load in this calculator is food- and serving-specific. When no food is selected, the calculator does not create a fictional daily GL number.",
   },
   {
-    question: "Why does the brain need carbohydrates?",
-    answer: "The human brain consumes approximately 120 grams of glucose per day (representing ~20% of resting metabolic energy). If carbs are restricted, the brain adapts to utilize ketone bodies for energy."
+    question: "What is a low-carb diet?",
+    answer:
+      "Low-carb describes a broad family of dietary patterns with carbohydrate intake below a person's usual intake. There is no single universally applicable threshold for every dietary purpose. Ketogenic diets are generally much lower in carbohydrate than ordinary lower-carb diets.",
   },
   {
-    question: "How much dietary fiber do I need daily?",
-    answer: "The clinical recommendation is 14 grams of dietary fiber per 1,000 calories consumed—typically 25 to 30 grams per day for women and 38 grams per day for men."
+    question: "Is a low-carb diet better for weight loss?",
+    answer:
+      "Not automatically. Weight loss depends substantially on sustained energy balance and adherence. Lower-carb diets can work well for some people, while other people prefer moderate or higher carbohydrate intake.",
   },
   {
-    question: "Does eating carbs at night cause fat gain?",
-    answer: "No. Fat gain is dictated by your 24-hour total energy balance (calorie surplus), not the specific hour you consume carbohydrates."
+    question: "What is a ketogenic diet?",
+    answer:
+      "A ketogenic diet is a very-low-carbohydrate dietary pattern intended to promote nutritional ketosis. Achieving ketosis is not determined solely by a carbohydrate calculator because individual physiology, activity, fasting and total food intake also matter.",
   },
   {
-    question: "What are sugar alcohols?",
-    answer: "Sugar alcohols (polyols like erythritol, xylitol, and maltitol) are low-calorie sweeteners that are incomplete digested by the gut, resulting in minimal blood sugar spikes."
+    question: "Should athletes eat more carbohydrates?",
+    answer:
+      "Athletes with greater training demands often have higher carbohydrate requirements, especially during prolonged endurance work. Sports nutrition recommendations are commonly expressed in grams per kilogram and adjusted to training load.",
   },
   {
-    question: "What foods have low Glycemic Index (GI ≤ 55)?",
-    answer: "Low GI foods include rolled oats, quinoa, lentils, chickpeas, apples, berries, broccoli, non-fat Greek yogurt, and green leafy vegetables."
+    question: "What is carbohydrate cycling?",
+    answer:
+      "Carbohydrate cycling varies carbohydrate intake across different days, often according to training demand. It is a planning strategy rather than a requirement for weight loss or muscle gain.",
   },
   {
-    question: "What foods have high Glycemic Index (GI ≥ 70)?",
-    answer: "High GI foods include white bread, white rice, baked potatoes, watermelon, pretzels, sugary breakfast cereals, and sodas."
+    question: "Are all carbohydrate foods equally healthy?",
+    answer:
+      "No. Carbohydrate quality matters. WHO guidance emphasizes whole grains, vegetables, fruits and pulses and highlights dietary fiber and overall carbohydrate quality.",
   },
   {
-    question: "How does insulin relate to carbohydrate intake?",
-    answer: "When carbohydrates are digested into glucose, the pancreas secretes insulin to transport glucose into cells for immediate energy or muscle/liver glycogen storage."
+    question: "Does fiber count as carbohydrate?",
+    answer:
+      "Yes. Dietary fiber is included within total carbohydrate on the U.S. Nutrition Facts label, even though it differs physiologically from digestible carbohydrate.",
   },
   {
-    question: "What is muscle glycogen?",
-    answer: "Glycogen is the stored form of glucose in skeletal muscle and liver tissue. The body stores approximately 400 to 500 grams of glycogen (~1,600 to 2,000 kcal)."
+    question: "Should I subtract all sugar alcohols from total carbs?",
+    answer:
+      "Not necessarily. Sugar alcohols differ in absorption and metabolism, so completely subtracting every sugar alcohol is an approximation used in some tracking systems.",
   },
   {
-    question: "What is gluconeogenesis?",
-    answer: "Gluconeogenesis is the metabolic pathway by which the liver converts non-carbohydrate substrates (amino acids, lactate, glycerol) into glucose during carbohydrate restriction or fasting."
+    question: "Why does my carb target change when I change my BMR formula?",
+    answer:
+      "Different BMR equations can produce different estimates of resting energy expenditure. Because the carbohydrate target may be derived from the resulting calorie requirement, changing the BMR equation can change the final carbohydrate number.",
   },
   {
-    question: "Why do I gain water weight when eating more carbs?",
-    answer: "Each 1 gram of stored muscle glycogen binds with approximately 3 to 4 grams of water molecules. Increasing carb intake temporarily increases transient hydration weight."
+    question: "Why does my calculated carb target differ from another calculator?",
+    answer:
+      "Different calculators may use different BMR equations, activity multipliers, calorie assumptions, carbohydrate percentages, rounding conventions and dietary definitions. Compare the methodology, not just the final number.",
   },
   {
-    question: "Can carbohydrates cause type 2 diabetes?",
-    answer: "Carbohydrates themselves do not directly cause diabetes. Chronic calorie surpluses, obesity, lack of exercise, and high intake of refined sugars contribute to insulin resistance over time."
+    question: "Should I follow my calculator result exactly?",
+    answer:
+      "No. Treat it as a starting estimate. Your actual response over time—body-weight trend, training performance, hunger, recovery and adherence—can help determine whether the target should be adjusted.",
   },
   {
-    question: "What is the carb recommendation for a keto diet?",
-    answer: "A strict ketogenic diet restricts total net carbohydrates to under 20 to 50 grams per day (or ~5% of total daily calories) to induce metabolic ketosis."
+    question: "Does eating fewer carbohydrates automatically mean eating fewer calories?",
+    answer:
+      "No. Reducing carbohydrate calories does not necessarily reduce total calorie intake if those calories are replaced with fat or protein.",
   },
   {
-    question: "What are resistant starches?",
-    answer: "Resistant starches act like soluble fiber, resisting digestion in the small intestine and fermenting in the large intestine to produce beneficial short-chain fatty acids (butyrate)."
+    question: "Can I use this calculator for diabetes?",
+    answer:
+      "The calculator can provide general carbohydrate estimates, but it should not replace individualized diabetes education or medical advice. The ADA recommends attention to total carbohydrate rather than relying on the non-standardized “net carbs” term.",
   },
-  {
-    question: "How do I calculate total daily carb calories?",
-    answer: "Multiply total carbohydrate grams by 4 (since carbohydrates contain 4 calories per gram). Example: 250g carbs × 4 = 1,000 carb calories."
-  },
-  {
-    question: "What is the Minimum Daily Carbohydrate Intake for adults?",
-    answer: "The Institute of Medicine (IOM) sets the Recommended Dietary Allowance (RDA) minimum at 130 grams per day to ensure adequate brain glucose supply."
-  },
-  {
-    question: "How do carbs affect thyroid function?",
-    answer: "Prolonged severe carbohydrate restriction can decrease active thyroid hormone (T3) levels in some individuals, potentially slowing metabolic rate."
-  },
-  {
-    question: "What is carb loading?",
-    answer: "Carb loading is an athletic strategy of maximizing muscle glycogen stores by consuming 8 to 12g/kg of carbs 1 to 3 days prior to an endurance event (like a marathon)."
-  },
-  {
-    question: "Should diabetics count total carbs or net carbs?",
-    answer: "Diabetics should consult their endocrinologist or certified diabetes educator. Many clinical protocols track total carbohydrates for insulin dosing calculations."
-  },
-  {
-    question: "What are the best healthy carbohydrate sources?",
-    answer: "Top healthy sources include sweet potatoes, oats, quinoa, brown rice, black beans, lentils, blueberries, apples, broccoli, and winter squash."
-  },
-  {
-    question: "Why do low-carb diets cause rapid initial weight loss?",
-    answer: "Initial low-carb weight loss is predominantly water weight shed as muscle glycogen stores are depleted (releasing 3-4g of bound water per gram of glycogen)."
-  },
-  {
-    question: "What is the difference between BMR and TDEE?",
-    answer: "BMR is your baseline calories burned at rest. TDEE includes BMR plus calories burned through daily movement, step count, exercise, and food digestion."
-  },
-  {
-    question: "How does fiber help with cholesterol management?",
-    answer: "Soluble fiber binds to bile acids in the digestive system, promoting their excretion and encouraging the liver to pull LDL cholesterol from the bloodstream."
-  },
-  {
-    question: "Can I build muscle on a low-carb diet?",
-    answer: "Yes, as long as total daily calories and protein targets are met. However, carbohydrates optimize training intensity, volume, and muscle glycogen replenishment."
-  },
-  {
-    question: "What is the Thermic Effect of Carbohydrates?",
-    answer: "The Thermic Effect of Food (TEF) for carbohydrates is approximately 5% to 10%, meaning 5-10% of carb calories are consumed during digestion and processing."
-  },
-  {
-    question: "How often should I recalculate my carb targets?",
-    answer: "Recalculate your carb targets every time your body weight changes by 5 to 10 lbs or when your weekly workout volume or fitness goal shifts."
-  },
-  {
-    question: "What are empty calorie carbohydrates?",
-    answer: "Empty calorie carbohydrates refer to foods high in sugar or refined flour that provide energy (calories) but lack essential fiber, vitamins, and minerals."
-  },
-  {
-    question: "How do I track carbs using a digital food scale?",
-    answer: "Weigh food raw or cooked in grams, look up the raw/cooked entry in our database, and multiply by the carbohydrate percentage to find exact grams."
-  },
-  {
-    question: "What is the difference between high GI and high GL?",
-    answer: "High GI means a food spikes blood sugar rapidly per gram. High GL means a typical serving size contains enough total digestible carbs to cause a high blood sugar impact."
-  },
-  {
-    question: "Why is Calculator.net's carbohydrate calculator less advanced than this tool?",
-    answer: "Calculator.net provides static formulas with basic outputs. Our suite offers 10 modes, 5 BMR formulas, Net Carbs calculation, Glycemic Index/Load analysis, 7-day Carb Cycling schedules, searchable 40+ food GI database, and PDF reports."
-  }
 ];

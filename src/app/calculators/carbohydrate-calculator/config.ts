@@ -9,7 +9,7 @@ export const carbohydrate_calculatorConfig: CalculatorModuleDefinition = {
   category: "Health",
   subcategory: "Nutrition & Health",
   description:
-    "Calculate your exact daily carbohydrate requirements, net carbs, glycemic load, and 7-day carb cycling schedule across 10 modes and 5 BMR formulas. Includes searchable food GI database.",
+    "Calculate daily carbohydrate needs for maintenance, weight loss, muscle gain and sports. Compare carb targets, fiber and net carbs, glycemic load, and 7-day carb cycling.",
   iconName: "Apple",
   featured: true,
   keywords: [
@@ -32,7 +32,7 @@ export const carbohydrate_calculatorConfig: CalculatorModuleDefinition = {
     "body-fat-calculator",
   ],
   formulaDescription:
-    "Target Carbs = (Target Calories × Carb %) / 4. Net Carbs = Total Carbs - Fiber - Sugar Alcohols.",
+    "Target Carbs = (Target Calories × Carb %) / 4. Net Carbs (Dietary Convention) = Total Carbs − Fiber − Sugar Alcohols.",
   faqs: carbohydrate_calculatorFaqs,
   inputs: [
     {

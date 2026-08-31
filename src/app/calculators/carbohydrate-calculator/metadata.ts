@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 
 export const carbohydrate_calculatorMetadata: Metadata = {
-  title: "Carbohydrate Calculator | Net Carbs, Glycemic Load & Carb Cycling",
+  title: "Carbohydrate Calculator – Daily Carb Intake, Net Carbs & Carb Goals",
   description:
-    "Calculate your exact daily carbohydrate requirements, net carbs, glycemic load, and 7-day carb cycling schedules across 10 modes and 5 BMR formulas. Features searchable food GI database.",
+    "Calculate daily carbohydrate needs for maintenance, weight loss, muscle gain and sports. Compare carb targets, fiber and net carbs, glycemic load, and 7-day carb cycling.",
   keywords: [
     "Carbohydrate Calculator",
     "Carb Calculator",
@@ -16,16 +16,16 @@ export const carbohydrate_calculatorMetadata: Metadata = {
   ],
   authors: [{ name: "Calculator Platform Clinical Nutrition Team" }],
   openGraph: {
-    title: "Advanced Carbohydrate Calculator & Glycemic Analytics Suite",
+    title: "Carbohydrate Calculator – Daily Carb Intake, Net Carbs & Carb Goals",
     description:
-      "Calculate total carbs, net carbs, glycemic load, and carb cycling schedules tailored to your body composition and athletic goals.",
+      "Calculate daily carbohydrate needs for maintenance, weight loss, muscle gain and sports. Compare carb targets, fiber and net carbs, glycemic load, and 7-day carb cycling.",
     type: "website",
     url: "https://calculator-platform.com/calculators/carbohydrate-calculator",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Carbohydrate Calculator | Net Carbs & Glycemic Load",
+    title: "Carbohydrate Calculator – Daily Carb Intake, Net Carbs & Carb Goals",
     description:
-      "Calculate your daily carbohydrate targets, net carbs, and glycemic impact across 10 modes and 5 BMR formulas.",
+      "Calculate daily carbohydrate needs for maintenance, weight loss, muscle gain and sports. Compare carb targets, fiber and net carbs, glycemic load, and 7-day carb cycling.",
   },
 };

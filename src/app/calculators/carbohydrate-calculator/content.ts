@@ -1,51 +1,53 @@
 export const carbohydrate_calculatorContent = `
-# The Ultimate Guide to Carbohydrates, Net Carbs, Glycemic Load & Metabolic Health
+# Evidence-Informed Guide to Carbohydrates, Net Carbs, Glycemic Load & Metabolic Health
 
-Carbohydrates are the human body's principal, most efficient primary energy source. From fueling high-intensity resistance workouts and marathon runs to sustaining central nervous system and brain metabolic function, carbohydrates play an irreplaceable role in human physiology.
+Carbohydrates are the human body's principal, most versatile energy substrate. From fueling high-intensity resistance workouts and athletic performance to sustaining central nervous system function, carbohydrates play an integral physiological role in human metabolism.
 
-However, not all carbohydrates affect the human body equally. Refined simple sugars cause rapid spikes in blood glucose and insulin, whereas complex fiber-rich carbohydrates digest slowly, providing sustained energy, gut microbiome support, and cardiovascular protection.
+However, not all carbohydrates affect the human body equally. Refined simple sugars cause rapid surges in blood glucose and insulin, whereas complex fiber-rich carbohydrate foods digest slowly, providing sustained energy, gut microbiome support, and cardiovascular protection.
 
-This 3,000+ word comprehensive clinical guide explores carbohydrate biochemistry, the science of Net Carbs, Glycemic Index (GI), Glycemic Load (GL), BMR equations, carb cycling strategies, sports nutrition, and glycemic food tables.
+This comprehensive nutrition guide explores carbohydrate biochemistry, the science of Net Carbs, Glycemic Index (GI), Glycemic Load (GL), BMR equations, carb cycling strategies, sports nutrition, and glycemic food tables.
 
 ---
 
 ## 1–2. What Are Carbohydrates & Why Do They Matter?
 
-**Carbohydrates** (carbs) are organic biomolecules composed of carbon, hydrogen, and oxygen atoms, typically with a hydrogen-to-oxygen atom ratio of 2:1 ($C_n(H_2O)_n$).
+**Carbohydrates** are organic biomolecules composed of carbon, hydrogen, and oxygen atoms ($C_n(H_2O)_n$).
 
-In human metabolism, carbohydrates are digested and broken down into **glucose** ($C_6H_{12}O_6$), which enters the bloodstream. Cells absorb glucose under the influence of the pancreatic hormone **insulin** to synthesize adenosine triphosphate (ATP) via cellular respiration:
+In human metabolism, dietary carbohydrates are digested and broken down into **glucose** ($C_6H_{12}O_6$), which enters the bloodstream. Cells absorb glucose under the influence of the pancreatic hormone **insulin** to synthesize adenosine triphosphate (ATP) via cellular respiration:
 
 $$\\text{C}_6\\text{H}_{12}\\text{O}_6 + 6\\text{O}_2 \\rightarrow 6\\text{CO}_2 + 6\\text{H}_2\\text{O} + 36-38 \\text{ ATP}$$
 
 ---
 
-## 3–6. Types of Carbohydrates: Simple vs Complex, Sugars, Starches & Fiber
+## 3–6. Types of Carbohydrates: Sugars, Starches & Fiber
 
 Carbohydrates are classified chemically by their degree of polymerization:
 
 ### 1. Simple Carbohydrates (Monosaccharides & Disaccharides)
 - **Monosaccharides**: Glucose, Fructose, Galactose.
-- **Disaccharides**: Sucrose (table sugar = glucose + fructose), Lactose (milk sugar = glucose + galactose), Maltose.
-- Digested and absorbed rapidly in the duodenum and jejunum, causing fast plasma glucose surges.
+- **Disaccharides**: Sucrose (glucose + fructose), Lactose (glucose + galactose), Maltose.
+- Digested and absorbed rapidly in the small intestine, causing fast plasma glucose surges.
 
 ### 2. Complex Carbohydrates (Polysaccharides)
-- **Starches**: Long-chain polymers of glucose molecules linked by alpha-1,4 and alpha-1,6 glycosidic bonds (amylose and amylopectin). Found in oats, potatoes, rice, and whole grains.
+- **Starches**: Long-chain polymers of glucose molecules linked by alpha-glycosidic bonds (amylose and amylopectin). Found in oats, potatoes, legumes, and whole grains.
 - **Dietary Fiber**: Non-digestible polysaccharides linked by beta-glycosidic bonds that human digestive enzymes cannot cleave.
-  - *Soluble Fiber* (pectins, beta-glucans): Forms a gel in the GI tract, lowering LDL cholesterol and slowing glucose absorption.
-  - *Insoluble Fiber* (cellulose, lignin): Adds bulk to stool, promoting gut motility and preventing constipation.
+  - *Soluble Fiber* (pectins, beta-glucans): Forms a viscous gel in the digestive tract, aiding LDL cholesterol regulation and blunting glucose surges.
+  - *Insoluble Fiber* (cellulose, lignin): Adds fecal bulk, promoting healthy gastrointestinal motility.
 
 ---
 
-## 7. Good Carbs vs Bad Carbs: A Clinical Comparison
+## 7. Understanding Carbohydrate Quality
 
-| Characteristic | "Good" Carbs (Unrefined Complex) | "Bad" Carbs (Refined Simple) |
+Rather than simplistic "good vs bad" labels, nutritional science evaluates carbohydrate sources along a qualitative continuum:
+
+| Dimension | Higher-Quality Carbohydrate Foods | Highly Refined / Sugar-Rich Foods |
 | :--- | :--- | :--- |
-| **Nutrient Density** | High (vitamins, minerals, antioxidants) | Low ("empty calories") |
-| **Fiber Content** | High (3g – 15g per serving) | Minimal to zero |
-| **Glycemic Index (GI)** | Low to Medium (GI ≤ 55) | High (GI ≥ 70) |
-| **Blood Sugar Impact** | Slow, steady glucose elevation | Rapid spike followed by reactive hypoglycemia |
-| **Satiety Rating** | High (promotes fullness via GLP-1 & PYY) | Low (triggers rapid hunger rebound) |
-| **Primary Food Examples** | Oats, sweet potatoes, black beans, quinoa, apples | Sodas, candy, white bread, pastries, corn syrup |
+| **Nutrient Density** | High (vitamins, minerals, bioactive polyphenols) | Low ("empty calories") |
+| **Fiber Content** | High (3g – 15g per standard serving) | Minimal to zero |
+| **Processing Degree** | Whole, minimally processed whole plants | Industrially ultra-processed |
+| **Blood Sugar Impact** | Gradual, steady glucose elevation | Rapid spikes and steep postprandial drops |
+| **Satiety Value** | High (promotes fullness via gut hormones) | Low (promotes rapid rebound hunger) |
+| **Primary Examples** | Oats, sweet potatoes, black beans, quinoa, apples | Sugar-sweetened beverages, candy, white flour pastries |
 
 ---
 
@@ -58,27 +60,29 @@ The **Glycemic Index** measures how rapidly 50 grams of available carbohydrates 
 - **High GI**: 70 or greater
 
 ### Glycemic Load (GL)
-While GI measures carbohydrate *quality*, **Glycemic Load (GL)** incorporates serving size and *quantity*:
+While GI evaluates carbohydrate *quality*, **Glycemic Load (GL)** incorporates serving size and *quantity*:
 
-$$\\text{Glycemic Load (GL)} = \\frac{\\text{Glycemic Index (GI)} \\times \\text{Net Carbs (grams)}}{100}$$
+$$\\text{Glycemic Load (GL)} = \\frac{\\text{Glycemic Index (GI)} \\times \\text{Available Carbohydrates (g)}}{100}$$
 
 - **Low GL**: 10 or less
 - **Medium GL**: 11 to 19
 - **High GL**: 20 or greater
 
-### Net Carbs Formula
-**Net Carbs** isolate the digestible carbohydrates that impact blood glucose and insulin:
+### Net Carbs Convention
+**Net Carbs** isolate the estimated digestible carbohydrates that impact blood glucose and insulin:
 
-$$\\text{Net Carbs} = \\text{Total Carbohydrates} - \\text{Dietary Fiber} - \\text{Sugar Alcohols}$$
+$$\\text{Net Carbs (Tracking Convention)} = \\text{Total Carbohydrates} - \\text{Dietary Fiber} - \\text{Sugar Alcohols}$$
+
+*Note: Net carbs is a dietary tracking convention rather than an FDA-standardized Nutrition Facts quantity.*
 
 ---
 
 ## 18–20. Low-Carb Diets, Keto & Carb Cycling
 
 ### Carb Cycling Mechanics
-Carb cycling strategically alternates high-carb, medium-carb, and low-carb days to maximize fat loss while preserving metabolic rate and athletic performance:
-- **High-Carb Days** (Heavy Leg/Back Workouts): Replaces glycogen stores, stimulates leptin, and boosts thyroid function (T3).
-- **Low-Carb Days** (Rest Days): Lowers baseline insulin, enhancing fat oxidation (lipolysis).
+Carb cycling strategically alternates high-carb, medium-carb, and low-carb days to align fuel availability with athletic workouts:
+- **High-Carb Days** (Strenuous Training): Replenishes depleted skeletal muscle glycogen stores.
+- **Low-Carb Days** (Rest Days): Reduces baseline carbohydrate fuel demands.
 
 ---
 
@@ -97,13 +101,7 @@ Carb cycling strategically alternates high-carb, medium-carb, and low-carb days 
 
 ---
 
-## 29. Frequently Asked Questions
+## Summary
 
-*Refer to our interactive 40-question FAQ section above for clinical answers covering carb requirements, Net Carbs math, Glycemic Index, GI vs GL, keto, and sports carb loading.*
-
----
-
-## 30. Summary
-
-Optimizing your carbohydrate intake is fundamental to regulating blood sugar, maximizing athletic endurance, and achieving optimal body composition. By calculating your exact TDEE, choosing a scientifically validated BMR formula, tracking Net Carbs, and selecting low-to-medium Glycemic Load whole foods, you maintain precise control over your energy levels and metabolic health.
+Optimizing your carbohydrate intake is fundamental to sustaining athletic performance, managing energy balance, and achieving body-composition goals. By estimating your TDEE, choosing a validated BMR formula, tracking Net Carbs, and selecting nutrient-dense whole foods consistent with WHO guidance, you maintain structured control over your dietary plan.
 `;
