@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Baby,
   Scale,
@@ -15,6 +15,7 @@ import {
   Printer,
   Share2,
   Copy,
+  RotateCcw,
   Info,
   Apple,
   Clock,
@@ -60,6 +61,41 @@ export function PregnancyWeightGainCalculator() {
   const [activeTab, setActiveTab] = useState<"overview" | "breakdown" | "schedule" | "nutrition">("overview");
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
+
+  // Mount Hydration from URL Query Parameters
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const typeParam = params.get("type");
+    if (typeParam === "single" || typeParam === "twins") {
+      setPregnancyType(typeParam as PregnancyType);
+    }
+    const unitParam = params.get("unit");
+    if (unitParam === "us" || unitParam === "metric") {
+      setUnitSystem(unitParam as UnitSystem);
+    }
+    const weekParam = params.get("week");
+    if (weekParam && !isNaN(Number(weekParam))) {
+      setWeek(Math.min(40, Math.max(1, Number(weekParam))));
+    }
+    const htFt = params.get("htFt");
+    if (htFt && !isNaN(Number(htFt))) setHeightFeet(Number(htFt));
+    const htIn = params.get("htIn");
+    if (htIn && !isNaN(Number(htIn))) setHeightInches(Number(htIn));
+    const htCm = params.get("htCm");
+    if (htCm && !isNaN(Number(htCm))) setHeightCm(Number(htCm));
+    const preWt = params.get("preWt");
+    if (preWt && !isNaN(Number(preWt))) {
+      if (unitParam === "metric") setPreWeightKg(Number(preWt));
+      else setPreWeightLbs(Number(preWt));
+    }
+    const currWt = params.get("currWt");
+    if (currWt && !isNaN(Number(currWt))) {
+      if (unitParam === "metric") setCurrentWeightKg(Number(currWt));
+      else setCurrentWeightLbs(Number(currWt));
+    }
+  }, []);
 
   // Perform calculations
   const results = useMemo(() => {
@@ -135,6 +171,7 @@ export function PregnancyWeightGainCalculator() {
   // Copy Summary
   const handleCopySummary = () => {
     const text = `Pregnancy Weight Gain Summary (Week ${results.currentWeek}):
+• Pregnancy Type: ${results.pregnancyType === "twins" ? "Twins / Multiples" : "Single Fetus"}
 • Pre-Pregnancy BMI: ${results.preBmi} (${results.bmiCategory})
 • Total Recommended Gain (40 wks): ${results.recommendedGainTotalFormatted}
 • Week ${results.currentWeek} Target Gain Range: ${results.targetGainWeekFormatted}
@@ -147,7 +184,51 @@ Calculated on CalcPlatform.`;
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Export Schedule CSV
+  // Share URL Generator
+  const handleShareUrl = () => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams({
+      type: pregnancyType,
+      unit: unitSystem,
+      week: week.toString(),
+    });
+    if (unitSystem === "us") {
+      params.set("htFt", heightFeet.toString());
+      params.set("htIn", heightInches.toString());
+      params.set("preWt", preWeightLbs.toString());
+      params.set("currWt", currentWeightLbs.toString());
+    } else {
+      params.set("htCm", heightCm.toString());
+      params.set("preWt", preWeightKg.toString());
+      params.set("currWt", currentWeightKg.toString());
+    }
+    const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+    navigator.clipboard.writeText(shareUrl);
+    setShared(true);
+    setTimeout(() => setShared(false), 2500);
+  };
+
+  // Reset Defaults Handler
+  const handleResetDefaults = () => {
+    setUnitSystem("us");
+    setPregnancyType("single");
+    setWeek(20);
+    setHeightFeet(5);
+    setHeightInches(6);
+    setPreWeightLbs(130);
+    setCurrentWeightLbs(142);
+    setHeightCm(168);
+    setPreWeightKg(59);
+    setCurrentWeightKg(64.5);
+    setActiveTab("overview");
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.search = "";
+      window.history.replaceState({}, "", url.toString());
+    }
+  };
+
+  // Export Schedule CSV via standard Blob
   const handleExportCsv = () => {
     const headers = [
       "Week",
@@ -171,17 +252,16 @@ Calculated on CalcPlatform.`;
       `"${s.fetalMilestone.replace(/"/g, '""')}"`,
     ]);
 
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
-
-    const encodedUri = encodeURI(csvContent);
+    const csvContent = [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
+    link.setAttribute("href", url);
     link.setAttribute("download", `pregnancy_weight_gain_week_${week}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // Construct direct CalculatorReportData for ReportModal
@@ -295,42 +375,44 @@ Calculated on CalcPlatform.`;
   return (
     <div className="space-y-6">
       {/* 1. Main Interactive Input & Control Card */}
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-sm space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-4">
+      <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-pink-100 dark:bg-pink-950/60 text-pink-600 dark:text-pink-400">
+            <div className="p-2 rounded-xl bg-pink-50 text-pink-600 border border-pink-100">
               <Baby className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-blue-600 dark:text-blue-400">
-                Pregnancy & Maternal Details
+              <h2 className="text-base font-bold text-slate-900">
+                Pregnancy &amp; Maternal Details
               </h2>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Institute of Medicine (IOM) & ACOG Weight Gain Calculator
+              <p className="text-xs text-slate-500">
+                Institute of Medicine (IOM) &amp; ACOG Weight Gain Calculator
               </p>
             </div>
           </div>
 
           {/* Unit System Selector Toggle */}
-          <div className="flex items-center bg-zinc-100 dark:bg-zinc-800/80 p-1 rounded-xl self-start sm:self-auto">
+          <div className="flex items-center bg-slate-100 p-1 rounded-xl self-start sm:self-auto" role="group" aria-label="Unit System">
             <button
               type="button"
+              id="pwg-unit-us"
               onClick={() => handleUnitToggle("us")}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 unitSystem === "us"
-                  ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-xs"
-                  : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200"
+                  ? "bg-white text-slate-900 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               US Units (lbs, ft/in)
             </button>
             <button
               type="button"
+              id="pwg-unit-metric"
               onClick={() => handleUnitToggle("metric")}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 unitSystem === "metric"
-                  ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-xs"
-                  : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200"
+                  ? "bg-white text-slate-900 shadow-xs"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               Metric Units (kg, cm)
@@ -342,29 +424,31 @@ Calculated on CalcPlatform.`;
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Pregnancy Type Toggle */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300 flex items-center justify-between">
+            <label id="pwg-pregnancy-type-label" className="text-xs font-medium text-slate-700 flex items-center justify-between">
               <span>Pregnancy Type</span>
-              <span className="text-[10px] text-zinc-400">Singleton vs Twins</span>
+              <span className="text-[10px] text-slate-400 font-normal">Singleton vs Twins</span>
             </label>
-            <div className="grid grid-cols-2 gap-2 p-1 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/60 rounded-xl">
+            <div className="grid grid-cols-2 gap-2 p-1 bg-slate-50 border border-slate-200 rounded-xl" role="group" aria-labelledby="pwg-pregnancy-type-label">
               <button
                 type="button"
+                id="pwg-type-single"
                 onClick={() => setPregnancyType("single")}
-                className={`py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer ${
+                className={`py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
                   pregnancyType === "single"
                     ? "bg-pink-600 text-white shadow-xs"
-                    : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700/50"
+                    : "text-slate-600 hover:bg-slate-100"
                 }`}
               >
                 <Baby className="h-3.5 w-3.5" /> Single Baby
               </button>
               <button
                 type="button"
+                id="pwg-type-twins"
                 onClick={() => setPregnancyType("twins")}
-                className={`py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer ${
+                className={`py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
                   pregnancyType === "twins"
                     ? "bg-purple-600 text-white shadow-xs"
-                    : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700/50"
+                    : "text-slate-600 hover:bg-slate-100"
                 }`}
               >
                 <UsersIcon className="h-3.5 w-3.5" /> Twins / Multiples
@@ -374,84 +458,90 @@ Calculated on CalcPlatform.`;
 
           {/* Height Input */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+            <label htmlFor={unitSystem === "us" ? "pwg-height-feet" : "pwg-height-cm"} className="text-xs font-medium text-slate-700">
               Height
             </label>
             {unitSystem === "us" ? (
               <div className="grid grid-cols-2 gap-2">
                 <div className="relative">
                   <input
+                    id="pwg-height-feet"
                     type="number"
                     min={3}
                     max={7}
                     value={heightFeet}
                     onChange={(e) => setHeightFeet(Number(e.target.value))}
-                    className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition-all"
                   />
-                  <span className="absolute right-3 top-2.5 text-xs text-zinc-400">ft</span>
+                  <span className="absolute right-3 top-2.5 text-xs text-slate-400">ft</span>
                 </div>
                 <div className="relative">
                   <input
+                    id="pwg-height-inches"
                     type="number"
                     min={0}
                     max={11}
                     value={heightInches}
                     onChange={(e) => setHeightInches(Number(e.target.value))}
-                    className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition-all"
                   />
-                  <span className="absolute right-3 top-2.5 text-xs text-zinc-400">in</span>
+                  <span className="absolute right-3 top-2.5 text-xs text-slate-400">in</span>
                 </div>
               </div>
             ) : (
               <div className="relative">
                 <input
+                  id="pwg-height-cm"
                   type="number"
                   min={100}
                   max={230}
                   value={heightCm}
                   onChange={(e) => setHeightCm(Number(e.target.value))}
-                  className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition-all"
                 />
-                <span className="absolute right-3 top-2.5 text-xs text-zinc-400">cm</span>
+                <span className="absolute right-3 top-2.5 text-xs text-slate-400">cm</span>
               </div>
             )}
           </div>
 
           {/* Current Pregnancy Week Slider & Input */}
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between text-xs font-medium text-zinc-700 dark:text-zinc-300">
-              <span>Pregnancy Stage</span>
-              <span className="px-2 py-0.5 rounded-full bg-pink-100 dark:bg-pink-950 text-pink-700 dark:text-pink-300 text-[11px] font-bold">
+            <div className="flex items-center justify-between text-xs font-medium text-slate-700">
+              <label htmlFor="pwg-week-range">Pregnancy Stage</label>
+              <span className="px-2 py-0.5 rounded-full bg-pink-50 text-pink-700 border border-pink-200 text-[11px] font-bold">
                 Week {week} (Trimester {results.trimester})
               </span>
             </div>
             <div className="flex items-center gap-3">
               <input
+                id="pwg-week-range"
                 type="range"
                 min={1}
                 max={40}
                 value={week}
                 onChange={(e) => setWeek(Number(e.target.value))}
-                className="w-full h-2 bg-zinc-200 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-pink-600"
+                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-pink-600"
               />
               <input
+                id="pwg-week-number"
                 type="number"
                 min={1}
                 max={40}
                 value={week}
                 onChange={(e) => setWeek(Math.min(40, Math.max(1, Number(e.target.value))))}
-                className="w-16 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl px-2.5 py-1.5 text-sm font-semibold text-center text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                className="w-16 bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-1.5 text-sm font-semibold text-center text-slate-900 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition-all"
               />
             </div>
           </div>
 
           {/* Pre-Pregnancy Weight */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+            <label htmlFor="pwg-pre-weight" className="text-xs font-medium text-slate-700">
               Pre-Pregnancy Weight
             </label>
             <div className="relative">
               <input
+                id="pwg-pre-weight"
                 type="number"
                 step={0.5}
                 value={unitSystem === "us" ? preWeightLbs : preWeightKg}
@@ -460,9 +550,9 @@ Calculated on CalcPlatform.`;
                   if (unitSystem === "us") setPreWeightLbs(val);
                   else setPreWeightKg(val);
                 }}
-                className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition-all"
               />
-              <span className="absolute right-3 top-2.5 text-xs text-zinc-400">
+              <span className="absolute right-3 top-2.5 text-xs text-slate-400">
                 {unitSystem === "us" ? "lbs" : "kg"}
               </span>
             </div>
@@ -470,11 +560,12 @@ Calculated on CalcPlatform.`;
 
           {/* Current Weight */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+            <label htmlFor="pwg-current-weight" className="text-xs font-medium text-slate-700">
               Current Weight (Week {week})
             </label>
             <div className="relative">
               <input
+                id="pwg-current-weight"
                 type="number"
                 step={0.5}
                 value={unitSystem === "us" ? currentWeightLbs : currentWeightKg}
@@ -483,9 +574,9 @@ Calculated on CalcPlatform.`;
                   if (unitSystem === "us") setCurrentWeightLbs(val);
                   else setCurrentWeightKg(val);
                 }}
-                className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition-all"
               />
-              <span className="absolute right-3 top-2.5 text-xs text-zinc-400">
+              <span className="absolute right-3 top-2.5 text-xs text-slate-400">
                 {unitSystem === "us" ? "lbs" : "kg"}
               </span>
             </div>
@@ -497,20 +588,20 @@ Calculated on CalcPlatform.`;
       <div
         className={`p-4 sm:p-5 rounded-2xl border transition-all ${
           results.statusKey === "on-track"
-            ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-900 dark:text-emerald-200"
+            ? "bg-emerald-50 border-emerald-300 text-emerald-900"
             : results.statusKey === "under"
-            ? "bg-amber-500/10 border-amber-500/30 text-amber-900 dark:text-amber-200"
-            : "bg-orange-500/10 border-orange-500/30 text-orange-900 dark:text-orange-200"
+            ? "bg-amber-50 border-amber-300 text-amber-900"
+            : "bg-orange-50 border-orange-300 text-orange-900"
         }`}
       >
         <div className="flex items-start gap-3.5">
           <div
             className={`p-2 rounded-xl shrink-0 ${
               results.statusKey === "on-track"
-                ? "bg-emerald-500 text-white"
+                ? "bg-emerald-600 text-white"
                 : results.statusKey === "under"
-                ? "bg-amber-500 text-white"
-                : "bg-orange-500 text-white"
+                ? "bg-amber-600 text-white"
+                : "bg-orange-600 text-white"
             }`}
           >
             {results.statusKey === "on-track" ? (
@@ -522,7 +613,7 @@ Calculated on CalcPlatform.`;
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold tracking-tight">{results.statusLabel}</h3>
-              <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-white/60 dark:bg-black/40">
+              <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-white/80 border border-slate-200">
                 Week {results.currentWeek} Status
               </span>
             </div>
@@ -535,32 +626,32 @@ Calculated on CalcPlatform.`;
       {/* 3. Metric Dashboard Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Pre-pregnancy BMI */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 space-y-1.5 shadow-2xs">
-          <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-1.5 shadow-xs">
+          <div className="flex items-center justify-between text-xs text-slate-500">
             <span>Pre-Pregnancy BMI</span>
             <Activity className="h-4 w-4 text-blue-500" />
           </div>
-          <div className="text-2xl font-black text-zinc-900 dark:text-zinc-100">
+          <div className="text-2xl font-black text-slate-900">
             {results.preBmi}{" "}
-            <span className="text-xs font-normal text-zinc-400">kg/m²</span>
+            <span className="text-xs font-normal text-slate-400">kg/m²</span>
           </div>
-          <p className="text-[11px] font-semibold text-pink-600 dark:text-pink-400 truncate">
+          <p className="text-[11px] font-semibold text-pink-600 truncate">
             {results.bmiCategory}
           </p>
         </div>
 
         {/* Card 2: Week X Target Gain */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 space-y-1.5 shadow-2xs">
-          <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-1.5 shadow-xs">
+          <div className="flex items-center justify-between text-xs text-slate-500">
             <span>Week {results.currentWeek} Target Gain</span>
             <Calendar className="h-4 w-4 text-pink-500" />
           </div>
-          <div className="text-2xl font-black text-pink-600 dark:text-pink-400">
+          <div className="text-2xl font-black text-pink-600">
             {results.targetGainWeekFormatted}
           </div>
-          <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
+          <p className="text-[11px] text-slate-500">
             Current Weight Gain:{" "}
-            <strong className="text-zinc-800 dark:text-zinc-200">
+            <strong className="text-slate-900">
               {unitSystem === "metric"
                 ? `${results.actualGainKg} kg`
                 : `${results.actualGainLbs} lbs`}
@@ -569,96 +660,112 @@ Calculated on CalcPlatform.`;
         </div>
 
         {/* Card 3: Total 40-Week Recommended Gain */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 space-y-1.5 shadow-2xs">
-          <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-1.5 shadow-xs">
+          <div className="flex items-center justify-between text-xs text-slate-500">
             <span>Total 40-Week Gain</span>
             <TrendingUp className="h-4 w-4 text-emerald-500" />
           </div>
-          <div className="text-2xl font-black text-zinc-900 dark:text-zinc-100">
+          <div className="text-2xl font-black text-slate-900">
             {results.recommendedGainTotalFormatted}
           </div>
-          <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
+          <p className="text-[11px] text-slate-500">
             Institute of Medicine guideline target
           </p>
         </div>
 
         {/* Card 4: Recommended T2/T3 Pace */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 space-y-1.5 shadow-2xs">
-          <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-1.5 shadow-xs">
+          <div className="flex items-center justify-between text-xs text-slate-500">
             <span>Weekly Gain Rate (T2/T3)</span>
             <Clock className="h-4 w-4 text-purple-500" />
           </div>
-          <div className="text-2xl font-black text-zinc-900 dark:text-zinc-100">
+          <div className="text-2xl font-black text-slate-900">
             {results.weeklyRateFormatted}
           </div>
-          <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
-            Average gain rate in 2nd & 3rd trimesters
+          <p className="text-[11px] text-slate-500">
+            Average gain rate in 2nd &amp; 3rd trimesters
           </p>
         </div>
       </div>
 
       {/* 4. Tab Navigation for Detailed Views */}
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 sm:p-6 shadow-sm space-y-6">
-        <div className="flex items-center gap-2 border-b border-zinc-100 dark:border-zinc-800 pb-3 overflow-x-auto">
+      <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm space-y-6">
+        <div className="flex items-center gap-2 border-b border-slate-100 pb-3 overflow-x-auto" role="tablist" aria-label="Pregnancy Weight Gain Views">
           <button
             type="button"
+            role="tab"
+            id="tab-overview"
+            aria-selected={activeTab === "overview"}
+            aria-controls="panel-overview"
             onClick={() => setActiveTab("overview")}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
               activeTab === "overview"
                 ? "bg-pink-600 text-white shadow-xs"
-                : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                : "text-slate-600 hover:bg-slate-100"
             }`}
           >
             <TrendingUp className="h-3.5 w-3.5" /> 40-Week Trajectory Chart
           </button>
           <button
             type="button"
+            role="tab"
+            id="tab-breakdown"
+            aria-selected={activeTab === "breakdown"}
+            aria-controls="panel-breakdown"
             onClick={() => setActiveTab("breakdown")}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
               activeTab === "breakdown"
                 ? "bg-pink-600 text-white shadow-xs"
-                : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                : "text-slate-600 hover:bg-slate-100"
             }`}
           >
             <PieIcon className="h-3.5 w-3.5" /> Weight Composition Breakdown
           </button>
           <button
             type="button"
+            role="tab"
+            id="tab-schedule"
+            aria-selected={activeTab === "schedule"}
+            aria-controls="panel-schedule"
             onClick={() => setActiveTab("schedule")}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
               activeTab === "schedule"
                 ? "bg-pink-600 text-white shadow-xs"
-                : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                : "text-slate-600 hover:bg-slate-100"
             }`}
           >
             <TableIcon className="h-3.5 w-3.5" /> 40-Week Gain Schedule
           </button>
           <button
             type="button"
+            role="tab"
+            id="tab-nutrition"
+            aria-selected={activeTab === "nutrition"}
+            aria-controls="panel-nutrition"
             onClick={() => setActiveTab("nutrition")}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
               activeTab === "nutrition"
                 ? "bg-pink-600 text-white shadow-xs"
-                : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                : "text-slate-600 hover:bg-slate-100"
             }`}
           >
-            <Apple className="h-3.5 w-3.5" /> Calorie & Nutrient Targets
+            <Apple className="h-3.5 w-3.5" /> Calorie &amp; Nutrient Targets
           </button>
         </div>
 
         {/* TAB CONTENT 1: 40-Week Trajectory Chart */}
         {activeTab === "overview" && (
-          <div className="space-y-4">
+          <div id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" className="space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
+                <h3 className="text-sm font-bold text-slate-900">
                   Gestational Weight Gain Band (Week 1 – 40)
                 </h3>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                <p className="text-xs text-slate-500">
                   Green shaded band represents optimal clinical range based on pre-pregnancy BMI.
                 </p>
               </div>
-              <div className="flex items-center gap-3 text-[11px] text-zinc-600 dark:text-zinc-400">
+              <div className="flex items-center gap-3 text-[11px] text-slate-600">
                 <span className="flex items-center gap-1">
                   <span className="w-3 h-3 rounded-full bg-emerald-500/40 border border-emerald-500 inline-block"></span>
                   Optimal Range
@@ -679,25 +786,30 @@ Calculated on CalcPlatform.`;
                       <stop offset="95%" stopColor="#10b981" stopOpacity={0.05} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#374151" opacity={0.2} />
-                  <XAxis dataKey="week" stroke="#9ca3af" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#9ca3af" fontSize={11} tickLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                  <XAxis dataKey="week" stroke="#64748b" fontSize={11} tickLine={false} />
+                  <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
                   <Tooltip
                     content={({ active, payload }) => {
                       if (active && payload && payload.length) {
                         const data = payload[0].payload;
                         return (
-                          <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
-                            <p className="font-bold text-pink-400">{data.week} Target Range</p>
+                          <div className="bg-white border border-slate-200 text-slate-900 p-3 rounded-xl shadow-xl text-xs space-y-1">
+                            <p className="font-bold text-pink-600">{data.week} Target Range</p>
                             <p>
                               Min Weight: <strong>{data.minWeight} {unitSystem === "metric" ? "kg" : "lbs"}</strong>
                             </p>
                             <p>
                               Max Weight: <strong>{data.maxWeight} {unitSystem === "metric" ? "kg" : "lbs"}</strong>
                             </p>
-                            <p className="text-zinc-400">
+                            <p className="text-slate-500">
                               Target Gain: {data.minGain} – {data.maxGain} {unitSystem === "metric" ? "kg" : "lbs"}
                             </p>
+                            {data.actualWeight !== null && (
+                              <p className="text-pink-600 font-bold border-t border-slate-100 pt-1">
+                                Actual Weight: {data.actualWeight} {unitSystem === "metric" ? "kg" : "lbs"}
+                              </p>
+                            )}
                           </div>
                         );
                       }
@@ -727,12 +839,12 @@ Calculated on CalcPlatform.`;
 
         {/* TAB CONTENT 2: Weight Composition Breakdown */}
         {activeTab === "breakdown" && (
-          <div className="space-y-5">
+          <div id="panel-breakdown" role="tabpanel" aria-labelledby="tab-breakdown" className="space-y-5">
             <div>
-              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
+              <h3 className="text-sm font-bold text-slate-900">
                 Where Does the Weight Go at Week {results.currentWeek}?
               </h3>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="text-xs text-slate-500">
                 Physiological distribution of pregnancy weight gain across maternal and fetal tissues.
               </p>
             </div>
@@ -773,7 +885,7 @@ Calculated on CalcPlatform.`;
                 {results.breakdown.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/30 flex items-center justify-between text-xs"
+                    className="p-2.5 rounded-xl border border-slate-200 bg-slate-50/60 flex items-center justify-between text-xs"
                   >
                     <div className="flex items-center gap-2.5">
                       <span
@@ -781,19 +893,19 @@ Calculated on CalcPlatform.`;
                         style={{ backgroundColor: item.color }}
                       ></span>
                       <div>
-                        <span className="font-semibold text-zinc-900 dark:text-zinc-100">
+                        <span className="font-semibold text-slate-900">
                           {item.name}
                         </span>
-                        <p className="text-[10px] text-zinc-500 dark:text-zinc-400">
+                        <p className="text-[10px] text-slate-500">
                           {item.description}
                         </p>
                       </div>
                     </div>
                     <div className="text-right shrink-0">
-                      <span className="font-bold text-zinc-900 dark:text-zinc-100">
+                      <span className="font-bold text-slate-900">
                         {unitSystem === "metric" ? `${item.weightKg} kg` : `${item.weightLbs} lbs`}
                       </span>
-                      <p className="text-[10px] text-zinc-400">{item.percentage}%</p>
+                      <p className="text-[10px] text-slate-400">{item.percentage}%</p>
                     </div>
                   </div>
                 ))}
@@ -804,28 +916,28 @@ Calculated on CalcPlatform.`;
 
         {/* TAB CONTENT 3: 40-Week Schedule Table */}
         {activeTab === "schedule" && (
-          <div className="space-y-4">
+          <div id="panel-schedule" role="tabpanel" aria-labelledby="tab-schedule" className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
+                <h3 className="text-sm font-bold text-slate-900">
                   40-Week Gestational Weight Schedule
                 </h3>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                <p className="text-xs text-slate-500">
                   Clinical weight gain boundaries and fetal development milestones by week.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={handleExportCsv}
-                className="px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <Download className="h-3.5 w-3.5" /> CSV Schedule
               </button>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800 max-h-96">
+            <div className="overflow-x-auto rounded-xl border border-slate-200 max-h-96">
               <table className="w-full text-left text-xs">
-                <thead className="bg-zinc-50 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 sticky top-0 font-semibold border-b border-zinc-200 dark:border-zinc-800">
+                <thead className="bg-slate-100 text-slate-900 sticky top-0 font-semibold border-b border-slate-200">
                   <tr>
                     <th className="p-3">Week</th>
                     <th className="p-3">Trimester</th>
@@ -835,7 +947,7 @@ Calculated on CalcPlatform.`;
                     <th className="p-3">Fetal Milestone</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-zinc-600 dark:text-zinc-400">
+                <tbody className="divide-y divide-slate-100 text-slate-600">
                   {results.schedule.map((row) => {
                     const isSelected = row.week === week;
                     return (
@@ -843,8 +955,8 @@ Calculated on CalcPlatform.`;
                         key={row.week}
                         className={`transition-colors ${
                           isSelected
-                            ? "bg-pink-500/10 text-pink-900 dark:text-pink-200 font-bold"
-                            : "hover:bg-zinc-50 dark:hover:bg-zinc-800/40"
+                            ? "bg-pink-50 text-pink-950 font-bold"
+                            : "hover:bg-slate-50"
                         }`}
                       >
                         <td className="p-3 font-semibold">
@@ -861,7 +973,7 @@ Calculated on CalcPlatform.`;
                             ? `${row.minWeightKg} – ${row.maxWeightKg} kg`
                             : `${row.minWeightLbs} – ${row.maxWeightLbs} lbs`}
                         </td>
-                        <td className="p-3 text-pink-600 dark:text-pink-400 font-semibold">
+                        <td className="p-3 text-pink-600 font-semibold">
                           +{row.extraCalorieKcal} kcal
                         </td>
                         <td className="p-3 text-[11px] max-w-xs truncate">
@@ -878,16 +990,16 @@ Calculated on CalcPlatform.`;
 
         {/* TAB CONTENT 4: Calorie & Nutrient Targets */}
         {activeTab === "nutrition" && (
-          <div className="space-y-5">
-            <div className="p-4 rounded-xl bg-pink-500/10 border border-pink-500/20 text-zinc-900 dark:text-zinc-100 flex items-center justify-between gap-4">
+          <div id="panel-nutrition" role="tabpanel" aria-labelledby="tab-nutrition" className="space-y-5">
+            <div className="p-4 rounded-xl bg-pink-50 border border-pink-200 text-slate-900 flex items-center justify-between gap-4">
               <div className="space-y-0.5">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-pink-600">
                   Trimester {results.trimester} Calorie Recommendation
                 </h4>
                 <p className="text-base font-extrabold">
                   +{results.extraCalorieKcal} Extra Calories / Day
                 </p>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                <p className="text-xs text-slate-500">
                   Focus on nutrient-dense foods (proteins, whole grains, healthy fats) rather than empty sugars.
                 </p>
               </div>
@@ -898,20 +1010,20 @@ Calculated on CalcPlatform.`;
               {results.nutrientGuidelines.map((item, idx) => (
                 <div
                   key={idx}
-                  className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-1.5 shadow-2xs"
+                  className="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5 shadow-2xs"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                    <span className="text-xs font-bold text-slate-900">
                       {item.nutrient}
                     </span>
-                    <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-pink-600 dark:text-pink-400">
+                    <span className="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-slate-100 text-pink-600">
                       {item.target}
                     </span>
                   </div>
-                  <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                  <p className="text-xs text-slate-600 leading-relaxed">
                     {item.importance}
                   </p>
-                  <p className="text-[11px] text-zinc-500 dark:text-zinc-500">
+                  <p className="text-[11px] text-slate-500">
                     <strong>Food Sources:</strong> {item.topSources}
                   </p>
                 </div>
@@ -922,7 +1034,7 @@ Calculated on CalcPlatform.`;
       </div>
 
       {/* 5. Executive Action Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -934,7 +1046,7 @@ Calculated on CalcPlatform.`;
           <button
             type="button"
             onClick={() => window.print()}
-            className="px-3.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Printer className="h-3.5 w-3.5" /> Print
           </button>
@@ -944,9 +1056,25 @@ Calculated on CalcPlatform.`;
           <button
             type="button"
             onClick={handleCopySummary}
-            className="px-3.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Copy className="h-3.5 w-3.5" /> {copied ? "Copied!" : "Copy Summary"}
+          </button>
+          <button
+            type="button"
+            onClick={handleShareUrl}
+            className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+            title="Share Calculation URL"
+          >
+            <Share2 className="h-3.5 w-3.5" /> {shared ? "Link Copied!" : "Share"}
+          </button>
+          <button
+            type="button"
+            onClick={handleResetDefaults}
+            className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+            title="Reset Defaults"
+          >
+            <RotateCcw className="h-3.5 w-3.5" /> Reset Defaults
           </button>
         </div>
       </div>

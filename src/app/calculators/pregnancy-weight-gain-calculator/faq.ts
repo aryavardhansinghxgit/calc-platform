@@ -2,104 +2,74 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const pregnancy_weight_gain_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "How much total weight should I gain during pregnancy?",
+    question: "How much weight should I gain during pregnancy?",
     answer:
-      "According to the Institute of Medicine (IOM), recommended total gestational weight gain depends on your pre-pregnancy BMI: Underweight (<18.5 BMI) should gain 28–40 lbs (12.5–18 kg); Normal weight (18.5–24.9 BMI) should gain 25–35 lbs (11.5–16 kg); Overweight (25.0–29.9 BMI) should gain 15–25 lbs (7–11.5 kg); and Obese (≥30 BMI) should gain 11–20 lbs (5–9 kg).",
+      "The recommended total gain depends mainly on your pre-pregnancy BMI and whether you are carrying one baby or twins. For a singleton pregnancy, the IOM ranges are 28–40 lb for underweight, 25–35 lb for normal BMI, 15–25 lb for overweight, and 11–20 lb for obesity.",
   },
   {
-    question: "How much weight should I gain if I am pregnant with twins?",
+    question: "How is pregnancy weight gain calculated?",
     answer:
-      "For twin gestations, the IOM recommends: Normal pre-pregnancy BMI should gain 37–54 lbs (16.8–24.5 kg); Overweight BMI should gain 31–50 lbs (14.1–22.7 kg); and Obese BMI should gain 25–42 lbs (11.3–19.1 kg). Underweight women carrying twins should target 50–62 lbs (22.7–28.1 kg).",
+      "The calculator first determines your pre-pregnancy BMI from height and weight. It then uses your pregnancy type and gestational week to estimate a target weight-gain range and compares your current pregnancy gain with that range.",
   },
   {
-    question: "How is pregnancy weight gain distributed in the body?",
+    question: "How much weight should I gain by week 20?",
     answer:
-      "For an average 30 lb (13.6 kg) total weight gain at full term: Baby (fetus) accounts for ~7.5 lbs; Placenta accounts for ~1.5 lbs; Amniotic fluid ~2.0 lbs; Uterine muscle expansion ~2.0 lbs; Maternal blood volume ~4.0 lbs; Extracellular fluids ~3.0 lbs; Breast tissue ~2.0 lbs; and Maternal fat/nutrient stores ~7.0 lbs.",
+      "There is no single week-20 target that applies to everyone. The expected amount depends on pre-pregnancy BMI, pregnancy type and the guideline model used by the calculator. The calculator therefore provides a week-specific range rather than applying the total 40-week target at every stage.",
   },
   {
-    question: "How much weight should I gain in the first trimester?",
+    question: "Is 25 pounds of weight gain during pregnancy normal?",
     answer:
-      "Most women with a single fetus gain between 1.1 and 4.4 lbs (0.5 to 2.0 kg) total during the entire first trimester (Weeks 1 through 13). Some women even lose 1–3 lbs due to morning sickness and nausea, which is generally not harmful if adequate hydration is maintained.",
+      "It depends on the starting BMI, pregnancy type and gestational stage. For a singleton pregnancy beginning at a normal BMI, 25–35 lb is the standard total IOM range. Twenty-five pounds is therefore at the lower end of the full pregnancy range, but its meaning at an earlier week depends on the pregnancy trajectory.",
   },
   {
-    question: "What is the recommended weekly weight gain rate in the 2nd and 3rd trimesters?",
+    question: "How much weight should I gain with twins?",
     answer:
-      "In the 2nd and 3rd trimesters, women with normal pre-pregnancy BMI should gain about 1 lb (0.45 kg) per week. Overweight women should gain ~0.6 lbs (0.27 kg) per week, obese women ~0.5 lbs (0.23 kg) per week, and underweight women ~1 to 1.3 lbs (0.45–0.59 kg) per week.",
+      "The commonly used twin-pregnancy ranges are approximately 37–54 lb for normal pre-pregnancy BMI, 31–50 lb for overweight BMI, and 25–42 lb for obesity. CDC guidance lists 50–62 lb for women who began a twin pregnancy underweight.",
   },
   {
-    question: "Does 'eating for two' mean doubling my calorie intake?",
+    question: "What is the recommended weight gain in the first trimester?",
     answer:
-      "No. 'Eating for two' is a myth. In the 1st trimester, no extra daily calories are required. In the 2nd trimester, you need about 340 extra calories per day. In the 3rd trimester, you need about 450 extra calories per day—equivalent to a bowl of Greek yogurt with fruit and nuts or a turkey sandwich.",
+      "ACOG notes that someone who began pregnancy at a healthy weight may gain only about 1–5 lb during the first 12 weeks, and some people may gain no weight. Individual patterns vary, especially when nausea or vomiting affects food intake.",
   },
   {
-    question: "What happens if I don't gain enough weight during pregnancy?",
+    question: "Does pregnancy weight gain happen at the same rate every week?",
     answer:
-      "Inadequate weight gain increases the risk of delivering a Low Birth Weight infant (<5.5 lbs or 2.5 kg), premature labor (delivery before 37 weeks), NICU admission, impaired fetal neurological development, and maternal nutritional depletion.",
+      "No. Weight gain often varies from week to week. The commonly used guidelines provide average rates for the second and third trimesters rather than requiring the exact same increase every week.",
   },
   {
-    question: "What are the risks of gaining too much weight during pregnancy?",
+    question: "What happens if I gain less weight than recommended?",
     answer:
-      "Excessive gestational weight gain increases the risk of fetal macrosomia (birth weight >8.8 lbs or 4.0 kg), gestational diabetes, preeclampsia, labor complications requiring an emergency C-section, long-term postpartum weight retention, and childhood obesity in the baby.",
+      "A calculator result below the guideline range does not by itself diagnose a problem. Your clinician may consider fetal growth, nutritional intake, symptoms, pre-pregnancy BMI and the overall trend before deciding whether any action is needed.",
   },
   {
-    question: "Why am I gaining weight so quickly in late pregnancy?",
+    question: "What happens if I gain more weight than recommended?",
     answer:
-      "Rapid weight gain in the 3rd trimester is common because the fetus grows most rapidly during Weeks 28–40, accumulating subcutaneous fat. However, sudden weight gain of >3–5 lbs in a single week accompanied by swelling in the face or hands can signal preeclampsia and requires immediate medical evaluation.",
+      "Being above a guideline range does not automatically mean that your pregnancy is unhealthy. However, sustained excess gain or sudden rapid weight gain should be discussed with your prenatal care provider because the overall clinical context matters.",
   },
   {
-    question: "Is it safe to lose weight while pregnant if I am overweight or obese?",
+    question: "Does BMI affect how much weight I should gain during pregnancy?",
     answer:
-      "Weight loss diets are generally not recommended during pregnancy, even for obese women, because fetal development requires a continuous supply of essential nutrients. Rather than dieting, focus on nutrient-dense meals and controlled, modest weight gain under OB/GYN supervision.",
+      "Yes. The IOM framework uses pre-pregnancy BMI categories to determine different recommended weight-gain ranges. That is why the same amount of gain can be appropriate for one person but above or below the recommended range for another.",
   },
   {
-    question: "How much folic acid do I need during pregnancy?",
+    question: "How many extra calories do I need during pregnancy?",
     answer:
-      "The recommended daily intake is 600 mcg of folic acid (or folate) per day. Folic acid is essential during the first 28 days of pregnancy to prevent neural tube defects such as spina bifida.",
+      "Energy needs increase as pregnancy progresses, but the exact amount varies by individual circumstances. ACOG states that people with a healthy pre-pregnancy weight generally need no additional calories in the first trimester, about 340 additional calories per day in the second trimester, and about 450 in the third trimester. These are general figures, not individualized prescriptions.",
   },
   {
-    question: "Why is iron so important during pregnancy?",
+    question: "Can I use this calculator for triplets?",
     answer:
-      "Pregnant women need 27 mg of elemental iron per day—almost double the non-pregnant requirement—to produce red blood cells for the 50% expansion in circulating blood volume and prevent iron-deficiency anemia.",
+      "The calculator is designed around singleton and twin/multiple pregnancy guidance. Evidence is much less established for triplets and higher-order multiples, so those pregnancies should be managed using individualized guidance from the obstetric team.",
   },
   {
-    question: "What foods should I avoid during pregnancy for food safety?",
+    question: "Is the weight-composition breakdown exact?",
     answer:
-      "Avoid high-mercury fish (shark, swordfish, king mackerel, tilefish), raw or undercooked meats/seafood/sushi, unpasteurized milk and soft cheeses (feta, brie, queso fresco), raw sprouts, unwashed produce, and unpasteurized juices to prevent Listeria, Salmonella, and Toxoplasma infections.",
+      "No. The weight-composition section is an educational model showing approximate components of pregnancy-related weight. It should not be interpreted as a measurement of the exact weight of your fetus, placenta, fluid, blood volume, or maternal fat stores.",
   },
   {
-    question: "Can I drink caffeine during pregnancy?",
+    question: "Should I try to hit the exact number shown by the calculator?",
     answer:
-      "Yes, but caffeine should be limited to less than 200 mg per day—roughly equivalent to one 12-ounce cup of brewed coffee.",
-  },
-  {
-    question: "Is alcohol safe in small amounts during pregnancy?",
-    answer:
-      "No amount of alcohol is proven safe during pregnancy. Alcohol crosses the placenta and can cause Fetal Alcohol Spectrum Disorders (FASD), intellectual disabilities, and growth restriction.",
-  },
-  {
-    question: "How long does it take to lose pregnancy weight after giving birth?",
-    answer:
-      "Immediately after delivery, women lose ~10–12 lbs (fetus, placenta, amniotic fluid). Additional fluid weight drops over the first 2 weeks. The remaining fat stores acquired during pregnancy are gradually lost over 6 to 12 months with balanced nutrition, exercise, and breastfeeding.",
-  },
-  {
-    question: "How does breastfeeding affect postpartum weight loss?",
-    answer:
-      "Breastfeeding burns approximately 400 to 500 extra calories per day to produce breast milk, which helps mobilize maternal fat stores accumulated during pregnancy.",
-  },
-  {
-    question: "How much water should I drink during pregnancy?",
-    answer:
-      "Pregnant women should drink approximately 8 to 12 cups (64–96 oz or 2–3 liters) of water daily to support increased blood volume, amniotic fluid production, and cellular hydration.",
-  },
-  {
-    question: "Is exercise safe to help manage weight gain during pregnancy?",
-    answer:
-      "Yes. ACOG recommends at least 150 minutes of moderate-intensity aerobic physical activity per week (such as brisk walking, prenatal yoga, or stationary cycling) for women with uncomplicated pregnancies.",
-  },
-  {
-    question: "How often should my weight be monitored during prenatal visits?",
-    answer:
-      "Your healthcare provider will weigh you at every prenatal checkup—typically monthly until Week 28, biweekly from Weeks 28–36, and weekly from Week 36 until delivery.",
+      "No. The displayed result is a guideline-based reference range rather than a required daily or weekly number. Your healthcare provider may interpret your weight trajectory differently depending on fetal growth and your individual health.",
   },
 ];
 

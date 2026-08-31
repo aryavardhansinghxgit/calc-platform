@@ -10,7 +10,7 @@ export const pregnancy_weight_gain_calculatorConfig: CalculatorModuleDefinition 
   category: "Health",
   subcategory: "Pregnancy",
   description:
-    "Calculate personalized, healthy weight gain targets by week of pregnancy based on Institute of Medicine (IOM) & ACOG clinical guidelines. Features week-by-week weight schedule, 40-week trajectory chart, physiological weight distribution breakdown, and nutritional guidelines.",
+    "Calculate recommended pregnancy weight gain by pre-pregnancy BMI, pregnancy week, and singleton or twin pregnancy. See weekly targets and a 40-week trajectory.",
   iconName: "TrendingUp",
   featured: true,
   keywords: [
@@ -24,10 +24,6 @@ export const pregnancy_weight_gain_calculatorConfig: CalculatorModuleDefinition 
   ],
   priority: 1,
   relatedCalculators: [
-    "pregnancy-calculator",
-    "pregnancy-conception-calculator",
-    "due-date-calculator",
-    "ovulation-calculator",
     "bmi-calculator",
     "calorie-calculator",
   ],

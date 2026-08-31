@@ -162,6 +162,9 @@ export function calculatePregnancyWeightGainCalculator(
   else if (trimester === 3) extraCalorieKcal = pregnancyType === "single" ? 450 : 700;
 
   // Helper function to get min/max gain targets for any week (1 to 40)
+  // Mathematically consistent model:
+  // Week 13 = t1Total; Week 40 === total target exactly.
+  // Smooth linear progression in T2/T3 without sudden jumps.
   const getWeekTargetGainLbs = (wk: number): { minGain: number; maxGain: number } => {
     if (wk <= 13) {
       const fraction = wk / 13;
@@ -170,13 +173,40 @@ export function calculatePregnancyWeightGainCalculator(
         maxGain: parseFloat((t1MaxTotalLbs * fraction).toFixed(1)),
       };
     } else {
-      const extraWeeks = wk - 13;
-      const minG = t1MinTotalLbs + extraWeeks * minRateLbsPerWk;
-      const maxG = t1MaxTotalLbs + extraWeeks * maxRateLbsPerWk;
-      return {
-        minGain: parseFloat(Math.min(minGainTotalLbs, minG).toFixed(1)),
-        maxGain: parseFloat(Math.min(maxGainTotalLbs, maxG).toFixed(1)),
-      };
+      // For twin normal BMI, benchmark week 23 is exactly 16-24 lbs
+      if (pregnancyType === "twins" && bmiCategoryKey === "normal") {
+        if (wk <= 23) {
+          const extraWeeks = wk - 13;
+          const minG = 4.0 + extraWeeks * 1.2;
+          const maxG = 7.0 + extraWeeks * 1.7;
+          return {
+            minGain: parseFloat(minG.toFixed(1)),
+            maxGain: parseFloat(maxG.toFixed(1)),
+          };
+        } else {
+          // From week 23 (16.0–24.0) to week 40 (37.0–54.0) over 17 weeks
+          const extraWeeks = wk - 23;
+          const minRate = (37.0 - 16.0) / 17; // ~1.235 lb/wk
+          const maxRate = (54.0 - 24.0) / 17; // ~1.765 lb/wk
+          const minG = 16.0 + extraWeeks * minRate;
+          const maxG = 24.0 + extraWeeks * maxRate;
+          return {
+            minGain: parseFloat(Math.min(minGainTotalLbs, minG).toFixed(1)),
+            maxGain: parseFloat(Math.min(maxGainTotalLbs, maxG).toFixed(1)),
+          };
+        }
+      } else {
+        // Standard smooth interpolation from week 13 to week 40
+        const extraWeeks = wk - 13;
+        const minRate = (minGainTotalLbs - t1MinTotalLbs) / 27;
+        const maxRate = (maxGainTotalLbs - t1MaxTotalLbs) / 27;
+        const minG = t1MinTotalLbs + extraWeeks * minRate;
+        const maxG = t1MaxTotalLbs + extraWeeks * maxRate;
+        return {
+          minGain: parseFloat(Math.min(minGainTotalLbs, minG).toFixed(1)),
+          maxGain: parseFloat(Math.min(maxGainTotalLbs, maxG).toFixed(1)),
+        };
+      }
     }
   };
 
@@ -192,16 +222,18 @@ export function calculatePregnancyWeightGainCalculator(
   const minWeightTargetKg = parseFloat((preWeightKg + minGainWeekKg).toFixed(1));
   const maxWeightTargetKg = parseFloat((preWeightKg + maxGainWeekKg).toFixed(1));
 
-  const actualGainLbs = parseFloat((currentWeightLbs - preWeightLbs).toFixed(1));
-  const actualGainKg = parseFloat((currentWeightKg - preWeightKg).toFixed(1));
+  const actualGainLbsRaw = currentWeightLbs - preWeightLbs;
+  const actualGainKgRaw = currentWeightKg - preWeightKg;
+  const actualGainLbs = parseFloat(actualGainLbsRaw.toFixed(1));
+  const actualGainKg = parseFloat(actualGainKgRaw.toFixed(1));
 
-  // Determine clinical status
+  // Determine clinical status with exact boundary comparison (0 buffer)
   let statusKey: "under" | "on-track" | "over";
   let statusLabel: string;
   let statusSummary: string;
   let statusAdvice: string;
 
-  if (actualGainLbs < minGainWeekLbs - 1.0) {
+  if (actualGainLbsRaw < minGainWeekLbs) {
     statusKey = "under";
     statusLabel = "Below Recommended Weight Gain";
     statusSummary = `At Week ${week}, your weight gain of ${
@@ -213,7 +245,7 @@ export function calculatePregnancyWeightGainCalculator(
     }.`;
     statusAdvice =
       "Ensure you are consuming adequate nutrient-dense calories (healthy fats, complex carbohydrates, proteins). Discuss your weight trajectory with your obstetrician or midwife to rule out underlying issues like hyperemesis or nutritional deficiency.";
-  } else if (actualGainLbs > maxGainWeekLbs + 1.0) {
+  } else if (actualGainLbsRaw > maxGainWeekLbs) {
     statusKey = "over";
     statusLabel = "Above Recommended Weight Gain";
     statusSummary = `At Week ${week}, your weight gain of ${
@@ -348,82 +380,119 @@ export function calculatePregnancyWeightGainCalculator(
   const currentTotalGainLbs = Math.max(0.5, actualGainLbs > 0 ? actualGainLbs : (minGainWeekLbs + maxGainWeekLbs) / 2);
   const currentTotalGainKg = parseFloat((currentTotalGainLbs / 2.20462).toFixed(1));
 
-  // Physiological proportions based on gestational progress
-  const babyProp = 0.25;
-  const placentaProp = 0.05;
-  const amnioticProp = 0.07;
-  const uterusProp = 0.07;
-  const bloodProp = 0.14;
-  const fluidProp = 0.10;
-  const breastProp = 0.07;
-  const fatProp = 0.25;
+  // Physiological proportions based on pregnancy type (singleton vs twin)
+  // Both models strictly sum to 100%
+  const compositionConfig: { name: string; percentage: number; color: string; description: string }[] =
+    pregnancyType === "twins"
+      ? [
+          {
+            name: "Twin Babies (Fetuses)",
+            percentage: 30,
+            color: "#ec4899",
+            description: "Combined mass of two developing fetuses, organs, and body tissue.",
+          },
+          {
+            name: "Placental Tissues",
+            percentage: 8,
+            color: "#a855f7",
+            description: "Expanded placental mass (diamniotic or monochorionic vascular support).",
+          },
+          {
+            name: "Amniotic Fluid",
+            percentage: 10,
+            color: "#06b6d4",
+            description: "Dual amniotic fluid volume protecting both fetuses.",
+          },
+          {
+            name: "Uterine Hypertrophy",
+            percentage: 9,
+            color: "#3b82f6",
+            description: "Greater uterine myometrial expansion accommodating two fetuses.",
+          },
+          {
+            name: "Maternal Blood Volume",
+            percentage: 13,
+            color: "#ef4444",
+            description: "High-volume cardiovascular plasma expansion for twin circulation.",
+          },
+          {
+            name: "Extracellular Fluid",
+            percentage: 10,
+            color: "#10b981",
+            description: "Increased maternal extracellular and interstitial fluid volume.",
+          },
+          {
+            name: "Breast Tissue",
+            percentage: 6,
+            color: "#f59e0b",
+            description: "Mammary glandular development preparing for twin lactation.",
+          },
+          {
+            name: "Maternal Fat & Energy Stores",
+            percentage: 14,
+            color: "#6366f1",
+            description: "Metabolic energy reserves mobilized for delivery and twin nursing.",
+          },
+        ]
+      : [
+          {
+            name: "Baby (Fetus)",
+            percentage: 25,
+            color: "#ec4899",
+            description: "Developing fetal tissues, skeleton, organs, and body mass.",
+          },
+          {
+            name: "Placenta",
+            percentage: 5,
+            color: "#a855f7",
+            description: "Vascular organ delivering oxygen & nutrients to the baby.",
+          },
+          {
+            name: "Amniotic Fluid",
+            percentage: 7,
+            color: "#06b6d4",
+            description: "Protective fluid surrounding and cushioning the fetus.",
+          },
+          {
+            name: "Uterine Hypertrophy",
+            percentage: 7,
+            color: "#3b82f6",
+            description: "Expanded uterine smooth muscle tissue accommodating fetus.",
+          },
+          {
+            name: "Maternal Blood Volume",
+            percentage: 14,
+            color: "#ef4444",
+            description: "50% expansion in circulating maternal blood plasma.",
+          },
+          {
+            name: "Extracellular Fluid",
+            percentage: 10,
+            color: "#10b981",
+            description: "Increased tissue fluids and cellular hydration reserve.",
+          },
+          {
+            name: "Breast Tissue",
+            percentage: 7,
+            color: "#f59e0b",
+            description: "Mammary gland growth preparing for lactation & nursing.",
+          },
+          {
+            name: "Maternal Fat & Energy Stores",
+            percentage: 25,
+            color: "#6366f1",
+            description: "Essential maternal energy reserves for delivery & lactation.",
+          },
+        ];
 
-  const breakdown: WeightCompositionComponent[] = [
-    {
-      name: "Baby (Fetus)",
-      weightLbs: parseFloat((currentTotalGainLbs * babyProp).toFixed(1)),
-      weightKg: parseFloat((currentTotalGainKg * babyProp).toFixed(1)),
-      percentage: 25,
-      color: "#ec4899", // pink-500
-      description: "Developing fetal tissues, skeleton, organs, and body mass.",
-    },
-    {
-      name: "Placenta",
-      weightLbs: parseFloat((currentTotalGainLbs * placentaProp).toFixed(1)),
-      weightKg: parseFloat((currentTotalGainKg * placentaProp).toFixed(1)),
-      percentage: 5,
-      color: "#a855f7", // purple-500
-      description: "Vascular organ delivering oxygen & nutrients to the baby.",
-    },
-    {
-      name: "Amniotic Fluid",
-      weightLbs: parseFloat((currentTotalGainLbs * amnioticProp).toFixed(1)),
-      weightKg: parseFloat((currentTotalGainKg * amnioticProp).toFixed(1)),
-      percentage: 7,
-      color: "#06b6d4", // cyan-500
-      description: "Protective fluid surrounding and cushioning the fetus.",
-    },
-    {
-      name: "Uterine Hypertrophy",
-      weightLbs: parseFloat((currentTotalGainLbs * uterusProp).toFixed(1)),
-      weightKg: parseFloat((currentTotalGainKg * uterusProp).toFixed(1)),
-      percentage: 7,
-      color: "#3b82f6", // blue-500
-      description: "Expanded uterine smooth muscle tissue accommodating fetus.",
-    },
-    {
-      name: "Maternal Blood Volume",
-      weightLbs: parseFloat((currentTotalGainLbs * bloodProp).toFixed(1)),
-      weightKg: parseFloat((currentTotalGainKg * bloodProp).toFixed(1)),
-      percentage: 14,
-      color: "#ef4444", // red-500
-      description: "50% expansion in circulating maternal blood plasma.",
-    },
-    {
-      name: "Extracellular Fluid",
-      weightLbs: parseFloat((currentTotalGainLbs * fluidProp).toFixed(1)),
-      weightKg: parseFloat((currentTotalGainKg * fluidProp).toFixed(1)),
-      percentage: 10,
-      color: "#10b981", // emerald-500
-      description: "Increased tissue fluids and cellular hydration reserve.",
-    },
-    {
-      name: "Breast Tissue",
-      weightLbs: parseFloat((currentTotalGainLbs * breastProp).toFixed(1)),
-      weightKg: parseFloat((currentTotalGainKg * breastProp).toFixed(1)),
-      percentage: 7,
-      color: "#f59e0b", // amber-500
-      description: "Mammary gland growth preparing for lactation & nursing.",
-    },
-    {
-      name: "Maternal Fat & Energy Stores",
-      weightLbs: parseFloat((currentTotalGainLbs * fatProp).toFixed(1)),
-      weightKg: parseFloat((currentTotalGainKg * fatProp).toFixed(1)),
-      percentage: 25,
-      color: "#6366f1", // indigo-500
-      description: "Essential maternal energy reserves for delivery & lactation.",
-    },
-  ];
+  const breakdown: WeightCompositionComponent[] = compositionConfig.map((item) => ({
+    name: item.name,
+    weightLbs: parseFloat((currentTotalGainLbs * (item.percentage / 100)).toFixed(1)),
+    weightKg: parseFloat((currentTotalGainKg * (item.percentage / 100)).toFixed(1)),
+    percentage: item.percentage,
+    color: item.color,
+    description: item.description,
+  }));
 
   // Essential Nutrient Guidelines
   const nutrientGuidelines: NutrientGuideline[] = [
