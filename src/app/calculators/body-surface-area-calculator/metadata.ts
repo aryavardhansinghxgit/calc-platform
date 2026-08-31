@@ -1,34 +1,34 @@
 import { Metadata } from "next";
 
 export const bsaMetadata: Metadata = {
-  title: "Body Surface Area (BSA) Calculator | Mosteller, Du Bois & Clinical Dosing",
+  title: "BSA Calculator – Body Surface Area, Mosteller Formula & BSA Dosing",
   description:
-    "Free clinical Body Surface Area (BSA) calculator supporting Mosteller, Du Bois, Haycock, Schlich 3D, Chemotherapy dosing, Cardiac Index, and GFR normalization.",
+    "Calculate body surface area (BSA) from height and weight using the Mosteller, Du Bois, Haycock and other formulas. Compare BSA methods and explore chemotherapy, GFR and cardiac-index calculations.",
   keywords: [
-    "body surface area calculator",
     "BSA calculator",
-    "Mosteller formula BSA",
-    "Du Bois BSA calculator",
-    "chemotherapy dose BSA calculator",
-    "cardiac index BSA calculator",
-    "GFR BSA normalization calculator",
-    "Haycock pediatric BSA",
-    "Schlich 3D body scan BSA",
-    "Costeff formula BSA",
+    "body surface area",
+    "Mosteller formula",
+    "BSA dosing",
+    "Du Bois formula",
+    "Haycock BSA",
+    "chemotherapy BSA dosing",
+    "GFR normalization",
+    "cardiac index BSA",
+    "body surface area calculator",
   ],
   authors: [{ name: "Calculator Platform Clinical Team" }],
   openGraph: {
-    title: "Body Surface Area (BSA) Calculator | Mosteller & Clinical Oncology Suite",
+    title: "BSA Calculator – Body Surface Area, Mosteller Formula & BSA Dosing",
     description:
-      "Calculate precise Body Surface Area (BSA) using 9 formulas. Features chemotherapy dosing, Cardiac Index, GFR normalization, and population percentiles.",
+      "Calculate body surface area (BSA) from height and weight using the Mosteller, Du Bois, Haycock and other formulas. Compare BSA methods and explore chemotherapy, GFR and cardiac-index calculations.",
     url: "https://calculator-platform.com/calculators/body-surface-area-calculator",
     siteName: "Calculator Platform",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Body Surface Area (BSA) Calculator & Clinical Dosing Suite",
+    title: "BSA Calculator – Body Surface Area, Mosteller Formula & BSA Dosing",
     description:
-      "Clinical BSA calculator with Mosteller, Du Bois, Chemotherapy dosing, Cardiac Index, and 8-formula comparison.",
+      "Calculate body surface area (BSA) from height and weight using the Mosteller, Du Bois, Haycock and other formulas. Compare BSA methods and explore chemotherapy, GFR and cardiac-index calculations.",
   },
 };

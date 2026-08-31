@@ -25,13 +25,17 @@ export interface BsaFormulaItem {
 
 export interface ChemoDosingResult {
   targetDosePerM2: number;
+  genericTotalDoseMg: number;
   uncappedTotalDoseMg: number;
   isCapped: boolean;
-  cappedBsaLimitM2: number;
+  isProtocolCapped: boolean;
+  cappedBsaLimitM2?: number;
+  protocolMaxDoseMg?: number;
   effectiveBsaM2: number;
   finalDoseMg: number;
   carboplatinAucDoseMg?: number;
   dosingGuidance: string;
+  calvertGuidance?: string;
 }
 
 export interface CardiacIndexResult {
@@ -57,22 +61,24 @@ export interface PopulationBenchmark {
 }
 
 export interface BsaInputs {
-  mode: BsaMode;
-  gender: Gender;
-  unitSystem: UnitSystem;
-  ageYears: number;
+  mode?: BsaMode;
+  gender?: Gender;
+  unitSystem?: UnitSystem;
+  ageYears?: number;
   
   // Height & Weight US Imperial
-  heightFeet: number;
-  heightInches: number;
-  weightLbs: number;
+  heightFeet?: number;
+  heightInches?: number;
+  weightLbs?: number;
 
   // Height & Weight Metric
-  heightCm: number;
-  weightKg: number;
+  heightCm?: number;
+  weightKg?: number;
 
   // Chemotherapy Dosing Inputs
   targetChemoDoseMgM2?: number;
+  applyProtocolCap?: boolean;
+  protocolMaxDoseMg?: number;
   capObeseBsaAt2m2?: boolean;
   targetCarboplatinAuc?: number;
   targetGFR?: number;
@@ -106,7 +112,7 @@ export interface BsaResults {
   idealBodyWeightKg: number; // Devine
   leanBodyMassKg: number; // Boer
 
-  // 8-Formula Array & Variance
+  // 9-Formula Array & Variance
   formulaList: BsaFormulaItem[];
   minBsaM2: number;
   maxBsaM2: number;
@@ -121,4 +127,15 @@ export interface BsaResults {
   // Clinical Recommendations & Insights
   clinicalRecommendations: string[];
   actionPlan: string[];
+}
+
+export interface SavedBsaScenario {
+  id: string;
+  name: string;
+  timestamp: string;
+  inputs: BsaInputs;
+  primaryBsaM2: number;
+  primaryBsaFt2: number;
+  bmi: number;
+  formulaName: string;
 }

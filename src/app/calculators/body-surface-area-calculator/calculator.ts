@@ -9,8 +9,9 @@ import {
 } from "./types";
 
 /**
- * 1. Mosteller Formula (1987) - Clinical Gold Standard
- * BSA (m2) = sqrt( (W_kg * H_cm) / 3600 )
+ * 1. Mosteller Formula (1987)
+ * BSA (m²) = sqrt( (Weight_kg * Height_cm) / 3600 )
+ * Widely used simplified clinical equation.
  */
 export function calcMosteller(weightKg: number, heightCm: number): number {
   if (weightKg <= 0 || heightCm <= 0) return 0;
@@ -19,7 +20,8 @@ export function calcMosteller(weightKg: number, heightCm: number): number {
 
 /**
  * 2. Du Bois & Du Bois Formula (1916)
- * BSA (m2) = 0.007184 * W_kg^0.425 * H_cm^0.725
+ * BSA (m²) = 0.007184 * Weight_kg^0.425 * Height_cm^0.725
+ * Classic historical metabolic chamber equation.
  */
 export function calcDuBois(weightKg: number, heightCm: number): number {
   if (weightKg <= 0 || heightCm <= 0) return 0;
@@ -27,8 +29,9 @@ export function calcDuBois(weightKg: number, heightCm: number): number {
 }
 
 /**
- * 3. Haycock Formula (1978) - Pediatric Gold Standard
- * BSA (m2) = 0.024265 * W_kg^0.5378 * H_cm^0.3964
+ * 3. Haycock Formula (1978)
+ * BSA (m²) = 0.024265 * Weight_kg^0.5378 * Height_cm^0.3964
+ * Validated across infants, children, and adults.
  */
 export function calcHaycock(weightKg: number, heightCm: number): number {
   if (weightKg <= 0 || heightCm <= 0) return 0;
@@ -37,7 +40,8 @@ export function calcHaycock(weightKg: number, heightCm: number): number {
 
 /**
  * 4. Gehan & George Formula (1970)
- * BSA (m2) = 0.0235 * W_kg^0.51456 * H_cm^0.42246
+ * BSA (m²) = 0.0235 * Weight_kg^0.51456 * Height_cm^0.42246
+ * Derived from 229 direct 2D body surface measurements.
  */
 export function calcGehanGeorge(weightKg: number, heightCm: number): number {
   if (weightKg <= 0 || heightCm <= 0) return 0;
@@ -46,7 +50,8 @@ export function calcGehanGeorge(weightKg: number, heightCm: number): number {
 
 /**
  * 5. Boyd Formula (1935)
- * BSA (m2) = 0.03330 * W_kg^(0.6157 - 0.0188 * log10(W_kg)) * H_cm^0.3
+ * BSA (m²) = 0.03330 * Weight_kg^(0.6157 - 0.0188 * log10(Weight_kg)) * Height_cm^0.3
+ * Logarithmic weight polynomial curve fitting equation.
  */
 export function calcBoyd(weightKg: number, heightCm: number): number {
   if (weightKg <= 0 || heightCm <= 0) return 0;
@@ -55,8 +60,9 @@ export function calcBoyd(weightKg: number, heightCm: number): number {
 }
 
 /**
- * 6. Fujimoto Formula (1968) - Asian Demographic
- * BSA (m2) = 0.008883 * W_kg^0.444 * H_cm^0.663
+ * 6. Fujimoto Formula (1968)
+ * BSA (m²) = 0.008883 * Weight_kg^0.444 * Height_cm^0.663
+ * Derived from East Asian adult anthropometric measurements.
  */
 export function calcFujimoto(weightKg: number, heightCm: number): number {
   if (weightKg <= 0 || heightCm <= 0) return 0;
@@ -64,8 +70,9 @@ export function calcFujimoto(weightKg: number, heightCm: number): number {
 }
 
 /**
- * 7. Takahira Formula (1968) - Japanese Demographic
- * BSA (m2) = 0.007241 * W_kg^0.425 * H_cm^0.725
+ * 7. Takahira Formula (1925 / 1968)
+ * BSA (m²) = 0.007241 * Weight_kg^0.425 * Height_cm^0.725
+ * Japanese population anatomical surface equation.
  */
 export function calcTakahira(weightKg: number, heightCm: number): number {
   if (weightKg <= 0 || heightCm <= 0) return 0;
@@ -73,9 +80,10 @@ export function calcTakahira(weightKg: number, heightCm: number): number {
 }
 
 /**
- * 8. Schlich Formula (2010) - Gender 3D Body Scan
- * Women: BSA = 0.000975482 * W_kg^0.46 * H_cm^1.08
- * Men: BSA = 0.000579479 * W_kg^0.38 * H_cm^1.24
+ * 8. Schlich Formula (2010)
+ * Women: BSA (m²) = 0.000975482 * Weight_kg^0.46 * Height_cm^1.08
+ * Men: BSA (m²) = 0.000579479 * Weight_kg^0.38 * Height_cm^1.24
+ * Derived from 3D laser surface body scans.
  */
 export function calcSchlich(weightKg: number, heightCm: number, gender: "male" | "female"): number {
   if (weightKg <= 0 || heightCm <= 0) return 0;
@@ -86,8 +94,9 @@ export function calcSchlich(weightKg: number, heightCm: number, gender: "male" |
 }
 
 /**
- * 9. Costeff Emergency Formula (1966) - Fast Pediatric
- * BSA (m2) = (4 * W_kg + 7) / (W_kg + 90)
+ * 9. Costeff Emergency Formula (1966)
+ * BSA (m²) = (4 * Weight_kg + 7) / (Weight_kg + 90)
+ * Pediatric rule of thumb (empirically designed for children ≤ 40 kg).
  */
 export function calcCosteff(weightKg: number): number {
   if (weightKg <= 0) return 0;
@@ -98,6 +107,7 @@ export function calcCosteff(weightKg: number): number {
  * Ideal Body Weight (Devine Equation 1974)
  */
 export function calcDevineIbw(heightCm: number, gender: "male" | "female"): number {
+  if (heightCm <= 0) return 0;
   const heightInches = heightCm / 2.54;
   const inchesOver5Ft = Math.max(0, heightInches - 60);
   if (gender === "male") {
@@ -110,10 +120,11 @@ export function calcDevineIbw(heightCm: number, gender: "male" | "female"): numb
  * Lean Body Mass (Boer Equation 1984)
  */
 export function calcBoerLbm(weightKg: number, heightCm: number, gender: "male" | "female"): number {
+  if (weightKg <= 0 || heightCm <= 0) return 0;
   if (gender === "male") {
-    return 0.407 * weightKg + 0.267 * heightCm - 19.2;
+    return Math.max(0, 0.407 * weightKg + 0.267 * heightCm - 19.2);
   }
-  return 0.252 * weightKg + 0.473 * heightCm - 48.3;
+  return Math.max(0, 0.252 * weightKg + 0.473 * heightCm - 48.3);
 }
 
 /**
@@ -121,10 +132,10 @@ export function calcBoerLbm(weightKg: number, heightCm: number, gender: "male" |
  */
 export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
   const {
-    mode,
-    gender,
-    unitSystem,
-    ageYears,
+    mode = "mosteller-clinical",
+    gender = "male",
+    unitSystem = "us",
+    ageYears = 35,
     heightFeet: inputHeightFeet,
     heightInches: inputHeightInches,
     weightLbs: inputWeightLbs,
@@ -159,17 +170,18 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
 
   // 2. BMI & Anthropometrics
   const heightM = heightCm / 100;
-  const bmi = heightM > 0 ? Number((weightKg / (heightM * heightM)).toFixed(1)) : 0;
+  const bmi = heightM > 0 && weightKg > 0 ? Number((weightKg / (heightM * heightM)).toFixed(1)) : 0;
   let bmiCategory = "Normal weight";
-  if (bmi < 18.5) bmiCategory = "Underweight";
+  if (bmi <= 0) bmiCategory = "N/A";
+  else if (bmi < 18.5) bmiCategory = "Underweight";
   else if (bmi < 25) bmiCategory = "Normal weight";
   else if (bmi < 30) bmiCategory = "Overweight";
   else bmiCategory = "Obese";
 
   const idealBodyWeightKg = Number(calcDevineIbw(heightCm, gender).toFixed(1));
-  const leanBodyMassKg = Number(Math.max(0, calcBoerLbm(weightKg, heightCm, gender)).toFixed(1));
+  const leanBodyMassKg = Number(calcBoerLbm(weightKg, heightCm, gender).toFixed(1));
 
-  // 3. Compute 8 BSA Formulas
+  // 3. Compute 9 BSA Formulas
   const mostellerVal = calcMosteller(weightKg, heightCm);
   const duBoisVal = calcDuBois(weightKg, heightCm);
   const haycockVal = calcHaycock(weightKg, heightCm);
@@ -180,7 +192,12 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
   const schlichVal = calcSchlich(weightKg, heightCm, gender);
   const costeffVal = calcCosteff(weightKg);
 
-  const convertToFt2 = (m2: number) => m2 * 10.7639;
+  const convertToFt2 = (m2: number) => m2 * 10.7639104;
+
+  const calcVariance = (val: number) => {
+    if (mostellerVal <= 0) return 0;
+    return Number((((val - mostellerVal) / mostellerVal) * 100).toFixed(1));
+  };
 
   const formulaList: BsaFormulaItem[] = [
     {
@@ -190,7 +207,7 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
       bsaM2: Number(mostellerVal.toFixed(2)),
       bsaFt2: Number(convertToFt2(mostellerVal).toFixed(2)),
       varianceFromMosteller: 0,
-      description: "Clinical gold standard equation used in oncology and nephrology.",
+      description: "Standard simplified clinical equation used widely in oncology and nephrology.",
     },
     {
       formulaKey: "dubois",
@@ -198,8 +215,8 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
       year: "1916",
       bsaM2: Number(duBoisVal.toFixed(2)),
       bsaFt2: Number(convertToFt2(duBoisVal).toFixed(2)),
-      varianceFromMosteller: Number((((duBoisVal - mostellerVal) / mostellerVal) * 100).toFixed(1)),
-      description: "Classic historical 9-subject metabolic chamber study formula.",
+      varianceFromMosteller: calcVariance(duBoisVal),
+      description: "Classic historical metabolic chamber equation derived from 9 human subjects.",
     },
     {
       formulaKey: "haycock",
@@ -207,8 +224,8 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
       year: "1978",
       bsaM2: Number(haycockVal.toFixed(2)),
       bsaFt2: Number(convertToFt2(haycockVal).toFixed(2)),
-      varianceFromMosteller: Number((((haycockVal - mostellerVal) / mostellerVal) * 100).toFixed(1)),
-      description: "Validated across infants, children, and adults (high precision).",
+      varianceFromMosteller: calcVariance(haycockVal),
+      description: "Validated across infants, children, and adults for high pediatric accuracy.",
     },
     {
       formulaKey: "gehan-george",
@@ -216,8 +233,8 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
       year: "1970",
       bsaM2: Number(gehanGeorgeVal.toFixed(2)),
       bsaFt2: Number(convertToFt2(gehanGeorgeVal).toFixed(2)),
-      varianceFromMosteller: Number((((gehanGeorgeVal - mostellerVal) / mostellerVal) * 100).toFixed(1)),
-      description: "229-subject 2D surface measurement study.",
+      varianceFromMosteller: calcVariance(gehanGeorgeVal),
+      description: "Derived from 229 direct 2D body surface measurements.",
     },
     {
       formulaKey: "boyd",
@@ -225,7 +242,7 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
       year: "1935",
       bsaM2: Number(boydVal.toFixed(2)),
       bsaFt2: Number(convertToFt2(boydVal).toFixed(2)),
-      varianceFromMosteller: Number((((boydVal - mostellerVal) / mostellerVal) * 100).toFixed(1)),
+      varianceFromMosteller: calcVariance(boydVal),
       description: "Logarithmic weight polynomial curve fitting equation.",
     },
     {
@@ -234,8 +251,8 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
       year: "1968",
       bsaM2: Number(fujimotoVal.toFixed(2)),
       bsaFt2: Number(convertToFt2(fujimotoVal).toFixed(2)),
-      varianceFromMosteller: Number((((fujimotoVal - mostellerVal) / mostellerVal) * 100).toFixed(1)),
-      description: "Derived specifically for East Asian anthropometric baselines.",
+      varianceFromMosteller: calcVariance(fujimotoVal),
+      description: "Derived specifically from East Asian anatomical measurements.",
     },
     {
       formulaKey: "takahira",
@@ -243,7 +260,7 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
       year: "1968",
       bsaM2: Number(takahiraVal.toFixed(2)),
       bsaFt2: Number(convertToFt2(takahiraVal).toFixed(2)),
-      varianceFromMosteller: Number((((takahiraVal - mostellerVal) / mostellerVal) * 100).toFixed(1)),
+      varianceFromMosteller: calcVariance(takahiraVal),
       description: "Japanese population anatomical surface equation.",
     },
     {
@@ -252,7 +269,7 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
       year: "2010",
       bsaM2: Number(schlichVal.toFixed(2)),
       bsaFt2: Number(convertToFt2(schlichVal).toFixed(2)),
-      varianceFromMosteller: Number((((schlichVal - mostellerVal) / mostellerVal) * 100).toFixed(1)),
+      varianceFromMosteller: calcVariance(schlichVal),
       description: "Modern 3D laser surface body scan equation (gender differentiated).",
     },
     {
@@ -261,8 +278,8 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
       year: "1966",
       bsaM2: Number(costeffVal.toFixed(2)),
       bsaFt2: Number(convertToFt2(costeffVal).toFixed(2)),
-      varianceFromMosteller: Number((((costeffVal - mostellerVal) / mostellerVal) * 100).toFixed(1)),
-      description: "Fast mental arithmetic pediatric formula for emergency room dosing.",
+      varianceFromMosteller: calcVariance(costeffVal),
+      description: "Emergency pediatric rule of thumb requiring no height measurement (best for ≤40 kg).",
     },
   ];
 
@@ -303,34 +320,45 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
   // 4. Chemotherapy Dosing Module
   let chemoDosing: ChemoDosingResult | undefined = undefined;
   if (mode === "chemo-dosing" || mode === "custom-oncology") {
-    const uncappedDose = Math.round(primaryBsaM2 * targetChemoDoseMgM2);
-    let effectiveBsa = primaryBsaM2;
+    const genericDose = Math.round(bsaM2Rounded * targetChemoDoseMgM2);
+    let effectiveBsa = bsaM2Rounded;
     let isCapped = false;
+    let finalDoseMg = genericDose;
 
-    if (capObeseBsaAt2m2 && primaryBsaM2 > 2.0) {
+    // Optional protocol-specific maximum dose
+    if (inputs.applyProtocolCap && inputs.protocolMaxDoseMg && inputs.protocolMaxDoseMg > 0 && finalDoseMg > inputs.protocolMaxDoseMg) {
+      finalDoseMg = inputs.protocolMaxDoseMg;
+      isCapped = true;
+    } else if (capObeseBsaAt2m2 && bsaM2Rounded > 2.0) {
       effectiveBsa = 2.0;
+      finalDoseMg = Math.round(effectiveBsa * targetChemoDoseMgM2);
       isCapped = true;
     }
 
-    const finalDoseMg = Math.round(effectiveBsa * targetChemoDoseMgM2);
-
     // Calvert Formula for Carboplatin Dosing: Dose (mg) = Target AUC * (GFR + 25)
+    // Reference: Calvert AH et al., J Clin Oncol. 1989;7(11):1748-1756.
     const carboplatinDose = Math.round(targetCarboplatinAuc * (targetGFR + 25));
 
-    let guidance = "Standard BSA-based therapeutic dosing applied.";
+    let guidance = "Calculated from the prescribed mg/m² dose and patient BSA. Actual drug dosing must follow the specific prescribing information, regimen protocol, and clinical/pharmacist verification.";
     if (isCapped) {
-      guidance = "Empirical BSA capping at 2.0 m² applied; note that ASCO guidelines generally recommend full weight-based cytotoxic dosing without empirical capping unless required by specific drug protocols.";
+      guidance = "Protocol-specific maximum dose cap applied. Note: ASCO guideline update (Griggs et al., 2021) generally recommends full weight-based cytotoxic chemotherapy dosing in adults with obesity rather than routine arbitrary BSA capping (e.g. 2.0 m²).";
     }
+
+    const calvertNote = "Calvert formula — carboplatin AUC-based estimate: Dose (mg) = Target AUC × (GFR + 25). Input renal function must correspond to the protocol-required estimation method.";
 
     chemoDosing = {
       targetDosePerM2: targetChemoDoseMgM2,
-      uncappedTotalDoseMg: uncappedDose,
+      genericTotalDoseMg: genericDose,
+      uncappedTotalDoseMg: genericDose,
       isCapped,
-      cappedBsaLimitM2: 2.0,
+      isProtocolCapped: isCapped,
+      cappedBsaLimitM2: capObeseBsaAt2m2 ? 2.0 : undefined,
+      protocolMaxDoseMg: inputs.protocolMaxDoseMg,
       effectiveBsaM2: Number(effectiveBsa.toFixed(2)),
       finalDoseMg,
       carboplatinAucDoseMg: carboplatinDose,
       dosingGuidance: guidance,
+      calvertGuidance: calvertNote,
     };
   }
 
@@ -342,16 +370,19 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
     const svi = primaryBsaM2 > 0 ? Number((strokeVolume / primaryBsaM2).toFixed(1)) : 0;
 
     let category = "Normal Cardiac Index";
-    let interp = "Hemodynamic perfusion is optimal (normal range: 2.5 - 4.0 L/min/m²).";
-    if (ci < 2.2) {
+    let interp = "Hemodynamic perfusion is in normal range (2.5 – 4.0 L/min/m²).";
+    if (ci <= 0) {
+      category = "N/A";
+      interp = "Invalid inputs.";
+    } else if (ci < 2.2) {
       category = "Low Cardiac Index (Hypoperfusion Risk)";
-      interp = "Cardiogenic shock or severe hypoperfusion risk. Requires immediate clinical evaluation.";
+      interp = "Severe hypoperfusion risk (normal baseline: 2.5 – 4.0 L/min/m²).";
     } else if (ci < 2.5) {
       category = "Borderline Low Cardiac Index";
-      interp = "Slightly reduced systemic oxygen delivery. Monitor cardiac preload and contractility.";
+      interp = "Slightly reduced systemic oxygen delivery (normal: 2.5 – 4.0 L/min/m²).";
     } else if (ci > 4.2) {
       category = "Hyperdynamic Cardiac Output";
-      interp = "High output state (sepsis, thyrotoxicosis, severe anemia, or fever).";
+      interp = "Elevated cardiac index (normal: 2.5 – 4.0 L/min/m²).";
     }
 
     cardiacIndex = {
@@ -388,31 +419,31 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
       category: "Newborn Infant",
       averageBsaM2: 0.25,
       averageBsaFt2: 2.69,
-      userDiffPercent: Number((((bsaM2Rounded - 0.25) / 0.25) * 100).toFixed(0)),
+      userDiffPercent: bsaM2Rounded > 0 ? Number((((bsaM2Rounded - 0.25) / 0.25) * 100).toFixed(0)) : 0,
     },
     {
       category: "2-Year-Old Child",
       averageBsaM2: 0.50,
       averageBsaFt2: 5.38,
-      userDiffPercent: Number((((bsaM2Rounded - 0.50) / 0.50) * 100).toFixed(0)),
+      userDiffPercent: bsaM2Rounded > 0 ? Number((((bsaM2Rounded - 0.50) / 0.50) * 100).toFixed(0)) : 0,
     },
     {
       category: "10-Year-Old Child",
       averageBsaM2: 1.14,
       averageBsaFt2: 12.27,
-      userDiffPercent: Number((((bsaM2Rounded - 1.14) / 1.14) * 100).toFixed(0)),
+      userDiffPercent: bsaM2Rounded > 0 ? Number((((bsaM2Rounded - 1.14) / 1.14) * 100).toFixed(0)) : 0,
     },
     {
       category: "Adult Female Baseline",
       averageBsaM2: 1.60,
       averageBsaFt2: 17.22,
-      userDiffPercent: Number((((bsaM2Rounded - 1.60) / 1.60) * 100).toFixed(0)),
+      userDiffPercent: bsaM2Rounded > 0 ? Number((((bsaM2Rounded - 1.60) / 1.60) * 100).toFixed(0)) : 0,
     },
     {
       category: "Adult Male Baseline",
       averageBsaM2: 1.90,
       averageBsaFt2: 20.45,
-      userDiffPercent: Number((((bsaM2Rounded - 1.90) / 1.90) * 100).toFixed(0)),
+      userDiffPercent: bsaM2Rounded > 0 ? Number((((bsaM2Rounded - 1.90) / 1.90) * 100).toFixed(0)) : 0,
     },
   ];
 
@@ -421,13 +452,13 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
     `Calculated BSA of ${bsaM2Rounded} m² (${primaryBsaFt2} ft²) using ${primaryFormulaUsed}.`,
     `Body Mass Index (BMI) is ${bmi} kg/m² (${bmiCategory}). Ideal Body Weight (Devine) is ${idealBodyWeightKg} kg.`,
     `Formula variance across 9 clinical equations ranges from ${minBsaM2} m² to ${maxBsaM2} m² (average: ${averageBsaM2} m²).`,
-    `For chemotherapy dosing, Mosteller is the most widely adopted clinical reference equation in oncology protocols.`,
+    `BSA is an estimated metric; clinical decisions should incorporate patient history, laboratory values, and institutional protocols.`,
   ];
 
   const actionPlan: string[] = [
-    "Verify patient height and weight prior to administering narrow therapeutic index drugs.",
-    "For obese patients (BMI ≥ 30), consider clinical guidelines for BSA capping vs actual body weight dosing.",
-    "In pediatric patients, utilize the Haycock or Costeff equations for precise BSA estimations.",
+    "Verify patient height and weight prior to calculating narrow therapeutic index drug dosages.",
+    "For adult patients with obesity, ASCO clinical practice guidelines (Griggs et al., 2021) recommend full weight-based cytotoxic chemotherapy dosing without routine arbitrary BSA capping (such as 2.0 m²). Follow drug-specific labeling for any regimen-specific maximums.",
+    "In pediatric patients, consider formulas validated across infant/child cohorts such as Haycock.",
   ];
 
   return {
@@ -438,7 +469,7 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
     heightCm: Number(heightCm.toFixed(1)),
     heightInchesTotal: Number(heightInchesTotal.toFixed(1)),
     weightKg: Number(weightKg.toFixed(1)),
-    weightLbs: Number((weightKg * 2.20462).toFixed(1)),
+    weightLbs: Number((weightKg * 2.20462262).toFixed(1)),
     primaryBsaM2: bsaM2Rounded,
     primaryBsaFt2,
     primaryFormulaUsed,
@@ -460,4 +491,3 @@ export function calculateBsaCalculator(inputs: BsaInputs): BsaResults {
 }
 
 export const calculateBodySurfaceAreaCalculator = calculateBsaCalculator;
-

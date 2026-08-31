@@ -19,7 +19,7 @@ BSA is the clinical standard for calculating dosages of narrow therapeutic index
 
 ## 3. Standard Clinical BSA Formulas
 
-### 1. Mosteller Formula (1987) — Clinical Gold Standard
+### 1. Mosteller Formula (1987) — Standard Clinical Equation
 The Mosteller formula is the most widely adopted equation in modern oncology and clinical practice due to its accuracy and mathematical simplicity:
 
 BSA (m²) = √ [ ( Weight (kg) × Height (cm) ) / 3600 ]
@@ -73,13 +73,14 @@ Below are standard population baseline BSA values across key demographic age gro
 ## 5. Clinical Dosing & Protocol Applications
 
 ### Chemotherapy Dosing (ASCO Guidelines)
-- **Standard Dosing**: Total Dose (mg) = Prescribed Dose (mg/m²) × BSA (m²).
-- **Obesity Capping**: ASCO guidelines recommend dosing obese cancer patients based on actual full body weight without arbitrary BSA capping (e.g. 2.0 m²) to prevent sub-therapeutic underdosing.
+- **Generic Dose Calculation**: Total Dose (mg) = Prescribed Dose (mg/m²) × BSA (m²).
+- **Obesity Guidance (No Universal 2.0 m² Cap)**: ASCO clinical practice guidelines (Griggs et al., 2021 update) recommend full weight-based cytotoxic chemotherapy dosing for obese adult patients without routine arbitrary BSA capping (such as 2.0 m²). Regimen-specific dose limits must follow approved prescribing information and treatment protocols.
+- **Calvert Formula (Carboplatin AUC)**: Dose (mg) = Target AUC × (GFR + 25) (Calvert et al., 1989). Use protocol-specified absolute renal clearance (mL/min).
 
 ### Hemodynamic Cardiac Index (CI)
 - **Cardiac Index**: CI = Cardiac Output (L/min) / BSA (m²).
 - **Normal Reference Range**: 2.5 to 4.0 L/min/m².
 
 ### Renal GFR Surface Normalization
-- **eGFR Normalization**: Normalized eGFR = Unadjusted GFR (mL/min) × ( 1.73 / Patient BSA ).
+- **eGFR Normalization**: Normalized GFR = Absolute GFR (mL/min) × ( 1.73 / Patient BSA ).
 `;

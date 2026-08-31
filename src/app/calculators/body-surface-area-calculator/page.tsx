@@ -12,7 +12,7 @@ export default function BodySurfaceAreaCalculatorPage() {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: bsaFaqs.slice(0, 25).map((faq) => ({
+    mainEntity: bsaFaqs.map((faq) => ({
       "@type": "Question",
       name: faq.question,
       acceptedAnswer: {

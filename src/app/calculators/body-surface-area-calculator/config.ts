@@ -25,11 +25,11 @@ export const body_surface_area_calculatorConfig: CalculatorModuleDefinition = {
     "BSA (m²) calculated via Mosteller, Du Bois & Du Bois, Haycock, Gehan & George, Boyd, Fujimoto, Takahira, Schlich 3D, and Costeff equations.",
   faqs: bsaFaqs,
   modes: [
-    { id: "mosteller-clinical", name: "Mosteller Clinical Standard", description: "Gold standard oncology & clinical equation" },
+    { id: "mosteller-clinical", name: "Mosteller Clinical Standard", description: "Standard clinical oncology & nephrology equation" },
     { id: "dubois-classic", name: "Du Bois & Du Bois", description: "Classic historical metabolic equation (1916)" },
     { id: "haycock-pediatric", name: "Haycock Pediatric", description: "Pediatric & infant precise equation (1978)" },
     { id: "schlich-gender", name: "Schlich 3D Scan", description: "Gender-differentiated 3D laser scan formula" },
-    { id: "chemo-dosing", name: "Chemotherapy Dosing", description: "Target mg/m2 & ASCO obese capping calculator" },
+    { id: "chemo-dosing", name: "Chemotherapy Dose Estimator", description: "BSA-based mg/m² dose & Calvert carboplatin estimate" },
     { id: "cardiac-index", name: "Cardiac Index", description: "Hemodynamic CI (L/min/m2) & Stroke Volume Index" },
     { id: "gfr-normalization", name: "GFR Normalization", description: "Renal clearance surface area normalization" },
     { id: "pediatric-bsa", name: "Pediatric BSA", description: "Infant & children surface estimation" },
