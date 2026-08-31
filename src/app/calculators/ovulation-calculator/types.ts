@@ -8,8 +8,7 @@ export type OvulationCalculationMode =
 
 export type FertilityGoal =
   | "general-conception"
-  | "conceive-girl"
-  | "conceive-boy"
+  | "fertile-window-optimization"
   | "avoid-pregnancy";
 
 export type CervicalMucusType = "dry" | "sticky" | "creamy" | "egg-white";
@@ -24,6 +23,8 @@ export interface OvulationCalculatorInputs {
   nextPeriodDate?: string;
   targetDueDate?: string;
   conceptionDate?: string;
+  reverseOvulationDate?: string;
+  opkTestDate?: string;
   motherAge?: number;
   fertilityGoal?: FertilityGoal;
   bbtTemp?: number;
@@ -36,18 +37,25 @@ export interface CalendarDayInfo {
   dayOfMonth: number;
   monthName: string;
   dayOfWeekShort: string;
-  status: "menstrual" | "fertile" | "peak" | "ovulation" | "implantation" | "normal" | "next-period";
-  fertilityScore: number; // 0 to 100%
+  status:
+    | "menstrual"
+    | "fertile"
+    | "peak"
+    | "ovulation"
+    | "implantation"
+    | "normal"
+    | "next-period";
+  fertilityScore: number; // 0 to 100 relative index
   description: string;
   isToday: boolean;
 }
 
 export interface ConceptionProbabilityPoint {
-  dayLabel: string; // e.g. "O-5", "O-2", "Ovulation", "O+1"
+  dayLabel: string; // e.g. "O-5", "O-2", "Ovulation Day (O)", "O+1"
   dayOffset: number; // -5 to +1
-  probabilityPercent: number;
+  probabilityPercent: number; // Wilcox et al. population reference fecundability
   fertilityLevel: "Low" | "Moderate" | "High" | "Peak";
-  genderLean: "Girl Lean (X-Sperm)" | "Neutral" | "Boy Lean (Y-Sperm)";
+  clinicalInterpretation: string;
 }
 
 export interface HormoneDataPoint {
@@ -71,8 +79,9 @@ export interface OvulationCalculatorOutputs {
   implantationWindowEndFormatted: string;
   earliestHcgUrineTestDateFormatted: string;
   estimatedDueDateFormatted: string;
-  dailyFertilityScore: number;
+  dailyFertilityScore: number; // Relative 0-100 scale
   fertilityRating: "Low" | "Moderate" | "High" | "Peak";
+  fecundabilityReferenceNote: string;
   cycleLength: number;
   periodLength: number;
   lutealPhaseLength: number;
@@ -82,9 +91,13 @@ export interface OvulationCalculatorOutputs {
   conceptionProbabilityCurve: ConceptionProbabilityPoint[];
   hormoneCycleData: HormoneDataPoint[];
   monthlyCalendarDays: CalendarDayInfo[];
-  shettlesRecommendation: {
+  timingRecommendation: {
     title: string;
     bestWindow: string;
+    explanation: string;
+  };
+  historicalContextNote: {
+    title: string;
     explanation: string;
   };
   personalizedInsights: {

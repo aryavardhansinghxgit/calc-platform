@@ -10,7 +10,7 @@ export const pregnancy_conception_calculatorConfig: CalculatorModuleDefinition =
   category: "Health",
   subcategory: "Pregnancy",
   description:
-    "Estimate your exact conception date, fertile intercourse window, ovulation timing, and embryo implantation dates. Features 7 calculation modes (Due Date, LMP, Ultrasound, Ovulation, Reverse, IVF) with interactive probability curves and milestone timelines.",
+    "Estimate conception, ovulation, fertile-window timing and due dates from your cycle, ultrasound, conception or IVF dates with a clear pregnancy timeline.",
   iconName: "Heart",
   featured: true,
   keywords: [
@@ -31,7 +31,7 @@ export const pregnancy_conception_calculatorConfig: CalculatorModuleDefinition =
     "bmi-calculator",
   ],
   formulaDescription:
-    "Calculates conception date using 7 clinical methods based on ACOG & ASRM standards: Due Date (-266d), LMP (+CycleLength - LutealPhase), Ultrasound Scan (ScanDate - GestationalAge + 14d), or IVF Embryo Transfer Date.",
+    "Calculates conception date using 7 clinical methods based on ACOG & ASRM standards: Due Date (-266d), LMP (+CycleLength - LutealPhase), Ultrasound Scan (ScanDate - GestationalAge + (CycleLength - LutealPhase)), or IVF Embryo Transfer Date.",
   faqs: pregnancy_conception_calculatorFaqs,
   ContentComponent: PregnancyConceptionContent,
   inputs: [

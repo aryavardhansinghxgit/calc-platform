@@ -2,9 +2,9 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const pregnancy_conception_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Pregnancy Conception Calculator — 7 Modes & Fertile Window Estimator",
+  title: "Pregnancy Conception Calculator – Conception Date, Fertile Window & Due Date",
   description:
-    "Calculate your exact conception date, fertile intercourse window, ovulation day, and embryo implantation timing. Supports 7 calculation modes (Due Date, LMP, Ultrasound, Ovulation, Reverse, IVF) with interactive probability curves.",
+    "Estimate conception, ovulation, fertile-window timing and due dates from your cycle, ultrasound, conception or IVF dates with a clear pregnancy timeline.",
   slug: "pregnancy-conception-calculator",
 });
 

@@ -1,27 +1,20 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Sparkles,
   Calendar,
-  Clock,
-  Heart,
   Activity,
-  CheckCircle2,
-  AlertCircle,
   Download,
   Printer,
   Copy,
-  Info,
-  ShieldCheck,
-  Zap,
+  RotateCcw,
+  Share2,
+  Check,
   TrendingUp,
-  Baby,
-  Thermometer,
-  Layers,
   Award,
-  ChevronRight,
-  Flame,
+  ShieldCheck,
+  Info,
 } from "lucide-react";
 import {
   AreaChart,
@@ -55,18 +48,39 @@ export function OvulationCalculator() {
   const [nextPeriodDate, setNextPeriodDate] = useState<string>("2026-08-29");
   const [targetDueDate, setTargetDueDate] = useState<string>("2027-05-15");
   const [conceptionDate, setConceptionDate] = useState<string>("2026-08-15");
+  const [reverseOvulationDate, setReverseOvulationDate] = useState<string>("2026-08-15");
   const [motherAge, setMotherAge] = useState<number>(28);
   const [fertilityGoal, setFertilityGoal] = useState<FertilityGoal>("general-conception");
 
   // Advanced Biomarkers
-  const [bbtTemp, setBbtTemp] = useState<number>(36.5);
+  const [opkTestDate, setOpkTestDate] = useState<string>("");
   const [opkResult, setOpkResult] = useState<OpkResult>("negative");
   const [cervicalMucus, setCervicalMucus] = useState<CervicalMucusType>("creamy");
 
-  // Tab View State
+  // Tab View & Feedback State
   const [activeTab, setActiveTab] = useState<"calendar" | "probability" | "hormones" | "insights">("calendar");
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
+
+  // URL Hydration on Mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const m = params.get("mode");
+    if (m && ["lmp", "next-period", "due-date", "conception-date", "reverse", "advanced-planner"].includes(m)) {
+      setCalculationMode(m as OvulationCalculationMode);
+    }
+    if (params.get("lmp")) setLastPeriodDate(params.get("lmp")!);
+    if (params.get("nextPer")) setNextPeriodDate(params.get("nextPer")!);
+    if (params.get("due")) setTargetDueDate(params.get("due")!);
+    if (params.get("conception")) setConceptionDate(params.get("conception")!);
+    if (params.get("revOv")) setReverseOvulationDate(params.get("revOv")!);
+    if (params.get("cycle")) setCycleLength(Math.max(20, Math.min(45, Number(params.get("cycle")))));
+    if (params.get("period")) setPeriodLength(Math.max(2, Math.min(10, Number(params.get("period")))));
+    if (params.get("luteal")) setLutealPhaseLength(Math.max(9, Math.min(18, Number(params.get("luteal")))));
+    if (params.get("goal")) setFertilityGoal(params.get("goal") as FertilityGoal);
+  }, []);
 
   // Calculation Memo
   const results = useMemo(() => {
@@ -79,9 +93,10 @@ export function OvulationCalculator() {
       nextPeriodDate,
       targetDueDate,
       conceptionDate,
+      reverseOvulationDate,
+      opkTestDate,
       motherAge,
       fertilityGoal,
-      bbtTemp,
       opkResult,
       cervicalMucus,
     });
@@ -94,32 +109,73 @@ export function OvulationCalculator() {
     nextPeriodDate,
     targetDueDate,
     conceptionDate,
+    reverseOvulationDate,
+    opkTestDate,
     motherAge,
     fertilityGoal,
-    bbtTemp,
     opkResult,
     cervicalMucus,
   ]);
+
+  // Reset Defaults Handler
+  const handleResetDefaults = () => {
+    setCalculationMode("lmp");
+    setLastPeriodDate("2026-08-01");
+    setCycleLength(28);
+    setPeriodLength(5);
+    setLutealPhaseLength(14);
+    setNextPeriodDate("2026-08-29");
+    setTargetDueDate("2027-05-15");
+    setConceptionDate("2026-08-15");
+    setReverseOvulationDate("2026-08-15");
+    setMotherAge(28);
+    setFertilityGoal("general-conception");
+    setOpkTestDate("");
+    setOpkResult("negative");
+    setCervicalMucus("creamy");
+  };
+
+  // Share URL Handler
+  const handleShareUrl = () => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.origin + window.location.pathname);
+    url.searchParams.set("mode", calculationMode);
+    url.searchParams.set("lmp", lastPeriodDate);
+    url.searchParams.set("cycle", String(cycleLength));
+    url.searchParams.set("period", String(periodLength));
+    url.searchParams.set("luteal", String(lutealPhaseLength));
+    if (calculationMode === "next-period") url.searchParams.set("nextPer", nextPeriodDate);
+    if (calculationMode === "due-date") url.searchParams.set("due", targetDueDate);
+    if (calculationMode === "conception-date") url.searchParams.set("conception", conceptionDate);
+    if (calculationMode === "reverse") url.searchParams.set("revOv", reverseOvulationDate);
+    url.searchParams.set("goal", fertilityGoal);
+
+    navigator.clipboard.writeText(url.toString());
+    setShared(true);
+    setTimeout(() => setShared(false), 2000);
+  };
 
   // Copy Summary Handler
   const handleCopySummary = () => {
     const text = `Ovulation & Fertility Assessment Summary:
 • Mode: ${results.calculationMode.toUpperCase()}
+• Cycle Length: ${results.cycleLength} Days | Luteal Phase: ${results.lutealPhaseLength} Days
 • Predicted Ovulation Date: ${results.predictedOvulationDateFormatted}
-• Fertile Window (6 Days): ${results.fertileWindowStartFormatted} – ${results.fertileWindowEndFormatted}
+• 6-Day Fertile Window: ${results.fertileWindowStartFormatted} – ${results.fertileWindowEndFormatted}
 • Peak Fertility Window: ${results.peakFertilityStartFormatted} – ${results.peakFertilityEndFormatted}
-• Daily Fertility Rating: ${results.fertilityRating} (${results.dailyFertilityScore}% Score)
+• Daily Fertility Score: ${results.fertilityRating} (${results.dailyFertilityScore}/100 Index)
 • Implantation Window: ${results.implantationWindowStartFormatted} – ${results.implantationWindowEndFormatted}
 • Estimated Due Date (if conceived): ${results.estimatedDueDateFormatted}
-Calculated on CalcPlatform Ovulation Engine.`;
+Note: Population-level conception probability peaks at ~27%–33% (Wilcox et al. cohort).
+Calculated on CalcPlatform Clinical Ovulation Engine.`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // CSV Calendar Export Handler
+  // RFC-4180 Compliant CSV Export Handler via Blob
   const handleExportCsv = () => {
-    const headers = ["Date ISO", "Day", "Month", "Status", "Fertility Score %", "Clinical Details"];
+    const headers = ["Date ISO", "Day of Month", "Month", "Status", "Fertility Score Index", "Clinical Details"];
     const rows = results.monthlyCalendarDays.map((d) => [
       d.dateIso,
       d.dayOfMonth,
@@ -129,17 +185,16 @@ Calculated on CalcPlatform Ovulation Engine.`;
       `"${d.description.replace(/"/g, '""')}"`,
     ]);
 
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
-
-    const encodedUri = encodeURI(csvContent);
+    const csvContent = [headers.join(","), ...rows.map((e) => e.join(","))].join("\r\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `fertility_calendar_${results.predictedOvulationDate}.csv`);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `fertility_schedule_${results.predictedOvulationDate}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // Construct PDF Report Data for ReportModal
@@ -168,13 +223,13 @@ Calculated on CalcPlatform Ovulation Engine.`;
         {
           label: "Peak Fertility Window",
           value: `${results.peakFertilityStartFormatted} – ${results.peakFertilityEndFormatted}`,
-          subtitle: "High Conception Probability (-2 to 0 DPO)",
+          subtitle: "High Conception Potential (-2 to 0 DPO)",
           colorTheme: "purple",
         },
         {
           label: "Estimated Due Date (If Conceived)",
           value: results.estimatedDueDateFormatted,
-          subtitle: "40 Weeks Gestational Age",
+          subtitle: "40 Weeks Standard Gestational Age",
           colorTheme: "blue",
         },
       ],
@@ -186,8 +241,12 @@ Calculated on CalcPlatform Ovulation Engine.`;
             { label: "Cycle Length", value: `${cycleLength} Days` },
             { label: "Period Length", value: `${periodLength} Days` },
             { label: "Luteal Phase Length", value: `${lutealPhaseLength} Days` },
-            { label: "Fertility Goal", value: fertilityGoal.toUpperCase() },
-            { label: "Today's Fertility Score", value: `${results.dailyFertilityScore}% (${results.fertilityRating})`, highlight: true },
+            { label: "Conception Timing Focus", value: fertilityGoal.toUpperCase() },
+            {
+              label: "Daily Fertility Score",
+              value: `${results.dailyFertilityScore}/100 (${results.fertilityRating} Index)`,
+              highlight: true,
+            },
           ],
         },
         {
@@ -197,17 +256,17 @@ Calculated on CalcPlatform Ovulation Engine.`;
             { label: "Implantation Window (6–12 DPO)", value: `${results.implantationWindowStartFormatted} – ${results.implantationWindowEndFormatted}` },
             { label: "Earliest Home Urine Test Date", value: results.earliestHcgUrineTestDateFormatted, highlight: true },
             { label: "Predicted Next Period Start", value: results.nextPeriodDateFormatted },
-            { label: "Shettles Timing Advice", value: results.shettlesRecommendation.bestWindow },
+            { label: "Timing Guidance", value: results.timingRecommendation.bestWindow },
           ],
         },
       ],
       recommendation: {
-        title: `Clinical Fertility Plan: ${results.predictedOvulationDateFormatted}`,
+        title: `Clinical Conception Strategy: ${results.predictedOvulationDateFormatted}`,
         text: `Your predicted ovulation date is ${results.predictedOvulationDateFormatted}. Your 6-day fertile window is ${results.fertileWindowStartFormatted} through ${results.fertileWindowEndFormatted}.`,
         reasons: [
           `Peak fertility occurs on ${results.peakFertilityStartFormatted} through ${results.predictedOvulationDateFormatted}.`,
-          results.shettlesRecommendation.explanation,
-          "Daily BBT tracking combined with OPK LH surge detection increases ovulation pinpoint precision by up to 99%.",
+          results.timingRecommendation.explanation,
+          "Daily BBT tracking combined with OPK LH surge monitoring provides biological confirmation of physiological ovulation.",
         ],
       },
       table: {
@@ -216,20 +275,21 @@ Calculated on CalcPlatform Ovulation Engine.`;
           { key: "dateIso", label: "Date", align: "left" },
           { key: "dayOfMonth", label: "Day", align: "left" },
           { key: "status", label: "Fertility Status", align: "left" },
-          { key: "fertilityScore", label: "Score %", align: "left" },
+          { key: "fertilityScore", label: "Score Index", align: "left" },
           { key: "description", label: "Clinical Notes", align: "left" },
         ],
-        rows: results.monthlyCalendarDays.slice(0, 28).map((d) => ({
+        rows: results.monthlyCalendarDays.slice(0, 35).map((d) => ({
           dateIso: d.dateIso,
           dayOfMonth: `${d.monthName} ${d.dayOfMonth}`,
           status: d.status.toUpperCase(),
-          fertilityScore: `${d.fertilityScore}%`,
+          fertilityScore: `${d.fertilityScore}/100`,
           description: d.description,
         })),
       },
       notes: [
         "Generated by CalcPlatform Ovulation Clinical Engine.",
-        "Grounded in ASRM & WHO reproductive clinical guidelines.",
+        "Grounded in ASRM, ACOG, and WHO reproductive clinical guidelines.",
+        "Population-level conception probability peaks at ~27%–33% (Wilcox et al. cohort).",
       ],
     };
   }, [results, calculationMode, cycleLength, periodLength, lutealPhaseLength, fertilityGoal]);
@@ -245,7 +305,7 @@ Calculated on CalcPlatform Ovulation Engine.`;
             </div>
             <div>
               <h2 className="text-base font-bold text-blue-600 dark:text-blue-400">
-                Ovulation & Fertility Assessment Platform
+                Ovulation &amp; Fertility Assessment Platform
               </h2>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
                 Predict your fertile window, peak ovulation day, and cycle schedule using ASRM clinical algorithms
@@ -257,14 +317,20 @@ Calculated on CalcPlatform Ovulation Engine.`;
           </span>
         </div>
 
-        {/* Calculation Mode Tabs */}
+        {/* 6 Calculation Mode Tabs */}
         <div className="space-y-2">
-          <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+          <label id="ov-calc-mode-label" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
             Calculate Ovulation Based On:
           </label>
-          <div className="flex flex-wrap gap-1.5 p-1.5 bg-zinc-100 dark:bg-zinc-800/60 rounded-xl">
+          <div
+            role="tablist"
+            aria-labelledby="ov-calc-mode-label"
+            className="flex flex-wrap gap-1.5 p-1.5 bg-zinc-100 dark:bg-zinc-800/60 rounded-xl"
+          >
             <button
               type="button"
+              role="tab"
+              aria-selected={calculationMode === "lmp"}
               onClick={() => setCalculationMode("lmp")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 calculationMode === "lmp"
@@ -276,6 +342,8 @@ Calculated on CalcPlatform Ovulation Engine.`;
             </button>
             <button
               type="button"
+              role="tab"
+              aria-selected={calculationMode === "next-period"}
               onClick={() => setCalculationMode("next-period")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 calculationMode === "next-period"
@@ -287,6 +355,8 @@ Calculated on CalcPlatform Ovulation Engine.`;
             </button>
             <button
               type="button"
+              role="tab"
+              aria-selected={calculationMode === "due-date"}
               onClick={() => setCalculationMode("due-date")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 calculationMode === "due-date"
@@ -298,6 +368,8 @@ Calculated on CalcPlatform Ovulation Engine.`;
             </button>
             <button
               type="button"
+              role="tab"
+              aria-selected={calculationMode === "conception-date"}
               onClick={() => setCalculationMode("conception-date")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 calculationMode === "conception-date"
@@ -309,6 +381,21 @@ Calculated on CalcPlatform Ovulation Engine.`;
             </button>
             <button
               type="button"
+              role="tab"
+              aria-selected={calculationMode === "reverse"}
+              onClick={() => setCalculationMode("reverse")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                calculationMode === "reverse"
+                  ? "bg-pink-600 text-white shadow-xs"
+                  : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700"
+              }`}
+            >
+              Reverse Ovulation Date
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={calculationMode === "advanced-planner"}
               onClick={() => setCalculationMode("advanced-planner")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 calculationMode === "advanced-planner"
@@ -326,10 +413,11 @@ Calculated on CalcPlatform Ovulation Engine.`;
           {/* Mode 1 & Advanced: Last Period */}
           {(calculationMode === "lmp" || calculationMode === "advanced-planner") && (
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+              <label htmlFor="ov-lmp-date" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                 First Day of Last Period (LMP)
               </label>
               <input
+                id="ov-lmp-date"
                 type="date"
                 value={lastPeriodDate}
                 onChange={(e) => setLastPeriodDate(e.target.value)}
@@ -341,10 +429,11 @@ Calculated on CalcPlatform Ovulation Engine.`;
           {/* Mode 2: Next Period */}
           {calculationMode === "next-period" && (
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+              <label htmlFor="ov-next-period-date" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                 Next Expected Period Date
               </label>
               <input
+                id="ov-next-period-date"
                 type="date"
                 value={nextPeriodDate}
                 onChange={(e) => setNextPeriodDate(e.target.value)}
@@ -356,10 +445,11 @@ Calculated on CalcPlatform Ovulation Engine.`;
           {/* Mode 3: Target Due Date */}
           {calculationMode === "due-date" && (
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+              <label htmlFor="ov-target-due-date" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                 Target Delivery Due Date
               </label>
               <input
+                id="ov-target-due-date"
                 type="date"
                 value={targetDueDate}
                 onChange={(e) => setTargetDueDate(e.target.value)}
@@ -371,10 +461,11 @@ Calculated on CalcPlatform Ovulation Engine.`;
           {/* Mode 4: Conception Date */}
           {calculationMode === "conception-date" && (
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+              <label htmlFor="ov-conception-date" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                 Known Conception Date
               </label>
               <input
+                id="ov-conception-date"
                 type="date"
                 value={conceptionDate}
                 onChange={(e) => setConceptionDate(e.target.value)}
@@ -383,15 +474,32 @@ Calculated on CalcPlatform Ovulation Engine.`;
             </div>
           )}
 
+          {/* Mode 5: Reverse Ovulation Date */}
+          {calculationMode === "reverse" && (
+            <div className="space-y-1.5">
+              <label htmlFor="ov-reverse-ovulation-date" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                Known / Confirmed Ovulation Date
+              </label>
+              <input
+                id="ov-reverse-ovulation-date"
+                type="date"
+                value={reverseOvulationDate}
+                onChange={(e) => setReverseOvulationDate(e.target.value)}
+                className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
+              />
+            </div>
+          )}
+
           {/* Cycle Length Slider */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between text-xs font-medium text-zinc-700 dark:text-zinc-300">
-              <span>Average Cycle Length</span>
+              <label htmlFor="ov-cycle-length">Average Cycle Length</label>
               <span className="font-bold text-pink-600 dark:text-pink-400">
                 {cycleLength} Days
               </span>
             </div>
             <input
+              id="ov-cycle-length"
               type="range"
               min={20}
               max={45}
@@ -404,12 +512,13 @@ Calculated on CalcPlatform Ovulation Engine.`;
           {/* Period Length Slider */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between text-xs font-medium text-zinc-700 dark:text-zinc-300">
-              <span>Menstrual Period Duration</span>
+              <label htmlFor="ov-period-length">Menstrual Period Duration</label>
               <span className="font-bold text-purple-600 dark:text-purple-400">
                 {periodLength} Days
               </span>
             </div>
             <input
+              id="ov-period-length"
               type="range"
               min={2}
               max={10}
@@ -419,20 +528,39 @@ Calculated on CalcPlatform Ovulation Engine.`;
             />
           </div>
 
-          {/* Fertility Goal Selector */}
+          {/* Luteal Phase Length Slider */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
-              Fertility Goal (Shettles Timing)
+            <div className="flex items-center justify-between text-xs font-medium text-zinc-700 dark:text-zinc-300">
+              <label htmlFor="ov-luteal-phase">Luteal Phase Duration</label>
+              <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                {lutealPhaseLength} Days
+              </span>
+            </div>
+            <input
+              id="ov-luteal-phase"
+              type="range"
+              min={9}
+              max={18}
+              value={lutealPhaseLength}
+              onChange={(e) => setLutealPhaseLength(Number(e.target.value))}
+              className="w-full h-2 bg-zinc-200 dark:bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+            />
+          </div>
+
+          {/* Conception Timing Focus */}
+          <div className="space-y-1.5">
+            <label htmlFor="ov-fertility-goal" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+              Conception Timing Focus
             </label>
             <select
+              id="ov-fertility-goal"
               value={fertilityGoal}
               onChange={(e) => setFertilityGoal(e.target.value as FertilityGoal)}
               className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-500"
             >
-              <option value="general-conception">General Conception Optimization</option>
-              <option value="conceive-boy">Shettles Method for Conceiving a Boy</option>
-              <option value="conceive-girl">Shettles Method for Conceiving a Girl</option>
-              <option value="avoid-pregnancy">Natural Family Planning (Abstinence)</option>
+              <option value="general-conception">General Conception Optimization (6-Day Window)</option>
+              <option value="fertile-window-optimization">Peak Fertile Window Focus (O-2 to O)</option>
+              <option value="avoid-pregnancy">Natural Family Planning (Fertile Window Abstinence)</option>
             </select>
           </div>
 
@@ -440,10 +568,25 @@ Calculated on CalcPlatform Ovulation Engine.`;
           {calculationMode === "advanced-planner" && (
             <>
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                <label htmlFor="ov-opk-test-date" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                  OPK Positive Test Date (Optional)
+                </label>
+                <input
+                  id="ov-opk-test-date"
+                  type="date"
+                  value={opkTestDate}
+                  onChange={(e) => setOpkTestDate(e.target.value)}
+                  placeholder="Date of positive LH surge"
+                  className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label htmlFor="ov-opk-result" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                   Ovulation Predictor Kit (LH Surge)
                 </label>
                 <select
+                  id="ov-opk-result"
                   value={opkResult}
                   onChange={(e) => setOpkResult(e.target.value as OpkResult)}
                   className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -455,10 +598,11 @@ Calculated on CalcPlatform Ovulation Engine.`;
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                <label htmlFor="ov-cervical-mucus" className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
                   Cervical Mucus Observation
                 </label>
                 <select
+                  id="ov-cervical-mucus"
                   value={cervicalMucus}
                   onChange={(e) => setCervicalMucus(e.target.value as CervicalMucusType)}
                   className="w-full bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -497,14 +641,17 @@ Calculated on CalcPlatform Ovulation Engine.`;
           </div>
         </div>
 
-        {/* Daily Fertility Score Meter */}
+        {/* Daily Fertility Score Meter (Separates relative score from population fecundability) */}
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs font-semibold">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-semibold">
             <span className="text-zinc-700 dark:text-zinc-300">
-              Today's Fertility Index: <strong className="text-pink-600 dark:text-pink-400">{results.fertilityRating} Fertility</strong>
+              Today&apos;s Fertility Index:{" "}
+              <strong className="text-pink-600 dark:text-pink-400">
+                {results.fertilityRating} Fertility ({results.dailyFertilityScore}/100 Score)
+              </strong>
             </span>
-            <span className="text-pink-600 dark:text-pink-400 font-bold">
-              {results.dailyFertilityScore}% Conception Probability
+            <span className="text-slate-600 dark:text-zinc-400 font-normal">
+              Population Reference Fecundability: ~27%–33% on peak days
             </span>
           </div>
           <div className="w-full h-3 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden p-0.5">
@@ -513,6 +660,9 @@ Calculated on CalcPlatform Ovulation Engine.`;
               style={{ width: `${Math.min(100, Math.max(0, results.dailyFertilityScore))}%` }}
             ></div>
           </div>
+          <p className="text-[11px] text-zinc-500 dark:text-zinc-400 italic m-0">
+            {results.fecundabilityReferenceNote}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs pt-1">
@@ -588,7 +738,7 @@ Calculated on CalcPlatform Ovulation Engine.`;
                 : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
             }`}
           >
-            <Award className="h-3.5 w-3.5" /> Shettles & Clinical Insights
+            <Award className="h-3.5 w-3.5" /> Clinical Guidance &amp; Insights
           </button>
         </div>
 
@@ -598,7 +748,7 @@ Calculated on CalcPlatform Ovulation Engine.`;
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                  Interactive 35-Day Fertility Calendar Grid
+                  Interactive Fertility Calendar Grid ({results.monthlyCalendarDays.length} Days)
                 </h3>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">
                   Color-coded cycle roadmap detailing menstrual, fertile, peak, ovulation, and implantation windows.
@@ -630,10 +780,13 @@ Calculated on CalcPlatform Ovulation Engine.`;
               <span className="flex items-center gap-1 font-medium text-amber-600">
                 <span className="h-2.5 w-2.5 rounded-full bg-amber-500"></span> Implantation
               </span>
+              <span className="flex items-center gap-1 font-medium text-pink-700">
+                <span className="h-2.5 w-2.5 rounded-full bg-pink-400"></span> Next Period
+              </span>
             </div>
 
-            {/* Calendar Tile Grid */}
-            <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+            {/* Calendar Tile Grid with dedicated calendar-grid class for print preservation */}
+            <div className="calendar-grid grid grid-cols-7 gap-1.5 sm:gap-2">
               {results.monthlyCalendarDays.map((day, idx) => (
                 <div
                   key={idx}
@@ -685,10 +838,10 @@ Calculated on CalcPlatform Ovulation Engine.`;
           <div className="space-y-4">
             <div>
               <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                Daily Conception Probability Curve (-5 DPO to +1 DPO)
+                Daily Population Fecundability Curve (-5 DPO to +1 DPO)
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Clinical fertilization chances based on Wilcox et al. BMJ reproductive research data.
+                Statistical population-level fertilization probabilities based on Wilcox et al. prospective cohort research data.
               </p>
             </div>
 
@@ -709,11 +862,11 @@ Calculated on CalcPlatform Ovulation Engine.`;
                       if (active && payload && payload.length) {
                         const data = payload[0].payload;
                         return (
-                          <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
-                            <p className="font-bold text-pink-400">{data.dayLabel}</p>
-                            <p>Conception Probability: <strong>{data.probabilityPercent}%</strong></p>
-                            <p>Fertility Level: <strong>{data.fertilityLevel}</strong></p>
-                            <p className="text-[11px] text-zinc-300">Gender Lean: {data.genderLean}</p>
+                          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 p-3 rounded-xl shadow-xl text-xs space-y-1">
+                            <p className="font-bold text-pink-600 dark:text-pink-400">{data.dayLabel}</p>
+                            <p>Reference Fecundability: <strong>{data.probabilityPercent}%</strong></p>
+                            <p>Fertility Potential: <strong>{data.fertilityLevel}</strong></p>
+                            <p className="text-[11px] text-zinc-500 dark:text-zinc-400">{data.clinicalInterpretation}</p>
                           </div>
                         );
                       }
@@ -727,15 +880,15 @@ Calculated on CalcPlatform Ovulation Engine.`;
           </div>
         )}
 
-        {/* TAB 3: Hormone Cycle Visualization */}
+        {/* TAB 3: Dynamic Hormone Cycle Visualization */}
         {activeTab === "hormones" && (
           <div className="space-y-4">
             <div>
               <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                Hormonal Cycle Fluctuations (LH, Estrogen, Progesterone)
+                Modeled Hormone Fluctuations across {results.cycleLength}-Day Cycle (LH, Estrogen, Progesterone)
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Relative serum hormone concentrations during follicular and luteal phases.
+                Conceptual endocrine curve dynamically mapped to your cycle length ({results.cycleLength} days) and luteal phase ({results.lutealPhaseLength} days).
               </p>
             </div>
 
@@ -750,46 +903,58 @@ Calculated on CalcPlatform Ovulation Engine.`;
                       if (active && payload && payload.length) {
                         const data = payload[0].payload;
                         return (
-                          <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 p-3 rounded-xl border border-zinc-800 shadow-xl text-xs space-y-1">
-                            <p className="font-bold text-pink-400">{data.dayLabel} Hormones</p>
-                            <p className="text-pink-300">LH Surge: <strong>{data.lh} IU/L</strong></p>
-                            <p className="text-emerald-300">Estrogen: <strong>{data.estrogen} pg/mL</strong></p>
-                            <p className="text-purple-300">Progesterone: <strong>{data.progesterone} ng/mL</strong></p>
+                          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 p-3 rounded-xl shadow-xl text-xs space-y-1">
+                            <p className="font-bold text-pink-600 dark:text-pink-400">{data.dayLabel} Conceptual Levels</p>
+                            <p className="text-pink-600 dark:text-pink-400">LH Relative Scale: <strong>{data.lh}</strong></p>
+                            <p className="text-emerald-600 dark:text-emerald-400">Estrogen Relative Scale: <strong>{data.estrogen}</strong></p>
+                            <p className="text-purple-600 dark:text-purple-400">Progesterone Relative Scale: <strong>{data.progesterone}</strong></p>
                           </div>
                         );
                       }
                       return null;
                     }}
                   />
-                  <Line type="monotone" dataKey="lh" stroke="#ec4899" strokeWidth={2.5} name="LH Surge" />
-                  <Line type="monotone" dataKey="estrogen" stroke="#10b981" strokeWidth={2} name="Estrogen" />
-                  <Line type="monotone" dataKey="progesterone" stroke="#a855f7" strokeWidth={2} name="Progesterone" />
+                  <Line type="monotone" dataKey="lh" stroke="#ec4899" strokeWidth={2.5} name="LH Surge" dot={false} />
+                  <Line type="monotone" dataKey="estrogen" stroke="#10b981" strokeWidth={2} name="Estrogen" dot={false} />
+                  <Line type="monotone" dataKey="progesterone" stroke="#a855f7" strokeWidth={2} name="Progesterone" dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </div>
         )}
 
-        {/* TAB 4: Shettles & Clinical Insights */}
+        {/* TAB 4: Clinical Guidance & Historical Shettles Evaluation */}
         {activeTab === "insights" && (
           <div className="space-y-4">
             <div>
               <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
-                Shettles Conception Method & Clinical Insights
+                Clinical Conception Timing &amp; Evidence-Based Insights
               </h3>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Targeted timing recommendations based on your selected fertility goal.
+                Targeted timing recommendations based on your selected cycle parameters.
               </p>
             </div>
 
             <div className="p-4 rounded-xl border border-pink-500/20 bg-pink-500/5 text-zinc-900 dark:text-zinc-100 space-y-2">
-              <h4 className="text-xs font-bold text-pink-600 dark:text-pink-400 uppercase tracking-wider flex items-center gap-1.5">{results.shettlesRecommendation.title}
+              <h4 className="text-xs font-bold text-pink-600 dark:text-pink-400 uppercase tracking-wider flex items-center gap-1.5">
+                {results.timingRecommendation.title}
               </h4>
               <p className="text-xs font-bold">
-                Optimal Intercourse Window: <span className="text-pink-600 dark:text-pink-400">{results.shettlesRecommendation.bestWindow}</span>
+                Optimal Intercourse Window: <span className="text-pink-600 dark:text-pink-400">{results.timingRecommendation.bestWindow}</span>
               </p>
               <p className="text-xs text-slate-800 dark:text-slate-200 font-semibold leading-relaxed">
-                {results.shettlesRecommendation.explanation}
+                {results.timingRecommendation.explanation}
+              </p>
+            </div>
+
+            {/* Historical Shettles Context Note */}
+            <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 text-zinc-900 dark:text-zinc-100 space-y-1.5">
+              <h4 className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                <Info className="h-4 w-4 text-amber-600 shrink-0" />
+                {results.historicalContextNote.title}
+              </h4>
+              <p className="text-xs text-slate-800 dark:text-slate-200 leading-relaxed m-0">
+                {results.historicalContextNote.explanation}
               </p>
             </div>
 
@@ -799,11 +964,12 @@ Calculated on CalcPlatform Ovulation Engine.`;
                   key={idx}
                   className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-800/30 text-zinc-900 dark:text-zinc-100 space-y-1.5"
                 >
-                  <h5 className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider flex items-center gap-1.5">{item.title}
+                  <h5 className="text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider flex items-center gap-1.5">
+                    {item.title}
                   </h5>
                   <p className="text-xs font-semibold leading-relaxed">{item.text}</p>
                   <p className="text-xs text-slate-800 dark:text-slate-200 font-semibold leading-relaxed m-0">
-                    <strong>Medical Tip:</strong> {item.advice}
+                    <strong>Clinical Guidance:</strong> {item.advice}
                   </p>
                 </div>
               ))}
@@ -814,7 +980,7 @@ Calculated on CalcPlatform Ovulation Engine.`;
 
       {/* 4. Executive Action Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 shadow-sm">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={() => setIsReportOpen(true)}
@@ -829,9 +995,31 @@ Calculated on CalcPlatform Ovulation Engine.`;
           >
             <Printer className="h-3.5 w-3.5" /> Print
           </button>
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            className="px-3.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <Download className="h-3.5 w-3.5" /> Export CSV
+          </button>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={handleResetDefaults}
+            className="px-3.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <RotateCcw className="h-3.5 w-3.5" /> Reset Defaults
+          </button>
+          <button
+            type="button"
+            onClick={handleShareUrl}
+            className="px-3.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            {shared ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Share2 className="h-3.5 w-3.5" />}
+            {shared ? "Link Copied!" : "Share URL"}
+          </button>
           <button
             type="button"
             onClick={handleCopySummary}

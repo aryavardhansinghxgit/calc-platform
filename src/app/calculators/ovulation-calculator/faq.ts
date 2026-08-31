@@ -2,154 +2,104 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const ovulation_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "When do I ovulate?",
+    question: "What is an ovulation calculator?",
     answer:
-      "In a standard 28-day menstrual cycle, ovulation occurs on approximately Day 14 (14 days before your next expected period). If your cycle length is 32 days, ovulation typically occurs on Day 18.",
+      "An ovulation calculator estimates a likely ovulation date from menstrual-cycle information such as the first day of the last period and average cycle length. It is a planning estimate rather than a direct measurement of ovulation.",
   },
   {
-    question: "How long is the fertile window?",
+    question: "How do I calculate my ovulation date?",
     answer:
-      "The fertile window lasts 6 days per cycle—comprising the 5 days leading up to ovulation and the day of ovulation itself. This is based on sperm surviving up to 5 days in cervical mucus and an egg remaining viable for 12 to 24 hours.",
+      "A common calendar approach estimates ovulation by subtracting the expected luteal-phase length from the cycle length. With a 14-day luteal assumption, a 28-day cycle is estimated to ovulate around day 14 and a 30-day cycle around day 16.",
   },
   {
-    question: "What days of the cycle have the highest conception probability?",
+    question: "What is the fertile window?",
     answer:
-      "The 2 days prior to ovulation (O-2 and O-1) and Ovulation Day (O) offer the highest statistical chances of conception, ranging from 27% to 33% daily probability per cycle.",
+      "ASRM defines the fertile window for counseling as the six-day interval ending on the day of ovulation: five days before ovulation plus ovulation day.",
   },
   {
-    question: "How accurate is an online ovulation calculator?",
+    question: "What are the best days to conceive?",
     answer:
-      "An ovulation calculator based on regular cycle history is about 75% to 80% accurate. Combining calendar calculations with Ovulation Predictor Kits (OPK) and Basal Body Temperature (BBT) increases precision to over 99%.",
+      "The days immediately before ovulation are particularly important. ASRM reports the highest fecundability when intercourse occurs within approximately the two days before ovulation and recommends intercourse every one to two days during the fertile window for couples trying to conceive.",
   },
   {
-    question: "Can I get pregnant outside my fertile window?",
+    question: "Can I get pregnant on ovulation day?",
     answer:
-      "Conception is biologically impossible outside the fertile window because an unfertilized egg disintegrates 24 hours after ovulation, and sperm cannot survive past 5 days in cervical mucus.",
+      "Yes. Ovulation day is within the fertile window and conception can occur when viable sperm are present around egg release.",
   },
   {
-    question: "What is an OPK LH surge test?",
+    question: "Can I get pregnant the day after ovulation?",
     answer:
-      "An Ovulation Predictor Kit (OPK) detects a surge in Luteinizing Hormone (LH) in urine. A positive OPK test indicates that ovulation will occur within 24 to 36 hours.",
+      "Pregnancy can sometimes occur with intercourse shortly after ovulation, although the probability falls rapidly because the egg remains viable for a limited period. ACOG notes that pregnancy can occur from intercourse up to about one day after ovulation.",
   },
   {
-    question: "What is Basal Body Temperature (BBT) tracking?",
+    question: "Does a 28-day cycle always mean I ovulate on day 14?",
     answer:
-      "BBT is your body temperature measured immediately upon waking. Progesterone secreted after ovulation causes BBT to rise by 0.3°C to 0.5°C (0.5°F to 1.0°F), confirming that ovulation has occurred.",
+      "No. Day 14 is a common calendar estimate for a 28-day cycle when an approximately 14-day luteal phase is assumed. Actual ovulation can vary from cycle to cycle.",
   },
   {
-    question: "What does egg-white cervical mucus (EWCM) mean?",
+    question: "How accurate is an ovulation calculator?",
     answer:
-      "Clear, slippery, stretchy cervical mucus resembling raw egg whites indicates peak estrogen levels and impending ovulation. EWCM provides optimal nourishment and transport channels for sperm.",
+      "Accuracy depends on how consistent your cycles are and how closely your actual ovulation follows the assumptions used by the calculation. Calendar prediction cannot directly measure ovulation, and research shows that fertile-window timing can vary substantially between cycles.",
   },
   {
-    question: "What is the Shettles Method for gender selection?",
+    question: "How does cycle length affect ovulation?",
     answer:
-      "The Shettles Method proposes timing intercourse relative to ovulation to favor male or female offspring: Coitus on Ovulation Day favors faster Y-sperm (boy), while coitus 2–4 days before favors resilient X-sperm (girl).",
+      "Longer cycles generally produce a later calendar estimate of ovulation when the same luteal-phase assumption is used. For example, a 35-day cycle with a 14-day luteal estimate gives an estimated ovulation around day 21.",
   },
   {
-    question: "How does luteal phase length affect ovulation timing?",
+    question: "What is the luteal phase?",
     answer:
-      "The luteal phase (time between ovulation and next period) is typically constant at 14 days. Ovulation is calculated as Next Expected Period minus Luteal Phase Length.",
+      "The luteal phase is the portion of the menstrual cycle between ovulation and the beginning of the next menstrual period. Calendar-based ovulation calculations often use an estimated luteal-phase length when working backward from the expected next period.",
   },
   {
-    question: "Can stress delay ovulation?",
+    question: "What is an OPK?",
     answer:
-      "Yes. Physical or emotional stress alters hypothalamic GnRH pulsatility, which can delay the LH surge and push ovulation later in the cycle.",
+      "An ovulation predictor kit is a urine-based test used to detect hormonal changes associated with the LH surge that typically occurs shortly before ovulation. A positive OPK is a useful fertility-awareness signal but is not the same as directly observing ovulation.",
   },
   {
-    question: "What is mittelschmerz?",
+    question: "Does cervical mucus help identify ovulation?",
     answer:
-      "Mittelschmerz is a localized, one-sided lower abdominal pain or mild twinge that some women experience when a mature follicle ruptures and releases an egg.",
+      "Yes. Changes in cervical mucus can provide information about the fertile part of the cycle and are one of the fertility-awareness methods recognized by reproductive-health guidance.",
   },
   {
-    question: "How long does an ovulated egg live?",
+    question: "Can basal body temperature confirm ovulation?",
     answer:
-      "An ovulated egg remains viable and capable of fertilization in the Fallopian tube for only 12 to 24 hours after release.",
+      "A sustained rise in basal body temperature can help identify that ovulation likely occurred retrospectively. It is therefore complementary to calendar prediction rather than a substitute for it.",
   },
   {
-    question: "How long can human sperm survive inside the female body?",
+    question: "Does intercourse timing determine whether the baby is a boy or girl?",
     answer:
-      "Healthy sperm can survive in fertile cervical mucus for up to 5 days (120 hours), allowing intercourse occurring 5 days prior to ovulation to result in pregnancy.",
+      "No reliable evidence supports timing intercourse to select fetal sex. The Shettles method is a historical hypothesis, and the prospective Wilcox study found no meaningful influence of intercourse timing on the sex of the baby.",
   },
   {
-    question: "What is an anovulatory cycle?",
+    question: "Does the calculator tell me my exact chance of becoming pregnant?",
     answer:
-      "An anovulatory cycle is a menstrual cycle in which an egg is not released from the ovary. Pregnancy cannot occur during an anovulatory cycle.",
+      "No. The calculator provides cycle-planning estimates and, where shown, population-reference information. Individual fecundability depends on many biological and reproductive factors and cannot be reduced to one calendar percentage.",
   },
   {
-    question: "How does PCOS affect ovulation?",
+    question: "Why can my predicted ovulation date change from one cycle to another?",
     answer:
-      "Polycystic Ovary Syndrome (PCOS) causes elevated androgen levels and hormonal imbalances, leading to irregular ovulation (oligoovulation) or absence of ovulation (anovulation).",
+      "Because the length and timing of menstrual cycles can vary. Even women with apparently regular cycles may experience shifts in the fertile window.",
   },
   {
-    question: "When can an embryo implant into the uterine lining?",
+    question: "Can I use an ovulation calculator if my periods are irregular?",
     answer:
-      "Embryo implantation typically occurs 6 to 12 days after fertilization (most commonly 8 to 10 days post-ovulation/DPO).",
+      "You can use it as a rough planning tool, but calendar predictions become less dependable when cycle timing is inconsistent. Additional fertility-awareness methods or clinical evaluation may be more useful depending on the circumstances.",
   },
   {
-    question: "When should I take a home pregnancy test?",
+    question: "How often should we have intercourse during the fertile window?",
     answer:
-      "Sensitve home urine pregnancy tests can detect hCG starting 12 to 14 days post-ovulation (around the day of your missed period).",
+      "ASRM states that reproductive efficiency is highest with intercourse every one to two days during the fertile window, although couples should choose a frequency that is practical and comfortable for them.",
   },
   {
-    question: "Does age affect ovulation quality?",
+    question: "When should I seek an infertility evaluation?",
     answer:
-      "Oocyte quantity and chromosomal quality naturally decline after age 32, with a more pronounced decrease after age 35, making ovulation tracking helpful for timely conception.",
+      "When there are no known risk factors, ASRM generally recommends evaluation after 12 months of regular unprotected intercourse for women under 35 and after 6 months for women 35 or older. Earlier evaluation may be appropriate when there are irregular cycles or other known risk factors.",
   },
   {
-    question: "Can I ovulate twice in one menstrual cycle?",
+    question: "Is an ovulation calculator suitable for birth control?",
     answer:
-      "Hyperovulation can release two or more eggs within a single 24-hour window (resulting in fraternal twins), but separate ovulation events days apart do not occur due to progesterone suppression.",
-  },
-  {
-    question: "Does breastfeeding prevent ovulation?",
-    answer:
-      "Prolactin released during frequent breastfeeding suppresses GnRH, causing Lactational Amenorrhea (LAM). However, ovulation can recur unexpectedly before your first postpartum period.",
-  },
-  {
-    question: "What is a luteal phase defect (LPD)?",
-    answer:
-      "A luteal phase defect occurs when the luteal phase lasts less than 10 days, preventing the endometrial lining from thickening adequately for embryo implantation.",
-  },
-  {
-    question: "What vitamins boost ovulation quality?",
-    answer:
-      "Folic Acid (400–800 mcg), CoQ10, Vitamin D, Omega-3 fatty acids, and Inositol have been shown in clinical studies to support follicular development and ovulation regularities.",
-  },
-  {
-    question: "How does body mass index (BMI) impact ovulation?",
-    answer:
-      "Both very low BMI (<18.5) and high BMI (>30) can disrupt gonadotropin secretion, causing hypothalamic amenorrhea or anovulation.",
-  },
-  {
-    question: "Can sexual position increase conception probability?",
-    answer:
-      "Medical studies show that sexual position does not significantly alter conception chances, as sperm swim into cervical mucus within seconds of ejaculation.",
-  },
-  {
-    question: "What causes a false positive on an ovulation test kit?",
-    answer:
-      "PCOS, pregnancy, perimenopause, or recent hCG injections can cause elevated tonic LH levels, resulting in false positive OPK test results.",
-  },
-  {
-    question: "What is the difference between LH surge and progesterone rise?",
-    answer:
-      "The LH surge occurs *before* ovulation to trigger egg release. Progesterone rises *after* ovulation to prepare the uterine lining and elevate body temperature.",
-  },
-  {
-    question: "How does thyroid dysfunction affect ovulation?",
-    answer:
-      "Hypothyroidism and hyperthyroidism disrupt prolactin and estrogen metabolism, leading to anovulatory cycles or short luteal phases.",
-  },
-  {
-    question: "What is the best frequency of intercourse when trying to conceive?",
-    answer:
-      "Having intercourse every 1 to 2 days during the 6-day fertile window maintains optimal sperm count and ensures sperm presence upon ovulation.",
-  },
-  {
-    question: "Why does my cycle length vary by a few days?",
-    answer:
-      "Slight cycle variations (2 to 4 days) are normal and reflect subtle changes in follicular phase duration, while luteal phase duration remains constant.",
+      "A calendar prediction should not be treated as a guaranteed contraceptive method. Fertile-window timing can vary, and ACOG notes that fertility-awareness methods require consistent and correct use; typical-use pregnancy rates are higher than perfect-use rates.",
   },
 ];
 

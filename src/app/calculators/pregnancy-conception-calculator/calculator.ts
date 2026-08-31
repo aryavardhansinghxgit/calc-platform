@@ -7,6 +7,53 @@ import {
   ImplantationStageInfo,
 } from "./types";
 
+/**
+ * Timezone-safe local calendar-date parsing
+ * Prevents UTC midnight boundary shifts in Western hemisphere timezones
+ */
+export function parseInputDate(val?: string, fallbackOffsetDays = 0): Date {
+  if (val && typeof val === "string") {
+    const parts = val.split("-").map(Number);
+    if (parts.length === 3 && parts.every((n) => Number.isInteger(n))) {
+      return new Date(parts[0], parts[1] - 1, parts[2], 12, 0, 0, 0);
+    }
+  }
+  const fallback = new Date();
+  fallback.setHours(12, 0, 0, 0);
+  fallback.setDate(fallback.getDate() + fallbackOffsetDays);
+  return fallback;
+}
+
+/**
+ * Timezone-safe local date formatting to ISO YYYY-MM-DD
+ */
+export function formatIso(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+/**
+ * Standard US formatted date string (e.g. "Jan 15, 2026")
+ */
+export function formatDate(d: Date): string {
+  return d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+/**
+ * Add or subtract calendar days safely at midday
+ */
+export function addDays(d: Date, days: number): Date {
+  const res = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12, 0, 0, 0);
+  res.setDate(res.getDate() + days);
+  return res;
+}
+
 export function calculatePregnancyConceptionCalculator(
   rawInputs: Record<string, any>
 ): PregnancyConceptionCalculatorOutputs {
@@ -18,34 +65,7 @@ export function calculatePregnancyConceptionCalculator(
   const motherAge = Math.max(18, Math.min(50, Number(inputs.motherAge) || 28));
   const periodLength = Math.max(2, Math.min(10, Number(inputs.periodLength) || 5));
 
-  // Helper date functions
-  const formatDate = (d: Date): string => {
-    return d.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
-  const formatIso = (d: Date): string => {
-    return d.toISOString().split("T")[0];
-  };
-
-  const addDays = (d: Date, days: number): Date => {
-    const res = new Date(d.getTime());
-    res.setDate(res.getDate() + days);
-    return res;
-  };
-
-  const parseInputDate = (val?: string, fallbackOffsetDays = 0): Date => {
-    if (val) {
-      const parsed = new Date(val);
-      if (!isNaN(parsed.getTime())) return parsed;
-    }
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return addDays(today, fallbackOffsetDays);
-  };
+  const daysToOvulation = cycleLength - lutealPhaseLength;
 
   let estimatedConceptionDate: Date;
   let estimatedDueDate: Date;
@@ -54,16 +74,15 @@ export function calculatePregnancyConceptionCalculator(
 
   // Mode calculations
   if (mode === "due-date") {
-    estimatedDueDate = parseInputDate(inputs.dueDate, 140); // default ~20 weeks out
-    // Conception is 266 days before due date
+    estimatedDueDate = parseInputDate(inputs.dueDate, 140);
+    // Conception is 266 days before due date (38 weeks post-conception)
     estimatedConceptionDate = addDays(estimatedDueDate, -266);
-    // LMP is 280 days before due date
-    estimatedLmpDate = addDays(estimatedDueDate, -280);
+    // Derived LMP accounts for custom cycle length & luteal phase
+    estimatedLmpDate = addDays(estimatedConceptionDate, -daysToOvulation);
     confidenceRangeLabel = "± 2 to 4 Days (Based on Due Date)";
   } else if (mode === "lmp") {
-    estimatedLmpDate = parseInputDate(inputs.lmpDate, -140); // default ~20 weeks ago
-    // Ovulation/Conception = LMP + (CycleLength - LutealPhaseLength)
-    const daysToOvulation = cycleLength - lutealPhaseLength;
+    estimatedLmpDate = parseInputDate(inputs.lmpDate, -140);
+    // Ovulation / Conception = LMP + (CycleLength - LutealPhaseLength)
     estimatedConceptionDate = addDays(estimatedLmpDate, daysToOvulation);
     // Due Date = Conception + 266 days
     estimatedDueDate = addDays(estimatedConceptionDate, 266);
@@ -74,23 +93,20 @@ export function calculatePregnancyConceptionCalculator(
     const scanDays = Math.max(0, Math.min(6, Number(inputs.ultrasoundDays) || 0));
     const totalGestationalDays = scanWeeks * 7 + scanDays;
 
-    // Derived LMP = scanDate - totalGestationalDays
+    // Derived LMP from ultrasound biometric scan age
     estimatedLmpDate = addDays(scanDate, -totalGestationalDays);
-    // Conception = LMP + 14 days
-    estimatedConceptionDate = addDays(estimatedLmpDate, 14);
-    // Due Date = LMP + 280 days
-    estimatedDueDate = addDays(estimatedLmpDate, 280);
+    // Conception & Due date respect configured cycle & luteal assumptions
+    estimatedConceptionDate = addDays(estimatedLmpDate, daysToOvulation);
+    estimatedDueDate = addDays(estimatedConceptionDate, 266);
     confidenceRangeLabel = scanWeeks <= 12 ? "± 3 to 5 Days (High Early Ultrasound Accuracy)" : "± 7 to 10 Days (Mid-Pregnancy Scan)";
   } else if (mode === "conception-date" || mode === "reverse") {
     estimatedConceptionDate = parseInputDate(inputs.conceptionDate, -126);
     estimatedDueDate = addDays(estimatedConceptionDate, 266);
-    const daysToOvulation = cycleLength - lutealPhaseLength;
     estimatedLmpDate = addDays(estimatedConceptionDate, -daysToOvulation);
     confidenceRangeLabel = "Exact Known Date (± 1 Day Window)";
   } else if (mode === "ovulation-date") {
     estimatedConceptionDate = parseInputDate(inputs.ovulationDate, -126);
     estimatedDueDate = addDays(estimatedConceptionDate, 266);
-    const daysToOvulation = cycleLength - lutealPhaseLength;
     estimatedLmpDate = addDays(estimatedConceptionDate, -daysToOvulation);
     confidenceRangeLabel = "± 1 Day (Ovulation Timing)";
   } else if (mode === "ivf") {
@@ -108,20 +124,21 @@ export function calculatePregnancyConceptionCalculator(
       estimatedConceptionDate = transferDate;
       estimatedDueDate = addDays(transferDate, 266);
     }
-    estimatedLmpDate = addDays(estimatedConceptionDate, -14);
+    estimatedLmpDate = addDays(estimatedConceptionDate, -daysToOvulation);
     confidenceRangeLabel = "Exact Medical Date (± 0 Days Clinical Precision)";
   } else {
     estimatedDueDate = parseInputDate(inputs.dueDate, 140);
     estimatedConceptionDate = addDays(estimatedDueDate, -266);
-    estimatedLmpDate = addDays(estimatedDueDate, -280);
+    estimatedLmpDate = addDays(estimatedConceptionDate, -daysToOvulation);
   }
 
-  // Key Dates
+  // Key Intercourse & Conception Ranges
   const conceptionRangeStart = addDays(estimatedConceptionDate, -3);
   const conceptionRangeEnd = addDays(estimatedConceptionDate, 2);
 
+  // Fertile Window: Exactly 6 calendar days (O-5 through O inclusive, ASRM clinical standard)
   const fertileWindowStart = addDays(estimatedConceptionDate, -5);
-  const fertileWindowEnd = addDays(estimatedConceptionDate, 1);
+  const fertileWindowEnd = estimatedConceptionDate;
 
   const implantationWindowStart = addDays(estimatedConceptionDate, 6);
   const implantationWindowEnd = addDays(estimatedConceptionDate, 12);
@@ -130,14 +147,14 @@ export function calculatePregnancyConceptionCalculator(
   const earliestHcgUrineDate = addDays(estimatedConceptionDate, 12);
   const fetalHeartbeatDate = addDays(estimatedConceptionDate, 28); // ~6 weeks gestational age
 
-  // Calculate current gestational age based on today
+  // Calculate current gestational age based on today (midday local)
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setHours(12, 0, 0, 0);
   const totalGestationalDays = Math.max(0, Math.floor((today.getTime() - estimatedLmpDate.getTime()) / (1000 * 60 * 60 * 24)));
   const currentGestationalAgeWeeks = Math.floor(totalGestationalDays / 7);
   const currentGestationalAgeDays = totalGestationalDays % 7;
 
-  // Conception Probability Curve (-5 to +1 relative to ovulation)
+  // Conception Probability Curve (-5 to +1 relative to ovulation, Wilcox et al. reference cohort data)
   const probabilityCurve: ConceptionProbabilityPoint[] = [
     {
       dayOffset: -5,
@@ -229,7 +246,7 @@ export function calculatePregnancyConceptionCalculator(
       dateStr: formatDate(earliestHcgUrineDate),
       gestationalAge: "3 Weeks 5 Days (Day of Missed Period)",
       category: "testing",
-      description: "Over-the-counter urine tests detect hCG with >99% clinical accuracy.",
+      description: "Home urine tests reliably detect human chorionic gonadotropin (hCG) around the day of expected menses.",
     },
     {
       key: "heartbeat",
@@ -305,13 +322,13 @@ export function calculatePregnancyConceptionCalculator(
     },
     {
       title: `Implantation & Early Testing Timeline`,
-      text: `Embryo implantation expected around ${formatDate(addDays(estimatedConceptionDate, 8))} (range ${formatDate(implantationWindowStart)} – ${formatDate(implantationWindowEnd)}).`,
-      advice: `A home urine pregnancy test is most reliable starting ${formatDate(earliestHcgUrineDate)}. Testing earlier may yield a false negative if hCG levels have not reached detectable thresholds.`,
+      text: `Embryo implantation expected around ${formatDate(addDays(estimatedConceptionDate, 8))} (reference window ${formatDate(implantationWindowStart)} – ${formatDate(implantationWindowEnd)}).`,
+      advice: `Home pregnancy testing is most useful around the expected menstrual period (${formatDate(earliestHcgUrineDate)}), but test performance depends on timing, urine concentration, assay sensitivity, and the individual test.`,
     },
     {
       title: `Dating Precision & Confidence`,
       text: `Dating Accuracy Confidence: ${confidenceRangeLabel}.`,
-      advice: `Obstetric ultrasound performed in the first trimester (Weeks 7–12) is the medical gold standard for confirming gestational age, with a narrow margin of error of ±3 to 5 days.`,
+      advice: `Obstetric ultrasound performed in the first trimester (Weeks 7–12) provides the most reliable clinical confirmation of gestational age, with a typical margin of error of ±3 to 5 days.`,
     },
   ];
 
@@ -322,6 +339,8 @@ export function calculatePregnancyConceptionCalculator(
     conceptionRangeStartFormatted: formatDate(conceptionRangeStart),
     conceptionRangeEndFormatted: formatDate(conceptionRangeEnd),
     estimatedOvulationDateFormatted: formatDate(estimatedConceptionDate),
+    fertileWindowStart: formatIso(fertileWindowStart),
+    fertileWindowEnd: formatIso(fertileWindowEnd),
     fertileWindowStartFormatted: formatDate(fertileWindowStart),
     fertileWindowEndFormatted: formatDate(fertileWindowEnd),
     fertileWindowFormatted: `${formatDate(fertileWindowStart)} – ${formatDate(fertileWindowEnd)}`,

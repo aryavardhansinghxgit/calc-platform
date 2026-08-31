@@ -2,129 +2,124 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const pregnancy_conception_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "When did I conceive?",
+    question: "What is a pregnancy conception calculator?",
     answer:
-      "Conception typically occurs on the day of ovulation or within 24 hours following ovulation, which is approximately 14 days before your next expected period in a standard 28-day cycle. If you know your due date, conception occurred approximately 266 days (38 weeks) prior to your due date.",
+      "A pregnancy conception calculator estimates a likely conception or fertilization date and related pregnancy milestones from information such as LMP, cycle length, ovulation, ultrasound dating, conception date, due date or IVF transfer.",
   },
   {
-    question: "How is the conception date calculated from a due date?",
+    question: "How do you calculate a conception date from the last period?",
     answer:
-      "A full-term human pregnancy lasts 280 days (40 weeks) from the first day of your Last Menstrual Period (LMP), or 266 days (38 weeks) from actual fertilization/conception. Subtracting 266 days from your estimated due date gives your estimated conception date.",
-  },
-  {
-    question: "What is the difference between fertilization and conception?",
-    answer:
-      "Fertilization occurs in the Fallopian tube when a sperm penetrates an egg cell to form a zygote. Conception is medically defined as both successful fertilization and the subsequent implantation of the blastocyst into the uterine endometrial wall 6 to 12 days later.",
-  },
-  {
-    question: "Can an ultrasound determine the exact date of conception?",
-    answer:
-      "First-trimester ultrasounds (performed between 7 and 12 weeks) measure Crown-Rump Length (CRL) and provide the most accurate clinical estimation of gestational age, with a narrow margin of error of ±3 to 5 days. However, ultrasounds cannot pinpoint the exact intercourse hour.",
-  },
-  {
-    question: "How long can sperm survive inside the female body?",
-    answer:
-      "Healthy sperm can survive in fertile cervical mucus for up to 5 days (120 hours). This means sexual intercourse occurring up to 5 days before ovulation can result in conception when the egg is released.",
-  },
-  {
-    question: "How long is an ovulated egg viable for fertilization?",
-    answer:
-      "An ovulated egg remains viable and capable of fertilization for only 12 to 24 hours after being released from the ovary. If fertilization does not occur within 24 hours, the egg degenerates and is absorbed.",
+      "The calculator uses the relationship between cycle length and estimated luteal phase to estimate ovulation, then uses that timing to estimate conception. This is a calendar model, not direct observation of fertilization.",
   },
   {
     question: "What is the fertile window?",
     answer:
-      "The fertile window is the 6-day period during each menstrual cycle—comprising the 5 days before ovulation and the day of ovulation itself—when sexual intercourse can lead to pregnancy.",
+      "The fertile window is the six-day interval ending on the day of ovulation. It can be represented as O−5 through O.",
   },
   {
-    question: "Which day of the fertile window has the highest conception probability?",
+    question: "What are the best days to conceive?",
     answer:
-      "Clinical studies show that the highest daily probabilities of conception occur on the 2 days prior to ovulation (~28–32% chance) and the day of ovulation itself (~33% chance).",
+      "The days immediately before ovulation are especially important. ASRM reports peak fecundability when intercourse occurs within approximately two days before ovulation.",
   },
   {
-    question: "What is embryo implantation and when does it happen?",
+    question: "Can I get pregnant on ovulation day?",
     answer:
-      "Implantation is the process where a 100-cell blastocyst embeds into the uterine endometrial lining. It occurs 6 to 12 days after fertilization (most commonly 8 to 10 days post-ovulation/DPO).",
+      "Yes. Ovulation day is within the fertile window, and conception can occur when viable sperm are present around ovulation.",
   },
   {
-    question: "When can a home pregnancy test detect pregnancy?",
+    question: "Can I get pregnant before ovulation?",
     answer:
-      "Sensitve home urine pregnancy tests can detect human Chorionic Gonadotropin (hCG) as early as 10 to 12 days post-conception (around the day of your missed period). Clinical quantitative blood tests can detect hCG 8 to 9 days post-conception.",
+      "Yes. Sperm can remain viable for several days, which is why the fertile window begins before ovulation. Prospective research identified conception from intercourse occurring during the six-day interval ending on ovulation.",
   },
   {
-    question: "How is conception date calculated for IVF (In Vitro Fertilization)?",
+    question: "Is conception the same as ovulation?",
     answer:
-      "For Day 5 blastocyst transfers, conception date is Transfer Date minus 5 days (Due Date = Transfer + 261 days). For Day 3 embryo transfers, conception date is Transfer Date minus 3 days (Due Date = Transfer + 263 days).",
+      "No. Ovulation is the release of an egg; fertilization occurs when sperm and egg combine. A calendar calculator estimates these events rather than directly observing them.",
   },
   {
-    question: "What if I have an irregular menstrual cycle?",
+    question: "Is a 28-day cycle always ovulation on day 14?",
     answer:
-      "If your cycle length varies, calculating conception using LMP can be inaccurate. Ovulation occurs roughly 14 days before your next period (luteal phase), not 14 days after your last period. Early ultrasound is recommended for accurate dating in irregular cycles.",
+      "No. Day 14 is a common calendar estimate for a 28-day cycle using an approximately 14-day luteal-phase assumption. Actual ovulation can vary between cycles.",
   },
   {
-    question: "Can I conceive after ovulation has already occurred?",
+    question: "How does cycle length affect conception timing?",
     answer:
-      "Conception is possible only within 12 to 24 hours following ovulation while the egg remains viable in the Fallopian tube. Intercourse occurring 2 or more days after ovulation will not result in pregnancy.",
+      "Longer or shorter cycles can shift the estimated ovulation and conception dates. A calendar model therefore uses the selected cycle length instead of forcing every user into a 28-day cycle.",
   },
   {
-    question: "What are common signs of embryo implantation?",
+    question: "What is the luteal phase?",
     answer:
-      "Some women experience mild light implantation spotting (pinkish or brownish discharge), light uterine cramping, a triphasic basal body temperature curve, or mild breast tenderness around 8 to 10 DPO.",
+      "The luteal phase is the interval between ovulation and the start of the next menstrual period. It is important in reverse calendar calculations because it helps estimate ovulation from cycle length.",
   },
   {
-    question: "How accurate is the estimated due date?",
+    question: "How accurate is a conception calculator?",
     answer:
-      "Only about 4% to 5% of babies are born on their exact estimated due date. Most normal full-term births occur anywhere between 37 weeks 0 days and 41 weeks 6 days.",
+      "It provides an estimate, not an exact biological measurement. Fertile-window timing can vary substantially, even among people with regular cycles.",
   },
   {
-    question: "How does maternal age affect conception likelihood?",
+    question: "Can I use the calculator with irregular periods?",
     answer:
-      "Female fertility gradually declines after age 32 and more rapidly after age 35 due to a natural reduction in oocyte quantity and chromosomal quality. However, healthy pregnancies occur across all reproductive age brackets.",
+      "Yes, but the result should be interpreted cautiously because calendar predictions become less reliable when cycle timing varies. Combining calendar information with fertility-awareness signs can provide additional information.",
   },
   {
-    question: "What is Naegele's Rule?",
+    question: "How does an ovulation predictor kit help?",
     answer:
-      "Naegele's Rule is a standard clinical formula to estimate due date: Add 1 year to the first day of Last Menstrual Period (LMP), subtract 3 months, and add 7 days (assuming a 28-day cycle).",
+      "OPKs detect urinary LH changes associated with the LH surge that generally precedes ovulation by about 1–2 days. A positive OPK is indirect evidence of impending ovulation rather than proof that ovulation occurred.",
   },
   {
-    question: "Can sexual intercourse after conception affect the embryo?",
+    question: "What is an implantation window?",
     answer:
-      "No. Sexual intercourse during healthy, uncomplicated early pregnancy does not harm the embryo because the amniotic sac, uterine muscle walls, and cervical mucus plug protect the developing fetus.",
+      "The implantation window is an estimated period after fertilization when implantation may occur. The calculator presents it as a reference range rather than an exact event date.",
   },
   {
-    question: "Why is first-trimester ultrasound more accurate than late-trimester ultrasound?",
+    question: "When should I take a pregnancy test?",
     answer:
-      "In early first trimester (Weeks 7–12), human embryos grow at a nearly uniform biological rate. In late pregnancy (2nd & 3rd trimesters), individual genetic variations cause fetal size differences, increasing ultrasound dating margin of error to ±2 to 3 weeks.",
+      "Pregnancy tests become useful as hCG rises after implantation. Testing very early can produce a negative result even when pregnancy has occurred, so the calculator provides reference timing rather than a universal guaranteed test date.",
   },
   {
-    question: "How does the luteal phase length affect conception timing?",
+    question: "Can the calculator predict my exact chance of pregnancy?",
     answer:
-      "The luteal phase (period between ovulation and next period) is typically constant at 14 days. If your luteal phase is shorter (e.g. 11 days), ovulation occurs on Day 17 of a 28-day cycle rather than Day 14.",
+      "No. Any probability values are population-level reference data, not personalized predictions. Individual fecundability depends on many biological factors.",
   },
   {
-    question: "What is a chemical pregnancy?",
+    question: "Does intercourse timing determine the baby's sex?",
     answer:
-      "A chemical pregnancy is a very early pregnancy loss that occurs shortly after implantation, detected by a positive hCG test before an embryo can be visualized on ultrasound.",
+      "No reliable evidence supports timing intercourse as a method of selecting fetal sex. The prospective Wilcox study found no practical relationship between intercourse timing and baby sex.",
   },
   {
-    question: "When does a fetal heartbeat become detectable?",
+    question: "How often should we have intercourse during the fertile window?",
     answer:
-      "A fetal cardiac flicker can typically be detected via transvaginal ultrasound starting at 5.5 to 6 weeks gestational age (approximately 3.5 to 4 weeks after conception).",
+      "ASRM states that intercourse every 1–2 days during the fertile window provides the highest reproductive efficiency, although 2–3 times per week can be nearly equivalent for many couples.",
   },
   {
-    question: "What vitamins should I take immediately after conception?",
+    question: "How is ultrasound dating different from LMP dating?",
     answer:
-      "It is recommended to take a prenatal vitamin containing at least 600 mcg of Folic Acid, 27 mg of Iron, Calcium, Vitamin D, and DHA immediately upon trying to conceive or learning of pregnancy.",
+      "LMP dating uses menstrual history and cycle assumptions, while ultrasound dating uses measurements obtained during pregnancy. They therefore represent different types of pregnancy-dating evidence.",
   },
   {
-    question: "Can stress delay ovulation and shift conception dates?",
+    question: "How does IVF dating work?",
     answer:
-      "Yes. Physical or emotional stress can disrupt GnRH secretion from the hypothalamus, delaying the LH surge and pushing ovulation (and conception) later in the cycle.",
+      "IVF dating uses the embryo-transfer date together with embryo age rather than estimating ovulation from a natural menstrual cycle. Day-3 and Day-5 transfers therefore use different dating offsets.",
   },
   {
-    question: "How does anovulatory cycle affect conception calculation?",
+    question: "Can a calculator confirm implantation?",
     answer:
-      "An anovulatory cycle is a menstrual cycle in which an egg is not released. Conception cannot occur during an anovulatory cycle.",
+      "No. A calculator can estimate a reference implantation window but cannot confirm that implantation occurred.",
+  },
+  {
+    question: "Can a calculator confirm ovulation?",
+    answer:
+      "No. A calendar estimate predicts when ovulation may occur. OPKs, BBT, cervical mucus observations and clinical testing can provide additional evidence.",
+  },
+  {
+    question: "When should I seek a fertility evaluation?",
+    answer:
+      "When there are no known risk factors, ASRM generally recommends evaluation after 12 months of regular unprotected intercourse when the female partner is under 35, and after 6 months when the female partner is 35 or older. Earlier evaluation can be appropriate when risk factors or concerning symptoms are present.",
+  },
+  {
+    question: "Can I use a conception calculator to avoid pregnancy?",
+    answer:
+      "A conception calculator should not be treated as a guaranteed contraceptive method. Fertile-window timing can vary substantially, so calendar prediction alone may be unreliable for contraception.",
   },
 ];
 

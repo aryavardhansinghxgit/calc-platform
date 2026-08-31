@@ -10,7 +10,7 @@ export const ovulation_calculatorConfig: CalculatorModuleDefinition = {
   category: "Health",
   subcategory: "Pregnancy",
   description:
-    "Predict your peak ovulation date, 6-day fertile window, daily fertility score, and 35-day interactive calendar. Features 6 calculation modes and Shettles gender timing optimization.",
+    "Predict your peak ovulation date, 6-day fertile window, daily fertility score, and interactive cycle calendar across 6 clinical calculation modes based on ASRM and ACOG standards.",
   iconName: "Sparkles",
   featured: true,
   keywords: [
@@ -19,19 +19,19 @@ export const ovulation_calculatorConfig: CalculatorModuleDefinition = {
     "fertile window predictor",
     "conception calculator",
     "ovulation tracker",
-    "shettles method calculator",
-    "bb-temperature ovulation calculator",
+    "symptothermal calculator",
+    "bbt ovulation tracker",
   ],
   priority: 1,
   relatedCalculators: [
+    "due-date-calculator",
     "pregnancy-calculator",
     "pregnancy-conception-calculator",
-    "due-date-calculator",
     "pregnancy-weight-gain-calculator",
     "bmi-calculator",
   ],
   formulaDescription:
-    "Predicts ovulation using ASRM guidelines & 6 clinical methods: LMP (+CycleLength - LutealPhase), Next Period (-LutealPhase), Due Date (-266d), or Symptothermal Biomarkers (BBT + OPK + EWCM).",
+    "Predicts ovulation using ASRM guidelines across 6 clinical methods: LMP (+CycleLength − LutealPhase), Next Period (−LutealPhase), Target Due Date (−266d), Conception Date, Reverse Ovulation, or Symptothermal Biomarkers (BBT + OPK + EWCM).",
   faqs: ovulation_calculatorFaqs,
   ContentComponent: OvulationContent,
   inputs: [
@@ -45,6 +45,7 @@ export const ovulation_calculatorConfig: CalculatorModuleDefinition = {
         { label: "Next Expected Period Date", value: "next-period" },
         { label: "Target Delivery Due Date", value: "due-date" },
         { label: "Known Conception Date", value: "conception-date" },
+        { label: "Reverse Ovulation Date", value: "reverse" },
         { label: "Symptothermal Biomarker Planner", value: "advanced-planner" },
       ],
     },
@@ -80,14 +81,13 @@ export const ovulation_calculatorConfig: CalculatorModuleDefinition = {
     },
     {
       name: "fertilityGoal",
-      label: "Fertility Goal (Shettles Timing)",
+      label: "Conception Timing Focus",
       type: "select",
       defaultValue: "general-conception",
       options: [
-        { label: "General Conception Optimization", value: "general-conception" },
-        { label: "Shettles Method for Conceiving a Boy", value: "conceive-boy" },
-        { label: "Shettles Method for Conceiving a Girl", value: "conceive-girl" },
-        { label: "Natural Family Planning (Abstinence)", value: "avoid-pregnancy" },
+        { label: "General Conception Optimization (6-Day Window)", value: "general-conception" },
+        { label: "Peak Fertile Window Focus (O-2 to O)", value: "fertile-window-optimization" },
+        { label: "Natural Family Planning (Fertile Window Abstinence)", value: "avoid-pregnancy" },
       ],
     },
   ],
@@ -111,7 +111,7 @@ export const ovulation_calculatorConfig: CalculatorModuleDefinition = {
     },
     {
       name: "dailyFertilityScore",
-      label: "Today's Conception Probability (%)",
+      label: "Daily Fertility Score (0–100 Index)",
       format: "number",
     },
     {

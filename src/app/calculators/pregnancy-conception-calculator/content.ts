@@ -1,9 +1,9 @@
 export const pregnancy_conception_calculatorContent = {
   title: "Pregnancy Conception Calculator",
   formula:
-    "Estimates conception date using 7 clinical modes based on ACOG & ASRM standards: Due Date (-266 days), LMP (+CycleLength - LutealPhase), Ultrasound Scan (ScanDate - GestationalAge + 14d), or IVF Embryo Transfer Date.",
+    "Estimates conception date using 7 clinical modes based on ACOG & ASRM standards: Due Date (-266 days), LMP (+CycleLength - LutealPhase), Ultrasound Scan (ScanDate - GestationalAge + (CycleLength - LutealPhase)), or IVF Embryo Transfer Date.",
   description:
-    "Estimate your exact conception date, fertile intercourse window, ovulation timing, and embryo implantation dates. Features 7 calculation modes (Due Date, LMP, Ultrasound, Ovulation, Reverse, IVF) with interactive probability curves and milestone timelines.",
+    "Estimate your conception date, 6-day fertile intercourse window, ovulation timing, and embryo implantation timeline. Features 7 calculation modes (Due Date, LMP, Ultrasound, Ovulation, Reverse, IVF) with interactive probability curves and milestone timelines.",
   article: `
 ### Comprehensive Clinical Guide to Pregnancy Conception & Fertility Timing
 

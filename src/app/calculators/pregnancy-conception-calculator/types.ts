@@ -59,6 +59,8 @@ export interface PregnancyConceptionCalculatorOutputs {
   conceptionRangeStartFormatted: string;
   conceptionRangeEndFormatted: string;
   estimatedOvulationDateFormatted: string;
+  fertileWindowStart?: string;
+  fertileWindowEnd?: string;
   fertileWindowStartFormatted: string;
   fertileWindowEndFormatted: string;
   fertileWindowFormatted: string;

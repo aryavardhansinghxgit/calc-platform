@@ -2,9 +2,9 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const ovulation_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Ovulation Calculator & Fertility Tracker — 6 Modes & Interactive Calendar",
+  title: "Ovulation Calculator – Fertile Window, Ovulation Date & Conception Timing",
   description:
-    "Predict your peak ovulation date, 6-day fertile window, daily fertility score, and 35-day interactive calendar. Features 6 calculation modes and Shettles gender timing optimization.",
+    "Estimate your ovulation date, 6-day fertile window, peak fertility days, implantation timing and expected period using cycle length and luteal-phase inputs.",
   slug: "ovulation-calculator",
 });
 

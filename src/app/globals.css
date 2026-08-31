@@ -183,9 +183,17 @@ details[open] > summary::before {
     color: #000000 !important;
   }
 
-  /* 4. Force grid containers and columns to full width */
-  .grid {
+  /* 4. Force grid containers and columns to full width, excluding dedicated calendar grids */
+  .grid:not(.calendar-grid) {
     display: block !important;
+  }
+
+  .calendar-grid {
+    display: grid !important;
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
   .lg\:col-span-12,
