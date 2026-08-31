@@ -9,7 +9,7 @@ export const conception_calculatorConfig: CalculatorModuleDefinition = {
   category: "Health",
   subcategory: "Pregnancy",
   description:
-    "Pinpoint your exact conception date, peak fertile window, ovulation timing, implantation window, and estimated due date with our clinical multi-mode fertility engine.",
+    "Estimate your conception date, ovulation, fertile window, implantation timing and due date using LMP, ovulation, ultrasound, IVF or reverse due-date information.",
   iconName: "Heart",
   featured: true,
   keywords: [
