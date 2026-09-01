@@ -22,8 +22,9 @@ export type BirthControlStatusType =
   | "injection";
 
 export interface PeriodInputParams {
-  calculationMode: PeriodCalculationMode;
+  calculationMode?: PeriodCalculationMode;
   lmpDate?: string;
+  lastPeriod?: string;
   periodLength?: number;
   cycleLength?: number;
   userAge?: number;
@@ -33,6 +34,7 @@ export interface PeriodInputParams {
   isPregnant?: "no" | "yes" | "trying";
   isBreastfeeding?: boolean;
   hasPcos?: boolean;
+  referenceDate?: string | Date;
 }
 
 export interface FutureCyclePeriod {
@@ -51,7 +53,7 @@ export interface DailyFertilityItem {
   date: string;
   dayLabel: string;
   probability: number;
-  status: "Low" | "Moderate" | "High" | "Peak";
+  status: "Low" | "Moderate" | "High" | "Peak" | "Post-Ovulatory";
   description: string;
 }
 
@@ -72,11 +74,18 @@ export interface CycleTrendItem {
   regularityScore: number;
 }
 
+export interface PredictionRange {
+  earliest: string;
+  latest: string;
+  varianceDays: number;
+}
+
 export interface PeriodCalculationResults {
   mode: PeriodCalculationMode;
   lmpDate: string;
   nextPeriodStartDate: string;
   nextPeriodEndDate: string;
+  nextPeriodRange: PredictionRange;
   daysUntilNextPeriod: number;
   nextOvulationDate: string;
   fertileWindow: {
@@ -101,6 +110,8 @@ export interface PeriodCalculationResults {
   cycleTrends: CycleTrendItem[];
   healthScore: number;
   healthStatus: "Normal" | "Slightly Irregular" | "Moderately Irregular" | "Highly Irregular";
+  regularityScore: number;
+  regularityLabel: string;
   insights: string[];
   recommendations: string[];
 }
@@ -108,10 +119,12 @@ export interface PeriodCalculationResults {
 export interface PeriodCalculatorOutputs extends Record<string, any> {
   nextPeriodDate: string;
   nextPeriodEndDate: string;
+  nextPeriodRange?: string;
   daysUntilNextPeriod: number;
   ovulationDate: string;
   fertileWindow: string;
   dueDateIfConceived: string;
   healthStatus: string;
   healthScore: number;
+  regularityScore: number;
 }

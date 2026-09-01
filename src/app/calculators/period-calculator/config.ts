@@ -1,6 +1,8 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculatePeriodOutputs } from "./calculator";
 import { period_calculatorFaqs } from "./faq";
+import { PeriodCalculator } from "@/components/calculator/period/PeriodCalculator";
+import { PeriodContent } from "@/components/calculator/period/PeriodContent";
 
 export const period_calculatorConfig: CalculatorModuleDefinition = {
   id: "period-calculator",
@@ -8,8 +10,10 @@ export const period_calculatorConfig: CalculatorModuleDefinition = {
   slug: "period-calculator",
   category: "Health",
   subcategory: "Pregnancy",
+  CustomComponent: PeriodCalculator,
+  ContentComponent: PeriodContent,
   description:
-    "Predict your next period date, future 12-month cycle calendar, peak fertile window, ovulation dates, and overall cycle health score.",
+    "Use this period calculator to estimate your next period, period length, ovulation date, 6-day fertile window and future cycle dates, with irregular cycle planning and pregnancy timing tools.",
   iconName: "Calendar",
   featured: true,
   keywords: [
@@ -24,11 +28,8 @@ export const period_calculatorConfig: CalculatorModuleDefinition = {
   priority: 1,
   relatedCalculators: [
     "ovulation-calculator",
-    "pregnancy-calculator",
-    "due-date-calculator",
     "pregnancy-conception-calculator",
-    "conception-calculator",
-    "pregnancy-weight-gain-calculator",
+    "due-date-calculator",
   ],
   formulaDescription:
     "Next Period Date = First Day of Last Period + Average Cycle Length (Days)",
@@ -101,12 +102,12 @@ export const period_calculatorConfig: CalculatorModuleDefinition = {
     },
     {
       name: "fertileWindow",
-      label: "Fertile Window Range",
+      label: "6-Day Fertile Window Range",
       format: "text",
     },
     {
       name: "healthStatus",
-      label: "Cycle Health Status",
+      label: "Cycle Regularity Pattern",
       format: "text",
     },
   ],

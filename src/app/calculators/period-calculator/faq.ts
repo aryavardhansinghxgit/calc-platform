@@ -5,123 +5,98 @@ export interface FAQItem {
 
 export const period_calculatorFaqs: FAQItem[] = [
   {
-    question: "When will my next period start?",
-    answer: "Your next period is predicted to start exactly one cycle length (typically 28 days, ranging from 21 to 35 days) from the first day of your last period. Our calculator adds your average cycle length to the start date of your last period for an accurate prediction."
+    question: "How does a period calculator work?",
+    answer:
+      "A period calculator usually estimates the next period by adding your average cycle length to the first day of your last menstrual period. More advanced calculators can also estimate ovulation, fertile days, future cycles and other cycle-related dates.",
+  },
+  {
+    question: "How do I calculate my next period?",
+    answer:
+      "Enter the first day of your last period and your average cycle length. For example, an LMP of January 1 with a 28-day cycle produces an estimated next period start of January 29.",
+  },
+  {
+    question: "What is the first day of my menstrual cycle?",
+    answer:
+      "Day 1 is generally the first day of menstrual bleeding. Accurate identification of Day 1 matters because every subsequent calendar estimate depends on it.",
+  },
+  {
+    question: "Is a 28-day cycle normal?",
+    answer:
+      "Twenty-eight days is a common example and average, but individual cycles can be shorter or longer. What matters is your usual pattern and whether it changes significantly. ACOG recommends evaluation when periods consistently occur less than 21 days or more than 45 days apart.",
+  },
+  {
+    question: "What is the difference between cycle length and period length?",
+    answer:
+      "Cycle length is measured from the first day of one period to the first day of the next. Period length is the number of days of menstrual bleeding. A 28-day cycle with 5 days of bleeding is therefore completely different from saying the period lasts 28 days.",
   },
   {
     question: "How accurate is a period calculator?",
-    answer: "Period calculators are highly accurate for women with regular, consistent cycle lengths. For cycles that vary by only 1 to 2 days each month, accuracy is typically within ±1 day. If your cycles are irregular due to stress, hormonal shifts, or PCOS, active biomarker tracking (such as ovulation predictor kits and temperature charting) adds further accuracy."
+    answer:
+      "Accuracy depends on how consistent your cycle is and how accurately you enter your last-period date and average cycle length. Calendar predictions become less reliable when ovulation or cycle length changes substantially.",
   },
   {
-    question: "What is a normal cycle length?",
-    answer: "A normal menstrual cycle for adult women lasts between 21 and 35 days (averaging 28 days). For young teenagers, cycles ranging from 21 to 45 days are also considered normal as hormonal systems mature."
+    question: "Can stress make your period late?",
+    answer:
+      "Yes. Stress is one possible cause of delayed or missed periods because it can affect the hormonal signals involved in ovulation. Other causes include pregnancy, changes in weight, excessive exercise, breastfeeding, PCOS and perimenopause.",
   },
   {
-    question: "What causes irregular periods?",
-    answer: "Irregular periods can stem from emotional or physical stress, significant weight changes, excessive exercise, Polycystic Ovary Syndrome (PCOS), thyroid imbalance, perimenopause, hormonal birth control adjustments, or elevated prolactin levels."
+    question: "How do I calculate my ovulation date from my period?",
+    answer:
+      "A calendar model can estimate ovulation by subtracting the assumed luteal-phase length from the cycle length. For example, a 28-day cycle with a 14-day luteal phase gives an estimated ovulation around cycle day 14. This remains an estimate rather than confirmation of actual ovulation.",
   },
   {
-    question: "Can stress delay a period?",
-    answer: "Yes. High physical or psychological stress triggers cortisol release, which can disrupt the GnRH signals from the hypothalamus. This delays the LH surge and pushes ovulation (and therefore your period) back by days or weeks."
-  },
-  {
-    question: "When do I ovulate relative to my period?",
-    answer: "Ovulation typically occurs 14 days before the start of your next period (the luteal phase), rather than 14 days after your period starts. In a 28-day cycle, ovulation happens around Day 14; in a 35-day cycle, ovulation happens around Day 21."
-  },
-  {
-    question: "What is the difference between period length and cycle length?",
-    answer: "Period length is the number of days you experience menstrual bleeding (typically 2 to 7 days). Cycle length is the total number of days from Day 1 of one period up to Day 1 of the next period (typically 21 to 35 days)."
-  },
-  {
-    question: "How long does a typical period last?",
-    answer: "A normal menstrual period lasts between 3 and 7 days. Bleeding is usually heaviest during the first 2 days and gradually lightens toward the end."
-  },
-  {
-    question: "What is the fertile window during my cycle?",
-    answer: "The fertile window is the 6-day period during which sexual intercourse can result in pregnancy. It includes the 5 days before ovulation and the day of ovulation itself."
+    question: "What is the fertile window?",
+    answer:
+      "ASRM defines the fertile window for fertility counseling as the six-day period ending on the day of ovulation. Fertility is generally highest in the days immediately before ovulation.",
   },
   {
     question: "Can I get pregnant during my period?",
-    answer: "While unlikely, it is possible—especially for women with short cycle lengths (e.g., 21 days). If you have sex toward the end of a 7-day period and ovulate early on Day 10, living sperm (which can survive up to 5 days) can fertilize the egg."
+    answer:
+      "Pregnancy during or shortly after a period is possible because sperm can survive for several days and ovulation timing varies. The chance depends on cycle length and when ovulation actually occurs, so a period should not be treated as a guaranteed infertile time.",
   },
   {
-    question: "How does birth control affect period predictions?",
-    answer: "Hormonal birth control (pills, patches, rings) suppresses natural ovulation and creates withdrawal bleeding during inactive pill days. Progestin IUDs and implants often lighten or completely stop periods (amenorrhea)."
+    question: "Why is my period late if my cycle is usually regular?",
+    answer:
+      "A late period can have many causes, including pregnancy, stress, illness, weight change, excessive exercise, hormonal contraception, PCOS and perimenopause.",
   },
   {
-    question: "What is PMS and when does it occur?",
-    answer: "Premenstrual Syndrome (PMS) includes physical and emotional symptoms (bloating, breast tenderness, mood swings, fatigue) that occur during the luteal phase (1 to 2 weeks before your period) and disappear shortly after bleeding starts."
+    question: "How do irregular cycles affect period predictions?",
+    answer:
+      "Irregular cycles make a single predicted date less reliable. This calculator's Irregular Predictor uses an estimated range rather than pretending the next period will occur on one exact day.",
   },
   {
-    question: "What is PMDD?",
-    answer: "Premenstrual Dysphoric Disorder (PMDD) is a severe, debilitating form of PMS characterized by intense irritability, severe anxiety, depression, and mood shifts that significantly impair daily functioning before a period."
+    question: "Can PCOS cause irregular periods?",
+    answer:
+      "Yes. PCOS is commonly associated with irregular menstrual cycles and unpredictable ovulation. However, irregular periods alone do not prove that someone has PCOS.",
   },
   {
-    question: "What is PCOS and how does it affect periods?",
-    answer: "Polycystic Ovary Syndrome (PCOS) is a endocrine disorder marked by elevated androgen levels and multiple small ovarian follicles. It frequently causes infrequent, irregular, or prolonged menstrual cycles (oligomenorrhea or amenorrhea)."
+    question: "Does birth control affect period predictions?",
+    answer:
+      "Yes. Hormonal contraception can change bleeding patterns and may suppress ovulation depending on the method. A calendar prediction should therefore not be interpreted as proof of natural ovulation.",
   },
   {
-    question: "What counts as Day 1 of a period?",
-    answer: "Day 1 of your cycle is the first day of full, red menstrual flow (not light spotting). Spotting that occurs a day or two before full flow should not be counted as Day 1."
+    question: "How long should a period last?",
+    answer:
+      "A period that lasts more than 7 days should be evaluated, particularly if bleeding is heavy. Persistent or unusually prolonged bleeding can have several causes.",
   },
   {
-    question: "Why is my period late if my pregnancy test is negative?",
-    answer: "Late periods with negative pregnancy tests are commonly caused by delayed ovulation due to stress, illness, weight fluctuations, hormonal imbalance, intense exercise, or taking tests too early before hCG rises."
+    question: "When should I see a doctor about irregular periods?",
+    answer:
+      "Seek medical advice if your usual cycle becomes persistently irregular, your periods repeatedly occur less than 21 days or more than 45 days apart, you go 90 days without a period, or bleeding is unusually heavy or prolonged.",
   },
   {
-    question: "How does age affect cycle length?",
-    answer: "Cycles are often irregular during puberty as hormonal pathways mature. In your 20s and 30s, cycles are typically stable. In your late 40s (perimenopause), cycles shorten initially and then become irregular until menopause."
+    question: "Can a period calculator tell me if I am pregnant?",
+    answer:
+      "No. A period calculator can estimate when a period is expected, but it cannot diagnose pregnancy. If pregnancy is possible and your period is late, use an appropriate pregnancy test.",
   },
   {
-    question: "What is spot bleeding and is it normal?",
-    answer: "Spotting is light bleeding that occurs outside your expected period. It can be caused by ovulation, implantation in early pregnancy, hormonal birth control, cervical irritation, or hormonal fluctuations."
+    question: "Can I use a period calculator for fertility planning?",
+    answer:
+      "Yes, as a starting point. It can estimate ovulation and the fertile window, but fertility timing is not perfectly predictable from the calendar alone. Ovulation tests and cervical-mucus observations can provide additional information.",
   },
   {
-    question: "What is anovulatory cycle?",
-    answer: "An anovulatory cycle is a menstrual cycle in which the ovaries do not release an egg. Bleeding may still occur due to estrogen withdrawal, but it is often irregular or unpredictable."
+    question: "Why did my actual period date differ from the calculator?",
+    answer:
+      "The calculator works from the assumptions and averages you enter. Your actual cycle may be shorter or longer in a particular month because ovulation shifted or because of other biological factors.",
   },
-  {
-    question: "How can I regulate an irregular period naturally?",
-    answer: "Supporting hormonal health through balanced nutrition (adequate protein and healthy fats), managing stress, sleeping 7 to 9 hours, avoiding extreme calorie restrictions, and exercising moderately helps regulate cycle function."
-  },
-  {
-    question: "What is the luteal phase and how long should it be?",
-    answer: "The luteal phase is the second half of your cycle after ovulation. A healthy luteal phase lasts 11 to 16 days (averaging 14 days). A phase shorter than 10 days is called a luteal phase defect."
-  },
-  {
-    question: "Can thyroid disorders cause missed periods?",
-    answer: "Yes. Both hypothyroidism (underactive thyroid) and hyperthyroidism (overactive thyroid) alter TSH and prolactin levels, leading to heavy, light, or missed periods."
-  },
-  {
-    question: "How does breastfeeding delay period return?",
-    answer: "Suckling stimulates high prolactin production to make breast milk, which suppresses GnRH release and inhibits ovulation. This natural delay is known as lactational amenorrhea."
-  },
-  {
-    question: "What is implantation bleeding and when does it happen?",
-    answer: "Implantation bleeding is light pink or brown spotting occurring 6 to 12 days post-ovulation when a fertilized egg embeds in the uterine lining. It is lighter and shorter than a normal period."
-  },
-  {
-    question: "When should I see a doctor about my period?",
-    answer: "Consult a healthcare provider if your period is absent for 90 days (and you're not pregnant), occurs more often than every 21 days or less often than 35 days, lasts longer than 8 days, or causes severe pain."
-  },
-  {
-    question: "What are period cramps (dysmenorrhea)?",
-    answer: "Period cramps are painful contractions of the uterine muscle triggered by prostaglandins released as the lining sheds. Mild to moderate cramping is normal, but severe pain may indicate endometriosis."
-  },
-  {
-    question: "What is secondary amenorrhea?",
-    answer: "Secondary amenorrhea is the absence of periods for 3 consecutive months in women who previously had regular periods (or 6 months for women with irregular periods), excluding pregnancy."
-  },
-  {
-    question: "Can travel or time zones shift my period date?",
-    answer: "Yes. Rapid time zone changes and travel disrupt circadian rhythms and sleep patterns, which temporarily alters melatonin and cortisol levels, delaying ovulation and pushing back your period."
-  },
-  {
-    question: "What vitamins support a healthy menstrual cycle?",
-    answer: "Vitamin D, B-complex vitamins (especially B6 for progesterone production), Magnesium (reduces cramps), Iron (replenishes blood loss), and Omega-3 fatty acids support hormonal health."
-  },
-  {
-    question: "How does our Period Calculator differ from Calculator.net?",
-    answer: "While basic tools only show a simple 1-month date, our advanced suite provides 12-month period predictions, irregular cycle range analysis, fertility curves, cycle health diagnostics, light-theme interactive charts, and downloadable PDF reports."
-  }
 ];
