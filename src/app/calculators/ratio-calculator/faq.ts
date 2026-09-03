@@ -2,44 +2,104 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const ratio_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "What is the difference between a ratio and a fraction?",
-    answer: "A ratio compares two quantities to each other (part-to-part, e.g. 2 boys : 3 girls). A fraction compares one part to the whole group (part-to-whole, e.g. 2 boys / 5 total children = 2/5)."
+    question: "What is a ratio?",
+    answer: "A ratio compares two or more quantities in a specified order. It can be written as a:b, a/b, or \"a to b.\""
   },
   {
-    question: "How do you solve for an unknown X in a proportion like 4/5 = X/20?",
-    answer: "Cross-multiply the diagonal terms: 4 × 20 = 5 × X ⇒ 80 = 5X ⇒ X = 80 / 5 = 16."
+    question: "How do I solve a ratio such as 3:4 = 6:x?",
+    answer: "Write it as a proportion: 3/4 = 6/x. Cross multiply: 3x = 24, so x = 8."
   },
   {
-    question: "Can a ratio contain negative numbers or zero?",
-    answer: "Standard physical ratios (like ingredients, dimensions, populations) must be positive. However, mathematical vector ratios or financial growth rates can occasionally be negative or zero."
+    question: "What is the formula for solving a proportion?",
+    answer: "For A/B = C/D, the cross-products are equal: A×D = B×C. The required unknown can then be isolated algebraically."
   },
   {
-    question: "How do you convert a decimal ratio into a whole-number ratio?",
-    answer: "Multiply all terms in the ratio by powers of 10 (e.g., 10, 100, 1000) to clear decimals, then simplify by dividing by the Greatest Common Divisor (GCD). For example, 0.75 : 1.5 → 75 : 150 → 1 : 2."
+    question: "Can this ratio calculator solve for A, B, C and D?",
+    answer: "Yes. The proportion solver supports all four target variables."
   },
   {
-    question: "How do you simplify a 3-part ratio (e.g., 15 : 25 : 35)?",
-    answer: "Find the Greatest Common Divisor (GCD) of all three terms. GCD(15, 25, 35) = 5. Divide each term by 5: 15/5 : 25/5 : 35/5 = 3 : 5 : 7."
+    question: "How do you simplify 12:18:24?",
+    answer: "Find the GCD: GCD(12,18,24) = 6. Then divide all terms by 6: 2:3:4."
   },
   {
-    question: "How do you divide an amount of money among three people in a 2:3:5 ratio?",
-    answer: "Add the ratio parts together: 2 + 3 + 5 = 10 total parts. Divide the total money by 10 to find the unit value per part, then multiply by 2, 3, and 5 respectively."
+    question: "What is the GCD of 12, 18 and 24?",
+    answer: "The greatest common divisor is 6."
   },
   {
-    question: "What is a unit rate and how do you calculate it?",
-    answer: "A unit rate expresses a ratio as a single quantity relative to 1 unit of another quantity (e.g., miles per 1 hour, or price per 1 unit). Calculate it by dividing term A by term B: A / B."
+    question: "How do you simplify a decimal ratio?",
+    answer: "Multiply every term by the same power of 10 needed to remove the decimals, then divide by the GCD. For example: 0.75:1.5 → 75:150 → 1:2."
   },
   {
-    question: "How do aspect ratios work in digital screens and videos?",
-    answer: "Aspect ratio is the proportional relationship between display width and height. For example, 16:9 widescreen means for every 16 units of width, there are 9 units of height."
+    question: "What is a unit rate?",
+    answer: "A unit rate expresses the first quantity for every 1 unit of the second quantity. It is found by dividing the first quantity by the second."
   },
   {
-    question: "What is the Golden Ratio and why is it special?",
-    answer: "The Golden Ratio (Φ ≈ 1.6180339887...) is a mathematical proportion where (A + B) / A = A / B. It is revered in art, architecture, and nature for creating visually harmonious compositions."
+    question: "How do you divide 500 in a 2:3:5 ratio?",
+    answer: "There are 2+3+5 = 10 parts. One part is 500/10 = 50. So the shares are 100, 150, 250."
   },
   {
-    question: "How do you convert a ratio into a percentage?",
-    answer: "For a part-to-part ratio A : B, the percentage share of A out of the total is calculated as [A / (A + B)] × 100%. For example, in a 1 : 4 ratio, Share A = [1 / (1 + 4)] × 100% = 20%."
+    question: "How do you split money according to a ratio?",
+    answer: "Add the ratio parts, divide the total by that sum to find the value of one part, then multiply by each ratio term."
+  },
+  {
+    question: "What is the difference between a part-to-part and part-to-whole ratio?",
+    answer: "A part-to-part ratio compares two components, such as 2 red objects to 3 blue objects. A part-to-whole ratio compares one component with the total, such as 2 red objects out of 5 total objects."
+  },
+  {
+    question: "How do I convert a ratio into a percentage?",
+    answer: "For the first part of A:B, use A/(A+B) × 100%. For example, 1:4 gives 1/5 × 100% = 20%."
+  },
+  {
+    question: "What is an aspect ratio?",
+    answer: "An aspect ratio is the proportional relationship between width and height. It is commonly written as width:height, such as 16:9."
+  },
+  {
+    question: "How do I calculate a 16:9 dimension?",
+    answer: "If the width is known: height = width × 9/16. For a width of 1280: 1280 × 9/16 = 720. So the dimensions are 1280×720."
+  },
+  {
+    question: "What is the aspect ratio of 1920×1080?",
+    answer: "Divide both dimensions by their GCD, 120: 1920:1080 = 16:9."
+  },
+  {
+    question: "Can I resize an image without changing its aspect ratio?",
+    answer: "Yes. Keep width and height proportional. If one dimension changes, calculate the other from the original ratio rather than changing both independently. Maintaining the intended aspect ratio is important for preserving media proportions."
+  },
+  {
+    question: "What is the golden ratio?",
+    answer: "The golden ratio is φ = (1+√5)/2 ≈ 1.61803398875. It describes a special proportional division in which the ratio of the whole to the larger part equals the ratio of the larger part to the smaller part."
+  },
+  {
+    question: "What is the golden ratio of 100?",
+    answer: "Dividing 100 according to the golden ratio gives approximately 61.8034 and 38.1966."
+  },
+  {
+    question: "Why do golden-ratio results have decimal values?",
+    answer: "Because the golden ratio is irrational. The exact constant involves √5, so practical calculator displays show rounded decimal approximations."
+  },
+  {
+    question: "Does the calculator show calculation steps?",
+    answer: "Yes. The calculator provides step-by-step mathematical derivations for its major ratio tools."
+  },
+  {
+    question: "Does the calculator validate zero denominators?",
+    answer: "Yes. A proportion denominator cannot be zero, and the calculator explicitly validates denominator-zero cases."
+  },
+  {
+    question: "Can I use negative numbers in a ratio?",
+    answer: "It depends on the context and the calculator's accepted domain. Some mathematical ratios can involve signed quantities, while physical allocation ratios normally represent nonnegative amounts. The calculator should not silently change a negative input into a positive one."
+  },
+  {
+    question: "What happens if all ratio parts are zero?",
+    answer: "A zero-total ratio cannot be normalized because there is no nonzero common scale factor. The calculator should reject or explicitly handle that invalid case rather than producing NaN or an arbitrary ratio."
+  },
+  {
+    question: "Is 16:9 a fixed resolution?",
+    answer: "No. 16:9 is a proportion. 1920×1080 and 1280×720 are different resolutions with the same 16:9 aspect ratio."
+  },
+  {
+    question: "Can I export my ratio calculation?",
+    answer: "Yes. The calculator supports the applicable PDF/Print, CSV, Copy, Save and Share workflows."
   }
 ];
 

@@ -6,11 +6,11 @@ import { RatioContent } from "@/components/calculator/ratio/RatioContent";
 
 export const ratio_calculatorConfig: CalculatorModuleDefinition = {
   id: "ratio-calculator",
-  title: "Ratio Calculator — Solve Proportions, Simplify & Scale Ratios",
+  title: "Ratio Calculator",
   slug: "ratio-calculator",
   category: "Math",
   subcategory: "General Math",
-  description: "Free online Ratio Calculator. Solve proportions A:B=C:D, simplify multi-term ratios using GCD, divide total amounts, scale aspect ratios, and calculate golden ratio.",
+  description: "Solve proportions, simplify ratios, divide amounts by a ratio, calculate unit rates, resize images by aspect ratio, and find golden-ratio segments with step-by-step solutions.",
   iconName: "PieChart",
   featured: true,
   keywords: [
