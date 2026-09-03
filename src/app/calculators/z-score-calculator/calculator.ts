@@ -1,15 +1,21 @@
 import { ZScoreCalculatorOutputs } from "./types";
+import { computeStandardZ } from "./z-score-logic";
 
 export function calculateZScoreCalculator(inputs: Record<string, any>): ZScoreCalculatorOutputs {
-  const x = Number(inputs.rawScore) || 85;
-  const mu = Number(inputs.mean) || 70;
-  const sigma = Math.max(0.0001, Number(inputs.sd) || 10);
-  const z = (x - mu) / sigma;
-  const erf = (val: number) => {
-    const t = 1.0 / (1.0 + 0.5 * Math.abs(val));
-    const ans = 1 - t * Math.exp(-val * val - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 + t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))));
-    return val >= 0 ? ans : -ans;
+  const x = inputs.rawScore !== undefined && inputs.rawScore !== null && !isNaN(Number(inputs.rawScore))
+    ? Number(inputs.rawScore)
+    : 85;
+  const mu = inputs.mean !== undefined && inputs.mean !== null && !isNaN(Number(inputs.mean))
+    ? Number(inputs.mean)
+    : 70;
+  const sigma = inputs.sd !== undefined && inputs.sd !== null && !isNaN(Number(inputs.sd))
+    ? Number(inputs.sd)
+    : 10;
+
+  const res = computeStandardZ(x, mu, sigma, false, 4);
+
+  return {
+    zScore: Number.isFinite(res.zScore) ? parseFloat(res.zScore.toFixed(4)) : 0,
+    percentile: Number.isFinite(res.leftTailP) ? parseFloat((res.leftTailP * 100).toFixed(2)) : 0
   };
-  const cdf = 0.5 * (1 + erf(z / Math.SQRT2));
-  return { zScore: parseFloat(z.toFixed(3)), percentile: parseFloat((cdf * 100).toFixed(2)) };
 }

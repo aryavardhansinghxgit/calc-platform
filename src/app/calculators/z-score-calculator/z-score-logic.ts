@@ -2,8 +2,12 @@
  * Core mathematical engine for Z-Score & Normal Distribution Suite
  */
 
-// High-precision approximation of Standard Normal CDF Φ(z) using Abramowitz & Stegun formula
+// High-precision approximation of Standard Normal CDF Φ(z) using Abramowitz & Stegun formula 7.1.26
 export function normalCDF(z: number): number {
+  if (!Number.isFinite(z)) {
+    return z > 0 ? 1.0 : 0.0;
+  }
+  if (z === 0) return 0.5;
   if (z < -8.0) return 0.0;
   if (z > 8.0) return 1.0;
 
@@ -22,41 +26,85 @@ export function normalCDF(z: number): number {
   const y = 1.0 - ((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
 
   const erf = sign * y;
-  return 0.5 * (1.0 + erf);
+  const res = 0.5 * (1.0 + erf);
+  return Math.max(0.0, Math.min(1.0, res));
 }
 
-// Inverse Standard Normal CDF (Probit Function) for Critical Z-Scores
+// High-precision Inverse Standard Normal CDF using Peter J. Acklam's algorithm (relative error < 1.15e-9)
 export function inverseNormalCDF(p: number): number {
-  if (p <= 0.0) return -4.0;
-  if (p >= 1.0) return 4.0;
+  if (p <= 0.0) return -Infinity;
+  if (p >= 1.0) return Infinity;
+  if (p === 0.5) return 0.0;
 
-  // Rational approximation for lower/upper region
-  const q = p < 0.5 ? p : 1.0 - p;
-  if (q <= 0) return 0;
+  // Coefficients in rational approximations
+  const a = [
+    -3.969683028665376e+01,
+     2.209460984245205e+02,
+    -2.759285104469687e+02,
+     1.383577518672690e+02,
+    -3.066479806614716e+01,
+     2.506628277459239e+00
+  ];
 
-  const t = Math.sqrt(-2.0 * Math.log(q));
+  const b = [
+    -5.447609879822406e+01,
+     1.615858368580409e+02,
+    -1.556989798598866e+02,
+     6.680131188771972e+01,
+    -1.328068155288572e+01
+  ];
 
-  // Coefficients for rational approximation
-  const c0 = 2.515517;
-  const c1 = 0.802853;
-  const c2 = 0.010328;
-  const d1 = 1.432788;
-  const d2 = 0.189269;
-  const d3 = 0.001308;
+  const c = [
+    -7.784894002430293e-03,
+    -3.223964580411365e-01,
+    -2.400758277161838e+00,
+    -2.549732539343734e+00,
+     4.374664141464968e+00,
+     2.938163982698783e+00
+  ];
 
-  const num = (c2 * t + c1) * t + c0;
-  const den = ((d3 * t + d2) * t + d1) * t + 1.0;
-  const x = t - num / den;
+  const d = [
+     7.784695709041462e-03,
+     3.224671290700398e-01,
+     2.445134137142996e+00,
+     3.754408661907416e+00
+  ];
 
-  return p < 0.5 ? -x : x;
+  const p_low = 0.02425;
+  const p_high = 1 - p_low;
+
+  let q: number;
+
+  // Rational approximation for lower region:
+  if (p < p_low) {
+    q = Math.sqrt(-2 * Math.log(p));
+    return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) /
+           ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+  }
+
+  // Rational approximation for upper region:
+  if (p > p_high) {
+    q = Math.sqrt(-2 * Math.log(1 - p));
+    return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) /
+            ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+  }
+
+  // Rational approximation for central region:
+  q = p - 0.5;
+  const r = q * q;
+  return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q /
+         (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
 }
 
 // Standard Normal Probability Density Function φ(z)
 export function normalPDF(z: number): number {
+  if (!Number.isFinite(z)) return 0.0;
   return (1.0 / Math.sqrt(2.0 * Math.PI)) * Math.exp(-0.5 * z * z);
 }
 
 export interface StandardZResult {
+  isValid: boolean;
+  errorMessage?: string;
   rawScore: number;
   mean: number;
   sd: number;
@@ -82,27 +130,50 @@ export function computeStandardZ(
   isSample: boolean = false,
   precision: number = 4
 ): StandardZResult {
-  const safeSD = sd > 0 ? sd : 1.0;
-  const zScore = (rawScore - mean) / safeSD;
-
-  const leftP = normalCDF(zScore);
-  const rightP = 1.0 - leftP;
-  const absZ = Math.abs(zScore);
-  const betweenP = normalCDF(absZ) - normalCDF(-absZ);
-  const twoTailsP = 2.0 * (1.0 - normalCDF(absZ));
-
-  const fmt = (v: number) => v.toFixed(precision);
-  const fmtPct = (v: number) => `${(v * 100).toFixed(2)}%`;
+  const fmt = (v: number) => (Number.isFinite(v) ? v.toFixed(precision) : "—");
+  const fmtPct = (v: number) => (Number.isFinite(v) ? `${(Math.max(0, Math.min(100, v * 100))).toFixed(2)}%` : "—");
 
   const meanSymbol = isSample ? "x̄" : "μ";
   const sdSymbol = isSample ? "s" : "σ";
 
-  const stepText = `Z = (X - ${meanSymbol}) / ${sdSymbol} = (${rawScore} - ${mean}) / ${safeSD} = ${(rawScore - mean).toFixed(precision)} / ${safeSD} = ${fmt(zScore)}`;
+  if (!Number.isFinite(sd) || sd <= 0) {
+    return {
+      isValid: false,
+      errorMessage: "Standard deviation must be strictly greater than 0 (σ > 0).",
+      rawScore,
+      mean,
+      sd,
+      isSample,
+      zScore: NaN,
+      zScoreFormatted: "Undefined",
+      leftTailP: NaN,
+      leftTailPct: "Undefined",
+      rightTailP: NaN,
+      rightTailPct: "Undefined",
+      betweenP: NaN,
+      betweenPct: "Undefined",
+      twoTailsP: NaN,
+      twoTailsPct: "Undefined",
+      percentileRank: "Undefined",
+      stepText: `Z = (X - ${meanSymbol}) / ${sdSymbol} = (${rawScore} - ${mean}) / ${sd} → Undefined (division by non-positive SD)`
+    };
+  }
+
+  const zScore = (rawScore - mean) / sd;
+
+  const leftP = normalCDF(zScore);
+  const rightP = Math.max(0.0, 1.0 - leftP);
+  const absZ = Math.abs(zScore);
+  const betweenP = Math.max(0.0, Math.min(1.0, normalCDF(absZ) - normalCDF(-absZ)));
+  const twoTailsP = Math.max(0.0, Math.min(1.0, 2.0 * (1.0 - normalCDF(absZ))));
+
+  const stepText = `Z = (X - ${meanSymbol}) / ${sdSymbol} = (${rawScore} - ${mean}) / ${sd} = ${(rawScore - mean).toFixed(precision)} / ${sd} = ${fmt(zScore)}`;
 
   return {
+    isValid: true,
     rawScore,
     mean,
-    sd: safeSD,
+    sd,
     isSample,
     zScore,
     zScoreFormatted: fmt(zScore),
@@ -120,6 +191,8 @@ export function computeStandardZ(
 }
 
 export interface InverseZResult {
+  isValid: boolean;
+  errorMessage?: string;
   probInput: number;
   probType: "prob" | "conf" | "pct";
   tailType: "left" | "right" | "two";
@@ -142,16 +215,63 @@ export function computeInverseZ(
   sd: number = 1,
   precision: number = 4
 ): InverseZResult {
-  const safeSD = sd > 0 ? sd : 1.0;
-  let p = value;
+  const fmt = (v: number) => (Number.isFinite(v) ? v.toFixed(precision) : "—");
 
-  if (probType === "pct") {
-    p = value / 100.0;
-  } else if (probType === "conf") {
-    p = value > 1 ? value / 100.0 : value;
+  if (!Number.isFinite(sd) || sd <= 0) {
+    return {
+      isValid: false,
+      errorMessage: "Standard deviation must be strictly greater than 0.",
+      probInput: value,
+      probType,
+      tailType,
+      mean,
+      sd,
+      criticalZ: NaN,
+      criticalZFormatted: "Undefined",
+      rawValue: NaN,
+      rawValueFormatted: "Undefined",
+      marginOfError: NaN,
+      marginOfErrorFormatted: "Undefined",
+      explanation: "Standard deviation cannot be zero or negative."
+    };
   }
 
-  p = Math.max(0.0001, Math.min(0.9999, p));
+  let p = value;
+  let isOutOfRange = false;
+
+  if (probType === "pct") {
+    if (value <= 0 || value >= 100) isOutOfRange = true;
+    p = value / 100.0;
+  } else if (probType === "conf") {
+    const confVal = value > 1 ? value : value * 100;
+    if (confVal <= 0 || confVal >= 100) isOutOfRange = true;
+    p = confVal / 100.0;
+  } else {
+    // prob mode (0 < p < 1)
+    if (value <= 0 || value >= 1) isOutOfRange = true;
+    p = value;
+  }
+
+  if (isOutOfRange || !Number.isFinite(p) || p <= 0 || p >= 1) {
+    return {
+      isValid: false,
+      errorMessage: probType === "prob"
+        ? "Probability must be strictly between 0 and 1 (exclusive)."
+        : "Confidence level / percentile must be strictly between 0% and 100% (exclusive).",
+      probInput: value,
+      probType,
+      tailType,
+      mean,
+      sd,
+      criticalZ: NaN,
+      criticalZFormatted: "Undefined",
+      rawValue: NaN,
+      rawValueFormatted: "Undefined",
+      marginOfError: NaN,
+      marginOfErrorFormatted: "Undefined",
+      explanation: "Probability parameter is out of mathematical range (0, 1)."
+    };
+  }
 
   let critZ = 0;
   if (tailType === "left") {
@@ -164,21 +284,20 @@ export function computeInverseZ(
     critZ = Math.abs(inverseNormalCDF(1.0 - alpha / 2.0));
   }
 
-  const rawVal = mean + critZ * safeSD;
-  const me = critZ * safeSD;
-
-  const fmt = (v: number) => v.toFixed(precision);
+  const rawVal = mean + critZ * sd;
+  const me = Math.abs(critZ * sd);
 
   const explanation = tailType === "two"
-    ? `For a ${(p * 100).toFixed(1)}% confidence level (two-tailed), critical Z* = ±${fmt(critZ)}. Corresponding raw value X = ${fmt(rawVal)} with Margin of Error = ±${fmt(me)}.`
+    ? `For a ${(p * 100).toFixed(1)}% confidence level (two-tailed, α = ${(1 - p).toFixed(4)}), critical Z* = ±${fmt(critZ)}. Corresponding raw value X = ${fmt(rawVal)} with Margin of Error = ±${fmt(me)}.`
     : `For ${tailType}-tailed probability ${p.toFixed(4)}, critical Z = ${fmt(critZ)}. Corresponding raw value X = ${fmt(rawVal)}.`;
 
   return {
+    isValid: true,
     probInput: value,
     probType,
     tailType,
     mean,
-    sd: safeSD,
+    sd,
     criticalZ: critZ,
     criticalZFormatted: fmt(critZ),
     rawValue: rawVal,
@@ -190,6 +309,8 @@ export function computeInverseZ(
 }
 
 export interface IntervalZResult {
+  isValid: boolean;
+  errorMessage?: string;
   x1: number;
   x2: number;
   mean: number;
@@ -212,28 +333,48 @@ export function computeIntervalZ(
   sd: number,
   precision: number = 4
 ): IntervalZResult {
-  const safeSD = sd > 0 ? sd : 1.0;
+  const fmt = (v: number) => (Number.isFinite(v) ? v.toFixed(precision) : "—");
+  const fmtPct = (v: number) => (Number.isFinite(v) ? `${(v * 100).toFixed(2)}%` : "—");
+
+  if (!Number.isFinite(sd) || sd <= 0) {
+    return {
+      isValid: false,
+      errorMessage: "Standard deviation must be strictly greater than 0.",
+      x1,
+      x2,
+      mean,
+      sd,
+      z1: NaN,
+      z1Formatted: "Undefined",
+      z2: NaN,
+      z2Formatted: "Undefined",
+      areaBetween: NaN,
+      areaBetweenPct: "Undefined",
+      areaOutside: NaN,
+      areaOutsidePct: "Undefined",
+      stepText: "Undefined (standard deviation must be positive)."
+    };
+  }
+
   const lowerX = Math.min(x1, x2);
   const upperX = Math.max(x1, x2);
 
-  const z1 = (lowerX - mean) / safeSD;
-  const z2 = (upperX - mean) / safeSD;
+  const z1 = (lowerX - mean) / sd;
+  const z2 = (upperX - mean) / sd;
 
   const cdf1 = normalCDF(z1);
   const cdf2 = normalCDF(z2);
-  const areaBetween = cdf2 - cdf1;
-  const areaOutside = 1.0 - areaBetween;
+  const areaBetween = Math.max(0.0, Math.min(1.0, cdf2 - cdf1));
+  const areaOutside = Math.max(0.0, Math.min(1.0, 1.0 - areaBetween));
 
-  const fmt = (v: number) => v.toFixed(precision);
-  const fmtPct = (v: number) => `${(v * 100).toFixed(2)}%`;
-
-  const stepText = `Z1 = (${lowerX} - ${mean}) / ${safeSD} = ${fmt(z1)}, Z2 = (${upperX} - ${mean}) / ${safeSD} = ${fmt(z2)}. Area = P(${fmt(z1)} ≤ Z ≤ ${fmt(z2)}) = ${cdf2.toFixed(4)} - ${cdf1.toFixed(4)} = ${fmt(areaBetween)}`;
+  const stepText = `Z1 = (${lowerX} - ${mean}) / ${sd} = ${fmt(z1)}, Z2 = (${upperX} - ${mean}) / ${sd} = ${fmt(z2)}. Area = P(${fmt(z1)} ≤ Z ≤ ${fmt(z2)}) = ${cdf2.toFixed(4)} - ${cdf1.toFixed(4)} = ${fmt(areaBetween)}`;
 
   return {
+    isValid: true,
     x1: lowerX,
     x2: upperX,
     mean,
-    sd: safeSD,
+    sd,
     z1,
     z1Formatted: fmt(z1),
     z2,
@@ -260,10 +401,11 @@ export interface BatchZResult {
   variance: number;
   sd: number;
   items: BatchZItem[];
+  invalidTokens: string[];
 }
 
-export function parseBatchData(input: string): number[] {
-  if (!input || !input.trim()) return [];
+export function parseBatchData(input: string): { numbers: number[]; invalidTokens: string[] } {
+  if (!input || !input.trim()) return { numbers: [], invalidTokens: [] };
   const tokens = input
     .replace(/,/g, " ")
     .replace(/\t/g, " ")
@@ -271,20 +413,23 @@ export function parseBatchData(input: string): number[] {
     .split(/\s+/);
 
   const numbers: number[] = [];
+  const invalidTokens: string[] = [];
   for (const tok of tokens) {
     if (!tok) continue;
     const num = parseFloat(tok);
     if (!Number.isNaN(num) && Number.isFinite(num)) {
       numbers.push(num);
+    } else {
+      invalidTokens.push(tok);
     }
   }
-  return numbers;
+  return { numbers, invalidTokens };
 }
 
 export function computeBatchZ(input: string, precision: number = 4): BatchZResult {
-  const data = parseBatchData(input);
+  const { numbers: data, invalidTokens } = parseBatchData(input);
   if (data.length === 0) {
-    return { count: 0, mean: 0, median: 0, variance: 0, sd: 0, items: [] };
+    return { count: 0, mean: 0, median: 0, variance: 0, sd: 0, items: [], invalidTokens };
   }
 
   const n = data.length;
@@ -296,6 +441,7 @@ export function computeBatchZ(input: string, precision: number = 4): BatchZResul
   const median = n % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 
   const sumSqDev = data.reduce((acc, v) => acc + Math.pow(v - mean, 2), 0);
+  // Sample variance and standard deviation (Bessel's correction n - 1)
   const variance = n > 1 ? sumSqDev / (n - 1) : 0;
   const sd = Math.sqrt(variance);
 
@@ -305,7 +451,7 @@ export function computeBatchZ(input: string, precision: number = 4): BatchZResul
   const fmtPct = (v: number) => `${(v * 100).toFixed(2)}%`;
 
   const items: BatchZItem[] = data.map((val) => {
-    const z = (val - mean) / safeSD;
+    const z = sd > 0 ? (val - mean) / sd : 0;
     const p = normalCDF(z);
     return {
       val,
@@ -321,6 +467,7 @@ export function computeBatchZ(input: string, precision: number = 4): BatchZResul
     median: parseFloat(median.toFixed(precision)),
     variance: parseFloat(variance.toFixed(precision)),
     sd: parseFloat(sd.toFixed(precision)),
-    items
+    items,
+    invalidTokens
   };
 }

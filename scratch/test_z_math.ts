@@ -1,0 +1,13 @@
+import { normalCDF, inverseNormalCDF } from "../src/app/calculators/z-score-calculator/z-score-logic";
+
+console.log("Z=1.5 CDF:", normalCDF(1.5)); // Expected: 0.9331928
+console.log("Z=0 CDF:", normalCDF(0)); // Expected: 0.5
+console.log("Z=-1.5 CDF:", normalCDF(-1.5)); // Expected: 0.0668072
+console.log("Z=1.959964 CDF:", normalCDF(1.959964)); // Expected: 0.975000
+console.log("Z=78.4 CDF:", normalCDF(78.4)); // Expected: 1.0
+
+console.log("p=0.975 invCDF:", inverseNormalCDF(0.975)); // Expected: 1.959964...
+console.log("p=0.5 invCDF:", inverseNormalCDF(0.5)); // Expected: 0
+console.log("p=0.95 invCDF:", inverseNormalCDF(0.95)); // Expected: 1.644853...
+console.log("p=0.99 invCDF:", inverseNormalCDF(0.99)); // Expected: 2.326348...
+console.log("p=0.025 invCDF:", inverseNormalCDF(0.025)); // Expected: -1.959964...
