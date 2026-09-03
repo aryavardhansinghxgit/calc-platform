@@ -51,6 +51,7 @@ export interface TwoDatasetComparison {
 
 /**
  * Parse raw string input into array of clean numbers
+ * Supports commas, spaces, tabs, newlines, and mixed delimiters
  */
 export function parseDataset(input: string): number[] {
   if (!input || !input.trim()) return [];
@@ -82,17 +83,18 @@ export function computeDescriptiveStats(data: number[], isSample: boolean = true
   }
 
   const sorted = [...data].sort((a, b) => a - b);
-  const count = sorted.length;
-  const sum = sorted.reduce((acc, v) => acc + v, 0);
+  const count = data.length;
+  const sum = data.reduce((acc, v) => acc + v, 0);
   const mean = sum / count;
 
   // Sum of Squared Deviations (SS) & MAD
+  // We iterate over the original data sequence to preserve user row order in the step table
   let sumSqDev = 0;
   let sumAbsDev = 0;
   const stepTable: StepTableRow[] = [];
 
   for (let i = 0; i < count; i++) {
-    const v = sorted[i];
+    const v = data[i];
     const dev = v - mean;
     const devSq = dev * dev;
     sumSqDev += devSq;
@@ -101,22 +103,23 @@ export function computeDescriptiveStats(data: number[], isSample: boolean = true
     stepTable.push({
       index: i + 1,
       val: v,
-      dev: parseFloat(dev.toFixed(4)),
-      devSq: parseFloat(devSq.toFixed(4))
+      dev: Number(dev.toFixed(8)),
+      devSq: Number(devSq.toFixed(8))
     });
   }
 
-  // Variances & Standard Deviations
+  // Variances & Standard Deviations (Bessel's correction n - 1 for sample)
   const sampleVar = count > 1 ? sumSqDev / (count - 1) : 0;
   const sampleSD = Math.sqrt(sampleVar);
-  const popVar = sumSqDev / count;
+  const popVar = count > 0 ? sumSqDev / count : 0;
   const popSD = Math.sqrt(popVar);
 
   const activeSD = isSample ? sampleSD : popSD;
 
   // Standard Error & CV
-  const stdError = count > 0 ? sampleSD / Math.sqrt(count) : 0;
-  const coeffVar = mean !== 0 ? (activeSD / Math.abs(mean)) * 100 : 0;
+  // SE: sample SD / sqrt(N) in sample mode; pop SD / sqrt(N) in population mode
+  const stdError = count > 0 ? (isSample ? (count > 1 ? sampleSD / Math.sqrt(count) : 0) : popSD / Math.sqrt(count)) : 0;
+  const coeffVar = (mean !== 0 && !isNaN(activeSD) && (isSample ? count > 1 : count > 0)) ? (activeSD / Math.abs(mean)) * 100 : 0;
   const mad = sumAbsDev / count;
 
   // Min, Max, Range
@@ -124,7 +127,7 @@ export function computeDescriptiveStats(data: number[], isSample: boolean = true
   const max = sorted[count - 1];
   const range = max - min;
 
-  // Quartiles & Median
+  // Quartiles & Median (Linear interpolation p(n-1))
   const median = getPercentile(sorted, 0.5);
   const q1 = getPercentile(sorted, 0.25);
   const q3 = getPercentile(sorted, 0.75);
@@ -138,7 +141,7 @@ export function computeDescriptiveStats(data: number[], isSample: boolean = true
   const upperBound = q3 + 1.5 * iqr;
   const outliers = sorted.filter((v) => v < lowerBound || v > upperBound);
 
-  // Skewness & Kurtosis
+  // Skewness & Kurtosis (Sample unbiased estimators if count > 2, otherwise population moments)
   let m3 = 0;
   let m4 = 0;
   for (const v of sorted) {
@@ -210,11 +213,12 @@ export function compareTwoDatasets(dataA: number[], dataB: number[]): TwoDataset
 
   const varA = statsA.sampleVar;
   const varB = statsB.sampleVar;
-  const fRatio = varB !== 0 ? varA / varB : 1;
+  const fRatio = varB !== 0 ? varA / varB : (varA === 0 ? 1 : Infinity);
 
-  const dfA = statsA.count - 1;
-  const dfB = statsB.count - 1;
-  const pooledVar = (dfA * varA + dfB * varB) / Math.max(1, dfA + dfB);
+  const dfA = Math.max(0, statsA.count - 1);
+  const dfB = Math.max(0, statsB.count - 1);
+  const totalDf = dfA + dfB;
+  const pooledVar = totalDf > 0 ? (dfA * varA + dfB * varB) / totalDf : 0;
   const pooledSD = Math.sqrt(pooledVar);
 
   return { statsA, statsB, fRatio, pooledSD };

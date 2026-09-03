@@ -3,8 +3,8 @@ import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const standard_deviation_calculatorMetadata: Metadata = {
   ...generateCalculatorMetadata({
-    title: "Standard Deviation Calculator — Sample, Population & Step-by-Step Variance",
-    description: "Free online Standard Deviation Calculator & Descriptive Statistics Suite. Compute Sample (s) & Population (σ) Standard Deviation, Variance, Standard Error, CV %, interactive SVG Bell Curve, Box Plot, and step-by-step variance tables.",
+    title: "Standard Deviation Calculator: Sample, Population & Variance",
+    description: "Calculate sample or population standard deviation, variance, standard error, coefficient of variation and more. Compare datasets, visualize spread and work through every step of the calculation.",
     slug: "standard-deviation-calculator"
   }),
   keywords: [
