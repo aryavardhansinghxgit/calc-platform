@@ -5,12 +5,12 @@ import { PregnancyContent } from "@/components/calculator/pregnancy/PregnancyCon
 
 export const pregnancy_calculatorConfig: CalculatorModuleDefinition = {
   id: "pregnancy-calculator",
-  title: "Advanced Pregnancy Calculator Platform",
+  title: "Pregnancy Calculator",
   slug: "pregnancy-calculator",
   category: "Health",
   subcategory: "Pregnancy",
   description:
-    "Calculate estimated due date across 7 modes (LMP, Due Date, Conception, Ultrasound, IVF, Custom, Reverse). Track weekly baby development (Weeks 1–42), weight gain targets, due date probability, interactive milestone calendar, and clinical PDF reports.",
+    "Use our pregnancy calculator to estimate your due date, gestational age, conception date, pregnancy milestones and weekly development using LMP, ultrasound, IVF or other dating methods.",
   iconName: "Baby",
   featured: true,
   keywords: [

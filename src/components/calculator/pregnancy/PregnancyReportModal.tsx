@@ -119,8 +119,13 @@ export const PregnancyReportModal: React.FC<PregnancyReportModalProps> = ({ isOp
             <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">Week {results.gestationalAgeWeeks} Developmental Overview
             </h2>
             <div className="p-4 rounded-xl bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/40 text-xs space-y-2">
-              <p><strong>Fetal Size Analogy:</strong> {currentWeekInfo.sizeAnalogy} (~{currentWeekInfo.lengthCm} cm, {currentWeekInfo.weightGrams} g)</p>
-              <p><strong>Fetal Development:</strong> {currentWeekInfo.babyDevelopment}</p>
+              <p>
+                <strong>{results.gestationalAgeWeeks <= 2 ? "Biological Stage:" : "Fetal Size Analogy:"}</strong>{" "}
+                {results.gestationalAgeWeeks <= 2
+                  ? `${currentWeekInfo.sizeAnalogy} (Pre-conception stage)`
+                  : `${currentWeekInfo.sizeAnalogy} (~${currentWeekInfo.lengthCm} cm, ${currentWeekInfo.weightGrams} g)`}
+              </p>
+              <p><strong>{results.gestationalAgeWeeks <= 2 ? "Biological Phase:" : "Fetal Development:"}</strong> {currentWeekInfo.babyDevelopment}</p>
               <p><strong>Maternal Changes:</strong> {currentWeekInfo.motherChanges}</p>
               <p><strong>Clinical Recommendation:</strong> {currentWeekInfo.keyAdvice}</p>
             </div>

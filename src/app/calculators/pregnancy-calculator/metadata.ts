@@ -1,9 +1,25 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
-export const pregnancy_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Advanced Pregnancy Calculator — Due Date, Timeline, Weekly Baby Growth & Weight Gain",
+export const pregnancy_calculatorMetadata: Metadata = {
+  title: "Pregnancy Calculator: Due Date, Gestational Age & Pregnancy Timeline",
   description:
-    "Free clinical-grade Pregnancy Calculator with 7 calculation modes (LMP, Due Date, Conception, Ultrasound, IVF, Custom, Reverse). Features week-by-week baby development (Weeks 1–42), IOM weight gain corridor, birth probability curve, milestone calendar, and clinical PDF report generator.",
-  slug: "pregnancy-calculator",
-});
+    "Use our pregnancy calculator to estimate your due date, gestational age, conception date, pregnancy milestones and weekly development using LMP, ultrasound, IVF or other dating methods.",
+  alternates: {
+    canonical: "https://calcplatform.example.com/calculators/pregnancy-calculator",
+  },
+  openGraph: {
+    title: "Pregnancy Calculator: Due Date, Gestational Age & Pregnancy Timeline",
+    description:
+      "Use our pregnancy calculator to estimate your due date, gestational age, conception date, pregnancy milestones and weekly development using LMP, ultrasound, IVF or other dating methods.",
+    url: "https://calcplatform.example.com/calculators/pregnancy-calculator",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pregnancy Calculator: Due Date, Gestational Age & Pregnancy Timeline",
+    description:
+      "Use our pregnancy calculator to estimate your due date, gestational age, conception date, pregnancy milestones and weekly development using LMP, ultrasound, IVF or other dating methods.",
+  },
+};
+
+export default pregnancy_calculatorMetadata;
