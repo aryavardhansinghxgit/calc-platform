@@ -1,7 +1,25 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { Copy, Check, Sparkles, HelpCircle, RefreshCw, Layers, Eye, Sliders, Bookmark, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Copy,
+  Check,
+  Share2,
+  Download,
+  RotateCcw,
+  Printer,
+  HelpCircle,
+  Eye,
+  Bookmark,
+  Trash2,
+  ChevronDown,
+  ChevronUp,
+  Link2,
+  Layers,
+  ArrowRightLeft
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { QuadraticReportModal } from "./QuadraticReportModal";
 
 type SolvingMethod = "formula" | "square" | "factoring";
 
@@ -46,18 +64,6 @@ function simplifyRadical(n: number): { k: number; m: number } {
   return { k, m };
 }
 
-// Helper: Greatest Common Divisor
-function gcd(a: number, b: number): number {
-  let x = Math.abs(Math.round(a));
-  let y = Math.abs(Math.round(b));
-  while (y) {
-    const t = y;
-    y = x % y;
-    x = t;
-  }
-  return x || 1;
-}
-
 export function QuadraticCalculator() {
   const [aStr, setAStr] = useState<string>("1");
   const [bStr, setBStr] = useState<string>("-5");
@@ -65,6 +71,9 @@ export function QuadraticCalculator() {
   const [activeMethod, setActiveMethod] = useState<SolvingMethod>("formula");
 
   const [copiedLatex, setCopiedLatex] = useState<boolean>(false);
+  const [copiedSummary, setCopiedSummary] = useState<boolean>(false);
+  const [copiedShare, setCopiedShare] = useState<boolean>(false);
+  const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
 
   // Saved calculations states for Card 1 & Card 2
   const [savedQuadraticItems, setSavedQuadraticItems] = useState<SavedQuadraticItem[]>([]);
@@ -79,6 +88,23 @@ export function QuadraticCalculator() {
   const toggleExpand = (id: string) => {
     setExpandedIds(prev => ({ ...prev, [id]: !prev[id] }));
   };
+
+  // Synchronize URL parameters on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const urlA = params.get("a");
+      const urlB = params.get("b");
+      const urlC = params.get("c");
+      const urlMethod = params.get("method") as SolvingMethod;
+      if (urlA !== null) setAStr(urlA);
+      if (urlB !== null) setBStr(urlB);
+      if (urlC !== null) setCStr(urlC);
+      if (urlMethod && ["formula", "square", "factoring"].includes(urlMethod)) {
+        setActiveMethod(urlMethod);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     try {
@@ -100,19 +126,39 @@ export function QuadraticCalculator() {
       return { error: "Please enter valid numeric values for coefficients a, b, and c." };
     }
 
+    // Degenerate Cases: a = 0
     if (a === 0) {
       if (b === 0) {
-        return { error: "When a = 0 and b = 0, the equation is degenerate (no variable x)." };
+        if (c === 0) {
+          return {
+            isDegenerate: true,
+            infiniteSolutions: true,
+            error: "Identity (0 = 0): Infinitely many solutions (true for all real and complex x).",
+            stepsFormula: [
+              "When a = 0, b = 0, and c = 0, the equation reduces to 0 = 0.",
+              "This is an algebraic identity satisfied by every possible value of x."
+            ]
+          };
+        }
+        return {
+          isDegenerate: true,
+          noSolution: true,
+          error: `Contradiction (${c} = 0): No solution exists. The equation has no variables and is mathematically false.`,
+          stepsFormula: [
+            `When a = 0 and b = 0, the equation reduces to ${c} = 0.`,
+            `Because ${c} ≠ 0, no value of x can satisfy this contradiction.`
+          ]
+        };
       }
       const linRoot = -c / b;
       return {
         isLinear: true,
         linRoot,
-        error: "Coefficient 'a' cannot be zero in a quadratic equation. This degenerates to the linear equation bx + c = 0.",
-        steps: [
-          `Equation degenerates to linear form: ${b}x + ${c} = 0`,
-          `Subtract c: ${b}x = ${-c}`,
-          `Divide by b: x = ${-c} / ${b} = ${linRoot.toFixed(4)}`
+        error: "Coefficient 'a' is zero; the equation is linear (bx + c = 0), not quadratic.",
+        stepsFormula: [
+          `Equation degenerates to linear form: ${b}x ${c >= 0 ? "+ " + c : "- " + Math.abs(c)} = 0`,
+          `Move constant term to right side: ${b}x = ${-c}`,
+          `Divide by linear coefficient b: x = ${-c} / ${b} = ${linRoot.toFixed(4)}`
         ]
       };
     }
@@ -140,6 +186,8 @@ export function QuadraticCalculator() {
     let x2Val = 0;
     let x1Complex = "";
     let x2Complex = "";
+    let realPart = 0;
+    let absImag = 0;
     let isComplex = false;
 
     if (disc > 0) {
@@ -157,62 +205,62 @@ export function QuadraticCalculator() {
       stepsFormula.push(`Simplify Radical: √${disc} ${rad.k > 1 ? `= ${radStr}` : ""}`);
       stepsFormula.push(`Root 1 (x₁): [-(${b}) + ${sqrtDisc.toFixed(4)}] / ${2 * a} = ${x1Val.toFixed(4)}`);
       stepsFormula.push(`Root 2 (x₂): [-(${b}) - ${sqrtDisc.toFixed(4)}] / ${2 * a} = ${x2Val.toFixed(4)}`);
-      rootsSummary = `x₁ = ${x1Val.toFixed(4)}, x₂ = ${x2Val.toFixed(4)}`;
+      rootsSummary = `x₁ = ${x1Val.toFixed(4)},  x₂ = ${x2Val.toFixed(4)}`;
 
     } else if (disc === 0) {
       x1Val = -b / (2 * a);
       x2Val = x1Val;
-      stepsFormula.push(`Discriminant Δ = 0: One repeated real root.`);
+      stepsFormula.push(`Discriminant Δ = 0: Exactly one repeated real root (tangent to x-axis).`);
       stepsFormula.push(`x = -(${b}) / (2 × ${a}) = ${x1Val.toFixed(4)}`);
       rootsSummary = `x₁ = x₂ = ${x1Val.toFixed(4)}`;
 
     } else {
       isComplex = true;
-      const realPart = -b / (2 * a);
-      const imagPart = Math.sqrt(Math.abs(disc)) / (2 * a);
-      const absImag = Math.abs(imagPart);
+      realPart = -b / (2 * a);
+      absImag = Math.sqrt(Math.abs(disc)) / (2 * Math.abs(a));
 
       x1Complex = `${realPart.toFixed(4)} + ${absImag.toFixed(4)}i`;
       x2Complex = `${realPart.toFixed(4)} - ${absImag.toFixed(4)}i`;
 
       stepsFormula.push(`Discriminant Δ < 0: Two complex conjugate roots (imaginary unit i = √-1).`);
       stepsFormula.push(`Real Part: -b / 2a = -(${b}) / ${2 * a} = ${realPart.toFixed(4)}`);
-      stepsFormula.push(`Imaginary Part: √(4ac - b²) / 2a = √(${Math.abs(disc)}) / ${2 * a} = ${absImag.toFixed(4)}i`);
+      stepsFormula.push(`Imaginary Part: √(4ac - b²) / |2a| = √(${Math.abs(disc)}) / ${2 * Math.abs(a)} = ${absImag.toFixed(4)}i`);
       stepsFormula.push(`Complex Roots: x = ${realPart.toFixed(4)} ± ${absImag.toFixed(4)}i`);
       rootsSummary = `x = ${realPart.toFixed(4)} ± ${absImag.toFixed(4)}i`;
     }
 
     // --- METHOD 2: COMPLETING THE SQUARE ---
-    stepsSquare.push(`1. Start with Standard Form: ${a}x² + ${b}x + ${c} = 0`);
+    stepsSquare.push(`1. Start with Standard Form: ${a}x² ${b >= 0 ? "+ " + b : "- " + Math.abs(b)}x ${c >= 0 ? "+ " + c : "- " + Math.abs(c)} = 0`);
     if (a !== 1) {
-      stepsSquare.push(`2. Divide entire equation by a (${a}): x² + (${b}/${a})x + (${c}/${a}) = 0`);
+      stepsSquare.push(`2. Divide entire equation by a (${a}): x² + (${(b / a).toFixed(4)})x + (${(c / a).toFixed(4)}) = 0`);
     }
-    stepsSquare.push(`3. Move constant term to right side: x² + (${(b/a).toFixed(4)})x = ${(-c/a).toFixed(4)}`);
+    stepsSquare.push(`3. Move constant term to right side: x² + (${(b / a).toFixed(4)})x = ${(-c / a).toFixed(4)}`);
     const halfB = b / (2 * a);
     const halfBSq = halfB * halfB;
-    stepsSquare.push(`4. Add (b/2a)² = (${halfB.toFixed(4)})² = ${halfBSq.toFixed(4)} to both sides:`);
-    stepsSquare.push(`   x² + (${(b/a).toFixed(4)})x + ${halfBSq.toFixed(4)} = ${(-c/a + halfBSq).toFixed(4)}`);
-    stepsSquare.push(`5. Write left side as a perfect square: (x + ${halfB.toFixed(4)})² = ${(-c/a + halfBSq).toFixed(4)}`);
-    stepsSquare.push(`6. Take square root of both sides and solve for x.`);
+    stepsSquare.push(`4. Add (b / 2a)² = (${halfB.toFixed(4)})² = ${halfBSq.toFixed(4)} to both sides:`);
+    stepsSquare.push(`   x² + (${(b / a).toFixed(4)})x + ${halfBSq.toFixed(4)} = ${(-c / a + halfBSq).toFixed(4)}`);
+    stepsSquare.push(`5. Write left side as a perfect square binomial: (x ${halfB >= 0 ? "+ " + halfB.toFixed(4) : "- " + Math.abs(halfB).toFixed(4)})² = ${(-c / a + halfBSq).toFixed(4)}`);
+    stepsSquare.push(`6. Take square root of both sides: x ${halfB >= 0 ? "+ " + halfB.toFixed(4) : "- " + Math.abs(halfB).toFixed(4)} = ±√(${(-c / a + halfBSq).toFixed(4)})`);
+    stepsSquare.push(`7. Solve for x: ${rootsSummary}`);
 
     // --- METHOD 3: FACTORING ---
     if (disc >= 0 && Number.isInteger(disc) && Number.isInteger(a) && Number.isInteger(b) && Number.isInteger(c)) {
       const sqrtD = Math.round(Math.sqrt(disc));
       if (sqrtD * sqrtD === disc) {
         stepsFactor.push(`1. Calculate Discriminant: Δ = ${disc} (Perfect Square!). Can be factored over integers.`);
-        stepsFactor.push(`2. Find factors of a×c = ${a*c} that sum to b = ${b}.`);
+        stepsFactor.push(`2. Find factors of a×c = ${a * c} that sum to b = ${b}.`);
         stepsFactor.push(`3. Factored Form: (x - (${x1Val.toFixed(4)}))(x - (${x2Val.toFixed(4)})) = 0`);
         stepsFactor.push(`4. Apply Zero Product Property: x = ${x1Val.toFixed(4)} or x = ${x2Val.toFixed(4)}`);
       } else {
-        stepsFactor.push(`Discriminant Δ = ${disc} is NOT a perfect square. Cannot be factored into simple integers.`);
+        stepsFactor.push(`Discriminant Δ = ${disc} is NOT a perfect square. Cannot be factored into rational integers.`);
       }
     } else {
-      stepsFactor.push(`Discriminant Δ = ${disc}. Factoring over real integers is not applicable.`);
+      stepsFactor.push(`Discriminant Δ = ${disc}. Factoring over real rational integers is not applicable.`);
     }
 
     const vertexFormStr = `y = ${a === 1 ? "" : a === -1 ? "-" : a}(x ${h >= 0 ? "- " + h.toFixed(4) : "+ " + Math.abs(h).toFixed(4)})² ${k >= 0 ? "+ " + k.toFixed(4) : "- " + Math.abs(k).toFixed(4)}`;
 
-    const latex = `x = \\frac{-(${b}) \\pm \\sqrt{(${b})^2 - 4(${a})(${c})}}{2(${a})} = ${isComplex ? `${(-b/(2*a)).toFixed(2)} \\pm ${(Math.sqrt(Math.abs(disc))/(2*a)).toFixed(2)}i` : `${x1Val.toFixed(4)}, \\, ${x2Val.toFixed(4)}`}`;
+    const latex = `x = \\frac{-(${b}) \\pm \\sqrt{(${b})^2 - 4(${a})(${c})}}{2(${a})} = ${isComplex ? `${realPart.toFixed(4)} \\pm ${absImag.toFixed(4)}i` : `${x1Val.toFixed(4)}, \\, ${x2Val.toFixed(4)}`}`;
 
     return {
       disc,
@@ -226,9 +274,12 @@ export function QuadraticCalculator() {
       isMin: a > 0,
       x1Val,
       x2Val,
+      realPart,
+      absImag,
       x1Complex,
       x2Complex,
       isComplex,
+      isRepeated: disc === 0,
       rootsSummary,
       stepsFormula,
       stepsSquare,
@@ -248,8 +299,8 @@ export function QuadraticCalculator() {
     const resList = [
       `Roots = ${calculation.isComplex ? calculation.rootsSummary : `x₁ = ${calculation.x1Val?.toFixed(4)}, x₂ = ${calculation.x2Val?.toFixed(4)}`}`,
       `Discriminant (Δ) = ${calculation.disc} (${calculation.discType})`,
-      `Vertex = (${calculation.h?.toFixed(2)}, ${calculation.k?.toFixed(2)})`,
-      `Axis of Symmetry = x = ${calculation.h?.toFixed(2)}`,
+      `Vertex = (${calculation.h?.toFixed(4)}, ${calculation.k?.toFixed(4)})`,
+      `Axis of Symmetry = x = ${calculation.h?.toFixed(4)}`,
       `Vertex Form = ${calculation.vertexFormStr}`
     ];
 
@@ -313,7 +364,7 @@ export function QuadraticCalculator() {
 
   // SVG Parabola Chart Generator
   const svgChart = useMemo(() => {
-    if (calculation.error || calculation.isLinear) return null;
+    if (calculation.error || calculation.isLinear || calculation.isDegenerate) return null;
 
     const width = 450;
     const height = 240;
@@ -360,31 +411,48 @@ export function QuadraticCalculator() {
     const yIntSvg = [toSvgX(0), toSvgY(c)];
 
     return (
-      <svg suppressHydrationWarning viewBox={`0 0 ${width} ${height}`} className="w-full h-auto text-xs font-sans tabular-nums">
+      <svg
+        role="img"
+        aria-label="Interactive 2D Parabola plot showing vertex, axis of symmetry, intercepts and roots"
+        suppressHydrationWarning
+        viewBox={`0 0 ${width} ${height}`}
+        className="w-full h-auto text-xs font-sans tabular-nums"
+      >
+        {/* Horizontal & Vertical Coordinate Axes */}
         <line suppressHydrationWarning x1={padding} y1={zeroY} x2={width - padding} y2={zeroY} stroke="currentColor" strokeOpacity={0.25} strokeWidth={1.5} />
         <line suppressHydrationWarning x1={zeroX} y1={padding} x2={zeroX} y2={height - padding} stroke="currentColor" strokeOpacity={0.25} strokeWidth={1.5} />
 
+        {/* Axis of Symmetry */}
         <line suppressHydrationWarning x1={axisSymX} y1={padding} x2={axisSymX} y2={height - padding} stroke="#3b82f6" strokeDasharray="4 4" strokeWidth={1.5} />
 
+        {/* Parabola Curve */}
         <path suppressHydrationWarning d={pathD} fill="none" stroke="#2563eb" strokeWidth={2.5} className="dark:stroke-blue-400" />
 
+        {/* Vertex Point */}
         <circle cx={vertexSvg[0]} cy={vertexSvg[1]} r={5} fill="#ef4444" />
         <text x={vertexSvg[0] + 7} y={vertexSvg[1] - 7} className="fill-red-600 dark:fill-red-400 font-extrabold text-[10px]">
           Vertex ({h.toFixed(2)}, {k.toFixed(2)})
         </text>
 
+        {/* Real Root Markers (Non-complex) */}
         {!calculation.isComplex && (
-          <>
-            <circle cx={toSvgX(x1)} cy={zeroY} r={4} fill="#10b981" />
-            <circle cx={toSvgX(x2)} cy={zeroY} r={4} fill="#10b981" />
-          </>
+          calculation.isRepeated ? (
+            <circle cx={toSvgX(x1)} cy={zeroY} r={4.5} fill="#10b981" />
+          ) : (
+            <>
+              <circle cx={toSvgX(x1)} cy={zeroY} r={4} fill="#10b981" />
+              <circle cx={toSvgX(x2)} cy={zeroY} r={4} fill="#10b981" />
+            </>
+          )
         )}
 
+        {/* Y-Intercept */}
         <circle cx={yIntSvg[0]} cy={yIntSvg[1]} r={4} fill="#8b5cf6" />
       </svg>
     );
   }, [a, b, c, calculation]);
 
+  // Master Action Handlers
   const handleCopyText = (text: string) => {
     try {
       navigator.clipboard.writeText(text);
@@ -393,14 +461,105 @@ export function QuadraticCalculator() {
     } catch (e) {}
   };
 
+  const handleCopySummary = () => {
+    if (calculation.error) return;
+    const summaryText = `QUADRATIC FORMULA & PARABOLA GEOMETRY SUMMARY
+Equation: ${a}x² ${b >= 0 ? "+ " + b : "- " + Math.abs(b)}x ${c >= 0 ? "+ " + c : "- " + Math.abs(c)} = 0
+Coefficients: a = ${a}, b = ${b}, c = ${c}
+Discriminant (Δ): ${calculation.disc} (${calculation.discType})
+Roots: ${calculation.isComplex ? `x = ${calculation.realPart?.toFixed(4)} ± ${calculation.absImag?.toFixed(4)}i (x₁ = ${calculation.x1Complex}, x₂ = ${calculation.x2Complex})` : calculation.isLinear ? `x = ${calculation.linRoot?.toFixed(4)} (Linear)` : calculation.isRepeated ? `x₁ = x₂ = ${calculation.x1Val?.toFixed(4)} (Repeated)` : `x₁ = ${calculation.x1Val?.toFixed(4)}, x₂ = ${calculation.x2Val?.toFixed(4)}`}
+Vertex (h, k): (${calculation.h?.toFixed(4)}, ${calculation.k?.toFixed(4)}) [${calculation.isMin ? "Global Minimum" : "Global Maximum"}]
+Parabola Orientation: ${calculation.isMin ? "Opens Upward" : "Opens Downward"}
+Axis of Symmetry: x = ${calculation.h?.toFixed(4)}
+Y-Intercept: (0, ${calculation.yIntercept})
+Focus Point: (${calculation.h?.toFixed(4)}, ${calculation.focusY?.toFixed(4)})
+Directrix Line: y = ${calculation.directrixY?.toFixed(4)}
+Vertex Form: ${calculation.vertexFormStr}`;
+
+    try {
+      navigator.clipboard.writeText(summaryText);
+      setCopiedSummary(true);
+      setTimeout(() => setCopiedSummary(false), 2000);
+    } catch (e) {}
+  };
+
+  const handleShare = () => {
+    if (typeof window === "undefined") return;
+    const url = `${window.location.origin}${window.location.pathname}?a=${encodeURIComponent(aStr)}&b=${encodeURIComponent(bStr)}&c=${encodeURIComponent(cStr)}&method=${activeMethod}`;
+    try {
+      navigator.clipboard.writeText(url);
+      setCopiedShare(true);
+      setTimeout(() => setCopiedShare(false), 2000);
+    } catch (e) {}
+  };
+
+  const handleReset = () => {
+    setAStr("1");
+    setBStr("-5");
+    setCStr("6");
+    setActiveMethod("formula");
+  };
+
+  const handleExportCSV = () => {
+    const rows = [
+      ["Parameter / Field", "Value"],
+      ["Standard Form Equation", `${a}x² ${b >= 0 ? "+ " + b : "- " + Math.abs(b)}x ${c >= 0 ? "+ " + c : "- " + Math.abs(c)} = 0`],
+      ["Coefficient a", a.toString()],
+      ["Coefficient b", b.toString()],
+      ["Coefficient c", c.toString()],
+      ["Discriminant (Δ)", calculation.disc?.toString() ?? ""],
+      ["Classification", calculation.discType ?? ""],
+      ["Root 1 (x₁)", calculation.isComplex ? calculation.x1Complex : calculation.isLinear ? calculation.linRoot?.toString() : calculation.x1Val?.toString()],
+      ["Root 2 (x₂)", calculation.isComplex ? calculation.x2Complex : calculation.isLinear ? "N/A" : calculation.x2Val?.toString()],
+      ["Vertex h (-b/2a)", calculation.h?.toString() ?? ""],
+      ["Vertex k", calculation.k?.toString() ?? ""],
+      ["Orientation", calculation.isMin ? "Upward (Global Min)" : "Downward (Global Max)"],
+      ["Axis of Symmetry", `x = ${calculation.h}`],
+      ["Y-Intercept", `(0, ${calculation.yIntercept})`],
+      ["Focus Coordinate", `(${calculation.h}, ${calculation.focusY})`],
+      ["Directrix Line", `y = ${calculation.directrixY}`],
+      ["Vertex Form Equation", calculation.vertexFormStr ?? ""]
+    ];
+
+    if (calculation.stepsFormula) {
+      rows.push(["", ""]);
+      rows.push(["Quadratic Formula Derivation", "Step Description"]);
+      calculation.stepsFormula.forEach((step: string, idx: number) => {
+        rows.push([`Step ${idx + 1}`, step]);
+      });
+    }
+
+    const csvContent = "\uFEFF" + rows.map(r => r.map(cell => `"${(cell || "").replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `quadratic_equation_${a}_${b}_${c}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
+    <div className="space-y-6 max-w-7xl mx-auto">
+      {/* Print styles injection to prevent blank page overflow */}
+      <style jsx global>{`
+        @media print {
+          body { font-size: 11px !important; color: #0f172a !important; }
+          .no-print { display: none !important; }
+          .page-break-avoid { break-inside: avoid !important; page-break-inside: avoid !important; }
+        }
+      `}</style>
+
       {/* ========================================================================= */}
       {/* CARD 1: QUADRATIC FORMULA & EQUATION SOLVER */}
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span>Quadratic Formula &amp; Equation Solver (ax² + bx + c = 0)</span>
+          <span className="flex items-center gap-1.5">
+            <span>Quadratic Formula &amp; Equation Solver</span>
+            <span className="text-blue-200 font-mono text-[11px]">(ax² + bx + c = 0)</span>
+          </span>
           <button
             type="button"
             onClick={handleSaveQuadratic}
@@ -494,15 +653,25 @@ export function QuadraticCalculator() {
                   </div>
 
                   {calculation.error ? (
-                    <div className="text-xs font-bold text-amber-600 dark:text-amber-400">
+                    <div className="p-3 bg-amber-50 dark:bg-amber-950/40 rounded-xl border border-amber-200 dark:border-amber-800 text-xs font-bold text-amber-800 dark:text-amber-200">
                       {calculation.error}
                     </div>
                   ) : (
                     <div className="space-y-3">
                       <div className="text-2xl sm:text-3xl font-sans tabular-nums font-extrabold text-slate-900 dark:text-slate-100">
                         {calculation.isComplex ? (
-                          <div>
-                            x = {calculation.x1Complex}
+                          <div className="space-y-1">
+                            <div>x = {calculation.realPart?.toFixed(4)} &plusmn; {calculation.absImag?.toFixed(4)}i</div>
+                            <div className="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400">
+                              x₁ = {calculation.x1Complex}, &nbsp; x₂ = {calculation.x2Complex}
+                            </div>
+                          </div>
+                        ) : calculation.isRepeated ? (
+                          <div className="space-y-1">
+                            <div>x₁ = x₂ = {calculation.x1Val?.toFixed(4)}</div>
+                            <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                              One Repeated Real Root (Parabola vertex is tangent to x-axis)
+                            </div>
                           </div>
                         ) : (
                           <div>
@@ -516,14 +685,14 @@ export function QuadraticCalculator() {
                           Discriminant Δ = {calculation.disc} ({calculation.discType})
                         </span>
                         <span className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                          Vertex: ({calculation.h?.toFixed(2)}, {calculation.k?.toFixed(2)}) [{calculation.isMin ? "Global Min" : "Global Max"}]
+                          Vertex: ({calculation.h?.toFixed(4)}, {calculation.k?.toFixed(4)}) [{calculation.isMin ? "Global Min" : "Global Max"}]
                         </span>
                       </div>
 
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-bold">
                         <div className="p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl">
                           <span className="text-[10px] text-slate-400 block uppercase">Axis of Symmetry</span>
-                          <span className="font-sans tabular-nums">x = {calculation.h?.toFixed(2)}</span>
+                          <span className="font-sans tabular-nums">x = {calculation.h?.toFixed(4)}</span>
                         </div>
 
                         <div className="p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl">
@@ -552,7 +721,7 @@ export function QuadraticCalculator() {
 
                 {/* TABBED METHOD SOLVER & STEP BREAKDOWN */}
                 <div className="p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
-                  <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                  <div className="flex flex-wrap items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3 gap-2">
                     <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
                       <HelpCircle className="w-3.5 h-3.5" /> Multi-Method Algebraic Solution
                     </span>
@@ -702,11 +871,77 @@ export function QuadraticCalculator() {
       </div>
 
       {/* ========================================================================= */}
+      {/* MASTER ACTION TOOLBAR */}
+      {/* ========================================================================= */}
+      <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+        <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleCopySummary}
+            className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300"
+          >
+            {copiedSummary ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5 text-blue-600" />}
+            <span>{copiedSummary ? "Summary Copied!" : "Copy Summary"}</span>
+          </Button>
+
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleShare}
+            className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300"
+          >
+            {copiedShare ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Share2 className="w-3.5 h-3.5 text-blue-600" />}
+            <span>{copiedShare ? "Link Copied!" : "Share Link"}</span>
+          </Button>
+
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleExportCSV}
+            className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300"
+          >
+            <Download className="w-3.5 h-3.5 text-blue-600" />
+            <span>Export CSV</span>
+          </Button>
+
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleReset}
+            className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300"
+          >
+            <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
+            <span>Reset Defaults</span>
+          </Button>
+        </div>
+
+        <Button
+          type="button"
+          size="sm"
+          onClick={() => setIsReportOpen(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold flex items-center gap-1.5 shadow-xs"
+        >
+          <Printer className="w-3.5 h-3.5" />
+          <span>Print / Save PDF</span>
+        </Button>
+      </div>
+
+      {/* ========================================================================= */}
       {/* CARD 2: QUADRATIC VERTEX & PARABOLA GEOMETRY ANALYZER */}
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
-          <span>Quadratic Vertex &amp; Parabola Geometry Analyzer</span>
+          <div className="flex items-center gap-2">
+            <span>Quadratic Vertex &amp; Parabola Geometry Analyzer</span>
+            <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-700/80 text-[10px] text-blue-100 font-medium">
+              <ArrowRightLeft className="w-3 h-3" /> Live Bidirectional Sync with Equation Above
+            </span>
+          </div>
           <button
             type="button"
             onClick={handleSaveVertex}
@@ -720,9 +955,12 @@ export function QuadraticCalculator() {
         <div className="p-5 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
             <div className="md:col-span-5 space-y-4 bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
-              <h2 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                Parabola Inputs
-              </h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                  Parabola Inputs
+                </h2>
+                <span className="text-[10px] text-slate-500 font-semibold">Active Coefficients</span>
+              </div>
 
               <div>
                 <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
@@ -796,7 +1034,7 @@ export function QuadraticCalculator() {
 
                     <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
                       <span className="text-[10px] text-slate-400 block uppercase">Focus Coordinate</span>
-                      <span className="font-sans tabular-nums text-slate-900 dark:text-slate-100">({calculation.h?.toFixed(2)}, {calculation.focusY?.toFixed(2)})</span>
+                      <span className="font-sans tabular-nums text-slate-900 dark:text-slate-100">({calculation.h?.toFixed(4)}, {calculation.focusY?.toFixed(4)})</span>
                     </div>
 
                     <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
@@ -804,9 +1042,14 @@ export function QuadraticCalculator() {
                       <span className="font-sans tabular-nums text-slate-900 dark:text-slate-100">y = {calculation.directrixY?.toFixed(4)}</span>
                     </div>
 
-                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 col-span-2">
-                      <span className="text-[10px] text-slate-400 block uppercase">Converted Vertex Form Equation</span>
-                      <span className="font-sans tabular-nums text-blue-600 dark:text-blue-400">{calculation.vertexFormStr}</span>
+                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-400 block uppercase">Y-Intercept</span>
+                      <span className="font-sans tabular-nums text-slate-900 dark:text-slate-100">(0, {calculation.yIntercept})</span>
+                    </div>
+
+                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 col-span-2 sm:col-span-1">
+                      <span className="text-[10px] text-slate-400 block uppercase">Converted Vertex Form</span>
+                      <span className="font-sans tabular-nums text-blue-600 dark:text-blue-400 truncate block" title={calculation.vertexFormStr}>{calculation.vertexFormStr}</span>
                     </div>
                   </div>
                 )}
@@ -900,6 +1143,20 @@ export function QuadraticCalculator() {
           )}
         </div>
       </div>
+
+      {/* Report Modal */}
+      <QuadraticReportModal
+        isOpen={isReportOpen}
+        onClose={() => setIsReportOpen(false)}
+        a={a}
+        b={b}
+        c={c}
+        aStr={aStr}
+        bStr={bStr}
+        cStr={cStr}
+        calculation={calculation}
+        svgChart={svgChart}
+      />
     </div>
   );
 }
