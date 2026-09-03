@@ -171,13 +171,22 @@ export function PregnancyWeightGainCalculator() {
   // Copy Summary
   const handleCopySummary = () => {
     const text = `Pregnancy Weight Gain Summary (Week ${results.currentWeek}):
-• Pregnancy Type: ${results.pregnancyType === "twins" ? "Twins / Multiples" : "Single Fetus"}
-• Pre-Pregnancy BMI: ${results.preBmi} (${results.bmiCategory})
-• Total Recommended Gain (40 wks): ${results.recommendedGainTotalFormatted}
-• Week ${results.currentWeek} Target Gain Range: ${results.targetGainWeekFormatted}
+• Pregnancy Type: ${results.pregnancyType === "twins" ? "Twins / Multiples" : "Single Baby"}
+• Pre-Pregnancy BMI: ${results.preBmi} kg/m² (${results.bmiCategory})
+• Pre-Pregnancy Weight: ${
+      unitSystem === "metric" ? `${results.preWeightKg} kg` : `${results.preWeightLbs} lbs`
+    }
 • Current Weight: ${
       unitSystem === "metric" ? `${results.currentWeightKg} kg` : `${results.currentWeightLbs} lbs`
-    } (${results.statusLabel})
+    }
+• Current Weight Gain: ${
+      unitSystem === "metric" ? `${results.actualGainKg} kg` : `${results.actualGainLbs} lbs`
+    }
+• Week ${results.currentWeek} Estimated Range: ${results.illustrativeWeeklyTrajectory} (Illustrative Trajectory)
+• 40-Week Guideline Total Gain: ${results.totalRecommendedGain} (IOM Guideline Range)
+• IOM 2nd/3rd Trimester Recommended Rate: ${results.recommendedWeeklyRate}
+• Clinical Weight Status: ${results.statusLabel}
+Note: The weekly trajectory is an illustrative interpolation between reference points; individual gain patterns vary.
 Calculated on CalcPlatform.`;
     navigator.clipboard.writeText(text);
     setCopied(true);
@@ -202,54 +211,61 @@ Calculated on CalcPlatform.`;
       params.set("preWt", preWeightKg.toString());
       params.set("currWt", currentWeightKg.toString());
     }
-    const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
-    navigator.clipboard.writeText(shareUrl);
+    const fullUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+    navigator.clipboard.writeText(fullUrl);
     setShared(true);
     setTimeout(() => setShared(false), 2500);
   };
 
-  // Reset Defaults Handler
+  // Reset to default standard profile
   const handleResetDefaults = () => {
-    setUnitSystem("us");
     setPregnancyType("single");
-    setWeek(20);
+    setUnitSystem("us");
     setHeightFeet(5);
     setHeightInches(6);
+    setHeightCm(168);
     setPreWeightLbs(130);
     setCurrentWeightLbs(142);
-    setHeightCm(168);
     setPreWeightKg(59);
-    setCurrentWeightKg(64.5);
+    setCurrentWeightKg(64.4);
+    setWeek(20);
     setActiveTab("overview");
-    if (typeof window !== "undefined") {
-      const url = new URL(window.location.href);
-      url.search = "";
-      window.history.replaceState({}, "", url.toString());
+    if (typeof window !== "undefined" && window.history.replaceState) {
+      window.history.replaceState({}, "", window.location.pathname);
     }
   };
 
-  // Export Schedule CSV via standard Blob
+  // Quick Action: Print Page
+  const handlePrint = () => {
+    if (typeof window !== "undefined") {
+      window.print();
+    }
+  };
+
+  // Export 40-Week Schedule as CSV
   const handleExportCsv = () => {
     const headers = [
       "Week",
       "Trimester",
-      `Min Gain (${unitSystem === "metric" ? "kg" : "lbs"})`,
-      `Max Gain (${unitSystem === "metric" ? "kg" : "lbs"})`,
-      `Min Weight (${unitSystem === "metric" ? "kg" : "lbs"})`,
-      `Max Weight (${unitSystem === "metric" ? "kg" : "lbs"})`,
+      unitSystem === "metric" ? "Illustrative Min Gain (kg)" : "Illustrative Min Gain (lbs)",
+      unitSystem === "metric" ? "Illustrative Max Gain (kg)" : "Illustrative Max Gain (lbs)",
+      unitSystem === "metric" ? "Illustrative Min Weight (kg)" : "Illustrative Min Weight (lbs)",
+      unitSystem === "metric" ? "Illustrative Max Weight (kg)" : "Illustrative Max Weight (lbs)",
+      "IOM Guideline Weekly Rate",
       "Daily Extra Calorie (kcal)",
       "Fetal Milestone",
     ];
 
-    const rows = results.schedule.map((s) => [
-      s.week,
-      s.trimester,
-      unitSystem === "metric" ? s.minGainKg : s.minGainLbs,
-      unitSystem === "metric" ? s.maxGainKg : s.maxGainLbs,
-      unitSystem === "metric" ? s.minWeightKg : s.minWeightLbs,
-      unitSystem === "metric" ? s.maxWeightKg : s.maxWeightLbs,
-      s.extraCalorieKcal,
-      `"${s.fetalMilestone.replace(/"/g, '""')}"`,
+    const rows = results.schedule.map((row) => [
+      row.week,
+      row.trimester,
+      unitSystem === "metric" ? row.minGainKg : row.minGainLbs,
+      unitSystem === "metric" ? row.maxGainKg : row.maxGainLbs,
+      unitSystem === "metric" ? row.minWeightKg : row.minWeightLbs,
+      unitSystem === "metric" ? row.maxWeightKg : row.maxWeightLbs,
+      `"${row.guidelineWeeklyRate}"`,
+      row.extraCalorieKcal,
+      `"${row.fetalMilestone.replace(/"/g, '""')}"`,
     ]);
 
     const csvContent = [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
@@ -257,7 +273,7 @@ Calculated on CalcPlatform.`;
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", `pregnancy_weight_gain_week_${week}.csv`);
+    link.setAttribute("download", `pregnancy_weight_gain_schedule_week_${week}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -282,15 +298,15 @@ Calculated on CalcPlatform.`;
           colorTheme: "rose",
         },
         {
-          label: `Week ${results.currentWeek} Target Gain`,
-          value: results.targetGainWeekFormatted,
+          label: `Week ${results.currentWeek} Estimated Range`,
+          value: results.illustrativeWeeklyTrajectory,
           subtitle: `Status: ${results.statusLabel}`,
           colorTheme: "emerald",
         },
         {
-          label: "40-Week Recommended Total",
-          value: results.recommendedGainTotalFormatted,
-          subtitle: "Institute of Medicine Target",
+          label: "IOM 40-Week Guideline Total",
+          value: results.totalRecommendedGain,
+          subtitle: "Institute of Medicine Guideline Range",
           colorTheme: "purple",
         },
         {
@@ -305,7 +321,7 @@ Calculated on CalcPlatform.`;
           title: "Maternal & Pregnancy Inputs",
           items: [
             { label: "Unit System", value: unitSystem.toUpperCase() },
-            { label: "Pregnancy Type", value: results.pregnancyType === "twins" ? "Twins / Multiples" : "Single Fetus" },
+            { label: "Pregnancy Type", value: results.pregnancyType === "twins" ? "Twins / Multiples" : "Single Baby" },
             { label: "Gestational Age", value: `Week ${results.currentWeek}` },
             {
               label: "Height",
@@ -330,9 +346,9 @@ Calculated on CalcPlatform.`;
               value: unitSystem === "metric" ? `${results.actualGainKg} kg` : `${results.actualGainLbs} lbs`,
               highlight: true,
             },
-            { label: `Week ${results.currentWeek} Target Gain Range`, value: results.targetGainWeekFormatted, highlight: true },
-            { label: "Total Recommended 40-Wk Gain", value: results.recommendedGainTotalFormatted },
-            { label: "Recommended T2/T3 Weekly Pace", value: results.weeklyRateFormatted },
+            { label: `Week ${results.currentWeek} Estimated Range`, value: results.illustrativeWeeklyTrajectory, highlight: true },
+            { label: "IOM 40-Week Guideline Total Gain", value: results.totalRecommendedGain },
+            { label: "IOM 2nd/3rd Trimester Guideline Rate", value: results.recommendedWeeklyRate },
             { label: "Clinical Weight Status", value: results.statusLabel, highlight: true },
           ],
         },
@@ -342,8 +358,8 @@ Calculated on CalcPlatform.`;
         text: `${results.statusSummary} ${results.statusAdvice}`,
         reasons: [
           `Trimester ${results.trimester} Calorie Target: +${results.extraCalorieKcal} kcal/day surplus.`,
-          "Key Daily Nutrients: Folic Acid 600mcg, Protein 71g, Iron 27mg, Calcium 1,000mg, DHA 200mg.",
-          "Maintain regular prenatal care visits with your Obstetrician or Certified Nurse-Midwife.",
+          "Key Daily Nutrients: Folic Acid 600mcg, Protein 71g, Iron 27mg, Calcium 1,000mg, DHA 200–300mg.",
+          "Note: This weekly trajectory provides an illustrative interpolation between pregnancy weight-gain reference points. It should not be interpreted as an individualized clinical prescription.",
         ],
       },
       table: {
@@ -351,8 +367,9 @@ Calculated on CalcPlatform.`;
         headers: [
           { key: "week", label: "Week", align: "left" },
           { key: "trimester", label: "Trimester", align: "left" },
-          { key: "targetGain", label: "Target Gain", align: "left" },
-          { key: "targetWeight", label: "Target Weight", align: "left" },
+          { key: "targetGain", label: "Illustrative Gain Range", align: "left" },
+          { key: "targetWeight", label: "Target Total Weight", align: "left" },
+          { key: "weeklyRate", label: "IOM Weekly Pace", align: "left" },
           { key: "calorieSurplus", label: "Calorie Surplus", align: "right" },
         ],
         rows: results.schedule
@@ -362,6 +379,7 @@ Calculated on CalcPlatform.`;
             trimester: `Trimester ${s.trimester}`,
             targetGain: unitSystem === "metric" ? `${s.minGainKg}–${s.maxGainKg} kg` : `${s.minGainLbs}–${s.maxGainLbs} lbs`,
             targetWeight: unitSystem === "metric" ? `${s.minWeightKg}–${s.maxWeightKg} kg` : `${s.minWeightLbs}–${s.maxWeightLbs} lbs`,
+            weeklyRate: s.guidelineWeeklyRate,
             calorieSurplus: `+${s.extraCalorieKcal} kcal`,
           })),
       },
@@ -502,6 +520,14 @@ Calculated on CalcPlatform.`;
                 <span className="absolute right-3 top-2.5 text-xs text-slate-400">cm</span>
               </div>
             )}
+            {results.isHeightAtypical && (
+              <p className="text-[10px] text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-1.5 leading-tight flex items-start gap-1">
+                <AlertTriangle className="h-3 w-3 shrink-0 text-amber-600 mt-0.5" />
+                <span>
+                  <strong>Advisory:</strong> Entered height is outside typical adult range (4&apos;0&quot;–6&apos;8&quot;). Please verify input.
+                </span>
+              </p>
+            )}
           </div>
 
           {/* Current Pregnancy Week Slider & Input */}
@@ -640,50 +666,53 @@ Calculated on CalcPlatform.`;
           </p>
         </div>
 
-        {/* Card 2: Week X Target Gain */}
+        {/* Card 2: Week X Estimated Gain Range (Illustrative) */}
         <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-1.5 shadow-xs">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span>Week {results.currentWeek} Target Gain</span>
+            <span>Estimated Gain (Wk {results.currentWeek})</span>
             <Calendar className="h-4 w-4 text-pink-500" />
           </div>
           <div className="text-2xl font-black text-pink-600">
-            {results.targetGainWeekFormatted}
+            {results.illustrativeWeeklyTrajectory}
           </div>
           <p className="text-[11px] text-slate-500">
-            Current Weight Gain:{" "}
+            Current Gain:{" "}
             <strong className="text-slate-900">
               {unitSystem === "metric"
                 ? `${results.actualGainKg} kg`
                 : `${results.actualGainLbs} lbs`}
             </strong>
           </p>
-        </div>
-
-        {/* Card 3: Total 40-Week Recommended Gain */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-1.5 shadow-xs">
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span>Total 40-Week Gain</span>
-            <TrendingUp className="h-4 w-4 text-emerald-500" />
-          </div>
-          <div className="text-2xl font-black text-slate-900">
-            {results.recommendedGainTotalFormatted}
-          </div>
-          <p className="text-[11px] text-slate-500">
-            Institute of Medicine guideline target
+          <p className="text-[10px] text-slate-400 italic">
+            Illustrative interpolation
           </p>
         </div>
 
-        {/* Card 4: Recommended T2/T3 Pace */}
+        {/* Card 3: IOM 40-Week Guideline Total Gain */}
         <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-1.5 shadow-xs">
           <div className="flex items-center justify-between text-xs text-slate-500">
-            <span>Weekly Gain Rate (T2/T3)</span>
+            <span>Guideline Total (40 Wks)</span>
+            <TrendingUp className="h-4 w-4 text-emerald-500" />
+          </div>
+          <div className="text-2xl font-black text-slate-900">
+            {results.totalRecommendedGain}
+          </div>
+          <p className="text-[11px] text-slate-500">
+            IOM / National Academies range
+          </p>
+        </div>
+
+        {/* Card 4: IOM 2nd & 3rd Trimester Rate */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-4 space-y-1.5 shadow-xs">
+          <div className="flex items-center justify-between text-xs text-slate-500">
+            <span>Guideline Rate (T2/T3)</span>
             <Clock className="h-4 w-4 text-purple-500" />
           </div>
           <div className="text-2xl font-black text-slate-900">
-            {results.weeklyRateFormatted}
+            {results.recommendedWeeklyRate}
           </div>
           <p className="text-[11px] text-slate-500">
-            Average gain rate in 2nd &amp; 3rd trimesters
+            IOM second- and third-trimester rate
           </p>
         </div>
       </div>
@@ -759,16 +788,16 @@ Calculated on CalcPlatform.`;
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h3 className="text-sm font-bold text-slate-900">
-                  Gestational Weight Gain Band (Week 1 – 40)
+                  Illustrative 40-Week Weight-Gain Trajectory
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Green shaded band represents optimal clinical range based on pre-pregnancy BMI.
+                  An educational trajectory based on pregnancy weight-gain reference ranges; individual gain patterns vary.
                 </p>
               </div>
               <div className="flex items-center gap-3 text-[11px] text-slate-600">
                 <span className="flex items-center gap-1">
                   <span className="w-3 h-3 rounded-full bg-emerald-500/40 border border-emerald-500 inline-block"></span>
-                  Optimal Range
+                  Illustrative Range
                 </span>
                 <span className="flex items-center gap-1">
                   <span className="w-3 h-3 rounded-full bg-pink-600 inline-block"></span>
@@ -920,10 +949,10 @@ Calculated on CalcPlatform.`;
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold text-slate-900">
-                  40-Week Gestational Weight Schedule
+                  40-Week Gestational Timeline Schedule
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Clinical weight gain boundaries and fetal development milestones by week.
+                  Illustrative weekly trajectory ranges alongside IOM guideline trimester rates.
                 </p>
               </div>
               <button
@@ -941,8 +970,9 @@ Calculated on CalcPlatform.`;
                   <tr>
                     <th className="p-3">Week</th>
                     <th className="p-3">Trimester</th>
-                    <th className="p-3">Target Gain Range</th>
+                    <th className="p-3">Illustrative Gain Range</th>
                     <th className="p-3">Target Total Weight</th>
+                    <th className="p-3">IOM Weekly Pace</th>
                     <th className="p-3">Calorie Surplus</th>
                     <th className="p-3">Fetal Milestone</th>
                   </tr>
@@ -972,6 +1002,9 @@ Calculated on CalcPlatform.`;
                           {unitSystem === "metric"
                             ? `${row.minWeightKg} – ${row.maxWeightKg} kg`
                             : `${row.minWeightLbs} – ${row.maxWeightLbs} lbs`}
+                        </td>
+                        <td className="p-3 font-medium text-slate-700">
+                          {row.guidelineWeeklyRate}
                         </td>
                         <td className="p-3 text-pink-600 font-semibold">
                           +{row.extraCalorieKcal} kcal

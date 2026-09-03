@@ -34,6 +34,7 @@ export interface WeekScheduleItem {
   maxWeightLbs: number;
   minWeightKg: number;
   maxWeightKg: number;
+  guidelineWeeklyRate: string;
   extraCalorieKcal: number;
   fetalMilestone: string;
 }
@@ -66,12 +67,14 @@ export interface PregnancyWeightGainCalculatorOutputs {
   maxGainTotalKg: number;
   minGainTotalLbs: number;
   maxGainTotalLbs: number;
+  totalRecommendedGain: string;
   recommendedGainTotal: string;
   recommendedGainTotalFormatted: string;
   minGainWeekKg: number;
   maxGainWeekKg: number;
   minGainWeekLbs: number;
   maxGainWeekLbs: number;
+  illustrativeWeeklyTrajectory: string;
   targetGainWeek: string;
   targetGainWeekFormatted: string;
   minWeightTargetKg: number;
@@ -82,9 +85,11 @@ export interface PregnancyWeightGainCalculatorOutputs {
   statusLabel: string;
   statusSummary: string;
   statusAdvice: string;
+  recommendedWeeklyRate: string;
   weeklyRateFormatted: string;
   extraCalorieKcal: number;
   breakdown: WeightCompositionComponent[];
   schedule: WeekScheduleItem[];
   nutrientGuidelines: NutrientGuideline[];
+  isHeightAtypical?: boolean;
 }

@@ -4,72 +4,77 @@ export const pregnancy_weight_gain_calculatorFaqs: CalculatorFAQ[] = [
   {
     question: "How much weight should I gain during pregnancy?",
     answer:
-      "The recommended total gain depends mainly on your pre-pregnancy BMI and whether you are carrying one baby or twins. For a singleton pregnancy, the IOM ranges are 28–40 lb for underweight, 25–35 lb for normal BMI, 15–25 lb for overweight, and 11–20 lb for obesity.",
+      "Recommended pregnancy weight gain depends mainly on your pre-pregnancy BMI and whether you are carrying one baby or twins. For a singleton pregnancy, IOM ranges are 28–40 lb for underweight, 25–35 lb for normal weight, 15–25 lb for overweight, and 11–20 lb for obesity. Twin recommendations are higher.",
   },
   {
-    question: "How is pregnancy weight gain calculated?",
+    question: "How does a pregnancy weight gain calculator work?",
     answer:
-      "The calculator first determines your pre-pregnancy BMI from height and weight. It then uses your pregnancy type and gestational week to estimate a target weight-gain range and compares your current pregnancy gain with that range.",
+      "It uses your pre-pregnancy height and weight to calculate BMI, identifies your BMI category, considers pregnancy type and gestational week, and compares your current weight gain with the calculator's reference trajectory.",
   },
   {
-    question: "How much weight should I gain by week 20?",
+    question: "How is pregnancy weight gain calculated from BMI?",
     answer:
-      "There is no single week-20 target that applies to everyone. The expected amount depends on pre-pregnancy BMI, pregnancy type and the guideline model used by the calculator. The calculator therefore provides a week-specific range rather than applying the total 40-week target at every stage.",
+      "Pregnancy weight-gain recommendations are based on BMI before pregnancy. The calculator uses the unrounded BMI to classify you as underweight, normal weight, overweight or having obesity, then applies the corresponding pregnancy reference range.",
   },
   {
-    question: "Is 25 pounds of weight gain during pregnancy normal?",
+    question: "How much weight should I gain in the first trimester?",
     answer:
-      "It depends on the starting BMI, pregnancy type and gestational stage. For a singleton pregnancy beginning at a normal BMI, 25–35 lb is the standard total IOM range. Twenty-five pounds is therefore at the lower end of the full pregnancy range, but its meaning at an earlier week depends on the pregnancy trajectory.",
+      "ACOG notes that during the first 12 weeks, some people gain only 1–5 pounds or may gain no weight. First-trimester gain varies considerably, particularly when nausea and vomiting affect eating.",
   },
   {
-    question: "How much weight should I gain with twins?",
+    question: "How much weight should I gain in the second trimester?",
     answer:
-      "The commonly used twin-pregnancy ranges are approximately 37–54 lb for normal pre-pregnancy BMI, 31–50 lb for overweight BMI, and 25–42 lb for obesity. CDC guidance lists 50–62 lb for women who began a twin pregnancy underweight.",
+      "The appropriate amount depends on your pre-pregnancy BMI. For someone who began pregnancy at a healthy weight, ACOG describes an average gain of about 0.5–1 pound per week during the second and third trimesters.",
   },
   {
-    question: "What is the recommended weight gain in the first trimester?",
+    question: "How much weight should I gain in the third trimester?",
     answer:
-      "ACOG notes that someone who began pregnancy at a healthy weight may gain only about 1–5 lb during the first 12 weeks, and some people may gain no weight. Individual patterns vary, especially when nausea or vomiting affects food intake.",
+      "Third-trimester weight gain depends on your pre-pregnancy BMI and pregnancy type. The IOM framework provides average second- and third-trimester weekly rates rather than requiring exactly the same gain every week.",
   },
   {
-    question: "Does pregnancy weight gain happen at the same rate every week?",
+    question: "How much weight should I gain if I am pregnant with twins?",
     answer:
-      "No. Weight gain often varies from week to week. The commonly used guidelines provide average rates for the second and third trimesters rather than requiring the exact same increase every week.",
+      "CDC lists total twin-pregnancy ranges of 50–62 lb for people who began underweight, 37–54 lb for normal BMI, 31–50 lb for overweight and 25–42 lb for obesity. Individual twin pregnancies require clinical interpretation.",
   },
   {
-    question: "What happens if I gain less weight than recommended?",
+    question: "Is pregnancy weight gain different if I was overweight before pregnancy?",
     answer:
-      "A calculator result below the guideline range does not by itself diagnose a problem. Your clinician may consider fetal growth, nutritional intake, symptoms, pre-pregnancy BMI and the overall trend before deciding whether any action is needed.",
+      "Yes. The IOM framework recommends a lower total gain for a singleton pregnancy when pre-pregnancy BMI is 25.0–29.9: 15–25 pounds.",
   },
   {
-    question: "What happens if I gain more weight than recommended?",
+    question: "Is pregnancy weight gain different if I had obesity before pregnancy?",
     answer:
-      "Being above a guideline range does not automatically mean that your pregnancy is unhealthy. However, sustained excess gain or sudden rapid weight gain should be discussed with your prenatal care provider because the overall clinical context matters.",
+      "Yes. For a singleton pregnancy, the IOM total reference is 11–20 pounds when pre-pregnancy BMI is 30 or higher. Your clinician may also consider fetal growth and other pregnancy factors.",
   },
   {
-    question: "Does BMI affect how much weight I should gain during pregnancy?",
+    question: "What if I am gaining weight faster than the calculator recommends?",
     answer:
-      "Yes. The IOM framework uses pre-pregnancy BMI categories to determine different recommended weight-gain ranges. That is why the same amount of gain can be appropriate for one person but above or below the recommended range for another.",
+      "One measurement above the calculator's reference range does not diagnose a problem. Look at the trend and discuss unexpected or rapid changes with your prenatal care provider, especially if other symptoms are present.",
   },
   {
-    question: "How many extra calories do I need during pregnancy?",
+    question: "What if I am not gaining enough weight during pregnancy?",
     answer:
-      "Energy needs increase as pregnancy progresses, but the exact amount varies by individual circumstances. ACOG states that people with a healthy pre-pregnancy weight generally need no additional calories in the first trimester, about 340 additional calories per day in the second trimester, and about 450 in the third trimester. These are general figures, not individualized prescriptions.",
+      "Being below a calculator's reference range does not automatically mean that something is wrong. Persistent inadequate gain, significant weight loss, severe vomiting or concerns about fetal growth should be discussed with your healthcare provider.",
   },
   {
-    question: "Can I use this calculator for triplets?",
+    question: "Is it normal to lose weight during early pregnancy?",
     answer:
-      "The calculator is designed around singleton and twin/multiple pregnancy guidance. Evidence is much less established for triplets and higher-order multiples, so those pregnancies should be managed using individualized guidance from the obstetric team.",
+      "Some people lose weight early in pregnancy because nausea, vomiting or reduced appetite make eating difficult. Significant or persistent weight loss should be discussed with a healthcare professional.",
   },
   {
-    question: "Is the weight-composition breakdown exact?",
+    question: "Does the calculator predict my baby's weight?",
     answer:
-      "No. The weight-composition section is an educational model showing approximate components of pregnancy-related weight. It should not be interpreted as a measurement of the exact weight of your fetus, placenta, fluid, blood volume, or maternal fat stores.",
+      "No. The calculator provides pregnancy weight-gain reference information and, where shown, educational fetal or physiological reference material. It does not predict an individual baby's actual weight.",
   },
   {
-    question: "Should I try to hit the exact number shown by the calculator?",
+    question: "How accurate is a pregnancy weight gain calculator?",
     answer:
-      "No. The displayed result is a guideline-based reference range rather than a required daily or weekly number. Your healthcare provider may interpret your weight trajectory differently depending on fetal growth and your individual health.",
+      "It can accurately apply the mathematical rules and published population reference ranges on which it is based, but it cannot predict exactly how one individual pregnancy will progress. Clinical assessment is needed to interpret your actual weight trajectory.",
+  },
+  {
+    question: "Should I follow the calculator or my doctor's recommendation?",
+    answer:
+      "Your prenatal clinician's assessment takes priority. The calculator is an educational tracking tool and should be used to support conversations with your obstetric care team, not replace them.",
   },
 ];
 

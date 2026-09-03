@@ -18,10 +18,14 @@ Target weight gain is determined primarily by pre-pregnancy Body Mass Index (BMI
 * **Overweight (BMI 25.0 – 29.9)**: 15 to 25 lbs (7.0 to 11.5 kg) total gain; ~0.5 to 0.7 lbs/week in T2/T3.
 * **Obese (BMI ≥ 30.0)**: 11 to 20 lbs (5.0 to 9.0 kg) total gain; ~0.4 to 0.6 lbs/week in T2/T3.
 
-For **Twin Gestations**::
-* **Normal Weight**: 37 to 54 lbs (16.8 to 24.5 kg).
-* **Overweight**: 31 to 50 lbs (14.1 to 22.7 kg).
-* **Obese**: 25 to 42 lbs (11.3 to 19.1 kg).
+For **Twin Gestations**:
+* **Underweight**: 50 to 62 lbs (22.7 to 28.1 kg) total gain (CDC Clinical Guidance); ~1.5 to 1.8 lbs/week in T2/T3.
+* **Normal Weight**: 37 to 54 lbs (16.8 to 24.5 kg) total gain; ~1.2 to 1.7 lbs/week in T2/T3.
+* **Overweight**: 31 to 50 lbs (14.1 to 22.7 kg) total gain; ~1.0 to 1.5 lbs/week in T2/T3.
+* **Obese**: 25 to 42 lbs (11.3 to 19.1 kg) total gain; ~0.8 to 1.2 lbs/week in T2/T3.
+
+##### Understanding Weekly Gain Trajectories vs. Guideline Targets
+The IOM guidelines establish two core reference anchors: (1) a full-term 40-week total weight gain range and (2) an average weekly rate of gain during the second and third trimesters. In clinical practice, weight gain is not strictly linear, especially during the first trimester when gain is typically modest (1.1–4.4 lbs total) or may temporarily decrease due to nausea. The weekly ranges presented in this calculator are illustrative interpolations between these official guideline milestones; they should be interpreted as educational references rather than rigid weekly clinical prescriptions.
 
 #### 2. Where Does the Weight Go?
 

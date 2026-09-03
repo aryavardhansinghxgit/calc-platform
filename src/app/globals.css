@@ -218,8 +218,8 @@ details[open] > summary::before {
     display: block !important;
   }
 
-  /* 6. Avoid breaking cards, charts, and math formulas across pages */
-  .p-4, .p-5, section, article, svg, table, canvas, .rounded-2xl, .rounded-xl {
+  /* 6. Avoid breaking small cards, charts, and math formulas across pages */
+  svg, table, tr, canvas, .print-card, .avoid-page-break {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }

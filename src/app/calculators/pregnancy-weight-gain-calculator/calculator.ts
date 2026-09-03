@@ -61,9 +61,14 @@ export function calculatePregnancyWeightGainCalculator(
 
   // Calculate Pre-pregnancy BMI
   const heightM = heightCm / 100;
-  const preBmi = parseFloat((preWeightKg / (heightM * heightM)).toFixed(1));
+  const rawBmi = preWeightKg / (heightM * heightM);
+  const preBmi = parseFloat(rawBmi.toFixed(1));
 
-  // Determine BMI Category & IOM Guideline Targets
+  // Determine clinical height plausibility for adult pregnancy
+  const totalInches = heightFeet * 12 + heightInches;
+  const isHeightAtypical = totalInches < 48 || totalInches > 80 || heightCm < 122 || heightCm > 203;
+
+  // Determine BMI Category & IOM Guideline Targets using unrounded raw BMI
   let bmiCategoryKey: "underweight" | "normal" | "overweight" | "obese";
   let bmiCategory: string;
 
@@ -74,7 +79,7 @@ export function calculatePregnancyWeightGainCalculator(
   let t1MinTotalLbs: number;
   let t1MaxTotalLbs: number;
 
-  if (preBmi < 18.5) {
+  if (rawBmi < 18.5) {
     bmiCategoryKey = "underweight";
     bmiCategory = "Underweight (BMI < 18.5)";
     if (pregnancyType === "single") {
@@ -92,7 +97,7 @@ export function calculatePregnancyWeightGainCalculator(
       t1MinTotalLbs = 4.0;
       t1MaxTotalLbs = 7.0;
     }
-  } else if (preBmi < 25.0) {
+  } else if (rawBmi < 25.0) {
     bmiCategoryKey = "normal";
     bmiCategory = "Normal Weight (BMI 18.5 – 24.9)";
     if (pregnancyType === "single") {
@@ -110,7 +115,7 @@ export function calculatePregnancyWeightGainCalculator(
       t1MinTotalLbs = 4.0;
       t1MaxTotalLbs = 7.0;
     }
-  } else if (preBmi < 30.0) {
+  } else if (rawBmi < 30.0) {
     bmiCategoryKey = "overweight";
     bmiCategory = "Overweight (BMI 25.0 – 29.9)";
     if (pregnancyType === "single") {
@@ -227,30 +232,35 @@ export function calculatePregnancyWeightGainCalculator(
   const actualGainLbs = parseFloat(actualGainLbsRaw.toFixed(1));
   const actualGainKg = parseFloat(actualGainKgRaw.toFixed(1));
 
-  // Determine clinical status with exact boundary comparison (0 buffer)
+  // Determine clinical status with exact boundary comparison (0 buffer, 1e-4 IEEE-754 epsilon)
+  const EPSILON = 1e-4;
+  const actualGainRawToCompare = unitSystem === "metric" ? actualGainKgRaw : actualGainLbsRaw;
+  const minGainToCompare = unitSystem === "metric" ? minGainWeekKg : minGainWeekLbs;
+  const maxGainToCompare = unitSystem === "metric" ? maxGainWeekKg : maxGainWeekLbs;
+
   let statusKey: "under" | "on-track" | "over";
   let statusLabel: string;
   let statusSummary: string;
   let statusAdvice: string;
 
-  if (actualGainLbsRaw < minGainWeekLbs) {
+  if (actualGainRawToCompare < minGainToCompare - EPSILON) {
     statusKey = "under";
-    statusLabel = "Below Recommended Weight Gain";
+    statusLabel = "Below Estimated Range";
     statusSummary = `At Week ${week}, your weight gain of ${
       unitSystem === "metric" ? `${actualGainKg} kg` : `${actualGainLbs} lbs`
-    } is below the IOM target range of ${
+    } is below the illustrative reference range of ${
       unitSystem === "metric"
         ? `${minGainWeekKg}–${maxGainWeekKg} kg`
         : `${minGainWeekLbs}–${maxGainWeekLbs} lbs`
     }.`;
     statusAdvice =
       "Ensure you are consuming adequate nutrient-dense calories (healthy fats, complex carbohydrates, proteins). Discuss your weight trajectory with your obstetrician or midwife to rule out underlying issues like hyperemesis or nutritional deficiency.";
-  } else if (actualGainLbsRaw > maxGainWeekLbs) {
+  } else if (actualGainRawToCompare > maxGainToCompare + EPSILON) {
     statusKey = "over";
-    statusLabel = "Above Recommended Weight Gain";
+    statusLabel = "Above Estimated Range";
     statusSummary = `At Week ${week}, your weight gain of ${
       unitSystem === "metric" ? `${actualGainKg} kg` : `${actualGainLbs} lbs`
-    } exceeds the IOM target range of ${
+    } exceeds the illustrative reference range of ${
       unitSystem === "metric"
         ? `${minGainWeekKg}–${maxGainWeekKg} kg`
         : `${minGainWeekLbs}–${maxGainWeekLbs} lbs`
@@ -259,41 +269,45 @@ export function calculatePregnancyWeightGainCalculator(
       "Focus on balanced whole-food nutrition and avoid empty sugary snacks or beverages. Consult your OB/GYN to monitor blood pressure and screen for gestational diabetes if recommended. Do not attempt crash dieting while pregnant.";
   } else {
     statusKey = "on-track";
-    statusLabel = "On Track — Optimal Weight Gain";
+    statusLabel = "On Track — Within Estimated Range";
     statusSummary = `At Week ${week}, your weight gain of ${
       unitSystem === "metric" ? `${actualGainKg} kg` : `${actualGainLbs} lbs`
-    } is within the recommended IOM target range of ${
+    } is within the illustrative reference range of ${
       unitSystem === "metric"
         ? `${minGainWeekKg}–${maxGainWeekKg} kg`
         : `${minGainWeekLbs}–${maxGainWeekLbs} lbs`
     }.`;
     statusAdvice =
-      "Excellent job! Continue following a balanced diet rich in folate, iron, protein, calcium, and essential fatty acids, while staying physically active as advised by your healthcare provider.";
+      "Continue following a balanced diet rich in folate, iron, protein, calcium, and essential fatty acids, while staying physically active as advised by your healthcare provider.";
   }
 
-  // Formatting strings
-  const recommendedGainTotal = unitSystem === "metric"
-    ? `${minGainTotalKg} kg – ${maxGainTotalKg} kg`
-    : `${minGainTotalLbs} lbs – ${maxGainTotalLbs} lbs`;
+  // 1. Guideline Total Gain (IOM / CDC Guideline Reference)
+  const totalRecommendedGain = unitSystem === "metric"
+    ? `${minGainTotalKg} – ${maxGainTotalKg} kg`
+    : `${minGainTotalLbs} – ${maxGainTotalLbs} lbs`;
 
+  const recommendedGainTotal = totalRecommendedGain;
   const recommendedGainTotalFormatted = unitSystem === "metric"
     ? `${minGainTotalKg} – ${maxGainTotalKg} kg (${minGainTotalLbs} – ${maxGainTotalLbs} lbs)`
     : `${minGainTotalLbs} – ${maxGainTotalLbs} lbs (${minGainTotalKg} – ${maxGainTotalKg} kg)`;
 
-  const targetGainWeek = unitSystem === "metric"
-    ? `${minGainWeekKg} kg – ${maxGainWeekKg} kg`
-    : `${minGainWeekLbs} lbs – ${maxGainWeekLbs} lbs`;
-
-  const targetGainWeekFormatted = unitSystem === "metric"
-    ? `${minGainWeekKg} – ${maxGainWeekKg} kg`
-    : `${minGainWeekLbs} – ${maxGainWeekLbs} lbs`;
-
+  // 2. Guideline Second- and Third-Trimester Weekly Rate (IOM Guideline Reference)
   const minRateKgPerWk = parseFloat((minRateLbsPerWk / 2.20462).toFixed(2));
   const maxRateKgPerWk = parseFloat((maxRateLbsPerWk / 2.20462).toFixed(2));
 
-  const weeklyRateFormatted = unitSystem === "metric"
+  const recommendedWeeklyRate = unitSystem === "metric"
     ? `${minRateKgPerWk} – ${maxRateKgPerWk} kg/week`
-    : `${minRateLbsPerWk} – ${maxRateLbsPerWk} lbs/week`;
+    : `${minRateLbsPerWk.toFixed(1)} – ${maxRateLbsPerWk.toFixed(1)} lbs/week`;
+
+  const weeklyRateFormatted = recommendedWeeklyRate;
+
+  // 3. Illustrative Weekly Trajectory (Interpolation between reference points)
+  const illustrativeWeeklyTrajectory = unitSystem === "metric"
+    ? `${minGainWeekKg} – ${maxGainWeekKg} kg`
+    : `${minGainWeekLbs} – ${maxGainWeekLbs} lbs`;
+
+  const targetGainWeek = illustrativeWeeklyTrajectory;
+  const targetGainWeekFormatted = illustrativeWeeklyTrajectory;
 
   // Fetal milestones dictionary for weeks 1-40
   const fetalMilestones: Record<number, string> = {
@@ -370,6 +384,12 @@ export function calculatePregnancyWeightGainCalculator(
       maxWeightLbs: maxWlbs,
       minWeightKg: minWkg,
       maxWeightKg: maxWkg,
+      guidelineWeeklyRate:
+        wkTrimester === 1
+          ? unitSystem === "metric"
+            ? "0.5 – 2.0 kg (T1 Total)"
+            : "1.1 – 4.4 lbs (T1 Total)"
+          : weeklyRateFormatted,
       extraCalorieKcal: wkExtraCal,
       fetalMilestone: fetalMilestones[wk] || "Fetal growth & organ maturation.",
     });
@@ -555,12 +575,14 @@ export function calculatePregnancyWeightGainCalculator(
     maxGainTotalKg,
     minGainTotalLbs,
     maxGainTotalLbs,
+    totalRecommendedGain,
     recommendedGainTotal,
     recommendedGainTotalFormatted,
     minGainWeekKg,
     maxGainWeekKg,
     minGainWeekLbs,
     maxGainWeekLbs,
+    illustrativeWeeklyTrajectory,
     targetGainWeek,
     targetGainWeekFormatted,
     minWeightTargetKg,
@@ -571,11 +593,13 @@ export function calculatePregnancyWeightGainCalculator(
     statusLabel,
     statusSummary,
     statusAdvice,
+    recommendedWeeklyRate,
     weeklyRateFormatted,
     extraCalorieKcal,
     breakdown,
     schedule,
     nutrientGuidelines,
+    isHeightAtypical,
   };
 }
 
