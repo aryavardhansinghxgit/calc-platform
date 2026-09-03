@@ -2,14 +2,15 @@ import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateSampleSizeCalculator } from "./calculator";
 import { SampleSizeCalculator } from "@/components/calculator/sample-size/SampleSizeCalculator";
 import { SampleSizeContent } from "@/components/calculator/sample-size/SampleSizeContent";
+import { sample_size_calculatorFaqs } from "./faq";
 
 export const sample_size_calculatorConfig: CalculatorModuleDefinition = {
   id: "sample-size-calculator",
-  title: "Sample Size Calculator — Survey, Power Analysis & Margin of Error",
+  title: "Sample Size Calculator",
   slug: "sample-size-calculator",
   category: "Math",
   subcategory: "Statistics",
-  description: "Determine required statistical sample size for surveys, A/B conversion tests, clinical trials, and hypothesis testing with Finite Population Correction (FPC), SVG power curves, and APA methodology text.",
+  description: "Calculate sample size for surveys, proportions, continuous means and A/B tests using confidence level, margin of error, population size and statistical power.",
   iconName: "Users",
   featured: true,
   keywords: [
@@ -21,9 +22,9 @@ export const sample_size_calculatorConfig: CalculatorModuleDefinition = {
     "Statistical Power Calculator"
   ],
   priority: 1,
-  relatedCalculators: ["confidence-interval-calculator", "z-score-calculator", "standard-deviation-calculator"],
+  relatedCalculators: ["standard-deviation-calculator", "confidence-interval-calculator", "z-score-calculator"],
   formulaDescription: "Cochran's Formula: n = [ Z² × p(1-p) ] / E²",
-  faqs: [],
+  faqs: sample_size_calculatorFaqs,
   CustomComponent: SampleSizeCalculator,
   ContentComponent: SampleSizeContent,
   inputs: [

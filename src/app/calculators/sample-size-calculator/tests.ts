@@ -3,44 +3,87 @@ import {
   computeSurveySampleSize,
   computeABTestSampleSize,
   computeContinuousMeanSampleSize,
-  computeReverseMarginOfError
+  computeReverseMarginOfError,
+  computePowerAnalysisSampleSize
 } from "./sample-size-logic";
 
 export function runSampleSizeCalculatorTests() {
-  // Test 1: Infinite Population Cochran's Formula (95% Conf, ±5% MOE -> n = 385)
-  const infiniteRes = computeSurveySampleSize(95, 5, 50);
-  if (infiniteRes.sampleSize !== 385) {
-    throw new Error(`Infinite population sample size failed: expected 385, got ${infiniteRes.sampleSize}`);
+  // G1: 95% Conf, ±5% MOE, infinite population -> n = 385
+  const g1 = computeSurveySampleSize(95, 5, 50);
+  if (!g1.isValid || g1.sampleSize !== 385) {
+    throw new Error(`G1 failed: expected 385, got ${g1.sampleSize}`);
   }
 
-  // Test 2: Finite Population Correction (95% Conf, ±5% MOE, N = 1000 -> n = 279)
-  const finiteRes = computeSurveySampleSize(95, 5, 50, 1000);
-  if (finiteRes.sampleSize !== 279) {
-    throw new Error(`Finite population FPC failed: expected 279, got ${finiteRes.sampleSize}`);
+  // G2: 95% Conf, ±5% MOE, N = 1000 -> n = 278
+  const g2 = computeSurveySampleSize(95, 5, 50, 1000);
+  if (!g2.isValid || g2.sampleSize !== 278) {
+    throw new Error(`G2 failed: expected 278, got ${g2.sampleSize}`);
   }
 
-  // Test 3: Continuous Mean Sample Size (95% Conf, E = 2, SD = 10 -> n = 97)
-  const continuousN = computeContinuousMeanSampleSize(95, 2, 10);
-  if (continuousN !== 97) {
-    throw new Error(`Continuous mean sample size failed: expected 97, got ${continuousN}`);
+  // G3: 99% Conf, ±11% MOE, infinite -> n = 138
+  const g3 = computeSurveySampleSize(99, 11, 50);
+  if (!g3.isValid || g3.sampleSize !== 138) {
+    throw new Error(`G3 failed: expected 138, got ${g3.sampleSize}`);
   }
 
-  // Test 4: A/B Test Sample Size (3.0% vs 3.5% conversion, 80% power)
-  const abRes = computeABTestSampleSize(3.0, 3.5, 5, 80);
-  if (abRes.sampleSizePerVariant <= 0) {
-    throw new Error(`A/B test sample size calculation failed: got ${abRes.sampleSizePerVariant}`);
+  // G4: 385 completed, 80% response rate -> 482 recruitment invitations
+  const g4 = computeSurveySampleSize(95, 5, 50, undefined, 80);
+  if (!g4.isValid || g4.invitedTarget !== 482) {
+    throw new Error(`G4 failed: expected 482, got ${g4.invitedTarget}`);
   }
 
-  // Test 5: Reverse Margin of Error (n = 385, 95% Conf -> ±5.0%)
-  const reverseMOE = computeReverseMarginOfError(385, 95, 50);
-  if (Math.abs(reverseMOE - 5.0) > 0.1) {
-    throw new Error(`Reverse margin of error failed: expected ±5.0%, got ±${reverseMOE}%`);
+  // G5: 400 sample, 95% Conf, infinite -> ±4.90% MOE
+  const g5 = computeReverseMarginOfError(400, 95, 50);
+  if (!g5.isValid || Math.abs(g5.moe - 4.90) > 0.05) {
+    throw new Error(`G5 failed: expected ±4.90%, got ±${g5.moe}%`);
   }
 
-  // Test 6: Fallback calculator wrapper test
-  const resDefault = calculateSampleSizeCalculator({ confidenceLevel: "95", marginError: 5, population: 1000 });
-  if (resDefault.sampleSize !== 279) {
-    throw new Error(`Fallback calculator failed: expected 279, got ${resDefault.sampleSize}`);
+  // G6: 400 sample, 90% Conf, infinite -> ±4.11% MOE
+  const g6 = computeReverseMarginOfError(400, 90, 50);
+  if (!g6.isValid || Math.abs(g6.moe - 4.11) > 0.05) {
+    throw new Error(`G6 failed: expected ±4.11%, got ±${g6.moe}%`);
+  }
+
+  // G7: A/B 3.0% vs 3.5%, 80% power -> 19,740 per variant
+  const g7 = computeABTestSampleSize(3.0, 3.5, 5, 80);
+  if (!g7.isValid || g7.sampleSizePerVariant !== 19740) {
+    throw new Error(`G7 failed: expected 19,740, got ${g7.sampleSizePerVariant}`);
+  }
+
+  // G8: A/B 3.1% vs 3.9%, 90% power -> 11,085 per variant
+  const g8 = computeABTestSampleSize(3.1, 3.9, 5, 90);
+  if (!g8.isValid || g8.sampleSizePerVariant !== 11085) {
+    throw new Error(`G8 failed: expected 11,085, got ${g8.sampleSizePerVariant}`);
+  }
+
+  // G9: Extreme finite population N = 10 -> sample size cannot exceed 10
+  const g9 = computeSurveySampleSize(95, 5, 50, 10);
+  if (!g9.isValid || g9.sampleSize !== 10) {
+    throw new Error(`G9 failed: expected sampleSize 10 for N=10, got ${g9.sampleSize}`);
+  }
+
+  // G10: Invalid zero response rate -> flagged invalid
+  const g10 = computeSurveySampleSize(95, 5, 50, undefined, 0);
+  if (g10.isValid) {
+    throw new Error(`G10 failed: 0% response rate should be invalid`);
+  }
+
+  // G11: Continuous mean mode zero SD -> flagged invalid
+  const g11 = computeContinuousMeanSampleSize(95, 2, 0);
+  if (g11.isValid) {
+    throw new Error(`G11 failed: zero SD should be invalid`);
+  }
+
+  // G12: Empty population -> infinite population Cochran formula
+  const g12 = computeSurveySampleSize(95, 5, 50, undefined);
+  if (!g12.isValid || g12.fpcApplied || g12.sampleSize !== 385) {
+    throw new Error(`G12 failed: undefined population should be infinite 385`);
+  }
+
+  // Server parity test
+  const serverRes = calculateSampleSizeCalculator({ confidenceLevel: 95, marginError: 5, population: 1000 });
+  if (serverRes.sampleSize !== 278) {
+    throw new Error(`Server parity failed: expected 278, got ${serverRes.sampleSize}`);
   }
 
   return true;
