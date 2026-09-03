@@ -22,8 +22,12 @@ export const log_calculatorConfig: CalculatorModuleDefinition = {
     "antilog calculator",
     "change of base calculator"
   ],
-  priority: 1,
-  relatedCalculators: ["exponent-calculator", "scientific-calculator", "root-calculator"],
+  relatedCalculators: [
+    "exponent-calculator",
+    "scientific-calculator",
+    "root-calculator",
+    "scientific-notation-calculator"
+  ],
   formulaDescription: "Solves log_b(x) = y, antilog b^y = x, and 3-variable logarithmic equations with change-of-base proofs.",
   faqs: log_calculatorFaqs,
   inputs: [
