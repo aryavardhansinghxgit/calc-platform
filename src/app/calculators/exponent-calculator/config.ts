@@ -10,7 +10,7 @@ export const exponent_calculatorConfig: CalculatorModuleDefinition = {
   slug: "exponent-calculator",
   category: "Math",
   subcategory: "General Math",
-  description: "Free online Exponent Calculator to solve base and power equations (bⁿ), fractional exponents, radicals, scientific notation, and 8 exponent laws.",
+  description: "Calculate powers, solve for bases or exponents, simplify fractional and negative exponents, apply exponent laws, and convert numbers to scientific, engineering and E notation with step-by-step solutions.",
   iconName: "Superscript",
   featured: true,
   keywords: [
@@ -20,10 +20,16 @@ export const exponent_calculatorConfig: CalculatorModuleDefinition = {
     "fractional exponent calculator",
     "radical solver",
     "scientific notation exponent",
-    "b^n solver"
+    "solve for base",
+    "solve for exponent"
   ],
   priority: 1,
-  relatedCalculators: ["scientific-notation-calculator", "log-calculator", "root-calculator", "scientific-calculator"],
+  relatedCalculators: [
+    "scientific-notation-calculator",
+    "log-calculator",
+    "root-calculator",
+    "scientific-calculator"
+  ],
   formulaDescription: "Evaluates y = b^n, solves for base b = ⁿ√y, or solves for exponent n = log_b(y) with step-by-step proofs.",
   faqs: exponent_calculatorFaqs,
   inputs: [
