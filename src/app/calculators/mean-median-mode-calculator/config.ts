@@ -1,22 +1,23 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateMeanMedianModeRangeCalculator } from "./calculator";
+import { mean_median_mode_calculatorFaqs } from "./faq";
 import { MeanMedianModeCalculator } from "@/components/calculator/mean-median-mode/MeanMedianModeCalculator";
 import { MeanMedianModeContent } from "@/components/calculator/mean-median-mode/MeanMedianModeContent";
 
 export const mean_median_mode_calculatorConfig: CalculatorModuleDefinition = {
   id: "mean-median-mode-calculator",
-  title: "Mean, Median, Mode & Range Calculator — Central Tendency Suite",
+  title: "Mean, Median, Mode & Range Calculator",
   slug: "mean-median-mode-calculator",
   category: "Math",
   subcategory: "Statistics",
-  description: "Calculate central tendency metrics (Mean, Median, Mode), Range, Weighted Means, Grouped Data, Target Score Solvers, and Outlier Skewness.",
+  description: "Calculate mean, median, mode and range from raw data. Also find weighted, geometric, harmonic and trimmed means, grouped-data averages, target scores, dataset comparisons, outliers and skewness with step-by-step results.",
   iconName: "Sliders",
   featured: true,
   keywords: ["mean median mode","average calculator","median calculator","mode calculator","central tendency","range calculator"],
   priority: 1,
   relatedCalculators: ["statistics-calculator","standard-deviation-calculator"],
   formulaDescription: "Mean = Σx / N; Median = Middle Value; Mode = Most Frequent",
-  faqs: [],
+  faqs: mean_median_mode_calculatorFaqs,
   CustomComponent: MeanMedianModeCalculator,
   ContentComponent: MeanMedianModeContent,
   inputs: [

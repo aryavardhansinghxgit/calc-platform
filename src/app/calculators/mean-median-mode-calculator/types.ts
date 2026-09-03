@@ -1,5 +1,6 @@
 export interface MeanMedianModeRangeCalculatorInputs {
   dataSeries?: string;
+  isSample?: boolean;
 }
 
 export interface MeanMedianModeRangeCalculatorOutputs {
@@ -7,4 +8,8 @@ export interface MeanMedianModeRangeCalculatorOutputs {
   median: number;
   mode: string;
   range: number;
+  count?: number;
+  sum?: number;
+  variance?: number;
+  standardDeviation?: number;
 }
