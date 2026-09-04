@@ -1,14 +1,29 @@
 import { PermutationCombinationCalculatorOutputs } from "./types";
+import { bigPermutation, bigCombination } from "./perm-comb-logic";
 
 export function calculatePermutationCombinationCalculator(inputs: Record<string, any>): PermutationCombinationCalculatorOutputs {
-  const n = Math.min(100, Math.max(0, Math.floor(Number(inputs.nVal) || 8)));
-  const r = Math.min(n, Math.max(0, Math.floor(Number(inputs.rVal) || 3)));
-  const fact = (num: number): number => {
-    let res = 1;
-    for (let i = 2; i <= num; i++) res *= i;
-    return res;
+  // Parse inputs preserving explicit 0
+  const parseNum = (val: any, defaultVal: number): number => {
+    if (val === undefined || val === null || val === "") return defaultVal;
+    const num = Number(val);
+    return Number.isFinite(num) ? Math.floor(num) : defaultVal;
   };
-  const nPr = fact(n) / fact(n - r);
-  const nCr = nPr / fact(r);
-  return { combinations: Math.round(nCr), permutations: Math.round(nPr) };
+
+  const rawN = parseNum(inputs.nVal, 6);
+  const rawR = parseNum(inputs.rVal, 2);
+
+  const n = Math.max(0, rawN);
+  const r = Math.max(0, rawR);
+
+  if (r > n) {
+    return { combinations: 0, permutations: 0 };
+  }
+
+  const nPr = bigPermutation(n, r);
+  const nCr = bigCombination(n, r);
+
+  return {
+    combinations: Number(nCr),
+    permutations: Number(nPr)
+  };
 }

@@ -55,18 +55,26 @@ export function formatBigNumber(val: bigint, mode: "std" | "sci" | "log" = "std"
   const str = val.toString();
 
   if (mode === "log") {
-    // Approximate log10(val)
-    const len = str.length;
-    const firstDigit = parseInt(str[0], 10);
-    const secondDigit = str.length > 1 ? parseInt(str[1], 10) : 0;
-    const approxVal = firstDigit + secondDigit / 10;
-    const logVal = (len - 1) + Math.log10(approxVal);
+    // High-precision log10 calculation for arbitrary BigInt values
+    if (val < 0n) return "0";
+    if (val === 1n) return "10^0.0000";
+    const prefixStr = str.slice(0, 15);
+    const prefixNum = Number(prefixStr);
+    const logVal = Math.log10(prefixNum) + (str.length - prefixStr.length);
     return `10^${logVal.toFixed(4)}`;
   }
 
-  if (mode === "sci" || str.length > 18) {
-    if (str.length <= 6) return str;
-    const mantissa = `${str[0]}.${str.slice(1, 5)}`;
+  if (mode === "sci") {
+    if (str.length <= 1) return str;
+    const rawDec = str.slice(1, 5);
+    const mantissa = rawDec.length > 0 ? `${str[0]}.${rawDec}` : str[0];
+    const exponent = str.length - 1;
+    return `${mantissa} × 10^${exponent}`;
+  }
+
+  if (str.length > 24) {
+    const rawDec = str.slice(1, 5);
+    const mantissa = rawDec.length > 0 ? `${str[0]}.${rawDec}` : str[0];
     const exponent = str.length - 1;
     return `${mantissa} × 10^${exponent}`;
   }
@@ -326,7 +334,8 @@ export function computeDerangements(n: number, formatMode: "std" | "sci" | "log"
 
   const totalPerm = bigFactorial(n);
   const formattedSubfactorial = formatBigNumber(dn, formatMode);
-  const prop = totalPerm > 0n ? Number((dn * 10000n) / totalPerm) / 100 : 0;
+  // High-precision percentage rounding to 2 decimal places
+  const prop = totalPerm > 0n ? Number((dn * 1000000n) / totalPerm) / 10000 : 0;
 
   const explanation = `Subfactorial !${n} calculates permutations where no item stays in its original spot. !${n} = ${formattedSubfactorial} out of ${formatBigNumber(totalPerm, formatMode)} total permutations (${prop.toFixed(2)}% ≈ 1/e = 36.79%).`;
 
@@ -335,7 +344,7 @@ export function computeDerangements(n: number, formatMode: "std" | "sci" | "log"
   if (n === 3) {
     sampleDerangements.push("BCA", "CAB");
   } else if (n === 4) {
-    sampleDerangements.push("BADCs", "BCDA", "BDAC", "CADB", "CDAB", "CDBA", "DABC", "DCAB", "DCBA");
+    sampleDerangements.push("BADC", "BCDA", "BDAC", "CADB", "CDAB", "CDBA", "DABC", "DCAB", "DCBA");
   }
 
   return {

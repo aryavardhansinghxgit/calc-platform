@@ -2,6 +2,7 @@ import { CalculatorModuleDefinition } from "@/calculators/types";
 import { PermutationCombinationCalculator } from "@/components/calculator/permutation-combination/PermutationCombinationCalculator";
 import { PermutationCombinationContent } from "@/components/calculator/permutation-combination/PermutationCombinationContent";
 import { calculatePermutationCombinationCalculator } from "./calculator";
+import { permutation_combination_calculatorFaqs } from "./faq";
 
 export const permutation_combination_calculatorConfig: CalculatorModuleDefinition = {
   id: "permutation-combination-calculator",
@@ -16,7 +17,7 @@ export const permutation_combination_calculatorConfig: CalculatorModuleDefinitio
   priority: 1,
   relatedCalculators: ["probability-calculator", "statistics-calculator", "big-number-calculator"],
   formulaDescription: "nPr = n! / (n-r)!; nCr = n! / [ r!(n-r)! ]",
-  faqs: [],
+  faqs: permutation_combination_calculatorFaqs,
   CustomComponent: PermutationCombinationCalculator,
   ContentComponent: PermutationCombinationContent,
   inputs: [
