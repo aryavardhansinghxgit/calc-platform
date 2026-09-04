@@ -6,7 +6,9 @@ export interface SlopeCalculatorInputs {
 }
 
 export interface SlopeCalculatorOutputs {
-  slopeM: number;
-  angleDeg: number;
+  slopeM: number | null;
+  angleDeg: number | null;
   lineEquation: string;
+  isVertical?: boolean;
+  isCoincident?: boolean;
 }

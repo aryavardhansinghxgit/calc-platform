@@ -5,11 +5,11 @@ import { SlopeContent } from "@/components/calculator/slope/SlopeContent";
 
 export const slope_calculatorConfig: CalculatorModuleDefinition = {
   id: "slope-calculator",
-  title: "Slope Calculator & Line Geometry Suite",
+  title: "Slope Calculator — Slope Between Two Points & Line Geometry",
   slug: "slope-calculator",
   category: "Math",
   subcategory: "Geometry",
-  description: "Calculate line slope m, incline angle θ, distance between points, slope-intercept equation y = mx + b, parallel & perpendicular lines, and angle between intersecting lines.",
+  description: "Calculate the slope of a line from two points using the rise-over-run formula. This Slope Calculator also determines the horizontal and vertical change, distance between points, incline angle, y-intercept, and line equation. Use the additional tools to find a missing endpoint, construct parallel and perpendicular lines, or calculate the angle between two intersecting lines.",
   iconName: "TrendingUp",
   featured: true,
   keywords: ["slope calculator", "incline angle", "line equation", "gradient", "y=mx+b", "perpendicular slope", "two point slope"],

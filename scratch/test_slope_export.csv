@@ -1,0 +1,4 @@
+"Module","Input Parameters","Metric / Description","Formula","Calculated Value","Formatted Value","Equation","Step / Notes","Timestamp"
+"Two-Point Slope Engine","P1=(1,1), P2=(4,7)","Slope (m)","m = (y2 - y1) / (x2 - x1)","2","2.0000","y = 2.0000x - 1.0000","Run=3, Rise=6","2026-09-04T13:12:37.715Z"
+"Two-Point Slope Engine","P1=(3,1), P2=(3,9)","Slope (m)","m = (y2 - y1) / (x2 - x1)","Undefined","Undefined (Vertical Line)","x = 3.0000 (Vertical Line)","Run=0, Rise=8","2026-09-04T13:12:37.715Z"
+"Parallel & Perpendicular","m=0, Point=(3,4)","Perpendicular Line","Orthogonal","null","Undefined (Vertical Line)","x = 3.0000 (Vertical Line)","Horizontal original","2026-09-04T13:12:37.715Z"

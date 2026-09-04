@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const slope_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Slope Calculator — Free Online Math Calculator",
-  description: "Calculate line slope m, incline angle, distance between points, and equation of a line y = mx + b.",
+  title: "Slope Calculator — Slope Between Two Points & Line Equation",
+  description: "Calculate slope between two points, rise over run, line equations, distance, incline angle, and parallel or perpendicular lines with step-by-step results.",
   slug: "slope-calculator",
 });

@@ -524,6 +524,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isTriangle = idLower === "triangle-calculator" || slugLower === "triangle-calculator";
   const isVolume = idLower === "volume-calculator" || slugLower === "volume-calculator";
   const isArea = idLower === "area-calculator" || slugLower === "area-calculator";
+  const isSlope = idLower === "slope-calculator" || slugLower === "slope-calculator";
 
   const CustomContent = (definition as any).ContentComponent || (
     isVat ? VatContent :
@@ -974,7 +975,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         </CalculatorErrorBoundary>
 
         {/* Related Calculators Links directly below calculator box */}
-        {!isPeriod && !isVolume && (
+        {!isPeriod && !isVolume && !isSlope && (
           <div className="no-print pt-3 pb-1 space-y-1.5 border-t border-slate-200/60 dark:border-slate-800">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
               RELATED CALCULATORS:
