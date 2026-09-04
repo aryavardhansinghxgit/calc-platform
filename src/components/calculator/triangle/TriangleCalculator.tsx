@@ -6,20 +6,23 @@ import {
   Trash2,
   ChevronDown,
   ChevronUp,
-  Sliders,
-  Layers,
+  RotateCcw,
   Copy,
+  Download,
+  FileText,
+  Printer,
   CheckCircle2,
-  BarChart2,
   Zap,
   Maximize2,
-  Circle,
-  Triangle as TriangleIcon
+  Compass,
+  ArrowRight
 } from "lucide-react";
+import jsPDF from "jspdf";
 import {
   solveUniversalTriangle,
   SolvedTriangle,
-  TriangleSolveResult
+  TriangleSolveResult,
+  parseAngleExpression
 } from "@/app/calculators/triangle-calculator/triangle-logic";
 
 export interface SavedTriangleItem {
@@ -31,6 +34,7 @@ export interface SavedTriangleItem {
   resultsList?: string[];
   expression?: string;
   timestamp: string;
+  rawInputs?: Record<string, any>;
 }
 
 export function TriangleCalculator() {
@@ -50,18 +54,18 @@ export function TriangleCalculator() {
   const [showCircumcircle, setShowCircumcircle] = useState<boolean>(false);
 
   // Card 2 Inputs: Right Triangle Solver
-  const [rtLegA, setRtLegA] = useState<number>(6);
-  const [rtLegB, setRtLegB] = useState<number>(8);
+  const [rtLegAStr, setRtLegAStr] = useState<string>("6");
+  const [rtLegBStr, setRtLegBStr] = useState<string>("8");
 
   // Card 3 Inputs: Inradius & Circumradius Solver
-  const [crcSideA, setCrcSideA] = useState<number>(7);
-  const [crcSideB, setCrcSideB] = useState<number>(8);
-  const [crcSideC, setCrcSideC] = useState<number>(9);
+  const [crcSideAStr, setCrcSideAStr] = useState<string>("7");
+  const [crcSideBStr, setCrcSideBStr] = useState<string>("8");
+  const [crcSideCStr, setCrcSideCStr] = useState<string>("9");
 
   // Card 4 Inputs: Heron's Formula Solver
-  const [heronA, setHeronA] = useState<number>(5);
-  const [heronB, setHeronB] = useState<number>(6);
-  const [heronC, setHeronC] = useState<number>(7);
+  const [heronAStr, setHeronAStr] = useState<string>("5");
+  const [heronBStr, setHeronBStr] = useState<string>("6");
+  const [heronCStr, setHeronCStr] = useState<string>("7");
 
   // Saved calculation states
   const [savedUnivItems, setSavedUnivItems] = useState<SavedTriangleItem[]>([]);
@@ -76,11 +80,14 @@ export function TriangleCalculator() {
   const [savedHeronItems, setSavedHeronItems] = useState<SavedTriangleItem[]>([]);
   const [justSavedHeron, setJustSavedHeron] = useState<boolean>(false);
 
+  // Copy status
+  const [copyFeedback, setCopyFeedback] = useState<string>("");
+
   // Expand state
   const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({});
 
   const toggleExpand = (id: string) => {
-    setExpandedIds(prev => ({ ...prev, [id]: !prev[id] }));
+    setExpandedIds((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   useEffect(() => {
@@ -99,31 +106,14 @@ export function TriangleCalculator() {
     } catch (e) {}
   }, []);
 
-  // Parse angle input helper (supportsdeg/rad and pi/2, pi/4)
-  const parseAngleVal = (rawStr: string): number | undefined => {
-    if (!rawStr || !rawStr.trim()) return undefined;
-    const str = rawStr.trim().toLowerCase();
-    if (str.includes("pi")) {
-      let val = Math.PI;
-      if (str.includes("/2")) val = Math.PI / 2;
-      else if (str.includes("/3")) val = Math.PI / 3;
-      else if (str.includes("/4")) val = Math.PI / 4;
-      else if (str.includes("/6")) val = Math.PI / 6;
-      return (val * 180.0) / Math.PI;
-    }
-    const num = parseFloat(str);
-    if (Number.isNaN(num) || num <= 0) return undefined;
-    return angleUnit === "rad" ? (num * 180.0) / Math.PI : num;
-  };
-
   // Card 1 Calculations
   const univSolveResult: TriangleSolveResult = useMemo(() => {
     const a = parseFloat(inA) > 0 ? parseFloat(inA) : undefined;
     const b = parseFloat(inB) > 0 ? parseFloat(inB) : undefined;
     const c = parseFloat(inC) > 0 ? parseFloat(inC) : undefined;
-    const A = parseAngleVal(inAngleA);
-    const B = parseAngleVal(inAngleB);
-    const C = parseAngleVal(inAngleC);
+    const A = parseAngleExpression(inAngleA, angleUnit);
+    const B = parseAngleExpression(inAngleB, angleUnit);
+    const C = parseAngleExpression(inAngleC, angleUnit);
 
     return solveUniversalTriangle(a, b, c, A, B, C, precision1);
   }, [inA, inB, inC, inAngleA, inAngleB, inAngleC, angleUnit, precision1]);
@@ -133,10 +123,15 @@ export function TriangleCalculator() {
       ? univSolveResult.solutions[selectedSolutionIndex] || univSolveResult.solutions[0]
       : undefined;
 
-  // Card 2 Calculations (Right Triangle)
+  // Card 2 Calculations (Right Triangle with strict validation)
   const rtSolveResult = useMemo(() => {
-    const a = Math.max(0.1, rtLegA);
-    const b = Math.max(0.1, rtLegB);
+    const a = parseFloat(rtLegAStr);
+    const b = parseFloat(rtLegBStr);
+
+    if (isNaN(a) || a <= 0 || isNaN(b) || b <= 0 || !isFinite(a) || !isFinite(b)) {
+      return { success: false, errorMessage: "Please enter positive numbers greater than zero for both legs." };
+    }
+
     const c = Math.sqrt(a * a + b * b);
     const area = 0.5 * a * b;
     const perimeter = a + b + c;
@@ -151,32 +146,61 @@ export function TriangleCalculator() {
     const fmt = (v: number) => v.toFixed(precision1);
 
     return {
+      success: true,
       a,
       b,
-      c: parseFloat(fmt(c)),
-      area: parseFloat(fmt(area)),
-      perimeter: parseFloat(fmt(perimeter)),
-      angleA: parseFloat(fmt(angleA_deg)),
-      angleB: parseFloat(fmt(angleB_deg)),
-      sinA: parseFloat(fmt(sinA)),
-      cosA: parseFloat(fmt(cosA)),
-      tanA: parseFloat(fmt(tanA))
+      c,
+      area,
+      perimeter,
+      angleA_deg,
+      angleB_deg,
+      sinA,
+      cosA,
+      tanA,
+      fmt: {
+        a: fmt(a),
+        b: fmt(b),
+        c: fmt(c),
+        area: fmt(area),
+        perimeter: fmt(perimeter),
+        angleA: fmt(angleA_deg),
+        angleB: fmt(angleB_deg),
+        sinA: fmt(sinA),
+        cosA: fmt(cosA),
+        tanA: fmt(tanA)
+      }
     };
-  }, [rtLegA, rtLegB, precision1]);
+  }, [rtLegAStr, rtLegBStr, precision1]);
 
   // Card 3 Calculations (Circle Metrics)
   const crcSolveResult = useMemo(() => {
-    return solveUniversalTriangle(crcSideA, crcSideB, crcSideC, undefined, undefined, undefined, precision1);
-  }, [crcSideA, crcSideB, crcSideC, precision1]);
+    const a = parseFloat(crcSideAStr);
+    const b = parseFloat(crcSideBStr);
+    const c = parseFloat(crcSideCStr);
 
-  const activeCrcSol = crcSolveResult.success ? crcSolveResult.solutions[0] : undefined;
+    if (isNaN(a) || a <= 0 || isNaN(b) || b <= 0 || isNaN(c) || c <= 0) {
+      return { success: false, errorMessage: "Please enter valid positive numbers for sides a, b, and c.", solutions: [] };
+    }
+
+    return solveUniversalTriangle(a, b, c, undefined, undefined, undefined, precision1);
+  }, [crcSideAStr, crcSideBStr, crcSideCStr, precision1]);
+
+  const activeCrcSol = crcSolveResult.success && crcSolveResult.solutions.length > 0 ? crcSolveResult.solutions[0] : undefined;
 
   // Card 4 Calculations (Heron's & Altitudes)
-  const heronSolveResult = useMemo(() => {
-    return solveUniversalTriangle(heronA, heronB, heronC, undefined, undefined, undefined, precision1);
-  }, [heronA, heronB, heronC, precision1]);
+  const heronSolveResult = useMemo((): TriangleSolveResult => {
+    const a = parseFloat(heronAStr);
+    const b = parseFloat(heronBStr);
+    const c = parseFloat(heronCStr);
 
-  const activeHeronSol = heronSolveResult.success ? heronSolveResult.solutions[0] : undefined;
+    if (isNaN(a) || a <= 0 || isNaN(b) || b <= 0 || isNaN(c) || c <= 0) {
+      return { success: false, errorMessage: "Please enter valid positive numbers for sides a, b, and c.", solutions: [] };
+    }
+
+    return solveUniversalTriangle(a, b, c, undefined, undefined, undefined, precision1);
+  }, [heronAStr, heronBStr, heronCStr, precision1]);
+
+  const activeHeronSol = heronSolveResult.success && heronSolveResult.solutions.length > 0 ? heronSolveResult.solutions[0] : undefined;
 
   // Quick Presets Handler for Card 1
   const handleApplyPreset = (preset: "345" | "equilateral" | "isosceles" | "306090") => {
@@ -184,75 +208,110 @@ export function TriangleCalculator() {
     setInAngleB("");
     setInAngleC("");
     if (preset === "345") {
-      setInA("3"); setInB("4"); setInC("5");
+      setInA("3");
+      setInB("4");
+      setInC("5");
     } else if (preset === "equilateral") {
-      setInA("6"); setInB("6"); setInC("6");
+      setInA("6");
+      setInB("6");
+      setInC("6");
     } else if (preset === "isosceles") {
-      setInA("5"); setInB("5"); setInC("8");
-    } else if (preset === "306090") {
       setInA("5");
-      setInB("8.6603");
+      setInB("5");
+      setInC("8");
+    } else if (preset === "306090") {
+      // Set exact algebraic parameters (a=5, c=10, A=30°) ensuring exact 30°-60°-90° angles
+      setInA("5");
+      setInB("");
       setInC("10");
+      setInAngleA("30");
+      setAngleUnit("deg");
     }
   };
 
-  // Save Handlers
+  // Save Handlers with rawInputs snapshot
   const handleSaveUniv = () => {
     if (!activeSolution) return;
     const inputsStr = `a=${activeSolution.a}, b=${activeSolution.b}, c=${activeSolution.c}`;
     const opStr = `Universal Triangle Calculator (${activeSolution.caseType})`;
     const resList = [
-      `Sides: a=${activeSolution.a}, b=${activeSolution.b}, c=${activeSolution.c}`,
-      `Angles: A=${activeSolution.A_deg}°, B=${activeSolution.B_deg}°, C=${activeSolution.C_deg}°`,
-      `Area K = ${activeSolution.area}, Perimeter P = ${activeSolution.perimeter}`,
-      `Altitudes: ha=${activeSolution.ha}, hb=${activeSolution.hb}, hc=${activeSolution.hc}`,
-      `Inradius r = ${activeSolution.inradius}, Circumradius R = ${activeSolution.circumradius}`
+      `Sides: a=${activeSolution.fmt.a}, b=${activeSolution.fmt.b}, c=${activeSolution.fmt.c}`,
+      `Angles: A=${activeSolution.fmt.A_deg}°, B=${activeSolution.fmt.B_deg}°, C=${activeSolution.fmt.C_deg}°`,
+      `Area K = ${activeSolution.fmt.area}, Perimeter P = ${activeSolution.fmt.perimeter}`,
+      `Altitudes: ha=${activeSolution.fmt.ha}, hb=${activeSolution.fmt.hb}, hc=${activeSolution.fmt.hc}`,
+      `Inradius r = ${activeSolution.fmt.inradius}, Circumradius R = ${activeSolution.fmt.circumradius}`
     ];
 
     const newItem: SavedTriangleItem = {
       id: Date.now().toString(),
-      title: `Triangle [${activeSolution.a}, ${activeSolution.b}, ${activeSolution.c}] → Area = ${activeSolution.area}`,
+      title: `Triangle [${activeSolution.a}, ${activeSolution.b}, ${activeSolution.c}] → Area = ${activeSolution.fmt.area}`,
       inputs: inputsStr,
       operation: opStr,
       result: resList.join(" | "),
       resultsList: resList,
-      expression: `Area = ${activeSolution.area}`,
-      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+      expression: `Area = ${activeSolution.fmt.area}`,
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+      rawInputs: { inA, inB, inC, inAngleA, inAngleB, inAngleC, angleUnit, precision1 }
     };
 
-    const updated = [newItem, ...savedUnivItems.filter(i => i.inputs !== inputsStr)].slice(0, 15);
+    const updated = [newItem, ...savedUnivItems.filter((i) => i.inputs !== inputsStr)].slice(0, 15);
     setSavedUnivItems(updated);
-    try { localStorage.setItem("saved_tri_univ", JSON.stringify(updated)); } catch (e) {}
+    try {
+      localStorage.setItem("saved_tri_univ", JSON.stringify(updated));
+    } catch (e) {}
     setJustSavedUniv(true);
     setTimeout(() => setJustSavedUniv(false), 2000);
   };
 
+  const handleLoadUniv = (item: SavedTriangleItem) => {
+    if (!item.rawInputs) return;
+    setInA(item.rawInputs.inA ?? "");
+    setInB(item.rawInputs.inB ?? "");
+    setInC(item.rawInputs.inC ?? "");
+    setInAngleA(item.rawInputs.inAngleA ?? "");
+    setInAngleB(item.rawInputs.inAngleB ?? "");
+    setInAngleC(item.rawInputs.inAngleC ?? "");
+    if (item.rawInputs.angleUnit) setAngleUnit(item.rawInputs.angleUnit);
+    if (item.rawInputs.precision1) setPrecision1(item.rawInputs.precision1);
+  };
+
   const handleSaveRt = () => {
+    if (!rtSolveResult.success || !rtSolveResult.fmt) return;
     const inputsStr = `Leg a = ${rtSolveResult.a}, Leg b = ${rtSolveResult.b}`;
     const opStr = `Right Triangle Solver`;
     const resList = [
-      `Hypotenuse c = ${rtSolveResult.c}`,
-      `Area = ${rtSolveResult.area}, Perimeter = ${rtSolveResult.perimeter}`,
-      `Angle A = ${rtSolveResult.angleA}°, Angle B = ${rtSolveResult.angleB}°`,
-      `sin(A) = ${rtSolveResult.sinA}, cos(A) = ${rtSolveResult.cosA}, tan(A) = ${rtSolveResult.tanA}`
+      `Hypotenuse c = ${rtSolveResult.fmt.c}`,
+      `Area = ${rtSolveResult.fmt.area}, Perimeter = ${rtSolveResult.fmt.perimeter}`,
+      `Angle A = ${rtSolveResult.fmt.angleA}°, Angle B = ${rtSolveResult.fmt.angleB}°`,
+      `sin(A) = ${rtSolveResult.fmt.sinA}, cos(A) = ${rtSolveResult.fmt.cosA}, tan(A) = ${rtSolveResult.fmt.tanA}`
     ];
 
     const newItem: SavedTriangleItem = {
       id: Date.now().toString(),
-      title: `Right Triangle [a=${rtSolveResult.a}, b=${rtSolveResult.b}] → c = ${rtSolveResult.c}`,
+      title: `Right Triangle [a=${rtSolveResult.a}, b=${rtSolveResult.b}] → c = ${rtSolveResult.fmt.c}`,
       inputs: inputsStr,
       operation: opStr,
       result: resList.join(" | "),
       resultsList: resList,
-      expression: `c = ${rtSolveResult.c}`,
-      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+      expression: `c = ${rtSolveResult.fmt.c}`,
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+      rawInputs: { rtLegAStr, rtLegBStr, precision1 }
     };
 
-    const updated = [newItem, ...savedRtItems.filter(i => i.inputs !== inputsStr)].slice(0, 15);
+    const updated = [newItem, ...savedRtItems.filter((i) => i.inputs !== inputsStr)].slice(0, 15);
     setSavedRtItems(updated);
-    try { localStorage.setItem("saved_tri_rt", JSON.stringify(updated)); } catch (e) {}
+    try {
+      localStorage.setItem("saved_tri_rt", JSON.stringify(updated));
+    } catch (e) {}
     setJustSavedRt(true);
     setTimeout(() => setJustSavedRt(false), 2000);
+  };
+
+  const handleLoadRt = (item: SavedTriangleItem) => {
+    if (!item.rawInputs) return;
+    if (item.rawInputs.rtLegAStr !== undefined) setRtLegAStr(item.rawInputs.rtLegAStr);
+    if (item.rawInputs.rtLegBStr !== undefined) setRtLegBStr(item.rawInputs.rtLegBStr);
+    if (item.rawInputs.precision1) setPrecision1(item.rawInputs.precision1);
   };
 
   const handleSaveCrc = () => {
@@ -260,27 +319,38 @@ export function TriangleCalculator() {
     const inputsStr = `a=${activeCrcSol.a}, b=${activeCrcSol.b}, c=${activeCrcSol.c}`;
     const opStr = `Inradius & Circumradius Solver`;
     const resList = [
-      `Inradius r = ${activeCrcSol.inradius} (Incircle Area = ${(Math.PI * activeCrcSol.inradius * activeCrcSol.inradius).toFixed(precision1)})`,
-      `Circumradius R = ${activeCrcSol.circumradius} (Circumcircle Area = ${(Math.PI * activeCrcSol.circumradius * activeCrcSol.circumradius).toFixed(precision1)})`,
-      `Triangle Area K = ${activeCrcSol.area}`
+      `Inradius r = ${activeCrcSol.fmt.inradius}`,
+      `Circumradius R = ${activeCrcSol.fmt.circumradius}`,
+      `Triangle Area K = ${activeCrcSol.fmt.area}`
     ];
 
     const newItem: SavedTriangleItem = {
       id: Date.now().toString(),
-      title: `Circle Metrics [r=${activeCrcSol.inradius}, R=${activeCrcSol.circumradius}]`,
+      title: `Circle Metrics [r=${activeCrcSol.fmt.inradius}, R=${activeCrcSol.fmt.circumradius}]`,
       inputs: inputsStr,
       operation: opStr,
       result: resList.join(" | "),
       resultsList: resList,
-      expression: `r = ${activeCrcSol.inradius}, R = ${activeCrcSol.circumradius}`,
-      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+      expression: `r = ${activeCrcSol.fmt.inradius}, R = ${activeCrcSol.fmt.circumradius}`,
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+      rawInputs: { crcSideAStr, crcSideBStr, crcSideCStr, precision1 }
     };
 
-    const updated = [newItem, ...savedCrcItems.filter(i => i.inputs !== inputsStr)].slice(0, 15);
+    const updated = [newItem, ...savedCrcItems.filter((i) => i.inputs !== inputsStr)].slice(0, 15);
     setSavedCrcItems(updated);
-    try { localStorage.setItem("saved_tri_crc", JSON.stringify(updated)); } catch (e) {}
+    try {
+      localStorage.setItem("saved_tri_crc", JSON.stringify(updated));
+    } catch (e) {}
     setJustSavedCrc(true);
     setTimeout(() => setJustSavedCrc(false), 2000);
+  };
+
+  const handleLoadCrc = (item: SavedTriangleItem) => {
+    if (!item.rawInputs) return;
+    if (item.rawInputs.crcSideAStr !== undefined) setCrcSideAStr(item.rawInputs.crcSideAStr);
+    if (item.rawInputs.crcSideBStr !== undefined) setCrcSideBStr(item.rawInputs.crcSideBStr);
+    if (item.rawInputs.crcSideCStr !== undefined) setCrcSideCStr(item.rawInputs.crcSideCStr);
+    if (item.rawInputs.precision1) setPrecision1(item.rawInputs.precision1);
   };
 
   const handleSaveHeron = () => {
@@ -288,88 +358,292 @@ export function TriangleCalculator() {
     const inputsStr = `a=${activeHeronSol.a}, b=${activeHeronSol.b}, c=${activeHeronSol.c}`;
     const opStr = `Heron's Formula & Altitudes`;
     const resList = [
-      `Area K = ${activeHeronSol.area}`,
-      `Semi-perimeter s = ${activeHeronSol.semiPerimeter}`,
-      `Altitudes: ha=${activeHeronSol.ha}, hb=${activeHeronSol.hb}, hc=${activeHeronSol.hc}`,
-      `Medians: ma=${activeHeronSol.ma}, mb=${activeHeronSol.mb}, mc=${activeHeronSol.mc}`
+      `Area K = ${activeHeronSol.fmt.area}`,
+      `Semi-perimeter s = ${activeHeronSol.fmt.semiPerimeter}`,
+      `Altitudes: ha=${activeHeronSol.fmt.ha}, hb=${activeHeronSol.fmt.hb}, hc=${activeHeronSol.fmt.hc}`,
+      `Medians: ma=${activeHeronSol.fmt.ma}, mb=${activeHeronSol.fmt.mb}, mc=${activeHeronSol.fmt.mc}`
     ];
 
     const newItem: SavedTriangleItem = {
       id: Date.now().toString(),
-      title: `Heron's Area = ${activeHeronSol.area} (s=${activeHeronSol.semiPerimeter})`,
+      title: `Heron's Area = ${activeHeronSol.fmt.area} (s=${activeHeronSol.fmt.semiPerimeter})`,
       inputs: inputsStr,
       operation: opStr,
       result: resList.join(" | "),
       resultsList: resList,
-      expression: `Area = ${activeHeronSol.area}`,
-      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+      expression: `Area = ${activeHeronSol.fmt.area}`,
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+      rawInputs: { heronAStr, heronBStr, heronCStr, precision1 }
     };
 
-    const updated = [newItem, ...savedHeronItems.filter(i => i.inputs !== inputsStr)].slice(0, 15);
+    const updated = [newItem, ...savedHeronItems.filter((i) => i.inputs !== inputsStr)].slice(0, 15);
     setSavedHeronItems(updated);
-    try { localStorage.setItem("saved_tri_heron", JSON.stringify(updated)); } catch (e) {}
+    try {
+      localStorage.setItem("saved_tri_heron", JSON.stringify(updated));
+    } catch (e) {}
     setJustSavedHeron(true);
     setTimeout(() => setJustSavedHeron(false), 2000);
   };
 
-  // Render Scaled Dynamic SVG Vector Triangle Visualizer
-  const renderTriangleSVG = (sol?: SolvedTriangle, showCircles: boolean = false) => {
-    if (!sol) return null;
+  const handleLoadHeron = (item: SavedTriangleItem) => {
+    if (!item.rawInputs) return;
+    if (item.rawInputs.heronAStr !== undefined) setHeronAStr(item.rawInputs.heronAStr);
+    if (item.rawInputs.heronBStr !== undefined) setHeronBStr(item.rawInputs.heronBStr);
+    if (item.rawInputs.heronCStr !== undefined) setHeronCStr(item.rawInputs.heronCStr);
+    if (item.rawInputs.precision1) setPrecision1(item.rawInputs.precision1);
+  };
 
+  // CSV Export Action
+  const handleExportCSV = () => {
+    if (!activeSolution) return;
+    const headers = [
+      "Module",
+      "Case",
+      "Side a",
+      "Side b",
+      "Side c",
+      "Angle A (deg)",
+      "Angle B (deg)",
+      "Angle C (deg)",
+      "Area",
+      "Perimeter",
+      "Semi-perimeter",
+      "Altitude ha",
+      "Altitude hb",
+      "Altitude hc",
+      "Median ma",
+      "Median mb",
+      "Median mc",
+      "Inradius r",
+      "Circumradius R",
+      "Angle Unit",
+      "Precision Decimals",
+      "Timestamp"
+    ];
+
+    const row = [
+      "Universal 6-Parameter Triangle",
+      activeSolution.caseType,
+      activeSolution.fmt.a,
+      activeSolution.fmt.b,
+      activeSolution.fmt.c,
+      activeSolution.fmt.A_deg,
+      activeSolution.fmt.B_deg,
+      activeSolution.fmt.C_deg,
+      activeSolution.fmt.area,
+      activeSolution.fmt.perimeter,
+      activeSolution.fmt.semiPerimeter,
+      activeSolution.fmt.ha,
+      activeSolution.fmt.hb,
+      activeSolution.fmt.hc,
+      activeSolution.fmt.ma,
+      activeSolution.fmt.mb,
+      activeSolution.fmt.mc,
+      activeSolution.fmt.inradius,
+      activeSolution.fmt.circumradius,
+      angleUnit,
+      precision1,
+      new Date().toISOString()
+    ];
+
+    const csvContent = [headers.join(","), row.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(",")].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `triangle-calculation-${Date.now()}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Dedicated PDF Export Action via jsPDF
+  const handleDownloadPDF = () => {
+    if (!activeSolution) return;
+    const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+    const now = new Date().toLocaleString();
+
+    // Header banner
+    doc.setFillColor(37, 99, 235);
+    doc.rect(0, 0, 595, 65, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("CalcPlatform Pro — Triangle Solver Report", 40, 38);
+
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Generated on: ${now} | Case: ${activeSolution.caseType} (${activeSolution.sideType} & ${activeSolution.angleType})`, 40, 54);
+
+    let y = 95;
+    doc.setTextColor(30, 41, 59);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.text("1. Solved Triangle Primary Metrics", 40, y);
+    y += 18;
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text(`Sides: a = ${activeSolution.fmt.a},  b = ${activeSolution.fmt.b},  c = ${activeSolution.fmt.c}`, 45, y);
+    y += 15;
+    doc.text(`Angles: A = ${activeSolution.fmt.A_deg}°,  B = ${activeSolution.fmt.B_deg}°,  C = ${activeSolution.fmt.C_deg}°`, 45, y);
+    y += 15;
+    doc.text(`Area K = ${activeSolution.fmt.area},  Perimeter P = ${activeSolution.fmt.perimeter},  Semi-perimeter s = ${activeSolution.fmt.semiPerimeter}`, 45, y);
+    y += 26;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.text("2. Altitudes, Medians & Circle Radii", 40, y);
+    y += 18;
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text(`Altitudes: ha = ${activeSolution.fmt.ha},  hb = ${activeSolution.fmt.hb},  hc = ${activeSolution.fmt.hc}`, 45, y);
+    y += 15;
+    doc.text(`Medians: ma = ${activeSolution.fmt.ma},  mb = ${activeSolution.fmt.mb},  mc = ${activeSolution.fmt.mc}`, 45, y);
+    y += 15;
+    doc.text(`Inradius: r = ${activeSolution.fmt.inradius}  (Formula: r = Area / s)`, 45, y);
+    y += 15;
+    doc.text(`Circumradius: R = ${activeSolution.fmt.circumradius}  (Formula: R = abc / 4K)`, 45, y);
+    y += 26;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.text("3. Mathematical Step-by-Step Derivation", 40, y);
+    y += 18;
+
+    doc.setFont("courier", "normal");
+    doc.setFontSize(9);
+    const splitSteps = doc.splitTextToSize(activeSolution.stepText, 510);
+    doc.text(splitSteps, 45, y);
+
+    y += splitSteps.length * 13 + 30;
+
+    // Right Triangle section if solved
+    if (rtSolveResult.success && rtSolveResult.fmt) {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(13);
+      doc.text("4. Auxiliary Right Triangle Metrics", 40, y);
+      y += 18;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.text(`Legs: a = ${rtSolveResult.fmt.a}, b = ${rtSolveResult.fmt.b}  ->  Hypotenuse c = ${rtSolveResult.fmt.c}`, 45, y);
+      y += 15;
+      doc.text(`Trigonometric Values: sin(A) = ${rtSolveResult.fmt.sinA},  cos(A) = ${rtSolveResult.fmt.cosA},  tan(A) = ${rtSolveResult.fmt.tanA}`, 45, y);
+    }
+
+    doc.save(`triangle-report-${Date.now()}.pdf`);
+  };
+
+  // Copy LaTeX Action
+  const handleCopyLatex = () => {
+    if (!activeSolution) return;
+    const latexStr = `\\begin{aligned}
+\\text{Sides: } & a = ${activeSolution.fmt.a}, \\quad b = ${activeSolution.fmt.b}, \\quad c = ${activeSolution.fmt.c} \\\\
+\\text{Angles: } & A = ${activeSolution.fmt.A_deg}^\\circ, \\quad B = ${activeSolution.fmt.B_deg}^\\circ, \\quad C = ${activeSolution.fmt.C_deg}^\\circ \\\\
+\\text{Area: } & K = \\sqrt{s(s-a)(s-b)(s-c)} = ${activeSolution.fmt.area} \\\\
+\\text{Inradius: } & r = \\frac{K}{s} = ${activeSolution.fmt.inradius} \\\\
+\\text{Circumradius: } & R = \\frac{abc}{4K} = ${activeSolution.fmt.circumradius}
+\\end{aligned}`;
+
+    navigator.clipboard.writeText(latexStr);
+    setCopyFeedback("LaTeX copied!");
+    setTimeout(() => setCopyFeedback(""), 2000);
+  };
+
+  // True-to-Scale Isometric SVG Visualizer
+  const renderTriangleSVG = (sol: SolvedTriangle, showCircles = false) => {
     const width = 450;
-    const height = 220;
-    const pad = 50;
+    const height = 240;
+    const pad = 42;
 
-    // Solved points (A at (0,0), B at (c,0), C at (Cx, Cy))
     const { Ax, Ay, Bx, By, Cx, Cy } = sol.coords;
 
-    const minX = Math.min(Ax, Bx, Cx);
-    const maxX = Math.max(Ax, Bx, Cx);
-    const minY = Math.min(Ay, By, Cy);
-    const maxY = Math.max(Ay, By, Cy);
+    // Circumcenter (ccX, ccY) in Cartesian coordinates
+    const ccX = sol.c / 2;
+    const ccY = Cy !== 0 ? (sol.b * sol.b - sol.c * Cx) / (2 * Cy) : 0;
 
-    const rangeX = Math.max(1, maxX - minX);
-    const rangeY = Math.max(1, maxY - minY);
+    // Incenter (incenterX, incenterY) in Cartesian coordinates
+    const incenterX = (sol.a * Ax + sol.b * Bx + sol.c * Cx) / sol.perimeter;
+    const incenterY = (sol.a * Ay + sol.b * By + sol.c * Cy) / sol.perimeter;
 
-    const scaleX = (x: number) => pad + ((x - minX) / rangeX) * (width - 2 * pad);
-    // SVG y-axis is inverted
-    const scaleY = (y: number) => height - pad - ((y - minY) / rangeY) * (height - 2 * pad);
+    // Compute bounding box encompassing vertices AND circles if active
+    let boxMinX = Math.min(Ax, Bx, Cx);
+    let boxMaxX = Math.max(Ax, Bx, Cx);
+    let boxMinY = Math.min(Ay, By, Cy);
+    let boxMaxY = Math.max(Ay, By, Cy);
+
+    const shouldDrawCircum = showCircumcircle || showCircles;
+    if (shouldDrawCircum) {
+      boxMinX = Math.min(boxMinX, ccX - sol.circumradius);
+      boxMaxX = Math.max(boxMaxX, ccX + sol.circumradius);
+      boxMinY = Math.min(boxMinY, ccY - sol.circumradius);
+      boxMaxY = Math.max(boxMaxY, ccY + sol.circumradius);
+    }
+
+    const rangeX = Math.max(0.001, boxMaxX - boxMinX);
+    const rangeY = Math.max(0.001, boxMaxY - boxMinY);
+
+    // UNIFORM SHARED ISOMETRIC SCALE
+    const scale = Math.min((width - 2 * pad) / rangeX, (height - 2 * pad) / rangeY);
+
+    // Center geometry in SVG viewport
+    const offsetX = pad + (width - 2 * pad - rangeX * scale) / 2;
+    const offsetY = height - pad - (height - 2 * pad - rangeY * scale) / 2;
+
+    const r2 = (v: number) => Math.round(v * 100) / 100;
+
+    const scaleX = (x: number) => r2(offsetX + (x - boxMinX) * scale);
+    const scaleY = (y: number) => r2(offsetY - (y - boxMinY) * scale);
 
     const pA = { x: scaleX(Ax), y: scaleY(Ay) };
     const pB = { x: scaleX(Bx), y: scaleY(By) };
     const pC = { x: scaleX(Cx), y: scaleY(Cy) };
 
-    // Incircle center & radius in SVG space
-    const incenterX = (sol.a * Ax + sol.b * Bx + sol.c * Cx) / sol.perimeter;
-    const incenterY = (sol.a * Ay + sol.b * By + sol.c * Cy) / sol.perimeter;
     const pIn = { x: scaleX(incenterX), y: scaleY(incenterY) };
-    const svgRin = (sol.inradius / rangeX) * (width - 2 * pad);
+    const svgRin = r2(sol.inradius * scale);
 
-    // Circumcircle center in SVG space
-    const d = 2 * (Ax * (By - Cy) + Bx * (Cy - Ay) + Cx * (Ay - By));
-    const ccX = ((Ax * Ax + Ay * Ay) * (By - Cy) + (Bx * Bx + By * By) * (Cy - Ay) + (Cx * Cx + Cy * Cy) * (Ay - By)) / d;
-    const ccY = ((Ax * Ax + Ay * Ay) * (Cx - Bx) + (Bx * Bx + By * By) * (Ax - Cx) + (Cx * Cx + Cy * Cy) * (Bx - Ax)) / d;
     const pCc = { x: scaleX(ccX), y: scaleY(ccY) };
-    const svgRcc = (sol.circumradius / rangeX) * (width - 2 * pad);
+    const svgRcc = r2(sol.circumradius * scale);
 
     return (
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-full max-w-lg h-auto">
-        {/* Background Grid */}
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        className="w-full max-w-lg h-auto"
+        suppressHydrationWarning
+      >
         <defs>
-          <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+          <pattern id="grid-tri" width="20" height="20" patternUnits="userSpaceOnUse">
             <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" strokeWidth="0.5" className="dark:stroke-slate-800" />
           </pattern>
         </defs>
-        <rect width={width} height={height} fill="url(#grid)" rx="12" />
+        <rect width={width} height={height} fill="url(#grid-tri)" rx="12" />
 
         {/* Circumcircle Option */}
-        {(showCircumcircle || showCircles) && (
-          <circle cx={pCc.x} cy={pCc.y} r={svgRcc} fill="none" stroke="#8b5cf6" strokeWidth="1.5" strokeDasharray="3,3" />
+        {shouldDrawCircum && (
+          <circle
+            cx={pCc.x}
+            cy={pCc.y}
+            r={svgRcc}
+            fill="none"
+            stroke="#8b5cf6"
+            strokeWidth="1.5"
+            strokeDasharray="3,3"
+            suppressHydrationWarning
+          />
         )}
 
         {/* Incircle Option */}
         {(showIncircle || showCircles) && (
-          <circle cx={pIn.x} cy={pIn.y} r={svgRin} fill="none" stroke="#10b981" strokeWidth="1.5" strokeDasharray="3,3" />
+          <circle
+            cx={pIn.x}
+            cy={pIn.y}
+            r={svgRin}
+            fill="none"
+            stroke="#10b981"
+            strokeWidth="1.5"
+            strokeDasharray="3,3"
+            suppressHydrationWarning
+          />
         )}
 
         {/* Triangle Shaded Vector Body */}
@@ -380,30 +654,80 @@ export function TriangleCalculator() {
           stroke="#1d4ed8"
           strokeWidth="3"
           strokeLinejoin="round"
+          suppressHydrationWarning
         />
 
         {/* Altitude Line from C to Base AB */}
-        <line x1={pC.x} y1={pC.y} x2={pC.x} y2={pA.y} stroke="#64748b" strokeWidth="1.5" strokeDasharray="2,2" />
+        <line
+          x1={pC.x}
+          y1={pC.y}
+          x2={pC.x}
+          y2={pA.y}
+          stroke="#64748b"
+          strokeWidth="1.5"
+          strokeDasharray="2,2"
+          suppressHydrationWarning
+        />
 
         {/* Vertex Markers & Labels */}
-        <circle cx={pA.x} cy={pA.y} r="5" fill="#1d4ed8" />
-        <text x={pA.x - 12} y={pA.y + 15} className="text-[11px] font-bold font-mono fill-blue-700 dark:fill-blue-400">A</text>
+        <circle cx={pA.x} cy={pA.y} r="5" fill="#1d4ed8" suppressHydrationWarning />
+        <text
+          x={r2(pA.x - 12)}
+          y={r2(pA.y + 15)}
+          className="text-[11px] font-bold font-mono fill-blue-700 dark:fill-blue-400"
+          suppressHydrationWarning
+        >
+          A
+        </text>
 
-        <circle cx={pB.x} cy={pB.y} r="5" fill="#1d4ed8" />
-        <text x={pB.x + 8} y={pB.y + 15} className="text-[11px] font-bold font-mono fill-blue-700 dark:fill-blue-400">B</text>
+        <circle cx={pB.x} cy={pB.y} r="5" fill="#1d4ed8" suppressHydrationWarning />
+        <text
+          x={r2(pB.x + 8)}
+          y={r2(pB.y + 15)}
+          className="text-[11px] font-bold font-mono fill-blue-700 dark:fill-blue-400"
+          suppressHydrationWarning
+        >
+          B
+        </text>
 
-        <circle cx={pC.x} cy={pC.y} r="5" fill="#1d4ed8" />
-        <text x={pC.x} y={pC.y - 10} textAnchor="middle" className="text-[11px] font-bold font-mono fill-blue-700 dark:fill-blue-400">C</text>
+        <circle cx={pC.x} cy={pC.y} r="5" fill="#1d4ed8" suppressHydrationWarning />
+        <text
+          x={pC.x}
+          y={r2(pC.y - 10)}
+          textAnchor="middle"
+          className="text-[11px] font-bold font-mono fill-blue-700 dark:fill-blue-400"
+          suppressHydrationWarning
+        >
+          C
+        </text>
 
         {/* Side Length Labels */}
-        <text x={(pA.x + pB.x) / 2} y={pA.y + 18} textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700 dark:text-slate-300">
-          c = {sol.c}
+        <text
+          x={r2((pA.x + pB.x) / 2)}
+          y={r2(pA.y + 18)}
+          textAnchor="middle"
+          className="text-[10px] font-mono font-bold fill-slate-700 dark:fill-slate-300"
+          suppressHydrationWarning
+        >
+          c = {sol.fmt.c}
         </text>
-        <text x={(pA.x + pC.x) / 2 - 12} y={(pA.y + pC.y) / 2} textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700 dark:text-slate-300">
-          b = {sol.b}
+        <text
+          x={r2((pA.x + pC.x) / 2 - 14)}
+          y={r2((pA.y + pC.y) / 2)}
+          textAnchor="middle"
+          className="text-[10px] font-mono font-bold fill-slate-700 dark:fill-slate-300"
+          suppressHydrationWarning
+        >
+          b = {sol.fmt.b}
         </text>
-        <text x={(pB.x + pC.x) / 2 + 12} y={(pB.y + pC.y) / 2} textAnchor="middle" className="text-[10px] font-mono font-bold fill-slate-700 dark:text-slate-300">
-          a = {sol.a}
+        <text
+          x={r2((pB.x + pC.x) / 2 + 14)}
+          y={r2((pB.y + pC.y) / 2)}
+          textAnchor="middle"
+          className="text-[10px] font-mono font-bold fill-slate-700 dark:fill-slate-300"
+          suppressHydrationWarning
+        >
+          a = {sol.fmt.a}
         </text>
       </svg>
     );
@@ -414,27 +738,49 @@ export function TriangleCalculator() {
       {/* ========================================================================= */}
       {/* CARD 1: UNIVERSAL 6-PARAMETER TRIANGLE CALCULATOR */}
       {/* ========================================================================= */}
-      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
+      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs print:break-inside-avoid print:shadow-none print:border-slate-300 print:mb-6">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
           <span>Universal 6-Parameter Triangle Calculator (Sides &amp; Angles)</span>
-          <button
-            type="button"
-            onClick={handleSaveUniv}
-            disabled={!activeSolution}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50"
-          >
-            <Bookmark className="w-3 h-3 text-white" />
-            <span>{justSavedUniv ? "Saved!" : "Save"}</span>
-          </button>
+          <div className="flex items-center gap-1.5 no-print">
+            <button
+              type="button"
+              onClick={handleExportCSV}
+              disabled={!activeSolution}
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50"
+              title="Export Current Calculation as CSV"
+            >
+              <FileText className="w-3 h-3 text-white" />
+              <span>CSV</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleDownloadPDF}
+              disabled={!activeSolution}
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50"
+              title="Download Calculation Report as PDF"
+            >
+              <Download className="w-3 h-3 text-white" />
+              <span>PDF</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveUniv}
+              disabled={!activeSolution}
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50"
+            >
+              <Bookmark className="w-3 h-3 text-white" />
+              <span>{justSavedUniv ? "Saved!" : "Save"}</span>
+            </button>
+          </div>
         </div>
 
         <div className="p-5 space-y-4">
           <p className="text-xs text-slate-600 dark:text-slate-400">
-            Please provide 3 values including at least one side to the following 6 fields, and click the &quot;Calculate&quot; button. When radians are selected as the angle unit, it can take values such as pi/2, pi/4, etc.
+            Please provide 3 values including at least one side to the following 6 fields, and click or change values to calculate. When radians are selected as the angle unit, it accepts fractional &pi; inputs such as pi/2, 2*pi/3, 3*pi/4, etc.
           </p>
 
           {/* QUICK PRESET CHIPS */}
-          <div className="flex flex-wrap items-center gap-2 bg-slate-50 dark:bg-slate-900/50 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold">
+          <div className="flex flex-wrap items-center gap-2 bg-slate-50 dark:bg-slate-900/50 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold no-print">
             <span className="text-slate-500 flex items-center gap-1">
               <Zap className="w-3.5 h-3.5 text-blue-600" /> Presets:
             </span>
@@ -450,7 +796,7 @@ export function TriangleCalculator() {
               onClick={() => handleApplyPreset("equilateral")}
               className="px-2.5 py-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
             >
-              Equilateral 60°-60°-60°
+              Equilateral 6-6-6
             </button>
             <button
               type="button"
@@ -468,15 +814,15 @@ export function TriangleCalculator() {
             </button>
           </div>
 
+          {/* INPUT FORM & RESULT DASHBOARD */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-            {/* LEFT COLUMN: 6 PARAMETER INPUT GRID */}
-            <div className="md:col-span-5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-xs">
+            {/* LEFT COLUMN: 6 INPUT FIELDS */}
+            <div className="md:col-span-5 space-y-3 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
               <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
-                <h2 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
-                  <Sliders className="h-4 w-4 text-blue-600" />
-                  <span>Sides &amp; Angles Inputs</span>
-                </h2>
-                <div className="flex bg-slate-200 dark:bg-slate-800 p-0.5 rounded-lg text-xs font-bold">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                  Sides &amp; Angles Inputs
+                </span>
+                <div className="flex bg-slate-200 dark:bg-slate-800 p-0.5 rounded-lg text-xs font-bold no-print">
                   <button
                     type="button"
                     onClick={() => setAngleUnit("deg")}
@@ -496,8 +842,11 @@ export function TriangleCalculator() {
 
               <div className="grid grid-cols-2 gap-3 text-xs">
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Side a:</label>
+                  <label htmlFor="in-side-a" className="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Side a:
+                  </label>
                   <input
+                    id="in-side-a"
                     type="text"
                     value={inA}
                     onChange={(e) => setInA(e.target.value)}
@@ -507,19 +856,25 @@ export function TriangleCalculator() {
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Angle A ({angleUnit}):</label>
+                  <label htmlFor="in-angle-a" className="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Angle A ({angleUnit}):
+                  </label>
                   <input
+                    id="in-angle-a"
                     type="text"
                     value={inAngleA}
                     onChange={(e) => setInAngleA(e.target.value)}
-                    placeholder={angleUnit === "rad" ? "e.g. pi/3 or 1.047" : "Angle A°"}
+                    placeholder={angleUnit === "rad" ? "e.g. pi/6 or 0.52" : "Angle A°"}
                     className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold text-xs"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Side b:</label>
+                  <label htmlFor="in-side-b" className="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Side b:
+                  </label>
                   <input
+                    id="in-side-b"
                     type="text"
                     value={inB}
                     onChange={(e) => setInB(e.target.value)}
@@ -529,8 +884,11 @@ export function TriangleCalculator() {
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Angle B ({angleUnit}):</label>
+                  <label htmlFor="in-angle-b" className="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Angle B ({angleUnit}):
+                  </label>
                   <input
+                    id="in-angle-b"
                     type="text"
                     value={inAngleB}
                     onChange={(e) => setInAngleB(e.target.value)}
@@ -540,8 +898,11 @@ export function TriangleCalculator() {
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Side c:</label>
+                  <label htmlFor="in-side-c" className="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Side c:
+                  </label>
                   <input
+                    id="in-side-c"
                     type="text"
                     value={inC}
                     onChange={(e) => setInC(e.target.value)}
@@ -551,8 +912,11 @@ export function TriangleCalculator() {
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Angle C ({angleUnit}):</label>
+                  <label htmlFor="in-angle-c" className="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Angle C ({angleUnit}):
+                  </label>
                   <input
+                    id="in-angle-c"
                     type="text"
                     value={inAngleC}
                     onChange={(e) => setInAngleC(e.target.value)}
@@ -563,7 +927,7 @@ export function TriangleCalculator() {
               </div>
 
               {/* PRECISION TOGGLE */}
-              <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300 pt-2 border-t border-slate-200 dark:border-slate-800">
+              <div className="flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300 pt-2 border-t border-slate-200 dark:border-slate-800 no-print">
                 <span>Display Decimals:</span>
                 <div className="flex bg-slate-200 dark:bg-slate-800 p-0.5 rounded-lg text-xs font-bold">
                   {[2, 4, 6].map((p) => (
@@ -586,144 +950,164 @@ export function TriangleCalculator() {
                 <div className="p-5 bg-red-50 dark:bg-red-950/40 rounded-2xl border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs font-bold">
                   {univSolveResult.errorMessage}
                 </div>
-              ) : activeSolution && (
-                <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
-                  {/* AMBIGUOUS SSA SOLUTION TABS */}
-                  {univSolveResult.isAmbiguous && univSolveResult.solutions.length === 2 && (
-                    <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-xl flex items-center justify-between">
-                      <span className="text-xs font-bold text-amber-900 dark:text-amber-300">
-                        Ambiguous SSA Case Detected! 2 Valid Triangles Exist:
-                      </span>
-                      <div className="flex bg-white dark:bg-slate-800 p-1 rounded-lg text-xs font-bold">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedSolutionIndex(0)}
-                          className={`px-3 py-1 rounded cursor-pointer ${selectedSolutionIndex === 0 ? "bg-blue-600 text-white" : ""}`}
-                        >
-                          Solution 1
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedSolutionIndex(1)}
-                          className={`px-3 py-1 rounded cursor-pointer ${selectedSolutionIndex === 1 ? "bg-blue-600 text-white" : ""}`}
-                        >
-                          Solution 2
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* HERO RESULT DISPLAY */}
-                  <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3">
-                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
-                          Solved Triangle Metrics
+              ) : (
+                activeSolution && (
+                  <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
+                    {/* AMBIGUOUS SSA SOLUTION TABS */}
+                    {univSolveResult.isAmbiguous && univSolveResult.solutions.length === 2 && (
+                      <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-xl flex items-center justify-between no-print">
+                        <span className="text-xs font-bold text-amber-900 dark:text-amber-300">
+                          Ambiguous SSA Case Detected! 2 Valid Triangles Exist:
                         </span>
-                        <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">
-                          {activeSolution.sideType} &amp; {activeSolution.angleType} ({activeSolution.caseType})
-                        </span>
+                        <div className="flex bg-white dark:bg-slate-800 p-1 rounded-lg text-xs font-bold">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedSolutionIndex(0)}
+                            className={`px-3 py-1 rounded cursor-pointer ${selectedSolutionIndex === 0 ? "bg-blue-600 text-white" : ""}`}
+                          >
+                            Solution 1
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedSolutionIndex(1)}
+                            className={`px-3 py-1 rounded cursor-pointer ${selectedSolutionIndex === 1 ? "bg-blue-600 text-white" : ""}`}
+                          >
+                            Solution 2
+                          </button>
+                        </div>
                       </div>
-                      <span className="text-xs font-mono font-bold text-slate-500">
-                        Area K = {activeSolution.area}
-                      </span>
-                    </div>
+                    )}
 
-                    {/* SIDES & ANGLES SUMMARY */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-bold">
-                      <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg">
-                        <span className="text-[10px] text-slate-400 block">Sides (a, b, c):</span>
-                        <span className="font-mono text-slate-900 dark:text-slate-100">
-                          {activeSolution.a}, {activeSolution.b}, {activeSolution.c}
+                    {/* HERO RESULT DISPLAY */}
+                    <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3">
+                      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+                            Solved Triangle Metrics
+                          </span>
+                          <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">
+                            {activeSolution.sideType} &amp; {activeSolution.angleType} ({activeSolution.caseType})
+                          </span>
+                        </div>
+                        <span className="text-xs font-mono font-bold text-slate-500">
+                          Area K = {activeSolution.fmt.area}
                         </span>
                       </div>
 
-                      <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg">
-                        <span className="text-[10px] text-slate-400 block">Angles (A, B, C):</span>
-                        <span className="font-mono text-blue-600 dark:text-blue-400">
-                          {activeSolution.A_deg}°, {activeSolution.B_deg}°, {activeSolution.C_deg}°
-                        </span>
-                      </div>
+                      {/* SIDES & ANGLES SUMMARY */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-bold">
+                        <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg">
+                          <span className="text-[10px] text-slate-400 block">Sides (a, b, c):</span>
+                          <span className="font-mono text-slate-900 dark:text-slate-100">
+                            {activeSolution.fmt.a}, {activeSolution.fmt.b}, {activeSolution.fmt.c}
+                          </span>
+                        </div>
 
-                      <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg">
-                        <span className="text-[10px] text-slate-400 block">Perimeter P:</span>
-                        <span className="font-mono text-slate-900 dark:text-slate-100">
-                          {activeSolution.perimeter} (s = {activeSolution.semiPerimeter})
-                        </span>
-                      </div>
+                        <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg">
+                          <span className="text-[10px] text-slate-400 block">Angles (A, B, C):</span>
+                          <span className="font-mono text-blue-600 dark:text-blue-400">
+                            {activeSolution.fmt.A_deg}°, {activeSolution.fmt.B_deg}°, {activeSolution.fmt.C_deg}°
+                          </span>
+                        </div>
 
-                      <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg">
-                        <span className="text-[10px] text-slate-400 block">Altitudes (ha, hb, hc):</span>
-                        <span className="font-mono text-slate-900 dark:text-slate-100">
-                          {activeSolution.ha}, {activeSolution.hb}, {activeSolution.hc}
-                        </span>
-                      </div>
+                        <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg">
+                          <span className="text-[10px] text-slate-400 block">Perimeter P:</span>
+                          <span className="font-mono text-slate-900 dark:text-slate-100">
+                            {activeSolution.fmt.perimeter} (s = {activeSolution.fmt.semiPerimeter})
+                          </span>
+                        </div>
 
-                      <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg">
-                        <span className="text-[10px] text-slate-400 block">Medians (ma, mb, mc):</span>
-                        <span className="font-mono text-slate-900 dark:text-slate-100">
-                          {activeSolution.ma}, {activeSolution.mb}, {activeSolution.mc}
-                        </span>
-                      </div>
+                        <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg">
+                          <span className="text-[10px] text-slate-400 block">Altitudes (ha, hb, hc):</span>
+                          <span className="font-mono text-slate-900 dark:text-slate-100">
+                            {activeSolution.fmt.ha}, {activeSolution.fmt.hb}, {activeSolution.fmt.hc}
+                          </span>
+                        </div>
 
-                      <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg">
-                        <span className="text-[10px] text-slate-400 block">Inradius / Circumradius:</span>
-                        <span className="font-mono text-slate-900 dark:text-slate-100">
-                          r = {activeSolution.inradius}, R = {activeSolution.circumradius}
-                        </span>
+                        <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg">
+                          <span className="text-[10px] text-slate-400 block">Medians (ma, mb, mc):</span>
+                          <span className="font-mono text-slate-900 dark:text-slate-100">
+                            {activeSolution.fmt.ma}, {activeSolution.fmt.mb}, {activeSolution.fmt.mc}
+                          </span>
+                        </div>
+
+                        <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg">
+                          <span className="text-[10px] text-slate-400 block">Inradius / Circumradius:</span>
+                          <span className="font-mono text-slate-900 dark:text-slate-100">
+                            r = {activeSolution.fmt.inradius}, R = {activeSolution.fmt.circumradius}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )
               )}
             </div>
           </div>
 
-          {/* DYNAMIC SCALE-ACCURATE VECTOR SVG visualizer & DERIVATION TAB */}
+          {/* DYNAMIC SCALE-ACCURATE VECTOR SVG VISUALIZER & DERIVATION TAB */}
           {activeSolution && (
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-xs">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-xs print:break-inside-avoid">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
                 <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
                   <Maximize2 className="h-4 w-4" />
                   <span>True-to-Scale Proportional Vector Visualizer</span>
                 </h3>
 
-                <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-bold gap-1">
+                <div className="flex items-center gap-2 no-print">
                   <button
                     type="button"
-                    onClick={() => setShowIncircle(!showIncircle)}
-                    className={`px-2.5 py-1 rounded-lg cursor-pointer transition-all ${
-                      showIncircle ? "bg-emerald-600 text-white shadow-xs" : "text-slate-700 dark:text-slate-300"
-                    }`}
+                    onClick={handleCopyLatex}
+                    className="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 hover:border-blue-500 transition-colors flex items-center gap-1 cursor-pointer"
                   >
-                    Incircle (r)
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>{copyFeedback || "Copy LaTeX"}</span>
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setShowCircumcircle(!showCircumcircle)}
-                    className={`px-2.5 py-1 rounded-lg cursor-pointer transition-all ${
-                      showCircumcircle ? "bg-purple-600 text-white shadow-xs" : "text-slate-700 dark:text-slate-300"
-                    }`}
-                  >
-                    Circumcircle (R)
-                  </button>
+
+                  <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-bold gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setShowIncircle(!showIncircle)}
+                      className={`px-2.5 py-1 rounded-lg cursor-pointer transition-all ${
+                        showIncircle ? "bg-emerald-600 text-white shadow-xs" : "text-slate-700 dark:text-slate-300"
+                      }`}
+                    >
+                      Incircle (r)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowCircumcircle(!showCircumcircle)}
+                      className={`px-2.5 py-1 rounded-lg cursor-pointer transition-all ${
+                        showCircumcircle ? "bg-purple-600 text-white shadow-xs" : "text-slate-700 dark:text-slate-300"
+                      }`}
+                    >
+                      Circumcircle (R)
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              <div className="w-full flex justify-center py-2 overflow-x-auto bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700">
+              <div className="w-full flex justify-center py-2 overflow-x-auto">
                 {renderTriangleSVG(activeSolution)}
               </div>
 
-              <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-xs space-y-1">
-                <span className="font-bold text-blue-600 dark:text-blue-400 block font-sans text-xs">Step-by-Step Derivation Breakdown:</span>
-                <pre className="whitespace-pre-wrap leading-relaxed">{activeSolution.stepText}</pre>
+              {/* STEP-BY-STEP BREAKDOWN ACCORDION */}
+              <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700/60">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block mb-2">
+                    Step-by-Step Derivation Breakdown:
+                  </span>
+                  <pre className="text-xs font-mono text-slate-700 dark:text-slate-300 whitespace-pre-wrap leading-relaxed">
+                    {activeSolution.stepText}
+                  </pre>
+                </div>
               </div>
             </div>
           )}
 
-          {/* EMBEDDED SAVED UNIVERSAL CALCULATIONS INSIDE CARD 1 */}
+          {/* SAVED UNIVERSAL CALCULATIONS LIST */}
           {savedUnivItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4 no-print">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
                   <Bookmark className="w-4 h-4 text-blue-600" />
@@ -733,7 +1117,9 @@ export function TriangleCalculator() {
                   type="button"
                   onClick={() => {
                     setSavedUnivItems([]);
-                    try { localStorage.removeItem("saved_tri_univ"); } catch(e){}
+                    try {
+                      localStorage.removeItem("saved_tri_univ");
+                    } catch (e) {}
                   }}
                   className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
                 >
@@ -744,7 +1130,7 @@ export function TriangleCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {savedUnivItems.map((item) => {
                   const isExpanded = !!expandedIds[item.id];
-                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map((s) => s.trim()).filter(Boolean) : []);
                   return (
                     <div
                       key={item.id}
@@ -755,18 +1141,30 @@ export function TriangleCalculator() {
                           <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
                           <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = savedUnivItems.filter(i => i.id !== item.id);
-                            setSavedUnivItems(updated);
-                            try { localStorage.setItem("saved_tri_univ", JSON.stringify(updated)); } catch(e){}
-                          }}
-                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
-                          title="Delete saved calculation"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleLoadUniv(item)}
+                            className="text-blue-600 hover:text-blue-700 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors cursor-pointer"
+                            title="Load to Inputs"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = savedUnivItems.filter((i) => i.id !== item.id);
+                              setSavedUnivItems(updated);
+                              try {
+                                localStorage.setItem("saved_tri_univ", JSON.stringify(updated));
+                              } catch (e) {}
+                            }}
+                            className="text-slate-400 hover:text-red-600 p-1 rounded hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors cursor-pointer"
+                            title="Delete saved calculation"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
@@ -791,7 +1189,10 @@ export function TriangleCalculator() {
                             </span>
                             <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
                               {resParts.map((resLine, idx) => (
-                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                <div
+                                  key={idx}
+                                  className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug"
+                                >
                                   {resLine}
                                 </div>
                               ))}
@@ -811,13 +1212,14 @@ export function TriangleCalculator() {
       {/* ========================================================================= */}
       {/* CARD 2: RIGHT TRIANGLE & PYTHAGOREAN THEOREM SOLVER (a² + b² = c²) */}
       {/* ========================================================================= */}
-      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
+      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs print:break-inside-avoid print:shadow-none print:border-slate-300 print:mb-6">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
           <span>Right Triangle &amp; Pythagorean Theorem Solver (a&sup2; + b&sup2; = c&sup2;)</span>
           <button
             type="button"
             onClick={handleSaveRt}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            disabled={!rtSolveResult.success}
+            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50 no-print"
           >
             <Bookmark className="w-3 h-3 text-white" />
             <span>{justSavedRt ? "Saved!" : "Save"}</span>
@@ -833,27 +1235,29 @@ export function TriangleCalculator() {
 
               <div className="space-y-3">
                 <div>
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  <label htmlFor="rt-leg-a" className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
                     Leg a (Base):
                   </label>
                   <input
-                    type="number"
-                    step="any"
-                    value={rtLegA}
-                    onChange={(e) => setRtLegA(parseFloat(e.target.value) || 0.1)}
+                    id="rt-leg-a"
+                    type="text"
+                    value={rtLegAStr}
+                    onChange={(e) => setRtLegAStr(e.target.value)}
+                    placeholder="Length a"
                     className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
+                  <label htmlFor="rt-leg-b" className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">
                     Leg b (Height):
                   </label>
                   <input
-                    type="number"
-                    step="any"
-                    value={rtLegB}
-                    onChange={(e) => setRtLegB(parseFloat(e.target.value) || 0.1)}
+                    id="rt-leg-b"
+                    type="text"
+                    value={rtLegBStr}
+                    onChange={(e) => setRtLegBStr(e.target.value)}
+                    placeholder="Length b"
                     className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold text-sm"
                   />
                 </div>
@@ -862,42 +1266,50 @@ export function TriangleCalculator() {
 
             {/* RIGHT COLUMN: RIGHT TRIANGLE METRICS */}
             <div className="md:col-span-7 space-y-4">
-              <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
-                <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
-                    Calculated Hypotenuse (c = &radic;[a&sup2; + b&sup2;])
-                  </span>
-                  <div className="text-3xl font-mono font-extrabold text-slate-900 dark:text-slate-100 break-all">
-                    c = {rtSolveResult.c}
-                  </div>
-                  <p className="text-xs font-mono font-bold text-slate-500">
-                    Area K = {rtSolveResult.area} | Perimeter P = {rtSolveResult.perimeter} | Angle A = {rtSolveResult.angleA}°
-                  </p>
+              {!rtSolveResult.success ? (
+                <div className="p-5 bg-red-50 dark:bg-red-950/40 rounded-2xl border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs font-bold">
+                  {rtSolveResult.errorMessage}
                 </div>
+              ) : (
+                rtSolveResult.fmt && (
+                  <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
+                    <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+                      <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
+                        Calculated Hypotenuse (c = &radic;[a&sup2; + b&sup2;])
+                      </span>
+                      <div className="text-3xl font-mono font-extrabold text-slate-900 dark:text-slate-100 break-all">
+                        c = {rtSolveResult.fmt.c}
+                      </div>
+                      <p className="text-xs font-mono font-bold text-slate-500">
+                        Area K = {rtSolveResult.fmt.area} | Perimeter P = {rtSolveResult.fmt.perimeter} | Angle A = {rtSolveResult.fmt.angleA}°
+                      </p>
+                    </div>
 
-                <div className="grid grid-cols-3 gap-2 text-xs font-bold">
-                  <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
-                    <span className="text-[10px] text-slate-400 block uppercase">sin(A)</span>
-                    <span className="font-mono text-slate-900 dark:text-slate-100">{rtSolveResult.sinA}</span>
-                  </div>
+                    <div className="grid grid-cols-3 gap-2 text-xs font-bold">
+                      <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                        <span className="text-[10px] text-slate-400 block uppercase">sin(A)</span>
+                        <span className="font-mono text-slate-900 dark:text-slate-100">{rtSolveResult.fmt.sinA}</span>
+                      </div>
 
-                  <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
-                    <span className="text-[10px] text-slate-400 block uppercase">cos(A)</span>
-                    <span className="font-mono text-slate-900 dark:text-slate-100">{rtSolveResult.cosA}</span>
-                  </div>
+                      <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                        <span className="text-[10px] text-slate-400 block uppercase">cos(A)</span>
+                        <span className="font-mono text-slate-900 dark:text-slate-100">{rtSolveResult.fmt.cosA}</span>
+                      </div>
 
-                  <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
-                    <span className="text-[10px] text-slate-400 block uppercase">tan(A)</span>
-                    <span className="font-mono text-blue-600 dark:text-blue-400">{rtSolveResult.tanA}</span>
+                      <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                        <span className="text-[10px] text-slate-400 block uppercase">tan(A)</span>
+                        <span className="font-mono text-blue-600 dark:text-blue-400">{rtSolveResult.fmt.tanA}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                )
+              )}
             </div>
           </div>
 
           {/* EMBEDDED SAVED RIGHT TRIANGLE CALCULATIONS INSIDE CARD 2 */}
           {savedRtItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4 no-print">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
                   <Bookmark className="w-4 h-4 text-blue-600" />
@@ -907,7 +1319,9 @@ export function TriangleCalculator() {
                   type="button"
                   onClick={() => {
                     setSavedRtItems([]);
-                    try { localStorage.removeItem("saved_tri_rt"); } catch(e){}
+                    try {
+                      localStorage.removeItem("saved_tri_rt");
+                    } catch (e) {}
                   }}
                   className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
                 >
@@ -918,7 +1332,7 @@ export function TriangleCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {savedRtItems.map((item) => {
                   const isExpanded = !!expandedIds[item.id];
-                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map((s) => s.trim()).filter(Boolean) : []);
                   return (
                     <div
                       key={item.id}
@@ -929,18 +1343,30 @@ export function TriangleCalculator() {
                           <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
                           <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = savedRtItems.filter(i => i.id !== item.id);
-                            setSavedRtItems(updated);
-                            try { localStorage.setItem("saved_tri_rt", JSON.stringify(updated)); } catch(e){}
-                          }}
-                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
-                          title="Delete saved calculation"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleLoadRt(item)}
+                            className="text-blue-600 hover:text-blue-700 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors cursor-pointer"
+                            title="Load to Inputs"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = savedRtItems.filter((i) => i.id !== item.id);
+                              setSavedRtItems(updated);
+                              try {
+                                localStorage.setItem("saved_tri_rt", JSON.stringify(updated));
+                              } catch (e) {}
+                            }}
+                            className="text-slate-400 hover:text-red-600 p-1 rounded hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors cursor-pointer"
+                            title="Delete saved calculation"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
@@ -961,11 +1387,14 @@ export function TriangleCalculator() {
                         {isExpanded && (
                           <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
                             <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-[11px]">
-                              Complete Converted Results:
+                              Complete Right Triangle Metrics:
                             </span>
                             <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
                               {resParts.map((resLine, idx) => (
-                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                <div
+                                  key={idx}
+                                  className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug"
+                                >
                                   {resLine}
                                 </div>
                               ))}
@@ -985,14 +1414,14 @@ export function TriangleCalculator() {
       {/* ========================================================================= */}
       {/* CARD 3: INRADIUS (r) & CIRCUMRADIUS (R) CALCULATOR */}
       {/* ========================================================================= */}
-      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
+      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs print:break-inside-avoid print:shadow-none print:border-slate-300 print:mb-6">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
           <span>Inradius (r) &amp; Circumradius (R) Calculator</span>
           <button
             type="button"
             onClick={handleSaveCrc}
             disabled={!activeCrcSol}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50"
+            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50 no-print"
           >
             <Bookmark className="w-3 h-3 text-white" />
             <span>{justSavedCrc ? "Saved!" : "Save"}</span>
@@ -1008,34 +1437,40 @@ export function TriangleCalculator() {
 
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="text-[11px] font-bold text-slate-500 block mb-1">Side a:</label>
+                  <label htmlFor="crc-side-a" className="text-[11px] font-bold text-slate-500 block mb-1">
+                    Side a:
+                  </label>
                   <input
-                    type="number"
-                    step="any"
-                    value={crcSideA}
-                    onChange={(e) => setCrcSideA(parseFloat(e.target.value) || 0.1)}
+                    id="crc-side-a"
+                    type="text"
+                    value={crcSideAStr}
+                    onChange={(e) => setCrcSideAStr(e.target.value)}
                     className="w-full h-9 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold text-xs"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-bold text-slate-500 block mb-1">Side b:</label>
+                  <label htmlFor="crc-side-b" className="text-[11px] font-bold text-slate-500 block mb-1">
+                    Side b:
+                  </label>
                   <input
-                    type="number"
-                    step="any"
-                    value={crcSideB}
-                    onChange={(e) => setCrcSideB(parseFloat(e.target.value) || 0.1)}
+                    id="crc-side-b"
+                    type="text"
+                    value={crcSideBStr}
+                    onChange={(e) => setCrcSideBStr(e.target.value)}
                     className="w-full h-9 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold text-xs"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-bold text-slate-500 block mb-1">Side c:</label>
+                  <label htmlFor="crc-side-c" className="text-[11px] font-bold text-slate-500 block mb-1">
+                    Side c:
+                  </label>
                   <input
-                    type="number"
-                    step="any"
-                    value={crcSideC}
-                    onChange={(e) => setCrcSideC(parseFloat(e.target.value) || 0.1)}
+                    id="crc-side-c"
+                    type="text"
+                    value={crcSideCStr}
+                    onChange={(e) => setCrcSideCStr(e.target.value)}
                     className="w-full h-9 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold text-xs"
                   />
                 </div>
@@ -1044,36 +1479,46 @@ export function TriangleCalculator() {
 
             {/* RIGHT COLUMN: CIRCLE METRICS */}
             <div className="md:col-span-7 space-y-4">
-              {activeCrcSol && (
-                <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
-                  <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
-                    <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
-                      Calculated Radius Metrics
-                    </span>
-                    <div className="grid grid-cols-2 gap-3 text-sm font-mono font-extrabold">
-                      <div className="p-2 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg border border-emerald-200 dark:border-emerald-800">
-                        <span className="text-[10px] text-emerald-800 dark:text-emerald-300 uppercase block">Inradius (r = Area/s)</span>
-                        r = {activeCrcSol.inradius}
-                      </div>
+              {!crcSolveResult.success ? (
+                <div className="p-5 bg-red-50 dark:bg-red-950/40 rounded-2xl border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs font-bold">
+                  {crcSolveResult.errorMessage}
+                </div>
+              ) : (
+                activeCrcSol && (
+                  <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
+                    <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+                      <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
+                        Calculated Radius Metrics
+                      </span>
+                      <div className="grid grid-cols-2 gap-3 text-sm font-mono font-extrabold">
+                        <div className="p-2 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                          <span className="text-[10px] text-emerald-800 dark:text-emerald-300 uppercase block">
+                            Inradius (r = Area / s)
+                          </span>
+                          r = {activeCrcSol.fmt.inradius}
+                        </div>
 
-                      <div className="p-2 bg-purple-50 dark:bg-purple-950/40 rounded-lg border border-purple-200 dark:border-purple-800">
-                        <span className="text-[10px] text-purple-800 dark:text-purple-300 uppercase block">Circumradius (R = abc/4K)</span>
-                        R = {activeCrcSol.circumradius}
+                        <div className="p-2 bg-purple-50 dark:bg-purple-950/40 rounded-lg border border-purple-200 dark:border-purple-800">
+                          <span className="text-[10px] text-purple-800 dark:text-purple-300 uppercase block">
+                            Circumradius (R = abc / (4·Area))
+                          </span>
+                          R = {activeCrcSol.fmt.circumradius}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="w-full flex justify-center py-2 overflow-x-auto bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
-                    {renderTriangleSVG(activeCrcSol, true)}
+                    <div className="w-full flex justify-center py-2 overflow-x-auto bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                      {renderTriangleSVG(activeCrcSol, true)}
+                    </div>
                   </div>
-                </div>
+                )
               )}
             </div>
           </div>
 
           {/* EMBEDDED SAVED CIRCLE CALCULATIONS INSIDE CARD 3 */}
           {savedCrcItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4 no-print">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
                   <Bookmark className="w-4 h-4 text-blue-600" />
@@ -1083,7 +1528,9 @@ export function TriangleCalculator() {
                   type="button"
                   onClick={() => {
                     setSavedCrcItems([]);
-                    try { localStorage.removeItem("saved_tri_crc"); } catch(e){}
+                    try {
+                      localStorage.removeItem("saved_tri_crc");
+                    } catch (e) {}
                   }}
                   className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
                 >
@@ -1094,7 +1541,7 @@ export function TriangleCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {savedCrcItems.map((item) => {
                   const isExpanded = !!expandedIds[item.id];
-                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map((s) => s.trim()).filter(Boolean) : []);
                   return (
                     <div
                       key={item.id}
@@ -1105,18 +1552,30 @@ export function TriangleCalculator() {
                           <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
                           <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = savedCrcItems.filter(i => i.id !== item.id);
-                            setSavedCrcItems(updated);
-                            try { localStorage.setItem("saved_tri_crc", JSON.stringify(updated)); } catch(e){}
-                          }}
-                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
-                          title="Delete saved calculation"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleLoadCrc(item)}
+                            className="text-blue-600 hover:text-blue-700 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors cursor-pointer"
+                            title="Load to Inputs"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = savedCrcItems.filter((i) => i.id !== item.id);
+                              setSavedCrcItems(updated);
+                              try {
+                                localStorage.setItem("saved_tri_crc", JSON.stringify(updated));
+                              } catch (e) {}
+                            }}
+                            className="text-slate-400 hover:text-red-600 p-1 rounded hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors cursor-pointer"
+                            title="Delete saved calculation"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
@@ -1137,11 +1596,14 @@ export function TriangleCalculator() {
                         {isExpanded && (
                           <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
                             <span className="font-extrabold text-blue-600 dark:text-blue-400 block text-[11px]">
-                              Complete Converted Results:
+                              Complete Radius Metrics:
                             </span>
                             <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
                               {resParts.map((resLine, idx) => (
-                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                <div
+                                  key={idx}
+                                  className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug"
+                                >
                                   {resLine}
                                 </div>
                               ))}
@@ -1161,14 +1623,14 @@ export function TriangleCalculator() {
       {/* ========================================================================= */}
       {/* CARD 4: HERON'S FORMULA & ALTITUDE / MEDIAN SUITE */}
       {/* ========================================================================= */}
-      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
+      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs print:break-inside-avoid print:shadow-none print:border-slate-300 print:mb-6">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
           <span>Heron&apos;s Formula &amp; Altitudes / Medians Suite</span>
           <button
             type="button"
             onClick={handleSaveHeron}
             disabled={!activeHeronSol}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50"
+            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50 no-print"
           >
             <Bookmark className="w-3 h-3 text-white" />
             <span>{justSavedHeron ? "Saved!" : "Save"}</span>
@@ -1184,34 +1646,40 @@ export function TriangleCalculator() {
 
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="text-[11px] font-bold text-slate-500 block mb-1">Side a:</label>
+                  <label htmlFor="heron-side-a" className="text-[11px] font-bold text-slate-500 block mb-1">
+                    Side a:
+                  </label>
                   <input
-                    type="number"
-                    step="any"
-                    value={heronA}
-                    onChange={(e) => setHeronA(parseFloat(e.target.value) || 0.1)}
+                    id="heron-side-a"
+                    type="text"
+                    value={heronAStr}
+                    onChange={(e) => setHeronAStr(e.target.value)}
                     className="w-full h-9 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold text-xs"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-bold text-slate-500 block mb-1">Side b:</label>
+                  <label htmlFor="heron-side-b" className="text-[11px] font-bold text-slate-500 block mb-1">
+                    Side b:
+                  </label>
                   <input
-                    type="number"
-                    step="any"
-                    value={heronB}
-                    onChange={(e) => setHeronB(parseFloat(e.target.value) || 0.1)}
+                    id="heron-side-b"
+                    type="text"
+                    value={heronBStr}
+                    onChange={(e) => setHeronBStr(e.target.value)}
                     className="w-full h-9 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold text-xs"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-bold text-slate-500 block mb-1">Side c:</label>
+                  <label htmlFor="heron-side-c" className="text-[11px] font-bold text-slate-500 block mb-1">
+                    Side c:
+                  </label>
                   <input
-                    type="number"
-                    step="any"
-                    value={heronC}
-                    onChange={(e) => setHeronC(parseFloat(e.target.value) || 0.1)}
+                    id="heron-side-c"
+                    type="text"
+                    value={heronCStr}
+                    onChange={(e) => setHeronCStr(e.target.value)}
                     className="w-full h-9 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold text-xs"
                   />
                 </div>
@@ -1220,43 +1688,53 @@ export function TriangleCalculator() {
 
             {/* RIGHT COLUMN: HERON OUTPUTS */}
             <div className="md:col-span-7 space-y-4">
-              {activeHeronSol && (
-                <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
-                  <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
-                    <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
-                      Area via Heron&apos;s Formula: &radic;[s(s-a)(s-b)(s-c)]
-                    </span>
-                    <div className="text-3xl font-mono font-extrabold text-slate-900 dark:text-slate-100 break-all">
-                      Area K = {activeHeronSol.area}
-                    </div>
-                    <p className="text-xs font-mono font-bold text-slate-500">
-                      Semi-perimeter s = {activeHeronSol.semiPerimeter} | Perimeter P = {activeHeronSol.perimeter}
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3 text-xs font-mono font-bold">
-                    <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
-                      <span className="text-[10px] text-slate-400 block uppercase font-sans">Altitudes (ha, hb, hc)</span>
-                      ha = {activeHeronSol.ha}<br />
-                      hb = {activeHeronSol.hb}<br />
-                      hc = {activeHeronSol.hc}
-                    </div>
-
-                    <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
-                      <span className="text-[10px] text-slate-400 block uppercase font-sans">Medians (ma, mb, mc)</span>
-                      ma = {activeHeronSol.ma}<br />
-                      mb = {activeHeronSol.mb}<br />
-                      mc = {activeHeronSol.mc}
-                    </div>
-                  </div>
+              {!heronSolveResult.success ? (
+                <div className="p-5 bg-red-50 dark:bg-red-950/40 rounded-2xl border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs font-bold">
+                  {heronSolveResult.errorMessage}
                 </div>
+              ) : (
+                activeHeronSol && (
+                  <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
+                    <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
+                      <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
+                        Area via Heron&apos;s Formula: &radic;[s(s-a)(s-b)(s-c)]
+                      </span>
+                      <div className="text-3xl font-mono font-extrabold text-slate-900 dark:text-slate-100 break-all">
+                        Area K = {activeHeronSol.fmt.area}
+                      </div>
+                      <p className="text-xs font-mono font-bold text-slate-500">
+                        Semi-perimeter s = {activeHeronSol.fmt.semiPerimeter} | Perimeter P = {activeHeronSol.fmt.perimeter}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 text-xs font-mono font-bold">
+                      <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+                        <span className="text-[10px] text-slate-400 block uppercase font-sans">Altitudes (ha, hb, hc)</span>
+                        ha = {activeHeronSol.fmt.ha}
+                        <br />
+                        hb = {activeHeronSol.fmt.hb}
+                        <br />
+                        hc = {activeHeronSol.fmt.hc}
+                      </div>
+
+                      <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+                        <span className="text-[10px] text-slate-400 block uppercase font-sans">Medians (ma, mb, mc)</span>
+                        ma = {activeHeronSol.fmt.ma}
+                        <br />
+                        mb = {activeHeronSol.fmt.mb}
+                        <br />
+                        mc = {activeHeronSol.fmt.mc}
+                      </div>
+                    </div>
+                  </div>
+                )
               )}
             </div>
           </div>
 
           {/* EMBEDDED SAVED HERON CALCULATIONS INSIDE CARD 4 */}
           {savedHeronItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4 no-print">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
                   <Bookmark className="w-4 h-4 text-blue-600" />
@@ -1266,7 +1744,9 @@ export function TriangleCalculator() {
                   type="button"
                   onClick={() => {
                     setSavedHeronItems([]);
-                    try { localStorage.removeItem("saved_tri_heron"); } catch(e){}
+                    try {
+                      localStorage.removeItem("saved_tri_heron");
+                    } catch (e) {}
                   }}
                   className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
                 >
@@ -1277,7 +1757,7 @@ export function TriangleCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {savedHeronItems.map((item) => {
                   const isExpanded = !!expandedIds[item.id];
-                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map(s => s.trim()).filter(Boolean) : []);
+                  const resParts = item.resultsList ?? (item.result ? item.result.split("|").map((s) => s.trim()).filter(Boolean) : []);
                   return (
                     <div
                       key={item.id}
@@ -1288,18 +1768,30 @@ export function TriangleCalculator() {
                           <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
                           <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = savedHeronItems.filter(i => i.id !== item.id);
-                            setSavedHeronItems(updated);
-                            try { localStorage.setItem("saved_tri_heron", JSON.stringify(updated)); } catch(e){}
-                          }}
-                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
-                          title="Delete saved calculation"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleLoadHeron(item)}
+                            className="text-blue-600 hover:text-blue-700 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors cursor-pointer"
+                            title="Load to Inputs"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = savedHeronItems.filter((i) => i.id !== item.id);
+                              setSavedHeronItems(updated);
+                              try {
+                                localStorage.setItem("saved_tri_heron", JSON.stringify(updated));
+                              } catch (e) {}
+                            }}
+                            className="text-slate-400 hover:text-red-600 p-1 rounded hover:bg-red-50 dark:hover:bg-red-950/50 transition-colors cursor-pointer"
+                            title="Delete saved calculation"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
@@ -1324,7 +1816,10 @@ export function TriangleCalculator() {
                             </span>
                             <div className="space-y-1 text-xs font-sans tabular-nums max-h-48 overflow-y-auto">
                               {resParts.map((resLine, idx) => (
-                                <div key={idx} className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug">
+                                <div
+                                  key={idx}
+                                  className="bg-slate-50 dark:bg-slate-800/80 px-2 py-1 rounded border border-slate-200/60 dark:border-slate-700/60 font-medium text-slate-800 dark:text-slate-200 break-all leading-snug"
+                                >
                                   {resLine}
                                 </div>
                               ))}

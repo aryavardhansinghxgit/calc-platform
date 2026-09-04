@@ -24,6 +24,7 @@ export interface SolvedTriangle {
   area: number;
   perimeter: number;
   semiPerimeter: number;
+  s: number;
   ha: number;
   hb: number;
   hc: number;
@@ -32,6 +33,8 @@ export interface SolvedTriangle {
   mc: number;
   inradius: number;
   circumradius: number;
+  r: number;
+  R: number;
   sideType: "Equilateral" | "Isosceles" | "Scalene";
   angleType: "Right" | "Acute" | "Obtuse";
   caseType: "SSS" | "SAS" | "ASA" | "AAS" | "SSA";
@@ -45,6 +48,28 @@ export interface SolvedTriangle {
     Cx: number;
     Cy: number;
   };
+  // Exact string formatted values preserving trailing zeros per active precision
+  fmt: {
+    a: string;
+    b: string;
+    c: string;
+    A_deg: string;
+    B_deg: string;
+    C_deg: string;
+    area: string;
+    perimeter: string;
+    semiPerimeter: string;
+    ha: string;
+    hb: string;
+    hc: string;
+    ma: string;
+    mb: string;
+    mc: string;
+    inradius: string;
+    circumradius: string;
+    r: string;
+    R: string;
+  };
 }
 
 export interface TriangleSolveResult {
@@ -56,6 +81,33 @@ export interface TriangleSolveResult {
 
 const radToDeg = (r: number) => (r * 180.0) / Math.PI;
 const degToRad = (d: number) => (d * Math.PI) / 180.0;
+
+/**
+ * Safe deterministic angle parser supporting numeric values and fractional pi expressions.
+ * Supported: pi/6, pi/4, pi/3, pi/2, 2*pi/3, 3*pi/4, 5*pi/6, 2*pi, 2pi/3, π/6, 2π/3, etc.
+ * Zero eval/Function execution for strict security.
+ */
+export function parseAngleExpression(rawStr: string, angleUnit: "deg" | "rad" = "deg"): number | undefined {
+  if (!rawStr || !rawStr.trim()) return undefined;
+  const s = rawStr.trim().toLowerCase().replace(/π/g, "pi").replace(/\s+/g, "");
+
+  if (s.includes("pi")) {
+    const match = s.match(/^(?:([0-9]+(?:\.[0-9]+)?)\*?)?pi(?:\/([0-9]+(?:\.[0-9]+)?))?$/);
+    if (match) {
+      const coeff = match[1] !== undefined ? parseFloat(match[1]) : 1.0;
+      const denom = match[2] !== undefined ? parseFloat(match[2]) : 1.0;
+      if (denom === 0 || isNaN(coeff) || isNaN(denom)) return undefined;
+      const radians = (coeff * Math.PI) / denom;
+      if (radians <= 0) return undefined;
+      return (radians * 180.0) / Math.PI; // Return in degrees for universal solver
+    }
+    return undefined;
+  }
+
+  const num = parseFloat(s);
+  if (Number.isNaN(num) || num <= 0 || !Number.isFinite(num)) return undefined;
+  return angleUnit === "rad" ? (num * 180.0) / Math.PI : num;
+}
 
 function computeDerivedMetrics(
   a: number,
@@ -135,6 +187,7 @@ function computeDerivedMetrics(
     area: parseFloat(fmt(area)),
     perimeter: parseFloat(fmt(perimeter)),
     semiPerimeter: parseFloat(fmt(s)),
+    s: parseFloat(fmt(s)),
     ha: parseFloat(fmt(ha)),
     hb: parseFloat(fmt(hb)),
     hc: parseFloat(fmt(hc)),
@@ -143,6 +196,8 @@ function computeDerivedMetrics(
     mc: parseFloat(fmt(mc)),
     inradius: parseFloat(fmt(inradius)),
     circumradius: parseFloat(fmt(circumradius)),
+    r: parseFloat(fmt(inradius)),
+    R: parseFloat(fmt(circumradius)),
     sideType,
     angleType,
     caseType,
@@ -154,6 +209,27 @@ function computeDerivedMetrics(
       By: 0,
       Cx,
       Cy
+    },
+    fmt: {
+      a: fmt(a),
+      b: fmt(b),
+      c: fmt(c),
+      A_deg: fmt(A_deg),
+      B_deg: fmt(B_deg),
+      C_deg: fmt(C_deg),
+      area: fmt(area),
+      perimeter: fmt(perimeter),
+      semiPerimeter: fmt(s),
+      ha: fmt(ha),
+      hb: fmt(hb),
+      hc: fmt(hc),
+      ma: fmt(ma),
+      mb: fmt(mb),
+      mc: fmt(mc),
+      inradius: fmt(inradius),
+      circumradius: fmt(circumradius),
+      r: fmt(inradius),
+      R: fmt(circumradius)
     }
   };
 }
@@ -350,3 +426,253 @@ export function solveUniversalTriangle(
 
   return { success: false, errorMessage: "Could not solve triangle with given parameters.", solutions: [] };
 }
+
+export interface RightTriangleSolution {
+  a: number;
+  b: number;
+  c: number;
+  area: number;
+  perimeter: number;
+  sinA: number;
+  cosA: number;
+  tanA: number;
+  A_deg: number;
+  B_deg: number;
+  C_deg: number;
+  fmt: {
+    a: string;
+    b: string;
+    c: string;
+    area: string;
+    perimeter: string;
+    sinA: string;
+    cosA: string;
+    tanA: string;
+    A_deg: string;
+    B_deg: string;
+    C_deg: string;
+  };
+}
+
+export function solveRightTriangle(
+  legA: number,
+  legB: number,
+  precision: number = 4
+): { success: boolean; errorMessage?: string; solution?: RightTriangleSolution } {
+  if (
+    legA === undefined || legB === undefined ||
+    isNaN(legA) || isNaN(legB) ||
+    legA <= 0 || legB <= 0 ||
+    !Number.isFinite(legA) || !Number.isFinite(legB)
+  ) {
+    return { success: false, errorMessage: "Leg lengths must be strictly positive finite numbers." };
+  }
+
+  const c = Math.hypot(legA, legB);
+  const area = 0.5 * legA * legB;
+  const perimeter = legA + legB + c;
+  const sinA = legA / c;
+  const cosA = legB / c;
+  const tanA = legA / legB;
+  const A_deg = (Math.asin(sinA) * 180.0) / Math.PI;
+  const B_deg = 90.0 - A_deg;
+  const C_deg = 90.0;
+
+  const fmt = (v: number) => v.toFixed(precision);
+
+  return {
+    success: true,
+    solution: {
+      a: legA,
+      b: legB,
+      c,
+      area,
+      perimeter,
+      sinA,
+      cosA,
+      tanA,
+      A_deg,
+      B_deg,
+      C_deg,
+      fmt: {
+        a: fmt(legA),
+        b: fmt(legB),
+        c: fmt(c),
+        area: fmt(area),
+        perimeter: fmt(perimeter),
+        sinA: fmt(sinA),
+        cosA: fmt(cosA),
+        tanA: fmt(tanA),
+        A_deg: fmt(A_deg),
+        B_deg: fmt(B_deg),
+        C_deg: fmt(C_deg)
+      }
+    }
+  };
+}
+
+export interface InradiusCircumradiusSolution {
+  a: number;
+  b: number;
+  c: number;
+  s: number;
+  area: number;
+  r: number;
+  R: number;
+  fmt: {
+    a: string;
+    b: string;
+    c: string;
+    s: string;
+    area: string;
+    r: string;
+    R: string;
+  };
+}
+
+export function calculateInradiusCircumradius(
+  a: number,
+  b: number,
+  c: number,
+  precision: number = 4
+): { success: boolean; errorMessage?: string; solution?: InradiusCircumradiusSolution } {
+  if (
+    a === undefined || b === undefined || c === undefined ||
+    isNaN(a) || isNaN(b) || isNaN(c) ||
+    a <= 0 || b <= 0 || c <= 0 ||
+    !Number.isFinite(a) || !Number.isFinite(b) || !Number.isFinite(c)
+  ) {
+    return { success: false, errorMessage: "Side lengths must be positive real numbers." };
+  }
+
+  if (a + b <= c + 1e-9 || a + c <= b + 1e-9 || b + c <= a + 1e-9) {
+    return { success: false, errorMessage: "Triangle inequality violated (sum of any two sides must exceed the third)." };
+  }
+
+  const s = (a + b + c) / 2.0;
+  const areaTerm = s * (s - a) * (s - b) * (s - c);
+  if (areaTerm <= 0) {
+    return { success: false, errorMessage: "Degenerate triangle configuration." };
+  }
+  const area = Math.sqrt(areaTerm);
+  const r = area / s;
+  const R = (a * b * c) / (4.0 * area);
+
+  const fmt = (v: number) => v.toFixed(precision);
+
+  return {
+    success: true,
+    solution: {
+      a,
+      b,
+      c,
+      s,
+      area,
+      r,
+      R,
+      fmt: {
+        a: fmt(a),
+        b: fmt(b),
+        c: fmt(c),
+        s: fmt(s),
+        area: fmt(area),
+        r: fmt(r),
+        R: fmt(R)
+      }
+    }
+  };
+}
+
+export interface HeronSolution {
+  a: number;
+  b: number;
+  c: number;
+  s: number;
+  area: number;
+  ha: number;
+  hb: number;
+  hc: number;
+  ma: number;
+  mb: number;
+  mc: number;
+  fmt: {
+    a: string;
+    b: string;
+    c: string;
+    s: string;
+    area: string;
+    ha: string;
+    hb: string;
+    hc: string;
+    ma: string;
+    mb: string;
+    mc: string;
+  };
+}
+
+export function calculateHeron(
+  a: number,
+  b: number,
+  c: number,
+  precision: number = 4
+): { success: boolean; errorMessage?: string; solution?: HeronSolution } {
+  if (
+    a === undefined || b === undefined || c === undefined ||
+    isNaN(a) || isNaN(b) || isNaN(c) ||
+    a <= 0 || b <= 0 || c <= 0 ||
+    !Number.isFinite(a) || !Number.isFinite(b) || !Number.isFinite(c)
+  ) {
+    return { success: false, errorMessage: "Side lengths must be positive real numbers." };
+  }
+
+  if (a + b <= c + 1e-9 || a + c <= b + 1e-9 || b + c <= a + 1e-9) {
+    return { success: false, errorMessage: "Triangle inequality violated (sum of any two sides must exceed the third)." };
+  }
+
+  const s = (a + b + c) / 2.0;
+  const areaTerm = s * (s - a) * (s - b) * (s - c);
+  if (areaTerm <= 0) {
+    return { success: false, errorMessage: "Degenerate triangle configuration." };
+  }
+  const area = Math.sqrt(areaTerm);
+  const ha = (2.0 * area) / a;
+  const hb = (2.0 * area) / b;
+  const hc = (2.0 * area) / c;
+
+  const ma = 0.5 * Math.sqrt(Math.max(0, 2 * b * b + 2 * c * c - a * a));
+  const mb = 0.5 * Math.sqrt(Math.max(0, 2 * a * a + 2 * c * c - b * b));
+  const mc = 0.5 * Math.sqrt(Math.max(0, 2 * a * a + 2 * b * b - c * c));
+
+  const fmt = (v: number) => v.toFixed(precision);
+
+  return {
+    success: true,
+    solution: {
+      a,
+      b,
+      c,
+      s,
+      area,
+      ha,
+      hb,
+      hc,
+      ma,
+      mb,
+      mc,
+      fmt: {
+        a: fmt(a),
+        b: fmt(b),
+        c: fmt(c),
+        s: fmt(s),
+        area: fmt(area),
+        ha: fmt(ha),
+        hb: fmt(hb),
+        hc: fmt(hc),
+        ma: fmt(ma),
+        mb: fmt(mb),
+        mc: fmt(mc)
+      }
+    }
+  };
+}
+
