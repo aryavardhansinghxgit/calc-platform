@@ -523,6 +523,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isPermutationCombination = idLower === "permutation-combination-calculator" || slugLower === "permutation-combination-calculator";
   const isTriangle = idLower === "triangle-calculator" || slugLower === "triangle-calculator";
   const isVolume = idLower === "volume-calculator" || slugLower === "volume-calculator";
+  const isArea = idLower === "area-calculator" || slugLower === "area-calculator";
 
   const CustomContent = (definition as any).ContentComponent || (
     isVat ? VatContent :
@@ -610,7 +611,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           {definition.category}
         </Link>
         <ChevronRight className="h-3 w-3 text-zinc-300 dark:text-zinc-600" />
-        <span className="font-medium text-zinc-800 dark:text-zinc-200 truncate">{definition.title}</span>
+        <span className="font-medium text-zinc-800 dark:text-zinc-200 truncate">
+          {definition.id === "area-calculator" ? "Area Calculator" : (definition.title.includes("—") ? definition.title.split("—")[0].trim() : definition.title)}
+        </span>
       </nav>
 
       {/* 2. Main Full-Width Calculator Layout */}
@@ -1011,7 +1014,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
 
           {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
-          {Boolean(definition.faqs && definition.faqs.length > 0) && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume ? (
+          {Boolean(definition.faqs && definition.faqs.length > 0) && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions
@@ -1029,7 +1032,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                 ))}
               </div>
             </div>
-          ) : !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isRmd && !isAutoLease && !isSimpleInterest && !isSocialSecurity && !isInterest && !isRothIra && !isTimeDuration && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isRoi && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && definition.category !== "Math" ? (
+          ) : !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isRmd && !isAutoLease && !isSimpleInterest && !isSocialSecurity && !isInterest && !isRothIra && !isTimeDuration && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isRoi && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && definition.category !== "Math" ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions
