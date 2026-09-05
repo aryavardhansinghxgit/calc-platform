@@ -526,6 +526,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isArea = idLower === "area-calculator" || slugLower === "area-calculator";
   const isSlope = idLower === "slope-calculator" || slugLower === "slope-calculator";
   const isPythagorean = idLower === "pythagorean-theorem-calculator" || slugLower === "pythagorean-theorem-calculator";
+  const isDistance = idLower === "distance-calculator" || slugLower === "distance-calculator";
 
   const CustomContent = (definition as any).ContentComponent || (
     isVat ? VatContent :
@@ -976,7 +977,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         </CalculatorErrorBoundary>
 
         {/* Related Calculators Links directly below calculator box */}
-        {!isPeriod && !isVolume && !isSlope && (
+        {!isPeriod && !isVolume && !isSlope && !isDistance && (
           <div className="no-print pt-3 pb-1 space-y-1.5 border-t border-slate-200/60 dark:border-slate-800">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
               RELATED CALCULATORS:
@@ -1016,7 +1017,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
 
           {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
-          {Boolean(definition.faqs && definition.faqs.length > 0) && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && !isPythagorean ? (
+          {Boolean(definition.faqs && definition.faqs.length > 0) && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && !isPythagorean && !isDistance ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions

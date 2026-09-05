@@ -241,6 +241,19 @@ details[open] > summary::before {
     height: auto !important;
   }
 
+  /* 9. Prevent unnecessary trailing blank pages from bottom padding / margins */
+  .prose, article, section, main, #main-web-app, .max-w-7xl, .space-y-8, .space-y-12, .space-y-6 {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  article > section:last-child {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
   @page {
     size: A4 portrait;
     margin: 10mm;
