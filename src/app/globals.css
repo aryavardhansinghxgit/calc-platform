@@ -240,6 +240,11 @@ details[open] > summary::before {
     page-break-inside: avoid !important;
   }
 
+  /* Prevent card overflow clips from forcing empty pages in Chromium print layout */
+  .overflow-hidden {
+    overflow: visible !important;
+  }
+
   /* 7. Ensure dark mode containers print with clean white background and dark text */
   .bg-slate-900, .bg-slate-950, .bg-zinc-900, .bg-zinc-950, .bg-zinc-900\/90 {
     background: #f8fafc !important;

@@ -78,8 +78,10 @@ export function GcfContent() {
 
           <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5">
             <h4 className="text-xs font-bold text-blue-600 uppercase">4. GCF-LCM Duality Theorem</h4>
-            <p className="font-mono text-sm font-bold">{"GCF(a, b) × LCM(a, b) = |a · b|"}</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">The product of two numbers equals GCF times LCM.</p>
+            <p className="font-mono text-sm font-bold">{"GCF(a, b) × LCM(a, b) = |a × b|"}</p>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              For two positive integers a and b, the product of their greatest common factor and least common multiple equals the product of the two integers.
+            </p>
           </div>
         </div>
       </section>
