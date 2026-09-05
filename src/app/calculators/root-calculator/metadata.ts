@@ -3,17 +3,17 @@ import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const root_calculatorMetadata: Metadata = {
   ...generateCalculatorMetadata({
-    title: "Root Calculator — Nth Root & Radical Simplifier with Steps",
-    description: "Free online Root Calculator & Radical Simplifier. Calculate n-th roots, square roots, cube roots, simplify radicals into exact form, evaluate fractional exponents, and explore step-by-step derivations.",
+    title: "Root Calculator & Radical Simplifier – nth Root Calculator",
+    description: "Calculate square roots, cube roots, and nth roots with exact radical forms, decimal answers, step-by-step simplification, fractional exponents, and more.",
     slug: "root-calculator",
   }),
   keywords: [
-    "Root Calculator",
-    "Nth Root Calculator",
-    "Square Root Calculator",
-    "Cube Root Calculator",
-    "Radical Simplifier",
-    "Simplify Radicals Calculator",
-    "Fractional Exponent Calculator"
+    "root calculator",
+    "nth root calculator",
+    "radical calculator",
+    "radical simplifier",
+    "square root calculator",
+    "cube root calculator",
+    "simplify radicals"
   ]
 };

@@ -32,6 +32,7 @@ export interface NewtonRaphsonStep {
   guess: number;
   nextGuess: number;
   error: number;
+  converged?: boolean;
 }
 
 export interface LongDivisionStep {
@@ -201,10 +202,18 @@ export function evaluateFractionalExponent(base: number, num: number, den: numbe
     val = Math.pow(base, effectiveExponent);
   }
 
+  // Safe numeric snapping ONLY when the value is sufficiently close to an integer (DEF-ROOT-06)
+  const nearest = Math.round(val);
+  if (Math.abs(val - nearest) < 1e-12) {
+    val = nearest;
+  }
+
   const simp = Number.isInteger(base) && base > 0 ? simplifyRadical(Math.pow(base, Math.abs(m)), n) : null;
   let exactForm = val.toString();
 
-  if (simp && simp.isPerfectPower) {
+  if (Number.isInteger(val)) {
+    exactForm = val.toString();
+  } else if (simp && simp.isPerfectPower) {
     exactForm = m < 0 ? `1 / ${simp.coefficient}` : `${simp.coefficient}`;
   } else if (simp) {
     exactForm = m < 0 ? `1 / (${simp.formattedText})` : simp.formattedText;
@@ -294,30 +303,70 @@ function gcd(a: number, b: number): number {
 
 /**
  * Generate Newton-Raphson iterations for finding ⁿ√S
- * Formula: x_{k+1} = 1/n * ((n - 1) * x_k + S / (x_k^(n - 1)))
+ * Formula: x_{k+1} = ((n - 1) * x_k + S / (x_k^(n - 1))) / n
  */
-export function calculateNewtonRaphson(S: number, n: number = 2, maxIter: number = 8): NewtonRaphsonStep[] {
-  if (S <= 0 || n <= 0) return [];
+export function calculateNewtonRaphson(S: number, n: number = 2, maxIter: number = 10): NewtonRaphsonStep[] {
+  const intN = Math.max(1, Math.round(n));
+  
+  // Handle S = 0 without division by zero
+  if (S === 0) {
+    return [{ iteration: 1, guess: 0, nextGuess: 0, error: 0, converged: true }];
+  }
+
+  // Handle n = 1 consistently
+  if (intN === 1) {
+    return [{ iteration: 1, guess: S, nextGuess: S, error: 0, converged: true }];
+  }
+
+  // Even root of negative number is not real
+  if (S < 0 && intN % 2 === 0) {
+    return [];
+  }
+
+  // Support negative odd roots
+  const isNegativeOdd = S < 0 && intN % 2 !== 0;
+  const absS = Math.abs(S);
+  const target = Math.pow(absS, 1 / intN);
+
+  // Robust finite positive initial guess based on scale/order of magnitude (2^(round(log2(S)/n)))
+  const log2Val = Math.log2(absS);
+  const expEst = Math.round(log2Val / intN);
+  let x = Math.pow(2, expEst);
+  if (!Number.isFinite(x) || x <= 0) {
+    x = Math.max(1, absS / intN);
+  }
+
   const steps: NewtonRaphsonStep[] = [];
 
-  // Initial guess x0: S / n or 1
-  let x = Math.max(1, S / n);
-  const target = Math.pow(S, 1 / n);
-
   for (let k = 0; k < maxIter; k++) {
-    const nextX = (1 / n) * ((n - 1) * x + S / Math.pow(x, n - 1));
-    const error = Math.abs(nextX - target);
+    const xPow = Math.pow(x, intN - 1);
+    if (!Number.isFinite(xPow) || xPow === 0) break;
+
+    let nextX = ((intN - 1) * x + absS / xPow) / intN;
+    if (!Number.isFinite(nextX)) break;
+
+    // Integer snapping if exact perfect power
+    const rounded = Math.round(nextX);
+    if (Math.abs(nextX - rounded) < 1e-12 && Math.abs(Math.pow(rounded, intN) - absS) < 1e-9) {
+      nextX = rounded;
+    }
+
+    const residual = Math.abs(Math.pow(nextX, intN) - absS);
+    const diff = Math.abs(nextX - x);
+    const isConverged = (diff < 1e-12 || Math.abs(nextX - target) < 1e-12) && residual < 1e-8;
+
+    const displayGuess = isNegativeOdd ? -x : x;
+    const displayNext = isNegativeOdd ? -nextX : nextX;
 
     steps.push({
       iteration: k + 1,
-      guess: x,
-      nextGuess: nextX,
-      error
+      guess: displayGuess,
+      nextGuess: displayNext,
+      error: residual,
+      converged: isConverged
     });
 
-    if (error < 1e-15 || Math.abs(nextX - x) < 1e-15) {
-      break;
-    }
+    if (isConverged) break;
     x = nextX;
   }
 

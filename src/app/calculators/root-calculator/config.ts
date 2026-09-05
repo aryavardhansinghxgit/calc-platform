@@ -9,7 +9,7 @@ export const root_calculatorConfig: CalculatorModuleDefinition = {
   slug: "root-calculator",
   category: "Math",
   subcategory: "General Math",
-  description: "Calculate n-th roots, square roots, cube roots, simplify radicals into exact form, evaluate fractional exponents, and explore step-by-step derivations.",
+  description: "Calculate square roots, cube roots, and general nth roots with exact radical simplification and precise decimal approximations. This calculator also simplifies radicals, evaluates fractional exponents, shows step-by-step mathematical work, and explains how roots and radicals are calculated.",
   iconName: "Radical",
   featured: true,
   keywords: [
