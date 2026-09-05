@@ -1,8 +1,11 @@
 /**
  * Mathematical logic engine for Circle Calculator & Circular Geometry Suite
+ * Strict domain validation, no silent clamping of invalid inputs, high precision.
  */
 
 export interface CoreCircleResult {
+  isValid: boolean;
+  errorMessage?: string;
   radius: number;
   diameter: number;
   circumference: number;
@@ -17,41 +20,54 @@ export function computeCoreCircle(
   val: number,
   precision: number = 4
 ): CoreCircleResult {
-  let r = 0;
-  const safeVal = Math.max(0.000001, val);
+  const fmt = (v: number) => parseFloat(v.toFixed(precision));
 
+  if (!isFinite(val) || val <= 0) {
+    return {
+      isValid: false,
+      errorMessage: "Input value must be a positive real number greater than 0.",
+      radius: 0,
+      diameter: 0,
+      circumference: 0,
+      area: 0,
+      exactAreaPi: "0π",
+      exactCircumferencePi: "0π",
+      stepText: "Please enter a valid positive numerical value."
+    };
+  }
+
+  let r = 0;
   if (givenType === "r") {
-    r = safeVal;
+    r = val;
   } else if (givenType === "d") {
-    r = safeVal / 2.0;
+    r = val / 2.0;
   } else if (givenType === "c") {
-    r = safeVal / (2.0 * Math.PI);
+    r = val / (2.0 * Math.PI);
   } else {
     // Area
-    r = Math.sqrt(safeVal / Math.PI);
+    r = Math.sqrt(val / Math.PI);
   }
 
   const d = 2.0 * r;
   const C = 2.0 * Math.PI * r;
   const A = Math.PI * r * r;
 
-  const fmt = (v: number) => parseFloat(v.toFixed(precision));
-
   const exactAreaPi = `${fmt(r * r)}π`;
   const exactCircumferencePi = `${fmt(2 * r)}π`;
 
   let stepText = "";
   if (givenType === "r") {
-    stepText = `1. Given Radius r = ${r}.\n2. Diameter d = 2r = 2 × ${r} = ${fmt(d)}.\n3. Circumference C = 2πr = 2 × π × ${r} = ${exactCircumferencePi} ≈ ${fmt(C)}.\n4. Area A = πr² = π × ${r}² = ${exactAreaPi} ≈ ${fmt(A)}.`;
+    stepText = `1. Given Radius r = ${val}.\n2. Diameter d = 2r = 2 × ${val} = ${fmt(d)}.\n3. Circumference C = 2πr = 2 × π × ${val} = ${exactCircumferencePi} ≈ ${fmt(C)}.\n4. Area A = πr² = π × ${val}² = ${exactAreaPi} ≈ ${fmt(A)}.`;
   } else if (givenType === "d") {
-    stepText = `1. Given Diameter d = ${val}.\n2. Radius r = d / 2 = ${fmt(r)}.\n3. Circumference C = πd = π × ${val} ≈ ${fmt(C)}.\n4. Area A = πr² = π × ${r}² ≈ ${fmt(A)}.`;
+    stepText = `1. Given Diameter d = ${val}.\n2. Radius r = d / 2 = ${val} / 2 = ${fmt(r)}.\n3. Circumference C = πd = π × ${val} ≈ ${fmt(C)}.\n4. Area A = πr² = π × ${fmt(r)}² = ${exactAreaPi} ≈ ${fmt(A)}.`;
   } else if (givenType === "c") {
-    stepText = `1. Given Circumference C = ${val}.\n2. Radius r = C / (2π) = ${val} / (2π) ≈ ${fmt(r)}.\n3. Diameter d = 2r ≈ ${fmt(d)}.\n4. Area A = πr² ≈ ${fmt(A)}.`;
+    stepText = `1. Given Circumference C = ${val}.\n2. Radius r = C / (2π) = ${val} / (2π) ≈ ${fmt(r)}.\n3. Diameter d = 2r = 2 × ${fmt(r)} ≈ ${fmt(d)}.\n4. Area A = πr² = π × ${fmt(r)}² ≈ ${fmt(A)}.`;
   } else {
     stepText = `1. Given Area A = ${val}.\n2. Radius r = √(A / π) = √(${val} / π) ≈ ${fmt(r)}.\n3. Diameter d = 2r ≈ ${fmt(d)}.\n4. Circumference C = 2πr ≈ ${fmt(C)}.`;
   }
 
   return {
+    isValid: true,
     radius: fmt(r),
     diameter: fmt(d),
     circumference: fmt(C),
@@ -63,44 +79,97 @@ export function computeCoreCircle(
 }
 
 export interface SectorResult {
+  isValid: boolean;
+  errorMessage?: string;
   arcLength: number;
   sectorArea: number;
   sectorPerimeter: number;
   angleRad: number;
+  angleDeg: number;
   stepText: string;
 }
 
 export function computeSector(
   radius: number,
-  angleDeg: number,
+  angle: number,
+  angleUnit: "deg" | "rad" = "deg",
   precision: number = 4
 ): SectorResult {
-  const r = Math.max(0.000001, radius);
-  const theta = Math.max(0, Math.min(360, angleDeg));
-  const angleRad = (theta * Math.PI) / 180.0;
-
-  const arcLength = (theta / 360.0) * 2.0 * Math.PI * r;
-  const sectorArea = (theta / 360.0) * Math.PI * r * r;
-  const sectorPerimeter = 2.0 * r + arcLength;
-
   const fmt = (v: number) => parseFloat(v.toFixed(precision));
 
-  const stepText = `1. Central Angle θ = ${theta}° (${fmt(angleRad)} rad).\n2. Arc Length L = (θ/360) × 2πr = (${theta}/360) × 2π × ${r} = ${fmt(arcLength)}.\n3. Sector Area A_sector = (θ/360) × πr² = (${theta}/360) × π × ${r}² = ${fmt(sectorArea)}.\n4. Sector Perimeter P = 2r + L = ${2*r} + ${fmt(arcLength)} = ${fmt(sectorPerimeter)}.`;
+  if (!isFinite(radius) || radius <= 0) {
+    return {
+      isValid: false,
+      errorMessage: "Radius must be a positive number greater than 0.",
+      arcLength: 0,
+      sectorArea: 0,
+      sectorPerimeter: 0,
+      angleRad: 0,
+      angleDeg: 0,
+      stepText: "Radius must be greater than 0."
+    };
+  }
+
+  let angleDeg = 0;
+  let angleRad = 0;
+
+  if (angleUnit === "rad") {
+    if (!isFinite(angle) || angle < 0 || angle > 2 * Math.PI + 1e-7) {
+      return {
+        isValid: false,
+        errorMessage: "Central angle in radians must be between 0 and 2π (≈ 6.2832 rad).",
+        arcLength: 0,
+        sectorArea: 0,
+        sectorPerimeter: 0,
+        angleRad: 0,
+        angleDeg: 0,
+        stepText: "Central angle out of range."
+      };
+    }
+    angleRad = angle;
+    angleDeg = (angle * 180.0) / Math.PI;
+  } else {
+    if (!isFinite(angle) || angle < 0 || angle > 360) {
+      return {
+        isValid: false,
+        errorMessage: "Central angle must be between 0° and 360°.",
+        arcLength: 0,
+        sectorArea: 0,
+        sectorPerimeter: 0,
+        angleRad: 0,
+        angleDeg: 0,
+        stepText: "Central angle out of range."
+      };
+    }
+    angleDeg = angle;
+    angleRad = (angle * Math.PI) / 180.0;
+  }
+
+  const arcLength = (angleDeg / 360.0) * 2.0 * Math.PI * radius;
+  const sectorArea = (angleDeg / 360.0) * Math.PI * radius * radius;
+  const sectorPerimeter = 2.0 * radius + arcLength;
+
+  const stepText = `1. Central Angle θ = ${fmt(angleDeg)}° (${fmt(angleRad)} rad), Radius r = ${radius}.\n2. Arc Length L = (θ/360) × 2πr = (${fmt(angleDeg)}/360) × 2π × ${radius} ≈ ${fmt(arcLength)}.\n3. Sector Area A_sector = (θ/360) × πr² = (${fmt(angleDeg)}/360) × π × ${radius}² ≈ ${fmt(sectorArea)}.\n4. Sector Perimeter P = 2r + L = 2(${radius}) + ${fmt(arcLength)} = ${fmt(sectorPerimeter)}.`;
 
   return {
+    isValid: true,
     arcLength: fmt(arcLength),
     sectorArea: fmt(sectorArea),
     sectorPerimeter: fmt(sectorPerimeter),
     angleRad: fmt(angleRad),
+    angleDeg: fmt(angleDeg),
     stepText
   };
 }
 
 export interface SegmentResult {
+  isValid: boolean;
+  errorMessage?: string;
   chordLength: number;
   sagitta: number;
   segmentArea: number;
   centralAngleDeg: number;
+  centralAngleRad: number;
   stepText: string;
 }
 
@@ -110,39 +179,98 @@ export function computeSegment(
   mode: "chord" | "angle",
   precision: number = 4
 ): SegmentResult {
-  const r = Math.max(0.000001, radius);
+  const fmt = (v: number) => parseFloat(v.toFixed(precision));
+
+  if (!isFinite(radius) || radius <= 0) {
+    return {
+      isValid: false,
+      errorMessage: "Radius must be a positive number greater than 0.",
+      chordLength: 0,
+      sagitta: 0,
+      segmentArea: 0,
+      centralAngleDeg: 0,
+      centralAngleRad: 0,
+      stepText: "Radius must be greater than 0."
+    };
+  }
+
   let c = 0;
   let thetaRad = 0;
   let thetaDeg = 0;
 
   if (mode === "angle") {
-    thetaDeg = Math.max(0, Math.min(360, chordOrAngle));
+    if (!isFinite(chordOrAngle) || chordOrAngle < 0 || chordOrAngle > 360) {
+      return {
+        isValid: false,
+        errorMessage: "Central angle must be between 0° and 360°.",
+        chordLength: 0,
+        sagitta: 0,
+        segmentArea: 0,
+        centralAngleDeg: 0,
+        centralAngleRad: 0,
+        stepText: "Central angle must be between 0° and 360°."
+      };
+    }
+    thetaDeg = chordOrAngle;
     thetaRad = (thetaDeg * Math.PI) / 180.0;
-    c = 2.0 * r * Math.sin(thetaRad / 2.0);
+    c = 2.0 * radius * Math.sin(thetaRad / 2.0);
   } else {
     // Chord mode
-    c = Math.min(2.0 * r, Math.max(0, chordOrAngle));
-    thetaRad = 2.0 * Math.asin(c / (2.0 * r));
-    thetaDeg = (thetaRad * 180.0) / Math.PI;
+    if (!isFinite(chordOrAngle) || chordOrAngle < 0) {
+      return {
+        isValid: false,
+        errorMessage: "Chord length must be a non-negative number.",
+        chordLength: 0,
+        sagitta: 0,
+        segmentArea: 0,
+        centralAngleDeg: 0,
+        centralAngleRad: 0,
+        stepText: "Chord length must be non-negative."
+      };
+    }
+    const maxChord = 2.0 * radius;
+    if (chordOrAngle > maxChord + 1e-9) {
+      return {
+        isValid: false,
+        errorMessage: `Geometrically impossible: Chord length (${chordOrAngle}) cannot exceed the circle diameter 2r = ${fmt(maxChord)}.`,
+        chordLength: fmt(chordOrAngle),
+        sagitta: 0,
+        segmentArea: 0,
+        centralAngleDeg: 0,
+        centralAngleRad: 0,
+        stepText: `Error: A chord cannot be longer than the diameter (${fmt(maxChord)}).`
+      };
+    }
+    c = Math.min(maxChord, chordOrAngle);
+    if (radius === 0) {
+      thetaRad = 0;
+      thetaDeg = 0;
+    } else {
+      const ratio = Math.min(1, Math.max(0, c / (2.0 * radius)));
+      thetaRad = 2.0 * Math.asin(ratio);
+      thetaDeg = (thetaRad * 180.0) / Math.PI;
+    }
   }
 
-  const sagitta = r - Math.sqrt(Math.max(0, r * r - (c / 2.0) * (c / 2.0)));
-  const segmentArea = 0.5 * r * r * (thetaRad - Math.sin(thetaRad));
+  const sagitta = radius - Math.sqrt(Math.max(0, radius * radius - (c / 2.0) * (c / 2.0)));
+  const segmentArea = 0.5 * radius * radius * (thetaRad - Math.sin(thetaRad));
 
-  const fmt = (v: number) => parseFloat(v.toFixed(precision));
-
-  const stepText = `1. Radius r = ${r}, Central Angle θ = ${fmt(thetaDeg)}° (${fmt(thetaRad)} rad).\n2. Chord Length c = 2r sin(θ/2) = ${fmt(c)}.\n3. Sagitta (Height h) = r - √(r² - (c/2)²) = ${fmt(sagitta)}.\n4. Segment Area A_segment = ½r²(θ - sin θ) = ${fmt(segmentArea)}.`;
+  const stepText = `1. Radius r = ${radius}, Chord Length c = ${fmt(c)}.\n2. Central Angle θ = 2 × asin(c / 2r) = ${fmt(thetaDeg)}° (${fmt(thetaRad)} rad).\n3. Sagitta (Height h) = r - √(r² - (c/2)²) = ${fmt(sagitta)}.\n4. Segment Area A_segment = ½r²(θ - sin θ) = ½(${radius}²)(${fmt(thetaRad)} - ${fmt(Math.sin(thetaRad))}) = ${fmt(segmentArea)}.`;
 
   return {
+    isValid: true,
     chordLength: fmt(c),
     sagitta: fmt(sagitta),
     segmentArea: fmt(segmentArea),
     centralAngleDeg: fmt(thetaDeg),
+    centralAngleRad: fmt(thetaRad),
     stepText
   };
 }
 
 export interface AnnulusResult {
+  isValid: boolean;
+  errorMessage?: string;
   outerArea: number;
   innerArea: number;
   annulusArea: number;
@@ -156,8 +284,36 @@ export function computeAnnulus(
   innerR: number,
   precision: number = 4
 ): AnnulusResult {
-  const R = Math.max(0.000002, Math.max(outerR, innerR));
-  const r = Math.max(0.000001, Math.min(outerR, innerR));
+  const fmt = (v: number) => parseFloat(v.toFixed(precision));
+
+  if (!isFinite(outerR) || !isFinite(innerR) || outerR <= 0 || innerR < 0) {
+    return {
+      isValid: false,
+      errorMessage: "Radii must be valid numbers with Outer Radius R > 0 and Inner Radius r ≥ 0.",
+      outerArea: 0,
+      innerArea: 0,
+      annulusArea: 0,
+      wallThickness: 0,
+      avgRadius: 0,
+      stepText: "Please enter valid radii."
+    };
+  }
+
+  if (outerR <= innerR) {
+    return {
+      isValid: false,
+      errorMessage: `Outer radius R (${outerR}) must be strictly greater than inner radius r (${innerR}).`,
+      outerArea: fmt(Math.PI * outerR * outerR),
+      innerArea: fmt(Math.PI * innerR * innerR),
+      annulusArea: 0,
+      wallThickness: 0,
+      avgRadius: fmt((outerR + innerR) / 2.0),
+      stepText: "Error: Outer radius must be greater than inner radius (R > r)."
+    };
+  }
+
+  const R = outerR;
+  const r = innerR;
 
   const outerArea = Math.PI * R * R;
   const innerArea = Math.PI * r * r;
@@ -165,11 +321,10 @@ export function computeAnnulus(
   const wallThickness = R - r;
   const avgRadius = (R + r) / 2.0;
 
-  const fmt = (v: number) => parseFloat(v.toFixed(precision));
-
-  const stepText = `1. Outer Radius R = ${R}, Inner Radius r = ${r}.\n2. Outer Area A_outer = πR² = ${fmt(outerArea)}.\n3. Inner Area A_inner = πr² = ${fmt(innerArea)}.\n4. Annulus Area = π(R² - r²) = ${fmt(annulusArea)}.\n5. Wall Thickness t = R - r = ${fmt(wallThickness)}.`;
+  const stepText = `1. Outer Radius R = ${R}, Inner Radius r = ${r}.\n2. Outer Area A_outer = πR² = π × ${R}² ≈ ${fmt(outerArea)}.\n3. Inner Area A_inner = πr² = π × ${r}² ≈ ${fmt(innerArea)}.\n4. Annulus Area = π(R² - r²) = π(${R * R} - ${r * r}) = ${fmt(R * R - r * r)}π ≈ ${fmt(annulusArea)}.\n5. Wall Thickness t = R - r = ${fmt(wallThickness)}.\n6. Average Radius = (R + r)/2 = ${fmt(avgRadius)}.`;
 
   return {
+    isValid: true,
     outerArea: fmt(outerArea),
     innerArea: fmt(innerArea),
     annulusArea: fmt(annulusArea),
@@ -180,6 +335,8 @@ export function computeAnnulus(
 }
 
 export interface CircleEquationResult {
+  isValid: boolean;
+  errorMessage?: string;
   standardForm: string;
   generalForm: string;
   center: { h: number; k: number };
@@ -196,31 +353,54 @@ export function computeCircleEquation(
   r: number,
   precision: number = 4
 ): CircleEquationResult {
-  const safeR = Math.max(0.000001, r);
-  const rSq = safeR * safeR;
+  const fmt = (v: number) => parseFloat(v.toFixed(precision));
 
+  if (!isFinite(h) || !isFinite(k) || !isFinite(r) || r <= 0) {
+    return {
+      isValid: false,
+      errorMessage: "Radius r must be a positive number greater than 0.",
+      standardForm: "Invalid",
+      generalForm: "Invalid",
+      center: { h: 0, k: 0 },
+      radius: 0,
+      D: 0,
+      E: 0,
+      F: 0,
+      stepText: "Radius must be greater than 0."
+    };
+  }
+
+  const rSq = r * r;
   const D = -2 * h;
   const E = -2 * k;
   const F = h * h + k * k - rSq;
 
-  const fmt = (v: number) => parseFloat(v.toFixed(precision));
+  // Standard Form: (x - h)² + (y - k)² = r²
+  const hPart = h === 0 ? "x²" : h > 0 ? `(x - ${fmt(h)})²` : `(x + ${fmt(Math.abs(h))})²`;
+  const kPart = k === 0 ? "y²" : k > 0 ? `(y - ${fmt(k)})²` : `(y + ${fmt(Math.abs(k))})²`;
+  const standardForm = `${hPart} + ${kPart} = ${fmt(rSq)}`;
 
-  const hStr = h >= 0 ? `- ${fmt(h)}` : `+ ${fmt(Math.abs(h))}`;
-  const kStr = k >= 0 ? `- ${fmt(k)}` : `+ ${fmt(Math.abs(k))}`;
-  const standardForm = `(x ${hStr})² + (y ${kStr})² = ${fmt(rSq)}`;
+  // General Form: x² + y² + Dx + Ey + F = 0
+  let generalForm = "x² + y²";
+  if (D !== 0) {
+    generalForm += D > 0 ? ` + ${fmt(D)}x` : ` - ${fmt(Math.abs(D))}x`;
+  }
+  if (E !== 0) {
+    generalForm += E > 0 ? ` + ${fmt(E)}y` : ` - ${fmt(Math.abs(E))}y`;
+  }
+  if (F !== 0) {
+    generalForm += F > 0 ? ` + ${fmt(F)}` : ` - ${fmt(Math.abs(F))}`;
+  }
+  generalForm += " = 0";
 
-  const dSign = D >= 0 ? `+ ${fmt(D)}` : `- ${fmt(Math.abs(D))}`;
-  const eSign = E >= 0 ? `+ ${fmt(E)}` : `- ${fmt(Math.abs(E))}`;
-  const fSign = F >= 0 ? `+ ${fmt(F)}` : `- ${fmt(Math.abs(F))}`;
-  const generalForm = `x² + y² ${dSign}x ${eSign}y ${fSign} = 0`;
-
-  const stepText = `1. Center (h, k) = (${h}, ${k}), Radius r = ${safeR}.\n2. Standard Form: (x - h)² + (y - k)² = r² => ${standardForm}.\n3. General Form: x² + y² + Dx + Ey + F = 0 where D = ${D}, E = ${E}, F = ${fmt(F)}.`;
+  const stepText = `1. Center (h, k) = (${h}, ${k}), Radius r = ${r}.\n2. Standard Form: (x - h)² + (y - k)² = r² => ${standardForm}.\n3. Expanding: x² - 2hx + h² + y² - 2ky + k² = r²\n   x² + y² + (${fmt(D)})x + (${fmt(E)})y + (${fmt(F)}) = 0\n   => ${generalForm}.`;
 
   return {
+    isValid: true,
     standardForm,
     generalForm,
     center: { h: fmt(h), k: fmt(k) },
-    radius: fmt(safeR),
+    radius: fmt(r),
     D: fmt(D),
     E: fmt(E),
     F: fmt(F),
@@ -229,6 +409,9 @@ export function computeCircleEquation(
 }
 
 export interface ThreePointCircleResult {
+  isValid: boolean;
+  isCollinear: boolean;
+  errorMessage?: string;
   center: { h: number; k: number };
   radius: number;
   area: number;
@@ -242,15 +425,49 @@ export function computeThreePointCircle(
   x3: number, y3: number,
   precision: number = 4
 ): ThreePointCircleResult {
-  const d = 2.0 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
-  if (Math.abs(d) < 1e-9) {
-    // Collinear fallback
+  const fmt = (v: number) => parseFloat(v.toFixed(precision));
+
+  if (![x1, y1, x2, y2, x3, y3].every(isFinite)) {
     return {
+      isValid: false,
+      isCollinear: false,
+      errorMessage: "All coordinates must be valid finite numbers.",
       center: { h: 0, k: 0 },
       radius: 0,
       area: 0,
       circumference: 0,
-      stepText: "Points are collinear! No unique circumcircle exists."
+      stepText: "Invalid coordinates entered."
+    };
+  }
+
+  // Check duplicate points
+  const d12 = (x1 - x2) ** 2 + (y1 - y2) ** 2;
+  const d23 = (x2 - x3) ** 2 + (y2 - y3) ** 2;
+  const d31 = (x3 - x1) ** 2 + (y3 - y1) ** 2;
+  if (d12 < 1e-12 || d23 < 1e-12 || d31 < 1e-12) {
+    return {
+      isValid: false,
+      isCollinear: true,
+      errorMessage: "Points must be distinct. At least two points are coincident.",
+      center: { h: 0, k: 0 },
+      radius: 0,
+      area: 0,
+      circumference: 0,
+      stepText: "Duplicate points: a unique circumcircle requires three distinct points."
+    };
+  }
+
+  const d = 2.0 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
+  if (Math.abs(d) < 1e-11) {
+    return {
+      isValid: false,
+      isCollinear: true,
+      errorMessage: "Points are collinear! No unique circumcircle exists for points along a straight line.",
+      center: { h: 0, k: 0 },
+      radius: 0,
+      area: 0,
+      circumference: 0,
+      stepText: "Collinear points: the cross product determinant equals zero; circumradius is infinite."
     };
   }
 
@@ -269,11 +486,11 @@ export function computeThreePointCircle(
   const area = Math.PI * r * r;
   const circumference = 2.0 * Math.PI * r;
 
-  const fmt = (v: number) => parseFloat(v.toFixed(precision));
-
-  const stepText = `1. Points: (${x1},${y1}), (${x2},${y2}), (${x3},${y3}).\n2. Circumcenter (h, k) = (${fmt(ux)}, ${fmt(uy)}).\n3. Circumradius R = ${fmt(r)}.\n4. Area A = πR² = ${fmt(area)}, Circumference C = ${fmt(circumference)}.`;
+  const stepText = `1. Points: P1(${x1}, ${y1}), P2(${x2}, ${y2}), P3(${x3}, ${y3}).\n2. Perpendicular Bisector Intersection (Circumcenter):\n   h = ${fmt(ux)}, k = ${fmt(uy)}.\n3. Circumradius R = √[(x₁ - h)² + (y₁ - k)²] = ${fmt(r)}.\n4. Circumcircle Area A = πR² ≈ ${fmt(area)}.\n5. Circumference C = 2πR ≈ ${fmt(circumference)}.`;
 
   return {
+    isValid: true,
+    isCollinear: false,
     center: { h: fmt(ux), k: fmt(uy) },
     radius: fmt(r),
     area: fmt(area),
@@ -282,22 +499,42 @@ export function computeThreePointCircle(
   };
 }
 
-export function convertCircleUnits(radiusInMeters: number, precision: number = 4) {
+export const UNIT_FACTORS_METERS: Record<string, number> = {
+  meters: 1.0,
+  cm: 0.01,
+  mm: 0.001,
+  feet: 0.3048,
+  inches: 0.0254,
+  yards: 0.9144,
+  km: 1000.0,
+  miles: 1609.344
+};
+
+export function convertCircleUnits(
+  inputRadius: number,
+  baseUnit: string = "meters",
+  precision: number = 4
+) {
   const fmt = (v: number) => parseFloat(v.toFixed(precision));
+  const factorToBase = UNIT_FACTORS_METERS[baseUnit] || 1.0;
+  const r_m = Math.max(0, inputRadius) * factorToBase;
 
-  const r_m = radiusInMeters;
-  const d_m = 2 * r_m;
-  const c_m = 2 * Math.PI * r_m;
-  const a_m2 = Math.PI * r_m * r_m;
+  const units = ["meters", "cm", "mm", "feet", "inches", "yards", "km", "miles"] as const;
+  const result: Record<string, { r: number; d: number; c: number; a: number }> = {};
 
-  return {
-    meters: { r: fmt(r_m), d: fmt(d_m), c: fmt(c_m), a: fmt(a_m2) },
-    cm: { r: fmt(r_m * 100), d: fmt(d_m * 100), c: fmt(c_m * 100), a: fmt(a_m2 * 10000) },
-    mm: { r: fmt(r_m * 1000), d: fmt(d_m * 1000), c: fmt(c_m * 1000), a: fmt(a_m2 * 1000000) },
-    feet: { r: fmt(r_m * 3.28084), d: fmt(d_m * 3.28084), c: fmt(c_m * 3.28084), a: fmt(a_m2 * 10.7639) },
-    inches: { r: fmt(r_m * 39.3701), d: fmt(d_m * 39.3701), c: fmt(c_m * 39.3701), a: fmt(a_m2 * 1550) },
-    yards: { r: fmt(r_m * 1.09361), d: fmt(d_m * 1.09361), c: fmt(c_m * 1.09361), a: fmt(a_m2 * 1.19599) },
-    km: { r: fmt(r_m / 1000), d: fmt(d_m / 1000), c: fmt(c_m / 1000), a: fmt(a_m2 / 1000000) },
-    miles: { r: fmt(r_m / 1609.34), d: fmt(d_m / 1609.34), c: fmt(c_m / 1609.34), a: fmt(a_m2 / 2589988) }
-  };
+  for (const u of units) {
+    const uFactor = UNIT_FACTORS_METERS[u];
+    const r_u = r_m / uFactor;
+    const d_u = 2.0 * r_u;
+    const c_u = 2.0 * Math.PI * r_u;
+    const a_u = Math.PI * r_u * r_u;
+    result[u] = {
+      r: fmt(r_u),
+      d: fmt(d_u),
+      c: fmt(c_u),
+      a: fmt(a_u)
+    };
+  }
+
+  return result as Record<(typeof units)[number], { r: number; d: number; c: number; a: number }>;
 }
