@@ -265,6 +265,38 @@ function isPrimeNumber(n: number): boolean {
  * Factor Quadratic Trinomial ax^2 + bx + c -> (px + q)(rx + s)
  */
 export function factorQuadraticTrinomial(a: number, b: number, c: number): QuadraticFactoringResult {
+  // Guard against non-quadratic linear or constant cases when a === 0
+  if (a === 0) {
+    if (b !== 0) {
+      const root = -c / b;
+      const bStr = b === 1 ? "x" : b === -1 ? "-x" : `${b}x`;
+      const cStr = c === 0 ? "" : c > 0 ? ` + ${c}` : ` - ${Math.abs(c)}`;
+      return {
+        a, b, c,
+        isFactorable: false,
+        factoredString: `Linear expression: ${bStr}${cStr} = 0 (Not quadratic)`,
+        roots: [Number(root.toFixed(4))],
+        p: 0, q: b, r: 0, s: c
+      };
+    } else if (c !== 0) {
+      return {
+        a, b, c,
+        isFactorable: false,
+        factoredString: `Constant equation: ${c} = 0 (No solution)`,
+        roots: [],
+        p: 0, q: 0, r: 0, s: c
+      };
+    } else {
+      return {
+        a, b, c,
+        isFactorable: false,
+        factoredString: "0 = 0 (Identity — Infinitely many solutions)",
+        roots: [],
+        p: 0, q: 0, r: 0, s: 0
+      };
+    }
+  }
+
   const disc = b * b - 4 * a * c;
 
   if (disc < 0) {
@@ -279,11 +311,13 @@ export function factorQuadraticTrinomial(a: number, b: number, c: number): Quadr
 
   const sqrtDisc = Math.round(Math.sqrt(disc));
   if (sqrtDisc * sqrtDisc !== disc) {
+    const r1 = (-b + Math.sqrt(disc)) / (2 * a);
+    const r2 = (-b - Math.sqrt(disc)) / (2 * a);
     return {
       a, b, c,
       isFactorable: false,
       factoredString: "Irreducible over Integers (Discriminant not perfect square)",
-      roots: [(-b + Math.sqrt(disc)) / (2 * a), (-b - Math.sqrt(disc)) / (2 * a)],
+      roots: [Number(r1.toFixed(4)), Number(r2.toFixed(4))],
       p: a, q: 0, r: 1, s: 0
     };
   }
@@ -312,19 +346,32 @@ export function factorQuadraticTrinomial(a: number, b: number, c: number): Quadr
   const part1 = formatLinearTerm(p, q);
   const part2 = formatLinearTerm(r, s);
 
-  if (scale === 1) {
-    factoredString = `${part1}${part2}`;
-  } else if (scale === -1) {
-    factoredString = `-${part1}${part2}`;
+  if (part1 === part2) {
+    if (scale === 1) {
+      factoredString = `${part1}²`;
+    } else if (scale === -1) {
+      factoredString = `-${part1}²`;
+    } else {
+      factoredString = `${scale}${part1}²`;
+    }
   } else {
-    factoredString = `${scale}${part1}${part2}`;
+    if (scale === 1) {
+      factoredString = `${part1}${part2}`;
+    } else if (scale === -1) {
+      factoredString = `-${part1}${part2}`;
+    } else {
+      factoredString = `${scale}${part1}${part2}`;
+    }
   }
+
+  const rawRoots = [(-b + sqrtDisc) / (2 * a), (-b - sqrtDisc) / (2 * a)];
+  const uniqueRoots = sqrtDisc === 0 ? [rawRoots[0]] : rawRoots;
 
   return {
     a, b, c,
     isFactorable: true,
     factoredString,
-    roots: [(-b + sqrtDisc) / (2 * a), (-b - sqrtDisc) / (2 * a)],
+    roots: uniqueRoots.map(v => Number(v.toFixed(4))),
     p, q, r, s
   };
 }
