@@ -183,8 +183,8 @@ details[open] > summary::before {
     color: #000000 !important;
   }
 
-  /* 4. Force grid containers and columns to full width, excluding dedicated calendar grids */
-  .grid:not(.calendar-grid) {
+  /* 4. Force grid containers and columns to full width, excluding dedicated calendar and matrix grids */
+  .grid:not(.calendar-grid):not(.matrix-grid) {
     display: block !important;
   }
 
@@ -194,6 +194,22 @@ details[open] > summary::before {
     gap: 4px !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
+  }
+
+  .matrix-grid {
+    display: grid !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .matrix-grid input {
+    border: 1px solid #cbd5e1 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 2px 4px !important;
+    font-size: 9pt !important;
+    text-align: center !important;
+    box-shadow: none !important;
   }
 
   .lg\:col-span-12,

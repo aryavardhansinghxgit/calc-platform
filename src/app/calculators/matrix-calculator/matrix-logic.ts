@@ -190,15 +190,47 @@ export function determinantMatrix(A: Matrix): number {
     );
   }
 
-  // Laplace Cofactor Expansion along Row 0 for n >= 4
-  let det = 0;
-  for (let j = 0; j < n; j++) {
-    const subMatrix = A.slice(1).map((row) => row.filter((_, colIdx) => colIdx !== j));
-    const sign = j % 2 === 0 ? 1 : -1;
-    det += sign * A[0][j] * determinantMatrix(subMatrix);
+  // Gaussian Elimination with Partial Pivoting for n >= 4 (O(n³) vs O(n!) Laplace)
+  const mat = A.map((r) => [...r]);
+  let sign = 1;
+  let det = 1;
+
+  for (let i = 0; i < n; i++) {
+    let maxRow = i;
+    let maxVal = Math.abs(mat[i][i]);
+    for (let k = i + 1; k < n; k++) {
+      if (Math.abs(mat[k][i]) > maxVal) {
+        maxVal = Math.abs(mat[k][i]);
+        maxRow = k;
+      }
+    }
+
+    if (maxVal < 1e-12) return 0;
+
+    if (maxRow !== i) {
+      const tmp = mat[i];
+      mat[i] = mat[maxRow];
+      mat[maxRow] = tmp;
+      sign = -sign;
+    }
+
+    const pivot = mat[i][i];
+    det *= pivot;
+
+    for (let k = i + 1; k < n; k++) {
+      const factor = mat[k][i] / pivot;
+      for (let j = i; j < n; j++) {
+        mat[k][j] -= factor * mat[i][j];
+      }
+    }
   }
 
-  return det;
+  const result = sign * det;
+  const isAllInt = A.every((r) => r.every((v) => Number.isInteger(v)));
+  if (isAllInt && Math.abs(result - Math.round(result)) < 1e-6) {
+    return Math.round(result);
+  }
+  return parseFloat(result.toFixed(6));
 }
 
 /**
@@ -358,7 +390,7 @@ export function solveLinearSystem(A: Matrix, b: number[]): LinearSystemResult {
   }
 
   if (rankA === cols) {
-    const solutionVector = rref.map((row) => row[cols]);
+    const solutionVector = rref.slice(0, cols).map((row) => row[cols]);
     const solStr = solutionVector.map((val, i) => `x${i + 1} = ${val}`).join(", ");
     return {
       hasSolution: true,

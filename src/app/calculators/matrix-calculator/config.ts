@@ -5,11 +5,11 @@ import { MatrixContent } from "@/components/calculator/matrix/MatrixContent";
 
 export const matrix_calculatorConfig: CalculatorModuleDefinition = {
   id: "matrix-calculator",
-  title: "Matrix Calculator & Linear Algebra Suite",
+  title: "Matrix Calculator & Linear Algebra Solver",
   slug: "matrix-calculator",
   category: "Math",
   subcategory: "General Math",
-  description: "Perform matrix arithmetic (A+B, A-B, A×B, A⊗B), determinants, inverse matrices, RREF Gauss-Jordan reduction, linear system solving (Ax=b), and eigenvalue analytics for up to 10×10 matrices.",
+  description: "Use this free matrix calculator to perform common linear algebra calculations without doing every row and column operation by hand. Enter one or two matrices, choose the operation you need, and get the calculated result with mathematical details. The calculator supports matrix addition, subtraction, multiplication, transpose, determinant, inverse, rank, trace, reduced row echelon form (RREF), and systems of linear equations in the form Ax = b.",
   iconName: "Grid",
   featured: true,
   keywords: [
@@ -22,7 +22,7 @@ export const matrix_calculatorConfig: CalculatorModuleDefinition = {
     "Linear Algebra Solver"
   ],
   priority: 1,
-  relatedCalculators: ["scientific-calculator", "big-number-calculator", "vector-calculator"],
+  relatedCalculators: ["scientific-calculator", "slope-calculator", "distance-calculator", "quadratic-formula-calculator"],
   formulaDescription: "Linear Algebra & Gauss-Jordan Reduction",
   faqs: [],
   CustomComponent: MatrixCalculator,

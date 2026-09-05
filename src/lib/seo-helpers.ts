@@ -14,12 +14,14 @@ export interface CalculatorSeoProps {
   faqs?: Array<{ question: string; answer: string }>;
 }
 
+const DEFAULT_BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.com";
+
 export function generateCalculatorMetadata({
   title,
   description,
   slug,
   keywords,
-  baseUrl = "https://calcplatform.example.com",
+  baseUrl = DEFAULT_BASE_URL,
 }: CalculatorSeoProps) {
   const canonicalUrl = `${baseUrl}/calculators/${slug}`;
 
@@ -57,7 +59,7 @@ export function generateJsonLdSchema({
   description,
   slug,
   category = "Calculators",
-  baseUrl = "https://calcplatform.example.com",
+  baseUrl = DEFAULT_BASE_URL,
   faqs = [],
 }: CalculatorSeoProps) {
   const canonicalUrl = `${baseUrl}/calculators/${slug}`;

@@ -3,8 +3,8 @@ import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const matrix_calculatorMetadata: Metadata = {
   ...generateCalculatorMetadata({
-    title: "Matrix Calculator — Matrix Arithmetic, Determinants, Inverses & RREF",
-    description: "Free online Matrix Calculator & Linear Algebra Suite. Compute matrix multiplication, addition, determinants, inverses, RREF Gauss-Jordan reduction, linear system solving (Ax=b), and eigenvalues for up to 10×10 matrices.",
+    title: "Matrix Calculator – Multiply, Add, Inverse, Determinant & RREF",
+    description: "Free matrix calculator for matrix multiplication, addition, subtraction, determinant, inverse, transpose, rank, trace, RREF and solving Ax = b. See results and mathematical steps instantly.",
     slug: "matrix-calculator"
   }),
   keywords: [

@@ -1,5 +1,6 @@
 async function checkSchema() {
-  const res = await fetch('http://localhost:3000/calculators/distance-calculator');
+  const url = process.argv[2] || 'http://localhost:3000/calculators/matrix-calculator';
+  const res = await fetch(url);
   const html = await res.text();
   const scripts = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g);
   console.log('JSON-LD scripts found:', scripts ? scripts.length : 0);
