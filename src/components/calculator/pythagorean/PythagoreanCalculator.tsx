@@ -7,23 +7,34 @@ import {
   ChevronDown,
   ChevronUp,
   Zap,
-  Triangle as TriangleIcon,
-  Maximize2,
   CheckCircle2,
-  Sparkles
+  Copy,
+  Check,
+  Download,
+  Printer,
+  RotateCcw,
+  AlertCircle
 } from "lucide-react";
 import {
   computePythagoreanCore,
+  computeSideAngle,
   compute3DPythagorean,
+  computeEuclidTriple,
   convertPythagoreanUnits,
   PythagoreanCoreResult,
-  Pythagorean3DResult
+  SideAngleResult,
+  Pythagorean3DResult,
+  EuclidTripleResult,
+  ConvertedUnitsResult,
+  PythagoreanLengthUnit
 } from "@/app/calculators/pythagorean-theorem-calculator/pythagorean-logic";
 
 export interface SavedPythagoreanItem {
   id: string;
+  module: "core" | "sa" | "3d" | "gen" | "conv";
   title: string;
   inputs: string;
+  inputPayload: Record<string, any>;
   operation: string;
   result: string;
   resultsList?: string[];
@@ -31,7 +42,11 @@ export interface SavedPythagoreanItem {
 }
 
 export function PythagoreanCalculator() {
-  // Card 1: Core Inputs (Enter any 2 of a, b, c)
+  // Precision state
+  const [precision, setPrecision] = useState<number>(4);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  // Card 1: Core Inputs (Enter any 2 of a, b, c or verify all 3)
   const [coreA, setCoreA] = useState<string>("3");
   const [coreB, setCoreB] = useState<string>("4");
   const [coreC, setCoreC] = useState<string>("");
@@ -39,23 +54,21 @@ export function PythagoreanCalculator() {
 
   // Card 2: Side + Angle Inputs
   const [saSideType, setSaSideType] = useState<"a" | "b" | "c">("a");
-  const [saSideVal, setSaSideVal] = useState<number>(5);
-  const [saAngleDeg, setSaAngleDeg] = useState<number>(30);
+  const [saSideVal, setSaSideVal] = useState<string>("5");
+  const [saAngleDeg, setSaAngleDeg] = useState<string>("30");
 
-  // Card 3: 3D Distance Inputs
-  const [distX, setDistX] = useState<number>(3);
-  const [distY, setDistY] = useState<number>(4);
-  const [distZ, setDistZ] = useState<number>(12);
+  // Card 3: 3D Distance Inputs (supports negative coordinate offsets)
+  const [distX, setDistX] = useState<string>("3");
+  const [distY, setDistY] = useState<string>("4");
+  const [distZ, setDistZ] = useState<string>("12");
 
   // Card 4: Euclid Generator Inputs
-  const [euclidM, setEuclidM] = useState<number>(2);
-  const [euclidN, setEuclidN] = useState<number>(1);
+  const [euclidM, setEuclidM] = useState<string>("2");
+  const [euclidN, setEuclidN] = useState<string>("1");
 
   // Card 5: Converter Inputs
-  const [convVal, setConvVal] = useState<number>(5);
-  const [convUnit, setConvUnit] = useState<"meters" | "cm" | "mm" | "feet" | "inches">("meters");
-
-  const [precision1, setPrecision1] = useState<number>(4);
+  const [convVal, setConvVal] = useState<string>("5");
+  const [convUnit, setConvUnit] = useState<PythagoreanLengthUnit>("meters");
 
   // Saved items states
   const [savedCoreItems, setSavedCoreItems] = useState<SavedPythagoreanItem[]>([]);
@@ -79,6 +92,16 @@ export function PythagoreanCalculator() {
     setExpandedIds(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
+  const handleCopyText = (text: string, key: string) => {
+    try {
+      navigator.clipboard.writeText(text);
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey(null), 2000);
+    } catch (e) {
+      console.error("Clipboard copy failed", e);
+    }
+  };
+
   useEffect(() => {
     try {
       const s1 = localStorage.getItem("saved_pyth_core"); if (s1) setSavedCoreItems(JSON.parse(s1));
@@ -91,84 +114,103 @@ export function PythagoreanCalculator() {
 
   // Card 1 Calculations
   const resultCore: PythagoreanCoreResult = useMemo(() => {
-    const numA = parseFloat(coreA);
-    const numB = parseFloat(coreB);
-    const numC = parseFloat(coreC);
+    const numA = coreA.trim() === "" ? undefined : parseFloat(coreA);
+    const numB = coreB.trim() === "" ? undefined : parseFloat(coreB);
+    const numC = coreC.trim() === "" ? undefined : parseFloat(coreC);
 
-    const valA = !isNaN(numA) && numA > 0 ? numA : undefined;
-    const valB = !isNaN(numB) && numB > 0 ? numB : undefined;
-    const valC = !isNaN(numC) && numC > 0 ? numC : undefined;
-
-    return computePythagoreanCore(valA, valB, valC, precision1);
-  }, [coreA, coreB, coreC, precision1]);
+    return computePythagoreanCore(numA, numB, numC, precision);
+  }, [coreA, coreB, coreC, precision]);
 
   // Card 2 Calculations (Side + Angle)
-  const resultSA: PythagoreanCoreResult = useMemo(() => {
-    const rad = (saAngleDeg * Math.PI) / 180.0;
-    let a = 0; let b = 0; let c = 0;
-
-    if (saSideType === "c") {
-      c = saSideVal;
-      a = c * Math.sin(rad);
-      b = c * Math.cos(rad);
-    } else if (saSideType === "a") {
-      a = saSideVal;
-      c = a / Math.sin(rad);
-      b = Math.sqrt(Math.max(0, c * c - a * a));
-    } else {
-      b = saSideVal;
-      c = b / Math.cos(rad);
-      a = Math.sqrt(Math.max(0, c * c - b * b));
-    }
-
-    return computePythagoreanCore(a, b, c, precision1);
-  }, [saSideType, saSideVal, saAngleDeg, precision1]);
+  const resultSA: SideAngleResult = useMemo(() => {
+    const sideNum = parseFloat(saSideVal);
+    const angleNum = parseFloat(saAngleDeg);
+    return computeSideAngle(saSideType, sideNum, angleNum, precision);
+  }, [saSideType, saSideVal, saAngleDeg, precision]);
 
   // Card 3 Calculations
   const result3D: Pythagorean3DResult = useMemo(() => {
-    return compute3DPythagorean(distX, distY, distZ, precision1);
-  }, [distX, distY, distZ, precision1]);
+    const x = parseFloat(distX) || 0;
+    const y = parseFloat(distY) || 0;
+    const z = parseFloat(distZ) || 0;
+    return compute3DPythagorean(x, y, z, precision);
+  }, [distX, distY, distZ, precision]);
 
   // Card 4 Euclid Triple Calculations
-  const resultEuclid = useMemo(() => {
-    const m = Math.max(2, Math.round(euclidM));
-    const n = Math.max(1, Math.min(m - 1, Math.round(euclidN)));
-    const a = m * m - n * n;
-    const b = 2 * m * n;
-    const c = m * m + n * n;
-    return { m, n, a, b, c };
+  const resultEuclid: EuclidTripleResult = useMemo(() => {
+    const m = parseFloat(euclidM);
+    const n = parseFloat(euclidN);
+    return computeEuclidTriple(m, n);
   }, [euclidM, euclidN]);
 
   // Card 5 Converter Calculations
-  const resultConv = useMemo(() => {
-    let m = convVal;
-    if (convUnit === "cm") m = convVal / 100;
-    else if (convUnit === "mm") m = convVal / 1000;
-    else if (convUnit === "feet") m = convVal * 0.3048;
-    else if (convUnit === "inches") m = convVal * 0.0254;
-    return convertPythagoreanUnits(m, precision1);
-  }, [convVal, convUnit, precision1]);
+  const resultConv: ConvertedUnitsResult = useMemo(() => {
+    const val = parseFloat(convVal) || 0;
+    return convertPythagoreanUnits(val, convUnit, precision);
+  }, [convVal, convUnit, precision]);
 
   // Presets Handlers
   const handleApplyPreset = (aStr: string, bStr: string, cStr: string) => {
     setCoreA(aStr); setCoreB(bStr); setCoreC(cStr);
   };
 
+  // Restore Handlers for Saved History
+  const handleRestoreCore = (item: SavedPythagoreanItem) => {
+    if (item.inputPayload) {
+      setCoreA(item.inputPayload.coreA ?? "");
+      setCoreB(item.inputPayload.coreB ?? "");
+      setCoreC(item.inputPayload.coreC ?? "");
+    }
+  };
+
+  const handleRestoreSA = (item: SavedPythagoreanItem) => {
+    if (item.inputPayload) {
+      setSaSideType(item.inputPayload.saSideType ?? "a");
+      setSaSideVal(item.inputPayload.saSideVal ?? "5");
+      setSaAngleDeg(item.inputPayload.saAngleDeg ?? "30");
+    }
+  };
+
+  const handleRestore3D = (item: SavedPythagoreanItem) => {
+    if (item.inputPayload) {
+      setDistX(item.inputPayload.distX ?? "3");
+      setDistY(item.inputPayload.distY ?? "4");
+      setDistZ(item.inputPayload.distZ ?? "12");
+    }
+  };
+
+  const handleRestoreGen = (item: SavedPythagoreanItem) => {
+    if (item.inputPayload) {
+      setEuclidM(item.inputPayload.euclidM ?? "2");
+      setEuclidN(item.inputPayload.euclidN ?? "1");
+    }
+  };
+
+  const handleRestoreConv = (item: SavedPythagoreanItem) => {
+    if (item.inputPayload) {
+      setConvVal(item.inputPayload.convVal ?? "5");
+      setConvUnit(item.inputPayload.convUnit ?? "meters");
+    }
+  };
+
   // Save Handlers
   const handleSaveCore = () => {
+    if (!resultCore.isValid) return;
     const inputsStr = `a = ${resultCore.a}, b = ${resultCore.b}, c = ${resultCore.c}`;
     const resList = [
       `Hypotenuse c = ${resultCore.c} (${resultCore.exactRadicalC || resultCore.c})`,
       `Area A = ${resultCore.area}`,
       `Perimeter P = ${resultCore.perimeter}`,
-      `Angles α = ${resultCore.alphaDeg}°, β = ${resultCore.betaDeg}°`,
       `Altitude h_c = ${resultCore.altitudeHc}`,
+      `Angle α (top) = ${resultCore.alphaDeg}°, Angle β (base) = ${resultCore.betaDeg}°`,
       `Inradius r = ${resultCore.inradius}, Circumradius R = ${resultCore.circumradius}`
     ];
     const newItem: SavedPythagoreanItem = {
       id: Date.now().toString(),
+      module: "core",
       title: `Right Triangle (${resultCore.a}, ${resultCore.b}, ${resultCore.c})`,
       inputs: inputsStr,
+      inputPayload: { coreA, coreB, coreC },
       operation: `Core Pythagorean Theorem`,
       result: resList.join(" | "),
       resultsList: resList,
@@ -181,16 +223,24 @@ export function PythagoreanCalculator() {
   };
 
   const handleSaveSA = () => {
-    const inputsStr = `${saSideType.toUpperCase()} = ${saSideVal}, Angle θ = ${saAngleDeg}°`;
+    if (!resultSA.isValid) return;
+    const label = saSideType === "a" ? "Opposite Leg a" : saSideType === "b" ? "Adjacent Leg b" : "Hypotenuse c";
+    const inputsStr = `${label} = ${resultSA.knownVal}, Angle θ = ${resultSA.angleDeg}°`;
     const resList = [
-      `Solved a = ${resultSA.a}, b = ${resultSA.b}, c = ${resultSA.c}`,
+      `Leg a (Opposite) = ${resultSA.a}`,
+      `Leg b (Adjacent) = ${resultSA.b}`,
+      `Hypotenuse c = ${resultSA.c}`,
       `Area = ${resultSA.area}`,
-      `Perimeter = ${resultSA.perimeter}`
+      `Perimeter = ${resultSA.perimeter}`,
+      `Altitude h_c = ${resultSA.altitudeHc}`,
+      `sin(θ) = ${resultSA.sinVal}, cos(θ) = ${resultSA.cosVal}, tan(θ) = ${resultSA.tanVal}`
     ];
     const newItem: SavedPythagoreanItem = {
       id: Date.now().toString(),
-      title: `Side-Angle c = ${resultSA.c}`,
+      module: "sa",
+      title: `Side-Angle: c = ${resultSA.c}`,
       inputs: inputsStr,
+      inputPayload: { saSideType, saSideVal, saAngleDeg },
       operation: `Side + Acute Angle Solver`,
       result: resList.join(" | "),
       resultsList: resList,
@@ -203,15 +253,17 @@ export function PythagoreanCalculator() {
   };
 
   const handleSave3D = () => {
-    const inputsStr = `X = ${distX}, Y = ${distY}, Z = ${distZ}`;
+    const inputsStr = `X = ${result3D.x}, Y = ${result3D.y}, Z = ${result3D.z}`;
     const resList = [
       `3D Space Distance d_3D = ${result3D.spaceDiag3D} (${result3D.exactRadical3D})`,
-      `2D Base Diagonal d_2D = ${result3D.baseDiag2D}`
+      `2D Base Diagonal d_2D = ${result3D.baseDiag2D} (${result3D.exactRadical2D})`
     ];
     const newItem: SavedPythagoreanItem = {
       id: Date.now().toString(),
+      module: "3d",
       title: `3D Distance d = ${result3D.spaceDiag3D}`,
       inputs: inputsStr,
+      inputPayload: { distX, distY, distZ },
       operation: `3D Pythagorean Distance`,
       result: resList.join(" | "),
       resultsList: resList,
@@ -224,15 +276,19 @@ export function PythagoreanCalculator() {
   };
 
   const handleSaveGen = () => {
+    if (!resultEuclid.isValid) return;
     const inputsStr = `m = ${resultEuclid.m}, n = ${resultEuclid.n}`;
     const resList = [
       `Generated Triple: (${resultEuclid.a}, ${resultEuclid.b}, ${resultEuclid.c})`,
-      `a² + b² = ${resultEuclid.a * resultEuclid.a} + ${resultEuclid.b * resultEuclid.b} = ${resultEuclid.c * resultEuclid.c}`
+      `a² + b² = ${resultEuclid.a * resultEuclid.a} + ${resultEuclid.b * resultEuclid.b} = ${resultEuclid.c * resultEuclid.c} (${resultEuclid.c}²)`,
+      `Type: ${resultEuclid.isPrimitive ? "Primitive Triple" : "Non-Primitive Triple"}`
     ];
     const newItem: SavedPythagoreanItem = {
       id: Date.now().toString(),
+      module: "gen",
       title: `Triple (${resultEuclid.a}, ${resultEuclid.b}, ${resultEuclid.c})`,
       inputs: inputsStr,
+      inputPayload: { euclidM, euclidN },
       operation: `Euclid Triple Generator`,
       result: resList.join(" | "),
       resultsList: resList,
@@ -248,13 +304,17 @@ export function PythagoreanCalculator() {
     const inputsStr = `Length = ${convVal} ${convUnit}`;
     const resList = [
       `${resultConv.meters} meters`,
+      `${resultConv.cm} cm`,
       `${resultConv.feet} feet`,
-      `${resultConv.inches} inches`
+      `${resultConv.inches} inches`,
+      `${resultConv.yards} yards`
     ];
     const newItem: SavedPythagoreanItem = {
       id: Date.now().toString(),
-      title: `Converted Length = ${resultConv.meters} m`,
+      module: "conv",
+      title: `Converted ${convVal} ${convUnit}`,
       inputs: inputsStr,
+      inputPayload: { convVal, convUnit },
       operation: `Pythagorean Unit Matrix`,
       result: resList.join(" | "),
       resultsList: resList,
@@ -266,51 +326,179 @@ export function PythagoreanCalculator() {
     setJustSavedConv(true); setTimeout(() => setJustSavedConv(false), 2000);
   };
 
-  // Render Interactive Dynamic SVG Right Triangle (with optional a², b², c² proof squares)
+  // CSV Export
+  const handleExportCSV = () => {
+    const rows = [
+      ["Module", "Timestamp", "Inputs", "Result Details"],
+      ...savedCoreItems.map(i => [i.operation, i.timestamp, `"${i.inputs.replace(/"/g, '""')}"`, `"${i.result.replace(/"/g, '""')}"`]),
+      ...savedSaItems.map(i => [i.operation, i.timestamp, `"${i.inputs.replace(/"/g, '""')}"`, `"${i.result.replace(/"/g, '""')}"`]),
+      ...saved3DItems.map(i => [i.operation, i.timestamp, `"${i.inputs.replace(/"/g, '""')}"`, `"${i.result.replace(/"/g, '""')}"`]),
+      ...savedGenItems.map(i => [i.operation, i.timestamp, `"${i.inputs.replace(/"/g, '""')}"`, `"${i.result.replace(/"/g, '""')}"`]),
+      ...savedConvItems.map(i => [i.operation, i.timestamp, `"${i.inputs.replace(/"/g, '""')}"`, `"${i.result.replace(/"/g, '""')}"`])
+    ];
+
+    if (rows.length === 1) {
+      // If no saved items, export current active state
+      rows.push([
+        "Core Pythagorean",
+        new Date().toISOString(),
+        `"a=${resultCore.a}, b=${resultCore.b}"`,
+        `"c=${resultCore.c}, area=${resultCore.area}, perimeter=${resultCore.perimeter}"`
+      ]);
+      rows.push([
+        "Side + Acute Angle",
+        new Date().toISOString(),
+        `"${saSideType}=${saSideVal}, angle=${saAngleDeg}"`,
+        `"a=${resultSA.a}, b=${resultSA.b}, c=${resultSA.c}"`
+      ]);
+      rows.push([
+        "3D Distance",
+        new Date().toISOString(),
+        `"x=${result3D.x}, y=${result3D.y}, z=${result3D.z}"`,
+        `"d_3D=${result3D.spaceDiag3D}, d_2D=${result3D.baseDiag2D}"`
+      ]);
+      rows.push([
+        "Euclid Triple",
+        new Date().toISOString(),
+        `"m=${euclidM}, n=${euclidN}"`,
+        `"(${resultEuclid.a}, ${resultEuclid.b}, ${resultEuclid.c})"`
+      ]);
+      rows.push([
+        "Unit Converter",
+        new Date().toISOString(),
+        `"${convVal} ${convUnit}"`,
+        `"meters=${resultConv.meters}, feet=${resultConv.feet}, inches=${resultConv.inches}"`
+      ]);
+    }
+
+    const csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `pythagorean_suite_export_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Render Interactive Dynamic SVG Right Triangle
   const renderTriangleSVG = () => {
-    const width = 280; const height = 220;
+    const width = 300;
+    const height = 230;
     const isSquares = showSquares;
 
     // Fixed base origin
-    const ox = isSquares ? 90 : 50;
-    const oy = isSquares ? 150 : 170;
+    const ox = isSquares ? 100 : 55;
+    const oy = isSquares ? 155 : 175;
 
-    // Scaled dimensions
-    const scale = isSquares ? 12 : 20;
-    const clampedA = Math.min(6, Math.max(1.5, resultCore.a));
-    const clampedB = Math.min(6, Math.max(1.5, resultCore.b));
+    // Normalizing scale based on ratio between a and b
+    const rawA = resultCore.isValid ? Math.max(0.1, resultCore.a) : 3;
+    const rawB = resultCore.isValid ? Math.max(0.1, resultCore.b) : 4;
+    const maxSide = Math.max(rawA, rawB);
+    const targetMaxPx = isSquares ? 65 : 110;
+    const scale = targetMaxPx / maxSide;
 
-    const ax = ox; const ay = oy - clampedA * scale; // top vertex
-    const bx = ox + clampedB * scale; const by = oy; // right vertex
+    const scaledA = rawA * scale;
+    const scaledB = rawB * scale;
+
+    const ax = ox;
+    const ay = oy - scaledA; // top vertex A
+    const bx = ox + scaledB;
+    const by = oy; // right vertex B
 
     return (
-      <svg viewBox={`0 0 ${width} ${height}`} className="w-64 h-52">
+      <svg
+        role="img"
+        aria-label="Interactive Right Triangle Diagram with labeled sides a, b, c and acute angles"
+        viewBox={`0 0 ${width} ${height}`}
+        className="w-full max-w-[280px] h-[210px] select-none"
+      >
+        <title>Right Triangle Geometry</title>
+        <desc>{`Right triangle with leg a = ${resultCore.a}, leg b = ${resultCore.b}, and hypotenuse c = ${resultCore.c}`}</desc>
         <rect width={width} height={height} fill="#f8fafc" rx="12" className="dark:fill-slate-800/40" />
 
         {/* Proof Squares if enabled */}
         {isSquares && (
-          <>
+          <g aria-label="Geometric proof squares on legs a and b">
             {/* Square on side a (left) */}
-            <rect x={ox - clampedA * scale} y={ay} width={clampedA * scale} height={clampedA * scale} fill="#3b82f6" fillOpacity="0.15" stroke="#2563eb" strokeWidth="1.5" strokeDasharray="3,3" />
+            <rect
+              x={ox - scaledA}
+              y={ay}
+              width={scaledA}
+              height={scaledA}
+              fill="#3b82f6"
+              fillOpacity="0.15"
+              stroke="#2563eb"
+              strokeWidth="1.5"
+              strokeDasharray="3,3"
+            />
             {/* Square on side b (bottom) */}
-            <rect x={ox} y={oy} width={clampedB * scale} height={clampedB * scale} fill="#16a34a" fillOpacity="0.15" stroke="#16a34a" strokeWidth="1.5" strokeDasharray="3,3" />
-          </>
+            <rect
+              x={ox}
+              y={oy}
+              width={scaledB}
+              height={scaledB}
+              fill="#16a34a"
+              fillOpacity="0.15"
+              stroke="#16a34a"
+              strokeWidth="1.5"
+              strokeDasharray="3,3"
+            />
+          </g>
         )}
 
         {/* Right Angle Corner Box */}
-        <path d={`M ${ox} ${oy - 12} L ${ox + 12} ${oy - 12} L ${ox + 12} ${oy}`} fill="none" stroke="#2563eb" strokeWidth="1.5" />
+        <path
+          d={`M ${ox} ${oy - 10} L ${ox + 10} ${oy - 10} L ${ox + 10} ${oy}`}
+          fill="none"
+          stroke="#2563eb"
+          strokeWidth="1.5"
+        />
 
         {/* Triangle Polygon */}
-        <polygon points={`${ox},${oy} ${ox},${ay} ${bx},${by}`} fill="#3b82f6" fillOpacity="0.2" stroke="#2563eb" strokeWidth="2.5" />
+        <polygon
+          points={`${ox},${oy} ${ox},${ay} ${bx},${by}`}
+          fill="#3b82f6"
+          fillOpacity="0.2"
+          stroke="#2563eb"
+          strokeWidth="2.5"
+        />
 
         {/* Side Labels */}
-        <text x={ox - 10} y={(oy + ay) / 2} textAnchor="end" className="text-[11px] font-mono font-bold fill-blue-600 dark:fill-blue-400">a = {resultCore.a}</text>
-        <text x={(ox + bx) / 2} y={oy + 16} textAnchor="middle" className="text-[11px] font-mono font-bold fill-emerald-600 dark:fill-emerald-400">b = {resultCore.b}</text>
-        <text x={(ox + bx) / 2 + 10} y={(ay + by) / 2 - 5} textAnchor="start" className="text-[11px] font-mono font-bold fill-purple-600 dark:fill-purple-400">c = {resultCore.c}</text>
+        <text
+          x={ox - 8}
+          y={(oy + ay) / 2}
+          textAnchor="end"
+          dominantBaseline="middle"
+          className="text-[11px] font-mono font-bold fill-blue-600 dark:fill-blue-400"
+        >
+          a = {resultCore.a}
+        </text>
+        <text
+          x={(ox + bx) / 2}
+          y={oy + 15}
+          textAnchor="middle"
+          dominantBaseline="hanging"
+          className="text-[11px] font-mono font-bold fill-emerald-600 dark:fill-emerald-400"
+        >
+          b = {resultCore.b}
+        </text>
+        <text
+          x={(ox + bx) / 2 + 10}
+          y={(ay + by) / 2 - 8}
+          textAnchor="start"
+          className="text-[11px] font-mono font-bold fill-purple-600 dark:fill-purple-400"
+        >
+          c = {resultCore.c}
+        </text>
 
-        {/* Angle Labels */}
-        <text x={ox + 6} y={ay + 20} className="text-[9px] font-mono font-bold fill-slate-500">α={resultCore.alphaDeg}°</text>
-        <text x={bx - 28} y={by - 6} className="text-[9px] font-mono font-bold fill-slate-500">β={resultCore.betaDeg}°</text>
+        {/* Angle Labels: Alpha at top vertex (opposite b), Beta at right vertex (opposite a) */}
+        <text x={ox + 6} y={ay + 18} className="text-[9px] font-mono font-bold fill-slate-500">
+          α={resultCore.alphaDeg}°
+        </text>
+        <text x={bx - 32} y={by - 5} className="text-[9px] font-mono font-bold fill-slate-500">
+          β={resultCore.betaDeg}°
+        </text>
       </svg>
     );
   };
@@ -319,7 +507,8 @@ export function PythagoreanCalculator() {
     title: string,
     items: SavedPythagoreanItem[],
     onClear: () => void,
-    onDelete: (id: string) => void
+    onDelete: (id: string) => void,
+    onRestore: (item: SavedPythagoreanItem) => void
   ) => {
     if (items.length === 0) return null;
     return (
@@ -332,7 +521,7 @@ export function PythagoreanCalculator() {
           <button
             type="button"
             onClick={onClear}
-            className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+            className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1 transition-colors"
           >
             <Trash2 className="w-3.5 h-3.5" /> Clear All
           </button>
@@ -352,14 +541,26 @@ export function PythagoreanCalculator() {
                     <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
                     <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => onDelete(item.id)}
-                    className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
-                    title="Delete saved calculation"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => handleCopyText(`${item.title}\nInputs: ${item.inputs}\nResults:\n${resParts.join("\n")}`, `saved-${item.id}`)}
+                      className="text-slate-400 hover:text-blue-600 p-1 transition-colors cursor-pointer"
+                      title="Copy calculation"
+                      aria-label="Copy calculation"
+                    >
+                      {copiedKey === `saved-${item.id}` ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onDelete(item.id)}
+                      className="text-slate-400 hover:text-red-600 p-1 transition-colors cursor-pointer"
+                      title="Delete saved calculation"
+                      aria-label="Delete saved calculation"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
 
                 <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
@@ -368,14 +569,23 @@ export function PythagoreanCalculator() {
                     <span className="font-semibold text-slate-900 dark:text-slate-100">{item.inputs}</span>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => toggleExpand(item.id)}
-                    className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                  >
-                    <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
-                    {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => onRestore(item)}
+                      className="flex-1 flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 font-bold text-[11px] hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors cursor-pointer"
+                    >
+                      <RotateCcw className="w-3 h-3" /> Restore
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => toggleExpand(item.id)}
+                      className="flex-1 flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                    >
+                      <span>{isExpanded ? "Hide" : "Details"}</span>
+                      {isExpanded ? <ChevronUp className="w-3 h-3 text-blue-600" /> : <ChevronDown className="w-3 h-3 text-blue-600" />}
+                    </button>
+                  </div>
 
                   {isExpanded && (
                     <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800 space-y-1">
@@ -402,16 +612,80 @@ export function PythagoreanCalculator() {
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
+      {/* Top Suite Toolbar: Precision Selector & Global Export */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 dark:bg-slate-900/60 p-3 sm:p-4 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-slate-600 dark:text-slate-400">Precision:</span>
+          {[2, 4, 6].map((p) => (
+            <button
+              key={p}
+              type="button"
+              onClick={() => setPrecision(p)}
+              className={`px-2.5 py-1 rounded-lg font-bold transition-colors cursor-pointer ${
+                precision === p
+                  ? "bg-blue-600 text-white shadow-xs"
+                  : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-blue-400"
+              }`}
+            >
+              {p} Decimals
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleExportCSV}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 font-bold text-slate-700 dark:text-slate-300 transition-colors cursor-pointer shadow-xs"
+            title="Download complete calculation log as CSV"
+          >
+            <Download className="w-3.5 h-3.5 text-blue-600" /> Export CSV
+          </button>
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-500 font-bold text-slate-700 dark:text-slate-300 transition-colors cursor-pointer shadow-xs no-print"
+            title="Print or Save as PDF"
+          >
+            <Printer className="w-3.5 h-3.5 text-slate-500" /> Print / PDF
+          </button>
+        </div>
+      </div>
+
       {/* ========================================================================= */}
       {/* CARD 1: CORE PYTHAGOREAN THEOREM SOLVER */}
       {/* ========================================================================= */}
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
           <span>Core Pythagorean Theorem Solver (a² + b² = c²)</span>
-          <button type="button" onClick={handleSaveCore} className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer">
-            <Bookmark className="w-3 h-3 text-white" />
-            <span>{justSavedCore ? "Saved!" : "Save"}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleCopyText(
+                `Pythagorean Calculation:\nInputs: a = ${resultCore.a}, b = ${resultCore.b}, c = ${resultCore.c}\n` +
+                `Formula: a² + b² = c²\n` +
+                `Results:\n` +
+                `- Hypotenuse c = ${resultCore.c} (${resultCore.exactRadicalC || resultCore.c})\n` +
+                `- Area = ${resultCore.area}\n` +
+                `- Perimeter = ${resultCore.perimeter}\n` +
+                `- Altitude = ${resultCore.altitudeHc}\n` +
+                `- Steps:\n${resultCore.stepText}`,
+                "copy-core"
+              )}
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              {copiedKey === "copy-core" ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+              <span>{copiedKey === "copy-core" ? "Copied!" : "Copy"}</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveCore}
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              <Bookmark className="w-3 h-3 text-white" />
+              <span>{justSavedCore ? "Saved!" : "Save"}</span>
+            </button>
+          </div>
         </div>
 
         <div className="p-5 space-y-4">
@@ -427,45 +701,120 @@ export function PythagoreanCalculator() {
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
             <div className="md:col-span-5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-3 text-xs">
-              <p className="font-bold text-slate-500 mb-1">Enter any 2 values to compute the 3rd side:</p>
-              <div><label className="font-bold block mb-1">Side a (Leg):</label><input type="number" step="any" placeholder="e.g. 3" value={coreA} onChange={(e)=>setCoreA(e.target.value)} className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"/></div>
-              <div><label className="font-bold block mb-1">Side b (Leg):</label><input type="number" step="any" placeholder="e.g. 4" value={coreB} onChange={(e)=>setCoreB(e.target.value)} className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"/></div>
-              <div><label className="font-bold block mb-1">Side c (Hypotenuse):</label><input type="number" step="any" placeholder="e.g. 5" value={coreC} onChange={(e)=>setCoreC(e.target.value)} className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"/></div>
-              <button type="button" onClick={()=>handleApplyPreset("","","")} className="text-xs text-red-600 font-semibold cursor-pointer">Clear Inputs</button>
+              <p className="font-bold text-slate-500 mb-1">Enter any 2 values to compute the 3rd side (or all 3 to verify):</p>
+              <div>
+                <label htmlFor="coreA" className="font-bold block mb-1">Side a (Leg):</label>
+                <input
+                  id="coreA"
+                  type="number"
+                  step="any"
+                  placeholder="e.g. 3"
+                  value={coreA}
+                  onChange={(e)=>setCoreA(e.target.value)}
+                  className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"
+                />
+              </div>
+              <div>
+                <label htmlFor="coreB" className="font-bold block mb-1">Side b (Leg):</label>
+                <input
+                  id="coreB"
+                  type="number"
+                  step="any"
+                  placeholder="e.g. 4"
+                  value={coreB}
+                  onChange={(e)=>setCoreB(e.target.value)}
+                  className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"
+                />
+              </div>
+              <div>
+                <label htmlFor="coreC" className="font-bold block mb-1">Side c (Hypotenuse):</label>
+                <input
+                  id="coreC"
+                  type="number"
+                  step="any"
+                  placeholder="e.g. 5"
+                  value={coreC}
+                  onChange={(e)=>setCoreC(e.target.value)}
+                  className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={()=>handleApplyPreset("","","")}
+                className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer transition-colors"
+              >
+                Clear Inputs
+              </button>
             </div>
 
             <div className="md:col-span-7 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-3">
-              <div className="grid grid-cols-3 gap-2 text-xs font-mono font-bold">
-                <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center"><span className="text-[9px] text-slate-400 uppercase block font-sans">Side a</span><span className="text-blue-600 dark:text-blue-400">{resultCore.a}</span></div>
-                <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center"><span className="text-[9px] text-slate-400 uppercase block font-sans">Side b</span><span className="text-emerald-600 dark:text-emerald-400">{resultCore.b}</span></div>
-                <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center"><span className="text-[9px] text-slate-400 uppercase block font-sans">Hypotenuse c</span><span className="text-purple-600 dark:text-purple-400">{resultCore.c}</span><span className="text-[9px] text-slate-400 block font-sans">({resultCore.exactRadicalC || resultCore.exactRadicalLeg || resultCore.c})</span></div>
-              </div>
+              {!resultCore.isValid ? (
+                <div className="p-3.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-xl text-red-700 dark:text-red-300 text-xs flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold block mb-0.5">Validation Alert</span>
+                    <span>{resultCore.error}</span>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-3 gap-2 text-xs font-mono font-bold">
+                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-400 uppercase block font-sans">Side a</span>
+                      <span className="text-blue-600 dark:text-blue-400">{resultCore.a}</span>
+                    </div>
+                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-400 uppercase block font-sans">Side b</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">{resultCore.b}</span>
+                    </div>
+                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-400 uppercase block font-sans">Hypotenuse c</span>
+                      <span className="text-purple-600 dark:text-purple-400">{resultCore.c}</span>
+                      <span className="text-[9px] text-slate-400 block font-sans">({resultCore.exactRadicalC || resultCore.exactRadicalLeg || resultCore.c})</span>
+                    </div>
+                  </div>
 
-              <div className="grid grid-cols-3 gap-2 text-xs font-mono font-bold">
-                <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center"><span className="text-[9px] text-slate-400 uppercase block font-sans">Area A</span><span>{resultCore.area}</span></div>
-                <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center"><span className="text-[9px] text-slate-400 uppercase block font-sans">Perimeter P</span><span>{resultCore.perimeter}</span></div>
-                <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center"><span className="text-[9px] text-slate-400 uppercase block font-sans">Altitude h_c</span><span>{resultCore.altitudeHc}</span></div>
-              </div>
+                  <div className="grid grid-cols-3 gap-2 text-xs font-mono font-bold">
+                    <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-400 uppercase block font-sans">Area A</span>
+                      <span>{resultCore.area}</span>
+                    </div>
+                    <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-400 uppercase block font-sans">Perimeter P</span>
+                      <span>{resultCore.perimeter}</span>
+                    </div>
+                    <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-400 uppercase block font-sans">Altitude h_c</span>
+                      <span>{resultCore.altitudeHc}</span>
+                    </div>
+                  </div>
 
-              <div className="flex items-center justify-between text-xs pt-1">
-                <label className="flex items-center gap-1.5 cursor-pointer font-bold text-slate-700 dark:text-slate-300">
-                  <input type="checkbox" checked={showSquares} onChange={(e)=>setShowSquares(e.target.checked)} className="rounded text-blue-600"/>
-                  <span>Show a², b², c² Proof Squares</span>
-                </label>
-                {resultCore.isTriple && (
-                  <span className="bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3"/> {resultCore.isPrimitiveTriple ? "Primitive Triple" : "Pythagorean Triple"}
-                  </span>
-                )}
-              </div>
+                  <div className="flex items-center justify-between text-xs pt-1">
+                    <label className="flex items-center gap-1.5 cursor-pointer font-bold text-slate-700 dark:text-slate-300">
+                      <input
+                        type="checkbox"
+                        checked={showSquares}
+                        onChange={(e)=>setShowSquares(e.target.checked)}
+                        className="rounded text-blue-600"
+                      />
+                      <span>Show a², b², c² Proof Squares</span>
+                    </label>
+                    {resultCore.isTriple && (
+                      <span className="bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1">
+                        <CheckCircle2 className="w-3 h-3"/> {resultCore.isPrimitiveTriple ? "Primitive Triple" : "Pythagorean Triple"}
+                      </span>
+                    )}
+                  </div>
 
-              <div className="w-full flex justify-center py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
-                {renderTriangleSVG()}
-              </div>
+                  <div className="w-full flex justify-center py-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                    {renderTriangleSVG()}
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
-          {renderSavedCardsGroup("Saved Core Calculations", savedCoreItems, ()=>setSavedCoreItems([]), (id)=>setSavedCoreItems(savedCoreItems.filter(i=>i.id!==id)))}
+          {renderSavedCardsGroup("Saved Core Calculations", savedCoreItems, ()=>setSavedCoreItems([]), (id)=>setSavedCoreItems(savedCoreItems.filter(i=>i.id!==id)), handleRestoreCore)}
         </div>
       </div>
 
@@ -475,42 +824,139 @@ export function PythagoreanCalculator() {
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
           <span>Side + Acute Angle Right Triangle Solver</span>
-          <button type="button" onClick={handleSaveSA} className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer">
-            <Bookmark className="w-3 h-3 text-white" />
-            <span>{justSavedSa ? "Saved!" : "Save"}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleCopyText(
+                `Side + Acute Angle Right Triangle Solver:\n` +
+                `Known: ${saSideType === "a" ? "Opposite Leg a" : saSideType === "b" ? "Adjacent Leg b" : "Hypotenuse c"} = ${resultSA.knownVal}, Angle θ = ${resultSA.angleDeg}°\n` +
+                `Results:\n` +
+                `- Leg a (Opposite) = ${resultSA.a}\n` +
+                `- Leg b (Adjacent) = ${resultSA.b}\n` +
+                `- Hypotenuse c = ${resultSA.c}\n` +
+                `- Area = ${resultSA.area}\n` +
+                `- Perimeter = ${resultSA.perimeter}\n` +
+                `- Altitude h_c = ${resultSA.altitudeHc}\n` +
+                `- sin(θ) = ${resultSA.sinVal}, cos(θ) = ${resultSA.cosVal}, tan(θ) = ${resultSA.tanVal}\n` +
+                `- Steps:\n${resultSA.stepText}`,
+                "copy-sa"
+              )}
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              {copiedKey === "copy-sa" ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+              <span>{copiedKey === "copy-sa" ? "Copied!" : "Copy"}</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveSA}
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              <Bookmark className="w-3 h-3 text-white" />
+              <span>{justSavedSa ? "Saved!" : "Save"}</span>
+            </button>
+          </div>
         </div>
 
         <div className="p-5 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
             <div className="md:col-span-5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-3 text-xs">
               <div>
-                <label className="font-bold block mb-1">Known Side:</label>
-                <select value={saSideType} onChange={(e)=>setSaSideType(e.target.value as any)} className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold">
-                  <option value="a">Leg a</option>
-                  <option value="b">Leg b</option>
+                <label htmlFor="saSideType" className="font-bold block mb-1">Known Side Reference:</label>
+                <select
+                  id="saSideType"
+                  value={saSideType}
+                  onChange={(e)=>setSaSideType(e.target.value as any)}
+                  className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold"
+                >
+                  <option value="a">Leg a (Opposite to θ)</option>
+                  <option value="b">Leg b (Adjacent to θ)</option>
                   <option value="c">Hypotenuse c</option>
                 </select>
               </div>
 
-              <div><label className="font-bold block mb-1">Side Length:</label><input type="number" step="any" value={saSideVal} onChange={(e)=>setSaSideVal(parseFloat(e.target.value)||0)} className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"/></div>
-              <div><label className="font-bold block mb-1">Acute Angle θ (°):</label><input type="number" step="any" value={saAngleDeg} onChange={(e)=>setSaAngleDeg(parseFloat(e.target.value)||0)} className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"/></div>
+              <div>
+                <label htmlFor="saSideVal" className="font-bold block mb-1">Side Length:</label>
+                <input
+                  id="saSideVal"
+                  type="number"
+                  step="any"
+                  value={saSideVal}
+                  onChange={(e)=>setSaSideVal(e.target.value)}
+                  className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"
+                />
+              </div>
+              <div>
+                <label htmlFor="saAngleDeg" className="font-bold block mb-1">Acute Angle θ (°):</label>
+                <input
+                  id="saAngleDeg"
+                  type="number"
+                  step="any"
+                  placeholder="0 < θ < 90"
+                  value={saAngleDeg}
+                  onChange={(e)=>setSaAngleDeg(e.target.value)}
+                  className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"
+                />
+              </div>
             </div>
 
             <div className="md:col-span-7 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-3">
-              <span className="text-xs font-extrabold text-blue-600 uppercase block">Solved Triangle Metrics</span>
-              <div className="grid grid-cols-3 gap-2 text-xs font-mono font-bold">
-                <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center"><span className="text-[9px] text-slate-400 uppercase block font-sans">Side a</span><span className="text-blue-600 dark:text-blue-400">{resultSA.a}</span></div>
-                <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center"><span className="text-[9px] text-slate-400 uppercase block font-sans">Side b</span><span className="text-emerald-600 dark:text-emerald-400">{resultSA.b}</span></div>
-                <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center"><span className="text-[9px] text-slate-400 uppercase block font-sans">Hypotenuse c</span><span className="text-purple-600 dark:text-purple-400">{resultSA.c}</span></div>
-              </div>
-              <p className="text-xs font-mono font-bold text-slate-500">
-                Area = {resultSA.area} | Perimeter = {resultSA.perimeter}
-              </p>
+              {!resultSA.isValid ? (
+                <div className="p-3.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-xl text-red-700 dark:text-red-300 text-xs flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold block mb-0.5">Validation Alert</span>
+                    <span>{resultSA.error}</span>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <span className="text-xs font-extrabold text-blue-600 uppercase block">Solved Triangle Metrics</span>
+                  <div className="grid grid-cols-3 gap-2 text-xs font-mono font-bold">
+                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-400 uppercase block font-sans">Leg a (Opposite)</span>
+                      <span className="text-blue-600 dark:text-blue-400">{resultSA.a}</span>
+                    </div>
+                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-400 uppercase block font-sans">Leg b (Adjacent)</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">{resultSA.b}</span>
+                    </div>
+                    <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-400 uppercase block font-sans">Hypotenuse c</span>
+                      <span className="text-purple-600 dark:text-purple-400">{resultSA.c}</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 text-xs font-mono font-bold">
+                    <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-400 uppercase block font-sans">Area A</span>
+                      <span>{resultSA.area}</span>
+                    </div>
+                    <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-400 uppercase block font-sans">Perimeter P</span>
+                      <span>{resultSA.perimeter}</span>
+                    </div>
+                    <div className="p-2 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-center">
+                      <span className="text-[9px] text-slate-400 uppercase block font-sans">Altitude h_c</span>
+                      <span>{resultSA.altitudeHc}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-2.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-xs space-y-1">
+                    <div className="flex justify-between font-mono font-bold text-slate-600 dark:text-slate-300">
+                      <span>sin({resultSA.angleDeg}°) = {resultSA.sinVal}</span>
+                      <span>cos({resultSA.angleDeg}°) = {resultSA.cosVal}</span>
+                      <span>tan({resultSA.angleDeg}°) = {resultSA.tanVal}</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-sans">
+                      Complementary acute angle: 90° - {resultSA.angleDeg}° = {resultSA.complementaryAngleDeg}°
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
-          {renderSavedCardsGroup("Saved Side-Angle Calculations", savedSaItems, ()=>setSavedSaItems([]), (id)=>setSavedSaItems(savedSaItems.filter(i=>i.id!==id)))}
+          {renderSavedCardsGroup("Saved Side-Angle Calculations", savedSaItems, ()=>setSavedSaItems([]), (id)=>setSavedSaItems(savedSaItems.filter(i=>i.id!==id)), handleRestoreSA)}
         </div>
       </div>
 
@@ -520,19 +966,72 @@ export function PythagoreanCalculator() {
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
           <span>3D Pythagorean Distance Solver (d = √(x² + y² + z²))</span>
-          <button type="button" onClick={handleSave3D} className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer">
-            <Bookmark className="w-3 h-3 text-white" />
-            <span>{justSaved3D ? "Saved!" : "Save"}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleCopyText(
+                `3D Pythagorean Space Distance:\n` +
+                `Coordinates: X = ${result3D.x}, Y = ${result3D.y}, Z = ${result3D.z}\n` +
+                `Results:\n` +
+                `- 3D Space Distance d_3D = ${result3D.spaceDiag3D} (${result3D.exactRadical3D})\n` +
+                `- 2D Base Diagonal d_2D = ${result3D.baseDiag2D} (${result3D.exactRadical2D})\n` +
+                `- Calculation Steps:\n${result3D.stepText}`,
+                "copy-3d"
+              )}
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              {copiedKey === "copy-3d" ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+              <span>{copiedKey === "copy-3d" ? "Copied!" : "Copy"}</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleSave3D}
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              <Bookmark className="w-3 h-3 text-white" />
+              <span>{justSaved3D ? "Saved!" : "Save"}</span>
+            </button>
+          </div>
         </div>
 
         <div className="p-5 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
             <div className="md:col-span-5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-3 text-xs">
+              <p className="font-bold text-slate-500 mb-1">Enter 3D coordinate offsets (positive or negative):</p>
               <div className="grid grid-cols-3 gap-2">
-                <div><label className="font-bold block mb-1">X Offset:</label><input type="number" value={distX} onChange={(e)=>setDistX(parseFloat(e.target.value)||0)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs"/></div>
-                <div><label className="font-bold block mb-1">Y Offset:</label><input type="number" value={distY} onChange={(e)=>setDistY(parseFloat(e.target.value)||0)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs"/></div>
-                <div><label className="font-bold block mb-1">Z Offset:</label><input type="number" value={distZ} onChange={(e)=>setDistZ(parseFloat(e.target.value)||0)} className="w-full h-8 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs"/></div>
+                <div>
+                  <label htmlFor="distX" className="font-bold block mb-1">X Offset:</label>
+                  <input
+                    id="distX"
+                    type="number"
+                    step="any"
+                    value={distX}
+                    onChange={(e)=>setDistX(e.target.value)}
+                    className="w-full h-9 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs font-bold"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="distY" className="font-bold block mb-1">Y Offset:</label>
+                  <input
+                    id="distY"
+                    type="number"
+                    step="any"
+                    value={distY}
+                    onChange={(e)=>setDistY(e.target.value)}
+                    className="w-full h-9 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs font-bold"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="distZ" className="font-bold block mb-1">Z Offset:</label>
+                  <input
+                    id="distZ"
+                    type="number"
+                    step="any"
+                    value={distZ}
+                    onChange={(e)=>setDistZ(e.target.value)}
+                    className="w-full h-9 px-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono text-xs font-bold"
+                  />
+                </div>
               </div>
             </div>
 
@@ -542,12 +1041,15 @@ export function PythagoreanCalculator() {
                 {result3D.spaceDiag3D} <span className="text-base text-blue-600">({result3D.exactRadical3D})</span>
               </div>
               <p className="text-xs font-mono font-bold text-slate-500">
-                2D Base Diagonal d_2D = {result3D.baseDiag2D}
+                2D Base Diagonal d_2D = {result3D.baseDiag2D} ({result3D.exactRadical2D})
               </p>
+              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-[11px] font-mono text-slate-600 dark:text-slate-400 whitespace-pre-line leading-relaxed">
+                {result3D.stepText}
+              </div>
             </div>
           </div>
 
-          {renderSavedCardsGroup("Saved 3D Calculations", saved3DItems, ()=>setSaved3DItems([]), (id)=>setSaved3DItems(saved3DItems.filter(i=>i.id!==id)))}
+          {renderSavedCardsGroup("Saved 3D Calculations", saved3DItems, ()=>setSaved3DItems([]), (id)=>setSaved3DItems(saved3DItems.filter(i=>i.id!==id)), handleRestore3D)}
         </div>
       </div>
 
@@ -557,33 +1059,101 @@ export function PythagoreanCalculator() {
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
           <span>Euclid Pythagorean Triple Generator (a = m² - n², b = 2mn, c = m² + n²)</span>
-          <button type="button" onClick={handleSaveGen} className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer">
-            <Bookmark className="w-3 h-3 text-white" />
-            <span>{justSavedGen ? "Saved!" : "Save"}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleCopyText(
+                `Euclid Pythagorean Triple:\n` +
+                `Parameters: m = ${resultEuclid.m}, n = ${resultEuclid.n}\n` +
+                `Generated Triple: (${resultEuclid.a}, ${resultEuclid.b}, ${resultEuclid.c})\n` +
+                `Formula: a = m² - n² = ${resultEuclid.a}, b = 2mn = ${resultEuclid.b}, c = m² + n² = ${resultEuclid.c}\n` +
+                `Verification: ${resultEuclid.a}² + ${resultEuclid.b}² = ${resultEuclid.c}²\n` +
+                `Classification: ${resultEuclid.isPrimitive ? "Primitive Triple" : "Non-Primitive Triple"}`,
+                "copy-gen"
+              )}
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              {copiedKey === "copy-gen" ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+              <span>{copiedKey === "copy-gen" ? "Copied!" : "Copy"}</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveGen}
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              <Bookmark className="w-3 h-3 text-white" />
+              <span>{justSavedGen ? "Saved!" : "Save"}</span>
+            </button>
+          </div>
         </div>
 
         <div className="p-5 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
             <div className="md:col-span-5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-3 text-xs">
+              <p className="font-bold text-slate-500 mb-1">Enter positive integers m and n (where m &gt; n):</p>
               <div className="grid grid-cols-2 gap-2">
-                <div><label className="font-bold block mb-1">Parameter m (m &gt; n):</label><input type="number" value={euclidM} onChange={(e)=>setEuclidM(parseFloat(e.target.value)||2)} className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"/></div>
-                <div><label className="font-bold block mb-1">Parameter n:</label><input type="number" value={euclidN} onChange={(e)=>setEuclidN(parseFloat(e.target.value)||1)} className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"/></div>
+                <div>
+                  <label htmlFor="euclidM" className="font-bold block mb-1">Parameter m (m &gt; n):</label>
+                  <input
+                    id="euclidM"
+                    type="number"
+                    step="1"
+                    value={euclidM}
+                    onChange={(e)=>setEuclidM(e.target.value)}
+                    className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="euclidN" className="font-bold block mb-1">Parameter n:</label>
+                  <input
+                    id="euclidN"
+                    type="number"
+                    step="1"
+                    value={euclidN}
+                    onChange={(e)=>setEuclidN(e.target.value)}
+                    className="w-full h-9 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold"
+                  />
+                </div>
               </div>
             </div>
 
             <div className="md:col-span-7 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-3">
-              <span className="text-xs font-extrabold text-blue-600 uppercase block">Generated Primitive Triple</span>
-              <div className="text-2xl font-mono font-black text-slate-900 dark:text-slate-100">
-                ({resultEuclid.a}, {resultEuclid.b}, {resultEuclid.c})
-              </div>
-              <p className="text-xs font-mono font-bold text-slate-500">
-                {resultEuclid.a}² + {resultEuclid.b}² = {resultEuclid.a * resultEuclid.a} + {resultEuclid.b * resultEuclid.b} = {resultEuclid.c * resultEuclid.c} ({resultEuclid.c}²)
-              </p>
+              {!resultEuclid.isValid ? (
+                <div className="p-3.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-xl text-red-700 dark:text-red-300 text-xs flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold block mb-0.5">Validation Alert</span>
+                    <span>{resultEuclid.error}</span>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold text-blue-600 uppercase block">Generated Pythagorean Triple</span>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1 ${
+                      resultEuclid.isPrimitive
+                        ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300"
+                        : "bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300"
+                    }`}>
+                      <CheckCircle2 className="w-3 h-3" />
+                      {resultEuclid.isPrimitive ? "Primitive Triple (gcd=1)" : "Non-Primitive Triple"}
+                    </span>
+                  </div>
+                  <div className="text-3xl font-mono font-black text-slate-900 dark:text-slate-100">
+                    ({resultEuclid.a}, {resultEuclid.b}, {resultEuclid.c})
+                  </div>
+                  <p className="text-xs font-mono font-bold text-slate-500">
+                    {resultEuclid.a}² + {resultEuclid.b}² = {resultEuclid.a * resultEuclid.a} + {resultEuclid.b * resultEuclid.b} = {resultEuclid.c * resultEuclid.c} ({resultEuclid.c}²)
+                  </p>
+                  <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-[11px] font-mono text-slate-600 dark:text-slate-400 whitespace-pre-line leading-relaxed">
+                    {resultEuclid.stepText}
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
-          {renderSavedCardsGroup("Saved Generated Triples", savedGenItems, ()=>setSavedGenItems([]), (id)=>setSavedGenItems(savedGenItems.filter(i=>i.id!==id)))}
+          {renderSavedCardsGroup("Saved Generated Triples", savedGenItems, ()=>setSavedGenItems([]), (id)=>setSavedGenItems(savedGenItems.filter(i=>i.id!==id)), handleRestoreGen)}
         </div>
       </div>
 
@@ -593,26 +1163,68 @@ export function PythagoreanCalculator() {
       <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
           <span>Master Pythagorean Unit Converter Matrix</span>
-          <button type="button" onClick={handleSaveConv} className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer">
-            <Bookmark className="w-3 h-3 text-white" />
-            <span>{justSavedConv ? "Saved!" : "Save"}</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => handleCopyText(
+                `Pythagorean Unit Conversion Matrix:\n` +
+                `Input: ${convVal} ${convUnit}\n` +
+                `Equivalent Measurements:\n` +
+                `- Meters: ${resultConv.meters} m\n` +
+                `- Centimeters: ${resultConv.cm} cm\n` +
+                `- Millimeters: ${resultConv.mm} mm\n` +
+                `- Kilometers: ${resultConv.km} km\n` +
+                `- Feet: ${resultConv.feet} ft\n` +
+                `- Inches: ${resultConv.inches} in\n` +
+                `- Yards: ${resultConv.yards} yd\n` +
+                `- Miles: ${resultConv.miles} mi`,
+                "copy-conv"
+              )}
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              {copiedKey === "copy-conv" ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+              <span>{copiedKey === "copy-conv" ? "Copied!" : "Copy"}</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveConv}
+              className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              <Bookmark className="w-3 h-3 text-white" />
+              <span>{justSavedConv ? "Saved!" : "Save"}</span>
+            </button>
+          </div>
         </div>
 
         <div className="p-5 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
             <div>
-              <label className="block text-xs font-bold mb-1">Length Value:</label>
-              <input type="number" step="any" value={convVal} onChange={(e)=>setConvVal(parseFloat(e.target.value)||0)} className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold text-sm"/>
+              <label htmlFor="convVal" className="block text-xs font-bold mb-1">Length Value:</label>
+              <input
+                id="convVal"
+                type="number"
+                step="any"
+                value={convVal}
+                onChange={(e)=>setConvVal(e.target.value)}
+                className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-mono font-bold text-sm"
+              />
             </div>
             <div>
-              <label className="block text-xs font-bold mb-1">Base Unit:</label>
-              <select value={convUnit} onChange={(e)=>setConvUnit(e.target.value as any)} className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-sm">
+              <label htmlFor="convUnit" className="block text-xs font-bold mb-1">Base Unit:</label>
+              <select
+                id="convUnit"
+                value={convUnit}
+                onChange={(e)=>setConvUnit(e.target.value as any)}
+                className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-sm"
+              >
                 <option value="meters">Meters (m)</option>
                 <option value="cm">Centimeters (cm)</option>
                 <option value="mm">Millimeters (mm)</option>
+                <option value="km">Kilometers (km)</option>
                 <option value="feet">Feet (ft)</option>
                 <option value="inches">Inches (in)</option>
+                <option value="yards">Yards (yd)</option>
+                <option value="miles">Miles (mi)</option>
               </select>
             </div>
           </div>
@@ -626,17 +1238,19 @@ export function PythagoreanCalculator() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 dark:divide-slate-700 bg-slate-50 dark:bg-slate-900 font-mono">
-                <tr><td className="p-2 font-bold font-sans">Meters (m)</td><td className="p-2 text-blue-600 dark:text-blue-400 font-bold">{resultConv.meters}</td></tr>
-                <tr><td className="p-2 font-bold font-sans">Centimeters (cm)</td><td className="p-2 text-blue-600 dark:text-blue-400 font-bold">{resultConv.cm}</td></tr>
-                <tr><td className="p-2 font-bold font-sans">Millimeters (mm)</td><td className="p-2 font-bold">{resultConv.mm}</td></tr>
-                <tr><td className="p-2 font-bold font-sans">Feet (ft)</td><td className="p-2 font-bold">{resultConv.feet}</td></tr>
-                <tr><td className="p-2 font-bold font-sans">Inches (in)</td><td className="p-2 font-bold">{resultConv.inches}</td></tr>
-                <tr><td className="p-2 font-bold font-sans">Yards (yd)</td><td className="p-2 font-bold">{resultConv.yards}</td></tr>
+                <tr><td className="p-2.5 font-bold font-sans">Meters (m)</td><td className="p-2.5 text-blue-600 dark:text-blue-400 font-bold">{resultConv.meters}</td></tr>
+                <tr><td className="p-2.5 font-bold font-sans">Centimeters (cm)</td><td className="p-2.5 text-blue-600 dark:text-blue-400 font-bold">{resultConv.cm}</td></tr>
+                <tr><td className="p-2.5 font-bold font-sans">Millimeters (mm)</td><td className="p-2.5 font-bold">{resultConv.mm}</td></tr>
+                <tr><td className="p-2.5 font-bold font-sans">Kilometers (km)</td><td className="p-2.5 font-bold">{resultConv.km}</td></tr>
+                <tr><td className="p-2.5 font-bold font-sans">Feet (ft)</td><td className="p-2.5 font-bold">{resultConv.feet}</td></tr>
+                <tr><td className="p-2.5 font-bold font-sans">Inches (in)</td><td className="p-2.5 font-bold">{resultConv.inches}</td></tr>
+                <tr><td className="p-2.5 font-bold font-sans">Yards (yd)</td><td className="p-2.5 font-bold">{resultConv.yards}</td></tr>
+                <tr><td className="p-2.5 font-bold font-sans">Miles (mi)</td><td className="p-2.5 font-bold">{resultConv.miles}</td></tr>
               </tbody>
             </table>
           </div>
 
-          {renderSavedCardsGroup("Saved Converter Calculations", savedConvItems, ()=>setSavedConvItems([]), (id)=>setSavedConvItems(savedConvItems.filter(i=>i.id!==id)))}
+          {renderSavedCardsGroup("Saved Converter Calculations", savedConvItems, ()=>setSavedConvItems([]), (id)=>setSavedConvItems(savedConvItems.filter(i=>i.id!==id)), handleRestoreConv)}
         </div>
       </div>
     </div>

@@ -525,6 +525,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isVolume = idLower === "volume-calculator" || slugLower === "volume-calculator";
   const isArea = idLower === "area-calculator" || slugLower === "area-calculator";
   const isSlope = idLower === "slope-calculator" || slugLower === "slope-calculator";
+  const isPythagorean = idLower === "pythagorean-theorem-calculator" || slugLower === "pythagorean-theorem-calculator";
 
   const CustomContent = (definition as any).ContentComponent || (
     isVat ? VatContent :
@@ -1015,7 +1016,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
 
           {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
-          {Boolean(definition.faqs && definition.faqs.length > 0) && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea ? (
+          {Boolean(definition.faqs && definition.faqs.length > 0) && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && !isPythagorean ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions
