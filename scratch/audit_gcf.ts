@@ -117,7 +117,7 @@ for (const r of grid.rows) {
 }
 console.log(`  Final Quotients: [${grid.finalQuotients.join(", ")}]`);
 console.log(`  GCF Product Expression: ${grid.gcfProductExpression}`);
-if (grid.gcfProductExpression === "2 × 3 × 3" || grid.gcfProductExpression === "2 × 3^2" || grid.sharedDivisors.reduce((a,b)=>a*b, 1) === 18) {
+if (grid.gcfProductExpression === "2 × 3 × 3" || grid.gcfProductExpression === "2 × 3^2" || grid.sharedDivisors.reduce((a, b) => a * b, 1) === 18) {
   console.log(`✓ Division Grid GCF product: 18 (PASS)`);
 }
 
