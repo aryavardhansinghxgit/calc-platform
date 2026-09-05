@@ -1,291 +1,745 @@
 "use client";
 
 import React from "react";
-import { BookOpen, CheckCircle2, AlertTriangle, Lightbulb, HelpCircle, Layers, ShieldCheck, Target, Award } from "lucide-react";
+import Link from "next/link";
+import {
+  BookOpen,
+  Layers,
+  Calculator,
+  HelpCircle,
+  CheckCircle2,
+  AlertTriangle,
+  Award,
+  Grid,
+  Zap,
+  ListOrdered,
+  ArrowRight,
+  ShieldCheck,
+  Compass,
+  FileSpreadsheet
+} from "lucide-react";
 
 export function GcfContent() {
+  const faqs = [
+    {
+      q: "What is a GCF?",
+      a: "The greatest common factor is the largest positive integer that divides every number in a given set without a remainder."
+    },
+    {
+      q: "Is GCF the same as GCD?",
+      a: "Yes. For ordinary integer calculations, GCF and GCD describe the same quantity. GCD stands for greatest common divisor."
+    },
+    {
+      q: "Is GCF the same as HCF?",
+      a: "Yes. HCF, meaning highest common factor, is another common name for the same concept."
+    },
+    {
+      q: "How do I find the GCF of two numbers?",
+      a: "You can list their factors, use prime factorization, or apply the Euclidean algorithm. The calculator above displays several of these step-by-step approaches."
+    },
+    {
+      q: "How do I find the GCF of three or more numbers?",
+      a: "Calculate the GCF pairwise using the associative property: GCF(a, b, c) = GCF(GCF(a, b), c). Continue sequentially until all numbers in the set have been processed."
+    },
+    {
+      q: "What is the GCF of 12 and 18?",
+      a: "The GCF is 6. Factors of 12 are {1, 2, 3, 4, 6, 12} and factors of 18 are {1, 2, 3, 6, 9, 18}, making 6 their largest shared factor."
+    },
+    {
+      q: "What is the GCF of 48 and 180?",
+      a: "The GCF is 12. Prime factorizations are 48 = 2⁴ × 3 and 180 = 2² × 3² × 5, yielding 2² × 3 = 12."
+    },
+    {
+      q: "What is the GCF of 36, 54 and 90?",
+      a: "The GCF is 18. Shared prime powers are 2¹ and 3², yielding 2 × 9 = 18."
+    },
+    {
+      q: "What happens when the GCF is 1?",
+      a: "The numbers have no common divisor greater than 1 and are collectively relatively prime (coprime)."
+    },
+    {
+      q: "Can the GCF be larger than the smallest number?",
+      a: "No. A common factor must divide every input including the smallest, so the GCF cannot exceed the smallest absolute input value."
+    },
+    {
+      q: "How is GCF related to LCM?",
+      a: "For two positive integers, their product equals the product of their GCF and LCM: GCF(a, b) × LCM(a, b) = a × b."
+    },
+    {
+      q: "Can GCF be used to simplify fractions?",
+      a: "Yes. Dividing both the numerator and denominator by their GCF reduces a fraction to its lowest irreducible terms in a single operation."
+    },
+    {
+      q: "Can GCF be used to simplify ratios?",
+      a: "Yes. Dividing every term in a ratio by the collective GCF of all terms scales the ratio down to its simplest integer form."
+    },
+    {
+      q: "What is the GCF of a number and 1?",
+      a: "It is always 1, because 1 has no positive divisors other than 1."
+    },
+    {
+      q: "What is the GCF of a number and itself?",
+      a: "For any non-zero integer a, GCF(a, a) = |a|."
+    },
+    {
+      q: "Does GCF work with negative integers?",
+      a: "Yes. The conventional integer GCD is strictly positive and is evaluated from the absolute values of the numbers: GCF(−a, b) = GCF(|a|, |b|)."
+    },
+    {
+      q: "What is the GCF of zero and a non-zero number?",
+      a: "For non-zero a, GCF(a, 0) = |a|. However, GCF(0, 0) is undefined because every non-zero integer divides 0."
+    },
+    {
+      q: "Why is prime factorization useful for GCF?",
+      a: "It provides a clear structural view of the numbers, showing shared prime building blocks and applying the minimum exponent rule."
+    },
+    {
+      q: "Why is the Euclidean algorithm useful?",
+      a: "It computes the GCF quickly through repeated division without requiring factorization, making it ideal for arbitrarily large integers."
+    }
+  ];
+
   return (
-    <div className="space-y-10 text-slate-800 dark:text-slate-200 leading-relaxed font-sans">
-      
-      {/* 1. INTRODUCTION */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <BookOpen className="h-6 w-6 text-blue-600" />
-          <span>1. Introduction to the Greatest Common Factor (GCF) Suite</span>
-        </h2>
-        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-          The <strong>Greatest Common Factor (GCF) Calculator & Factorization Suite</strong> is an advanced computational mathematics tool engineered to compute the largest integer that divides two or more numbers completely without leaving a remainder. GCF evaluation is fundamental to algebraic fraction reduction, polynomial simplification, modular arithmetic, and modern public-key cryptography.
-        </p>
-        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-          This suite provides simultaneous dual outputs for both the <strong>Greatest Common Factor (GCF)</strong> and the <strong>Least Common Multiple (LCM)</strong>, alongside 6 interactive derivation methods: Exponential Prime Factorization, Euclidean Division & Subtraction Algorithm, Extended Euclidean Bézout's Identity, Division Grid (Ladder Method), Factor Set Intersection, and Interactive SVG Venn Diagrams.
-        </p>
+    <article className="space-y-12 text-slate-800 dark:text-slate-200 leading-relaxed font-sans">
+
+      {/* ========================================================================= */}
+      {/* 0. TOP RELATED CALCULATORS (Directly above educational content) */}
+      {/* ========================================================================= */}
+      <section className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+        <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+          <Compass className="h-4 w-4" />
+          <span>Related Integer &amp; Arithmetic Calculators</span>
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+          <Link
+            href="/calculators/lcm-calculator"
+            className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500 hover:shadow-xs transition-all group"
+          >
+            <h4 className="font-bold text-blue-600 dark:text-blue-400 text-sm group-hover:underline mb-1 flex items-center justify-between">
+              <span>Least Common Multiple (LCM) Calculator</span>
+              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              Find the smallest positive common multiple for 2 or more numbers with step-by-step methods.
+            </p>
+          </Link>
+
+          <Link
+            href="/calculators/factor-calculator"
+            className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500 hover:shadow-xs transition-all group"
+          >
+            <h4 className="font-bold text-blue-600 dark:text-blue-400 text-sm group-hover:underline mb-1 flex items-center justify-between">
+              <span>Factor Calculator &amp; Prime Factorization</span>
+              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              Decompose any integer into prime factor trees, discover all divisor pairs, and check primality.
+            </p>
+          </Link>
+
+          <Link
+            href="/calculators/fraction-calculator"
+            className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500 hover:shadow-xs transition-all group"
+          >
+            <h4 className="font-bold text-blue-600 dark:text-blue-400 text-sm group-hover:underline mb-1 flex items-center justify-between">
+              <span>Fraction Calculator</span>
+              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              Add, subtract, multiply, and simplify fractions to irreducible lowest terms using common factors.
+            </p>
+          </Link>
+        </div>
       </section>
 
-      {/* 2. MATHEMATICAL CONCEPT */}
+      {/* ========================================================================= */}
+      {/* 1. DEFINITION AND MEANING */}
+      {/* ========================================================================= */}
       <section className="space-y-4">
         <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Layers className="h-6 w-6 text-blue-600" />
-          <span>2. Mathematical Concept, Global Terminology & Definitions</span>
+          <BookOpen className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>1. Greatest Common Factor (GCF): Definition and Meaning</span>
         </h2>
         <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-          In global educational systems and mathematics literature, the Greatest Common Factor is known under three equivalent terms:
+          The <strong>Greatest Common Factor (GCF)</strong> is the largest positive integer that divides every number in a given set without leaving a remainder. In number theory, the same quantity is commonly called the <strong>Greatest Common Divisor (GCD)</strong>. In some curricula, especially in the UK and other Commonwealth contexts, it is also called the <strong>Highest Common Factor (HCF)</strong>.
         </p>
-        <ul className="space-y-2 text-sm text-slate-700 dark:text-slate-300 pl-4 list-disc">
-          <li>
-            <strong>GCF (Greatest Common Factor):</strong> Standard terminology in American and Canadian mathematics curricula.
+        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          For positive integers, GCF, GCD, and HCF refer to the exact same mathematical quantity.
+        </p>
+
+        <div className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+            Introductory Worked Set: 36, 54, and 90
+          </h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-sans">
+            <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+              <span className="font-bold text-slate-700 dark:text-slate-300 block">Factors of 36:</span>
+              <p className="font-mono text-slate-600 dark:text-slate-400">1, 2, 3, 4, 6, 9, 12, 18, 36</p>
+            </div>
+            <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+              <span className="font-bold text-slate-700 dark:text-slate-300 block">Factors of 54:</span>
+              <p className="font-mono text-slate-600 dark:text-slate-400">1, 2, 3, 6, 9, 18, 27, 54</p>
+            </div>
+            <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-1">
+              <span className="font-bold text-slate-700 dark:text-slate-300 block">Factors of 90:</span>
+              <p className="font-mono text-slate-600 dark:text-slate-400">1, 2, 3, 5, 6, 9, 10, 15, 18, 30, 45, 90</p>
+            </div>
+          </div>
+          <p className="text-xs text-slate-700 dark:text-slate-300 pt-1">
+            The common factors shared by all three numbers are <strong>1, 2, 3, 6, 9, and 18</strong>. The largest among these is <strong>18</strong>.
+          </p>
+          <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-200 font-mono text-sm font-bold text-center">
+            {"GCF(36, 54, 90) = 18"}
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 2. GCF, GCD AND HCF */}
+      {/* ========================================================================= */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <Layers className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>2. GCF, GCD and HCF: Are They the Same?</span>
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          For ordinary integer calculations, GCF, GCD, and HCF are different names for the same concept:
+        </p>
+        <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-sans">
+          <li className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
+            <strong className="text-blue-600 dark:text-blue-400 block text-sm">GCF</strong>
+            <span>Greatest Common Factor (standard in US &amp; Canadian curricula)</span>
           </li>
-          <li>
-            <strong>GCD (Greatest Common Divisor):</strong> Standard terminology in computer science, abstract algebra, and number theory.
+          <li className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
+            <strong className="text-blue-600 dark:text-blue-400 block text-sm">GCD</strong>
+            <span>Greatest Common Divisor (standard in computer science &amp; number theory)</span>
           </li>
-          <li>
-            <strong>HCF (Highest Common Factor):</strong> Standard terminology in British, Indian, Australian, and Singaporean mathematics curricula.
+          <li className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
+            <strong className="text-blue-600 dark:text-blue-400 block text-sm">HCF</strong>
+            <span>Highest Common Factor (standard in UK, Indian, &amp; Commonwealth systems)</span>
           </li>
         </ul>
-
-        <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-center font-mono text-base font-bold text-blue-700 dark:text-blue-300">
-          {"g = GCF(a, b) ⟺ g | a  AND  g | b, and g is the largest positive integer"}
-        </div>
+        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          For example, whether written as <code className="font-mono font-bold text-blue-600 dark:text-blue-400">GCF(48, 180) = 12</code>, <code className="font-mono font-bold text-blue-600 dark:text-blue-400">GCD(48, 180) = 12</code>, or <code className="font-mono font-bold text-blue-600 dark:text-blue-400">HCF(48, 180) = 12</code>, all three identify the exact same mathematical value.
+        </p>
       </section>
 
-      {/* 3. FORMULA SECTION */}
+      {/* ========================================================================= */}
+      {/* 3. HOW TO FIND THE GCF */}
+      {/* ========================================================================= */}
       <section className="space-y-4">
         <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Target className="h-6 w-6 text-blue-600" />
-          <span>3. Core Formulas & The 5 Mathematical Properties of GCF</span>
+          <Calculator className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>3. How to Find the GCF</span>
         </h2>
         <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-          The Greatest Common Factor satisfies rigid algebraic properties governing integer division and modular congruence:
+          There are several valid ways to calculate a greatest common factor. The most useful method depends on the size and structure of the numbers:
         </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-          <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <h4 className="text-xs font-bold text-blue-600 uppercase">1. Commutative Property</h4>
-            <p className="font-mono text-sm font-bold">{"GCF(a, b) = GCF(b, a)"}</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Order of operands does not change the resulting factor.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">1. Listing Factors</span>
+            <p className="text-slate-600 dark:text-slate-400">Directly enumerating all divisors; easiest for small classroom numbers.</p>
           </div>
-
-          <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <h4 className="text-xs font-bold text-blue-600 uppercase">2. Associative Property</h4>
-            <p className="font-mono text-sm font-bold">{"GCF(a, GCF(b, c)) = GCF(GCF(a, b), c)"}</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Allows computing GCF iteratively across N integers.</p>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">2. Prime Factorization</span>
+            <p className="text-slate-600 dark:text-slate-400">Decomposing into prime powers and taking minimum exponents for all shared primes.</p>
           </div>
-
-          <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <h4 className="text-xs font-bold text-blue-600 uppercase">3. Distributive Property</h4>
-            <p className="font-mono text-sm font-bold">{"GCF(k·a, k·b) = |k| · GCF(a, b)"}</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Factoring out multiplier k scales the GCF by |k|.</p>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">3. Euclidean Algorithm</span>
+            <p className="text-slate-600 dark:text-slate-400">Repeated modulo division; optimal for large numbers without full factorization.</p>
           </div>
-
-          <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <h4 className="text-xs font-bold text-blue-600 uppercase">4. GCF-LCM Duality Theorem</h4>
-            <p className="font-mono text-sm font-bold">{"GCF(a, b) × LCM(a, b) = |a × b|"}</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              For two positive integers a and b, the product of their greatest common factor and least common multiple equals the product of the two integers.
-            </p>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">4. Division Grid / Ladder</span>
+            <p className="text-slate-600 dark:text-slate-400">Simultaneous extraction of common prime divisors in an inverted division table.</p>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">5. Repeated Pairwise GCF</span>
+            <p className="text-slate-600 dark:text-slate-400">Applying associativity across N numbers: GCF(a, b, c) = GCF(GCF(a, b), c).</p>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-extrabold text-blue-600 dark:text-blue-400 text-sm">6. Bézout's Identity</span>
+            <p className="text-slate-600 dark:text-slate-400">Expressing GCF as an integer linear combination: a·x + b·y = GCF(a, b).</p>
           </div>
         </div>
       </section>
 
-      {/* 4. HOW THE CALCULATION WORKS */}
+      {/* ========================================================================= */}
+      {/* 4. GCF BY LISTING FACTORS */}
+      {/* ========================================================================= */}
       <section className="space-y-4">
         <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <ShieldCheck className="h-6 w-6 text-blue-600" />
-          <span>4. How the Calculation Works (Step-by-Step Breakdown)</span>
+          <ListOrdered className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>4. GCF by Listing Factors</span>
         </h2>
         <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-          When an integer set is provided, the calculation engine runs through four processing phases:
+          The direct factor-listing method is often the easiest approach for classroom examples. Suppose we need the GCF of 24 and 36:
+        </p>
+        <div className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2 text-xs font-mono">
+          <p><strong>Factors of 24:</strong> 1, 2, 3, 4, 6, 8, 12, 24</p>
+          <p><strong>Factors of 36:</strong> 1, 2, 3, 4, 6, 9, 12, 18, 36</p>
+          <p className="text-blue-600 dark:text-blue-400 font-bold"><strong>Common Factors:</strong> 1, 2, 3, 4, 6, 12</p>
+          <p className="text-sm font-bold text-slate-900 dark:text-slate-100 pt-1">
+            The largest common factor is <strong>12</strong>. Therefore, <code className="text-blue-600">GCF(24, 36) = 12</code>.
+          </p>
+        </div>
+        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          The limitation is computational efficiency. As integers grow into tens or hundreds of thousands, listing every divisor becomes impractical. For larger inputs, the Euclidean algorithm is mathematically superior.
+        </p>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 5. GCF BY PRIME FACTORIZATION */}
+      {/* ========================================================================= */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <Zap className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>5. GCF by Prime Factorization</span>
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          Prime factorization decomposes an integer into unique prime building blocks. To find the GCF of 36, 54, and 90:
+        </p>
+        <div className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2 text-xs font-mono">
+          <p>36 = 2² × 3²</p>
+          <p>54 = 2¹ × 3³</p>
+          <p>90 = 2¹ × 3² × 5¹</p>
+          <div className="pt-2 border-t border-slate-200 dark:border-slate-700 space-y-1 font-sans">
+            <p>• <strong>Prime 2:</strong> Appears in all three. Minimum exponent = 1 → 2¹</p>
+            <p>• <strong>Prime 3:</strong> Appears in all three. Minimum exponent = 2 → 3²</p>
+            <p>• <strong>Prime 5:</strong> Not present in 36 or 54 → Excluded</p>
+            <p className="pt-1 font-mono font-bold text-blue-600 dark:text-blue-400 text-sm">
+              {"GCF = 2¹ × 3² = 2 × 9 = 18"}
+            </p>
+          </div>
+        </div>
+        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          This minimum-exponent rule explains why prime factorization works: the GCF can only contain the amount of each prime power that all numbers have in common.
+        </p>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 6. GCF BY THE EUCLIDEAN ALGORITHM */}
+      {/* ========================================================================= */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <ShieldCheck className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>6. GCF by the Euclidean Algorithm</span>
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          The Euclidean algorithm is a fast, highly efficient algorithm for computing the greatest common divisor of two integers. It is governed by the recursive invariant:
+        </p>
+        <div className="p-3.5 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-200 dark:border-blue-800 font-mono text-sm font-bold text-center text-blue-900 dark:text-blue-200">
+          {"GCF(a, b) = GCF(b, a mod b)"}
+        </div>
+        <p className="text-xs text-slate-600 dark:text-slate-400">
+          where <code className="font-mono">a mod b</code> is the remainder obtained when <code className="font-mono">a</code> is divided by <code className="font-mono">b</code>.
         </p>
 
-        <ol className="space-y-3 text-sm text-slate-700 dark:text-slate-300 pl-4 list-decimal">
-          <li className="pl-2">
-            <strong>Input Parsing & Domain Normalization:</strong> Input strings are tokenized into absolute positive integers.
-          </li>
-          <li className="pl-2">
-            <strong>Euclidean Remainder Division:</strong> The engine executes repeated integer division (a = b &middot; q + r). The last non-zero remainder r is identified as the exact GCF.
-          </li>
-          <li className="pl-2">
-            <strong>Prime Power Minimum Selection:</strong> Prime factor powers are compared across all numbers, taking the minimum exponent count for each common prime.
-          </li>
-          <li className="pl-2">
-            <strong>Bézout Coefficient Evaluation:</strong> The Extended Euclidean Algorithm solves for integer coefficients x and y satisfying a &middot; x + b &middot; y = GCF(a, b).
-          </li>
-        </ol>
+        <div className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2 text-xs font-mono">
+          <p className="font-bold text-slate-700 dark:text-slate-300 font-sans">Worked Step-by-Step for GCF(180, 48):</p>
+          <p>Step 1: 180 = 48 × 3 + 36  (remainder = 36)</p>
+          <p>Step 2: 48 = 36 × 1 + 12   (remainder = 12)</p>
+          <p>Step 3: 36 = 12 × 3 + 0    (remainder = 0)</p>
+          <p className="pt-1 font-bold text-emerald-600 dark:text-emerald-400 font-sans">
+            The last non-zero remainder is 12. Therefore, GCF(180, 48) = 12.
+          </p>
+        </div>
       </section>
 
-      {/* 5. WORKED EXAMPLES */}
+      {/* ========================================================================= */}
+      {/* 7. GCF OF THREE OR MORE NUMBERS */}
+      {/* ========================================================================= */}
       <section className="space-y-4">
         <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <CheckCircle2 className="h-6 w-6 text-blue-600" />
-          <span>5. Worked Calculation Examples</span>
+          <Layers className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>7. GCF of Three or More Numbers</span>
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          The GCF operation is associative and commutative, allowing it to scale to any finite set of integers:
+        </p>
+        <div className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 font-mono text-sm text-center font-bold">
+          {"GCF(a, b, c) = GCF(GCF(a, b), c)"}
+        </div>
+        <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+          To find <code className="font-mono font-bold">GCF(36, 54, 90)</code>, first evaluate <code className="font-mono font-bold">GCF(36, 54) = 18</code>. Then evaluate <code className="font-mono font-bold">GCF(18, 90) = 18</code>. Changing the grouping or order does not alter the result: <code className="font-mono font-bold">GCF(90, 36, 54) = 18</code>.
+        </p>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 8. WHAT DOES IT MEAN WHEN GCF IS 1? */}
+      {/* ========================================================================= */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <ShieldCheck className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>8. What Does It Mean When the GCF Is 1?</span>
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          When the GCF of a set of integers is 1, the numbers have no common divisor greater than 1. They are collectively <strong>relatively prime</strong> (or <strong>coprime</strong>).
+        </p>
+        <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 space-y-1 text-xs">
+          <p className="font-bold text-amber-900 dark:text-amber-200">
+            Example: GCF(6, 10, 15) = 1 and GCF(17, 19, 23) = 1
+          </p>
+          <p className="text-amber-800 dark:text-amber-300">
+            A GCF of 1 does not mean the individual numbers have no divisors. 6, 10, and 15 are composite, but no single factor greater than 1 divides all three simultaneously.
+          </p>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 9 & 10. WORKED EXAMPLES */}
+      {/* ========================================================================= */}
+      <section className="space-y-6">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <Award className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>9 &amp; 10. Complete Step-by-Step Worked Examples</span>
         </h2>
 
-        <div className="space-y-4">
-          {/* Example 1 */}
-          <div className="bg-slate-50 dark:bg-slate-800/80 p-5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
-            <h3 className="text-sm font-bold text-blue-600">
-              Example 1 (Prime Factorization Method): Find GCF(36, 54)
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <h3 className="text-sm font-extrabold text-blue-600 dark:text-blue-400">
+              Worked Example 1: GCF(12, 18, 30)
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              <strong>Step 1:</strong> Factorize into prime powers: 36 = 2&#178; &middot; 3&#178;, 54 = 2&#185; &middot; 3&#179;.<br />
-              <strong>Step 2:</strong> Select minimum power for shared primes: min(2&#178;, 2&#185;) = 2&#185;, min(3&#178;, 3&#179;) = 3&#178;.<br />
-              <strong>Step 3:</strong> Multiply: GCF = 2&#185; &middot; 3&#178; = 2 &middot; 9 = <strong>18</strong>.
+            <div className="space-y-1.5 text-xs font-mono">
+              <p>12 = 2² × 3</p>
+              <p>18 = 2 × 3²</p>
+              <p>30 = 2 × 3 × 5</p>
+              <p className="pt-1 font-sans text-slate-700 dark:text-slate-300">
+                Shared primes: 2 (min power 1) and 3 (min power 1).
+              </p>
+              <p className="font-bold text-blue-600 dark:text-blue-400">GCF = 2 × 3 = 6</p>
+              <div className="pt-2 border-t border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-sans">
+                <strong>Divisibility Verification:</strong> 12÷6=2, 18÷6=3, 30÷6=5. All integer quotients; no larger common divisor exists.
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <h3 className="text-sm font-extrabold text-blue-600 dark:text-blue-400">
+              Worked Example 2: GCF(48, 180)
+            </h3>
+            <div className="space-y-1.5 text-xs font-mono">
+              <p>48 = 2⁴ × 3</p>
+              <p>180 = 2² × 3² × 5</p>
+              <p className="pt-1 font-sans text-slate-700 dark:text-slate-300">
+                min(4, 2) for prime 2 = 2; min(1, 2) for prime 3 = 1.
+              </p>
+              <p className="font-bold text-blue-600 dark:text-blue-400">GCF = 2² × 3 = 4 × 3 = 12</p>
+              <div className="pt-2 border-t border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 font-sans">
+                <strong>Divisibility Verification:</strong> 48÷12=4, 180÷12=15. Since GCF(4, 15)=1, 12 is the maximal factor.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 11. GCF AND LEAST COMMON MULTIPLE */}
+      {/* ========================================================================= */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <Calculator className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>11. GCF and the Least Common Multiple (GCF-LCM Duality)</span>
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          For two positive integers <code className="font-mono font-bold">a</code> and <code className="font-mono font-bold">b</code>, the greatest common factor and the least common multiple satisfy a fundamental product identity:
+        </p>
+        <div className="p-4 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-200 dark:border-blue-800 text-center font-mono text-base font-extrabold text-blue-900 dark:text-blue-200">
+          {"GCF(a, b) × LCM(a, b) = |a × b| = a × b"}
+        </div>
+        <div className="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-mono space-y-1">
+          <p>For a = 48, b = 180:</p>
+          <p>GCF(48, 180) = 12,  LCM(48, 180) = 720</p>
+          <p>GCF × LCM = 12 × 720 = 8,640</p>
+          <p>Product a × b = 48 × 180 = 8,640</p>
+        </div>
+        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          For the complementary smallest-common-multiple problem, explore our dedicated{" "}
+          <Link href="/calculators/lcm-calculator" className="font-bold text-blue-600 dark:text-blue-400 underline">
+            Least Common Multiple (LCM) Calculator
+          </Link>.
+        </p>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 12, 13, 14. APPLICATIONS: FRACTIONS, RATIOS, ALGEBRA */}
+      {/* ========================================================================= */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <Award className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>12, 13 &amp; 14. Core Mathematical Applications</span>
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h4 className="font-bold text-sm text-blue-600 dark:text-blue-400">12. Fraction Reduction</h4>
+            <p className="text-slate-600 dark:text-slate-400">
+              To reduce 48/180, divide numerator and denominator by GCF(48, 180) = 12: (48÷12)/(180÷12) = 4/15. For full multi-step fraction operations, use our{" "}
+              <Link href="/calculators/fraction-calculator" className="font-bold text-blue-600 dark:text-blue-400 underline">
+                Fraction Calculator
+              </Link>.
             </p>
           </div>
 
-          {/* Example 2 */}
-          <div className="bg-slate-50 dark:bg-slate-800/80 p-5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
-            <h3 className="text-sm font-bold text-blue-600">
-              Example 2 (Euclidean Division Method): Find GCF(268442, 178296)
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 font-mono">
-              268442 = 178296 &middot; 1 + 90146<br />
-              178296 = 90146 &middot; 1 + 88150<br />
-              90146 = 88150 &middot; 1 + 1996<br />
-              88150 = 1996 &middot; 44 + 326<br />
-              1996 = 326 &middot; 6 + 40<br />
-              326 = 40 &middot; 8 + 6<br />
-              40 = 6 &middot; 6 + 4<br />
-              6 = 4 &middot; 1 + 2<br />
-              4 = 2 &middot; 2 + 0 ⟹ Last non-zero remainder = <strong>2</strong>.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h4 className="font-bold text-sm text-blue-600 dark:text-blue-400">13. Ratio Simplification</h4>
+            <p className="text-slate-600 dark:text-slate-400">
+              For 36 : 54 : 90, dividing every term by GCF = 18 yields 2 : 3 : 5, preserving relative proportions while eliminating common scaling.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h4 className="font-bold text-sm text-blue-600 dark:text-blue-400">14. Algebraic Factoring</h4>
+            <p className="text-slate-600 dark:text-slate-400">
+              Factoring out common terms: 12x + 18 = 6(2x + 3), and for polynomials with variables: 12x² + 18x = 6x(2x + 3).
             </p>
           </div>
         </div>
       </section>
 
-      {/* 6. VISUAL UNDERSTANDING */}
+      {/* ========================================================================= */}
+      {/* 15. DIVISION GRID / LADDER METHOD */}
+      {/* ========================================================================= */}
       <section className="space-y-4">
         <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Lightbulb className="h-6 w-6 text-blue-600" />
-          <span>6. Visual Understanding & Reference Comparison Tables</span>
+          <Grid className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>15. GCF Using a Division Grid or Ladder Method</span>
         </h2>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse font-sans">
-            <thead>
-              <tr className="bg-blue-600 text-white font-bold">
-                <th className="p-2.5">Integer Set</th>
-                <th className="p-2.5">Prime Factorization</th>
-                <th className="p-2.5">GCF</th>
-                <th className="p-2.5">LCM</th>
-                <th className="p-2.5">Coprime Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-700 bg-slate-50 dark:bg-slate-800/50">
-              <tr>
-                <td className="p-2 font-bold">(36, 54)</td>
-                <td className="p-2 font-mono">36=2&#178;&middot;3&#178;, 54=2&middot;3&#179;</td>
-                <td className="p-2 font-mono font-bold text-emerald-600">18</td>
-                <td className="p-2 font-mono">108</td>
-                <td className="p-2 font-bold text-slate-500">No</td>
-              </tr>
-              <tr>
-                <td className="p-2 font-bold">(17, 31)</td>
-                <td className="p-2 font-mono">17 (prime), 31 (prime)</td>
-                <td className="p-2 font-mono font-bold text-emerald-600">1</td>
-                <td className="p-2 font-mono">527</td>
-                <td className="p-2 font-bold text-emerald-600">Yes (Coprime)</td>
-              </tr>
-              <tr>
-                <td className="p-2 font-bold">(16, 88, 104)</td>
-                <td className="p-2 font-mono">16=2&#8308;, 88=2&#173;&#179;&middot;11, 104=2&#179;&middot;13</td>
-                <td className="p-2 font-mono font-bold text-emerald-600">8</td>
-                <td className="p-2 font-mono">22,880</td>
-                <td className="p-2 font-bold text-slate-500">No</td>
-              </tr>
-            </tbody>
-          </table>
+        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          The division grid (ladder method) extracts common prime factors repeatedly from all integers simultaneously:
+        </p>
+        <div className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 text-xs font-mono space-y-1.5">
+          <p>Divide by 2:  36, 54, 90  →  [18, 27, 45]</p>
+          <p>Divide by 3:  18, 27, 45  →  [6, 9, 15]</p>
+          <p>Divide by 3:  6, 9, 15    →  [2, 3, 5]</p>
+          <p className="pt-2 font-bold text-blue-600 dark:text-blue-400 font-sans">
+            Common Divisors Product: 2 × 3 × 3 = 18. Remaining quotients [2, 3, 5] share no factor &gt; 1.
+          </p>
         </div>
       </section>
 
-      {/* 7. COMMON MISTAKES */}
+      {/* ========================================================================= */}
+      {/* 16. BÉZOUT'S IDENTITY AND GCF */}
+      {/* ========================================================================= */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <ShieldCheck className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>16. Bézout's Identity and the GCF</span>
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          For two integers <code className="font-mono">a</code> and <code className="font-mono">b</code>, Bézout's identity states that there exist integers <code className="font-mono">x</code> and <code className="font-mono">y</code> such that:
+        </p>
+        <div className="p-3 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-200 dark:border-blue-800 font-mono text-sm font-bold text-center text-blue-900 dark:text-blue-200">
+          {"a · x + b · y = GCF(a, b)"}
+        </div>
+        <p className="text-xs text-slate-600 dark:text-slate-400">
+          For 48 and 180: <code className="font-mono font-bold">48 × 4 + 180 × (−1) = 192 − 180 = 12</code>. This linear equation provides an exact algebraic verification of the result and is fundamental to modular arithmetic, cryptography, and Diophantine equations.
+        </p>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 17. PRIME FACTOR VIEW */}
+      {/* ========================================================================= */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <Zap className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>17. Prime-Factor View: GCF vs LCM Duality</span>
+        </h2>
+        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
+          <p>Suppose a = 2⁵ × 3² × 7 and b = 2³ × 3⁴ × 11:</p>
+          <p className="font-bold text-blue-600 dark:text-blue-400 font-mono">
+            GCF takes MINIMUM exponents of shared primes: 2³ × 3² = 72
+          </p>
+          <p className="font-bold text-emerald-600 dark:text-emerald-400 font-mono">
+            LCM takes MAXIMUM exponents of all primes: 2⁵ × 3⁴ × 7¹ × 11¹
+          </p>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 18 & 19. HOW THE CALCULATOR WORKS & INPUT RULES */}
+      {/* ========================================================================= */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <Calculator className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>18 &amp; 19. How the Calculator Works &amp; Input Rules</span>
+        </h2>
+        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+          Enter two or more positive integers separated by commas or spaces into the calculation field (e.g. <code className="font-mono font-bold">12, 18, 30</code> or <code className="font-mono font-bold">48 180</code>). The calculator dynamically parses the input, evaluates the GCF, computes the LCM, generates prime power expressions, and renders 6 tabbed mathematical derivations.
+        </p>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 20 & 21. EDGE CASES & COMMON FACTORS */}
+      {/* ========================================================================= */}
       <section className="space-y-4">
         <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
           <AlertTriangle className="h-6 w-6 text-amber-500" />
-          <span>7. Common Errors & Edge Cases in GCF Calculations</span>
+          <span>20 &amp; 21. Edge Cases &amp; GCF vs Common Factors</span>
         </h2>
-
-        <div className="space-y-3 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 space-y-1">
-            <h4 className="font-bold text-amber-900 dark:text-amber-200">
-              Mistake 1: Confusing GCF with LCM (Least Common Multiple)
-            </h4>
-            <p className="text-xs text-amber-800 dark:text-amber-300">
-              GCF is the largest common divisor dividing into all numbers (&le; smallest number). LCM is the smallest common multiple divisible by all numbers (&ge; largest number).
+            <h4 className="font-bold text-amber-900 dark:text-amber-200">Zero &amp; Negative Numbers</h4>
+            <p className="text-amber-800 dark:text-amber-300">
+              For any non-zero integer a, GCF(a, 0) = |a|. Negative inputs are mapped to absolute values: GCF(−12, 18) = 6. The pair (0, 0) is undefined.
             </p>
           </div>
-
-          <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 space-y-1">
-            <h4 className="font-bold text-amber-900 dark:text-amber-200">
-              Mistake 2: Handling Zero [GCF(a, 0) = |a|]
-            </h4>
-            <p className="text-xs text-amber-800 dark:text-amber-300">
-              Every non-zero integer divides 0. Thus, GCF(a, 0) = |a|. However, GCF(0, 0) is mathematically undefined.
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-1">
+            <h4 className="font-bold text-slate-900 dark:text-slate-100">GCF vs Common Factors</h4>
+            <p className="text-slate-600 dark:text-slate-400">
+              Common factors of 12 and 18 are 1, 2, 3, and 6. Every GCF is a common factor, but only 6 is the maximal common factor.
             </p>
           </div>
         </div>
       </section>
 
-      {/* 8. PRACTICAL APPLICATIONS */}
+      {/* ========================================================================= */}
+      {/* 22 & 23. GCF VS LCM & METHOD SELECTION */}
+      {/* ========================================================================= */}
       <section className="space-y-4">
         <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Award className="h-6 w-6 text-blue-600" />
-          <span>8. Real-World Applications Across Fields</span>
+          <CheckCircle2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>22 &amp; 23. When to Use Each Calculation Method</span>
         </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
+            <strong className="text-blue-600 dark:text-blue-400 block mb-1">Factor Listing</strong>
+            <span>Best for small integers (&lt;50) when learning factor definitions.</span>
+          </div>
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
+            <strong className="text-blue-600 dark:text-blue-400 block mb-1">Prime Factorization</strong>
+            <span>Best when prime structure or simultaneous LCM computation is needed.</span>
+          </div>
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
+            <strong className="text-blue-600 dark:text-blue-400 block mb-1">Euclidean Algorithm</strong>
+            <span>Best for large integers where factoring into primes is computationally hard.</span>
+          </div>
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800">
+            <strong className="text-blue-600 dark:text-blue-400 block mb-1">Bézout's Identity</strong>
+            <span>Essential for number theory, modular inverses, and Diophantine equations.</span>
+          </div>
+        </div>
+      </section>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h4 className="font-bold text-slate-900 dark:text-slate-100 text-sm">Simplifying Rational Fractions & Ratios</h4>
+      {/* ========================================================================= */}
+      {/* 24 & 25. APPLICATIONS & CROSS-VERIFICATION */}
+      {/* ========================================================================= */}
+      <section className="space-y-4">
+        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <Award className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>24 &amp; 25. Real-World Applications &amp; Cross-Method Verification</span>
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-slate-900 dark:text-slate-100 text-sm">Equal Grouping &amp; Distribution Logistics</span>
             <p className="text-slate-600 dark:text-slate-400">
-              Dividing numerator and denominator by their GCF reduces rational fractions to simplest irreducible form.
+              When packaging different items (e.g. 36 pens, 54 notebooks, 90 folders) into identical kits without leftovers, GCF(36, 54, 90) = 18 kits.
             </p>
           </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h4 className="font-bold text-slate-900 dark:text-slate-100 text-sm">Cryptography & RSA Encryption</h4>
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-1">
+            <span className="font-bold text-slate-900 dark:text-slate-100 text-sm">Room Tiling &amp; Grid Geometry</span>
             <p className="text-slate-600 dark:text-slate-400">
-              The Extended Euclidean Algorithm computes modular multiplicative inverses required for RSA public/private key generation.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h4 className="font-bold text-slate-900 dark:text-slate-100 text-sm">Room Tiling & Grid Geometry</h4>
-            <p className="text-slate-600 dark:text-slate-400">
-              Determining the largest square tile size that covers an M &times; N rectangular floor without cutting tiles.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h4 className="font-bold text-slate-900 dark:text-slate-100 text-sm">Equal Distribution Logistics</h4>
-            <p className="text-slate-600 dark:text-slate-400">
-              Distributing different quantities of supplies into identical containers without leftover items.
+              The largest square tile that can tile an M × N rectangular floor without cutting tiles equals GCF(M, N).
             </p>
           </div>
         </div>
       </section>
 
-      {/* 9. RELATED MATHEMATICAL CONCEPTS */}
-      <section className="space-y-4">
+      {/* ========================================================================= */}
+      {/* 26. FREQUENTLY ASKED QUESTIONS (UNFOLDED, 401(K) EXECUTIVE STYLE) */}
+      {/* ========================================================================= */}
+      <section className="space-y-5 pt-2">
         <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <HelpCircle className="h-6 w-6 text-blue-600" />
-          <span>9. Related Mathematical Concepts & Prerequisite Topics</span>
+          <HelpCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          <span>26. Frequently Asked Questions About GCF</span>
         </h2>
-        <ul className="space-y-2 text-sm text-slate-700 dark:text-slate-300 pl-4 list-disc">
-          <li><strong>Least Common Multiple (LCM):</strong> The complementary common multiple metric.</li>
-          <li><strong>Bézout's Identity:</strong> Expression of GCF as a linear combination of two integers.</li>
-          <li><strong>Prime Number Factorization:</strong> Unique prime power decomposition of integers.</li>
-        </ul>
+        <p className="text-sm text-slate-600 dark:text-slate-400">
+          Clear, mathematically verified answers to common questions about greatest common factors, divisors, and integer arithmetic:
+        </p>
+        <div className="space-y-3">
+          {faqs.map((faq, idx) => (
+            <div
+              key={idx}
+              className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 space-y-2 shadow-xs transition-all"
+            >
+              <h3 className="font-bold text-sm sm:text-base text-slate-900 dark:text-slate-100 flex items-start gap-2">
+                <span className="text-blue-600 dark:text-blue-400 font-mono font-extrabold">Q:</span>
+                <span>{faq.q}</span>
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed pl-6">
+                {faq.a}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
 
-      {/* 10. SUMMARY */}
+      {/* ========================================================================= */}
+      {/* 27. FINAL TAKEAWAY */}
+      {/* ========================================================================= */}
       <section className="space-y-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800/60 p-6 rounded-2xl border border-blue-200 dark:border-slate-700">
-        <h2 className="text-lg font-extrabold text-blue-900 dark:text-blue-300">
-          10. Educational Summary
+        <h2 className="text-lg sm:text-xl font-extrabold text-blue-900 dark:text-blue-300 flex items-center gap-2">
+          <CheckCircle2 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <span>27. Final Educational Takeaway</span>
         </h2>
         <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
-          The <strong>Greatest Common Factor (GCF) Calculator & Factorization Suite</strong> integrates fundamental arithmetic and advanced number theory. Combining 6 distinct derivation methods—from Euclidean remainders to Bézout coefficients and Venn diagrams—the suite offers clear problem solving and mathematical authority.
+          The Greatest Common Factor is the largest integer that divides every number in a set without a remainder. GCF, GCD, and HCF are interchangeable names for the exact same integer concept. For two positive integers, GCF is directly linked to the Least Common Multiple through <code className="font-mono font-bold text-blue-700 dark:text-blue-300">{"GCF(a, b) × LCM(a, b) = a × b"}</code>. A reliable GCF calculation does more than return a number: it establishes a precise divisibility relationship among your numbers across arithmetic, fraction reduction, and discrete mathematics.
         </p>
       </section>
 
-    </div>
+      {/* ========================================================================= */}
+      {/* 28. BOTTOM RELATED-CALCULATOR BLOCK (Once at the very end) */}
+      {/* ========================================================================= */}
+      <section className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+        <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
+          <Compass className="h-4 w-4" />
+          <span>Related Integer &amp; Arithmetic Calculators</span>
+        </h3>
+        <p className="text-xs text-slate-600 dark:text-slate-400">
+          Continue your mathematical exploration with these related tools:
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+          <Link
+            href="/calculators/lcm-calculator"
+            className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500 hover:shadow-xs transition-all group"
+          >
+            <h4 className="font-bold text-blue-600 dark:text-blue-400 text-sm group-hover:underline mb-1 flex items-center justify-between">
+              <span>Least Common Multiple (LCM) Calculator</span>
+              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              Find the smallest positive common multiple for 2 or more numbers with step-by-step methods.
+            </p>
+          </Link>
+
+          <Link
+            href="/calculators/factor-calculator"
+            className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500 hover:shadow-xs transition-all group"
+          >
+            <h4 className="font-bold text-blue-600 dark:text-blue-400 text-sm group-hover:underline mb-1 flex items-center justify-between">
+              <span>Factor Calculator &amp; Prime Factorization</span>
+              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              Decompose any integer into prime factor trees, discover all divisor pairs, and check primality.
+            </p>
+          </Link>
+
+          <Link
+            href="/calculators/fraction-calculator"
+            className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500 hover:shadow-xs transition-all group"
+          >
+            <h4 className="font-bold text-blue-600 dark:text-blue-400 text-sm group-hover:underline mb-1 flex items-center justify-between">
+              <span>Fraction Calculator</span>
+              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+            </h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              Add, subtract, multiply, and simplify fractions to irreducible lowest terms using common factors.
+            </p>
+          </Link>
+        </div>
+      </section>
+
+    </article>
   );
 }
+
+export default GcfContent;

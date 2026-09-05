@@ -3,8 +3,8 @@ import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const gcf_calculatorMetadata: Metadata = {
   ...generateCalculatorMetadata({
-    title: "Greatest Common Factor (GCF) Calculator with Steps",
-    description: "Free online Greatest Common Factor (GCF) Calculator & Factorization Suite. Calculate GCF, GCD, HCF, and LCM for 2 to 15+ numbers with Prime Factorization, Euclidean Algorithm, Division Grid, Bézout Identity, and Venn Diagrams.",
+    title: "GCF Calculator – Greatest Common Factor, GCD & HCF",
+    description: "Calculate the GCF, GCD or HCF of 2 or more numbers with prime factorization, Euclidean steps, common factors, Bézout identity and LCM.",
     slug: "gcf-calculator"
   }),
   keywords: [

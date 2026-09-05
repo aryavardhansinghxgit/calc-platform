@@ -21,7 +21,10 @@ import {
   Bookmark,
   Trash2,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Download,
+  FileText,
+  RotateCcw
 } from "lucide-react";
 import {
   parseGcfNumbersInput,
@@ -42,6 +45,31 @@ export interface SavedGcfItem {
   resultsList?: string[];
   expression?: string;
   timestamp: string;
+  rawInput?: string;
+  rawA?: string;
+  rawB?: string;
+}
+
+export function formatPrimeSuperscript(expr: string): string {
+  if (!expr) return "";
+  const superscripts: Record<string, string> = {
+    "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴",
+    "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹"
+  };
+  return expr.replace(/\^(\d+)/g, (_, digits) =>
+    digits.split("").map((d: string) => superscripts[d] || d).join("")
+  );
+}
+
+export function formatGcfLatex(nums: number[], gcf: number, primeExpr?: string): string {
+  const numList = nums.join(",");
+  if (primeExpr && primeExpr !== `${gcf}` && primeExpr !== "1") {
+    const latexPrime = primeExpr
+      .replace(/\s*×\s*/g, "\\times")
+      .replace(/\^(\d+)/g, "^$1");
+    return `\\operatorname{GCF}(${numList})=${latexPrime}=${gcf}`;
+  }
+  return `\\operatorname{GCF}(${numList})=${gcf}`;
 }
 
 export function GcfCalculator() {
@@ -55,6 +83,9 @@ export function GcfCalculator() {
 
   // Feedback states
   const [copiedResult, setCopiedResult] = useState<boolean>(false);
+  const [copiedLatex, setCopiedLatex] = useState<boolean>(false);
+  const [copiedPairResult, setCopiedPairResult] = useState<boolean>(false);
+  const [copiedPairLatex, setCopiedPairLatex] = useState<boolean>(false);
   const [copiedTable, setCopiedTable] = useState<boolean>(false);
   const [copiedExplanation, setCopiedExplanation] = useState<boolean>(false);
   const [copiedUrl, setCopiedUrl] = useState<boolean>(false);
@@ -114,12 +145,41 @@ export function GcfCalculator() {
     return null;
   }, [pairNumbers]);
 
-  const handleCopy = (text: string, setFn: React.Dispatch<React.SetStateAction<boolean>>) => {
+  const fallbackCopy = (text: string, setFn: React.Dispatch<React.SetStateAction<boolean>>) => {
     try {
-      navigator.clipboard.writeText(text);
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
       setFn(true);
       setTimeout(() => setFn(false), 2000);
-    } catch (e) {}
+    } catch (err) {}
+  };
+
+  const handleCopy = (text: string, setFn: React.Dispatch<React.SetStateAction<boolean>>) => {
+    try {
+      if (typeof navigator !== "undefined" && navigator?.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(
+          () => {
+            setFn(true);
+            setTimeout(() => setFn(false), 2000);
+          },
+          () => {
+            fallbackCopy(text, setFn);
+          }
+        );
+      } else {
+        fallbackCopy(text, setFn);
+      }
+    } catch (e) {
+      fallbackCopy(text, setFn);
+    }
   };
 
   const handleShare = () => {
@@ -127,6 +187,39 @@ export function GcfCalculator() {
     params.set("q", inputStr);
     const shareableUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
     handleCopy(shareableUrl, setCopiedUrl);
+  };
+
+  const handleExportCsv = () => {
+    if (numbers.length === 0) return;
+    const primeStr = formatPrimeSuperscript(summary.gcfPrimeExpression);
+    const now = new Date().toISOString();
+
+    const headers = ["Input Set", "GCF", "LCM", "Prime Factorization", "Method", "Timestamp"];
+    const row = [
+      `[${numbers.join(", ")}]`,
+      `${summary.gcf}`,
+      `${summary.lcm}`,
+      `${primeStr}`,
+      "GCF Calculator",
+      now
+    ];
+
+    const escapeCsv = (val: string) => `"${val.replace(/"/g, '""')}"`;
+    const csvContent = [
+      headers.map(escapeCsv).join(","),
+      row.map(escapeCsv).join(",")
+    ].join("\r\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    const dateStr = new Date().toISOString().slice(0, 10);
+    link.setAttribute("download", `gcf-calculation-${dateStr}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // Save Card 1 Handler
@@ -147,6 +240,7 @@ export function GcfCalculator() {
       id: Date.now().toString(),
       title: `GCF/HCF([${numbers.join(", ")}])`,
       inputs: inputsStr,
+      rawInput: inputStr,
       operation: opStr,
       result: resList.join(" | "),
       resultsList: resList,
@@ -162,6 +256,17 @@ export function GcfCalculator() {
 
     setJustSavedGcf(true);
     setTimeout(() => setJustSavedGcf(false), 2000);
+  };
+
+  const handleRestoreGcf = (item: SavedGcfItem) => {
+    if (item.rawInput !== undefined) {
+      setInputStr(item.rawInput);
+    } else {
+      const match = item.inputs.match(/\[(.*?)\]/) || item.title.match(/\[(.*?)\]/);
+      if (match && match[1]) {
+        setInputStr(match[1]);
+      }
+    }
   };
 
   // Save Card 2 Handler
@@ -182,6 +287,8 @@ export function GcfCalculator() {
       id: Date.now().toString(),
       title: `Pairwise GCF(${pairA}, ${pairB})`,
       inputs: inputsStr,
+      rawA: pairA,
+      rawB: pairB,
       operation: opStr,
       result: resList.join(" | "),
       resultsList: resList,
@@ -199,6 +306,19 @@ export function GcfCalculator() {
     setTimeout(() => setJustSavedPair(false), 2000);
   };
 
+  const handleRestorePair = (item: SavedGcfItem) => {
+    if (item.rawA !== undefined && item.rawB !== undefined) {
+      setPairA(item.rawA);
+      setPairB(item.rawB);
+    } else {
+      const match = item.inputs.match(/a:\s*(\d+),\s*b:\s*(\d+)/);
+      if (match) {
+        setPairA(match[1]);
+        setPairB(match[2]);
+      }
+    }
+  };
+
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
       {/* ========================================================================= */}
@@ -210,7 +330,7 @@ export function GcfCalculator() {
           <button
             type="button"
             onClick={handleSaveGcf}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            className="no-print bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
           >
             <Bookmark className="w-3 h-3 text-white" />
             <span>{justSavedGcf ? "Saved!" : "Save"}</span>
@@ -277,6 +397,53 @@ export function GcfCalculator() {
                 <p className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">
                   Prime Factor Form: {summary.gcfPrimeExpression}
                 </p>
+
+                {/* USER-FACING CONTROLS: COPY RESULT, COPY LATEX, EXPORT CSV */}
+                <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 no-print">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const primeFormatted = formatPrimeSuperscript(summary.gcfPrimeExpression);
+                      const copyStr = [
+                        `GCF(${numbers.join(", ")}) = ${summary.gcf}`,
+                        `LCM(${numbers.join(", ")}) = ${summary.lcm}`,
+                        `Prime factorization of GCF: ${primeFormatted}`
+                      ].join("\n");
+                      handleCopy(copyStr, setCopiedResult);
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
+                    aria-label="Copy Result"
+                    title="Copy calculation summary to clipboard"
+                  >
+                    {copiedResult ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-slate-500" />}
+                    <span>{copiedResult ? "Copied!" : "Copy Result"}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const latexStr = formatGcfLatex(numbers, summary.gcf, summary.gcfPrimeExpression);
+                      handleCopy(latexStr, setCopiedLatex);
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
+                    aria-label="Copy LaTeX"
+                    title="Copy LaTeX formula to clipboard"
+                  >
+                    {copiedLatex ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <FileText className="w-3.5 h-3.5 text-slate-500" />}
+                    <span>{copiedLatex ? "Copied LaTeX!" : "Copy LaTeX"}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleExportCsv}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 transition-colors cursor-pointer"
+                    aria-label="Export CSV"
+                    title="Export calculation as CSV"
+                  >
+                    <Download className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                    <span>Export CSV</span>
+                  </button>
+                </div>
 
                 <div className="grid grid-cols-2 gap-2 text-xs font-bold pt-2 border-t border-slate-100 dark:border-slate-800">
                   <div className="p-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl">
@@ -650,18 +817,31 @@ export function GcfCalculator() {
                           <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
                           <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = savedGcfItems.filter(i => i.id !== item.id);
-                            setSavedGcfItems(updated);
-                            try { localStorage.setItem("saved_gcf_calculations", JSON.stringify(updated)); } catch(e){}
-                          }}
-                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
-                          title="Delete saved calculation"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1.5 no-print">
+                          <button
+                            type="button"
+                            onClick={() => handleRestoreGcf(item)}
+                            className="flex items-center gap-1 text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/50 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors cursor-pointer"
+                            title="Load this calculation into active inputs"
+                            aria-label="Load calculation"
+                          >
+                            <RotateCcw className="w-3 h-3" />
+                            <span>Load</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = savedGcfItems.filter(i => i.id !== item.id);
+                              setSavedGcfItems(updated);
+                              try { localStorage.setItem("saved_gcf_calculations", JSON.stringify(updated)); } catch(e){}
+                            }}
+                            className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                            title="Delete saved calculation"
+                            aria-label="Delete saved calculation"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
@@ -712,7 +892,7 @@ export function GcfCalculator() {
           <button
             type="button"
             onClick={handleSavePair}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            className="no-print bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
           >
             <Bookmark className="w-3 h-3 text-white" />
             <span>{justSavedPair ? "Saved!" : "Save"}</span>
@@ -753,12 +933,56 @@ export function GcfCalculator() {
             {/* RIGHT COLUMN: LIVE PAIRWISE MATRIX & BEZOUT */}
             <div className="md:col-span-7 space-y-4">
               <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
-                <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
-                    GCF({pairA}, {pairB})
-                  </span>
+                <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
+                      GCF({pairA}, {pairB})
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">
+                      Evaluated
+                    </span>
+                  </div>
                   <div className="text-3xl font-sans tabular-nums font-extrabold text-slate-900 dark:text-slate-100 break-all">
                     {pairSummary.gcf}
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 no-print">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const copyStr = [
+                          `GCF(${pairA}, ${pairB}) = ${pairSummary.gcf}`,
+                          `LCM(${pairA}, ${pairB}) = ${pairSummary.lcm}`,
+                          bezoutDataCard2 ? `Bézout identity: ${bezoutDataCard2.identityStr}` : ""
+                        ].filter(Boolean).join("\n");
+                        handleCopy(copyStr, setCopiedPairResult);
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
+                      aria-label="Copy Pairwise Result"
+                      title="Copy pairwise calculation summary"
+                    >
+                      {copiedPairResult ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-slate-500" />}
+                      <span>{copiedPairResult ? "Copied!" : "Copy Result"}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        let latex = `\\operatorname{GCF}(${pairA},${pairB})=${pairSummary.gcf}`;
+                        if (bezoutDataCard2) {
+                          const yFormatted = bezoutDataCard2.y < 0 ? `(${bezoutDataCard2.y})` : `${bezoutDataCard2.y}`;
+                          const bezoutLatex = `${bezoutDataCard2.a}\\times${bezoutDataCard2.x}+${bezoutDataCard2.b}\\times${yFormatted}=${bezoutDataCard2.gcf}`;
+                          latex += `\n${bezoutLatex}`;
+                        }
+                        handleCopy(latex, setCopiedPairLatex);
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
+                      aria-label="Copy Pairwise LaTeX"
+                      title="Copy LaTeX formula"
+                    >
+                      {copiedPairLatex ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <FileText className="w-3.5 h-3.5 text-slate-500" />}
+                      <span>{copiedPairLatex ? "Copied LaTeX!" : "Copy LaTeX"}</span>
+                    </button>
                   </div>
                 </div>
 
@@ -825,18 +1049,31 @@ export function GcfCalculator() {
                           <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
                           <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = savedPairItems.filter(i => i.id !== item.id);
-                            setSavedPairItems(updated);
-                            try { localStorage.setItem("saved_gcf_pairwise", JSON.stringify(updated)); } catch(e){}
-                          }}
-                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
-                          title="Delete saved calculation"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1.5 no-print">
+                          <button
+                            type="button"
+                            onClick={() => handleRestorePair(item)}
+                            className="flex items-center gap-1 text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/50 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors cursor-pointer"
+                            title="Load this pairwise calculation into active inputs"
+                            aria-label="Load pairwise calculation"
+                          >
+                            <RotateCcw className="w-3 h-3" />
+                            <span>Load</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = savedPairItems.filter(i => i.id !== item.id);
+                              setSavedPairItems(updated);
+                              try { localStorage.setItem("saved_gcf_pairwise", JSON.stringify(updated)); } catch(e){}
+                            }}
+                            className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
+                            title="Delete saved calculation"
+                            aria-label="Delete saved calculation"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">

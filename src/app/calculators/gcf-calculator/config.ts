@@ -9,7 +9,7 @@ export const gcf_calculatorConfig: CalculatorModuleDefinition = {
   slug: "gcf-calculator",
   category: "Math",
   subcategory: "General Math",
-  description: "Calculate the Greatest Common Factor (GCF / GCD / HCF) and LCM for 2 to 15+ numbers with 6 multi-method step-by-step derivations.",
+  description: "Find the greatest common factor (GCF), greatest common divisor (GCD), or highest common factor (HCF) of two or more integers with step-by-step mathematical methods.",
   iconName: "Layers",
   featured: true,
   keywords: [
