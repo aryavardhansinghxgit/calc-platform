@@ -1,25 +1,22 @@
-async function checkSchema() {
-  const url = process.argv[2] || 'http://localhost:3000/calculators/matrix-calculator';
-  const res = await fetch(url);
-  const html = await res.text();
-  const scripts = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g);
-  console.log('JSON-LD scripts found:', scripts ? scripts.length : 0);
-  if (scripts) {
-    scripts.forEach((s, idx) => {
-      const raw = s.replace(/<script type="application\/ld\+json">/, '').replace(/<\/script>/, '');
-      try {
-        const parsed = JSON.parse(raw);
-        console.log(`Schema [${idx}] @type:`, parsed['@type']);
-        if (parsed['@type'] === 'BreadcrumbList') {
-          console.log('Breadcrumbs:', parsed.itemListElement.map(x => x.name));
-        }
-        if (parsed['@type'] === 'WebApplication' || parsed['@type'] === 'SoftwareApplication') {
-          console.log('Application Name:', parsed.name);
-        }
-      } catch (e) {
-        console.log(`Schema [${idx}] parse error:`, e.message);
+const fs = require("fs");
+const html = fs.readFileSync("scratch/ssr_output.html", "utf8");
+
+const scriptRegex = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/gi;
+let match;
+let count = 0;
+while ((match = scriptRegex.exec(html)) !== null) {
+  try {
+    const json = JSON.parse(match[1]);
+    console.log(`Schema [${count++}] @type:`, json["@type"]);
+    if (json["@type"] === "FAQPage") {
+      console.log("FAQ count in schema:", json.mainEntity ? json.mainEntity.length : 0);
+      if (json.mainEntity) {
+        json.mainEntity.slice(0, 3).forEach((item, i) => {
+          console.log(`FAQ [${i}]:`, item.name);
+        });
       }
-    });
+    }
+  } catch (err) {
+    console.error("JSON parse error:", err.message);
   }
 }
-checkSchema().catch(console.error);

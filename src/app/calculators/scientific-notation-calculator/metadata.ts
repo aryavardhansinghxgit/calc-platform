@@ -4,15 +4,23 @@ import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 export const scientific_notation_calculatorMetadata: Metadata = {
   ...generateCalculatorMetadata({
     title: "Scientific Notation Calculator & Converter with Steps",
-    description: "Free online Scientific Notation Calculator & Converter Suite. Perform arithmetic (+, -, ×, /), convert across Normalized Scientific, Engineering Notation with SI Metric Prefixes, E-Notation, and Physical Constants.",
+    description: "Use this scientific notation calculator to convert numbers and calculate in scientific, engineering, and E notation with step-by-step results.",
     slug: "scientific-notation-calculator"
   }),
   keywords: [
-    "Scientific Notation Calculator",
-    "Scientific Notation to Decimal",
-    "Decimal to Scientific Notation",
-    "Scientific Notation Operations",
-    "Engineering Notation Calculator",
-    "E Notation Calculator"
+    "scientific notation calculator",
+    "scientific notation converter",
+    "scientific notation calculator with steps",
+    "engineering notation calculator",
+    "engineering notation converter",
+    "E notation converter",
+    "scientific notation conversion",
+    "convert to scientific notation",
+    "scientific notation arithmetic",
+    "scientific notation multiplication",
+    "scientific notation division",
+    "scientific notation addition",
+    "scientific notation subtraction",
+    "scientific notation exponent calculator"
   ]
 };

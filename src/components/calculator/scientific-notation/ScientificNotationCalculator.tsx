@@ -2,34 +2,21 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import {
-  Calculator,
-  Copy,
-  Check,
-  Share2,
-  Sparkles,
   Sliders,
-  BookOpen,
-  Zap,
-  Grid,
-  ListOrdered,
-  Layers,
-  PieChart,
-  CheckCircle2,
-  Info,
-  ShieldCheck,
-  Split,
-  Atom,
-  Binary,
   Bookmark,
   Trash2,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Copy,
+  Check,
+  FileText,
+  Download,
+  RotateCcw
 } from "lucide-react";
 import {
   ScientificNumber,
   PHYSICAL_CONSTANTS,
   parseToScientific,
-  normalizeScientific,
   formatNormalizedScientific,
   formatEngineeringNotation,
   formatENotation,
@@ -54,6 +41,55 @@ export interface SavedScientificItem {
   resultsList?: string[];
   expression?: string;
   timestamp: string;
+  rawInputs?: Record<string, any>;
+}
+
+// Clipboard helper with fallback
+async function copyToClipboard(text: string, onSuccess: () => void) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      onSuccess();
+    } else {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+      onSuccess();
+    }
+  } catch (err) {
+    console.error("Clipboard copy failed:", err);
+  }
+}
+
+// RFC-compliant CSV exporter
+function exportCsv(filename: string, headers: string[], rows: (string | number)[][]) {
+  const escapeCsv = (val: string | number) => {
+    const s = String(val ?? "");
+    if (s.includes(",") || s.includes('"') || s.includes("\n")) {
+      return `"${s.replace(/"/g, '""')}"`;
+    }
+    return s;
+  };
+  const csvContent = [
+    headers.map(escapeCsv).join(","),
+    ...rows.map(row => row.map(escapeCsv).join(","))
+  ].join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", filename);
+  link.style.visibility = "hidden";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 export function ScientificNotationCalculator() {
@@ -70,11 +106,19 @@ export function ScientificNotationCalculator() {
   const [convPrecision, setConvPrecision] = useState<number>(4);
 
   // Card 3 Inputs: Physical Constants
-  const [selectedConstantName, setSelectedConstantName] = useState<string>("Speed of Light in Vacuum");
+  const [selectedConstantName, setSelectedConstantName] = useState<string>(PHYSICAL_CONSTANTS[0].name);
 
-  // Action feedback states
-  const [copiedSci, setCopiedSci] = useState<boolean>(false);
-  const [copiedDec, setCopiedDec] = useState<boolean>(false);
+  // Copy & Action feedback states for Card 1
+  const [copiedArithRes, setCopiedArithRes] = useState<boolean>(false);
+  const [copiedArithLatex, setCopiedArithLatex] = useState<boolean>(false);
+
+  // Copy & Action feedback states for Card 2
+  const [copiedConvRes, setCopiedConvRes] = useState<boolean>(false);
+  const [copiedConvLatex, setCopiedConvLatex] = useState<boolean>(false);
+
+  // Copy & Action feedback states for Card 3
+  const [copiedConstRes, setCopiedConstRes] = useState<boolean>(false);
+  const [copiedConstLatex, setCopiedConstLatex] = useState<boolean>(false);
 
   // Saved calculation states for Card 1, 2, 3
   const [savedArithItems, setSavedArithItems] = useState<SavedScientificItem[]>([]);
@@ -158,6 +202,83 @@ export function ScientificNotationCalculator() {
   const constDecString = useMemo(() => formatStandardDecimal(constSciNum, 8), [constSciNum]);
   const constWordString = useMemo(() => formatWordRepresentation(constSciNum), [constSciNum]);
 
+  // ==========================================
+  // CARD 1: COPY & EXPORT HANDLERS
+  // ==========================================
+  const handleCopyArithResult = () => {
+    const opSym = arithOp === "mult" ? "×" : arithOp === "div" ? "÷" : arithOp === "add" ? "+" : arithOp === "sub" ? "−" : arithOp === "pow" ? "^" : arithOp === "sqrt" ? "√" : "²";
+    const expr = arithOp === "sqrt"
+      ? `√(${manX} × 10^${expX})`
+      : arithOp === "sq"
+      ? `(${manX} × 10^${expX})²`
+      : `(${manX} × 10^${expX}) ${opSym} (${manY} × 10^${expY})`;
+    const text = `${expr} = ${arithNormString}\nDecimal: ${arithDecString}\nEngineering: ${arithEngDetails.engineeringString} ${arithEngDetails.prefixSymbol ? `(${arithEngDetails.prefixSymbol})` : ""}\nE-Notation: ${arithEText}\nWord Representation: ${arithWordString}`;
+    copyToClipboard(text, () => {
+      setCopiedArithRes(true);
+      setTimeout(() => setCopiedArithRes(false), 2000);
+    });
+  };
+
+  const handleCopyArithLatex = () => {
+    let latexExpr = "";
+    const cleanSci = arithNormString.replace(/×/g, "\\times ").replace(/\^/g, "^");
+    if (arithOp === "mult") {
+      latexExpr = `(${manX} \\times 10^{${expX}}) \\times (${manY} \\times 10^{${expY}}) = ${cleanSci}`;
+    } else if (arithOp === "div") {
+      latexExpr = `\\frac{${manX} \\times 10^{${expX}}}{${manY} \\times 10^{${expY}}} = ${cleanSci}`;
+    } else if (arithOp === "add") {
+      latexExpr = `(${manX} \\times 10^{${expX}}) + (${manY} \\times 10^{${expY}}) = ${cleanSci}`;
+    } else if (arithOp === "sub") {
+      latexExpr = `(${manX} \\times 10^{${expX}}) - (${manY} \\times 10^{${expY}}) = ${cleanSci}`;
+    } else if (arithOp === "pow") {
+      latexExpr = `(${manX} \\times 10^{${expX}})^{${numY.mantissa * Math.pow(10, numY.exponent)}} = ${cleanSci}`;
+    } else if (arithOp === "sqrt") {
+      latexExpr = `\\sqrt{${manX} \\times 10^{${expX}}} = ${cleanSci}`;
+    } else if (arithOp === "sq") {
+      latexExpr = `(${manX} \\times 10^{${expX}})^2 = ${cleanSci}`;
+    }
+    copyToClipboard(latexExpr, () => {
+      setCopiedArithLatex(true);
+      setTimeout(() => setCopiedArithLatex(false), 2000);
+    });
+  };
+
+  const handleExportArithCsv = () => {
+    const headers = [
+      "Module",
+      "Operation",
+      "Mantissa X",
+      "Exponent X",
+      "Mantissa Y",
+      "Exponent Y",
+      "Precision",
+      "Scientific Result",
+      "Decimal Result",
+      "Engineering Result",
+      "E-Notation Result",
+      "Word Representation",
+      "Timestamp"
+    ];
+    const rows = [
+      [
+        "Arithmetic Solver",
+        arithOp,
+        manX,
+        expX,
+        arithOp === "sqrt" || arithOp === "sq" ? "N/A" : manY,
+        arithOp === "sqrt" || arithOp === "sq" ? "N/A" : expY,
+        precision,
+        arithNormString,
+        arithDecString,
+        arithEngDetails.engineeringString,
+        arithEText,
+        arithWordString,
+        new Date().toISOString()
+      ]
+    ];
+    exportCsv(`scientific_arithmetic_${Date.now()}.csv`, headers, rows);
+  };
+
   // Save Card 1 Handler
   const handleSaveArith = () => {
     const inputsStr = `X: (${manX} × 10^${expX}), Y: (${manY} × 10^${expY}), Op: ${arithOp}`;
@@ -178,7 +299,8 @@ export function ScientificNotationCalculator() {
       result: resList.join(" | "),
       resultsList: resList,
       expression: arithNormString,
-      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+      rawInputs: { manX, expX, manY, expY, arithOp, precision }
     };
 
     const updated = [newItem, ...savedArithItems.filter(item => item.inputs !== inputsStr)].slice(0, 15);
@@ -189,6 +311,65 @@ export function ScientificNotationCalculator() {
 
     setJustSavedArith(true);
     setTimeout(() => setJustSavedArith(false), 2000);
+  };
+
+  // Restore Card 1 Handler
+  const handleRestoreArith = (item: SavedScientificItem) => {
+    if (!item.rawInputs) return;
+    if (item.rawInputs.manX !== undefined) setManX(String(item.rawInputs.manX));
+    if (item.rawInputs.expX !== undefined) setExpX(String(item.rawInputs.expX));
+    if (item.rawInputs.manY !== undefined) setManY(String(item.rawInputs.manY));
+    if (item.rawInputs.expY !== undefined) setExpY(String(item.rawInputs.expY));
+    if (item.rawInputs.arithOp !== undefined) setArithOp(item.rawInputs.arithOp as any);
+    if (item.rawInputs.precision !== undefined) setPrecision(Number(item.rawInputs.precision));
+  };
+
+  // ==========================================
+  // CARD 2: COPY & EXPORT HANDLERS
+  // ==========================================
+  const handleCopyConvResult = () => {
+    const text = `Input: ${singleInput} = ${convNormString}\nDecimal Form: ${convDecString}\nEngineering Form: ${convEngDetails.engineeringString} ${convEngDetails.prefixSymbol ? `(${convEngDetails.prefixSymbol})` : ""}\nE-Notation: ${convEText}\nWord Representation: ${convWordString}`;
+    copyToClipboard(text, () => {
+      setCopiedConvRes(true);
+      setTimeout(() => setCopiedConvRes(false), 2000);
+    });
+  };
+
+  const handleCopyConvLatex = () => {
+    const cleanSci = convNormString.replace(/×/g, "\\times ").replace(/\^/g, "^");
+    const latexExpr = `${singleInput} = ${cleanSci}`;
+    copyToClipboard(latexExpr, () => {
+      setCopiedConvLatex(true);
+      setTimeout(() => setCopiedConvLatex(false), 2000);
+    });
+  };
+
+  const handleExportConvCsv = () => {
+    const headers = [
+      "Module",
+      "Raw Input",
+      "Precision",
+      "Scientific Notation",
+      "Engineering Notation",
+      "E-Notation",
+      "Decimal Form",
+      "Word Representation",
+      "Timestamp"
+    ];
+    const rows = [
+      [
+        "Single Number Converter",
+        singleInput,
+        convPrecision,
+        convNormString,
+        convEngDetails.engineeringString,
+        convEText,
+        convDecString,
+        convWordString,
+        new Date().toISOString()
+      ]
+    ];
+    exportCsv(`scientific_conversion_${Date.now()}.csv`, headers, rows);
   };
 
   // Save Card 2 Handler
@@ -211,7 +392,8 @@ export function ScientificNotationCalculator() {
       result: resList.join(" | "),
       resultsList: resList,
       expression: convNormString,
-      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+      rawInputs: { singleInput, convPrecision }
     };
 
     const updated = [newItem, ...savedConvItems.filter(item => item.inputs !== inputsStr)].slice(0, 15);
@@ -222,6 +404,69 @@ export function ScientificNotationCalculator() {
 
     setJustSavedConv(true);
     setTimeout(() => setJustSavedConv(false), 2000);
+  };
+
+  // Restore Card 2 Handler
+  const handleRestoreConv = (item: SavedScientificItem) => {
+    if (!item.rawInputs) return;
+    if (item.rawInputs.singleInput !== undefined) setSingleInput(String(item.rawInputs.singleInput));
+    if (item.rawInputs.convPrecision !== undefined) setConvPrecision(Number(item.rawInputs.convPrecision));
+  };
+
+  // ==========================================
+  // CARD 3: COPY & EXPORT HANDLERS
+  // ==========================================
+  const handleCopyConstResult = () => {
+    const text = `${selectedConstObj.name} (${selectedConstObj.symbol}):\nScientific Form: ${constNormString} ${selectedConstObj.unit}\nStandard Decimal: ${constDecString} ${selectedConstObj.unit}\nWord Representation: ${constWordString}\nDescription: ${selectedConstObj.description}`;
+    copyToClipboard(text, () => {
+      setCopiedConstRes(true);
+      setTimeout(() => setCopiedConstRes(false), 2000);
+    });
+  };
+
+  const handleCopyConstLatex = () => {
+    const unitClean = selectedConstObj.unit
+      .replace(/·/g, " \\cdot ")
+      .replace(/⁻¹/g, "^{-1}")
+      .replace(/²/g, "^2")
+      .replace(/³/g, "^3");
+    const latexExpr = `${selectedConstObj.symbol} = ${selectedConstObj.mantissa} \\times 10^{${selectedConstObj.exponent}} \\text{ ${unitClean}}`;
+    copyToClipboard(latexExpr, () => {
+      setCopiedConstLatex(true);
+      setTimeout(() => setCopiedConstLatex(false), 2000);
+    });
+  };
+
+  const handleExportConstCsv = () => {
+    const headers = [
+      "Module",
+      "Constant Name",
+      "Symbol",
+      "Mantissa",
+      "Exponent",
+      "Unit",
+      "Scientific Form",
+      "Decimal Form",
+      "Word Representation",
+      "Description",
+      "Timestamp"
+    ];
+    const rows = [
+      [
+        "Physical Constants Library",
+        selectedConstObj.name,
+        selectedConstObj.symbol,
+        selectedConstObj.mantissa,
+        selectedConstObj.exponent,
+        selectedConstObj.unit,
+        `${selectedConstObj.mantissa} × 10^${selectedConstObj.exponent}`,
+        constDecString,
+        constWordString,
+        selectedConstObj.description,
+        new Date().toISOString()
+      ]
+    ];
+    exportCsv(`scientific_constant_${selectedConstObj.symbol}_${Date.now()}.csv`, headers, rows);
   };
 
   // Save Card 3 Handler
@@ -242,7 +487,8 @@ export function ScientificNotationCalculator() {
       result: resList.join(" | "),
       resultsList: resList,
       expression: constNormString,
-      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })
+      timestamp: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+      rawInputs: { selectedConstantName: selectedConstObj.name }
     };
 
     const updated = [newItem, ...savedConstItems.filter(item => item.inputs !== inputsStr)].slice(0, 15);
@@ -255,18 +501,27 @@ export function ScientificNotationCalculator() {
     setTimeout(() => setJustSavedConst(false), 2000);
   };
 
+  // Restore Card 3 Handler
+  const handleRestoreConst = (item: SavedScientificItem) => {
+    if (!item.rawInputs) return;
+    if (item.rawInputs.selectedConstantName !== undefined) {
+      setSelectedConstantName(String(item.rawInputs.selectedConstantName));
+    }
+  };
+
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
       {/* ========================================================================= */}
       {/* CARD 1: SCIENTIFIC NOTATION ARITHMETIC SOLVER (X × 10ᵃ & Y × 10ᵇ) */}
       {/* ========================================================================= */}
-      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
+      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs print:overflow-visible print:break-inside-avoid print-card">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
           <span>Scientific Notation Arithmetic Solver (X &times; 10ᵃ &amp; Y &times; 10ᵇ)</span>
           <button
             type="button"
             onClick={handleSaveArith}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            className="no-print bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            aria-label="Save arithmetic calculation"
           >
             <Bookmark className="w-3 h-3 text-white" />
             <span>{justSavedArith ? "Saved!" : "Save"}</span>
@@ -335,7 +590,7 @@ export function ScientificNotationCalculator() {
                   </div>
                 </div>
 
-                <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-800">
+                <div className="space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-800 no-print">
                   <div className="flex justify-between items-center text-xs font-bold text-slate-700 dark:text-slate-300">
                     <span>Decimal Precision:</span>
                     <span className="font-mono text-blue-600">{precision} Places</span>
@@ -397,21 +652,52 @@ export function ScientificNotationCalculator() {
                     </div>
                   </>
                 )}
+
+                {/* COPY & EXPORT TOOLBAR */}
+                <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-slate-100 dark:border-slate-800 no-print">
+                  <button
+                    type="button"
+                    onClick={handleCopyArithResult}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+                    aria-label="Copy Result"
+                  >
+                    {copiedArithRes ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedArithRes ? "Copied" : "Copy Result"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCopyArithLatex}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+                    aria-label="Copy LaTeX"
+                  >
+                    {copiedArithLatex ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <FileText className="w-3.5 h-3.5" />}
+                    <span>{copiedArithLatex ? "Copied LaTeX" : "Copy LaTeX"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleExportArithCsv}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+                    aria-label="Export CSV"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Export CSV</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
 
           {/* ARITHMETIC OP SELECTOR BUTTONS & STEP DERIVATION */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 space-y-4 shadow-xs">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+            <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 no-print">
               Select Arithmetic Operation
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 no-print">
               <button
                 type="button"
                 onClick={() => setArithOp("mult")}
                 className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                  arithOp === "mult" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 border-slate-300"
+                  arithOp === "mult" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 dark:bg-slate-800/80 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300"
                 }`}
               >
                 X &times; Y
@@ -420,7 +706,7 @@ export function ScientificNotationCalculator() {
                 type="button"
                 onClick={() => setArithOp("div")}
                 className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                  arithOp === "div" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 border-slate-300"
+                  arithOp === "div" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 dark:bg-slate-800/80 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300"
                 }`}
               >
                 X / Y
@@ -429,7 +715,7 @@ export function ScientificNotationCalculator() {
                 type="button"
                 onClick={() => setArithOp("add")}
                 className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                  arithOp === "add" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 border-slate-300"
+                  arithOp === "add" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 dark:bg-slate-800/80 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300"
                 }`}
               >
                 X + Y
@@ -438,7 +724,7 @@ export function ScientificNotationCalculator() {
                 type="button"
                 onClick={() => setArithOp("sub")}
                 className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                  arithOp === "sub" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 border-slate-300"
+                  arithOp === "sub" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 dark:bg-slate-800/80 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300"
                 }`}
               >
                 X - Y
@@ -447,7 +733,7 @@ export function ScientificNotationCalculator() {
                 type="button"
                 onClick={() => setArithOp("pow")}
                 className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                  arithOp === "pow" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 border-slate-300"
+                  arithOp === "pow" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 dark:bg-slate-800/80 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300"
                 }`}
               >
                 X^Y
@@ -456,7 +742,7 @@ export function ScientificNotationCalculator() {
                 type="button"
                 onClick={() => setArithOp("sqrt")}
                 className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                  arithOp === "sqrt" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 border-slate-300"
+                  arithOp === "sqrt" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 dark:bg-slate-800/80 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300"
                 }`}
               >
                 &radic;X
@@ -465,7 +751,7 @@ export function ScientificNotationCalculator() {
                 type="button"
                 onClick={() => setArithOp("sq")}
                 className={`py-2 px-3 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                  arithOp === "sq" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 border-slate-300"
+                  arithOp === "sq" ? "bg-blue-600 text-white border-blue-600 shadow-xs" : "bg-slate-50 dark:bg-slate-800/80 border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300"
                 }`}
               >
                 X&sup2;
@@ -474,7 +760,7 @@ export function ScientificNotationCalculator() {
 
             {stepExplanation && (
               <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-xs space-y-1">
-                <span className="text-blue-600 font-bold block">Step-by-Step Mathematical Derivation:</span>
+                <span className="text-blue-600 dark:text-blue-400 font-bold block">Step-by-Step Mathematical Derivation:</span>
                 <p className="text-slate-800 dark:text-slate-200 leading-relaxed">{stepExplanation}</p>
               </div>
             )}
@@ -482,7 +768,7 @@ export function ScientificNotationCalculator() {
 
           {/* EMBEDDED SAVED ARITHMETIC SOLVES INSIDE CARD 1 */}
           {savedArithItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4 print:hidden">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
                   <Bookmark className="w-4 h-4 text-blue-600" />
@@ -494,7 +780,7 @@ export function ScientificNotationCalculator() {
                     setSavedArithItems([]);
                     try { localStorage.removeItem("saved_sci_arith"); } catch(e){}
                   }}
-                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1 no-print"
                 >
                   <Trash2 className="w-3.5 h-3.5" /> Clear All
                 </button>
@@ -514,18 +800,30 @@ export function ScientificNotationCalculator() {
                           <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
                           <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = savedArithItems.filter(i => i.id !== item.id);
-                            setSavedArithItems(updated);
-                            try { localStorage.setItem("saved_sci_arith", JSON.stringify(updated)); } catch(e){}
-                          }}
-                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
-                          title="Delete saved calculation"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1 no-print">
+                          <button
+                            type="button"
+                            onClick={() => handleRestoreArith(item)}
+                            className="text-slate-400 hover:text-blue-600 p-1 transition-colors cursor-pointer"
+                            title="Restore saved calculation"
+                            aria-label="Restore saved calculation"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = savedArithItems.filter(i => i.id !== item.id);
+                              setSavedArithItems(updated);
+                              try { localStorage.setItem("saved_sci_arith", JSON.stringify(updated)); } catch(e){}
+                            }}
+                            className="text-slate-400 hover:text-red-600 p-1 transition-colors cursor-pointer"
+                            title="Delete saved calculation"
+                            aria-label="Delete saved calculation"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
@@ -537,7 +835,7 @@ export function ScientificNotationCalculator() {
                         <button
                           type="button"
                           onClick={() => toggleExpand(item.id)}
-                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                          className="no-print w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                         >
                           <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
                           {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
@@ -570,13 +868,14 @@ export function ScientificNotationCalculator() {
       {/* ========================================================================= */}
       {/* CARD 2: SINGLE NUMBER TO SCIENTIFIC & ENGINEERING CONVERTER */}
       {/* ========================================================================= */}
-      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
+      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs print:overflow-visible print:break-inside-avoid print-card">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
           <span>Single Number to Scientific &amp; Engineering Converter</span>
           <button
             type="button"
             onClick={handleSaveConv}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            className="no-print bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            aria-label="Save converted number"
           >
             <Bookmark className="w-3 h-3 text-white" />
             <span>{justSavedConv ? "Saved!" : "Save"}</span>
@@ -604,7 +903,7 @@ export function ScientificNotationCalculator() {
                   />
                 </div>
 
-                <div>
+                <div className="no-print">
                   <div className="flex justify-between items-center text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                     <span>Converter Precision:</span>
                     <span className="font-mono text-blue-600">{convPrecision} Places</span>
@@ -654,13 +953,44 @@ export function ScientificNotationCalculator() {
                     <span className="font-mono text-slate-900 dark:text-slate-100 truncate block">{convDecString}</span>
                   </div>
                 </div>
+
+                {/* COPY & EXPORT TOOLBAR */}
+                <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 no-print">
+                  <button
+                    type="button"
+                    onClick={handleCopyConvResult}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+                    aria-label="Copy Converted Result"
+                  >
+                    {copiedConvRes ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedConvRes ? "Copied" : "Copy Result"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCopyConvLatex}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+                    aria-label="Copy Converted LaTeX"
+                  >
+                    {copiedConvLatex ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <FileText className="w-3.5 h-3.5" />}
+                    <span>{copiedConvLatex ? "Copied LaTeX" : "Copy LaTeX"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleExportConvCsv}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+                    aria-label="Export Converted CSV"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Export CSV</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
 
           {/* EMBEDDED SAVED SCIENTIFIC CONVERSIONS INSIDE CARD 2 */}
           {savedConvItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4 print:hidden">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
                   <Bookmark className="w-4 h-4 text-blue-600" />
@@ -672,7 +1002,7 @@ export function ScientificNotationCalculator() {
                     setSavedConvItems([]);
                     try { localStorage.removeItem("saved_sci_converter"); } catch(e){}
                   }}
-                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1 no-print"
                 >
                   <Trash2 className="w-3.5 h-3.5" /> Clear All
                 </button>
@@ -692,18 +1022,30 @@ export function ScientificNotationCalculator() {
                           <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
                           <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = savedConvItems.filter(i => i.id !== item.id);
-                            setSavedConvItems(updated);
-                            try { localStorage.setItem("saved_sci_converter", JSON.stringify(updated)); } catch(e){}
-                          }}
-                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
-                          title="Delete saved calculation"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1 no-print">
+                          <button
+                            type="button"
+                            onClick={() => handleRestoreConv(item)}
+                            className="text-slate-400 hover:text-blue-600 p-1 transition-colors cursor-pointer"
+                            title="Restore saved calculation"
+                            aria-label="Restore saved calculation"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = savedConvItems.filter(i => i.id !== item.id);
+                              setSavedConvItems(updated);
+                              try { localStorage.setItem("saved_sci_converter", JSON.stringify(updated)); } catch(e){}
+                            }}
+                            className="text-slate-400 hover:text-red-600 p-1 transition-colors cursor-pointer"
+                            title="Delete saved calculation"
+                            aria-label="Delete saved calculation"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
@@ -715,7 +1057,7 @@ export function ScientificNotationCalculator() {
                         <button
                           type="button"
                           onClick={() => toggleExpand(item.id)}
-                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                          className="no-print w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                         >
                           <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
                           {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}
@@ -748,13 +1090,14 @@ export function ScientificNotationCalculator() {
       {/* ========================================================================= */}
       {/* CARD 3: PHYSICAL CONSTANTS SCIENTIFIC LIBRARY */}
       {/* ========================================================================= */}
-      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs">
+      <div className="border border-blue-600 dark:border-blue-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs print:overflow-visible print:break-inside-avoid print-card">
         <div className="bg-blue-600 text-white font-bold text-xs px-4 py-2.5 flex items-center justify-between">
           <span>Physical Constants Scientific Library</span>
           <button
             type="button"
             onClick={handleSaveConst}
-            className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            className="no-print bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
+            aria-label="Save selected constant"
           >
             <Bookmark className="w-3 h-3 text-white" />
             <span>{justSavedConst ? "Saved!" : "Save"}</span>
@@ -775,15 +1118,15 @@ export function ScientificNotationCalculator() {
                     onClick={() => setSelectedConstantName(c.name)}
                     className={`p-3 rounded-xl border text-xs cursor-pointer transition-all ${
                       selectedConstantName === c.name
-                        ? "bg-blue-50 dark:bg-blue-950/40 border-blue-600 text-blue-900 dark:text-blue-100 font-bold"
+                        ? "bg-blue-50 dark:bg-blue-950/40 border-blue-600 text-blue-900 dark:text-blue-100 font-bold shadow-xs"
                         : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-blue-400"
                     }`}
                   >
                     <div className="flex justify-between items-center">
                       <span className="font-extrabold">{c.name} ({c.symbol})</span>
-                      <span className="text-[10px] font-mono text-blue-600 font-bold">{c.unit}</span>
+                      <span className="text-[10px] font-mono text-blue-600 dark:text-blue-400 font-bold">{c.unit}</span>
                     </div>
-                    <p className="font-mono text-xs font-bold text-blue-600 pt-0.5">{c.mantissa} &times; 10^{c.exponent}</p>
+                    <p className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400 pt-0.5">{c.mantissa} &times; 10^{c.exponent}</p>
                   </div>
                 ))}
               </div>
@@ -819,13 +1162,44 @@ export function ScientificNotationCalculator() {
                     <span className="font-mono text-blue-600 dark:text-blue-400 truncate block">{constWordString}</span>
                   </div>
                 </div>
+
+                {/* COPY & EXPORT TOOLBAR */}
+                <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 no-print">
+                  <button
+                    type="button"
+                    onClick={handleCopyConstResult}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+                    aria-label="Copy Constant Details"
+                  >
+                    {copiedConstRes ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedConstRes ? "Copied" : "Copy Result"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCopyConstLatex}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+                    aria-label="Copy Constant LaTeX"
+                  >
+                    {copiedConstLatex ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <FileText className="w-3.5 h-3.5" />}
+                    <span>{copiedConstLatex ? "Copied LaTeX" : "Copy LaTeX"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleExportConstCsv}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+                    aria-label="Export Constant CSV"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Export CSV</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
 
           {/* EMBEDDED SAVED CONSTANT SOLVES INSIDE CARD 3 */}
           {savedConstItems.length > 0 && (
-            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4">
+            <div className="bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs space-y-3 pt-3 mt-4 print:hidden">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
                   <Bookmark className="w-4 h-4 text-blue-600" />
@@ -837,7 +1211,7 @@ export function ScientificNotationCalculator() {
                     setSavedConstItems([]);
                     try { localStorage.removeItem("saved_sci_constants"); } catch(e){}
                   }}
-                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1"
+                  className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer flex items-center gap-1 no-print"
                 >
                   <Trash2 className="w-3.5 h-3.5" /> Clear All
                 </button>
@@ -857,18 +1231,30 @@ export function ScientificNotationCalculator() {
                           <span className="font-extrabold text-blue-600 dark:text-blue-400">{item.title}</span>
                           <span className="text-[10px] text-slate-400 font-sans tabular-nums">{item.timestamp}</span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = savedConstItems.filter(i => i.id !== item.id);
-                            setSavedConstItems(updated);
-                            try { localStorage.setItem("saved_sci_constants", JSON.stringify(updated)); } catch(e){}
-                          }}
-                          className="text-slate-400 hover:text-red-600 p-0.5 transition-colors cursor-pointer"
-                          title="Delete saved calculation"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1 no-print">
+                          <button
+                            type="button"
+                            onClick={() => handleRestoreConst(item)}
+                            className="text-slate-400 hover:text-blue-600 p-1 transition-colors cursor-pointer"
+                            title="Restore saved calculation"
+                            aria-label="Restore saved calculation"
+                          >
+                            <RotateCcw className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = savedConstItems.filter(i => i.id !== item.id);
+                              setSavedConstItems(updated);
+                              try { localStorage.setItem("saved_sci_constants", JSON.stringify(updated)); } catch(e){}
+                            }}
+                            className="text-slate-400 hover:text-red-600 p-1 transition-colors cursor-pointer"
+                            title="Delete saved calculation"
+                            aria-label="Delete saved calculation"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
 
                       <div className="space-y-2 text-slate-700 dark:text-slate-300 font-sans tabular-nums">
@@ -880,7 +1266,7 @@ export function ScientificNotationCalculator() {
                         <button
                           type="button"
                           onClick={() => toggleExpand(item.id)}
-                          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                          className="no-print w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold text-[11px] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                         >
                           <span>{isExpanded ? "Hide Details" : "Show Details"}</span>
                           {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-blue-600" /> : <ChevronDown className="w-3.5 h-3.5 text-blue-600" />}

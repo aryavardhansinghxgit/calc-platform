@@ -334,23 +334,68 @@ export function explainArithmeticStepByStep(
     const xScaled = normX.mantissa * Math.pow(10, normX.exponent - maxExp);
     const yScaled = normY.mantissa * Math.pow(10, normY.exponent - maxExp);
     const sumMan = xScaled + yScaled;
-    return `Align exponents to 10^${maxExp}: (${xScaled.toFixed(4)} + ${yScaled.toFixed(4)}) × 10^${maxExp} = ${sumMan.toFixed(4)} × 10^${maxExp}`;
+    const alignedStr = normX.exponent === normY.exponent
+      ? `Add coefficients: (${normX.mantissa.toFixed(4)} + ${normY.mantissa.toFixed(4)}) × 10^${maxExp} = ${sumMan.toFixed(4)} × 10^${maxExp}`
+      : `Align exponents to 10^${maxExp}: (${xScaled.toFixed(4)} + ${yScaled.toFixed(4)}) × 10^${maxExp} = ${sumMan.toFixed(4)} × 10^${maxExp}`;
+    const normalized = normalizeScientific({ mantissa: sumMan, exponent: maxExp });
+    if (sumMan !== 0 && (Math.abs(sumMan) >= 10 || Math.abs(sumMan) < 1)) {
+      return `${alignedStr} → Re-normalize: ${normalized.mantissa.toFixed(4)} × 10^${normalized.exponent}`;
+    }
+    return alignedStr;
+  }
+
+  if (op === "sub") {
+    const maxExp = Math.max(normX.exponent, normY.exponent);
+    const xScaled = normX.mantissa * Math.pow(10, normX.exponent - maxExp);
+    const yScaled = normY.mantissa * Math.pow(10, normY.exponent - maxExp);
+    const diffMan = xScaled - yScaled;
+    const alignedStr = normX.exponent === normY.exponent
+      ? `Subtract coefficients: (${normX.mantissa.toFixed(4)} - ${normY.mantissa.toFixed(4)}) × 10^${maxExp} = ${diffMan.toFixed(4)} × 10^${maxExp}`
+      : `Align exponents to 10^${maxExp}: (${xScaled.toFixed(4)} - ${yScaled.toFixed(4)}) × 10^${maxExp} = ${diffMan.toFixed(4)} × 10^${maxExp}`;
+    const normalized = normalizeScientific({ mantissa: diffMan, exponent: maxExp });
+    if (diffMan !== 0 && (Math.abs(diffMan) >= 10 || Math.abs(diffMan) < 1)) {
+      return `${alignedStr} → Re-normalize: ${normalized.mantissa.toFixed(4)} × 10^${normalized.exponent}`;
+    }
+    return alignedStr;
   }
 
   if (op === "mult") {
     const productMan = normX.mantissa * normY.mantissa;
     const sumExp = normX.exponent + normY.exponent;
-    return `Multiply coefficients & add exponents: (${normX.mantissa} × ${normY.mantissa}) × 10^(${normX.exponent} + ${normY.exponent}) = ${productMan.toFixed(4)} × 10^${sumExp}`;
+    const rawStr = `Multiply coefficients & add exponents: (${normX.mantissa} × ${normY.mantissa}) × 10^(${normX.exponent} + ${normY.exponent}) = ${productMan.toFixed(4)} × 10^${sumExp}`;
+    const normalized = normalizeScientific({ mantissa: productMan, exponent: sumExp });
+    if (productMan !== 0 && (Math.abs(productMan) >= 10 || Math.abs(productMan) < 1)) {
+      return `${rawStr} → Re-normalize: ${normalized.mantissa.toFixed(4)} × 10^${normalized.exponent}`;
+    }
+    return rawStr;
   }
 
   if (op === "div") {
+    if (normY.mantissa === 0) return "Error: Division by zero is undefined.";
     const divMan = normX.mantissa / normY.mantissa;
     const diffExp = normX.exponent - normY.exponent;
-    return `Divide coefficients & subtract exponents: (${normX.mantissa} / ${normY.mantissa}) × 10^(${normX.exponent} - ${normY.exponent}) = ${divMan.toFixed(4)} × 10^${diffExp}`;
+    const rawStr = `Divide coefficients & subtract exponents: (${normX.mantissa} / ${normY.mantissa}) × 10^(${normX.exponent} - ${normY.exponent}) = ${divMan.toFixed(4)} × 10^${diffExp}`;
+    const normalized = normalizeScientific({ mantissa: divMan, exponent: diffExp });
+    if (divMan !== 0 && (Math.abs(divMan) >= 10 || Math.abs(divMan) < 1)) {
+      return `${rawStr} → Re-normalize: ${normalized.mantissa.toFixed(4)} × 10^${normalized.exponent}`;
+    }
+    return rawStr;
+  }
+
+  if (op === "sq") {
+    const sqMan = normX.mantissa * normX.mantissa;
+    const sqExp = normX.exponent * 2;
+    const rawStr = `Square coefficient & double exponent: (${normX.mantissa})² × 10^(${normX.exponent} × 2) = ${sqMan.toFixed(4)} × 10^${sqExp}`;
+    const normalized = normalizeScientific({ mantissa: sqMan, exponent: sqExp });
+    if (sqMan >= 10) {
+      return `${rawStr} → Re-normalize: ${normalized.mantissa.toFixed(4)} × 10^${normalized.exponent}`;
+    }
+    return rawStr;
   }
 
   if (op === "sqrt") {
     const realVal = normX.mantissa * Math.pow(10, normX.exponent);
+    if (realVal < 0) return "Error: Square root of a negative number is undefined in real numbers.";
     return `sqrt(${normX.mantissa} × 10^${normX.exponent}) = sqrt(${realVal}) = ${Math.sqrt(realVal).toExponential(4)}`;
   }
 

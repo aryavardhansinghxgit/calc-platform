@@ -1,0 +1,6 @@
+H1 count: 1
+H1 [0]: Scientific Notation Calculator &amp; Converter
+Title: Scientific Notation Calculator &amp; Converter with Steps - Free Online Calculator | CalcPlatform
+Meta description: Use this scientific notation calculator to convert numbers and calculate in scientific, engineering, and E notation with step-by-step results.
+Canonical: https://calcplatform.com/calculators/scientific-notation-calculator
+RELATED CALCULATORS count: 2
