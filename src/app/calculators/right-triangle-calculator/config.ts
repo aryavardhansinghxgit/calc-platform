@@ -2,21 +2,22 @@ import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateRightTriangleCalculator } from "./calculator";
 import { RightTriangleCalculator } from "@/components/calculator/right-triangle/RightTriangleCalculator";
 import { RightTriangleContent } from "@/components/calculator/right-triangle/RightTriangleContent";
+import { right_triangle_calculatorFaqs } from "./faq";
 
 export const right_triangle_calculatorConfig: CalculatorModuleDefinition = {
   id: "right-triangle-calculator",
-  title: "Right Triangle Calculator & Trigonometric Solver Suite",
+  title: "Right Triangle Calculator & Trigonometric Solver",
   slug: "right-triangle-calculator",
   category: "Math",
   subcategory: "Geometry",
-  description: "Calculate sides, angles, area, perimeter, altitude, and 6 trigonometric ratios for right-angled triangles.",
+  description: "Solve a right triangle from two known values. Find missing sides, hypotenuse, angles, area, perimeter, altitude, inradius, circumradius, and trig ratios with steps.",
   iconName: "Triangle",
   featured: true,
   keywords: ["right triangle calculator", "trigonometry calculator", "sine cosine tangent", "hypotenuse calculator", "soh cah toa"],
   priority: 1,
   relatedCalculators: ["pythagorean-theorem-calculator", "triangle-calculator", "distance-calculator"],
   formulaDescription: "c = √(a² + b²); α = arctan(a/b); β = 90° - α",
-  faqs: [],
+  faqs: right_triangle_calculatorFaqs,
   CustomComponent: RightTriangleCalculator,
   ContentComponent: RightTriangleContent,
   inputs: [
