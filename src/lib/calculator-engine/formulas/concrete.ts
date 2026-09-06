@@ -102,7 +102,65 @@ export function estimateTruckLoads(cubicYards: number): number {
 
 // ─── Core Result Builder ─────────────────────────────────────────────────────
 
+// ─── Core Result Builder & Validation ────────────────────────────────────────
+
+export function emptyResult(): ConcreteResult {
+  return {
+    cubicFeet: 0,
+    cubicYards: 0,
+    cubicMeters: 0,
+    weightLbs: 0,
+    weightKg: 0,
+    bags40lb: 0,
+    bags50lb: 0,
+    bags60lb: 0,
+    bags80lb: 0,
+    truckLoads: 0,
+  };
+}
+
+export interface ConcreteValidationResult {
+  isValid: boolean;
+  error?: string;
+}
+
+export function validateDimensions(...dims: number[]): ConcreteValidationResult {
+  for (const d of dims) {
+    if (!Number.isFinite(d) || d <= 0) {
+      return { isValid: false, error: "Dimensions must be greater than zero." };
+    }
+  }
+  return { isValid: true };
+}
+
+export function validateQuantity(qty: number): ConcreteValidationResult {
+  if (!Number.isFinite(qty) || qty < 1 || !Number.isInteger(qty)) {
+    return { isValid: false, error: "Quantity must be a positive whole number (1 or greater)." };
+  }
+  return { isValid: true };
+}
+
+export function validateDensity(density: number): ConcreteValidationResult {
+  if (!Number.isFinite(density) || density <= 0) {
+    return { isValid: false, error: "Concrete density must be greater than zero." };
+  }
+  return { isValid: true };
+}
+
+export function validateTube(outer: number, inner: number): ConcreteValidationResult {
+  if (!Number.isFinite(outer) || outer <= 0 || !Number.isFinite(inner) || inner <= 0) {
+    return { isValid: false, error: "Dimensions must be greater than zero." };
+  }
+  if (inner >= outer) {
+    return { isValid: false, error: "Inner diameter must be smaller than outer diameter." };
+  }
+  return { isValid: true };
+}
+
 function buildResult(cubicFeet: number, density: number = DEFAULT_CONCRETE_DENSITY_LBS_PER_CUFT): ConcreteResult {
+  if (cubicFeet <= 0 || !Number.isFinite(cubicFeet)) {
+    return emptyResult();
+  }
   const cubicYards = cubicFeet / 27;
   const cubicMeters = cubicFeet * 0.0283168;
   const weightLbs = cubicFeet * density;
@@ -137,12 +195,20 @@ export function calculateSlabVolume(
   wastagePercent: number = 0,
   density: number = DEFAULT_CONCRETE_DENSITY_LBS_PER_CUFT,
 ): ConcreteResult {
-  const lFt = convertToFeet(Math.max(0, length), lengthUnit);
-  const wFt = convertToFeet(Math.max(0, width), widthUnit);
-  const hFt = convertToFeet(Math.max(0, height), heightUnit);
-  const qty = Math.max(1, Math.round(quantity));
-  const wastageMultiplier = 1 + Math.max(0, wastagePercent) / 100;
-  const cubicFeet = lFt * wFt * hFt * qty * wastageMultiplier;
+  if (length <= 0 || width <= 0 || height <= 0 || !Number.isFinite(length) || !Number.isFinite(width) || !Number.isFinite(height)) {
+    return emptyResult();
+  }
+  if (quantity < 1 || !Number.isInteger(quantity) || !Number.isFinite(quantity)) {
+    return emptyResult();
+  }
+  if (density <= 0 || !Number.isFinite(density)) {
+    return emptyResult();
+  }
+  const lFt = convertToFeet(length, lengthUnit);
+  const wFt = convertToFeet(width, widthUnit);
+  const hFt = convertToFeet(height, heightUnit);
+  const wastageMultiplier = 1 + Math.max(0, Number.isFinite(wastagePercent) ? wastagePercent : 0) / 100;
+  const cubicFeet = lFt * wFt * hFt * quantity * wastageMultiplier;
   return buildResult(cubicFeet, density);
 }
 
@@ -159,12 +225,20 @@ export function calculateColumnVolume(
   wastagePercent: number = 0,
   density: number = DEFAULT_CONCRETE_DENSITY_LBS_PER_CUFT,
 ): ConcreteResult {
-  const dFt = convertToFeet(Math.max(0, diameter), diameterUnit);
-  const hFt = convertToFeet(Math.max(0, height), heightUnit);
-  const qty = Math.max(1, Math.round(quantity));
-  const wastageMultiplier = 1 + Math.max(0, wastagePercent) / 100;
+  if (diameter <= 0 || height <= 0 || !Number.isFinite(diameter) || !Number.isFinite(height)) {
+    return emptyResult();
+  }
+  if (quantity < 1 || !Number.isInteger(quantity) || !Number.isFinite(quantity)) {
+    return emptyResult();
+  }
+  if (density <= 0 || !Number.isFinite(density)) {
+    return emptyResult();
+  }
+  const dFt = convertToFeet(diameter, diameterUnit);
+  const hFt = convertToFeet(height, heightUnit);
+  const wastageMultiplier = 1 + Math.max(0, Number.isFinite(wastagePercent) ? wastagePercent : 0) / 100;
   const radius = dFt / 2;
-  const cubicFeet = Math.PI * radius * radius * hFt * qty * wastageMultiplier;
+  const cubicFeet = Math.PI * radius * radius * hFt * quantity * wastageMultiplier;
   return buildResult(cubicFeet, density);
 }
 
@@ -183,15 +257,27 @@ export function calculateTubeVolume(
   wastagePercent: number = 0,
   density: number = DEFAULT_CONCRETE_DENSITY_LBS_PER_CUFT,
 ): ConcreteResult {
-  const d1Ft = convertToFeet(Math.max(0, outerDiameter), outerUnit);
-  const d2Ft = convertToFeet(Math.max(0, innerDiameter), innerUnit);
-  const hFt = convertToFeet(Math.max(0, height), heightUnit);
-  const qty = Math.max(1, Math.round(quantity));
-  const wastageMultiplier = 1 + Math.max(0, wastagePercent) / 100;
+  if (outerDiameter <= 0 || innerDiameter <= 0 || height <= 0 ||
+      !Number.isFinite(outerDiameter) || !Number.isFinite(innerDiameter) || !Number.isFinite(height)) {
+    return emptyResult();
+  }
+  const d1Ft = convertToFeet(outerDiameter, outerUnit);
+  const d2Ft = convertToFeet(innerDiameter, innerUnit);
+  if (d2Ft >= d1Ft) {
+    return emptyResult();
+  }
+  if (quantity < 1 || !Number.isInteger(quantity) || !Number.isFinite(quantity)) {
+    return emptyResult();
+  }
+  if (density <= 0 || !Number.isFinite(density)) {
+    return emptyResult();
+  }
+  const hFt = convertToFeet(height, heightUnit);
+  const wastageMultiplier = 1 + Math.max(0, Number.isFinite(wastagePercent) ? wastagePercent : 0) / 100;
   const r1 = d1Ft / 2;
   const r2 = d2Ft / 2;
-  const cubicFeet = Math.PI * (r1 * r1 - r2 * r2) * hFt * qty * wastageMultiplier;
-  return buildResult(Math.max(0, cubicFeet), density);
+  const cubicFeet = Math.PI * (r1 * r1 - r2 * r2) * hFt * quantity * wastageMultiplier;
+  return buildResult(cubicFeet, density);
 }
 
 /**
@@ -211,30 +297,33 @@ export function calculateCurbVolume(
   flagThicknessUnit: LengthUnit,
   lengthUnit: LengthUnit,
   quantity: number = 1,
+  density: number = DEFAULT_CONCRETE_DENSITY_LBS_PER_CUFT,
 ): ConcreteResult {
-  const cdFt = convertToFeet(Math.max(0, curbDepth), curbDepthUnit);
-  const gwFt = convertToFeet(Math.max(0, gutterWidth), gutterWidthUnit);
-  const chFt = convertToFeet(Math.max(0, curbHeight), curbHeightUnit);
-  const ftFt = convertToFeet(Math.max(0, flagThickness), flagThicknessUnit);
-  const lFt = convertToFeet(Math.max(0, length), lengthUnit);
-  const qty = Math.max(1, Math.round(quantity));
+  if (curbDepth <= 0 || gutterWidth <= 0 || curbHeight <= 0 || flagThickness <= 0 || length <= 0 ||
+      !Number.isFinite(curbDepth) || !Number.isFinite(gutterWidth) || !Number.isFinite(curbHeight) || !Number.isFinite(flagThickness) || !Number.isFinite(length)) {
+    return emptyResult();
+  }
+  if (quantity < 1 || !Number.isInteger(quantity) || !Number.isFinite(quantity)) {
+    return emptyResult();
+  }
+  if (density <= 0 || !Number.isFinite(density)) {
+    return emptyResult();
+  }
+  const cdFt = convertToFeet(curbDepth, curbDepthUnit);
+  const gwFt = convertToFeet(gutterWidth, gutterWidthUnit);
+  const chFt = convertToFeet(curbHeight, curbHeightUnit);
+  const ftFt = convertToFeet(flagThickness, flagThicknessUnit);
+  const lFt = convertToFeet(length, lengthUnit);
 
-  // L-profile: vertical curb + horizontal gutter flag
   const crossSectionArea = (cdFt * chFt) + (gwFt * ftFt);
-  const cubicFeet = crossSectionArea * lFt * qty;
-  return buildResult(cubicFeet);
+  const cubicFeet = crossSectionArea * lFt * quantity;
+  return buildResult(cubicFeet, density);
 }
 
 /**
  * Card 5: Stairs Calculator
- * Each step is a rectangular block: run × rise × width
- * Steps form a cumulative staircase: step i has height = rise × i
  * Total = sum of all step blocks + platform slab
- * Simplified: V = width × numRisers × run × rise / 2 + width × platformDepth × rise × numRisers
- * More accurately: V = width × [ Σ(i=1..n)(run × rise) + platformDepth × (rise × n) ]
- * Using the standard stepped approach:
- * stepVolume = width × run × rise × n  (each step is same size, stacked cumulatively)
- * triangleVolume = width × (run × n) × (rise × n) / 2
+ * stepsVolume = run × width × rise × n(n+1)/2
  * platformVolume = width × platformDepth × (rise × n)
  */
 export function calculateStairsVolume(
@@ -247,30 +336,26 @@ export function calculateStairsVolume(
   riseUnit: LengthUnit,
   widthUnit: LengthUnit,
   platformUnit: LengthUnit,
+  density: number = DEFAULT_CONCRETE_DENSITY_LBS_PER_CUFT,
 ): ConcreteResult {
-  const runFt = convertToFeet(Math.max(0, run), runUnit);
-  const riseFt = convertToFeet(Math.max(0, rise), riseUnit);
-  const widthFt = convertToFeet(Math.max(0, width), widthUnit);
-  const platFt = convertToFeet(Math.max(0, platformDepth), platformUnit);
-  const n = Math.max(1, Math.round(numRisers));
-
-  // Concrete stairs are solid concrete poured as a wedge shape
-  // The volume = width × [ (totalRun × totalRise / 2) + platformDepth × totalRise ]
-  // where totalRun = run × n, totalRise = rise × n
-  // But more accurately, each step adds its own block
-  // Step i (1-indexed) has dimensions: run × (rise × i) — but that's the full height
-  // Standard approach: sum of rectangular steps
-  // Step 1: run × rise × width
-  // Step 2: run × (2 × rise) × width  ... etc.
-  // Total = run × width × rise × Σ(i=1..n)(i) = run × width × rise × n(n+1)/2
+  if (run <= 0 || rise <= 0 || width <= 0 || platformDepth < 0 || numRisers < 1 ||
+      !Number.isFinite(run) || !Number.isFinite(rise) || !Number.isFinite(width) || !Number.isFinite(platformDepth) || !Number.isFinite(numRisers) ||
+      !Number.isInteger(numRisers)) {
+    return emptyResult();
+  }
+  if (density <= 0 || !Number.isFinite(density)) {
+    return emptyResult();
+  }
+  const runFt = convertToFeet(run, runUnit);
+  const riseFt = convertToFeet(rise, riseUnit);
+  const widthFt = convertToFeet(width, widthUnit);
+  const platFt = convertToFeet(platformDepth, platformUnit);
+  const n = numRisers;
 
   const stepsVolume = runFt * widthFt * riseFt * (n * (n + 1)) / 2;
-
-  // Platform: a slab on top
   const platformVolume = platFt * widthFt * (riseFt * n);
-
   const totalCubicFeet = stepsVolume + platformVolume;
-  return buildResult(totalCubicFeet);
+  return buildResult(totalCubicFeet, density);
 }
 
 // ─── Mix Material Estimation ─────────────────────────────────────────────────
