@@ -9,7 +9,7 @@ export const rounding_calculatorConfig: CalculatorModuleDefinition = {
   slug: "rounding-calculator",
   category: "Math",
   subcategory: "General Math",
-  description: "Round numbers to specified decimal places, place values, sig figs, nearest fractions, custom multiples, Swedish cash rounding, and bulk column CSV rounding with 8 standard IEEE/financial algorithms.",
+  description: "Round numbers to decimal places, significant figures, fractions, multiples and place values. Compare rounding methods, see the deciding digit, and review step-by-step results.",
   iconName: "Binary",
   featured: true,
   keywords: [

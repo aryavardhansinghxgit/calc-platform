@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { rounding_calculatorMetadata } from "./metadata";
 import { rounding_calculatorConfig } from "./config";
+import { rounding_calculatorFaqs } from "./faq";
 import { CalculatorLayout } from "@/components/calculator/CalculatorLayout";
 import { generateJsonLdSchema } from "@/lib/seo-helpers";
 
@@ -13,7 +14,7 @@ export default function RoundingCalculatorPage() {
     description: rounding_calculatorConfig.description,
     slug: rounding_calculatorConfig.slug,
     category: rounding_calculatorConfig.category,
-    faqs: rounding_calculatorConfig.faqs,
+    faqs: rounding_calculatorFaqs,
   });
 
   return (

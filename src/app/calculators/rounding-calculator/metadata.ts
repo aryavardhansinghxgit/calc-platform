@@ -3,16 +3,25 @@ import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const rounding_calculatorMetadata: Metadata = {
   ...generateCalculatorMetadata({
-    title: "Rounding Calculator — Round Decimals, Fractions, and Sig Figs",
-    description: "Free online Rounding Calculator & Numerical Precision Suite. Round numbers to decimal places, sig figs, nearest fractions, custom multiples, and Swedish cash rounding with 8 IEEE/financial algorithms including Banker's Rounding.",
+    title: "Rounding Calculator – Decimal Places, Sig Figs & More",
+    description: "Round numbers to decimal places, significant figures, fractions, multiples and place values. Compare rounding methods, see the deciding digit, and review step-by-step results.",
     slug: "rounding-calculator"
   }),
   keywords: [
     "Rounding Calculator",
-    "Round to the Nearest Tenth",
-    "Round to the Nearest Hundredth",
-    "Round to Nearest Cent",
-    "Significant Figures Rounding Calculator",
-    "Bankers Rounding Calculator"
+    "round to decimal places",
+    "round to nearest whole number",
+    "round to nearest 10 / 100 / 1000",
+    "round to significant figures",
+    "round half up",
+    "round half down",
+    "banker's rounding",
+    "round up / round down",
+    "round to nearest fraction",
+    "round to nearest multiple",
+    "round negative numbers",
+    "rounding calculator with steps",
+    "decimal rounding calculator",
+    "significant figures calculator"
   ]
 };
