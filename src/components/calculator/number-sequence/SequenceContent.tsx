@@ -1,242 +1,767 @@
 "use client";
 
-import React from "react";
-import { BookOpen, CheckCircle2, AlertTriangle, Lightbulb, HelpCircle, Layers, ShieldCheck, Target, Award } from "lucide-react";
+import React, { useState } from "react";
+import Link from "next/link";
+import {
+  HelpCircle,
+  ChevronDown,
+  BookOpen,
+  ArrowRight,
+  TrendingUp,
+  Layers,
+  Calculator,
+  Compass,
+  CheckCircle2,
+  AlertCircle
+} from "lucide-react";
+import { numberSequenceFaqs } from "@/app/calculators/number-sequence-calculator/config";
 
 export function SequenceContent() {
+  // All 10 FAQs open/unfolded by default, following the 401(k) template
+  const [openFaqIndices, setOpenFaqIndices] = useState<Set<number>>(
+    new Set(Array.from({ length: 10 }, (_, i) => i))
+  );
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndices((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
+  };
+
   return (
-    <div className="space-y-10 text-slate-800 dark:text-slate-200 leading-relaxed font-sans">
-      
-      {/* 1. INTRODUCTION */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <BookOpen className="h-6 w-6 text-blue-600" />
-          <span>1. Introduction to the Number Sequence & Series Suite</span>
-        </h2>
-        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-          The <strong>Number Sequence Calculator & Series Suite</strong> is a computational discrete mathematics tool engineered to identify, analyze, and evaluate numerical patterns across arithmetic, geometric, quadratic polynomial, Fibonacci recurrence, and harmonic progressions.
-        </p>
-        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-          This suite features 6 dedicated calculation modes (Automatic Pattern Detector, Arithmetic Suite, Geometric Suite, Fibonacci & Recurrence Solver, Custom Function Evaluator a_n = f(n), and Infinite Convergence Checker) with interactive 2D coordinate scatter plots and method of finite differences tables.
-        </p>
-      </section>
-
-      {/* 2. MATHEMATICAL CONCEPT */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Layers className="h-6 w-6 text-blue-600" />
-          <span>2. Mathematical Concept & Formal Definitions</span>
-        </h2>
-        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-          A <strong>Number Sequence</strong> is an ordered set of elements governed by a specific mathematical rule: {"{aₙ} = a₁, a₂, a₃, ..., aₙ"}. A <strong>Series</strong> represents the cumulative summation of a sequence's terms: {"Sₙ = ∑ aₖ"}.
-        </p>
-
-        <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-center font-mono text-base font-bold text-blue-700 dark:text-blue-300">
-          {"Explicit Formula: aₙ = f(n)   vs.   Recursive Formula: aₙ = f(aₙ₋₁)"}
-        </div>
-      </section>
-
-      {/* 3. FORMULA SECTION */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Target className="h-6 w-6 text-blue-600" />
-          <span>3. Core Sequence & Series Formulas</span>
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-          <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <h4 className="text-xs font-bold text-blue-600 uppercase">1. Arithmetic Sequence & Series</h4>
-            <p className="font-mono text-sm font-bold">{"aₙ = a₁ + (n - 1)d  |  Sₙ = (n/2)[2a₁ + (n - 1)d]"}</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Constant common difference d between consecutive terms.</p>
-          </div>
-
-          <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <h4 className="text-xs font-bold text-blue-600 uppercase">2. Geometric Sequence & Series</h4>
-            <p className="font-mono text-sm font-bold">{"aₙ = a₁ · rⁿ⁻¹  |  S_∞ = a₁ / (1 - r)  for |r| < 1"}</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Constant common ratio r between consecutive terms.</p>
-          </div>
-
-          <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <h4 className="text-xs font-bold text-blue-600 uppercase">3. Fibonacci Binet's Formula</h4>
-            <p className="font-mono text-sm font-bold">{"Fₙ = [ Φⁿ - ψⁿ ] / √5  where Φ = (1+√5)/2"}</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Computes the N-th Fibonacci term using the Golden Ratio.</p>
-          </div>
-
-          <div className="bg-slate-50 dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1.5">
-            <h4 className="text-xs font-bold text-blue-600 uppercase">4. Quadratic Finite Differences</h4>
-            <p className="font-mono text-sm font-bold">{"aₙ = an² + bn + c  where 2a = Δ²"}</p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Constant 2nd difference indicates quadratic growth.</p>
+    <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
+      {/* 1. ABOVE-CONTENT RELATED CALCULATORS STRIP */}
+      <div className="space-y-3">
+        <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2.5 text-xs">
+          <span className="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+            <Calculator className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            RELATED CALCULATORS:
+          </span>
+          <div className="flex flex-wrap items-center gap-2 font-medium">
+            <Link
+              href="/calculators/standard-deviation-calculator"
+              className="text-blue-600 dark:text-blue-400 hover:underline px-2.5 py-1 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 transition-colors"
+            >
+              Standard Deviation Calculator
+            </Link>
+            <span className="text-slate-300 dark:text-slate-600">|</span>
+            <Link
+              href="/calculators/exponent-calculator"
+              className="text-blue-600 dark:text-blue-400 hover:underline px-2.5 py-1 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 transition-colors"
+            >
+              Exponent Calculator
+            </Link>
+            <span className="text-slate-300 dark:text-slate-600">|</span>
+            <Link
+              href="/calculators/big-number-calculator"
+              className="text-blue-600 dark:text-blue-400 hover:underline px-2.5 py-1 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 transition-colors"
+            >
+              Big Number Calculator
+            </Link>
           </div>
         </div>
-      </section>
 
-      {/* 4. HOW THE CALCULATION WORKS */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <ShieldCheck className="h-6 w-6 text-blue-600" />
-          <span>4. How the Calculation Works (Pattern Recognition Steps)</span>
-        </h2>
-
-        <ol className="space-y-3 text-sm text-slate-700 dark:text-slate-300 pl-4 list-decimal">
-          <li className="pl-2">
-            <strong>Check 1st Differences (&Delta;&sup1;):</strong> Subtract consecutive terms. If constant, pattern is Arithmetic.
-          </li>
-          <li className="pl-2">
-            <strong>Check Consecutive Ratios (r):</strong> Divide consecutive terms. If constant, pattern is Geometric.
-          </li>
-          <li className="pl-2">
-            <strong>Check Higher-Order Differences (&Delta;&#178;, &Delta;&#179;):</strong> Calculate successive differences to identify quadratic or polynomial degree.
-          </li>
-          <li className="pl-2">
-            <strong>Formulate Closed-Form Expression (a_n):</strong> Solve coefficient system of equations to output explicit formula.
-          </li>
-        </ol>
-      </section>
-
-      {/* 5. WORKED EXAMPLES */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <CheckCircle2 className="h-6 w-6 text-blue-600" />
-          <span>5. Worked Calculation Example</span>
-        </h2>
-
-        <div className="bg-slate-50 dark:bg-slate-800/80 p-5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
-          <h3 className="text-sm font-bold text-blue-600">
-            Example: Quadratic Sequence (2, 5, 10, 17, 26)
-          </h3>
-          <p className="text-xs text-slate-600 dark:text-slate-400 font-mono">
-            Level 0 Terms: 2, 5, 10, 17, 26<br />
-            Level 1 Differences (&Delta;&sup1;): 3, 5, 7, 9<br />
-            Level 2 Differences (&Delta;&#178;): 2, 2, 2 (Constant!)<br />
-            Since 2a = &Delta;&#178; = 2 &rArr; a = 1.<br />
-            3a + b = &Delta;&sup1;&#8321; = 3 &rArr; 3(1) + b = 3 &rArr; b = 0.<br />
-            a + b + c = a&#8321; = 2 &rArr; 1 + 0 + c = 2 &rArr; c = 1.<br />
-            Explicit Formula: <strong>a_n = n&#178; + 1</strong>.
+        {/* INTRODUCTION ABOVE THE DEEPER GUIDE */}
+        <section className="space-y-3 pt-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+            <BookOpen className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0" />
+            Number Sequence Calculator
+          </h2>
+          <p>
+            A number sequence is an ordered list of terms generated according to a rule. Some sequences follow a constant difference, some use a constant ratio, while others are generated by polynomial formulas or recurrence relationships.
           </p>
-        </div>
-      </section>
-
-      {/* 6. VISUAL UNDERSTANDING */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Lightbulb className="h-6 w-6 text-blue-600" />
-          <span>6. Visual Understanding & Sequence Classification Matrix</span>
-        </h2>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse font-sans">
-            <thead>
-              <tr className="bg-blue-600 text-white font-bold">
-                <th className="p-2.5">Sequence Type</th>
-                <th className="p-2.5">Constant Property</th>
-                <th className="p-2.5">Explicit Closed Form</th>
-                <th className="p-2.5">Growth Profile</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-700 bg-slate-50 dark:bg-slate-800/50 font-mono">
-              <tr>
-                <td className="p-2 font-bold text-blue-600">Arithmetic</td>
-                <td className="p-2">1st Difference (d)</td>
-                <td className="p-2">a_n = a₁ + (n-1)d</td>
-                <td className="p-2 font-sans">Linear Growth</td>
-              </tr>
-              <tr>
-                <td className="p-2 font-bold text-blue-600">Geometric</td>
-                <td className="p-2">Consecutive Ratio (r)</td>
-                <td className="p-2">a_n = a₁ · rⁿ⁻¹</td>
-                <td className="p-2 font-sans">Exponential Growth</td>
-              </tr>
-              <tr>
-                <td className="p-2 font-bold text-blue-600">Quadratic</td>
-                <td className="p-2">2nd Difference (&Delta;&#178;)</td>
-                <td className="p-2">a_n = an² + bn + c</td>
-                <td className="p-2 font-sans">Parabolic Curve</td>
-              </tr>
-              <tr>
-                <td className="p-2 font-bold text-blue-600">Fibonacci</td>
-                <td className="p-2">Sum of 2 Prior Terms</td>
-                <td className="p-2">Binet's Formula</td>
-                <td className="p-2 font-sans">Golden Ratio (&Phi;) Growth</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* 7. COMMON MISTAKES */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <AlertTriangle className="h-6 w-6 text-amber-500" />
-          <span>7. Common Errors & Edge Cases in Sequences</span>
-        </h2>
-
-        <div className="space-y-3 text-sm">
-          <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 space-y-1">
-            <h4 className="font-bold text-amber-900 dark:text-amber-200">
-              Mistake 1: Confusing Sequence Terms with Partial Series Sums
-            </h4>
-            <p className="text-xs text-amber-800 dark:text-amber-300">
-              a_n is the specific value of term n, whereas S_n is the cumulative sum of all terms from 1 to n.
-            </p>
+          <p>
+            This Number Sequence Calculator helps you move beyond simply guessing the next number. Enter a sequence to identify a plausible mathematical pattern, calculate a target term, derive an explicit formula, examine finite differences, and evaluate partial sums. You can also work directly with arithmetic and geometric progressions, Fibonacci or Lucas-type recurrences, custom recurrence sequences, custom functions of <em>n</em>, and geometric-series convergence.
+          </p>
+          <p>
+            The calculator is designed to show the reasoning behind the result. Instead of returning only a number, it can expose the detected structure, generated terms, finite-difference levels, formulas, sums, and a visual representation of the sequence.
+          </p>
+          <p>
+            For example, the sequence <strong>2, 5, 10, 17, 26, ...</strong> has first differences 3, 5, 7, 9 and constant second differences of 2. That identifies a quadratic pattern:
+          </p>
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm font-semibold text-slate-800 dark:text-slate-200">
+            aₙ = n² + 1
           </div>
+          <p>
+            so the tenth term is <strong>a₁₀ = 10² + 1 = 101</strong> and the sum of the first ten terms is <strong>S₁₀ = 385 + 10 = 395</strong>.
+          </p>
+          <p>
+            The important distinction is that a finite list does not always determine one unique rule. A good sequence solver should therefore distinguish a strong detected pattern from a merely possible pattern. This calculator uses that distinction for short or ambiguous inputs rather than presenting every guess as mathematically certain.
+          </p>
+        </section>
+      </div>
 
-          <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 space-y-1">
-            <h4 className="font-bold text-amber-900 dark:text-amber-200">
-              Mistake 2: Summing Infinite Geometric Series when |r| &ge; 1
-            </h4>
-            <p className="text-xs text-amber-800 dark:text-amber-300">
-              The formula S_&infin; = a&#8321; / (1 - r) applies strictly when |r| &lt; 1. If |r| &ge; 1, the series diverges to infinity.
-            </p>
+      {/* 2. MAIN EDUCATIONAL SECTIONS */}
+      <div className="space-y-8 pt-6 text-slate-800 dark:text-slate-200">
+        {/* Section 1 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            1. What Is a Number Sequence?
+          </h2>
+          <p>
+            A number sequence is an ordered list of numbers, called terms, arranged according to a rule. The position of a term is usually represented by <em>n</em>, and the term at position <em>n</em> is written as <em>aₙ</em>.
+          </p>
+          <p>
+            For example, <strong>3, 7, 11, 15, 19, ...</strong> is a sequence because every term follows the same rule: add 4 to obtain the next term. Another sequence, <strong>2, 6, 18, 54, 162, ...</strong>, follows a different rule: multiply each term by 3.
+          </p>
+          <p>
+            Sequences are closely related to series, but they are not the same thing. A sequence lists terms:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-xs sm:text-sm">
+            Sequence: 2, 5, 8, 11, ...
           </div>
+          <p>
+            whereas the corresponding series adds them:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-xs sm:text-sm">
+            Series: 2 + 5 + 8 + 11 + ...
+          </div>
+          <p>
+            That distinction matters when calculating an <em>n</em>th term versus a partial sum. This calculator supports both the term-oriented problem and the sum-oriented problem. Depending on the selected mode, you can identify the structure of a sequence, find a target term, generate terms, derive a formula, and calculate a finite or, where mathematically appropriate, infinite sum.
+          </p>
+        </section>
+
+        {/* Section 2 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            2. Arithmetic Sequences
+          </h2>
+          <p>
+            An arithmetic sequence has a constant common difference between consecutive terms. If the first term is <em>a₁</em> and the common difference is <em>d</em>, then:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm font-semibold">
+            aₙ = a₁ + (n − 1)d
+          </div>
+          <p>
+            For example, <strong>3, 7, 11, 15, 19, ...</strong> has <em>a₁ = 3</em> and <em>d = 4</em>. The tenth term is therefore:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm">
+            a₁₀ = 3 + (10 − 1)(4) = 39
+          </div>
+          <p>
+            The sum of the first <em>n</em> terms is:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm font-semibold">
+            Sₙ = (n / 2) [2a₁ + (n − 1)d]
+          </div>
+          <p>
+            For ten terms: <strong>S₁₀ = (10 / 2) [2(3) + 9(4)] = 5(42) = 210</strong>.
+          </p>
+          <p>
+            Arithmetic sequences have a linear pattern because the same amount is added or subtracted at every step. A positive <em>d</em> produces an increasing sequence, a negative <em>d</em> produces a decreasing sequence, and <em>d = 0</em> produces a constant sequence.
+          </p>
+          <p>
+            The calculator handles negative differences explicitly. For example, <strong>20, 17, 14, 11, 8, ...</strong> has <em>d = −3</em>, so:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm">
+            aₙ = 20 + (n − 1)(−3) = 23 − 3n
+          </div>
+          <p>
+            and the tenth term is <strong>a₁₀ = 23 − 3(10) = −7</strong>.
+          </p>
+
+          {/* DIAGRAM 1: ARITHMETIC SEQUENCE PROGRESSION */}
+          <figure className="my-4 p-4 sm:p-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+            <div className="overflow-x-auto text-center font-mono text-xs sm:text-sm py-2">
+              <div className="inline-flex items-center gap-1 sm:gap-2 text-blue-700 dark:text-blue-300 font-semibold">
+                <span className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">3</span>
+                <span className="text-slate-400 dark:text-slate-500 text-xs">──(+4)──&gt;</span>
+                <span className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">7</span>
+                <span className="text-slate-400 dark:text-slate-500 text-xs">──(+4)──&gt;</span>
+                <span className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">11</span>
+                <span className="text-slate-400 dark:text-slate-500 text-xs">──(+4)──&gt;</span>
+                <span className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">15</span>
+                <span className="text-slate-400 dark:text-slate-500 text-xs">──(+4)──&gt;</span>
+                <span className="px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs">19</span>
+              </div>
+              <div className="mt-2 text-[11px] text-slate-500 dark:text-slate-400">
+                Common difference d = 4 across all consecutive term transitions
+              </div>
+            </div>
+            <figcaption className="text-xs text-slate-500 dark:text-slate-400 mt-2 text-center">
+              Diagram 1 — Arithmetic sequence: each term increases by the same constant common difference.
+            </figcaption>
+          </figure>
+        </section>
+
+        {/* Section 3 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            3. Geometric Sequences
+          </h2>
+          <p>
+            A geometric sequence is generated by multiplying each term by the same common ratio <em>r</em>. For a first term <em>a₁</em>:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm font-semibold">
+            aₙ = a₁ · rⁿ⁻¹
+          </div>
+          <p>
+            For example, <strong>2, 6, 18, 54, 162, ...</strong> has <em>a₁ = 2</em> and <em>r = 3</em>. Therefore:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm">
+            a₆ = 2(3⁵) = 2(243) = 486
+          </div>
+          <p>
+            The sum of the first <em>n</em> terms is:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm font-semibold">
+            Sₙ = a₁(1 − rⁿ) / (1 − r) &nbsp;&nbsp;(for r ≠ 1)
+          </div>
+          <p>
+            If <em>r = 1</em>, every term is equal to <em>a₁</em> and <strong>Sₙ = n · a₁</strong>.
+          </p>
+          <p>
+            Geometric sequences can increase rapidly when <em>|r| &gt; 1</em> (similar to principles modeled in our{" "}
+            <Link
+              href="/calculators/compound-interest-calculator"
+              className="text-blue-600 dark:text-blue-400 font-medium underline"
+            >
+              Compound Interest Calculator
+            </Link>
+            ), decrease toward zero when <em>|r| &lt; 1</em>, and alternate signs when <em>r</em> is negative.
+          </p>
+          <p>
+            For example, <strong>2, −4, 8, −16, 32, ...</strong> has <em>r = −2</em>. The sixth term is:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm">
+            a₆ = 2(−2)⁵ = 2(−32) = −64
+          </div>
+          <p>
+            The calculator retains negative ratios rather than treating them as invalid simply because the sign alternates.
+          </p>
+        </section>
+
+        {/* Section 4 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            4. How to Find the nth Term of a Sequence
+          </h2>
+          <p>
+            The <em>n</em>th term is the value occupying position <em>n</em> in a sequence. Finding it is different from simply generating the next few terms because the goal is to describe the sequence with a rule that works directly at the requested position.
+          </p>
+          <p>
+            For an arithmetic sequence: <strong>aₙ = a₁ + (n − 1)d</strong>. For a geometric sequence: <strong>aₙ = a₁rⁿ⁻¹</strong>. For polynomial sequences, the formula may involve powers such as <em>n²</em> or <em>n³</em>.
+          </p>
+          <p>
+            For example, <strong>2, 5, 10, 17, 26, ...</strong> has <strong>aₙ = n² + 1</strong>, so <strong>a₁₀ = 10² + 1 = 101</strong>.
+          </p>
+          <p>
+            A closed-form rule is particularly useful for large <em>n</em> because it avoids manually generating every preceding term. When a sequence is generated by a recurrence rather than a simple arithmetic or geometric rule, the calculator evaluates the recurrence using the supplied initial terms. This is important for Fibonacci-type sequences with nonstandard starting values.
+          </p>
+        </section>
+
+        {/* Section 5 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            5. Finite Differences: How Polynomial Patterns Are Detected
+          </h2>
+          <p>
+            Finite differences provide a systematic way to investigate sequences whose consecutive differences are not constant. Start with the original terms: <strong>2, 5, 10, 17, 26</strong>.
+          </p>
+          <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm pl-2">
+            <li>First differences (Δ¹): <strong>3, 5, 7, 9</strong></li>
+            <li>Second differences (Δ²): <strong>2, 2, 2</strong></li>
+          </ul>
+          <p>
+            Because the second difference is constant, the sequence is generated by a quadratic polynomial. The same idea extends to higher-degree polynomial sequences.
+          </p>
+          <p>
+            A sequence generated by a degree-3 polynomial has constant third differences. For example, <strong>1, 8, 27, 64, 125</strong> has:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm">
+            Δ¹ = [7, 19, 37, 61], &nbsp; Δ² = [12, 18, 24], &nbsp; Δ³ = [6, 6]
+          </div>
+          <p>
+            Since <em>6a = Δ³ = 6</em>, we obtain <em>a = 1</em>, leading to <strong>aₙ = n³</strong> and therefore <strong>a₆ = 216</strong>.
+          </p>
+          <p>
+            The calculator examines successive difference levels rather than assuming every unfamiliar sequence is arithmetic or geometric. This provides a more defensible way to recognize quadratic, cubic and higher-order polynomial behavior. The difference table is also useful as evidence. A formula can appear plausible from a handful of values, but a constant difference level provides a concrete algebraic signature of polynomial structure.
+          </p>
+
+          {/* DIAGRAM 2: FINITE DIFFERENCES TREE */}
+          <figure className="my-4 p-4 sm:p-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+            <div className="overflow-x-auto text-center font-mono text-xs sm:text-sm py-2">
+              <div className="space-y-1.5 inline-block text-left">
+                <div className="flex items-center gap-4 text-slate-700 dark:text-slate-300">
+                  <span className="w-24 text-[11px] font-bold uppercase text-slate-400">Terms:</span>
+                  <span className="font-bold tracking-widest text-blue-600 dark:text-blue-400">2 &nbsp;&nbsp;&nbsp;&nbsp; 5 &nbsp;&nbsp;&nbsp;&nbsp; 10 &nbsp;&nbsp;&nbsp;&nbsp; 17 &nbsp;&nbsp;&nbsp;&nbsp; 26</span>
+                </div>
+                <div className="flex items-center gap-4 text-slate-600 dark:text-slate-400">
+                  <span className="w-24 text-[11px] font-bold uppercase text-slate-400">1st Diff (Δ¹):</span>
+                  <span className="tracking-widest">&nbsp;&nbsp; 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 9</span>
+                </div>
+                <div className="flex items-center gap-4 text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <span className="w-24 text-[11px] font-bold uppercase text-slate-400">2nd Diff (Δ²):</span>
+                  <span className="tracking-widest">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 &nbsp;(Constant!)</span>
+                </div>
+              </div>
+            </div>
+            <figcaption className="text-xs text-slate-500 dark:text-slate-400 mt-2 text-center">
+              Diagram 2 — Finite differences: constant second differences indicate a quadratic polynomial sequence.
+            </figcaption>
+          </figure>
+        </section>
+
+        {/* Section 6 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            6. Fibonacci, Lucas and Custom Recurrence Sequences
+          </h2>
+          <p>
+            A recurrence sequence defines a term from one or more previous terms. The classic Fibonacci recurrence is:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm font-semibold">
+            Fₙ = Fₙ₋₁ + Fₙ₋₂
+          </div>
+          <p>
+            with the conventional starting values <em>F₀ = 0, F₁ = 1</em>, giving <strong>0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ...</strong>. The calculator also supports Lucas values using the standard Lucas convention (starting at 2 and 1).
+          </p>
+          <p>
+            More importantly, an additive recurrence does not have to start with classical Fibonacci seeds. Consider:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm">
+            2, 3, 5, 8, 13, 21, ...
+          </div>
+          <p>
+            The same recurrence applies, <em>aₙ = aₙ₋₁ + aₙ₋₂</em>, but the initial terms are 2 and 3 rather than 0 and 1. The next term is <strong>13 + 21 = 34</strong>. This is a Fibonacci-type recurrence, but it is not the standard Fibonacci sequence.
+          </p>
+          <p>
+            The distinction matters because applying the standard Fibonacci index formula to a custom-seeded recurrence can produce the wrong result. The calculator therefore advances custom recurrence sequences from the actual supplied starting terms. For calculations involving extremely high recurrence indices where values exceed standard 64-bit precision, our{" "}
+            <Link
+              href="/calculators/big-number-calculator"
+              className="text-blue-600 dark:text-blue-400 font-medium underline"
+            >
+              Big Number Calculator
+            </Link>{" "}
+            can compute arbitrary-precision integers exactly.
+          </p>
+        </section>
+
+        {/* Section 7 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            7. Why Sequence Pattern Recognition Needs a Confidence Caveat
+          </h2>
+          <p>
+            A finite sequence can often be continued in more than one mathematically valid way. For example, with only:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm">
+            5, 8
+          </div>
+          <p>
+            there is not enough information to establish one unique sequence rule. An arithmetic rule with <em>d = 3</em> is a natural candidate, but infinitely many other formulas can pass through those two values.
+          </p>
+          <p>
+            Likewise, a sequence such as <strong>1, 2, 4, 8</strong> strongly suggests repeated multiplication by 2, but a finite set of observations does not logically prove that this is the only possible generating rule.
+          </p>
+          <p>
+            For this reason, pattern-recognition results should be interpreted as detected or selected rules rather than universal proofs of uniqueness. This calculator explicitly treats very short or potentially ambiguous sequences differently from strongly supported patterns. That is useful when the result is being used for homework checking, teaching, mathematical exploration, or code verification, because it avoids presenting a convenient extrapolation as though it were the only mathematically possible answer.
+          </p>
+        </section>
+
+        {/* Section 8 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            8. Sequence vs. Series: Calculating Partial Sums
+          </h2>
+          <p>
+            A sequence becomes a series when its terms are added. For example, <strong>3, 7, 11, 15, ...</strong> is a sequence, while <strong>3 + 7 + 11 + 15 + ...</strong> is a series.
+          </p>
+          <p>
+            For an arithmetic sequence: <strong>Sₙ = (n / 2) [2a₁ + (n − 1)d]</strong>. For a geometric sequence with <em>r ≠ 1</em>: <strong>Sₙ = a₁(1 − rⁿ) / (1 − r)</strong> (evaluate powers directly with our{" "}
+            <Link
+              href="/calculators/exponent-calculator"
+              className="text-blue-600 dark:text-blue-400 font-medium underline"
+            >
+              Exponent Calculator
+            </Link>
+            ).
+          </p>
+          <p>
+            The calculator can report the sum of the first <em>n</em> terms alongside the <em>n</em>th term, which makes it useful for problems where both quantities are required. For example, with <strong>3, 7, 11, 15, ...</strong>, the tenth term is 39 and the first-ten-term sum is 210.
+          </p>
+          <p>
+            For convergent geometric series, the infinite sum exists only when <strong>|r| &lt; 1</strong> and is:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm font-semibold">
+            S∞ = a₁ / (1 − r)
+          </div>
+          <p>
+            For <strong>81 + 27 + 9 + 3 + 1 + ...</strong>, the ratio is <em>r = 1/3</em>, so:
+          </p>
+          <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-center text-sm">
+            S∞ = 81 / (1 − 1/3) = 81 / (2/3) = 121.5
+          </div>
+          <p>
+            When <em>|r| ≥ 1</em>, the infinite geometric sum does not converge to a finite value.
+          </p>
+        </section>
+
+        {/* Section 9 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            9. Evaluating a Sequence from a Custom Function
+          </h2>
+          <p>
+            Some sequences are most naturally expressed directly as a function of <em>n</em>. For example:
+          </p>
+          <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm pl-2 font-mono">
+            <li>aₙ = n² + 1</li>
+            <li>aₙ = 2ⁿ − 1</li>
+            <li>aₙ = 1 / n</li>
+          </ul>
+          <p>
+            When using the custom-function mode, the function itself defines the sequence. The calculator can evaluate successive values, determine the requested target term, and calculate the requested finite sum where supported.
+          </p>
+          <p>
+            This is conceptually different from pattern recognition. Pattern recognition starts with observed terms and attempts to infer a rule. A custom function starts with the rule and generates the terms. That distinction is useful when a known formula must be checked numerically. It also reduces the temptation to infer a pattern from too little data when the intended formula is already known.
+          </p>
+        </section>
+
+        {/* Section 10 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            10. How to Use the Number Sequence Calculator
+          </h2>
+          <p>
+            For automatic pattern analysis, enter the known sequence terms using commas, spaces, tabs or line breaks. Then specify the target index <em>n</em>. For example, enter <strong>2, 5, 10, 17, 26</strong> with <strong>n = 10</strong>.
+          </p>
+          <p>
+            The calculator examines the data and can report:
+          </p>
+          <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm pl-2">
+            <li>the detected sequence type (Arithmetic, Geometric, Quadratic, Cubic, Fibonacci-type);</li>
+            <li>the explicit formula;</li>
+            <li>the requested term;</li>
+            <li>partial-sum information;</li>
+            <li>finite differences;</li>
+            <li>generated sequence information; and</li>
+            <li>a visual representation where applicable.</li>
+          </ul>
+          <p>
+            For an arithmetic or geometric progression, use the dedicated progression controls and enter the first term together with the common difference or ratio. For Fibonacci, Lucas or custom recurrence calculations, select the recurrence mode and supply the appropriate index or starting information. For custom functions, enter the supported expression in terms of <em>n</em> and use the target index or generated term range.
+          </p>
+          <p>
+            When interpreting an automatically detected pattern, pay attention to any caveat shown by the calculator. A mathematically responsible sequence solver should distinguish between an exact structural match and a merely plausible extrapolation.
+          </p>
+        </section>
+
+        {/* Section 11: WORKED EXAMPLES */}
+        <section className="space-y-4">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            11. Worked Number Sequence Examples
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+            {/* Example 1 */}
+            <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5 text-sm">
+                <CheckCircle2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                Example 1: Arithmetic Sequence
+              </h3>
+              <p className="text-slate-600 dark:text-slate-300">
+                Consider: <strong>4, 9, 14, 19, 24, ...</strong>
+              </p>
+              <p className="text-slate-600 dark:text-slate-300">
+                Common difference: <strong>d = 5</strong>. Using <em>aₙ = a₁ + (n − 1)d</em>:
+              </p>
+              <div className="font-mono text-xs bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-700">
+                a₁₅ = 4 + 14(5) = 74<br />
+                S₁₅ = (15 / 2) [2(4) + 14(5)] = 585
+              </div>
+            </div>
+
+            {/* Example 2 */}
+            <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5 text-sm">
+                <CheckCircle2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                Example 2: Geometric Sequence
+              </h3>
+              <p className="text-slate-600 dark:text-slate-300">
+                Consider: <strong>3, 12, 48, 192, ...</strong>
+              </p>
+              <p className="text-slate-600 dark:text-slate-300">
+                Common ratio: <strong>r = 4</strong>. Explicit formula: <em>aₙ = 3 × 4ⁿ⁻¹</em>.
+              </p>
+              <div className="font-mono text-xs bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-700">
+                a₅ = 3 × 4⁴ = 3 × 256 = 768<br />
+                S₅ = 3(1 − 4⁵) / (1 − 4) = 1,023
+              </div>
+            </div>
+
+            {/* Example 3 */}
+            <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5 text-sm">
+                <CheckCircle2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                Example 3: Quadratic Sequence
+              </h3>
+              <p className="text-slate-600 dark:text-slate-300">
+                Consider: <strong>2, 5, 10, 17, 26, ...</strong>
+              </p>
+              <p className="text-slate-600 dark:text-slate-300">
+                First differences: 3, 5, 7, 9. Second differences: 2, 2, 2 (constant).
+              </p>
+              <div className="font-mono text-xs bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-700">
+                aₙ = n² + 1<br />
+                a₁₀ = 101<br />
+                S₁₀ = 395
+              </div>
+            </div>
+
+            {/* Example 4 */}
+            <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5 text-sm">
+                <CheckCircle2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                Example 4: Cubic Sequence
+              </h3>
+              <p className="text-slate-600 dark:text-slate-300">
+                Consider: <strong>1, 8, 27, 64, 125, ...</strong>
+              </p>
+              <p className="text-slate-600 dark:text-slate-300">
+                Terms are perfect cubes 1³, 2³, 3³, 4³, 5³, so <em>aₙ = n³</em>.
+              </p>
+              <div className="font-mono text-xs bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-700">
+                a₆ = 6³ = 216<br />
+                S₆ = 1 + 8 + 27 + 64 + 125 + 216 = 441
+              </div>
+            </div>
+
+            {/* Example 5 */}
+            <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5 text-sm">
+                <CheckCircle2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                Example 5: Custom Fibonacci-Type Recurrence
+              </h3>
+              <p className="text-slate-600 dark:text-slate-300">
+                Consider: <strong>2, 3, 5, 8, 13, 21, ...</strong>
+              </p>
+              <p className="text-slate-600 dark:text-slate-300">
+                Each term equals the preceding two terms added together.
+              </p>
+              <div className="font-mono text-xs bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-700">
+                a₇ = 13 + 21 = 34<br />
+                S₇ = 2 + 3 + 5 + 8 + 13 + 21 + 34 = 86
+              </div>
+            </div>
+
+            {/* Example 6 */}
+            <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+              <h3 className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5 text-sm">
+                <CheckCircle2 className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                Example 6: Infinite Geometric Sum
+              </h3>
+              <p className="text-slate-600 dark:text-slate-300">
+                Consider: <strong>81, 27, 9, 3, 1, ...</strong>
+              </p>
+              <p className="text-slate-600 dark:text-slate-300">
+                Ratio <em>r = 1/3</em>. Because <em>|r| &lt; 1</em>, series converges.
+              </p>
+              <div className="font-mono text-xs bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-700">
+                S∞ = a₁ / (1 − r) = 81 / (1 − 1/3)<br />
+                S∞ = 81 / (2/3) = 121.5
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 12 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            12. When a Sequence Cannot Be Identified Reliably
+          </h2>
+          <p>
+            Not every sequence is arithmetic, geometric, polynomial, Fibonacci-type, or another simple pattern. A sequence may also involve:
+          </p>
+          <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm pl-2">
+            <li>alternating rules;</li>
+            <li>piecewise definitions;</li>
+            <li>prime numbers;</li>
+            <li>recursive rules with more than two previous terms;</li>
+            <li>periodic behavior;</li>
+            <li>factorials;</li>
+            <li>exponential or logarithmic functions;</li>
+            <li>combinations of several patterns.</li>
+          </ul>
+          <p>
+            Even when a sequence has a recognizable pattern, several different formulas may agree with a finite number of terms. Therefore, an &quot;unclassified&quot; result does not necessarily mean that the sequence has no rule. It means that the available terms do not provide enough evidence for one of the supported structures, or that the selected rule is outside the calculator&apos;s recognition model.
+          </p>
+          <p>
+            Entering additional terms can make the structure easier to distinguish. When the intended rule is already known, the custom-function or dedicated recurrence tools are preferable to trying to infer it from a short list.
+          </p>
+        </section>
+
+        {/* Section 13 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            13. Where Number Sequences Are Used
+          </h2>
+          <p>
+            Number sequences occur throughout mathematics, science, engineering, computing and quantitative modeling.
+          </p>
+          <p>
+            <strong>Arithmetic sequences</strong> represent quantities that change by a fixed amount, such as equally spaced values, regular schedules, repeated increments, or linear discrete models. When discrete sequences are measured in real-world samples, their distribution and spread are often analyzed using our{" "}
+            <Link
+              href="/calculators/standard-deviation-calculator"
+              className="text-blue-600 dark:text-blue-400 font-medium underline"
+            >
+              Standard Deviation Calculator
+            </Link>
+            .
+          </p>
+          <p>
+            <strong>Geometric sequences</strong> describe repeated proportional change. They appear in growth and decay models, repeated scaling, financial calculations, population models, and algorithmic analysis.
+          </p>
+          <p>
+            <strong>Fibonacci and related recurrence sequences</strong> are important examples of recursive mathematical structure and appear in combinatorics, algorithmic examples and models involving repeated dependence on preceding states.
+          </p>
+          <p>
+            <strong>Polynomial sequences</strong> are useful when discrete data follows a polynomial law. Finite differences provide a practical way to detect the degree of such a polynomial from equally spaced input indices. In programming and data analysis, sequence formulas can also be useful for generating test data, validating recurrence implementations, and checking whether observed discrete values follow an expected rule.
+          </p>
+        </section>
+
+        {/* Section 14 */}
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
+            14. How This Sequence Calculator Checks a Result
+          </h2>
+          <p>
+            The calculator does not rely on a single pattern test for every sequence. Depending on the input, it examines:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm pt-1">
+            <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700">
+              <strong className="text-blue-600 dark:text-blue-400 block mb-1">Arithmetic structure</strong>
+              Checks whether consecutive differences are constant.
+            </div>
+            <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700">
+              <strong className="text-blue-600 dark:text-blue-400 block mb-1">Geometric structure</strong>
+              Checks whether consecutive terms share a constant ratio.
+            </div>
+            <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700">
+              <strong className="text-blue-600 dark:text-blue-400 block mb-1">Finite differences</strong>
+              Examines higher-order differences (Δ², Δ³, Δ⁴) to identify polynomial behavior.
+            </div>
+            <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700">
+              <strong className="text-blue-600 dark:text-blue-400 block mb-1">Recurrence structure</strong>
+              Checks relationships involving preceding terms and evaluates custom starting conditions.
+            </div>
+            <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700">
+              <strong className="text-blue-600 dark:text-blue-400 block mb-1">Explicit formulas</strong>
+              Uses a direct mathematical rule when the selected mode defines one.
+            </div>
+            <div className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700">
+              <strong className="text-blue-600 dark:text-blue-400 block mb-1">Convergence</strong>
+              Applies the mathematical condition for a geometric infinite series (|r| &lt; 1).
+            </div>
+          </div>
+          <p className="pt-2">
+            The coordinate plot provides a visual representation of term values against their positions, while the finite-difference table exposes the numerical structure behind polynomial detection. This combination is useful because the same list of terms can look very different depending on whether the problem is asking for a pattern, a formula, a recurrence, or a sum.
+          </p>
+        </section>
+      </div>
+
+      {/* 3. FAQ SECTION (Exactly 10 Approved FAQs, Open/Unfolded by Default) */}
+      <div className="pt-8">
+        <div className="flex items-center gap-2 mb-4">
+          <HelpCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+            15. Frequently Asked Questions
+          </h2>
         </div>
-      </section>
 
-      {/* 8. PRACTICAL APPLICATIONS */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <Award className="h-6 w-6 text-blue-600" />
-          <span>8. Real-World Applications Across Fields</span>
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h4 className="font-bold text-slate-900 dark:text-slate-100 text-sm">Finance & Compound Interest</h4>
-            <p className="text-slate-600 dark:text-slate-400">
-              Simple interest grows as an arithmetic sequence; compound interest and loan amortization grow geometrically.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1">
-            <h4 className="font-bold text-slate-900 dark:text-slate-100 text-sm">Computer Science & Algorithms</h4>
-            <p className="text-slate-600 dark:text-slate-400">
-              Recurrence relations govern algorithmic time complexity (e.g. Merge Sort O(n log n), Binary Search).
-            </p>
-          </div>
+        <div className="space-y-3">
+          {numberSequenceFaqs.map((faq, idx) => {
+            const isOpen = openFaqIndices.has(idx);
+            return (
+              <div
+                key={idx}
+                className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs"
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleFaq(idx)}
+                  className="w-full p-4 text-left text-xs sm:text-sm font-semibold text-slate-900 dark:text-slate-100 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
+                >
+                  <span className="flex items-center gap-2 pr-4">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
+                      Q{idx + 1}.
+                    </span>
+                    {faq.question}
+                  </span>
+                  <ChevronDown
+                    className={`h-4 w-4 text-slate-400 shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {isOpen && (
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed bg-slate-50/50 dark:bg-slate-900/50 font-normal">
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
-      </section>
+      </div>
 
-      {/* 9. RELATED MATHEMATICAL CONCEPTS */}
-      <section className="space-y-4">
-        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <HelpCircle className="h-6 w-6 text-blue-600" />
-          <span>9. Related Mathematical Concepts & Prerequisites</span>
+      {/* 4. POST-CONTENT INTERNAL LINKS SECTION */}
+      <div className="pt-8 space-y-3">
+        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+          <Compass className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0" />
+          16. Continue Exploring Related Calculations
         </h2>
-        <ul className="space-y-2 text-sm text-slate-700 dark:text-slate-300 pl-4 list-disc">
-          <li><strong>Limits & Convergence:</strong> Assessing asymptotic behavior as term index n approaches infinity.</li>
-          <li><strong>The Golden Ratio (&Phi;):</strong> Limit of consecutive Fibonacci term ratios (&approx; 1.618033).</li>
-        </ul>
-      </section>
-
-      {/* 10. SUMMARY */}
-      <section className="space-y-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800/60 p-6 rounded-2xl border border-blue-200 dark:border-slate-700">
-        <h2 className="text-lg font-extrabold text-blue-900 dark:text-blue-300">
-          10. Educational Summary
-        </h2>
-        <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
-          The <strong>Number Sequence Calculator & Series Suite</strong> combines pattern recognition algorithms with interactive 2D coordinate plotting. Supporting arithmetic, geometric, quadratic, and Fibonacci sequences, this suite functions as an authoritative computational learning resource.
+        <p className="text-sm text-slate-700 dark:text-slate-300">
+          When a sequence problem leads into another type of calculation, these specialized tools provide exact mathematical solutions:
         </p>
-      </section>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
+          <Link
+            href="/calculators/standard-deviation-calculator"
+            className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all group block"
+          >
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 text-sm flex items-center justify-between">
+              Standard Deviation Calculator
+              <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+              Analyze dispersion, variance, and spread when sequence terms represent an empirical dataset.
+            </p>
+          </Link>
 
-    </div>
+          <Link
+            href="/calculators/exponent-calculator"
+            className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all group block"
+          >
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 text-sm flex items-center justify-between">
+              Exponent Calculator
+              <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+              Evaluate rapid exponential powers such as <em>rⁿ</em> or <em>2ⁿ</em> with complete step-by-step laws of exponents.
+            </p>
+          </Link>
+
+          <Link
+            href="/calculators/big-number-calculator"
+            className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all group block"
+          >
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 text-sm flex items-center justify-between">
+              Big Number Calculator
+              <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+            </h3>
+            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+              Compute huge recurrence terms and factorials with exact arbitrary-precision integers.
+            </p>
+          </Link>
+        </div>
+      </div>
+    </article>
   );
 }
+
+export default SequenceContent;

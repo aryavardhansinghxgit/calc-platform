@@ -1,19 +1,37 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const number_sequence_calculatorMetadata: Metadata = {
-  ...generateCalculatorMetadata({
-    title: "Number Sequence Calculator — Arithmetic, Geometric & Pattern Solver",
-    description: "Free online Number Sequence Calculator & Series Suite. Automatically detect sequence patterns (Arithmetic, Geometric, Quadratic, Fibonacci), find explicit formulas, generate 2D graphs, and finite difference tables.",
-    slug: "number-sequence-calculator"
-  }),
+  title: "Number Sequence Calculator – Nth Term, Sum & Pattern Solver | CalcPlatform",
+  description:
+    "Find sequence patterns, nth terms, partial sums and formulas for arithmetic, geometric, quadratic, cubic, Fibonacci and custom recurrences. Free step-by-step number sequence calculator.",
+  alternates: {
+    canonical: "https://calcplatform.com/calculators/number-sequence-calculator",
+  },
+  openGraph: {
+    title: "Number Sequence Calculator – Nth Term, Sum & Pattern Solver | CalcPlatform",
+    description:
+      "Find sequence patterns, nth terms, partial sums and formulas for arithmetic, geometric, quadratic, cubic, Fibonacci and custom recurrences. Free step-by-step number sequence calculator.",
+    url: "https://calcplatform.com/calculators/number-sequence-calculator",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Number Sequence Calculator – Nth Term, Sum & Pattern Solver | CalcPlatform",
+    description:
+      "Find sequence patterns, nth terms, partial sums and formulas for arithmetic, geometric, quadratic, cubic, Fibonacci and custom recurrences. Free step-by-step number sequence calculator.",
+  },
   keywords: [
-    "Number Sequence Calculator",
-    "Arithmetic Sequence Calculator",
-    "Geometric Sequence Calculator",
-    "Sequence Solver",
-    "Find the Next Number in the Sequence",
-    "Fibonacci Calculator",
-    "Series and Sequences Solver"
-  ]
+    "number sequence calculator",
+    "arithmetic sequence",
+    "geometric sequence",
+    "nth term",
+    "finite differences",
+    "Fibonacci",
+    "Lucas",
+    "custom recurrence",
+    "partial sum",
+    "infinite geometric series",
+  ],
 };
+
+export default number_sequence_calculatorMetadata;

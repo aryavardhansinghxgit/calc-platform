@@ -31,3 +31,5 @@ async function auditSeo() {
 }
 
 auditSeo();
+
+export {};
