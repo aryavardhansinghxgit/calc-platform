@@ -13,7 +13,8 @@ export interface PitchInfo {
   pitchString: string; // e.g. "6/12"
   rise: number; // 6
   angleDegrees: number; // 26.57°
-  multiplier: number; // 1.1180
+  multiplier: number; // exact float e.g. 1.1180339887...
+  multiplierDisplay: number; // rounded e.g. 1.118
   gradePercent: number; // 50%
 }
 
@@ -24,35 +25,35 @@ export const PITCH_TABLE: PitchInfo[] = Array.from({ length: 24 }, (_, i) => {
   const rise = i + 1;
   const rad = Math.atan(rise / 12);
   const angleDegrees = Math.round((rad * 180 / Math.PI) * 10) / 10;
-  const multiplier = Math.round(Math.sqrt(1 + Math.pow(rise / 12, 2)) * 1000) / 1000;
+  const rawMultiplier = Math.sqrt(1 + Math.pow(rise / 12, 2));
   const gradePercent = Math.round((rise / 12) * 1000) / 10;
   return {
     pitchString: `${rise}/12`,
     rise,
     angleDegrees,
-    multiplier,
+    multiplier: rawMultiplier,
+    multiplierDisplay: Math.round(rawMultiplier * 1000) / 1000,
     gradePercent,
   };
 });
 
 export function getPitchInfo(rise: number): PitchInfo {
-  const safeRise = Math.max(0.5, Math.min(30, rise));
-  const rad = Math.atan(safeRise / 12);
+  const rad = Math.atan(rise / 12);
   const angleDegrees = Math.round((rad * 180 / Math.PI) * 10) / 10;
-  const multiplier = Math.round(Math.sqrt(1 + Math.pow(safeRise / 12, 2)) * 1000) / 1000;
-  const gradePercent = Math.round((safeRise / 12) * 1000) / 10;
+  const rawMultiplier = Math.sqrt(1 + Math.pow(rise / 12, 2));
+  const gradePercent = Math.round((rise / 12) * 1000) / 10;
   return {
-    pitchString: `${safeRise}/12`,
-    rise: safeRise,
+    pitchString: `${rise}/12`,
+    rise,
     angleDegrees,
-    multiplier,
+    multiplier: rawMultiplier,
+    multiplierDisplay: Math.round(rawMultiplier * 1000) / 1000,
     gradePercent,
   };
 }
 
 export function getPitchFromAngle(angleDeg: number): PitchInfo {
-  const safeAngle = Math.max(1, Math.min(80, angleDeg));
-  const rad = (safeAngle * Math.PI) / 180;
+  const rad = (angleDeg * Math.PI) / 180;
   const rise = Math.tan(rad) * 12;
   return getPitchInfo(rise);
 }
@@ -76,14 +77,17 @@ export interface FootprintAreaResult {
   flatFootprintSqFt: number;
   flatAreaWithOverhangsSqFt: number;
   pitchMultiplier: number;
+  pitchMultiplierExact: number;
   pitchAngleDeg: number;
   pitchString: string;
   style: RoofStyle;
   
   trueRoofSurfaceAreaSqFt: number;
+  trueRoofSurfaceAreaExact: number;
   wastePercent: number;
   wasteAreaSqFt: number;
   totalCoveredAreaSqFt: number;
+  totalCoveredAreaExact: number;
   roofingSquares: number; // 1 Square = 100 sq ft
   roofingSquaresRaw: number;
   
@@ -105,64 +109,85 @@ export function calculateFootprintArea(input: FootprintAreaInput): FootprintArea
   let lengthFt = 50;
   let widthFt = 40;
 
-  if (input.inputMode === "dimensions" && input.houseLengthFt && input.houseWidthFt) {
-    lengthFt = input.houseLengthFt;
-    widthFt = input.houseWidthFt;
+  if (input.inputMode === "dimensions") {
+    lengthFt = input.houseLengthFt ?? 50;
+    widthFt = input.houseWidthFt ?? 40;
     flatFootprintSqFt = lengthFt * widthFt;
     const totalLengthWithGable = lengthFt + 2 * gableOverhangFt;
     const totalWidthWithEaves = widthFt + 2 * eaveOverhangFt;
     flatAreaWithOverhangsSqFt = totalLengthWithGable * totalWidthWithEaves;
   } else {
-    flatFootprintSqFt = input.baseAreaSqFt || 2000;
-    // Approximate dimensions assuming 1.25:1 aspect ratio
+    // Ground Base Area mode: strictly use the entered base area directly without synthetic overhang inflation
+    flatFootprintSqFt = input.baseAreaSqFt ?? 2000;
+    flatAreaWithOverhangsSqFt = flatFootprintSqFt;
+    // Derive dimensions for perimeter/ridge approximations without adding overhangs
     widthFt = Math.sqrt(flatFootprintSqFt / 1.25);
     lengthFt = widthFt * 1.25;
-    const totalLengthWithGable = lengthFt + 2 * gableOverhangFt;
-    const totalWidthWithEaves = widthFt + 2 * eaveOverhangFt;
-    flatAreaWithOverhangsSqFt = totalLengthWithGable * totalWidthWithEaves;
   }
 
-  // True surface area
-  const trueRoofSurfaceAreaSqFt = flatAreaWithOverhangsSqFt * pitch.multiplier;
+  // True surface area using full precision multiplier
+  const trueRoofSurfaceAreaExact = flatAreaWithOverhangsSqFt * pitch.multiplier;
   const wasteFactor = 1 + (input.wastePercent || 0) / 100;
-  const totalCoveredAreaSqFt = trueRoofSurfaceAreaSqFt * wasteFactor;
-  const wasteAreaSqFt = totalCoveredAreaSqFt - trueRoofSurfaceAreaSqFt;
+  const totalCoveredAreaExact = trueRoofSurfaceAreaExact * wasteFactor;
+  const wasteAreaExact = totalCoveredAreaExact - trueRoofSurfaceAreaExact;
 
-  const roofingSquaresRaw = totalCoveredAreaSqFt / 100;
+  const roofingSquaresRaw = totalCoveredAreaExact / 100;
   const roofingSquares = Math.ceil(roofingSquaresRaw * 10) / 10; // 1 decimal
 
   // Style-specific perimeters and ridge
-  let eavesPerimeterFt = (lengthFt + 2 * gableOverhangFt) * 2;
-  let rakesPerimeterFt = (widthFt + 2 * eaveOverhangFt) * 2 * pitch.multiplier;
-  let estimatedRidgeFt = lengthFt + 2 * gableOverhangFt;
+  let eavesPerimeterFt = 0;
+  let rakesPerimeterFt = 0;
+  let estimatedRidgeFt = 0;
 
-  if (style === "hip") {
-    // 4 eaves on all sides, 0 rakes
-    eavesPerimeterFt = 2 * ((lengthFt + 2 * gableOverhangFt) + (widthFt + 2 * eaveOverhangFt));
-    rakesPerimeterFt = 0;
-    estimatedRidgeFt = Math.max(10, (lengthFt + 2 * gableOverhangFt) - (widthFt + 2 * eaveOverhangFt));
-  } else if (style === "shed") {
-    // 1 upper eave/ridge, 1 lower eave
+  if (input.inputMode === "dimensions") {
     eavesPerimeterFt = (lengthFt + 2 * gableOverhangFt) * 2;
     rakesPerimeterFt = (widthFt + 2 * eaveOverhangFt) * 2 * pitch.multiplier;
     estimatedRidgeFt = lengthFt + 2 * gableOverhangFt;
+
+    if (style === "hip") {
+      eavesPerimeterFt = 2 * ((lengthFt + 2 * gableOverhangFt) + (widthFt + 2 * eaveOverhangFt));
+      rakesPerimeterFt = 0;
+      estimatedRidgeFt = Math.max(10, (lengthFt + 2 * gableOverhangFt) - (widthFt + 2 * eaveOverhangFt));
+    } else if (style === "shed") {
+      eavesPerimeterFt = (lengthFt + 2 * gableOverhangFt) * 2;
+      rakesPerimeterFt = (widthFt + 2 * eaveOverhangFt) * 2 * pitch.multiplier;
+      estimatedRidgeFt = lengthFt + 2 * gableOverhangFt;
+    }
+  } else {
+    // Base Area Mode: calculate clean perimeter from base dimensions without overhang additions
+    eavesPerimeterFt = lengthFt * 2;
+    rakesPerimeterFt = widthFt * 2 * pitch.multiplier;
+    estimatedRidgeFt = lengthFt;
+
+    if (style === "hip") {
+      eavesPerimeterFt = 2 * (lengthFt + widthFt);
+      rakesPerimeterFt = 0;
+      estimatedRidgeFt = Math.max(10, lengthFt - widthFt);
+    } else if (style === "shed") {
+      eavesPerimeterFt = lengthFt * 2;
+      rakesPerimeterFt = widthFt * 2 * pitch.multiplier;
+      estimatedRidgeFt = lengthFt;
+    }
   }
 
   const totalPerimeterFt = eavesPerimeterFt + rakesPerimeterFt;
-  const estimatedCost = (input.pricePerSqFt || 0) * totalCoveredAreaSqFt;
+  const estimatedCost = (input.pricePerSqFt || 0) * totalCoveredAreaExact;
 
   return {
     flatFootprintSqFt: Math.round(flatFootprintSqFt),
     flatAreaWithOverhangsSqFt: Math.round(flatAreaWithOverhangsSqFt),
-    pitchMultiplier: pitch.multiplier,
+    pitchMultiplier: pitch.multiplierDisplay,
+    pitchMultiplierExact: pitch.multiplier,
     pitchAngleDeg: pitch.angleDegrees,
     pitchString: pitch.pitchString,
     style,
 
-    trueRoofSurfaceAreaSqFt: Math.round(trueRoofSurfaceAreaSqFt * 10) / 10,
+    trueRoofSurfaceAreaSqFt: Math.round(trueRoofSurfaceAreaExact * 10) / 10,
+    trueRoofSurfaceAreaExact,
     wastePercent: input.wastePercent,
-    wasteAreaSqFt: Math.round(wasteAreaSqFt * 10) / 10,
-    totalCoveredAreaSqFt: Math.round(totalCoveredAreaSqFt * 10) / 10,
+    wasteAreaSqFt: Math.round(wasteAreaExact * 10) / 10,
+    totalCoveredAreaSqFt: Math.round(totalCoveredAreaExact * 10) / 10,
+    totalCoveredAreaExact,
     roofingSquares,
     roofingSquaresRaw: Math.round(roofingSquaresRaw * 100) / 100,
 

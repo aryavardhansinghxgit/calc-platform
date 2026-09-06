@@ -6,11 +6,12 @@ import {
   Trash2,
   Plus,
   FileSpreadsheet,
-  Layers,
-  Sparkles,
   ShieldCheck,
-  Building2,
   Hammer,
+  RotateCcw,
+  Copy,
+  Check,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,8 +41,9 @@ interface SavedRoofEstimate<T> {
   id: string;
   timestamp: string;
   inputSummary: string;
+  rawInputs: Record<string, any>;
   result: T;
-  notes: string;
+  notes?: string;
 }
 
 function flashSave(setter: React.Dispatch<React.SetStateAction<boolean>>) {
@@ -61,11 +63,12 @@ function useCardSaved<T>(storageKey: string) {
   }, [storageKey]);
 
   const save = useCallback(
-    (inputSummary: string, result: T, notes = "") => {
+    (inputSummary: string, rawInputs: Record<string, any>, result: T, notes = "") => {
       const entry: SavedRoofEstimate<T> = {
         id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         inputSummary,
+        rawInputs,
         result,
         notes,
       };
@@ -123,17 +126,18 @@ function CardWrapper({
   onSave?: () => void;
 }) {
   return (
-    <div className="border border-blue-600/30 dark:border-blue-500/30 rounded-xl overflow-hidden shadow-xs bg-white dark:bg-zinc-900 transition-all">
+    <div className="print-card border border-blue-600/30 dark:border-blue-500/30 rounded-xl overflow-hidden shadow-xs bg-white dark:bg-zinc-900 transition-all">
       <div className="bg-blue-600 text-white px-3.5 py-1.5 flex items-center justify-between">
         <h3 className="font-bold text-xs tracking-wide text-white">{title}</h3>
         {hasResult && onSave && (
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 print:hidden">
             {savedCount !== undefined && savedCount > 0 && onToggleSaved && (
               <button
                 type="button"
                 onClick={onToggleSaved}
                 className="text-[10px] bg-white/20 hover:bg-white/30 text-white font-bold px-1.5 py-0.5 rounded cursor-pointer transition-colors"
                 title="View saved calculations"
+                aria-label={`View ${savedCount} saved calculations`}
               >
                 {savedCount} saved
               </button>
@@ -141,6 +145,7 @@ function CardWrapper({
             <button
               type="button"
               onClick={onSave}
+              aria-label={`Save ${title}`}
               className={`text-[11px] font-bold px-2 py-0.5 rounded cursor-pointer transition-all ${
                 isSaved
                   ? "bg-emerald-500 text-white"
@@ -158,6 +163,7 @@ function CardWrapper({
 }
 
 function InputRow({
+  id,
   label,
   value,
   onChange,
@@ -166,7 +172,9 @@ function InputRow({
   max,
   step = 1,
   showUnit = true,
+  error,
 }: {
+  id: string;
   label: string;
   value: string;
   onChange: (v: string) => void;
@@ -175,27 +183,41 @@ function InputRow({
   max?: number;
   step?: number;
   showUnit?: boolean;
+  error?: string;
 }) {
   return (
-    <div className="grid grid-cols-12 gap-2 items-center text-xs">
-      <label className="col-span-5 font-medium text-zinc-700 dark:text-zinc-300 truncate">
-        {label}
-      </label>
-      <div className={showUnit && unit ? "col-span-4" : "col-span-7"}>
-        <Input
-          type="number"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          min={min}
-          max={max}
-          step={step}
-          className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
-        />
-      </div>
-      {showUnit && unit && (
-        <div className="col-span-3 text-[11px] text-zinc-500 font-medium truncate flex items-center">
-          {unit}
+    <div className="space-y-0.5">
+      <div className="grid grid-cols-12 gap-2 items-center text-xs">
+        <label
+          htmlFor={id}
+          className="col-span-5 font-medium text-zinc-700 dark:text-zinc-300 truncate cursor-pointer"
+        >
+          {label}
+        </label>
+        <div className={showUnit && unit ? "col-span-4" : "col-span-7"}>
+          <Input
+            id={id}
+            type="number"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            min={min}
+            max={max}
+            step={step}
+            className={`h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800 ${
+              error ? "border-red-500 focus-visible:ring-red-500" : ""
+            }`}
+          />
         </div>
+        {showUnit && unit && (
+          <div className="col-span-3 text-[11px] text-zinc-500 font-medium truncate flex items-center">
+            {unit}
+          </div>
+        )}
+      </div>
+      {error && (
+        <p role="alert" className="text-[10px] text-red-600 dark:text-red-400 pl-1 font-medium">
+          {error}
+        </p>
       )}
     </div>
   );
@@ -206,6 +228,7 @@ function SavedEstimatesDrawer<T>({
   isOpen,
   remove,
   clear,
+  onRestore,
   cardTitle,
   formatSummary,
 }: {
@@ -213,6 +236,7 @@ function SavedEstimatesDrawer<T>({
   isOpen: boolean;
   remove: (id: string) => void;
   clear: () => void;
+  onRestore?: (rawInputs: Record<string, any>) => void;
   cardTitle: string;
   formatSummary: (result: T) => string;
 }) {
@@ -234,21 +258,25 @@ function SavedEstimatesDrawer<T>({
   };
 
   return (
-    <div className="mt-3 p-3 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 space-y-2 text-xs">
+    <div className="print:hidden mt-3 p-3 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 space-y-2 text-xs">
       <div className="flex items-center justify-between pb-1 border-b border-zinc-200 dark:border-zinc-800">
         <span className="font-bold text-zinc-700 dark:text-zinc-300">
           Saved {cardTitle} History ({saved.length})
         </span>
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={exportCsv}
             className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-0.5 cursor-pointer"
+            aria-label={`Export ${cardTitle} saved estimates to CSV`}
           >
             <Download className="w-3 h-3" /> CSV
           </button>
           <button
+            type="button"
             onClick={clear}
             className="text-[10px] text-zinc-400 hover:text-red-500 cursor-pointer"
+            aria-label={`Clear all saved ${cardTitle} estimates`}
           >
             Clear
           </button>
@@ -266,13 +294,28 @@ function SavedEstimatesDrawer<T>({
               </span>
               <span className="text-zinc-400 ml-1.5">({item.inputSummary})</span>
             </div>
-            <button
-              onClick={() => remove(item.id)}
-              className="text-zinc-400 hover:text-red-500 p-0.5 cursor-pointer"
-              title="Delete"
-            >
-              <Trash2 className="w-3 h-3" />
-            </button>
+            <div className="flex items-center gap-1">
+              {onRestore && item.rawInputs && (
+                <button
+                  type="button"
+                  onClick={() => onRestore(item.rawInputs)}
+                  className="text-zinc-500 hover:text-blue-600 dark:hover:text-blue-400 p-1 cursor-pointer transition-colors rounded"
+                  title="Restore saved calculation"
+                  aria-label="Restore saved roofing calculation"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => remove(item.id)}
+                className="text-zinc-400 hover:text-red-500 p-1 cursor-pointer transition-colors rounded"
+                title="Delete"
+                aria-label="Delete saved calculation"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         ))}
       </div>
@@ -280,9 +323,57 @@ function SavedEstimatesDrawer<T>({
   );
 }
 
+function ExportCopyBar({
+  resultText,
+  summaryText,
+  latexText,
+  onCopy,
+}: {
+  resultText: string;
+  summaryText: string;
+  latexText: string;
+  onCopy: (text: string, label: string) => void;
+}) {
+  return (
+    <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-zinc-100 dark:border-zinc-800 print:hidden text-[10px]">
+      <span className="text-zinc-400 font-semibold mr-1">Copy:</span>
+      <button
+        type="button"
+        onClick={() => onCopy(resultText, "Result copied to clipboard")}
+        className="px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-750 text-zinc-700 dark:text-zinc-300 cursor-pointer font-medium transition-colors"
+        aria-label="Copy primary numeric result"
+      >
+        Copy Result
+      </button>
+      <button
+        type="button"
+        onClick={() => onCopy(summaryText, "Summary copied to clipboard")}
+        className="px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-750 text-zinc-700 dark:text-zinc-300 cursor-pointer font-medium transition-colors"
+        aria-label="Copy calculation summary"
+      >
+        Copy Summary
+      </button>
+      <button
+        type="button"
+        onClick={() => onCopy(latexText, "LaTeX copied to clipboard")}
+        className="px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-750 text-zinc-700 dark:text-zinc-300 cursor-pointer font-medium font-mono transition-colors"
+        aria-label="Copy mathematical formula in LaTeX"
+      >
+        Copy LaTeX
+      </button>
+    </div>
+  );
+}
+
 // ─── 2D SVG Scaled Roof Diagrams ────────────────────────────────────────────
 
-function RoofPitchDiagram2D({ pitchRise, style = "gable" }: { pitchRise: number; style?: RoofStyle }) {
+function RoofPitchDiagram2D({
+  pitchRise,
+  style = "gable",
+}: {
+  pitchRise: number;
+  style?: RoofStyle;
+}) {
   const pitch = getPitchInfo(pitchRise);
   const risePx = Math.min(65, Math.max(15, pitch.rise * 5.5));
 
@@ -290,7 +381,7 @@ function RoofPitchDiagram2D({ pitchRise, style = "gable" }: { pitchRise: number;
     <svg
       viewBox="0 0 280 180"
       className="w-full max-w-[270px] mx-auto select-none"
-      aria-label="Roof Pitch and Overhang 2D Scaled Diagram"
+      aria-label={`${style} Roof Pitch and Overhang 2D Scaled Diagram`}
     >
       <defs>
         <marker id="roof-arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
@@ -301,9 +392,23 @@ function RoofPitchDiagram2D({ pitchRise, style = "gable" }: { pitchRise: number;
         </marker>
       </defs>
 
-      {/* House Base Box (Grey) */}
-      <rect x="55" y="115" width="170" height="45" fill="#3b82f6" fillOpacity="0.15" stroke="#2563eb" strokeWidth="1.2" />
-      <text x="140" y="142" textAnchor="middle" className="text-[9.5px] fill-blue-900 dark:fill-blue-200 font-bold">
+      {/* House Base Box */}
+      <rect
+        x="55"
+        y="115"
+        width="170"
+        height="45"
+        fill="#3b82f6"
+        fillOpacity="0.15"
+        stroke="#2563eb"
+        strokeWidth="1.2"
+      />
+      <text
+        x="140"
+        y="142"
+        textAnchor="middle"
+        className="text-[9.5px] fill-blue-900 dark:fill-blue-200 font-bold"
+      >
         base area
       </text>
 
@@ -317,13 +422,67 @@ function RoofPitchDiagram2D({ pitchRise, style = "gable" }: { pitchRise: number;
           strokeWidth="1.5"
         />
       ) : style === "hip" ? (
+        <g>
+          <polygon
+            points={`35,115 90,${115 - risePx} 190,${115 - risePx} 245,115`}
+            fill="#2563eb"
+            fillOpacity="0.85"
+            stroke="#1d4ed8"
+            strokeWidth="1.5"
+          />
+          <line
+            x1="35"
+            y1="115"
+            x2="90"
+            y2={`${115 - risePx}`}
+            stroke="#60a5fa"
+            strokeWidth="1.2"
+            strokeDasharray="2,2"
+          />
+          <line
+            x1="245"
+            y1="115"
+            x2="190"
+            y2={`${115 - risePx}`}
+            stroke="#60a5fa"
+            strokeWidth="1.2"
+            strokeDasharray="2,2"
+          />
+        </g>
+      ) : style === "gambrel" ? (
         <polygon
-          points={`35,115 90,${115 - risePx} 190,${115 - risePx} 245,115`}
+          points={`35,115 65,${115 - risePx * 0.75} 140,${115 - risePx * 1.25} 215,${115 - risePx * 0.75} 245,115`}
           fill="#2563eb"
           fillOpacity="0.85"
           stroke="#1d4ed8"
           strokeWidth="1.5"
         />
+      ) : style === "mansard" ? (
+        <g>
+          <polygon
+            points={`35,115 65,${115 - risePx} 215,${115 - risePx} 245,115`}
+            fill="#2563eb"
+            fillOpacity="0.85"
+            stroke="#1d4ed8"
+            strokeWidth="1.5"
+          />
+          <line
+            x1="65"
+            y1={`${115 - risePx}`}
+            x2="215"
+            y2={`${115 - risePx}`}
+            stroke="#93c5fd"
+            strokeWidth="2"
+          />
+          <text
+            x="140"
+            y={`${110 - risePx}`}
+            textAnchor="middle"
+            className="text-[7px] fill-zinc-700 dark:fill-zinc-300 font-bold"
+          >
+            flat deck
+          </text>
+        </g>
       ) : (
         <polygon
           points={`35,115 140,${115 - risePx} 245,115`}
@@ -335,114 +494,338 @@ function RoofPitchDiagram2D({ pitchRise, style = "gable" }: { pitchRise: number;
       )}
 
       {/* Pitch Triangle Helper (Rise/Run) on right slope */}
-      <polygon
-        points={`140,${115 - risePx} 190,${115 - risePx} 190,${115 - risePx + (risePx * 50) / 105}`}
-        fill="white"
-        fillOpacity="0.9"
-        stroke="#1e293b"
-        strokeWidth="0.8"
-      />
-      <text x="165" y={`${112 - risePx}`} textAnchor="middle" className="text-[7.5px] fill-zinc-800 font-bold">
-        run (12")
-      </text>
-      <text x="194" y={`${115 - risePx + (risePx * 25) / 105}`} textAnchor="start" className="text-[7.5px] fill-zinc-800 font-bold">
-        rise ({pitch.rise}")
-      </text>
+      {style !== "shed" && (
+        <g>
+          <polygon
+            points={`140,${115 - risePx} 190,${115 - risePx} 190,${115 - risePx + (risePx * 50) / 105}`}
+            fill="white"
+            fillOpacity="0.9"
+            stroke="#1e293b"
+            strokeWidth="0.8"
+          />
+          <text
+            x="165"
+            y={`${112 - risePx}`}
+            textAnchor="middle"
+            className="text-[7.5px] fill-zinc-800 font-bold"
+          >
+            run (12")
+          </text>
+          <text
+            x="194"
+            y={`${115 - risePx + (risePx * 25) / 105}`}
+            textAnchor="start"
+            className="text-[7.5px] fill-zinc-800 font-bold"
+          >
+            rise ({pitch.rise}")
+          </text>
+        </g>
+      )}
 
       {/* Angle Arc on right */}
-      <path d={`M 225,115 A 20,20 0 0,0 230,${115 - 8}`} fill="none" stroke="#f59e0b" strokeWidth="1.2" />
-      <text x="210" y="105" textAnchor="end" className="text-[8px] fill-amber-700 dark:fill-amber-300 font-bold">
+      <path
+        d={`M 225,115 A 20,20 0 0,0 230,${115 - 8}`}
+        fill="none"
+        stroke="#f59e0b"
+        strokeWidth="1.2"
+      />
+      <text
+        x="210"
+        y="105"
+        textAnchor="end"
+        className="text-[8px] fill-amber-700 dark:fill-amber-300 font-bold"
+      >
         {pitch.angleDegrees}°
       </text>
 
-      {/* Eaves Stick Out (Overhang) Dimension Line on left */}
-      <line x1="35" y1="125" x2="55" y2="125" stroke="#18181b" strokeWidth="0.9" markerStart="url(#roof-arr-l)" markerEnd="url(#roof-arr)" className="dark:stroke-zinc-300" />
-      <text x="45" y="136" textAnchor="middle" className="text-[7.5px] fill-zinc-700 dark:fill-zinc-300 font-medium">
+      {/* Eaves Stick Out Dimension Line on left */}
+      <line
+        x1="35"
+        y1="125"
+        x2="55"
+        y2="125"
+        stroke="#18181b"
+        strokeWidth="0.9"
+        markerStart="url(#roof-arr-l)"
+        markerEnd="url(#roof-arr)"
+        className="dark:stroke-zinc-300"
+      />
+      <text
+        x="45"
+        y="136"
+        textAnchor="middle"
+        className="text-[7.5px] fill-zinc-700 dark:fill-zinc-300 font-medium"
+      >
         eaves
       </text>
 
       {/* Eaves Stick Out Dimension Line on right */}
-      <line x1="225" y1="125" x2="245" y2="125" stroke="#18181b" strokeWidth="0.9" markerStart="url(#roof-arr-l)" markerEnd="url(#roof-arr)" className="dark:stroke-zinc-300" />
-      <text x="235" y="136" textAnchor="middle" className="text-[7.5px] fill-zinc-700 dark:fill-zinc-300 font-medium">
+      <line
+        x1="225"
+        y1="125"
+        x2="245"
+        y2="125"
+        stroke="#18181b"
+        strokeWidth="0.9"
+        markerStart="url(#roof-arr-l)"
+        markerEnd="url(#roof-arr)"
+        className="dark:stroke-zinc-300"
+      />
+      <text
+        x="235"
+        y="136"
+        textAnchor="middle"
+        className="text-[7.5px] fill-zinc-700 dark:fill-zinc-300 font-medium"
+      >
         stick out
       </text>
 
       {/* Pitch Notation Banner */}
-      <rect x="70" y="162" width="140" height="15" rx="3" fill="#1e293b" />
-      <text x="140" y="172.5" textAnchor="middle" className="text-[8px] fill-white font-bold capitalize">
-        {style} Roof: {pitch.pitchString} ({pitch.multiplier}x)
+      <rect x="50" y="162" width="180" height="15" rx="3" fill="#1e293b" />
+      <text
+        x="140"
+        y="172.5"
+        textAnchor="middle"
+        className="text-[8px] fill-white font-bold capitalize"
+      >
+        {style} Roof: {pitch.pitchString} ({pitch.multiplierDisplay}x Multiplier)
       </text>
     </svg>
   );
 }
 
-function RoofStyleWireframeDiagram({ style }: { style: RoofStyle }) {
-  if (style === "gable") {
-    return (
-      <svg viewBox="0 0 200 110" className="w-full max-w-[190px] mx-auto select-none" aria-label="Gable Roof Wireframe">
-        <polygon points="20,80 100,25 180,80" fill="#3b82f6" fillOpacity="0.2" stroke="#2563eb" strokeWidth="1.5" />
-        <line x1="100" y1="25" x2="100" y2="80" stroke="#1e3a8a" strokeWidth="1" strokeDasharray="3,3" />
-        <rect x="25" y="80" width="150" height="18" fill="#cbd5e1" fillOpacity="0.5" stroke="#64748b" strokeWidth="1" />
-        <text x="60" y="55" className="text-[8.5px] fill-blue-900 dark:fill-blue-200 font-bold">Front Slope</text>
-        <text x="140" y="55" className="text-[8.5px] fill-blue-900 dark:fill-blue-200 font-bold">Rear Slope</text>
-        <text x="100" y="18" textAnchor="middle" className="text-[7.5px] fill-zinc-700 dark:fill-zinc-300 font-bold">Ridge Line</text>
-      </svg>
-    );
-  }
-
-  if (style === "hip") {
-    return (
-      <svg viewBox="0 0 200 110" className="w-full max-w-[190px] mx-auto select-none" aria-label="Hip Roof Wireframe">
-        <polygon points="20,85 60,35 140,35 180,85" fill="#3b82f6" fillOpacity="0.25" stroke="#2563eb" strokeWidth="1.5" />
-        <polygon points="20,85 60,35 20,85" fill="#60a5fa" fillOpacity="0.3" stroke="#2563eb" strokeWidth="1.2" />
-        <polygon points="180,85 140,35 180,85" fill="#60a5fa" fillOpacity="0.3" stroke="#2563eb" strokeWidth="1.2" />
-        <line x1="60" y1="35" x2="140" y2="35" stroke="#1e3a8a" strokeWidth="2" />
-        <rect x="20" y="85" width="160" height="16" fill="#cbd5e1" fillOpacity="0.5" stroke="#64748b" strokeWidth="1" />
-        <text x="100" y="62" textAnchor="middle" className="text-[8.5px] fill-blue-900 dark:fill-blue-200 font-bold">Front &amp; Rear (4 Hips)</text>
-        <text x="100" y="28" textAnchor="middle" className="text-[7.5px] fill-zinc-700 dark:fill-zinc-300 font-bold">Center Ridge</text>
-      </svg>
-    );
-  }
-
-  if (style === "shed") {
-    return (
-      <svg viewBox="0 0 200 110" className="w-full max-w-[190px] mx-auto select-none" aria-label="Shed Roof Wireframe">
-        <polygon points="25,40 175,75 175,95 25,95" fill="#3b82f6" fillOpacity="0.25" stroke="#2563eb" strokeWidth="1.5" />
-        <line x1="25" y1="40" x2="175" y2="75" stroke="#1d4ed8" strokeWidth="2" />
-        <rect x="25" y="95" width="150" height="10" fill="#cbd5e1" stroke="#64748b" strokeWidth="1" />
-        <text x="100" y="60" textAnchor="middle" className="text-[8.5px] fill-blue-900 dark:fill-blue-200 font-bold">Single Mono-Pitch Slope</text>
-        <text x="100" y="32" textAnchor="middle" className="text-[7.5px] fill-zinc-700 dark:fill-zinc-300 font-bold">High Eave / Single Ridge</text>
-      </svg>
-    );
-  }
-
-  if (style === "gambrel") {
-    return (
-      <svg viewBox="0 0 200 110" className="w-full max-w-[190px] mx-auto select-none" aria-label="Gambrel Barn Roof Wireframe">
-        <polygon points="25,80 50,45 100,20 150,45 175,80" fill="#3b82f6" fillOpacity="0.25" stroke="#2563eb" strokeWidth="1.5" />
-        <rect x="25" y="80" width="150" height="18" fill="#cbd5e1" fillOpacity="0.5" stroke="#64748b" strokeWidth="1" />
-        <text x="100" y="35" textAnchor="middle" className="text-[7.5px] fill-blue-900 dark:fill-blue-200 font-bold">Upper Shallow (5/12)</text>
-        <text x="35" y="65" textAnchor="middle" className="text-[7px] fill-blue-950 dark:fill-blue-100 font-bold">Lower Steep</text>
-        <text x="165" y="65" textAnchor="middle" className="text-[7px] fill-blue-950 dark:fill-blue-100 font-bold">Lower Steep</text>
-      </svg>
-    );
-  }
-
-  // Mansard
+function RoofStyleWireframeDiagram({
+  style,
+  planes,
+}: {
+  style: RoofStyle;
+  planes: RoofPlane[];
+}) {
   return (
-    <svg viewBox="0 0 200 110" className="w-full max-w-[190px] mx-auto select-none" aria-label="Mansard Roof Wireframe">
-      <polygon points="20,80 45,35 155,35 180,80" fill="#3b82f6" fillOpacity="0.25" stroke="#2563eb" strokeWidth="1.5" />
-      <line x1="45" y1="35" x2="155" y2="35" stroke="#1e3a8a" strokeWidth="1.5" />
-      <rect x="20" y="80" width="160" height="18" fill="#cbd5e1" fillOpacity="0.5" stroke="#64748b" strokeWidth="1" />
-      <text x="100" y="30" textAnchor="middle" className="text-[7.5px] fill-blue-900 dark:fill-blue-200 font-bold">Upper Flat Deck (1/12)</text>
-      <text x="100" y="60" textAnchor="middle" className="text-[8px] fill-blue-950 dark:fill-blue-100 font-bold">Steep Mansard Curb (18/12)</text>
-    </svg>
+    <div className="w-full flex flex-col items-center">
+      <svg
+        viewBox="0 0 220 115"
+        className="w-full max-w-[210px] mx-auto select-none"
+        aria-label={`${style} roof architectural wireframe showing ${planes.length} slope planes`}
+      >
+        {style === "gable" ? (
+          <g>
+            <polygon
+              points="20,85 110,25 200,85"
+              fill="#3b82f6"
+              fillOpacity="0.2"
+              stroke="#2563eb"
+              strokeWidth="1.5"
+            />
+            <line
+              x1="110"
+              y1="25"
+              x2="110"
+              y2="85"
+              stroke="#1e3a8a"
+              strokeWidth="1"
+              strokeDasharray="3,3"
+            />
+            <rect
+              x="25"
+              y="85"
+              width="170"
+              height="18"
+              fill="#cbd5e1"
+              fillOpacity="0.5"
+              stroke="#64748b"
+              strokeWidth="1"
+            />
+            <text x="65" y="60" className="text-[8px] fill-blue-900 dark:fill-blue-200 font-bold">
+              {planes[0]?.name || "Front"} ({planes[0]?.pitchRise || 6}/12)
+            </text>
+            <text x="135" y="60" className="text-[8px] fill-blue-900 dark:fill-blue-200 font-bold">
+              {planes[1]?.name || "Rear"} ({planes[1]?.pitchRise || 6}/12)
+            </text>
+            <text
+              x="110"
+              y="18"
+              textAnchor="middle"
+              className="text-[7.5px] fill-zinc-700 dark:fill-zinc-300 font-bold"
+            >
+              Ridge Line
+            </text>
+          </g>
+        ) : style === "hip" ? (
+          <g>
+            <polygon
+              points="20,85 65,35 155,35 200,85"
+              fill="#3b82f6"
+              fillOpacity="0.25"
+              stroke="#2563eb"
+              strokeWidth="1.5"
+            />
+            <polygon
+              points="20,85 65,35 20,85"
+              fill="#60a5fa"
+              fillOpacity="0.3"
+              stroke="#2563eb"
+              strokeWidth="1.2"
+            />
+            <polygon
+              points="200,85 155,35 200,85"
+              fill="#60a5fa"
+              fillOpacity="0.3"
+              stroke="#2563eb"
+              strokeWidth="1.2"
+            />
+            <line x1="65" y1="35" x2="155" y2="35" stroke="#1e3a8a" strokeWidth="2" />
+            <rect
+              x="20"
+              y="85"
+              width="180"
+              height="16"
+              fill="#cbd5e1"
+              fillOpacity="0.5"
+              stroke="#64748b"
+              strokeWidth="1"
+            />
+            <text
+              x="110"
+              y="62"
+              textAnchor="middle"
+              className="text-[8px] fill-blue-900 dark:fill-blue-200 font-bold"
+            >
+              4-Hip Geometry ({planes.length} active planes)
+            </text>
+            <text
+              x="110"
+              y="28"
+              textAnchor="middle"
+              className="text-[7.5px] fill-zinc-700 dark:fill-zinc-300 font-bold"
+            >
+              Center Ridge
+            </text>
+          </g>
+        ) : style === "shed" ? (
+          <g>
+            <polygon
+              points="25,40 195,75 195,95 25,95"
+              fill="#3b82f6"
+              fillOpacity="0.25"
+              stroke="#2563eb"
+              strokeWidth="1.5"
+            />
+            <line x1="25" y1="40" x2="195" y2="75" stroke="#1d4ed8" strokeWidth="2" />
+            <rect x="25" y="95" width="170" height="10" fill="#cbd5e1" stroke="#64748b" strokeWidth="1" />
+            <text
+              x="110"
+              y="60"
+              textAnchor="middle"
+              className="text-[8.5px] fill-blue-900 dark:fill-blue-200 font-bold"
+            >
+              Mono-Pitch Slope ({planes[0]?.lengthFt || 50}&apos; × {planes[0]?.widthFt || 42}&apos;)
+            </text>
+            <text
+              x="110"
+              y="32"
+              textAnchor="middle"
+              className="text-[7.5px] fill-zinc-700 dark:fill-zinc-300 font-bold"
+            >
+              High Eave / Single Ridge
+            </text>
+          </g>
+        ) : style === "gambrel" ? (
+          <g>
+            <polygon
+              points="25,85 55,50 110,25 165,50 195,85"
+              fill="#3b82f6"
+              fillOpacity="0.25"
+              stroke="#2563eb"
+              strokeWidth="1.5"
+            />
+            <rect
+              x="25"
+              y="85"
+              width="170"
+              height="18"
+              fill="#cbd5e1"
+              fillOpacity="0.5"
+              stroke="#64748b"
+              strokeWidth="1"
+            />
+            <text
+              x="110"
+              y="40"
+              textAnchor="middle"
+              className="text-[7.5px] fill-blue-900 dark:fill-blue-200 font-bold"
+            >
+              Upper Shallow ({planes[1]?.pitchRise || 5}/12)
+            </text>
+            <text
+              x="40"
+              y="70"
+              textAnchor="middle"
+              className="text-[6.5px] fill-blue-950 dark:fill-blue-100 font-bold"
+            >
+              Steep ({planes[0]?.pitchRise || 14}/12)
+            </text>
+            <text
+              x="180"
+              y="70"
+              textAnchor="middle"
+              className="text-[6.5px] fill-blue-950 dark:fill-blue-100 font-bold"
+            >
+              Steep ({planes[planes.length - 1]?.pitchRise || 14}/12)
+            </text>
+          </g>
+        ) : (
+          <g>
+            <polygon
+              points="20,85 50,35 170,35 200,85"
+              fill="#3b82f6"
+              fillOpacity="0.25"
+              stroke="#2563eb"
+              strokeWidth="1.5"
+            />
+            <line x1="50" y1="35" x2="170" y2="35" stroke="#1e3a8a" strokeWidth="1.5" />
+            <rect
+              x="20"
+              y="85"
+              width="180"
+              height="18"
+              fill="#cbd5e1"
+              fillOpacity="0.5"
+              stroke="#64748b"
+              strokeWidth="1"
+            />
+            <text
+              x="110"
+              y="30"
+              textAnchor="middle"
+              className="text-[7.5px] fill-blue-900 dark:fill-blue-200 font-bold"
+            >
+              Upper Deck Deck ({planes[4]?.pitchRise || 1}/12)
+            </text>
+            <text
+              x="110"
+              y="65"
+              textAnchor="middle"
+              className="text-[8px] fill-blue-950 dark:fill-blue-100 font-bold"
+            >
+              Mansard Curbs ({planes[0]?.pitchRise || 18}/12)
+            </text>
+          </g>
+        )}
+      </svg>
+      <div className="w-full text-center text-[10px] text-zinc-500 font-medium mt-1">
+        {planes.length} slope {planes.length === 1 ? "plane" : "planes"} configured
+      </div>
+    </div>
   );
 }
 
 // ─── Roof Style Presets ─────────────────────────────────────────────────────
 
-const DEFAULT_STYLE_PLANES: Record<RoofStyle, { planes: RoofPlane[]; ridge: string; valley: string }> = {
+const DEFAULT_STYLE_PLANES: Record<
+  RoofStyle,
+  { planes: RoofPlane[]; ridge: string; valley: string }
+> = {
   gable: {
     planes: [
       { id: "1", name: "Front Slope", lengthFt: 50, widthFt: 22, pitchRise: 6 },
@@ -494,6 +877,39 @@ const DEFAULT_STYLE_PLANES: Record<RoofStyle, { planes: RoofPlane[]; ridge: stri
 // ─── MAIN COMPONENT ─────────────────────────────────────────────────────────
 
 export function RoofingCalculator() {
+  // ─── GLOBAL TOAST / FEEDBACK ───
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = useCallback((msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage((cur) => (cur === msg ? null : cur));
+    }, 2000);
+  }, []);
+
+  const copyToClipboard = useCallback(
+    async (text: string, label: string) => {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+        }
+        showToast(label);
+      } catch {
+        showToast("Failed to copy");
+      }
+    },
+    [showToast],
+  );
+
   // ─── CARD 1: HOUSE FOOTPRINT & PITCH AREA ───
   const [footprintStyle, setFootprintStyle] = useState<RoofStyle>("gable");
   const [footprintMode, setFootprintMode] = useState<"dimensions" | "base_area">("dimensions");
@@ -507,6 +923,7 @@ export function RoofingCalculator() {
   const [roofAngleDeg, setRoofAngleDeg] = useState("26.6");
   const [wastePercent, setWastePercent] = useState("10");
   const [pricePerSqFt, setPricePerSqFt] = useState("");
+  const [card1Error, setCard1Error] = useState<string | null>(null);
   const [footprintResult, setFootprintResult] = useState<FootprintAreaResult | null>(null);
   const [footprintSaveSuccess, setFootprintSaveSuccess] = useState(false);
   const footprintSaved = useCardSaved<FootprintAreaResult>("saved_roof_footprint");
@@ -518,11 +935,38 @@ export function RoofingCalculator() {
   const [ridgeLength, setRidgeLength] = useState("50");
   const [deductionArea, setDeductionArea] = useState("0");
   const [multiPitchWaste, setMultiPitchWaste] = useState("10");
+  const [card2Error, setCard2Error] = useState<string | null>(null);
   const [multiPitchResult, setMultiPitchResult] = useState<MultiPitchResult | null>(null);
   const [multiPitchSaveSuccess, setMultiPitchSaveSuccess] = useState(false);
   const multiPitchSaved = useCardSaved<MultiPitchResult>("saved_roof_multipitch");
 
-  // Handler to switch style and auto-populate standard plane presets
+  // ─── CARD 3: MATERIAL & BUNDLE ESTIMATOR ───
+  const [materialTargetArea, setMaterialTargetArea] = useState("2686");
+  const [shingleType, setShingleType] = useState<ShingleType>("architectural");
+  const [underlaymentType, setUnderlaymentType] = useState<UnderlaymentType>("synthetic");
+  const [iceShieldMargin, setIceShieldMargin] = useState("3"); // 3ft or 6ft
+  const [isHighWindZone, setIsHighWindZone] = useState(false);
+  const [card3Error, setCard3Error] = useState<string | null>(null);
+  const [materialResult, setMaterialResult] = useState<MaterialEstimateResult | null>(null);
+  const [materialSaveSuccess, setMaterialSaveSuccess] = useState(false);
+  const materialSaved = useCardSaved<MaterialEstimateResult>("saved_roof_materials");
+
+  // ─── CARD 4: ROOFING COST & CONTRACTOR QUOTE ───
+  const [costSquares, setCostSquares] = useState("27");
+  const [pricePerSquare, setPricePerSquare] = useState("160");
+  const [tearOffCost, setTearOffCost] = useState("50");
+  const [laborCost, setLaborCost] = useState("200");
+  const [permitAndDumpster, setPermitAndDumpster] = useState("650");
+  const [salesTaxRate, setSalesTaxRate] = useState("7");
+  const [card4Error, setCard4Error] = useState<string | null>(null);
+  const [costResult, setCostResult] = useState<RoofingCostResult | null>(null);
+  const [costSaveSuccess, setCostSaveSuccess] = useState(false);
+  const costSaved = useCardSaved<RoofingCostResult>("saved_roof_cost");
+
+  // ─── GLOBAL REPORT MODAL ───
+  const [isReportOpen, setIsReportOpen] = useState(false);
+
+  // ─── CARD 2 Style Handler (Isolated from Card 1) ───
   const handleRoofStyleChange = useCallback((newStyle: RoofStyle) => {
     setRoofStyle(newStyle);
     const preset = DEFAULT_STYLE_PLANES[newStyle];
@@ -534,70 +978,118 @@ export function RoofingCalculator() {
       setPlanes(newPlanes);
       setRidgeLength(preset.ridge);
       setValleyLength(preset.valley);
-
-      // Direct synchronous recalculation on style change
-      const res = calculateMultiPitchRoof({
-        style: newStyle,
-        planes: newPlanes,
-        valleyLengthFt: Number(preset.valley) || 0,
-        ridgeLengthFt: Number(preset.ridge) || 0,
-        deductionAreaSqFt: Number(deductionArea) || 0,
-        wastePercent: Number(multiPitchWaste) || 10,
-      });
-      setMultiPitchResult(res);
-      setMaterialTargetArea(String(Math.round(res.grossCoveredAreaSqFt)));
-      setCostSquares(String(res.roofingSquares));
     }
-  }, [deductionArea, multiPitchWaste]);
-
-  // ─── CARD 3: MATERIAL & BUNDLE ESTIMATOR ───
-  const [materialTargetArea, setMaterialTargetArea] = useState("2686");
-  const [shingleType, setShingleType] = useState<ShingleType>("architectural");
-  const [underlaymentType, setUnderlaymentType] = useState<UnderlaymentType>("synthetic");
-  const [iceShieldMargin, setIceShieldMargin] = useState("3"); // 3ft or 6ft
-  const [isHighWindZone, setIsHighWindZone] = useState(false);
-  const [materialResult, setMaterialResult] = useState<MaterialEstimateResult | null>(null);
-  const [materialSaveSuccess, setMaterialSaveSuccess] = useState(false);
-  const materialSaved = useCardSaved<MaterialEstimateResult>("saved_roof_materials");
-
-  // ─── CARD 4: ROOFING COST & CONTRACTOR QUOTE ───
-  const [costSquares, setCostSquares] = useState("27");
-  const [pricePerSquare, setPricePerSquare] = useState("160"); // $/sq architectural
-  const [tearOffCost, setTearOffCost] = useState("50"); // $/sq removal
-  const [laborCost, setLaborCost] = useState("200"); // $/sq labor
-  const [permitAndDumpster, setPermitAndDumpster] = useState("650"); // lump sum
-  const [salesTaxRate, setSalesTaxRate] = useState("7");
-  const [costResult, setCostResult] = useState<RoofingCostResult | null>(null);
-  const [costSaveSuccess, setCostSaveSuccess] = useState(false);
-  const costSaved = useCardSaved<RoofingCostResult>("saved_roof_cost");
-
-  // ─── GLOBAL REPORT MODAL ───
-  const [isReportOpen, setIsReportOpen] = useState(false);
+  }, []);
 
   // ─── Calculation Handlers ───
 
   const handleFootprintCalc = useCallback(() => {
-    let rise = Number(selectedPitchRise) || 6;
-    if (pitchInputMode === "angle") {
-      const angle = Number(roofAngleDeg) || 26.6;
-      rise = getPitchFromAngle(angle).rise;
+    // 1. Validate Dimensions or Base Area
+    if (footprintMode === "dimensions") {
+      if (houseLength.trim() === "") {
+        setCard1Error("Enter a valid house length.");
+        setFootprintResult(null);
+        return;
+      }
+      const l = Number(houseLength);
+      if (isNaN(l) || l <= 0) {
+        setCard1Error("House length must be greater than zero.");
+        setFootprintResult(null);
+        return;
+      }
+      if (houseWidth.trim() === "") {
+        setCard1Error("Enter a valid house width.");
+        setFootprintResult(null);
+        return;
+      }
+      const w = Number(houseWidth);
+      if (isNaN(w) || w <= 0) {
+        setCard1Error("House width must be greater than zero.");
+        setFootprintResult(null);
+        return;
+      }
+    } else {
+      if (baseArea.trim() === "") {
+        setCard1Error("Enter a valid ground base area.");
+        setFootprintResult(null);
+        return;
+      }
+      const ba = Number(baseArea);
+      if (isNaN(ba) || ba <= 0) {
+        setCard1Error("Ground base area must be greater than zero.");
+        setFootprintResult(null);
+        return;
+      }
     }
+
+    // 2. Validate Overhangs
+    const eo = Number(eaveOverhang);
+    if (isNaN(eo) || eo < 0) {
+      setCard1Error("Eaves overhang cannot be negative.");
+      setFootprintResult(null);
+      return;
+    }
+    const go = Number(gableOverhang);
+    if (isNaN(go) || go < 0) {
+      setCard1Error("Gable overhang cannot be negative.");
+      setFootprintResult(null);
+      return;
+    }
+
+    // 3. Validate Pitch & Angle
+    let rise = 6;
+    if (pitchInputMode === "pitch") {
+      rise = Number(selectedPitchRise);
+      if (isNaN(rise) || rise <= 0) {
+        setCard1Error("Pitch rise must be greater than zero.");
+        setFootprintResult(null);
+        return;
+      }
+    } else {
+      const ang = Number(roofAngleDeg);
+      if (isNaN(ang) || ang < 1 || ang > 85) {
+        setCard1Error("Roof angle must be between 1° and 85°.");
+        setFootprintResult(null);
+        return;
+      }
+      rise = getPitchFromAngle(ang).rise;
+    }
+
+    // 4. Validate Waste
+    const wp = Number(wastePercent);
+    if (isNaN(wp) || wp < 0 || wp > 100) {
+      setCard1Error("Waste allowance must be between 0% and 100%.");
+      setFootprintResult(null);
+      return;
+    }
+
+    // 5. Validate Price per sq ft if provided
+    let ppsf = 0;
+    if (pricePerSqFt.trim() !== "") {
+      ppsf = Number(pricePerSqFt);
+      if (isNaN(ppsf) || ppsf < 0) {
+        setCard1Error("Price per square foot cannot be negative.");
+        setFootprintResult(null);
+        return;
+      }
+    }
+
+    setCard1Error(null);
 
     const res = calculateFootprintArea({
       style: footprintStyle,
       inputMode: footprintMode,
-      houseLengthFt: Number(houseLength) || 50,
-      houseWidthFt: Number(houseWidth) || 40,
-      baseAreaSqFt: Number(baseArea) || 2000,
-      eaveOverhangInches: Number(eaveOverhang) || 12,
-      gableOverhangInches: Number(gableOverhang) || 12,
+      houseLengthFt: Number(houseLength),
+      houseWidthFt: Number(houseWidth),
+      baseAreaSqFt: Number(baseArea),
+      eaveOverhangInches: eo,
+      gableOverhangInches: go,
       pitchRise: rise,
-      wastePercent: Number(wastePercent) || 10,
-      pricePerSqFt: Number(pricePerSqFt) || 0,
+      wastePercent: wp,
+      pricePerSqFt: ppsf,
     });
+
     setFootprintResult(res);
-    setMaterialTargetArea(String(Math.round(res.totalCoveredAreaSqFt)));
-    setCostSquares(String(res.roofingSquares));
   }, [
     footprintStyle,
     footprintMode,
@@ -614,23 +1106,105 @@ export function RoofingCalculator() {
   ]);
 
   const handleMultiPitchCalc = useCallback(() => {
+    // Validate Planes
+    if (planes.length === 0) {
+      setCard2Error("At least one roof plane is required.");
+      setMultiPitchResult(null);
+      return;
+    }
+    for (let i = 0; i < planes.length; i++) {
+      const p = planes[i];
+      if (isNaN(p.lengthFt) || p.lengthFt <= 0) {
+        setCard2Error(`Plane ${i + 1} (${p.name}): length must be greater than zero.`);
+        setMultiPitchResult(null);
+        return;
+      }
+      if (isNaN(p.widthFt) || p.widthFt <= 0) {
+        setCard2Error(`Plane ${i + 1} (${p.name}): width must be greater than zero.`);
+        setMultiPitchResult(null);
+        return;
+      }
+      if (isNaN(p.pitchRise) || p.pitchRise <= 0) {
+        setCard2Error(`Plane ${i + 1} (${p.name}): pitch must be greater than zero.`);
+        setMultiPitchResult(null);
+        return;
+      }
+    }
+
+    // Validate Ridge & Valley
+    const rl = Number(ridgeLength);
+    if (isNaN(rl) || rl < 0) {
+      setCard2Error("Ridge length cannot be negative.");
+      setMultiPitchResult(null);
+      return;
+    }
+    const vl = Number(valleyLength);
+    if (isNaN(vl) || vl < 0) {
+      setCard2Error("Valley length cannot be negative.");
+      setMultiPitchResult(null);
+      return;
+    }
+
+    // Validate Waste
+    const mpw = Number(multiPitchWaste);
+    if (isNaN(mpw) || mpw < 0 || mpw > 100) {
+      setCard2Error("Waste allowance must be between 0% and 100%.");
+      setMultiPitchResult(null);
+      return;
+    }
+
+    // Validate Deduction
+    const ded = Number(deductionArea);
+    if (isNaN(ded) || ded < 0) {
+      setCard2Error("Deduction area cannot be negative.");
+      setMultiPitchResult(null);
+      return;
+    }
+
+    // Calculate gross area to test deduction limit
+    let gross = 0;
+    for (const p of planes) {
+      gross += p.lengthFt * p.widthFt * getPitchInfo(p.pitchRise).multiplier;
+    }
+    if (ded > gross) {
+      setCard2Error(
+        `Deduction (${ded} sq ft) exceeds gross true roof area (${Math.round(gross)} sq ft).`,
+      );
+      setMultiPitchResult(null);
+      return;
+    }
+
+    setCard2Error(null);
+
     const res = calculateMultiPitchRoof({
       style: roofStyle,
       planes,
-      valleyLengthFt: Number(valleyLength) || 0,
-      ridgeLengthFt: Number(ridgeLength) || 0,
-      deductionAreaSqFt: Number(deductionArea) || 0,
-      wastePercent: Number(multiPitchWaste) || 10,
+      valleyLengthFt: vl,
+      ridgeLengthFt: rl,
+      deductionAreaSqFt: ded,
+      wastePercent: mpw,
     });
+
     setMultiPitchResult(res);
-    setMaterialTargetArea(String(Math.round(res.grossCoveredAreaSqFt)));
-    setCostSquares(String(res.roofingSquares));
   }, [roofStyle, planes, valleyLength, ridgeLength, deductionArea, multiPitchWaste]);
 
   const handleMaterialCalc = useCallback(() => {
-    const targetArea = Number(materialTargetArea) || 2000;
+    if (materialTargetArea.trim() === "") {
+      setCard3Error("Enter target surface area.");
+      setMaterialResult(null);
+      return;
+    }
+    const ta = Number(materialTargetArea);
+    if (isNaN(ta) || ta <= 0) {
+      setCard3Error("Target surface area must be greater than zero.");
+      setMaterialResult(null);
+      return;
+    }
+
+    setCard3Error(null);
+
     const res = calculateRoofingMaterials({
-      targetAreaSqFt: targetArea,
+      targetAreaSqFt: ta,
       shingleType,
       underlaymentType,
       iceShieldMarginFt: Number(iceShieldMargin) || 3,
@@ -639,6 +1213,7 @@ export function RoofingCalculator() {
       ridgeLengthFt: footprintResult ? footprintResult.estimatedRidgeFt : 50,
       isHighWindZone,
     });
+
     setMaterialResult(res);
   }, [
     materialTargetArea,
@@ -651,14 +1226,64 @@ export function RoofingCalculator() {
   ]);
 
   const handleCostCalc = useCallback(() => {
+    if (costSquares.trim() === "") {
+      setCard4Error("Enter roofing squares.");
+      setCostResult(null);
+      return;
+    }
+    const sq = Number(costSquares);
+    if (isNaN(sq) || sq <= 0) {
+      setCard4Error("Roofing squares must be greater than zero.");
+      setCostResult(null);
+      return;
+    }
+
+    const mat = Number(pricePerSquare);
+    if (isNaN(mat) || mat < 0) {
+      setCard4Error("Material cost cannot be negative.");
+      setCostResult(null);
+      return;
+    }
+
+    const tear = Number(tearOffCost);
+    if (isNaN(tear) || tear < 0) {
+      setCard4Error("Tear-off cost cannot be negative.");
+      setCostResult(null);
+      return;
+    }
+
+    const lab = Number(laborCost);
+    if (isNaN(lab) || lab < 0) {
+      setCard4Error("Labor rate cannot be negative.");
+      setCostResult(null);
+      return;
+    }
+
+    const dump = Number(permitAndDumpster);
+    if (isNaN(dump) || dump < 0) {
+      setCard4Error("Dumpster and permits cost cannot be negative.");
+      setCostResult(null);
+      return;
+    }
+
+    const tax = Number(salesTaxRate);
+    if (isNaN(tax) || tax < 0 || tax > 100) {
+      setCard4Error("Sales tax must be between 0% and 100%.");
+      setCostResult(null);
+      return;
+    }
+
+    setCard4Error(null);
+
     const res = calculateRoofingCost({
-      roofingSquares: Number(costSquares) || 20,
-      materialCostPerSquare: Number(pricePerSquare) || 160,
-      tearOffCostPerSquare: Number(tearOffCost) || 50,
-      laborCostPerSquare: Number(laborCost) || 200,
-      dumpsterAndPermitCost: Number(permitAndDumpster) || 650,
-      salesTaxPercent: Number(salesTaxRate) || 7,
+      roofingSquares: sq,
+      materialCostPerSquare: mat,
+      tearOffCostPerSquare: tear,
+      laborCostPerSquare: lab,
+      dumpsterAndPermitCost: dump,
+      salesTaxPercent: tax,
     });
+
     setCostResult(res);
   }, [costSquares, pricePerSquare, tearOffCost, laborCost, permitAndDumpster, salesTaxRate]);
 
@@ -704,6 +1329,56 @@ export function RoofingCalculator() {
     );
   };
 
+  // Restore handlers
+  const handleRestoreCard1 = useCallback((raw: Record<string, any>) => {
+    if (!raw) return;
+    if (raw.style) setFootprintStyle(raw.style);
+    if (raw.inputMode) setFootprintMode(raw.inputMode);
+    if (raw.pitchInputMode) setPitchInputMode(raw.pitchInputMode);
+    if (raw.houseLength !== undefined) setHouseLength(String(raw.houseLength));
+    if (raw.houseWidth !== undefined) setHouseWidth(String(raw.houseWidth));
+    if (raw.baseArea !== undefined) setBaseArea(String(raw.baseArea));
+    if (raw.eaveOverhang !== undefined) setEaveOverhang(String(raw.eaveOverhang));
+    if (raw.gableOverhang !== undefined) setGableOverhang(String(raw.gableOverhang));
+    if (raw.selectedPitchRise !== undefined) setSelectedPitchRise(String(raw.selectedPitchRise));
+    if (raw.roofAngleDeg !== undefined) setRoofAngleDeg(String(raw.roofAngleDeg));
+    if (raw.wastePercent !== undefined) setWastePercent(String(raw.wastePercent));
+    if (raw.pricePerSqFt !== undefined) setPricePerSqFt(String(raw.pricePerSqFt));
+    showToast("Roof Area calculation restored!");
+  }, [showToast]);
+
+  const handleRestoreCard2 = useCallback((raw: Record<string, any>) => {
+    if (!raw) return;
+    if (raw.roofStyle) setRoofStyle(raw.roofStyle);
+    if (Array.isArray(raw.planes)) setPlanes(raw.planes);
+    if (raw.valleyLength !== undefined) setValleyLength(String(raw.valleyLength));
+    if (raw.ridgeLength !== undefined) setRidgeLength(String(raw.ridgeLength));
+    if (raw.deductionArea !== undefined) setDeductionArea(String(raw.deductionArea));
+    if (raw.multiPitchWaste !== undefined) setMultiPitchWaste(String(raw.multiPitchWaste));
+    showToast("Multi-Pitch calculation restored!");
+  }, [showToast]);
+
+  const handleRestoreCard3 = useCallback((raw: Record<string, any>) => {
+    if (!raw) return;
+    if (raw.materialTargetArea !== undefined) setMaterialTargetArea(String(raw.materialTargetArea));
+    if (raw.shingleType) setShingleType(raw.shingleType);
+    if (raw.underlaymentType) setUnderlaymentType(raw.underlaymentType);
+    if (raw.iceShieldMargin !== undefined) setIceShieldMargin(String(raw.iceShieldMargin));
+    if (raw.isHighWindZone !== undefined) setIsHighWindZone(Boolean(raw.isHighWindZone));
+    showToast("Material estimate restored!");
+  }, [showToast]);
+
+  const handleRestoreCard4 = useCallback((raw: Record<string, any>) => {
+    if (!raw) return;
+    if (raw.costSquares !== undefined) setCostSquares(String(raw.costSquares));
+    if (raw.pricePerSquare !== undefined) setPricePerSquare(String(raw.pricePerSquare));
+    if (raw.tearOffCost !== undefined) setTearOffCost(String(raw.tearOffCost));
+    if (raw.laborCost !== undefined) setLaborCost(String(raw.laborCost));
+    if (raw.permitAndDumpster !== undefined) setPermitAndDumpster(String(raw.permitAndDumpster));
+    if (raw.salesTaxRate !== undefined) setSalesTaxRate(String(raw.salesTaxRate));
+    showToast("Cost estimate restored!");
+  }, [showToast]);
+
   // Report Data
   const reportData: CalculatorReportData = useMemo(() => {
     const sections = [];
@@ -712,10 +1387,19 @@ export function RoofingCalculator() {
         title: "Roof Surface Area & Squares",
         items: [
           { label: "Ground Footprint", value: `${footprintResult.flatFootprintSqFt} sq ft` },
-          { label: "Pitch Factor", value: `${footprintResult.pitchString} (${footprintResult.pitchMultiplier}x)` },
+          {
+            label: "Pitch Factor",
+            value: `${footprintResult.pitchString} (${footprintResult.pitchMultiplier}x)`,
+          },
           { label: "True Roof Surface", value: `${footprintResult.trueRoofSurfaceAreaSqFt} sq ft` },
-          { label: "Waste-Adjusted Area", value: `${footprintResult.totalCoveredAreaSqFt} sq ft (+${footprintResult.wastePercent}%)` },
-          { label: "Total Roofing Squares", value: `${footprintResult.roofingSquares} Squares (100 sq ft/sq)` },
+          {
+            label: "Waste-Adjusted Area",
+            value: `${footprintResult.totalCoveredAreaSqFt} sq ft (+${footprintResult.wastePercent}%)`,
+          },
+          {
+            label: "Total Roofing Squares",
+            value: `${footprintResult.roofingSquares} Squares (100 sq ft/sq)`,
+          },
           { label: "Estimated Ridge Length", value: `${footprintResult.estimatedRidgeFt} ft` },
         ],
       });
@@ -726,10 +1410,19 @@ export function RoofingCalculator() {
         items: [
           { label: "Shingle Type", value: materialResult.shingleType.replace("_", " ").toUpperCase() },
           { label: "Shingle Bundles Needed", value: `${materialResult.shingleBundlesNeeded} Bundles` },
-          { label: "Underlayment Rolls", value: `${materialResult.underlaymentRollsNeeded} Rolls (${materialResult.underlaymentType})` },
-          { label: "Ice & Water Shield", value: `${materialResult.iceShieldRollsNeeded} Rolls (${materialResult.iceShieldCoverageSqFt} sq ft)` },
+          {
+            label: "Underlayment Rolls",
+            value: `${materialResult.underlaymentRollsNeeded} Rolls (${materialResult.underlaymentType})`,
+          },
+          {
+            label: "Ice & Water Shield",
+            value: `${materialResult.iceShieldRollsNeeded} Rolls (${materialResult.iceShieldCoverageSqFt} sq ft)`,
+          },
           { label: "Ridge Cap Bundles", value: `${materialResult.ridgeCapBundlesNeeded} Bundles` },
-          { label: "Roofing Nails Required", value: `${materialResult.nailsCountTotal} nails (~${materialResult.nailsPoundsNeeded} lbs)` },
+          {
+            label: "Roofing Nails Required",
+            value: `${materialResult.nailsCountTotal} nails (~${materialResult.nailsPoundsNeeded} lbs)`,
+          },
         ],
       });
     }
@@ -742,7 +1435,10 @@ export function RoofingCalculator() {
           { label: "Professional Labor", value: `$${costResult.laborSubtotal}` },
           { label: "Permit & Dumpster", value: `$${costResult.dumpsterAndPermits}` },
           { label: "Total Estimated Investment", value: `$${costResult.totalEstimatedCost}` },
-          { label: "Estimated Contractor Bid Range", value: `$${costResult.lowEstimateCost.toLocaleString()} – $${costResult.highEstimateCost.toLocaleString()}` },
+          {
+            label: "Estimated Contractor Bid Range",
+            value: `$${costResult.lowEstimateCost.toLocaleString()} – $${costResult.highEstimateCost.toLocaleString()}`,
+          },
         ],
       });
     }
@@ -756,9 +1452,19 @@ export function RoofingCalculator() {
         currencySymbol: "$",
       },
       keyMetrics: [
-        { label: "Roofing Squares", value: footprintResult ? `${footprintResult.roofingSquares} Squares` : "—", highlight: true },
-        { label: "Shingle Bundles", value: materialResult ? `${materialResult.shingleBundlesNeeded} Bundles` : "—" },
-        { label: "Estimated Project Cost", value: costResult ? `$${costResult.totalEstimatedCost.toLocaleString()}` : "—" },
+        {
+          label: "Roofing Squares",
+          value: footprintResult ? `${footprintResult.roofingSquares} Squares` : "—",
+          highlight: true,
+        },
+        {
+          label: "Shingle Bundles",
+          value: materialResult ? `${materialResult.shingleBundlesNeeded} Bundles` : "—",
+        },
+        {
+          label: "Estimated Project Cost",
+          value: costResult ? `$${costResult.totalEstimatedCost.toLocaleString()}` : "—",
+        },
       ],
       sections,
     };
@@ -766,6 +1472,18 @@ export function RoofingCalculator() {
 
   return (
     <div className="space-y-4">
+      {/* ═══════════════════ TOAST FEEDBACK NOTIFICATION ═══════════════════ */}
+      {toastMessage && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-4 right-4 z-50 bg-blue-600 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow-lg flex items-center gap-1.5 animate-in fade-in slide-in-from-bottom-2"
+        >
+          <Check className="w-3.5 h-3.5" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
+
       {/* ═══════════════════ CARD 1: HOUSE FOOTPRINT & PITCH AREA ═══════════════════ */}
       <CardWrapper
         title="Roofing Area Calculator (Footprint, Pitch &amp; Squares)"
@@ -775,16 +1493,31 @@ export function RoofingCalculator() {
         onToggleSaved={() => footprintSaved.setIsOpen(!footprintSaved.isOpen)}
         onSave={() => {
           if (!footprintResult) return;
+          const rawInputs = {
+            style: footprintStyle,
+            inputMode: footprintMode,
+            pitchInputMode,
+            houseLength,
+            houseWidth,
+            baseArea,
+            eaveOverhang,
+            gableOverhang,
+            selectedPitchRise,
+            roofAngleDeg,
+            wastePercent,
+            pricePerSqFt,
+          };
           footprintSaved.save(
             `Footprint: ${footprintResult.flatFootprintSqFt} sq ft, Pitch: ${footprintResult.pitchString}, ${footprintResult.roofingSquares} sq`,
-            footprintResult
+            rawInputs,
+            footprintResult,
           );
           flashSave(setFootprintSaveSuccess);
         }}
       >
         <div className="space-y-3">
           {/* Sub-Tabs: Pitch vs Angle */}
-          <div className="flex gap-2 text-xs pb-1 border-b border-zinc-100 dark:border-zinc-800">
+          <div className="flex gap-2 text-xs pb-1 border-b border-zinc-100 dark:border-zinc-800 print:hidden">
             <button
               type="button"
               onClick={() => setPitchInputMode("pitch")}
@@ -793,6 +1526,7 @@ export function RoofingCalculator() {
                   ? "bg-blue-600 text-white"
                   : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300"
               }`}
+              aria-label="Enter roof pitch as rise over 12"
             >
               Roof Pitch (Rise/12)
             </button>
@@ -804,6 +1538,7 @@ export function RoofingCalculator() {
                   ? "bg-blue-600 text-white"
                   : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300"
               }`}
+              aria-label="Enter roof pitch in degrees"
             >
               Roof Angle (Degrees °)
             </button>
@@ -812,23 +1547,23 @@ export function RoofingCalculator() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
             {/* Inputs Column */}
             <div className="md:col-span-7 space-y-2.5">
-              {/* Roof Style Selector for Card 1 */}
+              {/* Roof Style Selector for Card 1 (Decoupled from Card 2) */}
               <div className="space-y-1">
-                <span className="font-semibold text-zinc-700 dark:text-zinc-300 text-xs">Roof Style:</span>
+                <span className="font-semibold text-zinc-700 dark:text-zinc-300 text-xs">
+                  Roof Style:
+                </span>
                 <div className="flex flex-wrap items-center gap-1">
                   {(["gable", "hip", "shed", "gambrel", "mansard"] as RoofStyle[]).map((st) => (
                     <button
                       key={st}
                       type="button"
-                      onClick={() => {
-                        setFootprintStyle(st);
-                        handleRoofStyleChange(st); // Also sync Card 2
-                      }}
+                      onClick={() => setFootprintStyle(st)}
                       className={`px-2 py-0.5 rounded text-[11px] font-bold capitalize cursor-pointer transition-colors ${
                         footprintStyle === st
                           ? "bg-blue-600 text-white shadow-xs"
                           : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-blue-50"
                       }`}
+                      aria-label={`Select ${st} roof style`}
                     >
                       {st}
                     </button>
@@ -842,6 +1577,7 @@ export function RoofingCalculator() {
                 <label className="flex items-center gap-1 cursor-pointer">
                   <input
                     type="radio"
+                    id="roof-mode-dimensions"
                     name="footprintMode"
                     checked={footprintMode === "dimensions"}
                     onChange={() => setFootprintMode("dimensions")}
@@ -851,6 +1587,7 @@ export function RoofingCalculator() {
                 <label className="flex items-center gap-1 cursor-pointer">
                   <input
                     type="radio"
+                    id="roof-mode-basearea"
                     name="footprintMode"
                     checked={footprintMode === "base_area"}
                     onChange={() => setFootprintMode("base_area")}
@@ -861,28 +1598,51 @@ export function RoofingCalculator() {
 
               {footprintMode === "dimensions" ? (
                 <>
-                  <InputRow label="House Length" value={houseLength} onChange={setHouseLength} unit="feet" />
-                  <InputRow label="House Width" value={houseWidth} onChange={setHouseWidth} unit="feet" />
+                  <InputRow
+                    id="roof-card1-house-length"
+                    label="House Length"
+                    value={houseLength}
+                    onChange={setHouseLength}
+                    unit="feet"
+                  />
+                  <InputRow
+                    id="roof-card1-house-width"
+                    label="House Width"
+                    value={houseWidth}
+                    onChange={setHouseWidth}
+                    unit="feet"
+                  />
                 </>
               ) : (
-                <InputRow label="House Base Area" value={baseArea} onChange={setBaseArea} unit="square feet" />
+                <InputRow
+                  id="roof-card1-base-area"
+                  label="House Base Area"
+                  value={baseArea}
+                  onChange={setBaseArea}
+                  unit="square feet"
+                />
               )}
 
               {/* Pitch Selector */}
               {pitchInputMode === "pitch" ? (
                 <div className="grid grid-cols-12 gap-2 items-center text-xs">
-                  <label className="col-span-5 font-medium text-zinc-700 dark:text-zinc-300">
+                  <label
+                    htmlFor="roof-card1-pitch-select"
+                    className="col-span-5 font-medium text-zinc-700 dark:text-zinc-300"
+                  >
                     Roof Pitch (Rise/12)
                   </label>
                   <div className="col-span-7">
                     <select
+                      id="roof-card1-pitch-select"
                       value={selectedPitchRise}
                       onChange={(e) => setSelectedPitchRise(e.target.value)}
                       className="w-full h-7 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 font-medium text-zinc-700 dark:text-zinc-300 font-sans tabular-nums"
+                      aria-label="Select roof pitch rise over 12"
                     >
                       {PITCH_TABLE.map((p) => (
                         <option key={p.rise} value={p.rise}>
-                          {p.pitchString} ({p.angleDegrees}° — {p.multiplier}x Multiplier)
+                          {p.pitchString} ({p.angleDegrees}° — {p.multiplierDisplay}x Multiplier)
                         </option>
                       ))}
                     </select>
@@ -890,42 +1650,65 @@ export function RoofingCalculator() {
                 </div>
               ) : (
                 <InputRow
+                  id="roof-card1-angle"
                   label="Roof Incline Angle"
                   value={roofAngleDeg}
                   onChange={setRoofAngleDeg}
                   unit="degrees (°)"
                   min={1}
-                  max={75}
+                  max={85}
                   step={0.5}
                 />
               )}
 
-              {/* Overhangs */}
-              <div className="grid grid-cols-2 gap-2">
-                <InputRow label="Eaves Overhang" value={eaveOverhang} onChange={setEaveOverhang} unit="inches" />
-                <InputRow label="Gable Overhang" value={gableOverhang} onChange={setGableOverhang} unit="inches" />
-              </div>
+              {/* Overhangs (Only active for Dimensions Mode) */}
+              {footprintMode === "dimensions" && (
+                <div className="grid grid-cols-2 gap-2">
+                  <InputRow
+                    id="roof-card1-eaves-overhang"
+                    label="Eaves Overhang"
+                    value={eaveOverhang}
+                    onChange={setEaveOverhang}
+                    unit="inches"
+                  />
+                  <InputRow
+                    id="roof-card1-gable-overhang"
+                    label="Gable Overhang"
+                    value={gableOverhang}
+                    onChange={setGableOverhang}
+                    unit="inches"
+                  />
+                </div>
+              )}
 
               {/* Waste Allowance */}
               <div className="grid grid-cols-12 gap-2 items-center text-xs">
-                <label className="col-span-5 font-medium text-zinc-700 dark:text-zinc-300">
+                <label
+                  htmlFor="roof-card1-waste-select"
+                  className="col-span-5 font-medium text-zinc-700 dark:text-zinc-300"
+                >
                   Waste Allowance
                 </label>
                 <div className="col-span-7">
                   <select
+                    id="roof-card1-waste-select"
                     value={wastePercent}
                     onChange={(e) => setWastePercent(e.target.value)}
                     className="w-full h-7 text-xs rounded-md border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 text-zinc-700 dark:text-zinc-300"
+                    aria-label="Select roofing waste allowance percentage"
                   >
+                    <option value="0">0% (Exact Net Area, No Scrap)</option>
                     <option value="5">5% (Simple Gable Roof)</option>
                     <option value="10">10% (Standard Residential Gable/Hip)</option>
                     <option value="15">15% (Hip Roof with Valleys)</option>
                     <option value="20">20% (Complex Cut-up Roof with Dormers)</option>
+                    <option value="25">25% (Extreme Multi-Pitch / Irregular)</option>
                   </select>
                 </div>
               </div>
 
               <InputRow
+                id="roof-card1-price-sqft"
                 label="Price per Sq Ft (optional)"
                 value={pricePerSqFt}
                 onChange={setPricePerSqFt}
@@ -934,7 +1717,7 @@ export function RoofingCalculator() {
                 step={0.25}
               />
 
-              <div className="flex gap-2 pt-1">
+              <div className="flex gap-2 pt-1 print:hidden">
                 <Button
                   onClick={handleFootprintCalc}
                   className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer"
@@ -948,7 +1731,11 @@ export function RoofingCalculator() {
                     setHouseWidth("40");
                     setBaseArea("2000");
                     setSelectedPitchRise("6");
+                    setEaveOverhang("12");
+                    setGableOverhang("12");
+                    setWastePercent("10");
                     setPricePerSqFt("");
+                    setCard1Error(null);
                   }}
                   className="text-xs font-semibold h-8 px-3 cursor-pointer"
                 >
@@ -957,7 +1744,7 @@ export function RoofingCalculator() {
               </div>
 
               {/* Quick 1/12 to 12/12 Pitch Selector Grid */}
-              <div className="pt-2">
+              <div className="pt-2 print:hidden">
                 <span className="text-[11px] font-bold text-zinc-600 dark:text-zinc-400 block mb-1">
                   Quick Pitch Selection Buttons:
                 </span>
@@ -971,10 +1758,11 @@ export function RoofingCalculator() {
                         setPitchInputMode("pitch");
                       }}
                       className={`p-1 rounded border text-center cursor-pointer transition-colors ${
-                        selectedPitchRise === String(p.rise)
+                        selectedPitchRise === String(p.rise) && pitchInputMode === "pitch"
                           ? "bg-blue-600 text-white border-blue-600 font-bold"
                           : "bg-slate-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-blue-50"
                       }`}
+                      aria-label={`Select quick pitch ${p.pitchString}`}
                     >
                       {p.pitchString}
                     </button>
@@ -985,68 +1773,118 @@ export function RoofingCalculator() {
 
             {/* Right: 2D Scaled SVG Diagram */}
             <div className="md:col-span-5 flex flex-col items-center justify-center bg-slate-50 dark:bg-zinc-800/40 p-2 rounded-lg border border-slate-200 dark:border-zinc-700">
-              <RoofPitchDiagram2D pitchRise={Number(selectedPitchRise) || 6} style={footprintStyle} />
+              <RoofPitchDiagram2D
+                pitchRise={Number(selectedPitchRise) || 6}
+                style={footprintStyle}
+              />
             </div>
           </div>
 
+          {/* Validation Alert */}
+          {card1Error && (
+            <div
+              role="alert"
+              className="p-2.5 rounded-lg bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 text-xs flex items-center gap-2"
+            >
+              <AlertTriangle className="w-4 h-4 shrink-0 text-red-500" />
+              <span>{card1Error}</span>
+            </div>
+          )}
+
           {/* Results Summary */}
           {footprintResult && (
-            <div className="space-y-2 pt-2">
+            <div className="space-y-2 pt-2" aria-live="polite">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-center">
                 <div className="p-2.5 bg-blue-50 dark:bg-blue-950/30 rounded border border-blue-200 dark:border-blue-800">
-                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">Total Roofing Squares</span>
+                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">
+                    Total Roofing Squares
+                  </span>
                   <span className="text-2xl font-black text-blue-950 dark:text-blue-100 font-sans tabular-nums">
                     {footprintResult.roofingSquares}
                   </span>
-                  <span className="text-[10px] text-blue-700 dark:text-blue-300 block">({footprintResult.roofingSquaresRaw} raw sq)</span>
+                  <span className="text-[10px] text-blue-700 dark:text-blue-300 block">
+                    ({footprintResult.roofingSquaresRaw} raw sq)
+                  </span>
                 </div>
 
                 <div className="p-2.5 bg-blue-50 dark:bg-blue-950/30 rounded border border-blue-200 dark:border-blue-800">
-                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">True Roof Surface Area</span>
+                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">
+                    True Roof Surface Area
+                  </span>
                   <span className="text-xl font-black text-blue-950 dark:text-blue-100 font-sans tabular-nums">
                     {footprintResult.trueRoofSurfaceAreaSqFt.toLocaleString()}{" "}
                     <span className="text-xs font-normal">sq ft</span>
                   </span>
-                  <span className="text-[10px] text-blue-700 dark:text-blue-300 block">Flat: {footprintResult.flatFootprintSqFt} sq ft</span>
+                  <span className="text-[10px] text-blue-700 dark:text-blue-300 block">
+                    Flat: {footprintResult.flatFootprintSqFt} sq ft
+                  </span>
                 </div>
 
                 <div className="p-2.5 bg-blue-50 dark:bg-blue-950/30 rounded border border-blue-200 dark:border-blue-800">
-                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">With {footprintResult.wastePercent}% Waste</span>
+                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">
+                    With {footprintResult.wastePercent}% Waste
+                  </span>
                   <span className="text-xl font-black text-blue-950 dark:text-blue-100 font-sans tabular-nums">
                     {footprintResult.totalCoveredAreaSqFt.toLocaleString()}{" "}
                     <span className="text-xs font-normal">sq ft</span>
                   </span>
-                  <span className="text-[10px] text-blue-700 dark:text-blue-300 block">Waste: +{footprintResult.wasteAreaSqFt} sq ft</span>
+                  <span className="text-[10px] text-blue-700 dark:text-blue-300 block">
+                    Waste: +{footprintResult.wasteAreaSqFt} sq ft
+                  </span>
                 </div>
 
                 <div className="p-2.5 bg-blue-50 dark:bg-blue-950/30 rounded border border-blue-200 dark:border-blue-800">
-                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">Pitch Factor Multiplier</span>
+                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">
+                    Pitch Factor Multiplier
+                  </span>
                   <span className="text-xl font-black text-blue-950 dark:text-blue-100 font-sans tabular-nums">
                     {footprintResult.pitchMultiplier}x
                   </span>
-                  <span className="text-[10px] text-blue-700 dark:text-blue-300 block">{footprintResult.pitchAngleDeg}° Incline</span>
+                  <span className="text-[10px] text-blue-700 dark:text-blue-300 block">
+                    {footprintResult.pitchAngleDeg}° Incline
+                  </span>
                 </div>
               </div>
 
               {/* Secondary Linear Dimensions */}
               <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800/60 rounded-lg border border-zinc-200 dark:border-zinc-700 text-[11px] font-sans tabular-nums flex flex-wrap items-center justify-between gap-2">
-                <span>• Estimated Ridge Length: <strong>{footprintResult.estimatedRidgeFt} ft</strong></span>
-                <span>• Total Eaves Perimeter: <strong>{footprintResult.eavesPerimeterFt} ft</strong></span>
-                <span>• Total Rakes Perimeter: <strong>{footprintResult.rakesPerimeterFt} ft</strong></span>
+                <span>
+                  • Estimated Ridge Length: <strong>{footprintResult.estimatedRidgeFt} ft</strong>
+                </span>
+                <span>
+                  • Total Eaves Perimeter: <strong>{footprintResult.eavesPerimeterFt} ft</strong>
+                </span>
+                <span>
+                  • Total Rakes Perimeter: <strong>{footprintResult.rakesPerimeterFt} ft</strong>
+                </span>
                 {footprintResult.estimatedCost > 0 && (
                   <span className="font-bold text-emerald-600 dark:text-emerald-400">
-                    • Total Cost: ${footprintResult.estimatedCost.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    • Total Cost: $
+                    {footprintResult.estimatedCost.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </span>
                 )}
               </div>
+
+              <ExportCopyBar
+                resultText={`${footprintResult.roofingSquares} roofing squares (${footprintResult.totalCoveredAreaSqFt} sq ft with ${footprintResult.wastePercent}% waste)`}
+                summaryText={`Roof Area Takeoff: Style=${footprintStyle.toUpperCase()}, Pitch=${footprintResult.pitchString}, Base=${footprintResult.flatFootprintSqFt} sq ft, True Area=${footprintResult.trueRoofSurfaceAreaSqFt} sq ft, Waste-Adjusted=${footprintResult.totalCoveredAreaSqFt} sq ft, Squares=${footprintResult.roofingSquares}, Ridge=${footprintResult.estimatedRidgeFt} ft, Eaves=${footprintResult.eavesPerimeterFt} ft, Rakes=${footprintResult.rakesPerimeterFt} ft`}
+                latexText={`M = \\sqrt{1 + \\left(\\frac{${selectedPitchRise}}{12}\\right)^2} = ${footprintResult.pitchMultiplier}\n\\text{Roof Area} = ${footprintResult.flatAreaWithOverhangsSqFt} \\times ${footprintResult.pitchMultiplier} \\times \\left(1 + \\frac{${footprintResult.wastePercent}}{100}\\right) = ${footprintResult.totalCoveredAreaSqFt}\\text{ sq ft}`}
+                onCopy={copyToClipboard}
+              />
             </div>
           )}
         </div>
 
         <SavedEstimatesDrawer
           {...footprintSaved}
+          onRestore={handleRestoreCard1}
           cardTitle="Roof Area"
-          formatSummary={(r) => `${r.roofingSquares} sq (${r.totalCoveredAreaSqFt} sq ft), ${r.pitchString}`}
+          formatSummary={(r) =>
+            `${r.roofingSquares} sq (${r.totalCoveredAreaSqFt} sq ft), ${r.pitchString}`
+          }
         />
       </CardWrapper>
 
@@ -1059,9 +1897,18 @@ export function RoofingCalculator() {
         onToggleSaved={() => multiPitchSaved.setIsOpen(!multiPitchSaved.isOpen)}
         onSave={() => {
           if (!multiPitchResult) return;
+          const rawInputs = {
+            roofStyle,
+            planes,
+            valleyLength,
+            ridgeLength,
+            deductionArea,
+            multiPitchWaste,
+          };
           multiPitchSaved.save(
             `${roofStyle.toUpperCase()} Roof (${planes.length} planes), ${multiPitchResult.roofingSquares} sq`,
-            multiPitchResult
+            rawInputs,
+            multiPitchResult,
           );
           flashSave(setMultiPitchSaveSuccess);
         }}
@@ -1070,7 +1917,9 @@ export function RoofingCalculator() {
           {/* Top: Roof Style Selector (Quick Buttons + Dropdown) */}
           <div className="space-y-2 pb-2 border-b border-zinc-100 dark:border-zinc-800">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="font-semibold text-zinc-700 dark:text-zinc-300">Select Roof Architecture Style:</span>
+              <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+                Select Roof Architecture Style:
+              </span>
               <div className="flex items-center gap-1">
                 {(["gable", "hip", "shed", "gambrel", "mansard"] as RoofStyle[]).map((st) => (
                   <button
@@ -1082,6 +1931,7 @@ export function RoofingCalculator() {
                         ? "bg-blue-600 text-white shadow-xs"
                         : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 hover:bg-blue-50"
                     }`}
+                    aria-label={`Select ${st} architecture preset`}
                   >
                     {st}
                   </button>
@@ -1091,11 +1941,18 @@ export function RoofingCalculator() {
 
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <span className="text-[11px] text-zinc-500 font-medium">Dropdown:</span>
+                <label
+                  htmlFor="roof-card2-style-dropdown"
+                  className="text-[11px] text-zinc-500 font-medium cursor-pointer"
+                >
+                  Dropdown:
+                </label>
                 <select
+                  id="roof-card2-style-dropdown"
                   value={roofStyle}
                   onChange={(e) => handleRoofStyleChange(e.target.value as RoofStyle)}
                   className="h-7 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 text-zinc-700 dark:text-zinc-300 font-semibold text-xs cursor-pointer"
+                  aria-label="Select roof architecture style from dropdown"
                 >
                   <option value="gable">Gable Roof (2 Slopes, Standard)</option>
                   <option value="hip">Hip Roof (4 Slopes, Pyramid/Hips)</option>
@@ -1109,7 +1966,8 @@ export function RoofingCalculator() {
                 variant="outline"
                 size="sm"
                 onClick={addPlaneRow}
-                className="text-xs h-7 gap-1 font-semibold text-blue-600 dark:text-blue-400 cursor-pointer"
+                className="text-xs h-7 gap-1 font-semibold text-blue-600 dark:text-blue-400 cursor-pointer print:hidden"
+                aria-label="Add roof slope plane"
               >
                 <Plus className="w-3.5 h-3.5" /> Add Slope Plane
               </Button>
@@ -1123,43 +1981,57 @@ export function RoofingCalculator() {
                 Surface Slope Planes ({planes.length}):
               </span>
               <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
-                {planes.map((plane) => (
+                {planes.map((plane, idx) => (
                   <div
                     key={plane.id}
                     className="grid grid-cols-12 gap-1.5 items-center bg-slate-50 dark:bg-zinc-800/40 p-1.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs"
                   >
                     <div className="col-span-4">
                       <Input
+                        id={`roof-plane-${idx}-name`}
                         type="text"
                         value={plane.name}
                         onChange={(e) => updatePlaneRow(plane.id, "name", e.target.value)}
                         className="h-7 text-xs bg-white dark:bg-zinc-800"
                         placeholder="Plane Name"
+                        aria-label={`Plane ${idx + 1} Name`}
                       />
                     </div>
                     <div className="col-span-3">
                       <Input
+                        id={`roof-plane-${idx}-len`}
                         type="number"
                         value={plane.lengthFt}
-                        onChange={(e) => updatePlaneRow(plane.id, "lengthFt", Number(e.target.value))}
+                        onChange={(e) =>
+                          updatePlaneRow(plane.id, "lengthFt", Number(e.target.value))
+                        }
                         className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                         placeholder="Length (ft)"
+                        aria-label={`Plane ${idx + 1} Length in feet`}
                       />
                     </div>
                     <div className="col-span-2">
                       <Input
+                        id={`roof-plane-${idx}-wid`}
                         type="number"
                         value={plane.widthFt}
-                        onChange={(e) => updatePlaneRow(plane.id, "widthFt", Number(e.target.value))}
+                        onChange={(e) =>
+                          updatePlaneRow(plane.id, "widthFt", Number(e.target.value))
+                        }
                         className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                         placeholder="Width (ft)"
+                        aria-label={`Plane ${idx + 1} Width in feet`}
                       />
                     </div>
                     <div className="col-span-2">
                       <select
+                        id={`roof-plane-${idx}-pitch`}
                         value={plane.pitchRise}
-                        onChange={(e) => updatePlaneRow(plane.id, "pitchRise", Number(e.target.value))}
+                        onChange={(e) =>
+                          updatePlaneRow(plane.id, "pitchRise", Number(e.target.value))
+                        }
                         className="w-full h-7 text-xs rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-1 text-zinc-700 dark:text-zinc-300 font-sans tabular-nums"
+                        aria-label={`Plane ${idx + 1} Pitch rise over 12`}
                       >
                         {PITCH_TABLE.slice(0, 18).map((p) => (
                           <option key={p.rise} value={p.rise}>
@@ -1168,13 +2040,14 @@ export function RoofingCalculator() {
                         ))}
                       </select>
                     </div>
-                    <div className="col-span-1 flex justify-end">
+                    <div className="col-span-1 flex justify-end print:hidden">
                       <button
                         type="button"
                         onClick={() => removePlaneRow(plane.id)}
                         disabled={planes.length <= 1}
                         className="text-zinc-400 hover:text-red-500 disabled:opacity-30 p-1 cursor-pointer"
                         title="Delete plane"
+                        aria-label={`Remove plane ${idx + 1}`}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -1184,13 +2057,38 @@ export function RoofingCalculator() {
               </div>
 
               {/* Deductions & Linear Features */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
-                <InputRow label="Deduction Area" value={deductionArea} onChange={setDeductionArea} unit="sq ft" />
-                <InputRow label="Ridge Length" value={ridgeLength} onChange={setRidgeLength} unit="ft" />
-                <InputRow label="Valley Length" value={valleyLength} onChange={setValleyLength} unit="ft" />
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 pt-1">
+                <InputRow
+                  id="roof-card2-deduction"
+                  label="Deductions"
+                  value={deductionArea}
+                  onChange={setDeductionArea}
+                  unit="sq ft"
+                />
+                <InputRow
+                  id="roof-card2-ridge"
+                  label="Ridge Length"
+                  value={ridgeLength}
+                  onChange={setRidgeLength}
+                  unit="ft"
+                />
+                <InputRow
+                  id="roof-card2-valley"
+                  label="Valley Length"
+                  value={valleyLength}
+                  onChange={setValleyLength}
+                  unit="ft"
+                />
+                <InputRow
+                  id="roof-card2-waste"
+                  label="Waste (%)"
+                  value={multiPitchWaste}
+                  onChange={setMultiPitchWaste}
+                  unit="%"
+                />
               </div>
 
-              <div className="flex gap-2 pt-1">
+              <div className="flex gap-2 pt-1 print:hidden">
                 <Button
                   onClick={handleMultiPitchCalc}
                   className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-7 px-4 cursor-pointer"
@@ -1205,27 +2103,45 @@ export function RoofingCalculator() {
               <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider mb-1">
                 {roofStyle.toUpperCase()} ARCHITECTURE
               </span>
-              <RoofStyleWireframeDiagram style={roofStyle} />
+              <RoofStyleWireframeDiagram style={roofStyle} planes={planes} />
             </div>
           </div>
 
+          {/* Card 2 Error Alert */}
+          {card2Error && (
+            <div
+              role="alert"
+              className="p-2.5 rounded-lg bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 text-xs flex items-center gap-2"
+            >
+              <AlertTriangle className="w-4 h-4 shrink-0 text-red-500" />
+              <span>{card2Error}</span>
+            </div>
+          )}
+
           {/* Results Summary */}
           {multiPitchResult && (
-            <div className="space-y-2 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+            <div
+              className="space-y-2 pt-2 border-t border-zinc-100 dark:border-zinc-800"
+              aria-live="polite"
+            >
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
                 <div className="p-2 bg-blue-50 dark:bg-blue-950/30 rounded border border-blue-200 dark:border-blue-800">
                   <span className="text-[10px] text-zinc-500 block">Total Squares</span>
                   <span className="text-xl font-bold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums">
                     {multiPitchResult.roofingSquares} sq
                   </span>
-                  <span className="text-[10px] text-zinc-400 block">{multiPitchResult.grossCoveredAreaSqFt} sq ft</span>
+                  <span className="text-[10px] text-zinc-400 block">
+                    {multiPitchResult.grossCoveredAreaSqFt} sq ft
+                  </span>
                 </div>
                 <div className="p-2 bg-slate-50 dark:bg-zinc-800/60 rounded border border-slate-200 dark:border-zinc-700">
                   <span className="text-[10px] text-zinc-500 block">Net True Area</span>
                   <span className="text-base font-bold text-zinc-800 dark:text-zinc-200 font-sans tabular-nums">
                     {multiPitchResult.netTrueAreaSqFt} sq ft
                   </span>
-                  <span className="text-[10px] text-zinc-400 block">Deductions: -{multiPitchResult.deductionsSqFt} sq ft</span>
+                  <span className="text-[10px] text-zinc-400 block">
+                    Deductions: -{multiPitchResult.deductionsSqFt} sq ft
+                  </span>
                 </div>
                 <div className="p-2 bg-slate-50 dark:bg-zinc-800/60 rounded border border-slate-200 dark:border-zinc-700">
                   <span className="text-[10px] text-zinc-500 block">Starter Strip Length</span>
@@ -1242,12 +2158,20 @@ export function RoofingCalculator() {
                   <span className="text-[10px] text-zinc-400 block">@ 10-ft pieces</span>
                 </div>
               </div>
+
+              <ExportCopyBar
+                resultText={`${multiPitchResult.roofingSquares} squares (${multiPitchResult.grossCoveredAreaSqFt} gross covered sq ft)`}
+                summaryText={`Multi-Pitch Takeoff (${roofStyle.toUpperCase()}): ${planes.length} planes, Net Area=${multiPitchResult.netTrueAreaSqFt} sq ft, Deductions=${multiPitchResult.deductionsSqFt} sq ft, Total Squares=${multiPitchResult.roofingSquares} sq, Starter Strip=${multiPitchResult.starterStripLengthFt} ft, Drip Edge=${multiPitchResult.dripEdgePieces} pcs`}
+                latexText={`\\text{Net Area} = \\sum_{i=1}^{${planes.length}} (L_i \\times W_i \\times M_i) - ${deductionArea} = ${multiPitchResult.netTrueAreaSqFt}\\text{ sq ft}`}
+                onCopy={copyToClipboard}
+              />
             </div>
           )}
         </div>
 
         <SavedEstimatesDrawer
           {...multiPitchSaved}
+          onRestore={handleRestoreCard2}
           cardTitle="Multi-Pitch"
           formatSummary={(r) => `${r.roofingSquares} sq (${r.grossCoveredAreaSqFt} sq ft), ${r.style}`}
         />
@@ -1262,9 +2186,17 @@ export function RoofingCalculator() {
         onToggleSaved={() => materialSaved.setIsOpen(!materialSaved.isOpen)}
         onSave={() => {
           if (!materialResult) return;
+          const rawInputs = {
+            materialTargetArea,
+            shingleType,
+            underlaymentType,
+            iceShieldMargin,
+            isHighWindZone,
+          };
           materialSaved.save(
             `${materialResult.shingleBundlesNeeded} bundles (${materialResult.shingleType}), ${materialResult.underlaymentRollsNeeded} underlayment rolls`,
-            materialResult
+            rawInputs,
+            materialResult,
           );
           flashSave(setMaterialSaveSuccess);
         }}
@@ -1272,23 +2204,31 @@ export function RoofingCalculator() {
         <div className="space-y-3 text-xs">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
+              <label
+                htmlFor="roof-card3-target-area"
+                className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1 cursor-pointer"
+              >
                 Target Surface Area (sq ft):
               </label>
               <Input
+                id="roof-card3-target-area"
                 type="number"
                 value={materialTargetArea}
                 onChange={(e) => setMaterialTargetArea(e.target.value)}
-                min={100}
+                min={1}
                 className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
               />
             </div>
 
             <div>
-              <label className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
+              <label
+                htmlFor="roof-card3-shingle-type"
+                className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1 cursor-pointer"
+              >
                 Shingle Type:
               </label>
               <select
+                id="roof-card3-shingle-type"
                 value={shingleType}
                 onChange={(e) => setShingleType(e.target.value as any)}
                 className="w-full h-7 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 text-zinc-700 dark:text-zinc-300"
@@ -1302,10 +2242,14 @@ export function RoofingCalculator() {
             </div>
 
             <div>
-              <label className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
+              <label
+                htmlFor="roof-card3-underlayment-type"
+                className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1 cursor-pointer"
+              >
                 Underlayment Type:
               </label>
               <select
+                id="roof-card3-underlayment-type"
                 value={underlaymentType}
                 onChange={(e) => setUnderlaymentType(e.target.value as any)}
                 className="w-full h-7 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 text-zinc-700 dark:text-zinc-300"
@@ -1320,10 +2264,14 @@ export function RoofingCalculator() {
           {/* Freezing Zone & High Wind Options */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-2 bg-slate-50 dark:bg-zinc-800/40 rounded-lg border border-slate-200 dark:border-zinc-700">
             <div className="space-y-1">
-              <label className="font-semibold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+              <label
+                htmlFor="roof-card3-ice-shield"
+                className="font-semibold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5 cursor-pointer"
+              >
                 <ShieldCheck className="w-3.5 h-3.5 text-blue-500" /> Ice &amp; Water Barrier (IRC R905.1.2)
               </label>
               <select
+                id="roof-card3-ice-shield"
                 value={iceShieldMargin}
                 onChange={(e) => setIceShieldMargin(e.target.value)}
                 className="w-full h-7 text-xs rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 text-zinc-700 dark:text-zinc-300"
@@ -1335,13 +2283,14 @@ export function RoofingCalculator() {
             </div>
 
             <div className="space-y-1 flex flex-col justify-center">
-              <label className="font-semibold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+              <span className="font-semibold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
                 <Hammer className="w-3.5 h-3.5 text-blue-500" /> Fastener Pattern
-              </label>
+              </span>
               <div className="flex items-center gap-4 text-xs pt-1">
                 <label className="flex items-center gap-1 cursor-pointer">
                   <input
                     type="radio"
+                    id="fastener-pattern-std"
                     name="windZone"
                     checked={!isHighWindZone}
                     onChange={() => setIsHighWindZone(false)}
@@ -1351,6 +2300,7 @@ export function RoofingCalculator() {
                 <label className="flex items-center gap-1 cursor-pointer">
                   <input
                     type="radio"
+                    id="fastener-pattern-high"
                     name="windZone"
                     checked={isHighWindZone}
                     onChange={() => setIsHighWindZone(true)}
@@ -1361,7 +2311,7 @@ export function RoofingCalculator() {
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 print:hidden">
             <Button
               onClick={handleMaterialCalc}
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-7 px-4 cursor-pointer"
@@ -1370,15 +2320,31 @@ export function RoofingCalculator() {
             </Button>
           </div>
 
+          {/* Card 3 Error Alert */}
+          {card3Error && (
+            <div
+              role="alert"
+              className="p-2.5 rounded-lg bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 text-xs flex items-center gap-2"
+            >
+              <AlertTriangle className="w-4 h-4 shrink-0 text-red-500" />
+              <span>{card3Error}</span>
+            </div>
+          )}
+
           {materialResult && (
-            <div className="space-y-2 pt-1 border-t border-zinc-100 dark:border-zinc-800">
+            <div
+              className="space-y-2 pt-1 border-t border-zinc-100 dark:border-zinc-800"
+              aria-live="polite"
+            >
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs">
                 <div className="p-2 bg-blue-50 dark:bg-blue-950/30 rounded border border-blue-200 dark:border-blue-800">
                   <span className="text-[10px] text-zinc-500 block">Shingle Bundles</span>
                   <span className="text-xl font-bold text-blue-900 dark:text-blue-100 font-sans tabular-nums">
                     {materialResult.shingleBundlesNeeded}
                   </span>
-                  <span className="text-[10px] text-blue-700 dark:text-blue-300 block">@ {materialResult.bundlesPerSquare} bundles/sq</span>
+                  <span className="text-[10px] text-blue-700 dark:text-blue-300 block">
+                    @ {materialResult.bundlesPerSquare} bundles/sq
+                  </span>
                 </div>
 
                 <div className="p-2 bg-slate-50 dark:bg-zinc-800/60 rounded border border-slate-200 dark:border-zinc-700">
@@ -1386,7 +2352,9 @@ export function RoofingCalculator() {
                   <span className="text-base font-bold text-zinc-800 dark:text-zinc-200 font-sans tabular-nums">
                     {materialResult.underlaymentRollsNeeded} rolls
                   </span>
-                  <span className="text-[10px] text-zinc-400 block">{materialResult.underlaymentType}</span>
+                  <span className="text-[10px] text-zinc-400 block">
+                    {materialResult.underlaymentType}
+                  </span>
                 </div>
 
                 <div className="p-2 bg-slate-50 dark:bg-zinc-800/60 rounded border border-slate-200 dark:border-zinc-700">
@@ -1394,7 +2362,9 @@ export function RoofingCalculator() {
                   <span className="text-base font-bold text-zinc-800 dark:text-zinc-200 font-sans tabular-nums">
                     {materialResult.iceShieldRollsNeeded} rolls
                   </span>
-                  <span className="text-[10px] text-zinc-400 block">({materialResult.iceShieldCoverageSqFt} sq ft)</span>
+                  <span className="text-[10px] text-zinc-400 block">
+                    ({materialResult.iceShieldCoverageSqFt} sq ft)
+                  </span>
                 </div>
 
                 <div className="p-2 bg-slate-50 dark:bg-zinc-800/60 rounded border border-slate-200 dark:border-zinc-700">
@@ -1410,17 +2380,29 @@ export function RoofingCalculator() {
                   <span className="text-base font-bold text-zinc-800 dark:text-zinc-200 font-sans tabular-nums">
                     ~{materialResult.nailsPoundsNeeded} lbs
                   </span>
-                  <span className="text-[10px] text-zinc-400 block">({materialResult.nailsCountTotal.toLocaleString()} nails)</span>
+                  <span className="text-[10px] text-zinc-400 block">
+                    ({materialResult.nailsCountTotal.toLocaleString()} nails)
+                  </span>
                 </div>
               </div>
+
+              <ExportCopyBar
+                resultText={`${materialResult.shingleBundlesNeeded} bundles (${materialResult.shingleType}), ${materialResult.underlaymentRollsNeeded} underlayment rolls, ~${materialResult.nailsPoundsNeeded} lbs nails`}
+                summaryText={`Material Takeoff (${materialTargetArea} sq ft): ${materialResult.shingleBundlesNeeded} Shingle Bundles (${materialResult.shingleType}), ${materialResult.underlaymentRollsNeeded} Underlayment Rolls (${materialResult.underlaymentType}), ${materialResult.iceShieldRollsNeeded} Ice & Water Rolls, ${materialResult.ridgeCapBundlesNeeded} Ridge Cap Bundles, ${materialResult.nailsCountTotal} Roofing Nails (~${materialResult.nailsPoundsNeeded} lbs)`}
+                latexText={`\\text{Bundles} = \\lceil ${materialResult.totalSquares}\\text{ sq} \\times ${materialResult.bundlesPerSquare} \\rceil = ${materialResult.shingleBundlesNeeded}\\text{ bundles}`}
+                onCopy={copyToClipboard}
+              />
             </div>
           )}
         </div>
 
         <SavedEstimatesDrawer
           {...materialSaved}
+          onRestore={handleRestoreCard3}
           cardTitle="Material Bundles"
-          formatSummary={(r) => `${r.shingleBundlesNeeded} bundles (${r.shingleType}), ${r.underlaymentRollsNeeded} underlayment rolls`}
+          formatSummary={(r) =>
+            `${r.shingleBundlesNeeded} bundles (${r.shingleType}), ${r.underlaymentRollsNeeded} underlayment rolls`
+          }
         />
       </CardWrapper>
 
@@ -1433,9 +2415,18 @@ export function RoofingCalculator() {
         onToggleSaved={() => costSaved.setIsOpen(!costSaved.isOpen)}
         onSave={() => {
           if (!costResult) return;
+          const rawInputs = {
+            costSquares,
+            pricePerSquare,
+            tearOffCost,
+            laborCost,
+            permitAndDumpster,
+            salesTaxRate,
+          };
           costSaved.save(
             `${costResult.roofingSquares} sq, Total: $${costResult.totalEstimatedCost}`,
-            costResult
+            rawInputs,
+            costResult,
           );
           flashSave(setCostSaveSuccess);
         }}
@@ -1455,7 +2446,8 @@ export function RoofingCalculator() {
                   setPermitAndDumpster("650");
                   setSalesTaxRate("7");
                 }}
-                className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline font-semibold cursor-pointer"
+                className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline font-semibold cursor-pointer print:hidden"
+                aria-label="Reset rates to default market values"
               >
                 Reset Default Market Rates
               </button>
@@ -1463,8 +2455,14 @@ export function RoofingCalculator() {
 
             <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
               <div>
-                <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Roofing Squares</label>
+                <label
+                  htmlFor="roof-card4-squares"
+                  className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium cursor-pointer"
+                >
+                  Roofing Squares
+                </label>
                 <Input
+                  id="roof-card4-squares"
                   type="number"
                   value={costSquares}
                   onChange={(e) => setCostSquares(e.target.value)}
@@ -1473,8 +2471,14 @@ export function RoofingCalculator() {
                 />
               </div>
               <div>
-                <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Material Cost ($/sq)</label>
+                <label
+                  htmlFor="roof-card4-price-sq"
+                  className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium cursor-pointer"
+                >
+                  Material Cost ($/sq)
+                </label>
                 <Input
+                  id="roof-card4-price-sq"
                   type="number"
                   value={pricePerSquare}
                   onChange={(e) => setPricePerSquare(e.target.value)}
@@ -1484,8 +2488,14 @@ export function RoofingCalculator() {
                 />
               </div>
               <div>
-                <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Tear-Off Old Roof ($/sq)</label>
+                <label
+                  htmlFor="roof-card4-tearoff"
+                  className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium cursor-pointer"
+                >
+                  Tear-Off Old Roof ($/sq)
+                </label>
                 <Input
+                  id="roof-card4-tearoff"
                   type="number"
                   value={tearOffCost}
                   onChange={(e) => setTearOffCost(e.target.value)}
@@ -1495,8 +2505,14 @@ export function RoofingCalculator() {
                 />
               </div>
               <div>
-                <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Labor Rate ($/sq)</label>
+                <label
+                  htmlFor="roof-card4-labor"
+                  className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium cursor-pointer"
+                >
+                  Labor Rate ($/sq)
+                </label>
                 <Input
+                  id="roof-card4-labor"
                   type="number"
                   value={laborCost}
                   onChange={(e) => setLaborCost(e.target.value)}
@@ -1506,8 +2522,14 @@ export function RoofingCalculator() {
                 />
               </div>
               <div>
-                <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Dumpster &amp; Permits ($)</label>
+                <label
+                  htmlFor="roof-card4-dumpster"
+                  className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium cursor-pointer"
+                >
+                  Dumpster &amp; Permits ($)
+                </label>
                 <Input
+                  id="roof-card4-dumpster"
                   type="number"
                   value={permitAndDumpster}
                   onChange={(e) => setPermitAndDumpster(e.target.value)}
@@ -1517,8 +2539,14 @@ export function RoofingCalculator() {
                 />
               </div>
               <div>
-                <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Sales Tax (%)</label>
+                <label
+                  htmlFor="roof-card4-tax"
+                  className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium cursor-pointer"
+                >
+                  Sales Tax (%)
+                </label>
                 <Input
+                  id="roof-card4-tax"
                   type="number"
                   value={salesTaxRate}
                   onChange={(e) => setSalesTaxRate(e.target.value)}
@@ -1530,7 +2558,7 @@ export function RoofingCalculator() {
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 print:hidden">
             <Button
               onClick={handleCostCalc}
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-7 px-4 cursor-pointer"
@@ -1539,8 +2567,22 @@ export function RoofingCalculator() {
             </Button>
           </div>
 
+          {/* Card 4 Error Alert */}
+          {card4Error && (
+            <div
+              role="alert"
+              className="p-2.5 rounded-lg bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 text-xs flex items-center gap-2"
+            >
+              <AlertTriangle className="w-4 h-4 shrink-0 text-red-500" />
+              <span>{card4Error}</span>
+            </div>
+          )}
+
           {costResult && (
-            <div className="space-y-2 pt-1 border-t border-zinc-100 dark:border-zinc-800">
+            <div
+              className="space-y-2 pt-1 border-t border-zinc-100 dark:border-zinc-800"
+              aria-live="polite"
+            >
               {/* Itemized Cost Table */}
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-[11px] font-sans tabular-nums border-collapse">
@@ -1554,37 +2596,61 @@ export function RoofingCalculator() {
                   </thead>
                   <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
                     <tr>
-                      <td className="py-1 font-medium text-zinc-800 dark:text-zinc-200">Shingles &amp; Roofing Materials</td>
+                      <td className="py-1 font-medium text-zinc-800 dark:text-zinc-200">
+                        Shingles &amp; Roofing Materials
+                      </td>
                       <td className="py-1">{costResult.roofingSquares} Squares</td>
                       <td className="py-1">${pricePerSquare}/sq</td>
-                      <td className="py-1 text-right font-semibold">${costResult.materialSubtotal.toFixed(2)}</td>
+                      <td className="py-1 text-right font-semibold">
+                        ${costResult.materialSubtotal.toFixed(2)}
+                      </td>
                     </tr>
                     <tr>
-                      <td className="py-1 font-medium text-zinc-800 dark:text-zinc-200">Tear-Off Old Layers &amp; Disposal</td>
+                      <td className="py-1 font-medium text-zinc-800 dark:text-zinc-200">
+                        Tear-Off Old Layers &amp; Disposal
+                      </td>
                       <td className="py-1">{costResult.roofingSquares} Squares</td>
                       <td className="py-1">${tearOffCost}/sq</td>
-                      <td className="py-1 text-right font-semibold">${costResult.tearOffSubtotal.toFixed(2)}</td>
+                      <td className="py-1 text-right font-semibold">
+                        ${costResult.tearOffSubtotal.toFixed(2)}
+                      </td>
                     </tr>
                     <tr>
-                      <td className="py-1 font-medium text-zinc-800 dark:text-zinc-200">Professional Installation Labor</td>
+                      <td className="py-1 font-medium text-zinc-800 dark:text-zinc-200">
+                        Professional Installation Labor
+                      </td>
                       <td className="py-1">{costResult.roofingSquares} Squares</td>
                       <td className="py-1">${laborCost}/sq</td>
-                      <td className="py-1 text-right font-semibold">${costResult.laborSubtotal.toFixed(2)}</td>
+                      <td className="py-1 text-right font-semibold">
+                        ${costResult.laborSubtotal.toFixed(2)}
+                      </td>
                     </tr>
                     <tr>
-                      <td className="py-1 font-medium text-zinc-800 dark:text-zinc-200">Municipal Permit &amp; Dumpster Rental</td>
+                      <td className="py-1 font-medium text-zinc-800 dark:text-zinc-200">
+                        Municipal Permit &amp; Dumpster Rental
+                      </td>
                       <td className="py-1">Lump Sum</td>
                       <td className="py-1">—</td>
-                      <td className="py-1 text-right font-semibold">${costResult.dumpsterAndPermits.toFixed(2)}</td>
+                      <td className="py-1 text-right font-semibold">
+                        ${costResult.dumpsterAndPermits.toFixed(2)}
+                      </td>
                     </tr>
                     <tr className="bg-slate-50/70 dark:bg-zinc-800/40 text-zinc-600 dark:text-zinc-400">
-                      <td colSpan={3} className="py-1">Material Sales Tax ({salesTaxRate}%)</td>
+                      <td colSpan={3} className="py-1">
+                        Material Sales Tax ({salesTaxRate}% applied to materials)
+                      </td>
                       <td className="py-1 text-right">${costResult.salesTaxAmount.toFixed(2)}</td>
                     </tr>
                     <tr className="bg-blue-50 dark:bg-blue-950/40 font-bold text-xs">
-                      <td colSpan={3} className="py-1.5 text-blue-900 dark:text-blue-100">Estimated Total Roof Replacement Cost</td>
+                      <td colSpan={3} className="py-1.5 text-blue-900 dark:text-blue-100">
+                        Estimated Total Roof Replacement Cost
+                      </td>
                       <td className="py-1.5 text-right text-emerald-600 dark:text-emerald-400 text-sm">
-                        ${costResult.totalEstimatedCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        $
+                        {costResult.totalEstimatedCost.toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
                       </td>
                     </tr>
                   </tbody>
@@ -1597,22 +2663,33 @@ export function RoofingCalculator() {
                   Estimated Contractor Bid Range:
                 </span>
                 <span className="font-bold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums">
-                  ${costResult.lowEstimateCost.toLocaleString()} (Competitive) — ${costResult.highEstimateCost.toLocaleString()} (Premium)
+                  ${costResult.lowEstimateCost.toLocaleString()} (Competitive) — $
+                  {costResult.highEstimateCost.toLocaleString()} (Premium)
                 </span>
               </div>
+
+              <ExportCopyBar
+                resultText={`Estimated Replacement Cost: $${costResult.totalEstimatedCost.toFixed(2)} ($${costResult.lowEstimateCost.toLocaleString()} to $${costResult.highEstimateCost.toLocaleString()})`}
+                summaryText={`Roofing Cost Breakdown (${costResult.roofingSquares} sq): Materials=$${costResult.materialSubtotal.toFixed(2)}, Tear-off=$${costResult.tearOffSubtotal.toFixed(2)}, Labor=$${costResult.laborSubtotal.toFixed(2)}, Dumpster/Permit=$${costResult.dumpsterAndPermits.toFixed(2)}, Material Tax ($${salesTaxRate}%)=$${costResult.salesTaxAmount.toFixed(2)}, Total=$${costResult.totalEstimatedCost.toFixed(2)}`}
+                latexText={`\\text{Total Cost} = (${costSquares} \\times ${pricePerSquare}) + (${costSquares} \\times ${tearOffCost}) + (${costSquares} \\times ${laborCost}) + ${permitAndDumpster} + \\text{Tax} = \\$${costResult.totalEstimatedCost.toFixed(2)}`}
+                onCopy={copyToClipboard}
+              />
             </div>
           )}
         </div>
 
         <SavedEstimatesDrawer
           {...costSaved}
+          onRestore={handleRestoreCard4}
           cardTitle="Roofing Cost"
-          formatSummary={(r) => `${r.roofingSquares} sq, Total: $${r.totalEstimatedCost.toLocaleString()}`}
+          formatSummary={(r) =>
+            `${r.roofingSquares} sq, Total: $${r.totalEstimatedCost.toLocaleString()}`
+          }
         />
       </CardWrapper>
 
       {/* ═══════════════════ REPORT MODAL TRIGGER ═══════════════════ */}
-      <div className="flex items-center justify-end pt-1">
+      <div className="flex items-center justify-end pt-1 print:hidden">
         <Button
           variant="outline"
           onClick={() => setIsReportOpen(true)}
