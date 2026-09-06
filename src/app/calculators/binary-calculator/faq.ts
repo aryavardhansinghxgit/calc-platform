@@ -2,45 +2,75 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const binary_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "What is two's complement and why is it used?",
-    answer: "Two's complement is a binary representation system for signed negative numbers formed by inverting all bits (1's complement) and adding 1. It allows digital arithmetic logic units (ALUs) to perform subtraction using standard addition circuitry."
+    question: "What is a binary calculator?",
+    answer:
+      "A binary calculator performs arithmetic and logical operations using the base-2 number system, where values are represented with 0 and 1. This calculator also supports bitwise operations, fixed-width signed representation, and base conversion.",
   },
   {
-    question: "How do you add two binary numbers with carry?",
-    answer: "Add bits column-by-column from right to left using binary rules: 0+0=0, 0+1=1, 1+0=1, and 1+1=0 with a carry bit of 1 forwarded to the next column."
+    question: "How do I add binary numbers?",
+    answer:
+      "Align the binary digits from right to left and add each column using the binary rules 0+0=0, 0+1=1, and 1+1=10, carrying the extra bit to the next column. The calculator shows the carry chain so you can verify each step.",
   },
   {
-    question: "Can this calculator handle floating-point or negative binary numbers?",
-    answer: "Yes! The calculator supports signed negative binary numbers using 2's complement representation across 8-bit, 16-bit, 32-bit, and 64-bit register widths."
+    question: "How do I convert binary to decimal?",
+    answer:
+      "Multiply each binary digit by its corresponding power of two and add the results. For example, 1011₂ = 8 + 2 + 1 = 11₁₀.",
   },
   {
-    question: "What is the difference between bitwise shift and arithmetic shift?",
-    answer: "A logical bitwise shift (<< or >>) moves all bits and fills empty positions with zeros. An arithmetic right shift preserves the sign bit (MSB) to maintain correct negative integer values."
+    question: "How do I convert decimal to binary?",
+    answer:
+      "Repeatedly divide the decimal integer by 2 and record each remainder. Reading the remainders from bottom to top gives the binary representation. The calculator performs this conversion automatically and shows the division steps.",
   },
   {
-    question: "How do you convert binary to hexadecimal and octal?",
-    answer: "To convert to hexadecimal, group binary bits into sets of 4 from right to left (each 4-bit nibble maps to hex 0-F). To convert to octal, group bits into sets of 3 (each 3-bit group maps to octal 0-7)."
+    question: "What is the difference between signed and unsigned binary?",
+    answer:
+      "Unsigned binary treats all bits as magnitude, while signed two's-complement binary reserves the highest bit as part of the sign representation. For example, the eight-bit pattern 11111101 is 253 unsigned but −3 as signed two's complement.",
   },
   {
-    question: "What is the difference between bitwise AND, OR, and XOR operations?",
-    answer: "Bitwise AND (&) outputs 1 only when both input bits are 1. Bitwise OR (|) outputs 1 if at least one input bit is 1. Bitwise XOR (^) outputs 1 when the two input bits are different."
+    question: "What is two's complement?",
+    answer:
+      "Two's complement is a fixed-width representation for signed integers. To obtain the negative representation of a positive binary value, invert all bits and add 1.",
   },
   {
-    question: "How does binary long division work with remainders?",
-    answer: "Binary division mirrors decimal long division by iteratively comparing the divisor to the partial dividend. If the divisor fits, output a quotient bit of 1 and subtract; otherwise output 0 and shift to the next bit."
+    question: "What does binary overflow mean?",
+    answer:
+      "Overflow occurs when a mathematical result cannot be represented within the selected register width. For example, 255 + 1 = 256, but an unsigned eight-bit register can store only 0 through 255, so the stored result wraps to 00000000 with a carry-out.",
   },
   {
-    question: "Why do computers use binary instead of decimal?",
-    answer: "Computers use binary because physical semiconductor transistors naturally operate in two distinct electrical states: voltage presence (ON / 1) or absence (OFF / 0), providing maximum noise immunity and hardware simplicity."
+    question: "What is a bitwise AND operation?",
+    answer:
+      "Bitwise AND compares corresponding bits and produces 1 only when both corresponding bits are 1.",
   },
   {
-    question: "What is an 8-bit, 16-bit, or 64-bit overflow?",
-    answer: "Overflow occurs when a calculation produces a result exceeding the maximum representable capacity of a fixed bit register (e.g. 255 for unsigned 8-bit). Extra carry bits beyond the width are truncated."
+    question: "What is the difference between XOR and OR?",
+    answer:
+      "OR produces 1 when either input bit is 1, whereas XOR produces 1 only when the two input bits are different.",
   },
   {
-    question: "How are ASCII characters represented in binary code?",
-    answer: "ASCII assigns a unique 8-bit binary number (0 to 127) to every character, number, and symbol. For example, uppercase 'A' is 65 in decimal, represented in binary as 01000001."
-  }
+    question: "Why is hexadecimal useful for binary values?",
+    answer:
+      "One hexadecimal digit represents exactly four binary bits, making long binary values much shorter to read and write. For example, 10111001 becomes B9 in hexadecimal.",
+  },
+  {
+    question: "Can this calculator handle numbers larger than 2⁵³ - 1?",
+    answer:
+      "Yes. The calculator's large-integer calculation and conversion path uses arbitrary-precision integer arithmetic. This avoids the precision limitation that applies to JavaScript Number values beyond 2⁵³ - 1.",
+  },
+  {
+    question: "What bases does the converter support?",
+    answer:
+      "The converter supports integer bases from 2 through 36, allowing common systems such as binary, octal, decimal and hexadecimal as well as less common positional bases.",
+  },
+  {
+    question: "What is binary modulo?",
+    answer:
+      "Binary modulo returns the remainder after dividing one binary integer by another. For example, 13 mod 5 = 3, which is 0011 in binary.",
+  },
+  {
+    question: "Why does an eight-bit result sometimes differ from the mathematical result?",
+    answer:
+      "An eight-bit register can store only a finite range of bit patterns. If an operation produces a value outside that range, the register representation can wrap or truncate while the underlying mathematical result remains different. The calculator displays the representation and overflow information separately.",
+  },
 ];
 
 export default binary_calculatorFaqs;

@@ -1,14 +1,24 @@
-import { HexCalculatorOutputs } from "./types";
+import { HexCalculatorInputs, HexCalculatorOutputs } from "./types";
+import { executeHexArithmetic, HexOperator, BitWidth } from "./hex-logic";
 
 export function calculateHexCalculator(inputs: Record<string, any>): HexCalculatorOutputs {
-  const h1 = parseInt(String(inputs.hex1 || "1A"), 16) || 0;
-  const h2 = parseInt(String(inputs.hex2 || "0F"), 16) || 0;
-  const op = inputs.operation || "+";
-  let dec = 0;
-  if (op === "+") dec = h1 + h2;
-  else if (op === "-") dec = h1 - h2;
-  else if (op === "*") dec = h1 * h2;
-  const hexStr = (dec >= 0 ? dec.toString(16).toUpperCase() : "-" + Math.abs(dec).toString(16).toUpperCase());
-  const binStr = (dec >= 0 ? dec.toString(2) : "-" + Math.abs(dec).toString(2));
-  return { hexResult: hexStr, decimalResult: dec, binaryResult: binStr };
+  const rawA = String(inputs.inputA ?? inputs.hex1 ?? "8AB").trim();
+  const rawB = String(inputs.inputB ?? inputs.hex2 ?? "B78").trim();
+  const op = (inputs.operation || "+").toUpperCase() as HexOperator;
+  const bitWidth = (Number(inputs.bitWidth) || 32) as BitWidth;
+  const isSigned = Boolean(inputs.isSigned);
+
+  const result = executeHexArithmetic(rawA, rawB, op, bitWidth, isSigned);
+
+  return {
+    hexResult: result.hexResult,
+    decimalResult: result.decResult,
+    binaryResult: result.binResult,
+    octalResult: result.octResult,
+    carryOut: result.carryOut,
+    overflow: result.unsignedOverflow || result.signedOverflow,
+    mathematicalResult: result.mathematicalResult.toString()
+  };
 }
+
+export default calculateHexCalculator;

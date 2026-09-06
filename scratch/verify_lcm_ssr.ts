@@ -1,3 +1,5 @@
+export {};
+
 async function testSSR() {
   const res = await fetch("http://localhost:3000/calculators/lcm-calculator");
   if (!res.ok) {

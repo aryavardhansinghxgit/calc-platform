@@ -1,37 +1,58 @@
 import { calculateHexCalculator } from "./calculator";
 
 export function runHexCalculatorTests() {
-  const defaultInputs = {
-  "hex1": "1A",
-  "operation": "+",
-  "hex2": "0F"
-};
-  const res1 = calculateHexCalculator(defaultInputs);
-  if (!res1 || typeof res1 !== "object") throw new Error("Formula failed for default inputs");
+  // Canonical inputs
+  const res1 = calculateHexCalculator({
+    inputA: "8AB",
+    inputB: "B78",
+    operation: "+"
+  });
+  if (!res1 || res1.hexResult !== "00001423" || res1.decimalResult !== "5155") {
+    throw new Error(`Formula failed for canonical inputs 8AB + B78: got ${JSON.stringify(res1)}`);
+  }
 
-  const zeroInputs = {
-  "hex1": 0,
-  "operation": 0,
-  "hex2": 0
-};
-  const res2 = calculateHexCalculator(zeroInputs);
-  if (!res2) throw new Error("Formula failed for zero inputs");
+  // Legacy inputs
+  const resLegacy = calculateHexCalculator({
+    hex1: "1A",
+    hex2: "0F",
+    operation: "+"
+  });
+  if (!resLegacy || typeof resLegacy !== "object") {
+    throw new Error("Formula failed for legacy inputs");
+  }
 
-  const negInputs = {
-  "hex1": -50,
-  "operation": -50,
-  "hex2": -50
-};
-  const res3 = calculateHexCalculator(negInputs);
-  if (!res3) throw new Error("Formula failed for negative inputs");
+  // 8-bit unsigned carry test
+  const resCarry = calculateHexCalculator({
+    inputA: "FF",
+    inputB: "01",
+    operation: "+",
+    bitWidth: 8
+  });
+  if (resCarry.hexResult !== "00" || resCarry.carryOut !== 1) {
+    throw new Error(`Carry test failed: got ${JSON.stringify(resCarry)}`);
+  }
 
-  const nanInputs = {
-  "hex1": null,
-  "operation": null,
-  "hex2": null
-};
-  const res4 = calculateHexCalculator(nanInputs);
-  if (!res4) throw new Error("Formula failed for NaN inputs");
+  // Bitwise AND test
+  const resAnd = calculateHexCalculator({
+    inputA: "CC",
+    inputB: "AA",
+    operation: "AND",
+    bitWidth: 8
+  });
+  if (resAnd.hexResult !== "88") {
+    throw new Error(`Bitwise AND failed: got ${JSON.stringify(resAnd)}`);
+  }
+
+  // Logical Right Shift (>>>) test
+  const resShift = calculateHexCalculator({
+    inputA: "80",
+    inputB: "1",
+    operation: ">>>",
+    bitWidth: 8
+  });
+  if (resShift.hexResult !== "40") {
+    throw new Error(`Logical shift failed: got ${JSON.stringify(resShift)}`);
+  }
 
   return true;
 }
