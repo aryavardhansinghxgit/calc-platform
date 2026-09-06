@@ -2,6 +2,7 @@ import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateBigNumberCalculator } from "./calculator";
 import { BigNumberCalculator } from "@/components/calculator/big-number/BigNumberCalculator";
 import { BigNumberContent } from "@/components/calculator/big-number/BigNumberContent";
+import { big_number_calculatorFaqs } from "./faq";
 
 export const big_number_calculatorConfig: CalculatorModuleDefinition = {
   id: "big-number-calculator",
@@ -9,22 +10,39 @@ export const big_number_calculatorConfig: CalculatorModuleDefinition = {
   slug: "big-number-calculator",
   category: "Math",
   subcategory: "General Math",
-  description: "Perform arbitrary-precision arithmetic (+, -, ×, /), modular exponentiation (A^B mod M), massive factorials (N!), trailing zero counts, Googology presets, and digit analytics for thousands of digits.",
+  description: "Calculate huge integers exactly with arbitrary-precision arithmetic. Add, subtract, multiply, divide, modulo, powers, GCD, LCM, factorials, nPr, nCr and more.",
   iconName: "PlusCircle",
   featured: true,
   keywords: [
-    "Big Number Calculator",
-    "Large Number Calculator",
-    "Arbitrary Precision Calculator",
-    "Large Factorial Calculator",
-    "Googol Calculator",
-    "Modular Exponentiation Calculator",
-    "BigInt Calculator"
+    "big number calculator",
+    "arbitrary precision calculator",
+    "large number calculator",
+    "big integer calculator",
+    "arbitrary precision arithmetic",
+    "BigInt calculator",
+    "large integer calculator",
+    "big number multiplication",
+    "big number addition",
+    "big number division",
+    "modular exponentiation calculator",
+    "large factorial calculator",
+    "nCr calculator",
+    "nPr calculator",
+    "GCD calculator for large numbers",
+    "LCM calculator for large numbers",
+    "large number primality test",
+    "digit frequency calculator"
   ],
   priority: 1,
-  relatedCalculators: ["scientific-notation-calculator", "scientific-calculator", "exponent-calculator"],
+  relatedCalculators: [
+    "scientific-notation-calculator",
+    "factor-calculator",
+    "permutation-combination-calculator",
+    "gcf-calculator",
+    "lcm-calculator"
+  ],
   formulaDescription: "Arbitrary-Precision BigInt Arithmetic",
-  faqs: [],
+  faqs: big_number_calculatorFaqs,
   CustomComponent: BigNumberCalculator,
   ContentComponent: BigNumberContent,
   inputs: [
