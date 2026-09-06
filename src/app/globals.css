@@ -240,6 +240,19 @@ details[open] > summary::before {
     page-break-inside: avoid !important;
   }
 
+  .print-card {
+    margin-bottom: 0.5rem !important;
+    padding: 0.25rem !important;
+  }
+
+  .print-card .grid {
+    display: grid !important;
+  }
+
+  .print-card svg {
+    max-height: 85px !important;
+  }
+
   /* Prevent card overflow clips from forcing empty pages in Chromium print layout */
   .overflow-hidden {
     overflow: visible !important;

@@ -8,7 +8,7 @@ export const square_footage_calculatorConfig: CalculatorModuleDefinition = {
   slug: "square-footage-calculator",
   category: "construction",
   subcategory: "Housing / Building",
-  description: "Calculate total floor, wall, or land square footage and estimated material costs.",
+  description: "Calculate square footage for rectangles, circles, triangles, trapezoids, sectors and more. Convert units, estimate cost, combine rooms and plan materials.",
   iconName: "Box",
   featured: true,
   keywords: ["square footage","sq ft calculator","area calculator","floor space"],

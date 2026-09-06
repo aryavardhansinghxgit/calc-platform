@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const square_footage_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Square Footage Calculator — Area, Flooring & Multi-Room Suite",
+  title: "Square Footage Calculator – Area, Cost & Material Estimates",
   description:
-    "Free online square footage calculator for rectangles, circles, triangles, borders, and multi-room floor plans with waste factor and material packaging estimates.",
+    "Calculate square footage for rectangles, circles, triangles, trapezoids, sectors and more. Convert units, estimate cost, combine rooms and plan materials.",
   slug: "square-footage-calculator",
 });

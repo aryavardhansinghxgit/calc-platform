@@ -8,6 +8,10 @@ import {
   FileSpreadsheet,
   Layers,
   Sparkles,
+  Copy,
+  Check,
+  RotateCcw,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,6 +41,38 @@ import {
   MaterialEstimation,
 } from "@/lib/calculator-engine/formulas/square-footage";
 
+// ─── Clipboard Helper with Fallback ──────────────────────────────────────────
+
+async function copyToClipboard(text: string): Promise<boolean> {
+  if (typeof window !== "undefined" && navigator?.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // fallback
+    }
+  }
+  if (typeof document !== "undefined") {
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      const success = document.execCommand("copy");
+      document.body.removeChild(textArea);
+      return success;
+    } catch {
+      return false;
+    }
+  }
+  return false;
+}
+
 // ─── Types & Local Storage Hook ─────────────────────────────────────────────
 
 interface SavedAreaEstimate<T> {
@@ -45,6 +81,7 @@ interface SavedAreaEstimate<T> {
   inputSummary: string;
   result: T;
   notes: string;
+  rawInputs: Record<string, any>;
 }
 
 const LINEAR_UNITS: { value: LinearUnit; label: string }[] = [
@@ -78,13 +115,14 @@ function useCardSaved<T>(storageKey: string) {
   }, [storageKey]);
 
   const save = useCallback(
-    (inputSummary: string, result: T, notes = "") => {
+    (inputSummary: string, result: T, rawInputs: Record<string, any>, notes = "") => {
       const entry: SavedAreaEstimate<T> = {
         id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         inputSummary,
         result,
         notes,
+        rawInputs,
       };
       setSaved((prev) => {
         const next = [entry, ...prev].slice(0, 15);
@@ -140,17 +178,18 @@ function CardWrapper({
   onSave?: () => void;
 }) {
   return (
-    <div className="border border-blue-600/30 dark:border-blue-500/30 rounded-xl overflow-hidden shadow-xs bg-white dark:bg-zinc-900 transition-all">
-      <div className="bg-blue-600 text-white px-3.5 py-1.5 flex items-center justify-between">
-        <h3 className="font-bold text-xs tracking-wide text-white">{title}</h3>
+    <div className="print-card border border-blue-600/30 dark:border-blue-500/30 rounded-xl overflow-hidden shadow-xs bg-white dark:bg-zinc-900 transition-all print:break-inside-avoid print:shadow-none print:border-zinc-300">
+      <div className="bg-blue-600 text-white px-3.5 py-1.5 flex items-center justify-between print:bg-zinc-100 print:text-zinc-900 print:border-b print:border-zinc-300">
+        <h3 className="font-bold text-xs tracking-wide text-white print:text-zinc-900">{title}</h3>
         {hasResult && onSave && (
-          <div className="flex items-center gap-1.5">
+          <div className="no-print flex items-center gap-1.5">
             {savedCount !== undefined && savedCount > 0 && onToggleSaved && (
               <button
                 type="button"
                 onClick={onToggleSaved}
                 className="text-[10px] bg-white/20 hover:bg-white/30 text-white font-bold px-1.5 py-0.5 rounded cursor-pointer transition-colors"
                 title="View saved calculations"
+                aria-label={`View ${savedCount} saved calculations`}
               >
                 {savedCount} saved
               </button>
@@ -158,6 +197,7 @@ function CardWrapper({
             <button
               type="button"
               onClick={onSave}
+              aria-label={`Save ${title} calculation`}
               className={`text-[11px] font-bold px-2 py-0.5 rounded cursor-pointer transition-all ${
                 isSaved
                   ? "bg-emerald-500 text-white"
@@ -175,6 +215,7 @@ function CardWrapper({
 }
 
 function InputRow({
+  id,
   label,
   value,
   onChange,
@@ -186,6 +227,7 @@ function InputRow({
   step = 0.5,
   showUnit = true,
 }: {
+  id?: string;
   label: string;
   value: string;
   onChange: (v: string) => void;
@@ -197,13 +239,21 @@ function InputRow({
   step?: number;
   showUnit?: boolean;
 }) {
+  const reactId = React.useId();
+  const inputId = id ?? reactId;
+
   return (
     <div className="grid grid-cols-12 gap-2 items-center text-xs">
-      <label className="col-span-5 font-medium text-zinc-700 dark:text-zinc-300 truncate">
+      <label
+        htmlFor={inputId}
+        className="col-span-5 font-medium text-zinc-700 dark:text-zinc-300 truncate cursor-pointer"
+      >
         {label}
       </label>
       <div className={showUnit && unitOptions ? "col-span-4" : "col-span-7"}>
         <Input
+          id={inputId}
+          name={inputId}
           type="number"
           value={value}
           onChange={(e) => onChange(e.target.value)}
@@ -216,6 +266,7 @@ function InputRow({
       {showUnit && unitOptions && onUnitChange && (
         <div className="col-span-3">
           <select
+            id={`${inputId}-unit`}
             value={unit}
             onChange={(e) => onUnitChange(e.target.value)}
             aria-label={`${label} unit`}
@@ -240,6 +291,7 @@ function SavedEstimatesDrawer<T>({
   clear,
   cardTitle,
   formatSummary,
+  onRestore,
 }: {
   saved: SavedAreaEstimate<T>[];
   isOpen: boolean;
@@ -247,6 +299,7 @@ function SavedEstimatesDrawer<T>({
   clear: () => void;
   cardTitle: string;
   formatSummary: (result: T) => string;
+  onRestore?: (rawInputs: Record<string, any>) => void;
 }) {
   if (!isOpen || saved.length === 0) return null;
 
@@ -266,45 +319,64 @@ function SavedEstimatesDrawer<T>({
   };
 
   return (
-    <div className="mt-3 p-3 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 space-y-2 text-xs">
+    <div className="no-print mt-3 p-3 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 space-y-2 text-xs">
       <div className="flex items-center justify-between pb-1 border-b border-zinc-200 dark:border-zinc-800">
         <span className="font-bold text-zinc-700 dark:text-zinc-300">
           Saved {cardTitle} History ({saved.length})
         </span>
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={exportCsv}
             className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-0.5 cursor-pointer"
+            aria-label={`Export ${cardTitle} calculations to CSV`}
           >
             <Download className="w-3 h-3" /> CSV
           </button>
           <button
+            type="button"
             onClick={clear}
             className="text-[10px] text-zinc-400 hover:text-red-500 cursor-pointer"
+            aria-label={`Clear all ${cardTitle} saved calculations`}
           >
-            Clear
+            Clear All
           </button>
         </div>
       </div>
-      <div className="space-y-1.5 max-h-36 overflow-y-auto">
+      <div className="space-y-1.5 max-h-44 overflow-y-auto">
         {saved.map((item) => (
           <div
             key={item.id}
-            className="p-2 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-[11px] font-sans tabular-nums"
+            className="p-2 bg-white dark:bg-zinc-900 rounded border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-[11px] font-sans tabular-nums gap-2"
           >
-            <div className="truncate pr-2">
+            <div className="truncate pr-1 flex-1">
               <span className="font-bold text-zinc-800 dark:text-zinc-200">
                 {formatSummary(item.result)}
               </span>
               <span className="text-zinc-400 ml-1.5">({item.inputSummary})</span>
             </div>
-            <button
-              onClick={() => remove(item.id)}
-              className="text-zinc-400 hover:text-red-500 p-0.5 cursor-pointer"
-              title="Delete"
-            >
-              <Trash2 className="w-3 h-3" />
-            </button>
+            <div className="flex items-center gap-1.5 shrink-0">
+              {onRestore && item.rawInputs && (
+                <button
+                  type="button"
+                  onClick={() => onRestore(item.rawInputs)}
+                  className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 px-1.5 py-0.5 rounded border border-blue-200 dark:border-blue-800 cursor-pointer flex items-center gap-0.5"
+                  title="Restore calculation"
+                  aria-label={`Restore ${item.inputSummary}`}
+                >
+                  <RotateCcw className="w-2.5 h-2.5" /> Restore
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => remove(item.id)}
+                className="text-zinc-400 hover:text-red-500 p-0.5 cursor-pointer"
+                title="Delete"
+                aria-label="Delete saved calculation"
+              >
+                <Trash2 className="w-3 h-3" />
+              </button>
+            </div>
           </div>
         ))}
       </div>
@@ -313,6 +385,9 @@ function SavedEstimatesDrawer<T>({
 }
 
 function ResultDisplay({
+  shapeName,
+  latexFormula,
+  summaryText,
   sqFt,
   sqYd,
   sqM,
@@ -323,6 +398,9 @@ function ResultDisplay({
   secondaryLabel,
   secondaryValue,
 }: {
+  shapeName: string;
+  latexFormula: string;
+  summaryText: string;
   sqFt: number;
   sqYd: number;
   sqM: number;
@@ -333,8 +411,23 @@ function ResultDisplay({
   secondaryLabel?: string;
   secondaryValue?: string;
 }) {
+  const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
+
+  const handleCopy = async (text: string, label: string) => {
+    const ok = await copyToClipboard(text);
+    if (ok) {
+      setCopyFeedback(label);
+      setTimeout(() => setCopyFeedback(null), 2000);
+    }
+  };
+
+  const resultString = `${shapeName} area = ${sqFt.toLocaleString()} ft²`;
+
   return (
-    <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800 space-y-2">
+    <div
+      aria-live="polite"
+      className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800 space-y-2 print:border-zinc-300 print:bg-transparent"
+    >
       <div className="text-center">
         <span className="text-[10px] uppercase font-bold text-blue-700 dark:text-blue-300 block">
           Total Area
@@ -344,14 +437,17 @@ function ResultDisplay({
           <span className="text-xs font-normal text-blue-700 dark:text-blue-300">sq ft</span>
         </div>
         <div className="text-xs font-semibold text-blue-800 dark:text-blue-300 mt-0.5">
-          {sqYd.toLocaleString()} sq yd · {sqM.toLocaleString()} m² · {acres > 0.001 ? `${acres.toFixed(3)} acres` : `${acres} acres`}
+          {sqYd.toLocaleString()} sq yd · {sqM.toLocaleString()} m² ·{" "}
+          {acres > 0.001 ? `${acres.toFixed(3)} acres` : `${acres} acres`}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-blue-200/60 dark:border-blue-800/60">
+      <div className="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-blue-200/60 dark:border-blue-800/60 print:border-zinc-300">
         {wastePercent > 0 && wasteSqFt !== undefined && (
           <div className="p-1.5 bg-white/70 dark:bg-zinc-900/60 rounded text-center">
-            <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">With {wastePercent}% Waste</span>
+            <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">
+              With {wastePercent}% Waste
+            </span>
             <span className="font-bold text-zinc-800 dark:text-zinc-200 font-sans tabular-nums text-xs">
               {wasteSqFt.toLocaleString()} sq ft
             </span>
@@ -359,7 +455,9 @@ function ResultDisplay({
         )}
         {cost > 0 && (
           <div className="p-1.5 bg-white/70 dark:bg-zinc-900/60 rounded text-center">
-            <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">Estimated Material Cost</span>
+            <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">
+              Estimated Material Cost
+            </span>
             <span className="font-bold text-emerald-600 dark:text-emerald-400 font-sans tabular-nums text-xs">
               ${cost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
@@ -367,149 +465,750 @@ function ResultDisplay({
         )}
         {secondaryLabel && secondaryValue && (
           <div className="col-span-2 p-1.5 bg-white/70 dark:bg-zinc-900/60 rounded text-center">
-            <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">{secondaryLabel}</span>
+            <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">
+              {secondaryLabel}
+            </span>
             <span className="font-bold text-zinc-800 dark:text-zinc-200 font-sans tabular-nums text-xs">
               {secondaryValue}
             </span>
           </div>
         )}
       </div>
+
+      {/* Copy Result / Summary / LaTeX Action Controls */}
+      <div className="no-print pt-2 flex flex-wrap items-center justify-between gap-1.5 border-t border-blue-200/60 dark:border-blue-800/60">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => handleCopy(resultString, "Result Copied!")}
+            className="text-[11px] px-2 py-1 rounded bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-semibold cursor-pointer flex items-center gap-1 transition-colors"
+            title="Copy standard area result"
+            aria-label="Copy result"
+          >
+            <Copy className="w-3 h-3 text-blue-500" />
+            <span>Copy Result</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleCopy(summaryText, "Summary Copied!")}
+            className="text-[11px] px-2 py-1 rounded bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-semibold cursor-pointer flex items-center gap-1 transition-colors"
+            title="Copy full input & calculation summary"
+            aria-label="Copy summary"
+          >
+            <Copy className="w-3 h-3 text-blue-500" />
+            <span>Copy Summary</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleCopy(latexFormula, "LaTeX Copied!")}
+            className="text-[11px] px-2 py-1 rounded bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 font-semibold cursor-pointer flex items-center gap-1 transition-colors"
+            title="Copy mathematical LaTeX formula"
+            aria-label="Copy LaTeX"
+          >
+            <Copy className="w-3 h-3 text-blue-500" />
+            <span>Copy LaTeX</span>
+          </button>
+        </div>
+
+        {copyFeedback && (
+          <span
+            role="status"
+            className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 animate-fadeIn"
+          >
+            <Check className="w-3 h-3" /> {copyFeedback}
+          </span>
+        )}
+      </div>
     </div>
   );
 }
 
-// ─── 2D SVG Diagrams Matching Calculator.net Precision ─────────────────────
+// ─── Dynamic 2D SVG Diagrams with Proportional Scaling & Real Labels ─────────
 
-function RectangleSvg({ l, w }: { l: number; w: number }) {
+function RectangleSvg({ l, w, unit }: { l: number; w: number; unit: string }) {
+  const safeL = l > 0 ? l : 30;
+  const safeW = w > 0 ? w : 20;
+  const ratio = Math.max(0.35, Math.min(2.8, safeL / safeW));
+
+  let boxW = 100;
+  let boxH = Math.round(boxW / ratio);
+  if (boxH > 58) {
+    boxH = 58;
+    boxW = Math.round(boxH * ratio);
+  }
+  boxW = Math.max(30, Math.min(115, boxW));
+  boxH = Math.max(20, Math.min(58, boxH));
+
+  const startX = Math.round((160 - boxW) / 2);
+  const startY = Math.round((95 - boxH) / 2) + 2;
+
   return (
-    <svg viewBox="0 0 160 110" className="w-full max-w-[140px] mx-auto select-none" aria-label="Rectangle 2D Diagram">
-      <rect x="25" y="25" width="110" height="60" fill="none" stroke="#27272a" strokeWidth="1.5" className="dark:stroke-zinc-300" />
+    <svg
+      viewBox="0 0 160 110"
+      className="w-full max-w-[150px] mx-auto select-none"
+      aria-label={`Rectangle diagram: length ${safeL} ${unit}, width ${safeW} ${unit}`}
+    >
+      <rect
+        x={startX}
+        y={startY}
+        width={boxW}
+        height={boxH}
+        fill="rgba(59, 130, 246, 0.08)"
+        stroke="#2563eb"
+        strokeWidth="1.5"
+        className="dark:stroke-blue-400"
+      />
+      {/* Top dimension label: Length */}
+      <text
+        x="80"
+        y={Math.max(12, startY - 4)}
+        textAnchor="middle"
+        className="text-[9px] fill-zinc-800 dark:fill-zinc-200 font-semibold"
+      >
+        L = {safeL} {unit}
+      </text>
+      {/* Left dimension label: Width */}
+      <text
+        x={Math.max(6, startX - 4)}
+        y={startY + boxH / 2 + 3}
+        textAnchor="end"
+        className="text-[9px] fill-zinc-800 dark:fill-zinc-200 font-semibold"
+      >
+        W = {safeW} {unit}
+      </text>
     </svg>
   );
 }
 
-function RectangleBorderSvg() {
+function RectangleBorderSvg({
+  outerL,
+  outerW,
+  border,
+  unit,
+  isValid,
+}: {
+  outerL: number;
+  outerW: number;
+  border: number;
+  unit: string;
+  isValid?: boolean;
+}) {
+  if (isValid === false) {
+    return (
+      <svg
+        viewBox="0 0 160 110"
+        className="w-full max-w-[150px] mx-auto select-none"
+        aria-label="Invalid geometry diagram"
+      >
+        <rect
+          x="20"
+          y="20"
+          width="120"
+          height="70"
+          fill="rgba(239, 68, 68, 0.05)"
+          stroke="#ef4444"
+          strokeWidth="1.5"
+          strokeDasharray="4 2"
+        />
+        <text
+          x="80"
+          y="58"
+          textAnchor="middle"
+          className="text-[10px] fill-red-600 dark:fill-red-400 font-bold"
+        >
+          Invalid Border Geometry
+        </text>
+      </svg>
+    );
+  }
+
+  const safeL = outerL > 0 ? outerL : 30;
+  const safeW = outerW > 0 ? outerW : 20;
+  const safeB = border > 0 ? border : 2;
+
   return (
-    <svg viewBox="0 0 160 110" className="w-full max-w-[140px] mx-auto select-none" aria-label="Rectangle Border 2D Diagram">
+    <svg
+      viewBox="0 0 160 110"
+      className="w-full max-w-[150px] mx-auto select-none"
+      aria-label={`Rectangle border diagram: ${safeL} by ${safeW} ${unit}, border ${safeB} ${unit}`}
+    >
       <defs>
         <marker id="rb-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-          <path d="M1,0.5 L5,3 L1,5.5 Z" fill="#27272a" className="dark:fill-zinc-300" />
+          <path d="M1,0.5 L5,3 L1,5.5 Z" fill="#2563eb" className="dark:fill-blue-400" />
         </marker>
       </defs>
-      <rect x="15" y="15" width="100" height="75" fill="none" stroke="#27272a" strokeWidth="1.5" className="dark:stroke-zinc-300" />
-      <rect x="30" y="28" width="70" height="49" fill="none" stroke="#27272a" strokeWidth="1.5" className="dark:stroke-zinc-300" />
-      <text x="65" y="99" textAnchor="middle" className="text-[9px] fill-zinc-800 dark:fill-zinc-200 font-medium">Width</text>
-      <text x="8" y="55" textAnchor="end" className="text-[9px] fill-zinc-800 dark:fill-zinc-200 font-medium">Height</text>
-      <line x1="145" y1="52" x2="102" y2="52" stroke="#27272a" strokeWidth="1" markerEnd="url(#rb-arrow)" className="dark:stroke-zinc-300" />
-      <text x="148" y="55" textAnchor="start" className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-medium">Border Width</text>
-    </svg>
-  );
-}
-
-function CircleSvg() {
-  return (
-    <svg viewBox="0 0 160 110" className="w-full max-w-[140px] mx-auto select-none" aria-label="Circle 2D Diagram">
-      <circle cx="80" cy="55" r="42" fill="none" stroke="#27272a" strokeWidth="1.5" className="dark:stroke-zinc-300" />
-    </svg>
-  );
-}
-
-function RingSvg() {
-  return (
-    <svg viewBox="0 0 170 120" className="w-full max-w-[150px] mx-auto select-none" aria-label="Ring 2D Diagram">
-      <defs>
-        <marker id="ring-arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-          <path d="M1,0.5 L5,3 L1,5.5 Z" fill="#27272a" className="dark:fill-zinc-300" />
-        </marker>
-        <marker id="ring-arr-l" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto">
-          <path d="M5,0.5 L1,3 L5,5.5 Z" fill="#27272a" className="dark:fill-zinc-300" />
-        </marker>
-      </defs>
-      <circle cx="65" cy="60" r="48" fill="none" stroke="#27272a" strokeWidth="1.5" className="dark:stroke-zinc-300" />
-      <circle cx="65" cy="60" r="28" fill="none" stroke="#27272a" strokeWidth="1.5" className="dark:stroke-zinc-300" />
-      <line x1="15" y1="112" x2="115" y2="112" stroke="#27272a" strokeWidth="1" markerStart="url(#ring-arr-l)" markerEnd="url(#ring-arr)" className="dark:stroke-zinc-300" />
-      <text x="65" y="120" textAnchor="middle" className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-medium">Outer Diameter</text>
-      <line x1="160" y1="60" x2="95" y2="60" stroke="#27272a" strokeWidth="1" markerEnd="url(#ring-arr)" className="dark:stroke-zinc-300" />
-      <text x="162" y="63" textAnchor="start" className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-medium">Border Width</text>
-    </svg>
-  );
-}
-
-function TriangleEdgesSvg() {
-  return (
-    <svg viewBox="0 0 160 110" className="w-full max-w-[140px] mx-auto select-none" aria-label="Triangle Edges Diagram">
-      <polygon points="40,20 135,100 15,100" fill="none" stroke="#27272a" strokeWidth="1.5" className="dark:stroke-zinc-300" />
-    </svg>
-  );
-}
-
-function TriangleBaseHeightSvg() {
-  return (
-    <svg viewBox="0 0 160 110" className="w-full max-w-[140px] mx-auto select-none" aria-label="Triangle Base Height Diagram">
-      <polygon points="50,20 140,95 15,95" fill="none" stroke="#27272a" strokeWidth="1.5" className="dark:stroke-zinc-300" />
-      <line x1="50" y1="20" x2="50" y2="95" stroke="#27272a" strokeWidth="1" strokeDasharray="3 2" className="dark:stroke-zinc-300" />
-      <rect x="50" y="87" width="8" height="8" fill="none" stroke="#27272a" strokeWidth="0.8" className="dark:stroke-zinc-300" />
-      <text x="45" y="60" textAnchor="end" className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-medium">Height</text>
-      <text x="75" y="106" textAnchor="middle" className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-medium">Base</text>
-    </svg>
-  );
-}
-
-function TrapezoidSvg() {
-  return (
-    <svg viewBox="0 0 160 110" className="w-full max-w-[140px] mx-auto select-none" aria-label="Trapezoid 2D Diagram">
-      <polygon points="45,30 115,30 145,90 15,90" fill="none" stroke="#27272a" strokeWidth="1.5" className="dark:stroke-zinc-300" />
-    </svg>
-  );
-}
-
-function SectorSvg() {
-  return (
-    <svg viewBox="0 0 160 115" className="w-full max-w-[145px] mx-auto select-none" aria-label="Sector 2D Diagram">
-      {/* Sector Shape */}
-      <path
-        d="M 30,57 L 102,12 A 85,85 0 0,1 102,102 Z"
-        fill="none"
-        stroke="#27272a"
+      {/* Outer Rectangle */}
+      <rect
+        x="15"
+        y="15"
+        width="100"
+        height="70"
+        fill="rgba(59, 130, 246, 0.1)"
+        stroke="#2563eb"
         strokeWidth="1.5"
-        strokeLinejoin="round"
-        className="dark:stroke-zinc-300"
+        className="dark:stroke-blue-400"
       />
-      {/* Blue Angle Arc */}
-      <path
-        d="M 55.4,41.1 A 30,30 0 0,1 55.4,72.9"
-        fill="none"
+      {/* Inner Rectangle */}
+      <rect
+        x="30"
+        y="28"
+        width="70"
+        height="44"
+        fill="white"
+        stroke="#2563eb"
+        strokeWidth="1"
+        strokeDasharray="2 2"
+        className="dark:fill-zinc-900 dark:stroke-blue-400"
+      />
+      {/* Bottom label */}
+      <text
+        x="65"
+        y="98"
+        textAnchor="middle"
+        className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-medium"
+      >
+        {safeL} × {safeW} {unit}
+      </text>
+      {/* Border dimension indicator */}
+      <line
+        x1="140"
+        y1="50"
+        x2="102"
+        y2="50"
+        stroke="#2563eb"
+        strokeWidth="1"
+        markerEnd="url(#rb-arrow)"
+        className="dark:stroke-blue-400"
+      />
+      <text
+        x="105"
+        y="42"
+        textAnchor="start"
+        className="text-[8px] fill-zinc-800 dark:fill-zinc-200 font-medium"
+      >
+        Border: {safeB} {unit}
+      </text>
+    </svg>
+  );
+}
+
+function CircleSvg({ diameter, unit }: { diameter: number; unit: string }) {
+  const safeD = diameter > 0 ? diameter : 30;
+  return (
+    <svg
+      viewBox="0 0 160 110"
+      className="w-full max-w-[150px] mx-auto select-none"
+      aria-label={`Circle diagram: diameter ${safeD} ${unit}`}
+    >
+      <defs>
+        <marker id="circ-arr" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+          <path d="M1,0.5 L4,2.5 L1,4.5 Z" fill="#2563eb" className="dark:fill-blue-400" />
+        </marker>
+        <marker id="circ-arr-l" markerWidth="5" markerHeight="5" refX="1" refY="2.5" orient="auto">
+          <path d="M4,0.5 L1,2.5 L4,4.5 Z" fill="#2563eb" className="dark:fill-blue-400" />
+        </marker>
+      </defs>
+      <circle
+        cx="80"
+        cy="52"
+        r="42"
+        fill="rgba(59, 130, 246, 0.08)"
+        stroke="#2563eb"
+        strokeWidth="1.5"
+        className="dark:stroke-blue-400"
+      />
+      {/* Diameter dimension line across center */}
+      <line
+        x1="38"
+        y1="52"
+        x2="122"
+        y2="52"
+        stroke="#2563eb"
+        strokeWidth="1"
+        strokeDasharray="2 2"
+        markerStart="url(#circ-arr-l)"
+        markerEnd="url(#circ-arr)"
+        className="dark:stroke-blue-400"
+      />
+      <circle cx="80" cy="52" r="2" fill="#2563eb" className="dark:fill-blue-400" />
+      <text
+        x="80"
+        y="47"
+        textAnchor="middle"
+        className="text-[9px] fill-zinc-800 dark:fill-zinc-200 font-semibold"
+      >
+        d = {safeD} {unit}
+      </text>
+      <text
+        x="80"
+        y="105"
+        textAnchor="middle"
+        className="text-[8.5px] fill-zinc-500 dark:text-zinc-400"
+      >
+        radius r = {safeD / 2} {unit}
+      </text>
+    </svg>
+  );
+}
+
+function RingSvg({
+  outerDia,
+  border,
+  unit,
+  isValid,
+}: {
+  outerDia: number;
+  border: number;
+  unit: string;
+  isValid?: boolean;
+}) {
+  if (isValid === false) {
+    return (
+      <svg
+        viewBox="0 0 170 120"
+        className="w-full max-w-[150px] mx-auto select-none"
+        aria-label="Invalid geometry diagram"
+      >
+        <circle
+          cx="85"
+          cy="60"
+          r="45"
+          fill="rgba(239, 68, 68, 0.05)"
+          stroke="#ef4444"
+          strokeWidth="1.5"
+          strokeDasharray="4 2"
+        />
+        <text
+          x="85"
+          y="64"
+          textAnchor="middle"
+          className="text-[10px] fill-red-600 dark:fill-red-400 font-bold"
+        >
+          Invalid Ring Geometry
+        </text>
+      </svg>
+    );
+  }
+
+  const safeD = outerDia > 0 ? outerDia : 30;
+  const safeB = border > 0 ? border : 2;
+  const innerD = Math.max(0, safeD - 2 * safeB);
+
+  return (
+    <svg
+      viewBox="0 0 170 120"
+      className="w-full max-w-[150px] mx-auto select-none"
+      aria-label={`Ring diagram: outer diameter ${safeD} ${unit}, border ${safeB} ${unit}`}
+    >
+      <defs>
+        <marker id="ring-arr" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+          <path d="M1,0.5 L4,2.5 L1,4.5 Z" fill="#2563eb" className="dark:fill-blue-400" />
+        </marker>
+        <marker id="ring-arr-l" markerWidth="5" markerHeight="5" refX="1" refY="2.5" orient="auto">
+          <path d="M4,0.5 L1,2.5 L4,4.5 Z" fill="#2563eb" className="dark:fill-blue-400" />
+        </marker>
+      </defs>
+      {/* Outer Circle */}
+      <circle
+        cx="65"
+        cy="55"
+        r="44"
+        fill="rgba(59, 130, 246, 0.12)"
+        stroke="#2563eb"
+        strokeWidth="1.5"
+        className="dark:stroke-blue-400"
+      />
+      {/* Inner Circle hole */}
+      <circle
+        cx="65"
+        cy="55"
+        r="24"
+        fill="white"
         stroke="#2563eb"
         strokeWidth="1.2"
+        strokeDasharray="2 2"
+        className="dark:fill-zinc-900 dark:stroke-blue-400"
+      />
+      {/* Dimension Line across bottom */}
+      <line
+        x1="21"
+        y1="108"
+        x2="109"
+        y2="108"
+        stroke="#2563eb"
+        strokeWidth="1"
+        markerStart="url(#ring-arr-l)"
+        markerEnd="url(#ring-arr)"
+        className="dark:stroke-blue-400"
+      />
+      <text
+        x="65"
+        y="117"
+        textAnchor="middle"
+        className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-medium"
+      >
+        Outer D = {safeD} {unit}
+      </text>
+      {/* Border Width Callout */}
+      <text
+        x="115"
+        y="50"
+        textAnchor="start"
+        className="text-[8px] fill-zinc-800 dark:fill-zinc-200 font-medium"
+      >
+        Border = {safeB} {unit}
+      </text>
+      <text
+        x="115"
+        y="62"
+        textAnchor="start"
+        className="text-[7.5px] fill-zinc-500 dark:fill-zinc-400"
+      >
+        Inner D = {innerD} {unit}
+      </text>
+    </svg>
+  );
+}
+
+function TriangleEdgesSvg({
+  a,
+  b,
+  c,
+  unit,
+}: {
+  a: number;
+  b: number;
+  c: number;
+  unit: string;
+}) {
+  const safeA = a > 0 ? a : 30;
+  const safeB = b > 0 ? b : 45;
+  const safeC = c > 0 ? c : 50;
+
+  return (
+    <svg
+      viewBox="0 0 160 110"
+      className="w-full max-w-[150px] mx-auto select-none"
+      aria-label={`Triangle Heron diagram: sides ${safeA}, ${safeB}, ${safeC} ${unit}`}
+    >
+      <polygon
+        points="45,22 135,92 18,92"
+        fill="rgba(59, 130, 246, 0.08)"
+        stroke="#2563eb"
+        strokeWidth="1.5"
+        className="dark:stroke-blue-400"
+      />
+      {/* Side a (left) */}
+      <text
+        x="24"
+        y="52"
+        textAnchor="end"
+        className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-semibold"
+      >
+        a = {safeA} {unit}
+      </text>
+      {/* Side b (right) */}
+      <text
+        x="98"
+        y="52"
+        textAnchor="start"
+        className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-semibold"
+      >
+        b = {safeB} {unit}
+      </text>
+      {/* Side c (bottom) */}
+      <text
+        x="76"
+        y="104"
+        textAnchor="middle"
+        className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-semibold"
+      >
+        c = {safeC} {unit}
+      </text>
+    </svg>
+  );
+}
+
+function TriangleBaseHeightSvg({
+  base,
+  height,
+  unit,
+}: {
+  base: number;
+  height: number;
+  unit: string;
+}) {
+  const safeB = base > 0 ? base : 30;
+  const safeH = height > 0 ? height : 20;
+
+  return (
+    <svg
+      viewBox="0 0 160 110"
+      className="w-full max-w-[150px] mx-auto select-none"
+      aria-label={`Triangle Base/Height diagram: base ${safeB} ${unit}, height ${safeH} ${unit}`}
+    >
+      <polygon
+        points="55,22 138,92 18,92"
+        fill="rgba(59, 130, 246, 0.08)"
+        stroke="#2563eb"
+        strokeWidth="1.5"
+        className="dark:stroke-blue-400"
+      />
+      {/* Dashed altitude height line */}
+      <line
+        x1="55"
+        y1="22"
+        x2="55"
+        y2="92"
+        stroke="#2563eb"
+        strokeWidth="1"
+        strokeDasharray="3 2"
+        className="dark:stroke-blue-400"
+      />
+      {/* Right angle indicator */}
+      <rect
+        x="55"
+        y="84"
+        width="8"
+        height="8"
+        fill="none"
+        stroke="#2563eb"
+        strokeWidth="0.8"
+        className="dark:stroke-blue-400"
+      />
+      <text
+        x="50"
+        y="58"
+        textAnchor="end"
+        className="text-[8.5px] fill-blue-600 dark:fill-blue-400 font-semibold"
+      >
+        h = {safeH} {unit}
+      </text>
+      <text
+        x="78"
+        y="104"
+        textAnchor="middle"
+        className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-semibold"
+      >
+        b = {safeB} {unit}
+      </text>
+    </svg>
+  );
+}
+
+function TrapezoidSvg({
+  b1,
+  b2,
+  h,
+  unit,
+}: {
+  b1: number;
+  b2: number;
+  h: number;
+  unit: string;
+}) {
+  const safeB1 = b1 > 0 ? b1 : 30;
+  const safeB2 = b2 > 0 ? b2 : 45;
+  const safeH = h > 0 ? h : 20;
+
+  return (
+    <svg
+      viewBox="0 0 160 110"
+      className="w-full max-w-[150px] mx-auto select-none"
+      aria-label={`Trapezoid diagram: b1 ${safeB1} ${unit}, b2 ${safeB2} ${unit}, height ${safeH} ${unit}`}
+    >
+      <polygon
+        points="45,28 115,28 145,88 15,88"
+        fill="rgba(59, 130, 246, 0.08)"
+        stroke="#2563eb"
+        strokeWidth="1.5"
+        className="dark:stroke-blue-400"
+      />
+      {/* Dashed height line */}
+      <line
+        x1="45"
+        y1="28"
+        x2="45"
+        y2="88"
+        stroke="#2563eb"
+        strokeWidth="1"
+        strokeDasharray="2 2"
+        className="dark:stroke-blue-400"
+      />
+      <text
+        x="80"
+        y="22"
+        textAnchor="middle"
+        className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-semibold"
+      >
+        b₁ = {safeB1} {unit}
+      </text>
+      <text
+        x="80"
+        y="102"
+        textAnchor="middle"
+        className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-semibold"
+      >
+        b₂ = {safeB2} {unit}
+      </text>
+      <text
+        x="40"
+        y="58"
+        textAnchor="end"
+        className="text-[8.5px] fill-blue-600 dark:fill-blue-400 font-semibold"
+      >
+        h = {safeH} {unit}
+      </text>
+    </svg>
+  );
+}
+
+function SectorSvg({
+  radius,
+  angle,
+  unit,
+  isValid,
+}: {
+  radius: number;
+  angle: number;
+  unit: string;
+  isValid?: boolean;
+}) {
+  if (isValid === false) {
+    return (
+      <svg
+        viewBox="0 0 160 115"
+        className="w-full max-w-[150px] mx-auto select-none"
+        aria-label="Invalid sector angle diagram"
+      >
+        <circle
+          cx="80"
+          cy="58"
+          r="40"
+          fill="rgba(239, 68, 68, 0.05)"
+          stroke="#ef4444"
+          strokeWidth="1.5"
+          strokeDasharray="4 2"
+        />
+        <text
+          x="80"
+          y="62"
+          textAnchor="middle"
+          className="text-[10px] fill-red-600 dark:fill-red-400 font-bold"
+        >
+          Invalid Angle (0°–360°)
+        </text>
+      </svg>
+    );
+  }
+
+  const safeR = radius > 0 ? radius : 30;
+  const safeA = Number.isFinite(angle) ? Math.max(0, Math.min(360, angle)) : 90;
+
+  // Render arc according to angle
+  const rad = (safeA * Math.PI) / 180;
+  const rPx = 65;
+  const cx = 35;
+  const cy = 60;
+  const xEnd = cx + rPx * Math.cos(-rad / 2);
+  const yEnd = cy + rPx * Math.sin(-rad / 2);
+  const xStart = cx + rPx * Math.cos(rad / 2);
+  const yStart = cy + rPx * Math.sin(rad / 2);
+  const largeArcFlag = safeA > 180 ? 1 : 0;
+
+  const pathD =
+    safeA >= 360
+      ? `M ${cx - rPx},${cy} A ${rPx},${rPx} 0 1,0 ${cx + rPx},${cy} A ${rPx},${rPx} 0 1,0 ${cx - rPx},${cy}`
+      : `M ${cx},${cy} L ${xEnd},${yEnd} A ${rPx},${rPx} 0 ${largeArcFlag},1 ${xStart},${yStart} Z`;
+
+  return (
+    <svg
+      viewBox="0 0 160 115"
+      className="w-full max-w-[150px] mx-auto select-none"
+      aria-label={`Sector diagram: radius ${safeR} ${unit}, central angle ${safeA}°`}
+    >
+      <path
+        d={pathD}
+        fill="rgba(59, 130, 246, 0.08)"
+        stroke="#2563eb"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
         className="dark:stroke-blue-400"
       />
       {/* Angle label */}
       <text
-        x="44"
-        y="60"
-        textAnchor="middle"
-        className="text-[9px] fill-blue-600 dark:fill-blue-400 font-semibold"
+        x={cx + 18}
+        y={cy + 3}
+        textAnchor="start"
+        className="text-[8.5px] fill-blue-600 dark:fill-blue-400 font-bold"
       >
-        angle
+        {safeA}°
       </text>
       {/* Radius label */}
       <text
-        x="72"
-        y="88"
+        x="95"
+        y="102"
         textAnchor="middle"
-        transform="rotate(32 72 88)"
-        className="text-[9px] fill-zinc-700 dark:fill-zinc-300 font-medium"
+        className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-semibold"
       >
-        radius
+        r = {safeR} {unit}
       </text>
     </svg>
   );
 }
 
-function ParallelogramSvg() {
+function ParallelogramSvg({
+  base,
+  height,
+  unit,
+}: {
+  base: number;
+  height: number;
+  unit: string;
+}) {
+  const safeB = base > 0 ? base : 30;
+  const safeH = height > 0 ? height : 20;
+
   return (
-    <svg viewBox="0 0 160 110" className="w-full max-w-[140px] mx-auto select-none" aria-label="Parallelogram 2D Diagram">
-      <polygon points="50,30 145,30 115,90 20,90" fill="none" stroke="#27272a" strokeWidth="1.5" className="dark:stroke-zinc-300" />
+    <svg
+      viewBox="0 0 160 110"
+      className="w-full max-w-[150px] mx-auto select-none"
+      aria-label={`Parallelogram diagram: base ${safeB} ${unit}, height ${safeH} ${unit}`}
+    >
+      <polygon
+        points="50,28 145,28 115,88 20,88"
+        fill="rgba(59, 130, 246, 0.08)"
+        stroke="#2563eb"
+        strokeWidth="1.5"
+        className="dark:stroke-blue-400"
+      />
+      {/* Dashed height indicator */}
+      <line
+        x1="50"
+        y1="28"
+        x2="50"
+        y2="88"
+        stroke="#2563eb"
+        strokeWidth="1"
+        strokeDasharray="2 2"
+        className="dark:stroke-blue-400"
+      />
+      <text
+        x="45"
+        y="58"
+        textAnchor="end"
+        className="text-[8.5px] fill-blue-600 dark:fill-blue-400 font-semibold"
+      >
+        h = {safeH} {unit}
+      </text>
+      <text
+        x="68"
+        y="102"
+        textAnchor="middle"
+        className="text-[8.5px] fill-zinc-800 dark:fill-zinc-200 font-semibold"
+      >
+        b = {safeB} {unit}
+      </text>
     </svg>
   );
 }
@@ -517,6 +1216,14 @@ function ParallelogramSvg() {
 // ─── MAIN COMPONENT ─────────────────────────────────────────────────────────
 
 export function SquareFootageCalculator() {
+  // Global feedback message for restored calculations
+  const [restoredToast, setRestoredToast] = useState<string | null>(null);
+
+  const showRestored = (msg: string) => {
+    setRestoredToast(msg);
+    setTimeout(() => setRestoredToast(null), 2500);
+  };
+
   // ─── CARD 1: RECTANGLE ───
   const [rectMode, setRectMode] = useState<"single" | "multi">("single");
   const [rectLength, setRectLength] = useState("30");
@@ -642,7 +1349,7 @@ export function SquareFootageCalculator() {
         priceUnit: rectPriceUnit,
       });
       setRectResult(res);
-      setMaterialPresetSqFt(String(res.squareFeet));
+      if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
     } else {
       const res = calculateMultiRoomArea(
         rooms,
@@ -651,7 +1358,7 @@ export function SquareFootageCalculator() {
         multiPriceUnit,
       );
       setMultiResult(res);
-      setMaterialPresetSqFt(String(res.wasteSquareFeet || res.squareFeet));
+      if (res.isValid) setMaterialPresetSqFt(String(res.wasteSquareFeet || res.squareFeet));
     }
   }, [
     rectMode,
@@ -679,6 +1386,7 @@ export function SquareFootageCalculator() {
       priceUnit: borderPriceUnit,
     });
     setBorderResult(res);
+    if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
   }, [borderLength, borderWidthVal, borderThickness, borderUnit, borderQty, borderPrice, borderPriceUnit]);
 
   const handleCircCalc = useCallback(() => {
@@ -691,6 +1399,7 @@ export function SquareFootageCalculator() {
       priceUnit: circPriceUnit,
     });
     setCircResult(res);
+    if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
   }, [circDiameter, circUnit, circQty, circPrice, circPriceUnit]);
 
   const handleRingCalc = useCallback(() => {
@@ -704,6 +1413,7 @@ export function SquareFootageCalculator() {
       priceUnit: ringPriceUnit,
     });
     setRingResult(res);
+    if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
   }, [ringOuterDia, ringBorderWidth, ringUnit, ringQty, ringPrice, ringPriceUnit]);
 
   const handleTriCalc = useCallback(() => {
@@ -719,6 +1429,7 @@ export function SquareFootageCalculator() {
         priceUnit: triPriceUnit,
       });
       setTriResult(res);
+      if (res && res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
     } else {
       const res = calculateTriangleBaseHeight({
         base: Number(triBase) || 0,
@@ -730,6 +1441,7 @@ export function SquareFootageCalculator() {
         priceUnit: triPriceUnit,
       });
       setTriResult(res);
+      if (res && res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
     }
   }, [triMode, triEdge1, triEdge2, triEdge3, triBase, triHeight, triUnit, triQty, triPrice, triPriceUnit]);
 
@@ -745,6 +1457,7 @@ export function SquareFootageCalculator() {
       priceUnit: trapPriceUnit,
     });
     setTrapResult(res);
+    if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
   }, [trapBase1, trapBase2, trapHeight, trapUnit, trapQty, trapPrice, trapPriceUnit]);
 
   const handleSectorCalc = useCallback(() => {
@@ -758,6 +1471,7 @@ export function SquareFootageCalculator() {
       priceUnit: sectorPriceUnit,
     });
     setSectorResult(res);
+    if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
   }, [sectorRadius, sectorAngle, sectorUnit, sectorQty, sectorPrice, sectorPriceUnit]);
 
   const handleParaCalc = useCallback(() => {
@@ -771,6 +1485,7 @@ export function SquareFootageCalculator() {
       priceUnit: paraPriceUnit,
     });
     setParaResult(res);
+    if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
   }, [paraBase, paraHeight, paraUnit, paraQty, paraPrice, paraPriceUnit]);
 
   // Recalculate material presets
@@ -826,10 +1541,218 @@ export function SquareFootageCalculator() {
     );
   };
 
+  // ─── Restore Handlers for All 8 Geometric Modules ───
+
+  const handleRestoreRect = (raw: Record<string, any>) => {
+    if (raw.mode === "single") {
+      setRectMode("single");
+      setRectLength(String(raw.length ?? "30"));
+      setRectWidth(String(raw.width ?? "20"));
+      setRectUnit(raw.unit ?? "feet");
+      setRectQty(String(raw.quantity ?? "1"));
+      setRectPrice(String(raw.price ?? ""));
+      setRectPriceUnit(raw.priceUnit ?? "per_sq_ft");
+      const res = calculateRectangleArea({
+        length: Number(raw.length) || 0,
+        width: Number(raw.width) || 0,
+        unit: raw.unit ?? "feet",
+        quantity: Number(raw.quantity) || 1,
+        wastePercent: 0,
+        price: Number(raw.price) || 0,
+        priceUnit: raw.priceUnit ?? "per_sq_ft",
+      });
+      setRectResult(res);
+      if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
+    } else {
+      setRectMode("multi");
+      if (Array.isArray(raw.rooms)) setRooms(raw.rooms);
+      setMultiWaste(String(raw.waste ?? "10"));
+      setMultiPrice(String(raw.price ?? ""));
+      setMultiPriceUnit(raw.priceUnit ?? "per_sq_ft");
+      const res = calculateMultiRoomArea(
+        raw.rooms ?? rooms,
+        Number(raw.waste) || 0,
+        Number(raw.price) || 0,
+        raw.priceUnit ?? "per_sq_ft",
+      );
+      setMultiResult(res);
+      if (res.isValid) setMaterialPresetSqFt(String(res.wasteSquareFeet || res.squareFeet));
+    }
+    showRestored("Rectangle calculation restored");
+  };
+
+  const handleRestoreBorder = (raw: Record<string, any>) => {
+    setBorderLength(String(raw.length ?? "30"));
+    setBorderWidthVal(String(raw.width ?? "20"));
+    setBorderThickness(String(raw.borderThickness ?? "2"));
+    setBorderUnit(raw.unit ?? "feet");
+    setBorderQty(String(raw.quantity ?? "1"));
+    setBorderPrice(String(raw.price ?? ""));
+    setBorderPriceUnit(raw.priceUnit ?? "per_sq_ft");
+    const res = calculateRectangleBorderArea({
+      outerLength: Number(raw.length) || 0,
+      outerWidth: Number(raw.width) || 0,
+      borderWidth: Number(raw.borderThickness) || 0,
+      unit: raw.unit ?? "feet",
+      quantity: Number(raw.quantity) || 1,
+      wastePercent: 0,
+      price: Number(raw.price) || 0,
+      priceUnit: raw.priceUnit ?? "per_sq_ft",
+    });
+    setBorderResult(res);
+    if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
+    showRestored("Rectangle border calculation restored");
+  };
+
+  const handleRestoreCirc = (raw: Record<string, any>) => {
+    setCircDiameter(String(raw.diameter ?? "30"));
+    setCircUnit(raw.unit ?? "feet");
+    setCircQty(String(raw.quantity ?? "1"));
+    setCircPrice(String(raw.price ?? ""));
+    setCircPriceUnit(raw.priceUnit ?? "per_sq_ft");
+    const res = calculateCircleArea({
+      diameter: Number(raw.diameter) || 0,
+      unit: raw.unit ?? "feet",
+      quantity: Number(raw.quantity) || 1,
+      wastePercent: 0,
+      price: Number(raw.price) || 0,
+      priceUnit: raw.priceUnit ?? "per_sq_ft",
+    });
+    setCircResult(res);
+    if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
+    showRestored("Circle calculation restored");
+  };
+
+  const handleRestoreRing = (raw: Record<string, any>) => {
+    setRingOuterDia(String(raw.outerDia ?? "30"));
+    setRingBorderWidth(String(raw.borderWidth ?? "2"));
+    setRingUnit(raw.unit ?? "feet");
+    setRingQty(String(raw.quantity ?? "1"));
+    setRingPrice(String(raw.price ?? ""));
+    setRingPriceUnit(raw.priceUnit ?? "per_sq_ft");
+    const res = calculateRingArea({
+      outerDiameter: Number(raw.outerDia) || 0,
+      borderWidth: Number(raw.borderWidth) || 0,
+      unit: raw.unit ?? "feet",
+      quantity: Number(raw.quantity) || 1,
+      wastePercent: 0,
+      price: Number(raw.price) || 0,
+      priceUnit: raw.priceUnit ?? "per_sq_ft",
+    });
+    setRingResult(res);
+    if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
+    showRestored("Ring calculation restored");
+  };
+
+  const handleRestoreTri = (raw: Record<string, any>) => {
+    const mode = raw.mode ?? "edges";
+    setTriMode(mode);
+    setTriEdge1(String(raw.edge1 ?? "30"));
+    setTriEdge2(String(raw.edge2 ?? "45"));
+    setTriEdge3(String(raw.edge3 ?? "50"));
+    setTriBase(String(raw.base ?? "30"));
+    setTriHeight(String(raw.height ?? "20"));
+    setTriUnit(raw.unit ?? "feet");
+    setTriQty(String(raw.quantity ?? "1"));
+    setTriPrice(String(raw.price ?? ""));
+    setTriPriceUnit(raw.priceUnit ?? "per_sq_ft");
+    let res: any;
+    if (mode === "edges") {
+      res = calculateTriangleHeron({
+        sideA: Number(raw.edge1) || 0,
+        sideB: Number(raw.edge2) || 0,
+        sideC: Number(raw.edge3) || 0,
+        unit: raw.unit ?? "feet",
+        quantity: Number(raw.quantity) || 1,
+        wastePercent: 0,
+        price: Number(raw.price) || 0,
+        priceUnit: raw.priceUnit ?? "per_sq_ft",
+      });
+    } else {
+      res = calculateTriangleBaseHeight({
+        base: Number(raw.base) || 0,
+        height: Number(raw.height) || 0,
+        unit: raw.unit ?? "feet",
+        quantity: Number(raw.quantity) || 1,
+        wastePercent: 0,
+        price: Number(raw.price) || 0,
+        priceUnit: raw.priceUnit ?? "per_sq_ft",
+      });
+    }
+    setTriResult(res);
+    if (res && res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
+    showRestored("Triangle calculation restored");
+  };
+
+  const handleRestoreTrap = (raw: Record<string, any>) => {
+    setTrapBase1(String(raw.base1 ?? "30"));
+    setTrapBase2(String(raw.base2 ?? "45"));
+    setTrapHeight(String(raw.height ?? "20"));
+    setTrapUnit(raw.unit ?? "feet");
+    setTrapQty(String(raw.quantity ?? "1"));
+    setTrapPrice(String(raw.price ?? ""));
+    setTrapPriceUnit(raw.priceUnit ?? "per_sq_ft");
+    const res = calculateTrapezoidArea({
+      base1: Number(raw.base1) || 0,
+      base2: Number(raw.base2) || 0,
+      height: Number(raw.height) || 0,
+      unit: raw.unit ?? "feet",
+      quantity: Number(raw.quantity) || 1,
+      wastePercent: 0,
+      price: Number(raw.price) || 0,
+      priceUnit: raw.priceUnit ?? "per_sq_ft",
+    });
+    setTrapResult(res);
+    if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
+    showRestored("Trapezoid calculation restored");
+  };
+
+  const handleRestoreSector = (raw: Record<string, any>) => {
+    setSectorRadius(String(raw.radius ?? "30"));
+    setSectorAngle(String(raw.angle ?? "90"));
+    setSectorUnit(raw.unit ?? "feet");
+    setSectorQty(String(raw.quantity ?? "1"));
+    setSectorPrice(String(raw.price ?? ""));
+    setSectorPriceUnit(raw.priceUnit ?? "per_sq_ft");
+    const res = calculateSectorArea({
+      radius: Number(raw.radius) || 0,
+      angleDegrees: Number(raw.angle) || 0,
+      unit: raw.unit ?? "feet",
+      quantity: Number(raw.quantity) || 1,
+      wastePercent: 0,
+      price: Number(raw.price) || 0,
+      priceUnit: raw.priceUnit ?? "per_sq_ft",
+    });
+    setSectorResult(res);
+    if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
+    showRestored("Sector calculation restored");
+  };
+
+  const handleRestorePara = (raw: Record<string, any>) => {
+    setParaBase(String(raw.base ?? "30"));
+    setParaHeight(String(raw.height ?? "20"));
+    setParaUnit(raw.unit ?? "feet");
+    setParaQty(String(raw.quantity ?? "1"));
+    setParaPrice(String(raw.price ?? ""));
+    setParaPriceUnit(raw.priceUnit ?? "per_sq_ft");
+    const res = calculateParallelogramArea({
+      base: Number(raw.base) || 0,
+      height: Number(raw.height) || 0,
+      unit: raw.unit ?? "feet",
+      quantity: Number(raw.quantity) || 1,
+      wastePercent: 0,
+      price: Number(raw.price) || 0,
+      priceUnit: raw.priceUnit ?? "per_sq_ft",
+    });
+    setParaResult(res);
+    if (res.isValid) setMaterialPresetSqFt(String(res.squareFeet));
+    showRestored("Parallelogram calculation restored");
+  };
+
   // Report Data
   const reportData: CalculatorReportData = useMemo(() => {
     const sections = [];
-    if (rectResult) {
+    if (rectResult && rectResult.isValid) {
       sections.push({
         title: "Rectangle",
         items: [
@@ -839,7 +1762,7 @@ export function SquareFootageCalculator() {
         ],
       });
     }
-    if (borderResult) {
+    if (borderResult && borderResult.isValid) {
       sections.push({
         title: "Rectangle Border",
         items: [
@@ -848,7 +1771,7 @@ export function SquareFootageCalculator() {
         ],
       });
     }
-    if (circResult) {
+    if (circResult && circResult.isValid) {
       sections.push({
         title: "Circle",
         items: [
@@ -856,7 +1779,7 @@ export function SquareFootageCalculator() {
         ],
       });
     }
-    if (ringResult) {
+    if (ringResult && ringResult.isValid) {
       sections.push({
         title: "Ring",
         items: [
@@ -864,7 +1787,7 @@ export function SquareFootageCalculator() {
         ],
       });
     }
-    if (triResult) {
+    if (triResult && triResult.isValid) {
       sections.push({
         title: "Triangle",
         items: [
@@ -872,7 +1795,7 @@ export function SquareFootageCalculator() {
         ],
       });
     }
-    if (trapResult) {
+    if (trapResult && trapResult.isValid) {
       sections.push({
         title: "Trapezoid",
         items: [
@@ -880,7 +1803,7 @@ export function SquareFootageCalculator() {
         ],
       });
     }
-    if (sectorResult) {
+    if (sectorResult && sectorResult.isValid) {
       sections.push({
         title: "Sector",
         items: [
@@ -888,7 +1811,7 @@ export function SquareFootageCalculator() {
         ],
       });
     }
-    if (paraResult) {
+    if (paraResult && paraResult.isValid) {
       sections.push({
         title: "Parallelogram",
         items: [
@@ -906,9 +1829,19 @@ export function SquareFootageCalculator() {
         currencySymbol: "$",
       },
       keyMetrics: [
-        { label: "Rectangle Area", value: rectResult ? `${rectResult.squareFeet.toLocaleString()} sq ft` : "—", highlight: true },
-        { label: "Trapezoid Area", value: trapResult ? `${trapResult.squareFeet.toLocaleString()} sq ft` : "—" },
-        { label: "Sector Area", value: sectorResult ? `${sectorResult.squareFeet.toLocaleString()} sq ft` : "—" },
+        {
+          label: "Rectangle Area",
+          value: rectResult && rectResult.isValid ? `${rectResult.squareFeet.toLocaleString()} sq ft` : "—",
+          highlight: true,
+        },
+        {
+          label: "Trapezoid Area",
+          value: trapResult && trapResult.isValid ? `${trapResult.squareFeet.toLocaleString()} sq ft` : "—",
+        },
+        {
+          label: "Sector Area",
+          value: sectorResult && sectorResult.isValid ? `${sectorResult.squareFeet.toLocaleString()} sq ft` : "—",
+        },
       ],
       sections,
     };
@@ -916,24 +1849,58 @@ export function SquareFootageCalculator() {
 
   return (
     <div className="space-y-4">
+      {/* Global Restore Confirmation Banner */}
+      {restoredToast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="no-print p-2.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-200 text-xs font-semibold rounded-lg flex items-center gap-2 shadow-xs transition-all animate-fadeIn"
+        >
+          <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>{restoredToast}</span>
+        </div>
+      )}
+
       {/* ═══════════════════ CARD 1: RECTANGLE ═══════════════════ */}
       <CardWrapper
         title="Rectangle"
-        hasResult={rectMode === "single" ? !!rectResult : !!multiResult}
+        hasResult={rectMode === "single" ? !!(rectResult && rectResult.isValid) : !!(multiResult && multiResult.isValid)}
         isSaved={rectSaveSuccess}
         savedCount={rectSaved.saved.length}
         onToggleSaved={() => rectSaved.setIsOpen(!rectSaved.isOpen)}
         onSave={() => {
-          if (rectMode === "single" && rectResult) {
-            rectSaved.save(`${rectLength}×${rectWidth} ${rectUnit}, Qty: ${rectQty}`, rectResult);
+          if (rectMode === "single" && rectResult && rectResult.isValid) {
+            rectSaved.save(
+              `${rectLength}×${rectWidth} ${rectUnit}, Qty: ${rectQty}`,
+              rectResult,
+              {
+                mode: "single",
+                length: rectLength,
+                width: rectWidth,
+                unit: rectUnit,
+                quantity: rectQty,
+                price: rectPrice,
+                priceUnit: rectPriceUnit,
+              },
+            );
             flashSave(setRectSaveSuccess);
-          } else if (rectMode === "multi" && multiResult) {
-            rectSaved.save(`Multi-room (${rooms.length} sections)`, multiResult);
+          } else if (rectMode === "multi" && multiResult && multiResult.isValid) {
+            rectSaved.save(
+              `Multi-room (${rooms.length} sections)`,
+              multiResult,
+              {
+                mode: "multi",
+                rooms: [...rooms],
+                waste: multiWaste,
+                price: multiPrice,
+                priceUnit: multiPriceUnit,
+              },
+            );
             flashSave(setRectSaveSuccess);
           }
         }}
       >
-        <div className="flex gap-2 text-xs pb-1 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="no-print flex gap-2 text-xs pb-1 border-b border-zinc-100 dark:border-zinc-800">
           <button
             type="button"
             onClick={() => setRectMode("single")}
@@ -961,13 +1928,47 @@ export function SquareFootageCalculator() {
         {rectMode === "single" ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <InputRow label="Length" value={rectLength} onChange={setRectLength} unit={rectUnit} onUnitChange={setRectUnit} />
-              <InputRow label="Width" value={rectWidth} onChange={setRectWidth} unit={rectUnit} onUnitChange={setRectUnit} />
-              <InputRow label="Quantity" value={rectQty} onChange={setRectQty} min={1} step={1} showUnit={false} />
-              <InputRow label="Price (optional)" value={rectPrice} onChange={setRectPrice} unit={rectPriceUnit} onUnitChange={setRectPriceUnit} unitOptions={PRICE_UNITS} min={0} />
+              <InputRow
+                id="rect-length"
+                label="Length"
+                value={rectLength}
+                onChange={setRectLength}
+                unit={rectUnit}
+                onUnitChange={setRectUnit}
+              />
+              <InputRow
+                id="rect-width"
+                label="Width"
+                value={rectWidth}
+                onChange={setRectWidth}
+                unit={rectUnit}
+                onUnitChange={setRectUnit}
+              />
+              <InputRow
+                id="rect-qty"
+                label="Quantity"
+                value={rectQty}
+                onChange={setRectQty}
+                min={1}
+                step={1}
+                showUnit={false}
+              />
+              <InputRow
+                id="rect-price"
+                label="Price (optional)"
+                value={rectPrice}
+                onChange={setRectPrice}
+                unit={rectPriceUnit}
+                onUnitChange={setRectPriceUnit}
+                unitOptions={PRICE_UNITS}
+                min={0}
+              />
 
-              <div className="flex gap-2 pt-1">
-                <Button onClick={handleRectCalc} className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer">
+              <div className="no-print flex gap-2 pt-1">
+                <Button
+                  onClick={handleRectCalc}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer"
+                >
                   Calculate
                 </Button>
                 <Button
@@ -985,16 +1986,23 @@ export function SquareFootageCalculator() {
               </div>
             </div>
             <div className="flex flex-col items-center justify-center">
-              <RectangleSvg l={Number(rectLength)} w={Number(rectWidth)} />
+              <RectangleSvg l={Number(rectLength)} w={Number(rectWidth)} unit={rectUnit} />
             </div>
           </div>
         ) : (
           <div className="space-y-3">
             <div className="space-y-2">
-              {rooms.map((room) => (
-                <div key={room.id} className="grid grid-cols-12 gap-2 items-center bg-slate-50 dark:bg-zinc-800/40 p-2 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs">
+              {rooms.map((room, idx) => (
+                <div
+                  key={room.id}
+                  className="grid grid-cols-12 gap-2 items-center bg-slate-50 dark:bg-zinc-800/40 p-2 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs"
+                >
                   <div className="col-span-3">
+                    <label htmlFor={`room-name-${room.id}`} className="sr-only">
+                      Room Name
+                    </label>
                     <Input
+                      id={`room-name-${room.id}`}
                       type="text"
                       value={room.name}
                       onChange={(e) => updateRoomRow(room.id, "name", e.target.value)}
@@ -1003,7 +2011,11 @@ export function SquareFootageCalculator() {
                     />
                   </div>
                   <div className="col-span-3">
+                    <label htmlFor={`room-length-${room.id}`} className="sr-only">
+                      Room Length
+                    </label>
                     <Input
+                      id={`room-length-${room.id}`}
                       type="number"
                       value={room.length}
                       onChange={(e) => updateRoomRow(room.id, "length", Number(e.target.value))}
@@ -1012,7 +2024,11 @@ export function SquareFootageCalculator() {
                     />
                   </div>
                   <div className="col-span-3">
+                    <label htmlFor={`room-width-${room.id}`} className="sr-only">
+                      Room Width
+                    </label>
                     <Input
+                      id={`room-width-${room.id}`}
                       type="number"
                       value={room.width}
                       onChange={(e) => updateRoomRow(room.id, "width", Number(e.target.value))}
@@ -1022,7 +2038,9 @@ export function SquareFootageCalculator() {
                   </div>
                   <div className="col-span-2">
                     <select
+                      id={`room-unit-${room.id}`}
                       value={room.unit}
+                      aria-label={`Room ${idx + 1} unit`}
                       onChange={(e) => updateRoomRow(room.id, "unit", e.target.value)}
                       className="w-full h-7 text-xs rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-1 text-zinc-700 dark:text-zinc-300"
                     >
@@ -1033,12 +2051,13 @@ export function SquareFootageCalculator() {
                       ))}
                     </select>
                   </div>
-                  <div className="col-span-1 flex justify-end">
+                  <div className="col-span-1 flex justify-end no-print">
                     <button
                       type="button"
                       onClick={() => removeRoomRow(room.id)}
                       disabled={rooms.length <= 1}
                       className="text-zinc-400 hover:text-red-500 disabled:opacity-30 p-1 cursor-pointer"
+                      aria-label={`Remove room ${room.name}`}
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -1047,7 +2066,7 @@ export function SquareFootageCalculator() {
               ))}
             </div>
 
-            <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center justify-between pt-1 no-print">
               <Button
                 variant="outline"
                 size="sm"
@@ -1056,15 +2075,21 @@ export function SquareFootageCalculator() {
               >
                 <Plus className="w-3.5 h-3.5" /> Add Room / Section
               </Button>
-              <Button onClick={handleRectCalc} className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-7 px-4 cursor-pointer">
+              <Button
+                onClick={handleRectCalc}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-7 px-4 cursor-pointer"
+              >
                 Calculate Total
               </Button>
             </div>
           </div>
         )}
 
-        {rectMode === "single" && rectResult && (
+        {rectMode === "single" && rectResult && rectResult.isValid && (
           <ResultDisplay
+            shapeName="Rectangle"
+            latexFormula="A = L \times W"
+            summaryText={`Rectangle: Length = ${rectLength} ${rectUnit}, Width = ${rectWidth} ${rectUnit}, Quantity = ${rectQty}, Area = ${rectResult.squareFeet.toLocaleString()} sq ft (${rectResult.squareYards} sq yd, ${rectResult.squareMeters} m²), Perimeter = ${rectResult.perimeterFt} ft${rectPrice ? `, Cost = $${rectResult.estimatedCost.toFixed(2)}` : ""}`}
             sqFt={rectResult.squareFeet}
             sqYd={rectResult.squareYards}
             sqM={rectResult.squareMeters}
@@ -1075,8 +2100,11 @@ export function SquareFootageCalculator() {
           />
         )}
 
-        {rectMode === "multi" && multiResult && (
+        {rectMode === "multi" && multiResult && multiResult.isValid && (
           <ResultDisplay
+            shapeName="Multi-Room Aggregator"
+            latexFormula="A_{\text{total}} = \sum_{i=1}^{n} (L_i \times W_i)"
+            summaryText={`Multi-Room: ${rooms.length} sections, Total Area = ${multiResult.squareFeet.toLocaleString()} sq ft (with ${multiWaste}% waste: ${multiResult.wasteSquareFeet.toLocaleString()} sq ft)`}
             sqFt={multiResult.squareFeet}
             sqYd={multiResult.squareYards}
             sqM={multiResult.squareMeters}
@@ -1093,32 +2121,86 @@ export function SquareFootageCalculator() {
           {...rectSaved}
           cardTitle="Rectangle"
           formatSummary={(r) => `${r.squareFeet.toLocaleString()} sq ft`}
+          onRestore={handleRestoreRect}
         />
       </CardWrapper>
 
       {/* ═══════════════════ CARD 2: RECTANGLE BORDER ═══════════════════ */}
       <CardWrapper
         title="Rectangle Border"
-        hasResult={!!borderResult}
+        hasResult={!!(borderResult && borderResult.isValid)}
         isSaved={borderSaveSuccess}
         savedCount={borderSaved.saved.length}
         onToggleSaved={() => borderSaved.setIsOpen(!borderSaved.isOpen)}
         onSave={() => {
-          if (!borderResult) return;
-          borderSaved.save(`Outer: ${borderLength}×${borderWidthVal}, Border: ${borderThickness} ${borderUnit}`, borderResult);
+          if (!borderResult || !borderResult.isValid) return;
+          borderSaved.save(
+            `Outer: ${borderLength}×${borderWidthVal}, Border: ${borderThickness} ${borderUnit}`,
+            borderResult,
+            {
+              length: borderLength,
+              width: borderWidthVal,
+              borderThickness,
+              unit: borderUnit,
+              quantity: borderQty,
+              price: borderPrice,
+              priceUnit: borderPriceUnit,
+            },
+          );
           flashSave(setBorderSaveSuccess);
         }}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <InputRow label="Length" value={borderLength} onChange={setBorderLength} unit={borderUnit} onUnitChange={setBorderUnit} />
-            <InputRow label="Width" value={borderWidthVal} onChange={setBorderWidthVal} unit={borderUnit} onUnitChange={setBorderUnit} />
-            <InputRow label="Border Width" value={borderThickness} onChange={setBorderThickness} unit={borderUnit} onUnitChange={setBorderUnit} />
-            <InputRow label="Quantity" value={borderQty} onChange={setBorderQty} min={1} step={1} showUnit={false} />
-            <InputRow label="Price (optional)" value={borderPrice} onChange={setBorderPrice} unit={borderPriceUnit} onUnitChange={setBorderPriceUnit} unitOptions={PRICE_UNITS} min={0} />
+            <InputRow
+              id="border-outer-length"
+              label="Length"
+              value={borderLength}
+              onChange={setBorderLength}
+              unit={borderUnit}
+              onUnitChange={setBorderUnit}
+            />
+            <InputRow
+              id="border-outer-width"
+              label="Width"
+              value={borderWidthVal}
+              onChange={setBorderWidthVal}
+              unit={borderUnit}
+              onUnitChange={setBorderUnit}
+            />
+            <InputRow
+              id="border-thickness"
+              label="Border Width"
+              value={borderThickness}
+              onChange={setBorderThickness}
+              unit={borderUnit}
+              onUnitChange={setBorderUnit}
+            />
+            <InputRow
+              id="border-qty"
+              label="Quantity"
+              value={borderQty}
+              onChange={setBorderQty}
+              min={1}
+              step={1}
+              showUnit={false}
+            />
+            <InputRow
+              id="border-price"
+              label="Price (optional)"
+              value={borderPrice}
+              onChange={setBorderPrice}
+              unit={borderPriceUnit}
+              onUnitChange={setBorderPriceUnit}
+              unitOptions={PRICE_UNITS}
+              min={0}
+            />
 
-            <div className="flex gap-2 pt-1">
-              <Button onClick={handleBorderCalc} className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer">
+            <div className="no-print flex gap-2 pt-1">
+              <Button
+                onClick={handleBorderCalc}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer"
+              >
                 Calculate
               </Button>
               <Button
@@ -1137,12 +2219,35 @@ export function SquareFootageCalculator() {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <RectangleBorderSvg />
+            <RectangleBorderSvg
+              outerL={Number(borderLength)}
+              outerW={Number(borderWidthVal)}
+              border={Number(borderThickness)}
+              unit={borderUnit}
+              isValid={borderResult ? borderResult.isValid : true}
+            />
           </div>
         </div>
 
-        {borderResult && (
+        {/* Validation Error Banner */}
+        {borderResult && !borderResult.isValid && (
+          <div
+            role="alert"
+            className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-300 dark:border-red-800 rounded-lg text-xs text-red-800 dark:text-red-200 flex items-start gap-2"
+          >
+            <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+            <div>
+              <div className="font-bold">Invalid Geometry</div>
+              <div>{borderResult.error}</div>
+            </div>
+          </div>
+        )}
+
+        {borderResult && borderResult.isValid && (
           <ResultDisplay
+            shapeName="Rectangle Border"
+            latexFormula="A = (L \times W) - ((L - 2b) \times (W - 2b))"
+            summaryText={`Rectangle Border: Outer = ${borderLength}×${borderWidthVal} ${borderUnit}, Border Width = ${borderThickness} ${borderUnit}, Net Border Area = ${borderResult.squareFeet.toLocaleString()} sq ft, Outer Area = ${borderResult.outerAreaSqFt} sq ft, Inner Area = ${borderResult.innerAreaSqFt} sq ft${borderPrice ? `, Cost = $${borderResult.estimatedCost.toFixed(2)}` : ""}`}
             sqFt={borderResult.squareFeet}
             sqYd={borderResult.squareYards}
             sqM={borderResult.squareMeters}
@@ -1157,30 +2262,68 @@ export function SquareFootageCalculator() {
           {...borderSaved}
           cardTitle="Border"
           formatSummary={(r) => `${r.squareFeet.toLocaleString()} sq ft`}
+          onRestore={handleRestoreBorder}
         />
       </CardWrapper>
 
       {/* ═══════════════════ CARD 3: CIRCLE ═══════════════════ */}
       <CardWrapper
         title="Circle"
-        hasResult={!!circResult}
+        hasResult={!!(circResult && circResult.isValid)}
         isSaved={circSaveSuccess}
         savedCount={circSaved.saved.length}
         onToggleSaved={() => circSaved.setIsOpen(!circSaved.isOpen)}
         onSave={() => {
-          if (!circResult) return;
-          circSaved.save(`Diameter: ${circDiameter} ${circUnit}`, circResult);
+          if (!circResult || !circResult.isValid) return;
+          circSaved.save(
+            `Diameter: ${circDiameter} ${circUnit}`,
+            circResult,
+            {
+              diameter: circDiameter,
+              unit: circUnit,
+              quantity: circQty,
+              price: circPrice,
+              priceUnit: circPriceUnit,
+            },
+          );
           flashSave(setCircSaveSuccess);
         }}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <InputRow label="Diameter" value={circDiameter} onChange={setCircDiameter} unit={circUnit} onUnitChange={setCircUnit} />
-            <InputRow label="Quantity" value={circQty} onChange={setCircQty} min={1} step={1} showUnit={false} />
-            <InputRow label="Price (optional)" value={circPrice} onChange={setCircPrice} unit={circPriceUnit} onUnitChange={setCircPriceUnit} unitOptions={PRICE_UNITS} min={0} />
+            <InputRow
+              id="circ-diameter"
+              label="Diameter"
+              value={circDiameter}
+              onChange={setCircDiameter}
+              unit={circUnit}
+              onUnitChange={setCircUnit}
+            />
+            <InputRow
+              id="circ-qty"
+              label="Quantity"
+              value={circQty}
+              onChange={setCircQty}
+              min={1}
+              step={1}
+              showUnit={false}
+            />
+            <InputRow
+              id="circ-price"
+              label="Price (optional)"
+              value={circPrice}
+              onChange={setCircPrice}
+              unit={circPriceUnit}
+              onUnitChange={setCircPriceUnit}
+              unitOptions={PRICE_UNITS}
+              min={0}
+            />
 
-            <div className="flex gap-2 pt-1">
-              <Button onClick={handleCircCalc} className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer">
+            <div className="no-print flex gap-2 pt-1">
+              <Button
+                onClick={handleCircCalc}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer"
+              >
                 Calculate
               </Button>
               <Button
@@ -1197,12 +2340,15 @@ export function SquareFootageCalculator() {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <CircleSvg />
+            <CircleSvg diameter={Number(circDiameter)} unit={circUnit} />
           </div>
         </div>
 
-        {circResult && (
+        {circResult && circResult.isValid && (
           <ResultDisplay
+            shapeName="Circle"
+            latexFormula="A = \pi r^2"
+            summaryText={`Circle: Diameter = ${circDiameter} ${circUnit} (radius = ${Number(circDiameter) / 2} ${circUnit}), Area = ${circResult.squareFeet.toLocaleString()} sq ft, Circumference = ${circResult.circumferenceFt} ft${circPrice ? `, Cost = $${circResult.estimatedCost.toFixed(2)}` : ""}`}
             sqFt={circResult.squareFeet}
             sqYd={circResult.squareYards}
             sqM={circResult.squareMeters}
@@ -1217,31 +2363,77 @@ export function SquareFootageCalculator() {
           {...circSaved}
           cardTitle="Circle"
           formatSummary={(r) => `${r.squareFeet.toLocaleString()} sq ft`}
+          onRestore={handleRestoreCirc}
         />
       </CardWrapper>
 
       {/* ═══════════════════ CARD 4: RING ═══════════════════ */}
       <CardWrapper
         title="Ring"
-        hasResult={!!ringResult}
+        hasResult={!!(ringResult && ringResult.isValid)}
         isSaved={ringSaveSuccess}
         savedCount={ringSaved.saved.length}
         onToggleSaved={() => ringSaved.setIsOpen(!ringSaved.isOpen)}
         onSave={() => {
-          if (!ringResult) return;
-          ringSaved.save(`Outer Dia: ${ringOuterDia}, Border: ${ringBorderWidth} ${ringUnit}`, ringResult);
+          if (!ringResult || !ringResult.isValid) return;
+          ringSaved.save(
+            `Outer Dia: ${ringOuterDia}, Border: ${ringBorderWidth} ${ringUnit}`,
+            ringResult,
+            {
+              outerDia: ringOuterDia,
+              borderWidth: ringBorderWidth,
+              unit: ringUnit,
+              quantity: ringQty,
+              price: ringPrice,
+              priceUnit: ringPriceUnit,
+            },
+          );
           flashSave(setRingSaveSuccess);
         }}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <InputRow label="Outer Diameter" value={ringOuterDia} onChange={setRingOuterDia} unit={ringUnit} onUnitChange={setRingUnit} />
-            <InputRow label="Border Width" value={ringBorderWidth} onChange={setRingBorderWidth} unit={ringUnit} onUnitChange={setRingUnit} />
-            <InputRow label="Quantity" value={ringQty} onChange={setRingQty} min={1} step={1} showUnit={false} />
-            <InputRow label="Price (optional)" value={ringPrice} onChange={setRingPrice} unit={ringPriceUnit} onUnitChange={setRingPriceUnit} unitOptions={PRICE_UNITS} min={0} />
+            <InputRow
+              id="ring-outer-dia"
+              label="Outer Diameter"
+              value={ringOuterDia}
+              onChange={setRingOuterDia}
+              unit={ringUnit}
+              onUnitChange={setRingUnit}
+            />
+            <InputRow
+              id="ring-border-width"
+              label="Border Width"
+              value={ringBorderWidth}
+              onChange={setRingBorderWidth}
+              unit={ringUnit}
+              onUnitChange={setRingUnit}
+            />
+            <InputRow
+              id="ring-qty"
+              label="Quantity"
+              value={ringQty}
+              onChange={setRingQty}
+              min={1}
+              step={1}
+              showUnit={false}
+            />
+            <InputRow
+              id="ring-price"
+              label="Price (optional)"
+              value={ringPrice}
+              onChange={setRingPrice}
+              unit={ringPriceUnit}
+              onUnitChange={setRingPriceUnit}
+              unitOptions={PRICE_UNITS}
+              min={0}
+            />
 
-            <div className="flex gap-2 pt-1">
-              <Button onClick={handleRingCalc} className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer">
+            <div className="no-print flex gap-2 pt-1">
+              <Button
+                onClick={handleRingCalc}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer"
+              >
                 Calculate
               </Button>
               <Button
@@ -1259,12 +2451,34 @@ export function SquareFootageCalculator() {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <RingSvg />
+            <RingSvg
+              outerDia={Number(ringOuterDia)}
+              border={Number(ringBorderWidth)}
+              unit={ringUnit}
+              isValid={ringResult ? ringResult.isValid : true}
+            />
           </div>
         </div>
 
-        {ringResult && (
+        {/* Validation Error Banner */}
+        {ringResult && !ringResult.isValid && (
+          <div
+            role="alert"
+            className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-300 dark:border-red-800 rounded-lg text-xs text-red-800 dark:text-red-200 flex items-start gap-2"
+          >
+            <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+            <div>
+              <div className="font-bold">Invalid Geometry</div>
+              <div>{ringResult.error}</div>
+            </div>
+          </div>
+        )}
+
+        {ringResult && ringResult.isValid && (
           <ResultDisplay
+            shapeName="Ring"
+            latexFormula="A = \pi(R^2 - r^2)"
+            summaryText={`Ring: Outer Diameter = ${ringOuterDia} ${ringUnit}, Border Width = ${ringBorderWidth} ${ringUnit}, Inner Diameter = ${ringResult.innerDiameterFt} ft, Area = ${ringResult.squareFeet.toLocaleString()} sq ft${ringPrice ? `, Cost = $${ringResult.estimatedCost.toFixed(2)}` : ""}`}
             sqFt={ringResult.squareFeet}
             sqYd={ringResult.squareYards}
             sqM={ringResult.squareMeters}
@@ -1279,23 +2493,39 @@ export function SquareFootageCalculator() {
           {...ringSaved}
           cardTitle="Ring"
           formatSummary={(r) => `${r.squareFeet.toLocaleString()} sq ft`}
+          onRestore={handleRestoreRing}
         />
       </CardWrapper>
 
       {/* ═══════════════════ CARD 5: TRIANGLE ═══════════════════ */}
       <CardWrapper
         title="Triangle with Edge Lengths & Base/Height"
-        hasResult={!!triResult}
+        hasResult={!!(triResult && triResult.isValid)}
         isSaved={triSaveSuccess}
         savedCount={triSaved.saved.length}
         onToggleSaved={() => triSaved.setIsOpen(!triSaved.isOpen)}
         onSave={() => {
-          if (!triResult) return;
-          triSaved.save(`Triangle: ${triResult.squareFeet} sq ft`, triResult);
+          if (!triResult || !triResult.isValid) return;
+          triSaved.save(
+            `Triangle (${triMode}): ${triResult.squareFeet.toLocaleString()} sq ft`,
+            triResult,
+            {
+              mode: triMode,
+              edge1: triEdge1,
+              edge2: triEdge2,
+              edge3: triEdge3,
+              base: triBase,
+              height: triHeight,
+              unit: triUnit,
+              quantity: triQty,
+              price: triPrice,
+              priceUnit: triPriceUnit,
+            },
+          );
           flashSave(setTriSaveSuccess);
         }}
       >
-        <div className="flex gap-2 text-xs pb-1 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="no-print flex gap-2 text-xs pb-1 border-b border-zinc-100 dark:border-zinc-800">
           <button
             type="button"
             onClick={() => setTriMode("edges")}
@@ -1324,22 +2554,77 @@ export function SquareFootageCalculator() {
           <div className="space-y-2">
             {triMode === "edges" ? (
               <>
-                <InputRow label="Edge 1 (a)" value={triEdge1} onChange={setTriEdge1} unit={triUnit} onUnitChange={setTriUnit} />
-                <InputRow label="Edge 2 (b)" value={triEdge2} onChange={setTriEdge2} unit={triUnit} onUnitChange={setTriUnit} />
-                <InputRow label="Edge 3 (c)" value={triEdge3} onChange={setTriEdge3} unit={triUnit} onUnitChange={setTriUnit} />
+                <InputRow
+                  id="tri-edge1"
+                  label="Edge 1 (a)"
+                  value={triEdge1}
+                  onChange={setTriEdge1}
+                  unit={triUnit}
+                  onUnitChange={setTriUnit}
+                />
+                <InputRow
+                  id="tri-edge2"
+                  label="Edge 2 (b)"
+                  value={triEdge2}
+                  onChange={setTriEdge2}
+                  unit={triUnit}
+                  onUnitChange={setTriUnit}
+                />
+                <InputRow
+                  id="tri-edge3"
+                  label="Edge 3 (c)"
+                  value={triEdge3}
+                  onChange={setTriEdge3}
+                  unit={triUnit}
+                  onUnitChange={setTriUnit}
+                />
               </>
             ) : (
               <>
-                <InputRow label="Base" value={triBase} onChange={setTriBase} unit={triUnit} onUnitChange={setTriUnit} />
-                <InputRow label="Height" value={triHeight} onChange={setTriHeight} unit={triUnit} onUnitChange={setTriUnit} />
+                <InputRow
+                  id="tri-base"
+                  label="Base"
+                  value={triBase}
+                  onChange={setTriBase}
+                  unit={triUnit}
+                  onUnitChange={setTriUnit}
+                />
+                <InputRow
+                  id="tri-height"
+                  label="Height"
+                  value={triHeight}
+                  onChange={setTriHeight}
+                  unit={triUnit}
+                  onUnitChange={setTriUnit}
+                />
               </>
             )}
 
-            <InputRow label="Quantity" value={triQty} onChange={setTriQty} min={1} step={1} showUnit={false} />
-            <InputRow label="Price (optional)" value={triPrice} onChange={setTriPrice} unit={triPriceUnit} onUnitChange={setTriPriceUnit} unitOptions={PRICE_UNITS} min={0} />
+            <InputRow
+              id="tri-qty"
+              label="Quantity"
+              value={triQty}
+              onChange={setTriQty}
+              min={1}
+              step={1}
+              showUnit={false}
+            />
+            <InputRow
+              id="tri-price"
+              label="Price (optional)"
+              value={triPrice}
+              onChange={setTriPrice}
+              unit={triPriceUnit}
+              onUnitChange={setTriPriceUnit}
+              unitOptions={PRICE_UNITS}
+              min={0}
+            />
 
-            <div className="flex gap-2 pt-1">
-              <Button onClick={handleTriCalc} className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer">
+            <div className="no-print flex gap-2 pt-1">
+              <Button
+                onClick={handleTriCalc}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer"
+              >
                 Calculate
               </Button>
               <Button
@@ -1360,12 +2645,36 @@ export function SquareFootageCalculator() {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
-            {triMode === "edges" ? <TriangleEdgesSvg /> : <TriangleBaseHeightSvg />}
+            {triMode === "edges" ? (
+              <TriangleEdgesSvg
+                a={Number(triEdge1)}
+                b={Number(triEdge2)}
+                c={Number(triEdge3)}
+                unit={triUnit}
+              />
+            ) : (
+              <TriangleBaseHeightSvg
+                base={Number(triBase)}
+                height={Number(triHeight)}
+                unit={triUnit}
+              />
+            )}
           </div>
         </div>
 
-        {triResult && (
+        {triResult && triResult.isValid && (
           <ResultDisplay
+            shapeName={`Triangle (${triMode === "edges" ? "3 Sides" : "Base & Height"})`}
+            latexFormula={
+              triMode === "edges"
+                ? "A = \\sqrt{s(s-a)(s-b)(s-c)}"
+                : "A = \\frac{1}{2}bh"
+            }
+            summaryText={
+              triMode === "edges"
+                ? `Triangle (Heron): a = ${triEdge1}, b = ${triEdge2}, c = ${triEdge3} ${triUnit}, Area = ${triResult.squareFeet.toLocaleString()} sq ft${triPrice ? `, Cost = $${triResult.estimatedCost.toFixed(2)}` : ""}`
+                : `Triangle (Base/Height): Base = ${triBase}, Height = ${triHeight} ${triUnit}, Area = ${triResult.squareFeet.toLocaleString()} sq ft${triPrice ? `, Cost = $${triResult.estimatedCost.toFixed(2)}` : ""}`
+            }
             sqFt={triResult.squareFeet}
             sqYd={triResult.squareYards}
             sqM={triResult.squareMeters}
@@ -1378,32 +2687,86 @@ export function SquareFootageCalculator() {
           {...triSaved}
           cardTitle="Triangle"
           formatSummary={(r) => `${r.squareFeet.toLocaleString()} sq ft`}
+          onRestore={handleRestoreTri}
         />
       </CardWrapper>
 
       {/* ═══════════════════ CARD 6: TRAPEZOID ═══════════════════ */}
       <CardWrapper
         title="Trapezoid"
-        hasResult={!!trapResult}
+        hasResult={!!(trapResult && trapResult.isValid)}
         isSaved={trapSaveSuccess}
         savedCount={trapSaved.saved.length}
         onToggleSaved={() => trapSaved.setIsOpen(!trapSaved.isOpen)}
         onSave={() => {
-          if (!trapResult) return;
-          trapSaved.save(`Base1: ${trapBase1}, Base2: ${trapBase2}, H: ${trapHeight} ${trapUnit}`, trapResult);
+          if (!trapResult || !trapResult.isValid) return;
+          trapSaved.save(
+            `Base1: ${trapBase1}, Base2: ${trapBase2}, H: ${trapHeight} ${trapUnit}`,
+            trapResult,
+            {
+              base1: trapBase1,
+              base2: trapBase2,
+              height: trapHeight,
+              unit: trapUnit,
+              quantity: trapQty,
+              price: trapPrice,
+              priceUnit: trapPriceUnit,
+            },
+          );
           flashSave(setTrapSaveSuccess);
         }}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <InputRow label="Base 1" value={trapBase1} onChange={setTrapBase1} unit={trapUnit} onUnitChange={setTrapUnit} />
-            <InputRow label="Base 2" value={trapBase2} onChange={setTrapBase2} unit={trapUnit} onUnitChange={setTrapUnit} />
-            <InputRow label="Height" value={trapHeight} onChange={setTrapHeight} unit={trapUnit} onUnitChange={setTrapUnit} />
-            <InputRow label="Quantity" value={trapQty} onChange={setTrapQty} min={1} step={1} showUnit={false} />
-            <InputRow label="Price (optional)" value={trapPrice} onChange={setTrapPrice} unit={trapPriceUnit} onUnitChange={setTrapPriceUnit} unitOptions={PRICE_UNITS} min={0} />
+            <InputRow
+              id="trap-base1"
+              label="Base 1"
+              value={trapBase1}
+              onChange={setTrapBase1}
+              unit={trapUnit}
+              onUnitChange={setTrapUnit}
+            />
+            <InputRow
+              id="trap-base2"
+              label="Base 2"
+              value={trapBase2}
+              onChange={setTrapBase2}
+              unit={trapUnit}
+              onUnitChange={setTrapUnit}
+            />
+            <InputRow
+              id="trap-height"
+              label="Height"
+              value={trapHeight}
+              onChange={setTrapHeight}
+              unit={trapUnit}
+              onUnitChange={setTrapUnit}
+            />
+            <InputRow
+              id="trap-qty"
+              label="Quantity"
+              value={trapQty}
+              onChange={setTrapQty}
+              min={1}
+              step={1}
+              showUnit={false}
+            />
+            <InputRow
+              id="trap-price"
+              label="Price (optional)"
+              value={trapPrice}
+              onChange={setTrapPrice}
+              unit={trapPriceUnit}
+              onUnitChange={setTrapPriceUnit}
+              unitOptions={PRICE_UNITS}
+              min={0}
+            />
 
-            <div className="flex gap-2 pt-1">
-              <Button onClick={handleTrapCalc} className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer">
+            <div className="no-print flex gap-2 pt-1">
+              <Button
+                onClick={handleTrapCalc}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer"
+              >
                 Calculate
               </Button>
               <Button
@@ -1422,12 +2785,20 @@ export function SquareFootageCalculator() {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <TrapezoidSvg />
+            <TrapezoidSvg
+              b1={Number(trapBase1)}
+              b2={Number(trapBase2)}
+              h={Number(trapHeight)}
+              unit={trapUnit}
+            />
           </div>
         </div>
 
-        {trapResult && (
+        {trapResult && trapResult.isValid && (
           <ResultDisplay
+            shapeName="Trapezoid"
+            latexFormula="A = \\frac{b_1 + b_2}{2}h"
+            summaryText={`Trapezoid: Base 1 = ${trapBase1} ${trapUnit}, Base 2 = ${trapBase2} ${trapUnit}, Height = ${trapHeight} ${trapUnit}, Area = ${trapResult.squareFeet.toLocaleString()} sq ft${trapPrice ? `, Cost = $${trapResult.estimatedCost.toFixed(2)}` : ""}`}
             sqFt={trapResult.squareFeet}
             sqYd={trapResult.squareYards}
             sqM={trapResult.squareMeters}
@@ -1440,31 +2811,79 @@ export function SquareFootageCalculator() {
           {...trapSaved}
           cardTitle="Trapezoid"
           formatSummary={(r) => `${r.squareFeet.toLocaleString()} sq ft`}
+          onRestore={handleRestoreTrap}
         />
       </CardWrapper>
 
       {/* ═══════════════════ CARD 7: SECTOR ═══════════════════ */}
       <CardWrapper
         title="Sector"
-        hasResult={!!sectorResult}
+        hasResult={!!(sectorResult && sectorResult.isValid)}
         isSaved={sectorSaveSuccess}
         savedCount={sectorSaved.saved.length}
         onToggleSaved={() => sectorSaved.setIsOpen(!sectorSaved.isOpen)}
         onSave={() => {
-          if (!sectorResult) return;
-          sectorSaved.save(`Radius: ${sectorRadius} ${sectorUnit}, Angle: ${sectorAngle}°`, sectorResult);
+          if (!sectorResult || !sectorResult.isValid) return;
+          sectorSaved.save(
+            `Radius: ${sectorRadius} ${sectorUnit}, Angle: ${sectorAngle}°`,
+            sectorResult,
+            {
+              radius: sectorRadius,
+              angle: sectorAngle,
+              unit: sectorUnit,
+              quantity: sectorQty,
+              price: sectorPrice,
+              priceUnit: sectorPriceUnit,
+            },
+          );
           flashSave(setSectorSaveSuccess);
         }}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <InputRow label="Radius" value={sectorRadius} onChange={setSectorRadius} unit={sectorUnit} onUnitChange={setSectorUnit} />
-            <InputRow label="Angle (degree °)" value={sectorAngle} onChange={setSectorAngle} min={1} max={360} step={1} showUnit={false} />
-            <InputRow label="Quantity" value={sectorQty} onChange={setSectorQty} min={1} step={1} showUnit={false} />
-            <InputRow label="Price (optional)" value={sectorPrice} onChange={setSectorPrice} unit={sectorPriceUnit} onUnitChange={setSectorPriceUnit} unitOptions={PRICE_UNITS} min={0} />
+            <InputRow
+              id="sector-radius"
+              label="Radius"
+              value={sectorRadius}
+              onChange={setSectorRadius}
+              unit={sectorUnit}
+              onUnitChange={setSectorUnit}
+            />
+            <InputRow
+              id="sector-angle"
+              label="Angle (degree °)"
+              value={sectorAngle}
+              onChange={setSectorAngle}
+              min={0}
+              max={360}
+              step={1}
+              showUnit={false}
+            />
+            <InputRow
+              id="sector-qty"
+              label="Quantity"
+              value={sectorQty}
+              onChange={setSectorQty}
+              min={1}
+              step={1}
+              showUnit={false}
+            />
+            <InputRow
+              id="sector-price"
+              label="Price (optional)"
+              value={sectorPrice}
+              onChange={setSectorPrice}
+              unit={sectorPriceUnit}
+              onUnitChange={setSectorPriceUnit}
+              unitOptions={PRICE_UNITS}
+              min={0}
+            />
 
-            <div className="flex gap-2 pt-1">
-              <Button onClick={handleSectorCalc} className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer">
+            <div className="no-print flex gap-2 pt-1">
+              <Button
+                onClick={handleSectorCalc}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer"
+              >
                 Calculate
               </Button>
               <Button
@@ -1482,12 +2901,34 @@ export function SquareFootageCalculator() {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <SectorSvg />
+            <SectorSvg
+              radius={Number(sectorRadius)}
+              angle={Number(sectorAngle)}
+              unit={sectorUnit}
+              isValid={sectorResult ? sectorResult.isValid : true}
+            />
           </div>
         </div>
 
-        {sectorResult && (
+        {/* Validation Error Banner */}
+        {sectorResult && !sectorResult.isValid && (
+          <div
+            role="alert"
+            className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-300 dark:border-red-800 rounded-lg text-xs text-red-800 dark:text-red-200 flex items-start gap-2"
+          >
+            <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+            <div>
+              <div className="font-bold">Invalid Geometry</div>
+              <div>{sectorResult.error}</div>
+            </div>
+          </div>
+        )}
+
+        {sectorResult && sectorResult.isValid && (
           <ResultDisplay
+            shapeName="Sector"
+            latexFormula="A = \\frac{\\theta}{360}\\pi r^2"
+            summaryText={`Sector: Radius = ${sectorRadius} ${sectorUnit}, Angle = ${sectorAngle}°, Area = ${sectorResult.squareFeet.toLocaleString()} sq ft, Arc Length = ${sectorResult.arcLengthFt} ft${sectorPrice ? `, Cost = $${sectorResult.estimatedCost.toFixed(2)}` : ""}`}
             sqFt={sectorResult.squareFeet}
             sqYd={sectorResult.squareYards}
             sqM={sectorResult.squareMeters}
@@ -1502,31 +2943,77 @@ export function SquareFootageCalculator() {
           {...sectorSaved}
           cardTitle="Sector"
           formatSummary={(r) => `${r.squareFeet.toLocaleString()} sq ft`}
+          onRestore={handleRestoreSector}
         />
       </CardWrapper>
 
       {/* ═══════════════════ CARD 8: PARALLELOGRAM ═══════════════════ */}
       <CardWrapper
         title="Parallelogram"
-        hasResult={!!paraResult}
+        hasResult={!!(paraResult && paraResult.isValid)}
         isSaved={paraSaveSuccess}
         savedCount={paraSaved.saved.length}
         onToggleSaved={() => paraSaved.setIsOpen(!paraSaved.isOpen)}
         onSave={() => {
-          if (!paraResult) return;
-          paraSaved.save(`Base: ${paraBase}, Height: ${paraHeight} ${paraUnit}`, paraResult);
+          if (!paraResult || !paraResult.isValid) return;
+          paraSaved.save(
+            `Base: ${paraBase}, Height: ${paraHeight} ${paraUnit}`,
+            paraResult,
+            {
+              base: paraBase,
+              height: paraHeight,
+              unit: paraUnit,
+              quantity: paraQty,
+              price: paraPrice,
+              priceUnit: paraPriceUnit,
+            },
+          );
           flashSave(setParaSaveSuccess);
         }}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <InputRow label="Base" value={paraBase} onChange={setParaBase} unit={paraUnit} onUnitChange={setParaUnit} />
-            <InputRow label="Height" value={paraHeight} onChange={setParaHeight} unit={paraUnit} onUnitChange={setParaUnit} />
-            <InputRow label="Quantity" value={paraQty} onChange={setParaQty} min={1} step={1} showUnit={false} />
-            <InputRow label="Price (optional)" value={paraPrice} onChange={setParaPrice} unit={paraPriceUnit} onUnitChange={setParaPriceUnit} unitOptions={PRICE_UNITS} min={0} />
+            <InputRow
+              id="para-base"
+              label="Base"
+              value={paraBase}
+              onChange={setParaBase}
+              unit={paraUnit}
+              onUnitChange={setParaUnit}
+            />
+            <InputRow
+              id="para-height"
+              label="Height"
+              value={paraHeight}
+              onChange={setParaHeight}
+              unit={paraUnit}
+              onUnitChange={setParaUnit}
+            />
+            <InputRow
+              id="para-qty"
+              label="Quantity"
+              value={paraQty}
+              onChange={setParaQty}
+              min={1}
+              step={1}
+              showUnit={false}
+            />
+            <InputRow
+              id="para-price"
+              label="Price (optional)"
+              value={paraPrice}
+              onChange={setParaPrice}
+              unit={paraPriceUnit}
+              onUnitChange={setParaPriceUnit}
+              unitOptions={PRICE_UNITS}
+              min={0}
+            />
 
-            <div className="flex gap-2 pt-1">
-              <Button onClick={handleParaCalc} className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer">
+            <div className="no-print flex gap-2 pt-1">
+              <Button
+                onClick={handleParaCalc}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer"
+              >
                 Calculate
               </Button>
               <Button
@@ -1544,12 +3031,19 @@ export function SquareFootageCalculator() {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <ParallelogramSvg />
+            <ParallelogramSvg
+              base={Number(paraBase)}
+              height={Number(paraHeight)}
+              unit={paraUnit}
+            />
           </div>
         </div>
 
-        {paraResult && (
+        {paraResult && paraResult.isValid && (
           <ResultDisplay
+            shapeName="Parallelogram"
+            latexFormula="A = bh"
+            summaryText={`Parallelogram: Base = ${paraBase} ${paraUnit}, Height = ${paraHeight} ${paraUnit}, Area = ${paraResult.squareFeet.toLocaleString()} sq ft${paraPrice ? `, Cost = $${paraResult.estimatedCost.toFixed(2)}` : ""}`}
             sqFt={paraResult.squareFeet}
             sqYd={paraResult.squareYards}
             sqM={paraResult.squareMeters}
@@ -1562,6 +3056,7 @@ export function SquareFootageCalculator() {
           {...paraSaved}
           cardTitle="Parallelogram"
           formatSummary={(r) => `${r.squareFeet.toLocaleString()} sq ft`}
+          onRestore={handleRestorePara}
         />
       </CardWrapper>
 
@@ -1570,10 +3065,15 @@ export function SquareFootageCalculator() {
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+              <label
+                htmlFor="target-surface-area"
+                className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 cursor-pointer"
+              >
                 Target Surface Area:
               </label>
               <Input
+                id="target-surface-area"
+                name="target-surface-area"
                 type="number"
                 value={materialPresetSqFt}
                 onChange={(e) => setMaterialPresetSqFt(e.target.value)}
@@ -1583,7 +3083,7 @@ export function SquareFootageCalculator() {
               <span className="text-xs text-zinc-500 font-medium">sq ft</span>
             </div>
 
-            <div className="flex items-center gap-1.5 text-[11px] text-zinc-500">
+            <div className="no-print flex items-center gap-1.5 text-[11px] text-zinc-500">
               <Sparkles className="w-3.5 h-3.5 text-blue-500" />
               <span>Auto-synced from latest calculation</span>
             </div>
@@ -1592,35 +3092,45 @@ export function SquareFootageCalculator() {
           {materials && (
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs">
               <div className="p-2.5 bg-slate-50 dark:bg-zinc-800/60 rounded border border-slate-200 dark:border-zinc-700/60">
-                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">Tile Boxes</span>
+                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">
+                  Tile Boxes
+                </span>
                 <span className="text-base font-bold text-zinc-800 dark:text-zinc-200 font-sans tabular-nums">
                   {materials.tileBoxes}
                 </span>
                 <span className="text-[10px] text-zinc-400 block">@ 10 sq ft/box</span>
               </div>
               <div className="p-2.5 bg-slate-50 dark:bg-zinc-800/60 rounded border border-slate-200 dark:border-zinc-700/60">
-                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">Hardwood Flooring</span>
+                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">
+                  Hardwood Flooring
+                </span>
                 <span className="text-base font-bold text-zinc-800 dark:text-zinc-200 font-sans tabular-nums">
                   {materials.hardwoodCartons}
                 </span>
                 <span className="text-[10px] text-zinc-400 block">@ 20 sq ft/carton</span>
               </div>
               <div className="p-2.5 bg-slate-50 dark:bg-zinc-800/60 rounded border border-slate-200 dark:border-zinc-700/60">
-                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">Wall Paint</span>
+                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">
+                  Wall Paint
+                </span>
                 <span className="text-base font-bold text-zinc-800 dark:text-zinc-200 font-sans tabular-nums">
                   {materials.paintGallons}
                 </span>
                 <span className="text-[10px] text-zinc-400 block">gallons (1 coat)</span>
               </div>
               <div className="p-2.5 bg-slate-50 dark:bg-zinc-800/60 rounded border border-slate-200 dark:border-zinc-700/60">
-                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">Lawn Sod Turf</span>
+                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">
+                  Lawn Sod Turf
+                </span>
                 <span className="text-base font-bold text-zinc-800 dark:text-zinc-200 font-sans tabular-nums">
                   {materials.sodRolls}
                 </span>
                 <span className="text-[10px] text-zinc-400 block">rolls (10 sq ft/roll)</span>
               </div>
               <div className="p-2.5 bg-slate-50 dark:bg-zinc-800/60 rounded border border-slate-200 dark:border-zinc-700/60">
-                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">Carpet Area</span>
+                <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">
+                  Carpet Area
+                </span>
                 <span className="text-base font-bold text-zinc-800 dark:text-zinc-200 font-sans tabular-nums">
                   {materials.carpetYards}
                 </span>
@@ -1632,11 +3142,12 @@ export function SquareFootageCalculator() {
       </CardWrapper>
 
       {/* ═══════════════════ REPORT MODAL TRIGGER ═══════════════════ */}
-      <div className="flex items-center justify-end pt-1">
+      <div className="no-print flex items-center justify-end pt-1">
         <Button
           variant="outline"
           onClick={() => setIsReportOpen(true)}
           className="h-8 text-xs font-semibold gap-1.5 cursor-pointer"
+          aria-label="Generate Full Square Footage Estimation Report"
         >
           <FileSpreadsheet className="h-3.5 w-3.5 text-blue-500" /> Generate Full Report
         </Button>

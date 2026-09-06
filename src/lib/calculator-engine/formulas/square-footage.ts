@@ -60,6 +60,8 @@ export interface AreaBreakdown {
   wasteSquareMeters: number;
   estimatedCost: number;
   pricePerSqFt: number;
+  isValid?: boolean;
+  error?: string;
 }
 
 export function computeAreaOutputs(
@@ -108,6 +110,7 @@ export function computeAreaOutputs(
     wasteSquareMeters,
     estimatedCost,
     pricePerSqFt: parseFloat(pricePerSqFt.toFixed(3)),
+    isValid: true,
   };
 }
 
@@ -257,10 +260,22 @@ export function calculateRingArea(input: RingInput): RingResult {
   const borderFt = toFeet(input.borderWidth, input.unit);
 
   const outerRFt = outerDFt / 2;
-  const innerRFt = Math.max(outerRFt - borderFt, 0);
+  const innerRFt = outerRFt - borderFt;
   const innerDFt = innerRFt * 2;
 
-  const rawSqFt = Math.PI * (outerRFt * outerRFt - innerRFt * innerRFt);
+  const isValid = outerDFt > 0 && borderFt > 0 && borderFt < outerRFt;
+  let error: string | undefined;
+
+  if (!isValid) {
+    if (borderFt >= outerRFt) {
+      const maxBorder = fromFeet(outerRFt, input.unit);
+      error = `Border width must be less than the outer radius (less than ${parseFloat(maxBorder.toFixed(2))} ${input.unit}).`;
+    } else {
+      error = "Please enter valid positive dimensions for outer diameter and border width.";
+    }
+  }
+
+  const rawSqFt = isValid ? Math.PI * (outerRFt * outerRFt - innerRFt * innerRFt) : 0;
 
   const breakdown = computeAreaOutputs(
     rawSqFt,
@@ -273,10 +288,12 @@ export function calculateRingArea(input: RingInput): RingResult {
   return {
     ...breakdown,
     outerRadiusFt: parseFloat(outerRFt.toFixed(2)),
-    innerRadiusFt: parseFloat(innerRFt.toFixed(2)),
+    innerRadiusFt: isValid ? parseFloat(innerRFt.toFixed(2)) : 0,
     outerDiameterFt: parseFloat(outerDFt.toFixed(2)),
-    innerDiameterFt: parseFloat(innerDFt.toFixed(2)),
+    innerDiameterFt: isValid ? parseFloat(innerDFt.toFixed(2)) : 0,
     borderWidthFt: parseFloat(borderFt.toFixed(2)),
+    isValid,
+    error,
   };
 }
 
@@ -298,9 +315,22 @@ export interface SectorResult extends AreaBreakdown {
 
 export function calculateSectorArea(input: SectorInput): SectorResult {
   const rFt = toFeet(input.radius, input.unit);
-  const angle = Math.min(Math.max(input.angleDegrees, 0), 360);
-  const rawSqFt = (angle / 360) * Math.PI * rFt * rFt;
-  const arcLengthFt = (angle / 360) * 2 * Math.PI * rFt;
+  const angle = input.angleDegrees;
+
+  const isValid = !isNaN(angle) && !isNaN(rFt) && isFinite(angle) && isFinite(rFt) && angle >= 0 && angle <= 360 && rFt > 0;
+  let error: string | undefined;
+
+  if (!isValid) {
+    if (angle < 0 || angle > 360 || !isFinite(angle)) {
+      error = "Central angle must be between 0° and 360°.";
+    } else {
+      error = "Radius must be a positive number.";
+    }
+  }
+
+  const safeAngle = isValid ? angle : 0;
+  const rawSqFt = isValid ? (safeAngle / 360) * Math.PI * rFt * rFt : 0;
+  const arcLengthFt = isValid ? (safeAngle / 360) * 2 * Math.PI * rFt : 0;
 
   const breakdown = computeAreaOutputs(
     rawSqFt,
@@ -315,6 +345,8 @@ export function calculateSectorArea(input: SectorInput): SectorResult {
     radiusFt: parseFloat(rFt.toFixed(2)),
     angleDegrees: angle,
     arcLengthFt: parseFloat(arcLengthFt.toFixed(2)),
+    isValid,
+    error,
   };
 }
 
@@ -492,12 +524,25 @@ export function calculateRectangleBorderArea(input: RectangleBorderInput): Recta
   const outWFt = toFeet(input.outerWidth, input.unit);
   const borderFt = toFeet(input.borderWidth, input.unit);
 
-  const inLFt = Math.max(outLFt - 2 * borderFt, 0);
-  const inWFt = Math.max(outWFt - 2 * borderFt, 0);
+  const inLFt = outLFt - 2 * borderFt;
+  const inWFt = outWFt - 2 * borderFt;
+
+  const isValid = outLFt > 0 && outWFt > 0 && borderFt > 0 && inLFt > 0 && inWFt > 0;
+  let error: string | undefined;
+
+  if (!isValid) {
+    if (2 * borderFt >= outLFt || 2 * borderFt >= outWFt) {
+      const minDimensionFt = Math.min(outLFt, outWFt);
+      const maxBorder = fromFeet(minDimensionFt / 2, input.unit);
+      error = `Border width must be less than half of both outer dimensions (less than ${parseFloat(maxBorder.toFixed(2))} ${input.unit} for a ${parseFloat(fromFeet(minDimensionFt, input.unit).toFixed(2))} ${input.unit}-wide rectangle).`;
+    } else {
+      error = "Please enter valid positive dimensions for outer length, outer width, and border width.";
+    }
+  }
 
   const outerArea = outLFt * outWFt;
-  const innerArea = inLFt * inWFt;
-  const rawSqFt = Math.max(outerArea - innerArea, 0);
+  const innerArea = isValid ? inLFt * inWFt : 0;
+  const rawSqFt = isValid ? outerArea - innerArea : 0;
 
   const breakdown = computeAreaOutputs(
     rawSqFt,
@@ -511,11 +556,13 @@ export function calculateRectangleBorderArea(input: RectangleBorderInput): Recta
     ...breakdown,
     outerLengthFt: parseFloat(outLFt.toFixed(2)),
     outerWidthFt: parseFloat(outWFt.toFixed(2)),
-    innerLengthFt: parseFloat(inLFt.toFixed(2)),
-    innerWidthFt: parseFloat(inWFt.toFixed(2)),
+    innerLengthFt: isValid ? parseFloat(inLFt.toFixed(2)) : 0,
+    innerWidthFt: isValid ? parseFloat(inWFt.toFixed(2)) : 0,
     borderWidthFt: parseFloat(borderFt.toFixed(2)),
     outerAreaSqFt: parseFloat(outerArea.toFixed(2)),
-    innerAreaSqFt: parseFloat(innerArea.toFixed(2)),
+    innerAreaSqFt: isValid ? parseFloat(innerArea.toFixed(2)) : 0,
+    isValid,
+    error,
   };
 }
 
