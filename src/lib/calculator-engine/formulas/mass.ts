@@ -154,6 +154,8 @@ export interface MassFromDensityInput {
 }
 
 export interface MassFromDensityResult {
+  valid: boolean;
+  error?: string;
   massKg: number;
   massGrams: number;
   massLbs: number;
@@ -173,8 +175,56 @@ export function calculateMassFromDensity(input: MassFromDensityInput): MassFromD
   const dUnit = DENSITY_UNITS_CATALOG.find((u) => u.id === input.densityUnitId) || DENSITY_UNITS_CATALOG[0];
   const vUnit = VOLUME_UNITS_CATALOG.find((u) => u.id === input.volumeUnitId) || VOLUME_UNITS_CATALOG[0];
 
-  const rhoKgM3 = (input.densityValue || 0) * dUnit.toKgM3;
-  const volM3 = (input.volumeValue || 0) * vUnit.toM3;
+  if (!Number.isFinite(input.densityValue) || !Number.isFinite(input.volumeValue)) {
+    return {
+      valid: false,
+      error: "Please enter valid numeric values for density and volume.",
+      massKg: 0,
+      massGrams: 0,
+      massLbs: 0,
+      massMetricTons: 0,
+      massShortTons: 0,
+      massOz: 0,
+      formulaDescription: "Invalid inputs",
+      closestReference: REAL_WORLD_REFERENCES[0],
+      allConversions: [],
+    };
+  }
+
+  if (input.densityValue < 0) {
+    return {
+      valid: false,
+      error: "Density cannot be negative.",
+      massKg: 0,
+      massGrams: 0,
+      massLbs: 0,
+      massMetricTons: 0,
+      massShortTons: 0,
+      massOz: 0,
+      formulaDescription: "Density cannot be negative",
+      closestReference: REAL_WORLD_REFERENCES[0],
+      allConversions: [],
+    };
+  }
+
+  if (input.volumeValue < 0) {
+    return {
+      valid: false,
+      error: "Volume cannot be negative.",
+      massKg: 0,
+      massGrams: 0,
+      massLbs: 0,
+      massMetricTons: 0,
+      massShortTons: 0,
+      massOz: 0,
+      formulaDescription: "Volume cannot be negative",
+      closestReference: REAL_WORLD_REFERENCES[0],
+      allConversions: [],
+    };
+  }
+
+  const rhoKgM3 = input.densityValue * dUnit.toKgM3;
+  const volM3 = input.volumeValue * vUnit.toM3;
 
   const massKg = rhoKgM3 * volM3;
   const massGrams = massKg * 1000;
@@ -206,6 +256,7 @@ export function calculateMassFromDensity(input: MassFromDensityInput): MassFromD
   });
 
   return {
+    valid: true,
     massKg,
     massGrams,
     massLbs,
@@ -221,6 +272,8 @@ export function calculateMassFromDensity(input: MassFromDensityInput): MassFromD
 // ─── CARD 2: CONVERTER ENGINE ───────────────────────────────────────────────
 
 export interface MassConversionResult {
+  valid: boolean;
+  error?: string;
   fromUnit: MassUnitDefinition;
   toUnit: MassUnitDefinition;
   inputValue: number;
@@ -245,7 +298,37 @@ export function convertMass(
   const fromUnit = MASS_UNITS.find((u) => u.id === fromUnitId) || MASS_UNITS[0];
   const toUnit = MASS_UNITS.find((u) => u.id === toUnitId) || MASS_UNITS[5] || MASS_UNITS[0];
 
-  const massInKg = (value || 0) * fromUnit.toKg;
+  if (!Number.isFinite(value)) {
+    return {
+      valid: false,
+      error: "Please enter a valid numeric value.",
+      fromUnit,
+      toUnit,
+      inputValue: 0,
+      outputValue: 0,
+      massInKg: 0,
+      formulaDescription: "Invalid value",
+      closestReference: REAL_WORLD_REFERENCES[0],
+      allConversions: [],
+    };
+  }
+
+  if (value < 0) {
+    return {
+      valid: false,
+      error: "Value cannot be negative.",
+      fromUnit,
+      toUnit,
+      inputValue: value,
+      outputValue: 0,
+      massInKg: 0,
+      formulaDescription: "Negative mass is physically invalid",
+      closestReference: REAL_WORLD_REFERENCES[0],
+      allConversions: [],
+    };
+  }
+
+  const massInKg = value * fromUnit.toKg;
   const outputValue = massInKg / toUnit.toKg;
 
   const factor = fromUnit.toKg / toUnit.toKg;
@@ -272,6 +355,7 @@ export function convertMass(
   });
 
   return {
+    valid: true,
     fromUnit,
     toUnit,
     inputValue: value,
@@ -305,6 +389,8 @@ export const CELESTIAL_BODIES: CelestialBodyGravity[] = [
 ];
 
 export interface CelestialWeightResult {
+  valid: boolean;
+  error?: string;
   massKg: number;
   bodyResults: {
     body: CelestialBodyGravity;
@@ -315,11 +401,29 @@ export interface CelestialWeightResult {
 }
 
 export function calculateCelestialWeight(massKg: number): CelestialWeightResult {
-  const m = Math.max(0, massKg || 0);
+  if (typeof massKg !== "number" || !Number.isFinite(massKg)) {
+    return {
+      valid: false,
+      error: "Please enter a valid numeric value for mass.",
+      massKg: 0,
+      bodyResults: [],
+    };
+  }
+
+  if (massKg < 0) {
+    return {
+      valid: false,
+      error: "Mass must be zero or greater.",
+      massKg,
+      bodyResults: [],
+    };
+  }
+
+  const m = massKg;
 
   const bodyResults = CELESTIAL_BODIES.map((b) => {
     const weightNewtons = m * b.surfaceGravity;
-    const weightLbf = weightNewtons * 0.224808943;
+    const weightLbf = weightNewtons * 0.22480894387096;
     const weightKgEquivalent = m * b.relativeToEarth;
     return {
       body: b,
@@ -330,6 +434,7 @@ export function calculateCelestialWeight(massKg: number): CelestialWeightResult 
   });
 
   return {
+    valid: true,
     massKg: m,
     bodyResults,
   };

@@ -1,3 +1,4 @@
+export {};
 async function testSsr() {
   try {
     const res = await fetch("http://localhost:3000/calculators/roofing-calculator");

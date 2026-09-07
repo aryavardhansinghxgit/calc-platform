@@ -13,7 +13,7 @@ export const weight_calculatorConfig: CalculatorModuleDefinition = {
   featured: true,
   keywords: ["weight calculator","gravitational force","weight on moon"],
   priority: 1,
-  relatedCalculators: ["mass-calculator","conversion-calculator"],
+  relatedCalculators: ["conversion-calculator", "scientific-notation-calculator"],
   formulaDescription: "Weight Force W = Mass (m) × Gravity (g)",
   faqs: weight_calculatorFaqs,
   inputs: [
