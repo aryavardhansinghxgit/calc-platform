@@ -12,8 +12,7 @@ export const conversion_calculatorConfig: CalculatorModuleDefinition = {
   iconName: "ArrowRightLeft",
   featured: true,
   keywords: ["unit converter","conversion calculator","convert units","metric to imperial"],
-  priority: 1,
-  relatedCalculators: ["mass-calculator","speed-calculator"],
+  relatedCalculators: ["scientific-notation-calculator", "big-number-calculator"],
   formulaDescription: "Standard Unit Factor Conversion",
   faqs: conversion_calculatorFaqs,
   inputs: [

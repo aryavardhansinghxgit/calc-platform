@@ -1,9 +1,23 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
-export const conversion_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Conversion Calculator — Universal Multi-Category Unit Converter",
+export const conversion_calculatorMetadata: Metadata = {
+  title: "Unit Conversion Calculator – Convert Length, Mass, Temperature & More | CalcPlatform",
   description:
-    "Free online conversion calculator for length, temperature, area, volume, weight, time, speed, pressure, energy, power, data, and fuel economy with live unit matrix and multiplier formulas.",
-  slug: "conversion-calculator",
-});
+    "Convert units instantly for length, weight, area, volume, temperature, speed, pressure, energy, power, data and fuel economy with exact step-by-step results.",
+  alternates: {
+    canonical: "https://calcplatform.com/calculators/conversion-calculator",
+  },
+  openGraph: {
+    title: "Unit Conversion Calculator – Length, Mass, Temperature & More",
+    description:
+      "Convert everyday and technical units across 12 categories, compare units, view conversion factors, and generate reusable reference results.",
+    url: "https://calcplatform.com/calculators/conversion-calculator",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Unit Conversion Calculator – Length, Mass, Temperature & More",
+    description:
+      "Convert everyday and technical units across 12 categories, compare units, view conversion factors, and generate reusable reference results.",
+  },
+};
