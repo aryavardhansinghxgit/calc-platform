@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const tile_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Tile Calculator — Floor, Wall, Grout, Boxes & Cost Suite",
+  title: "Tile Calculator: Calculate Tiles, Boxes, Grout & Cost",
   description:
-    "Free online tile calculator for floor and wall coverage, tile box requirements, TCNA grout weight, thin-set mortar bags, and material cost estimation.",
+    "Calculate how many tiles you need for floors, walls, backsplashes and multiple rooms. Estimate tile waste, boxes, grout, thin-set and project cost.",
   slug: "tile-calculator",
 });

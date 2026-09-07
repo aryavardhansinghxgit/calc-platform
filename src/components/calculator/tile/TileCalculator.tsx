@@ -6,12 +6,11 @@ import {
   Trash2,
   Plus,
   FileSpreadsheet,
-  Layers,
+  RotateCcw,
+  Copy,
+  Check,
+  FileText,
   Sparkles,
-  ShieldCheck,
-  Building2,
-  Hammer,
-  Grid,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,13 +34,58 @@ import {
   RoomSection,
 } from "@/lib/calculator-engine/formulas/tile";
 
-// ─── Local Storage Hook ─────────────────────────────────────────────────────
+// ─── Raw Input Interfaces for Full Persistence & Restore ────────────────────
 
-interface SavedTileEstimate<T> {
+export interface TileQuantityRawInputs {
+  inputMode: "dimensions" | "total_area";
+  roomLength: string;
+  roomLengthUnit: LengthUnit;
+  roomWidth: string;
+  roomWidthUnit: LengthUnit;
+  totalAreaSqFt: string;
+  tileLength: string;
+  tileWidth: string;
+  tileUnit: TileUnit;
+  tileThickness: string;
+  groutJointWidth: string;
+  groutJointUnit: GroutUnit;
+  pattern: TilePattern;
+  wastePercent: string;
+  tilesPerBox: string;
+  pricePerUnit: string;
+  pricingType: "per_tile" | "per_sqft" | "per_box";
+}
+
+export interface TileCostRawInputs {
+  costSqFt: string;
+  tileCostRate: string;
+  groutBagCost: string;
+  mortarBagCost: string;
+  sundriesCost: string;
+  laborRatePerSqFt: string;
+  salesTaxRate: string;
+}
+
+export interface TileMultiRoomRawInputs {
+  rooms: RoomSection[];
+  multiRoomWaste: string;
+}
+
+export interface TileGroutRawInputs {
+  groutArea: string;
+  groutType: GroutType;
+  tileThickness: string;
+  groutJointWidth: string;
+}
+
+// ─── Local Storage Hook with Typed Raw Input Restoration ────────────────────
+
+export interface SavedTileEstimate<TInput, TResult> {
   id: string;
   timestamp: string;
   inputSummary: string;
-  result: T;
+  rawInputs: TInput;
+  result: TResult;
   notes: string;
 }
 
@@ -50,8 +94,8 @@ function flashSave(setter: React.Dispatch<React.SetStateAction<boolean>>) {
   setTimeout(() => setter(false), 1500);
 }
 
-function useCardSaved<T>(storageKey: string) {
-  const [saved, setSaved] = useState<SavedTileEstimate<T>[]>([]);
+function useCardSaved<TInput, TResult>(storageKey: string) {
+  const [saved, setSaved] = useState<SavedTileEstimate<TInput, TResult>[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -62,11 +106,12 @@ function useCardSaved<T>(storageKey: string) {
   }, [storageKey]);
 
   const save = useCallback(
-    (inputSummary: string, result: T, notes = "") => {
-      const entry: SavedTileEstimate<T> = {
+    (inputSummary: string, rawInputs: TInput, result: TResult, notes = "") => {
+      const entry: SavedTileEstimate<TInput, TResult> = {
         id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         inputSummary,
+        rawInputs,
         result,
         notes,
       };
@@ -104,7 +149,26 @@ function useCardSaved<T>(storageKey: string) {
   return { saved, isOpen, setIsOpen, save, remove, clear };
 }
 
-// ─── UI Helper Components ───────────────────────────────────────────────────
+// ─── RFC-4180 CSV Download Helper ───────────────────────────────────────────
+
+function downloadCsv(filename: string, rows: string[][]) {
+  const escapeCell = (cell: string) => {
+    if (cell.includes(",") || cell.includes("\"") || cell.includes("\n")) {
+      return `"${cell.replace(/"/g, '""')}"`;
+    }
+    return cell;
+  };
+  const csvContent = rows.map((r) => r.map(escapeCell).join(",")).join("\r\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ─── Card Wrapper Component ─────────────────────────────────────────────────
 
 function CardWrapper({
   title,
@@ -124,17 +188,18 @@ function CardWrapper({
   onSave?: () => void;
 }) {
   return (
-    <div className="border border-blue-600/30 dark:border-blue-500/30 rounded-xl overflow-hidden shadow-xs bg-white dark:bg-zinc-900 transition-all">
+    <div className="border border-blue-600/30 dark:border-blue-500/30 rounded-xl overflow-hidden shadow-xs bg-white dark:bg-zinc-900 transition-all print:break-inside-avoid print:border-zinc-300 print:shadow-none">
       <div className="bg-blue-600 text-white px-3.5 py-1.5 flex items-center justify-between">
         <h3 className="font-bold text-xs tracking-wide text-white">{title}</h3>
         {hasResult && onSave && (
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 no-print">
             {savedCount !== undefined && savedCount > 0 && onToggleSaved && (
               <button
                 type="button"
                 onClick={onToggleSaved}
                 className="text-[10px] bg-white/20 hover:bg-white/30 text-white font-bold px-1.5 py-0.5 rounded cursor-pointer transition-colors"
                 title="View saved calculations"
+                aria-label="View saved calculations"
               >
                 {savedCount} saved
               </button>
@@ -142,6 +207,7 @@ function CardWrapper({
             <button
               type="button"
               onClick={onSave}
+              aria-label={isSaved ? "Saved to history" : "Save calculation"}
               className={`text-[11px] font-bold px-2 py-0.5 rounded cursor-pointer transition-all ${
                 isSaved
                   ? "bg-emerald-500 text-white"
@@ -158,100 +224,57 @@ function CardWrapper({
   );
 }
 
-function InputRow({
-  label,
-  value,
-  onChange,
-  unit,
-  min = 0,
-  max,
-  step = 1,
-  showUnit = true,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  unit?: string;
-  min?: number;
-  max?: number;
-  step?: number;
-  showUnit?: boolean;
-}) {
-  return (
-    <div className="grid grid-cols-12 gap-2 items-center text-xs">
-      <label className="col-span-5 font-medium text-zinc-700 dark:text-zinc-300 truncate">
-        {label}
-      </label>
-      <div className={showUnit && unit ? "col-span-4" : "col-span-7"}>
-        <Input
-          type="number"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          min={min}
-          max={max}
-          step={step}
-          className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
-        />
-      </div>
-      {showUnit && unit && (
-        <div className="col-span-3 text-[11px] text-zinc-500 font-medium truncate flex items-center">
-          {unit}
-        </div>
-      )}
-    </div>
-  );
-}
+// ─── Saved Estimates Drawer with Restore Action ─────────────────────────────
 
-function SavedEstimatesDrawer<T>({
+function SavedEstimatesDrawer<TInput, TResult>({
   saved,
   isOpen,
   remove,
   clear,
   cardTitle,
   formatSummary,
+  onRestore,
 }: {
-  saved: SavedTileEstimate<T>[];
+  saved: SavedTileEstimate<TInput, TResult>[];
   isOpen: boolean;
   remove: (id: string) => void;
   clear: () => void;
   cardTitle: string;
-  formatSummary: (result: T) => string;
+  formatSummary: (result: TResult) => string;
+  onRestore: (raw: TInput) => void;
 }) {
   if (!isOpen || saved.length === 0) return null;
 
-  const exportCsv = () => {
+  const exportSavedCsv = () => {
     const rows = [
       ["Timestamp", "Input Summary", "Result Summary"],
       ...saved.map((e) => [e.timestamp, e.inputSummary, formatSummary(e.result)]),
     ];
-    const csv = rows.map((r) => r.map((c) => `"${c}"`).join(",")).join("\n");
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `tile_${cardTitle.toLowerCase().replace(/\s+/g, "_")}_estimates.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadCsv(`tile_${cardTitle.toLowerCase().replace(/\s+/g, "_")}_history.csv`, rows);
   };
 
   return (
-    <div className="mt-3 p-3 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 space-y-2 text-xs">
+    <div className="mt-3 p-3 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800 space-y-2 text-xs no-print">
       <div className="flex items-center justify-between pb-1 border-b border-zinc-200 dark:border-zinc-800">
         <span className="font-bold text-zinc-700 dark:text-zinc-300">
           Saved {cardTitle} History ({saved.length})
         </span>
         <div className="flex items-center gap-2">
           <button
-            onClick={exportCsv}
+            type="button"
+            onClick={exportSavedCsv}
             className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-0.5 cursor-pointer"
+            aria-label="Export history as CSV"
           >
             <Download className="w-3 h-3" /> CSV
           </button>
           <button
+            type="button"
             onClick={clear}
             className="text-[10px] text-zinc-400 hover:text-red-500 cursor-pointer"
+            aria-label="Clear all saved history"
           >
-            Clear
+            Clear All
           </button>
         </div>
       </div>
@@ -267,13 +290,26 @@ function SavedEstimatesDrawer<T>({
               </span>
               <span className="text-zinc-400 ml-1.5">({item.inputSummary})</span>
             </div>
-            <button
-              onClick={() => remove(item.id)}
-              className="text-zinc-400 hover:text-red-500 p-0.5 cursor-pointer"
-              title="Delete"
-            >
-              <Trash2 className="w-3 h-3" />
-            </button>
+            <div className="flex items-center gap-1 shrink-0">
+              <button
+                type="button"
+                onClick={() => onRestore(item.rawInputs)}
+                className="p-1 rounded text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 cursor-pointer transition-colors"
+                title="Restore calculation"
+                aria-label="Restore saved calculation"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => remove(item.id)}
+                className="p-1 rounded text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer transition-colors"
+                title="Delete"
+                aria-label="Delete saved calculation"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         ))}
       </div>
@@ -295,14 +331,17 @@ function TilePatternVisualizer2D({
   groutIn: number;
 }) {
   const isRectangular = Math.abs(tileLengthIn - tileWidthIn) > 0.5;
+  const patternLabel = pattern.replace("_", " ");
 
   return (
-    <div className="w-full flex flex-col items-center select-none">
+    <div className="w-full flex flex-col items-center select-none print:max-h-[140px]">
       <svg
         viewBox="0 0 240 160"
         className="w-full max-w-[230px] rounded-lg border border-slate-300 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-800 shadow-xs"
-        aria-label="2D Tile Pattern Visualizer"
+        role="img"
+        aria-label={`2D Tile Layout Pattern Visualizer: ${patternLabel} layout with ${tileLengthIn} by ${tileWidthIn} inch tiles and ${groutIn} inch grout joint.`}
       >
+        <title>{`2D Pattern: ${patternLabel}`}</title>
         <defs>
           <pattern
             id={`pat-grid-${tileLengthIn}-${tileWidthIn}`}
@@ -311,8 +350,12 @@ function TilePatternVisualizer2D({
             patternUnits="userSpaceOnUse"
           >
             <rect width={isRectangular ? "58" : "38"} height="38" fill="#3b82f6" fillOpacity="0.85" stroke="#1d4ed8" strokeWidth="1" />
-            <rect x={isRectangular ? "58" : "38"} y="0" width="2" height="40" fill="#cbd5e1" />
-            <rect x="0" y="38" width={isRectangular ? "60" : "40"} height="2" fill="#cbd5e1" />
+            {groutIn > 0 && (
+              <>
+                <rect x={isRectangular ? "58" : "38"} y="0" width="2" height="40" fill="#cbd5e1" />
+                <rect x="0" y="38" width={isRectangular ? "60" : "40"} height="2" fill="#cbd5e1" />
+              </>
+            )}
           </pattern>
 
           <pattern
@@ -357,14 +400,14 @@ function TilePatternVisualizer2D({
         {/* Grout & Dimension Overlay Banner */}
         <rect x="10" y="132" width="220" height="20" rx="4" fill="#0f172a" fillOpacity="0.9" />
         <text x="120" y="145.5" textAnchor="middle" className="text-[8.5px] fill-white font-bold capitalize">
-          {pattern.replace("_", " ")} ({tileLengthIn}&quot; × {tileWidthIn}&quot; Tile, {groutIn}&quot; Grout)
+          {patternLabel} ({tileLengthIn}&quot; × {tileWidthIn}&quot; Tile, {groutIn}&quot; Grout)
         </text>
       </svg>
     </div>
   );
 }
 
-// ─── MAIN COMPONENT ─────────────────────────────────────────────────────────
+// ─── MAIN TILE CALCULATOR COMPONENT ─────────────────────────────────────────
 
 export function TileCalculator() {
   // ─── CARD 1: FLOOR & WALL TILE QUANTITY ───
@@ -389,8 +432,9 @@ export function TileCalculator() {
   const [pricingType, setPricingType] = useState<"per_tile" | "per_sqft" | "per_box">("per_sqft");
 
   const [tileResult, setTileResult] = useState<TileQuantityResult | null>(null);
+  const [card1Error, setCard1Error] = useState<string | null>(null);
   const [tileSaveSuccess, setTileSaveSuccess] = useState(false);
-  const tileSaved = useCardSaved<TileQuantityResult>("saved_tile_quantity");
+  const tileSaved = useCardSaved<TileQuantityRawInputs, TileQuantityResult>("saved_tile_quantity");
 
   // ─── CARD 2: TILE COST & BUDGET ESTIMATOR ───
   const [costSqFt, setCostSqFt] = useState("300");
@@ -401,8 +445,9 @@ export function TileCalculator() {
   const [laborRatePerSqFt, setLaborRatePerSqFt] = useState("9.00"); // $/sq ft
   const [salesTaxRate, setSalesTaxRate] = useState("7");
   const [costResult, setCostResult] = useState<TileCostResult | null>(null);
+  const [card2Error, setCard2Error] = useState<string | null>(null);
   const [costSaveSuccess, setCostSaveSuccess] = useState(false);
-  const costSaved = useCardSaved<TileCostResult>("saved_tile_cost");
+  const costSaved = useCardSaved<TileCostRawInputs, TileCostResult>("saved_tile_cost");
 
   // ─── CARD 3: MULTI-ROOM AGGREGATOR ───
   const [rooms, setRooms] = useState<RoomSection[]>([
@@ -412,18 +457,52 @@ export function TileCalculator() {
   ]);
   const [multiRoomWaste, setMultiRoomWaste] = useState("10");
   const [multiRoomResult, setMultiRoomResult] = useState<MultiRoomResult | null>(null);
+  const [card3Error, setCard3Error] = useState<string | null>(null);
   const [multiRoomSaveSuccess, setMultiRoomSaveSuccess] = useState(false);
-  const multiRoomSaved = useCardSaved<MultiRoomResult>("saved_tile_multiroom");
+  const multiRoomSaved = useCardSaved<TileMultiRoomRawInputs, MultiRoomResult>("saved_tile_multiroom");
 
   // ─── CARD 4: GROUT & MORTAR CALCULATOR ───
   const [groutArea, setGroutArea] = useState("300");
   const [groutType, setGroutType] = useState<GroutType>("sanded");
   const [groutResult, setGroutResult] = useState<GroutMortarResult | null>(null);
+  const [card4Error, setCard4Error] = useState<string | null>(null);
   const [groutSaveSuccess, setGroutSaveSuccess] = useState(false);
-  const groutSaved = useCardSaved<GroutMortarResult>("saved_tile_grout");
+  const groutSaved = useCardSaved<TileGroutRawInputs, GroutMortarResult>("saved_tile_grout");
 
-  // ─── GLOBAL REPORT MODAL ───
+  // Global Report Modal
   const [isReportOpen, setIsReportOpen] = useState(false);
+
+  // Copy & Action Feedback
+  const [actionFeedback, setActionFeedback] = useState<Record<string, string>>({});
+
+  const setFeedback = (key: string, msg: string) => {
+    setActionFeedback((prev) => ({ ...prev, [key]: msg }));
+    setTimeout(() => {
+      setActionFeedback((prev) => {
+        const next = { ...prev };
+        delete next[key];
+        return next;
+      });
+    }, 1500);
+  };
+
+  const copyToClipboard = async (key: string, text: string, msg = "Copied!") => {
+    try {
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      setFeedback(key, msg);
+    } catch {
+      setFeedback(key, "Error");
+    }
+  };
 
   // Preset Tile Dimensions
   const setTilePreset = (l: string, w: string) => {
@@ -432,30 +511,83 @@ export function TileCalculator() {
     setTileUnit("inches");
   };
 
-  // ─── Calculation Handlers ───
+  // ─── Calculation Handlers ──────────────────────────────────────────────────
 
   const handleTileCalc = useCallback(() => {
+    // Explicit Validation
+    if (inputMode === "dimensions") {
+      if (!roomLength.trim() || Number(roomLength) <= 0) {
+        setCard1Error("Room length must be greater than 0.");
+        setTileResult(null);
+        return;
+      }
+      if (!roomWidth.trim() || Number(roomWidth) <= 0) {
+        setCard1Error("Room width must be greater than 0.");
+        setTileResult(null);
+        return;
+      }
+    } else {
+      if (!totalAreaSqFt.trim() || Number(totalAreaSqFt) <= 0) {
+        setCard1Error("Surface area must be greater than 0.");
+        setTileResult(null);
+        return;
+      }
+    }
+
+    if (!tileLength.trim() || Number(tileLength) <= 0) {
+      setCard1Error("Tile length must be greater than 0.");
+      setTileResult(null);
+      return;
+    }
+    if (!tileWidth.trim() || Number(tileWidth) <= 0) {
+      setCard1Error("Tile width must be greater than 0.");
+      setTileResult(null);
+      return;
+    }
+    if (wastePercent.trim() === "" || Number(wastePercent) < 0 || Number(wastePercent) > 100) {
+      setCard1Error("Waste percentage must be between 0 and 100%.");
+      setTileResult(null);
+      return;
+    }
+    const boxCount = Number(tilesPerBox);
+    if (!tilesPerBox.trim() || boxCount < 1 || !Number.isInteger(boxCount)) {
+      setCard1Error("Tiles per box must be a positive whole number (≥ 1).");
+      setTileResult(null);
+      return;
+    }
+    if (pricePerUnit.trim() !== "" && Number(pricePerUnit) < 0) {
+      setCard1Error("Tile price cannot be negative.");
+      setTileResult(null);
+      return;
+    }
+
+    setCard1Error(null);
+
+    // Grout width handling: explicit 0 preservation
+    const gWidth = groutJointWidth.trim() === "" ? 0.125 : Number(groutJointWidth);
+
     const res = calculateTileQuantity({
       inputMode,
-      roomLength: Number(roomLength) || 20,
+      roomLength: Number(roomLength),
       roomLengthUnit,
-      roomWidth: Number(roomWidth) || 15,
+      roomWidth: Number(roomWidth),
       roomWidthUnit,
-      totalAreaSqFt: Number(totalAreaSqFt) || 300,
+      totalAreaSqFt: Number(totalAreaSqFt),
 
-      tileLength: Number(tileLength) || 12,
-      tileWidth: Number(tileWidth) || 12,
+      tileLength: Number(tileLength),
+      tileWidth: Number(tileWidth),
       tileUnit,
       tileThicknessInches: Number(tileThickness) || 0.375,
 
-      groutJointWidth: Number(groutJointWidth) || 0.125,
+      groutJointWidth: gWidth,
       groutJointUnit,
       pattern,
-      wastePercent: Number(wastePercent) || 10,
-      tilesPerBox: Number(tilesPerBox) || 12,
-      pricePerUnit: Number(pricePerUnit) || 0,
+      wastePercent: Number(wastePercent),
+      tilesPerBox: boxCount,
+      pricePerUnit: pricePerUnit.trim() !== "" ? Number(pricePerUnit) : 0,
       pricingType,
     });
+
     setTileResult(res);
     setCostSqFt(String(res.roomAreaSqFt));
     setGroutArea(String(res.roomAreaSqFt));
@@ -480,25 +612,89 @@ export function TileCalculator() {
   ]);
 
   const handleCostCalc = useCallback(() => {
-    const sqFt = Number(costSqFt) || 300;
+    if (!costSqFt.trim() || Number(costSqFt) <= 0) {
+      setCard2Error("Tile area must be greater than 0.");
+      setCostResult(null);
+      return;
+    }
+    if (Number(tileCostRate) < 0) {
+      setCard2Error("Tile cost rate cannot be negative.");
+      setCostResult(null);
+      return;
+    }
+    if (Number(groutBagCost) < 0) {
+      setCard2Error("Grout bag cost cannot be negative.");
+      setCostResult(null);
+      return;
+    }
+    if (Number(mortarBagCost) < 0) {
+      setCard2Error("Mortar bag cost cannot be negative.");
+      setCostResult(null);
+      return;
+    }
+    if (Number(sundriesCost) < 0) {
+      setCard2Error("Sundries cost cannot be negative.");
+      setCostResult(null);
+      return;
+    }
+    if (Number(laborRatePerSqFt) < 0) {
+      setCard2Error("Labor rate cannot be negative.");
+      setCostResult(null);
+      return;
+    }
+    if (Number(salesTaxRate) < 0 || Number(salesTaxRate) > 100) {
+      setCard2Error("Sales tax rate must be between 0 and 100%.");
+      setCostResult(null);
+      return;
+    }
+
+    setCard2Error(null);
+
+    const sqFt = Number(costSqFt);
     const groutBags = tileResult ? tileResult.groutBagsNeeded : Math.ceil((sqFt * 0.45) / 25);
     const mortarBags = tileResult ? tileResult.mortarBagsNeeded : Math.ceil(sqFt / 40);
 
     const res = calculateTileCost({
       totalSqFt: sqFt,
-      tileCostPerSqFt: Number(tileCostRate) || 4.5,
-      groutCostPerBag: Number(groutBagCost) || 18,
+      tileCostPerSqFt: Number(tileCostRate) || 0,
+      groutCostPerBag: Number(groutBagCost) || 0,
       groutBags,
-      mortarCostPerBag: Number(mortarBagCost) || 22,
+      mortarCostPerBag: Number(mortarBagCost) || 0,
       mortarBags,
-      spacersAndSealerCost: Number(sundriesCost) || 35,
-      laborCostPerSqFt: Number(laborRatePerSqFt) || 9,
-      salesTaxPercent: Number(salesTaxRate) || 7,
+      spacersAndSealerCost: Number(sundriesCost) || 0,
+      laborCostPerSqFt: Number(laborRatePerSqFt) || 0,
+      salesTaxPercent: Number(salesTaxRate) || 0,
     });
     setCostResult(res);
   }, [costSqFt, tileCostRate, groutBagCost, mortarBagCost, sundriesCost, laborRatePerSqFt, salesTaxRate, tileResult]);
 
   const handleMultiRoomCalc = useCallback(() => {
+    for (const r of rooms) {
+      if (r.lengthFt <= 0 || r.widthFt <= 0) {
+        setCard3Error(`Room "${r.name || "Area"}" length and width must be greater than 0.`);
+        setMultiRoomResult(null);
+        return;
+      }
+      if (r.deductionSqFt < 0) {
+        setCard3Error(`Deduction for "${r.name || "Area"}" cannot be negative.`);
+        setMultiRoomResult(null);
+        return;
+      }
+      const gross = r.lengthFt * r.widthFt;
+      if (r.deductionSqFt > gross) {
+        setCard3Error(`Deduction (${r.deductionSqFt} sq ft) cannot exceed gross area (${gross} sq ft) for "${r.name || "Area"}".`);
+        setMultiRoomResult(null);
+        return;
+      }
+    }
+    if (multiRoomWaste.trim() === "" || Number(multiRoomWaste) < 0 || Number(multiRoomWaste) > 100) {
+      setCard3Error("Waste percentage must be between 0 and 100%.");
+      setMultiRoomResult(null);
+      return;
+    }
+
+    setCard3Error(null);
+
     const res = calculateMultiRoomTiles({
       rooms,
       tileLengthIn: Number(tileLength) || 12,
@@ -510,18 +706,33 @@ export function TileCalculator() {
   }, [rooms, tileLength, tileWidth, tilesPerBox, multiRoomWaste]);
 
   const handleGroutCalc = useCallback(() => {
+    if (!groutArea.trim() || Number(groutArea) <= 0) {
+      setCard4Error("Surface area to grout must be greater than 0.");
+      setGroutResult(null);
+      return;
+    }
+    if (!tileThickness.trim() || Number(tileThickness) <= 0) {
+      setCard4Error("Tile thickness must be greater than 0.");
+      setGroutResult(null);
+      return;
+    }
+
+    setCard4Error(null);
+
+    const gWidth = groutJointWidth.trim() === "" ? 0.125 : Number(groutJointWidth);
+
     const res = calculateGroutAndMortar({
-      surfaceAreaSqFt: Number(groutArea) || 300,
+      surfaceAreaSqFt: Number(groutArea),
       tileLengthInches: Number(tileLength) || 12,
       tileWidthInches: Number(tileWidth) || 12,
       tileThicknessInches: Number(tileThickness) || 0.375,
-      groutJointWidthInches: Number(groutJointWidth) || 0.125,
+      groutJointWidthInches: gWidth,
       groutType,
     });
     setGroutResult(res);
   }, [groutArea, tileLength, tileWidth, tileThickness, groutJointWidth, groutType]);
 
-  // Reactive Calculation on state changes
+  // Reactive Calculation on State Changes
   useEffect(() => {
     handleTileCalc();
   }, [handleTileCalc]);
@@ -563,6 +774,142 @@ export function TileCalculator() {
     );
   };
 
+  // ─── State Restoration Handlers ────────────────────────────────────────────
+
+  const restoreCard1 = (raw: TileQuantityRawInputs) => {
+    setInputMode(raw.inputMode);
+    setRoomLength(raw.roomLength);
+    setRoomLengthUnit(raw.roomLengthUnit);
+    setRoomWidth(raw.roomWidth);
+    setRoomWidthUnit(raw.roomWidthUnit);
+    setTotalAreaSqFt(raw.totalAreaSqFt);
+    setTileLength(raw.tileLength);
+    setTileWidth(raw.tileWidth);
+    setTileUnit(raw.tileUnit);
+    setTileThickness(raw.tileThickness);
+    setGroutJointWidth(raw.groutJointWidth);
+    setGroutJointUnit(raw.groutJointUnit);
+    setPattern(raw.pattern);
+    setWastePercent(raw.wastePercent);
+    setTilesPerBox(raw.tilesPerBox);
+    setPricePerUnit(raw.pricePerUnit);
+    setPricingType(raw.pricingType);
+    setFeedback("c1_restore", "Restored!");
+  };
+
+  const restoreCard2 = (raw: TileCostRawInputs) => {
+    setCostSqFt(raw.costSqFt);
+    setTileCostRate(raw.tileCostRate);
+    setGroutBagCost(raw.groutBagCost);
+    setMortarBagCost(raw.mortarBagCost);
+    setSundriesCost(raw.sundriesCost);
+    setLaborRatePerSqFt(raw.laborRatePerSqFt);
+    setSalesTaxRate(raw.salesTaxRate);
+    setFeedback("c2_restore", "Restored!");
+  };
+
+  const restoreCard3 = (raw: TileMultiRoomRawInputs) => {
+    setRooms(raw.rooms);
+    setMultiRoomWaste(raw.multiRoomWaste);
+    setFeedback("c3_restore", "Restored!");
+  };
+
+  const restoreCard4 = (raw: TileGroutRawInputs) => {
+    setGroutArea(raw.groutArea);
+    setGroutType(raw.groutType);
+    setTileThickness(raw.tileThickness);
+    setGroutJointWidth(raw.groutJointWidth);
+    setFeedback("c4_restore", "Restored!");
+  };
+
+  // ─── Export & Copy Generators ──────────────────────────────────────────────
+
+  const exportCard1Csv = () => {
+    if (!tileResult) return;
+    const rows = [
+      ["Parameter", "Value"],
+      ["Module", "Floor & Wall Tile Quantity"],
+      ["Surface Area (sq ft)", String(tileResult.roomAreaSqFt)],
+      ["Surface Area (m²)", String(tileResult.roomAreaSqM)],
+      ["Tile Length (in)", String(tileResult.tileLengthInches)],
+      ["Tile Width (in)", String(tileResult.tileWidthInches)],
+      ["Grout Width (in)", String(tileResult.groutWidthInches)],
+      ["Pattern", tileResult.pattern],
+      ["Waste Percent", `${tileResult.wastePercent}%`],
+      ["Net Tiles Needed", String(tileResult.netTilesNeeded)],
+      ["Waste Scrap Tiles", String(tileResult.wasteTilesCount)],
+      ["Total Purchased Tiles", String(tileResult.totalTilesNeeded)],
+      ["Tiles Per Box", String(tileResult.tilesPerBox)],
+      ["Total Boxes Needed", String(tileResult.totalBoxesNeeded)],
+      ["Total Purchased Coverage (sq ft)", String(tileResult.totalPurchasedAreaSqFt)],
+      ["Grout Required (lbs)", String(tileResult.estimatedGroutLbs)],
+      ["Thin-Set Mortar Bags (50-lb)", String(tileResult.mortarBagsNeeded)],
+      ["Recommended Trowel", tileResult.recommendedTrowel],
+      ["Estimated Tile Cost ($)", tileResult.estimatedCost ? `$${tileResult.estimatedCost.toFixed(2)}` : "N/A"],
+      ["Export Timestamp", new Date().toISOString()],
+    ];
+    downloadCsv("tile_quantity_takeoff.csv", rows);
+    setFeedback("c1_csv", "CSV Exported!");
+  };
+
+  const exportCard2Csv = () => {
+    if (!costResult) return;
+    const rows = [
+      ["Cost Component", "Quantity", "Rate", "Subtotal ($)"],
+      ["Tiles (Porcelain / Ceramic)", `${costSqFt} sq ft`, `$${tileCostRate}/sq ft`, costResult.tileMaterialSubtotal.toFixed(2)],
+      ["Grout (25-lb Bags)", `${tileResult ? tileResult.groutBagsNeeded : 1} bags`, `$${groutBagCost}/bag`, costResult.groutSubtotal.toFixed(2)],
+      ["Thin-Set Mortar (50-lb Bags)", `${tileResult ? tileResult.mortarBagsNeeded : 2} bags`, `$${mortarBagCost}/bag`, costResult.mortarSubtotal.toFixed(2)],
+      ["Spacers, Sponge & Sealant", "Sundries Kit", "—", costResult.sundriesSubtotal.toFixed(2)],
+      ["Professional Setter Labor", `${costSqFt} sq ft`, `$${laborRatePerSqFt}/sq ft`, costResult.laborSubtotal.toFixed(2)],
+      ["Material Sales Tax", `${salesTaxRate}%`, "—", costResult.salesTaxAmount.toFixed(2)],
+      ["Grand Total Project Investment", `${costSqFt} sq ft`, `$${costResult.costPerSquareFoot.toFixed(2)}/sq ft`, costResult.grandTotalProjectCost.toFixed(2)],
+      ["Timestamp", "", "", new Date().toISOString()],
+    ];
+    downloadCsv("tile_installation_budget.csv", rows);
+    setFeedback("c2_csv", "CSV Exported!");
+  };
+
+  const exportCard3Csv = () => {
+    if (!multiRoomResult) return;
+    const rows = [
+      ["Room / Area Name", "Length (ft)", "Width (ft)", "Gross Area (sq ft)", "Deduction (sq ft)", "Net Area (sq ft)"],
+      ...rooms.map((r) => [
+        r.name,
+        String(r.lengthFt),
+        String(r.widthFt),
+        String(r.lengthFt * r.widthFt),
+        String(r.deductionSqFt),
+        String(Math.max(0, r.lengthFt * r.widthFt - r.deductionSqFt)),
+      ]),
+      ["TOTALS", "", "", String(multiRoomResult.totalGrossSqFt), String(multiRoomResult.totalDeductionsSqFt), String(multiRoomResult.totalNetSqFt)],
+      ["Total Tiles with Waste", String(multiRoomResult.totalTilesWithWaste)],
+      ["Total Boxes Needed", String(multiRoomResult.totalBoxesNeeded)],
+      ["Grout Bags (25-lb)", String(multiRoomResult.totalGroutBagsNeeded)],
+      ["Mortar Bags (50-lb)", String(multiRoomResult.totalMortarBagsNeeded)],
+      ["Timestamp", new Date().toISOString()],
+    ];
+    downloadCsv("tile_multi_room_takeoff.csv", rows);
+    setFeedback("c3_csv", "CSV Exported!");
+  };
+
+  const exportCard4Csv = () => {
+    if (!groutResult) return;
+    const rows = [
+      ["Parameter", "Value"],
+      ["Surface Area (sq ft)", groutArea],
+      ["Grout Formulation", groutResult.recommendedGroutType],
+      ["Total Grout Weight (lbs)", String(groutResult.groutLbs)],
+      ["Total Grout Weight (kg)", String(groutResult.groutKg)],
+      ["25-lb Grout Bags", String(groutResult.bags25lb)],
+      ["10-lb Grout Bags", String(groutResult.bags10lb)],
+      ["50-lb Thin-Set Bags", String(groutResult.mortarBags50lb)],
+      ["Recommended Trowel", groutResult.trowelRecommendation],
+      ["Timestamp", new Date().toISOString()],
+    ];
+    downloadCsv("tile_grout_mortar_takeoff.csv", rows);
+    setFeedback("c4_csv", "CSV Exported!");
+  };
+
   // Report Data
   const reportData: CalculatorReportData = useMemo(() => {
     const sections = [];
@@ -587,11 +934,12 @@ export function TileCalculator() {
       sections.push({
         title: "Tile Installation Cost Estimate",
         items: [
-          { label: "Tile Materials Subtotal", value: `$${costResult.tileMaterialSubtotal}` },
+          { label: "Tile Materials Subtotal", value: `$${costResult.tileMaterialSubtotal.toFixed(2)}` },
           { label: "Grout & Mortar", value: `$${(costResult.groutSubtotal + costResult.mortarSubtotal).toFixed(2)}` },
-          { label: "Sundries & Spacers", value: `$${costResult.sundriesSubtotal}` },
-          { label: "Labor Subtotal", value: `$${costResult.laborSubtotal}` },
-          { label: "Grand Total Project Cost", value: `$${costResult.grandTotalProjectCost}` },
+          { label: "Sundries & Spacers", value: `$${costResult.sundriesSubtotal.toFixed(2)}` },
+          { label: "Labor Subtotal", value: `$${costResult.laborSubtotal.toFixed(2)}` },
+          { label: "Material Sales Tax", value: `$${costResult.salesTaxAmount.toFixed(2)}` },
+          { label: "Grand Total Project Cost", value: `$${costResult.grandTotalProjectCost.toFixed(2)}` },
           { label: "Average Cost per Sq Ft", value: `$${costResult.costPerSquareFoot.toFixed(2)}/sq ft` },
         ],
       });
@@ -608,7 +956,7 @@ export function TileCalculator() {
       keyMetrics: [
         { label: "Total Tiles Needed", value: tileResult ? `${tileResult.totalTilesNeeded} Tiles` : "—", highlight: true },
         { label: "Total Boxes Needed", value: tileResult ? `${tileResult.totalBoxesNeeded} Boxes` : "—" },
-        { label: "Estimated Project Cost", value: costResult ? `$${costResult.grandTotalProjectCost.toLocaleString()}` : "—" },
+        { label: "Estimated Project Cost", value: costResult ? `$${costResult.grandTotalProjectCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "—" },
       ],
       sections,
     };
@@ -625,8 +973,28 @@ export function TileCalculator() {
         onToggleSaved={() => tileSaved.setIsOpen(!tileSaved.isOpen)}
         onSave={() => {
           if (!tileResult) return;
+          const raw: TileQuantityRawInputs = {
+            inputMode,
+            roomLength,
+            roomLengthUnit,
+            roomWidth,
+            roomWidthUnit,
+            totalAreaSqFt,
+            tileLength,
+            tileWidth,
+            tileUnit,
+            tileThickness,
+            groutJointWidth,
+            groutJointUnit,
+            pattern,
+            wastePercent,
+            tilesPerBox,
+            pricePerUnit,
+            pricingType,
+          };
           tileSaved.save(
-            `${tileResult.totalTilesNeeded} tiles (${tileResult.totalBoxesNeeded} boxes), Area: ${tileResult.roomAreaSqFt} sq ft`,
+            `${tileResult.totalTilesNeeded} tiles (${tileResult.totalBoxesNeeded} boxes), ${tileResult.roomAreaSqFt} sq ft`,
+            raw,
             tileResult
           );
           flashSave(setTileSaveSuccess);
@@ -634,7 +1002,7 @@ export function TileCalculator() {
       >
         <div className="space-y-3">
           {/* Sub-Tabs: Dimensions vs Total Area */}
-          <div className="flex gap-2 text-xs pb-1 border-b border-zinc-100 dark:border-zinc-800">
+          <div className="flex gap-2 text-xs pb-1 border-b border-zinc-100 dark:border-zinc-800 no-print">
             <button
               type="button"
               onClick={() => setInputMode("dimensions")}
@@ -659,6 +1027,13 @@ export function TileCalculator() {
             </button>
           </div>
 
+          {/* Validation Alert */}
+          {card1Error && (
+            <div role="alert" className="p-2.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-lg text-xs text-red-700 dark:text-red-300 font-medium">
+              {card1Error}
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
             {/* Inputs Column */}
             <div className="md:col-span-7 space-y-2.5">
@@ -666,15 +1041,22 @@ export function TileCalculator() {
               {inputMode === "dimensions" ? (
                 <div className="grid grid-cols-2 gap-2">
                   <div className="space-y-1">
-                    <label className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300">Room Length</label>
+                    <label htmlFor="tile-room-length" className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 block">
+                      Room Length
+                    </label>
                     <div className="flex gap-1">
                       <Input
+                        id="tile-room-length"
                         type="number"
                         value={roomLength}
                         onChange={(e) => setRoomLength(e.target.value)}
+                        min={0.1}
+                        step={0.5}
                         className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                       />
                       <select
+                        id="tile-room-length-unit"
+                        aria-label="Room length unit"
                         value={roomLengthUnit}
                         onChange={(e) => setRoomLengthUnit(e.target.value as LengthUnit)}
                         className="h-7 text-xs rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-1 text-zinc-700 dark:text-zinc-300"
@@ -688,15 +1070,22 @@ export function TileCalculator() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300">Room Width</label>
+                    <label htmlFor="tile-room-width" className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 block">
+                      Room Width
+                    </label>
                     <div className="flex gap-1">
                       <Input
+                        id="tile-room-width"
                         type="number"
                         value={roomWidth}
                         onChange={(e) => setRoomWidth(e.target.value)}
+                        min={0.1}
+                        step={0.5}
                         className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                       />
                       <select
+                        id="tile-room-width-unit"
+                        aria-label="Room width unit"
                         value={roomWidthUnit}
                         onChange={(e) => setRoomWidthUnit(e.target.value as LengthUnit)}
                         className="h-7 text-xs rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-1 text-zinc-700 dark:text-zinc-300"
@@ -710,14 +1099,30 @@ export function TileCalculator() {
                   </div>
                 </div>
               ) : (
-                <InputRow label="Total Surface Area" value={totalAreaSqFt} onChange={setTotalAreaSqFt} unit="sq ft" />
+                <div className="grid grid-cols-12 gap-2 items-center text-xs">
+                  <label htmlFor="tile-total-area" className="col-span-5 font-medium text-zinc-700 dark:text-zinc-300 truncate">
+                    Total Surface Area
+                  </label>
+                  <div className="col-span-4">
+                    <Input
+                      id="tile-total-area"
+                      type="number"
+                      value={totalAreaSqFt}
+                      onChange={(e) => setTotalAreaSqFt(e.target.value)}
+                      min={0.1}
+                      step={1}
+                      className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
+                    />
+                  </div>
+                  <div className="col-span-3 text-[11px] text-zinc-500 font-medium">sq ft</div>
+                </div>
               )}
 
               {/* Tile Size Inputs & Presets */}
               <div className="space-y-1 pt-1">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300">Tile Dimensions:</span>
-                  <div className="flex items-center gap-1 text-[10px]">
+                  <div className="flex items-center gap-1 text-[10px] no-print">
                     <button
                       type="button"
                       onClick={() => setTilePreset("12", "12")}
@@ -751,26 +1156,34 @@ export function TileCalculator() {
 
                 <div className="grid grid-cols-3 gap-2">
                   <div>
-                    <label className="text-[10px] text-zinc-500 block">Length</label>
+                    <label htmlFor="tile-length" className="text-[10px] text-zinc-500 block">Length</label>
                     <Input
+                      id="tile-length"
                       type="number"
                       value={tileLength}
                       onChange={(e) => setTileLength(e.target.value)}
+                      min={0.1}
+                      step={0.5}
                       className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] text-zinc-500 block">Width</label>
+                    <label htmlFor="tile-width" className="text-[10px] text-zinc-500 block">Width</label>
                     <Input
+                      id="tile-width"
                       type="number"
                       value={tileWidth}
                       onChange={(e) => setTileWidth(e.target.value)}
+                      min={0.1}
+                      step={0.5}
                       className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] text-zinc-500 block">Unit</label>
+                    <label htmlFor="tile-unit" className="text-[10px] text-zinc-500 block">Unit</label>
                     <select
+                      id="tile-unit"
+                      aria-label="Tile unit of measurement"
                       value={tileUnit}
                       onChange={(e) => setTileUnit(e.target.value as TileUnit)}
                       className="w-full h-7 text-xs rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-1 text-zinc-700 dark:text-zinc-300"
@@ -787,10 +1200,11 @@ export function TileCalculator() {
               {/* Grout Joint Spacing & Pattern */}
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <div>
-                  <label className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 block mb-0.5">
+                  <label htmlFor="tile-grout-width" className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 block mb-0.5">
                     Grout Joint Gap Width:
                   </label>
                   <select
+                    id="tile-grout-width"
                     value={groutJointWidth}
                     onChange={(e) => setGroutJointWidth(e.target.value)}
                     className="w-full h-7 text-xs rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 text-zinc-700 dark:text-zinc-300"
@@ -805,10 +1219,11 @@ export function TileCalculator() {
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 block mb-0.5">
+                  <label htmlFor="tile-pattern" className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 block mb-0.5">
                     Layout Pattern:
                   </label>
                   <select
+                    id="tile-pattern"
                     value={pattern}
                     onChange={(e) => {
                       const p = e.target.value as TilePattern;
@@ -829,14 +1244,18 @@ export function TileCalculator() {
               {/* Waste Allowance & Box Size */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 block mb-0.5">
+                  <label htmlFor="tile-waste-percent" className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 block mb-0.5">
                     Waste Factor (%):
                   </label>
                   <div className="flex gap-1 items-center">
                     <Input
+                      id="tile-waste-percent"
                       type="number"
                       value={wastePercent}
                       onChange={(e) => setWastePercent(e.target.value)}
+                      min={0}
+                      max={100}
+                      step={1}
                       className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                     />
                     <span className="text-xs text-zinc-500 font-medium">%</span>
@@ -844,14 +1263,16 @@ export function TileCalculator() {
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 block mb-0.5">
+                  <label htmlFor="tile-box-size" className="text-[11px] font-medium text-zinc-700 dark:text-zinc-300 block mb-0.5">
                     Box Size (Tiles / Box):
                   </label>
                   <Input
+                    id="tile-box-size"
                     type="number"
                     value={tilesPerBox}
                     onChange={(e) => setTilesPerBox(e.target.value)}
                     min={1}
+                    step={1}
                     className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                   />
                 </div>
@@ -859,11 +1280,12 @@ export function TileCalculator() {
 
               {/* Price Row (optional) */}
               <div className="grid grid-cols-12 gap-2 items-center text-xs pt-1">
-                <label className="col-span-4 font-medium text-zinc-700 dark:text-zinc-300">
+                <label htmlFor="tile-price-per-unit" className="col-span-4 font-medium text-zinc-700 dark:text-zinc-300">
                   Tile Price (optional)
                 </label>
                 <div className="col-span-4">
                   <Input
+                    id="tile-price-per-unit"
                     type="number"
                     value={pricePerUnit}
                     onChange={(e) => setPricePerUnit(e.target.value)}
@@ -875,6 +1297,8 @@ export function TileCalculator() {
                 </div>
                 <div className="col-span-4">
                   <select
+                    id="tile-pricing-type"
+                    aria-label="Pricing unit"
                     value={pricingType}
                     onChange={(e) => setPricingType(e.target.value as any)}
                     className="w-full h-7 text-xs rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-1 text-zinc-700 dark:text-zinc-300"
@@ -886,7 +1310,8 @@ export function TileCalculator() {
                 </div>
               </div>
 
-              <div className="flex gap-2 pt-1">
+              {/* Calculate / Clear Buttons */}
+              <div className="flex gap-2 pt-1 no-print">
                 <Button
                   onClick={handleTileCalc}
                   className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-4 cursor-pointer"
@@ -903,6 +1328,7 @@ export function TileCalculator() {
                     setGroutJointWidth("0.125");
                     setWastePercent("10");
                     setPricePerUnit("");
+                    setCard1Error(null);
                   }}
                   className="text-xs font-semibold h-8 px-3 cursor-pointer"
                 >
@@ -920,14 +1346,14 @@ export function TileCalculator() {
                 pattern={pattern}
                 tileLengthIn={Number(tileLength) || 12}
                 tileWidthIn={Number(tileWidth) || 12}
-                groutIn={Number(groutJointWidth) || 0.125}
+                groutIn={groutJointWidth.trim() !== "" ? Number(groutJointWidth) : 0.125}
               />
             </div>
           </div>
 
           {/* Results Summary */}
           {tileResult && (
-            <div className="space-y-2 pt-2">
+            <div className="space-y-2 pt-2" aria-live="polite">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-center">
                 <div className="p-2.5 bg-blue-50 dark:bg-blue-950/30 rounded border border-blue-200 dark:border-blue-800">
                   <span className="text-[10px] text-zinc-500 dark:text-zinc-400 block font-medium">Total Tiles Needed</span>
@@ -980,6 +1406,82 @@ export function TileCalculator() {
                   </span>
                 )}
               </div>
+
+              {/* Card 1 Action Toolbar: Copy & CSV */}
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-zinc-100 dark:border-zinc-800 text-xs no-print">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyToClipboard(
+                        "c1_res",
+                        `${tileResult.totalTilesNeeded} Tiles (${tileResult.totalBoxesNeeded} Boxes) for ${tileResult.roomAreaSqFt} sq ft (${tileResult.estimatedGroutLbs} lbs Grout, ${tileResult.mortarBagsNeeded} Mortar Bags)`
+                      )
+                    }
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-semibold cursor-pointer transition-colors"
+                    aria-label="Copy result to clipboard"
+                  >
+                    {actionFeedback["c1_res"] ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                    {actionFeedback["c1_res"] || "Copy Result"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyToClipboard(
+                        "c1_sum",
+                        `Tile Takeoff Summary:
+• Surface Area: ${tileResult.roomAreaSqFt} sq ft (${tileResult.roomAreaSqM} m²)
+• Tile Dimensions: ${tileResult.tileLengthInches}" × ${tileResult.tileWidthInches}" (${tileResult.singleTileAreaSqFt} sq ft/tile)
+• Grout Joint: ${tileResult.groutWidthInches}"
+• Layout Pattern: ${tileResult.pattern.replace("_", " ")}
+• Net Tiles: ${tileResult.netTilesNeeded}
+• Purchased Tiles (+${tileResult.wastePercent}% waste): ${tileResult.totalTilesNeeded} (${tileResult.wasteTilesCount} scrap)
+• Packaging: ${tileResult.totalBoxesNeeded} Boxes (@${tileResult.tilesPerBox} pcs/box)
+• Grout Required: ${tileResult.estimatedGroutLbs} lbs (~${tileResult.groutBagsNeeded} × 25-lb bags)
+• Mortar Required: ${tileResult.mortarBagsNeeded} Bags (50-lb)
+• Recommended Trowel: ${tileResult.recommendedTrowel}`
+                      )
+                    }
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-semibold cursor-pointer transition-colors"
+                    aria-label="Copy detailed summary to clipboard"
+                  >
+                    {actionFeedback["c1_sum"] ? <Check className="w-3 h-3 text-emerald-600" /> : <FileText className="w-3 h-3" />}
+                    {actionFeedback["c1_sum"] || "Copy Summary"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyToClipboard(
+                        "c1_latex",
+                        `A = ${tileResult.roomAreaSqFt}\\text{ ft}^2, \\quad A_{\\text{eff}} = (${tileResult.tileLengthInches} + ${tileResult.groutWidthInches})(${tileResult.tileWidthInches} + ${tileResult.groutWidthInches}) = ${(
+                          (tileResult.tileLengthInches + tileResult.groutWidthInches) *
+                          (tileResult.tileWidthInches + tileResult.groutWidthInches)
+                        ).toFixed(3)}\\text{ in}^2 \\\\
+N_{\\text{net}} = \\left\\lceil \\frac{A \\times 144}{A_{\\text{eff}}} \\right\\rceil = ${tileResult.netTilesNeeded} \\\\
+N_{\\text{total}} = \\left\\lceil N_{\\text{net}} \\times \\left(1 + \\frac{${tileResult.wastePercent}}{100}\\right) \\right\\rceil = ${tileResult.totalTilesNeeded} \\\\
+\\text{Boxes} = \\left\\lceil \\frac{N_{\\text{total}}}{${tileResult.tilesPerBox}} \\right\\rceil = ${tileResult.totalBoxesNeeded}\\text{ boxes}`
+                      )
+                    }
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-semibold cursor-pointer transition-colors"
+                    aria-label="Copy calculation formulas in LaTeX format"
+                  >
+                    {actionFeedback["c1_latex"] ? <Check className="w-3 h-3 text-emerald-600" /> : <Sparkles className="w-3 h-3" />}
+                    {actionFeedback["c1_latex"] || "Copy LaTeX"}
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={exportCard1Csv}
+                  className="flex items-center gap-1 px-2 py-1 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 text-[11px] font-bold cursor-pointer transition-colors"
+                  aria-label="Export active tile quantity takeoff as CSV"
+                >
+                  <Download className="w-3 h-3" />
+                  {actionFeedback["c1_csv"] || "Export CSV"}
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -988,6 +1490,7 @@ export function TileCalculator() {
           {...tileSaved}
           cardTitle="Tile Quantity"
           formatSummary={(r) => `${r.totalTilesNeeded} tiles (${r.totalBoxesNeeded} boxes), ${r.roomAreaSqFt} sq ft`}
+          onRestore={restoreCard1}
         />
       </CardWrapper>
 
@@ -1000,14 +1503,30 @@ export function TileCalculator() {
         onToggleSaved={() => costSaved.setIsOpen(!costSaved.isOpen)}
         onSave={() => {
           if (!costResult) return;
+          const raw: TileCostRawInputs = {
+            costSqFt,
+            tileCostRate,
+            groutBagCost,
+            mortarBagCost,
+            sundriesCost,
+            laborRatePerSqFt,
+            salesTaxRate,
+          };
           costSaved.save(
-            `Area: ${costSqFt} sq ft, Total: $${costResult.grandTotalProjectCost} ($${costResult.costPerSquareFoot}/sq ft)`,
+            `Area: ${costSqFt} sq ft, Total: $${costResult.grandTotalProjectCost.toFixed(2)} ($${costResult.costPerSquareFoot.toFixed(2)}/sq ft)`,
+            raw,
             costResult
           );
           flashSave(setCostSaveSuccess);
         }}
       >
         <div className="space-y-3 text-xs">
+          {card2Error && (
+            <div role="alert" className="p-2.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-lg text-xs text-red-700 dark:text-red-300 font-medium">
+              {card2Error}
+            </div>
+          )}
+
           <div className="p-3 bg-slate-50 dark:bg-zinc-800/40 rounded-lg border border-slate-200 dark:border-zinc-700 space-y-2">
             <div className="flex items-center justify-between pb-1 border-b border-zinc-200 dark:border-zinc-700">
               <span className="font-bold text-zinc-800 dark:text-zinc-200 text-xs">
@@ -1022,8 +1541,10 @@ export function TileCalculator() {
                   setSundriesCost("35.00");
                   setLaborRatePerSqFt("9.00");
                   setSalesTaxRate("7");
+                  setCard2Error(null);
                 }}
-                className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline font-semibold cursor-pointer"
+                className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline font-semibold cursor-pointer no-print"
+                aria-label="Reset cost rates to standard defaults"
               >
                 Reset Default Rates
               </button>
@@ -1031,8 +1552,11 @@ export function TileCalculator() {
 
             <div className="grid grid-cols-2 sm:grid-cols-6 gap-2">
               <div>
-                <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Tile Area (sq ft)</label>
+                <label htmlFor="cost-tile-area" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+                  Tile Area (sq ft)
+                </label>
                 <Input
+                  id="cost-tile-area"
                   type="number"
                   value={costSqFt}
                   onChange={(e) => setCostSqFt(e.target.value)}
@@ -1041,8 +1565,11 @@ export function TileCalculator() {
                 />
               </div>
               <div>
-                <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Tile Cost ($/sq ft)</label>
+                <label htmlFor="cost-tile-rate" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+                  Tile Cost ($/sq ft)
+                </label>
                 <Input
+                  id="cost-tile-rate"
                   type="number"
                   value={tileCostRate}
                   onChange={(e) => setTileCostRate(e.target.value)}
@@ -1052,8 +1579,11 @@ export function TileCalculator() {
                 />
               </div>
               <div>
-                <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Grout ($/bag)</label>
+                <label htmlFor="cost-grout-cost" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+                  Grout ($/bag)
+                </label>
                 <Input
+                  id="cost-grout-cost"
                   type="number"
                   value={groutBagCost}
                   onChange={(e) => setGroutBagCost(e.target.value)}
@@ -1063,8 +1593,11 @@ export function TileCalculator() {
                 />
               </div>
               <div>
-                <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Thin-Set ($/bag)</label>
+                <label htmlFor="cost-mortar-cost" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+                  Thin-Set ($/bag)
+                </label>
                 <Input
+                  id="cost-mortar-cost"
                   type="number"
                   value={mortarBagCost}
                   onChange={(e) => setMortarBagCost(e.target.value)}
@@ -1074,8 +1607,11 @@ export function TileCalculator() {
                 />
               </div>
               <div>
-                <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Tile Setter Labor ($/sq ft)</label>
+                <label htmlFor="cost-labor-rate" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+                  Setter Labor ($/sq ft)
+                </label>
                 <Input
+                  id="cost-labor-rate"
                   type="number"
                   value={laborRatePerSqFt}
                   onChange={(e) => setLaborRatePerSqFt(e.target.value)}
@@ -1085,12 +1621,16 @@ export function TileCalculator() {
                 />
               </div>
               <div>
-                <label className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">Sales Tax (%)</label>
+                <label htmlFor="cost-sales-tax" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+                  Sales Tax (%)
+                </label>
                 <Input
+                  id="cost-sales-tax"
                   type="number"
                   value={salesTaxRate}
                   onChange={(e) => setSalesTaxRate(e.target.value)}
                   min={0}
+                  max={100}
                   step={0.5}
                   className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                 />
@@ -1098,7 +1638,7 @@ export function TileCalculator() {
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 no-print">
             <Button
               onClick={handleCostCalc}
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-7 px-4 cursor-pointer"
@@ -1108,7 +1648,7 @@ export function TileCalculator() {
           </div>
 
           {costResult && (
-            <div className="space-y-2 pt-1 border-t border-zinc-100 dark:border-zinc-800">
+            <div className="space-y-2 pt-1 border-t border-zinc-100 dark:border-zinc-800" aria-live="polite">
               {/* Itemized Cost Breakdown */}
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-[11px] font-sans tabular-nums border-collapse">
@@ -1124,19 +1664,19 @@ export function TileCalculator() {
                     <tr>
                       <td className="py-1 font-medium text-zinc-800 dark:text-zinc-200">Tiles (Porcelain / Ceramic)</td>
                       <td className="py-1">{costSqFt} sq ft</td>
-                      <td className="py-1">${tileCostRate}/sq ft</td>
+                      <td className="py-1">${Number(tileCostRate).toFixed(2)}/sq ft</td>
                       <td className="py-1 text-right font-semibold">${costResult.tileMaterialSubtotal.toFixed(2)}</td>
                     </tr>
                     <tr>
                       <td className="py-1 font-medium text-zinc-800 dark:text-zinc-200">Grout (25-lb Bags)</td>
                       <td className="py-1">{tileResult ? tileResult.groutBagsNeeded : 1} bags</td>
-                      <td className="py-1">${groutBagCost}/bag</td>
+                      <td className="py-1">${Number(groutBagCost).toFixed(2)}/bag</td>
                       <td className="py-1 text-right font-semibold">${costResult.groutSubtotal.toFixed(2)}</td>
                     </tr>
                     <tr>
                       <td className="py-1 font-medium text-zinc-800 dark:text-zinc-200">Thin-Set Mortar (50-lb Bags)</td>
                       <td className="py-1">{tileResult ? tileResult.mortarBagsNeeded : 2} bags</td>
-                      <td className="py-1">${mortarBagCost}/bag</td>
+                      <td className="py-1">${Number(mortarBagCost).toFixed(2)}/bag</td>
                       <td className="py-1 text-right font-semibold">${costResult.mortarSubtotal.toFixed(2)}</td>
                     </tr>
                     <tr>
@@ -1148,7 +1688,7 @@ export function TileCalculator() {
                     <tr>
                       <td className="py-1 font-medium text-zinc-800 dark:text-zinc-200">Professional Tile Setter Labor</td>
                       <td className="py-1">{costSqFt} sq ft</td>
-                      <td className="py-1">${laborRatePerSqFt}/sq ft</td>
+                      <td className="py-1">${Number(laborRatePerSqFt).toFixed(2)}/sq ft</td>
                       <td className="py-1 text-right font-semibold">${costResult.laborSubtotal.toFixed(2)}</td>
                     </tr>
                     <tr className="bg-slate-50/70 dark:bg-zinc-800/40 text-zinc-600 dark:text-zinc-400">
@@ -1171,6 +1711,76 @@ export function TileCalculator() {
                   ${costResult.costPerSquareFoot.toFixed(2)} per Square Foot
                 </span>
               </div>
+
+              {/* Card 2 Action Toolbar */}
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-zinc-100 dark:border-zinc-800 text-xs no-print">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyToClipboard(
+                        "c2_res",
+                        `Total Project Investment: $${costResult.grandTotalProjectCost.toFixed(2)} ($${costResult.costPerSquareFoot.toFixed(2)}/sq ft for ${costSqFt} sq ft)`
+                      )
+                    }
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-semibold cursor-pointer transition-colors"
+                    aria-label="Copy project cost to clipboard"
+                  >
+                    {actionFeedback["c2_res"] ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                    {actionFeedback["c2_res"] || "Copy Result"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyToClipboard(
+                        "c2_sum",
+                        `Tile Installation Budget (${costSqFt} sq ft):
+• Tile Materials: $${costResult.tileMaterialSubtotal.toFixed(2)}
+• Grout: $${costResult.groutSubtotal.toFixed(2)}
+• Thin-Set Mortar: $${costResult.mortarSubtotal.toFixed(2)}
+• Sundries: $${costResult.sundriesSubtotal.toFixed(2)}
+• Total Materials: $${costResult.materialsTotal.toFixed(2)}
+• Setter Labor: $${costResult.laborSubtotal.toFixed(2)}
+• Sales Tax (${salesTaxRate}% on materials): $${costResult.salesTaxAmount.toFixed(2)}
+• Grand Total: $${costResult.grandTotalProjectCost.toFixed(2)} ($${costResult.costPerSquareFoot.toFixed(2)}/sq ft)`
+                      )
+                    }
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-semibold cursor-pointer transition-colors"
+                    aria-label="Copy itemized budget summary to clipboard"
+                  >
+                    {actionFeedback["c2_sum"] ? <Check className="w-3 h-3 text-emerald-600" /> : <FileText className="w-3 h-3" />}
+                    {actionFeedback["c2_sum"] || "Copy Summary"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyToClipboard(
+                        "c2_latex",
+                        `\\text{Materials} = \\$${costResult.materialsTotal.toFixed(2)}, \\quad \\text{Labor} = \\$${costResult.laborSubtotal.toFixed(2)}, \\quad \\text{Tax} = \\$${costResult.salesTaxAmount.toFixed(2)} \\\\
+\\text{Total Cost} = \\text{Materials} + \\text{Labor} + \\text{Tax} = \\$${costResult.grandTotalProjectCost.toFixed(2)} \\\\
+\\text{Unit Investment} = \\frac{\\$${costResult.grandTotalProjectCost.toFixed(2)}}{${costSqFt}\\text{ ft}^2} = \\$${costResult.costPerSquareFoot.toFixed(2)}/\\text{ft}^2`
+                      )
+                    }
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-semibold cursor-pointer transition-colors"
+                    aria-label="Copy budget formulas in LaTeX format"
+                  >
+                    {actionFeedback["c2_latex"] ? <Check className="w-3 h-3 text-emerald-600" /> : <Sparkles className="w-3 h-3" />}
+                    {actionFeedback["c2_latex"] || "Copy LaTeX"}
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={exportCard2Csv}
+                  className="flex items-center gap-1 px-2 py-1 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 text-[11px] font-bold cursor-pointer transition-colors"
+                  aria-label="Export budget breakdown as CSV"
+                >
+                  <Download className="w-3 h-3" />
+                  {actionFeedback["c2_csv"] || "Export CSV"}
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -1178,7 +1788,8 @@ export function TileCalculator() {
         <SavedEstimatesDrawer
           {...costSaved}
           cardTitle="Tile Cost"
-          formatSummary={(r) => `$${r.grandTotalProjectCost.toLocaleString()} ($${r.costPerSquareFoot.toFixed(2)}/sq ft)`}
+          formatSummary={(r) => `$${r.grandTotalProjectCost.toFixed(2)} ($${r.costPerSquareFoot.toFixed(2)}/sq ft)`}
+          onRestore={restoreCard2}
         />
       </CardWrapper>
 
@@ -1191,15 +1802,26 @@ export function TileCalculator() {
         onToggleSaved={() => multiRoomSaved.setIsOpen(!multiRoomSaved.isOpen)}
         onSave={() => {
           if (!multiRoomResult) return;
+          const raw: TileMultiRoomRawInputs = {
+            rooms,
+            multiRoomWaste,
+          };
           multiRoomSaved.save(
-            `${rooms.length} Rooms, Total: ${multiRoomResult.totalNetSqFt} sq ft, ${multiRoomResult.totalTilesWithWaste} tiles`,
+            `${rooms.length} Rooms, Net Area: ${multiRoomResult.totalNetSqFt} sq ft, ${multiRoomResult.totalTilesWithWaste} tiles`,
+            raw,
             multiRoomResult
           );
           flashSave(setMultiRoomSaveSuccess);
         }}
       >
         <div className="space-y-3 text-xs">
-          <div className="flex items-center justify-between">
+          {card3Error && (
+            <div role="alert" className="p-2.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-lg text-xs text-red-700 dark:text-red-300 font-medium">
+              {card3Error}
+            </div>
+          )}
+
+          <div className="flex items-center justify-between no-print">
             <span className="font-semibold text-zinc-700 dark:text-zinc-300">
               Rooms &amp; Sections ({rooms.length}):
             </span>
@@ -1208,12 +1830,13 @@ export function TileCalculator() {
               size="sm"
               onClick={addRoomRow}
               className="text-xs h-7 gap-1 font-semibold text-blue-600 dark:text-blue-400 cursor-pointer"
+              aria-label="Add new room or floor section"
             >
               <Plus className="w-3.5 h-3.5" /> Add Room Section
             </Button>
           </div>
 
-          {/* Table Column Headers / Reference Labels */}
+          {/* Table Column Headers */}
           <div className="grid grid-cols-12 gap-1.5 px-2 py-1.5 bg-blue-50/80 dark:bg-blue-950/40 rounded-md border border-blue-200/70 dark:border-blue-900/50 text-[11px] font-bold text-blue-900 dark:text-blue-200">
             <div className="col-span-4">Room / Area Name</div>
             <div className="col-span-3">Length (ft)</div>
@@ -1221,62 +1844,74 @@ export function TileCalculator() {
             <div className="col-span-2 truncate" title="Deductions: Kitchen Islands, Bathtubs, Vanities, Fireplaces">
               Deduct (sq ft)
             </div>
-            <div className="col-span-1 text-right">Del</div>
+            <div className="col-span-1 text-right no-print">Del</div>
           </div>
 
           {/* Dynamic Rooms List */}
           <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
-            {rooms.map((room) => (
+            {rooms.map((room, idx) => (
               <div
                 key={room.id}
                 className="grid grid-cols-12 gap-1.5 items-center bg-slate-50 dark:bg-zinc-800/40 p-1.5 rounded-lg border border-slate-200 dark:border-zinc-700 text-xs"
               >
                 <div className="col-span-4">
                   <Input
+                    id={`room-name-${idx}`}
                     type="text"
                     value={room.name}
                     onChange={(e) => updateRoomRow(room.id, "name", e.target.value)}
                     className="h-7 text-xs bg-white dark:bg-zinc-800"
                     placeholder="e.g. Master Bath"
+                    aria-label={`Room ${idx + 1} Name`}
                   />
                 </div>
                 <div className="col-span-3">
                   <Input
+                    id={`room-length-${idx}`}
                     type="number"
                     value={room.lengthFt}
                     onChange={(e) => updateRoomRow(room.id, "lengthFt", Number(e.target.value))}
                     className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                     placeholder="Length (ft)"
-                    title="Length in feet"
+                    min={0.1}
+                    step={0.5}
+                    aria-label={`Room ${idx + 1} Length in feet`}
                   />
                 </div>
                 <div className="col-span-2">
                   <Input
+                    id={`room-width-${idx}`}
                     type="number"
                     value={room.widthFt}
                     onChange={(e) => updateRoomRow(room.id, "widthFt", Number(e.target.value))}
                     className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                     placeholder="Width (ft)"
-                    title="Width in feet"
+                    min={0.1}
+                    step={0.5}
+                    aria-label={`Room ${idx + 1} Width in feet`}
                   />
                 </div>
                 <div className="col-span-2">
                   <Input
+                    id={`room-deduct-${idx}`}
                     type="number"
                     value={room.deductionSqFt}
                     onChange={(e) => updateRoomRow(room.id, "deductionSqFt", Number(e.target.value))}
                     className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
                     placeholder="Deduct (sq ft)"
-                    title="Deductions in square feet (Kitchen Island, Tub, Vanity)"
+                    min={0}
+                    step={1}
+                    aria-label={`Room ${idx + 1} Deduction area in square feet`}
                   />
                 </div>
-                <div className="col-span-1 flex justify-end">
+                <div className="col-span-1 flex justify-end no-print">
                   <button
                     type="button"
                     onClick={() => removeRoomRow(room.id)}
                     disabled={rooms.length <= 1}
                     className="text-zinc-400 hover:text-red-500 disabled:opacity-30 p-1 cursor-pointer"
                     title="Delete Room"
+                    aria-label={`Delete ${room.name || "Room"}`}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -1285,7 +1920,7 @@ export function TileCalculator() {
             ))}
           </div>
 
-          <div className="flex gap-2 pt-1">
+          <div className="flex gap-2 pt-1 no-print">
             <Button
               onClick={handleMultiRoomCalc}
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-7 px-4 cursor-pointer"
@@ -1295,7 +1930,7 @@ export function TileCalculator() {
           </div>
 
           {multiRoomResult && (
-            <div className="space-y-2 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+            <div className="space-y-2 pt-2 border-t border-zinc-100 dark:border-zinc-800" aria-live="polite">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
                 <div className="p-2 bg-blue-50 dark:bg-blue-950/30 rounded border border-blue-200 dark:border-blue-800">
                   <span className="text-[10px] text-zinc-500 block">Total Net Area</span>
@@ -1326,6 +1961,64 @@ export function TileCalculator() {
                   <span className="text-[10px] text-zinc-400 block">Bags</span>
                 </div>
               </div>
+
+              {/* Card 3 Action Toolbar */}
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-zinc-100 dark:border-zinc-800 text-xs no-print">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyToClipboard(
+                        "c3_res",
+                        `${multiRoomResult.totalNetSqFt} sq ft Net Area, ${multiRoomResult.totalTilesWithWaste} Tiles (${multiRoomResult.totalBoxesNeeded} Boxes) across ${rooms.length} rooms`
+                      )
+                    }
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-semibold cursor-pointer transition-colors"
+                    aria-label="Copy multi-room result to clipboard"
+                  >
+                    {actionFeedback["c3_res"] ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                    {actionFeedback["c3_res"] || "Copy Result"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyToClipboard(
+                        "c3_sum",
+                        `Multi-Room Tile Aggregation (${rooms.length} areas):
+${rooms
+  .map(
+    (r) =>
+      `• ${r.name}: ${r.lengthFt}×${r.widthFt} ft = ${r.lengthFt * r.widthFt} sq ft (Deduct ${r.deductionSqFt} sq ft) = ${Math.max(
+        0,
+        r.lengthFt * r.widthFt - r.deductionSqFt
+      )} sq ft net`
+  )
+  .join("\n")}
+Total Gross: ${multiRoomResult.totalGrossSqFt} sq ft | Deductions: ${multiRoomResult.totalDeductionsSqFt} sq ft
+Total Net Area: ${multiRoomResult.totalNetSqFt} sq ft (${multiRoomResult.totalNetSqM} m²)
+Total Tiles (+${multiRoomWaste}% waste): ${multiRoomResult.totalTilesWithWaste} pcs (${multiRoomResult.totalBoxesNeeded} Boxes)
+Materials: ${multiRoomResult.totalGroutBagsNeeded} Grout Bags / ${multiRoomResult.totalMortarBagsNeeded} Mortar Bags`
+                      )
+                    }
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-semibold cursor-pointer transition-colors"
+                    aria-label="Copy multi-room summary to clipboard"
+                  >
+                    {actionFeedback["c3_sum"] ? <Check className="w-3 h-3 text-emerald-600" /> : <FileText className="w-3 h-3" />}
+                    {actionFeedback["c3_sum"] || "Copy Summary"}
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={exportCard3Csv}
+                  className="flex items-center gap-1 px-2 py-1 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 text-[11px] font-bold cursor-pointer transition-colors"
+                  aria-label="Export multi-room breakdown as CSV"
+                >
+                  <Download className="w-3 h-3" />
+                  {actionFeedback["c3_csv"] || "Export CSV"}
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -1334,6 +2027,7 @@ export function TileCalculator() {
           {...multiRoomSaved}
           cardTitle="Multi-Room"
           formatSummary={(r) => `${r.totalNetSqFt} sq ft, ${r.totalTilesWithWaste} tiles (${r.totalBoxesNeeded} boxes)`}
+          onRestore={restoreCard3}
         />
       </CardWrapper>
 
@@ -1346,33 +2040,49 @@ export function TileCalculator() {
         onToggleSaved={() => groutSaved.setIsOpen(!groutSaved.isOpen)}
         onSave={() => {
           if (!groutResult) return;
+          const raw: TileGroutRawInputs = {
+            groutArea,
+            groutType,
+            tileThickness,
+            groutJointWidth,
+          };
           groutSaved.save(
-            `${groutResult.groutLbs} lbs Grout (${groutResult.groutType}), ${groutResult.mortarBags50lb} Mortar Bags`,
+            `${groutResult.groutLbs} lbs Grout (${groutResult.groutType}), ${groutResult.mortarBags50lb} Mortar Bags for ${groutArea} sq ft`,
+            raw,
             groutResult
           );
           flashSave(setGroutSaveSuccess);
         }}
       >
         <div className="space-y-3 text-xs">
+          {card4Error && (
+            <div role="alert" className="p-2.5 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-lg text-xs text-red-700 dark:text-red-300 font-medium">
+              {card4Error}
+            </div>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
+              <label htmlFor="grout-surface-area" className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
                 Surface Area to Grout (sq ft):
               </label>
               <Input
+                id="grout-surface-area"
                 type="number"
                 value={groutArea}
                 onChange={(e) => setGroutArea(e.target.value)}
                 min={1}
+                step={1}
                 className="h-7 text-xs font-sans tabular-nums bg-white dark:bg-zinc-800"
               />
             </div>
 
             <div>
-              <label className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
+              <label htmlFor="grout-type-select" className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
                 Grout Formulation Type:
               </label>
               <select
+                id="grout-type-select"
                 value={groutType}
                 onChange={(e) => setGroutType(e.target.value as GroutType)}
                 className="w-full h-7 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 text-zinc-700 dark:text-zinc-300"
@@ -1384,10 +2094,11 @@ export function TileCalculator() {
             </div>
 
             <div>
-              <label className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
+              <label htmlFor="grout-tile-thickness" className="font-semibold text-zinc-700 dark:text-zinc-300 block mb-1">
                 Tile Thickness / Depth (in):
               </label>
               <select
+                id="grout-tile-thickness"
                 value={tileThickness}
                 onChange={(e) => setTileThickness(e.target.value)}
                 className="w-full h-7 rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 text-zinc-700 dark:text-zinc-300 font-sans tabular-nums"
@@ -1400,7 +2111,7 @@ export function TileCalculator() {
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 no-print">
             <Button
               onClick={handleGroutCalc}
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-7 px-4 cursor-pointer"
@@ -1410,7 +2121,7 @@ export function TileCalculator() {
           </div>
 
           {groutResult && (
-            <div className="space-y-2 pt-1 border-t border-zinc-100 dark:border-zinc-800">
+            <div className="space-y-2 pt-1 border-t border-zinc-100 dark:border-zinc-800" aria-live="polite">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
                 <div className="p-2 bg-blue-50 dark:bg-blue-950/30 rounded border border-blue-200 dark:border-blue-800">
                   <span className="text-[10px] text-zinc-500 block">Total Grout Weight</span>
@@ -1449,23 +2160,75 @@ export function TileCalculator() {
               <div className="p-2 bg-blue-50/70 dark:bg-blue-950/40 rounded border border-blue-200 dark:border-blue-800 text-[11px] text-blue-900 dark:text-blue-200 font-medium">
                 • TCNA Recommendation: <strong>{groutResult.recommendedGroutType}</strong>
               </div>
+
+              {/* Card 4 Action Toolbar */}
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-zinc-100 dark:border-zinc-800 text-xs no-print">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyToClipboard(
+                        "c4_res",
+                        `${groutResult.groutLbs} lbs Grout (${groutResult.bags25lb} × 25-lb bags), ${groutResult.mortarBags50lb} Thin-Set Bags (50-lb) for ${groutArea} sq ft`
+                      )
+                    }
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-semibold cursor-pointer transition-colors"
+                    aria-label="Copy grout result to clipboard"
+                  >
+                    {actionFeedback["c4_res"] ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                    {actionFeedback["c4_res"] || "Copy Result"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyToClipboard(
+                        "c4_sum",
+                        `TCNA Grout & Mortar Estimate (${groutArea} sq ft):
+• Total Grout Weight: ${groutResult.groutLbs} lbs (${groutResult.groutKg} kg)
+• Packaging: ${groutResult.bags25lb} × 25-lb bags (or ${groutResult.bags10lb} × 10-lb bags)
+• Thin-Set Mortar: ${groutResult.mortarBags50lb} × 50-lb bags
+• Recommended Trowel: ${groutResult.trowelRecommendation} (~${groutResult.trowelCoverageSqFtPerBag} sq ft/bag)
+• TCNA Formulation: ${groutResult.recommendedGroutType}`
+                      )
+                    }
+                    className="flex items-center gap-1 px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-[11px] font-semibold cursor-pointer transition-colors"
+                    aria-label="Copy grout summary to clipboard"
+                  >
+                    {actionFeedback["c4_sum"] ? <Check className="w-3 h-3 text-emerald-600" /> : <FileText className="w-3 h-3" />}
+                    {actionFeedback["c4_sum"] || "Copy Summary"}
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={exportCard4Csv}
+                  className="flex items-center gap-1 px-2 py-1 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 hover:bg-blue-100 text-[11px] font-bold cursor-pointer transition-colors"
+                  aria-label="Export grout and mortar estimate as CSV"
+                >
+                  <Download className="w-3 h-3" />
+                  {actionFeedback["c4_csv"] || "Export CSV"}
+                </button>
+              </div>
             </div>
           )}
         </div>
 
         <SavedEstimatesDrawer
           {...groutSaved}
-          cardTitle="Grout & Mortar"
+          cardTitle="Grout &amp; Mortar"
           formatSummary={(r) => `${r.groutLbs} lbs Grout (${r.bags25lb} × 25-lb bags), ${r.mortarBags50lb} Mortar Bags`}
+          onRestore={restoreCard4}
         />
       </CardWrapper>
 
       {/* ═══════════════════ REPORT MODAL TRIGGER ═══════════════════ */}
-      <div className="flex items-center justify-end pt-1">
+      <div className="flex items-center justify-end pt-1 no-print">
         <Button
           variant="outline"
           onClick={() => setIsReportOpen(true)}
           className="h-8 text-xs font-semibold gap-1.5 cursor-pointer"
+          aria-label="Generate full printable tile takeoff report"
         >
           <FileSpreadsheet className="h-3.5 w-3.5 text-blue-500" /> Generate Tile Takeoff Report
         </Button>
@@ -1479,3 +2242,4 @@ export function TileCalculator() {
     </div>
   );
 }
+export default TileCalculator;

@@ -126,7 +126,7 @@ export function calculateTileQuantity(input: TileQuantityInput): TileQuantityRes
 
   const tLengthIn = convertTileToInches(input.tileLength || 12, input.tileUnit || "inches");
   const tWidthIn = convertTileToInches(input.tileWidth || 12, input.tileUnit || "inches");
-  const gWidthIn = convertGroutToInches(input.groutJointWidth || 0.125, input.groutJointUnit || "inches");
+  const gWidthIn = convertGroutToInches(input.groutJointWidth ?? 0.125, input.groutJointUnit || "inches");
 
   const singleTileAreaSqInches = tLengthIn * tWidthIn;
   const singleTileAreaSqFt = singleTileAreaSqInches / 144;
@@ -137,10 +137,10 @@ export function calculateTileQuantity(input: TileQuantityInput): TileQuantityRes
 
   // Net tiles without waste
   const netTilesNeededExact = (roomAreaSqFt * 144) / effectiveTileAreaSqInches;
-  const netTilesNeeded = Math.ceil(netTilesNeededExact);
+  const netTilesNeeded = Math.ceil(Math.round(netTilesNeededExact * 1e6) / 1e6);
 
   const wastePercent = input.wastePercent ?? 10;
-  const totalTilesNeeded = Math.ceil(netTilesNeededExact * (1 + wastePercent / 100));
+  const totalTilesNeeded = Math.ceil(Math.round(netTilesNeededExact * (1 + wastePercent / 100) * 1e6) / 1e6);
   const wasteTilesCount = Math.max(0, totalTilesNeeded - netTilesNeeded);
 
   const tilesPerBox = Math.max(1, input.tilesPerBox || 10);
@@ -151,14 +151,14 @@ export function calculateTileQuantity(input: TileQuantityInput): TileQuantityRes
   // Grout Calculation: TCNA formula
   // Weight (lbs) = [(L + W) * Depth * Gap * 0.065 * Area_sqft * 144] / [L * W * 144]
   // 0.065 is dry Portland cement grout density factor in lbs/cu in.
-  const thicknessIn = input.tileThicknessInches || (tLengthIn >= 12 ? 0.375 : 0.25);
+  const thicknessIn = input.tileThicknessInches ?? (tLengthIn >= 12 ? 0.375 : 0.25);
   const groutWeightLbsExact =
     singleTileAreaSqInches > 0
       ? ((tLengthIn + tWidthIn) * thicknessIn * gWidthIn * 0.065 * (roomAreaSqFt * 144)) / singleTileAreaSqInches
-      : 5;
-  const estimatedGroutLbs = Math.max(1, Math.round(groutWeightLbsExact * 1.1 * 10) / 10); // +10% standard cleanup waste
+      : 0;
+  const estimatedGroutLbs = gWidthIn === 0 ? 0 : Math.max(1, Math.round(groutWeightLbsExact * 1.1 * 10) / 10); // +10% standard cleanup waste
   const estimatedGroutKg = Math.round((estimatedGroutLbs * 0.453592) * 10) / 10;
-  const groutBagsNeeded = Math.ceil(estimatedGroutLbs / 25); // standard 25-lb bag
+  const groutBagsNeeded = gWidthIn === 0 ? 0 : Math.ceil(estimatedGroutLbs / 25); // standard 25-lb bag
 
   // Thin-set Mortar Calculation
   // 1 50-lb bag covers ~40-45 sq ft for medium tile, ~30 sq ft for large format
@@ -261,8 +261,8 @@ export interface TileCostResult {
 export function calculateTileCost(input: TileCostInput): TileCostResult {
   const sqFt = Math.max(1, input.totalSqFt || 100);
   const tileMaterialSubtotal = sqFt * (input.tileCostPerSqFt || 0);
-  const groutSubtotal = (input.groutBags || 1) * (input.groutCostPerBag || 0);
-  const mortarSubtotal = (input.mortarBags || 2) * (input.mortarCostPerBag || 0);
+  const groutSubtotal = (input.groutBags ?? 1) * (input.groutCostPerBag || 0);
+  const mortarSubtotal = (input.mortarBags ?? 2) * (input.mortarCostPerBag || 0);
   const sundriesSubtotal = input.spacersAndSealerCost || 0;
 
   const materialsTotal = tileMaterialSubtotal + groutSubtotal + mortarSubtotal + sundriesSubtotal;
@@ -332,7 +332,7 @@ export function calculateMultiRoomTiles(input: MultiRoomInput): MultiRoomResult 
   const singleTileSqFt = (tLengthIn * tWidthIn) / 144;
 
   const netTiles = (totalNetSqFt * 144) / (tLengthIn * tWidthIn);
-  const totalTilesWithWaste = Math.ceil(netTiles * (1 + (input.wastePercent || 10) / 100));
+  const totalTilesWithWaste = Math.ceil(Math.round(netTiles * (1 + (input.wastePercent || 10) / 100) * 1e6) / 1e6);
 
   const tilesPerBox = Math.max(1, input.tilesPerBox || 10);
   const totalBoxesNeeded = Math.ceil(totalTilesWithWaste / tilesPerBox);
@@ -382,12 +382,14 @@ export function calculateGroutAndMortar(input: GroutMortarInput): GroutMortarRes
   const L = input.tileLengthInches || 12;
   const W = input.tileWidthInches || 12;
   const T = input.tileThicknessInches || 0.375;
-  const G = input.groutJointWidthInches || 0.125;
+  const G = input.groutJointWidthInches ?? 0.125;
   const area = input.surfaceAreaSqFt || 100;
 
-  // Recommendation: Sanded for >= 1/8", Unsanded for < 1/8"
+  // Recommendation: Sanded for >= 1/8", Unsanded for < 1/8", or No Grout
   let recommendedGroutType = "Sanded Grout (Joints ≥ 1/8\")";
-  if (G < 0.125) {
+  if (G === 0) {
+    recommendedGroutType = "No Grout (Rectified / Edge-to-Edge Installation)";
+  } else if (G < 0.125) {
     recommendedGroutType = "Unsanded Grout (Narrow Joints < 1/8\" to prevent scratching)";
   } else if (input.groutType === "epoxy") {
     recommendedGroutType = "Epoxy Grout (100% Stainproof / Chemical / Shower Wet Areas)";
@@ -395,12 +397,12 @@ export function calculateGroutAndMortar(input: GroutMortarInput): GroutMortarRes
 
   // Weight formula
   const singleTileSqIn = L * W;
-  const rawLbs = singleTileSqIn > 0 ? ((L + W) * T * G * 0.065 * (area * 144)) / singleTileSqIn : 10;
-  const groutLbs = Math.max(1, Math.round(rawLbs * 1.15 * 10) / 10); // +15% waste allowance
+  const rawLbs = singleTileSqIn > 0 && G > 0 ? ((L + W) * T * G * 0.065 * (area * 144)) / singleTileSqIn : 0;
+  const groutLbs = G === 0 ? 0 : Math.max(1, Math.round(rawLbs * 1.15 * 10) / 10); // +15% waste allowance
   const groutKg = Math.round((groutLbs * 0.453592) * 10) / 10;
 
-  const bags10lb = Math.ceil(groutLbs / 10);
-  const bags25lb = Math.ceil(groutLbs / 25);
+  const bags10lb = G === 0 ? 0 : Math.ceil(groutLbs / 10);
+  const bags25lb = G === 0 ? 0 : Math.ceil(groutLbs / 25);
 
   const maxDim = Math.max(L, W);
   let trowelCoverageSqFtPerBag = 40;
