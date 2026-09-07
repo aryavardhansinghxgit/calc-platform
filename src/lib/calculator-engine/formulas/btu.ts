@@ -256,6 +256,8 @@ export interface HeatingBtuResult {
     heatingOilGallonsPerHour: number;
     electricKwhPerHour: number;
   };
+  invalidTempGradient?: boolean;
+  validationError?: string;
 }
 
 /**
@@ -280,7 +282,26 @@ export function calculateHeatingBtu(input: HeatingBtuInput): HeatingBtuResult {
 
   const indoorF = toFahrenheit(input.desiredIndoorTemp, tempUnit);
   const outdoorF = toFahrenheit(input.outdoorLowTemp, tempUnit);
-  const deltaTempF = Math.max(indoorF - outdoorF, 1);
+  const isInvalidGradient = outdoorF >= indoorF;
+  const deltaTempF = Math.max(indoorF - outdoorF, 0);
+
+  if (isInvalidGradient) {
+    return {
+      volumeCuFt: Math.round(volumeCuFt),
+      volumeCuM: parseFloat(volumeCuM.toFixed(1)),
+      deltaTempF: Math.round(deltaTempF),
+      totalHeatingBtu: 0,
+      heatingKw: 0,
+      fuelEquivalents: {
+        naturalGasThermsPerHour: 0,
+        propaneGallonsPerHour: 0,
+        heatingOilGallonsPerHour: 0,
+        electricKwhPerHour: 0,
+      },
+      invalidTempGradient: true,
+      validationError: "For heating-load estimation, the outdoor design temperature should be below the desired indoor temperature.",
+    };
+  }
 
   let heatLossFactor = 0.13;
   const ins = input.insulationCondition || "average_standard";
@@ -362,12 +383,12 @@ export interface EnergyCostResult {
  * Carbon Footprint = Annual kWh × 0.388 kg CO₂/kWh (US Grid average)
  */
 export function calculateEnergyCostAndSizing(input: EnergyCostInput): EnergyCostResult {
-  const btu = Math.max(input.btuRating, 1000);
-  const seer = Math.max(input.seerRating, 8);
-  const hours = Math.min(Math.max(input.dailyHours, 0.5), 24);
-  const rate = Math.max(input.electricityRatePerKwh, 0.01);
+  const btu = Math.max(input.btuRating, 0);
+  const seer = Math.max(input.seerRating, 1);
+  const hours = Math.min(Math.max(input.dailyHours ?? 0, 0), 24);
+  const rate = Math.max(input.electricityRatePerKwh ?? 0, 0);
 
-  const watts = btu / seer;
+  const watts = seer > 0 ? btu / seer : 0;
   const kilowatts = watts / 1000;
 
   const dailyKwh = kilowatts * hours;
@@ -385,7 +406,7 @@ export function calculateEnergyCostAndSizing(input: EnergyCostInput): EnergyCost
 
   const SEER_BENCHMARKS = [10, 14, 16, 18, 20, 24];
   const seerComparison: SeerComparisonItem[] = SEER_BENCHMARKS.map((s) => {
-    const w = btu / s;
+    const w = s > 0 ? btu / s : 0;
     const annKwh = (w / 1000) * hours * 365;
     const cost = annKwh * rate;
     const savings = Math.max(baselineAnnualCost - cost, 0);

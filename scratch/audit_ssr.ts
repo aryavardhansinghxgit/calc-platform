@@ -1,3 +1,4 @@
+export {};
 async function auditSSR() {
   const url = "http://localhost:3000/calculators/right-triangle-calculator";
   console.log(`Fetching ${url}...`);
