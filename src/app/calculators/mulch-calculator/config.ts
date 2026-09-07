@@ -1,6 +1,7 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateMulchCalculator } from "./calculator";
 import { mulch_calculatorFaqs } from "./faq";
+import { MulchContent } from "@/components/calculator/mulch/MulchContent";
 
 export const mulch_calculatorConfig: CalculatorModuleDefinition = {
   id: "mulch-calculator",
@@ -13,6 +14,7 @@ export const mulch_calculatorConfig: CalculatorModuleDefinition = {
   featured: true,
   keywords: ["mulch calculator","garden mulch","landscape mulch","cubic yards"],
   priority: 1,
+  ContentComponent: MulchContent,
   relatedCalculators: ["gravel-calculator","square-footage-calculator"],
   formulaDescription: "Cubic Yards = (Area sq ft × Depth ft) / 27",
   faqs: mulch_calculatorFaqs,

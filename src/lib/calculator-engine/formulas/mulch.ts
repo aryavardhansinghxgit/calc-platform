@@ -101,18 +101,21 @@ export interface RectangularMulchResult {
 }
 
 export function calculateRectangularMulch(input: RectangularMulchInput): RectangularMulchResult {
-  let areaSqFt = 200;
+  let areaSqFt = 0;
 
-  if (input.inputMode === "total_area" && input.totalAreaSqFt) {
-    areaSqFt = input.totalAreaSqFt;
+  if (input.inputMode === "total_area") {
+    areaSqFt = input.totalAreaSqFt !== undefined ? input.totalAreaSqFt : 200;
   } else {
-    const lFt = convertDimensionToFeet(input.length || 20, input.lengthUnit || "feet");
-    const wFt = convertDimensionToFeet(input.width || 10, input.widthUnit || "feet");
-    areaSqFt = Math.max(0.1, lFt * wFt);
+    const lRaw = input.length !== undefined ? input.length : 20;
+    const wRaw = input.width !== undefined ? input.width : 10;
+    const lFt = convertDimensionToFeet(lRaw, input.lengthUnit || "feet");
+    const wFt = convertDimensionToFeet(wRaw, input.widthUnit || "feet");
+    areaSqFt = lFt * wFt;
   }
 
   const areaSqM = Math.round(areaSqFt * 0.092903 * 100) / 100;
-  const depthInches = Math.max(0.1, convertDepthToInches(input.depth || 3, input.depthUnit || "inches"));
+  const depthRaw = input.depth !== undefined ? input.depth : 3;
+  const depthInches = convertDepthToInches(depthRaw, input.depthUnit || "inches");
   const depthCm = Math.round(depthInches * 2.54 * 10) / 10;
   const depthFeet = depthInches / 12;
 
@@ -135,11 +138,13 @@ export function calculateRectangularMulch(input: RectangularMulchInput): Rectang
   const truckLoadsStandard = Math.round((volumeCuYards / 2.0) * 10) / 10;
 
   let estimatedCost = 0;
-  if (input.pricingType === "per_yard" && input.pricePerCubicYard) {
-    estimatedCost = volumeCuYards * input.pricePerCubicYard;
-  } else if (input.pricePerBag) {
+  if (input.pricingType === "per_yard") {
+    const pricePerYard = input.pricePerCubicYard !== undefined ? input.pricePerCubicYard : 0;
+    estimatedCost = volumeCuYards * pricePerYard;
+  } else {
+    const pricePerBag = input.pricePerBag !== undefined ? input.pricePerBag : 0;
     const selectedBags = input.bagSizeCuFt === 1.5 ? bags1_5CuFt : input.bagSizeCuFt === 3.0 ? bags3_0CuFt : bags2_0CuFt;
-    estimatedCost = selectedBags * input.pricePerBag;
+    estimatedCost = selectedBags * pricePerBag;
   }
 
   return {
@@ -183,6 +188,8 @@ export interface CircularMulchInput {
 
 export interface CircularMulchResult {
   mode: "full_circle" | "tree_ring";
+  isValid: boolean;
+  error?: string;
   outerAreaSqFt: number;
   innerAreaSqFt: number;
   netAreaSqFt: number;
@@ -208,22 +215,64 @@ export interface CircularMulchResult {
 }
 
 export function calculateCircularMulch(input: CircularMulchInput): CircularMulchResult {
-  const outerDiaFt = convertDimensionToFeet(input.outerDiameter || 8, input.outerDiameterUnit || "feet");
+  const outerDiaRaw = input.outerDiameter !== undefined ? input.outerDiameter : 8;
+  const outerDiaFt = convertDimensionToFeet(outerDiaRaw, input.outerDiameterUnit || "feet");
   const outerRadiusFt = outerDiaFt / 2;
   const outerAreaSqFt = Math.PI * Math.pow(outerRadiusFt, 2);
 
   let innerAreaSqFt = 0;
+  let innerDiaFt = 0;
+  let isInvalidGeometry = false;
+  let geometryError = "";
+
   if (input.mode === "tree_ring") {
-    const innerDiaFt = convertDimensionToFeet(input.innerDiameter || 1.5, input.innerDiameterUnit || "feet");
-    const innerRadiusFt = innerDiaFt / 2;
-    innerAreaSqFt = Math.PI * Math.pow(innerRadiusFt, 2);
+    const innerDiaRaw = input.innerDiameter !== undefined ? input.innerDiameter : 1.5;
+    innerDiaFt = convertDimensionToFeet(innerDiaRaw, input.innerDiameterUnit || "feet");
+
+    if (innerDiaFt >= outerDiaFt && outerDiaFt > 0) {
+      isInvalidGeometry = true;
+      geometryError = "Trunk diameter must be smaller than outer bed diameter.";
+    } else if (innerDiaFt > 0) {
+      const innerRadiusFt = innerDiaFt / 2;
+      innerAreaSqFt = Math.PI * Math.pow(innerRadiusFt, 2);
+    } else {
+      innerAreaSqFt = 0;
+    }
   }
 
-  const netAreaSqFt = Math.max(0.1, outerAreaSqFt - innerAreaSqFt);
-  const netAreaSqM = Math.round(netAreaSqFt * 0.092903 * 100) / 100;
-  const depthInches = Math.max(0.1, input.depthInches || 3);
+  const depthRaw = input.depthInches !== undefined ? input.depthInches : 3;
+  const depthInches = depthRaw;
   const depthCm = Math.round(depthInches * 2.54 * 10) / 10;
   const depthFeet = depthInches / 12;
+
+  if (isInvalidGeometry) {
+    return {
+      mode: input.mode,
+      isValid: false,
+      error: geometryError,
+      outerAreaSqFt: Math.round(outerAreaSqFt * 100) / 100,
+      innerAreaSqFt: Math.round(innerAreaSqFt * 100) / 100,
+      netAreaSqFt: 0,
+      netAreaSqM: 0,
+      depthInches,
+      depthCm,
+      volumeCuFt: 0,
+      volumeCuYards: 0,
+      volumeCuMeters: 0,
+      volumeLiters: 0,
+      bags2_0CuFt: 0,
+      bags3_0CuFt: 0,
+      weightLbs: 0,
+      weightKg: 0,
+      weightMetricTonnes: 0,
+      applicationRateKgPerM2: 0,
+      treeSafetyStatus: "volcano_hazard",
+      estimatedCost: 0,
+    };
+  }
+
+  const netAreaSqFt = Math.max(0, outerAreaSqFt - innerAreaSqFt);
+  const netAreaSqM = Math.round(netAreaSqFt * 0.092903 * 100) / 100;
 
   const volumeCuFt = netAreaSqFt * depthFeet;
   const volumeCuYards = volumeCuFt / 27;
@@ -239,16 +288,17 @@ export function calculateCircularMulch(input: CircularMulchInput): CircularMulch
   const weightMetricTonnes = Math.round((weightKg / 1000) * 100) / 100;
   const applicationRateKgPerM2 = netAreaSqM > 0 ? Math.round((weightKg / netAreaSqM) * 10) / 10 : 0;
 
-  // Arboricultural Safety Rule: Keep mulch depth <= 4 inches and maintain a 3" to 6" gap from the trunk (Donut method)
+  // Arboricultural Safety Rule: Keep mulch depth <= 4.5 inches and maintain a 3" to 6" gap from the trunk (Donut method)
   const treeSafetyStatus = depthInches > 4.5 || (input.mode === "full_circle" && outerDiaFt < 4)
     ? "volcano_hazard"
     : "safe_donut";
 
-  const pricePerBag = input.pricePerBag || 0;
+  const pricePerBag = input.pricePerBag !== undefined ? input.pricePerBag : 0;
   const estimatedCost = bags2_0CuFt * pricePerBag;
 
   return {
     mode: input.mode,
+    isValid: true,
     outerAreaSqFt: Math.round(outerAreaSqFt * 100) / 100,
     innerAreaSqFt: Math.round(innerAreaSqFt * 100) / 100,
     netAreaSqFt: Math.round(netAreaSqFt * 100) / 100,
@@ -320,8 +370,8 @@ export function calculateMultiBedLandscape(input: MultiBedInput): MultiBedResult
 
   for (const bed of input.beds) {
     let bedSqFt = 0;
-    const d1 = bed.dim1 || 10;
-    const d2 = bed.dim2 || 5;
+    const d1 = bed.dim1 !== undefined ? bed.dim1 : 10;
+    const d2 = bed.dim2 !== undefined ? bed.dim2 : 5;
 
     if (bed.shape === "rectangle") {
       bedSqFt = d1 * d2;
@@ -329,13 +379,14 @@ export function calculateMultiBedLandscape(input: MultiBedInput): MultiBedResult
       bedSqFt = Math.PI * Math.pow(d1 / 2, 2);
     } else if (bed.shape === "ring") {
       const outerArea = Math.PI * Math.pow(d1 / 2, 2);
-      const innerArea = Math.PI * Math.pow(d2 / 2, 2);
+      const innerArea = d2 < d1 && d2 > 0 ? Math.PI * Math.pow(d2 / 2, 2) : 0;
       bedSqFt = Math.max(0, outerArea - innerArea);
     } else if (bed.shape === "triangle") {
       bedSqFt = 0.5 * d1 * d2;
     }
 
-    const depthFt = (bed.depthInches || 3) / 12;
+    const depthInches = bed.depthInches !== undefined ? bed.depthInches : 3;
+    const depthFt = depthInches / 12;
     totalSqFt += bedSqFt;
     totalCuFt += bedSqFt * depthFt;
   }
@@ -353,10 +404,14 @@ export function calculateMultiBedLandscape(input: MultiBedInput): MultiBedResult
   const totalWeightMetricTonnes = Math.round((totalWeightKg / 1000) * 100) / 100;
   const avgApplicationRateKgPerM2 = totalSqM > 0 ? Math.round((totalWeightKg / totalSqM) * 10) / 10 : 0;
 
-  const baggedTotalCost = total2CuFtBags * (input.bagCost || 4.0);
-  const bulkTotalCost = (totalCuYards * (input.bulkCostPerYard || 36.0)) + (input.deliveryFee || 45.0);
+  const bagCost = input.bagCost !== undefined ? input.bagCost : 4.0;
+  const bulkCostPerYard = input.bulkCostPerYard !== undefined ? input.bulkCostPerYard : 36.0;
+  const deliveryFee = input.deliveryFee !== undefined ? input.deliveryFee : 45.0;
+
+  const baggedTotalCost = total2CuFtBags * bagCost;
+  const bulkTotalCost = (totalCuYards * bulkCostPerYard) + deliveryFee;
   const costDifference = Math.abs(baggedTotalCost - bulkTotalCost);
-  const recommendedOption = bulkTotalCost < baggedTotalCost && totalCuYards >= 3 ? "buy_bulk" : "buy_bags";
+  const recommendedOption = bulkTotalCost < baggedTotalCost ? "buy_bulk" : "buy_bags";
 
   return {
     totalSqFt: Math.round(totalSqFt * 100) / 100,
@@ -410,9 +465,29 @@ export interface TruckLoadResult {
 }
 
 export function calculateTruckLoads(input: TruckLoadInput): TruckLoadResult {
-  const yards = Math.max(0.1, input.totalCubicYards || 3);
+  const yards = input.totalCubicYards !== undefined ? input.totalCubicYards : 3;
   const density = MULCH_TYPES[input.mulchType || "hardwood_bark"] || MULCH_TYPES.hardwood_bark;
   const vehicle = VEHICLE_CAPACITIES[input.vehicleType || "halfton_truck"] || VEHICLE_CAPACITIES.halfton_truck;
+
+  if (yards <= 0) {
+    return {
+      totalWeightLbs: 0,
+      totalWeightKg: 0,
+      totalWeightTons: 0,
+      totalWeightMetricTonnes: 0,
+      vehicleName: vehicle.name,
+      maxCubicYardsPerTrip: vehicle.maxCubicYards,
+      maxCubicMetersPerTrip: vehicle.maxCubicMeters,
+      maxPayloadLbs: vehicle.maxPayloadLbs,
+      maxPayloadKg: vehicle.maxPayloadKg,
+      tripsNeededByVolume: 0,
+      tripsNeededByWeight: 0,
+      tripsRecommended: 0,
+      isOverloadedPerTrip: false,
+      weightUtilizationPercent: 0,
+      safetyStatus: "safe",
+    };
+  }
 
   const totalWeightLbs = Math.round(yards * density.lbsPerCubicYard);
   const totalWeightKg = Math.round(totalWeightLbs * 0.453592);
@@ -423,7 +498,7 @@ export function calculateTruckLoads(input: TruckLoadInput): TruckLoadResult {
   const tripsNeededByWeight = Math.ceil(totalWeightLbs / vehicle.maxPayloadLbs);
   const tripsRecommended = Math.max(tripsNeededByVolume, tripsNeededByWeight);
 
-  const weightPerTripLbs = totalWeightLbs / tripsRecommended;
+  const weightPerTripLbs = tripsRecommended > 0 ? totalWeightLbs / tripsRecommended : 0;
   const weightUtilizationPercent = Math.round((weightPerTripLbs / vehicle.maxPayloadLbs) * 100);
 
   let safetyStatus: "safe" | "caution" | "overloaded" = "safe";
