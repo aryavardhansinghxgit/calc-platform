@@ -155,6 +155,77 @@ export function fromInches(inches: number, unit: StairLinearUnit): number {
 }
 
 /**
+ * Robust carpentry dimension parser supporting:
+ * - Decimals: "7.5", "10.25"
+ * - Simple fractions: "3/4", "1/2", "7/16"
+ * - Mixed fractions: "7 1/2", "10 1/4", "12 3/16"
+ * - Unicode fractions: "7½", "¾"
+ * - Whitespace variants: " 7 1/2 ", "7    1/2"
+ * Returns NaN for invalid, negative, or zero dimensions.
+ */
+export function parseCarpentryDimension(value: string | number): number {
+  if (typeof value === "number") {
+    return Number.isFinite(value) && value > 0 ? value : NaN;
+  }
+  if (!value || typeof value !== "string") return NaN;
+  const str = value.trim();
+  if (!str) return NaN;
+
+  // Handle unicode fractions e.g. ½, ¼, ¾, ⅛, ⅜, ⅝, ⅞
+  const unicodeMap: Record<string, number> = {
+    "½": 0.5,
+    "¼": 0.25,
+    "¾": 0.75,
+    "⅛": 0.125,
+    "⅜": 0.375,
+    "⅝": 0.625,
+    "⅞": 0.875,
+  };
+  for (const [char, dec] of Object.entries(unicodeMap)) {
+    if (str.includes(char)) {
+      const parts = str.split(char);
+      const whole = parts[0].trim() ? parseFloat(parts[0].trim()) : 0;
+      if (isNaN(whole) || whole < 0) return NaN;
+      return whole + dec;
+    }
+  }
+
+  const slashCount = (str.match(/\//g) || []).length;
+  if (slashCount > 1) return NaN;
+
+  if (slashCount === 1) {
+    // Mixed fraction: e.g. "7 1/2" or "10   1/4"
+    const mixedMatch = str.match(/^([0-9.]+)\s+([0-9]+)\s*\/\s*([0-9]+)$/);
+    if (mixedMatch) {
+      const whole = parseFloat(mixedMatch[1]);
+      const num = parseInt(mixedMatch[2], 10);
+      const den = parseInt(mixedMatch[3], 10);
+      if (isNaN(whole) || isNaN(num) || isNaN(den) || den === 0 || whole < 0 || num < 0) return NaN;
+      return whole + num / den;
+    }
+
+    // Simple fraction: e.g. "3/4"
+    const simpleMatch = str.match(/^([0-9]+)\s*\/\s*([0-9]+)$/);
+    if (simpleMatch) {
+      const num = parseInt(simpleMatch[1], 10);
+      const den = parseInt(simpleMatch[2], 10);
+      if (isNaN(num) || isNaN(den) || den === 0 || num <= 0) return NaN;
+      return num / den;
+    }
+
+    return NaN;
+  }
+
+  // Pure decimal or integer
+  if (/^[0-9]+(\.[0-9]+)?$/.test(str)) {
+    const val = parseFloat(str);
+    return !isNaN(val) && val > 0 ? val : NaN;
+  }
+
+  return NaN;
+}
+
+/**
  * Converts a decimal number of inches into a standard carpentry fraction (to nearest 1/16")
  */
 export function toCarpentryFraction(decimalInches: number): string {
@@ -267,7 +338,7 @@ export function calculateBasicStair(input: StairBasicInput): StairCalculationRes
 
   // Target standard riser is ~7.5"
   const targetRiser = 7.5;
-  const numberOfRisers = Math.max(1, Math.round(totalRiseInches / targetRiser));
+  const numberOfRisers = Math.max(1, Math.ceil(totalRiseInches / targetRiser));
   const exactRiserHeightInches = totalRiseInches / numberOfRisers;
 
   // Standard mount: top step is 1 step down from floor landing
@@ -339,7 +410,7 @@ export function calculateComprehensiveStair(
     numberOfRisers = Math.round(input.fixedStepsCount);
   } else {
     const target = input.targetRiserHeight && input.targetRiserHeight > 0 ? input.targetRiserHeight : 7.5;
-    numberOfRisers = Math.max(1, Math.round(totalRiseInches / target));
+    numberOfRisers = Math.max(1, Math.ceil(totalRiseInches / target));
   }
 
   const exactRiserHeightInches = totalRiseInches / numberOfRisers;

@@ -8,13 +8,13 @@ export const stair_calculatorConfig: CalculatorModuleDefinition = {
   slug: "stair-calculator",
   category: "construction",
   subcategory: "Housing / Building",
-  description: "Calculate stair riser height, tread depth, number of steps, and stringer angle for building code compliance.",
+  description: "Calculate stair riser height, tread depth, number of steps, total run, stair angle, stringer length and headroom. Includes stair geometry, material cost and code-reference checks.",
   iconName: "Layers",
   featured: true,
-  keywords: ["stair calculator","stair riser","stair tread","staircase design"],
+  keywords: ["stair calculator","stair riser","stair tread","staircase design","stringer calculator"],
   priority: 1,
   relatedCalculators: ["square-footage-calculator","concrete-calculator"],
-  formulaDescription: "Risers Count = Round(Total Rise / Target Riser Height)",
+  formulaDescription: "Risers Count = ceil(Total Rise / Target Riser Height)",
   faqs: stair_calculatorFaqs,
   inputs: [
   {
