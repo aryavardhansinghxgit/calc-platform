@@ -897,11 +897,11 @@ ${celestialResult.bodyResults.map((b) => `  * ${b.body.name.padEnd(22)}: ${b.wei
 
           {/* Presets Bar */}
           <div className="flex items-center gap-1.5 text-[11px]">
-            <label htmlFor="weight-material-preset" className="text-zinc-500 shrink-0 font-medium">
+            <label htmlFor="mass-material-preset" className="text-zinc-500 shrink-0 font-medium">
               Material Preset:
             </label>
             <select
-              id="weight-material-preset"
+              id="mass-material-preset"
               value={selectedMaterial}
               onChange={(e) => handleMaterialPreset(e.target.value)}
               aria-label="Material preset"
@@ -919,21 +919,21 @@ ${celestialResult.bodyResults.map((b) => `  * ${b.body.name.padEnd(22)}: ${b.wei
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {/* Density Input */}
             <div className="space-y-0.5">
-              <label htmlFor="weight-density-input" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+              <label htmlFor="mass-density-input" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
                 Density:
               </label>
               <div className="grid grid-cols-12 gap-1">
                 <Input
-                  id="weight-density-input"
+                  id="mass-density-input"
                   type="number"
                   value={densityInput}
                   onChange={(e) => setDensityInput(e.target.value)}
                   className="col-span-6 h-7 text-xs font-bold font-sans tabular-nums bg-white dark:bg-zinc-800"
                   placeholder="8900"
-                  aria-describedby={card1Error ? "weight-density-error" : undefined}
+                  aria-describedby={card1Error ? "mass-density-error" : undefined}
                 />
                 <select
-                  id="weight-density-unit"
+                  id="mass-density-unit"
                   value={densityUnit}
                   onChange={(e) => setDensityUnit(e.target.value)}
                   aria-label="Density unit"
@@ -950,21 +950,21 @@ ${celestialResult.bodyResults.map((b) => `  * ${b.body.name.padEnd(22)}: ${b.wei
 
             {/* Volume Input */}
             <div className="space-y-0.5">
-              <label htmlFor="weight-volume-input" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
+              <label htmlFor="mass-volume-input" className="text-[10px] text-zinc-600 dark:text-zinc-400 block font-medium">
                 Volume:
               </label>
               <div className="grid grid-cols-12 gap-1">
                 <Input
-                  id="weight-volume-input"
+                  id="mass-volume-input"
                   type="number"
                   value={volumeInput}
                   onChange={(e) => setVolumeInput(e.target.value)}
                   className="col-span-6 h-7 text-xs font-bold font-sans tabular-nums bg-white dark:bg-zinc-800"
                   placeholder="1"
-                  aria-describedby={card1Error ? "weight-volume-error" : undefined}
+                  aria-describedby={card1Error ? "mass-volume-error" : undefined}
                 />
                 <select
-                  id="weight-volume-unit"
+                  id="mass-volume-unit"
                   value={volumeUnit}
                   onChange={(e) => setVolumeUnit(e.target.value)}
                   aria-label="Volume unit"
@@ -983,7 +983,7 @@ ${celestialResult.bodyResults.map((b) => `  * ${b.body.name.padEnd(22)}: ${b.wei
           {/* Validation Alert */}
           {card1Error && (
             <div
-              id="weight-density-error"
+              id="mass-density-error"
               role="alert"
               className="p-1.5 bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 rounded text-[11px] flex items-center gap-1.5"
             >
@@ -1135,11 +1135,11 @@ ${celestialResult.bodyResults.map((b) => `  * ${b.body.name.padEnd(22)}: ${b.wei
       >
         <div className="space-y-2 text-xs">
           <div className="flex flex-wrap sm:flex-nowrap items-center gap-1.5">
-            <label htmlFor="weight-converter-input" className="sr-only">
+            <label htmlFor="mass-converter-input" className="sr-only">
               Amount to convert
             </label>
             <Input
-              id="weight-converter-input"
+              id="mass-converter-input"
               type="number"
               value={convertVal}
               onChange={(e) => setConvertVal(e.target.value)}
@@ -1148,11 +1148,11 @@ ${celestialResult.bodyResults.map((b) => `  * ${b.body.name.padEnd(22)}: ${b.wei
               className="h-7 text-xs font-bold font-sans tabular-nums bg-white dark:bg-zinc-800 flex-1 min-w-[70px]"
             />
 
-            <label htmlFor="weight-converter-from" className="sr-only">
+            <label htmlFor="mass-converter-from" className="sr-only">
               Convert from unit
             </label>
             <select
-              id="weight-converter-from"
+              id="mass-converter-from"
               value={convertFrom}
               onChange={(e) => setConvertFrom(e.target.value)}
               aria-label="Convert from unit"
@@ -1176,11 +1176,11 @@ ${celestialResult.bodyResults.map((b) => `  * ${b.body.name.padEnd(22)}: ${b.wei
               <ArrowRightLeft className="w-3 h-3" />
             </Button>
 
-            <label htmlFor="weight-converter-to" className="sr-only">
+            <label htmlFor="mass-converter-to" className="sr-only">
               Convert to unit
             </label>
             <select
-              id="weight-converter-to"
+              id="mass-converter-to"
               value={convertTo}
               onChange={(e) => setConvertTo(e.target.value)}
               aria-label="Convert to unit"
@@ -1287,11 +1287,11 @@ ${celestialResult.bodyResults.map((b) => `  * ${b.body.name.padEnd(22)}: ${b.wei
       >
         <div className="space-y-2 text-xs">
           <div className="flex flex-wrap items-center gap-1.5">
-            <label htmlFor="weight-celestial-mass" className="text-[10px] text-zinc-600 dark:text-zinc-400 font-medium">
+            <label htmlFor="mass-celestial-mass" className="text-[10px] text-zinc-600 dark:text-zinc-400 font-medium">
               Mass in Kilograms:
             </label>
             <Input
-              id="weight-celestial-mass"
+              id="mass-celestial-mass"
               type="number"
               value={celestialMassKg}
               onChange={(e) => setCelestialMassKg(e.target.value)}

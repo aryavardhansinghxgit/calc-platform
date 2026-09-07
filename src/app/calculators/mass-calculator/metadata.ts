@@ -1,9 +1,23 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
-export const mass_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Mass & Weight Converter — Universal Units, Density & Celestial Physics",
+export const mass_calculatorMetadata: Metadata = {
+  title: "Mass Calculator – Mass, Weight, Density & Unit Converter",
   description:
-    "Free online mass and weight converter. Convert between kg, lbs, grams, ounces, stones, carats, tons, and daltons. Calculate mass from density (m = ρV) and weight across planets (W = mg).",
-  slug: "mass-calculator",
-});
+    "Calculate mass from density and volume, convert kg, lb, oz, tons and more, and compare weight on Earth, Moon, Mars and other celestial bodies.",
+  alternates: {
+    canonical: "https://calcplatform.com/calculators/mass-calculator",
+  },
+  openGraph: {
+    title: "Mass Calculator – Density, Weight & Mass Unit Converter",
+    description:
+      "Calculate mass from density and volume, convert mass units, and calculate gravitational weight on different celestial bodies.",
+    url: "https://calcplatform.com/calculators/mass-calculator",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mass Calculator – Density, Weight & Mass Unit Converter",
+    description:
+      "Calculate mass from density and volume, convert mass units, and calculate gravitational weight on different celestial bodies.",
+  },
+};
