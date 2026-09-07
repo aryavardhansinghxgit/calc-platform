@@ -1,9 +1,23 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
-export const gravel_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Gravel Calculator — Tons, Cubic Yards, Compaction & Cost Estimator",
+export const gravel_calculatorMetadata: Metadata = {
+  title: "Gravel Calculator – Cubic Yards, Tons & Cost Estimator | CalcPlatform",
   description:
-    "Free online gravel calculator for driveways, French drains, crushed stone #57, crusher run, pea gravel, compaction settling, delivery budgeting, and multi-zone takeoff.",
-  slug: "gravel-calculator",
-});
+    "Calculate gravel needed in cubic yards, tons, bags and truckloads for driveways, patios, walkways and drainage. Includes compaction, waste, cost and French drain estimates.",
+  alternates: {
+    canonical: "https://calcplatform.com/calculators/gravel-calculator",
+  },
+  openGraph: {
+    title: "Gravel Calculator – Cubic Yards, Tons & Cost Estimator | CalcPlatform",
+    description:
+      "Calculate gravel needed in cubic yards, tons, bags and truckloads for driveways, patios, walkways and drainage. Includes compaction, waste, cost and French drain estimates.",
+    url: "https://calcplatform.com/calculators/gravel-calculator",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gravel Calculator – Cubic Yards, Tons & Cost Estimator | CalcPlatform",
+    description:
+      "Calculate gravel needed in cubic yards, tons, bags and truckloads for driveways, patios, walkways and drainage. Includes compaction, waste, cost and French drain estimates.",
+  },
+};

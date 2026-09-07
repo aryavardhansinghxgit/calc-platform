@@ -8,13 +8,13 @@ export const gravel_calculatorConfig: CalculatorModuleDefinition = {
   slug: "gravel-calculator",
   category: "construction",
   subcategory: "Housing / Building",
-  description: "Calculate weight in tons and volume in cubic yards of crushed stone or gravel.",
+  description: "Calculate gravel needed in cubic yards, tons, bags and truckloads for driveways, patios, walkways and drainage. Includes compaction, waste, cost and French drain estimates.",
   iconName: "Layers",
   featured: true,
-  keywords: ["gravel calculator","crushed stone","tons of gravel","driveway gravel"],
+  keywords: ["gravel calculator","cubic yards of gravel","tons of gravel","driveway gravel","french drain gravel","crushed stone calculator"],
   priority: 1,
-  relatedCalculators: ["mulch-calculator","concrete-calculator"],
-  formulaDescription: "Gravel Weight (Tons) = Cubic Yards × 1.4 Tons/Yard",
+  relatedCalculators: ["square-footage-calculator", "concrete-calculator"],
+  formulaDescription: "Volume = Area × Depth; Cubic Yards = Volume (ft³) / 27; Adjusted Volume = Volume × (1 + Compaction%) × (1 + Waste%); Tons = Cubic Yards × Density (tons/yd³).",
   faqs: gravel_calculatorFaqs,
   inputs: [
   {
