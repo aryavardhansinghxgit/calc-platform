@@ -13,14 +13,23 @@ export interface HeightFtIn {
 }
 
 export function feetInchesToCm(feet: number, inches: number): number {
-  const totalIn = Math.max(0, (feet || 0) * 12 + (inches || 0));
+  if (isNaN(feet) && isNaN(inches)) return 0;
+  const totalIn = (feet || 0) * 12 + (inches || 0);
+  if (totalIn <= 0) return 0;
   return Math.round(totalIn * 2.54 * 10) / 10;
 }
 
 export function cmToFeetInches(cm: number): { feet: number; inches: number; text: string } {
-  const totalIn = Math.max(0, cm / 2.54);
-  const feet = Math.floor(totalIn / 12);
-  const inches = Math.round((totalIn % 12) * 10) / 10;
+  if (isNaN(cm) || cm <= 0) {
+    return { feet: 0, inches: 0, text: `0' 0"` };
+  }
+  const totalIn = cm / 2.54;
+  let feet = Math.floor(totalIn / 12);
+  let inches = Math.round((totalIn % 12) * 10) / 10;
+  if (inches >= 12) {
+    feet += 1;
+    inches = 0;
+  }
   return {
     feet,
     inches,
@@ -28,11 +37,30 @@ export function cmToFeetInches(cm: number): { feet: number; inches: number; text
   };
 }
 
+export function formatOrdinalPercentile(pct: number): string {
+  if (isNaN(pct) || pct === null || pct === undefined) return "—";
+  const rounded = Math.round(pct * 10) / 10;
+  const whole = Math.floor(rounded);
+  const lastTwo = whole % 100;
+  const lastOne = whole % 10;
+  let suffix = "th";
+  if (rounded === whole) {
+    if (lastOne === 1 && lastTwo !== 11) suffix = "st";
+    else if (lastOne === 2 && lastTwo !== 12) suffix = "nd";
+    else if (lastOne === 3 && lastTwo !== 13) suffix = "rd";
+  } else {
+    suffix = "th";
+  }
+  return `${rounded}${suffix} %`;
+}
+
 export function lbsToKg(lbs: number): number {
+  if (isNaN(lbs) || lbs <= 0) return 0;
   return Math.round((lbs * 0.45359237) * 10) / 10;
 }
 
 export function kgToLbs(kg: number): number {
+  if (isNaN(kg) || kg <= 0) return 0;
   return Math.round((kg / 0.45359237) * 10) / 10;
 }
 
@@ -111,7 +139,7 @@ function getKhamisCoefficients(gender: Gender, age: number): KhamisRocheCoeffici
   return table[closest];
 }
 
-// Population percentile calculation based on CDC/WHO adult reference stats (US / Global)
+// Adult reference-distribution percentile estimate (Male: mean 177 cm, SD 7.5 cm; Female: mean 163.5 cm, SD 6.5 cm)
 export function getAdultHeightPercentile(heightCm: number, gender: Gender): number {
   // Adult Male: mean 177 cm (5'9.7"), SD 7.5 cm
   // Adult Female: mean 163.5 cm (5'4.4"), SD 6.5 cm
@@ -151,12 +179,12 @@ export interface KhamisRocheResult {
 }
 
 export function calculateKhamisRoche(input: KhamisRocheInput): KhamisRocheResult {
-  const age = Math.max(3.0, Math.min(18.0, input.childAgeYears || 5.2));
-  const childHtIn = Math.max(20, input.childHeightCm / 2.54);
-  const childWtLbs = Math.max(15, input.childWeightKg * 2.20462);
+  const age = input.childAgeYears;
+  const childHtIn = input.childHeightCm / 2.54;
+  const childWtLbs = input.childWeightKg * 2.20462262;
 
-  const motherHtIn = Math.max(40, input.motherHeightCm / 2.54);
-  const fatherHtIn = Math.max(40, input.fatherHeightCm / 2.54);
+  const motherHtIn = input.motherHeightCm / 2.54;
+  const fatherHtIn = input.fatherHeightCm / 2.54;
   const midParentHtIn = (motherHtIn + fatherHtIn) / 2;
 
   const coeff = getKhamisCoefficients(input.childGender, age);
@@ -170,12 +198,12 @@ export function calculateKhamisRoche(input: KhamisRocheInput): KhamisRocheResult
   const predictedHeightCm = Math.round(predictedHtIn * 2.54 * 10) / 10;
   const predictedHeightFtIn = cmToFeetInches(predictedHeightCm);
 
-  const lowerIn = Math.max(30, predictedHtIn - coeff.errorMarginInches);
+  const lowerIn = predictedHtIn - coeff.errorMarginInches;
   const upperIn = predictedHtIn + coeff.errorMarginInches;
   const lowerCm = Math.round(lowerIn * 2.54 * 10) / 10;
   const upperCm = Math.round(upperIn * 2.54 * 10) / 10;
 
-  const growthRemainingCm = Math.max(0, Math.round((predictedHeightCm - input.childHeightCm) * 10) / 10);
+  const growthRemainingCm = Math.round((predictedHeightCm - input.childHeightCm) * 10) / 10;
   const growthRemainingInches = Math.round((growthRemainingCm / 2.54) * 10) / 10;
 
   const adultPercentile = getAdultHeightPercentile(predictedHeightCm, input.childGender);
@@ -213,17 +241,12 @@ export interface MidParentalResult {
 }
 
 export function calculateMidParental(input: MidParentalInput): MidParentalResult {
-  const fCm = Math.max(100, input.fatherHeightCm || 178);
-  const mCm = Math.max(100, input.motherHeightCm || 165);
+  const fCm = input.fatherHeightCm;
+  const mCm = input.motherHeightCm;
 
-  let targetHeightCm = 175;
-  if (input.childGender === "male") {
-    // Boy: (Father + Mother + 13cm) / 2
-    targetHeightCm = (fCm + mCm + 13) / 2;
-  } else {
-    // Girl: (Father + Mother - 13cm) / 2
-    targetHeightCm = (fCm + mCm - 13) / 2;
-  }
+  let targetHeightCm = input.childGender === "male"
+    ? (fCm + mCm + 13) / 2
+    : (fCm + mCm - 13) / 2;
 
   targetHeightCm = Math.round(targetHeightCm * 10) / 10;
   const targetHeightFtIn = cmToFeetInches(targetHeightCm);
@@ -261,8 +284,8 @@ export interface ToddlerDoublingResult {
 }
 
 export function calculateToddlerDoubling(input: ToddlerDoublingInput): ToddlerDoublingResult {
-  const h2Cm = Math.max(50, input.heightAt2YearsCm || 86.5);
-  let predictedHeightCm = 175;
+  const h2Cm = input.heightAt2YearsCm;
+  let predictedHeightCm = 0;
   let explanation = "";
 
   if (input.childGender === "male") {
@@ -270,7 +293,7 @@ export function calculateToddlerDoubling(input: ToddlerDoublingInput): ToddlerDo
     predictedHeightCm = h2Cm * 2;
     explanation = "Boys achieve approximately 50% of their final adult stature at 24 months (2.0 years).";
   } else {
-    // Girls: Double height at age 18 months or (2 x age 2 height) - 6.5 cm (2.5 inches)
+    // Girls: Double height at age 18 months or (2 x age 2 height) - 6.35 cm (2.5 inches)
     predictedHeightCm = (h2Cm * 2) - 6.35;
     explanation = "Girls mature slightly faster, reaching 50% adult height at ~18 months (or 2x age 2 height minus 2.5 inches).";
   }
@@ -308,18 +331,18 @@ export interface HeightConverterResult {
 }
 
 export function calculateHeightConverter(input: HeightConverterInput): HeightConverterResult {
-  let cm = 175;
+  let cm = 0;
 
   if (input.fromUnit === "feet_inches") {
-    cm = feetInchesToCm(input.feet || 5, input.inches || 9);
+    cm = feetInchesToCm(input.feet ?? 0, input.inches ?? 0);
   } else if (input.fromUnit === "inches") {
-    cm = (input.value || 69) * 2.54;
+    cm = (input.value ?? 0) * 2.54;
   } else if (input.fromUnit === "meters") {
-    cm = (input.value || 1.75) * 100;
+    cm = (input.value ?? 0) * 100;
   } else if (input.fromUnit === "mm") {
-    cm = (input.value || 1750) / 10;
+    cm = (input.value ?? 0) / 10;
   } else {
-    cm = input.value || 175;
+    cm = input.value ?? 0;
   }
 
   cm = Math.round(cm * 10) / 10;

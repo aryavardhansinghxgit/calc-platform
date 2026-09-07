@@ -1,9 +1,23 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
-export const height_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Height Calculator — Child Adult Height Prediction & Stature Converter",
+export const height_calculatorMetadata: Metadata = {
+  title: "Height Calculator – Child Adult Height Predictor & Height Converter",
   description:
-    "Free online height calculator using Khamis-Roche linear regression, Tanner Mid-Parental method, toddler doubling, WHO/CDC growth percentiles, and multi-unit conversions.",
-  slug: "height-calculator",
-});
+    "Estimate adult height with Khamis-Roche and mid-parental methods, calculate toddler-based estimates, compare stature, and convert feet, inches and cm.",
+  alternates: {
+    canonical: "https://calcplatform.com/calculators/height-calculator",
+  },
+  openGraph: {
+    title: "Height Calculator – Adult Height Prediction & Stature Converter",
+    description:
+      "Estimate adult height from child and parent measurements, compare prediction methods, calculate stature ranges, and convert height units.",
+    url: "https://calcplatform.com/calculators/height-calculator",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Height Calculator – Adult Height Prediction & Stature Converter",
+    description:
+      "Estimate adult height from child and parent measurements, compare prediction methods, calculate stature ranges, and convert height units.",
+  },
+};
