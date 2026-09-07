@@ -186,6 +186,54 @@ export function convertSpeedDirect(
   };
 }
 
+export function parseNumericInput(
+  raw: string,
+  fieldName: string,
+  options: { allowZero?: boolean; min?: number; max?: number } = {}
+): { valid: boolean; value: number; error: string | null } {
+  const value = raw.trim();
+
+  if (value === "") {
+    return {
+      valid: false,
+      value: 0,
+      error: `${fieldName} is required.`,
+    };
+  }
+
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed) || isNaN(parsed)) {
+    return {
+      valid: false,
+      value: 0,
+      error: `${fieldName} must be a valid number.`,
+    };
+  }
+
+  if (options.min !== undefined && parsed < options.min) {
+    return {
+      valid: false,
+      value: 0,
+      error: `${fieldName} cannot be less than ${options.min}.`,
+    };
+  }
+
+  if (!options.allowZero && parsed === 0) {
+    return {
+      valid: false,
+      value: 0,
+      error: `${fieldName} must be greater than zero.`,
+    };
+  }
+
+  return {
+    valid: true,
+    value: parsed,
+    error: null,
+  };
+}
+
 // ─── CARD 1: TRI-MODAL SPEED SOLVER ─────────────────────────────────────────
 
 export interface SpeedSolverInput {
@@ -200,6 +248,8 @@ export interface SpeedSolverInput {
 }
 
 export interface SpeedSolverResult {
+  valid: boolean;
+  error?: string;
   mode: SpeedCalcMode;
   distanceMeters: number;
   distanceFormatted: string;
@@ -214,6 +264,7 @@ export interface SpeedSolverResult {
   paceMinMile: string;
   paceMinKm: string;
   formulaDescription: string;
+  latexFormula: string;
   closestReference: RealWorldSpeedReference;
   allSpeedUnits: {
     unit: SpeedUnitDefinition;
@@ -226,43 +277,167 @@ export function calculateSpeedSolver(input: SpeedSolverInput): SpeedSolverResult
   const dUnit = DISTANCE_UNITS.find((u) => u.id === input.distanceUnit) || DISTANCE_UNITS[0];
   const sUnit = SPEED_UNITS.find((u) => u.id === input.speedUnit) || SPEED_UNITS[0];
 
+  const defaultEmptyRef = REAL_WORLD_SPEED_REFERENCES[0];
+  const defaultEmptyUnits = SPEED_UNITS.filter((u) => u.category === "common" || u.id === "mach").map((u) => ({
+    unit: u,
+    value: 0,
+    formatted: "0.000",
+  }));
+
+  // Physical validation: negative values are invalid in scalar kinematics
+  if (input.distanceValue < 0) {
+    return {
+      valid: false,
+      error: "Distance cannot be negative.",
+      mode: input.mode,
+      distanceMeters: 0,
+      distanceFormatted: `0 ${dUnit.symbol}`,
+      totalTimeSeconds: 0,
+      timeFormatted: "00:00",
+      speedMs: 0,
+      speedKmh: 0,
+      speedMph: 0,
+      speedFts: 0,
+      speedKnots: 0,
+      speedMach: 0,
+      paceMinMile: "--:--",
+      paceMinKm: "--:--",
+      formulaDescription: "",
+      latexFormula: "s = \\frac{d}{t}",
+      closestReference: defaultEmptyRef,
+      allSpeedUnits: defaultEmptyUnits,
+    };
+  }
+
+  if (input.timeHours < 0 || input.timeMinutes < 0 || input.timeSeconds < 0) {
+    return {
+      valid: false,
+      error: "Time components cannot be negative.",
+      mode: input.mode,
+      distanceMeters: 0,
+      distanceFormatted: `0 ${dUnit.symbol}`,
+      totalTimeSeconds: 0,
+      timeFormatted: "00:00",
+      speedMs: 0,
+      speedKmh: 0,
+      speedMph: 0,
+      speedFts: 0,
+      speedKnots: 0,
+      speedMach: 0,
+      paceMinMile: "--:--",
+      paceMinKm: "--:--",
+      formulaDescription: "",
+      latexFormula: "s = \\frac{d}{t}",
+      closestReference: defaultEmptyRef,
+      allSpeedUnits: defaultEmptyUnits,
+    };
+  }
+
+  if (input.speedValue < 0) {
+    return {
+      valid: false,
+      error: "Speed cannot be negative.",
+      mode: input.mode,
+      distanceMeters: 0,
+      distanceFormatted: `0 ${dUnit.symbol}`,
+      totalTimeSeconds: 0,
+      timeFormatted: "00:00",
+      speedMs: 0,
+      speedKmh: 0,
+      speedMph: 0,
+      speedFts: 0,
+      speedKnots: 0,
+      speedMach: 0,
+      paceMinMile: "--:--",
+      paceMinKm: "--:--",
+      formulaDescription: "",
+      latexFormula: "s = \\frac{d}{t}",
+      closestReference: defaultEmptyRef,
+      allSpeedUnits: defaultEmptyUnits,
+    };
+  }
+
   let distanceMeters = (input.distanceValue || 0) * dUnit.toMeters;
   let totalTimeSeconds =
-    (Math.max(0, input.timeHours || 0) * 3600) +
-    (Math.max(0, input.timeMinutes || 0) * 60) +
-    Math.max(0, input.timeSeconds || 0);
+    ((input.timeHours || 0) * 3600) +
+    ((input.timeMinutes || 0) * 60) +
+    (input.timeSeconds || 0);
   let speedMs = (input.speedValue || 0) * sUnit.toMetersPerSecond;
 
   let formulaDesc = "";
+  let latexFormula = "";
 
   if (input.mode === "speed") {
-    if (totalTimeSeconds > 0) {
-      speedMs = distanceMeters / totalTimeSeconds;
-    } else {
-      speedMs = 0;
+    latexFormula = "s = \\frac{d}{t}";
+    if (totalTimeSeconds <= 0) {
+      return {
+        valid: false,
+        error: "Time must be greater than zero.",
+        mode: input.mode,
+        distanceMeters,
+        distanceFormatted: `${input.distanceValue} ${dUnit.symbol}`,
+        totalTimeSeconds: 0,
+        timeFormatted: "00:00",
+        speedMs: 0,
+        speedKmh: 0,
+        speedMph: 0,
+        speedFts: 0,
+        speedKnots: 0,
+        speedMach: 0,
+        paceMinMile: "--:--",
+        paceMinKm: "--:--",
+        formulaDescription: "Time must be greater than zero.",
+        latexFormula,
+        closestReference: defaultEmptyRef,
+        allSpeedUnits: defaultEmptyUnits,
+      };
     }
+
+    speedMs = distanceMeters / totalTimeSeconds;
     const tFormatted = formatTimeHoursMinutesSeconds(totalTimeSeconds).formatted;
     formulaDesc = `Speed = Distance / Time = ${input.distanceValue} ${dUnit.symbol} / ${tFormatted} = ${(speedMs * 2.23694).toFixed(2)} mph (${(speedMs * 3.6).toFixed(2)} km/h)`;
   } else if (input.mode === "distance") {
+    latexFormula = "d = s \\times t";
     distanceMeters = speedMs * totalTimeSeconds;
     const distInChosen = distanceMeters / dUnit.toMeters;
     const tFormatted = formatTimeHoursMinutesSeconds(totalTimeSeconds).formatted;
     formulaDesc = `Distance = Speed × Time = ${input.speedValue} ${sUnit.symbol} × ${tFormatted} = ${distInChosen.toFixed(3)} ${dUnit.symbol} (${(distanceMeters / 1000).toFixed(3)} km)`;
   } else {
     // Mode: Time
-    if (speedMs > 0) {
-      totalTimeSeconds = distanceMeters / speedMs;
-    } else {
-      totalTimeSeconds = 0;
+    latexFormula = "t = \\frac{d}{s}";
+    if (speedMs <= 0) {
+      return {
+        valid: false,
+        error: "Speed must be greater than zero.",
+        mode: input.mode,
+        distanceMeters,
+        distanceFormatted: `${input.distanceValue} ${dUnit.symbol}`,
+        totalTimeSeconds: 0,
+        timeFormatted: "00:00",
+        speedMs: 0,
+        speedKmh: 0,
+        speedMph: 0,
+        speedFts: 0,
+        speedKnots: 0,
+        speedMach: 0,
+        paceMinMile: "--:--",
+        paceMinKm: "--:--",
+        formulaDescription: "Speed must be greater than zero.",
+        latexFormula,
+        closestReference: defaultEmptyRef,
+        allSpeedUnits: defaultEmptyUnits,
+      };
     }
+
+    totalTimeSeconds = distanceMeters / speedMs;
     const tFormatted = formatTimeHoursMinutesSeconds(totalTimeSeconds).formatted;
     formulaDesc = `Time = Distance / Speed = ${input.distanceValue} ${dUnit.symbol} / ${input.speedValue} ${sUnit.symbol} = ${tFormatted}`;
   }
 
   const speedKmh = speedMs * 3.6;
-  const speedMph = speedMs * 2.23693629;
-  const speedFts = speedMs * 3.2808399;
-  const speedKnots = speedMs * 1.94384449;
+  const speedMph = speedMs * 2.2369362920544;
+  const speedFts = speedMs * 3.28083989501312;
+  const speedKnots = speedMs * 1.9438444924406;
   const speedMach = speedMs / 343.0;
 
   // Athletic Pace
@@ -273,12 +448,14 @@ export function calculateSpeedSolver(input: SpeedSolverInput): SpeedSolverResult
 
   // Closest real world benchmark
   let closestRef = REAL_WORLD_SPEED_REFERENCES[0];
-  let minDiff = Math.abs(Math.log10(Math.max(1e-5, speedMs)) - Math.log10(closestRef.speedMs));
-  for (const ref of REAL_WORLD_SPEED_REFERENCES) {
-    const diff = Math.abs(Math.log10(Math.max(1e-5, speedMs)) - Math.log10(ref.speedMs));
-    if (diff < minDiff) {
-      minDiff = diff;
-      closestRef = ref;
+  if (speedMs > 0) {
+    let minDiff = Math.abs(Math.log10(Math.max(1e-5, speedMs)) - Math.log10(closestRef.speedMs));
+    for (const ref of REAL_WORLD_SPEED_REFERENCES) {
+      const diff = Math.abs(Math.log10(Math.max(1e-5, speedMs)) - Math.log10(ref.speedMs));
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestRef = ref;
+      }
     }
   }
 
@@ -292,6 +469,7 @@ export function calculateSpeedSolver(input: SpeedSolverInput): SpeedSolverResult
   });
 
   return {
+    valid: true,
     mode: input.mode,
     distanceMeters,
     distanceFormatted: `${(distanceMeters / dUnit.toMeters).toLocaleString(undefined, { maximumFractionDigits: 3 })} ${dUnit.symbol}`,
@@ -306,6 +484,7 @@ export function calculateSpeedSolver(input: SpeedSolverInput): SpeedSolverResult
     paceMinMile,
     paceMinKm,
     formulaDescription: formulaDesc,
+    latexFormula,
     closestReference: closestRef,
     allSpeedUnits,
   };
@@ -322,6 +501,8 @@ export interface RacePaceSplit {
 }
 
 export interface RacePaceResult {
+  valid: boolean;
+  error?: string;
   distanceMeters: number;
   totalTimeSeconds: number;
   paceMinKm: string;
@@ -336,12 +517,40 @@ export function calculateRacePace(
   totalTimeSeconds: number,
   splitIntervalKm = 1
 ): RacePaceResult {
-  const d = Math.max(1, distanceMeters);
-  const t = Math.max(1, totalTimeSeconds);
+  if (distanceMeters <= 0) {
+    return {
+      valid: false,
+      error: "Race distance must be greater than zero.",
+      distanceMeters: 0,
+      totalTimeSeconds: 0,
+      paceMinKm: "--:--",
+      paceMinMile: "--:--",
+      speedMph: 0,
+      speedKmh: 0,
+      splits: [],
+    };
+  }
+
+  if (totalTimeSeconds <= 0) {
+    return {
+      valid: false,
+      error: "Target finish time must be greater than zero.",
+      distanceMeters,
+      totalTimeSeconds: 0,
+      paceMinKm: "--:--",
+      paceMinMile: "--:--",
+      speedMph: 0,
+      speedKmh: 0,
+      splits: [],
+    };
+  }
+
+  const d = distanceMeters;
+  const t = totalTimeSeconds;
 
   const speedMs = d / t;
   const speedKmh = speedMs * 3.6;
-  const speedMph = speedMs * 2.23694;
+  const speedMph = speedMs * (3600 / 1609.344);
 
   const secPerKm = 1000 / speedMs;
   const secPerMile = 1609.344 / speedMs;
@@ -352,35 +561,39 @@ export function calculateRacePace(
   const totalKm = d / 1000;
   const splits: RacePaceSplit[] = [];
 
-  const step = Math.max(1, splitIntervalKm);
-  for (let k = step; k < totalKm; k += step) {
+  const step = Math.max(0.1, splitIntervalKm);
+  for (let k = step; k < totalKm - 1e-6; k += step) {
     const splitSecs = (k * 1000) / speedMs;
     splits.push({
-      splitName: `KM ${k}`,
-      distanceKm: k,
-      distanceMiles: Math.round((k * 0.621371) * 100) / 100,
+      splitName: `KM ${Math.round(k * 10) / 10}`,
+      distanceKm: Math.round(k * 100) / 100,
+      distanceMiles: Math.round((k * 0.62137119) * 100) / 100,
       cumulativeTimeFormatted: formatTimeHoursMinutesSeconds(splitSecs).formatted,
       splitTimeFormatted: formatTimeHoursMinutesSeconds(secPerKm * step).formatted,
     });
   }
 
   // Final Finish Split
+  const lastCumulativeSeconds = splits.length > 0 ? (splits[splits.length - 1].distanceKm * 1000) / speedMs : 0;
+  const finalIntervalSeconds = Math.max(0, t - lastCumulativeSeconds);
+
   splits.push({
-    splitName: `Finish (${(totalKm).toFixed(2)} km)`,
-    distanceKm: totalKm,
-    distanceMiles: Math.round((totalKm * 0.621371) * 100) / 100,
+    splitName: `Finish (${totalKm.toFixed(2)} km)`,
+    distanceKm: Math.round(totalKm * 100) / 100,
+    distanceMiles: Math.round((totalKm * 0.62137119) * 100) / 100,
     cumulativeTimeFormatted: formatTimeHoursMinutesSeconds(t).formatted,
-    splitTimeFormatted: formatTimeHoursMinutesSeconds(t - (splits.length > 0 ? (splits[splits.length - 1].distanceKm * 1000) / speedMs : 0)).formatted,
+    splitTimeFormatted: formatTimeHoursMinutesSeconds(finalIntervalSeconds).formatted,
   });
 
   return {
+    valid: true,
     distanceMeters: d,
     totalTimeSeconds: t,
     paceMinKm,
     paceMinMile,
     speedMph,
     speedKmh,
-    splits: splits.slice(0, 10),
+    splits,
   };
 }
 
@@ -393,6 +606,8 @@ export interface JourneyLeg {
 }
 
 export interface MultiSegmentResult {
+  valid: boolean;
+  error?: string;
   totalDistanceKm: number;
   totalTimeMinutes: number;
   averageSpeedKmh: number;
@@ -404,15 +619,47 @@ export function calculateMultiSegmentSpeed(legs: JourneyLeg[]): MultiSegmentResu
   let totTimeMin = 0;
 
   for (const leg of legs) {
-    totDist += Math.max(0, leg.distanceKm || 0);
-    totTimeMin += Math.max(0, leg.timeMinutes || 0);
+    if (leg.distanceKm < 0 || leg.timeMinutes < 0) {
+      return {
+        valid: false,
+        error: "Distance and duration for each trip segment cannot be negative.",
+        totalDistanceKm: 0,
+        totalTimeMinutes: 0,
+        averageSpeedKmh: 0,
+        averageSpeedMph: 0,
+      };
+    }
+    totDist += Number(leg.distanceKm) || 0;
+    totTimeMin += Number(leg.timeMinutes) || 0;
   }
 
   const totHours = totTimeMin / 60;
-  const avgKmh = totHours > 0 ? totDist / totHours : 0;
-  const avgMph = avgKmh * 0.621371;
+
+  if (totHours <= 0) {
+    if (totDist > 0) {
+      return {
+        valid: false,
+        error: "Total travel duration must be greater than zero.",
+        totalDistanceKm: totDist,
+        totalTimeMinutes: totTimeMin,
+        averageSpeedKmh: 0,
+        averageSpeedMph: 0,
+      };
+    }
+    return {
+      valid: true,
+      totalDistanceKm: 0,
+      totalTimeMinutes: 0,
+      averageSpeedKmh: 0,
+      averageSpeedMph: 0,
+    };
+  }
+
+  const avgKmh = totDist / totHours;
+  const avgMph = avgKmh * 0.62137119223733;
 
   return {
+    valid: true,
     totalDistanceKm: totDist,
     totalTimeMinutes: totTimeMin,
     averageSpeedKmh: Math.round(avgKmh * 100) / 100,
