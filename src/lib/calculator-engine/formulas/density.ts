@@ -102,11 +102,11 @@ export const DENSITY_FACTORS: Record<string, { name: string; symbol: string; toK
   g_cm3: { name: "Gram / Cubic Centimeter", symbol: "g/cm³", toKgM3: 1000 },
   g_ml: { name: "Gram / Milliliter", symbol: "g/mL", toKgM3: 1000 },
   kg_l: { name: "Kilogram / Liter", symbol: "kg/L", toKgM3: 1000 },
-  lb_ft3: { name: "Pound / Cubic Foot", symbol: "lb/ft³", toKgM3: 16.01846337 },
-  lb_in3: { name: "Pound / Cubic Inch", symbol: "lb/in³", toKgM3: 27679.9047 },
-  lb_gal_us: { name: "Pound / US Gallon", symbol: "lb/gal", toKgM3: 119.826427 },
-  oz_in3: { name: "Ounce / Cubic Inch", symbol: "oz/in³", toKgM3: 1729.99404 },
-  ton_yd3: { name: "Short Ton / Cubic Yard", symbol: "ton/yd³", toKgM3: 1186.55284 },
+  lb_ft3: { name: "Pound / Cubic Foot", symbol: "lb/ft³", toKgM3: 0.45359237 / 0.028316846592 },
+  lb_in3: { name: "Pound / Cubic Inch", symbol: "lb/in³", toKgM3: 0.45359237 / 0.000016387064 },
+  lb_gal_us: { name: "Pound / US Gallon", symbol: "lb/gal", toKgM3: 0.45359237 / 0.003785411784 },
+  oz_in3: { name: "Ounce / Cubic Inch", symbol: "oz/in³", toKgM3: 0.028349523125 / 0.000016387064 },
+  ton_yd3: { name: "Short Ton / Cubic Yard", symbol: "ton/yd³", toKgM3: 907.18474 / 0.764554857984 },
 };
 
 // ─── CARD 1: TRI-MODAL DENSITY SOLVER ───────────────────────────────────────
@@ -133,6 +133,24 @@ export interface DensitySolverResult {
   buoyancyAir: "floats" | "sinks";
   submergedFractionPct: number; // 0 to 100%
   allDensityUnits: { unitKey: string; name: string; symbol: string; value: number; formatted: string }[];
+  error?: string;
+}
+
+function makeErrorResult(mode: DensityCalcMode, errorMessage: string): DensitySolverResult {
+  return {
+    mode,
+    densityKgM3: 0,
+    densityGCm3: 0,
+    densityLbFt3: 0,
+    massKg: 0,
+    volumeM3: 0,
+    specificGravity: 0,
+    buoyancyWater: "neutral",
+    buoyancyAir: "sinks",
+    submergedFractionPct: 0,
+    allDensityUnits: [],
+    error: errorMessage,
+  };
 }
 
 export function calculateDensitySolver(input: DensitySolverInput): DensitySolverResult {
@@ -145,39 +163,81 @@ export function calculateDensitySolver(input: DensitySolverInput): DensitySolver
   let densityKgM3 = 0;
 
   if (input.mode === "density") {
-    massKg = Math.max(0, input.massValue * mFact.toKg);
-    volumeM3 = Math.max(1e-12, input.volumeValue * vFact.toM3);
+    if (!isFinite(input.massValue) || !isFinite(input.volumeValue)) {
+      return makeErrorResult(input.mode, "Please enter valid finite numerical values for mass and volume.");
+    }
+    if (input.massValue < 0) {
+      return makeErrorResult(input.mode, "Object mass cannot be negative. Please enter a value ≥ 0.");
+    }
+    if (input.volumeValue < 0) {
+      return makeErrorResult(input.mode, "Volume cannot be negative. Please enter a volume > 0.");
+    }
+    if (input.volumeValue === 0) {
+      return makeErrorResult(input.mode, "Volume must be strictly greater than zero for density calculation. Division by zero is undefined.");
+    }
+    massKg = input.massValue * mFact.toKg;
+    volumeM3 = input.volumeValue * vFact.toM3;
     densityKgM3 = massKg / volumeM3;
   } else if (input.mode === "mass") {
-    densityKgM3 = Math.max(0, input.densityValue * dFact.toKgM3);
-    volumeM3 = Math.max(0, input.volumeValue * vFact.toM3);
+    if (!isFinite(input.densityValue) || !isFinite(input.volumeValue)) {
+      return makeErrorResult(input.mode, "Please enter valid finite numerical values for density and volume.");
+    }
+    if (input.densityValue < 0) {
+      return makeErrorResult(input.mode, "Material density cannot be negative. Please enter a value ≥ 0.");
+    }
+    if (input.volumeValue < 0) {
+      return makeErrorResult(input.mode, "Volume cannot be negative. Please enter a value ≥ 0.");
+    }
+    densityKgM3 = input.densityValue * dFact.toKgM3;
+    volumeM3 = input.volumeValue * vFact.toM3;
     massKg = densityKgM3 * volumeM3;
   } else {
     // Mode volume: V = M / D
-    massKg = Math.max(0, input.massValue * mFact.toKg);
-    densityKgM3 = Math.max(1e-12, input.densityValue * dFact.toKgM3);
+    if (!isFinite(input.massValue) || !isFinite(input.densityValue)) {
+      return makeErrorResult(input.mode, "Please enter valid finite numerical values for mass and density.");
+    }
+    if (input.massValue < 0) {
+      return makeErrorResult(input.mode, "Object mass cannot be negative. Please enter a value ≥ 0.");
+    }
+    if (input.densityValue < 0) {
+      return makeErrorResult(input.mode, "Material density cannot be negative. Please enter a density > 0.");
+    }
+    if (input.densityValue === 0) {
+      return makeErrorResult(input.mode, "Density must be strictly greater than zero for volume calculation. Division by zero is undefined.");
+    }
+    massKg = input.massValue * mFact.toKg;
+    densityKgM3 = input.densityValue * dFact.toKgM3;
     volumeM3 = massKg / densityKgM3;
   }
 
   const densityGCm3 = densityKgM3 / 1000;
-  const densityLbFt3 = densityKgM3 / 16.01846337;
+  const densityLbFt3 = densityKgM3 / (0.45359237 / 0.028316846592);
   const specificGravity = densityKgM3 / 1000;
 
   let buoyancyWater: "floats" | "sinks" | "neutral" = "sinks";
-  if (specificGravity < 0.9999) buoyancyWater = "floats";
-  else if (specificGravity > 1.0001) buoyancyWater = "sinks";
-  else buoyancyWater = "neutral";
+  if (Math.abs(specificGravity - 1.0) <= 0.0001) {
+    buoyancyWater = "neutral";
+  } else if (specificGravity < 1.0) {
+    buoyancyWater = "floats";
+  } else {
+    buoyancyWater = "sinks";
+  }
 
-  const buoyancyAir = densityKgM3 < 1.204 ? "floats" : "sinks";
+  const buoyancyAir = densityKgM3 < 1.2041 ? "floats" : "sinks";
   const submergedFractionPct = Math.min(100, Math.max(0, specificGravity * 100));
 
   const allDensityUnits = Object.entries(DENSITY_FACTORS).map(([key, def]) => {
     const val = densityKgM3 / def.toKgM3;
-    let formatted = val.toFixed(4);
-    if (val >= 1e6 || (val < 1e-4 && val > 0)) {
+    let formatted = "";
+    if (val === 0) {
+      formatted = "0";
+    } else if (val >= 1e6 || (val < 1e-4 && val > 0)) {
       formatted = val.toExponential(4);
     } else {
-      formatted = val.toLocaleString(undefined, { maximumFractionDigits: 4 });
+      formatted = val.toLocaleString("en-US", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 4,
+      });
     }
     return {
       unitKey: key,
@@ -217,25 +277,53 @@ export interface GasDensityResult {
   temperatureKelvin: number;
   specificVolumeM3PerKg: number;
   isLighterThanAir: boolean;
+  error?: string;
+}
+
+function makeGasError(errorMessage: string): GasDensityResult {
+  return {
+    densityKgM3: 0,
+    densityGCm3: 0,
+    temperatureKelvin: 0,
+    specificVolumeM3PerKg: 0,
+    isLighterThanAir: false,
+    error: errorMessage,
+  };
 }
 
 export function calculateGasDensity(input: GasDensityInput): GasDensityResult {
-  const T_K = Math.max(0.1, input.temperatureCelsius + 273.15);
-  const P_Pa = Math.max(1, input.pressureKPa * 1000);
-  const M_kg_mol = Math.max(0.001, input.molarMassGPerMol / 1000);
-  const R = 8.314462618; // Universal gas constant J/(mol·K)
+  if (!isFinite(input.molarMassGPerMol) || !isFinite(input.pressureKPa) || !isFinite(input.temperatureCelsius)) {
+    return makeGasError("Please enter valid finite numerical values for molar mass, pressure, and temperature.");
+  }
+  if (input.temperatureCelsius < -273.15) {
+    return makeGasError("Temperature cannot be below absolute zero (-273.15 °C / 0 K).");
+  }
+  if (input.temperatureCelsius === -273.15) {
+    return makeGasError("Temperature must be strictly above absolute zero (-273.15 °C / 0 K). Division by zero is undefined.");
+  }
+  if (input.pressureKPa <= 0) {
+    return makeGasError("Absolute pressure must be strictly greater than zero.");
+  }
+  if (input.molarMassGPerMol <= 0) {
+    return makeGasError("Gas molar mass must be strictly greater than zero.");
+  }
+
+  const T_K = input.temperatureCelsius + 273.15;
+  const P_Pa = input.pressureKPa * 1000;
+  const M_kg_mol = input.molarMassGPerMol / 1000;
+  const R = 8.314462618; // Universal gas constant J/(mol·K) [NIST CODATA]
 
   // ρ = (P · M) / (R · T)
   const densityKgM3 = (P_Pa * M_kg_mol) / (R * T_K);
   const densityGCm3 = densityKgM3 / 1000;
   const specificVolumeM3PerKg = 1 / densityKgM3;
-  const isLighterThanAir = densityKgM3 < 1.204;
+  const isLighterThanAir = densityKgM3 < 1.2041; // Room air at 20°C, 101.325 kPa is ~1.2043 kg/m³
 
   return {
-    densityKgM3: Math.round(densityKgM3 * 10000) / 10000,
-    densityGCm3: Math.round(densityGCm3 * 1000000) / 1000000,
-    temperatureKelvin: Math.round(T_K * 100) / 100,
-    specificVolumeM3PerKg: Math.round(specificVolumeM3PerKg * 10000) / 10000,
+    densityKgM3,
+    densityGCm3,
+    temperatureKelvin: T_K,
+    specificVolumeM3PerKg,
     isLighterThanAir,
   };
 }
@@ -251,21 +339,45 @@ export interface HydrostaticResult {
   gaugePressureKPa: number;
   gaugePressurePsi: number;
   gaugePressureBar: number;
-  apiGravity: number; // For oils: (141.5 / SG) - 131.5
+  apiGravity: number | null; // For oils: (141.5 / SG) - 131.5 (null if rho <= 0)
+  error?: string;
+}
+
+function makeHydroError(errorMessage: string): HydrostaticResult {
+  return {
+    gaugePressureKPa: 0,
+    gaugePressurePsi: 0,
+    gaugePressureBar: 0,
+    apiGravity: null,
+    error: errorMessage,
+  };
 }
 
 export function calculateHydrostatic(input: HydrostaticInput): HydrostaticResult {
-  const g = 9.80665;
-  const rho = Math.max(0, input.densityKgM3);
-  const h = Math.max(0, input.depthMeters);
+  if (!isFinite(input.densityKgM3) || !isFinite(input.depthMeters)) {
+    return makeHydroError("Please enter valid finite numerical values for fluid density and submerged depth.");
+  }
+  if (input.densityKgM3 < 0) {
+    return makeHydroError("Fluid density cannot be negative. Please enter a value ≥ 0.");
+  }
+  if (input.depthMeters < 0) {
+    return makeHydroError("Submerged depth cannot be negative. Please enter a depth ≥ 0.");
+  }
+
+  const g = 9.80665; // Standard acceleration due to gravity (m/s²) ISO 80000-3
+  const rho = input.densityKgM3;
+  const h = input.depthMeters;
 
   const pPa = rho * g * h;
-  const gaugePressureKPa = Math.round((pPa / 1000) * 100) / 100;
-  const gaugePressurePsi = Math.round((pPa / 6894.757293) * 100) / 100;
-  const gaugePressureBar = Math.round((pPa / 100000) * 1000) / 1000;
+  const gaugePressureKPa = pPa / 1000;
+  const gaugePressurePsi = pPa / 6894.757293168;
+  const gaugePressureBar = pPa / 100000;
 
-  const sg = Math.max(0.1, rho / 1000);
-  const apiGravity = Math.round(((141.5 / sg) - 131.5) * 10) / 10;
+  let apiGravity: number | null = null;
+  if (rho > 0) {
+    const sg = rho / 1000;
+    apiGravity = (141.5 / sg) - 131.5;
+  }
 
   return {
     gaugePressureKPa,

@@ -1,9 +1,31 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
-export const density_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Density Calculator — Mass, Volume, Buoyancy & Material Database (ρ = m/V)",
+export const density_calculatorMetadata: Metadata = {
+  title: "Density Calculator – Density, Mass, Volume & Specific Gravity",
   description:
-    "Free online density calculator to find density, mass, or volume. Features a searchable 50+ material database, interactive water tank buoyancy visualizer, ideal gas solver, and hydrostatic pressure calculator.",
-  slug: "density-calculator",
-});
+    "Calculate density, mass, or volume from ρ = m/V. Convert density units, compare specific gravity, test buoyancy, calculate gas density and hydrostatic pressure.",
+  alternates: {
+    canonical: "https://calcplatform.com/calculators/density-calculator",
+  },
+  openGraph: {
+    title: "Density Calculator – Mass, Volume, Specific Gravity & Buoyancy",
+    description:
+      "Calculate density from mass and volume, find mass or volume, convert density units, explore material densities, and solve gas and fluid-pressure problems.",
+    url: "https://calcplatform.com/calculators/density-calculator",
+    type: "website",
+    images: [
+      {
+        url: "https://calcplatform.com/og?title=Density%20Calculator",
+        width: 1200,
+        height: 630,
+        alt: "Density Calculator",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Density Calculator – Mass, Volume, Specific Gravity & Buoyancy",
+    description:
+      "Calculate density from mass and volume, find mass or volume, convert density units, explore material densities, and solve gas and fluid-pressure problems.",
+  },
+};
