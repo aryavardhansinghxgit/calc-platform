@@ -118,6 +118,22 @@ export function convertPowerToWatts(val: number, unit: PowerUnit): number {
   }
 }
 
+function parseNonNegative(val: any, fallback = 0): number {
+  if (val === undefined || val === null || val === "" || isNaN(Number(val))) {
+    return fallback;
+  }
+  const n = Number(val);
+  return n >= 0 ? n : 0;
+}
+
+function parseBounded(val: any, min: number, max: number, fallback: number): number {
+  if (val === undefined || val === null || val === "" || isNaN(Number(val))) {
+    return fallback;
+  }
+  const n = Number(val);
+  return Math.min(max, Math.max(min, n));
+}
+
 // ─── CARD 1: SINGLE APPLIANCE ESTIMATOR ─────────────────────────────────────
 
 export interface SingleApplianceInput {
@@ -125,8 +141,8 @@ export interface SingleApplianceInput {
   powerUnit: PowerUnit;
   dutyCyclePct: number; // 0 - 100%
   hoursPerDay: number;
-  daysPerWeek: number; // 1 - 7
-  monthsPerYear: number; // 1 - 12
+  daysPerWeek: number; // 0 - 7
+  monthsPerYear: number; // 0 - 12
   currency: CurrencyCode;
   ratePerKwh: number;
 }
@@ -149,14 +165,15 @@ export interface SingleApplianceResult {
 }
 
 export function calculateSingleAppliance(input: SingleApplianceInput): SingleApplianceResult {
-  const baseWatts = Math.max(0, convertPowerToWatts(input.powerValue || 1000, input.powerUnit || "watts"));
-  const duty = Math.max(1, Math.min(100, input.dutyCyclePct ?? 100)) / 100;
+  const baseWatts = Math.max(0, convertPowerToWatts(parseNonNegative(input.powerValue, 1000), input.powerUnit || "watts"));
+  const dutyPct = parseBounded(input.dutyCyclePct, 0, 100, 100);
+  const duty = dutyPct / 100;
   const effectiveWatts = baseWatts * duty;
   const effectiveKw = effectiveWatts / 1000;
 
-  const hours = Math.max(0.1, Math.min(24, input.hoursPerDay || 4));
-  const daysPerWeek = Math.max(1, Math.min(7, input.daysPerWeek || 7));
-  const monthsPerYear = Math.max(1, Math.min(12, input.monthsPerYear || 12));
+  const hours = parseBounded(input.hoursPerDay, 0, 24, 4);
+  const daysPerWeek = parseBounded(input.daysPerWeek, 0, 7, 7);
+  const monthsPerYear = parseBounded(input.monthsPerYear, 0, 12, 12);
 
   // Daily energy in kWh
   const dailyKwh = (effectiveWatts * hours) / 1000;
@@ -166,7 +183,7 @@ export function calculateSingleAppliance(input: SingleApplianceInput): SingleApp
   const monthlyKwh = (weeklyKwh / 7) * daysInMonth;
   const annualKwh = (weeklyKwh / 7) * 365.25 * (monthsPerYear / 12);
 
-  const rate = Math.max(0, input.ratePerKwh || 0.16);
+  const rate = parseNonNegative(input.ratePerKwh, 0.16);
   const hourlyCost = effectiveKw * rate;
   const dailyCost = dailyKwh * rate;
   const monthlyCost = monthlyKwh * rate;
@@ -223,8 +240,8 @@ export interface TimeOfUseResult {
 }
 
 export function calculateTimeOfUse(input: TimeOfUseInput): TimeOfUseResult {
-  const peakDaily = Math.max(0, input.peakKwhPerDay || 8);
-  const offPeakDaily = Math.max(0, input.offPeakKwhPerDay || 16);
+  const peakDaily = parseNonNegative(input.peakKwhPerDay, 8);
+  const offPeakDaily = parseNonNegative(input.offPeakKwhPerDay, 16);
   const totalDailyKwh = peakDaily + offPeakDaily;
 
   const daysInMonth = 30.4375;
@@ -233,9 +250,9 @@ export function calculateTimeOfUse(input: TimeOfUseInput): TimeOfUseResult {
   const totalMonthlyKwh = totalDailyKwh * daysInMonth;
   const totalAnnualKwh = totalDailyKwh * 365.25;
 
-  const peakRate = Math.max(0, input.peakRate || 0.28);
-  const offPeakRate = Math.max(0, input.offPeakRate || 0.12);
-  const fixedFee = Math.max(0, input.fixedMonthlyGridFee || 15);
+  const peakRate = parseNonNegative(input.peakRate, 0.28);
+  const offPeakRate = parseNonNegative(input.offPeakRate, 0.12);
+  const fixedFee = parseNonNegative(input.fixedMonthlyGridFee, 15);
 
   const peakMonthlyCost = peakMonthlyKwh * peakRate;
   const offPeakMonthlyCost = offPeakMonthlyKwh * offPeakRate;
@@ -244,7 +261,7 @@ export function calculateTimeOfUse(input: TimeOfUseInput): TimeOfUseResult {
 
   const effectiveRatePerKwh = totalMonthlyKwh > 0 ? (peakMonthlyCost + offPeakMonthlyCost) / totalMonthlyKwh : 0;
   const peakPct = totalDailyKwh > 0 ? Math.round((peakDaily / totalDailyKwh) * 100) : 0;
-  const offPeakPct = 100 - peakPct;
+  const offPeakPct = totalDailyKwh > 0 ? 100 - peakPct : 0;
 
   const currConfig = CURRENCY_CONFIGS[input.currency || "USD"] || CURRENCY_CONFIGS.USD;
 
@@ -305,17 +322,17 @@ export interface HouseAggregatorResult {
 }
 
 export function calculateHouseAggregator(input: HouseAggregatorInput): HouseAggregatorResult {
-  const rate = Math.max(0, input.ratePerKwh || 0.16);
+  const rate = parseNonNegative(input.ratePerKwh, 0.16);
   const currConfig = CURRENCY_CONFIGS[input.currency || "USD"] || CURRENCY_CONFIGS.USD;
   const daysInMonth = 30.4375;
 
   let totalDailyKwh = 0;
   const itemKwhList: { id: string; name: string; category: string; monthlyKwh: number; monthlyCost: number }[] = [];
 
-  for (const item of input.appliances) {
-    const qty = Math.max(1, item.quantity || 1);
-    const watts = Math.max(0, item.powerWatts || 100);
-    const hours = Math.max(0, item.dailyHours || 1);
+  for (const item of (input.appliances || [])) {
+    const qty = parseNonNegative(item.quantity, 1);
+    const watts = parseNonNegative(item.powerWatts, 100);
+    const hours = parseBounded(item.dailyHours, 0, 24, 1);
 
     const itemDailyKwh = (qty * watts * hours) / 1000;
     const itemMonthlyKwh = itemDailyKwh * daysInMonth;
@@ -342,7 +359,7 @@ export function calculateHouseAggregator(input: HouseAggregatorInput): HouseAggr
     pctOfTotal: totalMonthlyKwh > 0 ? Math.round((item.monthlyKwh / totalMonthlyKwh) * 100) : 0,
   })).sort((a, b) => b.monthlyKwh - a.monthlyKwh);
 
-  const topDrainingAppliance = allocations.length > 0 ? `${allocations[0].name} (${allocations[0].pctOfTotal}%)` : "None";
+  const topDrainingAppliance = allocations.length > 0 && totalMonthlyKwh > 0 ? `${allocations[0].name} (${allocations[0].pctOfTotal}%)` : "None";
 
   return {
     totalDailyKwh: Math.round(totalDailyKwh * 10) / 10,
@@ -378,8 +395,9 @@ export interface EnergyEfficiencyResult {
 
   monthlyCostSaved: number;
   annualCostSaved: number;
-  fiveYearSavings: number;
-  tenYearSavings: number;
+  fiveYearSavings: number; // 5-Year Cumulative Savings
+  fiveYearNetProfit: number; // 5-Year Net Savings after initial investment
+  tenYearSavings: number; // 10-Year Cumulative Savings
 
   totalInvestmentCost: number;
   paybackMonths: number;
@@ -389,12 +407,12 @@ export interface EnergyEfficiencyResult {
 }
 
 export function calculateEnergyEfficiency(input: EnergyEfficiencyInput): EnergyEfficiencyResult {
-  const oldW = Math.max(0, input.oldWatts || 60);
-  const newW = Math.max(0, input.newWatts || 9);
-  const qty = Math.max(1, input.quantity || 10);
-  const hours = Math.max(0.1, input.dailyHours || 6);
-  const rate = Math.max(0, input.ratePerKwh || 0.16);
-  const unitCost = Math.max(0, input.replacementCostPerUnit || 4.0);
+  const oldW = parseNonNegative(input.oldWatts, 60);
+  const newW = parseNonNegative(input.newWatts, 9);
+  const qty = parseNonNegative(input.quantity, 10);
+  const hours = parseBounded(input.dailyHours, 0, 24, 6);
+  const rate = parseNonNegative(input.ratePerKwh, 0.16);
+  const unitCost = parseNonNegative(input.replacementCostPerUnit, 4.0);
 
   const perUnitSavedW = Math.max(0, oldW - newW);
   const totalPowerSavedW = perUnitSavedW * qty;
@@ -410,8 +428,11 @@ export function calculateEnergyEfficiency(input: EnergyEfficiencyInput): EnergyE
   const tenYearSavings = annualCostSaved * 10;
 
   const totalInvestmentCost = qty * unitCost;
-  const paybackMonths = monthlyCostSaved > 0 ? Math.round((totalInvestmentCost / monthlyCostSaved) * 10) / 10 : 0;
+  const paybackMonths = monthlyCostSaved > 0
+    ? (totalInvestmentCost > 0 ? Math.round((totalInvestmentCost / monthlyCostSaved) * 10) / 10 : 0)
+    : 0;
   const annualRoiPct = totalInvestmentCost > 0 ? Math.round((annualCostSaved / totalInvestmentCost) * 100) : 0;
+  const fiveYearNetProfit = Math.round((fiveYearSavings - totalInvestmentCost) * 100) / 100;
 
   const currConfig = CURRENCY_CONFIGS[input.currency || "USD"] || CURRENCY_CONFIGS.USD;
   const annualCarbonAvoidedKg = Math.round(annualKwhSaved * currConfig.carbonIntensityKgPerKwh);
@@ -426,6 +447,7 @@ export function calculateEnergyEfficiency(input: EnergyEfficiencyInput): EnergyE
     monthlyCostSaved: Math.round(monthlyCostSaved * 100) / 100,
     annualCostSaved: Math.round(annualCostSaved * 100) / 100,
     fiveYearSavings: Math.round(fiveYearSavings),
+    fiveYearNetProfit: Math.round(fiveYearNetProfit),
     tenYearSavings: Math.round(tenYearSavings),
 
     totalInvestmentCost: Math.round(totalInvestmentCost * 100) / 100,

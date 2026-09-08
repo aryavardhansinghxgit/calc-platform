@@ -14,7 +14,7 @@ export const electricity_calculatorConfig: CalculatorModuleDefinition = {
   keywords: ["electricity cost","kwh calculator","power consumption","electric bill"],
   priority: 1,
   relatedCalculators: ["ohms-law-calculator","voltage-drop-calculator"],
-  formulaDescription: "Monthly kWh = (Watts × Hours/Day × 30 Days) / 1000",
+  formulaDescription: "Monthly kWh = (Watts × Duty Cycle × Hours/Day × 30.4375) / 1000",
   faqs: electricity_calculatorFaqs,
   inputs: [
   {

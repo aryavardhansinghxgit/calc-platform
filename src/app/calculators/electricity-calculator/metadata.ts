@@ -1,9 +1,17 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
-export const electricity_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Electricity Calculator — Appliance Power Consumption, TOU Tariffs & Cost Estimator",
+export const electricity_calculatorMetadata: Metadata = {
+  title: "Electricity Calculator – kWh, Appliance Cost & Energy Usage",
   description:
-    "Free online electricity calculator to estimate appliance energy consumption (kWh), monthly electric bill, Time-of-Use tariffs, LED upgrade ROI, and carbon emissions across US, India, UK, EU, and Australia.",
-  slug: "electricity-calculator",
-});
+    "Calculate appliance kWh, electricity cost, time-of-use bills, whole-home energy use, carbon emissions, and energy-efficiency savings.",
+  alternates: {
+    canonical: "https://calcplatform.com/calculators/electricity-calculator",
+  },
+  openGraph: {
+    title: "Electricity Calculator – kWh, Energy Cost & Savings",
+    description:
+      "Estimate appliance electricity use, kWh, utility costs, TOU bills, household consumption, carbon emissions, and upgrade savings.",
+    url: "https://calcplatform.com/calculators/electricity-calculator",
+    type: "website",
+  },
+};
