@@ -1,8 +1,23 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
-export const fuel_cost_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Fuel Cost Calculator — Road Trips, Commutes & EV vs Gas",
-  description: "Free online Fuel Cost Calculator. Calculate trip gas costs, split passenger expenses, project monthly commute budgets & compare EV vs gas savings.",
-  slug: "fuel-cost-calculator",
-});
+export const fuel_cost_calculatorMetadata: Metadata = {
+  title: "Fuel Cost Calculator – Gas, MPG, Commute & EV Cost",
+  description:
+    "Calculate road-trip fuel cost, commute expenses, MPG, L/100km, EV vs gas savings, tolls, parking, and estimated CO₂ emissions.",
+  alternates: {
+    canonical: "https://calcplatform.com/calculators/fuel-cost-calculator",
+  },
+  openGraph: {
+    title: "Fuel Cost Calculator – Gas, MPG & EV Cost",
+    description:
+      "Estimate fuel use, trip cost, commute expenses, MPG, L/100km, EV charging cost, tolls, parking, and estimated CO₂ emissions.",
+    url: "https://calcplatform.com/calculators/fuel-cost-calculator",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Fuel Cost Calculator – Gas, MPG & EV Cost",
+    description:
+      "Estimate fuel use, trip cost, commute expenses, MPG, L/100km, EV charging cost, tolls, parking, and estimated CO₂ emissions.",
+  },
+};

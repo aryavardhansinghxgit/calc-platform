@@ -2,43 +2,103 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const fuel_cost_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "How do I calculate the fuel cost for a road trip?",
-    answer: "To calculate total road trip fuel cost, divide your total trip distance by your vehicle's fuel efficiency (MPG or L/100km) to determine total fuel volume required, then multiply that volume by the average price per gallon or liter."
+    question: "How do I calculate fuel cost for a trip?",
+    answer:
+      "Divide trip distance by vehicle MPG to find gallons required, then multiply gallons by the fuel price.",
   },
   {
-    question: "How do you convert MPG to Liters per 100 km (L/100km)?",
-    answer: "To convert US MPG to L/100km, divide 235.215 by your MPG figure (e.g., 25 MPG = 235.215 / 25 = 9.41 L/100km). For UK Imperial MPG, divide 282.481 by your Imperial MPG figure."
+    question: "How much gas do I need for 300 miles at 25 MPG?",
+    answer:
+      "You need: 300 ÷ 25 = 12 gallons. At $3.50 per gallon, the fuel costs $42.00.",
   },
   {
-    question: "Why does my car consume more fuel at speeds above 65 mph?",
-    answer: "Aerodynamic drag increases exponentially with speed (proportional to the square of velocity). Cruising at 75 mph requires your engine to overcome significantly more wind resistance than cruising at 55 mph, burning up to 20% to 25% more fuel for the same distance."
+    question: "How do I calculate round-trip fuel cost?",
+    answer:
+      "Double the one-way distance first, then divide by MPG. For 300 miles one way: 600 ÷ 25 = 24 gallons. At $3.50/gal: $84.00.",
   },
   {
-    question: "How much money does carpooling actually save?",
-    answer: "Carpooling divides total fuel, toll, and parking expenses evenly across all vehicle occupants. Sharing a ride with 3 coworkers (4 passengers total) cuts individual commuting costs by 75% while reducing individual vehicle wear and carbon emissions."
+    question: "How do I calculate my commute fuel cost per month?",
+    answer:
+      "Calculate your daily fuel requirement, multiply by fuel price, then multiply by the number of commute days per month. For 300 miles/day at 25 MPG and $3.50/gal: $42/day × 22 = $924/month.",
   },
   {
-    question: "Does using the air conditioner burn more gas than opening the windows?",
-    answer: "It depends on vehicle speed. At low city speeds (under 45 mph), opening windows is more fuel-efficient. At highway speeds (over 50 mph), open windows create significant aerodynamic drag, making air conditioning the more fuel-efficient option."
+    question: "How do I calculate MPG from my odometer?",
+    answer:
+      "Subtract the starting odometer from the ending odometer and divide the distance by gallons added: MPG = (End − Start) ÷ Gallons Added. For 10,000 → 10,350 miles and 14 gallons: 25 MPG.",
   },
   {
-    question: "How much does low tire pressure increase fuel costs?",
-    answer: "Under-inflated tires increase rolling resistance against the road surface. For every 1 PSI drop below recommended tire pressure, fuel efficiency decreases by roughly 0.2% to 0.3%, leading to noticeably higher annual fuel expenses."
+    question: "What is the difference between MPG and L/100km?",
+    answer:
+      "MPG measures distance traveled per gallon, while L/100km measures liters consumed per 100 kilometers. Higher MPG is better. Lower L/100km is better.",
   },
   {
-    question: "Is it cheaper to drive an Electric Vehicle (EV) than a gas car?",
-    answer: "Yes, in most cases. Charging an EV at home costs around 3¢ to 5¢ per mile (based on standard electricity rates of 14¢/kWh), compared to 12¢ to 18¢ per mile for a gasoline car averaging 25 MPG at $3.50/gallon."
+    question: "How do I convert 25 MPG to L/100km?",
+    answer:
+      "For U.S. MPG: 235.214583 ÷ 25 ≈ 9.41 L/100km. The conversion differs for Imperial MPG because the Imperial gallon is larger. NIST lists 3.785412 L for a U.S. gallon and 4.54609 L for an Imperial gallon.",
   },
   {
-    question: "How do I calculate my vehicle's actual real-world MPG?",
-    answer: "Use the fill-up method: Fill your gas tank completely and record your start odometer reading. Drive normally until the tank is low, fill it completely again, and record the gallons added and end odometer reading. Divide miles driven (End Odo - Start Odo) by gallons added."
+    question: "What is the difference between U.S. and Imperial MPG?",
+    answer:
+      "A U.S. gallon is approximately 3.785 L, while an Imperial gallon is approximately 4.546 L. Therefore, the same numerical MPG value represents different physical fuel consumption.",
   },
   {
-    question: "Does carrying extra weight in the trunk increase fuel consumption?",
-    answer: "Yes. Carrying an extra 100 lbs (45 kg) of cargo reduces vehicle fuel economy by approximately 1% in smaller cars. Removing unnecessary heavy items from your trunk immediately improves efficiency."
+    question: "Does driving faster increase fuel consumption?",
+    answer:
+      "Usually, yes, especially at higher road speeds. Aerodynamic drag force increases approximately with the square of velocity, while aerodynamic power required to overcome drag scales approximately with the cube of velocity.",
   },
   {
-    question: "What is the difference between US Gallons and UK Imperial Gallons?",
-    answer: "One UK Imperial Gallon equals approximately 4.546 Liters (1.201 US Gallons). Because a UK gallon is 20% larger than a US gallon, a vehicle's UK MPG rating will be about 20% higher than its US MPG rating for the exact same physical fuel economy."
-  }
+    question: "Does air conditioning increase fuel consumption?",
+    answer:
+      "It can increase vehicle energy demand, particularly in some operating conditions. The effect varies with temperature, vehicle type, speed, HVAC system and usage. It is not a single fixed percentage for every car.",
+  },
+  {
+    question: "Does extra weight increase fuel consumption?",
+    answer:
+      "Additional weight generally increases the energy required to accelerate the vehicle and can increase consumption, particularly in stop-and-go driving. The exact effect depends on the vehicle and driving conditions.",
+  },
+  {
+    question: "Does low tire pressure increase fuel consumption?",
+    answer:
+      "Underinflated tires can increase rolling resistance and reduce efficiency. Use the vehicle manufacturer's recommended tire pressure rather than assuming a universal percentage penalty.",
+  },
+  {
+    question: "How much can carpooling reduce my personal fuel cost?",
+    answer:
+      "If the total trip cost is $42, splitting it equally among four people gives each person a $10.50 share, assuming all participants share the cost equally.",
+  },
+  {
+    question: "Is an EV always cheaper than a gasoline car?",
+    answer:
+      "No. EV-versus-gas cost depends on gasoline price, electricity price, gasoline MPG, EV energy consumption, charging location and other factors. DOE notes that EV charging costs vary with electricity price, region, time of use and charging location.",
+  },
+  {
+    question: "How do I calculate EV charging cost for a trip?",
+    answer:
+      "For an EV rated at kWh per 100 miles: Energy = Distance × kWh/100mi ÷ 100. Then: Charging Cost = Energy × Electricity Rate.",
+  },
+  {
+    question: "What if the EV costs more than the gasoline car for a trip?",
+    answer:
+      "The result should be described as an EV premium rather than negative savings. For example, if gasoline costs $42 and the EV costs $72, the EV premium is $30 per trip.",
+  },
+  {
+    question: "How are gasoline CO₂ emissions calculated?",
+    answer:
+      "The calculator uses 8.887 kg CO₂ per gallon of gasoline. EPA documents the equivalent factor of 8,887 grams CO₂ per gallon.",
+  },
+  {
+    question: "Are these CO₂ values lifecycle emissions?",
+    answer:
+      "No. A gasoline-combustion factor does not automatically include every upstream or lifecycle source of greenhouse gases. EPA distinguishes combustion emissions from broader greenhouse-gas accounting and upstream emissions.",
+  },
+  {
+    question: "Why does my actual fuel cost differ from the calculator?",
+    answer:
+      "Actual fuel expense can differ because of changing fuel prices, traffic, weather, terrain, driving behavior, vehicle load, tire condition, HVAC use, and actual fuel economy.",
+  },
+  {
+    question: "Can I use this calculator to estimate a complete cost of owning a car?",
+    answer:
+      "It estimates the fuel and selected trip-related costs that it models. It does not automatically represent depreciation, insurance, financing, maintenance, registration, repairs, or every ownership expense.",
+  },
 ];

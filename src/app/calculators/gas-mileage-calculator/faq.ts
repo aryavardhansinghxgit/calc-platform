@@ -2,43 +2,63 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const gas_mileage_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "How do you calculate gas mileage manually?",
-    answer: "To calculate gas mileage manually, reset your trip odometer (or record your starting odometer) when you fill up your tank completely. Drive normally until the tank is low, fill up completely again, and record the exact gallons/liters added and miles/km driven. Divide total miles driven by gallons added."
+    question: "How do I calculate my car's MPG?",
+    answer:
+      "Subtract the starting odometer reading from the ending reading to get miles driven, then divide by gallons of fuel used: MPG = Miles Driven ÷ Gallons Used. For example, 360 miles using 12 gallons gives 30 MPG.",
   },
   {
-    question: "What is a good gas mileage (MPG) rating for a modern car?",
-    answer: "Modern benchmarks classify 25–30 MPG as average for standard sedans and compact SUVs, 35–45 MPG as excellent for non-hybrid compacts, 50–55 MPG for gasoline-electric hybrids, and 100+ MPGe for pure Electric Vehicles (EVs)."
+    question: "How do I calculate fuel cost from MPG?",
+    answer:
+      "First calculate fuel required: Fuel = Distance ÷ MPG. Then multiply by fuel price: Fuel Cost = Fuel × Fuel Price. For 300 miles at 25 MPG and $3.50/gal, 300 ÷ 25 = 12 gallons, and 12 × $3.50 = $42.00.",
   },
   {
-    question: "Why is my car's real-world gas mileage lower than the EPA window sticker?",
-    answer: "EPA window sticker ratings are measured under controlled laboratory dyno conditions at mild ambient temperatures. Real-world gas mileage is lower due to aggressive acceleration, cruising at speeds above 65 mph, city stop-and-go traffic, roof racks, cold winter weather, and underinflated tires."
+    question: "What is a good MPG?",
+    answer:
+      "There is no single MPG number that is 'good' for every vehicle. Fuel economy varies with vehicle size, drivetrain, engine, load, speed, driving conditions and use. The most useful comparison is often between similar vehicles or between your own vehicle's current and historical fuel economy.",
   },
   {
-    question: "How do you convert US MPG to Liters per 100 km (L/100km)?",
-    answer: "To convert US MPG to Liters per 100 km, divide 235.215 by your US MPG number (e.g., 30 MPG = 235.215 / 30 = 7.84 L/100km). To convert L/100km back to US MPG, divide 235.215 by your L/100km figure."
+    question: "How do I convert MPG to L/100km?",
+    answer:
+      "For U.S. MPG: L/100km = 235.214583 ÷ MPG. Therefore, 30 MPG ≈ 7.84 L/100km. NIST documents the U.S. MPG conversion basis. For UK Imperial MPG, the constant is approximately 282.481.",
   },
   {
-    question: "Why are UK Imperial MPG numbers higher than US MPG numbers?",
-    answer: "A UK Imperial Gallon (approximately 4.546 Liters) is 20% larger than a US Liquid Gallon (approximately 3.785 Liters). Because a UK gallon contains more fuel mass, a vehicle's UK MPG rating will naturally be ~20% higher than its US MPG rating for the exact same physical fuel efficiency."
+    question: "What is the difference between U.S. MPG and Imperial MPG?",
+    answer:
+      "A U.S. gallon is approximately 3.785412 liters, while an Imperial gallon is 4.54609 liters. Because the gallons differ in size, the numerical MPG values are not directly equivalent.",
   },
   {
-    question: "Does driving fast significantly lower gas mileage?",
-    answer: "Yes. Aerodynamic drag increases exponentially above 50–55 mph. Cruising at 75 mph consumes up to 20% to 25% more fuel per mile than cruising at 55 mph, forcing your engine to burn more fuel to overcome air resistance."
+    question: "How do I calculate my real-world gas mileage?",
+    answer:
+      "Record the starting odometer, drive normally, record the ending odometer and note how much fuel you add during the measurement. Then: MPG = (Ending Odometer − Starting Odometer) ÷ Fuel Added. Several tanks can be combined for a more stable long-term measurement.",
   },
   {
-    question: "How much gas does a car burn while idling?",
-    answer: "An idling car engine burns between 0.2 and 0.5 gallons (0.75 to 1.9 Liters) of fuel per hour while yielding 0.0 MPG. Turning off your engine when stopped for more than 10 seconds saves fuel and reduces engine wear."
+    question: "Why is my actual MPG different from the advertised MPG?",
+    answer:
+      "Actual fuel economy can be affected by driving behavior, speed, traffic, temperature, terrain, payload, tire pressure, vehicle condition and other operating conditions. DOE specifically notes that driving behavior and vehicle condition can materially affect fuel economy.",
   },
   {
-    question: "Does low tire pressure waste gasoline?",
-    answer: "Yes. Underinflated tires increase rolling resistance against the road surface. Fuel economy drops by approximately 0.2% to 0.3% for every 1 PSI drop in pressure across all four tires below recommended manufacturer specifications."
+    question: "Does driving faster use more fuel?",
+    answer:
+      "Often, yes. Fuel economy can decline at higher speeds, although the exact pattern differs by vehicle. Aerodynamic drag force is approximately proportional to velocity squared (F_drag ∝ v²), while aerodynamic power required to overcome drag scales approximately with velocity cubed (P_drag ∝ v³). DOE's modeled vehicle data also shows fuel economy varying significantly with speed.",
   },
   {
-    question: "What is the 'MPG Illusion' and why does it matter?",
-    answer: "The 'MPG Illusion' refers to the non-linear relationship between MPG and actual fuel volume consumed. Improving a gas guzzler from 10 to 15 MPG saves far more fuel over 10,000 miles (333 gallons saved) than improving an efficient car from 30 to 35 MPG (48 gallons saved)."
+    question: "Does tire pressure affect gas mileage?",
+    answer:
+      "Yes. Underinflated tires generally increase rolling resistance. DOE recommends maintaining the manufacturer's specified tire pressure and reports measurable fuel-economy benefits from properly inflated tires.",
   },
   {
-    question: "Does using premium high-octane gasoline improve gas mileage in regular cars?",
-    answer: "No. Premium octane gasoline is formulated to resist premature detonation ('engine knock') in high-compression or turbocharged engines. Using 91/93 octane fuel in an engine designed for regular 87 octane provides zero benefit in gas mileage, horsepower, or engine cleanliness."
-  }
+    question: "How do I calculate driving range?",
+    answer:
+      "For a simple estimate: Range = Tank Capacity × Fuel Economy. A 15-gallon tank at 30 MPG gives 15 × 30 = 450 miles. Actual range can differ because usable fuel capacity and real-world MPG are not perfectly constant.",
+  },
+  {
+    question: "How is a multi-tank MPG average calculated?",
+    answer:
+      "Add all measured distances and all fuel consumed, then divide: Weighted MPG = Total Distance ÷ Total Fuel. This is preferable to taking a simple arithmetic average of separate tank MPG values when the tanks contain different amounts of fuel.",
+  },
+  {
+    question: "How much CO₂ does gasoline produce?",
+    answer:
+      "EPA uses 8,887 grams of CO₂ per gallon of gasoline consumed as a tailpipe combustion factor. That means 12 gallons corresponds to about 106.6 kg of direct tailpipe CO₂. This is a combustion estimate rather than a complete lifecycle emissions calculation.",
+  },
 ];

@@ -15,14 +15,17 @@ export function calculatePenaltyMultiplier(flags: EfficiencyPenaltyFlags): numbe
   return mult;
 }
 
-export function convertMPGToL100km(mpg: number): number {
+// Full floating-point precision conversion constants (US: 235.214583, UK Imperial: 282.481)
+export function convertMPGToL100km(mpg: number, isImperialGal: boolean = false): number {
   if (mpg <= 0) return 0;
-  return parseFloat((235.215 / mpg).toFixed(2));
+  const constant = isImperialGal ? 282.481 : 235.214583;
+  return constant / mpg;
 }
 
-export function convertL100kmToMPG(l100: number): number {
+export function convertL100kmToMPG(l100: number, isImperialGal: boolean = false): number {
   if (l100 <= 0) return 0;
-  return parseFloat((235.215 / l100).toFixed(2));
+  const constant = isImperialGal ? 282.481 : 235.214583;
+  return constant / l100;
 }
 
 export function calculateFuelCost(
@@ -53,20 +56,47 @@ export function calculateFuelCost(
   evKwhPer100mi: number = 30,
   electricityRatePerKwh: number = 0.15
 ): FuelCostResult {
+  let validationError: string | null = null;
+
+  // Validation checks
+  if (distanceInput < 0) {
+    validationError = "Distance cannot be negative.";
+  }
+  if (fuelPriceInput < 0) {
+    validationError = "Fuel price cannot be negative.";
+  }
+  if (tolls < 0 || parking < 0) {
+    validationError = "Tolls and parking fees cannot be negative.";
+  }
+  if (mode !== "mpg_solver" && efficiencyInput <= 0) {
+    validationError = "Fuel efficiency must be greater than 0.";
+  }
+  if (mode === "mpg_solver") {
+    if (endOdo < startOdo) {
+      validationError = "End odometer must be greater than or equal to start odometer.";
+    } else if (fuelAdded < 0) {
+      validationError = "Fuel added cannot be negative.";
+    } else if (fuelAdded === 0 && endOdo > startOdo) {
+      validationError = "Fuel added must be greater than 0 to calculate MPG.";
+    }
+  }
+
   const penaltyMult = calculatePenaltyMultiplier(penalties);
 
   // Determine Distance
-  let totalDistance = distanceInput * (isRoundTrip ? 2 : 1);
+  let totalDistance = 0;
   if (mode === "mpg_solver") {
     totalDistance = Math.max(0, endOdo - startOdo);
+  } else {
+    totalDistance = Math.max(0, distanceInput) * (isRoundTrip ? 2 : 1);
   }
 
   // Effective Efficiency
-  let effectiveEfficiency = efficiencyInput;
+  let effectiveEfficiency = Math.max(0, efficiencyInput);
   if (unitSystem === "imperial") {
     effectiveEfficiency = efficiencyInput * penaltyMult;
   } else {
-    // Metric L/100km: penalty increases consumption
+    // Metric L/100km: penalty increases fuel consumption rate
     effectiveEfficiency = penaltyMult > 0 ? efficiencyInput / penaltyMult : efficiencyInput;
   }
 
@@ -74,20 +104,25 @@ export function calculateFuelCost(
   let fuelVolume = 0;
   let fuelOnlyCost = 0;
 
-  if (unitSystem === "imperial") {
-    const validMPG = Math.max(0.1, effectiveEfficiency);
-    fuelVolume = totalDistance / validMPG;
-    fuelOnlyCost = fuelVolume * fuelPriceInput;
-  } else {
-    const validL100 = Math.max(0.1, effectiveEfficiency);
-    fuelVolume = (totalDistance * validL100) / 100;
-    fuelOnlyCost = fuelVolume * fuelPriceInput;
+  if (mode === "mpg_solver") {
+    // P1-01 Fix: In MPG Solver mode, fuel volume is the actual fuel added by the user
+    fuelVolume = Math.max(0, fuelAdded);
+    fuelOnlyCost = fuelVolume * Math.max(0, fuelPriceInput);
+  } else if (effectiveEfficiency > 0 && totalDistance > 0) {
+    if (unitSystem === "imperial") {
+      fuelVolume = totalDistance / effectiveEfficiency;
+      fuelOnlyCost = fuelVolume * Math.max(0, fuelPriceInput);
+    } else {
+      fuelVolume = (totalDistance * effectiveEfficiency) / 100;
+      fuelOnlyCost = fuelVolume * Math.max(0, fuelPriceInput);
+    }
   }
 
-  const maintCost = totalDistance * maintPerDistance;
-  const tollsAndExpenses = tolls + parking + maintCost;
+  const maintCost = totalDistance * Math.max(0, maintPerDistance);
+  const tollsAndExpenses = Math.max(0, tolls) + Math.max(0, parking) + maintCost;
   const totalCost = fuelOnlyCost + tollsAndExpenses;
-  const costPerPerson = totalCost / Math.max(1, passengers);
+  const safePassengers = Math.max(1, passengers);
+  const costPerPerson = totalCost / safePassengers;
 
   const distUnit = unitSystem === "imperial" ? "miles" : "km";
   const volUnit = unitSystem === "imperial" ? "gallons" : "liters";
@@ -102,42 +137,54 @@ export function calculateFuelCost(
   }
   const carbonFootprint = fuelVolume * co2PerUnit;
 
-  // 1. Commute Planner Results
+  // 1. Commute Planner Results (P1-02 Fix)
   let weeklyCommuteCost = 0;
   let monthlyCommuteCost = 0;
   let annualCommuteCost = 0;
+  let dailyFuelCost = 0;
+  let dailyFuelVolume = 0;
+  let monthlyDistanceFormatted = "";
+  let monthlyFuelVolume = 0;
 
   if (mode === "commute") {
-    const dailyCost = totalCost;
-    weeklyCommuteCost = dailyCost * 5;
-    monthlyCommuteCost = dailyCost * workDaysPerMonth;
+    const validWorkDays = Math.max(0, workDaysPerMonth);
+    dailyFuelCost = totalCost;
+    dailyFuelVolume = fuelVolume;
+    weeklyCommuteCost = dailyFuelCost * 5;
+    monthlyCommuteCost = dailyFuelCost * validWorkDays;
     annualCommuteCost = monthlyCommuteCost * 12;
+    monthlyFuelVolume = dailyFuelVolume * validWorkDays;
+    const monthlyDistance = totalDistance * validWorkDays;
+    monthlyDistanceFormatted = `${monthlyDistance.toLocaleString()} ${distUnit}`;
   }
 
-  // 2. EV Comparison Results
+  // 2. EV Comparison Results (P2-01 & P2-02 Fix)
   let evTripCost = 0;
   let gasTripCost = 0;
   let evSavings = 0;
+  let evKwhTotal = 0;
+  let isEvPremium = false;
 
   if (mode === "ev_compare") {
     gasTripCost = fuelOnlyCost;
     // EV Energy = (Distance / 100) * kWh_per_100mi
-    const evKwhTotal = (totalDistance / 100) * evKwhPer100mi;
-    evTripCost = evKwhTotal * electricityRatePerKwh;
+    evKwhTotal = (totalDistance / 100) * Math.max(0, evKwhPer100mi);
+    evTripCost = evKwhTotal * Math.max(0, electricityRatePerKwh);
     evSavings = gasTripCost - evTripCost;
+    isEvPremium = evSavings < 0;
   }
 
-  // 3. MPG Solver Results
+  // 3. MPG Solver Results (P1-01 & P2-04 Fix)
   let calculatedMPG = 0;
   let calculatedL100km = 0;
 
   if (mode === "mpg_solver") {
     if (fuelAdded > 0 && totalDistance > 0) {
       if (unitSystem === "imperial") {
-        calculatedMPG = parseFloat((totalDistance / fuelAdded).toFixed(2));
+        calculatedMPG = totalDistance / fuelAdded;
         calculatedL100km = convertMPGToL100km(calculatedMPG);
       } else {
-        calculatedL100km = parseFloat(((fuelAdded / totalDistance) * 100).toFixed(2));
+        calculatedL100km = (fuelAdded / totalDistance) * 100;
         calculatedMPG = convertL100kmToMPG(calculatedL100km);
       }
     }
@@ -154,24 +201,36 @@ export function calculateFuelCost(
     effectiveEfficiency: parseFloat(effectiveEfficiency.toFixed(1)),
     efficiencyUnitName: effUnit,
     carbonFootprintKg: parseFloat(carbonFootprint.toFixed(1)),
+    // Commute Planner
     weeklyCommuteCost: parseFloat(weeklyCommuteCost.toFixed(2)),
     monthlyCommuteCost: parseFloat(monthlyCommuteCost.toFixed(2)),
     annualCommuteCost: parseFloat(annualCommuteCost.toFixed(2)),
+    dailyFuelCost: parseFloat(dailyFuelCost.toFixed(2)),
+    dailyFuelVolume: parseFloat(dailyFuelVolume.toFixed(2)),
+    monthlyDistanceFormatted,
+    monthlyFuelVolume: parseFloat(monthlyFuelVolume.toFixed(2)),
+    workDaysCount: workDaysPerMonth,
+    // EV Comparison
     evTripCost: parseFloat(evTripCost.toFixed(2)),
     gasTripCost: parseFloat(gasTripCost.toFixed(2)),
     evSavings: parseFloat(evSavings.toFixed(2)),
-    calculatedMPG,
-    calculatedL100km,
+    isEvPremium,
+    evKwhTotal: parseFloat(evKwhTotal.toFixed(1)),
+    // MPG Solver
+    calculatedMPG: parseFloat(calculatedMPG.toFixed(2)),
+    calculatedL100km: parseFloat(calculatedL100km.toFixed(2)),
     fuelOnlyCost: parseFloat(fuelOnlyCost.toFixed(2)),
     tollsAndExpenses: parseFloat(tollsAndExpenses.toFixed(2)),
+    validationError,
   };
 }
 
+// P1-03 Fix: Explicit nullish coalescing to preserve legitimate numeric zeroes
 export function calculateFuelCostFromInputs(inputs: Record<string, any>): FuelCostResult {
-  const distance = Number(inputs.distance || inputs.tripDistance || 300);
-  const efficiency = Number(inputs.efficiency || inputs.mpg || 25);
-  const price = Number(inputs.fuelPrice || inputs.price || 3.5);
-  const unit = (inputs.unitSystem as UnitSystem) || "imperial";
+  const distance = Number(inputs.distance ?? inputs.tripDistance ?? 300);
+  const efficiency = Number(inputs.efficiency ?? inputs.mpg ?? 25);
+  const price = Number(inputs.fuelPrice ?? inputs.price ?? 3.5);
+  const unit = (inputs.unitSystem as UnitSystem) ?? "imperial";
 
   return calculateFuelCost("trip", unit, "gasoline", distance, false, efficiency, price);
 }

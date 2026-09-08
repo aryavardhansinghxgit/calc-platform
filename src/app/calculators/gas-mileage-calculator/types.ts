@@ -26,6 +26,11 @@ export interface EfficiencyPenaltyFlags {
 }
 
 export interface GasMileageResult {
+  validationError?: string;
+  totalDistance: number;
+  totalFuelVolume: number;
+  avgPricePerUnit: number;
+  tripFuelCost: number;
   usMPG: number;
   ukMPG: number;
   l100km: number;
@@ -52,4 +57,23 @@ export interface GasMileageResult {
   ratingPercentage: number;
   mpgeEquivalent: number;
   evCostPer100mi: number;
+}
+
+export interface SavedGasMileageState {
+  id: string;
+  timestamp: number;
+  mode: CalcMode;
+  unitSystem: UnitSystem;
+  currencySymbol: string;
+  fuelType: FuelType;
+  startOdo: number;
+  endOdo: number;
+  tripDistance: number;
+  fuelAdded: number;
+  fuelPrice: number;
+  tankCapacity: number;
+  annualMileage: number;
+  multiTankLogs: FillUpEntry[];
+  penalties: EfficiencyPenaltyFlags;
+  resultSummary: string;
 }

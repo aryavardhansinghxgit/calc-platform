@@ -8,7 +8,7 @@ export const gas_mileage_calculatorConfig: CalculatorModuleDefinition = {
   slug: "gas-mileage-calculator",
   category: "other",
   subcategory: "Automotive & Fuel",
-  description: "Free online Gas Mileage Calculator. Calculate US/UK MPG, L/100km, multi-tank rolling averages, annual fuel spending, carbon footprint & MPGe benchmarks.",
+  description: "Calculate vehicle fuel economy from distance and fuel used, compare US and UK MPG with metric fuel-consumption units, estimate trip and annual fuel costs, measure multi-tank mileage, and calculate driving range.",
   iconName: "Gauge",
   featured: true,
   keywords: [

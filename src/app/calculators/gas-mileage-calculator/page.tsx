@@ -13,7 +13,6 @@ export default function GasMileageCalculatorPage() {
     description: gas_mileage_calculatorConfig.description,
     slug: gas_mileage_calculatorConfig.slug,
     category: gas_mileage_calculatorConfig.category,
-    faqs: gas_mileage_calculatorConfig.faqs,
   });
 
   return (

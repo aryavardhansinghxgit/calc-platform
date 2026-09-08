@@ -1,8 +1,23 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
-export const gas_mileage_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Gas Mileage Calculator — MPG, L/100km & Fuel Economy",
-  description: "Free online Gas Mileage Calculator. Calculate MPG, L/100km, multi-tank rolling averages, tank driving range, annual fuel spending & CO2 emissions.",
-  slug: "gas-mileage-calculator",
-});
+export const gas_mileage_calculatorMetadata: Metadata = {
+  title: "Gas Mileage Calculator – MPG, km/L, L/100km & Fuel Cost",
+  description:
+    "Calculate real-world MPG, km/L and L/100km, fuel cost, driving range, annual fuel spending, multi-tank averages and estimated CO₂.",
+  alternates: {
+    canonical: "https://calcplatform.com/calculators/gas-mileage-calculator",
+  },
+  openGraph: {
+    title: "Gas Mileage Calculator – MPG, km/L, L/100km & Fuel Cost",
+    description:
+      "Calculate real-world MPG, km/L and L/100km, fuel cost, driving range, annual fuel spending, multi-tank averages and estimated CO₂.",
+    url: "https://calcplatform.com/calculators/gas-mileage-calculator",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gas Mileage Calculator – MPG, km/L, L/100km & Fuel Cost",
+    description:
+      "Calculate real-world MPG, km/L and L/100km, fuel cost, driving range, annual fuel spending, multi-tank averages and estimated CO₂.",
+  },
+};

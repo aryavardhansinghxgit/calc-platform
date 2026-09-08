@@ -8,7 +8,7 @@ export const fuel_cost_calculatorConfig: CalculatorModuleDefinition = {
   slug: "fuel-cost-calculator",
   category: "other",
   subcategory: "Automotive & Fuel",
-  description: "Free online Fuel Cost Calculator. Calculate road trip gas cost, commute monthly budget, EV vs gas savings, passenger split, and carbon footprint.",
+  description: "Calculate road-trip fuel cost, commute expenses, MPG, L/100km, EV vs gas savings, tolls, parking, and estimated CO₂ emissions.",
   iconName: "Fuel",
   featured: true,
   keywords: [
