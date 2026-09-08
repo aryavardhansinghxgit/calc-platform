@@ -1,9 +1,31 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
-export const roman_numeral_converterMetadata: Metadata = generateCalculatorMetadata({
-  title: "Roman Numeral Converter & Date Calculator — Numbers to Roman Numerals",
+export const roman_numeral_converterMetadata: Metadata = {
+  title: "Roman Numeral Converter – Numbers, Dates & Roman Math",
   description:
-    "Free online Roman Numeral Converter, Date to Roman Numeral generator, and Roman Numeral arithmetic solver. Convert numbers up to 3,999,999 with Vinculum overlines and tattoo date styling.",
-  slug: "roman-numeral-converter",
-});
+    "Convert numbers to Roman numerals and back, write dates in Roman numerals, perform Roman numeral arithmetic, and use the 1–3999 reference chart.",
+  alternates: {
+    canonical: "https://calcplatform.com/calculators/roman-numeral-converter",
+  },
+  openGraph: {
+    title: "Roman Numeral Converter – Number, Date & Arithmetic Calculator",
+    description:
+      "Convert Arabic numbers and Roman numerals, validate standard notation, convert dates, calculate with Roman numerals, and explore the full reference chart.",
+    url: "https://calcplatform.com/calculators/roman-numeral-converter",
+    type: "website",
+    images: [
+      {
+        url: "https://calcplatform.com/og?title=Roman%20Numeral%20Converter",
+        width: 1200,
+        height: 630,
+        alt: "Roman Numeral Converter",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Roman Numeral Converter – Number, Date & Arithmetic Calculator",
+    description:
+      "Convert Arabic numbers and Roman numerals, validate standard notation, convert dates, calculate with Roman numerals, and explore the full reference chart.",
+  },
+};

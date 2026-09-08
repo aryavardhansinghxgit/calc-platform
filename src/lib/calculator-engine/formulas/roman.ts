@@ -1,7 +1,7 @@
 /**
  * Pure Mathematical Calculation Engine for Roman Numeral Suite
- * Compliant with Classical Latin Epigraphic Standards, Medieval Vinculum (Overline) Notation,
- * and Modern Unicode Combining Macron Standards.
+ * Compliant with Classical Latin Epigraphic Standards, Strict Canonical Additive/Subtractive Grammar,
+ * Medieval Vinculum (Overline) Notation, and Real Calendar Validation.
  */
 
 export interface RomanSymbol {
@@ -50,79 +50,190 @@ export interface RomanConversionResult {
   expansionParts: ExpansionPart[];
   stepByStepFormula: string;
   activeSymbols: string[];
+  isValid: boolean;
+  errorMessage?: string;
 }
 
-export function arabicToRoman(num: number, useVinculum = true): RomanConversionResult {
-  const n = Math.floor(Math.max(1, Math.min(3999999, num || 1)));
+// ─── CLASSICAL LOOKUP TABLE (1 TO 3999) ──────────────────────────────────────
 
-  let remainder = n;
-  let romanAscii = "";
-  let romanUnicode = "";
-  const expansionParts: ExpansionPart[] = [];
-  const activeSymbolsSet = new Set<string>();
+const CLASSICAL_TABLE: [number, string][] = [
+  [1000, "M"],
+  [900, "CM"],
+  [500, "D"],
+  [400, "CD"],
+  [100, "C"],
+  [90, "XC"],
+  [50, "L"],
+  [40, "XL"],
+  [10, "X"],
+  [9, "IX"],
+  [5, "V"],
+  [4, "IV"],
+  [1, "I"],
+];
 
-  const mapping = [
-    { val: 1000000, ascii: "_M", uni: "M̅" },
-    { val: 900000, ascii: "_C_M", uni: "C̅M̅" },
-    { val: 500000, ascii: "_D", uni: "D̅" },
-    { val: 400000, ascii: "_C_D", uni: "C̅D̅" },
-    { val: 100000, ascii: "_C", uni: "C̅" },
-    { val: 90000, ascii: "_X_C", uni: "X̅C̅" },
-    { val: 50000, ascii: "_L", uni: "L̅" },
-    { val: 40000, ascii: "_X_L", uni: "X̅L̅" },
-    { val: 10000, ascii: "_X", uni: "X̅" },
-    { val: 9000, ascii: "_I_X", uni: "I̅X̅" },
-    { val: 5000, ascii: "_V", uni: "V̅" },
-    { val: 4000, ascii: "_I_V", uni: "I̅V̅" },
-    { val: 1000, ascii: "M", uni: "M" },
-    { val: 900, ascii: "CM", uni: "CM" },
-    { val: 500, ascii: "D", uni: "D" },
-    { val: 400, ascii: "CD", uni: "CD" },
-    { val: 100, ascii: "C", uni: "C" },
-    { val: 90, ascii: "XC", uni: "XC" },
-    { val: 50, ascii: "L", uni: "L" },
-    { val: 40, ascii: "XL", uni: "XL" },
-    { val: 10, ascii: "X", uni: "X" },
-    { val: 9, ascii: "IX", uni: "IX" },
-    { val: 5, ascii: "V", uni: "V" },
-    { val: 4, ascii: "IV", uni: "IV" },
-    { val: 1, ascii: "I", uni: "I" },
-  ];
-
-  // If vinculum disabled and number <= 3999, filter out > 1000
-  const activeMapping = useVinculum ? mapping : mapping.filter((m) => m.val <= 1000);
-
-  for (const item of activeMapping) {
-    while (remainder >= item.val) {
-      romanAscii += item.ascii;
-      romanUnicode += item.uni;
-      remainder -= item.val;
-
-      // Track symbols
-      for (const char of item.uni) {
-        activeSymbolsSet.add(char);
-      }
+/**
+ * Encodes an integer 1..3999 into canonical classical Roman numerals.
+ */
+function classicalArabicToRoman(num: number): string {
+  if (num < 1 || num > 3999) return "";
+  let rem = num;
+  let res = "";
+  for (const [val, sym] of CLASSICAL_TABLE) {
+    while (rem >= val) {
+      res += sym;
+      rem -= val;
     }
   }
+  return res;
+}
 
-  // Decompose into standard place value expansion (e.g. 1994 -> 1000 + 900 + 90 + 4)
-  const numStr = n.toString();
+/**
+ * Strict classical Roman numeral regex (1..3999).
+ * Enforces:
+ * - At most 3 consecutive M, C, X, I
+ * - Non-repeating D, L, V
+ * - Only valid subtractive pairs: IV, IX, XL, XC, CD, CM
+ * - Strict place-value descending order
+ */
+const STRICT_CLASSICAL_REGEX =
+  /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
+
+/**
+ * Encodes an integer into canonical Roman numerals.
+ * Supports standard range 1..3,999 and Vinculum overline range 4,000..3,999,999.
+ */
+export function arabicToRoman(num: number, useVinculum = true): RomanConversionResult {
+  if (!Number.isFinite(num) || !Number.isInteger(num)) {
+    return {
+      arabicNumber: 0,
+      romanAscii: "",
+      romanUnicode: "",
+      expansionParts: [],
+      stepByStepFormula: "",
+      activeSymbols: [],
+      isValid: false,
+      errorMessage: "Please enter a valid whole integer.",
+    };
+  }
+
+  if (num === 0) {
+    return {
+      arabicNumber: 0,
+      romanAscii: "",
+      romanUnicode: "",
+      expansionParts: [],
+      stepByStepFormula: "",
+      activeSymbols: [],
+      isValid: false,
+      errorMessage:
+        "Classical Roman numerals do not have a symbol for zero (the Romans used 'nulla' or the letter 'N' for empty balances).",
+    };
+  }
+
+  if (num < 0) {
+    return {
+      arabicNumber: num,
+      romanAscii: "",
+      romanUnicode: "",
+      expansionParts: [],
+      stepByStepFormula: "",
+      activeSymbols: [],
+      isValid: false,
+      errorMessage: "Classical Roman numerals cannot represent negative numbers.",
+    };
+  }
+
+  if (num > 3999999) {
+    return {
+      arabicNumber: num,
+      romanAscii: "",
+      romanUnicode: "",
+      expansionParts: [],
+      stepByStepFormula: "",
+      activeSymbols: [],
+      isValid: false,
+      errorMessage: "Number exceeds maximum supported range (3,999,999).",
+    };
+  }
+
+  if (!useVinculum && num > 3999) {
+    return {
+      arabicNumber: num,
+      romanAscii: "",
+      romanUnicode: "",
+      expansionParts: [],
+      stepByStepFormula: "",
+      activeSymbols: [],
+      isValid: false,
+      errorMessage:
+        "Standard classical Roman numerals max out at 3,999 (MMMCMXCIX). Enable 'Vinculum Overlines' to convert numbers ≥ 4,000.",
+    };
+  }
+
+  let romanUnicode = "";
+  let romanAscii = "";
+  const activeSymbolsSet = new Set<string>();
+
+  if (num <= 3999) {
+    romanUnicode = classicalArabicToRoman(num);
+    romanAscii = romanUnicode;
+    for (const ch of romanUnicode) {
+      activeSymbolsSet.add(ch);
+    }
+  } else {
+    // Vinculum decomposition: thousands part and units part
+    const thousands = Math.floor(num / 1000);
+    const remainder = num % 1000;
+
+    const thousandsClassical = classicalArabicToRoman(thousands);
+    // Add combining macron to each character of the thousands portion
+    let thousandsUnicode = "";
+    let thousandsAscii = "";
+    for (const ch of thousandsClassical) {
+      thousandsUnicode += `${ch}\u0305`;
+      thousandsAscii += `_${ch}`;
+      activeSymbolsSet.add(ch);
+    }
+
+    const remainderClassical = remainder > 0 ? classicalArabicToRoman(remainder) : "";
+    for (const ch of remainderClassical) {
+      activeSymbolsSet.add(ch);
+    }
+
+    romanUnicode = thousandsUnicode + remainderClassical;
+    romanAscii = thousandsAscii + remainderClassical;
+  }
+
+  // Decompose by decimal place value (e.g. 1994 -> 1000 + 900 + 90 + 4)
+  const expansionParts: ExpansionPart[] = [];
+  const numStr = num.toString();
   const len = numStr.length;
+
   for (let i = 0; i < len; i++) {
     const digit = parseInt(numStr[i], 10);
     if (digit === 0) continue;
     const place = Math.pow(10, len - i - 1);
     const partValue = digit * place;
 
-    // Convert individual place value
-    let partAscii = "";
     let partUni = "";
-    let remPart = partValue;
-    for (const item of activeMapping) {
-      while (remPart >= item.val) {
-        partAscii += item.ascii;
-        partUni += item.uni;
-        remPart -= item.val;
+    let partAscii = "";
+
+    if (partValue <= 3999) {
+      partUni = classicalArabicToRoman(partValue);
+      partAscii = partUni;
+    } else {
+      const pThou = Math.floor(partValue / 1000);
+      const pRem = partValue % 1000;
+      const tClass = classicalArabicToRoman(pThou);
+      for (const ch of tClass) {
+        partUni += `${ch}\u0305`;
+        partAscii += `_${ch}`;
+      }
+      if (pRem > 0) {
+        const rClass = classicalArabicToRoman(pRem);
+        partUni += rClass;
+        partAscii += rClass;
       }
     }
 
@@ -135,18 +246,25 @@ export function arabicToRoman(num: number, useVinculum = true): RomanConversionR
     });
   }
 
-  const stepByStep = expansionParts.map((p) => `${p.arabicPart} (${p.unicodePart})`).join(" + ") + ` = ${romanUnicode}`;
+  const stepByStep =
+    expansionParts.map((p) => `${p.arabicPart.toLocaleString("en-US")} (${p.unicodePart})`).join(" + ") +
+    ` = ${romanUnicode}`;
 
   return {
-    arabicNumber: n,
+    arabicNumber: num,
     romanAscii,
     romanUnicode,
     expansionParts,
     stepByStepFormula: stepByStep,
     activeSymbols: Array.from(activeSymbolsSet),
+    isValid: true,
   };
 }
 
+/**
+ * Parses raw Roman numeral string, strictly validating against classical grammar
+ * and Vinculum overline conventions.
+ */
 export function romanToArabic(rawRoman: string): {
   arabicNumber: number;
   isValid: boolean;
@@ -155,83 +273,215 @@ export function romanToArabic(rawRoman: string): {
   stepByStepFormula: string;
 } {
   if (!rawRoman || rawRoman.trim() === "") {
-    return { arabicNumber: 0, isValid: false, errorMessage: "Input is empty", expansionParts: [], stepByStepFormula: "" };
+    return {
+      arabicNumber: 0,
+      isValid: false,
+      errorMessage: "Please enter a Roman numeral.",
+      expansionParts: [],
+      stepByStepFormula: "",
+    };
   }
 
-  const cleaned = rawRoman.trim().toUpperCase();
+  const trimmed = rawRoman.trim();
 
-  // Value map
-  const valueMap: Record<string, number> = {
-    I: 1,
-    V: 5,
-    X: 10,
-    L: 50,
-    C: 100,
-    D: 500,
-    M: 1000,
+  // Normalize combining macrons (\u0304, \u0305) and overlines
+  // e.g. "V̅" -> "_V", "X\u0305" -> "_X"
+  const normalizedOverlines = trimmed
+    .replace(/([IVXLCDMivxlcdm])[\u0304\u0305\u033F]/g, "_$1")
+    .toUpperCase();
+
+  // Check for internal whitespace corruption
+  if (/\s{2,}/.test(normalizedOverlines)) {
+    return {
+      arabicNumber: 0,
+      isValid: false,
+      errorMessage: "Invalid Roman numeral format: unexpected whitespace sequence.",
+      expansionParts: [],
+      stepByStepFormula: "",
+    };
+  }
+
+  // Remove single spacing or dots between tokens
+  const cleanTokens = normalizedOverlines.replace(/[\s\.\•\/\-]+/g, "");
+
+  // Check for illegal characters
+  const illegalMatch = cleanTokens.match(/[^IVXLCDM_]/);
+  if (illegalMatch) {
+    return {
+      arabicNumber: 0,
+      isValid: false,
+      errorMessage: `Invalid character '${illegalMatch[0]}' in Roman numeral. Allowed symbols are I, V, X, L, C, D, M (and overlines).`,
+      expansionParts: [],
+      stepByStepFormula: "",
+    };
+  }
+
+  // Split into Vinculum (prefixed with _) and Classical components
+  let thousandsStr = "";
+  let classicalStr = "";
+
+  let i = 0;
+  while (i < cleanTokens.length) {
+    if (cleanTokens[i] === "_") {
+      if (i + 1 < cleanTokens.length) {
+        thousandsStr += cleanTokens[i + 1];
+        i += 2;
+      } else {
+        return {
+          arabicNumber: 0,
+          isValid: false,
+          errorMessage: "Malformed vinculum overline syntax: trailing underscore without symbol.",
+          expansionParts: [],
+          stepByStepFormula: "",
+        };
+      }
+    } else {
+      classicalStr += cleanTokens[i];
+      i++;
+    }
+  }
+
+  // Check specific common grammar mistakes for classical component
+  const testGrammar = (str: string, isVinculum = false) => {
+    if (!str) return null;
+
+    // Check repetition limit: more than 3 consecutive I, X, C, M
+    if (/I{4,}/.test(str)) {
+      return "Invalid repetition: 'I' cannot appear more than 3 consecutive times (4 is IV).";
+    }
+    if (/X{4,}/.test(str)) {
+      return "Invalid repetition: 'X' cannot appear more than 3 consecutive times (40 is XL).";
+    }
+    if (/C{4,}/.test(str)) {
+      return "Invalid repetition: 'C' cannot appear more than 3 consecutive times (400 is CD).";
+    }
+    if (/M{4,}/.test(str)) {
+      return "Invalid repetition: 'M' cannot appear more than 3 consecutive times in standard notation (use Vinculum for ≥ 4,000).";
+    }
+
+    // V, L, D never repeated
+    if (/V{2,}/.test(str)) {
+      return "Invalid repetition: 'V' cannot be repeated (10 is X).";
+    }
+    if (/L{2,}/.test(str)) {
+      return "Invalid repetition: 'L' cannot be repeated (100 is C).";
+    }
+    if (/D{2,}/.test(str)) {
+      return "Invalid repetition: 'D' cannot be repeated (1000 is M).";
+    }
+
+    // Invalid subtractive symbols: V, L, D cannot be subtracted
+    if (/V[XLCDM]/.test(str)) {
+      return "Invalid subtractive pair: 'V' can never be subtracted.";
+    }
+    if (/L[CDM]/.test(str)) {
+      return "Invalid subtractive pair: 'L' can never be subtracted.";
+    }
+    if (/DM/.test(str)) {
+      return "Invalid subtractive pair: 'D' can never be subtracted.";
+    }
+
+    // Invalid subtractive distance: I can only subtract from V and X
+    if (/I[LCDM]/.test(str)) {
+      const match = str.match(/I[LCDM]/)![0];
+      return `Invalid subtractive pair '${match}': 'I' can only precede 'V' or 'X'.`;
+    }
+
+    // Invalid subtractive distance: X can only subtract from L and C
+    if (/X[DM]/.test(str)) {
+      const match = str.match(/X[DM]/)![0];
+      return `Invalid subtractive pair '${match}': 'X' can only precede 'L' or 'C'.`;
+    }
+
+    // Multiple subtractive: e.g. IIV, IIX, XXL, CCD
+    if (/I{2,}[VX]/.test(str) || /X{2,}[LC]/.test(str) || /C{2,}[DM]/.test(str)) {
+      return "Invalid multiple subtractive notation (e.g. 'IIV' or 'XXL'). Only one subtractive symbol is permitted before a larger value.";
+    }
+
+    // Non-canonical grammar check against strict regex
+    if (!STRICT_CLASSICAL_REGEX.test(str)) {
+      return `Invalid Roman numeral grammar in '${str}'. Please follow standard additive-subtractive ordering.`;
+    }
+
+    return null;
   };
 
-  // Check for vinculum prefix (e.g. _V = 5000, _X = 10000, or combining macron \u0305)
-  // Let's normalize combining macrons: V̅ -> _V, etc.
-  let normalized = cleaned
-    .replace(/M[\u0304\u0305]/g, "_M")
-    .replace(/D[\u0304\u0305]/g, "_D")
-    .replace(/C[\u0304\u0305]/g, "_C")
-    .replace(/L[\u0304\u0305]/g, "_L")
-    .replace(/X[\u0304\u0305]/g, "_X")
-    .replace(/V[\u0304\u0305]/g, "_V")
-    .replace(/I[\u0304\u0305]/g, "_I");
-
-  let total = 0;
-  let i = 0;
-
-  // Process tokens
-  const tokens: { sym: string; val: number }[] = [];
-  while (i < normalized.length) {
-    if (normalized[i] === "_" && i + 1 < normalized.length) {
-      const nextChar = normalized[i + 1];
-      const baseVal = valueMap[nextChar];
-      if (baseVal) {
-        tokens.push({ sym: `_${nextChar}`, val: baseVal * 1000 });
-        i += 2;
-        continue;
-      }
-    }
-    const char = normalized[i];
-    const baseVal = valueMap[char];
-    if (baseVal !== undefined) {
-      tokens.push({ sym: char, val: baseVal });
-      i++;
-    } else if (char === " " || char === "•" || char === "/" || char === "-" || char === ".") {
-      i++;
-    } else {
+  if (thousandsStr) {
+    const thErr = testGrammar(thousandsStr, true);
+    if (thErr) {
       return {
         arabicNumber: 0,
         isValid: false,
-        errorMessage: `Invalid Roman numeral character: '${char}'`,
+        errorMessage: `Overline portion error: ${thErr}`,
         expansionParts: [],
         stepByStepFormula: "",
       };
     }
   }
 
-  if (tokens.length === 0) {
-    return { arabicNumber: 0, isValid: false, errorMessage: "No valid Roman numeral symbols found", expansionParts: [], stepByStepFormula: "" };
-  }
-
-  for (let t = 0; t < tokens.length; t++) {
-    const currentVal = tokens[t].val;
-    const nextVal = t + 1 < tokens.length ? tokens[t + 1].val : 0;
-
-    if (currentVal < nextVal) {
-      total -= currentVal;
-    } else {
-      total += currentVal;
+  if (classicalStr) {
+    const clErr = testGrammar(classicalStr, false);
+    if (clErr) {
+      return {
+        arabicNumber: 0,
+        isValid: false,
+        errorMessage: clErr,
+        expansionParts: [],
+        stepByStepFormula: "",
+      };
     }
   }
 
-  // Canonical re-generation check for step breakdown
-  const canon = arabicToRoman(total);
+  // Calculate decimal value
+  const parseClassical = (s: string): number => {
+    if (!s) return 0;
+    const valueMap: Record<string, number> = {
+      I: 1,
+      V: 5,
+      X: 10,
+      L: 50,
+      C: 100,
+      D: 500,
+      M: 1000,
+    };
+    let sum = 0;
+    for (let idx = 0; idx < s.length; idx++) {
+      const current = valueMap[s[idx]];
+      const next = idx + 1 < s.length ? valueMap[s[idx + 1]] : 0;
+      if (current < next) {
+        sum -= current;
+      } else {
+        sum += current;
+      }
+    }
+    return sum;
+  };
+
+  const thouVal = parseClassical(thousandsStr);
+  const classVal = parseClassical(classicalStr);
+  const total = thouVal * 1000 + classVal;
+
+  if (total === 0) {
+    return {
+      arabicNumber: 0,
+      isValid: false,
+      errorMessage: "No valid Roman numeral symbols found.",
+      expansionParts: [],
+      stepByStepFormula: "",
+    };
+  }
+
+  // Final canonical verification: the re-encoded form must match input
+  const canon = arabicToRoman(total, !!thousandsStr);
+  if (!canon.isValid) {
+    return {
+      arabicNumber: 0,
+      isValid: false,
+      errorMessage: canon.errorMessage || "Invalid Roman numeral format.",
+      expansionParts: [],
+      stepByStepFormula: "",
+    };
+  }
 
   return {
     arabicNumber: total,
@@ -251,6 +501,47 @@ export interface RomanDateResult {
   formattedDMY: string;
   formattedYMD: string;
   formattedClassicDots: string;
+  isValid: boolean;
+  errorMessage?: string;
+}
+
+/**
+ * Validates real calendar dates, including exact leap year calculations and month boundaries.
+ */
+export function isValidCalendarDate(
+  year: number,
+  month: number,
+  day: number
+): { isValid: boolean; errorMessage?: string } {
+  if (!Number.isInteger(year) || year < 1 || year > 3999) {
+    return { isValid: false, errorMessage: "Year must be a valid integer between 1 and 3,999." };
+  }
+  if (!Number.isInteger(month) || month < 1 || month > 12) {
+    return { isValid: false, errorMessage: "Month must be between 1 and 12." };
+  }
+
+  const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+  const daysInMonth = [0, 31, isLeapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const maxDay = daysInMonth[month];
+
+  if (!Number.isInteger(day) || day < 1 || day > maxDay) {
+    if (month === 2 && day === 29 && !isLeapYear) {
+      return {
+        isValid: false,
+        errorMessage: `February ${year} is not a leap year and only has 28 days (February 29 does not exist in ${year}).`,
+      };
+    }
+    const monthNames = [
+      "", "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    return {
+      isValid: false,
+      errorMessage: `Invalid calendar date: ${monthNames[month]} only has ${maxDay} days (entered ${day}).`,
+    };
+  }
+
+  return { isValid: true };
 }
 
 export function convertDateToRoman(
@@ -259,14 +550,24 @@ export function convertDateToRoman(
   day: number,
   separator = " • "
 ): RomanDateResult {
-  const y = Math.max(1, Math.min(3999, year || 2026));
-  const m = Math.max(1, Math.min(12, month || 1));
-  const d = Math.max(1, Math.min(31, day || 1));
+  const dateCheck = isValidCalendarDate(year, month, day);
+  if (!dateCheck.isValid) {
+    return {
+      monthRoman: "",
+      dayRoman: "",
+      yearRoman: "",
+      formattedMDY: "",
+      formattedDMY: "",
+      formattedYMD: "",
+      formattedClassicDots: "",
+      isValid: false,
+      errorMessage: dateCheck.errorMessage,
+    };
+  }
 
-  const monthRom = arabicToRoman(m, false).romanUnicode;
-  const dayRom = arabicToRoman(d, false).romanUnicode;
-  const yearRom = arabicToRoman(y, false).romanUnicode;
-
+  const monthRom = classicalArabicToRoman(month);
+  const dayRom = classicalArabicToRoman(day);
+  const yearRom = classicalArabicToRoman(year);
   const sep = separator || " • ";
 
   return {
@@ -277,6 +578,7 @@ export function convertDateToRoman(
     formattedDMY: `${dayRom}${sep}${monthRom}${sep}${yearRom}`,
     formattedYMD: `${yearRom}${sep}${monthRom}${sep}${dayRom}`,
     formattedClassicDots: `${dayRom}.${monthRom}.${yearRom}`,
+    isValid: true,
   };
 }
 
@@ -294,6 +596,8 @@ export interface RomanArithmeticResult {
   remainder?: number;
   remainderRoman?: string;
   stepsExplanation: string;
+  isValid: boolean;
+  errorMessage?: string;
 }
 
 export function calculateRomanArithmetic(
@@ -301,53 +605,227 @@ export function calculateRomanArithmetic(
   op2Str: string,
   operator: "+" | "-" | "×" | "÷"
 ): RomanArithmeticResult {
-  // Convert inputs to arabic
-  let num1 = 0;
-  let num2 = 0;
+  const parseOperand = (raw: string, label: string): { val: number; rom: string; error?: string } => {
+    const s = raw.trim();
+    if (!s) {
+      return { val: 0, rom: "", error: `Please enter ${label}.` };
+    }
+    if (/^\d+$/.test(s)) {
+      const n = parseInt(s, 10);
+      if (n < 1 || n > 3999999) {
+        return { val: 0, rom: "", error: `${label} must be between 1 and 3,999,999.` };
+      }
+      return { val: n, rom: arabicToRoman(n).romanUnicode };
+    }
+    const parsed = romanToArabic(s);
+    if (!parsed.isValid) {
+      return { val: 0, rom: "", error: `Invalid ${label} ('${s}'): ${parsed.errorMessage}` };
+    }
+    return { val: parsed.arabicNumber, rom: arabicToRoman(parsed.arabicNumber).romanUnicode };
+  };
 
-  if (/^\d+$/.test(op1Str.trim())) {
-    num1 = parseInt(op1Str.trim(), 10);
-  } else {
-    num1 = romanToArabic(op1Str).arabicNumber;
+  const parsed1 = parseOperand(op1Str, "first operand");
+  if (parsed1.error) {
+    return {
+      op1Arabic: 0,
+      op1Roman: op1Str,
+      op2Arabic: 0,
+      op2Roman: op2Str,
+      operator,
+      resultArabic: 0,
+      resultRoman: "",
+      stepsExplanation: "",
+      isValid: false,
+      errorMessage: parsed1.error,
+    };
   }
 
-  if (/^\d+$/.test(op2Str.trim())) {
-    num2 = parseInt(op2Str.trim(), 10);
-  } else {
-    num2 = romanToArabic(op2Str).arabicNumber;
+  // Check for division by zero upfront
+  if (operator === "÷" && (op2Str.trim() === "0" || op2Str.trim().toLowerCase() === "nulla" || op2Str.trim().toUpperCase() === "N")) {
+    return {
+      op1Arabic: parsed1.val,
+      op1Roman: parsed1.rom,
+      op2Arabic: 0,
+      op2Roman: op2Str,
+      operator,
+      resultArabic: 0,
+      resultRoman: "",
+      stepsExplanation: "Division by zero is mathematically undefined.",
+      isValid: false,
+      errorMessage: "Division by zero is mathematically undefined.",
+    };
   }
 
-  num1 = Math.max(1, num1 || 1);
-  num2 = Math.max(1, num2 || 1);
+  const parsed2 = parseOperand(op2Str, "second operand");
+  if (parsed2.error) {
+    return {
+      op1Arabic: parsed1.val,
+      op1Roman: parsed1.rom,
+      op2Arabic: 0,
+      op2Roman: op2Str,
+      operator,
+      resultArabic: 0,
+      resultRoman: "",
+      stepsExplanation: "",
+      isValid: false,
+      errorMessage: parsed2.error,
+    };
+  }
 
-  const rom1 = arabicToRoman(num1).romanUnicode;
-  const rom2 = arabicToRoman(num2).romanUnicode;
-
-  let resArabic = 0;
-  let quotient: number | undefined;
-  let remainder: number | undefined;
-  let remainderRoman: string | undefined;
-  let steps = "";
+  const num1 = parsed1.val;
+  const rom1 = parsed1.rom;
+  const num2 = parsed2.val;
+  const rom2 = parsed2.rom;
 
   if (operator === "+") {
-    resArabic = num1 + num2;
-    steps = `${rom1} (${num1}) + ${rom2} (${num2}) = ${arabicToRoman(resArabic).romanUnicode} (${resArabic})`;
-  } else if (operator === "-") {
-    resArabic = Math.max(1, num1 - num2);
-    steps = `${rom1} (${num1}) - ${rom2} (${num2}) = ${arabicToRoman(resArabic).romanUnicode} (${resArabic})`;
-  } else if (operator === "×") {
-    resArabic = num1 * num2;
-    steps = `${rom1} (${num1}) × ${rom2} (${num2}) = ${arabicToRoman(resArabic).romanUnicode} (${resArabic})`;
-  } else {
-    // Division
-    quotient = Math.floor(num1 / num2);
-    remainder = num1 % num2;
-    resArabic = quotient;
-    remainderRoman = remainder > 0 ? arabicToRoman(remainder).romanUnicode : undefined;
-    steps = `${rom1} (${num1}) ÷ ${rom2} (${num2}) = ${arabicToRoman(quotient).romanUnicode} (${quotient}) with Remainder ${remainder > 0 ? `${remainderRoman} (${remainder})` : "0"}`;
+    const sum = num1 + num2;
+    if (sum > 3999999) {
+      return {
+        op1Arabic: num1,
+        op1Roman: rom1,
+        op2Arabic: num2,
+        op2Roman: rom2,
+        operator,
+        resultArabic: sum,
+        resultRoman: "",
+        stepsExplanation: "",
+        isValid: false,
+        errorMessage: `Arithmetic overflow: ${num1} + ${num2} = ${sum.toLocaleString("en-US")} exceeds maximum Roman numeral limit (3,999,999).`,
+      };
+    }
+    const romRes = arabicToRoman(sum).romanUnicode;
+    return {
+      op1Arabic: num1,
+      op1Roman: rom1,
+      op2Arabic: num2,
+      op2Roman: rom2,
+      operator,
+      resultArabic: sum,
+      resultRoman: romRes,
+      stepsExplanation: `${rom1} (${num1.toLocaleString("en-US")}) + ${rom2} (${num2.toLocaleString("en-US")}) = ${romRes} (${sum.toLocaleString("en-US")})`,
+      isValid: true,
+    };
   }
 
-  const resRom = arabicToRoman(resArabic).romanUnicode;
+  if (operator === "-") {
+    if (num1 === num2) {
+      return {
+        op1Arabic: num1,
+        op1Roman: rom1,
+        op2Arabic: num2,
+        op2Roman: rom2,
+        operator,
+        resultArabic: 0,
+        resultRoman: "nulla",
+        stepsExplanation: `${rom1} (${num1}) - ${rom2} (${num2}) = 0 (Roman numerals do not possess a symbol for zero; Romans recorded 'nulla' or 'N' for nil).`,
+        isValid: false,
+        errorMessage: "Roman numerals have no symbol for zero (nulla / N).",
+      };
+    }
+    if (num1 < num2) {
+      const diff = num1 - num2;
+      return {
+        op1Arabic: num1,
+        op1Roman: rom1,
+        op2Arabic: num2,
+        op2Roman: rom2,
+        operator,
+        resultArabic: diff,
+        resultRoman: "",
+        stepsExplanation: `${rom1} (${num1}) - ${rom2} (${num2}) = ${diff} (Roman numerals cannot represent negative quantities).`,
+        isValid: false,
+        errorMessage: `Negative result underflow: ${num1} - ${num2} = ${diff}. Roman numerals cannot represent negative numbers.`,
+      };
+    }
+    const diff = num1 - num2;
+    const romRes = arabicToRoman(diff).romanUnicode;
+    return {
+      op1Arabic: num1,
+      op1Roman: rom1,
+      op2Arabic: num2,
+      op2Roman: rom2,
+      operator,
+      resultArabic: diff,
+      resultRoman: romRes,
+      stepsExplanation: `${rom1} (${num1.toLocaleString("en-US")}) - ${rom2} (${num2.toLocaleString("en-US")}) = ${romRes} (${diff.toLocaleString("en-US")})`,
+      isValid: true,
+    };
+  }
+
+  if (operator === "×") {
+    const prod = num1 * num2;
+    if (prod > 3999999) {
+      return {
+        op1Arabic: num1,
+        op1Roman: rom1,
+        op2Arabic: num2,
+        op2Roman: rom2,
+        operator,
+        resultArabic: prod,
+        resultRoman: "",
+        stepsExplanation: "",
+        isValid: false,
+        errorMessage: `Arithmetic overflow: ${num1} × ${num2} = ${prod.toLocaleString("en-US")} exceeds maximum Roman numeral limit (3,999,999).`,
+      };
+    }
+    const romRes = arabicToRoman(prod).romanUnicode;
+    return {
+      op1Arabic: num1,
+      op1Roman: rom1,
+      op2Arabic: num2,
+      op2Roman: rom2,
+      operator,
+      resultArabic: prod,
+      resultRoman: romRes,
+      stepsExplanation: `${rom1} (${num1.toLocaleString("en-US")}) × ${rom2} (${num2.toLocaleString("en-US")}) = ${romRes} (${prod.toLocaleString("en-US")})`,
+      isValid: true,
+    };
+  }
+
+  // operator === "÷" (Division)
+  if (num2 === 0) {
+    return {
+      op1Arabic: num1,
+      op1Roman: rom1,
+      op2Arabic: 0,
+      op2Roman: "0",
+      operator,
+      resultArabic: 0,
+      resultRoman: "",
+      stepsExplanation: "Division by zero is mathematically undefined.",
+      isValid: false,
+      errorMessage: "Division by zero is mathematically undefined.",
+    };
+  }
+
+  if (num1 < num2) {
+    return {
+      op1Arabic: num1,
+      op1Roman: rom1,
+      op2Arabic: num2,
+      op2Roman: rom2,
+      operator,
+      resultArabic: 0,
+      resultRoman: "nulla",
+      quotient: 0,
+      remainder: num1,
+      remainderRoman: rom1,
+      stepsExplanation: `${rom1} (${num1}) ÷ ${rom2} (${num2}) = 0 with Remainder ${rom1} (${num1}) (Quotient is less than 1; Roman numerals do not represent fractional numbers in standard integer arithmetic).`,
+      isValid: true,
+    };
+  }
+
+  const quotient = Math.floor(num1 / num2);
+  const remainder = num1 % num2;
+  const romQuot = arabicToRoman(quotient).romanUnicode;
+  const romRem = remainder > 0 ? arabicToRoman(remainder).romanUnicode : undefined;
+
+  let steps = "";
+  if (remainder === 0) {
+    steps = `${rom1} (${num1.toLocaleString("en-US")}) ÷ ${rom2} (${num2.toLocaleString("en-US")}) = ${romQuot} (${quotient.toLocaleString("en-US")})`;
+  } else {
+    steps = `${rom1} (${num1.toLocaleString("en-US")}) ÷ ${rom2} (${num2.toLocaleString("en-US")}) = ${romQuot} (${quotient.toLocaleString("en-US")}) with Remainder ${romRem} (${remainder.toLocaleString("en-US")})`;
+  }
 
   return {
     op1Arabic: num1,
@@ -355,11 +833,12 @@ export function calculateRomanArithmetic(
     op2Arabic: num2,
     op2Roman: rom2,
     operator,
-    resultArabic: resArabic,
-    resultRoman: resRom,
+    resultArabic: quotient,
+    resultRoman: romQuot,
     quotient,
     remainder,
-    remainderRoman,
+    remainderRoman: romRem,
     stepsExplanation: steps,
+    isValid: true,
   };
 }
