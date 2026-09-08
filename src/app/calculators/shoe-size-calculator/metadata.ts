@@ -1,8 +1,17 @@
 import { Metadata } from "next";
-import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
-export const shoe_size_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Shoe Size Calculator — International Matrix & Brand Fit Profile",
-  description: "Free online shoe size calculator. Measure foot length & width in inches or cm, convert between US, UK, EU, JP, MX & AU sizes, and tune fits for Nike, Adidas & Converse.",
-  slug: "shoe-size-calculator",
-});
+export const shoe_size_calculatorMetadata: Metadata = {
+  title: "Shoe Size Calculator – US, UK, EU & JP Size Converter",
+  description:
+    "Find your shoe size from foot length and width. Compare US, UK, EU and JP sizes, check both feet, convert units, and understand width and fit.",
+  alternates: {
+    canonical: "https://calcplatform.com/calculators/shoe-size-calculator",
+  },
+  openGraph: {
+    title: "Shoe Size Calculator – Foot Measurement & International Size Converter",
+    description:
+      "Measure both feet, estimate a starting shoe size, convert US, UK, EU and JP sizing, evaluate width, and learn how footwear sizing actually works.",
+    url: "https://calcplatform.com/calculators/shoe-size-calculator",
+    type: "website",
+  },
+};

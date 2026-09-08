@@ -2,43 +2,96 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const shoe_size_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "How do I accurately measure my shoe size at home?",
-    answer: "To measure your shoe size at home, place a sheet of paper on a hard floor against a wall. Stand flat-footed on the paper with your heel lightly touching the wall while wearing your normal socks. Trace the outline of your foot with a vertical pen, mark the tip of your longest toe and widest part of your foot, and measure the distance in centimeters or inches with a ruler."
+    question: "How do I calculate my shoe size?",
+    answer:
+      "Measure both feet from heel to the longest toe while standing, enter the measurements into the calculator, and review the recommended size and width profile.",
   },
   {
-    question: "What is the difference between US Men’s and Women’s shoe sizes?",
-    answer: "In US shoe sizing, women's sizes are typically 1.5 sizes larger than men's sizes for the same foot length. For example, a US Men's size 8 corresponds to a US Women's size 9.5 (approx. 9.8 inches or 25 cm of foot length)."
+    question: "Should I measure both feet?",
+    answer:
+      "Yes. The calculator compares both feet and bases the recommendation on the larger dimensions according to its implemented bilateral logic.",
   },
   {
-    question: "Why do shoe sizes vary so much between brands like Nike, Adidas, and Converse?",
-    answer: "Shoe sizes vary across brands due to differences in standard lasts (3D foot models), regional origins, construction materials, and intended usage. For example, Converse Chuck Taylors run roughly 0.5 size large, while Nike and ASICS athletic shoes often run 0.5 size small."
+    question: "What if one foot is longer than the other?",
+    answer:
+      "Use the larger foot for sizing. The calculator also displays an asymmetry message when the length difference crosses its configured threshold.",
   },
   {
-    question: "What does the Mondopoint system mean on my shoe label?",
-    answer: "The Mondopoint system (ISO 9407) is an international standardized footwear sizing system based on the exact foot length and width measured in millimeters (mm). Unlike traditional US or European sizes, Mondopoint 270/100 means the shoe is designed for a foot 270 mm long and 100 mm wide."
+    question: "What if one foot is wider than the other?",
+    answer:
+      "The calculator checks bilateral width differences and flags a significant difference. It identifies the wider foot so the recommendation does not hide that information.",
   },
   {
-    question: "How much extra room should there be in the toe of a shoe?",
-    answer: "There should be roughly a thumb’s width—or 10 mm to 12 mm (0.4 to 0.5 inches)—of space between your longest toe and the tip of the shoe. This toe clearance margin prevents toe pinching and accounts for natural foot elongation during walking or running."
+    question: "Is 10 inches what shoe size?",
+    answer:
+      "For the calculator's current men's model, a 10.0-inch reference foot produces US Men's 8.5. The calculator also reports UK 7.5, EU theoretical 40 and JP 25.5 cm for the reference profile.",
   },
   {
-    question: "What should I do if one of my feet is larger than the other?",
-    answer: "It is extremely common for one foot to be up to half a size larger than the other. Always choose your shoe size based on the larger foot to avoid toe compression and ingrown nails. You can adjust the fit for your smaller foot using an insole insert, heel grip, or tongue pad."
+    question: "What is a 10-inch foot in centimeters?",
+    answer: "10 inches = 25.4 cm.",
   },
   {
-    question: "What does shoe width lettering (e.g., D, EE, 4E, B, Narrow, Wide) mean?",
-    answer: "Shoe width letters specify the circumference and volume of the shoe at the ball of the foot. For Women, 'B' is standard medium width, while 'A/2A' is narrow and 'D/W' is wide. For Men, 'D' is standard medium width, while 'B' is narrow, '2E/E' is wide, and '4E/6E' is extra wide."
+    question: "What is a US men's 8.5 in UK size?",
+    answer: "Under the conversion model used by this calculator, US Men's 8.5 = UK 7.5.",
   },
   {
-    question: "When is the best time of day to measure shoe size?",
-    answer: "The best time to measure your feet is in the late afternoon or evening. Your feet naturally swell and expand throughout the day due to gravity, physical activity, and fluid accumulation under body weight."
+    question: "What is a US men's 8.5 in EU size?",
+    answer:
+      "The calculator's theoretical conversion produces EU 40, while commercial retail labeling can differ. The page deliberately distinguishes the theoretical conversion from retail sizing rather than presenting EU 40 as a universal brand-independent label.",
   },
   {
-    question: "How do European (EU) shoe sizes translate to US sizes?",
-    answer: "European shoe sizes use the Paris Point system, where each size increment equals 2/3 of a centimeter (6.67 mm). Typically, an EU 38 translates to US Women's 7.5, EU 42 translates to US Men's 8.5–9 / Women's 10.5, and EU 44 translates to US Men's 10.5."
+    question: "Is EU shoe size the same for every brand?",
+    answer:
+      "No. International conversion tables are guidance, and individual brands and models can have different fit characteristics. ISO 19407:2023 specifically notes that shoe-size conversion systems developed differently and provides guidance rather than a universal exact mapping.",
   },
   {
-    question: "How fast do kids outgrow shoe sizes, and how often should they be measured?",
-    answer: "Toddlers under 3 years old outgrow shoe sizes rapidly—about every 2 to 3 months (+1 full size). Children aged 4 to 8 outgrow shoes roughly every 4 to 6 months (+0.5 size). Kids should have their feet measured every 3 months to prevent foot deformity from cramped shoes."
-  }
+    question: "What is Mondopoint?",
+    answer:
+      "Mondopoint is an international footwear sizing and marking system based on defined measurements of the foot. ISO 9407:2019 specifies the Mondopoint system.",
+  },
+  {
+    question: "Is JP the same as Mondopoint?",
+    answer:
+      "Not automatically. The calculator can display a JP centimeter value and a Mondopoint millimeter measurement, but those labels should not be treated as universally interchangeable across every retailer.",
+  },
+  {
+    question: "Should I measure my feet in the morning or evening?",
+    answer:
+      "Measuring later in the day can be useful because feet may change during prolonged standing and walking. More important than the exact time is using a consistent weight-bearing method for both feet.",
+  },
+  {
+    question: "Should I add room to my measured foot length?",
+    answer:
+      "Footwear needs usable space, but the appropriate amount depends on the shoe type, construction and intended use. Do not blindly add one universal allowance to every shoe.",
+  },
+  {
+    question: "Why does my calculated size differ from a brand's chart?",
+    answer:
+      "The calculator uses its own sizing model and conversion assumptions, while a brand may use its own last dimensions, grading and size chart. Check the specific brand/model chart before purchase.",
+  },
+  {
+    question: "Why can two shoes with the same size fit differently?",
+    answer:
+      "The size label does not uniquely define the shoe's internal geometry. Last shape, toe-box volume, width, materials and construction can all affect fit.",
+  },
+  {
+    question: "What width is 3.8 inches?",
+    answer:
+      "Width depends on foot length and the sizing model being used. This calculator classifies width using a length-to-width ratio rather than treating one raw width measurement as universally narrow or wide.",
+  },
+  {
+    question: "Can I use the calculator for children?",
+    answer:
+      "Yes, provided the child's measurement lies within the supported Kids domain. Larger measurements outside that range trigger a transition advisory rather than producing an artificial children's size.",
+  },
+  {
+    question: "Can I rely on the result for every shoe?",
+    answer:
+      "No. Treat it as a starting recommendation. Verify the final size using the manufacturer's current chart and, when possible, the actual shoe's fit.",
+  },
+  {
+    question: "Is the calculator a medical or orthopedic assessment?",
+    answer:
+      "No. It is a footwear-sizing and measurement tool. It does not diagnose foot conditions or replace professional clinical assessment.",
+  },
 ];

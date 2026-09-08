@@ -205,19 +205,63 @@ export function calculateShoeSize(
   const leftWidthInches = convertToInches(leftWidth, unit);
   const rightWidthInches = convertToInches(rightWidth, unit);
 
-  // Bilateral Handling: Use the larger foot
-  let usedLengthInches = Math.max(leftInches, rightInches);
-  if (usedLengthInches <= 0) usedLengthInches = 10.0; // default 10 inches (~US Men 8.5)
+  // Validation: foot lengths must be positive, finite numbers
+  if (
+    !leftLength ||
+    !rightLength ||
+    isNaN(leftInches) ||
+    isNaN(rightInches) ||
+    leftInches <= 0 ||
+    rightInches <= 0 ||
+    !isFinite(leftInches) ||
+    !isFinite(rightInches)
+  ) {
+    return {
+      gender,
+      isValid: false,
+      errorMessage: "Please enter a valid positive foot length greater than 0.",
+      usedFootLengthInches: 0,
+      usedFootLengthCm: 0,
+      isBilateralUsed: false,
+      internationalSizes: {
+        usMen: 0,
+        usWomen: 0,
+        usKids: 0,
+        uk: 0,
+        india: 0,
+        eu: 0,
+        japanCm: 0,
+        mondopointMm: 0,
+        mexico: 0,
+        australia: 0,
+      },
+      widthCategory: "Standard / Medium (D / M)",
+    };
+  }
 
-  let usedWidthInches = Math.max(leftWidthInches, rightWidthInches);
+  // Bilateral Handling: Use the larger foot length
+  const usedLengthInches = Math.max(leftInches, rightInches);
+  const usedWidthInches = Math.max(leftWidthInches, rightWidthInches);
 
-  const isBilateral = Math.abs(leftInches - rightInches) > 0.05;
+  const lengthDiff = Math.abs(leftInches - rightInches);
+  const isLengthBilateral = lengthDiff > 0.05;
   let bilateralNote: string | undefined = undefined;
 
-  if (isBilateral) {
+  if (isLengthBilateral) {
     const largerFoot = leftInches > rightInches ? "Left" : "Right";
-    const diff = Math.abs(leftInches - rightInches).toFixed(2);
-    bilateralNote = `Your ${largerFoot} foot is ${diff} inches longer. Recommendations are based on your larger foot to prevent toe compression.`;
+    const diffFormatted = lengthDiff.toFixed(2);
+    bilateralNote = `Your ${largerFoot} foot is ${diffFormatted} inches longer. Recommendations are based on your larger foot to prevent toe compression.`;
+  }
+
+  // Width Asymmetry Check
+  let widthAsymNote: string | undefined = undefined;
+  if (leftWidthInches > 0 && rightWidthInches > 0) {
+    const widthDiff = Math.abs(leftWidthInches - rightWidthInches);
+    if (widthDiff >= 0.15) {
+      const widerFoot = leftWidthInches > rightWidthInches ? "Left" : "Right";
+      const wDiffFormatted = widthDiff.toFixed(2);
+      widthAsymNote = `Your ${widerFoot} foot is wider by ${wDiffFormatted} inches across the joint. Fit recommendations use the wider dimension.`;
+    }
   }
 
   const usedLengthCm = usedLengthInches * 2.54;
@@ -230,12 +274,21 @@ export function calculateShoeSize(
 
   const growthProj = gender === "kids" ? calculateKidsGrowth(baseUs, kidAgeMonths || 36) : undefined;
 
+  // Kids sizing domain check
+  let kidsNote: string | undefined = undefined;
+  if (gender === "kids" && usedLengthInches > 8.5) {
+    kidsNote = `Entered foot length (${usedLengthInches.toFixed(1)} in / ${usedLengthCm.toFixed(1)} cm) exceeds standard children's sizing (up to ~8.5 in / 21.6 cm). Please select Men's or Women's mode for youth and adult sizing.`;
+  }
+
   return {
     gender,
+    isValid: true,
     usedFootLengthInches: parseFloat(usedLengthInches.toFixed(2)),
     usedFootLengthCm: parseFloat(usedLengthCm.toFixed(1)),
-    isBilateralUsed: isBilateral,
+    isBilateralUsed: isLengthBilateral || Boolean(widthAsymNote),
     largerFootNote: bilateralNote,
+    widthAsymmetryNote: widthAsymNote,
+    kidsTransitionNote: kidsNote,
     internationalSizes: intlSizes,
     widthCategory: widthCat,
     brandFit,

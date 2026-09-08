@@ -10,7 +10,7 @@ export const shoe_size_calculatorConfig: CalculatorModuleDefinition = {
   slug: "shoe-size-calculator",
   category: "converters",
   subcategory: "Everyday & Lifestyle",
-  description: "Free online shoe size calculator and international converter (US, UK, EU, CM, JP, MX, AU). Measure foot length & width, tune by brand, and handle 2-foot asymmetry.",
+  description: "Find your shoe size from foot length and width. Compare US, UK, EU and JP sizes, check both feet, convert units, and understand width and fit.",
   iconName: "Footprints",
   featured: true,
   keywords: [
@@ -23,7 +23,7 @@ export const shoe_size_calculatorConfig: CalculatorModuleDefinition = {
     "mondopoint converter"
   ],
   priority: 1,
-  relatedCalculators: ["bra-size-calculator", "conversion-calculator"],
+  relatedCalculators: ["conversion-calculator", "weight-calculator"],
   formulaDescription: "US Men = 3×L(in) - 22; EU = 1.5×(L(cm) + 1.5); Mondopoint = L(mm)",
   faqs: shoe_size_calculatorFaqs,
   CustomComponent: ShoeSizeCalculator,

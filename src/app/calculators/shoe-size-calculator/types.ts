@@ -47,10 +47,14 @@ export interface KidsGrowthProjection {
 
 export interface ShoeSizeConversionResult {
   gender: ShoeGender;
+  isValid?: boolean;
+  errorMessage?: string;
   usedFootLengthInches: number;
   usedFootLengthCm: number;
   isBilateralUsed: boolean;
   largerFootNote?: string;
+  widthAsymmetryNote?: string;
+  kidsTransitionNote?: string;
   internationalSizes: InternationalSizes;
   widthCategory: FootWidthCategory;
   brandFit?: BrandFitDetails;
