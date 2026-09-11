@@ -237,6 +237,8 @@ import { VoltageDropCalculator } from "./voltage-drop/VoltageDropCalculator";
 import { VoltageDropContent } from "./voltage-drop/VoltageDropContent";
 import { OhmsLawCalculator } from "./ohms-law/OhmsLawCalculator";
 import { OhmsLawContent } from "./ohms-law/OhmsLawContent";
+import { IPSubnetCalculator } from "./ip-subnet/IPSubnetCalculator";
+import { IPSubnetContent } from "./ip-subnet/IPSubnetContent";
 import { DateCalculator } from "./date/DateCalculator";
 import { DateContent } from "./date/DateContent";
 import { HoursCalculator } from "./hours/HoursCalculator";
@@ -550,8 +552,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isVoltageDrop = idLower === "voltage-drop-calculator" || slugLower === "voltage-drop-calculator" || idLower === "voltage-drop";
   const isOhmsLaw = idLower === "ohms-law-calculator" || slugLower === "ohms-law-calculator" || idLower === "ohms-law";
   const isShoeSize = idLower === "shoe-size-calculator" || slugLower === "shoe-size-calculator" || idLower === "shoe-size";
+  const isIpSubnet = idLower === "ip-subnet-calculator" || slugLower === "ip-subnet-calculator" || idLower === "ip-subnet" || slugLower === "ip-subnet";
 
-  const CustomContent = isOhmsLaw ? OhmsLawContent : isVoltageDrop ? VoltageDropContent : isShoeSize ? ShoeSizeContent : (definition as any).ContentComponent || (
+  const CustomContent = isIpSubnet ? IPSubnetContent : isOhmsLaw ? OhmsLawContent : isVoltageDrop ? VoltageDropContent : isShoeSize ? ShoeSizeContent : (definition as any).ContentComponent || (
     isVat ? VatContent :
     isGst ? GstContent :
     isBudget ? BudgetContent :
@@ -654,7 +657,9 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         </div>
 
         <CalculatorErrorBoundary fallbackTitle={`${definition.title} Error`}>
-          {isOhmsLaw ? (
+          {isIpSubnet ? (
+            <IPSubnetCalculator />
+          ) : isOhmsLaw ? (
             <OhmsLawCalculator />
           ) : isVoltageDrop ? (
             <VoltageDropCalculator />
@@ -1004,7 +1009,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         </CalculatorErrorBoundary>
 
         {/* Related Calculators Links directly below calculator box */}
-        {!isPeriod && !isVolume && !isSlope && !isDistance && !isMatrix && !isCircle && !isSurfaceArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRandomNumberGenerator && !isBinary && !isHex && !isHalfLife && !isRightTriangle && !isConcrete && !isSquareFootage && !isRoofing && !isBtu && !isTile && !isStair && !isGravel && !isMulch && !isConversion && !isMass && !isSpeed && !isHeight && !isElectricity && !isDensity && !isRoman && !isShoeSize && !isFuelCost && !isVoltageDrop && !isOhmsLaw && (
+        {!isPeriod && !isVolume && !isSlope && !isDistance && !isMatrix && !isCircle && !isSurfaceArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRandomNumberGenerator && !isBinary && !isHex && !isHalfLife && !isRightTriangle && !isConcrete && !isSquareFootage && !isRoofing && !isBtu && !isTile && !isStair && !isGravel && !isMulch && !isConversion && !isMass && !isSpeed && !isHeight && !isElectricity && !isDensity && !isRoman && !isShoeSize && !isFuelCost && !isVoltageDrop && !isOhmsLaw && !isIpSubnet && (
           <div className="no-print pt-3 pb-1 space-y-1.5 border-t border-slate-200/60 dark:border-slate-800">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
               RELATED CALCULATORS:
@@ -1044,7 +1049,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
 
           {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
-          {Boolean(definition.faqs && definition.faqs.length > 0) && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isRounding && !isBigNumber && !isBinary && !isHex && !isHalfLife && !isRightTriangle && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && !isPythagorean && !isDistance && !isMatrix && !isCircle && !isSurfaceArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRandomNumberGenerator && !isConcrete && !isSquareFootage && !isRoofing && !isBtu && !isTile && !isStair && !isGravel && !isMulch && !isConversion && !isMass && !isSpeed && !isHeight && !isDensity && !isRoman && !isShoeSize && !isElectricity && !isFuelCost && !isGasMileage && !isVoltageDrop && !isOhmsLaw ? (
+          {Boolean(definition.faqs && definition.faqs.length > 0) && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isRounding && !isBigNumber && !isBinary && !isHex && !isHalfLife && !isRightTriangle && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && !isPythagorean && !isDistance && !isMatrix && !isCircle && !isSurfaceArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRandomNumberGenerator && !isConcrete && !isSquareFootage && !isRoofing && !isBtu && !isTile && !isStair && !isGravel && !isMulch && !isConversion && !isMass && !isSpeed && !isHeight && !isDensity && !isRoman && !isShoeSize && !isElectricity && !isFuelCost && !isGasMileage && !isVoltageDrop && !isOhmsLaw && !isIpSubnet ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions
@@ -1062,7 +1067,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                 ))}
               </div>
             </div>
-          ) : !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isRounding && !isBigNumber && !isBinary && !isHex && !isHalfLife && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isRmd && !isAutoLease && !isSimpleInterest && !isSocialSecurity && !isInterest && !isRothIra && !isTimeDuration && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isRoi && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isShoeSize && !isFuelCost && !isGasMileage && !isVoltageDrop && !isOhmsLaw && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRounding && definition.category !== "Math" ? (
+          ) : !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isRounding && !isBigNumber && !isBinary && !isHex && !isHalfLife && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isRmd && !isAutoLease && !isSimpleInterest && !isSocialSecurity && !isInterest && !isRothIra && !isTimeDuration && !isIncomeTax && !isPersonalLoan && !isLoan && !isCompoundInterest && !isSip && !isEmi && !isMortgage && !isGdp && !isCreditCardPayoff && !isBoatLoan && !isDepreciation && !isCollegeCost && !isLease && !isRepayment && !isRepaymentMatch && !isCreditCard && !isInflation && !isCurrency && !isPayment && !isTakeHomePay && !isSalesTax && !isDiscount && !isMargin && !isRoi && !isEstateTax && !isMarriageTax && !isSalary && !isPaybackPeriod && !isIrr && !isAverageReturn && !isMutualFund && !isBond && !isConcrete && !isBtu && !isSquareFootage && !isStair && !isRoofing && !isTile && !isMulch && !isGravel && !isElectricity && !isHeight && !isConversion && !isDensity && !isMass && !isSpeed && !isRoman && !isShoeSize && !isFuelCost && !isGasMileage && !isVoltageDrop && !isOhmsLaw && !isIpSubnet && !isRetirement && !isInvestment && !isCalorie && !isAutoLoan && !isStudentLoan && !isSavings && !isHouseAffordability && !isTime && !isAge && !isAmortization && !isGrade && !isDebtConsolidation && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRounding && definition.category !== "Math" ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions

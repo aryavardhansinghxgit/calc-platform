@@ -1,3 +1,5 @@
+export {};
+
 async function auditSSR() {
   const res = await fetch("http://localhost:3000/calculators/speed-calculator");
   const html = await res.text();
