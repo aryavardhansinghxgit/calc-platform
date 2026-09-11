@@ -2,68 +2,68 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const ohms_law_calculatorFaqs: CalculatorFAQ[] = [
   {
-    "question": "What is Ohm's Law?",
-    "answer": "Ohm's Law is a fundamental electrical principle stating that the electric current (I) flowing through a conductor between two points is directly proportional to the voltage drop (V) across those points, and inversely proportional to the resistance (R) of the path. Mathematically, it is expressed as V = I × R."
+    question: "What is Ohm's Law?",
+    answer: "Ohm's Law describes the relationship between voltage, current and resistance for ohmic electrical behavior: V = I × R. It can be rearranged to calculate current or resistance."
   },
   {
-    "question": "What is the formula for Ohm's Law?",
-    "answer": "The primary formula is V = I × R (Voltage = Current × Resistance). From this, we derive the equations: I = V / R (Current = Voltage / Resistance) and R = V / I (Resistance = Voltage / Current)."
+    question: "What is the formula for Ohm's Law?",
+    answer: "The basic equation is: V = I × R, where V is voltage, I is current and R is resistance."
   },
   {
-    "question": "How do I calculate voltage using Ohm's Law?",
-    "answer": "To calculate Voltage (V), multiply the electric Current (I) in Amperes by the electrical Resistance (R) in Ohms. The formula is V = I × R."
+    question: "How do I calculate voltage with Ohm's Law?",
+    answer: "Multiply current by resistance: V = I × R. For example, 3 A through 4 Ω produces: V = 3 × 4 = 12 V."
   },
   {
-    "question": "How do I calculate electric current?",
-    "answer": "To calculate Current (I), divide the Voltage (V) across the circuit by the total Resistance (R) of the load. The formula is I = V / R."
+    question: "How do I calculate current?",
+    answer: "Divide voltage by resistance: I = V ÷ R. For example: 12 V ÷ 4 Ω = 3 A."
   },
   {
-    "question": "How do I calculate electrical resistance?",
-    "answer": "To calculate Resistance (R), divide the Voltage drop (V) across the component by the Current (I) flowing through it. The formula is R = V / I."
+    question: "How do I calculate resistance?",
+    answer: "Divide voltage by current: R = V ÷ I. For example: 12 V ÷ 3 A = 4 Ω."
   },
   {
-    "question": "How do I calculate electrical power?",
-    "answer": "Electrical Power (P) in Watts is calculated by multiplying Voltage (V) by Current (I): P = V × I. By integrating Ohm's Law, it can also be calculated using P = I² × R or P = V² / R."
+    question: "How do I calculate electrical power?",
+    answer: "For a resistive circuit, use any applicable form: P = VI, P = I²R, P = V²/R. The equations produce the same result when the underlying assumptions are satisfied."
   },
   {
-    "question": "What are the four variables in Ohm's Law and power relationships?",
-    "answer": "The four fundamental variables are Voltage (V, measured in Volts), Current (I, measured in Amperes), Resistance (R, measured in Ohms), and Power (P, measured in Watts)."
+    question: "What is the relationship between power and resistance?",
+    answer: "At constant voltage: P = V²/R, so increasing resistance decreases power. At constant current: P = I²R, so increasing resistance increases power. The result therefore depends on which electrical quantity is being held constant."
   },
   {
-    "question": "What is the relationship between electrical power and resistance?",
-    "answer": "Power is directly proportional to resistance when current is held constant (P = I²R), and inversely proportional to resistance when voltage is held constant (P = V²/R)."
+    question: "What happens to current if resistance increases?",
+    answer: "At constant voltage: I = V/R. Therefore, increasing resistance decreases current. For example, doubling resistance while keeping voltage constant halves the current."
   },
   {
-    "question": "Can I calculate power using only voltage and current?",
-    "answer": "Yes. Power (P) is equal to Voltage (V) multiplied by Current (I), using the equation P = V × I. This applies to resistive DC circuits and in-phase AC circuits."
+    question: "What happens to current if voltage increases?",
+    answer: "At constant resistance: I = V/R. Therefore, current increases proportionally with voltage. For an ohmic resistor, doubling voltage doubles current."
   },
   {
-    "question": "What happens to the current in a circuit when resistance increases?",
-    "answer": "According to I = V / R, if the voltage (V) remains constant, the current (I) is inversely proportional to resistance. Therefore, increasing the resistance reduces the current."
+    question: "Can I use Ohm's Law for AC circuits?",
+    answer: "It depends on the circuit. For a purely resistive AC element, the resistance relationship can be used for the appropriate steady-state calculation. For circuits with inductors and capacitors, impedance and phase relationships must generally be included. Ohm's Law in its broader AC form is expressed using impedance rather than resistance alone."
   },
   {
-    "question": "What happens to current when voltage increases?",
-    "answer": "According to I = V / R, if the resistance (R) remains constant, the current (I) is directly proportional to voltage. Therefore, increasing the voltage increases the current."
+    question: "What is the difference between resistance and impedance?",
+    answer: "Resistance is the resistive opposition to current. Impedance is the broader AC quantity that combines resistance with reactance. For a general AC circuit: Z = R + jX, where X represents reactance."
   },
   {
-    "question": "What is the difference between voltage and current?",
-    "answer": "Voltage is the potential difference or electrical pressure that pushes charge carriers, whereas current is the physical flow rate of those charge carriers through the conductor."
+    question: "How does a voltage divider work?",
+    answer: "A two-resistor voltage divider produces: Vout = Vin × R2/(R1 + R2) for the standard unloaded configuration. The calculator also supports a loaded-divider calculation when an output load resistor is present."
   },
   {
-    "question": "What is the difference between resistance and impedance?",
-    "answer": "Resistance is the opposition to charge flow in DC and purely resistive AC circuits. Impedance (Z) is a broader concept used in AC circuits that combines resistance and reactance (opposition from capacitors and inductors) across varying frequencies."
+    question: "How does a current divider work?",
+    answer: "Parallel branches share the same voltage while the total current divides among them. The calculator determines equivalent resistance, parallel voltage and individual branch currents. The branch currents must sum to the total current."
   },
   {
-    "question": "Does Ohm's Law work for AC circuits?",
-    "answer": "Ohm's Law works for AC circuits, but only if they are purely resistive. If capacitors or inductors are present, resistance (R) must be replaced with impedance (Z), resulting in the vector formula V = I × Z."
+    question: "How do I calculate an LED resistor?",
+    answer: "For a simple resistor-limited LED circuit: R = (Vs − Vf)/If. Use the supply voltage, LED forward voltage and desired forward current. For example, 9 V supply, 2 V LED drop and 20 mA requires: R = 350 Ω. The calculator then selects an appropriate standard E24 resistance."
   },
   {
-    "question": "How do I calculate a current-limiting resistor for an LED?",
-    "answer": "Subtract the LED forward voltage drop (Vf) from the supply voltage (Vsource), then divide the result by the desired forward current (If) in Amperes: R = (Vsource - Vf) / If."
+    question: "Why is the recommended LED resistor sometimes higher than the calculated resistance?",
+    answer: "Standard resistor values are discrete. A resistor below the calculated minimum can allow more LED current than intended. The calculator therefore selects the smallest E24 value that is at least as large as the calculated target resistance."
   },
   {
-    "question": "Why do my entered Ohm's Law inputs disagree?",
-    "answer": "If you input three or four values (e.g. V, I, and R), they must satisfy V = I × R. If they do not, they are mathematically inconsistent, indicating a measurement error or a non-resistive load in the physical circuit."
+    question: "What happens if my Ohm's Law inputs disagree?",
+    answer: "If several entered values do not satisfy the relevant equations, the calculator can flag the inconsistency rather than silently replacing your data. For example: V = 12 V, I = 3 A, R = 10 Ω does not satisfy: V = IR because: 3 × 10 = 30 V. Such a discrepancy may indicate an incorrect unit, measurement error, or a circuit that does not fit the assumed model."
   }
 ];
 

@@ -10,7 +10,7 @@ export const ohms_law_calculatorConfig: CalculatorModuleDefinition = {
   slug: "ohms-law-calculator",
   category: "other",
   subcategory: "Tech & Electrical",
-  description: "Calculate Voltage V, Current I, Resistance R, and Electrical Power P. Solve any two parameters, check circuit consistency, and configure dividers.",
+  description: "Calculate voltage, current, resistance and electrical power from any two known circuit values. Check circuit consistency, calculate voltage and current dividers, and size current-limiting resistors for LEDs.",
   iconName: "Zap",
   featured: true,
   keywords: [
