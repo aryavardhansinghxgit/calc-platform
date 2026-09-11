@@ -2,68 +2,64 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const resistor_calculatorFaqs: CalculatorFAQ[] = [
   {
-    "question": "What is an electrical resistor and what does it do in a circuit?",
-    "answer": "An electrical resistor is a passive two-terminal component that introduces electrical resistance into a circuit. It restricts the flow of electric current, divides voltages, adjusts signal levels, biases active components (like transistors), and converts electrical energy into heat, protecting sensitive parts from excessive current."
+    question: "How do I calculate resistor value from color bands?",
+    answer: "First determine whether the resistor has four, five or six bands. Then interpret the significant digits, multiplier and tolerance according to the applicable marking system. For a common 4-band resistor: Digit 1, Digit 2, Multiplier, Tolerance. IEC 60062 covers resistor colour coding and related marking systems."
   },
   {
-    "question": "How do I calculate a resistor's value from its color bands?",
-    "answer": "To decode a resistor, read the bands from left to right. For a 4-band resistor: the first two bands represent significant digits, the third is the multiplier (power of 10), and the fourth is the tolerance. Multiply the two-digit number by the multiplier. For 5-band and 6-band resistors, the first three bands represent significant digits, followed by the multiplier and tolerance."
+    question: "What does a 4-band resistor mean?",
+    answer: "A common 4-band resistor uses: Band 1 = first digit, Band 2 = second digit, Band 3 = multiplier, Band 4 = tolerance. For example, Brown – Black – Red – Gold means: 10 × 100 = 1,000 Ω = 1 kΩ ±5%."
   },
   {
-    "question": "What is the difference between 4-band, 5-band, and 6-band resistors?",
-    "answer": "A 4-band resistor uses two significant digits, one multiplier, and one tolerance band. A 5-band resistor offers higher precision, using three significant digits, one multiplier, and one tolerance band. A 6-band resistor adds a sixth band representing the Temperature Coefficient of Resistance (TCR), indicating how much the resistance shifts as the temperature changes."
+    question: "How do I read a 5-band resistor?",
+    answer: "A 5-band resistor normally uses three significant digits before the multiplier: Digit 1, Digit 2, Digit 3, Multiplier, Tolerance. This allows a more precise nominal resistance than the common 4-band arrangement."
   },
   {
-    "question": "What does the sixth band on a resistor mean?",
-    "answer": "The sixth band indicates the Temperature Coefficient of Resistance (TCR) measured in parts per million per Kelvin (ppm/K). It quantifies the expected shift in resistance per degree of temperature change. For example, a 100 ppm/K coefficient means the resistance will change by 0.01% for every 1°C temperature shift."
+    question: "What does the sixth resistor color band mean?",
+    answer: "On a 6-band resistor, the sixth band commonly represents the temperature coefficient of resistance, normally expressed in ppm/K. IEC 60062 includes temperature-coefficient marking provisions."
   },
   {
-    "question": "How do you calculate series resistor combinations?",
-    "answer": "Resistors in series are connected end-to-end, meaning the same current flows through each. The total equivalent resistance is the simple arithmetic sum of the individual values: R_total = R_1 + R_2 + ... + R_n."
+    question: "What is resistor tolerance?",
+    answer: "Tolerance describes the permitted variation around the nominal resistance. For a resistor marked 10 kΩ ±5%, the nominal tolerance limits are 9.5 kΩ to 10.5 kΩ."
   },
   {
-    "question": "How do you calculate parallel resistor combinations?",
-    "answer": "Resistors in parallel share the same voltage across their terminals. The equivalent resistance is calculated using the reciprocal formula: 1 / R_total = 1 / R_1 + 1 / R_2 + ... + 1 / R_n, which resolves to R_total = 1 / (Σ 1/R_i). The equivalent resistance of a parallel network is always lower than the smallest individual resistor in the branch."
+    question: "What is the formula for resistors in series?",
+    answer: "Use: Rtotal = R1 + R2 + R3 + ... For example: 100 Ω + 220 Ω + 470 Ω = 790 Ω."
   },
   {
-    "question": "What is resistor tolerance and how is it calculated?",
-    "answer": "Tolerance is the allowable variance between the resistor's nominal (printed) value and its actual measured value, expressed as a percentage. For a nominal value R and tolerance T%, the minimum value is R_min = R × (1 - T/100) and the maximum is R_max = R × (1 + T/100)."
+    question: "What is the formula for resistors in parallel?",
+    answer: "Use: 1/Rtotal = 1/R1 + 1/R2 + 1/R3 + ... For two resistors, this can also be written: Rtotal = (R1 × R2) / (R1 + R2), provided both resistors are finite and nonzero."
   },
   {
-    "question": "How does wire length affect its electrical resistance?",
-    "answer": "Resistance is directly proportional to conductor length. As the length of a wire doubles, electrons encounter twice as many collisions along the path, doubling the resistance (R = ρ × L / A)."
+    question: "Why is parallel resistance smaller than the smallest resistor?",
+    answer: "Parallel branches provide additional paths for current, increasing the total conductance. For ordinary positive resistors: Rparallel < smallest branch resistance. The calculator verifies this monotonic behavior across randomized test cases."
   },
   {
-    "question": "How does wire thickness or cross-sectional area affect resistance?",
-    "answer": "Resistance is inversely proportional to the cross-sectional area of the conductor. A thicker wire (larger area) provides a wider path for electron flow, reducing electrical resistance (R = ρ × L / A). Doubling the wire area cuts the resistance in half."
+    question: "What does SMD resistor code 103 mean?",
+    answer: "For the common 3-digit format, 103 means 10 × 10³ Ω = 10,000 Ω = 10 kΩ. It does not mean 103 Ω. DigiKey documents the same three-digit interpretation."
   },
   {
-    "question": "What is the difference between resistance and resistivity?",
-    "answer": "Resistivity (ρ) is an intrinsic physical property of a material indicating how strongly it opposes electrical current, independent of shape or size. Resistance (R) is the property of a specific object that depends on both the material's resistivity and its physical dimensions (length and area)."
+    question: "What does SMD resistor code 472 mean?",
+    answer: "472 means 47 × 10² Ω = 4,700 Ω = 4.7 kΩ. The final digit is the power-of-ten multiplier."
   },
   {
-    "question": "What is electrical conductivity?",
-    "answer": "Electrical conductivity (σ) is the measure of a material's ability to conduct electric current. It is the mathematical reciprocal of electrical resistivity: σ = 1 / ρ. Materials with high conductivity, like copper or silver, offer low resistance to current flow."
+    question: "What does 4R7 mean on a resistor?",
+    answer: "R is commonly used as a decimal-point marker, so 4R7 = 4.7 Ω. The same convention is used for values such as R47 = 0.47 Ω, depending on the marking format and component specification."
   },
   {
-    "question": "What does a 3-digit SMD resistor code mean?",
-    "answer": "A 3-digit Surface Mount Device (SMD) code uses the first two digits as significant figures and the third digit as the multiplier exponent (power of 10). For example, a code of '472' translates to 47 × 10² = 4,700 Ω, or 4.7 kΩ."
+    question: "What is an E24 resistor?",
+    answer: "E24 is one of the IEC preferred-number series used for resistor values. IEC 60063 defines preferred-number series for resistors and capacitors. The calculator uses E-series selection to find a practical standardized nominal value close to a requested resistance."
   },
   {
-    "question": "What does a 4-digit SMD resistor code mean?",
-    "answer": "A 4-digit SMD code is used for high-precision components. The first three digits represent the significant figures, and the fourth is the multiplier exponent. For example, a code of '1002' translates to 100 × 10² = 10,000 Ω, or 10 kΩ."
+    question: "What tolerance is associated with E24?",
+    answer: "In the calculator's E-series implementation, E24 is treated as a ±5% manufacturing-tolerance class. That tolerance is separate from the numerical difference between the requested target and the selected preferred value."
   },
   {
-    "question": "What is the EIA-96 SMD resistor marking system?",
-    "answer": "EIA-96 is a standardized coding system for 1% tolerance SMD resistors. It uses a three-character code: two digits (01 to 96) lookup a base significant value in a standard table, and one trailing letter indicates the multiplier power of ten."
+    question: "How is wire resistance calculated?",
+    answer: "For a uniform conductor: R = ρL/A. For a round wire: A = πd²/4, so resistance depends on material resistivity, length and the square of diameter."
   },
   {
-    "question": "How does temperature affect wire resistance?",
-    "answer": "As temperature increases, metal atoms vibrate more rapidly, increasing the frequency of electron collisions and raising resistance. This is calculated using the formula: R(T) = R_20 × [1 + α × (T - 20)], where α is the material's temperature coefficient."
-  },
-  {
-    "question": "How do I choose the correct resistor wattage?",
-    "answer": "Calculate the power dissipation using P = I²R or P = V²/R. Choose a resistor with a power rating at least twice the calculated power (50% derating safety margin) to prevent overheating and ensure long-term component reliability."
+    question: "How do I calculate resistor power?",
+    answer: "Common equivalent forms are: P = VI, P = I²R, and P = V²/R. Use the form that matches the quantities you know. When selecting a real resistor, compare the calculated dissipation with the component's rated power and the application's operating conditions."
   }
 ];
 

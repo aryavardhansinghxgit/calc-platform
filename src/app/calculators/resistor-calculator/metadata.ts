@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const resistor_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Resistor Calculator — Free Online Calculator",
-  description: "Decode 4-band resistor color codes to calculate resistance value and tolerance.",
+  title: "Resistor Calculator – Color Code, SMD, Series/Parallel & E-Series",
+  description: "Calculate resistor values from color bands, SMD markings, series and parallel networks, conductor resistance, E-series values, tolerance and power.",
   slug: "resistor-calculator",
 });

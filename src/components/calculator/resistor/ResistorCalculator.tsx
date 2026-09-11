@@ -1,17 +1,36 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { Copy, Check, Bookmark, Trash2, History, Printer, Share2, Zap, Settings, RefreshCw, Info, HelpCircle } from "lucide-react";
+import {
+  Copy,
+  Check,
+  Bookmark,
+  Trash2,
+  History,
+  Printer,
+  Share2,
+  Zap,
+  RefreshCw,
+  Info,
+  Download,
+  FileText,
+  Code
+} from "lucide-react";
 import {
   calculateResistorCalculator,
   COLOR_DATABASE,
   VALID_COLORS,
   formatOhms,
-  E_SERIES_BASES
+  E_SERIES_BASES,
+  E_SERIES_TOLERANCES,
+  MATERIAL_RESISTIVITIES,
+  awgToDiameterMeters
 } from "@/app/calculators/resistor-calculator/calculator";
 import { ResistorColor, ResistorCalculatorInputs, ResistorCalculatorOutputs } from "@/app/calculators/resistor-calculator/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ReportModal } from "@/components/report/ReportModal";
+import { CalculatorReportData } from "@/components/report/types";
 
 const TABS = [
   { id: "color", label: "Resistor Color Code" },
@@ -19,6 +38,12 @@ const TABS = [
   { id: "conductor", label: "Conductor Resistance" },
   { id: "smd", label: "SMD Resistor Decoder" },
   { id: "finder", label: "E-Series Finder" }
+];
+
+const AWG_GAUGES = [
+  "0000", "000", "00", "0", "1", "2", "4", "6", "8", "10",
+  "12", "14", "16", "18", "20", "22", "24", "26", "28", "30",
+  "32", "34", "36", "38", "40"
 ];
 
 export function ResistorCalculator() {
@@ -54,11 +79,12 @@ export function ResistorCalculator() {
   // ==========================================
   const [conductorLength, setConductorLength] = useState("100");
   const [conductorLengthUnit, setConductorLengthUnit] = useState<any>("m");
-  const [conductorSizeInputType, setConductorSizeInputType] = useState<"diameter" | "area">("diameter");
+  const [conductorSizeInputType, setConductorSizeInputType] = useState<"diameter" | "area" | "awg">("diameter");
   const [conductorDiameter, setConductorDiameter] = useState("1");
   const [conductorDiameterUnit, setConductorDiameterUnit] = useState<any>("mm");
-  const [conductorArea, setConductorArea] = useState("0.785");
+  const [conductorArea, setConductorArea] = useState("0.785398");
   const [conductorAreaUnit, setConductorAreaUnit] = useState<any>("mm²");
+  const [conductorAwg, setConductorAwg] = useState("14");
   const [conductorMaterial, setConductorMaterial] = useState("copper");
   const [conductorTemp, setConductorTemp] = useState("20");
 
@@ -75,11 +101,19 @@ export function ResistorCalculator() {
   const [finderESeries, setFinderESeries] = useState<any>("E24");
 
   // ==========================================
-  // STATE: COMMON / PERSISTENCE
+  // STATE: INTERACTIVE FORMULA WHEEL
   // ==========================================
-  const [copied, setCopied] = useState(false);
+  const [wheelFocus, setWheelFocus] = useState<"V" | "I" | "R" | "P">("V");
+
+  // ==========================================
+  // STATE: COMMON / PERSISTENCE & EXPORTS
+  // ==========================================
+  const [copiedResult, setCopiedResult] = useState(false);
+  const [copiedSummary, setCopiedSummary] = useState(false);
+  const [copiedLatex, setCopiedLatex] = useState(false);
   const [savedItems, setSavedItems] = useState<any[]>([]);
   const [justSaved, setJustSaved] = useState(false);
+  const [showReportModal, setShowReportModal] = useState<boolean>(false);
 
   // Sync saved list from local storage on mount
   useEffect(() => {
@@ -88,13 +122,6 @@ export function ResistorCalculator() {
       if (stored) setSavedItems(JSON.parse(stored));
     } catch (e) {}
   }, []);
-
-  // Sync reverse inputs if colors change in standard mode
-  const syncColorsToReverse = (res: ResistorCalculatorOutputs) => {
-    if (!res) return;
-    setTargetTolerance(String(res.tolerancePct || 5));
-    if (res.tempCoeffPpm) setTargetTempCoeff(String(res.tempCoeffPpm));
-  };
 
   // Compile inputs for standard calculation engine
   const currentInputs = useMemo<Record<string, any>>(() => {
@@ -114,7 +141,7 @@ export function ResistorCalculator() {
       targetTempCoeff: parseFloat(targetTempCoeff) || 100,
       resistorValuesString,
       parallelMode,
-      supplyVoltage: parseFloat(supplyVoltage) || 0,
+      supplyVoltage: supplyVoltage !== "" ? parseFloat(supplyVoltage) : 0,
       conductorLength: parseFloat(conductorLength) || 0,
       conductorLengthUnit,
       conductorSizeInputType,
@@ -122,8 +149,9 @@ export function ResistorCalculator() {
       conductorDiameterUnit,
       conductorArea: parseFloat(conductorArea) || 0,
       conductorAreaUnit,
+      conductorAwg,
       conductorMaterial,
-      conductorTemp: parseFloat(conductorTemp) || 20,
+      conductorTemp: conductorTemp !== "" ? parseFloat(conductorTemp) : 20,
       smdCode,
       finderTargetResistance: parseFloat(finderTargetResistance) || 0,
       finderTargetUnit,
@@ -133,11 +161,12 @@ export function ResistorCalculator() {
     activeTab, reverseMode, bandCount, band1, band2, band3, multiplier, tolerance, tempCoeff,
     targetResistance, targetResistanceUnit, targetTolerance, targetTempCoeff,
     resistorValuesString, parallelMode, supplyVoltage,
-    conductorLength, conductorLengthUnit, conductorSizeInputType, conductorDiameter, conductorDiameterUnit, conductorArea, conductorAreaUnit, conductorMaterial, conductorTemp,
+    conductorLength, conductorLengthUnit, conductorSizeInputType, conductorDiameter, conductorDiameterUnit,
+    conductorArea, conductorAreaUnit, conductorAwg, conductorMaterial, conductorTemp,
     smdCode, finderTargetResistance, finderTargetUnit, finderESeries
   ]);
 
-  // Validation
+  // Validation errors
   const validationErrors = useMemo(() => {
     const errors: string[] = [];
     if (activeTab === "color" && reverseMode) {
@@ -145,17 +174,22 @@ export function ResistorCalculator() {
       if (isNaN(tr) || tr <= 0) errors.push("Target resistance value must be greater than 0.");
     }
     if (activeTab === "series_parallel") {
-      if (!resistorValuesString.trim()) errors.push("Please enter at least one resistor value.");
+      if (!resistorValuesString.trim()) {
+        errors.push("Please enter at least one resistor value.");
+      }
+      if (supplyVoltage !== "" && (isNaN(parseFloat(supplyVoltage)) || parseFloat(supplyVoltage) < 0)) {
+        errors.push("Supply voltage cannot be negative.");
+      }
     }
     if (activeTab === "conductor") {
       const len = parseFloat(conductorLength);
       if (isNaN(len) || len <= 0) errors.push("Conductor length must be greater than 0.");
       if (conductorSizeInputType === "diameter") {
         const diam = parseFloat(conductorDiameter);
-        if (isNaN(diam) || diam <= 0) errors.push("Conductor diameter must be greater than 0.");
-      } else {
+        if (isNaN(diam) || diam <= 0) errors.push("Wire diameter must be greater than 0.");
+      } else if (conductorSizeInputType === "area") {
         const area = parseFloat(conductorArea);
-        if (isNaN(area) || area <= 0) errors.push("Conductor cross-sectional area must be greater than 0.");
+        if (isNaN(area) || area <= 0) errors.push("Cross-sectional area must be greater than 0.");
       }
     }
     if (activeTab === "smd") {
@@ -166,7 +200,7 @@ export function ResistorCalculator() {
       if (isNaN(ft) || ft <= 0) errors.push("Finder target resistance must be greater than 0.");
     }
     return errors;
-  }, [activeTab, reverseMode, targetResistance, resistorValuesString, conductorLength, conductorSizeInputType, conductorDiameter, conductorArea, smdCode, finderTargetResistance]);
+  }, [activeTab, reverseMode, targetResistance, resistorValuesString, supplyVoltage, conductorLength, conductorSizeInputType, conductorDiameter, conductorArea, smdCode, finderTargetResistance]);
 
   // Run calculation
   const result: ResistorCalculatorOutputs | null = useMemo(() => {
@@ -242,7 +276,7 @@ export function ResistorCalculator() {
       silver: "#94a3b8",
       none: "#d1d5db"
     };
-    return colors[color];
+    return colors[color] || "#d1d5db";
   };
 
   // Reset function
@@ -266,8 +300,9 @@ export function ResistorCalculator() {
     setConductorSizeInputType("diameter");
     setConductorDiameter("1");
     setConductorDiameterUnit("mm");
-    setConductorArea("0.785");
+    setConductorArea("0.785398");
     setConductorAreaUnit("mm²");
+    setConductorAwg("14");
     setConductorMaterial("copper");
     setConductorTemp("20");
     setSmdCode("103");
@@ -275,6 +310,7 @@ export function ResistorCalculator() {
     setFinderTargetUnit("kΩ");
     setFinderESeries("E24");
     setReverseMode(false);
+    setWheelFocus("V");
   };
 
   // Save calculation to local storage
@@ -320,57 +356,294 @@ export function ResistorCalculator() {
     } catch (e) {}
   };
 
-  // Copy details to clipboard
-  const handleCopy = () => {
+  // Copy Result (pure value and unit)
+  const handleCopyResult = () => {
     if (!result) return;
+    navigator.clipboard.writeText(result.formattedValue);
+    setCopiedResult(true);
+    setTimeout(() => setCopiedResult(false), 2000);
+  };
+
+  // Copy Summary (full Markdown engineering summary)
+  const handleCopySummary = () => {
+    if (!result) return;
+    const tabName = TABS.find(t => t.id === activeTab)?.label || activeTab;
     let summaryText = `Resistor Calculation Summary\n` +
       `---------------------------------\n` +
-      `Calculator Mode: ${TABS.find(t => t.id === activeTab)?.label}\n` +
-      `Equivalent Value: ${result.formattedValue}\n`;
+      `Calculator Mode: ${tabName}\n` +
+      `Calculated Resistance: ${result.formattedValue} (${result.resistanceOhms} Ω)\n`;
 
-    if (result.minOhms && result.maxOhms) {
-      summaryText += `Range: ${formatOhms(result.minOhms)} to ${formatOhms(result.maxOhms)} (±${result.tolerancePct}%)\n`;
+    if (result.minOhms !== undefined && result.maxOhms !== undefined) {
+      summaryText += `Tolerance Range: ${formatOhms(result.minOhms)} to ${formatOhms(result.maxOhms)} (±${result.tolerancePct}%)\n`;
+    }
+    if (result.errorPct !== undefined) {
+      summaryText += `Target Deviation: ${result.errorPct >= 0 ? "+" : ""}${result.errorPct}%\n`;
     }
     if (result.tempCoeffPpm) {
       summaryText += `TCR: ${result.tempCoeffPpm} ppm/K\n`;
     }
-    if (result.calculationSteps) {
-      summaryText += `\nSteps:\n${result.calculationSteps}\n`;
+    if (activeTab === "conductor") {
+      summaryText += `Material: ${conductorMaterial.toUpperCase()}, Length: ${conductorLength} ${conductorLengthUnit}, Temperature: ${conductorTemp}°C\n`;
     }
+    if (activeTab === "series_parallel" && supplyVoltage && parseFloat(supplyVoltage) > 0) {
+      const v = parseFloat(supplyVoltage);
+      const i = result.resistanceOhms > 0 ? v / result.resistanceOhms : 0;
+      const p = v * i;
+      summaryText += `Supply Voltage: ${v} V | Current: ${i.toFixed(5)} A | Power: ${p.toFixed(4)} W\n`;
+    }
+    if (result.calculationSteps) {
+      summaryText += `\nCalculation Breakdown:\n${result.calculationSteps}\n`;
+    }
+    summaryText += `Timestamp: ${new Date().toISOString()}\n`;
 
     navigator.clipboard.writeText(summaryText);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedSummary(true);
+    setTimeout(() => setCopiedSummary(false), 2000);
   };
 
-  // Share calculation url
-  const handleShare = () => {
+  // CSV Export
+  const handleExportCsv = () => {
     if (!result) return;
-    const url = `${window.location.origin}${window.location.pathname}?tab=${activeTab}&code=${smdCode}&parallel=${parallelMode}&voltage=${supplyVoltage}&length=${conductorLength}&diam=${conductorDiameter}&material=${conductorMaterial}`;
-    if (navigator.share) {
-      navigator.share({
-        title: "Resistor Calculator Suite Results",
-        text: `Calculated resistor network output: ${result.formattedValue}. Check it out here:`,
-        url
-      }).catch(() => {});
+    let headers: string[] = [];
+    let row: (string | number)[] = [];
+
+    if (activeTab === "color") {
+      headers = ["Mode", "Band Count", "Resistance (Ohm)", "Formatted", "Tolerance (%)", "Min (Ohm)", "Max (Ohm)", "TCR (ppm)", "Timestamp"];
+      row = [
+        `"Color Code"`, bandCount, result.resistanceOhms, `"${result.formattedValue}"`,
+        result.tolerancePct ?? "", result.minOhms?.toFixed(2) ?? "", result.maxOhms?.toFixed(2) ?? "",
+        result.tempCoeffPpm ?? "", `"${new Date().toISOString()}"`
+      ];
+    } else if (activeTab === "series_parallel") {
+      headers = ["Mode", "Configuration", "Input Resistors", "Supply Voltage (V)", "Equivalent (Ohm)", "Formatted", "Min (Ohm)", "Max (Ohm)", "Timestamp"];
+      row = [
+        `"Resistor Network"`, parallelMode ? `"Parallel"` : `"Series"`, `"${resistorValuesString}"`,
+        supplyVoltage || 0, result.resistanceOhms, `"${result.formattedValue}"`,
+        result.minOhms?.toFixed(2) ?? "", result.maxOhms?.toFixed(2) ?? "", `"${new Date().toISOString()}"`
+      ];
+    } else if (activeTab === "conductor") {
+      headers = ["Mode", "Material", "Length", "Size Type", "Temperature (C)", "Resistance (Ohm)", "Formatted", "Timestamp"];
+      row = [
+        `"Conductor Resistance"`, `"${conductorMaterial}"`, `"${conductorLength} ${conductorLengthUnit}"`,
+        `"${conductorSizeInputType}"`, conductorTemp, result.resistanceOhms.toFixed(5),
+        `"${result.formattedValue}"`, `"${new Date().toISOString()}"`
+      ];
+    } else if (activeTab === "smd") {
+      headers = ["Mode", "SMD Code", "Resistance (Ohm)", "Formatted", "Tolerance (%)", "Min (Ohm)", "Max (Ohm)", "Timestamp"];
+      row = [
+        `"SMD Decoder"`, `"${smdCode}"`, result.resistanceOhms, `"${result.formattedValue}"`,
+        result.tolerancePct ?? "", result.minOhms?.toFixed(2) ?? "", result.maxOhms?.toFixed(2) ?? "",
+        `"${new Date().toISOString()}"`
+      ];
     } else {
-      navigator.clipboard.writeText(url);
-      alert("Share URL copied to clipboard!");
+      headers = ["Mode", "Target (Ohm)", "Standard E-Series", "Closest Standard (Ohm)", "Formatted", "Tolerance (%)", "Error (%)", "Timestamp"];
+      row = [
+        `"E-Series Finder"`, `${finderTargetResistance} ${finderTargetUnit}`, `"${finderESeries}"`,
+        result.resistanceOhms, `"${result.formattedValue}"`, result.tolerancePct ?? "",
+        result.errorPct ?? "", `"${new Date().toISOString()}"`
+      ];
     }
+
+    const csvContent = `${headers.join(",")}\n${row.join(",")}\n`;
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `resistor_calculator_${activeTab}_${Date.now()}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
-  // Trigger browser print
-  const handlePrint = () => {
-    window.print();
+  // TXT Export
+  const handleExportTxt = () => {
+    if (!result) return;
+    const tabName = TABS.find(t => t.id === activeTab)?.label || activeTab;
+    const reportText = `============================================================\n` +
+      `CALCPLATFORM ENGINEERING REPORT: RESISTOR SUITE\n` +
+      `============================================================\n` +
+      `Module: ${tabName}\n` +
+      `Date/Time: ${new Date().toLocaleString()}\n` +
+      `------------------------------------------------------------\n` +
+      `CALCULATED EQUIVALENT RESISTANCE:\n` +
+      `Nominal Resistance : ${result.formattedValue} (${result.resistanceOhms} Ω)\n` +
+      (result.minOhms !== undefined && result.maxOhms !== undefined
+        ? `Tolerance Range    : ${formatOhms(result.minOhms)} to ${formatOhms(result.maxOhms)} (±${result.tolerancePct}%)\n`
+        : "") +
+      (result.errorPct !== undefined ? `Target Deviation   : ${result.errorPct >= 0 ? "+" : ""}${result.errorPct}%\n` : "") +
+      (result.tempCoeffPpm ? `Temperature Coeff  : ${result.tempCoeffPpm} ppm/K\n` : "") +
+      `------------------------------------------------------------\n` +
+      `MATHEMATICAL STEPS & DERIVATION:\n` +
+      `${result.calculationSteps || "Standard evaluation."}\n` +
+      `============================================================\n` +
+      `ENGINEERING NOTICE:\n` +
+      `Calculations conform to IEC 60062, IEC 60063, and standard conductor physics.\n` +
+      `Worst-case tolerance bounds assume extreme branch drifts under load.\n` +
+      `============================================================\n`;
+
+    const blob = new Blob([reportText], { type: "text/plain;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `resistor_report_${activeTab}_${Date.now()}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  // LaTeX Export
+  const handleExportLatex = () => {
+    if (!result) return;
+    let latex = "";
+    if (activeTab === "color") {
+      latex = `% Resistor Color Code Formulation\n` +
+        `\\begin{aligned}\n` +
+        `  R_{\\text{nominal}} &= ${result.resistanceOhms}\\,\\Omega = ${result.formattedValue} \\\\[4pt]\n` +
+        (result.minOhms !== undefined && result.maxOhms !== undefined
+          ? `  R_{\\text{min}} &= R_{\\text{nom}} \\times (1 - ${result.tolerancePct}/100) = ${result.minOhms.toFixed(2)}\\,\\Omega \\\\[4pt]\n` +
+            `  R_{\\text{max}} &= R_{\\text{nom}} \\times (1 + ${result.tolerancePct}/100) = ${result.maxOhms.toFixed(2)}\\,\\Omega\n`
+          : "") +
+        `\\end{aligned}`;
+    } else if (activeTab === "series_parallel") {
+      if (!parallelMode) {
+        latex = `% Series Resistor Network Formulation\n` +
+          `\\begin{aligned}\n` +
+          `  R_{\\text{total}} &= \\sum_{i=1}^{n} R_i = ${result.formattedValue} \\\\[4pt]\n` +
+          (supplyVoltage && parseFloat(supplyVoltage) > 0
+            ? `  I_{\\text{total}} &= \\frac{V}{R_{\\text{total}}} = \\frac{${supplyVoltage}\\,\\text{V}}{${result.resistanceOhms.toFixed(2)}\\,\\Omega} = ${(parseFloat(supplyVoltage) / result.resistanceOhms).toFixed(5)}\\,\\text{A} \\\\[4pt]\n` +
+              `  P_{\\text{total}} &= V \\cdot I = \\frac{V^2}{R} = ${(parseFloat(supplyVoltage) ** 2 / result.resistanceOhms).toFixed(4)}\\,\\text{W}\n`
+            : "") +
+          `\\end{aligned}`;
+      } else {
+        latex = `% Parallel Resistor Network Formulation\n` +
+          `\\begin{aligned}\n` +
+          `  \\frac{1}{R_{\\text{total}}} &= \\sum_{i=1}^{n} \\frac{1}{R_i} \\implies R_{\\text{total}} = ${result.formattedValue} \\\\[4pt]\n` +
+          (supplyVoltage && parseFloat(supplyVoltage) > 0 && result.resistanceOhms > 0
+            ? `  I_{\\text{total}} &= \\frac{V}{R_{\\text{total}}} = ${(parseFloat(supplyVoltage) / result.resistanceOhms).toFixed(5)}\\,\\text{A} \\\\[4pt]\n` +
+              `  P_{\\text{total}} &= V \\cdot I = ${(parseFloat(supplyVoltage) ** 2 / result.resistanceOhms).toFixed(4)}\\,\\text{W}\n`
+            : "") +
+          `\\end{aligned}`;
+      }
+    } else if (activeTab === "conductor") {
+      latex = `% Conductor Resistance Formulation\n` +
+        `\\begin{aligned}\n` +
+        `  R_{20} &= \\frac{\\rho \\cdot L}{A} \\\\[4pt]\n` +
+        `  R(T) &= R_{20} \\cdot [1 + \\alpha(T - 20^\\circ\\text{C})] = ${result.formattedValue}\n` +
+        `\\end{aligned}`;
+    } else if (activeTab === "smd") {
+      latex = `% SMD Resistor Decoding\n` +
+        `\\begin{aligned}\n` +
+        `  \\text{Code: } & \\text{${smdCode}} \\implies R = ${result.formattedValue}\\,(\\pm${result.tolerancePct}\\%)\n` +
+        `\\end{aligned}`;
+    } else {
+      latex = `% E-Series Standard Resistor Selection\n` +
+        `\\begin{aligned}\n` +
+        `  \\text{Standard: } & ${finderESeries} \\implies R_{\\text{standard}} = ${result.formattedValue} \\quad (\\pm${result.tolerancePct}\\%)\n` +
+        `\\end{aligned}`;
+    }
+
+    navigator.clipboard.writeText(latex);
+    setCopiedLatex(true);
+    setTimeout(() => setCopiedLatex(false), 2000);
+  };
+
+  // ReportModal report data configuration
+  const reportData: CalculatorReportData | undefined = useMemo(() => {
+    if (!result) return undefined;
+    const tabName = TABS.find(t => t.id === activeTab)?.label || activeTab;
+    return {
+      meta: {
+        calculatorName: "Resistor Calculator Suite",
+        reportTitle: "Resistor & Circuit Analysis Engineering Report",
+        generatedDate: new Date().toLocaleDateString(),
+        generatedTime: new Date().toLocaleTimeString(),
+      },
+      keyMetrics: [
+        { label: "Calculated Resistance", value: result.formattedValue, colorTheme: "blue" },
+        { label: "Nominal Ohms", value: `${result.resistanceOhms} Ω`, colorTheme: "emerald" },
+        {
+          label: "Tolerance Range",
+          value: result.minOhms !== undefined && result.maxOhms !== undefined
+            ? `${formatOhms(result.minOhms)} - ${formatOhms(result.maxOhms)} (±${result.tolerancePct}%)`
+            : "Exact",
+          colorTheme: "purple"
+        }
+      ],
+      sections: [
+        {
+          title: "Circuit Parameters & Specifications",
+          items: [
+            { label: "Calculation Module", value: tabName },
+            { label: "Calculated Resistance", value: result.formattedValue },
+            { label: "Nominal Ohms", value: `${result.resistanceOhms} Ω` },
+            { label: "Minimum Bound", value: result.minOhms !== undefined ? formatOhms(result.minOhms) : "N/A" },
+            { label: "Maximum Bound", value: result.maxOhms !== undefined ? formatOhms(result.maxOhms) : "N/A" },
+            { label: "Tolerance Rate", value: result.tolerancePct !== undefined ? `±${result.tolerancePct}%` : "N/A" },
+            { label: "Temperature Coefficient", value: result.tempCoeffPpm ? `${result.tempCoeffPpm} ppm/K` : "Standard" },
+            { label: "Operating Supply Voltage", value: supplyVoltage && parseFloat(supplyVoltage) > 0 ? `${supplyVoltage} V` : "Passive" }
+          ]
+        },
+        {
+          title: "Step-by-Step Calculation Breakdown",
+          items: [
+            { label: "Mathematical Steps", value: result.calculationSteps || "Standard algebraic component derivation." }
+          ]
+        }
+      ],
+      recommendation: {
+        title: "Engineering Recommendations",
+        text: "Select component wattage with a minimum 50% derating safety margin (rated power ≥ 2 × calculated dissipation) and verify thermal drift under maximum operational ambient temperatures."
+      }
+    };
+  }, [result, activeTab, supplyVoltage]);
+
+  // Formula Wheel Data Helper
+  const getFormulaWheelData = (variable: "V" | "I" | "R" | "P") => {
+    switch (variable) {
+      case "V":
+        return [
+          { formula: "V = I × R", label: "Ohm's Law" },
+          { formula: "V = P / I", label: "Power & Current" },
+          { formula: "V = √(P × R)", label: "Power & Resistance" }
+        ];
+      case "I":
+        return [
+          { formula: "I = V / R", label: "Ohm's Law" },
+          { formula: "I = P / V", label: "Power & Voltage" },
+          { formula: "I = √(P / R)", label: "Power & Resistance" }
+        ];
+      case "R":
+        return [
+          { formula: "R = V / I", label: "Ohm's Law" },
+          { formula: "R = V² / P", label: "Voltage & Power" },
+          { formula: "R = P / I²", label: "Power & Current" }
+        ];
+      case "P":
+        return [
+          { formula: "P = V × I", label: "Joule's First Law" },
+          { formula: "P = I² × R", label: "Current & Resistance" },
+          { formula: "P = V² / R", label: "Voltage & Resistance" }
+        ];
+    }
   };
 
   return (
     <div className="space-y-6">
       {/* TABS CONTROL BAR */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-zinc-200 dark:border-zinc-800 scrollbar-none text-xs">
+      <div 
+        role="tablist"
+        aria-label="Resistor Calculator Modules"
+        className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-zinc-200 dark:border-zinc-800 scrollbar-none text-xs"
+      >
         {TABS.map((tab) => (
           <button
             key={tab.id}
+            role="tab"
+            aria-selected={activeTab === tab.id}
+            id={`tab-${tab.id}`}
+            aria-controls={`panel-${tab.id}`}
             onClick={() => {
               setActiveTab(tab.id);
               setReverseMode(false);
@@ -387,7 +660,7 @@ export function ResistorCalculator() {
       </div>
 
       {/* PRESETS BAR */}
-      <div className="flex flex-wrap items-center gap-2 p-2.5 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-300 dark:border-zinc-700 shadow-sm">
+      <div className="flex flex-wrap items-center gap-2 p-2.5 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-300 dark:border-zinc-700 shadow-xs">
         <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider pl-1 mr-1 flex items-center gap-1">
           <Zap className="w-3.5 h-3.5 text-amber-500" /> Circuit Presets:
         </span>
@@ -412,24 +685,25 @@ export function ResistorCalculator() {
         <div className="lg:col-span-7 space-y-5">
           {/* TAB 1: RESISTOR COLOR CODE */}
           {activeTab === "color" && (
-            <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
+            <div id="panel-color" role="tabpanel" aria-labelledby="tab-color" className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
               <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
-                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Color Band Parameters</span>
+                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                  <span>Color Band Parameters</span>
                 </h3>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setReverseMode(!reverseMode)}
-                    className={`text-[10px] font-bold px-2 py-0.5 border rounded-md transition-all ${
+                    className={`text-[10px] font-bold px-2 py-0.5 border rounded-md transition-all cursor-pointer ${
                       reverseMode 
-                        ? "border-blue-600 text-blue-600 bg-blue-50/50" 
-                        : "border-zinc-200 text-zinc-400"
+                        ? "border-blue-600 text-blue-600 bg-blue-50/50 dark:bg-blue-950/40" 
+                        : "border-zinc-200 dark:border-zinc-700 text-zinc-400"
                     }`}
                   >
                     {reverseMode ? "← Value to Color Active" : "Value to Color Mode"}
                   </button>
                   <button
                     onClick={handleReset}
-                    className="text-[10px] text-zinc-400 hover:text-blue-500 flex items-center gap-1 font-semibold"
+                    className="text-[10px] text-zinc-400 hover:text-blue-500 flex items-center gap-1 font-semibold cursor-pointer"
                   >
                     <RefreshCw className="w-3 h-3" /> Reset
                   </button>
@@ -445,10 +719,10 @@ export function ResistorCalculator() {
                       key={num}
                       type="button"
                       onClick={() => setBandCount(num as any)}
-                      className={`flex-1 py-1.5 border rounded-lg font-bold transition-all ${
+                      className={`flex-1 py-1.5 border rounded-lg font-bold transition-all cursor-pointer ${
                         bandCount === num
-                          ? "border-blue-600 text-blue-600 bg-blue-50/50"
-                          : "border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50"
+                          ? "border-blue-600 text-blue-600 bg-blue-50/50 dark:bg-blue-950/40"
+                          : "border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800"
                       }`}
                     >
                       {num} Bands
@@ -481,17 +755,17 @@ export function ResistorCalculator() {
                                   key={c}
                                   type="button"
                                   onClick={() => onChange(c)}
-                                  className={`flex flex-col items-center justify-center p-2 border rounded-xl transition-all text-center group cursor-pointer shadow-sm ${
+                                  className={`flex flex-col items-center justify-center p-2 border rounded-xl transition-all text-center group cursor-pointer shadow-xs ${
                                     isSelected
                                       ? "border-2 border-blue-600 dark:border-blue-500 bg-blue-50/80 dark:bg-blue-950/30 scale-[1.03]"
                                       : "border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-600 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800"
                                   }`}
                                 >
                                   <span
-                                    className="w-4.5 h-4.5 rounded-full border border-zinc-400 dark:border-zinc-600 shadow-inner mb-1.5 ring-1 ring-zinc-300 dark:ring-zinc-700 shrink-0"
+                                    className="w-4 h-4 rounded-full border border-zinc-400 dark:border-zinc-600 shadow-inner mb-1.5 ring-1 ring-zinc-300 dark:ring-zinc-700 shrink-0"
                                     style={{ backgroundColor: swatchColor }}
                                   />
-                                  <span className="text-[9px] font-black text-slate-800 dark:text-slate-200 font-semibold group-hover:text-zinc-800 dark:group-hover:text-zinc-100 truncate w-full max-w-[80px]">
+                                  <span className="text-[9px] font-bold text-slate-800 dark:text-slate-200 truncate w-full max-w-[80px]">
                                     {labelFn(c)}
                                   </span>
                                 </button>
@@ -520,7 +794,7 @@ export function ResistorCalculator() {
                           (c) => COLOR_DATABASE[c].multiplier !== null,
                           (c) => {
                             const val = COLOR_DATABASE[c].multiplier;
-                            return val && val >= 1000 ? `${COLOR_DATABASE[c].label} (x${val/1000}k)` : `${COLOR_DATABASE[c].label} (x${val})`;
+                            return val && val >= 1000 ? `${COLOR_DATABASE[c].label} (x${val / 1000}k)` : `${COLOR_DATABASE[c].label} (x${val})`;
                           }
                         )}
                         {renderColorGrid("Tolerance Band (Accuracy range)", tolerance, setTolerance,
@@ -539,65 +813,50 @@ export function ResistorCalculator() {
                 // Reverse Mode: Enter Target Resistance
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Target Resistance</label>
+                    <label htmlFor="target-resistance" className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Target Resistance</label>
                     <div className="flex gap-1">
                       <Input
+                        id="target-resistance"
                         type="number"
                         value={targetResistance}
                         onChange={(e) => setTargetResistance(e.target.value)}
-                        className="font-sans tabular-nums flex-1 rounded-r-none border-r-0"
+                        className="font-sans tabular-nums flex-1 rounded-r-none border-r-0 text-xs"
                       />
                       <select
+                        id="target-resistance-unit"
+                        aria-label="Target Resistance Unit"
                         value={targetResistanceUnit}
                         onChange={(e) => setTargetResistanceUnit(e.target.value as any)}
-                        className="px-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 rounded-lg rounded-l-none text-xs outline-none"
+                        className="px-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 rounded-lg rounded-l-none text-xs outline-hidden"
                       >
-                        {["mΩ", "Ω", "kΩ", "MΩ", "GΩ"].map(u => <option key={u} value={u}>{u}</option>)}
+                        <option value="mΩ">mΩ</option>
+                        <option value="Ω">Ω</option>
+                        <option value="kΩ">kΩ</option>
+                        <option value="MΩ">MΩ</option>
+                        <option value="GΩ">GΩ</option>
                       </select>
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Target Tolerance</label>
+                    <label htmlFor="target-tolerance" className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Desired Tolerance (±%)</label>
                     <select
+                      id="target-tolerance"
+                      aria-label="Desired Tolerance"
                       value={targetTolerance}
                       onChange={(e) => setTargetTolerance(e.target.value)}
-                      className="w-full h-9 px-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full h-9 px-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs outline-hidden"
                     >
-                      <option value="0.01">±0.01% (Gray)</option>
-                      <option value="0.02">±0.02% (Yellow)</option>
-                      <option value="0.05">±0.05% (Orange)</option>
-                      <option value="0.1">±0.1% (Violet)</option>
-                      <option value="0.25">±0.25% (Blue)</option>
-                      <option value="0.5">±0.5% (Green)</option>
                       <option value="1">±1% (Brown)</option>
                       <option value="2">±2% (Red)</option>
+                      <option value="0.5">±0.5% (Green)</option>
+                      <option value="0.25">±0.25% (Blue)</option>
+                      <option value="0.1">±0.1% (Violet)</option>
+                      <option value="0.05">±0.05% (Orange)</option>
                       <option value="5">±5% (Gold)</option>
                       <option value="10">±10% (Silver)</option>
-                      <option value="20">±20% (None)</option>
                     </select>
                   </div>
-
-                  {bandCount === 6 && (
-                    <div>
-                      <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">TCR coefficient (ppm/K)</label>
-                      <select
-                        value={targetTempCoeff}
-                        onChange={(e) => setTargetTempCoeff(e.target.value)}
-                        className="w-full h-9 px-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs outline-none focus:ring-1 focus:ring-blue-500"
-                      >
-                        <option value="250">250 ppm/K (Black)</option>
-                        <option value="100">100 ppm/K (Brown)</option>
-                        <option value="50">50 ppm/K (Red)</option>
-                        <option value="15">15 ppm/K (Orange)</option>
-                        <option value="25">25 ppm/K (Yellow)</option>
-                        <option value="20">20 ppm/K (Green)</option>
-                        <option value="10">10 ppm/K (Blue)</option>
-                        <option value="5">5 ppm/K (Violet)</option>
-                        <option value="1">1 ppm/K (Gray)</option>
-                      </select>
-                    </div>
-                  )}
                 </div>
               )}
             </div>
@@ -605,27 +864,30 @@ export function ResistorCalculator() {
 
           {/* TAB 2: SERIES & PARALLEL NETWORKS */}
           {activeTab === "series_parallel" && (
-            <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
-                <span>Network Configuration</span>
+            <div id="panel-series_parallel" role="tabpanel" aria-labelledby="tab-series_parallel" className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
+              <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
+                  Network Configuration
+                </h3>
                 <button
-                  onClick={handleReset}
-                  className="text-[10px] text-zinc-400 hover:text-blue-500 font-semibold"
+                  onClick={() => setResistorValuesString("")}
+                  className="text-[10px] text-zinc-400 hover:text-red-500 font-semibold cursor-pointer"
                 >
                   Clear Fields
                 </button>
-              </h3>
+              </div>
 
+              {/* Series or Parallel Switch */}
               <div>
-                <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1.5 block">Connection Method</label>
+                <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Connection Method</label>
                 <div className="flex gap-2 text-xs">
                   <button
                     type="button"
                     onClick={() => setParallelMode(false)}
-                    className={`flex-1 py-1.5 border rounded-lg font-bold transition-all ${
+                    className={`flex-1 py-1.5 border rounded-lg font-bold transition-all cursor-pointer ${
                       !parallelMode
-                        ? "border-blue-600 text-blue-600 bg-blue-50/50"
-                        : "border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50"
+                        ? "border-blue-600 text-blue-600 bg-blue-50/50 dark:bg-blue-950/40"
+                        : "border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800"
                     }`}
                   >
                     Series Connection
@@ -633,10 +895,10 @@ export function ResistorCalculator() {
                   <button
                     type="button"
                     onClick={() => setParallelMode(true)}
-                    className={`flex-1 py-1.5 border rounded-lg font-bold transition-all ${
+                    className={`flex-1 py-1.5 border rounded-lg font-bold transition-all cursor-pointer ${
                       parallelMode
-                        ? "border-blue-600 text-blue-600 bg-blue-50/50"
-                        : "border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50"
+                        ? "border-blue-600 text-blue-600 bg-blue-50/50 dark:bg-blue-950/40"
+                        : "border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800"
                     }`}
                   >
                     Parallel Connection
@@ -644,27 +906,31 @@ export function ResistorCalculator() {
                 </div>
               </div>
 
+              {/* Resistor values */}
               <div>
-                <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">
+                <label htmlFor="resistor-values" className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">
                   Resistor Values (comma separated)
                 </label>
                 <textarea
+                  id="resistor-values"
+                  rows={3}
                   value={resistorValuesString}
                   onChange={(e) => setResistorValuesString(e.target.value)}
-                  placeholder="e.g. 100, 220, 4.7k, 1M, 2.2k@1"
-                  rows={3}
-                  className="w-full p-2.5 text-xs font-sans tabular-nums border border-zinc-200 dark:border-zinc-800 rounded-lg outline-none focus:ring-1 focus:ring-blue-500 bg-white dark:bg-zinc-900"
+                  placeholder="e.g. 100, 220, 470 or 10k@1, 2.2M"
+                  className="w-full p-2.5 text-xs font-sans tabular-nums rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 outline-hidden focus:ring-1 focus:ring-blue-500"
                 />
-                <span className="text-[10px] text-zinc-400 mt-1 block">
-                  Add custom tolerance via &apos;@&apos;, e.g. `2.2k@1` specifies 2.2 kΩ with ±1% tolerance.
+                <span className="text-[10px] text-zinc-400 block mt-1">
+                  Add custom tolerance via &apos;@&apos;, e.g. &apos;2.2k@1&apos; specifies 2.2 kΩ with ±1% tolerance.
                 </span>
               </div>
 
+              {/* Supply Voltage */}
               <div>
-                <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">
+                <label htmlFor="supply-voltage" className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">
                   Supply Voltage (V) — Optional
                 </label>
                 <Input
+                  id="supply-voltage"
                   type="number"
                   value={supplyVoltage}
                   onChange={(e) => setSupplyVoltage(e.target.value)}
@@ -677,49 +943,59 @@ export function ResistorCalculator() {
 
           {/* TAB 3: CONDUCTOR RESISTANCE */}
           {activeTab === "conductor" && (
-            <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
-                <span>Conductor physical properties</span>
+            <div id="panel-conductor" role="tabpanel" aria-labelledby="tab-conductor" className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
+              <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
+                <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400">
+                  Conductor physical properties
+                </h3>
                 <button
-                  onClick={handleReset}
-                  className="text-[10px] text-zinc-400 hover:text-blue-500 font-semibold"
+                  onClick={() => {
+                    setConductorLength("100");
+                    setConductorDiameter("1");
+                    setConductorMaterial("copper");
+                    setConductorTemp("20");
+                  }}
+                  className="text-[10px] text-zinc-400 hover:text-blue-500 font-semibold cursor-pointer"
                 >
                   Reset Defaults
                 </button>
-              </h3>
+              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Material Presets */}
+              <div className="space-y-3">
+                {/* Material */}
                 <div>
-                  <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Conductor Material</label>
+                  <label htmlFor="conductor-material" className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Conductor Material</label>
                   <select
+                    id="conductor-material"
                     value={conductorMaterial}
                     onChange={(e) => setConductorMaterial(e.target.value)}
-                    className="w-full h-9 px-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs outline-none focus:ring-1 focus:ring-blue-500"
+                    className="w-full h-9 px-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs outline-hidden"
                   >
-                    <option value="copper">Copper (ρ_20 = 1.72e-8)</option>
-                    <option value="aluminum">Aluminum (ρ_20 = 2.82e-8)</option>
-                    <option value="silver">Silver (ρ_20 = 1.59e-8)</option>
-                    <option value="gold">Gold (ρ_20 = 2.44e-8)</option>
-                    <option value="iron">Iron (ρ_20 = 1.0e-7)</option>
-                    <option value="carbon">Carbon (ρ_20 = 3.5e-5)</option>
+                    {Object.entries(MATERIAL_RESISTIVITIES).map(([key, mat]) => (
+                      <option key={key} value={key}>
+                        {mat.name} (ρ_20 = {mat.rho.toExponential(2)} Ω·m, α = {mat.alpha}/°C)
+                      </option>
+                    ))}
                   </select>
                 </div>
 
                 {/* Length */}
                 <div>
-                  <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Conductor Length</label>
+                  <label htmlFor="conductor-length" className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Conductor Length</label>
                   <div className="flex gap-1">
                     <Input
+                      id="conductor-length"
                       type="number"
                       value={conductorLength}
                       onChange={(e) => setConductorLength(e.target.value)}
                       className="font-sans tabular-nums flex-1 rounded-r-none border-r-0 text-xs"
                     />
                     <select
+                      id="conductor-length-unit"
+                      aria-label="Conductor Length Unit"
                       value={conductorLengthUnit}
                       onChange={(e) => setConductorLengthUnit(e.target.value as any)}
-                      className="px-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 rounded-lg rounded-l-none text-xs outline-none"
+                      className="px-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 rounded-lg rounded-l-none text-xs outline-hidden"
                     >
                       <option value="mm">mm</option>
                       <option value="cm">cm</option>
@@ -737,15 +1013,15 @@ export function ResistorCalculator() {
                 <div>
                   <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Size Input Type</label>
                   <div className="flex gap-2 text-xs">
-                    {["diameter", "area"].map(type => (
+                    {(["diameter", "area", "awg"] as const).map(type => (
                       <button
                         key={type}
                         type="button"
-                        onClick={() => setConductorSizeInputType(type as any)}
-                        className={`flex-1 py-1.5 border rounded-lg font-bold transition-all capitalize ${
+                        onClick={() => setConductorSizeInputType(type)}
+                        className={`flex-1 py-1.5 border rounded-lg font-bold transition-all uppercase cursor-pointer ${
                           conductorSizeInputType === type
-                            ? "border-blue-600 text-blue-600 bg-blue-50/50"
-                            : "border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50"
+                            ? "border-blue-600 text-blue-600 bg-blue-50/50 dark:bg-blue-950/40"
+                            : "border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800"
                         }`}
                       >
                         {type}
@@ -754,21 +1030,24 @@ export function ResistorCalculator() {
                   </div>
                 </div>
 
-                {/* Diameter or Area inputs */}
+                {/* Diameter, Area or AWG input */}
                 {conductorSizeInputType === "diameter" ? (
                   <div>
-                    <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Wire Diameter</label>
+                    <label htmlFor="conductor-diameter" className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Wire Diameter</label>
                     <div className="flex gap-1">
                       <Input
+                        id="conductor-diameter"
                         type="number"
                         value={conductorDiameter}
                         onChange={(e) => setConductorDiameter(e.target.value)}
                         className="font-sans tabular-nums flex-1 rounded-r-none border-r-0 text-xs"
                       />
                       <select
+                        id="conductor-diameter-unit"
+                        aria-label="Wire Diameter Unit"
                         value={conductorDiameterUnit}
                         onChange={(e) => setConductorDiameterUnit(e.target.value as any)}
-                        className="px-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 rounded-lg rounded-l-none text-xs outline-none"
+                        className="px-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 rounded-lg rounded-l-none text-xs outline-hidden"
                       >
                         <option value="mm">mm</option>
                         <option value="cm">cm</option>
@@ -776,20 +1055,39 @@ export function ResistorCalculator() {
                       </select>
                     </div>
                   </div>
+                ) : conductorSizeInputType === "awg" ? (
+                  <div>
+                    <label htmlFor="conductor-awg" className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">AWG Wire Gauge</label>
+                    <select
+                      id="conductor-awg"
+                      value={conductorAwg}
+                      onChange={(e) => setConductorAwg(e.target.value)}
+                      className="w-full h-9 px-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs outline-hidden font-bold"
+                    >
+                      {AWG_GAUGES.map(gauge => (
+                        <option key={gauge} value={gauge}>
+                          AWG {gauge} (Ø {(awgToDiameterMeters(gauge) * 1000).toFixed(3)} mm)
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 ) : (
                   <div>
-                    <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Cross-sectional Area</label>
+                    <label htmlFor="conductor-area" className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Cross-sectional Area</label>
                     <div className="flex gap-1">
                       <Input
+                        id="conductor-area"
                         type="number"
                         value={conductorArea}
                         onChange={(e) => setConductorArea(e.target.value)}
                         className="font-sans tabular-nums flex-1 rounded-r-none border-r-0 text-xs"
                       />
                       <select
+                        id="conductor-area-unit"
+                        aria-label="Conductor Area Unit"
                         value={conductorAreaUnit}
                         onChange={(e) => setConductorAreaUnit(e.target.value as any)}
-                        className="px-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 rounded-lg rounded-l-none text-xs outline-none"
+                        className="px-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 rounded-lg rounded-l-none text-xs outline-hidden"
                       >
                         <option value="mm²">mm²</option>
                         <option value="cm²">cm²</option>
@@ -801,10 +1099,11 @@ export function ResistorCalculator() {
 
                 {/* Operating temperature */}
                 <div>
-                  <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">
+                  <label htmlFor="conductor-temp" className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">
                     Operating Temperature (°C)
                   </label>
                   <Input
+                    id="conductor-temp"
                     type="number"
                     value={conductorTemp}
                     onChange={(e) => setConductorTemp(e.target.value)}
@@ -817,15 +1116,16 @@ export function ResistorCalculator() {
 
           {/* TAB 4: SMD RESISTOR DECODER */}
           {activeTab === "smd" && (
-            <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
+            <div id="panel-smd" role="tabpanel" aria-labelledby="tab-smd" className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
               <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2 flex items-center justify-between">
                 <span>SMD Resistor Codes</span>
                 <span className="text-[10px] text-zinc-400 font-bold uppercase">Standards: 3-digit, 4-digit, EIA-96</span>
               </h3>
 
               <div>
-                <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">SMD Marking Code</label>
+                <label htmlFor="smd-code" className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">SMD Marking Code</label>
                 <Input
+                  id="smd-code"
                   type="text"
                   value={smdCode}
                   onChange={(e) => setSmdCode(e.target.value)}
@@ -841,7 +1141,7 @@ export function ResistorCalculator() {
 
           {/* TAB 5: E-SERIES FINDER */}
           {activeTab === "finder" && (
-            <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
+            <div id="panel-finder" role="tabpanel" aria-labelledby="tab-finder" className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
               <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
                 E-Series Lookup and Resistor Finder
               </h3>
@@ -849,18 +1149,21 @@ export function ResistorCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Target resistance */}
                 <div>
-                  <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Target Resistance</label>
+                  <label htmlFor="finder-target" className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Target Resistance</label>
                   <div className="flex gap-1">
                     <Input
+                      id="finder-target"
                       type="number"
                       value={finderTargetResistance}
                       onChange={(e) => setFinderTargetResistance(e.target.value)}
                       className="font-sans tabular-nums flex-1 rounded-r-none border-r-0 text-xs"
                     />
                     <select
+                      id="finder-target-unit"
+                      aria-label="Target Resistance Unit"
                       value={finderTargetUnit}
                       onChange={(e) => setFinderTargetUnit(e.target.value as any)}
-                      className="px-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 rounded-lg rounded-l-none text-xs outline-none font-bold"
+                      className="px-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 rounded-lg rounded-l-none text-xs outline-hidden font-bold"
                     >
                       <option value="Ω">Ω</option>
                       <option value="kΩ">kΩ</option>
@@ -871,11 +1174,12 @@ export function ResistorCalculator() {
 
                 {/* E-Series set */}
                 <div>
-                  <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Prefered E-Series Standard</label>
+                  <label htmlFor="finder-eseries" className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Preferred E-Series Standard</label>
                   <select
+                    id="finder-eseries"
                     value={finderESeries}
                     onChange={(e) => setFinderESeries(e.target.value as any)}
-                    className="w-full h-9 px-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs outline-none focus:ring-1 focus:ring-blue-500 font-bold"
+                    className="w-full h-9 px-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs outline-hidden focus:ring-1 focus:ring-blue-500 font-bold"
                   >
                     <option value="E6">E6 (±20% Tolerance)</option>
                     <option value="E12">E12 (±10% Tolerance)</option>
@@ -888,11 +1192,115 @@ export function ResistorCalculator() {
               </div>
             </div>
           )}
+
+          {/* INTERACTIVE FORMULA WHEEL */}
+          <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4 flex flex-col items-center">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-1">
+              Interactive Formula Wheel (V, I, R, P)
+            </h4>
+
+            {/* SVG Formula Wheel representation */}
+            <svg 
+              viewBox="0 0 200 200" 
+              className="w-52 h-52 transition-transform select-none"
+              role="region"
+              aria-label="Interactive Resistor Formula Wheel"
+            >
+              {/* Outer boundary circle */}
+              <circle cx="100" cy="100" r="95" className="fill-none stroke-zinc-300 dark:stroke-zinc-700" strokeWidth="2" />
+              
+              {/* Quad segment P (Power, Top-Left) */}
+              <path
+                d="M 100,100 L 100,10 A 90,90 0 0,0 10,100 Z"
+                role="button"
+                tabIndex={0}
+                aria-label="Select Power formulas"
+                onClick={() => setWheelFocus("P")}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setWheelFocus("P"); } }}
+                className={`transition-colors duration-150 cursor-pointer focus:outline-hidden ${
+                  wheelFocus === "P" 
+                    ? "fill-emerald-100/80 dark:fill-emerald-950/40 stroke-emerald-600 stroke-2" 
+                    : "fill-zinc-50/50 dark:fill-zinc-900/30 stroke-zinc-200 dark:stroke-zinc-800 hover:fill-zinc-100/50"
+                }`}
+              />
+              {/* Quad segment V (Voltage, Top-Right) */}
+              <path
+                d="M 100,100 L 190,100 A 90,90 0 0,0 100,10 Z"
+                role="button"
+                tabIndex={0}
+                aria-label="Select Voltage formulas"
+                onClick={() => setWheelFocus("V")}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setWheelFocus("V"); } }}
+                className={`transition-colors duration-150 cursor-pointer focus:outline-hidden ${
+                  wheelFocus === "V" 
+                    ? "fill-pink-100/80 dark:fill-pink-950/40 stroke-pink-600 stroke-2" 
+                    : "fill-zinc-50/50 dark:fill-zinc-900/30 stroke-zinc-200 dark:stroke-zinc-800 hover:fill-zinc-100/50"
+                }`}
+              />
+              {/* Quad segment I (Current, Bottom-Left) */}
+              <path
+                d="M 100,100 L 10,100 A 90,90 0 0,0 100,190 Z"
+                role="button"
+                tabIndex={0}
+                aria-label="Select Current formulas"
+                onClick={() => setWheelFocus("I")}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setWheelFocus("I"); } }}
+                className={`transition-colors duration-150 cursor-pointer focus:outline-hidden ${
+                  wheelFocus === "I" 
+                    ? "fill-amber-100/80 dark:fill-amber-950/40 stroke-amber-600 stroke-2" 
+                    : "fill-zinc-50/50 dark:fill-zinc-900/30 stroke-zinc-200 dark:stroke-zinc-800 hover:fill-zinc-100/50"
+                }`}
+              />
+              {/* Quad segment R (Resistance, Bottom-Right) */}
+              <path
+                d="M 100,100 L 100,190 A 90,90 0 0,0 190,100 Z"
+                role="button"
+                tabIndex={0}
+                aria-label="Select Resistance formulas"
+                onClick={() => setWheelFocus("R")}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setWheelFocus("R"); } }}
+                className={`transition-colors duration-150 cursor-pointer focus:outline-hidden ${
+                  wheelFocus === "R" 
+                    ? "fill-indigo-100/80 dark:fill-indigo-950/40 stroke-indigo-600 stroke-2" 
+                    : "fill-zinc-50/50 dark:fill-zinc-900/30 stroke-zinc-200 dark:stroke-zinc-800 hover:fill-zinc-100/50"
+                }`}
+              />
+
+              {/* inner divider axes lines */}
+              <line x1="10" y1="100" x2="190" y2="100" className="stroke-zinc-300 dark:stroke-zinc-700" strokeWidth="1.5" />
+              <line x1="100" y1="10" x2="100" y2="190" className="stroke-zinc-300 dark:stroke-zinc-700" strokeWidth="1.5" />
+
+              {/* center indicator badge */}
+              <circle cx="100" cy="100" r="26" className="fill-white dark:fill-zinc-950 stroke-zinc-300 dark:stroke-zinc-700" strokeWidth="2" />
+              <text x="100" y="104" textAnchor="middle" className="text-[10px] font-black fill-zinc-900 dark:fill-white font-sans">WHEEL</text>
+
+              {/* Quadrant Text Labels */}
+              <text x="56" y="56" className="text-[13px] font-black fill-emerald-800 dark:fill-emerald-400">P</text>
+              <text x="144" y="56" className="text-[13px] font-black fill-pink-800 dark:fill-pink-400">V</text>
+              <text x="56" y="152" className="text-[13px] font-black fill-amber-800 dark:fill-amber-400">I</text>
+              <text x="144" y="152" className="text-[13px] font-black fill-indigo-800 dark:fill-indigo-400">R</text>
+            </svg>
+
+            {/* Selected segment formulas list */}
+            <div className="w-full space-y-2 border-t border-zinc-200 dark:border-zinc-800 pt-3 text-center">
+              <span className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 block">
+                Formulas to calculate <strong className="text-zinc-900 dark:text-zinc-100 font-bold">{wheelFocus}</strong>:
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {getFormulaWheelData(wheelFocus).map((item, i) => (
+                  <div key={i} className="p-2 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-xl text-center">
+                    <div className="text-xs font-sans tabular-nums font-black text-blue-600 dark:text-blue-400">{item.formula}</div>
+                    <div className="text-[9px] text-zinc-400 font-semibold">{item.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* RIGHT COLUMN: STICKY RESULTS PANEL */}
         <div className="lg:col-span-5 space-y-4 sticky top-4">
-          {/* DYNAMIC SVG ILLUSTRATION (only when color code is active) */}
+          {/* DYNAMIC SVG RESISTOR BAND VISUALIZER */}
           {activeTab === "color" && !validationErrors.length && result && result.bands && (
             <div className="p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-md space-y-2">
               <h4 className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider text-center">Resistor Band Visualizer</h4>
@@ -940,7 +1348,10 @@ export function ResistorCalculator() {
           )}
 
           {/* RESULTS CARD */}
-          <div className="p-4 sm:p-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-2xl border border-blue-600/30 dark:border-blue-500/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08),0_2px_6px_-1px_rgba(0,0,0,0.04)] space-y-4">
+          <div 
+            aria-live="polite"
+            className="p-4 sm:p-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-2xl border border-blue-600/30 dark:border-blue-500/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08),0_2px_6px_-1px_rgba(0,0,0,0.04)] space-y-4"
+          >
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
               <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
                 <span>⚡</span> Resistor Suite Outputs
@@ -951,7 +1362,7 @@ export function ResistorCalculator() {
                   variant="outline"
                   size="sm"
                   onClick={handleSave}
-                  className="h-7 text-xs gap-1.5 border border-slate-200 dark:border-slate-700 bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer rounded-lg"
+                  className="h-7 text-xs gap-1 border border-slate-200 dark:border-slate-700 bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer rounded-lg"
                 >
                   {justSaved ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Bookmark className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />}
                   {justSaved ? "Saved!" : "Save"}
@@ -960,17 +1371,17 @@ export function ResistorCalculator() {
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={handleCopy}
-                  className="h-7 text-xs gap-1.5 border border-slate-200 dark:border-slate-700 bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer rounded-lg"
+                  onClick={handleCopyResult}
+                  className="h-7 text-xs gap-1 border border-slate-200 dark:border-slate-700 bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer rounded-lg"
                 >
-                  {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
-                  {copied ? "Copied" : "Copy"}
+                  {copiedResult ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                  {copiedResult ? "Copied" : "Copy"}
                 </Button>
               </div>
             </div>
 
             {validationErrors.length > 0 ? (
-              <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 rounded-xl text-xs text-red-600 dark:text-red-400 font-semibold space-y-1">
+              <div role="alert" className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 rounded-xl text-xs text-red-600 dark:text-red-400 font-semibold space-y-1">
                 <div className="font-bold flex items-center gap-1.5">
                   <Info className="w-3.5 h-3.5 shrink-0" /> Input Validation Errors:
                 </div>
@@ -1007,12 +1418,74 @@ export function ResistorCalculator() {
                       <span className="text-slate-500 dark:text-slate-400 font-medium">Minimum resistance:</span>
                       <span className="font-bold text-slate-800 dark:text-slate-100">{formatOhms(result.minOhms)}</span>
                     </div>
-                    <div className="flex justify-between items-center py-1">
+                    <div className="flex justify-between items-center py-1 border-b border-slate-200/60 dark:border-slate-700/60">
                       <span className="text-slate-500 dark:text-slate-400 font-medium">Maximum resistance:</span>
                       <span className="font-bold text-slate-800 dark:text-slate-100">{formatOhms(result.maxOhms)}</span>
                     </div>
+                    {result.errorPct !== undefined && (
+                      <div className="flex justify-between items-center py-1">
+                        <span className="text-slate-500 dark:text-slate-400 font-medium">Deviation from target:</span>
+                        <span className="font-bold text-slate-800 dark:text-slate-100">{result.errorPct >= 0 ? "+" : ""}{result.errorPct}%</span>
+                      </div>
+                    )}
                   </div>
                 )}
+
+                {/* EXPORT ACTION TOOLBAR */}
+                <div className="pt-2 border-t border-slate-100 dark:border-slate-800 no-print space-y-2">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Export & Reports</span>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleCopySummary}
+                      className="h-7 text-[11px] gap-1 px-1.5 bg-white dark:bg-slate-800 hover:bg-slate-50 border-slate-200 dark:border-slate-700 cursor-pointer"
+                    >
+                      {copiedSummary ? <Check className="w-3 h-3 text-emerald-600" /> : <FileText className="w-3 h-3 text-blue-500" />}
+                      {copiedSummary ? "Copied!" : "Summary"}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleExportCsv}
+                      className="h-7 text-[11px] gap-1 px-1.5 bg-white dark:bg-slate-800 hover:bg-slate-50 border-slate-200 dark:border-slate-700 cursor-pointer"
+                    >
+                      <Download className="w-3 h-3 text-emerald-500" />
+                      CSV
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleExportTxt}
+                      className="h-7 text-[11px] gap-1 px-1.5 bg-white dark:bg-slate-800 hover:bg-slate-50 border-slate-200 dark:border-slate-700 cursor-pointer"
+                    >
+                      <FileText className="w-3 h-3 text-amber-500" />
+                      TXT
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleExportLatex}
+                      className="h-7 text-[11px] gap-1 px-1.5 bg-white dark:bg-slate-800 hover:bg-slate-50 border-slate-200 dark:border-slate-700 cursor-pointer"
+                    >
+                      {copiedLatex ? <Check className="w-3 h-3 text-emerald-600" /> : <Code className="w-3 h-3 text-indigo-500" />}
+                      {copiedLatex ? "Copied!" : "LaTeX"}
+                    </Button>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowReportModal(true)}
+                    className="w-full h-8 text-xs gap-1.5 bg-blue-50/50 hover:bg-blue-100/50 dark:bg-blue-950/30 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-900/50 font-bold cursor-pointer rounded-xl"
+                  >
+                    <Printer className="w-3.5 h-3.5" /> Generate Printable PDF Report
+                  </Button>
+                </div>
               </div>
             ) : (
               <div className="text-center py-6 text-slate-400 text-xs">
@@ -1033,7 +1506,7 @@ export function ResistorCalculator() {
                     setSavedItems([]);
                     localStorage.removeItem("saved_resistor_calculations");
                   }}
-                  className="text-[10px] text-zinc-400 hover:text-red-500 font-semibold"
+                  className="text-[10px] text-zinc-400 hover:text-red-500 font-semibold cursor-pointer"
                 >
                   Clear All
                 </button>
@@ -1043,7 +1516,6 @@ export function ResistorCalculator() {
                   <div key={item.id} className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-sans tabular-nums">
                     <button
                       onClick={() => {
-                        // Restore saved inputs
                         const inputs = item.inputs;
                         setActiveTab(item.tab);
                         if (item.tab === "color") {
@@ -1071,6 +1543,7 @@ export function ResistorCalculator() {
                           setConductorDiameterUnit(inputs.conductorDiameterUnit);
                           setConductorArea(String(inputs.conductorArea));
                           setConductorAreaUnit(inputs.conductorAreaUnit);
+                          setConductorAwg(String(inputs.conductorAwg || "14"));
                           setConductorMaterial(inputs.conductorMaterial);
                           setConductorTemp(String(inputs.conductorTemp));
                         } else if (item.tab === "smd") {
@@ -1081,14 +1554,15 @@ export function ResistorCalculator() {
                           setFinderESeries(inputs.finderESeries);
                         }
                       }}
-                      className="text-left font-bold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 truncate flex-1"
+                      className="text-left font-bold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 truncate flex-1 cursor-pointer"
                     >
                       <div className="text-[10px] text-zinc-400">{item.timestamp}</div>
                       {item.title}
                     </button>
                     <button
                       onClick={() => handleDeleteSaved(item.id)}
-                      className="text-zinc-400 hover:text-red-500 p-0.5 ml-2"
+                      className="text-zinc-400 hover:text-red-500 p-0.5 ml-2 cursor-pointer"
+                      aria-label={`Delete saved item ${item.title}`}
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -1100,7 +1574,7 @@ export function ResistorCalculator() {
 
           {/* STEP BY STEP FORMULA BREAKDOWN */}
           {result && result.calculationSteps && (
-            <details className="p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-3 group outline-none">
+            <details className="p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-3 group outline-hidden">
               <summary className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 cursor-pointer flex items-center justify-between select-none">
                 <span>📘 Show Calculation Breakdown</span>
                 <span className="text-[10px] font-sans tabular-nums group-open:hidden">Expand +</span>
@@ -1115,6 +1589,15 @@ export function ResistorCalculator() {
           )}
         </div>
       </div>
+
+      {/* PDF / Print Report Modal */}
+      {showReportModal && reportData && (
+        <ReportModal
+          isOpen={showReportModal}
+          onClose={() => setShowReportModal(false)}
+          reportData={reportData}
+        />
+      )}
     </div>
   );
 }

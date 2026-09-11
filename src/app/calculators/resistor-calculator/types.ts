@@ -39,11 +39,12 @@ export interface ResistorCalculatorInputs {
   // Conductor
   conductorLength?: number;
   conductorLengthUnit?: "mm" | "cm" | "m" | "km" | "in" | "ft" | "yd" | "mile";
-  conductorSizeInputType?: "diameter" | "area";
+  conductorSizeInputType?: "diameter" | "area" | "awg";
   conductorDiameter?: number;
   conductorDiameterUnit?: "mm" | "cm" | "in";
   conductorArea?: number;
   conductorAreaUnit?: "mm²" | "cm²" | "in²";
+  conductorAwg?: number | string;
   conductorMaterial?: string;
   conductorTemp?: number; // Current temperature in °C
 
@@ -65,6 +66,7 @@ export interface ResistorCalculatorOutputs {
   maxOhms?: number;
   tolerancePct?: number;
   tempCoeffPpm?: number;
+  errorPct?: number;
   bands?: ResistorColor[];
   calculationSteps?: string;
   error?: string;
