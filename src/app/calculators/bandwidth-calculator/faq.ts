@@ -2,43 +2,83 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const bandwidth_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "Why is my actual download speed slower than the speed advertised by my ISP?",
-    answer: "Advertised ISP speeds represent maximum physical line sync rates measured in Megabits per second (Mbps). Actual throughput is lower due to protocol overhead (TCP/IP header loss ~5%–10%), Wi-Fi interference (~15%), network congestion during peak hours, and host server rate-limiting. Furthermore, operating systems measure file downloads in Megabytes per second (MB/s), which are 8 times smaller than Megabit numbers."
+    question: "How do I calculate download time from Mbps?",
+    answer: "Convert the file size to bytes, multiply by 8 to obtain bits, then divide by the connection speed in bits per second: Time = File Size in Bytes × 8 / Bandwidth in bps. For a realistic estimate, additional loss or efficiency assumptions can be applied."
   },
   {
-    question: "What is the difference between Megabits per second (Mbps) and Megabytes per second (MB/s)?",
-    answer: "A bit (b) is the smallest binary data unit, while a Byte (B) contains 8 bits (1 Byte = 8 bits). Internet Service Providers advertise link speeds in Megabits per second (Mbps), while operating systems and file downloaders display speeds in Megabytes per second (MB/s). To convert Mbps to MB/s, divide the bitrate by 8 (e.g., 100 Mbps / 8 = 12.5 MB/s)."
+    question: "How many MB/s is 100 Mbps?",
+    answer: "Using the standard 8-bit byte relationship: 100 Mbps ÷ 8 = 12.5 MB/s. This is a unit conversion. Actual application throughput may be lower."
   },
   {
-    question: "How much protocol overhead loss should I factor into transfer calculations?",
-    answer: "On standard wired Ethernet and fiber connections, TCP/IP header encapsulation, preamble framing, and TCP acknowledgements (ACKs) account for 5% to 10% overhead. On wireless networks (Wi-Fi 5/6), packet retransmissions and RF interference increase overhead to 15%–20%. Mobile cellular networks (4G LTE and 5G) experience volatility loss ranging from 15% to 25%."
+    question: "How long does a 10 GB file take to download at 100 Mbps?",
+    answer: "The ideal theoretical duration is 13 minutes 20 seconds. The calculator's reference realistic model with 10% overhead and 90% ISP efficiency produces approximately 16 minutes 28 seconds. The difference comes from the assumptions applied to the effective rate."
   },
   {
-    question: "How much bandwidth does a household or office need for 4K streaming and remote work?",
-    answer: "A single 4K UHD video stream requires ~25 Mbps of sustained bandwidth. HD 1080p video streams require ~5 Mbps, Zoom video calls require ~3.5 Mbps per user, and online gaming requires ~4 Mbps with low latency. Households or small offices with multiple simultaneous users should select an internet plan with 20% to 30% safety headroom above their total peak concurrent bitrate (e.g., 300 Mbps to 500 Mbps for a 4-person household)."
+    question: "Why is my real download speed lower than my ISP's advertised speed?",
+    answer: "Advertised bandwidth represents the provisioned or nominal access rate. Actual end-to-end throughput can be affected by protocol overhead, congestion, Wi-Fi conditions, latency, server limitations, packet loss and endpoint limitations. IETF throughput-testing guidance explicitly treats bandwidth and measured TCP throughput as related but distinct quantities."
   },
   {
-    question: "What is the difference between asymmetric and symmetric internet connections?",
-    answer: "Asymmetric connections (such as cable broadband and ADSL) offer high download speeds but significantly lower upload speeds (e.g., 300 Mbps down / 10 Mbps up). Symmetric connections (such as fiber-optic internet) deliver identical download and upload speeds. Upload bandwidth is critical for video conferencing, cloud storage backups, live broadcasting, and server hosting."
+    question: "What is the difference between Mbps and MB/s?",
+    answer: "Mbps means megabits per second. MB/s means megabytes per second. Because 1 byte = 8 bits, you divide Mbps by 8 to obtain MB/s."
   },
   {
-    question: "How do I calculate web server hosting bandwidth requirements for a website?",
-    answer: "Web hosting bandwidth is calculated using the formula: Monthly Bandwidth (GB) = Monthly Page Views × Average Page Size (MB) × (1 + Bot Overhead %) / 1000. To determine the required server port capacity in Mbps, convert monthly bytes to bits, divide by average seconds in a month (approx. 2,629,800), and apply a peak traffic surge multiplier (2.0x to 5.0x) to accommodate traffic spikes."
+    question: "What is the difference between GB and GiB?",
+    answer: "A gigabyte is a decimal unit: 1 GB = 10⁹ bytes. A gibibyte is a binary unit: 1 GiB = 2³⁰ bytes. NIST distinguishes SI decimal prefixes from the IEC binary prefixes specifically to avoid this ambiguity."
   },
   {
-    question: "Why does a 100 Mbps internet connection take longer than 80 seconds to download a 1 GB file?",
-    answer: "A 1 GB file equals 8 Gigabits (8,000 Megabits). At a theoretical speed of 100 Mbps, 8,000 / 100 = 80 seconds. However, real-world factors such as 10% TCP/IP protocol overhead, ISP line efficiency (~90%), TCP slow-start algorithms, and server upload limits increase the realistic transfer duration to approximately 98–105 seconds."
+    question: "How much bandwidth does a website need?",
+    answer: "It depends on traffic volume and average payload size. A first-order estimate is: Monthly Data = Page Views × Average Payload × (1 + Overhead). The calculator then converts that total to average and peak network requirements."
   },
   {
-    question: "How does network latency (ping) affect file transfer speeds?",
-    answer: "While bandwidth dictates the maximum volume of data transmitted per second, latency (round-trip time in ms) dictates how fast requests and TCP ACKs travel between client and server. High latency delays TCP window scaling, reducing single-TCP-stream throughput over long geographical distances—a phenomenon known as the Bandwidth-Delay Product (BDP) constraint."
+    question: "How much bandwidth should I allow for peak website traffic?",
+    answer: "Use the average bandwidth as the baseline and apply an appropriate surge multiplier. For example: 8.75 Mbps × 2 = 17.5 Mbps. The correct multiplier depends on the site's actual traffic pattern rather than a universal standard."
   },
   {
-    question: "How long does it take to exhaust a 1.2 TB monthly ISP data cap?",
-    answer: "Exhaustion time depends on continuous download speed. At 100 Mbps (12.5 MB/s), downloading continuously will exhaust a 1.2 TB (1,200,000 MB) data cap in approximately 26 hours and 40 minutes. At 1 Gbps (1000 Mbps), a 1.2 TB cap can be depleted in just 2 hours and 40 minutes of uninterrupted downloading."
+    question: "How much bandwidth does a 4K video stream use?",
+    answer: "There is no single universal number because it depends on the codec, resolution, frame rate, compression and service. The calculator uses a configurable activity profile rather than claiming one fixed bandwidth requirement applies to every 4K stream."
   },
   {
-    question: "What is the difference between SI Base-1000 and IEC Base-1024 data units?",
-    answer: "SI decimal metric standards (used by ISPs, networking hardware, and storage manufacturers) define units in powers of 10 (1 Gigabyte (GB) = 1,000 Megabytes (MB) = 10^9 Bytes). IEC binary standards (historically used by Windows operating systems) define units in powers of 2 (1 Gibibyte (GiB) = 1,024 Mebibytes (MiB) = 2^30 Bytes). This mathematical difference explains why a 1 TB drive displays as approximately 931 GiB in Windows."
+    question: "How do I calculate bandwidth for multiple users?",
+    answer: "Estimate the simultaneous activities and their per-activity rates: Aggregate = Σ(Count × Rate). Then add headroom: Recommended = Aggregate × (1 + Headroom/100). This approach is used directly by the concurrency-planning module and is verified by the calculator's production tests."
+  },
+  {
+    question: "What is bandwidth headroom?",
+    answer: "Bandwidth headroom is additional capacity reserved above the calculated baseline. It helps accommodate demand spikes and normal variability without immediately saturating the link. The calculator allows the headroom percentage to be adjusted rather than assuming one fixed value."
+  },
+  {
+    question: "Does latency affect download speed?",
+    answer: "Latency does not simply change the nominal bandwidth of the physical link, but it can influence application throughput, particularly for protocols such as TCP where round-trip timing and available window sizes matter. IETF TCP-throughput guidance explicitly considers round-trip time, bottleneck bandwidth and socket buffers when evaluating achievable throughput."
+  },
+  {
+    question: "What is the bandwidth-delay product?",
+    answer: "The bandwidth-delay product is approximately: BDP = Bandwidth × RTT. It describes the quantity of data that corresponds to the bandwidth available during one round-trip interval. It is useful when reasoning about high-bandwidth, high-latency paths."
+  },
+  {
+    question: "How quickly will a 1.2 TB data cap be exhausted at 100 Mbps?",
+    answer: "Under the calculator's decimal-unit continuous-transfer model: 1.2 TB = 9.6 × 10¹² bits. At 100,000,000 bits/s, the theoretical continuous duration is 96,000 seconds = 1 day 2 hours 40 minutes. The actual time in a household or office will normally be much longer because usage is intermittent."
+  },
+  {
+    question: "Does 1 Gbps mean I can download at 1 GB/s?",
+    answer: "No. A 1 Gbps connection corresponds to: 1,000 Mbps ÷ 8 = 125 MB/s before considering real-world efficiency and overhead."
+  },
+  {
+    question: "Is bandwidth the same as throughput?",
+    answer: "No. Bandwidth refers to the capacity of a communication channel, while throughput refers to the actual rate of successfully delivered data. They can differ because of congestion, protocol behavior, packet loss, network conditions and endpoint limitations."
+  },
+  {
+    question: "What is the difference between upload and download bandwidth?",
+    answer: "Download bandwidth describes data moving toward the user or endpoint. Upload bandwidth describes data moving away from the endpoint. Some access networks are asymmetric, meaning the download capacity is substantially higher than the upload capacity. The practical impact becomes important for cloud backups, live broadcasting, remote file sharing and other upload-heavy applications."
+  },
+  {
+    question: "Does protocol overhead always equal 10%?",
+    answer: "No. Ten percent is an explicit assumption used by the calculator's reference scenario, not a universal networking constant. Actual overhead depends on the protocol stack, packetization, framing, retransmissions and other conditions. The calculator therefore exposes overhead as an input rather than pretending one value applies universally."
+  },
+  {
+    question: "Can a bandwidth calculator predict my exact real download time?",
+    answer: "No calculator can guarantee an exact future Internet transfer duration from link speed alone. It can produce a mathematical estimate using explicit assumptions. Actual performance can change because of congestion, network path characteristics, server capacity, Wi-Fi conditions, latency, packet loss and other variables. IETF guidance similarly distinguishes provisioned bandwidth from measured end-to-end TCP throughput."
+  },
+  {
+    question: "Why do websites need more bandwidth during traffic spikes?",
+    answer: "Monthly or daily averages hide short periods of high demand. If many users request pages or media simultaneously, the instantaneous traffic rate can be several times higher than the average. That is why the hosting module includes a configurable peak-surge multiplier rather than sizing only from average monthly traffic."
   }
 ];
