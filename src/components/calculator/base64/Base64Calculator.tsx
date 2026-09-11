@@ -93,10 +93,12 @@ function decodeBase64(
   charset: "UTF-8" | "ASCII" | "UTF-16" | "Latin-1",
   lineByLine: boolean
 ): { output: string; error?: string } {
-  if (!str.trim()) return { output: "" };
+  if (!str) return { output: "" };
+  if (!lineByLine && !str.trim()) return { output: "" };
 
   try {
     const processSingle = (b64Input: string): string => {
+      if (!b64Input.trim()) return "";
       let cleaned = b64Input.trim().replace(/\s+/g, "");
 
       if (variant === "urlsafe") {
@@ -128,8 +130,8 @@ function decodeBase64(
     };
 
     if (lineByLine) {
-      const lines = str.split("\n").filter((l) => l.trim().length > 0);
-      const decoded = lines.map((l) => processSingle(l));
+      const lines = str.split("\n");
+      const decoded = lines.map((l) => (l.trim() === "" ? "" : processSingle(l)));
       return { output: decoded.join("\n") };
     }
 
@@ -184,19 +186,40 @@ export function Base64Calculator() {
 
   // Analytics Computation
   const analytics = useMemo(() => {
-    const inputStr = tabMode === "text" ? inputText : selectedFile ? `${selectedFile.name}` : "";
-    const outputStr = tabMode === "text" ? textResult.output : fileBase64;
+    let inBytes = 0;
+    let outBytes = 0;
+    let inputChars = 0;
+    let outputChars = 0;
+    let lines = 0;
+    let ratio = 0;
 
-    const inBytes = new TextEncoder().encode(inputStr).length;
-    const outBytes = new TextEncoder().encode(outputStr).length;
-    const ratio = inBytes > 0 ? ((outBytes - inBytes) / inBytes) * 100 : 0;
-    const lines = outputStr ? outputStr.split("\n").length : 0;
+    if (tabMode === "text") {
+      const inputStr = inputText;
+      const outputStr = textResult.output;
+      inBytes = new TextEncoder().encode(inputStr).length;
+      outBytes = new TextEncoder().encode(outputStr).length;
+      inputChars = inputStr.length;
+      outputChars = outputStr.length;
+      lines = outputStr ? outputStr.split("\n").length : 0;
+      ratio = inBytes > 0 ? ((outBytes - inBytes) / inBytes) * 100 : 0;
+    } else {
+      // File mode: derive payload bytes strictly from selectedFile.size
+      if (selectedFile) {
+        inBytes = selectedFile.size;
+        inputChars = selectedFile.size;
+        const rawB64 = fileBase64.includes(",") ? fileBase64.split(",")[1] : fileBase64;
+        outBytes = rawB64.length;
+        outputChars = rawB64.length;
+        lines = 1;
+        ratio = inBytes > 0 ? ((outBytes - inBytes) / inBytes) * 100 : 0;
+      }
+    }
 
     return {
       inputBytes: inBytes,
       outputBytes: outBytes,
-      inputChars: inputStr.length,
-      outputChars: outputStr.length,
+      inputChars,
+      outputChars,
       expansionRatio: parseFloat(ratio.toFixed(2)),
       lineCount: lines,
     };
@@ -658,25 +681,39 @@ export function Base64Calculator() {
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
           <span className="text-[10px] text-zinc-400 font-bold block uppercase">Input Size</span>
           <span className="text-base font-black font-sans tabular-nums text-zinc-900 dark:text-zinc-100 block">
-            {analytics.inputBytes} Bytes
+            {analytics.inputBytes.toLocaleString()} Bytes
           </span>
-          <span className="text-[10px] text-zinc-400">{analytics.inputChars} characters</span>
+          <span className="text-[10px] text-zinc-400">
+            {tabMode === "text" ? `${analytics.inputChars.toLocaleString()} characters` : "Raw binary asset"}
+          </span>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
-          <span className="text-[10px] text-zinc-400 font-bold block uppercase">Encoded Size</span>
+          <span className="text-[10px] text-zinc-400 font-bold block uppercase">
+            {tabMode === "text" && opMode === "decode" ? "Decoded Size" : "Encoded Size"}
+          </span>
           <span className="text-base font-black font-sans tabular-nums text-blue-600 block">
-            {analytics.outputBytes} Bytes
+            {analytics.outputBytes.toLocaleString()} Bytes
           </span>
-          <span className="text-[10px] text-zinc-400">{analytics.outputChars} characters</span>
+          <span className="text-[10px] text-zinc-400">
+            {tabMode === "text" && opMode === "decode"
+              ? `${analytics.outputChars.toLocaleString()} plaintext chars`
+              : `${analytics.outputChars.toLocaleString()} characters`}
+          </span>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
-          <span className="text-[10px] text-zinc-400 font-bold block uppercase">Overhead Expansion Ratio</span>
+          <span className="text-[10px] text-zinc-400 font-bold block uppercase">
+            {tabMode === "text" && opMode === "decode" ? "Decoded Output Ratio" : "Overhead Expansion Ratio"}
+          </span>
           <span className={`text-base font-black font-sans tabular-nums block ${analytics.expansionRatio >= 0 ? "text-amber-600" : "text-emerald-600"}`}>
             {analytics.expansionRatio >= 0 ? `+${analytics.expansionRatio}%` : `${analytics.expansionRatio}%`}
           </span>
-          <span className="text-[10px] text-zinc-400">Standard 4:3 size bloat</span>
+          <span className="text-[10px] text-zinc-400">
+            {tabMode === "text" && opMode === "decode"
+              ? "Plaintext output relative to Base64"
+              : "Standard 4:3 size bloat"}
+          </span>
         </div>
 
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3.5 rounded-xl space-y-1">
