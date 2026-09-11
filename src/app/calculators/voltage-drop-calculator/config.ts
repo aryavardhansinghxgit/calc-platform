@@ -10,7 +10,7 @@ export const voltage_drop_calculatorConfig: CalculatorModuleDefinition = {
   slug: "voltage-drop-calculator",
   category: "other",
   subcategory: "Tech & Electrical",
-  description: "Calculate electrical wire voltage drop percentage based on wire gauge, current, distance, phase, power factor, and conduit type.",
+  description: "Calculate electrical voltage drop and load-terminal voltage from supply voltage, current, conductor size, distance, phase and conductor data. Compare wire sizes, check percentage drop and evaluate DC, single-phase AC and three-phase AC circuits.",
   iconName: "Zap",
   featured: true,
   keywords: [

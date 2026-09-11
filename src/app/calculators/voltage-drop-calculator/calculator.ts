@@ -64,11 +64,11 @@ export const METRIC_CONDUCTORS: ConductorData[] = [
 ];
 
 export function calculateVoltageDropCalculator(inputs: Record<string, any>): VoltageDropCalculatorOutputs {
-  // 1. Inputs Parsing & Sensible Defaults
-  const v = Math.max(0.1, inputs.voltage !== undefined ? Number(inputs.voltage) : 120);
-  const i = Math.max(0, inputs.currentAmps !== undefined ? Number(inputs.currentAmps) : 15);
+  // 1. Inputs Parsing without silent corrupting clamps
+  const v = inputs.voltage !== undefined ? Number(inputs.voltage) : 120;
+  const i = inputs.currentAmps !== undefined ? Number(inputs.currentAmps) : 15;
   const rawDist = inputs.distance !== undefined ? inputs.distance : (inputs.distanceFt !== undefined ? inputs.distanceFt : 100);
-  const distanceInput = Math.max(0, Number(rawDist) || 0);
+  const distanceInput = Number(rawDist);
   const distUnit = inputs.distanceUnit === "m" ? "m" : "ft";
   const phase = inputs.phase || "ac_single"; // dc, ac_single, ac_three
   const mode = inputs.mode || "nec"; // nec, estimated, custom
@@ -76,7 +76,7 @@ export function calculateVoltageDropCalculator(inputs: Record<string, any>): Vol
   const size = String(inputs.wireSize || inputs.wireGauge || "12");
   const condType = inputs.wireType || "awg"; // awg, metric
   const conduit = inputs.conduitMaterial || "pvc"; // pvc, steel, aluminum
-  const pf = Math.max(0, Math.min(1, inputs.powerFactor !== undefined ? Number(inputs.powerFactor) : 0.85));
+  const pf = inputs.powerFactor !== undefined ? Number(inputs.powerFactor) : 0.85;
   const condPerPhase = Math.max(1, Math.round(Number(inputs.conductorsPerPhase) || 1));
 
   // Convert distance to feet internally for lookup calculations
@@ -89,8 +89,8 @@ export function calculateVoltageDropCalculator(inputs: Record<string, any>): Vol
   // 2. Lookup parameters based on calculation mode
   if (mode === "custom") {
     // Custom resistance and reactance inputs
-    const rawR = Number(inputs.customResistance) || 0;
-    const rawX = Number(inputs.customReactance) || 0;
+    const rawR = inputs.customResistance !== undefined ? Number(inputs.customResistance) : 0;
+    const rawX = inputs.customReactance !== undefined ? Number(inputs.customReactance) : 0;
     const rUnit = inputs.customResistanceUnit || "ft"; // ft = /1000ft, m = /km
     const xUnit = inputs.customReactanceUnit || "ft";
 
@@ -117,12 +117,12 @@ export function calculateVoltageDropCalculator(inputs: Record<string, any>): Vol
   }
 
   // 3. Compute Effective Impedance (Z) per 1000 ft
-  if (phase === "dc") {
-    // DC: Z = R
+  if (phase === "dc" || mode === "estimated") {
+    // DC and Estimated Resistance mode: purely real resistive drop Z = R
     zPer1000Ft = rPer1000Ft;
   } else {
     // AC: Z = R * cos(theta) + X * sin(theta)
-    const sinTheta = Math.sqrt(1 - pf * pf);
+    const sinTheta = pf >= 0 && pf <= 1 ? Math.sqrt(Math.max(0, 1 - pf * pf)) : 0;
     zPer1000Ft = rPer1000Ft * pf + xPer1000Ft * sinTheta;
   }
 
@@ -144,33 +144,34 @@ export function calculateVoltageDropCalculator(inputs: Record<string, any>): Vol
 
   // V_drop = factor * I * L * Z_effective / 1000
   const vDrop = (factor * i * distanceFt * effectiveZ) / 1000;
-  const pct = v.valueOf() > 0 ? (vDrop / v) * 100 : 0;
-  const vLoad = Math.max(0, v - vDrop);
+  const pct = v > 0 ? (vDrop / v) * 100 : 0;
+  const vLoad = v - vDrop;
 
   // 5. Generate Formula Step breakdown text
   let breakdown = "";
-  if (phase === "dc") {
-    breakdown = `Voltage Drop (Vd) = (2 × L × I × R) / 1000\n` +
-      `  = (2 × ${distanceFt.toFixed(1)} ft × ${i} A × (${rPer1000Ft} Ω/1000ft / ${condPerPhase} parallel)) / 1000\n` +
-      `  = (2 × ${distanceFt.toFixed(1)} × ${i} × ${effectiveR.toFixed(5)}) / 1000\n` +
+  if (phase === "dc" || mode === "estimated") {
+    const fStr = phase === "ac_three" ? "√3" : "2";
+    breakdown = `Voltage Drop (Vd) = (${fStr} × I × L × R) / 1000\n` +
+      `  = (${fStr} × ${i} A × ${distanceFt.toFixed(2)} ft × (${rPer1000Ft} Ω/1000ft / ${condPerPhase} parallel)) / 1000\n` +
+      `  = (${fStr} × ${i} × ${distanceFt.toFixed(2)} × ${effectiveR.toFixed(5)}) / 1000\n` +
       `  = ${vDrop.toFixed(4)} V`;
   } else {
-    const sinTheta = Math.sqrt(1 - pf * pf);
+    const sinTheta = pf >= 0 && pf <= 1 ? Math.sqrt(Math.max(0, 1 - pf * pf)) : 0;
     const fStr = phase === "ac_three" ? "√3" : "2";
-    breakdown = `Z_effective = R_ac × PF + X_ac × sin(arccos(PF))\n` +
+    breakdown = `Effective Impedance (Z_eff) = R_ac × cos(θ) + X_ac × sin(θ)\n` +
       `  = (${rPer1000Ft} × ${pf}) + (${xPer1000Ft} × ${sinTheta.toFixed(4)})\n` +
       `  = ${zPer1000Ft.toFixed(5)} Ω/1000ft\n\n` +
-      `Impedance per Conductor Run (Z_run) = Z_effective / N\n` +
+      `Impedance per Conductor Run (Z_run) = Z_eff / N\n` +
       `  = ${zPer1000Ft.toFixed(5)} / ${condPerPhase} = ${effectiveZ.toFixed(5)} Ω/1000ft\n\n` +
       `Voltage Drop (Vd) = (${fStr} × I × L × Z_run) / 1000\n` +
-      `  = (${fStr} × ${i} A × ${distanceFt.toFixed(1)} ft × ${effectiveZ.toFixed(5)} Ω/1000ft) / 1000\n` +
+      `  = (${fStr} × ${i} A × ${distanceFt.toFixed(2)} ft × ${effectiveZ.toFixed(5)} Ω/1000ft) / 1000\n` +
       `  = ${vDrop.toFixed(4)} V`;
   }
 
   return {
-    voltageDrop: parseFloat(vDrop.toFixed(3)),
-    voltageDropPct: parseFloat(pct.toFixed(2)),
-    endVoltage: parseFloat(vLoad.toFixed(2)),
+    voltageDrop: vDrop,
+    voltageDropPct: pct,
+    endVoltage: vLoad,
     startingVoltage: v,
     current: i,
     distance: distanceInput,
@@ -180,9 +181,9 @@ export function calculateVoltageDropCalculator(inputs: Record<string, any>): Vol
     wireSize: condType === "metric" ? `${size} mm²` : `${size} AWG`,
     wireMaterial: mat.charAt(0).toUpperCase() + mat.slice(1),
     conductors: condPerPhase,
-    r: parseFloat(effectiveR.toFixed(5)),
-    x: parseFloat(effectiveX.toFixed(5)),
-    z: parseFloat(effectiveZ.toFixed(5)),
+    r: effectiveR,
+    x: effectiveX,
+    z: effectiveZ,
     formulaBreakdown: breakdown
   };
 }

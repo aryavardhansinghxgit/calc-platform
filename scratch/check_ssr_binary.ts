@@ -1,3 +1,5 @@
+export {};
+
 async function checkSSR() {
   const url = "http://localhost:3000/calculators/binary-calculator";
   console.log("Fetching:", url);

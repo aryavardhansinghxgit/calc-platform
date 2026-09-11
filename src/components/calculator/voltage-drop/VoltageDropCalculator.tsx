@@ -1,31 +1,133 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { Copy, Check, Bookmark, Trash2, History, Printer, Share2, Zap, Settings, RefreshCw, Info, HelpCircle } from "lucide-react";
-import { calculateVoltageDropCalculator, AWG_CONDUCTORS, METRIC_CONDUCTORS } from "@/app/calculators/voltage-drop-calculator/calculator";
-import { VoltageDropCalculatorInputs, VoltageDropCalculatorOutputs } from "@/app/calculators/voltage-drop-calculator/types";
+import {
+  Copy,
+  Check,
+  Bookmark,
+  Trash2,
+  History,
+  Printer,
+  Zap,
+  RefreshCw,
+  Info,
+  FileSpreadsheet,
+  FileText,
+  Code
+} from "lucide-react";
+import {
+  calculateVoltageDropCalculator,
+  AWG_CONDUCTORS,
+  METRIC_CONDUCTORS
+} from "@/app/calculators/voltage-drop-calculator/calculator";
+import {
+  VoltageDropCalculatorOutputs
+} from "@/app/calculators/voltage-drop-calculator/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const AWG_SIZES = AWG_CONDUCTORS.map(c => c.size);
-const METRIC_SIZES = METRIC_CONDUCTORS.map(c => c.size);
+const AWG_SIZES = AWG_CONDUCTORS.map((c) => c.size);
+const METRIC_SIZES = METRIC_CONDUCTORS.map((c) => c.size);
+
+export interface VoltageDropSavedRecord {
+  id: string;
+  title: string;
+  desc: string;
+  drop: string;
+  timestamp: string;
+  inputs: {
+    voltage: string;
+    currentAmps: string;
+    distance: string;
+    distanceUnit: "ft" | "m";
+    phase: "dc" | "ac_single" | "ac_three";
+    mode: "nec" | "estimated" | "custom";
+    wireMaterial: "copper" | "aluminum";
+    wireType: "awg" | "metric";
+    wireSize: string;
+    conduitMaterial: "pvc" | "steel" | "aluminum";
+    powerFactor: string;
+    conductorsPerPhase: string;
+    customResistance: string;
+    customReactance: string;
+    customResistanceUnit: "ft" | "m";
+    customReactanceUnit: "ft" | "m";
+    targetDropPct: string;
+  };
+}
 
 const PRESETS = [
   {
     name: "Residential 120V Branch Run (15A)",
-    inputs: { voltage: 120, currentAmps: 15, distance: 75, distanceUnit: "ft", phase: "ac_single", mode: "nec", wireMaterial: "copper", wireType: "awg", wireSize: "14", conduitMaterial: "pvc", powerFactor: 0.95, conductorsPerPhase: 1 }
+    inputs: {
+      voltage: 120,
+      currentAmps: 15,
+      distance: 75,
+      distanceUnit: "ft",
+      phase: "ac_single",
+      mode: "nec",
+      wireMaterial: "copper",
+      wireType: "awg",
+      wireSize: "14",
+      conduitMaterial: "pvc",
+      powerFactor: 0.95,
+      conductorsPerPhase: 1,
+      targetDropPct: 3
+    }
   },
   {
     name: "EV Charger Run (240V, 40A)",
-    inputs: { voltage: 240, currentAmps: 40, distance: 100, distanceUnit: "ft", phase: "ac_single", mode: "nec", wireMaterial: "copper", wireType: "awg", wireSize: "8", conduitMaterial: "pvc", powerFactor: 1.0, conductorsPerPhase: 1 }
+    inputs: {
+      voltage: 240,
+      currentAmps: 40,
+      distance: 100,
+      distanceUnit: "ft",
+      phase: "ac_single",
+      mode: "nec",
+      wireMaterial: "copper",
+      wireType: "awg",
+      wireSize: "8",
+      conduitMaterial: "pvc",
+      powerFactor: 1.0,
+      conductorsPerPhase: 1,
+      targetDropPct: 3
+    }
   },
   {
     name: "Industrial Motor Feed (480V 3Ø, 150A)",
-    inputs: { voltage: 480, currentAmps: 150, distance: 300, distanceUnit: "ft", phase: "ac_three", mode: "nec", wireMaterial: "copper", wireType: "awg", wireSize: "2/0", conduitMaterial: "steel", powerFactor: 0.85, conductorsPerPhase: 1 }
+    inputs: {
+      voltage: 480,
+      currentAmps: 150,
+      distance: 300,
+      distanceUnit: "ft",
+      phase: "ac_three",
+      mode: "nec",
+      wireMaterial: "copper",
+      wireType: "awg",
+      wireSize: "2/0",
+      conduitMaterial: "steel",
+      powerFactor: 0.85,
+      conductorsPerPhase: 1,
+      targetDropPct: 3
+    }
   },
   {
     name: "Solar PV DC Run (24V, 15A)",
-    inputs: { voltage: 24, currentAmps: 15, distance: 50, distanceUnit: "ft", phase: "dc", mode: "estimated", wireMaterial: "copper", wireType: "awg", wireSize: "10", conduitMaterial: "pvc", powerFactor: 1.0, conductorsPerPhase: 1 }
+    inputs: {
+      voltage: 24,
+      currentAmps: 15,
+      distance: 50,
+      distanceUnit: "ft",
+      phase: "dc",
+      mode: "estimated",
+      wireMaterial: "copper",
+      wireType: "awg",
+      wireSize: "10",
+      conduitMaterial: "pvc",
+      powerFactor: 1.0,
+      conductorsPerPhase: 1,
+      targetDropPct: 2
+    }
   }
 ];
 
@@ -33,7 +135,7 @@ export function VoltageDropCalculator() {
   // Mode selection: nec (NEC Table 9), estimated (DC/Table 8), custom (custom impedance)
   const [mode, setMode] = useState<"nec" | "estimated" | "custom">("nec");
 
-  // Core Inputs
+  // Core Inputs (stored as exact strings to allow valid 0 inputs and avoid premature coercions)
   const [voltage, setVoltage] = useState("120");
   const [currentAmps, setCurrentAmps] = useState("15");
   const [distance, setDistance] = useState("100");
@@ -56,9 +158,11 @@ export function VoltageDropCalculator() {
   // Multi-conductor Comparison Selector
   const [compareSizes, setCompareSizes] = useState<string[]>([]);
 
-  // Local/UI states
-  const [copied, setCopied] = useState(false);
-  const [savedItems, setSavedItems] = useState<Array<{ id: string; title: string; desc: string; drop: string; timestamp: string; inputs: any }>>([]);
+  // UI state
+  const [copiedResult, setCopiedResult] = useState(false);
+  const [copiedSummary, setCopiedSummary] = useState(false);
+  const [copiedLatex, setCopiedLatex] = useState(false);
+  const [savedItems, setSavedItems] = useState<VoltageDropSavedRecord[]>([]);
   const [justSaved, setJustSaved] = useState(false);
 
   // Sync wire size defaults when wire type shifts
@@ -80,58 +184,95 @@ export function VoltageDropCalculator() {
     } catch (e) {}
   }, []);
 
-  // Validation
+  // Strict Validation without silent clamping
   const validationErrors = useMemo(() => {
     const errors: string[] = [];
     const vVal = parseFloat(voltage);
     const iVal = parseFloat(currentAmps);
     const dVal = parseFloat(distance);
     const pfVal = parseFloat(powerFactor);
-    const condVal = parseInt(conductorsPerPhase);
+    const condVal = parseInt(conductorsPerPhase, 10);
     const targetVal = parseFloat(targetDropPct);
 
-    if (isNaN(vVal) || vVal <= 0) errors.push("Supply voltage must be greater than 0.");
-    if (isNaN(iVal) || iVal < 0) errors.push("Current cannot be negative.");
-    if (isNaN(dVal) || dVal <= 0) errors.push("Distance must be greater than 0.");
-    if (phase !== "dc") {
-      if (isNaN(pfVal) || pfVal < 0 || pfVal > 1) errors.push("Power factor must be between 0.0 and 1.0.");
+    if (voltage.trim() === "" || isNaN(vVal) || vVal <= 0) {
+      errors.push("Supply voltage must be greater than 0.");
     }
-    if (isNaN(condVal) || condVal < 1) errors.push("Parallel conductors must be 1 or more.");
-    if (isNaN(targetVal) || targetVal <= 0 || targetVal > 100) errors.push("Target drop % must be between 0.1% and 100%.");
+    if (currentAmps.trim() === "" || isNaN(iVal) || iVal < 0) {
+      errors.push("Current cannot be negative.");
+    }
+    if (distance.trim() === "" || isNaN(dVal) || dVal < 0) {
+      errors.push("Distance cannot be negative.");
+    }
+    if (phase !== "dc" && mode !== "estimated") {
+      if (powerFactor.trim() === "" || isNaN(pfVal) || pfVal < 0 || pfVal > 1) {
+        errors.push("Power factor must be between 0.0 and 1.0.");
+      }
+    }
+    if (conductorsPerPhase.trim() === "" || isNaN(condVal) || condVal < 1) {
+      errors.push("Parallel conductors must be 1 or more.");
+    }
+    if (targetDropPct.trim() === "" || isNaN(targetVal) || targetVal <= 0 || targetVal > 100) {
+      errors.push("Target drop % must be between 0.1% and 100%.");
+    }
 
     if (mode === "custom") {
       const rVal = parseFloat(customResistance);
       const xVal = parseFloat(customReactance);
-      if (isNaN(rVal) || rVal < 0) errors.push("Custom resistance cannot be negative.");
-      if (isNaN(xVal) || xVal < 0) errors.push("Custom reactance cannot be negative.");
+      if (customResistance.trim() === "" || isNaN(rVal) || rVal < 0) {
+        errors.push("Custom resistance cannot be negative.");
+      }
+      if (customReactance.trim() === "" || isNaN(xVal) || xVal < 0) {
+        errors.push("Custom reactance cannot be negative.");
+      }
     }
 
     return errors;
-  }, [voltage, currentAmps, distance, phase, powerFactor, conductorsPerPhase, targetDropPct, mode, customResistance, customReactance]);
+  }, [
+    voltage,
+    currentAmps,
+    distance,
+    phase,
+    powerFactor,
+    conductorsPerPhase,
+    targetDropPct,
+    mode,
+    customResistance,
+    customReactance
+  ]);
 
-  // Apply Preset
+  // Apply Preset cleanly setting all state fields
   const applyPreset = (preset: typeof PRESETS[0]) => {
-    const inputs = preset.inputs;
-    setVoltage(String(inputs.voltage));
-    setCurrentAmps(String(inputs.currentAmps));
-    setDistance(String(inputs.distance));
-    setDistanceUnit(inputs.distanceUnit as any);
-    setPhase(inputs.phase as any);
-    setMode(inputs.mode as any);
-    setWireMaterial(inputs.wireMaterial as any);
-    setWireType(inputs.wireType as any);
-    setWireSize(inputs.wireSize);
-    setConduitMaterial(inputs.conduitMaterial as any);
-    setPowerFactor(String(inputs.powerFactor));
-    setConductorsPerPhase(String(inputs.conductorsPerPhase));
+    const inp = preset.inputs;
+    setVoltage(String(inp.voltage));
+    setCurrentAmps(String(inp.currentAmps));
+    setDistance(String(inp.distance));
+    setDistanceUnit(inp.distanceUnit as any);
+    setPhase(inp.phase as any);
+    setMode(inp.mode as any);
+    setWireMaterial(inp.wireMaterial as any);
+    setWireType(inp.wireType as any);
+    setWireSize(inp.wireSize);
+    setConduitMaterial(inp.conduitMaterial as any);
+    setPowerFactor(String(inp.powerFactor));
+    setConductorsPerPhase(String(inp.conductorsPerPhase));
+    setTargetDropPct(String(inp.targetDropPct));
   };
 
-  // Compile calculations inputs
+  // Compile calculations inputs without falsy zero coercions
   const currentInputs = useMemo<Record<string, any>>(() => {
+    const vNum = parseFloat(voltage);
+    const iNum = parseFloat(currentAmps);
+    const dNum = parseFloat(distance);
+    const pfNum = parseFloat(powerFactor);
+    const condNum = parseInt(conductorsPerPhase, 10);
+    const targetNum = parseFloat(targetDropPct);
+    const customRNum = parseFloat(customResistance);
+    const customXNum = parseFloat(customReactance);
+
     return {
-      voltage: parseFloat(voltage) || 120,
-      currentAmps: parseFloat(currentAmps) || 15,
-      distance: parseFloat(distance) || 100,
+      voltage: isNaN(vNum) ? 120 : vNum,
+      currentAmps: isNaN(iNum) ? 15 : iNum,
+      distance: isNaN(dNum) ? 100 : dNum,
       distanceUnit,
       phase,
       mode,
@@ -139,17 +280,35 @@ export function VoltageDropCalculator() {
       wireType,
       wireSize,
       conduitMaterial,
-      powerFactor: parseFloat(powerFactor) || 0.85,
-      conductorsPerPhase: parseInt(conductorsPerPhase) || 1,
-      customResistance: parseFloat(customResistance) || 0,
-      customReactance: parseFloat(customReactance) || 0,
+      powerFactor: isNaN(pfNum) ? 0.85 : pfNum,
+      conductorsPerPhase: isNaN(condNum) || condNum < 1 ? 1 : condNum,
+      customResistance: isNaN(customRNum) ? 0 : customRNum,
+      customReactance: isNaN(customXNum) ? 0 : customXNum,
       customResistanceUnit,
       customReactanceUnit,
-      targetDropPct: parseFloat(targetDropPct) || 3
+      targetDropPct: isNaN(targetNum) ? 3 : targetNum
     };
-  }, [voltage, currentAmps, distance, distanceUnit, phase, mode, wireMaterial, wireType, wireSize, conduitMaterial, powerFactor, conductorsPerPhase, customResistance, customReactance, customResistanceUnit, customReactanceUnit, targetDropPct]);
+  }, [
+    voltage,
+    currentAmps,
+    distance,
+    distanceUnit,
+    phase,
+    mode,
+    wireMaterial,
+    wireType,
+    wireSize,
+    conduitMaterial,
+    powerFactor,
+    conductorsPerPhase,
+    customResistance,
+    customReactance,
+    customResistanceUnit,
+    customReactanceUnit,
+    targetDropPct
+  ]);
 
-  // Run core calculation
+  // Run core calculation with full floating precision
   const result: VoltageDropCalculatorOutputs | null = useMemo(() => {
     if (validationErrors.length > 0) return null;
     try {
@@ -159,88 +318,122 @@ export function VoltageDropCalculator() {
     }
   }, [currentInputs, validationErrors]);
 
-  // Status computation
+  // Status computation honoring user target thresholds
   const statusInfo = useMemo(() => {
     if (!result) return { text: "No Data", color: "text-zinc-500 bg-zinc-100 dark:bg-zinc-800" };
     const pct = result.voltageDropPct;
     const target = parseFloat(targetDropPct) || 3;
 
-    if (pct < 1.5) {
-      return { text: "Excellent (Very Low Loss)", color: "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800" };
-    } else if (pct <= target) {
-      return { text: "Acceptable (Within Target)", color: "text-blue-700 bg-blue-50 dark:text-blue-400 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800" };
+    if (pct <= target) {
+      if (pct <= 1.5 && pct <= target) {
+        return {
+          text: "Excellent (Very Low Loss)",
+          color:
+            "text-emerald-700 bg-emerald-50 dark:text-emerald-400 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800"
+        };
+      }
+      return {
+        text: "Acceptable (Within Target)",
+        color:
+          "text-blue-700 bg-blue-50 dark:text-blue-400 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800"
+      };
     } else {
-      return { text: "High Voltage Drop (Consider Upgrading)", color: "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-950/40 border border-red-200 dark:border-red-800" };
+      return {
+        text: "High Voltage Drop (Consider Upgrading)",
+        color:
+          "text-red-700 bg-red-50 dark:text-red-400 dark:bg-red-950/40 border border-red-200 dark:border-red-800"
+      };
     }
   }, [result, targetDropPct]);
 
-  // Dynamic recommendations for alternate wire sizes
-  const recommendations = useMemo(() => {
-    if (!result) return [];
+  // Dynamic recommendations for "What If?" Conductor Table
+  const whatIfRows = useMemo(() => {
+    if (!result || mode === "custom") return [];
     const sizes = wireType === "awg" ? AWG_SIZES : METRIC_SIZES;
     const currentIndex = sizes.indexOf(wireSize);
-    if (currentIndex === -1) return [];
 
-    // Calculate drops for sizes around the current wire size
-    const range = [-2, -1, 1, 2, 3];
-    const recs = [];
-
-    for (const offset of range) {
-      const idx = currentIndex + offset;
-      if (idx >= 0 && idx < sizes.length) {
-        const altSize = sizes[idx];
-        const altInputs = { ...currentInputs, wireSize: altSize };
-        try {
-          const altRes = calculateVoltageDropCalculator(altInputs);
-          recs.push({
-            size: altSize,
-            voltageDrop: altRes.voltageDrop,
-            voltageDropPct: altRes.voltageDropPct,
-            endVoltage: altRes.endVoltage,
-            isBetter: altRes.voltageDropPct < result.voltageDropPct,
-            isCurrent: false
-          });
-        } catch (e) {}
-      }
+    // Pick 4 surrounding or standard comparative sizes
+    let candidateSizes: string[] = [];
+    if (wireType === "awg" && ["14", "12", "10", "8", "6"].includes(wireSize)) {
+      candidateSizes = ["14", "12", "10", "8", "6"].filter((s) => s !== wireSize);
+    } else if (currentIndex !== -1) {
+      const offsets = [-2, -1, 1, 2];
+      candidateSizes = offsets
+        .map((offset) => sizes[currentIndex + offset])
+        .filter(Boolean);
     }
-    return recs.sort((a, b) => b.voltageDropPct - a.voltageDropPct);
-  }, [result, currentInputs, wireType, wireSize]);
 
-  // Compare selected list
+    const rows = candidateSizes.map((altSize) => {
+      const altInputs = { ...currentInputs, wireSize: altSize };
+      const altRes = calculateVoltageDropCalculator(altInputs);
+      return {
+        size: altSize,
+        voltageDrop: altRes.voltageDrop,
+        voltageDropPct: altRes.voltageDropPct,
+        endVoltage: altRes.endVoltage,
+        isCurrent: false
+      };
+    });
+
+    // Sort by drop percentage descending so smaller gauge / higher drop appears first
+    return rows.sort((a, b) => b.voltageDropPct - a.voltageDropPct);
+  }, [result, currentInputs, wireType, wireSize, mode]);
+
+  // Conductor comparator selection list
   const comparisonResults = useMemo(() => {
     if (compareSizes.length === 0) return [];
-    return compareSizes.map(sz => {
-      try {
-        const altRes = calculateVoltageDropCalculator({ ...currentInputs, wireSize: sz });
-        return {
-          size: sz,
-          material: currentInputs.wireMaterial,
-          r: altRes.r,
-          x: altRes.x,
-          drop: altRes.voltageDrop,
-          dropPct: altRes.voltageDropPct,
-          loadV: altRes.endVoltage
-        };
-      } catch (e) {
-        return null;
-      }
-    }).filter(Boolean);
+    return compareSizes
+      .map((sz) => {
+        try {
+          const altRes = calculateVoltageDropCalculator({ ...currentInputs, wireSize: sz });
+          return {
+            size: sz,
+            material: currentInputs.wireMaterial,
+            r: altRes.r,
+            x: altRes.x,
+            drop: altRes.voltageDrop,
+            dropPct: altRes.voltageDropPct,
+            loadV: altRes.endVoltage
+          };
+        } catch (e) {
+          return null;
+        }
+      })
+      .filter(Boolean);
   }, [compareSizes, currentInputs]);
 
-  // Save calculation
+  // Complete Raw State Save
   const handleSave = () => {
     if (!result) return;
     const desc = `${result.wireSize} ${result.wireMaterial} | ${result.current}A @ ${result.distance}${result.distanceUnit} | ${result.phase}`;
-    const newItem = {
+    const newItem: VoltageDropSavedRecord = {
       id: Date.now().toString(),
-      title: `Voltage Drop: ${result.voltageDropPct}%`,
+      title: `Voltage Drop: ${result.voltageDropPct.toFixed(2)}%`,
       desc,
-      drop: `${result.voltageDrop} V`,
+      drop: `${result.voltageDrop.toFixed(3)} V`,
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      inputs: { ...currentInputs }
+      inputs: {
+        voltage,
+        currentAmps,
+        distance,
+        distanceUnit,
+        phase,
+        mode,
+        wireMaterial,
+        wireType,
+        wireSize,
+        conduitMaterial,
+        powerFactor,
+        conductorsPerPhase,
+        customResistance,
+        customReactance,
+        customResistanceUnit,
+        customReactanceUnit,
+        targetDropPct
+      }
     };
 
-    const updated = [newItem, ...savedItems.filter(i => i.desc !== newItem.desc)].slice(0, 15);
+    const updated = [newItem, ...savedItems.filter((i) => i.desc !== newItem.desc)].slice(0, 15);
     setSavedItems(updated);
     try {
       localStorage.setItem("saved_voltage_drop_calculations", JSON.stringify(updated));
@@ -249,51 +442,244 @@ export function VoltageDropCalculator() {
     setTimeout(() => setJustSaved(false), 2000);
   };
 
-  // Delete saved calculation
+  // Restore Complete Raw State
+  const handleRestore = (item: VoltageDropSavedRecord) => {
+    const inp = item.inputs;
+    setVoltage(inp.voltage);
+    setCurrentAmps(inp.currentAmps);
+    setDistance(inp.distance);
+    setDistanceUnit(inp.distanceUnit);
+    setPhase(inp.phase);
+    setMode(inp.mode);
+    setWireMaterial(inp.wireMaterial);
+    setWireType(inp.wireType);
+    setWireSize(inp.wireSize);
+    setConduitMaterial(inp.conduitMaterial);
+    setPowerFactor(inp.powerFactor);
+    setConductorsPerPhase(inp.conductorsPerPhase);
+    if (inp.customResistance !== undefined) setCustomResistance(inp.customResistance);
+    if (inp.customReactance !== undefined) setCustomReactance(inp.customReactance);
+    if (inp.customResistanceUnit) setCustomResistanceUnit(inp.customResistanceUnit);
+    if (inp.customReactanceUnit) setCustomReactanceUnit(inp.customReactanceUnit);
+    if (inp.targetDropPct !== undefined) setTargetDropPct(inp.targetDropPct);
+  };
+
   const handleDeleteSaved = (id: string) => {
-    const updated = savedItems.filter(i => i.id !== id);
+    const updated = savedItems.filter((i) => i.id !== id);
     setSavedItems(updated);
     try {
       localStorage.setItem("saved_voltage_drop_calculations", JSON.stringify(updated));
     } catch (e) {}
   };
 
-  // Copy result summary
-  const handleCopy = () => {
+  // Copy Result
+  const handleCopyResult = () => {
     if (!result) return;
-    const text = `Voltage Drop Calculation Summary\n` +
+    const text = `${result.voltageDrop.toFixed(3)} V (${result.voltageDropPct.toFixed(2)}%)`;
+    navigator.clipboard.writeText(text);
+    setCopiedResult(true);
+    setTimeout(() => setCopiedResult(false), 2000);
+  };
+
+  // Copy Summary
+  const handleCopySummary = () => {
+    if (!result) return;
+    const text =
+      `Voltage Drop Calculation Summary\n` +
       `---------------------------------\n` +
+      `Mode: ${
+        mode === "nec"
+          ? "NEC Table 9"
+          : mode === "estimated"
+          ? "Estimated Resistance (DC/Basic)"
+          : "Custom Conductor Data"
+      }\n` +
       `Supply Voltage: ${result.startingVoltage} V\n` +
       `Current: ${result.current} A\n` +
-      `Conductor: ${result.wireSize} ${result.wireMaterial} (${result.conductors} per phase)\n` +
       `Distance: ${result.distance} ${result.distanceUnit}\n` +
       `Phase: ${result.phase}\n` +
+      `Conductor: ${result.wireSize} ${result.wireMaterial} (${result.conductors} per phase)\n` +
+      `Conduit: ${conduitMaterial.toUpperCase()}\n` +
+      `Power Factor: ${result.pf}\n` +
       `---------------------------------\n` +
-      `Voltage Drop: ${result.voltageDrop} V (${result.voltageDropPct}%)\n` +
-      `Voltage at Load: ${result.endVoltage} V\n` +
-      `Conductor R: ${result.r} Ω/kft | X: ${result.x} Ω/kft`;
+      `Voltage Drop: ${result.voltageDrop.toFixed(3)} V (${result.voltageDropPct.toFixed(2)}%)\n` +
+      `Voltage at Load: ${result.endVoltage.toFixed(2)} V\n` +
+      `Status: ${statusInfo.text}\n` +
+      `Conductor R: ${result.r.toFixed(5)} Ω/kft | X: ${result.x.toFixed(5)} Ω/kft | Z: ${result.z.toFixed(
+        5
+      )} Ω/kft`;
     navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedSummary(true);
+    setTimeout(() => setCopiedSummary(false), 2000);
   };
 
-  // Share calculation url
-  const handleShare = () => {
+  // CSV Export
+  const handleExportCsv = () => {
     if (!result) return;
-    const url = `${window.location.origin}${window.location.pathname}?voltage=${voltage}&current=${currentAmps}&distance=${distance}&distanceUnit=${distanceUnit}&phase=${phase}&mode=${mode}&wireMaterial=${wireMaterial}&wireType=${wireType}&wireSize=${wireSize}&conduitMaterial=${conduitMaterial}&powerFactor=${powerFactor}&conductorsPerPhase=${conductorsPerPhase}&target=${targetDropPct}`;
-    if (navigator.share) {
-      navigator.share({
-        title: "Voltage Drop Calculation Results",
-        text: `Check out this voltage drop calculation: ${result.voltageDropPct}% loss over ${result.distance} ${result.distanceUnit}.`,
-        url
-      }).catch(() => {});
-    } else {
-      navigator.clipboard.writeText(url);
-      alert("Share URL copied to clipboard!");
+    const target = parseFloat(targetDropPct) || 3;
+    const headers = [
+      "Mode",
+      "Supply Voltage (V)",
+      "Current (A)",
+      "Distance",
+      "Distance Unit",
+      "Phase",
+      "Conductor Material",
+      "Sizing Standard",
+      "Conductor Size",
+      "Conductors Per Phase",
+      "Resistance (Ohm/kft)",
+      "Reactance (Ohm/kft)",
+      "Power Factor",
+      "Effective Resistance (Ohm/kft)",
+      "Effective Reactance (Ohm/kft)",
+      "Effective Impedance (Ohm/kft)",
+      "Voltage Drop (V)",
+      "Drop Percentage (%)",
+      "Load Voltage (V)",
+      "Target Drop (%)",
+      "Status",
+      "Timestamp"
+    ];
+
+    const row = [
+      `"${mode}"`,
+      result.startingVoltage,
+      result.current,
+      result.distance,
+      `"${result.distanceUnit}"`,
+      `"${result.phase}"`,
+      `"${result.wireMaterial}"`,
+      `"${wireType.toUpperCase()}"`,
+      `"${result.wireSize}"`,
+      result.conductors,
+      result.r.toFixed(5),
+      result.x.toFixed(5),
+      result.pf,
+      result.r.toFixed(5),
+      result.x.toFixed(5),
+      result.z.toFixed(5),
+      result.voltageDrop.toFixed(3),
+      result.voltageDropPct.toFixed(2),
+      result.endVoltage.toFixed(2),
+      target,
+      `"${statusInfo.text}"`,
+      `"${new Date().toISOString()}"`
+    ];
+
+    let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + row.join(",");
+
+    if (whatIfRows.length > 0) {
+      csvContent += "\n\nWhat-If Conductor Size Comparison\nWire Size,Voltage Drop (V),Drop Percentage (%),Load Voltage (V),Status\n";
+      csvContent += `"${result.wireSize} (Current)",${result.voltageDrop.toFixed(3)},${result.voltageDropPct.toFixed(2)},${result.endVoltage.toFixed(2)},"${result.voltageDropPct <= target ? "Acceptable" : "Excessive"}"\n`;
+      whatIfRows.forEach((r) => {
+        csvContent += `"${wireType === "awg" ? `${r.size} AWG` : `${r.size} mm²`}",${r.voltageDrop.toFixed(3)},${r.voltageDropPct.toFixed(2)},${r.endVoltage.toFixed(2)},"${r.voltageDropPct <= target ? "Acceptable" : "Excessive"}"\n`;
+      });
     }
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `voltage_drop_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
-  // Print friendly engineering report
+  // TXT Engineering Report Export
+  const handleExportTxt = () => {
+    if (!result) return;
+    const target = parseFloat(targetDropPct) || 3;
+    const report =
+      `============================================================\n` +
+      `VOLTAGE DROP ENGINEERING CALCULATION REPORT\n` +
+      `============================================================\n\n` +
+      `Date / Time: ${new Date().toLocaleString()}\n` +
+      `Calculation Mode: ${
+        mode === "nec"
+          ? "NEC Chapter 9 Table 9 (AC, 75°C)"
+          : mode === "estimated"
+          ? "Estimated DC / Basic Resistance (Table 8)"
+          : "Custom Conductor Data"
+      }\n\n` +
+      `CIRCUIT PARAMETERS:\n` +
+      `- Supply Voltage: ${result.startingVoltage} V\n` +
+      `- Circuit Phase: ${result.phase}\n` +
+      `- Load Current: ${result.current} A\n` +
+      `- One-Way Run Distance: ${result.distance} ${result.distanceUnit}\n` +
+      `- Power Factor: ${result.pf}\n` +
+      `- Conductor Material: ${result.wireMaterial}\n` +
+      `- Conductor Size: ${result.wireSize}\n` +
+      `- Conduit Material: ${conduitMaterial.toUpperCase()}\n` +
+      `- Conductors Per Phase: ${result.conductors}\n\n` +
+      `ELECTRICAL IMPEDANCE VALUES:\n` +
+      `- Conductor Resistance (R): ${result.r.toFixed(5)} Ω/1000 ft\n` +
+      `- Conductor Reactance (X): ${result.x.toFixed(5)} Ω/1000 ft\n` +
+      `- Effective AC Impedance (Z): ${result.z.toFixed(5)} Ω/1000 ft\n\n` +
+      `CALCULATION RESULTS:\n` +
+      `- Voltage Drop: ${result.voltageDrop.toFixed(3)} V\n` +
+      `- Voltage Drop Percentage: ${result.voltageDropPct.toFixed(2)}%\n` +
+      `- Receiving End Voltage: ${result.endVoltage.toFixed(2)} V\n` +
+      `- Target Voltage Drop: ${target}%\n` +
+      `- Evaluation Status: ${statusInfo.text}\n\n` +
+      `CALCULATION BREAKDOWN:\n` +
+      `${result.formulaBreakdown || "N/A"}\n\n` +
+      `============================================================\n` +
+      `ENGINEERING DISCLAIMER:\n` +
+      `Voltage-drop calculations do not by themselves establish a complete\n` +
+      `electrical design. Conductor ampacity (NEC 310.16), overcurrent\n` +
+      `protection, conduit fill, and local code enforcement must be verified\n` +
+      `independently by a qualified electrical professional.\n` +
+      `============================================================\n`;
+
+    const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `voltage_drop_report_${Date.now()}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  // LaTeX Export
+  const handleExportLatex = () => {
+    if (!result) return;
+    const sinTheta =
+      result.pf >= 0 && result.pf <= 1
+        ? Math.sqrt(Math.max(0, 1 - result.pf * result.pf)).toFixed(4)
+        : "0";
+    const factorStr = phase === "ac_three" ? "\\sqrt{3}" : "2";
+
+    const latex =
+      `% Voltage Drop Calculation Formulation\n` +
+      `% Circuit: ${result.phase}, Supply: ${result.startingVoltage}V, Current: ${result.current}A, Distance: ${result.distance}${result.distanceUnit}\n` +
+      `\\begin{aligned}\n` +
+      (phase !== "dc" && mode !== "estimated"
+        ? `  Z_{\\text{eff}} &= R_{\\text{ac}} \\cos\\theta + X_{\\text{ac}} \\sin\\theta \\\\\n` +
+          `  &= (${result.r.toFixed(5)} \\times ${result.pf}) + (${result.x.toFixed(
+            5
+          )} \\times ${sinTheta}) = ${result.z.toFixed(5)}\\,\\Omega/1000\\text{ ft} \\\\[6pt]\n`
+        : `  Z_{\\text{eff}} &= R = ${result.r.toFixed(5)}\\,\\Omega/1000\\text{ ft} \\\\[6pt]\n`) +
+      `  V_{\\text{drop}} &= \\frac{${factorStr} \\cdot I \\cdot L \\cdot Z_{\\text{eff}}}{1000} \\\\\n` +
+      `  &= \\frac{${factorStr} \\times ${result.current}\\,\\text{A} \\times ${result.distance}\\,\\text{${result.distanceUnit}} \\times ${result.z.toFixed(
+        5
+      )}\\,\\Omega/1000\\text{ft}}{1000} = ${result.voltageDrop.toFixed(3)}\\,\\text{V} \\\\[6pt]\n` +
+      `  \\%_{\\text{drop}} &= \\frac{V_{\\text{drop}}}{V_{\\text{supply}}} \\times 100 = \\frac{${result.voltageDrop.toFixed(
+        3
+      )}}{${result.startingVoltage}} \\times 100 = ${result.voltageDropPct.toFixed(2)}\\% \\\\[6pt]\n` +
+      `  V_{\\text{load}} &= V_{\\text{supply}} - V_{\\text{drop}} = ${result.startingVoltage} - ${result.voltageDrop.toFixed(
+        3
+      )} = ${result.endVoltage.toFixed(2)}\\,\\text{V}\n` +
+      `\\end{aligned}`;
+
+    navigator.clipboard.writeText(latex);
+    setCopiedLatex(true);
+    setTimeout(() => setCopiedLatex(false), 2000);
+  };
+
+  // Print Friendly Engineering Report
   const handlePrint = () => {
     window.print();
   };
@@ -322,7 +708,11 @@ export function VoltageDropCalculator() {
   return (
     <div className="space-y-6">
       {/* TABS MODE SELECTOR */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-zinc-200 dark:border-zinc-800 scrollbar-none text-xs">
+      <div
+        className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-zinc-200 dark:border-zinc-800 scrollbar-none text-xs no-print"
+        role="tablist"
+        aria-label="Conductor data calculation mode"
+      >
         {[
           { id: "nec", label: "NEC Table 9 Mode" },
           { id: "estimated", label: "Estimated Resistance (DC/Basic)" },
@@ -330,6 +720,8 @@ export function VoltageDropCalculator() {
         ].map((tab) => (
           <button
             key={tab.id}
+            role="tab"
+            aria-selected={mode === tab.id}
             onClick={() => setMode(tab.id as any)}
             className={`px-3 py-1.5 rounded-lg font-bold whitespace-nowrap transition-all cursor-pointer ${
               mode === tab.id
@@ -343,14 +735,16 @@ export function VoltageDropCalculator() {
       </div>
 
       {/* PRESETS BAR */}
-      <div className="flex flex-wrap items-center gap-2 p-2.5 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200/80 dark:border-zinc-800">
+      <div className="flex flex-wrap items-center gap-2 p-2.5 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200/80 dark:border-zinc-800 no-print">
         <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider pl-1 mr-1 flex items-center gap-1">
           <Zap className="w-3.5 h-3.5 text-amber-500" /> Presets:
         </span>
         {PRESETS.map((preset, idx) => (
           <button
             key={idx}
+            type="button"
             onClick={() => applyPreset(preset)}
+            aria-label={`Apply preset: ${preset.name}`}
             className="px-2.5 py-1 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg text-[11px] font-medium text-zinc-600 dark:text-zinc-400 hover:border-blue-500 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
           >
             {preset.name}
@@ -360,14 +754,17 @@ export function VoltageDropCalculator() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* LEFT COLUMN: INPUT CONTROLS */}
-        <div className="lg:col-span-7 space-y-5">
+        <div className="lg:col-span-7 space-y-5 no-print">
           <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-2">
-              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2"><span>Electrical Parameters</span>
-              </h3>
+              <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                <span>Electrical Parameters</span>
+              </h2>
               <button
+                type="button"
                 onClick={handleReset}
-                className="text-[10px] text-zinc-400 hover:text-blue-500 flex items-center gap-1 font-semibold transition-colors"
+                aria-label="Reset defaults"
+                className="text-[10px] text-zinc-400 hover:text-blue-500 flex items-center gap-1 font-semibold transition-colors cursor-pointer"
               >
                 <RefreshCw className="w-3 h-3" /> Reset Defaults
               </button>
@@ -376,8 +773,14 @@ export function VoltageDropCalculator() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Supply Voltage */}
               <div>
-                <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Supply Voltage (V)</label>
+                <label
+                  htmlFor="vdrop-supply-voltage"
+                  className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block"
+                >
+                  Supply Voltage (V)
+                </label>
                 <Input
+                  id="vdrop-supply-voltage"
                   type="number"
                   value={voltage}
                   onChange={(e) => setVoltage(e.target.value)}
@@ -388,8 +791,14 @@ export function VoltageDropCalculator() {
 
               {/* Load Current */}
               <div>
-                <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Load Current (Amps)</label>
+                <label
+                  htmlFor="vdrop-current"
+                  className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block"
+                >
+                  Load Current (Amps)
+                </label>
                 <Input
+                  id="vdrop-current"
                   type="number"
                   value={currentAmps}
                   onChange={(e) => setCurrentAmps(e.target.value)}
@@ -400,9 +809,15 @@ export function VoltageDropCalculator() {
 
               {/* Length */}
               <div>
-                <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">One-Way Distance</label>
+                <label
+                  htmlFor="vdrop-distance"
+                  className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block"
+                >
+                  One-Way Distance
+                </label>
                 <div className="flex gap-1">
                   <Input
+                    id="vdrop-distance"
                     type="number"
                     value={distance}
                     onChange={(e) => setDistance(e.target.value)}
@@ -410,6 +825,8 @@ export function VoltageDropCalculator() {
                     placeholder="100"
                   />
                   <select
+                    id="vdrop-distance-unit"
+                    aria-label="Distance measurement unit"
                     value={distanceUnit}
                     onChange={(e) => setDistanceUnit(e.target.value as any)}
                     className="px-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 rounded-lg rounded-l-none text-xs outline-none"
@@ -422,8 +839,14 @@ export function VoltageDropCalculator() {
 
               {/* Phase */}
               <div>
-                <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Circuit Phase</label>
+                <label
+                  htmlFor="vdrop-phase"
+                  className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block"
+                >
+                  Circuit Phase
+                </label>
                 <select
+                  id="vdrop-phase"
                   value={phase}
                   onChange={(e) => setPhase(e.target.value as any)}
                   className="w-full h-9 px-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs outline-none focus:ring-1 focus:ring-blue-500"
@@ -438,22 +861,26 @@ export function VoltageDropCalculator() {
 
           {/* SECTION 2: CONDUCTOR DETAILS */}
           <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+            <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
               Conductor Configuration
-            </h3>
+            </h2>
 
             {mode !== "custom" ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Conductor Material */}
                 <div>
-                  <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Conductor Material</label>
-                  <div className="flex gap-2 text-xs">
-                    {["copper", "aluminum"].map(m => (
+                  <span className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">
+                    Conductor Material
+                  </span>
+                  <div className="flex gap-2 text-xs" role="radiogroup" aria-label="Conductor material">
+                    {["copper", "aluminum"].map((m) => (
                       <button
                         key={m}
                         type="button"
+                        role="radio"
+                        aria-checked={wireMaterial === m}
                         onClick={() => setWireMaterial(m as any)}
-                        className={`flex-1 py-1.5 border rounded-lg font-bold transition-all capitalize ${
+                        className={`flex-1 py-1.5 border rounded-lg font-bold transition-all capitalize cursor-pointer ${
                           wireMaterial === m
                             ? "border-blue-600 text-blue-600 bg-blue-50/50 dark:bg-blue-950/20"
                             : "border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50"
@@ -467,14 +894,18 @@ export function VoltageDropCalculator() {
 
                 {/* Conductor Unit Standard */}
                 <div>
-                  <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Sizing Standard</label>
-                  <div className="flex gap-2 text-xs">
-                    {["awg", "metric"].map(t => (
+                  <span className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">
+                    Sizing Standard
+                  </span>
+                  <div className="flex gap-2 text-xs" role="radiogroup" aria-label="Conductor sizing standard">
+                    {["awg", "metric"].map((t) => (
                       <button
                         key={t}
                         type="button"
+                        role="radio"
+                        aria-checked={wireType === t}
                         onClick={() => setWireType(t as any)}
-                        className={`flex-1 py-1.5 border rounded-lg font-bold transition-all uppercase ${
+                        className={`flex-1 py-1.5 border rounded-lg font-bold transition-all uppercase cursor-pointer ${
                           wireType === t
                             ? "border-blue-600 text-blue-600 bg-blue-50/50 dark:bg-blue-950/20"
                             : "border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50"
@@ -488,25 +919,42 @@ export function VoltageDropCalculator() {
 
                 {/* Wire Size Selector */}
                 <div>
-                  <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">
+                  <label
+                    htmlFor="vdrop-wire-size"
+                    className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block"
+                  >
                     Conductor Size {wireType === "awg" ? "(AWG)" : "(mm²)"}
                   </label>
                   <select
+                    id="vdrop-wire-size"
                     value={wireSize}
                     onChange={(e) => setWireSize(e.target.value)}
                     className="w-full h-9 px-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs outline-none focus:ring-1 focus:ring-blue-500 font-sans tabular-nums font-bold"
                   >
                     {wireType === "awg"
-                      ? AWG_SIZES.map(s => <option key={s} value={s}>{s} AWG</option>)
-                      : METRIC_SIZES.map(s => <option key={s} value={s}>{s} mm²</option>)
-                    }
+                      ? AWG_SIZES.map((s) => (
+                          <option key={s} value={s}>
+                            {s} AWG
+                          </option>
+                        ))
+                      : METRIC_SIZES.map((s) => (
+                          <option key={s} value={s}>
+                            {s} mm²
+                          </option>
+                        ))}
                   </select>
                 </div>
 
                 {/* Conductors per phase */}
                 <div>
-                  <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Conductors per Phase</label>
+                  <label
+                    htmlFor="vdrop-conductors-per-phase"
+                    className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block"
+                  >
+                    Conductors per Phase
+                  </label>
                   <Input
+                    id="vdrop-conductors-per-phase"
                     type="number"
                     value={conductorsPerPhase}
                     onChange={(e) => setConductorsPerPhase(e.target.value)}
@@ -516,18 +964,26 @@ export function VoltageDropCalculator() {
                 </div>
               </div>
             ) : (
-              // Custom Mode Values Inputs
+              // Custom Mode Inputs
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Resistance (R)</label>
+                  <label
+                    htmlFor="vdrop-custom-r"
+                    className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block"
+                  >
+                    Resistance (R)
+                  </label>
                   <div className="flex gap-1">
                     <Input
+                      id="vdrop-custom-r"
                       type="number"
                       value={customResistance}
                       onChange={(e) => setCustomResistance(e.target.value)}
                       className="font-sans tabular-nums flex-1 rounded-r-none border-r-0"
                     />
                     <select
+                      id="vdrop-custom-r-unit"
+                      aria-label="Resistance unit"
                       value={customResistanceUnit}
                       onChange={(e) => setCustomResistanceUnit(e.target.value as any)}
                       className="px-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 rounded-lg rounded-l-none text-xs outline-none"
@@ -539,15 +995,23 @@ export function VoltageDropCalculator() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Reactance (X)</label>
+                  <label
+                    htmlFor="vdrop-custom-x"
+                    className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block"
+                  >
+                    Reactance (X)
+                  </label>
                   <div className="flex gap-1">
                     <Input
+                      id="vdrop-custom-x"
                       type="number"
                       value={customReactance}
                       onChange={(e) => setCustomReactance(e.target.value)}
                       className="font-sans tabular-nums flex-1 rounded-r-none border-r-0"
                     />
                     <select
+                      id="vdrop-custom-x-unit"
+                      aria-label="Reactance unit"
                       value={customReactanceUnit}
                       onChange={(e) => setCustomReactanceUnit(e.target.value as any)}
                       className="px-2 border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 rounded-lg rounded-l-none text-xs outline-none"
@@ -559,8 +1023,14 @@ export function VoltageDropCalculator() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Conductors per Phase</label>
+                  <label
+                    htmlFor="vdrop-custom-conductors"
+                    className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block"
+                  >
+                    Conductors per Phase
+                  </label>
                   <Input
+                    id="vdrop-custom-conductors"
                     type="number"
                     value={conductorsPerPhase}
                     onChange={(e) => setConductorsPerPhase(e.target.value)}
@@ -571,19 +1041,25 @@ export function VoltageDropCalculator() {
             )}
           </div>
 
-          {/* SECTION 3: ENVIRONMENT PARAMETERS (only when AC is active) */}
+          {/* SECTION 3: ENVIRONMENT PARAMETERS (only when AC is active and not in basic estimated mode) */}
           {phase !== "dc" && (
             <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-              <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+              <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
                 Conduit & Power Factor
-              </h3>
+              </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Conduit Material */}
                 {mode !== "custom" && (
                   <div>
-                    <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Conduit Material</label>
+                    <label
+                      htmlFor="vdrop-conduit-material"
+                      className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block"
+                    >
+                      Conduit Material
+                    </label>
                     <select
+                      id="vdrop-conduit-material"
                       value={conduitMaterial}
                       onChange={(e) => setConduitMaterial(e.target.value as any)}
                       className="w-full h-9 px-3 border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 rounded-lg text-xs outline-none focus:ring-1 focus:ring-blue-500"
@@ -597,8 +1073,14 @@ export function VoltageDropCalculator() {
 
                 {/* Power Factor */}
                 <div>
-                  <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block">Load Power Factor (PF)</label>
+                  <label
+                    htmlFor="vdrop-power-factor"
+                    className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1 block"
+                  >
+                    Load Power Factor (PF)
+                  </label>
                   <Input
+                    id="vdrop-power-factor"
                     type="number"
                     value={powerFactor}
                     onChange={(e) => setPowerFactor(e.target.value)}
@@ -612,19 +1094,24 @@ export function VoltageDropCalculator() {
 
           {/* SECTION 4: DESIGN GOALS */}
           <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-            <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
+            <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-zinc-200 dark:border-zinc-800 pb-2">
               Design Constraints
-            </h3>
+            </h2>
 
             <div>
-              <label className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1.5 block">Target Voltage Drop (%)</label>
+              <label
+                htmlFor="vdrop-target-drop"
+                className="text-xs font-bold text-zinc-600 dark:text-zinc-400 mb-1.5 block"
+              >
+                Target Voltage Drop (%)
+              </label>
               <div className="flex flex-wrap gap-2 text-xs">
-                {["1", "2", "3", "5"].map(pct => (
+                {["1", "2", "3", "5"].map((pct) => (
                   <button
                     key={pct}
                     type="button"
                     onClick={() => setTargetDropPct(pct)}
-                    className={`px-3 py-1 border rounded-lg font-sans tabular-nums font-bold transition-all ${
+                    className={`px-3 py-1 border rounded-lg font-sans tabular-nums font-bold transition-all cursor-pointer ${
                       targetDropPct === pct
                         ? "border-blue-600 text-blue-600 bg-blue-50/50 dark:bg-blue-950/20"
                         : "border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50"
@@ -636,6 +1123,7 @@ export function VoltageDropCalculator() {
                 <div className="flex items-center gap-1 bg-zinc-50 dark:bg-zinc-850 px-2 rounded-lg border border-zinc-200 dark:border-zinc-800">
                   <span className="text-[10px] text-zinc-500 font-bold">Custom:</span>
                   <input
+                    id="vdrop-target-drop"
                     type="number"
                     value={targetDropPct}
                     onChange={(e) => setTargetDropPct(e.target.value)}
@@ -649,9 +1137,12 @@ export function VoltageDropCalculator() {
         </div>
 
         {/* RIGHT COLUMN: STICKY RESULTS */}
-        <div className="lg:col-span-5 space-y-4 sticky top-4">
+        <div className="lg:col-span-5 space-y-4 lg:sticky lg:top-4">
           {/* RESULTS CARD */}
-          <div className="p-4 sm:p-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-2xl border border-blue-600/30 dark:border-blue-500/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08),0_2px_6px_-1px_rgba(0,0,0,0.04)] space-y-4">
+          <div
+            aria-live="polite"
+            className="p-4 sm:p-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 rounded-2xl border border-blue-600/30 dark:border-blue-500/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08),0_2px_6px_-1px_rgba(0,0,0,0.04)] space-y-4"
+          >
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
               <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
                 <span>⚡</span> Electrical Calculation Results
@@ -661,28 +1152,37 @@ export function VoltageDropCalculator() {
                   type="button"
                   variant="outline"
                   size="sm"
+                  aria-label="Save calculation"
                   onClick={handleSave}
                   className="h-7 text-xs gap-1.5 border border-slate-200 dark:border-slate-700 bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer rounded-lg"
                 >
-                  {justSaved ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Bookmark className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />}
+                  {justSaved ? (
+                    <Check className="h-3.5 w-3.5 text-emerald-600" />
+                  ) : (
+                    <Bookmark className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                  )}
                   {justSaved ? "Saved!" : "Save"}
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={handleCopy}
+                  aria-label="Copy result"
+                  onClick={handleCopyResult}
                   className="h-7 text-xs gap-1.5 border border-slate-200 dark:border-slate-700 bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-xs cursor-pointer rounded-lg"
                 >
-                  {copied ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
-                  {copied ? "Copied" : "Copy"}
+                  {copiedResult ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5 text-slate-400" />}
+                  {copiedResult ? "Copied" : "Copy"}
                 </Button>
               </div>
             </div>
 
             {/* Error notifications */}
             {validationErrors.length > 0 ? (
-              <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 rounded-xl text-xs text-red-600 dark:text-red-400 font-semibold space-y-1">
+              <div
+                role="alert"
+                className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/80 rounded-xl text-xs text-red-600 dark:text-red-400 font-semibold space-y-1"
+              >
                 <div className="font-bold flex items-center gap-1.5">
                   <Info className="w-3.5 h-3.5 shrink-0" /> Please correct the following inputs:
                 </div>
@@ -697,23 +1197,29 @@ export function VoltageDropCalculator() {
                 {/* Primary numbers */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="p-3.5 bg-gradient-to-b from-blue-50/80 via-white to-blue-50/40 dark:from-slate-800/80 dark:via-slate-900 dark:to-slate-800/40 border border-blue-200 dark:border-blue-900/50 rounded-xl shadow-[inset_0_1.5px_2px_rgba(255,255,255,0.8),0_2px_8px_-2px_rgba(37,99,235,0.12)]">
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">Voltage Drop</div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">
+                      Voltage Drop
+                    </div>
                     <div className="text-2xl sm:text-3xl font-sans tabular-nums font-black text-blue-600 dark:text-blue-400 mt-0.5">
-                      {result.voltageDrop} V
+                      {result.voltageDrop.toFixed(3)} V
                     </div>
                   </div>
                   <div className="p-3.5 bg-gradient-to-b from-blue-50/80 via-white to-blue-50/40 dark:from-slate-800/80 dark:via-slate-900 dark:to-slate-800/40 border border-blue-200 dark:border-blue-900/50 rounded-xl shadow-[inset_0_1.5px_2px_rgba(255,255,255,0.8),0_2px_8px_-2px_rgba(37,99,235,0.12)]">
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">Percentage Drop</div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider">
+                      Percentage Drop
+                    </div>
                     <div className="text-2xl sm:text-3xl font-sans tabular-nums font-black text-blue-600 dark:text-blue-400 mt-0.5">
-                      {result.voltageDropPct}%
+                      {result.voltageDropPct.toFixed(2)}%
                     </div>
                   </div>
                 </div>
 
                 <div className="p-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 rounded-xl flex items-center justify-between shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]">
-                  <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">Voltage at Load Terminal</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
+                    Voltage at Load Terminal
+                  </span>
                   <span className="text-base sm:text-lg font-sans tabular-nums font-bold text-slate-900 dark:text-slate-100">
-                    {result.endVoltage} V
+                    {result.endVoltage.toFixed(2)} V
                   </span>
                 </div>
 
@@ -726,22 +1232,87 @@ export function VoltageDropCalculator() {
                 <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700 text-xs font-sans tabular-nums space-y-1.5 text-slate-700 dark:text-slate-200 shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]">
                   <div className="flex justify-between border-b border-slate-200/60 dark:border-slate-700/60 pb-1 mb-1">
                     <span className="text-slate-500 dark:text-slate-400 font-medium">Total Circuit Length:</span>
-                    <span className="font-bold text-slate-800 dark:text-slate-100">{(result.conductors * result.distance * 2).toFixed(0)} {result.distanceUnit} (loop)</span>
+                    <span className="font-bold text-slate-800 dark:text-slate-100">
+                      {phase === "ac_three"
+                        ? `${result.distance} ${result.distanceUnit} (one-way 3Ø)`
+                        : `${(result.distance * 2).toFixed(0)} ${result.distanceUnit} (loop)`}
+                    </span>
                   </div>
                   <div className="flex justify-between py-0.5 border-b border-slate-200/60 dark:border-slate-700/60">
                     <span className="text-slate-500 dark:text-slate-400 font-medium">Effective Resistance:</span>
-                    <span className="font-bold text-slate-800 dark:text-slate-100">{result.r.toFixed(5)} Ω/1000 ft</span>
+                    <span className="font-bold text-slate-800 dark:text-slate-100">
+                      {result.r.toFixed(5)} Ω/1000 ft
+                    </span>
                   </div>
-                  {phase !== "dc" && (
+                  {phase !== "dc" && mode !== "estimated" && (
                     <div className="flex justify-between py-0.5 border-b border-slate-200/60 dark:border-slate-700/60">
                       <span className="text-slate-500 dark:text-slate-400 font-medium">Effective Reactance:</span>
-                      <span className="font-bold text-slate-800 dark:text-slate-100">{result.x.toFixed(5)} Ω/1000 ft</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-100">
+                        {result.x.toFixed(5)} Ω/1000 ft
+                      </span>
                     </div>
                   )}
                   <div className="flex justify-between py-0.5">
                     <span className="text-slate-500 dark:text-slate-400 font-medium">Effective Impedance:</span>
-                    <span className="font-bold text-slate-800 dark:text-slate-100">{result.z.toFixed(5)} Ω/1000 ft</span>
+                    <span className="font-bold text-slate-800 dark:text-slate-100">
+                      {result.z.toFixed(5)} Ω/1000 ft
+                    </span>
                   </div>
+                </div>
+
+                {/* Multi-Format Export Action Bar */}
+                <div className="pt-2 border-t border-slate-200/60 dark:border-slate-700/60 flex flex-wrap gap-1.5 text-xs no-print">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleCopySummary}
+                    aria-label="Copy summary report"
+                    className="h-7 text-[11px] gap-1 px-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 cursor-pointer"
+                  >
+                    {copiedSummary ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3 text-slate-400" />}
+                    {copiedSummary ? "Copied Summary" : "Copy Summary"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleExportCsv}
+                    aria-label="Export calculation data as CSV"
+                    className="h-7 text-[11px] gap-1 px-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 cursor-pointer"
+                  >
+                    <FileSpreadsheet className="w-3 h-3 text-emerald-600" /> CSV
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleExportTxt}
+                    aria-label="Export calculation report as TXT"
+                    className="h-7 text-[11px] gap-1 px-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 cursor-pointer"
+                  >
+                    <FileText className="w-3 h-3 text-blue-600" /> TXT
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleExportLatex}
+                    aria-label="Copy LaTeX formulation"
+                    className="h-7 text-[11px] gap-1 px-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 cursor-pointer"
+                  >
+                    <Code className="w-3 h-3 text-purple-600" /> {copiedLatex ? "LaTeX Copied!" : "LaTeX"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handlePrint}
+                    aria-label="Print or save calculation as PDF"
+                    className="h-7 text-[11px] gap-1 px-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 cursor-pointer"
+                  >
+                    <Printer className="w-3 h-3 text-slate-600" /> PDF / Print
+                  </Button>
                 </div>
               </div>
             ) : (
@@ -759,43 +1330,37 @@ export function VoltageDropCalculator() {
                   <History className="w-3.5 h-3.5 text-blue-500" /> Saved Calculations ({savedItems.length})
                 </span>
                 <button
+                  type="button"
                   onClick={() => {
                     setSavedItems([]);
                     localStorage.removeItem("saved_voltage_drop_calculations");
                   }}
-                  className="text-[10px] text-zinc-400 hover:text-red-500 font-semibold"
+                  aria-label="Clear all saved calculations"
+                  className="text-[10px] text-zinc-400 hover:text-red-500 font-semibold cursor-pointer"
                 >
                   Clear All
                 </button>
               </div>
               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                 {savedItems.map((item) => (
-                  <div key={item.id} className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-sans tabular-nums">
+                  <div
+                    key={item.id}
+                    className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs font-sans tabular-nums"
+                  >
                     <button
-                      onClick={() => {
-                        // Restore saved inputs
-                        const inputs = item.inputs;
-                        setVoltage(String(inputs.voltage));
-                        setCurrentAmps(String(inputs.currentAmps));
-                        setDistance(String(inputs.distance));
-                        setDistanceUnit(inputs.distanceUnit);
-                        setPhase(inputs.phase);
-                        setMode(inputs.mode);
-                        setWireMaterial(inputs.wireMaterial);
-                        setWireType(inputs.wireType);
-                        setWireSize(inputs.wireSize);
-                        setConduitMaterial(inputs.conduitMaterial);
-                        setPowerFactor(String(inputs.powerFactor));
-                        setConductorsPerPhase(String(inputs.conductorsPerPhase));
-                      }}
-                      className="text-left font-bold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 truncate flex-1"
+                      type="button"
+                      onClick={() => handleRestore(item)}
+                      aria-label={`Restore calculation: ${item.desc}`}
+                      className="text-left font-bold text-zinc-700 dark:text-zinc-300 hover:text-blue-600 truncate flex-1 cursor-pointer"
                     >
                       <div className="text-[10px] text-zinc-400 dark:text-zinc-500">{item.timestamp}</div>
                       {item.desc} = <span className="text-emerald-600 font-black">{item.drop}</span>
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleDeleteSaved(item.id)}
-                      className="text-zinc-400 hover:text-red-500 p-0.5 ml-2"
+                      aria-label="Delete saved calculation"
+                      className="text-zinc-400 hover:text-red-500 p-0.5 ml-2 cursor-pointer"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -808,7 +1373,10 @@ export function VoltageDropCalculator() {
           {/* STEP BY STEP FORMULA BREAKDOWN */}
           {result && result.formulaBreakdown && (
             <details className="p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-3 group outline-none">
-              <summary className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 cursor-pointer flex items-center justify-between select-none">
+              <summary
+                aria-label="Toggle calculation breakdown"
+                className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 cursor-pointer flex items-center justify-between select-none"
+              >
                 <span>📘 Show Calculation Breakdown</span>
                 <span className="text-[10px] font-sans tabular-nums group-open:hidden">Expand +</span>
                 <span className="text-[10px] font-sans tabular-nums hidden group-open:inline">Collapse -</span>
@@ -824,9 +1392,10 @@ export function VoltageDropCalculator() {
       </div>
 
       {/* WHAT-IF RECOMMENDED WIRE GAUGE TABLE */}
-      {result && recommendations.length > 0 && (
+      {result && whatIfRows.length > 0 && (
         <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md space-y-4">
-          <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5"><span>&quot;What If?&quot; Conductor Size Impact Table</span>
+          <h3 className="text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
+            <span>&quot;What If?&quot; Conductor Size Impact Table</span>
           </h3>
           <p className="text-xs text-zinc-500">
             See how upgrading or downgrading wire sizes affects voltage drop and terminal voltage under identical electrical conditions:
@@ -836,30 +1405,74 @@ export function VoltageDropCalculator() {
             <table className="w-full text-xs text-left border-collapse font-sans tabular-nums">
               <thead>
                 <tr className="bg-zinc-50 dark:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 border-b border-zinc-200 dark:border-zinc-700">
-                  <th className="p-2.5 border-r border-zinc-200 dark:border-zinc-700">Wire Size</th>
-                  <th className="p-2.5 border-r border-zinc-200 dark:border-zinc-700">Voltage Drop (V)</th>
-                  <th className="p-2.5 border-r border-zinc-200 dark:border-zinc-700">Drop Percentage</th>
-                  <th className="p-2.5 border-r border-zinc-200 dark:border-zinc-700">Load Voltage (V)</th>
-                  <th className="p-2.5">Status</th>
+                  <th scope="col" className="p-2.5 border-r border-zinc-200 dark:border-zinc-700">
+                    Wire Size
+                  </th>
+                  <th scope="col" className="p-2.5 border-r border-zinc-200 dark:border-zinc-700">
+                    Voltage Drop (V)
+                  </th>
+                  <th scope="col" className="p-2.5 border-r border-zinc-200 dark:border-zinc-700">
+                    Drop Percentage
+                  </th>
+                  <th scope="col" className="p-2.5 border-r border-zinc-200 dark:border-zinc-700">
+                    Load Voltage (V)
+                  </th>
+                  <th scope="col" className="p-2.5">
+                    Status
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
-                {/* Render the current size row first or inline */}
-                <tr className="bg-blue-50/20 dark:bg-blue-950/10 font-bold border-l-2 border-l-blue-600">
-                  <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-750">{result.wireSize} (Current)</td>
-                  <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-750">{result.voltageDrop} V</td>
-                  <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-750">{result.voltageDropPct}%</td>
-                  <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-750">{result.endVoltage} V</td>
-                  <td className="p-2.5 font-bold">{parseFloat(targetDropPct) && result.voltageDropPct <= parseFloat(targetDropPct) ? "Acceptable" : "Excessive"}</td>
+                {/* Active current size row */}
+                <tr className="bg-blue-50/30 dark:bg-blue-950/20 font-bold border-l-4 border-l-blue-600">
+                  <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-750">
+                    {result.wireSize} (Current)
+                  </td>
+                  <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-750">
+                    {result.voltageDrop.toFixed(3)} V
+                  </td>
+                  <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-750">
+                    {result.voltageDropPct.toFixed(2)}%
+                  </td>
+                  <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-750">
+                    {result.endVoltage.toFixed(2)} V
+                  </td>
+                  <td
+                    className={`p-2.5 font-bold ${
+                      result.voltageDropPct <= (parseFloat(targetDropPct) || 3)
+                        ? "text-emerald-600"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {result.voltageDropPct <= (parseFloat(targetDropPct) || 3)
+                      ? "Acceptable"
+                      : "Excessive"}
+                  </td>
                 </tr>
-                {recommendations.map((rec, idx) => (
+                {whatIfRows.map((rec, idx) => (
                   <tr key={idx} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-950/40">
-                    <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-800">{wireType === "awg" ? `${rec.size} AW` : `${rec.size} mm²`}</td>
-                    <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-800">{rec.voltageDrop.toFixed(3)} V</td>
-                    <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-800">{rec.voltageDropPct.toFixed(2)}%</td>
-                    <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-800">{rec.endVoltage.toFixed(2)} V</td>
-                    <td className={`p-2.5 font-semibold ${rec.voltageDropPct <= (parseFloat(targetDropPct) || 3) ? "text-emerald-600" : "text-red-500"}`}>
-                      {rec.voltageDropPct <= (parseFloat(targetDropPct) || 3) ? "Acceptable" : "Excessive"}
+                    <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-800">
+                      {wireType === "awg" ? `${rec.size} AWG` : `${rec.size} mm²`}
+                    </td>
+                    <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-800">
+                      {rec.voltageDrop.toFixed(3)} V
+                    </td>
+                    <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-800">
+                      {rec.voltageDropPct.toFixed(2)}%
+                    </td>
+                    <td className="p-2.5 border-r border-zinc-200 dark:border-zinc-800">
+                      {rec.endVoltage.toFixed(2)} V
+                    </td>
+                    <td
+                      className={`p-2.5 font-semibold ${
+                        rec.voltageDropPct <= (parseFloat(targetDropPct) || 3)
+                          ? "text-emerald-600"
+                          : "text-red-500"
+                      }`}
+                    >
+                      {rec.voltageDropPct <= (parseFloat(targetDropPct) || 3)
+                        ? "Acceptable"
+                        : "Excessive"}
                     </td>
                   </tr>
                 ))}
@@ -880,7 +1493,7 @@ export function VoltageDropCalculator() {
           </p>
 
           <div className="flex flex-wrap gap-2 text-xs">
-            {(wireType === "awg" ? AWG_SIZES.slice(0, 15) : METRIC_SIZES.slice(0, 12)).map(s => {
+            {(wireType === "awg" ? AWG_SIZES.slice(0, 15) : METRIC_SIZES.slice(0, 12)).map((s) => {
               const isChecked = compareSizes.includes(s);
               return (
                 <label
@@ -896,7 +1509,7 @@ export function VoltageDropCalculator() {
                     checked={isChecked}
                     onChange={() => {
                       if (isChecked) {
-                        setCompareSizes(compareSizes.filter(x => x !== s));
+                        setCompareSizes(compareSizes.filter((x) => x !== s));
                       } else {
                         setCompareSizes([...compareSizes, s]);
                       }
@@ -914,25 +1527,50 @@ export function VoltageDropCalculator() {
               <table className="w-full text-xs text-left border-collapse font-sans tabular-nums">
                 <thead>
                   <tr className="bg-zinc-50 dark:bg-zinc-850/50 text-zinc-700 dark:text-zinc-300 border-b border-zinc-200 dark:border-zinc-700">
-                    <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Size</th>
-                    <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Resistance (R)</th>
-                    <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Reactance (X)</th>
-                    <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Voltage Drop (V)</th>
-                    <th className="p-2 border-r border-zinc-200 dark:border-zinc-700">Voltage Drop (%)</th>
-                    <th className="p-2">Load Voltage</th>
+                    <th scope="col" className="p-2 border-r border-zinc-200 dark:border-zinc-700">
+                      Size
+                    </th>
+                    <th scope="col" className="p-2 border-r border-zinc-200 dark:border-zinc-700">
+                      Resistance (R)
+                    </th>
+                    <th scope="col" className="p-2 border-r border-zinc-200 dark:border-zinc-700">
+                      Reactance (X)
+                    </th>
+                    <th scope="col" className="p-2 border-r border-zinc-200 dark:border-zinc-700">
+                      Voltage Drop (V)
+                    </th>
+                    <th scope="col" className="p-2 border-r border-zinc-200 dark:border-zinc-700">
+                      Voltage Drop (%)
+                    </th>
+                    <th scope="col" className="p-2">
+                      Load Voltage
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
-                  {comparisonResults.map((r, idx) => r && (
-                    <tr key={idx} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-950/40">
-                      <td className="p-2 border-r border-zinc-200 dark:border-zinc-800 font-bold">{wireType === "awg" ? `${r.size} AWG` : `${r.size} mm²`}</td>
-                      <td className="p-2 border-r border-zinc-200 dark:border-zinc-800">{r.r.toFixed(5)} Ω/kft</td>
-                      <td className="p-2 border-r border-zinc-200 dark:border-zinc-800">{r.x.toFixed(5)} Ω/kft</td>
-                      <td className="p-2 border-r border-zinc-200 dark:border-zinc-800">{r.drop.toFixed(3)} V</td>
-                      <td className="p-2 border-r border-zinc-200 dark:border-zinc-800">{r.dropPct.toFixed(2)}%</td>
-                      <td className="p-2 font-bold">{r.loadV.toFixed(2)} V</td>
-                    </tr>
-                  ))}
+                  {comparisonResults.map(
+                    (r, idx) =>
+                      r && (
+                        <tr key={idx} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-950/40">
+                          <td className="p-2 border-r border-zinc-200 dark:border-zinc-800 font-bold">
+                            {wireType === "awg" ? `${r.size} AWG` : `${r.size} mm²`}
+                          </td>
+                          <td className="p-2 border-r border-zinc-200 dark:border-zinc-800">
+                            {r.r.toFixed(5)} Ω/kft
+                          </td>
+                          <td className="p-2 border-r border-zinc-200 dark:border-zinc-800">
+                            {r.x.toFixed(5)} Ω/kft
+                          </td>
+                          <td className="p-2 border-r border-zinc-200 dark:border-zinc-800">
+                            {r.drop.toFixed(3)} V
+                          </td>
+                          <td className="p-2 border-r border-zinc-200 dark:border-zinc-800">
+                            {r.dropPct.toFixed(2)}%
+                          </td>
+                          <td className="p-2 font-bold">{r.loadV.toFixed(2)} V</td>
+                        </tr>
+                      )
+                  )}
                 </tbody>
               </table>
             </div>

@@ -2,65 +2,93 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const voltage_drop_calculatorFaqs: CalculatorFAQ[] = [
   {
-    "question": "What is voltage drop and why does it occur?",
-    "answer": "Voltage drop is the decrease in electrical potential along the path of a current flowing in an electrical circuit. It occurs because the conductors (wires) have a small amount of electrical resistance. As current flows through this resistance, some voltage is converted to heat (following Ohm's Law V = I × R), leaving less voltage available at the receiving end of the circuit."
+    question: "What is voltage drop?",
+    answer:
+      "Voltage drop is the reduction in voltage that occurs as current flows through the resistance and impedance of a circuit conductor. The receiving equipment therefore sees a lower voltage than the source when the circuit has nonzero voltage drop."
   },
   {
-    "question": "What percentage of voltage drop is acceptable?",
-    "answer": "The National Electrical Code (NEC) recommends a maximum voltage drop of 3% for branch circuits, and a maximum total voltage drop of 5% combined across both feeder and branch circuits. Keeping voltage drop within these limits ensures electrical equipment operates at peak efficiency and avoids safety hazards like motor overheating."
+    question: "What is the basic voltage-drop formula?",
+    answer:
+      "For a two-wire DC or single-phase resistive circuit, the calculator uses: Vdrop = 2 × I × L × R / 1000, where current is in amperes, one-way distance is in feet, and resistance is expressed in ohms per 1,000 feet."
   },
   {
-    "question": "How does wire size (AWG or metric) affect voltage drop?",
-    "answer": "Wire size is inversely proportional to electrical resistance: the larger the diameter (or cross-sectional area) of the wire, the lower its resistance. By increasing the wire size (using a lower AWG number or a larger mm² metric size), you reduce the resistance and subsequently lower the voltage drop across the run."
+    question: "How do I calculate voltage drop percentage?",
+    answer:
+      "Use: Voltage Drop % = (Voltage Drop ÷ Supply Voltage) × 100. For example, 5.185 V of drop on a 120 V supply is approximately 4.32%."
   },
   {
-    "question": "Does wire length impact voltage drop?",
-    "answer": "Yes, voltage drop is directly proportional to wire length. Resistance is cumulative along the length of a conductor. Therefore, doubling the length of the run doubles the total resistance, which doubles the voltage drop if current and wire size remain constant."
+    question: "How does wire size affect voltage drop?",
+    answer:
+      "Larger conductors generally have lower resistance, so increasing conductor size normally reduces voltage drop when the other circuit conditions remain unchanged. In AWG, remember that a smaller number means a larger conductor. Thus 10 AWG is larger than 12 AWG."
   },
   {
-    "question": "How does current (Amps) affect voltage drop?",
-    "answer": "Voltage drop is directly proportional to current (Amperes), according to Ohm's Law (V = I × Z). If the current traveling through a conductor doubles, the voltage drop will double. This is why circuits supplying high-power appliances (like heaters or chargers) experience higher voltage drop."
+    question: "What is the difference between voltage drop and ampacity?",
+    answer:
+      "Ampacity concerns the amount of current a conductor can safely carry under specified conditions. Voltage drop concerns the voltage lost along the circuit. A conductor can satisfy an ampacity requirement and still have undesirable voltage drop on a long run."
   },
   {
-    "question": "Does copper have less voltage drop than aluminum?",
-    "answer": "Yes, copper is a better electrical conductor than aluminum and has lower resistivity. A copper wire of a given size (AWG or mm²) will experience roughly 35% to 40% less voltage drop than an aluminum wire of the exact same size under the same load."
+    question: "Does wire length affect voltage drop?",
+    answer:
+      "Yes. With current and conductor impedance held constant, voltage drop is approximately proportional to conductor length. Doubling the relevant distance approximately doubles the calculated drop."
   },
   {
-    "question": "What is the formula for calculating DC voltage drop?",
-    "answer": "For Direct Current (DC) circuits, the formula is: Vdrop = (2 × L × I × R) / 1000, where L is the one-way distance in feet, I is current in Amps, and R is the DC resistance of the wire in ohms per 1000 feet. The factor of 2 accounts for the out-and-back path of the current."
+    question: "Does current affect voltage drop?",
+    answer:
+      "Yes. For the calculator's fixed-impedance models, voltage drop is approximately proportional to current. Doubling current approximately doubles the calculated voltage drop."
   },
   {
-    "question": "How do you calculate AC single-phase voltage drop?",
-    "answer": "For AC single-phase circuits, calculations must account for inductive reactance (X) in addition to AC resistance (R). The effective impedance is: Z_eff = R × cosθ + X × sinθ, where cosθ is the power factor. The voltage drop is then: Vdrop = (2 × L × I × Z_eff) / 1000."
+    question: "How is AC single-phase voltage drop different from DC voltage drop?",
+    answer:
+      "A basic DC calculation can use conductor resistance alone. AC calculations can also involve inductive reactance and power factor, which affect the effective impedance used in the voltage-drop calculation."
   },
   {
-    "question": "What is the formula for AC three-phase voltage drop?",
-    "answer": "For AC three-phase systems, line-to-line voltage drop is calculated as: Vdrop = (√3 × L × I × Z_eff) / 1000. Here, the factor of √3 (approximately 1.732) is used instead of 2 because phase voltages are shifted by 120 degrees, meaning current return paths are shared among the three wires."
+    question: "What is the three-phase voltage-drop formula?",
+    answer:
+      "For the calculator's balanced three-phase model: Vdrop = √3 × I × L × Zeff / 1000. The √3 factor is approximately 1.732 and comes from the phase relationship in a balanced three-phase system."
   },
   {
-    "question": "Does power factor affect voltage drop in AC circuits?",
-    "answer": "Yes, power factor (PF) represents the alignment between voltage and current. Lower power factor indicates inductive reactance in the circuit (commonly from motors or transformers). Under low power factor conditions, inductive reactance (X) contributes significantly more to the overall impedance and voltage drop than it does at a unity power factor."
+    question: "Does power factor affect voltage drop?",
+    answer:
+      "Yes, in the calculator's AC impedance model. Power factor determines the phase relationship between voltage and current and therefore affects how resistance and reactance contribute to effective impedance."
   },
   {
-    "question": "How can I reduce voltage drop in my design?",
-    "answer": "You can reduce voltage drop by: 1. Increasing the size (cross-sectional area) of the wire; 2. Using copper instead of aluminum; 3. Running multiple conductors in parallel; 4. Shortening the path length; or 5. Operating at a higher system voltage (e.g., converting 120V to 240V, which cuts current in half for the same power, reducing drop by 75%)."
+    question: "What is an acceptable voltage drop?",
+    answer:
+      "There is no single universal percentage that automatically establishes compliance for every electrical installation. Common design targets such as 3% or 5% are useful engineering criteria, but the applicable electrical code, installation conditions and equipment requirements must be evaluated separately."
   },
   {
-    "question": "Does a larger AWG number mean a larger wire size?",
-    "answer": "No, American Wire Gauge (AWG) is an inverse logarithmic scale. A smaller AWG number represents a larger conductor diameter. For example, a 10 AWG wire is larger than a 12 AWG wire, and has lower resistance. The scale transitions to 'ought' sizes (1/0, 2/0, etc.) and then to circular mils (kcmil) for even larger cables."
+    question: "Is 3% voltage drop required by the NEC?",
+    answer:
+      "The calculator should not describe 3% as a blanket mandatory NEC requirement. NEC voltage-drop language includes informational guidance in relevant sections, while other parts of electrical design contain mandatory requirements. The edition adopted by the local jurisdiction and the specific installation must be reviewed for a code determination. The page's own engineering content deliberately distinguishes code rules from voltage-drop guidance."
   },
   {
-    "question": "What is the difference between voltage drop and ampacity?",
-    "answer": "Ampacity is the maximum current a wire can carry continuously without exceeding its insulation's temperature rating (a safety threshold to prevent fires). Voltage drop is the measure of electric potential lost along the wire. A wire might be safe to carry a load (sufficient ampacity) but still drop too much voltage over a long distance, causing equipment malfunction."
+    question: "Is copper better than aluminum for voltage drop?",
+    answer:
+      "Copper generally has lower resistivity than aluminum for comparable conductor dimensions, but conductor selection is an engineering decision involving size, cost, installation conditions, terminations and applicable requirements. The calculator evaluates the selected material using its corresponding conductor data."
   },
   {
-    "question": "Does conduit material affect AC voltage drop?",
-    "answer": "Yes. Enclosing AC conductors in metallic/steel conduit introduces magnetic induction, which increases the wire's inductive reactance (X) and AC resistance. PVC and aluminum conduits are nonmagnetic, resulting in lower reactance and less voltage drop compared to steel conduit."
+    question: "Does conduit material affect voltage drop?",
+    answer:
+      "It can affect AC reactance when the installation and conductor data account for magnetic effects. The calculator therefore distinguishes conduit conditions in its AC conductor model where applicable."
   },
   {
-    "question": "Does temperature affect wire resistance and voltage drop?",
-    "answer": "Yes. As a conductor's temperature increases, its metal atoms vibrate more rapidly, impeding electron flow and increasing resistance. Copper resistance increases by about 0.393% per °C rise, which is why standard voltage drop calculations (like NEC Chapter 9 Table 9) assume a warm conductor operating temperature of 75°C (167°F)."
+    question: "Does a longer cable always have more voltage drop?",
+    answer:
+      "Under the same current and conductor characteristics, a longer run produces more voltage drop. The relationship is approximately linear for the fixed-impedance equations used by the calculator."
+  },
+  {
+    question: "What happens if I use two parallel conductors?",
+    answer:
+      "In the calculator's parallel-conductor model, effective resistance and reactance are reduced according to: R_eff = R/N and X_eff = X/N for N parallel conductors per phase. Actual installation requirements for parallel conductors still need separate verification."
+  },
+  {
+    question: "What happens when current is zero?",
+    answer:
+      "With zero current, the calculated voltage drop is zero for the supported physical models. The calculator preserves a legitimate explicit zero rather than replacing it with a default value."
+  },
+  {
+    question: "Can voltage drop be zero?",
+    answer:
+      "Yes. A zero drop can occur in the mathematical model when current or effective circuit impedance is zero, or when the modeled conductor distance is zero. In real installations, exact zero drop is generally an idealized condition."
   }
 ];
-
-export default voltage_drop_calculatorFaqs;
