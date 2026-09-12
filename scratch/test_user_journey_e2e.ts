@@ -86,7 +86,7 @@ function runUserJourney() {
   reportStep("Inspect pathname in breakdown", breakdown?.pathname === "/v1/search");
 
   // 18. Inspect query
-  reportStep("Inspect search query in breakdown", breakdown?.search.includes("hello"));
+  reportStep("Inspect search query in breakdown", Boolean(breakdown?.search.includes("hello")));
 
   // 19. Inspect fragment
   reportStep("Inspect fragment in breakdown", breakdown?.hash === "#results");
