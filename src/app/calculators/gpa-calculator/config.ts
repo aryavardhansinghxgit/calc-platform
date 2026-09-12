@@ -34,11 +34,8 @@ export const gpa_calculatorConfig: CalculatorModuleDefinition = {
   relatedCalculators: [
     "grade-calculator",
     "hours-calculator",
-    "scientific-calculator",
     "statistics-calculator",
     "percentage-calculator",
-    "fraction-calculator",
-    "ratio-calculator"
   ],
   formulaDescription: "Quality Points = Grade Point Value × Credit Hours | Semester GPA = Total Quality Points / Total Graded Credits",
   faqs: gpa_calculatorFaqs,

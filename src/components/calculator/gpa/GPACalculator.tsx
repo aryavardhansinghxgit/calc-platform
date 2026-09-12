@@ -15,6 +15,12 @@ import {
   Check,
   RotateCcw,
   BarChart2,
+  Copy,
+  Printer,
+  Download,
+  Code,
+  AlertTriangle,
+  FolderOpen,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -79,11 +85,19 @@ export function GPACalculator() {
 
   // UI & Report States
   const [isSaved, setIsSaved] = useState<boolean>(false);
+  const [isRestored, setIsRestored] = useState<boolean>(false);
+  const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
   const [showReportModal, setShowReportModal] = useState<boolean>(false);
 
   // Active semester courses shortcut
   const activeSemester = semesters.find((s) => s.id === activeSemId) || semesters[0];
   const courses = activeSemester.courses;
+
+  // Feedback banner timer
+  const triggerCopyFeedback = (msg: string) => {
+    setCopyFeedback(msg);
+    setTimeout(() => setCopyFeedback(null), 2500);
+  };
 
   // Add New Course to Active Semester
   const handleAddCourse = () => {
@@ -156,6 +170,40 @@ export function GPACalculator() {
     } catch (e) {}
   }, []);
 
+  // Save Transcript to Local Storage
+  const handleSaveTranscript = () => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("user_gpa_transcript", JSON.stringify({ semesters, priorGpa, priorCredits }));
+      setIsSaved(true);
+      setTimeout(() => setIsSaved(false), 2000);
+    }
+  };
+
+  // Restore Transcript from Local Storage
+  const handleRestoreTranscript = () => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("user_gpa_transcript");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.semesters && Array.isArray(parsed.semesters) && parsed.semesters.length > 0) {
+            setSemesters(parsed.semesters);
+            setActiveSemId(parsed.semesters[0].id);
+          }
+          if (typeof parsed.priorGpa === "number") setPriorGpa(parsed.priorGpa);
+          if (typeof parsed.priorCredits === "number") setPriorCredits(parsed.priorCredits);
+          setIsRestored(true);
+          setTimeout(() => setIsRestored(false), 2000);
+          triggerCopyFeedback("Transcript restored from saved state!");
+        } else {
+          triggerCopyFeedback("No saved transcript found.");
+        }
+      } catch (e) {
+        triggerCopyFeedback("Error restoring transcript.");
+      }
+    }
+  };
+
   // Reset to initial baseline
   const handleReset = () => {
     setMode("college");
@@ -192,12 +240,176 @@ export function GPACalculator() {
     });
   }, [mode, priorGpa, priorCredits, targetGpa, additionalCredits, courses, semesters]);
 
-  // Save Transcript to Local Storage
-  const handleSaveTranscript = () => {
+  // Validation Flags
+  const hasZeroCredits = useMemo(() => {
+    return courses.some((c) => Number(c.credits) <= 0);
+  }, [courses]);
+
+  // Copy Result to Clipboard
+  const handleCopyResult = () => {
+    let summaryText = "";
+    if (mode === "college") {
+      summaryText = `Semester GPA: ${result.semesterGpa.toFixed(2)}\nCumulative CGPA: ${result.cumulativeGpa.toFixed(2)}\nTotal Quality Points: ${result.totalQualityPoints.toFixed(1)}\nGraded Credits: ${result.totalGradedCredits}\nAcademic Standing: ${result.academicStanding}`;
+    } else if (mode === "weighted_hs") {
+      summaryText = `Weighted HS GPA (5.0): ${result.weightedGpa.toFixed(2)}\nUnweighted GPA: ${result.unweightedGpa.toFixed(2)}\nTotal Quality Points: ${result.totalQualityPoints.toFixed(1)}\nGraded Credits: ${result.totalGradedCredits}\nAcademic Standing: ${result.academicStanding}`;
+    } else if (mode === "target") {
+      summaryText = `Target GPA: ${targetGpa.toFixed(2)}\nCurrent Cumulative GPA: ${result.cumulativeGpa.toFixed(2)}\nRequired Future GPA: ${result.targetResult?.requiredGpa.toFixed(2) ?? "N/A"}\nUpcoming Credits: ${additionalCredits}\nFeasibility: ${result.targetResult?.isAchievable ? "Feasible" : "Unachievable on 4.0 scale"}\nGuidance: ${result.targetResult?.recommendedGradeMix ?? ""}`;
+    } else if (mode === "international") {
+      summaryText = `US 4.0 GPA: ${result.cumulativeGpa.toFixed(2)}\nMIT 5.0 Scale: ${result.internationalResult?.mitScale5 ?? ""}/5.0\nCanadian/ASU 4.33 Scale: ${result.internationalResult?.canadianScale433 ?? ""}/4.33\nIndian 10.0 CGPA: ${result.internationalResult?.indianCgpa10 ?? ""}/10.0\nUK Degree Class: ${result.internationalResult?.ukClassification ?? ""}\nEuropean ECTS: ${result.internationalResult?.ectsGrade ?? ""}\nNote: Illustrative conversion mapping only.`;
+    }
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(summaryText);
+      triggerCopyFeedback("Calculation result copied to clipboard!");
+    }
+  };
+
+  // Copy Summary (Transcript Table)
+  const handleCopySummary = () => {
+    let summaryText = `ACADEMIC SUMMARY REPORT\n=========================\nMode: ${mode.toUpperCase()}\n\n`;
+    semesters.forEach((sem) => {
+      summaryText += `${sem.name}:\n`;
+      summaryText += `Course\tGrade\tCredits\tLevel\n`;
+      sem.courses.forEach((c) => {
+        summaryText += `${c.name}\t${c.grade}\t${c.credits}\t${c.level}\n`;
+      });
+      summaryText += `\n`;
+    });
+    summaryText += `Prior Cumulative GPA: ${priorGpa.toFixed(2)} (${priorCredits} credits)\n`;
+    summaryText += `Semester GPA: ${result.semesterGpa.toFixed(2)}\n`;
+    summaryText += `Cumulative CGPA: ${result.cumulativeGpa.toFixed(2)}\n`;
+    summaryText += `High School Weighted GPA: ${result.weightedGpa.toFixed(2)}\n`;
+    summaryText += `Total Quality Points: ${result.totalQualityPoints.toFixed(1)}\n`;
+    summaryText += `Total Graded Credits: ${result.totalGradedCredits}\n`;
+    summaryText += `Academic Standing: ${result.academicStanding}\n`;
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(summaryText);
+      triggerCopyFeedback("Full academic summary copied to clipboard!");
+    }
+  };
+
+  // Export CSV (RFC-4180 compliant)
+  const handleExportCSV = () => {
+    const escapeCsv = (str: string) => {
+      if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Semester,Course Name,Grade,Credits,Level\n";
+
+    semesters.forEach((sem) => {
+      sem.courses.forEach((c) => {
+        csvContent += `${escapeCsv(sem.name)},${escapeCsv(c.name)},${escapeCsv(c.grade)},${c.credits},${escapeCsv(c.level)}\n`;
+      });
+    });
+
+    csvContent += "\nSummary Metric,Value\n";
+    csvContent += `Semester GPA,${result.semesterGpa.toFixed(2)}\n`;
+    csvContent += `Cumulative CGPA,${result.cumulativeGpa.toFixed(2)}\n`;
+    csvContent += `High School Weighted GPA (5.0),${result.weightedGpa.toFixed(2)}\n`;
+    csvContent += `Total Quality Points,${result.totalQualityPoints.toFixed(1)}\n`;
+    csvContent += `Total Graded Credits,${result.totalGradedCredits}\n`;
+    csvContent += `Prior Cumulative GPA,${priorGpa.toFixed(2)}\n`;
+    csvContent += `Prior Graded Credits,${priorCredits}\n`;
+    csvContent += `Academic Standing,${escapeCsv(result.academicStanding)}\n`;
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `gpa_transcript_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    triggerCopyFeedback("CSV transcript exported!");
+  };
+
+  // Export TXT Report
+  const handleExportTXT = () => {
+    let txt = `========================================================\n`;
+    txt += `       ACADEMIC TRANSCRIPT & GPA AUDIT REPORT           \n`;
+    txt += `========================================================\n\n`;
+    txt += `Calculation Mode: ${mode.toUpperCase()}\n`;
+    txt += `Generated on: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\n\n`;
+
+    txt += `ACADEMIC HISTORY:\n`;
+    txt += `  Prior Cumulative GPA: ${priorGpa.toFixed(2)}\n`;
+    txt += `  Prior Graded Credits: ${priorCredits}\n\n`;
+
+    semesters.forEach((sem) => {
+      txt += `--------------------------------------------------------\n`;
+      txt += `TERM: ${sem.name}\n`;
+      txt += `--------------------------------------------------------\n`;
+      sem.courses.forEach((c) => {
+        txt += `  * ${c.name.padEnd(28)} | Grade: ${c.grade.padEnd(4)} | Credits: ${String(c.credits).padEnd(2)} | Level: ${c.level}\n`;
+      });
+      txt += `\n`;
+    });
+
+    txt += `--------------------------------------------------------\n`;
+    txt += `PERFORMANCE SUMMARY:\n`;
+    txt += `--------------------------------------------------------\n`;
+    txt += `  Semester GPA:             ${result.semesterGpa.toFixed(2)}\n`;
+    txt += `  Cumulative CGPA:          ${result.cumulativeGpa.toFixed(2)}\n`;
+    txt += `  Weighted HS GPA (5.0):    ${result.weightedGpa.toFixed(2)}\n`;
+    txt += `  Total Quality Points:     ${result.totalQualityPoints.toFixed(1)}\n`;
+    txt += `  Total Graded Credits:     ${result.totalGradedCredits}\n`;
+    txt += `  Academic Standing:        ${result.academicStanding}\n\n`;
+
+    if (mode === "target" && result.targetResult) {
+      txt += `TARGET GPA PLANNER ANALYSIS:\n`;
+      txt += `  Desired Target GPA:       ${result.targetResult.targetGpa.toFixed(2)}\n`;
+      txt += `  Upcoming Credits:         ${result.targetResult.additionalCredits}\n`;
+      txt += `  Required Future GPA:      ${result.targetResult.requiredGpa.toFixed(2)}\n`;
+      txt += `  Feasibility Assessment:   ${result.targetResult.isAchievable ? "Feasible" : "Mathematically unreachable on 4.0 scale"}\n`;
+      txt += `  Recommendation:           ${result.targetResult.recommendedGradeMix}\n\n`;
+    }
+
+    if (mode === "international" && result.internationalResult) {
+      txt += `INTERNATIONAL CONVERSIONS (Illustrative Mapping):\n`;
+      txt += `  MIT 5.0 Scale:            ${result.internationalResult.mitScale5} / 5.0\n`;
+      txt += `  Canadian/ASU 4.33 Scale:  ${result.internationalResult.canadianScale433} / 4.33\n`;
+      txt += `  Indian 10.0 CGPA:         ${result.internationalResult.indianCgpa10} / 10.0\n`;
+      txt += `  UK Degree Classification: ${result.internationalResult.ukClassification}\n`;
+      txt += `  European ECTS Grade:      ${result.internationalResult.ectsGrade}\n\n`;
+    }
+
+    txt += `DISCLAIMER:\nThis document is an illustrative academic planning report generated by CalcPlatform.\nOfficial transcript evaluation must be verified with your institution's registrar.\n`;
+
+    const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `academic_report_${Date.now()}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    triggerCopyFeedback("TXT report downloaded!");
+  };
+
+  // Copy LaTeX Equations
+  const handleCopyLaTeX = () => {
+    const latex = `\\begin{aligned}
+\\text{Quality Points}_i &= G_i \\times C_i \\\\
+\\text{Semester GPA} &= \\frac{\\sum Q_i}{\\sum C_i} = \\frac{${result.totalQualityPoints.toFixed(1)}}{${result.totalGradedCredits}} = ${result.semesterGpa.toFixed(2)} \\\\
+\\text{Cumulative GPA} &= \\frac{\\text{Prior Points} + \\sum Q_i}{\\text{Prior Credits} + \\sum C_i} = \\frac{${(priorGpa * priorCredits + result.totalQualityPoints).toFixed(1)}}{${priorCredits + result.totalGradedCredits}} = ${result.cumulativeGpa.toFixed(2)} \\\\
+\\text{Required Future GPA} &= \\frac{T \\times (C_{\\text{cum}} + C_{\\text{fut}}) - Q_{\\text{cum}}}{C_{\\text{fut}}}
+\\end{aligned}`;
+
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(latex);
+      triggerCopyFeedback("LaTeX equations copied to clipboard!");
+    }
+  };
+
+  // Print
+  const handlePrint = () => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("user_gpa_transcript", JSON.stringify({ semesters, priorGpa, priorCredits }));
-      setIsSaved(true);
-      setTimeout(() => setIsSaved(false), 2000);
+      window.print();
     }
   };
 
@@ -216,6 +428,7 @@ export function GPACalculator() {
         formatted: {
           semesterGpa: result.semesterGpa.toFixed(2),
           cumulativeGpa: result.cumulativeGpa.toFixed(2),
+          weightedGpa: result.weightedGpa.toFixed(2),
           academicStanding: result.academicStanding,
         },
       }
@@ -240,11 +453,11 @@ export function GPACalculator() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
           <button
             type="button"
             onClick={handleReset}
-            className="px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-zinc-800 hover:bg-slate-300 dark:hover:bg-zinc-700 text-xs font-bold text-slate-800 dark:text-zinc-200 flex items-center gap-1.5 transition-all cursor-pointer"
+            className="px-2.5 py-1.5 rounded-xl bg-slate-200 dark:bg-zinc-800 hover:bg-slate-300 dark:hover:bg-zinc-700 text-xs font-bold text-slate-800 dark:text-zinc-200 flex items-center gap-1 transition-all cursor-pointer"
             title="Reset calculator to defaults"
           >
             <RotateCcw className="h-3.5 w-3.5" />
@@ -253,13 +466,48 @@ export function GPACalculator() {
           <button
             type="button"
             onClick={handleSaveTranscript}
-            className="px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-zinc-800 hover:bg-slate-300 dark:hover:bg-zinc-700 text-xs font-bold text-slate-800 dark:text-zinc-200 flex items-center gap-1.5 transition-all cursor-pointer"
+            className="px-2.5 py-1.5 rounded-xl bg-slate-200 dark:bg-zinc-800 hover:bg-slate-300 dark:hover:bg-zinc-700 text-xs font-bold text-slate-800 dark:text-zinc-200 flex items-center gap-1 transition-all cursor-pointer"
+            title="Save current courses to browser storage"
           >
             {isSaved ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Save className="h-3.5 w-3.5" />}
-            <span>{isSaved ? "Saved!" : "Save Transcript"}</span>
+            <span>{isSaved ? "Saved!" : "Save"}</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleRestoreTranscript}
+            className="px-2.5 py-1.5 rounded-xl bg-slate-200 dark:bg-zinc-800 hover:bg-slate-300 dark:hover:bg-zinc-700 text-xs font-bold text-slate-800 dark:text-zinc-200 flex items-center gap-1 transition-all cursor-pointer"
+            title="Restore transcript from browser storage"
+          >
+            {isRestored ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <FolderOpen className="h-3.5 w-3.5" />}
+            <span>Restore</span>
           </button>
         </div>
       </div>
+
+      {/* COPY FEEDBACK TOAST */}
+      {copyFeedback && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-xs font-bold text-blue-700 dark:text-blue-300 flex items-center gap-2 shadow-xs transition-all"
+        >
+          <Check className="h-4 w-4 text-emerald-600" />
+          <span>{copyFeedback}</span>
+        </div>
+      )}
+
+      {/* ZERO OR INVALID CREDIT VALIDATION ALERT */}
+      {hasZeroCredits && (
+        <div
+          role="alert"
+          className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 text-xs text-amber-800 dark:text-amber-200 flex items-center gap-2 shadow-xs"
+        >
+          <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
+          <span>
+            <strong>Notice:</strong> One or more courses have 0 credit hours. Courses with 0 credits are excluded from graded GPA quality points to prevent division by zero.
+          </span>
+        </div>
+      )}
 
       {/* WORKSPACE 2-COLUMN GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -413,7 +661,7 @@ export function GPACalculator() {
                 <span className={`${mode === "weighted_hs" ? "col-span-1" : "col-span-3"} text-right`}>Action</span>
               </div>
 
-              {courses.map((course) => (
+              {courses.map((course, idx) => (
                 <div
                   key={course.id}
                   className="grid grid-cols-12 gap-2 items-center bg-slate-50 dark:bg-zinc-800/60 p-2 rounded-xl border border-slate-200 dark:border-zinc-700/80"
@@ -421,10 +669,12 @@ export function GPACalculator() {
                   {/* Name */}
                   <div className="col-span-4">
                     <Input
+                      id={`course-name-${course.id}`}
                       type="text"
                       value={course.name}
                       onChange={(e) => handleUpdateCourse(course.id, "name", e.target.value)}
                       placeholder="Course name"
+                      aria-label={`Course ${idx + 1} Name`}
                       className="h-8 text-xs font-bold bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-700"
                     />
                   </div>
@@ -432,8 +682,10 @@ export function GPACalculator() {
                   {/* Grade Dropdown */}
                   <div className="col-span-3">
                     <select
+                      id={`course-grade-${course.id}`}
                       value={course.grade}
                       onChange={(e) => handleUpdateCourse(course.id, "grade", e.target.value as GradeLetter)}
+                      aria-label={`Course ${idx + 1} Grade`}
                       className="w-full h-8 px-2 rounded-lg text-xs font-bold bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 text-slate-900 dark:text-zinc-100"
                     >
                       {GRADE_OPTIONS.map((g) => (
@@ -447,11 +699,13 @@ export function GPACalculator() {
                   {/* Credits */}
                   <div className="col-span-2">
                     <Input
+                      id={`course-credits-${course.id}`}
                       type="number"
                       min="0"
                       max="12"
                       value={course.credits}
                       onChange={(e) => handleUpdateCourse(course.id, "credits", parseInt(e.target.value, 10) || 0)}
+                      aria-label={`Course ${idx + 1} Credits`}
                       className="h-8 text-xs font-sans tabular-nums text-center bg-white dark:bg-zinc-900 border-slate-200 dark:border-zinc-700"
                     />
                   </div>
@@ -460,8 +714,10 @@ export function GPACalculator() {
                   {mode === "weighted_hs" && (
                     <div className="col-span-2">
                       <select
+                        id={`course-level-${course.id}`}
                         value={course.level}
                         onChange={(e) => handleUpdateCourse(course.id, "level", e.target.value as GradeLevel)}
+                        aria-label={`Course ${idx + 1} Academic Level`}
                         className="w-full h-8 px-1 rounded-lg text-[10px] font-bold bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700"
                       >
                         <option value="regular">Regular (+0.0)</option>
@@ -477,6 +733,7 @@ export function GPACalculator() {
                       type="button"
                       onClick={() => handleRemoveCourse(course.id)}
                       disabled={courses.length <= 1}
+                      aria-label={`Delete ${course.name || `Course ${idx + 1}`}`}
                       className="p-1.5 text-slate-400 hover:text-rose-600 disabled:opacity-30 transition-colors cursor-pointer"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -498,7 +755,10 @@ export function GPACalculator() {
         </div>
 
         {/* RIGHT COLUMN (Col 5) - LIGHT ADAPTIVE RESULT DASHBOARD */}
-        <div className="lg:col-span-5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4 text-slate-900 dark:text-zinc-100">
+        <div
+          aria-live="polite"
+          className="lg:col-span-5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-5 rounded-2xl shadow-xs space-y-4 text-slate-900 dark:text-zinc-100"
+        >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-2.5">
             <span className="text-xs font-extrabold uppercase tracking-wider text-slate-700 dark:text-zinc-300 flex items-center gap-1.5">
@@ -618,11 +878,14 @@ export function GPACalculator() {
                   <span className="font-bold text-purple-600 dark:text-purple-400">{result.internationalResult.ectsGrade}</span>
                 </div>
               </div>
+              <p className="text-[10px] text-slate-400 pt-1 border-t border-slate-200/60 dark:border-zinc-700/60">
+                *Illustrative conversion model. Official transcript evaluation requires institutional review.
+              </p>
             </div>
           )}
 
-          {/* ACTION BUTTONS */}
-          <div className="pt-2">
+          {/* EXPORT & ACTION SUITE */}
+          <div className="pt-2 space-y-2.5">
             <button
               type="button"
               onClick={() => setShowReportModal(true)}
@@ -630,6 +893,64 @@ export function GPACalculator() {
             >
               <FileText className="h-4 w-4" /> Download Academic Summary PDF Report
             </button>
+
+            {/* Quick Export Grid */}
+            <div className="grid grid-cols-3 gap-1.5 text-[11px] font-bold text-slate-700 dark:text-zinc-300">
+              <button
+                type="button"
+                onClick={handleCopyResult}
+                className="p-2 rounded-lg bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                title="Copy current mode calculation result"
+              >
+                <Copy className="h-3.5 w-3.5 text-blue-500" />
+                <span>Copy Result</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleCopySummary}
+                className="p-2 rounded-lg bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                title="Copy complete transcript table and summary"
+              >
+                <FileText className="h-3.5 w-3.5 text-purple-500" />
+                <span>Transcript</span>
+              </button>
+              <button
+                type="button"
+                onClick={handlePrint}
+                className="p-2 rounded-lg bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                title="Print this page"
+              >
+                <Printer className="h-3.5 w-3.5 text-emerald-500" />
+                <span>Print</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleExportCSV}
+                className="p-2 rounded-lg bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                title="Download CSV course data"
+              >
+                <Download className="h-3.5 w-3.5 text-amber-500" />
+                <span>CSV</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleExportTXT}
+                className="p-2 rounded-lg bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                title="Download plain text academic report"
+              >
+                <FileText className="h-3.5 w-3.5 text-cyan-500" />
+                <span>TXT</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleCopyLaTeX}
+                className="p-2 rounded-lg bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                title="Copy LaTeX formula derivation"
+              >
+                <Code className="h-3.5 w-3.5 text-indigo-500" />
+                <span>LaTeX</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
