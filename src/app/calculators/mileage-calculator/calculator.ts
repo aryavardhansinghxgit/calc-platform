@@ -3,13 +3,34 @@ import {
   UnitSystem,
   IndianFuelType,
   ReimbursementCategory,
+  TaxYear,
   EfficiencyTier,
   LegInput,
   EnvironmentalModifiers,
   MileageResult,
 } from "./types";
 
-export function getIRSReimbursementRate(category: ReimbursementCategory): number {
+// Mathematical Conversion Constants
+export const US_TO_L100KM = 235.214583;
+export const UK_TO_L100KM = 282.480936;
+export const US_TO_UK_MPG = 4.54609 / 3.785411784; // ~1.2009499
+export const MPGE_KWH_EQUIV = 33.7; // 1 US gallon of gasoline = 33.7 kWh energy equivalent
+
+export function getIRSReimbursementRate(category: ReimbursementCategory, year: TaxYear = "2024"): number {
+  if (year === "2025") {
+    switch (category) {
+      case "business":
+        return 0.70; // 2025 IRS standard rate
+      case "medical":
+        return 0.21;
+      case "charity":
+        return 0.14;
+      default:
+        return 0.70;
+    }
+  }
+
+  // 2024 IRS standard rates
   switch (category) {
     case "business":
       return 0.67;
@@ -41,12 +62,24 @@ export function getIndianDefaultFuelPrice(fuelType: IndianFuelType): number {
   }
 }
 
+export function formatCurrency(amount: number, symbol: string = "$"): string {
+  if (isNaN(amount) || !isFinite(amount)) return `${symbol}0.00`;
+  const isNeg = amount < 0;
+  const abs = Math.abs(amount);
+  const locale = symbol === "₹" ? "en-IN" : "en-US";
+  const str = abs.toLocaleString(locale, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return `${isNeg ? "-" : ""}${symbol}${str}`;
+}
+
 export function evaluateEfficiencyTier(usMpg: number): {
   tier: EfficiencyTier;
   label: string;
 } {
   if (usMpg < 20) {
-    return { tier: "heavy_consumption", label: "Heavy Fuel Consumption (<20 MPG / <8.5 km/l)" };
+    return { tier: "heavy_consumption", label: "Heavy Consumption (<20 MPG / <8.5 km/l)" };
   } else if (usMpg <= 32) {
     return { tier: "average", label: "Average Efficiency (20–32 MPG / 8.5–13.6 km/l)" };
   } else if (usMpg <= 50) {
@@ -85,38 +118,21 @@ export function calculateMileage(
     aggressiveDriving: false,
     coldWeather: false,
   },
-  // Indian Metric Specifics
-  indianFuelType: IndianFuelType = "petrol"
+  // Fuel / Energy Type
+  indianFuelType: IndianFuelType = "petrol",
+  taxYear: TaxYear = "2024"
 ): MileageResult {
-  // Environmental penalty ratio
+  // Environmental penalty ratio (additive compounding of real-world degradation)
   let penaltyRatio = 0;
-  if (modifiers.cityDriving) penaltyRatio += 0.15;
-  if (modifiers.towing) penaltyRatio += 0.25;
-  if (modifiers.aggressiveDriving) penaltyRatio += 0.20;
-  if (modifiers.coldWeather) penaltyRatio += 0.12;
+  if (modifiers?.cityDriving) penaltyRatio += 0.15;
+  if (modifiers?.towing) penaltyRatio += 0.25;
+  if (modifiers?.aggressiveDriving) penaltyRatio += 0.20;
+  if (modifiers?.coldWeather) penaltyRatio += 0.12;
 
   const penaltyMultiplier = 1 + penaltyRatio;
 
-  let totalDistance = 0;
-  let totalFuelUsed = 0;
-  let totalFuelCost = 0;
-  let usMpg = 0;
-  let ukMpg = 0;
-  let litersPer100km = 0;
-  let kmPerLiter = 0;
-  let mpge = 0;
-  let kWhPer100mi = 0;
-  let taxReimbursementAmount = 0;
-  let reimbursementRatePerMile = getIRSReimbursementRate(reimbursementCategory);
-
-  if (customRatePerMile !== undefined && customRatePerMile > 0) {
-    reimbursementRatePerMile = customRatePerMile;
-  }
-
-  // Currency symbol
+  // Currency symbol & Units
   const currencySymbol = unitSystem === "indian_metric" ? "₹" : "$";
-
-  // Units
   let distanceUnit = "mi";
   let fuelUnit = "US Gal";
 
@@ -133,117 +149,257 @@ export function calculateMileage(
     fuelUnit = "UK Gal";
   }
 
-  if (mode === "fuel_mileage") {
-    totalDistance = isOdometerMode ? Math.max(0, endOdometer - startOdometer) : Math.max(0, distanceInput);
-    totalFuelUsed = Math.max(0.1, fuelInput) * penaltyMultiplier;
-    totalFuelCost = totalFuelUsed * Math.max(0, fuelPriceInput);
+  // Determine active reimbursement rate
+  let reimbursementRatePerMile = getIRSReimbursementRate(reimbursementCategory, taxYear);
+  if (customRatePerMile !== undefined && !isNaN(customRatePerMile) && customRatePerMile >= 0) {
+    reimbursementRatePerMile = customRatePerMile;
+  }
 
-    if (unitSystem === "indian_metric") {
-      // Input is km and Liters/kg
-      const km = totalDistance;
-      const fuel = totalFuelUsed;
-      kmPerLiter = fuel > 0 ? km / fuel : 0;
-      litersPer100km = kmPerLiter > 0 ? 100 / kmPerLiter : 0;
-      usMpg = kmPerLiter * 2.35215;
-      ukMpg = usMpg * 1.20095;
-    } else if (unitSystem === "metric") {
-      const km = totalDistance;
-      const liters = totalFuelUsed;
-      litersPer100km = km > 0 ? (liters * 100) / km : 0;
-      kmPerLiter = liters > 0 ? km / liters : 0;
-      usMpg = litersPer100km > 0 ? 235.215 / litersPer100km : 0;
-      ukMpg = litersPer100km > 0 ? 282.481 / litersPer100km : 0;
-    } else if (unitSystem === "uk_imperial") {
-      const miles = totalDistance;
-      const ukGal = totalFuelUsed;
-      ukMpg = ukGal > 0 ? miles / ukGal : 0;
-      const usGal = ukGal * 1.20095;
-      usMpg = usGal > 0 ? miles / usGal : 0;
-      litersPer100km = usMpg > 0 ? 235.215 / usMpg : 0;
-      kmPerLiter = litersPer100km > 0 ? 100 / litersPer100km : 0;
+  // Base output variables
+  let totalDistance = 0;
+  let totalFuelUsed = 0;
+  let totalFuelCost = 0;
+  let usMpg = 0;
+  let ukMpg = 0;
+  let litersPer100km = 0;
+  let kmPerLiter = 0;
+  let mpge = 0;
+  let kWhPer100mi = 0;
+  let taxReimbursementAmount = 0;
+  let isValid = true;
+  let errorMessage: string | undefined = undefined;
+  let isEmpty = false;
+
+  // VALIDATION & CORE LOGIC PER MODE
+  if (mode === "fuel_mileage") {
+    if (isOdometerMode) {
+      if (isNaN(startOdometer) || isNaN(endOdometer)) {
+        isValid = false;
+        errorMessage = "Odometer readings must be valid numbers.";
+      } else if (endOdometer < startOdometer) {
+        isValid = false;
+        errorMessage = "End odometer reading cannot be less than start odometer reading.";
+      } else {
+        totalDistance = endOdometer - startOdometer;
+      }
     } else {
-      const miles = totalDistance;
-      const usGal = totalFuelUsed;
-      usMpg = usGal > 0 ? miles / usGal : 0;
-      ukMpg = usMpg * 1.20095;
-      litersPer100km = usMpg > 0 ? 235.215 / usMpg : 0;
-      kmPerLiter = litersPer100km > 0 ? 100 / litersPer100km : 0;
+      if (isNaN(distanceInput)) {
+        isValid = false;
+        errorMessage = "Trip distance must be a valid number.";
+      } else if (distanceInput < 0) {
+        isValid = false;
+        errorMessage = "Trip distance cannot be negative.";
+      } else {
+        totalDistance = distanceInput;
+      }
+    }
+
+    if (isNaN(fuelInput)) {
+      isValid = false;
+      errorMessage = "Fuel volume must be a valid number.";
+    } else if (fuelInput <= 0) {
+      isValid = false;
+      errorMessage = "Fuel volume must be greater than zero to calculate mileage.";
+      totalFuelUsed = 0;
+    } else {
+      totalFuelUsed = fuelInput * penaltyMultiplier;
+    }
+
+    if (isNaN(fuelPriceInput) || fuelPriceInput < 0) {
+      isValid = false;
+      errorMessage = "Fuel price cannot be negative.";
+    } else {
+      totalFuelCost = totalFuelUsed * fuelPriceInput;
+    }
+
+    if (isValid && totalFuelUsed > 0 && totalDistance >= 0) {
+      if (unitSystem === "indian_metric") {
+        kmPerLiter = totalDistance / totalFuelUsed;
+        litersPer100km = kmPerLiter > 0 ? 100 / kmPerLiter : 0;
+        usMpg = kmPerLiter * (US_TO_L100KM / 100);
+        ukMpg = usMpg * US_TO_UK_MPG;
+      } else if (unitSystem === "metric") {
+        litersPer100km = totalDistance > 0 ? (totalFuelUsed * 100) / totalDistance : 0;
+        kmPerLiter = totalFuelUsed > 0 ? totalDistance / totalFuelUsed : 0;
+        usMpg = litersPer100km > 0 ? US_TO_L100KM / litersPer100km : 0;
+        ukMpg = litersPer100km > 0 ? UK_TO_L100KM / litersPer100km : 0;
+      } else if (unitSystem === "uk_imperial") {
+        ukMpg = totalDistance / totalFuelUsed;
+        usMpg = ukMpg / US_TO_UK_MPG;
+        litersPer100km = ukMpg > 0 ? UK_TO_L100KM / ukMpg : 0;
+        kmPerLiter = litersPer100km > 0 ? 100 / litersPer100km : 0;
+      } else {
+        // us_imperial
+        usMpg = totalDistance / totalFuelUsed;
+        ukMpg = usMpg * US_TO_UK_MPG;
+        litersPer100km = usMpg > 0 ? US_TO_L100KM / usMpg : 0;
+        kmPerLiter = litersPer100km > 0 ? 100 / litersPer100km : 0;
+      }
     }
   } else if (mode === "tax_reimbursement") {
-    totalDistance = Math.max(0, businessMiles);
-    taxReimbursementAmount = totalDistance * reimbursementRatePerMile;
+    if (isNaN(businessMiles)) {
+      isValid = false;
+      errorMessage = "Business miles must be a valid number.";
+    } else if (businessMiles < 0) {
+      isValid = false;
+      errorMessage = "Business miles cannot be negative.";
+    } else if (reimbursementRatePerMile < 0) {
+      isValid = false;
+      errorMessage = "Allowance rate cannot be negative.";
+    } else {
+      totalDistance = businessMiles;
+      taxReimbursementAmount = totalDistance * reimbursementRatePerMile;
+    }
+    // Baseline vehicle context for gauge display
     usMpg = 28;
-    ukMpg = usMpg * 1.20095;
-    litersPer100km = 235.215 / usMpg;
+    ukMpg = usMpg * US_TO_UK_MPG;
+    litersPer100km = US_TO_L100KM / usMpg;
     kmPerLiter = 100 / litersPer100km;
   } else if (mode === "multi_leg") {
-    let legDistSum = 0;
-    let legFuelSum = 0;
-    let legCostSum = 0;
-
-    for (const leg of legs) {
-      const d = Math.max(0, leg.distance);
-      const f = Math.max(0, leg.fuel) * penaltyMultiplier;
-      const p = Math.max(0, leg.pricePerUnit);
-      legDistSum += d;
-      legFuelSum += f;
-      legCostSum += f * p;
-    }
-
-    totalDistance = legDistSum;
-    totalFuelUsed = legFuelSum;
-    totalFuelCost = legCostSum;
-
-    if (unitSystem === "indian_metric") {
-      kmPerLiter = totalFuelUsed > 0 ? totalDistance / totalFuelUsed : 0;
-      litersPer100km = kmPerLiter > 0 ? 100 / kmPerLiter : 0;
-      usMpg = kmPerLiter * 2.35215;
-      ukMpg = usMpg * 1.20095;
-    } else if (unitSystem === "metric") {
-      litersPer100km = totalDistance > 0 ? (totalFuelUsed * 100) / totalDistance : 0;
-      kmPerLiter = totalFuelUsed > 0 ? totalDistance / totalFuelUsed : 0;
-      usMpg = litersPer100km > 0 ? 235.215 / litersPer100km : 0;
-      ukMpg = litersPer100km > 0 ? 282.481 / litersPer100km : 0;
+    if (!legs || legs.length === 0) {
+      isEmpty = true;
+      isValid = true;
+      totalDistance = 0;
+      totalFuelUsed = 0;
+      totalFuelCost = 0;
     } else {
-      usMpg = totalFuelUsed > 0 ? totalDistance / totalFuelUsed : 0;
-      ukMpg = usMpg * 1.20095;
-      litersPer100km = usMpg > 0 ? 235.215 / usMpg : 0;
-      kmPerLiter = litersPer100km > 0 ? 100 / litersPer100km : 0;
+      let legDistSum = 0;
+      let legFuelSum = 0;
+      let legCostSum = 0;
+
+      for (let i = 0; i < legs.length; i++) {
+        const leg = legs[i];
+        if (isNaN(leg.distance) || leg.distance < 0 || isNaN(leg.fuel) || leg.fuel < 0 || isNaN(leg.pricePerUnit) || leg.pricePerUnit < 0) {
+          isValid = false;
+          errorMessage = `Fill-up #${i + 1} contains invalid or negative numbers.`;
+          break;
+        }
+        const effectiveFuel = leg.fuel * penaltyMultiplier;
+        legDistSum += leg.distance;
+        legFuelSum += effectiveFuel;
+        legCostSum += effectiveFuel * leg.pricePerUnit;
+      }
+
+      if (isValid) {
+        totalDistance = legDistSum;
+        totalFuelUsed = legFuelSum;
+        totalFuelCost = legCostSum;
+
+        if (totalFuelUsed > 0) {
+          if (unitSystem === "indian_metric") {
+            kmPerLiter = totalDistance / totalFuelUsed;
+            litersPer100km = kmPerLiter > 0 ? 100 / kmPerLiter : 0;
+            usMpg = kmPerLiter * (US_TO_L100KM / 100);
+            ukMpg = usMpg * US_TO_UK_MPG;
+          } else if (unitSystem === "metric") {
+            litersPer100km = totalDistance > 0 ? (totalFuelUsed * 100) / totalDistance : 0;
+            kmPerLiter = totalFuelUsed > 0 ? totalDistance / totalFuelUsed : 0;
+            usMpg = litersPer100km > 0 ? US_TO_L100KM / litersPer100km : 0;
+            ukMpg = litersPer100km > 0 ? UK_TO_L100KM / litersPer100km : 0;
+          } else if (unitSystem === "uk_imperial") {
+            ukMpg = totalDistance / totalFuelUsed;
+            usMpg = ukMpg / US_TO_UK_MPG;
+            litersPer100km = ukMpg > 0 ? UK_TO_L100KM / ukMpg : 0;
+            kmPerLiter = litersPer100km > 0 ? 100 / litersPer100km : 0;
+          } else {
+            usMpg = totalDistance / totalFuelUsed;
+            ukMpg = usMpg * US_TO_UK_MPG;
+            litersPer100km = usMpg > 0 ? US_TO_L100KM / usMpg : 0;
+            kmPerLiter = litersPer100km > 0 ? 100 / litersPer100km : 0;
+          }
+        }
+      }
     }
   } else if (mode === "ev_mpge") {
-    totalDistance = Math.max(0, evDistanceMiles);
-    const kwh = Math.max(0.1, evKWhConsumed) * penaltyMultiplier;
-    totalFuelCost = kwh * Math.max(0, electricityCostPerKWh);
-    const milesPerKWh = totalDistance / kwh;
-    mpge = milesPerKWh * 33.7;
-    kWhPer100mi = (kwh / totalDistance) * 100;
+    if (isNaN(evDistanceMiles)) {
+      isValid = false;
+      errorMessage = "Distance driven must be a valid number.";
+    } else if (evDistanceMiles < 0) {
+      isValid = false;
+      errorMessage = "Distance driven cannot be negative.";
+    } else if (isNaN(evKWhConsumed)) {
+      isValid = false;
+      errorMessage = "Electricity used must be a valid number.";
+    } else if (evKWhConsumed <= 0) {
+      isValid = false;
+      errorMessage = "Electricity consumed must be greater than zero.";
+    } else if (isNaN(electricityCostPerKWh) || electricityCostPerKWh < 0) {
+      isValid = false;
+      errorMessage = "Electricity charging cost cannot be negative.";
+    } else {
+      totalDistance = evDistanceMiles;
+      const kwh = evKWhConsumed * penaltyMultiplier;
+      totalFuelUsed = kwh;
+      fuelUnit = "kWh";
+      totalFuelCost = kwh * electricityCostPerKWh;
 
-    usMpg = mpge;
-    ukMpg = mpge * 1.20095;
-    litersPer100km = 235.215 / Math.max(1, mpge);
-    kmPerLiter = 100 / litersPer100km;
+      const milesPerKWh = totalDistance > 0 ? totalDistance / kwh : 0;
+      mpge = milesPerKWh * MPGE_KWH_EQUIV;
+      kWhPer100mi = totalDistance > 0 ? (kwh / totalDistance) * 100 : 0;
+
+      usMpg = mpge;
+      ukMpg = mpge * US_TO_UK_MPG;
+      litersPer100km = mpge > 0 ? US_TO_L100KM / mpge : 0;
+      kmPerLiter = litersPer100km > 0 ? 100 / litersPer100km : 0;
+    }
   }
 
   // Financial Analytics
-  const costPerDistance = totalDistance > 0 ? totalFuelCost / totalDistance : 0;
-  const distancePerDollar = totalFuelCost > 0 ? totalDistance / totalFuelCost : 0;
-  const annualFuelCost = usMpg > 0 ? (annualDistanceMiles / usMpg) * fuelPriceInput : 0;
+  const costPerDistance = isValid && totalDistance > 0 ? totalFuelCost / totalDistance : 0;
+  const distancePerDollar = isValid && totalFuelCost > 0 ? totalDistance / totalFuelCost : 0;
+  const effectiveAnnualDist = isNaN(annualDistanceMiles) ? 12000 : Math.max(0, annualDistanceMiles);
+  const annualFuelCost = isValid && usMpg > 0 ? (effectiveAnnualDist / usMpg) * (fuelPriceInput || 0) : 0;
 
-  // Primary output selection
+  // Carbon Emissions Calculation
+  let co2Factor = 2.348; // default kg CO2 per Liter (gasoline)
+  let co2EmissionsLabel = "Direct Tailpipe CO₂";
+  if (mode === "ev_mpge" || (unitSystem === "indian_metric" && (indianFuelType === "ev_home" || indianFuelType === "ev_commercial"))) {
+    co2Factor = 0.386; // kg CO2 per kWh grid electric generation
+    co2EmissionsLabel = "Indirect Power Grid Generation CO₂";
+  } else if (unitSystem === "indian_metric") {
+    if (indianFuelType === "diesel") co2Factor = 2.689;
+    else if (indianFuelType === "cng") co2Factor = 2.750;
+    else if (indianFuelType === "lpg") co2Factor = 1.500;
+    else co2Factor = 2.348;
+  } else if (unitSystem === "us_imperial") {
+    co2Factor = 8.887; // kg CO2 per US gallon
+  } else if (unitSystem === "uk_imperial") {
+    co2Factor = 10.672; // kg CO2 per UK gallon
+  } else {
+    co2Factor = 2.348; // kg CO2 per Liter
+  }
+
+  const co2EmissionsKg = isValid && totalFuelUsed > 0 ? totalFuelUsed * co2Factor : 0;
+
+  // Primary Output Formatting
   let primaryValue = 0;
+  let formattedPrimaryValue = "0.0";
   let primaryUnit = "MPG";
   let primaryLabel = "Fuel Economy";
 
-  if (mode === "tax_reimbursement") {
+  if (!isValid) {
+    primaryValue = 0;
+    formattedPrimaryValue = "--";
+    primaryUnit = "";
+    primaryLabel = "Input Validation Required";
+  } else if (isEmpty) {
+    primaryValue = 0;
+    formattedPrimaryValue = "0.0";
+    primaryUnit = unitSystem === "indian_metric" ? "km/l" : unitSystem === "metric" ? "L/100 km" : "MPG";
+    primaryLabel = "No Fill-Up Records";
+  } else if (mode === "tax_reimbursement") {
     primaryValue = parseFloat(taxReimbursementAmount.toFixed(2));
+    formattedPrimaryValue = formatCurrency(taxReimbursementAmount, currencySymbol);
     primaryUnit = currencySymbol;
     primaryLabel = "Total Mileage Tax Reimbursement";
   } else if (mode === "ev_mpge") {
     primaryValue = parseFloat(mpge.toFixed(1));
+    formattedPrimaryValue = mpge.toFixed(1);
     primaryUnit = "MPGe";
     primaryLabel = "Electric Vehicle Efficiency";
   } else if (unitSystem === "indian_metric") {
-    primaryValue = parseFloat(kmPerLiter.toFixed(2));
+    primaryValue = parseFloat(kmPerLiter.toFixed(1));
+    formattedPrimaryValue = kmPerLiter.toFixed(1);
     if (indianFuelType === "ev_home" || indianFuelType === "ev_commercial") {
       primaryUnit = "km/kWh";
       primaryLabel = "EV Efficiency";
@@ -256,23 +412,60 @@ export function calculateMileage(
     }
   } else if (unitSystem === "metric") {
     primaryValue = parseFloat(litersPer100km.toFixed(2));
+    formattedPrimaryValue = litersPer100km.toFixed(2);
     primaryUnit = "L/100 km";
     primaryLabel = "Fuel Consumption";
   } else if (unitSystem === "uk_imperial") {
     primaryValue = parseFloat(ukMpg.toFixed(1));
+    formattedPrimaryValue = ukMpg.toFixed(1);
     primaryUnit = "UK MPG";
     primaryLabel = "Imperial Fuel Economy";
   } else {
     primaryValue = parseFloat(usMpg.toFixed(1));
+    formattedPrimaryValue = usMpg.toFixed(1);
     primaryUnit = "US MPG";
     primaryLabel = "Fuel Economy";
   }
 
+  // Tier info & Unit-aware gauge configuration
   const tierInfo = evaluateEfficiencyTier(usMpg);
-  const gaugeAngle = Math.min(180, Math.max(0, (usMpg / 60) * 180));
+
+  let gaugeAngle = 0;
+  let gaugeLeftLabel = "Heavy";
+  let gaugeRightLabel = "60+ MPG";
+
+  if (!isValid || isEmpty) {
+    gaugeAngle = 0;
+  } else if (mode === "tax_reimbursement") {
+    gaugeAngle = Math.min(180, Math.max(0, (taxReimbursementAmount / 1000) * 180));
+    gaugeLeftLabel = "$0";
+    gaugeRightLabel = "$1,000+";
+  } else if (mode === "ev_mpge") {
+    gaugeAngle = Math.min(180, Math.max(0, (mpge / 140) * 180));
+    gaugeLeftLabel = "Heavy";
+    gaugeRightLabel = "140+ MPGe";
+  } else if (unitSystem === "indian_metric") {
+    gaugeAngle = Math.min(180, Math.max(0, (kmPerLiter / 25.5) * 180));
+    gaugeLeftLabel = "Heavy";
+    gaugeRightLabel = "25+ km/l";
+  } else if (unitSystem === "metric") {
+    // For L/100km, lower is better. 15 L/100km = heavy, 4 L/100km = eco.
+    gaugeAngle = Math.min(180, Math.max(0, (usMpg / 60) * 180));
+    gaugeLeftLabel = "Heavy (15+)";
+    gaugeRightLabel = "3.9 L/100km";
+  } else if (unitSystem === "uk_imperial") {
+    gaugeAngle = Math.min(180, Math.max(0, (ukMpg / 72) * 180));
+    gaugeLeftLabel = "Heavy";
+    gaugeRightLabel = "72+ UK MPG";
+  } else {
+    gaugeAngle = Math.min(180, Math.max(0, (usMpg / 60) * 180));
+    gaugeLeftLabel = "Heavy";
+    gaugeRightLabel = "60+ MPG";
+  }
 
   return {
     primaryValue,
+    formattedPrimaryValue,
     primaryUnit,
     primaryLabel,
     currencySymbol,
@@ -284,20 +477,33 @@ export function calculateMileage(
     kWhPer100mi: parseFloat(kWhPer100mi.toFixed(1)),
     costPerDistance: parseFloat(costPerDistance.toFixed(2)),
     costPerDistanceUnit: `${currencySymbol} / ${distanceUnit}`,
+    formattedCostPerDistance: formatCurrency(costPerDistance, currencySymbol),
     distancePerDollar: parseFloat(distancePerDollar.toFixed(2)),
     distancePerDollarUnit: `${distanceUnit} / ${currencySymbol}`,
+    formattedDistancePerDollar: `${distancePerDollar.toFixed(2)} ${distanceUnit} / ${currencySymbol}`,
     annualFuelCost: Math.round(annualFuelCost),
+    formattedAnnualFuelCost: formatCurrency(annualFuelCost, currencySymbol),
     taxReimbursementAmount: parseFloat(taxReimbursementAmount.toFixed(2)),
+    formattedTaxReimbursement: formatCurrency(taxReimbursementAmount, currencySymbol),
     reimbursementRatePerMile,
+    taxYear,
     totalDistance: parseFloat(totalDistance.toFixed(1)),
     distanceUnit,
     totalFuelUsed: parseFloat(totalFuelUsed.toFixed(2)),
     fuelUnit,
     totalFuelCost: parseFloat(totalFuelCost.toFixed(2)),
+    formattedTotalFuelCost: formatCurrency(totalFuelCost, currencySymbol),
+    co2EmissionsKg: parseFloat(co2EmissionsKg.toFixed(2)),
+    co2EmissionsLabel,
     efficiencyTier: tierInfo.tier,
     efficiencyTierLabel: tierInfo.label,
     gaugeAngle,
+    gaugeLeftLabel,
+    gaugeRightLabel,
     environmentalPenaltyPercent: Math.round(penaltyRatio * 100),
+    isValid,
+    errorMessage,
+    isEmpty,
   };
 }
 

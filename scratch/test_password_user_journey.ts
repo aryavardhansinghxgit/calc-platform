@@ -152,7 +152,7 @@ const step32 = calculatePasswordGenerator({ activeTab: "strength_checker", check
 reportStep(32, "Test long random password", step32.strengthCategory === "Very Strong");
 
 // 33. Verify analyzer warnings and breakdown
-reportStep(33, "Verify analyzer pattern detection", step31.warnings && step31.warnings.length > 0);
+reportStep(33, "Verify analyzer pattern detection", Boolean(step31.warnings && step31.warnings.length > 0));
 
 // 34. Test visibility toggle
 const visibilityMasked = "•••••••••••••••• (Plaintext hidden for print security)";

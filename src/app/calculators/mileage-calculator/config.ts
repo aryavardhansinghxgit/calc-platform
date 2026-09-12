@@ -8,7 +8,7 @@ export const mileage_calculatorConfig: CalculatorModuleDefinition = {
   slug: "mileage-calculator",
   category: "other",
   subcategory: "Automotive & Fuel",
-  description: "Free online Mileage Calculator. Calculate vehicle gas mileage (MPG, L/100km), IRS business tax reimbursement, multi-fill-up fleet logs, and EV MPGe equivalents.",
+  description: "Calculate gas mileage, MPG, L/100km, km/L, trip fuel cost, IRS mileage reimbursement, multi-fill-up averages, EV MPGe and driving efficiency.",
   iconName: "Navigation",
   featured: true,
   keywords: [
