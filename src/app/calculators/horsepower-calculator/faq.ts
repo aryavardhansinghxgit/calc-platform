@@ -3,42 +3,70 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 export const horsepower_calculatorFaqs: CalculatorFAQ[] = [
   {
     question: "How do you calculate horsepower from torque and RPM?",
-    answer: "To calculate horsepower from torque and RPM, multiply torque (in lb-ft) by engine speed (in RPM) and divide by the mathematical constant 5,252: HP = (Torque × RPM) / 5252. If torque is given in Newton-meters (N-m), use HP = (Torque N-m × RPM) / 7127."
+    answer: "For torque in lb-ft, HP = (Torque × RPM) / 5252.113. For example, 400 lb-ft at 5,252.113 RPM produces approximately 400 HP."
   },
   {
-    question: "Why do horsepower and torque always cross at 5,252 RPM?",
-    answer: "Because one mechanical horsepower is defined as 33,000 foot-pounds of work per minute, and one rotational revolution equals 2π radians. Dividing 33,000 by 2π (6.28318) yields 5,252.11. When horsepower and imperial torque (lb-ft) are plotted on identical numerical scales, their curves must mathematically intersect at exactly 5,252 RPM."
+    question: "Why is 5,252 RPM special?",
+    answer: "It is the RPM at which horsepower and torque have the same numerical value when horsepower is expressed in HP and torque in lb-ft. It comes from the mechanical horsepower definition (33,000 ft-lbf/min) and the 2π radians relationship per engine revolution (33,000 / 2π ≈ 5252.113)."
   },
   {
-    question: "What is the difference between BHP, WHP, and HP?",
-    answer: "BHP (Brake Horsepower) is raw engine output measured at the crankshaft flywheel without drivetrain parasitic losses. WHP (Wheel Horsepower) is usable power measured at the drive wheels on a chassis dyno after transmission and differential friction losses. HP (Horsepower) is a general unit of power."
+    question: "What is the difference between BHP and WHP?",
+    answer: "BHP (Brake Horsepower) generally represents engine output measured at or associated with the crankshaft/flywheel under relevant test conditions. WHP (Wheel Horsepower) represents usable power measured at the drive tires on a chassis dynamometer after transmission, driveshaft, and axle parasitic friction losses."
   },
   {
-    question: "How do you convert Kilowatts (kW) to Horsepower (HP)?",
-    answer: "To convert Kilowatts to Mechanical Horsepower, multiply by 1.34102 (1 kW = 1.341 HP). To convert Mechanical Horsepower to Kilowatts, multiply by 0.7457 (1 HP = 0.7457 kW)."
+    question: "How do I calculate WHP from BHP?",
+    answer: "Using a simple drivetrain-loss percentage: WHP = BHP × (1 - Loss). For example, with 400 BHP and 14% loss: 400 × 0.86 = 344 WHP."
   },
   {
-    question: "What is the difference between Mechanical HP and Metric HP (PS / CV)?",
-    answer: "Mechanical (Imperial) HP is based on lifting 33,000 lbs by 1 foot in 1 minute (745.7 Watts). Metric HP (PS, CV, PK, or DIN) is based on lifting 75 kilograms by 1 meter in 1 second (735.5 Watts). Consequently, 1 Mechanical HP equals approximately 1.014 Metric PS."
+    question: "How accurate is a quarter-mile horsepower calculator?",
+    answer: "It is an empirical estimate, not a direct dyno measurement. Accuracy depends on the appropriateness of the selected model and the quality of the weight, ET or trap-speed data. Launch quality, traction, gearing, aerodynamics, and shift times all influence real-world quarter-mile times."
   },
   {
-    question: "How much horsepower does a typical car lose through the drivetrain?",
-    answer: "Drivetrain parasitic friction losses average 10%–12% for Front-Wheel Drive (FWD) manual transmissions, 13%–15% for Rear-Wheel Drive (RWD) manual transmissions, 16%–19% for RWD torque-converter automatic transmissions, and 20%–25% for All-Wheel Drive (AWD/4WD) systems."
+    question: "What is the 1/4-mile horsepower formula?",
+    answer: "A commonly used ET formulation is Hale: HP = Weight / (ET / 5.825)^3 or Fox: HP = Weight / (ET / 5.71)^3, while the empirical trap-speed relationship is Fox: HP = Weight × (Trap Speed / 234)^3."
   },
   {
-    question: "How can I estimate horsepower from quarter-mile track time?",
-    answer: "Use the empirical Fox elapsed time formula: Horsepower = Vehicle Weight in lbs × (234 / 1/4-Mile ET)^3. For example, a 3,500 lb car running a 12.0 second quarter-mile requires approximately 377 Crank HP."
+    question: "Which is more useful: quarter-mile ET or trap speed?",
+    answer: "They describe different parts of the run. Elapsed time (ET) is strongly affected by the launch and early acceleration traction, while trap speed reflects power and acceleration sustained through the top end of the track. Using both provides a comprehensive assessment."
   },
   {
-    question: "Does hot weather or high altitude reduce an engine's horsepower?",
-    answer: "Yes. High ambient temperatures, low barometric pressure at high altitude, and high humidity reduce air density, providing fewer oxygen molecules per cubic foot for combustion. Naturally aspirated engines lose roughly 3% of their horsepower for every 1,000 feet of elevation gain."
+    question: "How much drivetrain loss should I use?",
+    answer: "There is no universal percentage. Typical estimation presets are 11% for FWD manual, 14% for RWD manual, 17.5% for RWD automatic, and 22% for AWD/4WD systems, though actual losses vary by transmission design, fluid temperature, and tire setup."
   },
   {
-    question: "What is Power-to-Weight Ratio and why is it important for speed?",
-    answer: "Power-to-Weight Ratio divides vehicle horsepower by total curb weight (expressed as HP/ton or lb/HP). It determines real-world acceleration performance more accurately than peak horsepower alone, as light cars require less force to overcome inertia."
+    question: "What is power-to-weight ratio?",
+    answer: "Power-to-weight compares engine power with total vehicle curb weight. Common expressions are HP/ton (short tons or metric tonnes) or lb/HP (Weight in lbs / HP). A lower lb/HP value indicates more power available per unit of vehicle mass to overcome inertia."
   },
   {
-    question: "How many horses does one horsepower actually equal?",
-    answer: "While James Watt standardized 1 HP based on sustained all-day draft horse work (550 ft-lbs/sec), a real living horse can generate peak short-burst power output of 10 to 15 horsepower during maximum sprinting."
+    question: "How much horsepower is needed for a 0–60 mph time?",
+    answer: "There is no universal horsepower requirement because acceleration depends on vehicle mass, tire traction, gearing ratios, launch control, and torque delivery. A calculator provides an empirical kinetic-inertia estimate, but cannot eliminate vehicle-specific mechanical factors."
+  },
+  {
+    question: "What is the difference between HP and PS?",
+    answer: "Mechanical (Imperial) HP is based on 550 ft-lbs/sec (approx. 745.7 Watts). Metric horsepower (PS, CV, or DIN) is based on lifting 75 kg by 1 meter in 1 second (approx. 735.5 Watts). Consequently, 1 mechanical HP equals approximately 1.01387 metric PS."
+  },
+  {
+    question: "How many kilowatts is 400 horsepower?",
+    answer: "Using mechanical horsepower: 400 × 0.745699872 ≈ 298.28 kW (approximately 298.3 kW)."
+  },
+  {
+    question: "Does hot weather reduce horsepower?",
+    answer: "Yes. Hotter intake air is less dense, reducing the mass of oxygen entering a naturally aspirated combustion chamber per intake stroke. Forced-induction engines may also experience intercooler heat soak and ECU ignition timing retardation."
+  },
+  {
+    question: "What is SAE J1349?",
+    answer: "SAE J1349 is a standardized engine power testing and atmospheric correction standard. It defines methods for obtaining repeatable engine dyno measurements normalized to baseline reference inlet conditions (77°F / 25°C, 29.92 inHg barometric pressure)."
+  },
+  {
+    question: "Does SAE J1349 tell me exactly how much power I lose at altitude?",
+    answer: "No. SAE explicitly states that J1349 correction equations are not intended for altitude derating. They standardize dynamometer power measurements under specified laboratory conditions rather than acting as a universal altitude loss formula."
+  },
+  {
+    question: "Can two dynos show different horsepower?",
+    answer: "Yes. Dynamometer architecture (engine bench vs. chassis roller vs. hub dyno), calibration, roller inertia, ambient weather sensors, tie-down tension, and testing procedures cause variation. This is why BHP and WHP figures must not be directly conflated."
+  },
+  {
+    question: "Is horsepower enough to predict a car's performance?",
+    answer: "No. Horsepower represents the rate of doing work, but real-world acceleration depends heavily on vehicle mass, the breadth of the torque curve, transmission gearing, launch traction, and aerodynamic drag."
   }
 ];

@@ -13,11 +13,9 @@ import {
   ChevronDown,
   Layers,
   Flame,
-  Sparkles,
   Trophy,
   Info,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   CalcMode,
@@ -112,11 +110,16 @@ export function HorsepowerCalculator() {
   // Copy Summary
   const handleCopySummary = () => {
     let text = `🏎️ CalcPlatform Horsepower & Dyno Spec Sheet:\n`;
+    text += `Calculation Mode: ${mode === "torque_rpm" ? "Torque & RPM" : mode === "drag_strip" ? "1/4-Mile Drag" : mode === "acceleration" ? "0–60 Acceleration" : "Unit Converter"}\n`;
     text += `Crank Horsepower: ${result.crankBHP} BHP (${result.kilowatts} kW | ${result.metricPS} PS)\n`;
     text += `Wheel Horsepower (${result.drivetrainLossPercent}% loss): ${result.wheelWHP} WHP\n`;
     text += `Torque: ${result.torqueLbFt} lb-ft (${result.torqueNm} N-m) @ ${result.rpm} RPM\n`;
     text += `Power-to-Weight: ${result.hpPerTon} HP/ton (${result.lbPerHp} lb/HP) - ${result.performanceTierLabel}\n`;
-    text += `Est 1/4-Mile ET: ${result.estimatedET}s @ ${result.estimatedTrapSpeedMph} mph\n`;
+    text += `Est 1/4-Mile: ${result.estimatedET}s @ ${result.estimatedTrapSpeedMph} mph\n`;
+    text += `Est 0–60 mph: ${result.estimatedZeroToSixtySec}s\n`;
+    if (atmosphere.enabled) {
+      text += `SAE Weather Correction: ${result.correctedBHP} BHP (CF: ${result.saeCorrectionFactor} @ ${atmosphere.tempF}°F, ${atmosphere.pressureInHg} inHg)\n`;
+    }
 
     navigator.clipboard.writeText(text);
     setCopied(true);
@@ -163,7 +166,7 @@ export function HorsepowerCalculator() {
 
   return (
     <div className="space-y-4">
-      {/* 1. TOP TOOLBAR CONTROL BAR - LIGHT HARMONIOUS THEME WITH 3D BUTTONS */}
+      {/* 1. TOP TOOLBAR CONTROL BAR */}
       <div className="bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-4 rounded-2xl shadow-xs space-y-3">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
           {/* Mode Selector (Col 8) */}
@@ -173,6 +176,8 @@ export function HorsepowerCalculator() {
             </span>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-xs">
               <button
+                type="button"
+                id="hp-mode-torque"
                 onClick={() => setMode("torque_rpm")}
                 className={`py-1.5 px-2 rounded-lg text-center cursor-pointer transition-all ${
                   mode === "torque_rpm"
@@ -183,6 +188,8 @@ export function HorsepowerCalculator() {
                 Torque &amp; RPM
               </button>
               <button
+                type="button"
+                id="hp-mode-drag"
                 onClick={() => setMode("drag_strip")}
                 className={`py-1.5 px-2 rounded-lg text-center cursor-pointer transition-all ${
                   mode === "drag_strip"
@@ -193,6 +200,8 @@ export function HorsepowerCalculator() {
                 1/4-Mile Drag
               </button>
               <button
+                type="button"
+                id="hp-mode-accel"
                 onClick={() => setMode("acceleration")}
                 className={`py-1.5 px-2 rounded-lg text-center cursor-pointer transition-all ${
                   mode === "acceleration"
@@ -203,6 +212,8 @@ export function HorsepowerCalculator() {
                 0–60 Sprint
               </button>
               <button
+                type="button"
+                id="hp-mode-converter"
                 onClick={() => setMode("unit_converter")}
                 className={`py-1.5 px-2 rounded-lg text-center cursor-pointer transition-all ${
                   mode === "unit_converter"
@@ -220,7 +231,41 @@ export function HorsepowerCalculator() {
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-zinc-400 block">
               Spec Sheet &amp; Export
             </span>
-            
+            <div className="flex items-center gap-1.5 text-xs">
+              <button
+                type="button"
+                id="hp-copy-btn"
+                onClick={handleCopySummary}
+                className="flex-1 py-1.5 px-2 bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 font-bold border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-700 rounded-lg text-center cursor-pointer border-b-2 border-b-slate-300 dark:border-b-zinc-950 flex items-center justify-center gap-1 transition-all active:translate-y-0.5"
+                title="Copy Spec Sheet to Clipboard"
+                aria-label="Copy Spec Sheet to Clipboard"
+              >
+                {copied ? <Check className="h-3 w-3 text-emerald-600" /> : <Share2 className="h-3 w-3 text-amber-600" />}
+                <span>{copied ? "Copied!" : "Copy"}</span>
+              </button>
+              <button
+                type="button"
+                id="hp-spec-btn"
+                onClick={() => setShowReportModal(true)}
+                className="flex-1 py-1.5 px-2 bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 font-bold border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-700 rounded-lg text-center cursor-pointer border-b-2 border-b-slate-300 dark:border-b-zinc-950 flex items-center justify-center gap-1 transition-all active:translate-y-0.5"
+                title="Open Vehicle Spec Sheet Report"
+                aria-label="Open Vehicle Spec Sheet Report"
+              >
+                <Layers className="h-3 w-3 text-amber-600" />
+                <span>Spec Sheet</span>
+              </button>
+              <button
+                type="button"
+                id="hp-print-btn"
+                onClick={() => window.print()}
+                className="flex-1 py-1.5 px-2 bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 font-bold border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-700 rounded-lg text-center cursor-pointer border-b-2 border-b-slate-300 dark:border-b-zinc-950 flex items-center justify-center gap-1 transition-all active:translate-y-0.5"
+                title="Print Dyno Spec Sheet"
+                aria-label="Print Dyno Spec Sheet"
+              >
+                <Printer className="h-3 w-3 text-amber-600" />
+                <span>Print</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -231,6 +276,8 @@ export function HorsepowerCalculator() {
           </span>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-xs">
             <button
+              type="button"
+              id="hp-drivetrain-fwd-manual"
               onClick={() => setDrivetrain("fwd_manual")}
               className={`py-1.5 px-2 rounded-lg text-center cursor-pointer transition-all ${
                 drivetrain === "fwd_manual"
@@ -241,6 +288,8 @@ export function HorsepowerCalculator() {
               FWD Manual (-11%)
             </button>
             <button
+              type="button"
+              id="hp-drivetrain-rwd-manual"
               onClick={() => setDrivetrain("rwd_manual")}
               className={`py-1.5 px-2 rounded-lg text-center cursor-pointer transition-all ${
                 drivetrain === "rwd_manual"
@@ -251,6 +300,8 @@ export function HorsepowerCalculator() {
               RWD Manual (-14%)
             </button>
             <button
+              type="button"
+              id="hp-drivetrain-rwd-auto"
               onClick={() => setDrivetrain("rwd_auto")}
               className={`py-1.5 px-2 rounded-lg text-center cursor-pointer transition-all ${
                 drivetrain === "rwd_auto"
@@ -261,6 +312,8 @@ export function HorsepowerCalculator() {
               RWD Auto (-17.5%)
             </button>
             <button
+              type="button"
+              id="hp-drivetrain-awd"
               onClick={() => setDrivetrain("awd")}
               className={`py-1.5 px-2 rounded-lg text-center cursor-pointer transition-all ${
                 drivetrain === "awd"
@@ -278,6 +331,17 @@ export function HorsepowerCalculator() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         {/* LEFT INPUT PANE (Col 7) */}
         <div className="lg:col-span-7 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-4 rounded-2xl shadow-xs space-y-4">
+          {/* Validation Error Banner */}
+          {result.errorMessage && (
+            <div
+              role="alert"
+              className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 rounded-xl text-xs text-red-700 dark:text-red-300 font-semibold flex items-center gap-2"
+            >
+              <Info className="h-4 w-4 text-red-500 shrink-0" />
+              <span>{result.errorMessage}</span>
+            </div>
+          )}
+
           {/* MODE 1: TORQUE & RPM MODE */}
           {mode === "torque_rpm" && (
             <div className="space-y-3">
@@ -288,8 +352,9 @@ export function HorsepowerCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1">
                   <div className="flex justify-between items-center text-xs font-bold text-zinc-700 dark:text-zinc-300">
-                    <span>Torque Input</span>
+                    <label htmlFor="hp-torque-input">Torque Input</label>
                     <button
+                      type="button"
                       onClick={() => setTorqueUnit(torqueUnit === "lbft" ? "nm" : "lbft")}
                       className="text-[10px] text-amber-600 hover:underline font-extrabold cursor-pointer"
                     >
@@ -297,20 +362,24 @@ export function HorsepowerCalculator() {
                     </button>
                   </div>
                   <Input
+                    id="hp-torque-input"
                     type="number"
                     value={torqueInput}
-                    onChange={(e) => setTorqueInput(Number(e.target.value))}
+                    onChange={(e) => setTorqueInput(parseFloat(e.target.value) || 0)}
                     className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Engine RPM</label>
+                  <label htmlFor="hp-rpm-input" className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
+                    Engine RPM
+                  </label>
                   <Input
+                    id="hp-rpm-input"
                     type="number"
                     step="100"
                     value={rpmInput}
-                    onChange={(e) => setRpmInput(Number(e.target.value))}
+                    onChange={(e) => setRpmInput(parseFloat(e.target.value) || 0)}
                     className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
@@ -327,6 +396,7 @@ export function HorsepowerCalculator() {
                 </label>
                 <div className="flex bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg text-[10px] font-bold">
                   <button
+                    type="button"
                     onClick={() => setDragModel("fox")}
                     className={`px-2 py-0.5 rounded cursor-pointer ${
                       dragModel === "fox" ? "bg-amber-600 text-white" : "text-zinc-500"
@@ -335,6 +405,7 @@ export function HorsepowerCalculator() {
                     Fox
                   </button>
                   <button
+                    type="button"
                     onClick={() => setDragModel("hale")}
                     className={`px-2 py-0.5 rounded cursor-pointer ${
                       dragModel === "hale" ? "bg-amber-600 text-white" : "text-zinc-500"
@@ -343,6 +414,7 @@ export function HorsepowerCalculator() {
                     Hale
                   </button>
                   <button
+                    type="button"
                     onClick={() => setDragModel("hunt")}
                     className={`px-2 py-0.5 rounded cursor-pointer ${
                       dragModel === "hunt" ? "bg-amber-600 text-white" : "text-zinc-500"
@@ -355,19 +427,25 @@ export function HorsepowerCalculator() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Vehicle Weight (lbs)</label>
+                  <label htmlFor="hp-drag-weight" className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
+                    Vehicle Weight (lbs)
+                  </label>
                   <Input
+                    id="hp-drag-weight"
                     type="number"
                     value={vehicleWeight}
-                    onChange={(e) => setVehicleWeight(Number(e.target.value))}
+                    onChange={(e) => setVehicleWeight(parseFloat(e.target.value) || 0)}
                     className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
 
                 <div className="space-y-1">
                   <div className="flex justify-between items-center text-xs font-bold text-zinc-700 dark:text-zinc-300">
-                    <span>{useETMethod ? "1/4-Mile ET (sec)" : "Trap Speed (mph)"}</span>
+                    <label htmlFor={useETMethod ? "hp-drag-et" : "hp-drag-speed"}>
+                      {useETMethod ? "1/4-Mile ET (sec)" : "Trap Speed (mph)"}
+                    </label>
                     <button
+                      type="button"
                       onClick={() => setUseETMethod(!useETMethod)}
                       className="text-[10px] text-amber-600 hover:underline font-extrabold cursor-pointer"
                     >
@@ -376,17 +454,19 @@ export function HorsepowerCalculator() {
                   </div>
                   {useETMethod ? (
                     <Input
+                      id="hp-drag-et"
                       type="number"
                       step="0.1"
                       value={quarterMileET}
-                      onChange={(e) => setQuarterMileET(Number(e.target.value))}
+                      onChange={(e) => setQuarterMileET(parseFloat(e.target.value) || 0)}
                       className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                     />
                   ) : (
                     <Input
+                      id="hp-drag-speed"
                       type="number"
                       value={trapSpeedMph}
-                      onChange={(e) => setTrapSpeedMph(Number(e.target.value))}
+                      onChange={(e) => setTrapSpeedMph(parseFloat(e.target.value) || 0)}
                       className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                     />
                   )}
@@ -404,22 +484,28 @@ export function HorsepowerCalculator() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Vehicle Weight (lbs)</label>
+                  <label htmlFor="hp-accel-weight" className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
+                    Vehicle Weight (lbs)
+                  </label>
                   <Input
+                    id="hp-accel-weight"
                     type="number"
                     value={vehicleWeight}
-                    onChange={(e) => setVehicleWeight(Number(e.target.value))}
+                    onChange={(e) => setVehicleWeight(parseFloat(e.target.value) || 0)}
                     className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Target 0–60 Time (sec)</label>
+                  <label htmlFor="hp-target-zero-sixty" className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
+                    Target 0–60 Time (sec)
+                  </label>
                   <Input
+                    id="hp-target-zero-sixty"
                     type="number"
                     step="0.1"
                     value={targetZeroSixty}
-                    onChange={(e) => setTargetZeroSixty(Number(e.target.value))}
+                    onChange={(e) => setTargetZeroSixty(parseFloat(e.target.value) || 0)}
                     className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
@@ -436,17 +522,23 @@ export function HorsepowerCalculator() {
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                 <div className="space-y-1">
-                  <label className="font-bold text-zinc-700 dark:text-zinc-300">Value</label>
+                  <label htmlFor="hp-converter-value" className="font-bold text-zinc-700 dark:text-zinc-300">
+                    Value
+                  </label>
                   <Input
+                    id="hp-converter-value"
                     type="number"
                     value={fromValue}
-                    onChange={(e) => setFromValue(Number(e.target.value))}
+                    onChange={(e) => setFromValue(parseFloat(e.target.value) || 0)}
                     className="h-9 text-xs font-sans tabular-nums font-bold bg-zinc-50 dark:bg-zinc-800"
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="font-bold text-zinc-700 dark:text-zinc-300">From Unit</label>
+                  <label htmlFor="hp-converter-from" className="font-bold text-zinc-700 dark:text-zinc-300">
+                    From Unit
+                  </label>
                   <select
+                    id="hp-converter-from"
                     value={fromUnit}
                     onChange={(e) => setFromUnit(e.target.value as PowerUnit)}
                     className="w-full h-9 font-bold px-2 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-xs"
@@ -462,8 +554,11 @@ export function HorsepowerCalculator() {
                   </select>
                 </div>
                 <div className="space-y-1">
-                  <label className="font-bold text-zinc-700 dark:text-zinc-300">To Unit</label>
+                  <label htmlFor="hp-converter-to" className="font-bold text-zinc-700 dark:text-zinc-300">
+                    To Unit
+                  </label>
                   <select
+                    id="hp-converter-to"
                     value={toUnit}
                     onChange={(e) => setToUnit(e.target.value as PowerUnit)}
                     className="w-full h-9 font-bold px-2 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-xs"
@@ -485,6 +580,8 @@ export function HorsepowerCalculator() {
           {/* EXPANDABLE ACCORDION: SAE J1349 ATMOSPHERIC CORRECTION */}
           <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
             <button
+              type="button"
+              id="hp-sae-toggle-btn"
               onClick={() => setShowAdvanced(!showAdvanced)}
               className="flex items-center justify-between w-full text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:text-amber-600 cursor-pointer"
             >
@@ -498,6 +595,7 @@ export function HorsepowerCalculator() {
               <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl space-y-3 text-xs">
                 <label className="flex items-center gap-1.5 cursor-pointer font-bold text-amber-700 dark:text-amber-400">
                   <input
+                    id="hp-sae-checkbox"
                     type="checkbox"
                     checked={atmosphere.enabled}
                     onChange={(e) => setAtmosphere({ ...atmosphere, enabled: e.target.checked })}
@@ -509,21 +607,31 @@ export function HorsepowerCalculator() {
                 {atmosphere.enabled && (
                   <div className="grid grid-cols-2 gap-2 text-xs pt-1">
                     <div className="space-y-1">
-                      <label className="font-bold text-zinc-700 dark:text-zinc-300">Ambient Temp (°F)</label>
+                      <label htmlFor="hp-ambient-temp" className="font-bold text-zinc-700 dark:text-zinc-300">
+                        Ambient Temp (°F)
+                      </label>
                       <Input
+                        id="hp-ambient-temp"
                         type="number"
                         value={atmosphere.tempF}
-                        onChange={(e) => setAtmosphere({ ...atmosphere, tempF: Number(e.target.value) })}
+                        onChange={(e) =>
+                          setAtmosphere({ ...atmosphere, tempF: parseFloat(e.target.value) || 0 })
+                        }
                         className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 border-zinc-200"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="font-bold text-zinc-700 dark:text-zinc-300">Barometric (inHg)</label>
+                      <label htmlFor="hp-barometric-pressure" className="font-bold text-zinc-700 dark:text-zinc-300">
+                        Barometric (inHg)
+                      </label>
                       <Input
+                        id="hp-barometric-pressure"
                         type="number"
                         step="0.01"
                         value={atmosphere.pressureInHg}
-                        onChange={(e) => setAtmosphere({ ...atmosphere, pressureInHg: Number(e.target.value) })}
+                        onChange={(e) =>
+                          setAtmosphere({ ...atmosphere, pressureInHg: parseFloat(e.target.value) || 0 })
+                        }
                         className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900 border-zinc-200"
                       />
                     </div>
@@ -547,7 +655,7 @@ export function HorsepowerCalculator() {
 
           {/* Primary Result Card */}
           {mode !== "unit_converter" ? (
-            <div className="space-y-0.5">
+            <div className="space-y-0.5" aria-live="polite">
               <span className="text-[10px] font-bold uppercase tracking-wider text-amber-200 block">
                 Crankshaft Power Output
               </span>
@@ -559,7 +667,7 @@ export function HorsepowerCalculator() {
               </p>
             </div>
           ) : (
-            <div className="space-y-0.5">
+            <div className="space-y-0.5" aria-live="polite">
               <span className="text-[10px] font-bold uppercase tracking-wider text-amber-200 block">
                 Converted Power Output
               </span>
@@ -614,14 +722,14 @@ export function HorsepowerCalculator() {
 
                 const x5252 = getX(5252);
                 const pointAt5252 = points.find((p) => Math.abs(p.rpm - 5250) <= 250) || points[Math.floor(points.length / 2)];
-                const y5252 = getY(pointAt5252 ? pointAt5252.horsepower : (result.torqueLbFt * 5252) / 5252.11);
+                const y5252 = getY(pointAt5252 ? pointAt5252.horsepower : (result.torqueLbFt * 5252) / 5252.113);
 
                 const activeX = getX(result.rpm);
                 const activeHpY = getY(result.crankBHP);
                 const activeTorqueY = getY(result.torqueLbFt);
 
                 return (
-                  <svg className="w-full h-full overflow-visible" viewBox="0 0 300 110">
+                  <svg className="w-full h-full overflow-visible" viewBox="0 0 300 110" aria-label="Dynamometer horsepower and torque curve visualizer">
                     {/* Y-Axis Horizontal Grid Lines */}
                     <line x1={paddingLeft} y1={paddingTop} x2={paddingRight} y2={paddingTop} stroke="rgba(255,255,255,0.08)" strokeDasharray="3 3" />
                     <line x1={paddingLeft} y1={(paddingTop + paddingBottom) / 2} x2={paddingRight} y2={(paddingTop + paddingBottom) / 2} stroke="rgba(255,255,255,0.08)" strokeDasharray="3 3" />

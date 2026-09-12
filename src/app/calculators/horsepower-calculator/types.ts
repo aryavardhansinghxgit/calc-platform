@@ -54,4 +54,7 @@ export interface HorsepowerResult {
   convertedUnitName: string;
   // Dyno Curve Points
   dynoCurve: DynoCurvePoint[];
+  // Validation status
+  isValid: boolean;
+  errorMessage?: string;
 }
