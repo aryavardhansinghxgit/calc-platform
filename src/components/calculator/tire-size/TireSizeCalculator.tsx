@@ -1,23 +1,21 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Disc,
-  Sliders,
   Share2,
   Printer,
   Check,
-  ChevronUp,
-  ChevronDown,
-  Info,
-  AlertTriangle,
-  CheckCircle2,
+  Search,
   Gauge,
   Compass,
-  ArrowRightLeft,
-  Search,
-  Maximize2,
-  Layers,
+  FileSpreadsheet,
+  FileText,
+  Bookmark,
+  RotateCcw,
+  Code2,
+  AlertTriangle,
+  CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -68,9 +66,11 @@ export function TireSizeCalculator() {
   const [enableGear, setEnableGear] = useState<boolean>(false);
   const [stockGearRatio, setStockGearRatio] = useState<number>(3.73);
 
-  // UI State
+  // UI & Feedback State
   const [showReportModal, setShowReportModal] = useState<boolean>(false);
+  const [statusMsg, setStatusMsg] = useState<string>("");
   const [copied, setCopied] = useState<boolean>(false);
+  const [copiedLatex, setCopiedLatex] = useState<boolean>(false);
 
   // Parse Quick Code 1
   const handleApplyQuick1 = () => {
@@ -153,25 +153,341 @@ export function TireSizeCalculator() {
     return calculateTireComparison(tire1Inputs, tire2Inputs, offsetInputs, gearInputs);
   }, [tire1Inputs, tire2Inputs, offsetInputs, gearInputs]);
 
-  // Copy Summary Handler
-  const handleCopySummary = () => {
-    let text = `🚗 Tire Size & Wheel Fitment Comparison:\n`;
-    text += `Stock Tire: ${result.tire1.formattedSize} (${result.tire1.diameterIn}" dia, ${result.tire1.widthIn}" width)\n`;
-    text += `New Tire:   ${result.tire2.formattedSize} (${result.tire2.diameterIn}" dia, ${result.tire2.widthIn}" width)\n`;
-    text += `Diameter Delta: ${result.diameterDiffIn > 0 ? "+" : ""}${result.diameterDiffIn}" (${result.diameterDiffPercent}% variance)\n`;
-    text += `Speedometer @ 65mph: Actual GPS speed is ${result.speedAt65Mph} mph (${result.speedErrorPercent > 0 ? "faster" : "slower"})\n`;
-    text += `Ride Height Shift: ${result.rideHeightChangeIn > 0 ? "+" : ""}${result.rideHeightChangeIn}" (${result.rideHeightChangeMm} mm)\n`;
-    if (result.offsetResults) {
-      text += `Inner Clearance: ${result.offsetResults.innerClearanceMm > 0 ? result.offsetResults.innerClearanceMm + "mm closer to strut" : Math.abs(result.offsetResults.innerClearanceMm) + "mm more clearance"}\n`;
-      text += `Outer Fender Poke: ${result.offsetResults.outerPokeMm > 0 ? result.offsetResults.outerPokeMm + "mm extended outward" : Math.abs(result.offsetResults.outerPokeMm) + "mm tucked inward"}\n`;
+  // Save State
+  const handleSaveState = () => {
+    try {
+      const state = {
+        format,
+        t1Width,
+        t1Aspect,
+        t1Rim,
+        t1FloatDia,
+        t1FloatWidth,
+        t2Width,
+        t2Aspect,
+        t2Rim,
+        t2FloatDia,
+        t2FloatWidth,
+        enableOffset,
+        stockRimWidth,
+        stockOffset,
+        newRimWidth,
+        newOffset,
+        enableGear,
+        stockGearRatio,
+      };
+      localStorage.setItem("calc_tire_size_state", JSON.stringify(state));
+      setStatusMsg("State Saved!");
+      setTimeout(() => setStatusMsg(""), 2500);
+    } catch {
+      setStatusMsg("Failed to save state.");
+      setTimeout(() => setStatusMsg(""), 2500);
     }
+  };
+
+  // Restore State
+  const handleRestoreState = () => {
+    try {
+      const saved = localStorage.getItem("calc_tire_size_state");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.format) setFormat(parsed.format);
+        if (typeof parsed.t1Width === "number") setT1Width(parsed.t1Width);
+        if (typeof parsed.t1Aspect === "number") setT1Aspect(parsed.t1Aspect);
+        if (typeof parsed.t1Rim === "number") setT1Rim(parsed.t1Rim);
+        if (typeof parsed.t1FloatDia === "number") setT1FloatDia(parsed.t1FloatDia);
+        if (typeof parsed.t1FloatWidth === "number") setT1FloatWidth(parsed.t1FloatWidth);
+
+        if (typeof parsed.t2Width === "number") setT2Width(parsed.t2Width);
+        if (typeof parsed.t2Aspect === "number") setT2Aspect(parsed.t2Aspect);
+        if (typeof parsed.t2Rim === "number") setT2Rim(parsed.t2Rim);
+        if (typeof parsed.t2FloatDia === "number") setT2FloatDia(parsed.t2FloatDia);
+        if (typeof parsed.t2FloatWidth === "number") setT2FloatWidth(parsed.t2FloatWidth);
+
+        if (typeof parsed.enableOffset === "boolean") setEnableOffset(parsed.enableOffset);
+        if (typeof parsed.stockRimWidth === "number") setStockRimWidth(parsed.stockRimWidth);
+        if (typeof parsed.stockOffset === "number") setStockOffset(parsed.stockOffset);
+        if (typeof parsed.newRimWidth === "number") setNewRimWidth(parsed.newRimWidth);
+        if (typeof parsed.newOffset === "number") setNewOffset(parsed.newOffset);
+
+        if (typeof parsed.enableGear === "boolean") setEnableGear(parsed.enableGear);
+        if (typeof parsed.stockGearRatio === "number") setStockGearRatio(parsed.stockGearRatio);
+
+        setStatusMsg("State Restored!");
+        setTimeout(() => setStatusMsg(""), 2500);
+      } else {
+        setStatusMsg("No saved state found.");
+        setTimeout(() => setStatusMsg(""), 2500);
+      }
+    } catch {
+      setStatusMsg("Error restoring state.");
+      setTimeout(() => setStatusMsg(""), 2500);
+    }
+  };
+
+  // Copy Summary Handler (Copy Log)
+  const handleCopySummary = () => {
+    let text = `====================================================\n`;
+    text += `TIRE SIZE & WHEEL FITMENT COMPARISON REPORT\n`;
+    text += `Generated by CalcPlatform\n`;
+    text += `Date: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\n`;
+    text += `====================================================\n\n`;
+    text += `Stock Tire:     ${result.tire1.formattedSize}\n`;
+    text += `Target Tire:    ${result.tire2.formattedSize}\n`;
+    text += `Overall Dia:    Stock: ${result.tire1.diameterIn}" (${result.tire1.diameterMm} mm) | Target: ${result.tire2.diameterIn}" (${result.tire2.diameterMm} mm)\n`;
+    text += `Diameter Delta: ${result.diameterDiffIn > 0 ? "+" : ""}${result.diameterDiffIn}" (${result.diameterDiffMm} mm) | ${result.diameterDiffPercent > 0 ? "+" : ""}${result.diameterDiffPercent}%\n`;
+    text += `Section Width:  Stock: ${result.tire1.widthIn}" (${result.tire1.widthMm} mm) | Target: ${result.tire2.widthIn}" (${result.tire2.widthMm} mm)\n`;
+    text += `Sidewall Height: Stock: ${result.tire1.sidewallIn}" (${result.tire1.sidewallMm} mm) | Target: ${result.tire2.sidewallIn}" (${result.tire2.sidewallMm} mm)\n`;
+    text += `Circumference:  Stock: ${result.tire1.circumferenceIn}" (${result.tire1.circumferenceMm} mm) | Target: ${result.tire2.circumferenceIn}" (${result.tire2.circumferenceMm} mm)\n`;
+    text += `Revs / Mile:    Stock: ${result.tire1.revsPerMile} RPM | Target: ${result.tire2.revsPerMile} RPM (Delta: ${result.revsPerMileDiff > 0 ? "+" : ""}${result.revsPerMileDiff})\n`;
+    text += `Speedometer:    At indicated 65 mph, actual GPS speed is ${result.speedAt65Mph} mph (${result.speedErrorPercent > 0 ? "+" : ""}${result.speedErrorPercent}% error)\n`;
+    text += `Ride Height:    Estimated static shift: ${result.rideHeightChangeIn > 0 ? "+" : ""}${result.rideHeightChangeIn}" (${result.rideHeightChangeMm} mm)\n`;
+    text += `Safety Rating:  ${result.safetyRating.toUpperCase()} — ${result.safetyMessage}\n\n`;
+
+    text += `--- Speedometer Calibration Matrix ---\n`;
+    result.speedDeltaTable.forEach((row) => {
+      text += `Indicated: ${row.indicatedMph} mph -> Actual: ${row.actualMph} mph (Delta: ${(row.actualMph - row.indicatedMph).toFixed(1)} mph)\n`;
+    });
+
+    if (result.offsetResults) {
+      text += `\n--- Wheel Offset & Backspacing Mechanics ---\n`;
+      text += `Stock Wheel: ${stockRimWidth}" ET+${stockOffset}mm (Backspacing: ${result.offsetResults.backspacingStockIn}")\n`;
+      text += `New Wheel:   ${newRimWidth}" ET+${newOffset}mm (Backspacing: ${result.offsetResults.backspacingNewIn}")\n`;
+      text += `Inner Strut Clearance: ${result.offsetResults.innerClearanceMm > 0 ? result.offsetResults.innerClearanceMm + " mm closer to strut" : Math.abs(result.offsetResults.innerClearanceMm) + " mm extra clearance"}\n`;
+      text += `Outer Fender Poke:     ${result.offsetResults.outerPokeMm > 0 ? result.offsetResults.outerPokeMm + " mm extended outward" : Math.abs(result.offsetResults.outerPokeMm) + " mm tucked inward"}\n`;
+    }
+
     if (result.gearResults) {
-      text += `Effective Final Drive: ${result.gearResults.effectiveGearRatio} (Stock: ${stockGearRatio})\n`;
+      text += `\n--- Axle Differential Gear Adjustment ---\n`;
+      text += `Stock Axle Ratio:          ${stockGearRatio}\n`;
+      text += `Effective Final Drive:     ${result.gearResults.effectiveGearRatio}\n`;
+      text += `Target Ratio for OEM Perf: ${result.gearResults.equivalentRatioNeeded}\n`;
     }
 
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Export CSV
+  const handleExportCSV = () => {
+    const rows = [
+      ["CalcPlatform Tire Size Calculator Export"],
+      ["Generated", `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`],
+      [""],
+      ["Geometry Metric", "Stock Tire", "Target Tire", "Difference (in/mm)", "Variance (%)"],
+      [
+        "Tire Spec",
+        result.tire1.formattedSize,
+        result.tire2.formattedSize,
+        "",
+        "",
+      ],
+      [
+        "Overall Diameter (in)",
+        result.tire1.diameterIn.toString(),
+        result.tire2.diameterIn.toString(),
+        result.diameterDiffIn.toString(),
+        `${result.diameterDiffPercent}%`,
+      ],
+      [
+        "Overall Diameter (mm)",
+        result.tire1.diameterMm.toString(),
+        result.tire2.diameterMm.toString(),
+        result.diameterDiffMm.toString(),
+        `${result.diameterDiffPercent}%`,
+      ],
+      [
+        "Section Width (in)",
+        result.tire1.widthIn.toString(),
+        result.tire2.widthIn.toString(),
+        result.widthDiffIn.toString(),
+        `${result.widthDiffPercent}%`,
+      ],
+      [
+        "Section Width (mm)",
+        result.tire1.widthMm.toString(),
+        result.tire2.widthMm.toString(),
+        result.widthDiffMm.toString(),
+        `${result.widthDiffPercent}%`,
+      ],
+      [
+        "Sidewall Height (in)",
+        result.tire1.sidewallIn.toString(),
+        result.tire2.sidewallIn.toString(),
+        result.sidewallDiffIn.toString(),
+        `${result.sidewallDiffPercent}%`,
+      ],
+      [
+        "Sidewall Height (mm)",
+        result.tire1.sidewallMm.toString(),
+        result.tire2.sidewallMm.toString(),
+        result.sidewallDiffMm.toString(),
+        `${result.sidewallDiffPercent}%`,
+      ],
+      [
+        "Circumference (in)",
+        result.tire1.circumferenceIn.toString(),
+        result.tire2.circumferenceIn.toString(),
+        result.circumferenceDiffIn.toString(),
+        `${result.circumferenceDiffPercent}%`,
+      ],
+      [
+        "Circumference (mm)",
+        result.tire1.circumferenceMm.toString(),
+        result.tire2.circumferenceMm.toString(),
+        result.circumferenceDiffMm.toString(),
+        `${result.circumferenceDiffPercent}%`,
+      ],
+      [
+        "Revolutions Per Mile (RPM)",
+        result.tire1.revsPerMile.toString(),
+        result.tire2.revsPerMile.toString(),
+        result.revsPerMileDiff.toString(),
+        `${((result.tire2.revsPerMile - result.tire1.revsPerMile) / result.tire1.revsPerMile * 100).toFixed(1)}%`,
+      ],
+      ["Ride Height Shift (in)", "", "", result.rideHeightChangeIn.toString(), ""],
+      ["Ride Height Shift (mm)", "", "", result.rideHeightChangeMm.toString(), ""],
+      [""],
+      ["Speedometer Calibration Matrix"],
+      ["Indicated Speed (mph)", "Actual GPS Speed (mph)", "Speed Delta (mph)"],
+      ...result.speedDeltaTable.map((row) => [
+        row.indicatedMph.toString(),
+        row.actualMph.toString(),
+        (row.actualMph - row.indicatedMph).toFixed(1),
+      ]),
+    ];
+
+    if (result.offsetResults) {
+      rows.push(
+        [""],
+        ["Wheel Offset & Backspacing Mechanics"],
+        ["Parameter", "Stock Wheel", "New Wheel", "Fitment Effect"],
+        ["Rim Width (in)", stockRimWidth.toString(), newRimWidth.toString(), ""],
+        ["Offset (ET mm)", stockOffset.toString(), newOffset.toString(), ""],
+        ["Backspacing (in)", result.offsetResults.backspacingStockIn.toString(), result.offsetResults.backspacingNewIn.toString(), ""],
+        ["Backspacing (mm)", result.offsetResults.backspacingStockMm.toString(), result.offsetResults.backspacingNewMm.toString(), ""],
+        ["Inner Strut Clearance (mm)", "", "", `${result.offsetResults.innerClearanceMm} mm closer to strut`],
+        ["Outer Fender Poke (mm)", "", "", `${result.offsetResults.outerPokeMm} mm extended outward`]
+      );
+    }
+
+    if (result.gearResults) {
+      rows.push(
+        [""],
+        ["Axle Differential Gear Ratio"],
+        ["Parameter", "Value"],
+        ["Stock Axle Ratio", stockGearRatio.toString()],
+        ["Effective Final Drive", result.gearResults.effectiveGearRatio.toString()],
+        ["Compensating Target Ratio", result.gearResults.equivalentRatioNeeded.toString()]
+      );
+    }
+
+    rows.push(
+      [""],
+      ["Fitment Assessment", result.safetyRating.toUpperCase()],
+      ["Recommendation", result.safetyMessage]
+    );
+
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      rows.map((e) => e.map((val) => `"${val}"`).join(",")).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `tire_size_comparison_${result.tire1.formattedSize}_vs_${result.tire2.formattedSize}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Export TXT
+  const handleExportTXT = () => {
+    let report = `====================================================\n`;
+    report += `TIRE SIZE & WHEEL FITMENT SPECIFICATION REPORT\n`;
+    report += `Generated by CalcPlatform\n`;
+    report += `Date: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\n`;
+    report += `====================================================\n\n`;
+    report += `STOCK TIRE SPEC:   ${result.tire1.formattedSize}\n`;
+    report += `TARGET TIRE SPEC:  ${result.tire2.formattedSize}\n\n`;
+    report += `--- SIDE-BY-SIDE GEOMETRY MATRIX ---\n`;
+    report += `Overall Diameter:  Stock: ${result.tire1.diameterIn} in (${result.tire1.diameterMm} mm)\n`;
+    report += `                   Target: ${result.tire2.diameterIn} in (${result.tire2.diameterMm} mm)\n`;
+    report += `                   Difference: ${result.diameterDiffIn > 0 ? "+" : ""}${result.diameterDiffIn} in (${result.diameterDiffMm} mm, ${result.diameterDiffPercent > 0 ? "+" : ""}${result.diameterDiffPercent}%)\n\n`;
+    report += `Section Width:     Stock: ${result.tire1.widthIn} in (${result.tire1.widthMm} mm)\n`;
+    report += `                   Target: ${result.tire2.widthIn} in (${result.tire2.widthMm} mm)\n`;
+    report += `                   Difference: ${result.widthDiffIn > 0 ? "+" : ""}${result.widthDiffIn} in (${result.widthDiffMm} mm)\n\n`;
+    report += `Sidewall Height:   Stock: ${result.tire1.sidewallIn} in (${result.tire1.sidewallMm} mm)\n`;
+    report += `                   Target: ${result.tire2.sidewallIn} in (${result.tire2.sidewallMm} mm)\n`;
+    report += `                   Difference: ${result.sidewallDiffIn > 0 ? "+" : ""}${result.sidewallDiffIn} in (${result.sidewallDiffMm} mm)\n\n`;
+    report += `Circumference:     Stock: ${result.tire1.circumferenceIn} in (${result.tire1.circumferenceMm} mm)\n`;
+    report += `                   Target: ${result.tire2.circumferenceIn} in (${result.tire2.circumferenceMm} mm)\n`;
+    report += `                   Difference: ${result.circumferenceDiffIn > 0 ? "+" : ""}${result.circumferenceDiffIn} in (${result.circumferenceDiffMm} mm)\n\n`;
+    report += `Revs / Mile (RPM): Stock: ${result.tire1.revsPerMile} | Target: ${result.tire2.revsPerMile} (Delta: ${result.revsPerMileDiff > 0 ? "+" : ""}${result.revsPerMileDiff})\n`;
+    report += `Ride Height Shift: ${result.rideHeightChangeIn > 0 ? "+" : ""}${result.rideHeightChangeIn} in (${result.rideHeightChangeMm} mm geometric estimate)\n\n`;
+
+    report += `--- SPEEDOMETER ERROR CALIBRATION ---\n`;
+    report += `At 65 mph indicated: Actual GPS speed is ${result.speedAt65Mph} mph (${result.speedErrorPercent > 0 ? "+" : ""}${result.speedErrorPercent}% error)\n`;
+    result.speedDeltaTable.forEach((row) => {
+      report += `  - ${row.indicatedMph} mph indicated -> ${row.actualMph} mph actual (Delta: ${(row.actualMph - row.indicatedMph).toFixed(1)} mph)\n`;
+    });
+
+    if (result.offsetResults) {
+      report += `\n--- WHEEL OFFSET (ET) & BACKSPACING MECHANICS ---\n`;
+      report += `Stock Wheel Spec:  ${stockRimWidth}" ET+${stockOffset} mm | Backspacing: ${result.offsetResults.backspacingStockIn}" (${result.offsetResults.backspacingStockMm} mm)\n`;
+      report += `Target Wheel Spec: ${newRimWidth}" ET+${newOffset} mm | Backspacing: ${result.offsetResults.backspacingNewIn}" (${result.offsetResults.backspacingNewMm} mm)\n`;
+      report += `Inner Strut Clearance: ${result.offsetResults.innerClearanceMm > 0 ? result.offsetResults.innerClearanceMm + " mm closer to suspension strut" : Math.abs(result.offsetResults.innerClearanceMm) + " mm extra clearance"}\n`;
+      report += `Outer Fender Poke:     ${result.offsetResults.outerPokeMm > 0 ? result.offsetResults.outerPokeMm + " mm extended outward toward fender lip" : Math.abs(result.offsetResults.outerPokeMm) + " mm tucked inward"}\n`;
+    }
+
+    if (result.gearResults) {
+      report += `\n--- AXLE DIFFERENTIAL GEAR RATIO COMPENSATION ---\n`;
+      report += `Stock Axle Ratio:             ${stockGearRatio}\n`;
+      report += `Effective Final Drive:        ${result.gearResults.effectiveGearRatio}\n`;
+      report += `Compensating Target Axle:     ${result.gearResults.equivalentRatioNeeded}\n`;
+    }
+
+    report += `\n--- FITMENT WARNING & ASSESSMENT ---\n`;
+    report += `Rating:  ${result.safetyRating.toUpperCase()}\n`;
+    report += `Details: ${result.safetyMessage}\n`;
+    report += `\n====================================================\n`;
+
+    const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `tire_fitment_${result.tire1.formattedSize}_vs_${result.tire2.formattedSize}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  // Copy LaTeX Formulas
+  const handleCopyLatex = () => {
+    const latex = `% Tire Size & Wheel Fitment Mathematical Model
+% 1. Sidewall Height
+h_1 = \\frac{w_1 \\cdot \\text{AR}_1}{100 \\cdot 25.4} = \\frac{${result.tire1.widthMm} \\cdot ${t1Aspect}}{2540} \\approx ${result.tire1.sidewallIn}\\,\\text{in} \\quad (${result.tire1.sidewallMm}\\,\\text{mm})
+h_2 = \\frac{w_2 \\cdot \\text{AR}_2}{100 \\cdot 25.4} = \\frac{${result.tire2.widthMm} \\cdot ${t2Aspect}}{2540} \\approx ${result.tire2.sidewallIn}\\,\\text{in} \\quad (${result.tire2.sidewallMm}\\,\\text{mm})
+
+% 2. Overall Tire Diameter
+D_1 = 2h_1 + d_{\\text{rim},1} = 2(${result.tire1.sidewallIn}) + ${result.tire1.rimDiameterIn} = ${result.tire1.diameterIn}\\,\\text{in} \\quad (${result.tire1.diameterMm}\\,\\text{mm})
+D_2 = 2h_2 + d_{\\text{rim},2} = 2(${result.tire2.sidewallIn}) + ${result.tire2.rimDiameterIn} = ${result.tire2.diameterIn}\\,\\text{in} \\quad (${result.tire2.diameterMm}\\,\\text{mm})
+\\Delta D = D_2 - D_1 = ${result.diameterDiffIn > 0 ? "+" : ""}${result.diameterDiffIn}\\,\\text{in} \\quad (${result.diameterDiffPercent > 0 ? "+" : ""}${result.diameterDiffPercent}\\\\%)
+
+% 3. Rolling Circumference & Revolutions Per Mile
+C_1 = \\pi \\cdot D_1 \\approx ${result.tire1.circumferenceIn}\\,\\text{in}, \\quad \\text{RPM}_1 = \\frac{63360}{C_1} \\approx ${result.tire1.revsPerMile}
+C_2 = \\pi \\cdot D_2 \\approx ${result.tire2.circumferenceIn}\\,\\text{in}, \\quad \\text{RPM}_2 = \\frac{63360}{C_2} \\approx ${result.tire2.revsPerMile}
+
+% 4. Speedometer Calibration
+V_{\\text{actual}} = V_{\\text{indicated}} \\times \\frac{D_2}{D_1} = 65 \\times \\frac{${result.tire2.diameterIn}}{${result.tire1.diameterIn}} \\approx ${result.speedAt65Mph}\\,\\text{mph}
+
+% 5. Effective Final Drive Differential Ratio
+${enableGear ? `R_{\\text{effective}} = R_{\\text{stock}} \\times \\frac{D_1}{D_2} = ${stockGearRatio} \\times \\frac{${result.tire1.diameterIn}}{${result.tire2.diameterIn}} \\approx ${result.gearResults?.effectiveGearRatio}` : "% Gear ratio disabled"}`;
+
+    navigator.clipboard.writeText(latex);
+    setCopiedLatex(true);
+    setTimeout(() => setCopiedLatex(false), 2000);
   };
 
   // Report Modal Data
@@ -184,10 +500,20 @@ export function TireSizeCalculator() {
         calculatorName: "Tire Size Calculator",
       },
       keyMetrics: [
-        { label: "Overall Diameter Delta", value: `${result.diameterDiffIn > 0 ? "+" : ""}${result.diameterDiffIn} in (${result.diameterDiffPercent}%)`, highlight: true },
+        {
+          label: "Overall Diameter Delta",
+          value: `${result.diameterDiffIn > 0 ? "+" : ""}${result.diameterDiffIn} in (${result.diameterDiffPercent}%)`,
+          highlight: true,
+        },
         { label: "Speedometer @ 65 MPH", value: `${result.speedAt65Mph} MPH Actual GPS` },
-        { label: "Ride Height Shift", value: `${result.rideHeightChangeIn > 0 ? "+" : ""}${result.rideHeightChangeIn} in (${result.rideHeightChangeMm} mm)` },
-        { label: "Revs Per Mile Diff", value: `${result.revsPerMileDiff > 0 ? "+" : ""}${result.revsPerMileDiff} RPM` },
+        {
+          label: "Ride Height Shift",
+          value: `${result.rideHeightChangeIn > 0 ? "+" : ""}${result.rideHeightChangeIn} in (${result.rideHeightChangeMm} mm)`,
+        },
+        {
+          label: "Revs Per Mile Diff",
+          value: `${result.revsPerMileDiff > 0 ? "+" : ""}${result.revsPerMileDiff} RPM`,
+        },
       ],
       sections: [
         {
@@ -207,10 +533,28 @@ export function TireSizeCalculator() {
           ? {
               title: "Wheel Offset (ET) & Clearance Mechanics",
               items: [
-                { label: "Stock Wheel Spec", value: `${stockRimWidth}" ET+${stockOffset}mm (Backspacing: ${result.offsetResults.backspacingStockIn}")` },
-                { label: "New Wheel Spec", value: `${newRimWidth}" ET+${newOffset}mm (Backspacing: ${result.offsetResults.backspacingNewIn}")` },
-                { label: "Inner Suspension Clearance", value: result.offsetResults.innerClearanceMm > 0 ? `${result.offsetResults.innerClearanceMm} mm closer to strut` : `${Math.abs(result.offsetResults.innerClearanceMm)} mm extra room` },
-                { label: "Outer Fender Poke", value: result.offsetResults.outerPokeMm > 0 ? `${result.offsetResults.outerPokeMm} mm extended outward` : `${Math.abs(result.offsetResults.outerPokeMm)} mm tucked inward` },
+                {
+                  label: "Stock Wheel Spec",
+                  value: `${stockRimWidth}" ET+${stockOffset}mm (Backspacing: ${result.offsetResults.backspacingStockIn}")`,
+                },
+                {
+                  label: "New Wheel Spec",
+                  value: `${newRimWidth}" ET+${newOffset}mm (Backspacing: ${result.offsetResults.backspacingNewIn}")`,
+                },
+                {
+                  label: "Inner Strut Clearance",
+                  value:
+                    result.offsetResults.innerClearanceMm > 0
+                      ? `${result.offsetResults.innerClearanceMm} mm closer to strut`
+                      : `${Math.abs(result.offsetResults.innerClearanceMm)} mm extra room`,
+                },
+                {
+                  label: "Outer Fender Poke",
+                  value:
+                    result.offsetResults.outerPokeMm > 0
+                      ? `${result.offsetResults.outerPokeMm} mm extended outward`
+                      : `${Math.abs(result.offsetResults.outerPokeMm)} mm tucked inward`,
+                },
               ],
             }
           : {
@@ -228,16 +572,18 @@ export function TireSizeCalculator() {
 
   return (
     <div className="space-y-4">
-      {/* 1. TOP CONTROL TOOLBAR - LIGHT SLATE THEME WITH 3D BUTTONS */}
+      {/* 1. TOP CONTROL TOOLBAR WITH FULL EXPORT & PERSISTENCE SUITE */}
       <div className="bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-4 rounded-2xl shadow-xs space-y-3">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
-          {/* Format Toggle Buttons (Col 5) */}
-          <div className="md:col-span-5 space-y-1">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
+          {/* Format Toggle Buttons (Col 4) */}
+          <div className="lg:col-span-4 space-y-1">
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-zinc-400 block">
               Tire Sizing Standard
             </span>
             <div className="grid grid-cols-2 gap-1.5 text-xs">
               <button
+                type="button"
+                id="format-metric-btn"
                 onClick={() => setFormat("metric")}
                 className={`py-1.5 px-3 rounded-lg text-center cursor-pointer transition-all ${
                   format === "metric"
@@ -248,6 +594,8 @@ export function TireSizeCalculator() {
                 Metric (e.g. 225/50R17)
               </button>
               <button
+                type="button"
+                id="format-flotation-btn"
                 onClick={() => setFormat("flotation")}
                 className={`py-1.5 px-3 rounded-lg text-center cursor-pointer transition-all ${
                   format === "flotation"
@@ -260,9 +608,30 @@ export function TireSizeCalculator() {
             </div>
           </div>
 
-          {/* Export & Share Buttons (Col 7) */}
-          <div className="md:col-span-7 flex items-end justify-end gap-2">
+          {/* Export & Action Buttons (Col 8) */}
+          <div className="lg:col-span-8 flex flex-wrap items-center justify-end gap-1.5">
             <Button
+              id="save-state-btn"
+              onClick={handleSaveState}
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs font-bold gap-1 cursor-pointer bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 border-b-2 border-b-slate-300"
+              title="Save inputs to local browser storage"
+            >
+              <Bookmark className="h-3.5 w-3.5 text-blue-600" /> Save
+            </Button>
+            <Button
+              id="restore-state-btn"
+              onClick={handleRestoreState}
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs font-bold gap-1 cursor-pointer bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 border-b-2 border-b-slate-300"
+              title="Restore saved calculation inputs"
+            >
+              <RotateCcw className="h-3.5 w-3.5 text-amber-600" /> Restore
+            </Button>
+            <Button
+              id="copy-log-btn"
               onClick={handleCopySummary}
               variant="outline"
               size="sm"
@@ -272,6 +641,44 @@ export function TireSizeCalculator() {
               {copied ? "Copied" : "Copy Log"}
             </Button>
             <Button
+              id="export-csv-btn"
+              onClick={handleExportCSV}
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs font-bold gap-1 cursor-pointer bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 border-b-2 border-b-slate-300"
+            >
+              <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600" /> CSV
+            </Button>
+            <Button
+              id="export-txt-btn"
+              onClick={handleExportTXT}
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs font-bold gap-1 cursor-pointer bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 border-b-2 border-b-slate-300"
+            >
+              <FileText className="h-3.5 w-3.5 text-slate-600 dark:text-zinc-400" /> TXT
+            </Button>
+            <Button
+              id="copy-latex-btn"
+              onClick={handleCopyLatex}
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs font-bold gap-1 cursor-pointer bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 border-b-2 border-b-slate-300"
+            >
+              {copiedLatex ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Code2 className="h-3.5 w-3.5" />}
+              {copiedLatex ? "Copied" : "LaTeX"}
+            </Button>
+            <Button
+              id="direct-print-btn"
+              onClick={() => window.print()}
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs font-bold gap-1 cursor-pointer bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 border-b-2 border-b-slate-300"
+            >
+              <Printer className="h-3.5 w-3.5" /> Print
+            </Button>
+            <Button
+              id="export-pdf-btn"
               onClick={() => setShowReportModal(true)}
               variant="outline"
               size="sm"
@@ -281,7 +688,22 @@ export function TireSizeCalculator() {
             </Button>
           </div>
         </div>
+
+        {/* Status Notification Toast */}
+        {statusMsg && (
+          <div role="status" aria-live="polite" className="text-xs font-bold text-center text-blue-600 dark:text-blue-400 py-1 bg-blue-50 dark:bg-blue-950/40 rounded-lg border border-blue-200 dark:border-blue-900">
+            {statusMsg}
+          </div>
+        )}
       </div>
+
+      {/* Validation Error Alert Banner (When Invalid) */}
+      {!result.isValid && (
+        <div role="alert" className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-900 rounded-xl flex items-center gap-2 text-rose-800 dark:text-rose-200 text-xs font-bold">
+          <AlertTriangle className="h-4 w-4 shrink-0 text-rose-600" />
+          <span>{result.errorMessage || "Please verify tire dimensions. Values must be positive numbers."}</span>
+        </div>
+      )}
 
       {/* 2. SPLIT PANE INTERFACE */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
@@ -300,32 +722,41 @@ export function TireSizeCalculator() {
               </div>
 
               {/* Quick Text Parser Input 1 */}
-              <div className="flex gap-1.5">
-                <Input
-                  type="text"
-                  placeholder="e.g. 225/50R17 or 225 50 17"
-                  value={quickInput1}
-                  onChange={(e) => setQuickInput1(e.target.value)}
-                  className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
-                />
-                <Button
-                  onClick={handleApplyQuick1}
-                  size="sm"
-                  variant="outline"
-                  className="h-8 text-xs font-bold px-2 bg-slate-200 dark:bg-zinc-700 hover:bg-slate-300"
-                >
-                  <Search className="h-3 w-3" />
-                </Button>
+              <div className="space-y-1">
+                <label htmlFor="t1-quick-input" className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400 block">
+                  Quick Search / Preset String
+                </label>
+                <div className="flex gap-1.5">
+                  <Input
+                    id="t1-quick-input"
+                    type="text"
+                    placeholder="e.g. 225/50R17 or 225 50 17"
+                    value={quickInput1}
+                    onChange={(e) => setQuickInput1(e.target.value)}
+                    className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
+                  />
+                  <Button
+                    id="t1-quick-btn"
+                    onClick={handleApplyQuick1}
+                    size="sm"
+                    variant="outline"
+                    aria-label="Parse and apply stock tire size"
+                    className="h-8 text-xs font-bold px-2 bg-slate-200 dark:bg-zinc-700 hover:bg-slate-300"
+                  >
+                    <Search className="h-3 w-3" />
+                  </Button>
+                </div>
               </div>
 
               {format === "metric" ? (
                 <div className="space-y-2 text-xs">
                   <div className="space-y-1">
                     <div className="flex justify-between font-bold text-slate-700 dark:text-zinc-300">
-                      <span>Section Width:</span>
+                      <label htmlFor="t1-width-slider">Section Width:</label>
                       <span className="font-sans tabular-nums text-blue-600">{t1Width} mm</span>
                     </div>
                     <input
+                      id="t1-width-slider"
                       type="range"
                       min={135}
                       max={355}
@@ -338,10 +769,11 @@ export function TireSizeCalculator() {
 
                   <div className="space-y-1">
                     <div className="flex justify-between font-bold text-slate-700 dark:text-zinc-300">
-                      <span>Aspect Ratio:</span>
+                      <label htmlFor="t1-aspect-slider">Aspect Ratio:</label>
                       <span className="font-sans tabular-nums text-blue-600">{t1Aspect} %</span>
                     </div>
                     <input
+                      id="t1-aspect-slider"
                       type="range"
                       min={25}
                       max={85}
@@ -354,10 +786,11 @@ export function TireSizeCalculator() {
 
                   <div className="space-y-1">
                     <div className="flex justify-between font-bold text-slate-700 dark:text-zinc-300">
-                      <span>Rim Diameter:</span>
+                      <label htmlFor="t1-rim-slider">Rim Diameter:</label>
                       <span className="font-sans tabular-nums text-blue-600">{t1Rim} in</span>
                     </div>
                     <input
+                      id="t1-rim-slider"
                       type="range"
                       min={12}
                       max={28}
@@ -372,8 +805,11 @@ export function TireSizeCalculator() {
                 /* Flotation Mode Inputs */
                 <div className="space-y-2 text-xs">
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 dark:text-zinc-300">Outer Diameter (in)</label>
+                    <label htmlFor="t1-float-dia" className="font-bold text-slate-700 dark:text-zinc-300">
+                      Outer Diameter (in)
+                    </label>
                     <Input
+                      id="t1-float-dia"
                       type="number"
                       value={t1FloatDia}
                       onChange={(e) => setT1FloatDia(Number(e.target.value))}
@@ -381,8 +817,11 @@ export function TireSizeCalculator() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 dark:text-zinc-300">Section Width (in)</label>
+                    <label htmlFor="t1-float-width" className="font-bold text-slate-700 dark:text-zinc-300">
+                      Section Width (in)
+                    </label>
                     <Input
+                      id="t1-float-width"
                       type="number"
                       step="0.5"
                       value={t1FloatWidth}
@@ -391,8 +830,11 @@ export function TireSizeCalculator() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 dark:text-zinc-300">Rim Size (in)</label>
+                    <label htmlFor="t1-float-rim" className="font-bold text-slate-700 dark:text-zinc-300">
+                      Rim Size (in)
+                    </label>
                     <Input
+                      id="t1-float-rim"
                       type="number"
                       value={t1Rim}
                       onChange={(e) => setT1Rim(Number(e.target.value))}
@@ -406,7 +848,9 @@ export function TireSizeCalculator() {
               <div className="flex flex-wrap gap-1 pt-1">
                 {["205/55R16", "225/45R17", "245/40R18", "275/40R19"].map((preset) => (
                   <button
+                    type="button"
                     key={preset}
+                    id={`t1-preset-${preset.replace(/\//g, "-")}`}
                     onClick={() => {
                       const p = parseTireCodeString(preset);
                       if (p) {
@@ -435,32 +879,41 @@ export function TireSizeCalculator() {
               </div>
 
               {/* Quick Text Parser Input 2 */}
-              <div className="flex gap-1.5">
-                <Input
-                  type="text"
-                  placeholder="e.g. 245/45R18 or 33 12.5 15"
-                  value={quickInput2}
-                  onChange={(e) => setQuickInput2(e.target.value)}
-                  className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
-                />
-                <Button
-                  onClick={handleApplyQuick2}
-                  size="sm"
-                  variant="outline"
-                  className="h-8 text-xs font-bold px-2 bg-slate-200 dark:bg-zinc-700 hover:bg-slate-300"
-                >
-                  <Search className="h-3 w-3" />
-                </Button>
+              <div className="space-y-1">
+                <label htmlFor="t2-quick-input" className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400 block">
+                  Quick Search / Preset String
+                </label>
+                <div className="flex gap-1.5">
+                  <Input
+                    id="t2-quick-input"
+                    type="text"
+                    placeholder="e.g. 245/45R18 or 33 12.5 15"
+                    value={quickInput2}
+                    onChange={(e) => setQuickInput2(e.target.value)}
+                    className="h-8 text-xs font-sans tabular-nums bg-white dark:bg-zinc-900"
+                  />
+                  <Button
+                    id="t2-quick-btn"
+                    onClick={handleApplyQuick2}
+                    size="sm"
+                    variant="outline"
+                    aria-label="Parse and apply target tire size"
+                    className="h-8 text-xs font-bold px-2 bg-slate-200 dark:bg-zinc-700 hover:bg-slate-300"
+                  >
+                    <Search className="h-3 w-3" />
+                  </Button>
+                </div>
               </div>
 
               {format === "metric" ? (
                 <div className="space-y-2 text-xs">
                   <div className="space-y-1">
                     <div className="flex justify-between font-bold text-slate-700 dark:text-zinc-300">
-                      <span>Section Width:</span>
+                      <label htmlFor="t2-width-slider">Section Width:</label>
                       <span className="font-sans tabular-nums text-emerald-600">{t2Width} mm</span>
                     </div>
                     <input
+                      id="t2-width-slider"
                       type="range"
                       min={135}
                       max={355}
@@ -473,10 +926,11 @@ export function TireSizeCalculator() {
 
                   <div className="space-y-1">
                     <div className="flex justify-between font-bold text-slate-700 dark:text-zinc-300">
-                      <span>Aspect Ratio:</span>
+                      <label htmlFor="t2-aspect-slider">Aspect Ratio:</label>
                       <span className="font-sans tabular-nums text-emerald-600">{t2Aspect} %</span>
                     </div>
                     <input
+                      id="t2-aspect-slider"
                       type="range"
                       min={25}
                       max={85}
@@ -489,10 +943,11 @@ export function TireSizeCalculator() {
 
                   <div className="space-y-1">
                     <div className="flex justify-between font-bold text-slate-700 dark:text-zinc-300">
-                      <span>Rim Diameter:</span>
+                      <label htmlFor="t2-rim-slider">Rim Diameter:</label>
                       <span className="font-sans tabular-nums text-emerald-600">{t2Rim} in</span>
                     </div>
                     <input
+                      id="t2-rim-slider"
                       type="range"
                       min={12}
                       max={28}
@@ -507,8 +962,11 @@ export function TireSizeCalculator() {
                 /* Flotation Mode Inputs 2 */
                 <div className="space-y-2 text-xs">
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 dark:text-zinc-300">Outer Diameter (in)</label>
+                    <label htmlFor="t2-float-dia" className="font-bold text-slate-700 dark:text-zinc-300">
+                      Outer Diameter (in)
+                    </label>
                     <Input
+                      id="t2-float-dia"
                       type="number"
                       value={t2FloatDia}
                       onChange={(e) => setT2FloatDia(Number(e.target.value))}
@@ -516,8 +974,11 @@ export function TireSizeCalculator() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 dark:text-zinc-300">Section Width (in)</label>
+                    <label htmlFor="t2-float-width" className="font-bold text-slate-700 dark:text-zinc-300">
+                      Section Width (in)
+                    </label>
                     <Input
+                      id="t2-float-width"
                       type="number"
                       step="0.5"
                       value={t2FloatWidth}
@@ -526,8 +987,11 @@ export function TireSizeCalculator() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 dark:text-zinc-300">Rim Size (in)</label>
+                    <label htmlFor="t2-float-rim" className="font-bold text-slate-700 dark:text-zinc-300">
+                      Rim Size (in)
+                    </label>
                     <Input
+                      id="t2-float-rim"
                       type="number"
                       value={t2Rim}
                       onChange={(e) => setT2Rim(Number(e.target.value))}
@@ -541,7 +1005,9 @@ export function TireSizeCalculator() {
               <div className="flex flex-wrap gap-1 pt-1">
                 {["225/50R17", "245/45R18", "275/35R19", "315/30R20"].map((preset) => (
                   <button
+                    type="button"
                     key={preset}
+                    id={`t2-preset-${preset.replace(/\//g, "-")}`}
                     onClick={() => {
                       const p = parseTireCodeString(preset);
                       if (p) {
@@ -562,8 +1028,9 @@ export function TireSizeCalculator() {
           {/* ACCORDION 1: WHEEL OFFSET (ET) & BACKSPACING FITMENT ENGINE */}
           <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
             <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer text-xs font-extrabold text-slate-700 dark:text-zinc-300">
+              <label htmlFor="enable-offset-toggle" className="flex items-center gap-2 cursor-pointer text-xs font-extrabold text-slate-700 dark:text-zinc-300">
                 <input
+                  id="enable-offset-toggle"
                   type="checkbox"
                   checked={enableOffset}
                   onChange={(e) => setEnableOffset(e.target.checked)}
@@ -577,8 +1044,11 @@ export function TireSizeCalculator() {
               <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl space-y-3 text-xs">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 dark:text-zinc-300">Stock Rim Width (in)</label>
+                    <label htmlFor="stock-rim-width-input" className="font-bold text-slate-700 dark:text-zinc-300">
+                      Stock Rim Width (in)
+                    </label>
                     <Input
+                      id="stock-rim-width-input"
                       type="number"
                       step="0.5"
                       value={stockRimWidth}
@@ -587,8 +1057,11 @@ export function TireSizeCalculator() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 dark:text-zinc-300">Stock Offset (ET mm)</label>
+                    <label htmlFor="stock-offset-input" className="font-bold text-slate-700 dark:text-zinc-300">
+                      Stock Offset (ET mm)
+                    </label>
                     <Input
+                      id="stock-offset-input"
                       type="number"
                       value={stockOffset}
                       onChange={(e) => setStockOffset(Number(e.target.value))}
@@ -596,8 +1069,11 @@ export function TireSizeCalculator() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 dark:text-zinc-300">New Rim Width (in)</label>
+                    <label htmlFor="new-rim-width-input" className="font-bold text-slate-700 dark:text-zinc-300">
+                      New Rim Width (in)
+                    </label>
                     <Input
+                      id="new-rim-width-input"
                       type="number"
                       step="0.5"
                       value={newRimWidth}
@@ -606,8 +1082,11 @@ export function TireSizeCalculator() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 dark:text-zinc-300">New Offset (ET mm)</label>
+                    <label htmlFor="new-offset-input" className="font-bold text-slate-700 dark:text-zinc-300">
+                      New Offset (ET mm)
+                    </label>
                     <Input
+                      id="new-offset-input"
                       type="number"
                       value={newOffset}
                       onChange={(e) => setNewOffset(Number(e.target.value))}
@@ -622,7 +1101,7 @@ export function TireSizeCalculator() {
                       <span className="font-bold block">Inner Strut Clearance:</span>
                       {result.offsetResults.innerClearanceMm > 0
                         ? `${result.offsetResults.innerClearanceMm} mm closer to suspension strut`
-                        : `${Math.abs(result.offsetResults.innerClearanceMm)} mm extra clearance`}
+                        : `${Math.abs(result.offsetResults.innerClearanceMm)} mm extra room`}
                     </div>
                     <div>
                       <span className="font-bold block">Outer Fender Poke:</span>
@@ -639,8 +1118,9 @@ export function TireSizeCalculator() {
           {/* ACCORDION 2: DRIVETRAIN DIFFERENTIAL GEAR RATIO ADJUSTER */}
           <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
             <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer text-xs font-extrabold text-slate-700 dark:text-zinc-300">
+              <label htmlFor="enable-gear-toggle" className="flex items-center gap-2 cursor-pointer text-xs font-extrabold text-slate-700 dark:text-zinc-300">
                 <input
+                  id="enable-gear-toggle"
                   type="checkbox"
                   checked={enableGear}
                   onChange={(e) => setEnableGear(e.target.checked)}
@@ -654,8 +1134,11 @@ export function TireSizeCalculator() {
               <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl space-y-2 text-xs">
                 <div className="flex items-center gap-3">
                   <div className="space-y-1 flex-1">
-                    <label className="font-bold text-slate-700 dark:text-zinc-300">Stock Axle Gear Ratio (e.g. 3.73)</label>
+                    <label htmlFor="stock-gear-ratio-input" className="font-bold text-slate-700 dark:text-zinc-300">
+                      Stock Axle Gear Ratio (e.g. 3.73)
+                    </label>
                     <Input
+                      id="stock-gear-ratio-input"
                       type="number"
                       step="0.01"
                       value={stockGearRatio}
@@ -676,7 +1159,10 @@ export function TireSizeCalculator() {
         </div>
 
         {/* RIGHT DASHBOARD (Col 5) - INTERACTIVE VISUALIZER & COMPARISON */}
-        <div className="lg:col-span-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 p-4 sm:p-5 rounded-2xl border border-blue-600/30 dark:border-blue-500/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08),0_2px_6px_-1px_rgba(0,0,0,0.04)] space-y-4">
+        <div
+          aria-live="polite"
+          className="lg:col-span-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 p-4 sm:p-5 rounded-2xl border border-blue-600/30 dark:border-blue-500/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.08),0_2px_6px_-1px_rgba(0,0,0,0.04)] space-y-4"
+        >
           {/* Header & Safety Badge */}
           <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
             <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
@@ -713,7 +1199,7 @@ export function TireSizeCalculator() {
             </div>
           </div>
 
-          {/* Safety Alert Banner - MIN HEIGHT min-h-[64px] FULL UNTRUNCATED TEXT */}
+          {/* Safety Alert Banner */}
           <div
             className={`min-h-[64px] px-3.5 py-2.5 rounded-xl border text-xs flex items-center gap-2.5 transition-all duration-300 ${
               result.safetyRating === "safe"
@@ -748,21 +1234,25 @@ export function TireSizeCalculator() {
               </span>
               <div className="flex gap-1 text-[10px] bg-slate-200/80 dark:bg-slate-900 p-0.5 rounded-lg border border-slate-300 dark:border-slate-800">
                 <button
+                  type="button"
+                  id="view-side-profile-btn"
                   onClick={() => setVisualView("profile")}
                   className={`px-2.5 py-1 rounded-md cursor-pointer font-extrabold transition-all ${
                     visualView === "profile"
                       ? "bg-blue-600 text-white shadow-xs"
-                      : "text-slate-400 hover:text-white"
+                      : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
                   }`}
                 >
                   Side Profile
                 </button>
                 <button
+                  type="button"
+                  id="view-tread-front-btn"
                   onClick={() => setVisualView("tread")}
                   className={`px-2.5 py-1 rounded-md cursor-pointer font-extrabold transition-all ${
                     visualView === "tread"
                       ? "bg-blue-600 text-white shadow-xs"
-                      : "text-slate-400 hover:text-white"
+                      : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
                   }`}
                 >
                   Tread Front
@@ -772,7 +1262,12 @@ export function TireSizeCalculator() {
 
             {/* SVG CANVAS DIAGRAM */}
             <div className="h-48 w-full relative flex items-center justify-center pt-1">
-              <svg className="w-full h-full overflow-visible" viewBox="0 0 340 180">
+              <svg
+                role="img"
+                aria-label={`2D scaled visual overlay comparison between stock ${result.tire1.formattedSize} and target ${result.tire2.formattedSize} tire in ${visualView} view`}
+                className="w-full h-full overflow-visible"
+                viewBox="0 0 340 180"
+              >
                 <defs>
                   {/* Neon Glow & Metallic Gradients */}
                   <filter id="emeraldGlow" x="-20%" y="-20%" width="140%" height="140%">
@@ -794,12 +1289,11 @@ export function TireSizeCalculator() {
                 {visualView === "profile" ? (
                   /* SIDE PROFILE OVERLAY DIAGRAM */
                   <g>
-                    {/* Scale Math: Center (170, 85) */}
                     {(() => {
                       const cx = 170;
                       const cy = 85;
                       const maxDia = Math.max(result.tire1.diameterIn, result.tire2.diameterIn) || 30;
-                      const r2 = 62; // New tire outer radius
+                      const r2 = 62; // Target tire outer radius
                       const r1 = Math.min(72, Math.max(30, (result.tire1.diameterIn / maxDia) * 62)); // Stock outer radius
                       const rRim2 = Math.min(48, Math.max(18, (result.tire2.rimDiameterIn / maxDia) * 62));
                       const rRim1 = Math.min(48, Math.max(18, (result.tire1.rimDiameterIn / maxDia) * 62));
@@ -869,7 +1363,7 @@ export function TireSizeCalculator() {
                             filter="url(#emeraldGlow)"
                           />
 
-                          {/* Vented Brake Rotor (Behind Spokes) */}
+                          {/* Vented Brake Rotor */}
                           <circle
                             cx={cx}
                             cy={cy}
@@ -924,7 +1418,7 @@ export function TireSizeCalculator() {
                           <circle cx={cx} cy={cy} r="9" fill="#1e293b" stroke="#94a3b8" strokeWidth="2" />
                           <circle cx={cx} cy={cy} r="4" fill="#34d399" />
 
-                          {/* 5 Lug Nuts */}
+                          {/* Lug Nuts */}
                           {spokeAngles.map((angle, idx) => {
                             const rad = ((angle + 36) * Math.PI) / 180;
                             const lx = cx + 6 * Math.cos(rad);
@@ -935,13 +1429,13 @@ export function TireSizeCalculator() {
                           {/* Dynamic Legend */}
                           <g transform="translate(15, 20)">
                             <rect x="0" y="0" width="10" height="10" rx="2" fill="#3b82f6" />
-                            <text x="14" y="9" fill="#93c5fd" fontSize="9" fontWeight="bold">
+                            <text x="14" y="9" fill="#3b82f6" className="dark:fill-blue-300" fontSize="9" fontWeight="bold">
                               Stock: {result.tire1.formattedSize} ({result.tire1.diameterIn}")
                             </text>
                           </g>
                           <g transform="translate(180, 20)">
                             <rect x="0" y="0" width="10" height="10" rx="2" fill="#10b981" />
-                            <text x="14" y="9" fill="#6ee7b7" fontSize="9" fontWeight="bold">
+                            <text x="14" y="9" fill="#059669" className="dark:fill-emerald-300" fontSize="9" fontWeight="bold">
                               New: {result.tire2.formattedSize} ({result.tire2.diameterIn}")
                             </text>
                           </g>
@@ -954,7 +1448,6 @@ export function TireSizeCalculator() {
                   <g>
                     {(() => {
                       const cx = 170;
-                      const cy = 85;
                       const maxW = Math.max(result.tire1.widthMm, result.tire2.widthMm) || 245;
                       const w2 = Math.min(130, Math.max(40, (result.tire2.widthMm / maxW) * 110));
                       const w1 = Math.min(130, Math.max(40, (result.tire1.widthMm / maxW) * 110));
@@ -1021,15 +1514,15 @@ export function TireSizeCalculator() {
                           <line x1={cx - w2 / 2 - 15} y1="80" x2={cx + w2 / 2 + 15} y2="80" stroke="#f59e0b" strokeWidth="2" strokeDasharray="3 2" />
 
                           {/* Callout Width Text */}
-                          <text x={cx} y="72" textAnchor="middle" fill="#ffffff" fontSize="13" fontWeight="900" fontFamily="monospace">
+                          <text x={cx} y="72" textAnchor="middle" fill="#0f172a" className="dark:fill-white" fontSize="13" fontWeight="900" fontFamily="monospace">
                             {result.tire2.widthMm} mm ({result.tire2.widthIn}")
                           </text>
-                          <text x={cx} y="88" textAnchor="middle" fill="#6ee7b7" fontSize="10" fontWeight="extrabold">
+                          <text x={cx} y="88" textAnchor="middle" fill="#059669" className="dark:fill-emerald-300" fontSize="10" fontWeight="extrabold">
                             {result.widthDiffMm > 0 ? "+" : ""}{result.widthDiffMm} mm ({result.widthDiffIn > 0 ? "+" : ""}{result.widthDiffIn}") wider
                           </text>
 
                           {/* Bottom Legend */}
-                          <text x="170" y="162" textAnchor="middle" fill="#94a3b8" fontSize="9" fontWeight="bold">
+                          <text x="170" y="162" textAnchor="middle" fill="#64748b" className="dark:fill-slate-400" fontSize="9" fontWeight="bold">
                             Stock Width: {result.tire1.widthMm}mm ({result.tire1.widthIn}") | New Width: {result.tire2.widthMm}mm ({result.tire2.widthIn}")
                           </text>
                         </>
@@ -1041,7 +1534,7 @@ export function TireSizeCalculator() {
             </div>
           </div>
 
-          {/* SIDE-BY-SIDE DATA COMPARISON TABLE - SPACIOUS & DE-CONGESTED */}
+          {/* SIDE-BY-SIDE DATA COMPARISON TABLE */}
           <div className="bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-700 space-y-3 text-xs shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)]">
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-200 block text-center border-b border-slate-200/80 dark:border-slate-700 pb-2">
               Comprehensive Geometry Matrix

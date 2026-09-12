@@ -1,3 +1,5 @@
+export {};
+
 async function checkSSR() {
   const url = "http://localhost:3000/calculators/base64-calculator";
   console.log("Checking SSR at:", url);

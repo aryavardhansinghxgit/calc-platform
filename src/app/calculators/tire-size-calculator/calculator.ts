@@ -11,12 +11,58 @@ import {
 
 export function calculateTireGeometry(inputs: TireDimensions): TireGeometry {
   if (inputs.format === "flotation") {
-    const diaIn = Math.max(15, inputs.flotationDiameterInches || 33);
-    const widthIn = Math.max(5, inputs.flotationWidthInches || 12.5);
-    const rimIn = Math.max(8, inputs.rimDiameterInches || 15);
+    const diaIn = Number(inputs.flotationDiameterInches);
+    const widthIn = Number(inputs.flotationWidthInches);
+    const rimIn = Number(inputs.rimDiameterInches);
+
+    if (
+      !Number.isFinite(diaIn) ||
+      !Number.isFinite(widthIn) ||
+      !Number.isFinite(rimIn) ||
+      diaIn <= 0 ||
+      widthIn <= 0 ||
+      rimIn <= 0
+    ) {
+      return {
+        diameterMm: 0,
+        diameterIn: 0,
+        sidewallMm: 0,
+        sidewallIn: 0,
+        circumferenceMm: 0,
+        circumferenceIn: 0,
+        revsPerMile: 0,
+        revsPerKm: 0,
+        widthMm: 0,
+        widthIn: 0,
+        rimDiameterIn: 0,
+        formattedSize: "Invalid Size",
+        isValid: false,
+        errorMessage: "Tire dimensions must be positive numbers.",
+      };
+    }
+
+    if (diaIn <= rimIn) {
+      return {
+        diameterMm: 0,
+        diameterIn: 0,
+        sidewallMm: 0,
+        sidewallIn: 0,
+        circumferenceMm: 0,
+        circumferenceIn: 0,
+        revsPerMile: 0,
+        revsPerKm: 0,
+        widthMm: 0,
+        widthIn: 0,
+        rimDiameterIn: rimIn,
+        formattedSize: "Invalid Size",
+        isValid: false,
+        errorMessage: "Overall tire diameter must be strictly greater than rim diameter.",
+      };
+    }
+
     const diaMm = diaIn * 25.4;
     const widthMm = widthIn * 25.4;
-    const sidewallIn = Math.max(0.5, (diaIn - rimIn) / 2);
+    const sidewallIn = (diaIn - rimIn) / 2;
     const sidewallMm = sidewallIn * 25.4;
     const circIn = Math.PI * diaIn;
     const circMm = Math.PI * diaMm;
@@ -36,13 +82,41 @@ export function calculateTireGeometry(inputs: TireDimensions): TireGeometry {
       widthIn: parseFloat(widthIn.toFixed(2)),
       rimDiameterIn: rimIn,
       formattedSize: `${diaIn}x${widthIn}R${rimIn}`,
+      isValid: true,
     };
   }
 
   // Standard Metric Sizing
-  const widthMm = Math.max(100, inputs.widthMm || 225);
-  const aspect = Math.max(15, inputs.aspectRatio || 50);
-  const rimIn = Math.max(8, inputs.rimDiameterInches || 17);
+  const widthMm = Number(inputs.widthMm);
+  const aspect = Number(inputs.aspectRatio);
+  const rimIn = Number(inputs.rimDiameterInches);
+
+  if (
+    !Number.isFinite(widthMm) ||
+    !Number.isFinite(aspect) ||
+    !Number.isFinite(rimIn) ||
+    widthMm <= 0 ||
+    aspect <= 0 ||
+    rimIn <= 0
+  ) {
+    return {
+      diameterMm: 0,
+      diameterIn: 0,
+      sidewallMm: 0,
+      sidewallIn: 0,
+      circumferenceMm: 0,
+      circumferenceIn: 0,
+      revsPerMile: 0,
+      revsPerKm: 0,
+      widthMm: 0,
+      widthIn: 0,
+      rimDiameterIn: 0,
+      formattedSize: "Invalid Size",
+      isValid: false,
+      errorMessage: "Section width, aspect ratio, and rim diameter must be positive numbers.",
+    };
+  }
+
   const prefixStr = inputs.prefix && inputs.prefix !== "None" ? `${inputs.prefix} ` : "";
 
   const sidewallMm = widthMm * (aspect / 100);
@@ -68,6 +142,7 @@ export function calculateTireGeometry(inputs: TireDimensions): TireGeometry {
     widthIn: parseFloat(widthIn.toFixed(2)),
     rimDiameterIn: rimIn,
     formattedSize: `${prefixStr}${widthMm}/${aspect}R${rimIn}`,
+    isValid: true,
   };
 }
 
@@ -79,20 +154,28 @@ export function calculateOffsetFitment(
   // Backspacing formula: (Rim Width + 1") / 2 + (Offset mm / 25.4)
   const backspacingStockIn = (inputs.stockRimWidthIn + 1) / 2 + inputs.stockOffsetMm / 25.4;
   const backspacingNewIn = (inputs.newRimWidthIn + 1) / 2 + inputs.newOffsetMm / 25.4;
+  const backspacingStockMm = backspacingStockIn * 25.4;
+  const backspacingNewMm = backspacingNewIn * 25.4;
 
-  // Inner clearance change: 0.5*(Width2 - Width1) + (Offset2 - Offset1)
-  const widthDiffMm = tire2.widthMm - tire1.widthMm;
+  // Rim width difference in mm:
+  const rimWidthDiffMm = (inputs.newRimWidthIn - inputs.stockRimWidthIn) * 25.4;
   const offsetDiffMm = inputs.newOffsetMm - inputs.stockOffsetMm;
-  const innerClearanceMm = 0.5 * widthDiffMm + offsetDiffMm;
 
-  // Outer poke change: 0.5*(Width2 - Width1) - (Offset2 - Offset1)
-  const outerPokeMm = 0.5 * widthDiffMm - offsetDiffMm;
+  // Inner strut clearance shift: 0.5 * RimWidthDiff + OffsetDiff
+  // Positive = moves closer to suspension strut
+  const innerClearanceMm = 0.5 * rimWidthDiffMm + offsetDiffMm;
+
+  // Outer fender poke shift: 0.5 * RimWidthDiff - OffsetDiff
+  // Positive = extends further outward towards fender
+  const outerPokeMm = 0.5 * rimWidthDiffMm - offsetDiffMm;
 
   return {
     innerClearanceMm: parseFloat(innerClearanceMm.toFixed(1)),
     outerPokeMm: parseFloat(outerPokeMm.toFixed(1)),
     backspacingStockIn: parseFloat(backspacingStockIn.toFixed(2)),
     backspacingNewIn: parseFloat(backspacingNewIn.toFixed(2)),
+    backspacingStockMm: parseFloat(backspacingStockMm.toFixed(1)),
+    backspacingNewMm: parseFloat(backspacingNewMm.toFixed(1)),
   };
 }
 
@@ -101,11 +184,11 @@ export function calculateGearRatioFitment(
   tire2: TireGeometry,
   inputs: GearRatioInputs
 ): GearRatioResults {
-  const stockRatio = inputs.stockGearRatio || 3.73;
-  const diaRatio = tire1.diameterIn / (tire2.diameterIn || 1);
+  const stockRatio = inputs.stockGearRatio > 0 ? inputs.stockGearRatio : 3.73;
+  const diaRatio = tire2.diameterIn > 0 ? tire1.diameterIn / tire2.diameterIn : 1;
 
   const effectiveGearRatio = stockRatio * diaRatio;
-  const equivalentRatioNeeded = stockRatio * (tire2.diameterIn / (tire1.diameterIn || 1));
+  const equivalentRatioNeeded = tire1.diameterIn > 0 ? stockRatio * (tire2.diameterIn / tire1.diameterIn) : stockRatio;
   const ratioChangePercent = ((effectiveGearRatio - stockRatio) / stockRatio) * 100;
 
   return {
@@ -124,26 +207,77 @@ export function calculateTireComparison(
   const tire1 = calculateTireGeometry(tire1Inputs);
   const tire2 = calculateTireGeometry(tire2Inputs);
 
+  const isValid = tire1.isValid && tire2.isValid;
+  const errorMessage = !tire1.isValid ? tire1.errorMessage : !tire2.isValid ? tire2.errorMessage : undefined;
+
+  if (!isValid) {
+    return {
+      tire1,
+      tire2,
+      diameterDiffIn: 0,
+      diameterDiffMm: 0,
+      diameterDiffPercent: 0,
+      sidewallDiffIn: 0,
+      sidewallDiffMm: 0,
+      sidewallDiffPercent: 0,
+      widthDiffIn: 0,
+      widthDiffMm: 0,
+      widthDiffPercent: 0,
+      circumferenceDiffIn: 0,
+      circumferenceDiffMm: 0,
+      circumferenceDiffPercent: 0,
+      revsPerMileDiff: 0,
+      revsPerKmDiff: 0,
+      speedErrorPercent: 0,
+      speedAt65Mph: 0,
+      rideHeightChangeIn: 0,
+      rideHeightChangeMm: 0,
+      speedDeltaTable: [],
+      offsetResults: null,
+      gearResults: null,
+      safetyRating: "warning",
+      safetyMessage: errorMessage || "Please enter valid numeric tire dimensions.",
+      isValid: false,
+      errorMessage,
+    };
+  }
+
   const diameterDiffIn = parseFloat((tire2.diameterIn - tire1.diameterIn).toFixed(2));
   const diameterDiffMm = parseFloat((tire2.diameterMm - tire1.diameterMm).toFixed(1));
   const diameterDiffPercent = parseFloat(
-    (((tire2.diameterIn - tire1.diameterIn) / (tire1.diameterIn || 1)) * 100).toFixed(1)
+    (((tire2.diameterIn - tire1.diameterIn) / tire1.diameterIn) * 100).toFixed(1)
   );
 
   const sidewallDiffIn = parseFloat((tire2.sidewallIn - tire1.sidewallIn).toFixed(2));
   const sidewallDiffMm = parseFloat((tire2.sidewallMm - tire1.sidewallMm).toFixed(1));
+  const sidewallDiffPercent = parseFloat(
+    tire1.sidewallIn > 0
+      ? (((tire2.sidewallIn - tire1.sidewallIn) / tire1.sidewallIn) * 100).toFixed(1)
+      : "0"
+  );
+
   const widthDiffIn = parseFloat((tire2.widthIn - tire1.widthIn).toFixed(2));
   const widthDiffMm = parseFloat((tire2.widthMm - tire1.widthMm).toFixed(1));
+  const widthDiffPercent = parseFloat(
+    tire1.widthIn > 0
+      ? (((tire2.widthIn - tire1.widthIn) / tire1.widthIn) * 100).toFixed(1)
+      : "0"
+  );
 
   const circumferenceDiffIn = parseFloat((tire2.circumferenceIn - tire1.circumferenceIn).toFixed(2));
   const circumferenceDiffMm = parseFloat((tire2.circumferenceMm - tire1.circumferenceMm).toFixed(1));
+  const circumferenceDiffPercent = parseFloat(
+    tire1.circumferenceIn > 0
+      ? (((tire2.circumferenceIn - tire1.circumferenceIn) / tire1.circumferenceIn) * 100).toFixed(1)
+      : "0"
+  );
 
   const revsPerMileDiff = tire2.revsPerMile - tire1.revsPerMile;
   const revsPerKmDiff = tire2.revsPerKm - tire1.revsPerKm;
 
   // Speedometer error percentage
   const speedErrorPercent = diameterDiffPercent;
-  const speedRatio = tire2.diameterIn / (tire1.diameterIn || 1);
+  const speedRatio = tire1.diameterIn > 0 ? tire2.diameterIn / tire1.diameterIn : 1;
   const speedAt65Mph = parseFloat((65 * speedRatio).toFixed(1));
 
   // Ride height change = delta radius = delta diameter / 2
@@ -191,10 +325,13 @@ export function calculateTireComparison(
     diameterDiffPercent,
     sidewallDiffIn,
     sidewallDiffMm,
+    sidewallDiffPercent,
     widthDiffIn,
     widthDiffMm,
+    widthDiffPercent,
     circumferenceDiffIn,
     circumferenceDiffMm,
+    circumferenceDiffPercent,
     revsPerMileDiff,
     revsPerKmDiff,
     speedErrorPercent,
@@ -206,6 +343,7 @@ export function calculateTireComparison(
     gearResults,
     safetyRating,
     safetyMessage,
+    isValid: true,
   };
 }
 
@@ -219,7 +357,7 @@ export function parseTireCodeString(code: string): TireDimensions | null {
     const dia = parseFloat(flotationMatch[1]);
     const width = parseFloat(flotationMatch[2]);
     const rim = parseInt(flotationMatch[3], 10);
-    if (dia >= 20 && dia <= 50 && width >= 6 && width <= 20 && rim >= 10 && rim <= 30) {
+    if (dia >= 20 && dia <= 50 && width >= 6 && width <= 20 && rim >= 10 && rim <= 30 && dia > rim) {
       return {
         format: "flotation",
         flotationDiameterInches: dia,

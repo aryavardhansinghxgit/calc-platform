@@ -2,53 +2,93 @@ import { CalculatorFAQ } from "@/calculators/types";
 
 export const tire_size_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "What do the numbers on a tire size mean (e.g., 225/65R17)?",
+    question: "What do the numbers in a tire size such as 225/50R17 mean?",
     answer:
-      "In a standard metric tire code like 225/65R17: 225 is the section width in millimeters, 65 is the aspect ratio percentage representing sidewall height relative to width (65% of 225mm = 146.25mm), R stands for Radial tire construction, and 17 is the wheel rim diameter in inches.",
+      "In a standard metric tire marking, 225 is the nominal section width in millimetres, 50 is the aspect ratio as a percentage of that width, R indicates radial construction, and 17 is the nominal rim diameter in inches.",
   },
   {
-    question: "How do you calculate the overall diameter of a tire?",
+    question: "How do I calculate tire diameter?",
     answer:
-      "To calculate overall tire diameter: First convert sidewall height to inches by multiplying section width by aspect ratio percentage and dividing by 25.4 (Sidewall = [Width × Aspect / 100] / 25.4). Then multiply sidewall height by 2 and add the rim diameter: Overall Diameter = (2 × Sidewall) + Rim Diameter.",
+      "Calculate sidewall height first: H = W × AR / 100. Then convert the sidewall to inches (H_in = H_mm / 25.4) and use: D = Rim + 2H. For 225/50R17, this produces approximately 25.86 inches.",
   },
   {
-    question: "What is the maximum safe percentage difference when changing tire sizes?",
+    question: "How much bigger is 245/45R18 than 225/50R17?",
     answer:
-      "Automotive engineers recommend keeping overall tire diameter within ±3% of OEM factory specifications (ideally under ±1.5%). Exceeding 3% can disrupt ABS braking systems, traction control, automatic transmission shift points, and cause suspension or fender lip rubbing.",
+      "Using nominal tire geometry, 225/50R17 is approximately 25.86 inches in diameter and 245/45R18 is approximately 26.68 inches. The difference is about 0.82 inch, or 3.2%.",
   },
   {
-    question: "Why does my speedometer read incorrectly after installing larger tires?",
+    question: "How does a larger tire affect the speedometer?",
     answer:
-      "Your vehicle's speedometer is calibrated to count wheel revolutions based on stock tire circumference. Larger diameter tires travel farther per single revolution, causing the vehicle to move faster than indicated on the speedometer dashboard.",
+      "For the calculator's geometric comparison, a larger tire travels farther per revolution. Therefore, if the vehicle remains calibrated for the smaller stock tire, actual road speed can be higher than the indicated speed. For the reference example, 65 mph indicated corresponds to about 67.1 mph actual.",
   },
   {
-    question: "What is the 'Plus Sizing' rule for wheels and tires?",
+    question: "How do I calculate speedometer error from tire size?",
     answer:
-      "Plus Sizing (+1, +2, or +3) is the practice of increasing wheel rim diameter while decreasing tire sidewall aspect ratio in equal proportions. This maintains the original factory rolling diameter, preserving speedometer calibration while enhancing steering response and cornering grip.",
+      "A simplified diameter-based relationship is: V_actual = V_indicated × (D_new / D_stock). The percentage speed difference is closely related to the percentage change in rolling diameter.",
   },
   {
-    question: "What is the difference between Section Width and Tread Width?",
+    question: "What is the difference between section width and tread width?",
     answer:
-      "Section Width is the maximum width of the tire measured from outer sidewall to inner sidewall when properly inflated on a wheel rim. Tread Width is the specific portion of rubber tread pattern that actually contacts the road surface.",
+      "Section width is the nominal maximum width of the inflated tire under the applicable measurement conditions. Tread width refers to the width of the tread area and is not necessarily equal to section width.",
   },
   {
-    question: "How do you convert metric tire sizes to inches (e.g., 285/75R16 to 33-inch)?",
+    question: "What does wheel offset ET mean?",
     answer:
-      "To convert 285/75R16 to inches: 1) Sidewall = (285 × 0.75) = 213.75 mm = 8.415 inches. 2) Diameter = (2 × 8.415) + 16 = 32.83 inches. 3) Width = 285 / 25.4 = 11.22 inches. Thus, 285/75R16 is equivalent to a 33x11.50R16 flotation off-road size.",
+      "ET is the wheel offset measured in millimetres relative to the wheel centerline. Positive, zero and negative offsets position the wheel mounting face differently and therefore change inner clearance and outer fender position.",
   },
   {
-    question: "What is wheel offset and why does it matter for tire clearance?",
+    question: "How does wheel width affect offset fitment?",
     answer:
-      "Wheel offset (ET) is the distance in millimeters from the wheel's true centerline to its hub mounting surface. Positive offset moves the wheel face outward (sinking the tire inward toward struts), while negative offset pushes the wheel outward (increasing fender poke and stance). Correct offset prevents tire sidewall contact with inner suspension components.",
+      "Changing wheel width moves the inner and outer edges of the wheel even if ET stays the same. Changing both width and ET can therefore substantially alter suspension clearance and fender poke. The calculator evaluates those effects together.",
   },
   {
-    question: "How do I find my vehicle's recommended tire size and pressure?",
+    question: "What is backspacing?",
     answer:
-      "Factory recommended tire sizes and inflation pressures (PSI / kPa) are listed on the tire information placard located inside the driver's side door jamb (B-pillar) or inside the fuel filler door and vehicle owner's manual.",
+      "Backspacing is the distance from the wheel's mounting face toward the inner edge of the wheel. It is useful when evaluating inner suspension clearance and should be considered alongside wheel width and offset.",
   },
   {
-    question: "How do I read the manufacture date on a tire sidewall?",
+    question: "How does a larger tire affect gearing?",
     answer:
-      "Look for the 4-digit DOT serial code stamped into the lower sidewall. The first two digits represent the week of manufacture, and the last two digits represent the year. For example, '1326' indicates the tire was produced in the 13th week of 2026.",
+      "A larger tire covers more road distance per revolution, effectively making the final drive numerically taller. The calculator models this as: R_effective = R_stock × (D_stock / D_new), so a larger tire lowers the effective numerical ratio.",
+  },
+  {
+    question: "Is a 3% tire-diameter change always safe?",
+    answer:
+      "No. The calculator uses 3% as a warning threshold, but that is not a universal guarantee of ABS, ESC, transmission, suspension or legal compatibility. Vehicle-specific manufacturer recommendations, load capacity, clearance and other requirements must still be checked.",
+  },
+  {
+    question: "How do I know whether a replacement tire has enough load capacity?",
+    answer:
+      "Check the tire's load index and compare it with the vehicle manufacturer's requirements. Load index is a code corresponding to a maximum load under specified conditions; it is not itself a weight unit. ETRTO explicitly describes the service description as a load index combined with a speed symbol.",
+  },
+  {
+    question: "What does the speed rating on a tire mean?",
+    answer:
+      "The speed symbol is the letter in the tire's service description that identifies its rated maximum speed capability under the applicable standardized conditions. It should not be interpreted independently of the tire's load, inflation and application requirements.",
+  },
+  {
+    question: "How do I convert 225/75R16 to a 33-inch tire?",
+    answer:
+      "First calculate the original tire's actual nominal diameter from section width, aspect ratio and rim diameter. Then compare the result with the proposed 33-inch flotation tire. A tire called '33-inch' is nominally 33 inches in overall diameter, but actual dimensions can vary by tire model and measurement conditions.",
+  },
+  {
+    question: "Does plus sizing preserve the original tire diameter?",
+    answer:
+      "Not automatically. Plus sizing is intended to combine a larger wheel with a lower-profile tire while maintaining a similar rolling diameter, but the actual replacement dimensions should always be calculated. The calculator performs that dimensional comparison rather than assuming equivalence.",
+  },
+  {
+    question: "How much does ride height change when tire diameter changes?",
+    answer:
+      "The geometric change in tire radius is approximately half the change in diameter. For example, a 0.82-inch diameter increase corresponds to approximately a 0.41-inch increase in radius. Actual vehicle ride height can differ under load because tires deform and suspension systems move.",
+  },
+  {
+    question: "How do I find the recommended tire size for my vehicle?",
+    answer:
+      "Start with the tire information placard and owner's manual. NHTSA advises using the vehicle manufacturer's original or recommended tire size and following the manufacturer's recommended cold inflation pressure.",
+  },
+  {
+    question: "How do I read the DOT tire date?",
+    answer:
+      "The final four digits of the applicable date portion indicate the production week and year. For example, 1326 means the 13th week of 2026. NHTSA documentation describes the date code as part of the Tire Identification Number system.",
   },
 ];

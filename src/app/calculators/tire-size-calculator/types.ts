@@ -26,6 +26,8 @@ export interface TireGeometry {
   widthIn: number;
   rimDiameterIn: number;
   formattedSize: string;
+  isValid: boolean;
+  errorMessage?: string;
 }
 
 export interface FitmentOffsetInputs {
@@ -36,10 +38,12 @@ export interface FitmentOffsetInputs {
 }
 
 export interface FitmentOffsetResults {
-  innerClearanceMm: number; // positive = more room, negative = closer to strut
+  innerClearanceMm: number; // positive = closer to strut, negative = more room
   outerPokeMm: number; // positive = extends outward toward fender
   backspacingStockIn: number;
   backspacingNewIn: number;
+  backspacingStockMm: number;
+  backspacingNewMm: number;
 }
 
 export interface GearRatioInputs {
@@ -68,10 +72,13 @@ export interface TireComparisonResult {
   diameterDiffPercent: number;
   sidewallDiffIn: number;
   sidewallDiffMm: number;
+  sidewallDiffPercent: number;
   widthDiffIn: number;
   widthDiffMm: number;
+  widthDiffPercent: number;
   circumferenceDiffIn: number;
   circumferenceDiffMm: number;
+  circumferenceDiffPercent: number;
   revsPerMileDiff: number;
   revsPerKmDiff: number;
   speedErrorPercent: number;
@@ -83,4 +90,6 @@ export interface TireComparisonResult {
   gearResults: GearRatioResults | null;
   safetyRating: "safe" | "caution" | "warning";
   safetyMessage: string;
+  isValid: boolean;
+  errorMessage?: string;
 }
