@@ -2,43 +2,83 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const heat_index_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "What is the Heat Index and how is it calculated?",
-    answer: "The Heat Index (sometimes called the apparent temperature or 'humiture') is a measure of how hot it feels to the human body when relative humidity is combined with ambient air temperature. It is calculated using the National Weather Service (NWS) Rothfusz 9-term polynomial regression equation, which models human heat transfer and sweat evaporation."
+    question: "What is a heat index calculator?",
+    answer:
+      "A heat index calculator combines air temperature and relative humidity to estimate the apparent temperature associated with hot, humid conditions. The NWS heat-index method is designed to communicate how hot conditions may feel and the potential for heat stress.",
   },
   {
-    question: "Why does high humidity make hot weather feel much worse?",
-    answer: "Your body cools itself primarily by evaporating sweat off your skin. When relative humidity is high, the surrounding air is already saturated with water vapor, slowing down sweat evaporation. As a result, metabolic heat remains trapped in your body, making it feel much hotter."
+    question: "How do you calculate heat index?",
+    answer:
+      "The NWS procedure first calculates a simpler preliminary value. If the resulting conditions are below approximately 80°F, the simple procedure is used. Otherwise, the Rothfusz regression is applied together with any applicable low- or high-humidity correction.",
   },
   {
-    question: "Is the Heat Index calculated for the shade or direct sun?",
-    answer: "Official NWS Heat Index values assume shaded conditions with light wind speeds. Exposure to direct sunlight adds up to +15°F (+8.3°C) of radiant solar heat load to the calculated Heat Index value."
+    question: "What is the heat index at 85°F and 70% humidity?",
+    answer:
+      "Using the NWS procedure, 85°F with 70% relative humidity produces a heat index of approximately 92.7°F. The actual air temperature remains 85°F.",
   },
   {
-    question: "What Heat Index level is considered dangerous to human health?",
-    answer: "NWS heat safety thresholds classify Heat Index values into four hazard levels: Caution (80°F–90°F: fatigue possible), Extreme Caution (91°F–103°F: heat cramps & heat exhaustion possible), Danger (104°F–124°F: heat cramps & exhaustion likely; heat stroke probable), and Extreme Danger (125°F+: heat stroke imminent)."
+    question: "What is the NWS heat index formula?",
+    answer:
+      "The main NWS Rothfusz formula is a nine-term polynomial involving air temperature and relative humidity. It includes temperature-squared, humidity-squared and temperature-humidity interaction terms. The NWS also specifies a simpler procedure for conditions where the full regression is not appropriate.",
   },
   {
-    question: "What is the difference between Heat Index and Wet-Bulb Globe Temperature (WBGT)?",
-    answer: "Heat Index models apparent temperature in shaded conditions for general public weather advisories. Wet-Bulb Globe Temperature (WBGT) measures true environmental heat stress in direct sunlight by combining temperature, humidity, wind speed, and solar radiation angle (used heavily by OSHA, athletic associations, and the military)."
+    question: "Is the heat index the actual temperature?",
+    answer:
+      "No. Heat index is an apparent-temperature measure. If the thermometer reads 85°F and the heat index is 95°F, the actual air temperature is still 85°F.",
   },
   {
-    question: "At what temperature does the Heat Index formula become active?",
-    answer: "The standard NOAA/NWS Rothfusz Heat Index regression formula becomes active at air temperatures of 80°F (26.7°C) and above with relative humidity of 40% or higher. At temperatures below 80°F, a simplified Steadman baseline formula is used."
+    question: "Does humidity make it hotter?",
+    answer:
+      "Humidity can make hot weather feel more oppressive because it reduces the effectiveness of evaporative cooling. That is why heat index increases as humidity rises at a fixed temperature over the normal range of the index.",
   },
   {
-    question: "What is the difference between Heat Exhaustion and Heat Stroke?",
-    answer: "Heat exhaustion causes heavy sweating, rapid pulse, dizziness, nausea, and cool/clammy skin, requiring rest in the shade and hydration. Heat stroke is a life-threatening medical emergency where body temperature exceeds 104°F (40°C), accompanied by hot/dry skin or profuse sweating, confusion, and loss of consciousness, requiring immediate emergency medical care."
+    question: "What heat index is dangerous?",
+    answer:
+      "NWS commonly classifies approximately 103–124°F as the Danger range and 125°F or higher as Extreme Danger, although risk also depends on exposure duration and physical activity.",
   },
   {
-    question: "Can heat index be calculated using Dew Point instead of Relative Humidity?",
-    answer: "Yes. Dew Point directly measures the absolute moisture content of the air. Using the Magnus-Tetens approximation, Dew Point and air temperature can be converted to Relative Humidity, which is then fed into the Heat Index regression equation."
+    question: "Does direct sunlight change heat index?",
+    answer:
+      "Yes. NWS says heat-index values on standard charts are for shade and that direct sunlight can raise the heat index by up to about 15°F. This calculator presents +15°F as a conservative maximum-load estimate rather than claiming it is a universal fixed correction.",
   },
   {
-    question: "How much water should I drink during high heat index conditions?",
-    answer: "OSHA guidelines recommend drinking about 1 cup (250 ml) of cold water every 20 minutes during moderate outdoor physical labor in high Heat Index conditions, rather than drinking large quantities all at once."
+    question: "What is the difference between heat index and feels-like temperature?",
+    answer:
+      "\"Feels-like temperature\" is a broad phrase that can describe several different apparent-temperature models. Heat Index specifically refers to the temperature-humidity relationship used for hot conditions.",
   },
   {
-    question: "Why does a breeze or fan help lower heat stress?",
-    answer: "A breeze increases forced convective air movement across your skin, which accelerates the rate of sweat evaporation and strips away your warm thermal boundary layer, provided ambient air temperature remains below extreme body threshold levels."
-  }
+    question: "What is the difference between heat index and WBGT?",
+    answer:
+      "Heat Index primarily combines air temperature and humidity for shaded conditions. WBGT incorporates additional environmental factors such as radiant heat and wind and is more appropriate for detailed occupational heat assessment. OSHA recommends worksite WBGT assessment for workplace heat hazards.",
+  },
+  {
+    question: "Can I calculate heat index from dew point?",
+    answer:
+      "Yes, when a valid dew point and air temperature are available, the corresponding moisture state can be determined and used for the heat-index calculation. The entered dew point must be physically consistent with the air temperature.",
+  },
+  {
+    question: "What is heat index in Celsius?",
+    answer:
+      "Heat-index calculations can be displayed in Celsius by converting the Fahrenheit result. For example, a heat index of 92.7°F is approximately 33.7°C.",
+  },
+  {
+    question: "Why does my heat index calculator give a different answer from another website?",
+    answer:
+      "Different results can come from different formulas, rounding, model domains, humidity corrections or whether the calculation is based on NWS Heat Index, another apparent-temperature model, or an unrestricted implementation of the Rothfusz polynomial. Always compare the underlying method before comparing numbers.",
+  },
+  {
+    question: "Is a heat index of 100°F the same as an actual 100°F temperature?",
+    answer:
+      "No. A 100°F heat index can occur when the actual air temperature is substantially lower because humidity increases apparent heat. Heat index should therefore never be mistaken for the thermometer's actual reading.",
+  },
+  {
+    question: "Can heat index predict heat stroke?",
+    answer:
+      "No. Heat index is an environmental screening indicator and cannot determine whether a particular person will develop heat stroke. OSHA notes that workplace heat risk also depends on workload, clothing/PPE, acclimatization and other environmental factors.",
+  },
+  {
+    question: "What should workers do when the heat index is high?",
+    answer:
+      "Reduce unnecessary heat exposure, use appropriate rest and cooling practices, maintain hydration, and follow the employer's heat-safety program. For occupational settings, use appropriate site-specific heat assessment rather than relying only on a weather-service Heat Index.",
+  },
 ];

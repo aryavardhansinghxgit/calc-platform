@@ -7,12 +7,15 @@ export type HeatAlertCategory =
   | "danger"
   | "extreme_danger";
 
-export interface OSHAWorkRestPlan {
+export interface WorkRestSchedule {
   workMinutes: number;
   restMinutes: number;
   waterCupsPerHour: number;
   advisory: string;
 }
+
+// Alias for legacy support
+export type OSHAWorkRestPlan = WorkRestSchedule;
 
 export interface HeatIndexResult {
   airTempF: number;
@@ -25,10 +28,22 @@ export interface HeatIndexResult {
   directSunHeatIndexF: number;
   directSunHeatIndexC: number;
   isDirectSun: boolean;
+  heatStressEstimateF: number;
+  heatStressEstimateC: number;
   wbgtEstimateF: number;
   wbgtEstimateC: number;
   alertCategory: HeatAlertCategory;
   alertTitle: string;
   alertDescription: string;
-  oshaPlan: OSHAWorkRestPlan;
+  workRestPlan: WorkRestSchedule;
+  oshaPlan: WorkRestSchedule;
+  nwsPathway?: "steadman_simple" | "rothfusz_full";
+  pathway?: "steadman_simple" | "rothfusz_full";
+  simpleHI?: number;
+  avgHI?: number;
+  adjustment?: number;
+  isSupersaturated?: boolean;
+  isInvalid?: boolean;
+  domainNotice?: string;
+  warningNote?: string;
 }
