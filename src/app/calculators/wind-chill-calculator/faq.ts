@@ -2,43 +2,51 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const wind_chill_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "Can wind chill freeze water pipes or car engines below the actual air temperature?",
-    answer: "No. Wind chill accelerates the rate of heat loss from an object toward the ambient air temperature, but it cannot cool an inanimate object (such as water pipes, car radiators, or fuel lines) below the actual thermometer reading of the air."
+    question: "What is a wind chill calculator?",
+    answer: "A wind chill calculator combines air temperature and wind speed to estimate how cold the conditions may feel to exposed skin. The NWS wind-chill value is an exposure-oriented \"feels like\" index, not a separate physical air temperature."
   },
   {
-    question: "What is the formula used by the National Weather Service (NWS) to calculate wind chill?",
-    answer: "The official Joint Action Group for Temperature Indices (JAG/TI) formula used by the NWS and Environment Canada is: Wind Chill (°F) = 35.74 + 0.6215T - 35.75(V^0.16) + 0.4275T(V^0.16), where T is air temperature in °F and V is wind speed in mph at 10 meters height."
+    question: "What is the NWS wind chill formula?",
+    answer: "For Fahrenheit, the NWS formula is: WCT = 35.74 + 0.6215T - 35.75(V^0.16) + 0.4275T(V^0.16), where T is temperature in °F and V is wind speed in mph. The NWS defines the formula for temperatures at or below 50°F and wind speeds above 3 mph."
   },
   {
-    question: "At what wind chill temperature does frostbite become dangerous?",
-    answer: "Frostbite becomes an immediate hazard when wind chill temperatures drop below -18°F (-28°C). At -19°F to -32°F, exposed skin can freeze in 30 minutes. Below -33°F (-36°C), frostbite can occur in 10 minutes, and below -50°F (-45°C), frostbite can occur in 5 minutes or less."
+    question: "What is the wind chill at 10°F and 20 mph?",
+    answer: "Using the NWS/JAG-TI formula, the result is approximately −8.9°F. The calculator's production test suite independently verifies this exact reference case."
   },
   {
-    question: "Why does wind make cold air feel significantly colder?",
-    answer: "Your body naturally heats a thin microscopic layer of air trapped against your skin (the thermal boundary layer). Wind strips away this insulating layer through forced convective heat transfer, forcing your body to constantly expend energy heating fresh cold air."
+    question: "Can wind chill make water, pipes or a car engine colder than the actual air temperature?",
+    answer: "No. Wind can increase the rate at which an object loses heat, but the object cannot be cooled below the surrounding air temperature solely because of wind chill. Environment Canada gives the same physical explanation."
   },
   {
-    question: "Why does the standard wind chill formula only apply below 50°F (10°C)?",
-    answer: "At temperatures above 50°F (10°C) and light wind speeds, the biophysical heat exchange dynamics between human skin and ambient air change significantly. Heat stress and humidity become dominant, making the Heat Index or Steadman Apparent Temperature formula more appropriate."
+    question: "Can you get frostbite when the air temperature is above freezing but wind chill is below freezing?",
+    answer: "According to the NWS, frostbite requires the actual air temperature near the skin to be below freezing. A wind-chill number alone cannot make frostbite occur when the ambient air remains above freezing."
   },
   {
-    question: "Does wind chill affect pets and animals the same way as humans?",
-    answer: "Yes. While animals with thick fur coats benefit from an extra insulating layer, exposed tissue such as dog paws, ears, noses, and bellies lose heat rapidly and are vulnerable to frostbite and hypothermia under severe wind chill conditions."
+    question: "At what wind chill does frostbite become dangerous?",
+    answer: "Risk increases as wind chill falls. Environment Canada classifies −28 to −39 as high risk, −40 to −47 as very high risk, −48 to −54 as severe risk and −55 or colder as extreme risk. Exposure times can become very short at the coldest values."
   },
   {
-    question: "What is the difference between Wind Chill and 'Feels Like' or 'RealFeel' temperature?",
-    answer: "Wind Chill specifically measures convective heat loss caused by wind speed at cold temperatures (below 50°F). Proprietary 'Feels Like' or 'RealFeel' metrics combine wind chill with relative humidity, direct solar radiation, elevation, and heat index."
+    question: "How long can exposed skin be outside in extreme wind chill?",
+    answer: "There is no universally guaranteed safe duration. Published wind-chill guidance provides approximate exposure windows under specific conditions, but actual risk depends on clothing, exposed skin, wind, moisture, activity and individual factors. Seek shelter and protect exposed skin when conditions are hazardous."
   },
   {
-    question: "How does running or cycling in winter change the wind chill?",
-    answer: "When you run or cycle, your forward movement creates a relative headwind that adds to the environmental wind speed. For example, cycling at 20 mph into a 10 mph wind creates an effective 30 mph airflow across your body, dramatically lowering your effective wind chill temperature."
+    question: "Does running or cycling change wind chill?",
+    answer: "Your forward movement can create additional airflow over the body. This is sometimes called relative wind or relative airflow. The calculator includes an optional activity/headwind model so you can evaluate conditions during movement, but that supplemental adjustment should not be confused with the core NWS meteorological formula."
   },
   {
-    question: "Why was the wind chill index updated in 2001?",
-    answer: "The original 1945 Siple-Passel wind chill formula was based on measuring how fast water froze in plastic cylinders in Antarctica, which overstated human cold perception. In 2001, NOAA and Environment Canada updated the formula using modern facial skin heat transfer models and clinical wind tunnel testing."
+    question: "What is the difference between wind chill and Steadman apparent temperature?",
+    answer: "They are different apparent-temperature models. NWS wind chill focuses on cold-related heat loss from exposed skin, while Steadman's apparent-temperature framework incorporates temperature and atmospheric moisture. Because the models represent different physical relationships, they can produce different numbers for the same weather conditions."
   },
   {
-    question: "What are the early warning signs of frostbite and hypothermia?",
-    answer: "Early signs of frostbite include skin redness, tingling, numbness, and pale/waxy skin texture (frostnip). Early signs of hypothermia include uncontrollable shivering, slurred speech, loss of fine motor coordination, and mental confusion."
+    question: "Why does my wind chill result differ from another website?",
+    answer: "The most common reasons are different formulas, unit conversions, weather inputs, wind measurement conventions or rounding. Always compare the model being used before comparing the numerical results. This calculator explicitly identifies the active model in its result and exports."
+  },
+  {
+    question: "What are the early signs of frostbite and hypothermia?",
+    answer: "Frostbite can cause numbness and skin that becomes pale, white or grayish-yellow and firm or waxy. Hypothermia can involve shivering, exhaustion, confusion, fumbling hands, drowsiness and slurred speech. Hypothermia is a medical emergency."
+  },
+  {
+    question: "Is wind chill the same as a \"feels like\" temperature?",
+    answer: "Not always. \"Feels like\" is a broad everyday description that can refer to several different apparent-temperature models. Wind chill specifically describes the effect of cold air and wind, while other apparent-temperature measures can incorporate variables such as humidity."
   }
 ];

@@ -27,4 +27,5 @@ export interface WindChillResult {
   frostbiteMinutesMin: number;
   clothing: ClothingRecommendation;
   warningNote?: string;
+  domainNotice?: string;
 }

@@ -17,15 +17,16 @@ export function convertTempToC(temp: number, unit: TempUnit): number {
 }
 
 export function convertSpeedToMph(speed: number, unit: SpeedUnit): number {
+  const s = Math.max(0, speed);
   switch (unit) {
     case "kmh":
-      return speed * 0.621371;
+      return s / 1.609344;
     case "ms":
-      return speed * 2.23694;
+      return s * 2.23693629;
     case "knots":
-      return speed * 1.15078;
+      return s * 1.15077945;
     default:
-      return speed;
+      return s;
   }
 }
 
@@ -42,6 +43,11 @@ export function getActivitySpeedOffset(activity: ActivityMode): number {
   }
 }
 
+/**
+ * Official NWS / NOAA JAG/TI Wind Chill Formula in Fahrenheit
+ * WCT(°F) = 35.74 + 0.6215*T - 35.75*(V^0.16) + 0.4275*T*(V^0.16)
+ * Valid for T <= 50°F and V > 3 mph
+ */
 export function calculateJAGTIWindChillF(tempF: number, windSpeedMph: number): number {
   if (tempF > 50 || windSpeedMph <= 3.0) {
     return tempF;
@@ -51,16 +57,39 @@ export function calculateJAGTIWindChillF(tempF: number, windSpeedMph: number): n
   return parseFloat(wc.toFixed(1));
 }
 
+/**
+ * Official Environment Canada / JAG/TI Wind Chill Formula in Celsius
+ * WCT(°C) = 13.12 + 0.6215*T - 11.37*(V^0.16) + 0.3965*T*(V^0.16)
+ * Valid for T <= 10°C and V > 4.8 km/h
+ */
+export function calculateJAGTIWindChillC(tempC: number, windSpeedKmh: number): number {
+  if (tempC > 10 || windSpeedKmh <= 4.8) {
+    return tempC;
+  }
+  const v016 = Math.pow(windSpeedKmh, 0.16);
+  const wc = 13.12 + 0.6215 * tempC - 11.37 * v016 + 0.3965 * tempC * v016;
+  return parseFloat(wc.toFixed(1));
+}
+
+/**
+ * Australian Steadman Apparent Temperature (RH % Model)
+ * AT(°C) = Ta + 0.33*e - 0.70*ws - 4.00
+ * e = (RH / 100) * 6.105 * exp(17.27 * Ta / (237.7 + Ta))
+ */
 export function calculateSteadmanApparentTempC(
   tempC: number,
   windSpeedMs: number,
   humidityPct: number = 50
 ): number {
-  const e = (humidityPct / 100) * 6.105 * Math.exp((17.27 * tempC) / (237.7 + tempC));
-  const at = tempC + 0.33 * e - 0.7 * windSpeedMs - 4.0;
+  const rhClamped = Math.max(0, Math.min(100, humidityPct));
+  const e = (rhClamped / 100) * 6.105 * Math.exp((17.27 * tempC) / (237.7 + tempC));
+  const at = tempC + 0.33 * e - 0.7 * Math.max(0, windSpeedMs) - 4.0;
   return parseFloat(at.toFixed(1));
 }
 
+/**
+ * Historical Pre-2001 Siple-Passel Antarctic Model
+ */
 export function calculateSiplePasselWindChillC(tempC: number, windSpeedMs: number): number {
   if (windSpeedMs <= 1.78) return tempC;
   const v = Math.min(25, windSpeedMs);
@@ -69,11 +98,27 @@ export function calculateSiplePasselWindChillC(tempC: number, windSpeedMs: numbe
   return parseFloat(wc.toFixed(1));
 }
 
-export function evaluateFrostbiteRisk(windChillF: number): {
+/**
+ * Evaluate Frostbite Risk based on wind chill and ambient air temperature
+ * CRITICAL PHYSICS FACT: Frostbite cannot occur if actual ambient air temperature is above freezing (32°F / 0°C).
+ */
+export function evaluateFrostbiteRisk(
+  windChillF: number,
+  airTempF: number = windChillF
+): {
   risk: FrostbiteRiskLevel;
   text: string;
   minMinutes: number;
 } {
+  // If ambient air is above freezing, water in tissue cannot freeze
+  if (airTempF > 32) {
+    return {
+      risk: "safe",
+      text: "No Frostbite Hazard (Air temperature is above freezing 32°F / 0°C; hypothermia caution if wet or prolonged exposure)",
+      minMinutes: 999,
+    };
+  }
+
   if (windChillF > -18) {
     return {
       risk: "safe",
@@ -148,16 +193,20 @@ export function calculateWindChill(
   isWetClothing: boolean = false,
   isVulnerableGroup: boolean = false
 ): WindChillResult {
-  const tempF = convertTempToF(temp, tempUnit);
-  const tempC = convertTempToC(temp, tempUnit);
+  const safeTemp = isNaN(temp) ? 20 : temp;
+  const safeWind = isNaN(windSpeed) ? 0 : Math.max(0, windSpeed);
 
-  const baseWindSpeedMph = convertSpeedToMph(windSpeed, speedUnit);
+  const tempF = convertTempToF(safeTemp, tempUnit);
+  const tempC = convertTempToC(safeTemp, tempUnit);
+
+  const baseWindSpeedMph = convertSpeedToMph(safeWind, speedUnit);
   const activityOffsetMph = getActivitySpeedOffset(activity);
   const effectiveWindSpeedMph = baseWindSpeedMph + activityOffsetMph;
-  const effectiveWindSpeedMs = effectiveWindSpeedMph / 2.23694;
+  const effectiveWindSpeedMs = effectiveWindSpeedMph / 2.23693629;
 
   let windChillF = tempF;
   let windChillC = tempC;
+  let domainNotice: string | undefined = undefined;
 
   if (model === "steadman") {
     const atC = calculateSteadmanApparentTempC(tempC, effectiveWindSpeedMs, humidityPct);
@@ -168,24 +217,31 @@ export function calculateWindChill(
     windChillC = spC;
     windChillF = convertTempToF(spC, "C");
   } else {
-    // Default JAG/TI
+    // Default JAG/TI (US/Canada Standard)
+    if (tempF > 50) {
+      domainNotice = "Ambient temperature is above 50°F (10°C). NWS Wind Chill formula applies to temperatures ≤ 50°F.";
+    } else if (effectiveWindSpeedMph <= 3.0) {
+      domainNotice = "Calm wind conditions (≤ 3 mph). Wind chill equals ambient temperature.";
+    }
     windChillF = calculateJAGTIWindChillF(tempF, effectiveWindSpeedMph);
     windChillC = convertTempToC(windChillF, "F");
   }
 
-  // Risk Vulnerability Offset (Wet clothing or vulnerable groups increase effective cold perception)
+  // Combined Vulnerability Heuristic Modifiers (supplemental risk modeling)
   let riskEvalTempF = windChillF;
-  let warningNote: string | undefined = undefined;
+  const warnings: string[] = [];
 
   if (isWetClothing) {
-    riskEvalTempF -= 15; // Wet clothing accelerates conductive heat loss by 25x
-    warningNote = "CRITICAL WARNING: Wet clothing accelerates conductive heat loss up to 25x faster, dramatically increasing hypothermia risk!";
-  } else if (isVulnerableGroup) {
-    riskEvalTempF -= 10; // Children & seniors have lower thermoregulatory reserves
-    warningNote = "VULNERABILITY NOTICE: Children and seniors experience faster core body cooling.";
+    riskEvalTempF -= 15; // Wet clothing accelerates conductive heat loss by up to 25x
+    warnings.push("CRITICAL WARNING: Wet clothing accelerates conductive heat loss up to 25x faster, dramatically increasing hypothermia risk!");
+  }
+  if (isVulnerableGroup) {
+    riskEvalTempF -= 10; // Children & seniors have smaller thermal mass & reduced thermoregulatory vasoconstriction
+    warnings.push("VULNERABILITY NOTICE: Children, seniors, and high-altitude travelers experience accelerated core heat loss.");
   }
 
-  const frostbiteInfo = evaluateFrostbiteRisk(riskEvalTempF);
+  const warningNote = warnings.length > 0 ? warnings.join(" | ") : undefined;
+  const frostbiteInfo = evaluateFrostbiteRisk(riskEvalTempF, tempF);
   const clothing = generateClothingRecommendation(windChillF);
 
   const apparentTempC = calculateSteadmanApparentTempC(tempC, effectiveWindSpeedMs, humidityPct);
@@ -205,14 +261,30 @@ export function calculateWindChill(
     frostbiteMinutesMin: frostbiteInfo.minMinutes,
     clothing,
     warningNote,
+    domainNotice,
   };
 }
 
 export function calculateWindChillFromInputs(inputs: Record<string, any>): WindChillResult {
-  const temp = Number(inputs.temperature || inputs.temp || 20);
+  const temp = Number(inputs.temperature ?? inputs.temp ?? 20);
   const tempUnit = (inputs.tempUnit as TempUnit) || "F";
-  const windSpeed = Number(inputs.windSpeed || inputs.speed || 15);
+  const windSpeed = Number(inputs.windSpeed ?? inputs.speed ?? 15);
   const speedUnit = (inputs.speedUnit as SpeedUnit) || "mph";
+  const humidityPct = Number(inputs.humidity ?? 50);
+  const model = (inputs.model as WeatherModel) || "jag_ti";
+  const activity = (inputs.activity as ActivityMode) || "stationary";
+  const isWetClothing = Boolean(inputs.isWetClothing);
+  const isVulnerableGroup = Boolean(inputs.isVulnerableGroup);
 
-  return calculateWindChill(temp, tempUnit, windSpeed, speedUnit);
+  return calculateWindChill(
+    temp,
+    tempUnit,
+    windSpeed,
+    speedUnit,
+    humidityPct,
+    model,
+    activity,
+    isWetClothing,
+    isVulnerableGroup
+  );
 }
