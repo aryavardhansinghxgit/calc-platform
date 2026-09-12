@@ -1,4 +1,4 @@
-export type EngineCalcMode = "et_mode" | "trap_speed" | "torque_rpm" | "displacement_boost";
+export type EngineCalcMode = "et_mode" | "trap_speed" | "torque_rpm" | "zero_to_sixty" | "displacement_boost";
 export type DragModel = "fox" | "hale" | "hunt";
 export type DrivetrainType = "fwd_manual" | "rwd_manual" | "rwd_auto" | "awd";
 export type EnginePerformanceTier = "commuter" | "sport" | "track_day" | "supercar" | "pro_dragster";
@@ -42,4 +42,7 @@ export interface EngineHorsepowerResult {
   correctedBHP: number;
   // Gauge Visual Angle (0 to 180 deg)
   gaugeAngle: number;
+  // Validation Status
+  isValid: boolean;
+  errorMessage?: string;
 }
