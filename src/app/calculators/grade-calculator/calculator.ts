@@ -43,7 +43,8 @@ export function applyGradeCurve(rawPercent: number, curveMode: CurveMode = "none
  * Drop lowest N scores algorithm
  */
 export function dropLowestScores(assignments: AssignmentEntry[], dropCount: number): AssignmentEntry[] {
-  if (dropCount <= 0 || assignments.length <= dropCount) return assignments;
+  if (dropCount <= 0) return assignments;
+  if (assignments.length <= dropCount) return [];
   const sorted = [...assignments].sort((a, b) => a.grade - b.grade);
   return sorted.slice(dropCount);
 }
@@ -56,7 +57,31 @@ export function solveFinalExamTarget(
   targetGrade: number,
   finalExamWeight: number
 ): FinalExamSolverResult {
-  const w = Math.max(1, Math.min(99, finalExamWeight)) / 100;
+  if (finalExamWeight <= 0) {
+    return {
+      currentGrade,
+      targetGrade,
+      finalExamWeight,
+      requiredFinalScore: 0,
+      isAchievable: false,
+      verdict: "Final exam weight must be greater than 0% to compute required exam score.",
+      targetMatrix: [],
+    };
+  }
+
+  if (finalExamWeight > 100) {
+    return {
+      currentGrade,
+      targetGrade,
+      finalExamWeight,
+      requiredFinalScore: 0,
+      isAchievable: false,
+      verdict: "Final exam weight cannot exceed 100%.",
+      targetMatrix: [],
+    };
+  }
+
+  const w = finalExamWeight / 100;
   const reqScore = (targetGrade - currentGrade * (1 - w)) / w;
 
   const roundedReq = parseFloat(reqScore.toFixed(1));
@@ -64,24 +89,24 @@ export function solveFinalExamTarget(
 
   let verdict = "Achievable with focused preparation.";
   if (roundedReq > 100) {
-    verdict = "Requires extra credit (>100% on final exam).";
+    verdict = `Requires extra credit (>100% on final exam, mathematically ${roundedReq}%). Unreachable under standard 0–100% exam grading without extra credit or curve.`;
   } else if (roundedReq <= 0) {
-    verdict = "Target grade guaranteed! You can score 0% on final and still achieve target.";
+    verdict = `Target grade guaranteed! You can score ${Math.max(0, roundedReq)}% on the final and still achieve your target grade.`;
   }
 
   // Target Matrix for standard grade cutoffs
   const targets = [
     { letter: "A (90%)", targetPercent: 90 },
-    { label: "B (80%)", targetPercent: 80 },
-    { label: "C (70%)", targetPercent: 70 },
-    { label: "D (60%)", targetPercent: 60 },
+    { letter: "B (80%)", targetPercent: 80 },
+    { letter: "C (70%)", targetPercent: 70 },
+    { letter: "D (60%)", targetPercent: 60 },
   ];
 
   const targetMatrix = targets.map((t) => {
     const score = (t.targetPercent - currentGrade * (1 - w)) / w;
     const rounded = parseFloat(score.toFixed(1));
     return {
-      letter: t.letter || t.label || "",
+      letter: t.letter,
       targetPercent: t.targetPercent,
       requiredScore: rounded,
       isAchievable: rounded <= 100 && rounded >= 0,
@@ -134,15 +159,16 @@ export function calculateGradeCalculator(inputs: Record<string, any>): GradeCalc
           { id: "1", name: "Homework 1", grade: 45, weightOrMax: 50 },
           { id: "2", name: "Quiz 1", grade: 18, weightOrMax: 20 },
           { id: "3", name: "Midterm Exam", grade: 88, weightOrMax: 100 },
+          { id: "4", name: "Research Essay", grade: 95, weightOrMax: 100 },
         ];
 
     let earned = 0;
     let possible = 0;
 
     for (const a of assignments) {
-      if (a.weightOrMax > 0) {
-        earned += a.grade;
-        possible += a.weightOrMax;
+      if (typeof a.weightOrMax === "number" && a.weightOrMax > 0) {
+        earned += Number(a.grade) || 0;
+        possible += Number(a.weightOrMax);
       }
     }
 
@@ -167,24 +193,31 @@ export function calculateGradeCalculator(inputs: Record<string, any>): GradeCalc
     : [
         {
           id: "cat-1",
-          name: "Homework",
+          name: "Homework & Assignments",
           weight: 20,
-          dropLowestCount: 0,
-          assignments: [{ id: "a1", name: "HW 1", grade: 90, weightOrMax: 20 }],
+          dropLowestCount: 1,
+          assignments: [
+            { id: "a1", name: "Homework 1", grade: 95, weightOrMax: 20 },
+            { id: "a2", name: "Homework 2", grade: 60, weightOrMax: 20 },
+            { id: "a3", name: "Homework 3", grade: 90, weightOrMax: 20 },
+          ],
         },
         {
           id: "cat-2",
-          name: "Midterm Exam",
+          name: "Quizzes & Midterm",
           weight: 30,
           dropLowestCount: 0,
-          assignments: [{ id: "a2", name: "Midterm", grade: 85, weightOrMax: 30 }],
+          assignments: [
+            { id: "a4", name: "Quiz 1", grade: 88, weightOrMax: 15 },
+            { id: "a5", name: "Midterm Exam", grade: 84, weightOrMax: 15 },
+          ],
         },
         {
           id: "cat-3",
-          name: "Final Project",
+          name: "Final Project & Exam",
           weight: 50,
           dropLowestCount: 0,
-          assignments: [{ id: "a3", name: "Project", grade: 92, weightOrMax: 50 }],
+          assignments: [{ id: "a6", name: "Final Project", grade: 92, weightOrMax: 50 }],
         },
       ];
 
@@ -193,12 +226,15 @@ export function calculateGradeCalculator(inputs: Record<string, any>): GradeCalc
   const categoryBreakdowns: CategoryBreakdown[] = [];
 
   for (const cat of categories) {
-    if (cat.weight > 0 && cat.assignments.length > 0) {
+    if (cat.weight > 0 && Array.isArray(cat.assignments) && cat.assignments.length > 0) {
       // Apply drop lowest scores algorithm
       const filtered = dropLowestScores(cat.assignments, cat.dropLowestCount);
-      const catAvg = filtered.reduce((acc, a) => acc + a.grade, 0) / filtered.length;
+      if (filtered.length === 0) continue; // No remaining scores in this category; avoid empty calculation contamination
 
-      const weightedContribution = (catAvg * cat.weight) / 100;
+      const catAvg = filtered.reduce((acc, a) => acc + (Number(a.grade) || 0), 0) / filtered.length;
+      // Apply curve before category weight (per Section 21: Raw -> Curve -> Weight)
+      const curvedCatAvg = applyGradeCurve(catAvg, curveMode, curveValue);
+      const weightedContribution = (curvedCatAvg * cat.weight) / 100;
       totalWeightedScore += weightedContribution;
       totalWeightCompleted += cat.weight;
 
@@ -212,9 +248,9 @@ export function calculateGradeCalculator(inputs: Record<string, any>): GradeCalc
     }
   }
 
-  // Normalize if category weights do not sum to 100%
+  // Normalize if completed category weights do not sum to 100%
   const rawOverall = totalWeightCompleted > 0 ? (totalWeightedScore / totalWeightCompleted) * 100 : 0;
-  const finalPercent = parseFloat(applyGradeCurve(rawOverall, curveMode, curveValue).toFixed(2));
+  const finalPercent = parseFloat(rawOverall.toFixed(2));
   const letterInfo = getLetterAndGPA(finalPercent);
 
   return {

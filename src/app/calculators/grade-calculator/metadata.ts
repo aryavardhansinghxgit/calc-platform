@@ -1,26 +1,26 @@
 import { Metadata } from "next";
 
 export const grade_calculatorMetadata: Metadata = {
-  title: "Grade Calculator - Weighted Grade, Final Exam Target & GPA",
+  title: "Grade Calculator – Weighted Grade, Final Exam Target & GPA",
   description:
-    "Calculate weighted course grades, total points, final exam targets, dropped scores, grading curves, extra credit and illustrative letter/GPA results.",
+    "Calculate weighted grades, total points, dropped scores and final exam targets. See your letter grade and GPA reference with an easy course grade calculator.",
   keywords: [
+    "grade calculator",
     "weighted grade calculator",
     "final grade calculator",
     "final exam grade calculator",
     "what grade do I need on my final",
-    "current grade calculator",
-    "course grade calculator",
-    "percentage grade calculator",
-    "total points grade calculator",
+    "weighted average grade calculator",
+    "points based grade calculator",
     "drop lowest grade calculator",
-    "extra credit grade calculator",
     "grading curve calculator",
-    "letter grade calculator",
-    "GPA grade converter",
-    "calculate final course grade",
+    "exam grade calculator",
+    "course grade calculator",
+    "current grade calculator",
+    "GPA calculator",
+    "percentage to letter grade",
   ],
   alternates: {
-    canonical: "/calculators/grade-calculator",
+    canonical: "https://calcplatform.com/calculators/grade-calculator",
   },
 };
