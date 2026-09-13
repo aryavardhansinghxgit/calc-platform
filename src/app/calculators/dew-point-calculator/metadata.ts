@@ -2,7 +2,8 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const dew_point_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Dew Point Calculator — Bidirectional Solver & Wet-Bulb",
-  description: "Free online Dew Point Calculator. Calculate dew point, relative humidity, wet-bulb temp, frost point, Muggy Index comfort scale & ISO 8502-4 painting risk.",
+  title: "Dew Point Calculator – Humidity, Wet Bulb, Frost Point & Condensation",
+  description:
+    "Calculate dew point from temperature and humidity, or solve humidity from dew point. Includes wet-bulb, vapor pressure, absolute humidity, frost point, cloud-base and coating condensation screening.",
   slug: "dew-point-calculator",
 });

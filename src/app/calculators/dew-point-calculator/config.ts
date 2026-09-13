@@ -8,21 +8,31 @@ export const dew_point_calculatorConfig: CalculatorModuleDefinition = {
   slug: "dew-point-calculator",
   category: "other",
   subcategory: "Science & Education",
-  description: "Free online Dew Point Calculator. Calculate dew point, relative humidity, air temp, wet-bulb, frost point, absolute humidity, Muggy Index comfort & ISO 8502-4 painting safety.",
+  description:
+    "Calculate dew point from air temperature and relative humidity, or work backward from dew point to estimate humidity and temperature.",
   iconName: "Droplets",
   featured: true,
   keywords: [
     "dew point calculator",
-    "alduchov eskridge formula",
-    "wet bulb calculator",
+    "dew point from temperature and humidity",
+    "dew point temperature",
+    "relative humidity from dew point",
+    "humidity calculator",
+    "wet bulb temperature calculator",
     "frost point calculator",
-    "relative humidity to dew point",
-    "muggy index",
-    "iso 8502 4 painting rule"
+    "vapor pressure calculator",
+    "absolute humidity calculator",
+    "cloud base calculator",
+    "condensation calculator",
+    "dew point for painting",
+    "surface temperature dew point",
+    "dew point and relative humidity",
+    "calculate dew point",
+    "dew point formula"
   ],
   priority: 1,
   relatedCalculators: ["heat-index-calculator", "wind-chill-calculator"],
-  formulaDescription: "Alduchov & Eskridge (1996) Improved Magnus Equation",
+  formulaDescription: "Alduchov & Eskridge (1996) Improved Magnus Empirical Approximation",
   faqs: dew_point_calculatorFaqs,
   inputs: [
     {

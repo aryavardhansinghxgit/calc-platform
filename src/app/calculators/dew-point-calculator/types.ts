@@ -23,6 +23,8 @@ export interface PaintingRiskAdvice {
 }
 
 export interface DewPointResult {
+  isValid: boolean;
+  errorMessage?: string;
   airTempF: number;
   airTempC: number;
   airTempK: number;
@@ -48,4 +50,14 @@ export interface DewPointResult {
   paintingRisk: PaintingRiskAdvice;
   targetVariable: TargetVariable;
   model: PsychrometricModel;
+  raw?: {
+    airTempC: number;
+    dewPointC: number;
+    relativeHumidity: number;
+    wetBulbC: number;
+    actualVaporPressureHpa: number;
+    saturationVaporPressureHpa: number;
+    absoluteHumidityGM3: number;
+  };
 }
+
