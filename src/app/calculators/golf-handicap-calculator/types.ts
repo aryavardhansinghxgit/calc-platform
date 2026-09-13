@@ -37,13 +37,14 @@ export interface CourseHandicapResult {
 export interface WHSHandicapResult {
   roundsSubmitted: number;
   countingRoundsCount: number;
-  rawUncappedIndex: number;
+  rawUncappedIndex: number | null;
   lowIndexAnchor?: number;
+  baselineHandicapIndex?: number;
   softCapApplied: boolean;
   hardCapApplied: boolean;
   esrApplied: boolean;
   totalEsrAdjustment: number;
-  finalHandicapIndex: number;
+  finalHandicapIndex: number | null;
   differentials: DifferentialResult[];
   whsRuleNote: string;
 }

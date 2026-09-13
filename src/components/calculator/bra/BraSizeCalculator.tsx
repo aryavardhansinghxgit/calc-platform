@@ -13,6 +13,7 @@ import {
   Sliders,
   X,
   Printer,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,9 +32,9 @@ export function BraSizeCalculator() {
   const [unit, setUnit] = useState<BraUnit>("in");
   const [region, setRegion] = useState<RegionStandard>("US");
 
-  // Inputs
-  const [underbust, setUnderbust] = useState<number>(30);
-  const [bust, setBust] = useState<number>(34);
+  // Inputs - handle strings or numbers gracefully for seamless typing
+  const [underbust, setUnderbust] = useState<number | string>(30);
+  const [bust, setBust] = useState<number | string>(34);
   const [shape, setShape] = useState<BreastShape>("even");
 
   // UI Modals
@@ -41,23 +42,27 @@ export function BraSizeCalculator() {
   const [showReportModal, setShowReportModal] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
 
+  // Parse safe numeric inputs
+  const numUnderbust = typeof underbust === "number" ? underbust : (parseFloat(underbust) || 30);
+  const numBust = typeof bust === "number" ? bust : (parseFloat(bust) || 34);
+
   // Seamless real-time unit converter toggle handler
   const handleUnitToggle = (newUnit: BraUnit) => {
     if (newUnit === unit) return;
     if (newUnit === "cm") {
-      setUnderbust(parseFloat((underbust * 2.54).toFixed(1)));
-      setBust(parseFloat((bust * 2.54).toFixed(1)));
+      setUnderbust(parseFloat((numUnderbust * 2.54).toFixed(1)));
+      setBust(parseFloat((numBust * 2.54).toFixed(1)));
     } else {
-      setUnderbust(parseFloat((underbust / 2.54).toFixed(1)));
-      setBust(parseFloat((bust / 2.54).toFixed(1)));
+      setUnderbust(parseFloat((numUnderbust / 2.54).toFixed(1)));
+      setBust(parseFloat((numBust / 2.54).toFixed(1)));
     }
     setUnit(newUnit);
   };
 
   // Perform calculations dynamically
   const result: BraSizeCalculationResult = useMemo(() => {
-    return calculateBraSize(underbust, bust, unit, region, shape);
-  }, [underbust, bust, unit, region, shape]);
+    return calculateBraSize(numUnderbust, numBust, unit, region, shape);
+  }, [numUnderbust, numBust, unit, region, shape]);
 
   // Copy Fit Profile text to clipboard
   const handleCopyProfile = () => {
@@ -127,11 +132,12 @@ Shape Guidance: ${result.shapeAdvice}`;
         ],
       },
       notes: [
-        "80% of bra support comes from a snug, horizontal band across the ribcage.",
-        "Re-measure your bra size every 6 to 12 months or after weight fluctuations.",
+        "According to biomechanical breast support research, approximately 70% to 80% of structural support comes from a snug, horizontal band anchored across the ribcage.",
+        "Sister sizes approximate equivalent cup volume within a brand's sizing system, though underwire width and cup geometry vary across cuts.",
+        "Re-measure your bra size every 6 to 12 months or following body shifts and life stages.",
       ],
     };
-  }, [result, underbust, bust, unit, region]);
+  }, [result, numUnderbust, numBust, unit, region]);
 
   return (
     <div className="space-y-6">
@@ -216,7 +222,7 @@ Shape Guidance: ${result.shapeAdvice}`;
               <Input
                 type="number"
                 value={underbust}
-                onChange={(e) => setUnderbust(Number(e.target.value))}
+                onChange={(e) => setUnderbust(e.target.value === "" ? "" : Number(e.target.value))}
                 step={unit === "in" ? 0.5 : 1}
                 min={unit === "in" ? 22 : 55}
                 max={unit === "in" ? 60 : 150}
@@ -241,7 +247,7 @@ Shape Guidance: ${result.shapeAdvice}`;
               <Input
                 type="number"
                 value={bust}
-                onChange={(e) => setBust(Number(e.target.value))}
+                onChange={(e) => setBust(e.target.value === "" ? "" : Number(e.target.value))}
                 step={unit === "in" ? 0.5 : 1}
                 min={unit === "in" ? 24 : 60}
                 max={unit === "in" ? 70 : 180}
@@ -313,6 +319,19 @@ Shape Guidance: ${result.shapeAdvice}`;
           </div>
         </div>
       </div>
+
+      {/* Measurement Notice / Inverted Bust Warning */}
+      {result.isBustSmallerThanUnderbust && (
+        <div className="p-4 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 rounded-2xl text-amber-800 dark:text-amber-200 text-xs flex items-start gap-2.5 shadow-xs">
+          <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
+          <div className="space-y-0.5">
+            <span className="font-bold block text-[13px]">Measurement Check Required</span>
+            <p className="leading-relaxed">
+              Your measured bust ({bust} {unit}) is smaller than your underbust ({underbust} {unit}). Bra cup sizes represent the fullness of breast tissue extending beyond the ribcage. Please verify your tape placement: measure underbust snugly directly beneath the breasts, and measure bust gently around the fullest projection of the bust without compressing tissue.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* 2. RESULTS DASHBOARD CARD (LAYOUT SWAPPED: Left Matrix (Col 7), Right Pink Result Card (Col 5)) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">

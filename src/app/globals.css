@@ -275,10 +275,26 @@ details[open] > summary::before {
     height: auto !important;
   }
 
-  /* 9. Prevent unnecessary trailing blank pages from bottom padding / margins */
-  .prose, article, section, main, #main-web-app, .max-w-7xl, .space-y-8, .space-y-12, .space-y-6 {
+  /* 9. Prevent unnecessary trailing blank pages and artificial gaps from margins/paddings */
+  .prose, article, section, main, #main-web-app, .max-w-7xl, .space-y-8, .space-y-10, .space-y-12, .space-y-6 {
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
+  }
+
+  article {
+    padding: 0.5rem 0 !important;
+    margin-top: 0.5rem !important;
+    border: none !important;
+    box-shadow: none !important;
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  article > section, .prose > section {
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+    padding-top: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
   }
 
   article > section:last-child {

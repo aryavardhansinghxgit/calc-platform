@@ -4,12 +4,37 @@ import { CalculatorLayout } from "@/components/calculator/CalculatorLayout";
 import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-helpers";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return generateCalculatorMetadata({
-    title: "GDP Calculator",
+  const meta = generateCalculatorMetadata({
+    title: "GDP Calculator – GDP, Real GDP, Growth & GDP Per Capita",
     description:
-      "Free Gross Domestic Product (GDP) Calculator. Calculate national economic output using Expenditure Approach, Income Approach, Real vs. Nominal GDP Deflator, and GDP Per Capita.",
+      "Calculate GDP using expenditure, income and production approaches. Also calculate real GDP, GDP growth, CAGR, GDP per capita and sector shares.",
     slug: GDP_CALCULATOR.slug,
+    keywords: [
+      "GDP calculator",
+      "GDP calculation",
+      "GDP formula",
+      "how to calculate GDP",
+      "expenditure approach GDP calculator",
+      "C + I + G + (X - M)",
+      "income approach GDP",
+      "production approach GDP",
+      "GVA calculator",
+      "real GDP calculator",
+      "GDP deflator calculator",
+      "GDP growth calculator",
+      "CAGR calculator",
+      "GDP per capita calculator",
+      "GDP per capita formula",
+      "nominal GDP vs real GDP",
+      "net exports GDP",
+      "sector shares",
+    ],
   });
+
+  return {
+    ...meta,
+    title: "GDP Calculator – GDP, Real GDP, Growth & GDP Per Capita",
+  };
 }
 
 export default function GDPCalculatorPage() {

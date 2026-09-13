@@ -2,53 +2,113 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const tip_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "Should I calculate a tip before or after tax?",
+    question: "How do I calculate a 20% tip?",
     answer:
-      "The calculator supports both conventions. Pre-tax tipping applies the selected percentage to the subtotal. Post-tax tipping applies it to the tax-inclusive base.",
+      "Multiply the bill's chosen tip base by 0.20. For example, for a $50 pre-tax bill: $50 × 0.20 = $10.00.",
   },
   {
-    question: "What is the standard tip percentage in restaurants in the United States?",
+    question: "How much is an 18% tip on $50?",
     answer:
-      "The reference presents 15%-20% as a common table-service range, with 15% for adequate service, 18% as typical for good service, and 20% or more for very good or exceptional service. These are etiquette benchmarks, not universal legal requirements.",
+      "An 18% tip on $50 is $50 × 0.18 = $9.00. If sales tax is 8.5% ($4.25), the grand total is $50 + $4.25 + $9.00 = $63.25.",
   },
   {
-    question: "How do you split a restaurant bill evenly among friends with tip included?",
+    question: "Should I calculate the tip before or after tax?",
     answer:
-      "Calculate subtotal, tax, and tip, add them to get the grand total, and divide by the number of diners. A reliable calculator then distributes any remainder cents so the displayed shares still reconcile to the displayed total.",
+      "There is no single universal calculation basis for every situation. Emily Post's current restaurant guidance uses a pre-tax basis for its 15%–20% sit-down-service guideline. Some payment systems or diners calculate from the after-tax amount for convenience. Check the establishment's practice and choose the appropriate setting in the calculator.",
   },
   {
-    question: "What is the difference between a tip and a mandatory service charge?",
+    question: "How do I calculate a tip with tax?",
     answer:
-      "A tip is normally discretionary. A mandatory service charge or automatic gratuity is added by the business under the terms shown on the receipt. Check the bill carefully before adding another tip.",
+      "First calculate the tax amount: Subtotal × (Tax Rate / 100). Then calculate the tip using either the pre-tax subtotal or the after-tax total, depending on the selected basis, and sum subtotal, tax, and tip.",
   },
   {
-    question: "Is tipping considered offensive in Japan and other countries?",
+    question: "What is the formula for a restaurant tip?",
     answer:
-      "Tipping customs vary by country and service context. The reference notes that tipping can be uncommon or culturally inappropriate in some places while being customary elsewhere. Local norms should guide the decision.",
+      "The basic formula is Tip = Tip Base × (Tip Rate / 100). For a pre-tax tip, Tip Base is the food and beverage subtotal. For a post-tax tip, Tip Base is Subtotal + Sales Tax.",
   },
   {
-    question: "How much should you tip for food delivery services?",
+    question: "How do I split a $63.25 bill between two people?",
     answer:
-      "The reference gives 15%-20% as a common benchmark and also mentions a minimum suggested base amount. Actual practice depends on local custom, distance, order size, weather, service quality, and personal preference.",
+      "The exact mathematical share is $31.625 each. Because currency cannot be paid in fractions of a cent, a fair-cent allocation distributes the odd cent: Diner 1 pays $31.63 and Diner 2 pays $31.62, summing exactly to $63.25.",
   },
   {
-    question: "How do I quickly calculate a 20% tip in my head?",
+    question: "How do I split a restaurant bill by item?",
     answer:
-      "Find 10% by moving the decimal point one place left, then double it. For example, 10% of $45 is $4.50, so 20% is $9.00.",
+      "Use the Itemized Group Splitter. Enter each diner and their individual line items, then enter shared appetizers or beverages separately. The calculator allocates shared items, distributes sales tax and tip proportionally, and reconciles the final amounts to the exact cent.",
   },
   {
-    question: "What should I do if a restaurant automatically adds gratuity to the bill?",
+    question: "How are shared appetizers divided?",
     answer:
-      "Check the receipt line by line. If an automatic gratuity or service charge is already present, do not automatically add another identical tip.",
+      "In the calculator's itemized workflow, shared items are divided equally among participating diners. If the shared amount does not divide evenly into cents, the remainder cents are allocated deterministically so the shared allocations sum exactly to the original pool.",
   },
   {
-    question: "How much should I tip hotel housekeeping and bellhops?",
+    question: "What if one person ordered much more than everyone else?",
     answer:
-      "The reference gives example ranges for those services, but they are etiquette benchmarks and can vary by local practice and hotel policy.",
+      "Use itemized splitting instead of an equal split. Each diner pays for their own items plus an equal share of common appetizers and a proportional share of tax and gratuity based on their consumption.",
   },
   {
-    question: "Do I need to tip on takeout and counter-service orders?",
+    question: "Why do equal bill splits sometimes differ by one cent?",
     answer:
-      "The reference treats takeout and counter-service tipping as voluntary and context-dependent. Local custom and the level of service can influence the choice.",
+      "Because a currency total may not divide evenly into cents. For example, $10.01 divided by three is $3.3366... Three identical $3.34 payments would total $10.02. A deterministic remainder allocation assigns $3.34 to two diners and $3.33 to one diner, making the final payments reconcile exactly to $10.01.",
+  },
+  {
+    question: "Does this calculator round each person's bill independently?",
+    answer:
+      "No. The monetary engine works in integer cents and applies the Largest Remainder Method (Hare-Niemeyer Algorithm) to ensure that the sum of individual diner totals equals the grand total across 100% of cases without cent drift.",
+  },
+  {
+    question: "What happens if the restaurant already added a service charge?",
+    answer:
+      "Check the receipt before adding another discretionary tip. A mandatory service charge or automatic gratuity may already be included according to the establishment's stated policy.",
+  },
+  {
+    question: "Is a service charge the same as a tip?",
+    answer:
+      "Not necessarily. A tip is generally a voluntary, discretionary payment chosen by the customer. A service charge is imposed by the business and may be mandatory. The exact treatment and staff distribution depend on the establishment and applicable jurisdiction.",
+  },
+  {
+    question: "Is tipping legally required in the United States?",
+    answer:
+      "No federal law mandates that restaurant patrons must pay a tip. U.S. labor law governs how employers handle tip pools and when qualifying employers may claim a tip credit under the Fair Labor Standards Act (FLSA), but customer gratuities remain discretionary.",
+  },
+  {
+    question: "Is 15%–20% a legal requirement in the United States?",
+    answer:
+      "No. Emily Post suggests 15%–20% pre-tax as a current general etiquette benchmark for full table service, but this is a cultural norm, not a legal requirement.",
+  },
+  {
+    question: "Is tipping expected in Japan?",
+    answer:
+      "Tipping is generally not customary in Japan. Japan's official tourism organization notes that exceptional hospitality (Omotenashi) is included in the bill. Offering extra cash directly to staff is uncommon and can cause confusion, with very limited exceptions for specialized private guides.",
+  },
+  {
+    question: "Can I split a bill with different currencies?",
+    answer:
+      "A calculation should normally be performed in the bill's native currency. If diners contribute in different currencies, convert individual totals using prevailing exchange rates after calculating the bill in the restaurant's local currency.",
+  },
+  {
+    question: "What is the difference between an equal split and an itemized split?",
+    answer:
+      "An equal split divides the grand total evenly among diners. An itemized split assigns individual items and shared dishes to each person, distributing tax and tip proportionally based on each diner's order value.",
+  },
+  {
+    question: "Why does my per-person amount sometimes differ from simple division?",
+    answer:
+      "Simple division produces a mathematical average that often contains fractional cents (e.g. $31.625). Actual payments must be settled in whole cents, so deterministic allocation distributes remainder cents so the total adds up without discrepancy.",
+  },
+  {
+    question: "Can I calculate a tip on the tax-inclusive amount?",
+    answer:
+      "Yes. Select the 'Post-Tax Total' mode in the calculator. This applies your tip percentage to the subtotal plus sales tax, matching modern payment terminal presets.",
+  },
+  {
+    question: "What percentage should I enter for a tip?",
+    answer:
+      "Enter the percentage appropriate for your location and service level. Common U.S. benchmarks are 15% for adequate service, 18% for good service, and 20% or more for great service.",
+  },
+  {
+    question: "Does the calculator decide whether I should tip?",
+    answer:
+      "No. The calculator computes the exact mathematical figures based on your inputs. Social customs, service quality, and establishment policies require your personal judgment.",
   },
 ];

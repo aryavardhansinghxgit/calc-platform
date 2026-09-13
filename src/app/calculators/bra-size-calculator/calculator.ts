@@ -23,6 +23,9 @@ const AU_BAND_MAP: Record<number, number> = {
   42: 20,
   44: 22,
   46: 24,
+  48: 26,
+  50: 28,
+  52: 30,
 };
 
 const EU_BAND_MAP: Record<number, number> = {
@@ -36,6 +39,9 @@ const EU_BAND_MAP: Record<number, number> = {
   42: 95,
   44: 100,
   46: 105,
+  48: 110,
+  50: 115,
+  52: 120,
 };
 
 export function calculateBraSize(
@@ -45,9 +51,19 @@ export function calculateBraSize(
   region: RegionStandard = "US",
   shape: BreastShape = "even"
 ): BraSizeCalculationResult {
+  // Input sanitization: ensure valid finite non-negative numbers
+  const safeUnderbust = Number.isFinite(underbust) && underbust > 0 ? underbust : 30;
+  const safeBust = Number.isFinite(bust) && bust > 0 ? bust : 34;
+
   // Convert inputs to inches for calculation
-  const underbustInches = unit === "cm" ? underbust / 2.54 : underbust;
-  const bustInches = unit === "cm" ? bust / 2.54 : bust;
+  const underbustInches = unit === "cm" ? safeUnderbust / 2.54 : safeUnderbust;
+  const bustInches = unit === "cm" ? safeBust / 2.54 : safeBust;
+
+  // Detect inverted measurements
+  const isBustSmallerThanUnderbust = bustInches < underbustInches;
+  const warning = isBustSmallerThanUnderbust
+    ? "Bust measurement is smaller than underbust. Please verify tape placement (bust should be measured around the fullest point of the breasts)."
+    : undefined;
 
   // Band Size calculation (round to nearest even number)
   let roundedUnderbust = Math.round(underbustInches);
@@ -59,27 +75,22 @@ export function calculateBraSize(
   let diffInches = bustInches - underbustInches;
   if (diffInches < 0) diffInches = 0;
 
-  // Breast shape adjustment offset
-  let shapeOffset = 0;
+  // Base cup index calculation: Strictly derived from measured bust difference (shape does not alter base size)
+  const cupIndex = Math.min(Math.round(diffInches), US_CUPS.length - 1);
+
+  // Breast shape fit advice
   let shapeAdvice = "Standard even distribution. Most bra styles will fit comfortably.";
-
   if (shape === "shallow") {
-    shapeOffset = -0.5;
-    shapeAdvice = "Shallow breasts spread tissue over a wider area. Balconette and demi cups fit best to prevent gaping.";
+    shapeAdvice = "Shallow breast roots spread tissue over a broader chest area. Balconette, demi, and plunge cuts help prevent upper-cup gaping.";
   } else if (shape === "projected") {
-    shapeOffset = 0.5;
-    shapeAdvice = "Projected breasts require deeper cups. Unlined, multi-seam bras offer optimal room and shape.";
+    shapeAdvice = "Projected breasts feature forward projection requiring deeper cups. Unlined, multi-seam bras offer optimal room and natural shape.";
   } else if (shape === "asymmetrical") {
-    shapeOffset = 0.5;
-    shapeAdvice = "Fit the bra to your larger breast for comfort. Use removable cookies or adjust straps to balance the smaller side.";
+    shapeAdvice = "Fit your bra to the larger breast for comfort. Adjust the shoulder strap or insert a removable pad ('cookie') on the smaller side.";
   } else if (shape === "bell") {
-    shapeAdvice = "Bell shapes are fuller at the bottom. T-shirt bras, balconettes, and plunge styles prevent top cup gaping.";
+    shapeAdvice = "Bell shapes are fuller at the bottom. T-shirt bras, balconettes, and plunge styles prevent empty space at the top of the cup.";
   } else if (shape === "teardrop") {
-    shapeAdvice = "Teardrop shapes are versatile. Plunge, demi, and balconette bras provide natural lift and cleavage.";
+    shapeAdvice = "Teardrop breasts maintain gentle, balanced slope. Most styles fit naturally, with demi and plunge styles offering flattering lift.";
   }
-
-  const adjustedDiff = Math.max(0, diffInches + shapeOffset);
-  const cupIndex = Math.min(Math.round(adjustedDiff), US_CUPS.length - 1);
 
   // Cup letters per region
   const cupUS = US_CUPS[cupIndex] || "D";
@@ -87,7 +98,7 @@ export function calculateBraSize(
   const cupEU = EU_CUPS[cupIndex] || "D";
 
   // Band sizes per region
-  const euBand = EU_BAND_MAP[bandSizeInches] || (bandSizeInches - 30) * 5 + 65;
+  const euBand = EU_BAND_MAP[bandSizeInches] || Math.round(((bandSizeInches - 30) / 2) * 5 + 65);
   const frBand = euBand + 15;
   const auBand = AU_BAND_MAP[bandSizeInches] || bandSizeInches - 22;
 
@@ -115,17 +126,35 @@ export function calculateBraSize(
   // Calculate Sister Sizes
   const sisterSizes: SisterSize[] = [];
 
+  // Helper function to format sister size by region
+  const formatRegionalSister = (bandInches: number, cIdx: number, reg: RegionStandard): string => {
+    const cUS = US_CUPS[cIdx];
+    const cUK = UK_CUPS[cIdx];
+    const cEU = EU_CUPS[cIdx];
+    const eBand = EU_BAND_MAP[bandInches] || Math.round(((bandInches - 30) / 2) * 5 + 65);
+    const fBand = eBand + 15;
+    const aBand = AU_BAND_MAP[bandInches] || bandInches - 22;
+
+    switch (reg) {
+      case "UK":
+      case "IN":
+        return `${bandInches}${cUK}`;
+      case "EU":
+        return `${eBand}${cEU}`;
+      case "FR":
+        return `${fBand}${cEU}`;
+      case "AU":
+        return `${aBand}${cUK}`;
+      case "US":
+      default:
+        return `${bandInches}${cUS}`;
+    }
+  };
+
   // Sister Size 1: Sister Down (Smaller Band, Larger Cup Volume)
   if (bandSizeInches > 28 && cupIndex < US_CUPS.length - 1) {
     const sBand = bandSizeInches - 2;
-    const sCupUS = US_CUPS[cupIndex + 1];
-    const sCupUK = UK_CUPS[cupIndex + 1];
-    const sCupEU = EU_CUPS[cupIndex + 1];
-    const sEuBand = EU_BAND_MAP[sBand] || (sBand - 30) * 5 + 65;
-
-    let sizeStr = `${sBand}${sCupUS}`;
-    if (region === "UK" || region === "IN") sizeStr = `${sBand}${sCupUK}`;
-    if (region === "EU") sizeStr = `${sEuBand}${sCupEU}`;
+    const sizeStr = formatRegionalSister(sBand, cupIndex + 1, region);
 
     sisterSizes.push({
       size: sizeStr,
@@ -136,16 +165,9 @@ export function calculateBraSize(
   }
 
   // Sister Size 2: Sister Up (Larger Band, Smaller Cup Volume)
-  if (bandSizeInches < 50 && cupIndex > 0) {
+  if (bandSizeInches < 52 && cupIndex > 0) {
     const sBand = bandSizeInches + 2;
-    const sCupUS = US_CUPS[cupIndex - 1];
-    const sCupUK = UK_CUPS[cupIndex - 1];
-    const sCupEU = EU_CUPS[cupIndex - 1];
-    const sEuBand = EU_BAND_MAP[sBand] || (sBand - 30) * 5 + 65;
-
-    let sizeStr = `${sBand}${sCupUS}`;
-    if (region === "UK" || region === "IN") sizeStr = `${sBand}${sCupUK}`;
-    if (region === "EU") sizeStr = `${sEuBand}${sCupEU}`;
+    const sizeStr = formatRegionalSister(sBand, cupIndex - 1, region);
 
     sisterSizes.push({
       size: sizeStr,
@@ -193,12 +215,21 @@ export function calculateBraSize(
     sisterSizes,
     recommendedStyles,
     shapeAdvice,
+    isBustSmallerThanUnderbust,
+    warning,
   };
 }
 
 export function calculateBraSizeFromInputs(inputs: Record<string, any>): BraSizeCalculationResult {
-  const underbust = Number(inputs.underbust) || 30;
-  const bust = Number(inputs.bust) || 34;
+  const rawUnderbust = inputs.underbust !== undefined && inputs.underbust !== null && inputs.underbust !== ""
+    ? Number(inputs.underbust)
+    : 30;
+  const rawBust = inputs.bust !== undefined && inputs.bust !== null && inputs.bust !== ""
+    ? Number(inputs.bust)
+    : 34;
+
+  const underbust = Number.isFinite(rawUnderbust) && rawUnderbust > 0 ? rawUnderbust : 30;
+  const bust = Number.isFinite(rawBust) && rawBust > 0 ? rawBust : 34;
   const unit = (inputs.unit as BraUnit) || "in";
   const region = (inputs.region as RegionStandard) || "US";
   const shape = (inputs.shape as BreastShape) || "even";

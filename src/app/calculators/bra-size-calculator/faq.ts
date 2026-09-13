@@ -2,43 +2,79 @@ import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
 export const bra_size_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "How do I calculate my bra size accurately at home?",
-    answer: "To measure your bra size accurately at home, wear an unpadded, non-push-up bra. Use a flexible measuring tape to measure snugly around your ribcage directly underneath your bust (underbust/band size). Next, measure gently around the fullest part of your bust while keeping the tape parallel to the floor (bust size). Subtract your underbust measurement from your bust measurement to determine your cup size letter (e.g., 1 inch difference = A, 2 inches = B, 3 inches = C, 4 inches = D)."
+    question: "How do I calculate my bra size?",
+    answer: "Measure your underbust and bust, subtract the underbust from the bust measurement, and use the resulting measurements with the sizing system appropriate to the bra you are shopping for. This calculator automates that process and also shows regional conversions and sister sizes.",
   },
   {
-    question: "What is the difference between US and UK bra sizing?",
-    answer: "While US and UK band sizes use the same numbers (e.g., 32, 34, 36), their cup sizing progressions diverge after D cups. UK sizing uses double letters (D, DD, E, F, FF, G, GG, H, HH, J), whereas US sizing progresses as D, DD/E, DDD/F, G, H, I, J, K. If you wear a UK 34FF, your equivalent US size is 34H."
+    question: "What is the difference between band size and cup size?",
+    answer: "Band size represents the bra's ribcage dimension, while cup size represents the cup category relative to the band within a sizing system. The cup letter is therefore not an absolute measure independent of band size.",
   },
   {
-    question: "What are 'Sister Sizes' and how do they work?",
-    answer: "Sister sizes are bra sizes that hold the exact same cup volume across different band measurements. When you increase the band size by one step (+2 inches), you must decrease the cup size by one letter to maintain equal cup volume. For example, a 34D cup holds the exact same breast volume as a 36C or a 32DD bra."
+    question: "What size is 30 inches underbust and 34 inches bust?",
+    answer: "Using this calculator's US/Canada baseline convention, 30 inches underbust and 34 inches bust produce 30D. The bust-to-underbust difference is 4 inches.",
   },
   {
-    question: "Why is my bra band riding up my back?",
-    answer: "A bra band that rides up your back indicates that the band size is too large. Approximately 80% of a bra's support should come from a firm, horizontal band anchored across your ribcage. If the band is too large, it shifts upwards and forces your shoulder straps to bear unnecessary weight."
+    question: "What are the international equivalents of 30D?",
+    answer: "The calculator currently maps its 30D baseline to 30D US/Canada, 30D UK, 30D India/Asia, 65D EU, 80D France/Spain and 8D Australia/NZ. Regional labels can vary by manufacturer, so treat these as starting conversion references rather than guarantees.",
   },
   {
-    question: "How do I know if I need a larger cup or a larger band?",
-    answer: "If the band feels painfully tight around your ribcage even when you try the bra on backwards (with the cups hanging down your back), you need a larger band size. If your breasts spill over the top or sides of the cups ('quad-boob') or the center underwire gore floats away from your sternum, you need a larger cup size."
+    question: "What are sister sizes for 30D?",
+    answer: "For the calculator's US/Canada system, the displayed sister sizes are 28DD/E on the smaller band side and 32C on the larger band side. Sister sizing changes the band and cup designation together to approximate similar cup volume.",
   },
   {
-    question: "Should I measure my bra size while wearing a bra?",
-    answer: "Yes, it is recommended to measure while wearing a thin, unpadded, non-push-up bra. Measuring over soft, uncontained breast tissue (especially if breasts are projected or soft) can cause underestimation of cup volume. Wearing a supportive unpadded bra lifts tissue into its natural position."
+    question: "Why doesn't the same cup letter mean the same size on every band?",
+    answer: "Cup volume is linked to band size. A D cup on a larger band is not equivalent in physical volume to a D cup on a much smaller band. That is why sister sizes change both the band and cup designation.",
   },
   {
-    question: "Why do my bra straps keep slipping off my shoulders?",
-    answer: "Slipping straps can be caused by worn-out elasticity, narrow/sloped shoulders, or incorrectly adjusted straps. However, the most common culprit is a bra band that is too large. When the band is loose, the straps sit wider apart on the shoulders and slide off easily."
+    question: "Can a bra size calculator guarantee the perfect fit?",
+    answer: "No. A measurement-based calculator provides a starting size. Actual fit also depends on breast shape, cup geometry, wire shape, fabric, construction and manufacturer grading. Research has found meaningful differences between measurement-derived sizes and professional fit assessment.",
+  },
+  {
+    question: "Why can two bras with the same size label fit differently?",
+    answer: "Manufacturers and styles can use different cup shapes, wire geometry, materials, stretch and grading. The size label is therefore only one part of fit.",
+  },
+  {
+    question: "How tight should the underbust measurement be?",
+    answer: "For a band measurement, the tape should normally be snug and level around the ribcage without being so tight that it compresses tissue or creates an unrealistic measurement. Use the same measurement technique consistently.",
+  },
+  {
+    question: "Should I measure over a bra?",
+    answer: "A thin, unpadded bra can sometimes help keep breast tissue in a natural supported position, but padding or push-up construction can distort the measurement. When possible, use a consistent, lightly supported or unpadded setup and follow the calculator's measurement guidance.",
+  },
+  {
+    question: "Why is my bra band riding up?",
+    answer: "A band that rides up the back can indicate that the band is too loose or that the garment is otherwise not providing appropriate stabilization. Check the band fit before automatically changing the cup.",
+  },
+  {
+    question: "What should I do if the cup fits but the band does not?",
+    answer: "Consider a sister size. A smaller band is generally paired with a larger cup designation, while a larger band is paired with a smaller cup designation when trying to preserve approximately similar cup volume.",
+  },
+  {
+    question: "What if one breast is larger than the other?",
+    answer: "Fit the bra to the larger breast so that it is not compressed. Depending on the garment, a removable pad may help fill the smaller side. The calculator's asymmetry profile can provide general fit guidance but does not diagnose a medical condition.",
+  },
+  {
+    question: "Does breast shape change my calculated bra size?",
+    answer: "In this calculator, the base measured size is deliberately kept separate from shape profiling. Selecting a shape such as projected, shallow or asymmetrical changes fit advice and style recommendations but does not silently change the measured base size.",
+  },
+  {
+    question: "Which bra style is best for a projected or shallow shape?",
+    answer: "There is no universal best style, but cup construction can interact with breast shape. The calculator uses the selected profile to suggest styles such as multi-seam, balconette or demi constructions where appropriate. These are starting suggestions, not guaranteed matches.",
+  },
+  {
+    question: "Why do bra sizes change after weight loss or weight gain?",
+    answer: "Changes in body composition can change both ribcage and breast measurements. When your body changes noticeably, re-measuring is usually more useful than relying on an old size label.",
+  },
+  {
+    question: "Should I use a different size for a sports bra?",
+    answer: "Possibly. Sports bras can use very different constructions from everyday bras, and their performance depends on design as well as nominal size. Research shows substantial variation in breast-movement reduction among sports bras.",
+  },
+  {
+    question: "Why are UK, EU, French and Australian sizes different?",
+    answer: "These regions use different band-unit and cup-labeling conventions. European sizing commonly uses centimeter-based band designations, while UK and US systems use different band and cup progressions. Therefore, international conversion needs a regional chart rather than a simple numeric or alphabetical substitution.",
   },
   {
     question: "How often should I re-measure my bra size?",
-    answer: "You should re-measure your bra size every 6 to 12 months, or whenever you experience body shifts such as weight loss/gain, fitness changes, pregnancy, nursing, hormonal fluctuations, or post-surgical recovery."
+    answer: "There is no single interval that applies to everyone. Re-measure after meaningful body changes, pregnancy/postpartum changes, substantial weight change, or when bras that previously fit begin to fit differently.",
   },
-  {
-    question: "How do European (EU) and French (FR) bra sizes convert from US sizes?",
-    answer: "EU band sizes (EN 13402) represent your underbust in centimeters rounded to the nearest multiple of 5 (e.g., a 34-inch band converts to an EU 75 band). French (FR) and Spanish band sizes add 15 to the EU band (e.g., EU 75 = FR 90)."
-  },
-  {
-    question: "What should I do if one breast is larger than the other?",
-    answer: "Breast asymmetry is completely normal. Always fit your bra to the larger breast so that tissue is not compressed or pinched by the underwire. You can then shorten the strap on the smaller side or insert a removable push-up pad ('cookie') into the cup to fill out any remaining space."
-  }
 ];

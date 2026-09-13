@@ -43,7 +43,7 @@ export function ReportModal({ isOpen, onClose, reportData, data }: ReportModalPr
               </div>
               <div>
                 <h3 className="text-xs font-bold text-white">
-                  Executive Financial Report Preview
+                  {actualData.meta.reportTitle || `${actualData.meta.calculatorName || "Calculator"} Report Preview`}
                 </h3>
                 <p className="text-[10px] text-zinc-400">
                   Official CalcPlatform PDF Report — Only report content prints

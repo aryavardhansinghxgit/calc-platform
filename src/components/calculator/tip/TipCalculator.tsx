@@ -168,11 +168,18 @@ export function TipCalculator() {
     if (activeTab === "quick") {
       text += `👥 Split per person (${currentResult.partySize} people):\n`;
       text += `• Tip per person: ${sym}${currentResult.tipPerPerson.toFixed(2)}\n`;
-      text += `• Total per person: ${sym}${currentResult.totalPerPerson.toFixed(2)}\n`;
+      if (currentResult.isUnequalSplit && currentResult.allocatedShares.length > 0) {
+        text += `• Exact Per-Person Allocations:\n`;
+        currentResult.allocatedShares.forEach((share, idx) => {
+          text += `  - Diner ${idx + 1}: ${sym}${share.toFixed(2)}\n`;
+        });
+      } else {
+        text += `• Total per person: ${sym}${currentResult.totalPerPerson.toFixed(2)}\n`;
+      }
     } else {
       text += `👥 Itemized Individual Breakdown:\n`;
       itemizedResult.diners.forEach((d) => {
-        text += `• ${d.name}: ${sym}${d.total.toFixed(2)} (Subtotal ${sym}${d.subtotal.toFixed(2)} + Tip ${sym}${d.tipShare.toFixed(2)})\n`;
+        text += `• ${d.name}: ${sym}${d.total.toFixed(2)} (Items ${sym}${d.subtotal.toFixed(2)} + Shared ${sym}${d.sharedAppetizerShare.toFixed(2)} + Tax ${sym}${d.taxShare.toFixed(2)} + Tip ${sym}${d.tipShare.toFixed(2)})\n`;
       });
     }
 
@@ -193,7 +200,9 @@ export function TipCalculator() {
       keyMetrics: [
         { label: "Grand Total Bill", value: `${sym}${currentResult.totalAmount.toFixed(2)}`, highlight: true },
         { label: "Total Tip Amount", value: `${sym}${currentResult.tipAmount.toFixed(2)}` },
-        { label: `Total Per Person (${currentResult.partySize})`, value: `${sym}${currentResult.totalPerPerson.toFixed(2)}` },
+        activeTab === "quick"
+          ? { label: `Total Per Person (${currentResult.partySize})`, value: `${sym}${currentResult.totalPerPerson.toFixed(2)}` }
+          : { label: `Active Diners`, value: `${itemizedResult.diners.length} guests (Itemized)` },
         { label: "Tip Rate", value: `${currentResult.tipPct}% (${currentResult.taxMode})` },
       ],
       sections: [
@@ -227,19 +236,20 @@ export function TipCalculator() {
           activeTab === "itemized"
             ? itemizedResult.diners.map((d) => ({
                 person: d.name,
-                subtotal: `${sym}${d.subtotal.toFixed(2)}`,
+                subtotal: `${sym}${(d.subtotal + d.sharedAppetizerShare).toFixed(2)}`,
                 tip: `${sym}${d.tipShare.toFixed(2)}`,
                 total: `${sym}${d.total.toFixed(2)}`,
               }))
-            : Array.from({ length: currentResult.partySize }).map((_, i) => ({
+            : currentResult.allocatedShares.map((share, i) => ({
                 person: `Diner ${i + 1}`,
                 subtotal: `${sym}${(currentResult.subtotal / currentResult.partySize).toFixed(2)}`,
                 tip: `${sym}${currentResult.tipPerPerson.toFixed(2)}`,
-                total: `${sym}${currentResult.totalPerPerson.toFixed(2)}`,
+                total: `${sym}${share.toFixed(2)}`,
               })),
       },
     };
   }, [currentResult, selectedCountry, sym, activeTab, itemizedResult]);
+
 
   return (
     <div className="space-y-6">
@@ -596,20 +606,50 @@ export function TipCalculator() {
             </div>
 
             {/* SPLIT PER PERSON METRICS */}
-            <div className="bg-white/10 backdrop-blur-xs p-4 rounded-xl border border-white/20 space-y-2">
-              <div className="flex items-center justify-between border-b border-white/15 pb-2 text-xs">
-                <span className="text-emerald-100 font-medium">Tip Per Person ({currentResult.partySize} guests)</span>
-                <span className="font-sans tabular-nums font-bold text-sm text-white">
-                  {sym}{currentResult.tipPerPerson.toFixed(2)}
-                </span>
+            {activeTab === "quick" ? (
+              <div className="bg-white/10 backdrop-blur-xs p-4 rounded-xl border border-white/20 space-y-2">
+                <div className="flex items-center justify-between border-b border-white/15 pb-2 text-xs">
+                  <span className="text-emerald-100 font-medium">Tip Per Person ({currentResult.partySize} guests)</span>
+                  <span className="font-sans tabular-nums font-bold text-sm text-white">
+                    {sym}{currentResult.tipPerPerson.toFixed(2)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-emerald-100 font-bold">Total Per Person</span>
+                  <span className="font-sans tabular-nums font-black text-base text-amber-200">
+                    {sym}{currentResult.totalPerPerson.toFixed(2)}
+                  </span>
+                </div>
+                {currentResult.isUnequalSplit && currentResult.allocatedShares.length > 0 && (
+                  <div className="pt-2 border-t border-white/15 text-[11px] text-emerald-100 space-y-1">
+                    <span className="font-bold block text-amber-200">Exact Cent Allocations:</span>
+                    <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[11px]">
+                      {currentResult.allocatedShares.map((share, idx) => (
+                        <span key={idx} className="font-sans tabular-nums">
+                          Diner {idx + 1}: <span className="font-bold text-white">{sym}{share.toFixed(2)}</span>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-emerald-100 font-bold">Total Per Person</span>
-                <span className="font-sans tabular-nums font-black text-base text-amber-200">
-                  {sym}{currentResult.totalPerPerson.toFixed(2)}
-                </span>
+            ) : (
+              <div className="bg-white/10 backdrop-blur-xs p-4 rounded-xl border border-white/20 space-y-2">
+                <div className="flex items-center justify-between border-b border-white/15 pb-2 text-xs">
+                  <span className="text-emerald-100 font-medium">Group Split Method</span>
+                  <span className="font-bold text-white">Itemized Check ({itemizedResult.diners.length} Diners)</span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <div>
+                    <span className="text-emerald-100 font-bold block">Average Share</span>
+                    <span className="text-[10px] text-emerald-200/80 font-normal">Reference only · varies by diner</span>
+                  </div>
+                  <span className="font-sans tabular-nums font-black text-base text-amber-200">
+                    {sym}{(currentResult.totalAmount / itemizedResult.diners.length).toFixed(2)}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* ITEMIZATION TABLE SUMMARY IF ACTIVE */}
             {activeTab === "itemized" && (

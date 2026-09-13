@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const bra_size_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Bra Size Calculator — US, UK, EU Sizing & Sister Size Finder",
-  description: "Free online bra size calculator. Find your exact band and cup size across US, UK, EU, FR, and AU standards with sister sizes and breast shape fitting advice.",
+  title: "Bra Size Calculator – Find Your Size, Sister Sizes & International Conversion",
+  description: "Calculate your starting bra size from underbust and bust measurements. Compare US, UK, EU, French and Australian sizes, find sister sizes and improve fit with measurement guidance.",
   slug: "bra-size-calculator",
 });

@@ -49,4 +49,6 @@ export interface TipCalculationResult {
   roundingMode: RoundingMode;
   country: CountryTipInfo;
   itemizedResults?: ItemizedDinerResult[];
+  allocatedShares: number[];
+  isUnequalSplit: boolean;
 }

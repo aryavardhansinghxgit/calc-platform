@@ -39,4 +39,6 @@ export interface BraSizeCalculationResult {
   sisterSizes: SisterSize[];
   recommendedStyles: BraStyleRecommendation[];
   shapeAdvice: string;
+  isBustSmallerThanUnderbust?: boolean;
+  warning?: string;
 }

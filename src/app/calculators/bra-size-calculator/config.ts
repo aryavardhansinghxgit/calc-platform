@@ -10,19 +10,33 @@ export const bra_size_calculatorConfig: CalculatorModuleDefinition = {
   slug: "bra-size-calculator",
   category: "other",
   subcategory: "Everyday & Lifestyle",
-  description: "Calculate bra size across US/CAN, UK, EU, FR, and AU standards. Features sister size finder, breast shape adjustor, style engine, and visual measurement guide.",
+  description: "Measure your underbust and bust to find a starting bra size, compare international sizing systems, explore sister sizes, and get practical fit guidance.",
   iconName: "Heart",
   featured: true,
   keywords: [
     "bra size calculator",
+    "bra size chart",
+    "how to calculate bra size",
+    "how to measure bra size",
+    "bra size by measurements",
+    "underbust and bust calculator",
     "cup size calculator",
-    "sister sizes",
-    "bra size converter",
-    "us to uk bra size",
-    "eu bra size"
+    "band size calculator",
+    "sister size calculator",
+    "bra size conversion",
+    "US to UK bra size",
+    "US to EU bra size",
+    "French bra size conversion",
+    "Australian bra size conversion",
+    "bra fitting guide",
+    "what is my bra size",
   ],
   priority: 1,
-  relatedCalculators: ["shoe-size-calculator"],
+  relatedCalculators: [
+    "shoe-size-calculator",
+    "body-fat-calculator",
+    "ideal-weight-calculator",
+  ],
   formulaDescription: "Band Size = Underbust Rounded to Nearest Even Integer; Cup Size = Bust - Underbust",
   faqs: bra_size_calculatorFaqs,
   CustomComponent: BraSizeCalculator,
@@ -35,7 +49,7 @@ export const bra_size_calculatorConfig: CalculatorModuleDefinition = {
       defaultValue: 30,
       min: 20,
       max: 60,
-      step: 0.5
+      step: 0.5,
     },
     {
       name: "bust",
@@ -44,16 +58,16 @@ export const bra_size_calculatorConfig: CalculatorModuleDefinition = {
       defaultValue: 34,
       min: 20,
       max: 70,
-      step: 0.5
-    }
+      step: 0.5,
+    },
   ],
   outputs: [
     {
       name: "primarySize",
       label: "Calculated Bra Size",
       format: "text",
-      highlight: true
-    }
+      highlight: true,
+    },
   ],
   calculate: calculateBraSizeFromInputs,
 } as any;

@@ -18,7 +18,10 @@ export interface ExpenditureGdpResult {
   investmentPct: number;
   governmentPct: number;
   netExportsPct: number;
+  grossExportsPct: number;
+  grossImportsPct: number;
   gdpPerCapita: number;
+  sectorSharesAvailable: boolean;
 }
 
 /**
@@ -35,11 +38,15 @@ export function calculateExpenditureGdp(params: ExpenditureGdpParams): Expenditu
   const netExports = X - M;
   const gdp = C + I + G + netExports;
 
-  const base = gdp > 0 ? gdp : 1;
-  const cPct = (C / base) * 100;
-  const iPct = (I / base) * 100;
-  const gPct = (G / base) * 100;
-  const nxPct = (netExports / base) * 100;
+  const sharesAvailable = gdp > 0;
+  const base = sharesAvailable ? gdp : 1;
+
+  const cPct = sharesAvailable ? (C / base) * 100 : 0;
+  const iPct = sharesAvailable ? (I / base) * 100 : 0;
+  const gPct = sharesAvailable ? (G / base) * 100 : 0;
+  const nxPct = sharesAvailable ? (netExports / base) * 100 : 0;
+  const xPct = sharesAvailable ? (X / base) * 100 : 0;
+  const mPct = sharesAvailable ? (M / base) * 100 : 0;
   const perCapita = gdp / pop;
 
   return {
@@ -49,7 +56,10 @@ export function calculateExpenditureGdp(params: ExpenditureGdpParams): Expenditu
     investmentPct: iPct,
     governmentPct: gPct,
     netExportsPct: nxPct,
+    grossExportsPct: xPct,
+    grossImportsPct: mPct,
     gdpPerCapita: perCapita,
+    sectorSharesAvailable: sharesAvailable,
   };
 }
 

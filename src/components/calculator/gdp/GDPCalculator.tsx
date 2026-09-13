@@ -6,6 +6,7 @@ import {
   Trash2,
   Check,
   Download,
+  RotateCcw,
 } from "lucide-react";
 import {
   calculateExpenditureGdp,
@@ -22,7 +23,17 @@ export interface SavedGdpItem {
   inputs: string;
   result: string;
   resultsList: string[];
+  rawInputs: Record<string, string>;
   timestamp: string;
+}
+
+export interface SectorMatrixRow {
+  sector: string;
+  symbol: string;
+  value: number;
+  share: number;
+  shareFormatted: string;
+  economicRole: string;
 }
 
 export function GDPCalculator() {
@@ -217,26 +228,105 @@ export function GDPCalculator() {
   }, [grossOutputInput, intermediateInputs, netProductTaxes]);
 
   // ==========================================
+  // 1B. CANONICAL SECTOR MATRIX DATA
+  // ==========================================
+  const sectorRows: SectorMatrixRow[] = useMemo(() => {
+    const C = Number(consumptionInput) || 0;
+    const I = Number(investmentInput) || 0;
+    const G = Number(governmentInput) || 0;
+    const X = Number(exportsInput) || 0;
+    const M = Number(importsInput) || 0;
+    const NX = coreResult.netExports;
+    const sharesAvail = coreResult.sectorSharesAvailable;
+
+    return [
+      {
+        sector: "Personal Consumption Expenditures",
+        symbol: "C",
+        value: C,
+        share: coreResult.consumptionPct,
+        shareFormatted: sharesAvail ? `${coreResult.consumptionPct.toFixed(1)}%` : "N/A",
+        economicRole: "Household goods, services, and consumer spending",
+      },
+      {
+        sector: "Gross Private Domestic Investment",
+        symbol: "I",
+        value: I,
+        share: coreResult.investmentPct,
+        shareFormatted: sharesAvail ? `${coreResult.investmentPct.toFixed(1)}%` : "N/A",
+        economicRole: "Business machinery, non-residential buildings, and housing",
+      },
+      {
+        sector: "Government Consumption & Investment",
+        symbol: "G",
+        value: G,
+        share: coreResult.governmentPct,
+        shareFormatted: sharesAvail ? `${coreResult.governmentPct.toFixed(1)}%` : "N/A",
+        economicRole: "Public infrastructure, federal/defense and local municipal spending",
+      },
+      {
+        sector: "Gross Exports of Goods & Services",
+        symbol: "X",
+        value: X,
+        share: coreResult.grossExportsPct,
+        shareFormatted: sharesAvail ? `${coreResult.grossExportsPct.toFixed(1)}%` : "N/A",
+        economicRole: "Gross foreign purchases of domestic output",
+      },
+      {
+        sector: "Gross Imports of Goods & Services",
+        symbol: "M",
+        value: M,
+        share: coreResult.grossImportsPct,
+        shareFormatted: sharesAvail ? `${coreResult.grossImportsPct.toFixed(1)}%` : "N/A",
+        economicRole: "Gross domestic purchases of foreign output (subtracted in GDP)",
+      },
+      {
+        sector: "Net Exports of Goods & Services",
+        symbol: "NX (X - M)",
+        value: NX,
+        share: coreResult.netExportsPct,
+        shareFormatted: sharesAvail ? `${coreResult.netExportsPct.toFixed(1)}%` : "N/A",
+        economicRole: NX >= 0 ? "Trade Surplus (Exports exceed Imports)" : "Trade Deficit (Imports exceed Exports)",
+      },
+      {
+        sector: "Total Gross Domestic Product (GDP)",
+        symbol: "Y",
+        value: coreResult.totalGdp,
+        share: 100.0,
+        shareFormatted: sharesAvail ? "100.0%" : "N/A",
+        economicRole: "Total National Economic Output",
+      },
+    ];
+  }, [
+    consumptionInput,
+    investmentInput,
+    governmentInput,
+    exportsInput,
+    importsInput,
+    coreResult,
+  ]);
+
+  // ==========================================
   // 6. COMPUTED RESULTS: PER CAPITA TIER
   // ==========================================
   const tierResult = useMemo(() => {
     const gdp = Number(tierGdpInput) || 0;
     const pop = Number(tierPopInput) || 1;
-    const perCapita = gdp / pop;
+    const perCapita = pop > 0 ? gdp / pop : 0;
 
     let tier = "High Income";
     let badgeColor = "text-emerald-600";
     if (perCapita >= 14005) {
-      tier = "High Income Economy (World Bank Tier 1)";
+      tier = "High Income Economy (Illustrative Tier 1)";
       badgeColor = "text-emerald-600";
     } else if (perCapita >= 4466) {
-      tier = "Upper-Middle Income Economy (World Bank Tier 2)";
+      tier = "Upper-Middle Income Economy (Illustrative Tier 2)";
       badgeColor = "text-blue-600";
     } else if (perCapita >= 1136) {
-      tier = "Lower-Middle Income Economy (World Bank Tier 3)";
+      tier = "Lower-Middle Income Economy (Illustrative Tier 3)";
       badgeColor = "text-amber-600";
     } else {
-      tier = "Low Income Economy (World Bank Tier 4)";
+      tier = "Low Income Economy (Illustrative Tier 4)";
       badgeColor = "text-red-600";
     }
 
@@ -248,7 +338,7 @@ export function GDPCalculator() {
   }, [tierGdpInput, tierPopInput]);
 
   // ==========================================
-  // SAVE HANDLERS FOR ALL 6 BOXES
+  // SAVE HANDLERS FOR ALL 6 BOXES (WITH RAW INPUTS FOR RESTORE)
   // ==========================================
   const handleSaveCore = () => {
     const inputStr = `C: ${currencySymbol}${consumptionInput}B | I: ${currencySymbol}${investmentInput}B | G: ${currencySymbol}${governmentInput}B | NX: ${currencySymbol}${coreResult.netExports}B`;
@@ -264,6 +354,14 @@ export function GDPCalculator() {
       inputs: inputStr,
       result: resList.join(" | "),
       resultsList: resList,
+      rawInputs: {
+        consumption: consumptionInput,
+        investment: investmentInput,
+        government: governmentInput,
+        exports: exportsInput,
+        imports: importsInput,
+        population: populationInput,
+      },
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
     };
 
@@ -290,6 +388,16 @@ export function GDPCalculator() {
       inputs: inputStr,
       result: resList.join(" | "),
       resultsList: resList,
+      rawInputs: {
+        compWages: compWagesInput,
+        propIncome: propIncomeInput,
+        rentIncome: rentIncomeInput,
+        corpProfits: corpProfitsInput,
+        interestIncome: interestIncomeInput,
+        indirectTaxes: indirectTaxesInput,
+        depreciation: depreciationInput,
+        foreignIncome: foreignIncomeInput,
+      },
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
     };
 
@@ -315,6 +423,10 @@ export function GDPCalculator() {
       inputs: inputStr,
       result: resList.join(" | "),
       resultsList: resList,
+      rawInputs: {
+        nomGdp: nomGdpInput,
+        deflator: deflatorInput,
+      },
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
     };
 
@@ -341,6 +453,11 @@ export function GDPCalculator() {
       inputs: inputStr,
       result: resList.join(" | "),
       resultsList: resList,
+      rawInputs: {
+        priorGdp: priorGdpInput,
+        currGdp: currGdpInput,
+        growthYears: growthYearsInput,
+      },
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
     };
 
@@ -367,6 +484,11 @@ export function GDPCalculator() {
       inputs: inputStr,
       result: resList.join(" | "),
       resultsList: resList,
+      rawInputs: {
+        grossOutput: grossOutputInput,
+        intermediateInputs: intermediateInputs,
+        netProductTaxes: netProductTaxes,
+      },
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
     };
 
@@ -392,6 +514,10 @@ export function GDPCalculator() {
       inputs: inputStr,
       result: resList.join(" | "),
       resultsList: resList,
+      rawInputs: {
+        tierGdp: tierGdpInput,
+        tierPop: tierPopInput,
+      },
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
     };
 
@@ -568,16 +694,14 @@ export function GDPCalculator() {
                       <button
                         type="button"
                         onClick={() => {
-                          const headers = ["Macro Sector Component", "Dollar Value (Billion)", "Share of Total GDP (%)"];
-                          const rows = [
-                            ["Personal Consumption (C)", (Number(consumptionInput) || 0).toFixed(2), coreResult.consumptionPct.toFixed(1) + "%"],
-                            ["Gross Private Investment (I)", (Number(investmentInput) || 0).toFixed(2), coreResult.investmentPct.toFixed(1) + "%"],
-                            ["Government Spending (G)", (Number(governmentInput) || 0).toFixed(2), coreResult.governmentPct.toFixed(1) + "%"],
-                            ["Exports (X)", Number(exportsInput).toFixed(2), "-"],
-                            ["Imports (M)", Number(importsInput).toFixed(2), "-"],
-                            ["Net Exports (NX)", coreResult.netExports.toFixed(2), coreResult.netExportsPct.toFixed(1) + "%"],
-                            ["Total GDP", coreResult.totalGdp.toFixed(2), "100.0%"],
-                          ];
+                          const headers = ["Macro Sector Component", "Category Symbol", "Dollar Output (Billion)", "Economic Share of GDP (%)", "Economic Role"];
+                          const rows = sectorRows.map((r) => [
+                            `"${r.sector}"`,
+                            `"${r.symbol}"`,
+                            r.value.toFixed(2),
+                            `"${r.shareFormatted}"`,
+                            `"${r.economicRole}"`,
+                          ]);
                           const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
                           triggerCsvDownload(`gdp_expenditure_breakdown.csv`, csv);
                         }}
@@ -592,121 +716,120 @@ export function GDPCalculator() {
                 <div className="grid grid-cols-4 gap-2 text-xs font-bold text-center">
                   <div className="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
                     <span className="text-[9px] text-slate-400 uppercase block">Consumption (C)</span>
-                    <span className="font-mono text-xs text-blue-600">{coreResult.consumptionPct.toFixed(1)}%</span>
+                    <span className="font-mono text-xs text-blue-600">
+                      {coreResult.sectorSharesAvailable ? `${coreResult.consumptionPct.toFixed(1)}%` : "N/A"}
+                    </span>
                   </div>
 
                   <div className="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
                     <span className="text-[9px] text-slate-400 uppercase block">Investment (I)</span>
-                    <span className="font-mono text-xs text-amber-600">{coreResult.investmentPct.toFixed(1)}%</span>
+                    <span className="font-mono text-xs text-amber-600">
+                      {coreResult.sectorSharesAvailable ? `${coreResult.investmentPct.toFixed(1)}%` : "N/A"}
+                    </span>
                   </div>
 
                   <div className="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
                     <span className="text-[9px] text-slate-400 uppercase block">Government (G)</span>
-                    <span className="font-mono text-xs text-slate-900 dark:text-slate-100">{coreResult.governmentPct.toFixed(1)}%</span>
+                    <span className="font-mono text-xs text-slate-900 dark:text-slate-100">
+                      {coreResult.sectorSharesAvailable ? `${coreResult.governmentPct.toFixed(1)}%` : "N/A"}
+                    </span>
                   </div>
 
                   <div className="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">
                     <span className="text-[9px] text-slate-400 uppercase block">Net Exports (NX)</span>
-                    <span className="font-mono text-xs text-emerald-600">{coreResult.netExportsPct.toFixed(1)}%</span>
+                    <span className="font-mono text-xs text-emerald-600">
+                      {coreResult.sectorSharesAvailable ? `${coreResult.netExportsPct.toFixed(1)}%` : "N/A"}
+                    </span>
                   </div>
                 </div>
 
-                    {/* SECTOR STACKED PROGRESS */}
-                    <div className="space-y-1.5 pt-1">
-                      <div className="w-full h-3.5 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex">
+                {/* Warning if GDP <= 0 */}
+                {!coreResult.sectorSharesAvailable && (
+                  <div className="p-2.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 rounded-lg text-xs text-amber-800 dark:text-amber-300">
+                    <strong>Notice:</strong> Sector share distribution is not reported because total GDP is zero or negative; percentage-of-GDP shares are not meaningful under this condition.
+                  </div>
+                )}
+
+                {/* SECTOR STACKED PROGRESS */}
+                <div className="space-y-1.5 pt-1">
+                  <div className="w-full h-3.5 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 flex">
+                    {coreResult.sectorSharesAvailable ? (
+                      <>
                         <div style={{ width: `${Math.max(0, Math.min(100, coreResult.consumptionPct))}%` }} className="bg-blue-600" />
                         <div style={{ width: `${Math.max(0, Math.min(100, coreResult.investmentPct))}%` }} className="bg-amber-500" />
                         <div style={{ width: `${Math.max(0, Math.min(100, coreResult.governmentPct))}%` }} className="bg-purple-600" />
                         <div style={{ width: `${Math.max(0, Math.min(100, coreResult.netExportsPct))}%` }} className="bg-emerald-500" />
-                      </div>
-                      <div className="flex justify-between text-xs font-mono font-bold text-slate-600 dark:text-slate-400">
-                        <span>Net Trade: {coreResult.netExports >= 0 ? `+${fmt(coreResult.netExports)}B Surplus` : `${fmt(coreResult.netExports)}B Deficit`}</span>
-                        <span>Total Output: {(coreResult.totalGdp / 1000).toFixed(3)} Trillion</span>
-                      </div>
-                    </div>
+                      </>
+                    ) : (
+                      <div className="w-full bg-slate-300 dark:bg-slate-700" />
+                    )}
+                  </div>
+                  <div className="flex justify-between text-xs font-mono font-bold text-slate-600 dark:text-slate-400">
+                    <span>Net Trade: {coreResult.netExports >= 0 ? `+${fmt(coreResult.netExports)}B Surplus` : `${fmt(coreResult.netExports)}B Deficit`}</span>
+                    <span>Total Output: {(coreResult.totalGdp / 1000).toFixed(3)} Trillion</span>
                   </div>
                 </div>
               </div>
-
-            {/* FULL WIDTH EXPENDITURE SECTOR BREAKDOWN MATRIX (BIGGER BOX) */}
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xs">
-              <div className="p-3 bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                  National Expenditure Sector Distribution Matrix [GDP = C + I + G + (X - M)]
-                </span>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const headers = ["Macro Sector Component", "Category Symbol", "Dollar Output (Billion)", "Economic Share of GDP (%)"];
-                    const rows = [
-                      ["Personal Consumption Expenditures", "C", (Number(consumptionInput) || 0).toFixed(2), coreResult.consumptionPct.toFixed(1) + "%"],
-                      ["Gross Private Domestic Investment", "I", (Number(investmentInput) || 0).toFixed(2), coreResult.investmentPct.toFixed(1) + "%"],
-                      ["Government Consumption & Investment", "G", (Number(governmentInput) || 0).toFixed(2), coreResult.governmentPct.toFixed(1) + "%"],
-                      ["Gross Exports", "X", Number(exportsInput).toFixed(2), "-"],
-                      ["Gross Imports", "M", Number(importsInput).toFixed(2), "-"],
-                      ["Net Foreign Trade (Exports - Imports)", "NX", coreResult.netExports.toFixed(2), coreResult.netExportsPct.toFixed(1) + "%"],
-                      ["Total Gross Domestic Product", "GDP", coreResult.totalGdp.toFixed(2), "100.0%"],
-                    ];
-                    const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
-                    triggerCsvDownload(`gdp_expenditure_breakdown.csv`, csv);
-                  }}
-                  className="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-lg text-xs font-bold flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 cursor-pointer transition-colors"
-                >
-                  <Download className="w-3.5 h-3.5 text-blue-600" /> Export Sector Matrix (CSV)
-                </button>
-              </div>
-
-              <div className="overflow-x-auto text-xs max-h-72 overflow-y-auto">
-                <table className="w-full text-left border-collapse font-sans tabular-nums">
-                  <thead className="sticky top-0 bg-slate-50 dark:bg-slate-800/90 text-slate-600 dark:text-slate-400 font-bold border-b border-slate-200 dark:border-slate-700 backdrop-blur-xs">
-                    <tr>
-                      <th className="p-2.5">Macroeconomic Sector</th>
-                      <th className="p-2.5">Symbol</th>
-                      <th className="p-2.5">Aggregate Dollar Value</th>
-                      <th className="p-2.5">Share of Total GDP (%)</th>
-                      <th className="p-2.5">Economic Role</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                    <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                      <td className="p-2 font-bold text-slate-800 dark:text-slate-200">Personal Consumption Expenditures</td>
-                      <td className="p-2 font-mono font-bold text-blue-600">C</td>
-                      <td className="p-2 font-bold text-slate-900 dark:text-slate-100">{fmt(Number(consumptionInput) || 0)} Billion</td>
-                      <td className="p-2 font-bold text-blue-600">{coreResult.consumptionPct.toFixed(1)}%</td>
-                      <td className="p-2 text-slate-500">Household goods, services, and consumer spending</td>
-                    </tr>
-                    <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                      <td className="p-2 font-bold text-slate-800 dark:text-slate-200">Gross Private Domestic Investment</td>
-                      <td className="p-2 font-mono font-bold text-amber-600">I</td>
-                      <td className="p-2 font-bold text-slate-900 dark:text-slate-100">{fmt(Number(investmentInput) || 0)} Billion</td>
-                      <td className="p-2 font-bold text-amber-600">{coreResult.investmentPct.toFixed(1)}%</td>
-                      <td className="p-2 text-slate-500">Business machinery, non-residential buildings, and housing</td>
-                    </tr>
-                    <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                      <td className="p-2 font-bold text-slate-800 dark:text-slate-200">Government Consumption &amp; Investment</td>
-                      <td className="p-2 font-mono font-bold text-purple-600">G</td>
-                      <td className="p-2 font-bold text-slate-900 dark:text-slate-100">{fmt(Number(governmentInput) || 0)} Billion</td>
-                      <td className="p-2 font-bold text-purple-600">{coreResult.governmentPct.toFixed(1)}%</td>
-                      <td className="p-2 text-slate-500">Public infrastructure, federal/defense and local municipal spending</td>
-                    </tr>
-                    <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                      <td className="p-2 font-bold text-slate-800 dark:text-slate-200">Net Exports of Goods &amp; Services</td>
-                      <td className="p-2 font-mono font-bold text-emerald-600">NX (X - M)</td>
-                      <td className="p-2 font-bold text-slate-900 dark:text-slate-100">{fmt(coreResult.netExports)} Billion</td>
-                      <td className="p-2 font-bold text-emerald-600">{coreResult.netExportsPct.toFixed(1)}%</td>
-                      <td className="p-2 text-slate-500">{coreResult.netExports >= 0 ? "Trade Surplus (Exports exceed Imports)" : "Trade Deficit (Imports exceed Exports)"}</td>
-                    </tr>
-                    <tr className="bg-slate-50/80 dark:bg-slate-800/60 font-extrabold border-t-2 border-slate-300 dark:border-slate-600">
-                      <td className="p-2.5 text-slate-900 dark:text-slate-100">Total Gross Domestic Product (GDP)</td>
-                      <td className="p-2.5 font-mono text-blue-600">Y</td>
-                      <td className="p-2.5 text-emerald-600 text-sm">{fmt(coreResult.totalGdp)} Billion</td>
-                      <td className="p-2.5 text-slate-900 dark:text-slate-100">100.0%</td>
-                      <td className="p-2.5 text-slate-600 dark:text-slate-400">Total National Economic Output</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
             </div>
+          </div>
+
+          {/* FULL WIDTH EXPENDITURE SECTOR BREAKDOWN MATRIX (BIGGER BOX) */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xs">
+            <div className="p-3 bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                National Expenditure Sector Distribution Matrix [GDP = C + I + G + (X - M)]
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  const headers = ["Macro Sector Component", "Category Symbol", "Dollar Output (Billion)", "Economic Share of GDP (%)", "Economic Role"];
+                  const rows = sectorRows.map((r) => [
+                    `"${r.sector}"`,
+                    `"${r.symbol}"`,
+                    r.value.toFixed(2),
+                    `"${r.shareFormatted}"`,
+                    `"${r.economicRole}"`,
+                  ]);
+                  const csv = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+                  triggerCsvDownload(`gdp_expenditure_breakdown.csv`, csv);
+                }}
+                className="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-lg text-xs font-bold flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 cursor-pointer transition-colors"
+              >
+                <Download className="w-3.5 h-3.5 text-blue-600" /> Export Sector Matrix (CSV)
+              </button>
+            </div>
+
+            <div className="overflow-x-auto text-xs max-h-72 overflow-y-auto">
+              <table className="w-full text-left border-collapse font-sans tabular-nums">
+                <thead className="sticky top-0 bg-slate-50 dark:bg-slate-800/90 text-slate-600 dark:text-slate-400 font-bold border-b border-slate-200 dark:border-slate-700 backdrop-blur-xs">
+                  <tr>
+                    <th className="p-2.5">Macroeconomic Sector</th>
+                    <th className="p-2.5">Symbol</th>
+                    <th className="p-2.5">Aggregate Dollar Value</th>
+                    <th className="p-2.5">Share of Total GDP (%)</th>
+                    <th className="p-2.5">Economic Role</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {sectorRows.map((row, idx) => {
+                    const isTotal = row.symbol === "Y";
+                    return (
+                      <tr
+                        key={idx}
+                        className={isTotal ? "bg-slate-50/80 dark:bg-slate-800/60 font-extrabold border-t-2 border-slate-300 dark:border-slate-600" : "hover:bg-slate-50 dark:hover:bg-slate-800/40"}
+                      >
+                        <td className={`p-2 ${isTotal ? "text-slate-900 dark:text-slate-100" : "font-bold text-slate-800 dark:text-slate-200"}`}>{row.sector}</td>
+                        <td className="p-2 font-mono font-bold text-blue-600">{row.symbol}</td>
+                        <td className={`p-2 font-bold ${isTotal ? "text-emerald-600 text-sm" : "text-slate-900 dark:text-slate-100"}`}>{fmt(row.value)} Billion</td>
+                        <td className={`p-2 font-bold ${isTotal ? "text-slate-900 dark:text-slate-100" : row.symbol === "C" ? "text-blue-600" : row.symbol === "I" ? "text-amber-600" : row.symbol === "G" ? "text-purple-600" : "text-emerald-600"}`}>{row.shareFormatted}</td>
+                        <td className={`p-2 ${isTotal ? "text-slate-600 dark:text-slate-400" : "text-slate-500"}`}>{row.economicRole}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
           {/* SAVED CALCULATIONS BOX 1 */}
           {savedCoreItems.length > 0 && (
@@ -736,6 +859,23 @@ export function GDPCalculator() {
                     <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
                       <span className="font-bold text-blue-600 text-[11px]">{item.title}</span>
                       <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (item.rawInputs) {
+                              if (item.rawInputs.consumption !== undefined) setConsumptionInput(item.rawInputs.consumption);
+                              if (item.rawInputs.investment !== undefined) setInvestmentInput(item.rawInputs.investment);
+                              if (item.rawInputs.government !== undefined) setGovernmentInput(item.rawInputs.government);
+                              if (item.rawInputs.exports !== undefined) setExportsInput(item.rawInputs.exports);
+                              if (item.rawInputs.imports !== undefined) setImportsInput(item.rawInputs.imports);
+                              if (item.rawInputs.population !== undefined) setPopulationInput(item.rawInputs.population);
+                            }
+                          }}
+                          className="text-xs text-blue-600 hover:text-blue-700 font-semibold px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 flex items-center gap-1 cursor-pointer"
+                          title="Restore this scenario"
+                        >
+                          <RotateCcw className="w-2.5 h-2.5" /> Restore
+                        </button>
                         <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
                         <button
                           type="button"
@@ -949,9 +1089,41 @@ export function GDPCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                 {savedIncomeItems.map((item) => (
                   <div key={item.id} className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-xs space-y-1">
-                    <div className="flex justify-between border-b pb-1 text-[11px]">
-                      <span className="font-bold text-blue-600">{item.title}</span>
-                      <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
+                    <div className="flex justify-between items-center border-b pb-1 text-[11px]">
+                      <span className="font-bold text-blue-600 text-[11px]">{item.title}</span>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (item.rawInputs) {
+                              if (item.rawInputs.compWages !== undefined) setCompWagesInput(item.rawInputs.compWages);
+                              if (item.rawInputs.propIncome !== undefined) setPropIncomeInput(item.rawInputs.propIncome);
+                              if (item.rawInputs.rentIncome !== undefined) setRentIncomeInput(item.rawInputs.rentIncome);
+                              if (item.rawInputs.corpProfits !== undefined) setCorpProfitsInput(item.rawInputs.corpProfits);
+                              if (item.rawInputs.interestIncome !== undefined) setInterestIncomeInput(item.rawInputs.interestIncome);
+                              if (item.rawInputs.indirectTaxes !== undefined) setIndirectTaxesInput(item.rawInputs.indirectTaxes);
+                              if (item.rawInputs.depreciation !== undefined) setDepreciationInput(item.rawInputs.depreciation);
+                              if (item.rawInputs.foreignIncome !== undefined) setForeignIncomeInput(item.rawInputs.foreignIncome);
+                            }
+                          }}
+                          className="text-xs text-blue-600 hover:text-blue-700 font-semibold px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 flex items-center gap-1 cursor-pointer"
+                          title="Restore this scenario"
+                        >
+                          <RotateCcw className="w-2.5 h-2.5" /> Restore
+                        </button>
+                        <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = savedIncomeItems.filter((i) => i.id !== item.id);
+                            setSavedIncomeItems(updated);
+                            localStorage.setItem("saved_gdp_income", JSON.stringify(updated));
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 cursor-pointer"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
                     <div className="space-y-0.5 font-mono text-[10px]">
                       {item.resultsList?.map((line, idx) => (
@@ -1068,9 +1240,35 @@ export function GDPCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                 {savedRealItems.map((item) => (
                   <div key={item.id} className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-xs space-y-1">
-                    <div className="flex justify-between border-b pb-1 text-[11px]">
-                      <span className="font-bold text-blue-600">{item.title}</span>
-                      <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
+                    <div className="flex justify-between items-center border-b pb-1 text-[11px]">
+                      <span className="font-bold text-blue-600 text-[11px]">{item.title}</span>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (item.rawInputs) {
+                              if (item.rawInputs.nomGdp !== undefined) setNomGdpInput(item.rawInputs.nomGdp);
+                              if (item.rawInputs.deflator !== undefined) setDeflatorInput(item.rawInputs.deflator);
+                            }
+                          }}
+                          className="text-xs text-blue-600 hover:text-blue-700 font-semibold px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 flex items-center gap-1 cursor-pointer"
+                          title="Restore this scenario"
+                        >
+                          <RotateCcw className="w-2.5 h-2.5" /> Restore
+                        </button>
+                        <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = savedRealItems.filter((i) => i.id !== item.id);
+                            setSavedRealItems(updated);
+                            localStorage.setItem("saved_gdp_real", JSON.stringify(updated));
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 cursor-pointer"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
                     <div className="space-y-0.5 font-mono text-[10px]">
                       {item.resultsList?.map((line, idx) => (
@@ -1199,9 +1397,36 @@ export function GDPCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                 {savedGrowthItems.map((item) => (
                   <div key={item.id} className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-xs space-y-1">
-                    <div className="flex justify-between border-b pb-1 text-[11px]">
-                      <span className="font-bold text-blue-600">{item.title}</span>
-                      <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
+                    <div className="flex justify-between items-center border-b pb-1 text-[11px]">
+                      <span className="font-bold text-blue-600 text-[11px]">{item.title}</span>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (item.rawInputs) {
+                              if (item.rawInputs.priorGdp !== undefined) setPriorGdpInput(item.rawInputs.priorGdp);
+                              if (item.rawInputs.currGdp !== undefined) setCurrGdpInput(item.rawInputs.currGdp);
+                              if (item.rawInputs.growthYears !== undefined) setGrowthYearsInput(item.rawInputs.growthYears);
+                            }
+                          }}
+                          className="text-xs text-blue-600 hover:text-blue-700 font-semibold px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 flex items-center gap-1 cursor-pointer"
+                          title="Restore this scenario"
+                        >
+                          <RotateCcw className="w-2.5 h-2.5" /> Restore
+                        </button>
+                        <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = savedGrowthItems.filter((i) => i.id !== item.id);
+                            setSavedGrowthItems(updated);
+                            localStorage.setItem("saved_gdp_growth", JSON.stringify(updated));
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 cursor-pointer"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
                     <div className="space-y-0.5 font-mono text-[10px]">
                       {item.resultsList?.map((line, idx) => (
@@ -1330,9 +1555,36 @@ export function GDPCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                 {savedProdItems.map((item) => (
                   <div key={item.id} className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-xs space-y-1">
-                    <div className="flex justify-between border-b pb-1 text-[11px]">
-                      <span className="font-bold text-blue-600">{item.title}</span>
-                      <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
+                    <div className="flex justify-between items-center border-b pb-1 text-[11px]">
+                      <span className="font-bold text-blue-600 text-[11px]">{item.title}</span>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (item.rawInputs) {
+                              if (item.rawInputs.grossOutput !== undefined) setGrossOutputInput(item.rawInputs.grossOutput);
+                              if (item.rawInputs.intermediateInputs !== undefined) setIntermediateInputs(item.rawInputs.intermediateInputs);
+                              if (item.rawInputs.netProductTaxes !== undefined) setNetProductTaxes(item.rawInputs.netProductTaxes);
+                            }
+                          }}
+                          className="text-xs text-blue-600 hover:text-blue-700 font-semibold px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 flex items-center gap-1 cursor-pointer"
+                          title="Restore this scenario"
+                        >
+                          <RotateCcw className="w-2.5 h-2.5" /> Restore
+                        </button>
+                        <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = savedProdItems.filter((i) => i.id !== item.id);
+                            setSavedProdItems(updated);
+                            localStorage.setItem("saved_gdp_prod", JSON.stringify(updated));
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 cursor-pointer"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
                     <div className="space-y-0.5 font-mono text-[10px]">
                       {item.resultsList?.map((line, idx) => (
@@ -1422,6 +1674,9 @@ export function GDPCalculator() {
                   <span className="text-slate-500 font-sans">Monthly Output Per Citizen:</span>
                   <span className="text-blue-600">{fmt(tierResult.perCapita / 12)} / month</span>
                 </div>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                  Note: Illustrative GDP-per-capita classification inspired by World Bank analytical income brackets; official World Bank classification relies on GNI per capita using the Atlas method.
+                </p>
               </div>
             </div>
           </div>
@@ -1448,9 +1703,35 @@ export function GDPCalculator() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                 {savedTierItems.map((item) => (
                   <div key={item.id} className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-xs space-y-1">
-                    <div className="flex justify-between border-b pb-1 text-[11px]">
-                      <span className="font-bold text-blue-600">{item.title}</span>
-                      <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
+                    <div className="flex justify-between items-center border-b pb-1 text-[11px]">
+                      <span className="font-bold text-blue-600 text-[11px]">{item.title}</span>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (item.rawInputs) {
+                              if (item.rawInputs.tierGdp !== undefined) setTierGdpInput(item.rawInputs.tierGdp);
+                              if (item.rawInputs.tierPop !== undefined) setTierPopInput(item.rawInputs.tierPop);
+                            }
+                          }}
+                          className="text-xs text-blue-600 hover:text-blue-700 font-semibold px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 flex items-center gap-1 cursor-pointer"
+                          title="Restore this scenario"
+                        >
+                          <RotateCcw className="w-2.5 h-2.5" /> Restore
+                        </button>
+                        <span className="text-[9px] text-slate-400 font-mono">{item.timestamp}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = savedTierItems.filter((i) => i.id !== item.id);
+                            setSavedTierItems(updated);
+                            localStorage.setItem("saved_gdp_tier", JSON.stringify(updated));
+                          }}
+                          className="text-slate-400 hover:text-red-600 p-0.5 cursor-pointer"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
                     <div className="space-y-0.5 font-mono text-[10px]">
                       {item.resultsList?.map((line, idx) => (

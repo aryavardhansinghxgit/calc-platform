@@ -13,15 +13,15 @@ export const COUNTRY_TIPPING_DATABASE: CountryTipInfo[] = [
     name: "United States",
     currencySymbol: "$",
     defaultTipPct: 18,
-    tipExpected: "Mandatory Custom",
-    etiquetteNotes: "15%–20% is expected in sit-down restaurants due to tipped minimum wage laws.",
+    tipExpected: "Customary (15%–20%)",
+    etiquetteNotes: "15%–20% is customary for table service in the United States. Applicable minimum wage and tip-credit provisions depend on federal and state regulations.",
   },
   {
     code: "CA",
     name: "Canada",
     currencySymbol: "$",
     defaultTipPct: 15,
-    tipExpected: "Mandatory Custom",
+    tipExpected: "Customary (15%–18%)",
     etiquetteNotes: "15%–18% is standard for table service and bartenders.",
   },
   {
@@ -69,8 +69,8 @@ export const COUNTRY_TIPPING_DATABASE: CountryTipInfo[] = [
     name: "Japan",
     currencySymbol: "¥",
     defaultTipPct: 0,
-    tipExpected: "Offensive / Unusual",
-    etiquetteNotes: "Tipping is not part of Japanese culture and can cause confusion or offense. Good service is standard.",
+    tipExpected: "Service Included",
+    etiquetteNotes: "Standard hospitality (Omotenashi) is included in the bill. Offering extra cash directly is not customary and may cause confusion.",
   },
   {
     code: "KR",
@@ -138,6 +138,41 @@ export const COUNTRY_TIPPING_DATABASE: CountryTipInfo[] = [
   },
 ];
 
+/**
+ * Distributes total integer cents proportionally across weights using the
+ * Largest Remainder Method (Hare-Niemeyer Algorithm), guaranteeing exact cent reconciliation.
+ */
+function allocateCentsProportionally(totalCents: number, weights: number[]): number[] {
+  const sumWeights = weights.reduce((a, b) => a + b, 0);
+  if (totalCents === 0 || sumWeights === 0) {
+    return weights.map(() => 0);
+  }
+
+  const exactCents = weights.map((w) => (w / sumWeights) * totalCents);
+  const floorCents = exactCents.map((c) => Math.floor(c));
+  const remainders = exactCents.map((c, idx) => ({
+    fraction: c - Math.floor(c),
+    index: idx,
+  }));
+
+  let unallocatedCents = totalCents - floorCents.reduce((a, b) => a + b, 0);
+
+  // Stable sort by fractional remainder descending; tie-break by original index
+  remainders.sort((a, b) => {
+    const diff = b.fraction - a.fraction;
+    if (Math.abs(diff) > 1e-9) return diff;
+    return a.index - b.index;
+  });
+
+  const allocated = [...floorCents];
+  for (let i = 0; i < unallocatedCents; i++) {
+    const targetIdx = remainders[i % remainders.length].index;
+    allocated[targetIdx] += 1;
+  }
+
+  return allocated;
+}
+
 export function calculateTip(
   subtotal: number,
   taxRatePct: number = 0,
@@ -150,56 +185,71 @@ export function calculateTip(
   const safeSubtotal = Math.max(0, subtotal);
   const safeTaxRate = Math.max(0, taxRatePct);
   const safeTipPct = Math.max(0, tipPct);
-  const safePartySize = Math.max(1, partySize);
+  const safePartySize = Math.max(1, Math.round(partySize));
 
   const country = COUNTRY_TIPPING_DATABASE.find((c) => c.code === countryCode) || COUNTRY_TIPPING_DATABASE[0];
 
-  const taxAmount = safeSubtotal * (safeTaxRate / 100);
+  const subtotalCents = Math.round(safeSubtotal * 100);
+  const taxCents = Math.round(subtotalCents * (safeTaxRate / 100));
 
-  // Tip calculation base
-  const tipBase = taxMode === "pre-tax" ? safeSubtotal : safeSubtotal + taxAmount;
-  const rawTipAmount = tipBase * (safeTipPct / 100);
-  const rawTotalAmount = safeSubtotal + taxAmount + rawTipAmount;
+  // Tip calculation base in cents
+  const tipBaseCents = taxMode === "pre-tax" ? subtotalCents : subtotalCents + taxCents;
+  const rawTipCents = Math.round(tipBaseCents * (safeTipPct / 100));
+  const rawTotalCents = subtotalCents + taxCents + rawTipCents;
 
-  let tipAmount = rawTipAmount;
-  let totalAmount = rawTotalAmount;
-  let roundingAdjustment = 0;
+  let tipCents = rawTipCents;
+  let totalCents = rawTotalCents;
+  let roundingAdjustmentCents = 0;
 
   if (roundingMode === "tip") {
-    tipAmount = Math.ceil(rawTipAmount);
-    totalAmount = safeSubtotal + taxAmount + tipAmount;
-    roundingAdjustment = tipAmount - rawTipAmount;
+    tipCents = Math.ceil(rawTipCents / 100) * 100;
+    totalCents = subtotalCents + taxCents + tipCents;
+    roundingAdjustmentCents = tipCents - rawTipCents;
   } else if (roundingMode === "total") {
-    totalAmount = Math.ceil(rawTotalAmount);
-    tipAmount = Math.max(0, totalAmount - (safeSubtotal + taxAmount));
-    roundingAdjustment = totalAmount - rawTotalAmount;
+    totalCents = Math.ceil(rawTotalCents / 100) * 100;
+    tipCents = Math.max(0, totalCents - (subtotalCents + taxCents));
+    roundingAdjustmentCents = totalCents - rawTotalCents;
   } else if (roundingMode === "person") {
-    const rawPerPerson = rawTotalAmount / safePartySize;
-    const roundedPerPerson = Math.ceil(rawPerPerson);
-    totalAmount = roundedPerPerson * safePartySize;
-    tipAmount = Math.max(0, totalAmount - (safeSubtotal + taxAmount));
-    roundingAdjustment = totalAmount - rawTotalAmount;
+    const rawPerPersonCents = rawTotalCents / safePartySize;
+    const roundedPerPersonCents = Math.ceil(rawPerPersonCents / 100) * 100;
+    totalCents = roundedPerPersonCents * safePartySize;
+    tipCents = Math.max(0, totalCents - (subtotalCents + taxCents));
+    roundingAdjustmentCents = totalCents - rawTotalCents;
   }
 
+  const baseShareCents = Math.floor(totalCents / safePartySize);
+  const remainderCents = totalCents % safePartySize;
+
+  // Deterministic Fair-Cent Allocation: first remainderCents diners receive +1 cent
+  const allocatedShares = Array.from({ length: safePartySize }, (_, i) => {
+    const cents = baseShareCents + (i < remainderCents ? 1 : 0);
+    return cents / 100;
+  });
+
+  const tipAmount = tipCents / 100;
+  const totalAmount = totalCents / 100;
+  const taxAmount = taxCents / 100;
   const tipPerPerson = tipAmount / safePartySize;
   const totalPerPerson = totalAmount / safePartySize;
 
   return {
-    subtotal: parseFloat(safeSubtotal.toFixed(2)),
-    taxAmount: parseFloat(taxAmount.toFixed(2)),
+    subtotal: subtotalCents / 100,
+    taxAmount: taxAmount,
     taxRatePct: safeTaxRate,
     tipPct: safeTipPct,
-    rawTipAmount: parseFloat(rawTipAmount.toFixed(2)),
-    tipAmount: parseFloat(tipAmount.toFixed(2)),
-    rawTotalAmount: parseFloat(rawTotalAmount.toFixed(2)),
-    totalAmount: parseFloat(totalAmount.toFixed(2)),
+    rawTipAmount: rawTipCents / 100,
+    tipAmount: tipAmount,
+    rawTotalAmount: rawTotalCents / 100,
+    totalAmount: totalAmount,
     partySize: safePartySize,
     tipPerPerson: parseFloat(tipPerPerson.toFixed(2)),
     totalPerPerson: parseFloat(totalPerPerson.toFixed(2)),
-    roundingAdjustment: parseFloat(roundingAdjustment.toFixed(2)),
+    roundingAdjustment: roundingAdjustmentCents / 100,
     taxMode,
     roundingMode,
     country,
+    allocatedShares,
+    isUnequalSplit: remainderCents > 0,
   };
 }
 
@@ -212,42 +262,61 @@ export function calculateItemizedTip(
 ): { diners: ItemizedDinerResult[]; overall: TipCalculationResult } {
   const activeDiners = diners.length > 0 ? diners : [{ id: "1", name: "Guest 1", items: [] }];
 
-  // Calculate individual subtotals
-  const dinerSubtotals = activeDiners.map((diner) => {
-    const sum = diner.items.reduce((acc, item) => acc + (Number(item.price) || 0), 0);
-    return sum;
+  // 1. Calculate diner subtotals in integer cents
+  const dinerSubtotalCents = activeDiners.map((diner) => {
+    const sumDollars = diner.items.reduce((acc, item) => acc + (Number(item.price) || 0), 0);
+    return Math.round(Math.max(0, sumDollars) * 100);
   });
 
-  const totalDinerSubtotal = dinerSubtotals.reduce((a, b) => a + b, 0);
-  const sharedPerPerson = sharedAppetizersTotal / activeDiners.length;
+  const totalDinerSubtotalCents = dinerSubtotalCents.reduce((a, b) => a + b, 0);
+  const sharedCentsTotal = Math.round(Math.max(0, sharedAppetizersTotal) * 100);
 
-  const totalSubtotal = totalDinerSubtotal + sharedAppetizersTotal;
+  // 2. Allocate shared items evenly with deterministic remainder cents
+  const baseSharedPerPersonCents = Math.floor(sharedCentsTotal / activeDiners.length);
+  const sharedRemainderCents = sharedCentsTotal % activeDiners.length;
+  const sharedPerDinerCents = activeDiners.map(
+    (_, idx) => baseSharedPerPersonCents + (idx < sharedRemainderCents ? 1 : 0)
+  );
 
+  // 3. Combined subtotal in cents
+  const totalSubtotalCents = totalDinerSubtotalCents + sharedCentsTotal;
+  const totalSubtotal = totalSubtotalCents / 100;
+
+  // 4. Calculate overall totals using integer cents engine
   const overall = calculateTip(totalSubtotal, taxRatePct, tipPct, activeDiners.length, taxMode, "none");
+  const overallTaxCents = Math.round(overall.taxAmount * 100);
+  const overallTipCents = Math.round(overall.tipAmount * 100);
 
-  // Proportional Tax and Tip distribution
+  // Diner base for proportional distribution (subtotal + allocated shared cents)
+  const dinerBaseCents = dinerSubtotalCents.map((sub, idx) => sub + sharedPerDinerCents[idx]);
+
+  // 5. Allocate Tax and Tip using Largest Remainder Method
+  const allocatedTaxCents = allocateCentsProportionally(overallTaxCents, dinerBaseCents);
+  const allocatedTipCents = allocateCentsProportionally(overallTipCents, dinerBaseCents);
+
+  // 6. Assemble diner results with exact cents
   const dinerResults: ItemizedDinerResult[] = activeDiners.map((diner, index) => {
-    const rawSub = dinerSubtotals[index];
-    const subWithShared = rawSub + sharedPerPerson;
-    const proportion = totalSubtotal > 0 ? subWithShared / totalSubtotal : 1 / activeDiners.length;
-
-    const dinerTax = overall.taxAmount * proportion;
-    const dinerTip = overall.tipAmount * proportion;
-    const dinerTotal = subWithShared + dinerTax + dinerTip;
+    const rawSub = dinerSubtotalCents[index] / 100;
+    const sharedShare = sharedPerDinerCents[index] / 100;
+    const taxShare = allocatedTaxCents[index] / 100;
+    const tipShare = allocatedTipCents[index] / 100;
+    const total = (dinerBaseCents[index] + allocatedTaxCents[index] + allocatedTipCents[index]) / 100;
 
     return {
       dinerId: diner.id,
       name: diner.name || `Guest ${index + 1}`,
-      subtotal: parseFloat(rawSub.toFixed(2)),
-      sharedAppetizerShare: parseFloat(sharedPerPerson.toFixed(2)),
-      taxShare: parseFloat(dinerTax.toFixed(2)),
-      tipShare: parseFloat(dinerTip.toFixed(2)),
-      total: parseFloat(dinerTotal.toFixed(2)),
+      subtotal: rawSub,
+      sharedAppetizerShare: sharedShare,
+      taxShare: taxShare,
+      tipShare: tipShare,
+      total: total,
     };
   });
 
   return { diners: dinerResults, overall };
 }
+
+
 
 export function calculateTipFromInputs(inputs: Record<string, any>): TipCalculationResult {
   const subtotal = Number(inputs.billAmount || inputs.subtotal) || 50;
