@@ -2,7 +2,8 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const sleep_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Sleep Calculator — Bedtimes, 90-Min Cycles & Power Naps",
-  description: "Free online sleep calculator. Calculate optimal bedtimes & wake-up times from 90-minute ultradian cycles, calibrate sleep latency, track sleep debt & test your chronotype.",
+  title: "Sleep Calculator – Bedtime, Wake Time, Sleep Debt & Nap Planner",
+  description: "Use a sleep calculator to plan bedtime and wake times, estimate sleep duration, track weekly sleep deficit, plan naps and explore a simple chronotype profile.",
   slug: "sleep-calculator",
 });
+
