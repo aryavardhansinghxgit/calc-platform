@@ -186,36 +186,235 @@ export function MolecularWeightCalculator() {
     });
   }, [mode, formula, isMonoisotopicMode, percentC, percentH, percentO, targetMolarMass, inputGrams]);
 
-  // Copy Spec Sheet to Clipboard
+  // Copy Spec Sheet to Clipboard (Fully Mode-Aware)
   const handleCopySpec = () => {
-    if (result && typeof navigator !== "undefined") {
-      const text = `Formula: ${result.formula}\nMolar Mass: ${result.totalMolarMass} g/mol\nMonoisotopic Mass: ${result.totalMonoisotopicMass} Da\nElements:\n${result.parsedElements
-        .map((el) => `• ${el.symbol} (${el.name}): ${el.count} atoms, ${el.massPercentage}%`)
-        .join("\n")}`;
-      navigator.clipboard.writeText(text);
-      setCopiedSpec(true);
-      setTimeout(() => setCopiedSpec(false), 2000);
+    if (!result || typeof navigator === "undefined") return;
+
+    let text = "";
+    if (mode === "formula") {
+      text = [
+        `============================================================`,
+        `MOLECULAR SPECIFICATION SHEET — CalcPlatform`,
+        `============================================================`,
+        `Chemical Formula: ${result.formula}`,
+        `Calculation Mode: Chemical Formula & Mass Analysis`,
+        `Selected Mass Standard: ${isMonoisotopicMode ? "Monoisotopic Mass (Exact Isotope)" : "Average Molar Mass (IUPAC CIAAW)"}`,
+        `Total Average Molar Mass: ${result.totalMolarMass} g/mol`,
+        `Total Monoisotopic Mass: ${result.totalMonoisotopicMass} Da`,
+        `Total Atom Count: ${result.totalAtomCount}`,
+        ``,
+        `ELEMENTAL COMPOSITION BREAKDOWN:`,
+        ...result.parsedElements.map(
+          (el) =>
+            `• ${el.symbol} (${el.name}): ${el.count} atoms | At. Weight: ${el.atomicWeight} g/mol | Sub-Mass: ${el.totalSubMass} g/mol (${el.massPercentage}%)`
+        ),
+      ].join("\n");
+    } else if (mode === "empirical_solver") {
+      const emp = result.empiricalResult;
+      text = [
+        `============================================================`,
+        `EMPIRICAL & MOLECULAR FORMULA SPEC SHEET — CalcPlatform`,
+        `============================================================`,
+        `Input Elemental Percentages:`,
+        `• Carbon (C): ${percentC}%`,
+        `• Hydrogen (H): ${percentH}%`,
+        `• Oxygen (O): ${percentO}%`,
+        `Target Molar Mass: ${targetMolarMass} g/mol`,
+        ``,
+        `SOLVED STOICHIOMETRIC RESULTS:`,
+        `• Empirical Formula: ${emp?.empiricalFormula || "N/A"} (${emp?.empiricalMass || 0} g/mol)`,
+        `• Integer Molecular Multiplier: ${emp?.multiplier || 1}x`,
+        `• Solved Molecular Formula: ${emp?.molecularFormula || "N/A"} (${emp?.molecularMass || 0} g/mol)`,
+        ...(result.parsedElements.length > 0
+          ? [
+              ``,
+              `MOLECULAR COMPOSITION BREAKDOWN:`,
+              ...result.parsedElements.map(
+                (el) =>
+                  `• ${el.symbol} (${el.name}): ${el.count} atoms | Mass: ${el.totalSubMass} g/mol (${el.massPercentage}%)`
+              ),
+            ]
+          : []),
+      ].join("\n");
+    } else if (mode === "mass_converter") {
+      const conv = result.converterResult;
+      text = [
+        `============================================================`,
+        `MOLE-MASS-MOLECULE CONVERSION SPEC SHEET — CalcPlatform`,
+        `============================================================`,
+        `Chemical Formula: ${result.formula}`,
+        `Molar Mass: ${result.totalMolarMass} g/mol`,
+        ``,
+        `SAMPLE CONVERSION RESULTS:`,
+        `• Sample Mass: ${conv?.grams ?? inputGrams} g (${conv?.milligrams ?? inputGrams * 1000} mg)`,
+        `• Moles: ${conv?.moles ?? 0} mol (${conv?.millimoles ?? 0} mmol)`,
+        `• Molecule Count: ${conv?.moleculesCount ?? "0"} molecules`,
+        `• Avogadro Constant: 6.02214076 × 10²³ mol⁻¹`,
+      ].join("\n");
     }
+
+    navigator.clipboard.writeText(text);
+    setCopiedSpec(true);
+    setTimeout(() => setCopiedSpec(false), 2000);
   };
 
-  // PDF Report Data
+  // PDF Report Data (Full Mode-Aware Specification Report)
   const reportData = useMemo(() => {
-    return generateGenericReportData(
-      molecular_weight_calculatorConfig,
+    const now = new Date();
+    const generatedDate = now.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+    const generatedTime = now.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const standardLabel = isMonoisotopicMode ? "Monoisotopic (MS Exact)" : "Average (IUPAC CIAAW)";
+
+    // Mode-specific sections
+    const sections: any[] = [
       {
-        mode,
-        formula: result.formula,
+        title: "CALCULATION PARAMETERS & STANDARDS",
+        items: [
+          {
+            label: "Active Calculation Mode",
+            value:
+              mode === "formula"
+                ? "Chemical Formula & Isotopic Mass"
+                : mode === "empirical_solver"
+                ? "Empirical ↔ Molecular Solver"
+                : "Moles ↔ Grams ↔ Molecules Converter",
+          },
+          { label: "Chemical Formula", value: result.formula || "N/A" },
+          { label: "Selected Mass Standard", value: standardLabel },
+          ...(mode === "mass_converter"
+            ? [
+                { label: "Sample Mass (g)", value: `${inputGrams} g` },
+                { label: "Sample Mass (mg)", value: `${inputGrams * 1000} mg` },
+              ]
+            : []),
+          ...(mode === "empirical_solver"
+            ? [
+                { label: "Carbon Mass % (C)", value: `${percentC}%` },
+                { label: "Hydrogen Mass % (H)", value: `${percentH}%` },
+                { label: "Oxygen Mass % (O)", value: `${percentO}%` },
+                { label: "Target Molecular Mass", value: `${targetMolarMass} g/mol` },
+              ]
+            : []),
+        ],
       },
       {
-        success: true,
-        data: {},
-        formatted: {
-          molarMass: `${result.totalMolarMass} g/mol`,
-          monoisotopicMass: `${result.totalMonoisotopicMass} Da`,
-        },
-      }
-    );
-  }, [mode, result]);
+        title: "CALCULATED MOLAR MASS RESULTS",
+        items: [
+          { label: "Total Average Molar Mass", value: `${result.totalMolarMass} g/mol`, highlight: true },
+          { label: "Total Monoisotopic Mass", value: `${result.totalMonoisotopicMass} Da` },
+          { label: "Total Atom Count", value: `${result.totalAtomCount} atoms` },
+        ],
+      },
+    ];
+
+    if (mode === "empirical_solver" && result.empiricalResult) {
+      sections.push({
+        title: "EMPIRICAL & MOLECULAR FORMULA DETERMINATION",
+        items: [
+          { label: "Empirical Formula", value: result.empiricalResult.empiricalFormula, highlight: true },
+          { label: "Empirical Formula Mass", value: `${result.empiricalResult.empiricalMass} g/mol` },
+          { label: "Integer Molecular Multiplier", value: `${result.empiricalResult.multiplier}x` },
+          { label: "Solved Molecular Formula", value: result.empiricalResult.molecularFormula, highlight: true },
+          { label: "Molecular Formula Mass", value: `${result.empiricalResult.molecularMass} g/mol` },
+        ],
+      });
+    }
+
+    if (mode === "mass_converter" && result.converterResult) {
+      sections.push({
+        title: "SAMPLE QUANTITY STOICHIOMETRIC CONVERSION",
+        items: [
+          { label: "Sample Mass", value: `${result.converterResult.grams} g (${result.converterResult.milligrams} mg)` },
+          { label: "Molar Quantity (Moles)", value: `${result.converterResult.moles} mol`, highlight: true },
+          { label: "Millimoles", value: `${result.converterResult.millimoles} mmol` },
+          { label: "Discrete Molecule Count", value: `${result.converterResult.moleculesCount} molecules`, highlight: true },
+          { label: "Avogadro's Constant", value: "6.02214076 × 10²³ mol⁻¹" },
+        ],
+      });
+    }
+
+    // Key metrics cards
+    const keyMetrics = [
+      {
+        label: "Total Average Molar Mass",
+        value: `${result.totalMolarMass} g/mol`,
+        colorTheme: "emerald" as const,
+      },
+      {
+        label: "Monoisotopic Mass",
+        value: `${result.totalMonoisotopicMass} Da`,
+        colorTheme: "purple" as const,
+      },
+      {
+        label: "Chemical Formula",
+        value: result.formula || "N/A",
+        colorTheme: "blue" as const,
+      },
+      {
+        label:
+          mode === "empirical_solver"
+            ? "Empirical Multiplier"
+            : mode === "mass_converter"
+            ? "Molar Quantity"
+            : "Total Atoms",
+        value:
+          mode === "empirical_solver"
+            ? `${result.empiricalResult?.multiplier || 1}x`
+            : mode === "mass_converter"
+            ? `${result.converterResult?.moles || 0} mol`
+            : `${result.totalAtomCount} atoms`,
+        colorTheme: "amber" as const,
+      },
+    ];
+
+    // Composition Breakdown Table for PDF
+    const table =
+      result.parsedElements && result.parsedElements.length > 0
+        ? {
+            title: "ELEMENTAL COMPOSITION & MASS FRACTION BREAKDOWN",
+            headers: [
+              { key: "symbol", label: "Element" },
+              { key: "atoms", label: "Atoms", align: "center" as const },
+              { key: "atWeight", label: "At. Weight (g/mol)", align: "right" as const },
+              { key: "subMass", label: "Mass Contrib (g/mol)", align: "right" as const },
+              { key: "pct", label: "Mass Fraction %", align: "right" as const },
+            ],
+            rows: result.parsedElements.map((el) => ({
+              symbol: `${el.symbol} (${el.name})`,
+              atoms: el.count,
+              atWeight: `${el.atomicWeight}`,
+              subMass: `${el.totalSubMass}`,
+              pct: `${el.massPercentage}%`,
+            })),
+            footerSummary: `Total Substance Mass: ${result.totalMolarMass} g/mol | Elemental Percentages Sum: 100.00%`,
+          }
+        : undefined;
+
+    return {
+      meta: {
+        calculatorName: "Molecular Weight Calculator (Molar Mass)",
+        reportTitle: "CHEMICAL FORMULA & MOLECULAR SPECIFICATION REPORT",
+        generatedDate,
+        generatedTime,
+      },
+      keyMetrics,
+      sections,
+      table,
+      notes: [
+        "Molar masses calculated according to standard atomic weights published by IUPAC Commission on Isotopic Abundances and Atomic Weights (CIAAW).",
+        "Monoisotopic masses calculated using the ground-state exact nuclear isotopic mass of the most abundant stable isotope for high-resolution mass spectrometry (HRMS).",
+        "Discrete molecule counts calculated using the exact SI definition of Avogadro's constant: 6.02214076 × 10²³ entities per mole.",
+      ],
+    };
+  }, [mode, result, isMonoisotopicMode, percentC, percentH, percentO, targetMolarMass, inputGrams]);
 
   return (
     <div className="space-y-6">
@@ -585,6 +784,7 @@ export function MolecularWeightCalculator() {
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
         data={reportData}
+        reportData={reportData}
       />
     </div>
   );

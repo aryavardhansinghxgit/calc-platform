@@ -1,3 +1,4 @@
+export {};
 async function testSSR() {
   console.log("=== RUNNING HEAT INDEX CALCULATOR SSR & SEO VERIFICATION ===");
   const url = "http://localhost:3000/calculators/heat-index-calculator";

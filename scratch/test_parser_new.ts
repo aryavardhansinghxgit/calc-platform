@@ -1,30 +1,14 @@
-import { PERIODIC_TABLE_ELEMENTS, ORGANIC_GROUP_ABBREVIATIONS } from "./periodic-table";
+import { PERIODIC_TABLE_ELEMENTS, ORGANIC_GROUP_ABBREVIATIONS } from "../src/app/calculators/molecular-weight-calculator/periodic-table";
 
-/**
- * Smart Auto-Casing Intelligence
- * Converts 'c6h12o6' => 'C6H12O6', 'nacl' => 'NaCl', 'h2so4' => 'H2SO4'
- * Disambiguates common gases like 'co2' => 'CO2'
- */
-export function autoCorrectFormulaCase(input: string): string {
+export function autoCorrectFormulaCaseNew(input: string): string {
   if (!input || typeof input !== "string") return "";
   let text = input.trim();
 
-  // Replace unambiguous organic group shorthands
-  text = text.replace(/\bMe\b/g, "(CH3)");
-  text = text.replace(/\bEt\b/g, "(C2H5)");
-  text = text.replace(/\bPh\b/g, "(C6H5)");
-  text = text.replace(/\bBn\b/g, "(C7H7)");
-  text = text.replace(/\bGly\b/g, "(C2H4NO2)");
-  text = text.replace(/\bAla\b/g, "(C3H6NO2)");
-
-  // Disambiguate Ac (Acetyl vs Actinium 89) and Ts (Tosyl vs Tennessine 117) in common organic reagents
-  text = text.replace(/\bAcOH\b/g, "(C2H3O)OH");
-  text = text.replace(/\bAc2O\b/g, "(C2H3O)2O");
-  text = text.replace(/\bAcCl\b/g, "(C2H3O)Cl");
-  text = text.replace(/\bEtOAc\b/g, "(C2H5)O(C2H3O)");
-  text = text.replace(/\bMeOAc\b/g, "(CH3)O(C2H3O)");
-  text = text.replace(/\bTsOH\b/g, "(C7H7SO2)OH");
-  text = text.replace(/\bTsCl\b/g, "(C7H7SO2)Cl");
+  // Replace organic group shorthands first
+  for (const [abbr, expansion] of Object.entries(ORGANIC_GROUP_ABBREVIATIONS)) {
+    const reg = new RegExp(`\\b${abbr}\\b`, "g");
+    text = text.replace(reg, `(${expansion})`);
+  }
 
   // If already contains uppercase letters, return normalized
   if (/[A-Z]/.test(text)) {
@@ -32,6 +16,7 @@ export function autoCorrectFormulaCase(input: string): string {
   }
 
   // Handle common lowercase gases / compounds priority
+  // Specifically: co2 -> CO2, no2 -> NO2, so2 -> SO2, so3 -> SO3, so4 -> SO4, etc.
   text = text.replace(/\bco2\b/g, "CO2");
   text = text.replace(/\bco3\b/g, "CO3");
   text = text.replace(/\bh2o\b/g, "H2O");
@@ -66,6 +51,7 @@ export function autoCorrectFormulaCase(input: string): string {
 
       // Disambiguate 'co' followed by digit or nonmetal -> C + O
       if (pair === "co" && i + 2 < text.length && /\d|[a-z]/.test(text[i + 2])) {
+        // e.g. co2 -> CO2, co(oh)2 -> CO(OH)2
         result += "CO";
         i += 2;
         continue;
@@ -89,11 +75,7 @@ export function autoCorrectFormulaCase(input: string): string {
   return result;
 }
 
-/**
- * Strict Chemical Formula Parser
- * Returns a map of Element Symbol -> Total Atom Count
- */
-export function parseChemicalFormula(rawInput: string): {
+export function parseChemicalFormulaNew(rawInput: string): {
   elementCounts: Record<string, number>;
   error?: string;
 } {
@@ -135,15 +117,16 @@ export function parseChemicalFormula(rawInput: string): {
       return { elementCounts: {}, error: `Unclosed opening bracket '${bracketStack[bracketStack.length - 1]}' in formula.` };
     }
 
-    // 2. Reject negative subscripts or characters like '-'
+    // 2. Reject negative numbers or symbols like '-'
     if (trimmed.includes("-")) {
       return { elementCounts: {}, error: "Negative subscripts are not permitted." };
     }
 
     // 3. Autocorrect casing safely
-    const corrected = autoCorrectFormulaCase(trimmed);
+    const corrected = autoCorrectFormulaCaseNew(trimmed);
 
     // 4. Split Hydrates (e.g. CuSO4*5H2O, CuSO4·5H2O, CuSO4.5H2O)
+    // A dot '.' is only a hydrate separator if followed by a hydrate number and formula like 5H2O or H2O
     let mainPart = corrected;
     let hydratePart = "";
 
@@ -163,7 +146,7 @@ export function parseChemicalFormula(rawInput: string): {
       }
     }
 
-    // If mainPart contains a dot (which was not a valid hydrate separator), it is an illegal decimal subscript
+    // If mainPart contains a dot (which was not a valid hydrate separator), it's an illegal decimal subscript
     if (mainPart.includes(".")) {
       return { elementCounts: {}, error: "Decimal or fractional subscripts (e.g. 2.5) are not permitted." };
     }
@@ -230,9 +213,6 @@ export function parseChemicalFormula(rawInput: string): {
   }
 }
 
-/**
- * Helper to recursively parse a single formula expression with parentheses and strict validation
- */
 function parseExpressionStrict(expr: string): { counts: Record<string, number>; error?: string } {
   const counts: Record<string, number> = {};
   let i = 0;
@@ -310,4 +290,62 @@ function parseExpressionStrict(expr: string): { counts: Record<string, number>; 
   }
 
   return { counts: result.groupCounts };
+}
+
+// Test cases
+console.log("--- Testing autoCorrectFormulaCaseNew ---");
+console.log("co2 ->", autoCorrectFormulaCaseNew("co2"));
+console.log("CO2 ->", autoCorrectFormulaCaseNew("CO2"));
+console.log("Co ->", autoCorrectFormulaCaseNew("Co"));
+console.log("c6h12o6 ->", autoCorrectFormulaCaseNew("c6h12o6"));
+
+console.log("\n--- Testing Invalid Cases ---");
+const invalidCases = [
+  "H2O)",
+  "(H2O",
+  "C6H12O6)",
+  "C6H12O6(",
+  "C0H2",
+  "H-2O",
+  "ABC",
+  "C6H12O6xyz",
+  "C(OH",
+  "Fe((SO4)3",
+  "H2.5O",
+  "C0",
+  "H0",
+  "C-1",
+  "O-2",
+  "Xx",
+  "Q",
+  "Zz",
+  "()",
+  "CuSO4..5H2O"
+];
+
+for (const c of invalidCases) {
+  const res = parseChemicalFormulaNew(c);
+  console.log(`Input: '${c}' -> Error: ${res.error ? "PASS (" + res.error + ")" : "FAIL (silently accepted: " + JSON.stringify(res.elementCounts) + ")"}`);
+}
+
+console.log("\n--- Testing Valid Cases ---");
+const validCases = [
+  "H2O",
+  "CO2",
+  "co2",
+  "NaCl",
+  "Ca(OH)2",
+  "Al2(SO4)3",
+  "(NH4)2SO4",
+  "K4[Fe(CN)6]",
+  "CuSO4*5H2O",
+  "CuSO4·5H2O",
+  "CuSO4.5H2O",
+  "ThO2",
+  "RaCl2"
+];
+
+for (const c of validCases) {
+  const res = parseChemicalFormulaNew(c);
+  console.log(`Input: '${c}' -> Result: ${res.error ? "FAIL (" + res.error + ")" : "PASS (" + JSON.stringify(res.elementCounts) + ")"}`);
 }

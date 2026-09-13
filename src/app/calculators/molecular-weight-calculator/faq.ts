@@ -2,53 +2,83 @@ import { CalculatorFAQ } from "@/calculators/types";
 
 export const molecular_weight_calculatorFaqs: CalculatorFAQ[] = [
   {
+    question: "What is a molecular weight calculator?",
+    answer:
+      "A molecular weight calculator determines the mass associated with a chemical formula by adding the atomic-mass contributions of all constituent atoms. In precise IUPAC terminology, relative molecular mass is dimensionless, while molar mass is expressed in units such as g/mol.",
+  },
+  {
+    question: "What is the molar mass of H₂O?",
+    answer:
+      "Using standard atomic-weight values, the molar mass of water is approximately 18.015 g/mol.",
+  },
+  {
+    question: "What is the molecular weight of NaCl?",
+    answer:
+      "Using the standard atomic-weight convention, sodium chloride has a molecular weight of approximately 58.443 and a corresponding molar mass of approximately 58.443 g/mol. NIST lists the molecular weight as 58.443.",
+  },
+  {
+    question: "What is the molar mass of C₆H₁₂O₆?",
+    answer:
+      "For glucose, C₆H₁₂O₆, the molar mass is approximately 180.156 g/mol. NIST lists its molecular weight as 180.1559.",
+  },
+  {
+    question: "How do I calculate molar mass from a chemical formula?",
+    answer:
+      "Multiply the number of atoms of each element by its atomic-weight value and add all contributions: M = Σ(Nᵢ × Aᵢ). For example, H₂O contains two hydrogen atoms and one oxygen atom.",
+  },
+  {
     question: "What is the difference between molecular weight and molar mass?",
     answer:
-      "Molecular weight (relative molecular mass, MW) is a dimensionless ratio or the mass of a single molecule expressed in unified atomic mass units (u or Da), whereas molar mass (M) is the mass of one mole (6.022 × 10²³ entities) of a substance expressed in grams per mole (g/mol). Both share the same numerical value.",
+      "Relative molecular mass is a dimensionless ratio, while molar mass is the mass per mole and is commonly expressed in g/mol. IUPAC lists 'molecular weight' as a synonym of relative molecular mass in its terminology.",
   },
   {
-    question: "How do you calculate the molecular weight of a chemical formula?",
+    question: "What is an empirical formula?",
     answer:
-      "To calculate molecular weight, multiply the standard atomic weight of each element by the number of atoms of that element in the chemical formula subscript, and sum all elemental masses together.",
+      "An empirical formula is the simplest whole-number ratio of elements in a compound. For example, the empirical formula of glucose C₆H₁₂O₆ is CH₂O.",
   },
   {
-    question: "What units are used for molecular weight and molar mass?",
+    question: "What is the difference between empirical and molecular formula?",
     answer:
-      "Molecular weight uses unified atomic mass units (u or amu) or Daltons (Da). Molar mass is expressed in grams per mole (g/mol) or kilograms per mole (kg/mol).",
+      "The empirical formula gives the simplest composition ratio, whereas the molecular formula gives the actual molecular composition for a compound consisting of discrete molecules.",
   },
   {
-    question: "How do you convert grams to moles using molar mass?",
+    question: "How do I find a molecular formula from an empirical formula?",
     answer:
-      "To convert mass in grams to moles, use the formula: Moles (n) = Mass in grams (m) / Molar Mass (M). For example, 18.015 grams of water (H2O, molar mass 18.015 g/mol) equals exactly 1.0 mole.",
+      "First calculate the empirical formula mass. Then divide the target molecular mass by the empirical formula mass: k = M_molecular / M_empirical. If k is a compatible positive integer within measurement/calculation tolerance, multiply every empirical subscript by k.",
   },
   {
-    question: "How do you account for hydrates (e.g., CuSO4·5H2O) in molar mass?",
+    question: "How do hydrates affect molar mass?",
     answer:
-      "The dot in a hydrate formula represents the addition of bound crystallization water molecules. Add the molar mass of all water molecules (5 × 18.015 g/mol = 90.075 g/mol) to the anhydrous salt molar mass (159.60 g/mol for CuSO4) to obtain the total hydrate formula weight (249.68 g/mol).",
+      "A hydrate includes water of crystallization in its formula. For example, CuSO₄·5H₂O has a greater formula mass than anhydrous CuSO₄ because five water molecules are included in the crystal lattice (adding 90.075 g/mol).",
   },
   {
-    question: "Why is chemical formula capitalization important in a calculator?",
+    question: "What is monoisotopic mass?",
     answer:
-      "Chemical formula capitalization is critical because uppercase letters denote new element symbols. For example, 'Co' is Cobalt (molar mass 58.93 g/mol), whereas 'CO' is Carbon Monoxide (molar mass 28.01 g/mol).",
+      "Monoisotopic mass is calculated using a specified single isotope of each constituent element rather than the abundance-weighted average used for ordinary elemental atomic-weight calculations. It is especially relevant to exact-mass and mass-spectrometry applications.",
   },
   {
-    question: "What is Avogadro's number and how does it relate to molar mass?",
+    question: "Why can my molecular-weight result differ slightly from another calculator?",
     answer:
-      "Avogadro's constant (6.02214076 × 10²³ mol⁻¹) represents the exact number of atoms, molecules, or ions contained in one mole of any chemical substance. One mole of any compound has a mass in grams equal to its formula weight.",
+      "Small differences can result from the atomic-weight dataset, the precision carried internally and the number of displayed decimal places. For example, NIST lists glucose at 180.1559, while a calculator displaying three decimal places will show approximately 180.156.",
   },
   {
-    question: "What is the difference between an empirical formula and a molecular formula?",
+    question: "How do I convert grams to moles?",
     answer:
-      "An empirical formula represents the simplest whole-number integer ratio of elements in a compound (e.g., CH2O for glucose), while a molecular formula represents the actual number of atoms of each element in a molecule (e.g., C6H12O6).",
+      "Use: n = m / M, where m is the mass in grams and M is the molar mass in g/mol.",
   },
   {
-    question: "Why do atomic weights on the periodic table have decimals?",
+    question: "How do I convert moles to molecules?",
     answer:
-      "Standard atomic weights on the periodic table contain decimals because they represent the terrestrial weighted average mass of all naturally occurring stable isotopes of an element based on their relative abundances.",
+      "Multiply the amount in moles by the Avogadro constant: N = n × N_A, where N_A = 6.02214076 × 10²³ mol⁻¹ exactly under the SI revision.",
   },
   {
-    question: "How do you calculate the mass percent of an individual element in a compound?",
+    question: "Why is chemical formula capitalization important?",
     answer:
-      "Calculate elemental mass percentage using the formula: Mass % = [(Total Mass of Element in 1 mole) / Total Molar Mass of Compound] × 100. For example, in H2O (18.015 g/mol), Oxygen contributes (15.999 / 18.015) × 100 = 88.81% of the total mass.",
+      "Element symbols are case-sensitive. CO₂ represents carbon dioxide, whereas Co₂ contains cobalt. A formula parser must therefore preserve or correctly resolve capitalization rather than treating the formula as ordinary case-insensitive text.",
+  },
+  {
+    question: "Can this calculator handle parentheses and hydrates?",
+    answer:
+      "Yes. The current implementation supports grouped formulas and several hydrate representations, and its validation suite includes compounds such as K₄[Fe(CN)₆], CuSO₄·5H₂O, Na₂CO₃·10H₂O and MgSO₄·7H₂O.",
   },
 ];
