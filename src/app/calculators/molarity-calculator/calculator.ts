@@ -127,10 +127,27 @@ export function solveStockDilution(
     resC2 = v2 > 0 ? (c1 * v1) / v2 : 0;
   }
 
+  // Physical domain validation: A standard dilution requires C2 <= C1 and positive quantities
+  let isInvalidDilution = false;
+  let validationWarning = "";
+
+  if (resC1 <= 0 || resC2 < 0 || resV1 < 0 || resV2 < 0) {
+    isInvalidDilution = true;
+    validationWarning = "Concentrations and volumes must be positive numerical values.";
+  } else if (resC2 > resC1) {
+    isInvalidDilution = true;
+    validationWarning = "Target concentration (C₂) cannot be greater than stock concentration (C₁) for a dilution. Dilution only decreases concentration.";
+  }
+
   const solventVolumeNeeded = Math.max(0, resV2 - resV1);
 
-  const pipetteProtocol =
-    `Pipette exactly ${formatScientificNumber(resV1, 2)} mL of stock solution (${formatScientificNumber(
+  let pipetteProtocol = "";
+  if (isInvalidDilution) {
+    pipetteProtocol = validationWarning;
+  } else if (resC1 === resC2) {
+    pipetteProtocol = `Stock concentration equals target concentration (${formatScientificNumber(resC1, 2)} M). No solvent dilution needed; dispense ${formatScientificNumber(resV2, 2)} mL directly.`;
+  } else {
+    pipetteProtocol = `Pipette exactly ${formatScientificNumber(resV1, 2)} mL of stock solution (${formatScientificNumber(
       resC1,
       2
     )} M), and dilute with ${formatScientificNumber(
@@ -140,6 +157,7 @@ export function solveStockDilution(
       resC2,
       2
     )} M).`;
+  }
 
   return {
     c1: resC1,
@@ -148,6 +166,8 @@ export function solveStockDilution(
     v2: resV2,
     solventVolumeNeeded,
     pipetteProtocol,
+    isInvalidDilution,
+    validationWarning,
   };
 }
 
@@ -210,19 +230,37 @@ export function calculateMolarityCalculator(inputs: Record<string, any>): Molari
 
     const dilRes = solveStockDilution(c1, v1, c2, v2, target);
 
+    const benchProtocol = dilRes.isInvalidDilution
+      ? [
+          "DILUTION VALIDATION ADVISORY:",
+          dilRes.validationWarning || "Invalid dilution parameters.",
+          "Target concentration (C₂) cannot exceed stock concentration (C₁) in a dilution.",
+          "To achieve a higher concentration, use a more concentrated stock or dissolve solid solute directly.",
+        ]
+      : dilRes.c1 === dilRes.c2
+      ? [
+          "LABORATORY STOCK DILUTION PROTOCOL (C1V1 = C2V2):",
+          `1. Stock concentration equals target concentration (${formatScientificNumber(dilRes.c1, 2)} M).`,
+          `2. Dispense exactly ${formatScientificNumber(dilRes.v2, 2)} mL of stock solution directly into container.`,
+          `3. No solvent dilution required.`,
+        ]
+      : [
+          "LABORATORY STOCK DILUTION PROTOCOL (C1V1 = C2V2):",
+          `1. Measure exactly ${formatScientificNumber(dilRes.v1, 2)} mL of concentrated stock solution (${formatScientificNumber(
+            dilRes.c1,
+            2
+          )} M).`,
+          `2. Transfer into a ${formatScientificNumber(dilRes.v2, 2)} mL volumetric flask.`,
+          `3. Add ${formatScientificNumber(dilRes.solventVolumeNeeded, 2)} mL of solvent (deionized water).`,
+          `4. Invert 10 times to mix thoroughly.`,
+        ];
+
     return {
       mode,
       dilutionResult: dilRes,
-      benchProtocol: [
-        "LABORATORY STOCK DILUTION PROTOCOL (C1V1 = C2V2):",
-        `1. Measure exactly ${formatScientificNumber(dilRes.v1, 2)} mL of concentrated stock solution (${formatScientificNumber(
-          dilRes.c1,
-          2
-        )} M).`,
-        `2. Transfer into a ${formatScientificNumber(dilRes.v2, 2)} mL volumetric flask.`,
-        `3. Add ${formatScientificNumber(dilRes.solventVolumeNeeded, 2)} mL of solvent (deionized water).`,
-        `4. Invert 10 times to mix thoroughly.`,
-      ],
+      benchProtocol,
+      isInvalid: dilRes.isInvalidDilution,
+      warningMessage: dilRes.validationWarning,
     };
   }
 

@@ -16,6 +16,8 @@ export interface DilutionResult {
   v2: number;
   solventVolumeNeeded: number; // V2 - V1
   pipetteProtocol: string;
+  isInvalidDilution?: boolean;
+  validationWarning?: string;
 }
 
 export interface MassPercentResult {
@@ -44,4 +46,7 @@ export interface MolarityCalculatorOutputs {
   massPercentResult?: MassPercentResult;
   ppmResult?: PPMResult;
   benchProtocol: string[];
+  isInvalid?: boolean;
+  warningMessage?: string;
 }
+
