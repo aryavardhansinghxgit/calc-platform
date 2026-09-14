@@ -1,5 +1,7 @@
 export type StandardPolyhedralDie = "d4" | "d6" | "d8" | "d10" | "d12" | "d20" | "d100";
 
+export type DiceRng = (min: number, max: number) => number;
+
 export interface SingleDieResult {
   dieType: string;
   sides: number;
@@ -9,6 +11,7 @@ export interface SingleDieResult {
   isCriticalSuccess: boolean;
   isCriticalFumble: boolean;
   isExploded?: boolean;
+  explodedRolls?: number[];
   isRerolled?: boolean;
 }
 
@@ -43,9 +46,10 @@ export interface RollHistoryEntry {
 
 export interface ProbabilityPoint {
   value: number;
-  probability: number; // 0 to 1
-  percent: number; // 0 to 100
-  cumulative: number; // 0 to 100
+  rawProbability: number; // exact unrounded 0 to 1
+  probability: number; // rounded for display e.g. 0.0278
+  percent: number; // e.g. 2.78
+  cumulative: number; // cumulative e.g. 100.00
 }
 
 export interface DiceProbabilityStats {
@@ -56,4 +60,26 @@ export interface DiceProbabilityStats {
   stdDev: number;
   median: number;
   pmf: ProbabilityPoint[];
+  rawSum: number;
+  isSimulated?: boolean;
+}
+
+export interface DiceTerm {
+  count: number;
+  sides: number;
+  keepHighest?: number;
+  keepLowest?: number;
+  dropHighest?: number;
+  dropLowest?: number;
+  exploding?: boolean;
+  rerollBelow?: number;
+  targetSuccess?: number;
+  sign: number; // 1 or -1
+}
+
+export interface ParsedDiceExpression {
+  terms: DiceTerm[];
+  constantModifier: number;
+  isValid: boolean;
+  error?: string;
 }

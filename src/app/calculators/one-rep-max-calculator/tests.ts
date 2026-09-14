@@ -9,25 +9,34 @@ export function runOneRepMaxCalculatorTests() {
   if (!res1 || typeof res1 !== "object") throw new Error("Formula failed for default inputs");
 
   const zeroInputs = {
-  "weightLiftedKg": 0,
-  "reps": 0
-};
+    "weightLiftedKg": 0,
+    "reps": 0
+  };
   const res2 = calculateOneRepMaxCalculator(zeroInputs);
-  if (!res2) throw new Error("Formula failed for zero inputs");
+  if (!res2 || res2.epley1RM !== 0) throw new Error("Formula failed for zero inputs");
 
   const negInputs = {
-  "weightLiftedKg": -50,
-  "reps": -50
-};
+    "weightLiftedKg": -50,
+    "reps": -50
+  };
   const res3 = calculateOneRepMaxCalculator(negInputs);
-  if (!res3) throw new Error("Formula failed for negative inputs");
+  if (!res3 || res3.epley1RM !== 0) throw new Error("Formula failed for negative inputs");
 
   const nanInputs = {
-  "weightLiftedKg": null,
-  "reps": null
-};
+    "weightLiftedKg": null,
+    "reps": null
+  };
   const res4 = calculateOneRepMaxCalculator(nanInputs);
-  if (!res4) throw new Error("Formula failed for NaN inputs");
+  if (!res4 || res4.epley1RM !== 0) throw new Error("Formula failed for NaN inputs");
+
+  const oneRepInputs = {
+    "weightLiftedKg": 100,
+    "reps": 1
+  };
+  const res5 = calculateOneRepMaxCalculator(oneRepInputs);
+  if (!res5 || res5.epley1RM !== 100 || res5.brzycki1RM !== 100) {
+    throw new Error("Formula failed for 1 rep direct test");
+  }
 
   return true;
 }

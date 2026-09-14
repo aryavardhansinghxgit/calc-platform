@@ -10,10 +10,10 @@ interface OneRepMaxChartsProps {
 // 1. One Rep Max Radial Arch Gauge
 export function OneRepMaxGauge({ result }: OneRepMaxChartsProps) {
   const weight = result.weightLifted;
-  const max = result.consensusOneRepMax;
+  const max = result.consensusOneRepMax || 1;
 
   // Gauge percent based on lifted vs 1RM (range 50% to 100%)
-  const ratio = Math.max(0.5, Math.min(1.0, weight / max));
+  const ratio = max > 0 ? Math.max(0.5, Math.min(1.0, weight / max)) : 0.5;
   const percent = (ratio - 0.5) / 0.5;
   const angle = -120 + percent * 240;
 
@@ -34,8 +34,17 @@ export function OneRepMaxGauge({ result }: OneRepMaxChartsProps) {
 
   return (
     <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-      <div className="relative w-64 h-40 flex items-center justify-center">
-        <svg viewBox="0 0 200 140" className="w-full h-full">
+      <div
+        role="meter"
+        aria-label="Estimated One Rep Max Gauge"
+        aria-valuenow={result.consensusOneRepMax}
+        aria-valuemin={0}
+        aria-valuemax={Math.round(result.consensusOneRepMax * 1.5) || 300}
+        aria-valuetext={`Estimated One Rep Max: ${result.consensusOneRepMax} ${result.unitLabel}`}
+        tabIndex={0}
+        className="relative w-64 h-40 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-xl"
+      >
+        <svg viewBox="0 0 200 140" className="w-full h-full" aria-hidden="true">
           {/* Background track */}
           <path
             d={describeArc(100, 110, 80, -120, 120)}
@@ -68,7 +77,7 @@ export function OneRepMaxGauge({ result }: OneRepMaxChartsProps) {
         </svg>
 
         {/* Center overlay readout */}
-        <div className="absolute bottom-0 flex flex-col items-center bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md px-4 py-1.5 rounded-xl border border-zinc-200/90 dark:border-zinc-800 shadow-md">
+        <div className="absolute bottom-0 flex flex-col items-center bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md px-4 py-1.5 rounded-xl border border-zinc-200/90 dark:border-zinc-800 shadow-md pointer-events-none">
           <span className="text-2xl sm:text-3xl font-black text-purple-600 dark:text-purple-400 tracking-tight leading-none">
             {result.consensusOneRepMax} {result.unitLabel.toUpperCase()}
           </span>
@@ -96,7 +105,7 @@ export function OneRepMaxGauge({ result }: OneRepMaxChartsProps) {
 export function FormulaComparisonBarChart({ result }: OneRepMaxChartsProps) {
   if (!result.formulaResults || result.formulaResults.length === 0) return null;
 
-  const maxVal = Math.max(...result.formulaResults.map((f) => f.oneRepMax)) * 1.15;
+  const maxVal = Math.max(...result.formulaResults.map((f) => f.oneRepMax), 1) * 1.15;
 
   return (
     <div className="w-full space-y-3 p-4 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
@@ -110,7 +119,7 @@ export function FormulaComparisonBarChart({ result }: OneRepMaxChartsProps) {
 
       <div className="space-y-2 pt-1 text-xs">
         {result.formulaResults.map((f, idx) => {
-          const pct = (f.oneRepMax / maxVal) * 100;
+          const pct = maxVal > 0 ? (f.oneRepMax / maxVal) * 100 : 0;
           return (
             <div key={idx} className="space-y-1">
               <div className="flex justify-between items-center text-[11px]">

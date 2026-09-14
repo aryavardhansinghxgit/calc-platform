@@ -9,15 +9,7 @@ interface TargetHeartRateTablesProps {
 }
 
 export function TargetHeartRateTables({ result }: TargetHeartRateTablesProps) {
-  const borg620Matrix = [
-    { rating: 6, intensity: "No exertion at all", pct: "40%", bpm: Math.round(result.rhr + 0.0 * result.hrr) },
-    { rating: 9, intensity: "Very light (Easy walking)", pct: "55%", bpm: Math.round(result.rhr + 0.21 * result.hrr) },
-    { rating: 11, intensity: "Light (Brisk walking)", pct: "65%", bpm: Math.round(result.rhr + 0.35 * result.hrr) },
-    { rating: 13, intensity: "Somewhat hard (Moderate jog)", pct: "75%", bpm: Math.round(result.rhr + 0.50 * result.hrr) },
-    { rating: 15, intensity: "Hard (Heavy aerobic effort)", pct: "85%", bpm: Math.round(result.rhr + 0.64 * result.hrr) },
-    { rating: 17, intensity: "Very hard (Interval sprint)", pct: "92%", bpm: Math.round(result.rhr + 0.78 * result.hrr) },
-    { rating: 20, intensity: "Maximal exertion (Exhaustion)", pct: "100%", bpm: result.calculatedMhr },
-  ];
+  if (!result.isValid) return null;
 
   return (
     <div className="space-y-8 mt-8">
@@ -70,12 +62,12 @@ export function TargetHeartRateTables({ result }: TargetHeartRateTablesProps) {
               <tr>
                 <th className="py-2.5 px-3 font-sans tabular-nums text-purple-700 dark:text-purple-400">Borg Rating (6-20)</th>
                 <th className="py-2.5 px-3">Subjective Exertion Level</th>
-                <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">% HRR Equivalent</th>
+                <th className="py-2.5 px-3 font-sans tabular-nums text-emerald-700 dark:text-emerald-400">% HRR Intensity</th>
                 <th className="py-2.5 px-3 font-sans tabular-nums text-blue-700 dark:text-blue-400">Calculated Target BPM</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800/60 text-zinc-700 dark:text-zinc-300">
-              {borg620Matrix.map((row, idx) => (
+              {result.borgTable.map((row, idx) => (
                 <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="py-2 px-3 font-sans tabular-nums font-bold text-purple-700 dark:text-purple-400">Rating {row.rating}</td>
                   <td className="py-2 px-3 font-bold text-zinc-900 dark:text-zinc-100">{row.intensity}</td>

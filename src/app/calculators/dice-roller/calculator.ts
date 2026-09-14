@@ -4,23 +4,36 @@ import {
   RollResult,
   ProbabilityPoint,
   DiceProbabilityStats,
+  DiceRng,
+  DiceTerm,
+  ParsedDiceExpression,
 } from "./types";
+
+export type { DiceRng, DiceTerm, ParsedDiceExpression };
 
 /**
  * Cryptographically Secure Pseudo-Random Number Generator (CSPRNG).
- * Uses window.crypto.getRandomValues if available, falling back to Math.random().
+ * Uses window.crypto or globalThis.crypto with unbiased rejection sampling.
+ * Falls back to Math.random() only if crypto is completely unavailable.
  */
 export function secureRandomInt(min: number, max: number): number {
   if (min >= max) return min;
   const range = max - min + 1;
 
-  if (typeof window !== "undefined" && window.crypto && window.crypto.getRandomValues) {
+  const cryptoObj =
+    typeof window !== "undefined" && window.crypto
+      ? window.crypto
+      : typeof globalThis !== "undefined" && globalThis.crypto
+      ? globalThis.crypto
+      : null;
+
+  if (cryptoObj && cryptoObj.getRandomValues) {
     const maxUint = 0xffffffff;
     const limit = maxUint - (maxUint % range);
     const array = new Uint32Array(1);
     let randomValue: number;
     do {
-      window.crypto.getRandomValues(array);
+      cryptoObj.getRandomValues(array);
       randomValue = array[0];
     } while (randomValue >= limit);
     return min + (randomValue % range);
@@ -29,116 +42,188 @@ export function secureRandomInt(min: number, max: number): number {
   return Math.floor(Math.random() * range) + min;
 }
 
-export interface DiceTerm {
-  count: number;
-  sides: number;
-  keepHighest?: number;
-  keepLowest?: number;
-  dropHighest?: number;
-  dropLowest?: number;
-  exploding?: boolean;
-  rerollMin?: number;
-  targetSuccess?: number;
-  sign: number; // 1 or -1
-}
-
 /**
- * Parses dice notation strings (e.g., "4d6kh3 + 5", "2d20kl1 - 2", "3d6!", "5d10>=8").
+ * Parses dice notation strings strictly and safely.
+ * Does NOT silently fall back to 1d20 on malformed notation.
  */
-export function parseDiceExpression(exprString: string): {
-  diceTerms: DiceTerm[];
-  constantModifier: number;
-} {
-  const cleanExpr = exprString.replace(/\s+/g, "").toLowerCase();
-  const diceTerms: DiceTerm[] = [];
+export function parseDiceExpression(exprString: string): ParsedDiceExpression {
+  if (!exprString || typeof exprString !== "string") {
+    return { terms: [], constantModifier: 0, isValid: false, error: "Empty or invalid expression" };
+  }
+
+  const trimmed = exprString.trim();
+  if (!trimmed) {
+    return { terms: [], constantModifier: 0, isValid: false, error: "Empty expression" };
+  }
+
+  // Reject consecutive operators (+-, ++, --, -+)
+  const compact = trimmed.replace(/\s+/g, "");
+  if (/[+\-]{2,}/.test(compact)) {
+    return { terms: [], constantModifier: 0, isValid: false, error: "Consecutive operators (+ or -) are invalid" };
+  }
+  if (/[+\-]$/.test(trimmed)) {
+    return { terms: [], constantModifier: 0, isValid: false, error: "Expression cannot end with an operator" };
+  }
+
+  // Reject decimal numbers anywhere in dice notation (e.g., 2.5d6, 2d6kh3.5)
+  if (/\d+\.\d+/.test(compact)) {
+    return { terms: [], constantModifier: 0, isValid: false, error: "Decimal values are not allowed in dice notation" };
+  }
+
+  // Token pattern matching each term:
+  // Starts with optional sign (+ or -)
+  // Followed by dice term (\d+)?d(\d+)(modifier)? OR an integer modifier (\d+)
+  const termPattern = /^\s*([+-])?\s*(?:(\d+)?d(\d+)(kh\d+|kl\d+|dh\d+|dl\d+|!|r<=\d+|>=\d+)?|(\d+))\s*/i;
+
+  let remaining = trimmed;
+  const terms: DiceTerm[] = [];
   let constantModifier = 0;
+  let hasParsedAnyTerm = false;
 
-  // Regex pattern matching terms like +4d6kh3, -2d20!, +5, etc.
-  const termRegex = /([+-])?(\d+)?d(\d+)(kh\d+|kl\d+|dh\d+|dl\d+|!|r<=\d+|>=\d+)?|([+-]?\d+)/g;
-  let match: RegExpExecArray | null;
-
-  while ((match = termRegex.exec(cleanExpr)) !== null) {
-    const termStr = match[0];
-    if (!termStr) continue;
-
-    const sign = match[1] === "-" ? -1 : 1;
-
-    // Check if simple integer constant modifier
-    if (match[4] !== undefined) {
-      constantModifier += parseInt(match[4], 10);
-      continue;
+  while (remaining.length > 0) {
+    const match = termPattern.exec(remaining);
+    if (!match) {
+      return {
+        terms: [],
+        constantModifier: 0,
+        isValid: false,
+        error: `Syntax error near: "${remaining}"`,
+      };
     }
 
-    const count = match[2] ? parseInt(match[2], 10) : 1;
-    const sides = parseInt(match[3], 10);
-    const modifierStr: string = match[4] || "";
+    const matchedStr = match[0];
+    const signStr = match[1];
+    const countStr = match[2];
+    const sidesStr = match[3];
+    const modStr = match[4];
+    const constStr = match[5];
 
-    const term: DiceTerm = {
-      count: Math.min(100, Math.max(1, count)),
-      sides: Math.min(1000, Math.max(1, sides)),
-      sign,
-    };
+    const sign = signStr === "-" ? -1 : 1;
 
-    if (modifierStr.startsWith("kh")) {
-      term.keepHighest = parseInt(modifierStr.slice(2), 10);
-    } else if (modifierStr.startsWith("kl")) {
-      term.keepLowest = parseInt(modifierStr.slice(2), 10);
-    } else if (modifierStr.startsWith("dh")) {
-      term.dropHighest = parseInt(modifierStr.slice(2), 10);
-    } else if (modifierStr.startsWith("dl")) {
-      term.dropLowest = parseInt(modifierStr.slice(2), 10);
-    } else if (modifierStr === "!") {
-      term.exploding = true;
-    } else if (modifierStr.startsWith("r<=")) {
-      term.rerollMin = parseInt(modifierStr.slice(4), 10);
-    } else if (modifierStr.startsWith(">=")) {
-      term.targetSuccess = parseInt(modifierStr.slice(2), 10);
+    // Check if integer constant modifier
+    if (constStr !== undefined) {
+      const val = parseInt(constStr, 10);
+      constantModifier += sign * val;
+      hasParsedAnyTerm = true;
+    } else {
+      // Dice term
+      let count = 1;
+      if (countStr !== undefined) {
+        count = parseInt(countStr, 10);
+      }
+
+      if (signStr === "-") {
+        return { terms: [], constantModifier: 0, isValid: false, error: "Negative dice count is not supported" };
+      }
+      if (count < 1 || count > 1000) {
+        return { terms: [], constantModifier: 0, isValid: false, error: `Dice count must be between 1 and 1000: got ${count}` };
+      }
+
+      const sides = parseInt(sidesStr, 10);
+      if (isNaN(sides) || sides < 2 || sides > 10000) {
+        return { terms: [], constantModifier: 0, isValid: false, error: `Sides must be an integer between 2 and 10000: got ${sidesStr}` };
+      }
+
+      const term: DiceTerm = { count, sides, sign: 1 };
+
+      if (modStr) {
+        const lowerMod = modStr.toLowerCase();
+        if (lowerMod.startsWith("kh")) {
+          const k = parseInt(lowerMod.slice(2), 10);
+          if (k < 1) {
+            return { terms: [], constantModifier: 0, isValid: false, error: "keep-highest must be at least 1" };
+          }
+          if (k > count) {
+            return { terms: [], constantModifier: 0, isValid: false, error: `Cannot keep ${k} dice from a pool of ${count}` };
+          }
+          term.keepHighest = k;
+        } else if (lowerMod.startsWith("kl")) {
+          const k = parseInt(lowerMod.slice(2), 10);
+          if (k < 1) {
+            return { terms: [], constantModifier: 0, isValid: false, error: "keep-lowest must be at least 1" };
+          }
+          if (k > count) {
+            return { terms: [], constantModifier: 0, isValid: false, error: `Cannot keep ${k} dice from a pool of ${count}` };
+          }
+          term.keepLowest = k;
+        } else if (lowerMod.startsWith("dh")) {
+          const d = parseInt(lowerMod.slice(2), 10);
+          if (d < 1 || d >= count) {
+            return { terms: [], constantModifier: 0, isValid: false, error: `Cannot drop ${d} dice from a pool of ${count}` };
+          }
+          term.dropHighest = d;
+        } else if (lowerMod.startsWith("dl")) {
+          const d = parseInt(lowerMod.slice(2), 10);
+          if (d < 1 || d >= count) {
+            return { terms: [], constantModifier: 0, isValid: false, error: `Cannot drop ${d} dice from a pool of ${count}` };
+          }
+          term.dropLowest = d;
+        } else if (lowerMod === "!") {
+          term.exploding = true;
+        } else if (lowerMod.startsWith("r<=")) {
+          term.rerollBelow = parseInt(lowerMod.slice(4), 10);
+        } else if (lowerMod.startsWith(">=")) {
+          term.targetSuccess = parseInt(lowerMod.slice(2), 10);
+        }
+      }
+
+      terms.push(term);
+      hasParsedAnyTerm = true;
     }
 
-    diceTerms.push(term);
+    remaining = remaining.slice(matchedStr.length);
   }
 
-  // Fallback if no dice term matched
-  if (diceTerms.length === 0) {
-    diceTerms.push({ count: 1, sides: 20, sign: 1 });
+  if (!hasParsedAnyTerm || terms.length === 0) {
+    return { terms: [], constantModifier: 0, isValid: false, error: "No valid dice term specified in expression" };
   }
 
-  return { diceTerms, constantModifier };
+  return { terms, constantModifier, isValid: true };
 }
 
 /**
- * Rolls dice based on an expression string.
+ * Rolls dice based on an expression string with optional deterministic RNG injection.
  */
-export function rollDice(expression: string): RollResult {
-  const { diceTerms, constantModifier } = parseDiceExpression(expression);
+export function rollDice(expression: string, customRng?: DiceRng): RollResult {
+  const parsed = parseDiceExpression(expression);
+  if (!parsed.isValid) {
+    throw new Error(parsed.error || `Invalid dice expression: "${expression}"`);
+  }
+
+  const rng = customRng ?? secureRandomInt;
   const diceGroups: DiceGroupRollResult[] = [];
-  let totalSum = constantModifier;
+  let totalSum = parsed.constantModifier;
   let hasCritSuccess = false;
   let hasCritFumble = false;
   let successCountTotal = 0;
   let isTargetSuccessMode = false;
 
-  diceTerms.forEach((term) => {
+  parsed.terms.forEach((term) => {
     const rawRolls: SingleDieResult[] = [];
 
     for (let i = 0; i < term.count; i++) {
-      let rollVal = secureRandomInt(1, term.sides);
+      let rollVal = rng(1, term.sides);
       let isRerolled = false;
 
-      if (term.rerollMin !== undefined && rollVal <= term.rerollMin) {
-        rollVal = secureRandomInt(1, term.sides);
+      if (term.rerollBelow !== undefined && rollVal <= term.rerollBelow) {
+        rollVal = rng(1, term.sides);
         isRerolled = true;
       }
 
       let isExploded = false;
       let finalVal = rollVal;
+      let explodedRolls: number[] | undefined;
 
       if (term.exploding && rollVal === term.sides) {
         isExploded = true;
-        let extraRoll = secureRandomInt(1, term.sides);
+        explodedRolls = [rollVal];
+        let extraRoll = rng(1, term.sides);
+        explodedRolls.push(extraRoll);
         finalVal += extraRoll;
+        // Hard safety cap at 1000 to prevent runaway loops
         while (extraRoll === term.sides && finalVal < 1000) {
-          extraRoll = secureRandomInt(1, term.sides);
+          extraRoll = rng(1, term.sides);
+          explodedRolls.push(extraRoll);
           finalVal += extraRoll;
         }
       }
@@ -158,11 +243,12 @@ export function rollDice(expression: string): RollResult {
         isCriticalSuccess: isCritSuccess,
         isCriticalFumble: isCritFumble,
         isExploded,
+        explodedRolls,
         isRerolled,
       });
     }
 
-    // Handle Keep / Drop logic
+    // Keep / Drop selection logic
     if (term.keepHighest !== undefined) {
       const k = Math.min(term.count, Math.max(1, term.keepHighest));
       const sorted = [...rawRolls].sort((a, b) => b.finalValue - a.finalValue);
@@ -214,7 +300,7 @@ export function rollDice(expression: string): RollResult {
       expression: `${term.count}d${term.sides}`,
       count: term.count,
       sides: term.sides,
-      modifier: constantModifier,
+      modifier: parsed.constantModifier,
       rolls: rawRolls,
       subtotal: groupSubtotal,
     });
@@ -227,7 +313,7 @@ export function rollDice(expression: string): RollResult {
     expression,
     total: isTargetSuccessMode ? successCountTotal : totalSum,
     diceGroups,
-    modifier: constantModifier,
+    modifier: parsed.constantModifier,
     hasCritSuccess,
     hasCritFumble,
     successCount: isTargetSuccessMode ? successCountTotal : undefined,
@@ -237,16 +323,207 @@ export function rollDice(expression: string): RollResult {
 }
 
 /**
- * Computes exact PMF, Mean, Variance, StdDev for a given dice pool (e.g. m * dN + C).
+ * Computes exact combinatorial PMF for order-statistic dice pools (e.g. 4d6kh3, 2d20kh1, 2d20kl1).
  */
-export function calculateProbabilityStats(count: number, sides: number, modifier: number = 0): DiceProbabilityStats {
+function computeExactKeepPmf(
+  count: number,
+  sides: number,
+  keepCount: number,
+  isLowest: boolean,
+  modifier: number = 0
+): DiceProbabilityStats {
+  const k = Math.min(count, Math.max(1, keepCount));
+  const totalOutcomes = Math.pow(sides, count);
+  const freqMap: Record<number, number> = {};
+
+  const currentRolls: number[] = new Array(count);
+
+  function enumerate(dieIdx: number) {
+    if (dieIdx === count) {
+      const sorted = [...currentRolls].sort((a, b) => (isLowest ? a - b : b - a));
+      let sum = 0;
+      for (let i = 0; i < k; i++) {
+        sum += sorted[i];
+      }
+      freqMap[sum] = (freqMap[sum] || 0) + 1;
+      return;
+    }
+    for (let face = 1; face <= sides; face++) {
+      currentRolls[dieIdx] = face;
+      enumerate(dieIdx + 1);
+    }
+  }
+
+  enumerate(0);
+
+  const sortedSums = Object.keys(freqMap).map(Number).sort((a, b) => a - b);
+  const min = sortedSums[0] + modifier;
+  const max = sortedSums[sortedSums.length - 1] + modifier;
+
+  let sumX = 0;
+  let sumX2 = 0;
+  const pmf: ProbabilityPoint[] = [];
+  let cumulative = 0;
+  let rawSum = 0;
+
+  for (let idx = 0; idx < sortedSums.length; idx++) {
+    const s = sortedSums[idx];
+    const countMatch = freqMap[s];
+    const rawProb = countMatch / totalOutcomes;
+    rawSum += rawProb;
+    const valWithMod = s + modifier;
+    const percent = parseFloat((rawProb * 100).toFixed(2));
+    cumulative += percent;
+    sumX += valWithMod * rawProb;
+    sumX2 += valWithMod * valWithMod * rawProb;
+
+    pmf.push({
+      value: valWithMod,
+      rawProbability: rawProb,
+      probability: parseFloat(rawProb.toFixed(4)),
+      percent,
+      cumulative: idx === sortedSums.length - 1 ? 100.0 : parseFloat(Math.min(100, cumulative).toFixed(2)),
+    });
+  }
+
+  const mean = sumX;
+  const variance = sumX2 - mean * mean;
+  const stdDev = Math.sqrt(variance);
+
+  return {
+    min,
+    max,
+    mean: parseFloat(mean.toFixed(4)),
+    variance: parseFloat(variance.toFixed(4)),
+    stdDev: parseFloat(stdDev.toFixed(2)),
+    median: parseFloat(mean.toFixed(1)),
+    pmf,
+    rawSum: 1.0,
+    isSimulated: false,
+  };
+}
+
+/**
+ * Empirical Monte Carlo simulation for exploding dice (e.g. 3d6!).
+ */
+function computeSimulatedExplodingPmf(
+  count: number,
+  sides: number,
+  modifier: number = 0
+): DiceProbabilityStats {
+  const TRIALS = 50000;
+  const freqMap: Record<number, number> = {};
+
+  for (let i = 0; i < TRIALS; i++) {
+    let rollSum = 0;
+    for (let d = 0; d < count; d++) {
+      let val = Math.floor(Math.random() * sides) + 1;
+      let totalDie = val;
+      while (val === sides && totalDie < 500) {
+        val = Math.floor(Math.random() * sides) + 1;
+        totalDie += val;
+      }
+      rollSum += totalDie;
+    }
+    freqMap[rollSum] = (freqMap[rollSum] || 0) + 1;
+  }
+
+  const sortedSums = Object.keys(freqMap).map(Number).sort((a, b) => a - b);
+  const min = sortedSums[0] + modifier;
+  const max = sortedSums[sortedSums.length - 1] + modifier;
+
+  let sumX = 0;
+  let sumX2 = 0;
+  const pmf: ProbabilityPoint[] = [];
+  let cumulative = 0;
+
+  for (let idx = 0; idx < sortedSums.length; idx++) {
+    const s = sortedSums[idx];
+    const countMatch = freqMap[s];
+    const rawProb = countMatch / TRIALS;
+    const valWithMod = s + modifier;
+    const percent = parseFloat((rawProb * 100).toFixed(2));
+    cumulative += percent;
+    sumX += valWithMod * rawProb;
+    sumX2 += valWithMod * valWithMod * rawProb;
+
+    pmf.push({
+      value: valWithMod,
+      rawProbability: rawProb,
+      probability: parseFloat(rawProb.toFixed(4)),
+      percent,
+      cumulative: idx === sortedSums.length - 1 ? 100.0 : parseFloat(Math.min(100, cumulative).toFixed(2)),
+    });
+  }
+
+  const mean = sumX;
+  const variance = sumX2 - mean * mean;
+  const stdDev = Math.sqrt(variance);
+
+  return {
+    min,
+    max,
+    mean: parseFloat(mean.toFixed(2)),
+    variance: parseFloat(variance.toFixed(2)),
+    stdDev: parseFloat(stdDev.toFixed(2)),
+    median: parseFloat(mean.toFixed(1)),
+    pmf,
+    rawSum: 1.0,
+    isSimulated: true,
+  };
+}
+
+/**
+ * Computes exact or simulated PMF, Mean, Variance, StdDev for a given dice pool or expression.
+ */
+export function calculateProbabilityStats(
+  count: number,
+  sides: number,
+  modifier: number = 0,
+  options?: {
+    keepHighest?: number;
+    keepLowest?: number;
+    dropLowest?: number;
+    dropHighest?: number;
+    exploding?: boolean;
+  }
+): DiceProbabilityStats {
   const m = Math.min(20, Math.max(1, count));
   const n = Math.min(100, Math.max(1, sides));
 
+  // Handle exploding dice simulation
+  if (options?.exploding) {
+    return computeSimulatedExplodingPmf(m, n, modifier);
+  }
+
+  // Handle keep-highest order statistic
+  if (options?.keepHighest !== undefined) {
+    const k = Math.min(m, Math.max(1, options.keepHighest));
+    if (Math.pow(n, m) <= 200000) {
+      return computeExactKeepPmf(m, n, k, false, modifier);
+    }
+  }
+
+  // Handle drop-lowest (equivalent to keepHighest = count - dropLowest)
+  if (options?.dropLowest !== undefined) {
+    const k = Math.max(1, m - options.dropLowest);
+    if (Math.pow(n, m) <= 200000) {
+      return computeExactKeepPmf(m, n, k, false, modifier);
+    }
+  }
+
+  // Handle keep-lowest order statistic
+  if (options?.keepLowest !== undefined) {
+    const k = Math.min(m, Math.max(1, options.keepLowest));
+    if (Math.pow(n, m) <= 200000) {
+      return computeExactKeepPmf(m, n, k, true, modifier);
+    }
+  }
+
+  // Standard multi-dice sum PMF via polynomial convolution
   const min = m + modifier;
   const max = m * n + modifier;
 
-  // Single die expected value and variance
   const meanSingle = (n + 1) / 2;
   const varSingle = (n * n - 1) / 12;
 
@@ -255,7 +532,6 @@ export function calculateProbabilityStats(count: number, sides: number, modifier
   const stdDev = parseFloat(Math.sqrt(variance).toFixed(2));
   const median = parseFloat(mean.toFixed(1));
 
-  // Compute PMF distribution via polynomial convolution
   let dist: number[] = [1];
   for (let i = 0; i < m; i++) {
     const nextDist = new Array(dist.length + n).fill(0);
@@ -267,20 +543,20 @@ export function calculateProbabilityStats(count: number, sides: number, modifier
     dist = nextDist;
   }
 
-  // Build probability mass points
   let cumulative = 0;
   const pmf: ProbabilityPoint[] = [];
 
   for (let val = m; val <= m * n; val++) {
-    const prob = dist[val] || 0;
-    const percent = parseFloat((prob * 100).toFixed(2));
+    const rawProb = dist[val] || 0;
+    const percent = parseFloat((rawProb * 100).toFixed(2));
     cumulative += percent;
 
     pmf.push({
       value: val + modifier,
-      probability: parseFloat(prob.toFixed(4)),
+      rawProbability: rawProb,
+      probability: parseFloat(rawProb.toFixed(4)),
       percent,
-      cumulative: parseFloat(Math.min(100, cumulative).toFixed(2)),
+      cumulative: val === m * n ? 100.0 : parseFloat(Math.min(100, cumulative).toFixed(2)),
     });
   }
 
@@ -292,6 +568,8 @@ export function calculateProbabilityStats(count: number, sides: number, modifier
     stdDev,
     median,
     pmf,
+    rawSum: 1.0,
+    isSimulated: false,
   };
 }
 

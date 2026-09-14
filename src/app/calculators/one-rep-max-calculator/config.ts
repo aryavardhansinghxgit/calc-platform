@@ -13,7 +13,7 @@ export const one_rep_max_calculatorConfig: CalculatorModuleDefinition = {
   featured: true,
   keywords: ["one rep max","1rm","bench press","squat","deadlift","weightlifting"],
   priority: 1,
-  relatedCalculators: ["target-heart-rate-calculator","calories-burned-calculator"],
+  relatedCalculators: ["target-heart-rate-calculator", "calories-burned-calculator", "body-fat-calculator", "percentage-calculator"],
   formulaDescription: "Epley 1RM = Weight × (1 + Reps/30)",
   faqs: one_rep_max_calculatorFaqs,
   inputs: [

@@ -8,13 +8,13 @@ export const target_heart_rate_calculatorConfig: CalculatorModuleDefinition = {
   slug: "target-heart-rate-calculator",
   category: "Health",
   subcategory: "Fitness",
-  description: "Determine heart rate zones (moderate, vigorous, peak) for cardio training using Karvonen formula.",
+  description: "Calculate your target heart rate, heart rate reserve and training zones using the Karvonen formula, % of maximum heart rate, and multiple maximum-heart-rate equations.",
   iconName: "HeartPulse",
   featured: true,
-  keywords: ["target heart rate","heart rate zones","cardio","max heart rate","pulse"],
+  keywords: ["target heart rate", "heart rate zones", "Karvonen formula", "max heart rate", "pulse", "HRR", "Tanaka formula", "Borg RPE"],
   priority: 1,
-  relatedCalculators: ["pace-calculator","calories-burned-calculator"],
-  formulaDescription: "Max HR = 208 - (0.7 × Age); Target HR = Resting HR + (HRR × Intensity)",
+  relatedCalculators: ["pace-calculator", "calories-burned-calculator", "body-fat-calculator"],
+  formulaDescription: "Karvonen THR = RHR + Intensity × (MHR - RHR); Standard THR = MHR × Intensity",
   faqs: target_heart_rate_calculatorFaqs,
   inputs: [
   {

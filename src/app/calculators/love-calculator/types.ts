@@ -16,6 +16,8 @@ export type ZodiacElement = "fire" | "earth" | "air" | "water";
 
 export type FLAMESOutcome = "Friends" | "Lovers" | "Affection" | "Marriage" | "Enemies" | "Siblings";
 
+export type LoveEngineMode = "name" | "zodiac" | "birthday" | "flames" | "ultimate";
+
 export interface DimensionalChemistry {
   passion: number;
   communication: number;

@@ -22,7 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import ReportModal from "@/components/report/ReportModal";
-import { generateGenericReportData } from "@/lib/report-generator/generic-report";
+import { CalculatorReportData } from "@/components/report/types";
 import { dice_rollerConfig } from "@/app/calculators/dice-roller/config";
 import {
   rollDice,
@@ -212,6 +212,7 @@ export function DiceRollerCalculator() {
   const [isRolling, setIsRolling] = useState<boolean>(false);
   const [animatedFaceValues, setAnimatedFaceValues] = useState<number[]>([4, 6, 5, 2]);
   const [rollHistory, setRollHistory] = useState<RollHistoryEntry[]>([]);
+  const [formulaError, setFormulaError] = useState<string | null>(null);
 
   // UI States
   const [copied, setCopied] = useState<boolean>(false);
@@ -225,27 +226,36 @@ export function DiceRollerCalculator() {
       if (simpleModifier > 0) expr += ` + ${simpleModifier}`;
       if (simpleModifier < 0) expr += ` - ${Math.abs(simpleModifier)}`;
       setFormulaInput(expr);
+      setFormulaError(null);
     }
   }, [simpleDiceCount, simpleDiceSides, simpleModifier, activeTab]);
 
   // Perform initial roll on mount
   useEffect(() => {
-    const initialRes = rollDice("2d6");
-    setCurrentResult(initialRes);
-    setRollHistory([
-      {
-        id: "1",
-        expression: "2d6",
-        total: initialRes.total,
-        timestamp: initialRes.timestamp,
-        summary: initialRes.diceGroups.map((g) => g.rolls.map((r) => r.finalValue).join(", ")).join(" | "),
-      },
-    ]);
+    try {
+      const initialRes = rollDice("2d6");
+      setCurrentResult(initialRes);
+      setRollHistory([
+        {
+          id: "1",
+          expression: "2d6",
+          total: initialRes.total,
+          timestamp: initialRes.timestamp,
+          summary: initialRes.diceGroups.map((g) => g.rolls.map((r) => r.finalValue).join(", ")).join(" | "),
+        },
+      ]);
+    } catch (e) {}
   }, []);
 
   // Handle Roll Action with Smooth Rolling Animation
   const handleRoll = (exprToRoll?: string) => {
     const targetExpr = exprToRoll || formulaInput || "1d20";
+    const parsed = parseDiceExpression(targetExpr);
+    if (!parsed.isValid) {
+      setFormulaError(parsed.error || "Invalid dice expression syntax");
+      return;
+    }
+    setFormulaError(null);
     setIsRolling(true);
 
     // Rapid numbers flickering animation interval
@@ -261,26 +271,31 @@ export function DiceRollerCalculator() {
 
       if (tickCount >= 10) {
         clearInterval(animInterval);
-        const res = rollDice(targetExpr);
-        setCurrentResult(res);
-        setIsRolling(false);
+        try {
+          const res = rollDice(targetExpr);
+          setCurrentResult(res);
+          setIsRolling(false);
 
-        // Update active animated faces from settled result
-        const settledVals = res.diceGroups.flatMap((g) => g.rolls.map((r) => r.finalValue));
-        setAnimatedFaceValues(settledVals.length > 0 ? settledVals : [res.total]);
+          // Update active animated faces from settled result
+          const settledVals = res.diceGroups.flatMap((g) => g.rolls.map((r) => r.finalValue));
+          setAnimatedFaceValues(settledVals.length > 0 ? settledVals : [res.total]);
 
-        // Add to session history
-        const newEntry: RollHistoryEntry = {
-          id: Date.now().toString(),
-          expression: targetExpr,
-          total: res.total,
-          timestamp: res.timestamp,
-          summary: res.diceGroups
-            .map((g) => g.rolls.map((r) => (r.isKept ? `${r.finalValue}` : `[${r.finalValue}]`)).join(", "))
-            .join(" | "),
-        };
+          // Add to session history
+          const newEntry: RollHistoryEntry = {
+            id: Date.now().toString(),
+            expression: targetExpr,
+            total: res.total,
+            timestamp: res.timestamp,
+            summary: res.diceGroups
+              .map((g) => g.rolls.map((r) => (r.isKept ? `${r.finalValue}` : `[${r.finalValue}]`)).join(", "))
+              .join(" | "),
+          };
 
-        setRollHistory((prev) => [newEntry, ...prev.slice(0, 19)]);
+          setRollHistory((prev) => [newEntry, ...prev.slice(0, 19)]);
+        } catch (err: any) {
+          setIsRolling(false);
+          setFormulaError(err.message || "Failed to evaluate dice roll");
+        }
       }
     }, 50);
   };
@@ -288,6 +303,7 @@ export function DiceRollerCalculator() {
   // Preset Handlers
   const applyPreset = (expr: string) => {
     setFormulaInput(expr);
+    setFormulaError(null);
     handleRoll(expr);
   };
 
@@ -298,52 +314,162 @@ export function DiceRollerCalculator() {
       if (!trimmed) return `1${dieLabel}`;
       return `${trimmed} + 1${dieLabel}`;
     });
+    setFormulaError(null);
   };
 
   // Live Probability Analysis for current formula
   const probabilityAnalysis = useMemo(() => {
     try {
-      const { diceTerms, constantModifier } = parseDiceExpression(formulaInput || "1d20");
-      if (diceTerms.length === 1) {
-        return calculateProbabilityStats(diceTerms[0].count, diceTerms[0].sides, constantModifier);
+      const parsed = parseDiceExpression(formulaInput || "1d20");
+      if (parsed.isValid && parsed.terms.length > 0) {
+        const t = parsed.terms[0];
+        return calculateProbabilityStats(t.count, t.sides, parsed.constantModifier, {
+          keepHighest: t.keepHighest,
+          keepLowest: t.keepLowest,
+          dropLowest: t.dropLowest,
+          dropHighest: t.dropHighest,
+          exploding: t.exploding,
+        });
       }
-      return calculateProbabilityStats(diceTerms[0].count, diceTerms[0].sides, constantModifier);
+      return calculateProbabilityStats(simpleDiceCount, simpleDiceSides, simpleModifier);
     } catch (e) {
-      return calculateProbabilityStats(1, 20, 0);
+      return calculateProbabilityStats(2, 6, 0);
     }
-  }, [formulaInput]);
+  }, [formulaInput, simpleDiceCount, simpleDiceSides, simpleModifier]);
 
   // Copy Roll Log
   const handleCopyLog = () => {
     if (!currentResult) return;
-    const logStr = `Roll: ${currentResult.expression} => TOTAL: ${currentResult.total}\nDetails: ${currentResult.diceGroups
-      .map((g) => `${g.expression}: [${g.rolls.map((r) => r.finalValue).join(", ")}]`)
-      .join("; ")}`;
+    const allRolls = currentResult.diceGroups.flatMap((g) => g.rolls);
+    const kept = allRolls.filter((r) => r.isKept).map((r) => r.finalValue);
+    const dropped = allRolls.filter((r) => !r.isKept).map((r) => r.finalValue);
+
+    let logStr = `Roll: ${currentResult.expression} => TOTAL: ${currentResult.total}\nRolls: ${allRolls.map((r) => r.finalValue).join(", ")}`;
+    if (dropped.length > 0) {
+      logStr += `\nKept: ${kept.join(", ")}; Dropped: ${dropped.join(", ")}`;
+    }
+    if (currentResult.modifier !== 0) {
+      logStr += `\nModifier: ${currentResult.modifier > 0 ? `+${currentResult.modifier}` : currentResult.modifier}`;
+    }
     navigator.clipboard.writeText(logStr);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // PDF Report Data
-  const reportData = useMemo(() => {
-    return generateGenericReportData(
-      dice_rollerConfig,
-      {
-        diceCount: simpleDiceCount,
-        diceSides: simpleDiceSides,
-        modifier: simpleModifier,
+  // PDF Report Data reflecting exact current live roll state
+  const reportData = useMemo<CalculatorReportData | undefined>(() => {
+    if (!currentResult) return undefined;
+
+    const allRolls = currentResult.diceGroups.flatMap((g) => g.rolls);
+    const keptRolls = allRolls.filter((r) => r.isKept).map((r) => r.finalValue);
+    const droppedRolls = allRolls.filter((r) => !r.isKept).map((r) => r.finalValue);
+    const allRollValues = allRolls.map((r) => r.finalValue);
+
+    const now = new Date();
+    const generatedDate = now.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+    const generatedTime = currentResult.timestamp || now.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const keyMetrics = [
+      { label: "Expression", value: currentResult.expression },
+      { label: "Roll Total", value: `${currentResult.total}` },
+      { label: "Mean (μ)", value: `${probabilityAnalysis.mean}` },
+      { label: "Range (Min–Max)", value: `${probabilityAnalysis.min} – ${probabilityAnalysis.max}` },
+    ];
+
+    const rollDetailsItems = [
+      { label: "Total Dice Sum", value: `${currentResult.total}`, highlight: true },
+      { label: "Individual Rolls", value: allRollValues.join(", ") },
+    ];
+
+    if (currentResult.modifier !== 0) {
+      rollDetailsItems.push({
+        label: "Applied Modifier",
+        value: currentResult.modifier > 0 ? `+${currentResult.modifier}` : `${currentResult.modifier}`,
+      });
+    }
+
+    if (keptRolls.length > 0 && droppedRolls.length > 0) {
+      rollDetailsItems.push(
+        { label: "Kept Dice", value: keptRolls.join(", ") },
+        { label: "Dropped Dice", value: droppedRolls.join(", ") }
+      );
+    }
+
+    const explodingRolls = allRolls.filter((r) => r.isExploded);
+    if (explodingRolls.length > 0) {
+      rollDetailsItems.push({
+        label: "Exploded Roll Sequence",
+        value: explodingRolls.map((r) => `${r.rawRoll} -> ${r.finalValue}`).join("; "),
+      });
+    }
+
+    return {
+      meta: {
+        calculatorName: "Dice Roller & TTRPG Probability Engine",
+        reportTitle: "DICE ROLLER & TTRPG AUDIT REPORT",
+        generatedDate,
+        generatedTime,
       },
-      {
-        success: true,
-        data: {},
-        formatted: {
-          mean: `${probabilityAnalysis.mean}`,
-          minMax: `${probabilityAnalysis.min} – ${probabilityAnalysis.max}`,
-          stdDev: `${probabilityAnalysis.stdDev}`,
+      keyMetrics,
+      sections: [
+        {
+          title: "LIVE ROLL EXECUTION STATE",
+          items: rollDetailsItems,
         },
-      }
-    );
-  }, [simpleDiceCount, simpleDiceSides, simpleModifier, probabilityAnalysis]);
+        {
+          title: "FORMULA SPECIFICATIONS",
+          items: [
+            { label: "Expression", value: currentResult.expression },
+            { label: "Active Mode", value: activeTab === "simple" ? "Simple Quick Roller" : "Advanced TTRPG Formula" },
+            { label: "Modifier", value: currentResult.modifier > 0 ? `+${currentResult.modifier}` : `${currentResult.modifier}` },
+          ],
+        },
+        {
+          title: "THEORETICAL PROBABILITY MASS METRICS",
+          items: [
+            { label: "Expected Average (Mean)", value: `${probabilityAnalysis.mean}` },
+            { label: "Variance (σ²)", value: `${probabilityAnalysis.variance}` },
+            { label: "Standard Deviation (σ)", value: `${probabilityAnalysis.stdDev}` },
+            { label: "Distribution Model", value: probabilityAnalysis.isSimulated ? "Simulated Probability (Monte Carlo)" : "Exact PMF" },
+          ],
+        },
+      ],
+      table: {
+        title: "INDIVIDUAL DICE ROLL BREAKDOWN",
+        headers: [
+          { key: "die", label: "Die Type", align: "left" },
+          { key: "raw", label: "Raw Roll", align: "center" },
+          { key: "final", label: "Final Value", align: "center" },
+          { key: "status", label: "Status", align: "right" },
+        ],
+        rows: allRolls.map((r) => ({
+          die: r.dieType,
+          raw: r.rawRoll,
+          final: r.finalValue,
+          status: !r.isKept
+            ? "Dropped"
+            : r.isCriticalSuccess
+            ? "Crit Success"
+            : r.isCriticalFumble
+            ? "Crit Fumble"
+            : r.isExploded
+            ? "Exploded"
+            : "Kept",
+        })),
+      },
+      notes: [
+        "Cryptographically secure randomness generated via Web Crypto API (rejection sampling).",
+        "Order-statistic combinatorics verified via exact enumeration and polynomial generating functions.",
+      ],
+    };
+  }, [currentResult, probabilityAnalysis, activeTab]);
 
   return (
     <div className="space-y-6">
@@ -364,9 +490,12 @@ export function DiceRollerCalculator() {
         </div>
 
         {/* CSPRNG Security Badge */}
-        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-bold">
+        <div
+          title="Uses the browser's Web Crypto secure random source when available."
+          className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-bold"
+        >
           <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" />
-          <span>CSPRNG Hardware Random</span>
+          <span>Cryptographically Secure Randomness</span>
         </div>
       </div>
 
@@ -521,7 +650,10 @@ export function DiceRollerCalculator() {
                 </div>
 
                 <button
-                  onClick={() => setFormulaInput("1d20")}
+                  onClick={() => {
+                    setFormulaInput("1d20");
+                    setFormulaError(null);
+                  }}
                   className="text-[10px] text-slate-500 hover:text-slate-700 dark:text-zinc-400 dark:hover:text-zinc-200 flex items-center gap-1 font-bold cursor-pointer"
                 >
                   <RotateCcw className="h-3 w-3" /> Reset Formula
@@ -542,10 +674,20 @@ export function DiceRollerCalculator() {
                   id="advanced-formula-input-box"
                   type="text"
                   value={formulaInput}
-                  onChange={(e) => setFormulaInput(e.target.value)}
+                  onChange={(e) => {
+                    setFormulaInput(e.target.value);
+                    setFormulaError(null);
+                  }}
                   placeholder="e.g. 4d6kh3 + 5, 2d20kh1, 3d6!"
-                  className="h-11 text-base font-sans tabular-nums font-bold bg-slate-50 dark:bg-zinc-800 border-slate-300 dark:border-zinc-700 text-purple-700 dark:text-purple-300"
+                  className={`h-11 text-base font-sans tabular-nums font-bold bg-slate-50 dark:bg-zinc-800 border-slate-300 dark:border-zinc-700 text-purple-700 dark:text-purple-300 ${
+                    formulaError ? "border-rose-500 ring-1 ring-rose-500" : ""
+                  }`}
                 />
+                {formulaError && (
+                  <p className="text-xs font-semibold text-rose-600 dark:text-rose-400 mt-1">
+                    {formulaError}
+                  </p>
+                )}
               </div>
 
               {/* QUICK DIE TAP ATTACH BUTTONS */}

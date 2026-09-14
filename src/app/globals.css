@@ -304,6 +304,15 @@ details[open] > summary::before {
     page-break-after: avoid !important;
   }
 
+  /* 10. Compact FAQ cards and natural flow to eliminate orphan blank areas */
+  .space-y-3 > div,
+  .space-y-4 > div {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-bottom: 0.35rem !important;
+    padding: 0.5rem 0.75rem !important;
+  }
+
   @page {
     size: A4 portrait;
     margin: 10mm;

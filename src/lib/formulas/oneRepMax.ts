@@ -23,6 +23,8 @@ export interface RepMaxBreakdownItem {
 }
 
 export interface OneRepMaxResult {
+  isValid: boolean;
+  errorMessage?: string;
   exerciseName: string;
   weightLifted: number;
   repsPerformed: number;
@@ -40,11 +42,24 @@ export interface OneRepMaxResult {
   }>;
 }
 
+const REP_PCT_MAP = [
+  { reps: 1, pct: 1.0, zone: "Maximal Strength", use: "1RM Competition Peak" },
+  { reps: 2, pct: 0.95, zone: "Maximal Strength", use: "Heavy Strength / Triples Prep" },
+  { reps: 3, pct: 0.93, zone: "Maximal Strength", use: "Heavy Strength Triples" },
+  { reps: 4, pct: 0.90, zone: "Strength & Power", use: "Strength Building 4s" },
+  { reps: 5, pct: 0.87, zone: "Strength & Power", use: "Classic 5x5 Strength Base" },
+  { reps: 6, pct: 0.85, zone: "Hypertrophy", use: "Heavy Hypertrophy" },
+  { reps: 7, pct: 0.83, zone: "Hypertrophy", use: "Muscle Mass Building" },
+  { reps: 8, pct: 0.80, zone: "Hypertrophy", use: "Classic 8-Rep Hypertrophy" },
+  { reps: 9, pct: 0.77, zone: "Hypertrophy", use: "Moderate Hypertrophy" },
+  { reps: 10, pct: 0.75, zone: "Hypertrophy / Endurance", use: "10-Rep Hypertrophy / Volume" },
+  { reps: 11, pct: 0.73, zone: "Endurance", use: "High-Volume Metabolic Stress" },
+  { reps: 12, pct: 0.70, zone: "Endurance", use: "Muscular Endurance & Pump" },
+];
+
 export function calculateOneRepMax(input: OneRepMaxInput): OneRepMaxResult {
-  const unitSystem = input.unitSystem;
+  const unitSystem = input.unitSystem || "imperial";
   const unitLabel = unitSystem === "imperial" ? "lbs" : "kg";
-  const weight = Math.max(1, Number(input.weightLifted) || 100);
-  const reps = Math.max(1, Math.min(15, Math.round(Number(input.reps) || 5)));
 
   let exerciseName = "Custom Movement";
   if (input.exercise === "bench") exerciseName = "Bench Press";
@@ -52,52 +67,112 @@ export function calculateOneRepMax(input: OneRepMaxInput): OneRepMaxResult {
   else if (input.exercise === "deadlift") exerciseName = "Deadlift";
   else if (input.exercise === "press") exerciseName = "Overhead Press";
 
+  const rawW = Number(input.weightLifted);
+  const rawR = Number(input.reps);
+
+  // 1. Strict validation: Guard against NaN, Infinity, negative, zero, or out-of-range
+  if (!Number.isFinite(rawW) || rawW <= 0) {
+    return {
+      isValid: false,
+      errorMessage: "Please enter a valid weight lifted greater than 0.",
+      exerciseName,
+      weightLifted: 0,
+      repsPerformed: 0,
+      consensusOneRepMax: 0,
+      unitSystem,
+      unitLabel,
+      formulaResults: [],
+      repBreakdown: [],
+      trainingZones: [],
+    };
+  }
+
+  if (!Number.isFinite(rawR) || rawR < 1 || rawR > 15) {
+    return {
+      isValid: false,
+      errorMessage: "Repetitions must be between 1 and 15 for accurate estimation.",
+      exerciseName,
+      weightLifted: rawW,
+      repsPerformed: 0,
+      consensusOneRepMax: 0,
+      unitSystem,
+      unitLabel,
+      formulaResults: [],
+      repBreakdown: [],
+      trainingZones: [],
+    };
+  }
+
+  const weight = rawW;
+  const reps = Math.round(rawR);
+
+  // 2. Direct 1-Repetition Maximum Lift (reps === 1)
+  // In sports science, lifting a load for 1 repetition to maximum IS a measured 1RM.
+  // We keep all 7 formula slots populated and structurally stable.
   if (reps === 1) {
-    // 1 Rep performed equals 1RM
-    const singleRes: FormulaResult[] = [
-      { formulaName: "Direct Measurement", oneRepMax: weight, description: "Direct single repetition maximum" }
-    ];
-    const repPctMap = [
-      { reps: 1, pct: 1.0, zone: "Maximal Strength", use: "1RM Competition Peak" },
-      { reps: 2, pct: 0.95, zone: "Maximal Strength", use: "Heavy Strength / Triples Prep" },
-      { reps: 3, pct: 0.93, zone: "Maximal Strength", use: "Heavy Strength Triples" },
-      { reps: 4, pct: 0.90, zone: "Strength & Power", use: "Strength Building 4s" },
-      { reps: 5, pct: 0.87, zone: "Strength & Power", use: "Classic 5x5 Strength Base" },
-      { reps: 6, pct: 0.85, zone: "Hypertrophy", use: "Heavy Hypertrophy" },
-      { reps: 7, pct: 0.83, zone: "Hypertrophy", use: "Muscle Mass Building" },
-      { reps: 8, pct: 0.80, zone: "Hypertrophy", use: "Classic 8-Rep Hypertrophy" },
-      { reps: 9, pct: 0.77, zone: "Hypertrophy", use: "Moderate Hypertrophy" },
-      { reps: 10, pct: 0.75, zone: "Hypertrophy / Endurance", use: "10-Rep Hypertrophy / Volume" },
-      { reps: 11, pct: 0.73, zone: "Endurance", use: "High-Volume Metabolic Stress" },
-      { reps: 12, pct: 0.70, zone: "Endurance", use: "Muscular Endurance & Pump" },
+    const formattedW = parseFloat(weight.toFixed(1));
+    const formulaResults: FormulaResult[] = [
+      { formulaName: "Epley Formula (1985)", oneRepMax: formattedW, description: "Direct 1RM measurement (100% single rep lift)" },
+      { formulaName: "Brzycki Formula (1993)", oneRepMax: formattedW, description: "Direct 1RM measurement (100% single rep lift)" },
+      { formulaName: "Lombardi Formula (1989)", oneRepMax: formattedW, description: "Direct 1RM measurement (100% single rep lift)" },
+      { formulaName: "Mayhew et al. (1992)", oneRepMax: formattedW, description: "Direct 1RM measurement (100% single rep lift)" },
+      { formulaName: "O'Conner et al. (1989)", oneRepMax: formattedW, description: "Direct 1RM measurement (100% single rep lift)" },
+      { formulaName: "Wathan Formula (1994)", oneRepMax: formattedW, description: "Direct 1RM measurement (100% single rep lift)" },
+      { formulaName: "Lander Formula (1985)", oneRepMax: formattedW, description: "Direct 1RM measurement (100% single rep lift)" },
     ];
 
-    const repBreakdown = repPctMap.map((item) => ({
+    const repBreakdown = REP_PCT_MAP.map((item) => ({
       reps: item.reps,
       percentage: Math.round(item.pct * 100),
-      weight: parseFloat((weight * item.pct).toFixed(1)),
+      weight: parseFloat((formattedW * item.pct).toFixed(1)),
       intensityZone: item.zone,
       recommendedUse: item.use,
     }));
 
     return {
+      isValid: true,
       exerciseName,
       weightLifted: weight,
       repsPerformed: reps,
-      consensusOneRepMax: weight,
+      consensusOneRepMax: formattedW,
       unitSystem,
       unitLabel,
-      formulaResults: singleRes,
+      formulaResults,
       repBreakdown,
       trainingZones: [
-        { zoneName: "Explosive Power", percentageRange: "50% - 60%", weightRange: `${(weight * 0.5).toFixed(1)} - ${(weight * 0.6).toFixed(1)} ${unitLabel}`, repRange: "3 - 5 reps", focus: "Speed & Explosive Power" },
-        { zoneName: "Muscular Endurance", percentageRange: "60% - 70%", weightRange: `${(weight * 0.6).toFixed(1)} - ${(weight * 0.7).toFixed(1)} ${unitLabel}`, repRange: "12 - 20 reps", focus: "Stamina & Lactate Threshold" },
-        { zoneName: "Hypertrophy", percentageRange: "70% - 80%", weightRange: `${(weight * 0.7).toFixed(1)} - ${(weight * 0.8).toFixed(1)} ${unitLabel}`, repRange: "6 - 12 reps", focus: "Muscle Growth & Mass" },
-        { zoneName: "Maximal Strength", percentageRange: "80% - 100%", weightRange: `${(weight * 0.8).toFixed(1)} - ${weight.toFixed(1)} ${unitLabel}`, repRange: "1 - 5 reps", focus: "Peak Force & Powerlifting" },
+        {
+          zoneName: "Explosive Power",
+          percentageRange: "50% - 60%",
+          weightRange: `${(formattedW * 0.5).toFixed(1)} - ${(formattedW * 0.6).toFixed(1)} ${unitLabel}`,
+          repRange: "3 - 5 reps",
+          focus: "Bar Speed & Explosive Power Production",
+        },
+        {
+          zoneName: "Muscular Endurance",
+          percentageRange: "60% - 70%",
+          weightRange: `${(formattedW * 0.6).toFixed(1)} - ${(formattedW * 0.7).toFixed(1)} ${unitLabel}`,
+          repRange: "12 - 20 reps",
+          focus: "Lactate Threshold & Capillary Density",
+        },
+        {
+          zoneName: "Hypertrophy",
+          percentageRange: "70% - 80%",
+          weightRange: `${(formattedW * 0.7).toFixed(1)} - ${(formattedW * 0.8).toFixed(1)} ${unitLabel}`,
+          repRange: "6 - 12 reps",
+          focus: "Sarcoplasmic & Myofibrillar Hypertrophy",
+        },
+        {
+          zoneName: "Maximal Strength",
+          percentageRange: "80% - 100%",
+          weightRange: `${(formattedW * 0.8).toFixed(1)} - ${formattedW.toFixed(1)} ${unitLabel}`,
+          repRange: "1 - 5 reps",
+          focus: "Central Nervous System & Peak Force",
+        },
       ],
     };
   }
 
+  // 3. Sub-maximal 1RM Estimation (2 <= reps <= 15)
   // 1. Epley Formula (1985)
   const epley = weight * (1 + reps / 30);
 
@@ -129,26 +204,12 @@ export function calculateOneRepMax(input: OneRepMaxInput): OneRepMaxResult {
     { formulaName: "Lander Formula (1985)", oneRepMax: parseFloat(lander.toFixed(1)), description: "Empirical linear percentage model for athletic populations" },
   ];
 
+  // Consensus 1RM is the arithmetic mean of all 7 rounded formula outputs
   const avgOneRepMax = formulaResults.reduce((acc, curr) => acc + curr.oneRepMax, 0) / formulaResults.length;
   const consensusOneRepMax = parseFloat(avgOneRepMax.toFixed(1));
 
   // 1RM to 12RM Repetition Percentage Breakdown
-  const repPctMap = [
-    { reps: 1, pct: 1.0, zone: "Maximal Strength", use: "1RM Competition Peak" },
-    { reps: 2, pct: 0.95, zone: "Maximal Strength", use: "Heavy Strength / Triples Prep" },
-    { reps: 3, pct: 0.93, zone: "Maximal Strength", use: "Heavy Strength Triples" },
-    { reps: 4, pct: 0.90, zone: "Strength & Power", use: "Strength Building 4s" },
-    { reps: 5, pct: 0.87, zone: "Strength & Power", use: "Classic 5x5 Strength Base" },
-    { reps: 6, pct: 0.85, zone: "Hypertrophy", use: "Heavy Hypertrophy" },
-    { reps: 7, pct: 0.83, zone: "Hypertrophy", use: "Muscle Mass Building" },
-    { reps: 8, pct: 0.80, zone: "Hypertrophy", use: "Classic 8-Rep Hypertrophy" },
-    { reps: 9, pct: 0.77, zone: "Hypertrophy", use: "Moderate Hypertrophy" },
-    { reps: 10, pct: 0.75, zone: "Hypertrophy / Endurance", use: "10-Rep Hypertrophy / Volume" },
-    { reps: 11, pct: 0.73, zone: "Endurance", use: "High-Volume Metabolic Stress" },
-    { reps: 12, pct: 0.70, zone: "Endurance", use: "Muscular Endurance & Pump" },
-  ];
-
-  const repBreakdown = repPctMap.map((item) => ({
+  const repBreakdown = REP_PCT_MAP.map((item) => ({
     reps: item.reps,
     percentage: Math.round(item.pct * 100),
     weight: parseFloat((consensusOneRepMax * item.pct).toFixed(1)),
@@ -156,6 +217,7 @@ export function calculateOneRepMax(input: OneRepMaxInput): OneRepMaxResult {
     recommendedUse: item.use,
   }));
 
+  // Evidence-based general training zones (qualified in educational documentation)
   const trainingZones = [
     {
       zoneName: "Explosive Power",
@@ -188,6 +250,7 @@ export function calculateOneRepMax(input: OneRepMaxInput): OneRepMaxResult {
   ];
 
   return {
+    isValid: true,
     exerciseName,
     weightLifted: weight,
     repsPerformed: reps,

@@ -2,7 +2,9 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const one_rep_max_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "One Rep Max Calculator – Epley, Brzycki, Lombardi, Mayhew & Lander Formulas",
-  description: "Calculate your One Rep Max (1RM) using 7 strength equations (Epley, Brzycki, Lombardi, Mayhew, O'Conner, Wathan, Lander) with 1RM to 12RM rep breakdown and training intensity zones.",
+  title: "One Rep Max Calculator (1RM): Estimate Your Max & Training Weights",
+  description: "Calculate your estimated one-rep max from weight and reps using Epley, Brzycki, Lombardi, Mayhew, O'Conner, Wathan and Lander formulas, then get training weights from 1RM percentages.",
   slug: "one-rep-max-calculator",
 });
+
+export default one_rep_max_calculatorMetadata;

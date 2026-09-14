@@ -30,16 +30,29 @@ export interface FormulaMhrResult {
   description: string;
 }
 
+export interface BorgMatrixRow {
+  rating: number;
+  intensity: string;
+  multiplier: number;
+  pct: string;
+  bpm: number;
+}
+
 export interface TargetHeartRateResult {
+  isValid: boolean;
+  errorMessage?: string;
   mhrMode: MhrMode;
   calculatedMhr: number;
   rhr: number;
-  hrr: number; // Heart Rate Reserve (MHR - RHR)
+  hrr: number; // Heart Rate Reserve (MHR - RHR) or 0 if invalid
   formulaName: string;
+  method: CalculationMethod;
   methodName: string;
+  targetBpm: number; // Authoritative Target Heart Rate (BPM)
   customBorgThr?: number;
   zones: HeartRateZone[];
   formulaComparison: FormulaMhrResult[];
+  borgTable: BorgMatrixRow[];
   recommendations: {
     fatBurnZoneBpm: string;
     aerobicZoneBpm: string;
@@ -50,8 +63,10 @@ export interface TargetHeartRateResult {
 
 export function calculateTargetHeartRate(input: TargetHeartRateInput): TargetHeartRateResult {
   const mhrMode = input.mhrMode;
-  const age = Math.max(15, Math.min(110, Number(input.age) || 30));
-  const rhr = Math.max(30, Math.min(120, Number(input.rhr) || 70));
+  const ageNum = Number(input.age);
+  const age = Math.max(1, Math.min(120, isNaN(ageNum) ? 30 : ageNum));
+  const rhrNum = Number(input.rhr);
+  const rhr = isNaN(rhrNum) ? 70 : rhrNum;
   const formulaKey = input.formula || "haskell";
   const methodKey = input.method || "karvonen";
 
@@ -71,8 +86,9 @@ export function calculateTargetHeartRate(input: TargetHeartRateInput): TargetHea
   let calculatedMhr = haskellMhr;
   let formulaName = "Haskell & Fox Formula (220 - Age)";
 
-  if (mhrMode === "manual" && input.manualMhr && input.manualMhr > 0) {
-    calculatedMhr = Math.max(100, Math.min(250, Number(input.manualMhr)));
+  if (mhrMode === "manual" && input.manualMhr !== undefined && input.manualMhr !== null) {
+    const manualNum = Number(input.manualMhr);
+    calculatedMhr = isNaN(manualNum) ? 190 : manualNum;
     formulaName = "Manual Cardiac Stress Test Result";
   } else {
     if (formulaKey === "tanaka") {
@@ -87,10 +103,42 @@ export function calculateTargetHeartRate(input: TargetHeartRateInput): TargetHea
     }
   }
 
-  // 2. Heart Rate Reserve (HRR)
-  const hrr = Math.max(20, calculatedMhr - rhr);
+  // 2. Strict Physiological Validation (RHR > 0, MHR > 0, RHR < MHR)
+  if (rhr <= 0 || calculatedMhr <= 0 || rhr >= calculatedMhr) {
+    let errorMsg = "Resting Heart Rate must be lower than Maximum Heart Rate.";
+    if (rhr <= 0) {
+      errorMsg = "Resting Heart Rate must be greater than zero.";
+    } else if (calculatedMhr <= 0) {
+      errorMsg = "Maximum Heart Rate must be greater than zero.";
+    }
 
-  // 3. 5 Heart Rate Training Zones
+    return {
+      isValid: false,
+      errorMessage: errorMsg,
+      mhrMode,
+      calculatedMhr,
+      rhr,
+      hrr: 0,
+      formulaName,
+      method: methodKey,
+      methodName: methodKey === "standard" ? "Standard Maximum HR Percentage Method" : "Karvonen Heart Rate Reserve Method",
+      targetBpm: 0,
+      zones: [],
+      formulaComparison,
+      borgTable: [],
+      recommendations: {
+        fatBurnZoneBpm: "N/A",
+        aerobicZoneBpm: "N/A",
+        anaerobicZoneBpm: "N/A",
+        recoveryGuidance: "Please adjust your inputs to view exercise training zones.",
+      },
+    };
+  }
+
+  // 3. Heart Rate Reserve (HRR) - Mathematically valid: strictly positive
+  const hrr = calculatedMhr - rhr;
+
+  // 4. 5 Standard Heart Rate Training Zones
   const zoneDefs = [
     { num: 1, name: "Zone 1: Very Light / Recovery", pctMin: 0.50, pctMax: 0.60, benefit: "Warm-up & Active Recovery", desc: "Improves overall health & aids recovery after intense sessions", color: "#38bdf8" },
     { num: 2, name: "Zone 2: Light / Fat Burning", pctMin: 0.60, pctMax: 0.70, benefit: "Fat Oxidation & Aerobic Base", desc: "Builds basic endurance & maximizes lipid metabolism", color: "#10b981" },
@@ -125,37 +173,70 @@ export function calculateTargetHeartRate(input: TargetHeartRateInput): TargetHea
     };
   });
 
-  // Borg RPE Ratings Calculations
+  // 5. Authoritative Target Heart Rate & Method Calculation
   let customBorgThr: number | undefined = undefined;
   let methodName = useKarvonen ? "Karvonen Heart Rate Reserve Method" : "Standard Maximum HR Percentage Method";
+  let targetBpm = 0;
 
   if (methodKey === "borg620") {
     const rating = Math.max(6, Math.min(20, Number(input.borg620Rating) || 13));
     const factor = (rating - 6) / 14;
     customBorgThr = Math.round(rhr + factor * hrr);
+    targetBpm = customBorgThr;
     methodName = `Borg Scale 6-20 (Rating ${rating})`;
   } else if (methodKey === "borgCR10") {
     const rating = Math.max(0, Math.min(10, Number(input.borgCR10Rating) || 4));
     const factor = rating / 10;
     customBorgThr = Math.round(rhr + factor * hrr);
+    targetBpm = customBorgThr;
     methodName = `Borg CR10 Scale (Rating ${rating})`;
+  } else if (methodKey === "standard") {
+    // Standard 65% MHR (Midpoint of Zone 2 Fat Burn / Aerobic base)
+    targetBpm = Math.round(0.65 * calculatedMhr);
+  } else {
+    // Default Karvonen 65% HRR
+    targetBpm = Math.round(rhr + 0.65 * hrr);
   }
 
-  // Recommendations
+  // 6. Authoritative Borg 6-20 Conversion Table
+  // Ratings: 6, 9, 11, 13, 15, 17, 20
+  // Multipliers strictly match displayed percentages:
+  // 6: 0.00 -> 0%
+  // 9: 0.21 -> 21%
+  // 11: 0.35 -> 35%
+  // 13: 0.50 -> 50%
+  // 15: 0.64 -> 64%
+  // 17: 0.78 -> 78%
+  // 20: 1.00 -> 100%
+  const borgTable: BorgMatrixRow[] = [
+    { rating: 6, intensity: "No exertion at all (Resting)", multiplier: 0.0, pct: "0%", bpm: Math.round(rhr + 0.0 * hrr) },
+    { rating: 9, intensity: "Very light (Easy walking)", multiplier: 0.21, pct: "21%", bpm: Math.round(rhr + 0.21 * hrr) },
+    { rating: 11, intensity: "Light (Brisk walking)", multiplier: 0.35, pct: "35%", bpm: Math.round(rhr + 0.35 * hrr) },
+    { rating: 13, intensity: "Somewhat hard (Moderate jog)", multiplier: 0.50, pct: "50%", bpm: Math.round(rhr + 0.50 * hrr) },
+    { rating: 15, intensity: "Hard (Heavy aerobic effort)", multiplier: 0.64, pct: "64%", bpm: Math.round(rhr + 0.64 * hrr) },
+    { rating: 17, intensity: "Very hard (Interval sprint)", multiplier: 0.78, pct: "78%", bpm: Math.round(rhr + 0.78 * hrr) },
+    { rating: 20, intensity: "Maximal exertion (Exhaustion)", multiplier: 1.0, pct: "100%", bpm: calculatedMhr },
+  ];
+
+  // 7. Recommendations
   const fatBurnZone = zones[1];
   const aerobicZone = zones[2];
   const anaerobicZone = zones[3];
 
   return {
+    isValid: true,
     mhrMode,
     calculatedMhr,
     rhr,
     hrr,
     formulaName,
+    method: methodKey,
     methodName,
+    targetBpm,
     customBorgThr,
     zones,
     formulaComparison,
+    borgTable,
     recommendations: {
       fatBurnZoneBpm: `${fatBurnZone.minBpm} – ${fatBurnZone.maxBpm} BPM`,
       aerobicZoneBpm: `${aerobicZone.minBpm} – ${aerobicZone.maxBpm} BPM`,

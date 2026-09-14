@@ -14,6 +14,7 @@ import {
   Activity,
   Layers,
   Zap,
+  AlertTriangle,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -90,15 +91,16 @@ export function TargetHeartRateCalculator() {
   };
 
   const handleCopySummary = () => {
+    if (!result.isValid) return;
     const summary = `Clinical Target Heart Rate Assessment Report (${new Date().toLocaleDateString()})
 Maximum Heart Rate (MHR): ${result.calculatedMhr} BPM (${result.formulaName})
-Resting Heart Rate (RHR): ${result.rhr} BPM | Heart Rate Reserve (HRR): ${result.hrr} BPM
-Calculation Method: ${result.methodName}
-Zone 1 (Recovery): ${result.zones[0].minBpm} – ${result.zones[0].maxBpm} BPM
-Zone 2 (Fat Burn): ${result.zones[1].minBpm} – ${result.zones[1].maxBpm} BPM
-Zone 3 (Aerobic): ${result.zones[2].minBpm} – ${result.zones[2].maxBpm} BPM
-Zone 4 (Anaerobic): ${result.zones[3].minBpm} – ${result.zones[3].maxBpm} BPM
-Zone 5 (VO2 Max): ${result.zones[4].minBpm} – ${result.zones[4].maxBpm} BPM
+Resting Heart Rate (RHR): ${result.rhr} BPM | Heart Rate Reserve (HRR): ${result.method === "standard" ? "N/A" : `${result.hrr} BPM`}
+Target Heart Rate: ${result.targetBpm} BPM (${result.methodName})
+Zone 1 (Recovery): ${result.zones[0]?.minBpm} – ${result.zones[0]?.maxBpm} BPM
+Zone 2 (Fat Burn): ${result.zones[1]?.minBpm} – ${result.zones[1]?.maxBpm} BPM
+Zone 3 (Aerobic): ${result.zones[2]?.minBpm} – ${result.zones[2]?.maxBpm} BPM
+Zone 4 (Anaerobic): ${result.zones[3]?.minBpm} – ${result.zones[3]?.maxBpm} BPM
+Zone 5 (VO2 Max): ${result.zones[4]?.minBpm} – ${result.zones[4]?.maxBpm} BPM
 Calculated via CalcPlatform Clinical Cardiovascular Engine`;
 
     navigator.clipboard.writeText(summary);
@@ -107,11 +109,12 @@ Calculated via CalcPlatform Clinical Cardiovascular Engine`;
   };
 
   const handleShare = async () => {
+    if (!result.isValid) return;
     if (navigator.share) {
       try {
         await navigator.share({
           title: "My Target Heart Rate Assessment",
-          text: `My calculated MHR is ${result.calculatedMhr} BPM with Zone 2 Fat Burn at ${result.zones[1].minBpm}-${result.zones[1].maxBpm} BPM! Calculate yours:`,
+          text: `My target heart rate is ${result.targetBpm} BPM (${result.methodName}) with Max HR at ${result.calculatedMhr} BPM. Calculate yours on CalcPlatform:`,
           url: window.location.href,
         });
       } catch {
@@ -124,6 +127,7 @@ Calculated via CalcPlatform Clinical Cardiovascular Engine`;
 
   // Dedicated Standalone Popup Print Engine
   const handlePrint = () => {
+    if (!result.isValid) return;
     const reportEl = document.getElementById("thr-print-report");
     if (!reportEl) {
       window.print();
@@ -424,150 +428,241 @@ Calculated via CalcPlatform Clinical Cardiovascular Engine`;
 
             {/* Action Bar */}
             <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-              
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handlePrint}
+                  disabled={!result.isValid}
+                  className="text-xs font-semibold flex items-center gap-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                  aria-label="Print or Export Clinical Assessment Report PDF"
+                >
+                  <Printer className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400" />
+                  <span>Print / Export PDF</span>
+                </Button>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopySummary}
+                  disabled={!result.isValid}
+                  className="text-xs font-semibold flex items-center gap-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                  aria-label="Copy Calculation Summary"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                      <span className="text-emerald-600 dark:text-emerald-400">Copied!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400" />
+                      <span>Copy Summary</span>
+                    </>
+                  )}
+                </Button>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleShare}
+                  disabled={!result.isValid}
+                  className="text-xs font-semibold flex items-center gap-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                  aria-label="Share Target Heart Rate Assessment"
+                >
+                  <Share2 className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400" />
+                  <span>Share</span>
+                </Button>
+              </div>
 
               <div className="flex items-center gap-2">
-                
-
-                
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleReset}
+                  className="text-xs text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 flex items-center gap-1"
+                  aria-label="Reset Calculator to Defaults"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span>Reset Defaults</span>
+                </Button>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Results Dashboard */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1 space-y-6">
-            <TargetHeartRateGauge result={result} />
-            <FormulaComparisonBarChart result={result} />
-            <TargetHeartRatePyramid result={result} />
+        {/* Results Dashboard or Validation Block */}
+        {!result.isValid ? (
+          <div
+            className="p-6 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200 space-y-2"
+            role="alert"
+            aria-live="polite"
+          >
+            <div className="flex items-center gap-2 font-bold text-sm sm:text-base text-amber-800 dark:text-amber-300">
+              <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
+              <span>Calculation Blocked: Physiological Conflict</span>
+            </div>
+            <p className="text-sm font-semibold text-amber-950 dark:text-amber-100">
+              {result.errorMessage}
+            </p>
+            <p className="text-xs text-amber-700 dark:text-amber-300 leading-relaxed">
+              Resting heart rate represents your baseline cardiac pace at complete rest, whereas maximum heart rate is your physical ceiling during maximal exertion. Please verify your inputs (typical adult RHR is 40–100 BPM).
+            </p>
           </div>
-
-          {/* Result Cards & Method Comparison */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4">
-              <div className="flex justify-between items-center">
-                <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
-                  Cardiovascular Parameters &amp; Target Zones
-                </h4>
-                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
-                  {result.methodName}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
-                <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] block font-semibold">Max Heart Rate (MHR)</span>
-                  <strong className="text-xl font-black text-emerald-600 dark:text-emerald-400 block mt-0.5">{result.calculatedMhr} BPM</strong>
-                  <span className="text-[10px] text-zinc-400 block">{result.formulaName}</span>
-                </div>
-
-                <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] block font-semibold">Resting HR (RHR)</span>
-                  <strong className="text-xl font-black text-blue-600 dark:text-blue-400 block mt-0.5">{result.rhr} BPM</strong>
-                  <span className="text-[10px] text-zinc-400 block">Baseline Fitness</span>
-                </div>
-
-                <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] block font-semibold">Heart Rate Reserve</span>
-                  <strong className="text-xl font-black text-purple-600 dark:text-purple-400 block mt-0.5">{result.hrr} BPM</strong>
-                  <span className="text-[10px] text-zinc-400 block">MHR − RHR Range</span>
-                </div>
-
-                <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                  <span className="text-zinc-500 text-[10px] block font-semibold">Zone 2 Fat Burning</span>
-                  <strong className="text-xl font-black text-amber-600 dark:text-amber-400 block mt-0.5">{result.zones[1]?.minBpm} – {result.zones[1]?.maxBpm}</strong>
-                  <span className="text-[10px] text-zinc-400 block">60% – 70% Range</span>
-                </div>
-              </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-1 space-y-6">
+              <TargetHeartRateGauge result={result} />
+              <FormulaComparisonBarChart result={result} />
+              <TargetHeartRatePyramid result={result} />
             </div>
 
-            {/* Auxiliary Tables */}
-            <TargetHeartRateTables result={result} />
+            {/* Result Cards & Method Comparison */}
+            <div className="lg:col-span-2 space-y-6">
+              <div className="p-5 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-4">
+                <div className="flex justify-between items-center">
+                  <h4 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
+                    Cardiovascular Parameters &amp; Target Zones
+                  </h4>
+                  <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
+                    {result.methodName}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
+                  <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                    <span className="text-zinc-500 text-[10px] block font-semibold">Max Heart Rate (MHR)</span>
+                    <strong className="text-xl font-black text-emerald-600 dark:text-emerald-400 block mt-0.5">{result.calculatedMhr} BPM</strong>
+                    <span className="text-[10px] text-zinc-400 block">{result.formulaName}</span>
+                  </div>
+
+                  <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                    <span className="text-zinc-500 text-[10px] block font-semibold">Resting HR (RHR)</span>
+                    <strong className="text-xl font-black text-blue-600 dark:text-blue-400 block mt-0.5">{result.rhr} BPM</strong>
+                    <span className="text-[10px] text-zinc-400 block">Baseline Fitness</span>
+                  </div>
+
+                  <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                    <span className="text-zinc-500 text-[10px] block font-semibold">
+                      {result.method === "standard" ? "Calculation Method" : "Heart Rate Reserve"}
+                    </span>
+                    <strong className="text-xl font-black text-purple-600 dark:text-purple-400 block mt-0.5">
+                      {result.method === "standard" ? "Standard (% MHR)" : `${result.hrr} BPM`}
+                    </strong>
+                    <span className="text-[10px] text-zinc-400 block">
+                      {result.method === "standard" ? "Direct MHR %" : "MHR − RHR Range"}
+                    </span>
+                  </div>
+
+                  <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800">
+                    <span className="text-zinc-500 text-[10px] block font-semibold">Target Heart Rate</span>
+                    <strong className="text-xl font-black text-amber-600 dark:text-amber-400 block mt-0.5">
+                      {result.targetBpm} BPM
+                    </strong>
+                    <span className="text-[10px] text-zinc-400 block">
+                      {result.method === "standard" ? "65% of MHR" : "65% HRR Karvonen"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Auxiliary Tables */}
+              <TargetHeartRateTables result={result} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Standalone Printable PDF Report Section */}
-      <div id="thr-print-report" className="hidden">
-        <div className="p-8 max-w-4xl mx-auto space-y-6 bg-white text-zinc-900 font-sans">
-          <div className="border-b-2 border-emerald-600 pb-4 flex justify-between items-start">
-            <div>
-              <div className="text-xs font-black tracking-widest text-emerald-700 uppercase">
-                CalcPlatform Clinical Cardiovascular &amp; Sports Science Lab
+      {result.isValid && (
+        <div id="thr-print-report" className="hidden">
+          <div className="p-8 max-w-4xl mx-auto space-y-6 bg-white text-zinc-900 font-sans">
+            <div className="border-b-2 border-emerald-600 pb-4 flex justify-between items-start">
+              <div>
+                <div className="text-xs font-black tracking-widest text-emerald-700 uppercase">
+                  CalcPlatform Clinical Cardiovascular &amp; Sports Science Lab
+                </div>
+                <h2 className="text-2xl font-black text-blue-600 mt-1">
+                  Clinical Target Heart Rate Assessment Report
+                </h2>
+                <p className="text-xs text-zinc-500 mt-0.5">
+                  Haskell &amp; Fox, Tanaka, Nes, Gellish &amp; Karvonen HRR Cardiovascular Analysis
+                </p>
               </div>
-              <h1 className="text-2xl font-black text-blue-600 mt-1">
-                Clinical Target Heart Rate Assessment Report
-              </h1>
-              <p className="text-xs text-zinc-500 mt-0.5">
-                Haskell &amp; Fox, Tanaka, Nes, Gellish &amp; Karvonen HRR Cardiovascular Analysis
-              </p>
+              <div className="text-right text-xs text-zinc-500">
+                <p className="font-bold text-zinc-800" suppressHydrationWarning>Date: {new Date().toLocaleDateString()}</p>
+                <p suppressHydrationWarning>Time: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
+                <p className="font-sans tabular-nums text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #THR-{Date.now().toString().slice(-6)}</p>
+              </div>
             </div>
-            <div className="text-right text-xs text-zinc-500">
-              <p className="font-bold text-zinc-800" suppressHydrationWarning>Date: {new Date().toLocaleDateString()}</p>
-              <p suppressHydrationWarning>Time: {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
-              <p className="font-sans tabular-nums text-[10px] text-zinc-400 mt-1" suppressHydrationWarning>Ref ID: #THR-{Date.now().toString().slice(-6)}</p>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-4 gap-3 bg-zinc-50 p-4 rounded-xl border border-zinc-200 text-center">
-            <div className="p-2 border-r border-zinc-200">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Max Heart Rate</span>
-              <strong className="text-xl font-black text-emerald-700 block mt-1">{result.calculatedMhr} BPM</strong>
-              <span className="text-[9px] text-zinc-500 block">{result.formulaName}</span>
+            <div className="grid grid-cols-4 gap-3 bg-zinc-50 p-4 rounded-xl border border-zinc-200 text-center">
+              <div className="p-2 border-r border-zinc-200">
+                <span className="text-[10px] font-bold text-zinc-500 uppercase block">Max Heart Rate</span>
+                <strong className="text-xl font-black text-emerald-700 block mt-1">{result.calculatedMhr} BPM</strong>
+                <span className="text-[9px] text-zinc-500 block">{result.formulaName}</span>
+              </div>
+              <div className="p-2 border-r border-zinc-200">
+                <span className="text-[10px] font-bold text-zinc-500 uppercase block">Resting HR (RHR)</span>
+                <strong className="text-xl font-black text-blue-700 block mt-1">{result.rhr} BPM</strong>
+                <span className="text-[9px] text-zinc-500 block">Baseline Measurement</span>
+              </div>
+              <div className="p-2 border-r border-zinc-200">
+                <span className="text-[10px] font-bold text-zinc-500 uppercase block">Heart Rate Reserve</span>
+                <strong className="text-xl font-black text-purple-700 block mt-1">
+                  {result.method === "standard" ? "N/A" : `${result.hrr} BPM`}
+                </strong>
+                <span className="text-[9px] text-zinc-500 block">
+                  {result.method === "standard" ? "Standard Mode" : "MHR - RHR Range"}
+                </span>
+              </div>
+              <div className="p-2">
+                <span className="text-[10px] font-bold text-zinc-500 uppercase block">Target Heart Rate</span>
+                <strong className="text-xl font-black text-amber-700 block mt-1">{result.targetBpm} BPM</strong>
+                <span className="text-[9px] text-zinc-500 block">{result.methodName}</span>
+              </div>
             </div>
-            <div className="p-2 border-r border-zinc-200">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Resting HR (RHR)</span>
-              <strong className="text-xl font-black text-blue-700 block mt-1">{result.rhr} BPM</strong>
-              <span className="text-[9px] text-zinc-500 block">Baseline Measurement</span>
-            </div>
-            <div className="p-2 border-r border-zinc-200">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Heart Rate Reserve</span>
-              <strong className="text-xl font-black text-purple-700 block mt-1">{result.hrr} BPM</strong>
-              <span className="text-[9px] text-zinc-500 block">MHR - RHR Range</span>
-            </div>
-            <div className="p-2">
-              <span className="text-[10px] font-bold text-zinc-500 uppercase block">Zone 2 Fat Burn</span>
-              <strong className="text-xl font-black text-amber-700 block mt-1">{result.zones[1]?.minBpm} - {result.zones[1]?.maxBpm} BPM</strong>
-              <span className="text-[9px] text-zinc-500 block">60% - 70% Range</span>
-            </div>
-          </div>
 
-          <div className="space-y-2">
-            <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
-              1. 5 Standard Target Heart Rate Training Zones
-            </h3>
-            <table className="w-full text-xs text-left border border-zinc-200 border-collapse">
-              <thead>
-                <tr className="bg-zinc-100 font-bold">
-                  <th className="p-2 border border-zinc-200">Zone</th>
-                  <th className="p-2 border border-zinc-200">Intensity Range</th>
-                  <th className="p-2 border border-zinc-200">Target BPM Range</th>
-                  <th className="p-2 border border-zinc-200">Primary Training Benefit</th>
-                </tr>
-              </thead>
-              <tbody>
-                {result.zones.map((z) => (
-                  <tr key={z.zoneNumber} className="border-b border-zinc-200">
-                    <td className="p-2 font-bold">{z.zoneName}</td>
-                    <td className="p-2 font-sans tabular-nums font-bold text-emerald-700">{z.percentageRange}</td>
-                    <td className="p-2 font-sans tabular-nums font-bold text-blue-700">{z.minBpm} – {z.maxBpm} BPM</td>
-                    <td className="p-2 text-zinc-600">{z.benefit}</td>
+            <div className="space-y-2">
+              <h3 className="text-xs font-bold text-blue-600 uppercase tracking-wider border-b border-zinc-300 pb-1">
+                1. 5 Standard Target Heart Rate Training Zones
+              </h3>
+              <table className="w-full text-xs text-left border border-zinc-200 border-collapse">
+                <thead>
+                  <tr className="bg-zinc-100 font-bold">
+                    <th className="p-2 border border-zinc-200">Zone</th>
+                    <th className="p-2 border border-zinc-200">Intensity Range</th>
+                    <th className="p-2 border border-zinc-200">Target BPM Range</th>
+                    <th className="p-2 border border-zinc-200">Primary Training Benefit</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {result.zones.map((z) => (
+                    <tr key={z.zoneNumber} className="border-b border-zinc-200">
+                      <td className="p-2 font-bold">{z.zoneName}</td>
+                      <td className="p-2 font-sans tabular-nums font-bold text-emerald-700">{z.percentageRange}</td>
+                      <td className="p-2 font-sans tabular-nums font-bold text-blue-700">{z.minBpm} – {z.maxBpm} BPM</td>
+                      <td className="p-2 text-zinc-600">{z.benefit}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-          <div className="border-t border-zinc-300 pt-4 text-[10px] text-zinc-500 space-y-1">
-            <p className="font-bold text-zinc-700">Clinical &amp; Exercise Science Disclaimer:</p>
-            <p>
-              This report is generated using recognized cardiovascular equations (Haskell &amp; Fox, Tanaka, Nes, Gellish, and Karvonen). Always consult your cardiologist or physician before starting high-intensity Zone 4/5 exercise protocols.
-            </p>
-            <p className="text-zinc-400">© CalcPlatform Clinical Health Lab • All Rights Reserved</p>
+            <div className="border-t border-zinc-300 pt-4 text-[10px] text-zinc-500 space-y-1">
+              <p className="font-bold text-zinc-700">Clinical &amp; Exercise Science Disclaimer:</p>
+              <p>
+                This report is generated using recognized cardiovascular equations (Haskell &amp; Fox, Tanaka, Nes, Gellish, and Karvonen). Always consult your cardiologist or physician before starting high-intensity Zone 4/5 exercise protocols.
+              </p>
+              <p className="text-zinc-400">© CalcPlatform Clinical Health Lab • All Rights Reserved</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

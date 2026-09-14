@@ -9,16 +9,20 @@ interface TargetHeartRateChartsProps {
 
 // 1. Heart Rate Zone Radial Arch Gauge
 export function TargetHeartRateGauge({ result }: TargetHeartRateChartsProps) {
+  if (!result.isValid) return null;
+
   const mhr = result.calculatedMhr;
   const rhr = result.rhr;
 
-  // Arc range: rhr to mhr
-  const gaugeMin = Math.max(30, rhr);
+  // Arc range: min to max
+  const gaugeMin = result.method === "standard"
+    ? Math.min(rhr, Math.round(0.4 * mhr))
+    : Math.max(30, rhr);
   const gaugeMax = mhr;
-  const activeBpm = result.customBorgThr || Math.round(rhr + 0.65 * result.hrr);
+  const activeBpm = result.targetBpm;
 
   const clampedBpm = Math.max(gaugeMin, Math.min(gaugeMax, activeBpm));
-  const percent = (clampedBpm - gaugeMin) / (gaugeMax - gaugeMin);
+  const percent = gaugeMax > gaugeMin ? (clampedBpm - gaugeMin) / (gaugeMax - gaugeMin) : 0;
   const angle = -120 + percent * 240;
 
   const polarToCartesian = (cx: number, cy: number, r: number, angleInDegrees: number) => {
@@ -37,9 +41,17 @@ export function TargetHeartRateGauge({ result }: TargetHeartRateChartsProps) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
+    <div
+      role="meter"
+      aria-label="Target Heart Rate Gauge"
+      aria-valuenow={activeBpm}
+      aria-valuemin={gaugeMin}
+      aria-valuemax={gaugeMax}
+      aria-valuetext={`Target heart rate gauge: ${activeBpm} BPM, range ${gaugeMin} to ${gaugeMax} BPM.`}
+      className="flex flex-col items-center justify-center p-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm"
+    >
       <div className="relative w-64 h-40 flex items-center justify-center">
-        <svg viewBox="0 0 200 140" className="w-full h-full">
+        <svg viewBox="0 0 200 140" className="w-full h-full" aria-hidden="true">
           {/* Background track */}
           <path
             d={describeArc(100, 110, 80, -120, 120)}
@@ -88,8 +100,12 @@ export function TargetHeartRateGauge({ result }: TargetHeartRateChartsProps) {
           <div className="font-bold text-blue-600 dark:text-blue-400 mt-0.5">{result.rhr} BPM</div>
         </div>
         <div className="p-2 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800">
-          <div className="text-zinc-500 dark:text-zinc-400 text-[10px]">Heart Rate Reserve</div>
-          <div className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">{result.hrr} BPM</div>
+          <div className="text-zinc-500 dark:text-zinc-400 text-[10px]">
+            {result.method === "standard" ? "Calculation Method" : "Heart Rate Reserve"}
+          </div>
+          <div className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+            {result.method === "standard" ? "Standard (% MHR)" : `${result.hrr} BPM`}
+          </div>
         </div>
       </div>
     </div>
@@ -98,7 +114,7 @@ export function TargetHeartRateGauge({ result }: TargetHeartRateChartsProps) {
 
 // 2. Formula Comparison Bar Chart
 export function FormulaComparisonBarChart({ result }: TargetHeartRateChartsProps) {
-  if (!result.formulaComparison || result.formulaComparison.length === 0) return null;
+  if (!result.isValid || !result.formulaComparison || result.formulaComparison.length === 0) return null;
 
   const maxVal = Math.max(...result.formulaComparison.map((f) => f.mhrBpm)) * 1.15;
 
@@ -137,7 +153,7 @@ export function FormulaComparisonBarChart({ result }: TargetHeartRateChartsProps
 
 // 3. Heart Rate Training Pyramid
 export function TargetHeartRatePyramid({ result }: TargetHeartRateChartsProps) {
-  if (!result.zones || result.zones.length === 0) return null;
+  if (!result.isValid || !result.zones || result.zones.length === 0) return null;
 
   return (
     <div className="w-full space-y-3 p-4 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm">

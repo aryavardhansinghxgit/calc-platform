@@ -23,7 +23,7 @@ const PYTHAGOREAN_MAP: Record<string, number> = {
   i: 9, r: 9,
 };
 
-const VOWELS = new Set(["a", "e", "i", "o", "u", "y"]);
+const LATIN_VOWELS = new Set(["a", "e", "i", "o", "u", "y"]);
 
 // Zodiac Element Assignments
 export const ZODIAC_ELEMENTS: Record<ZodiacSign, ZodiacElement> = {
@@ -44,8 +44,8 @@ export const ZODIAC_ELEMENTS: Record<ZodiacSign, ZodiacElement> = {
 /**
  * Reduce a number to a single digit (1-9) or Master Number (11, 22, 33)
  */
-
 export function reduceToSingleDigit(num: number): number {
+  if (num <= 0) return 1;
   if (num === 11 || num === 22 || num === 33) return num;
   let current = num;
   while (current > 9 && current !== 11 && current !== 22 && current !== 33) {
@@ -57,31 +57,55 @@ export function reduceToSingleDigit(num: number): number {
 }
 
 /**
- * Pythagorean Name Numerology Engine
+ * Pythagorean Name Numerology Engine (with International Unicode Fallback)
  */
 export function calculateNumerology(name1: string, name2: string): NumerologyBreakdown {
-  const clean1 = name1.toLowerCase().replace(/[^a-z]/g, "");
-  const clean2 = name2.toLowerCase().replace(/[^a-z]/g, "");
-
   const getNumbers = (str: string) => {
+    const trimmed = str.trim().toLowerCase();
+    // 1. Check for Latin characters first
+    const latinOnly = trimmed.replace(/[^a-z]/g, "");
+    if (latinOnly.length > 0) {
+      let soulSum = 0;
+      let personalitySum = 0;
+      for (const char of latinOnly) {
+        const val = PYTHAGOREAN_MAP[char] || 0;
+        if (LATIN_VOWELS.has(char)) {
+          soulSum += val;
+        } else {
+          personalitySum += val;
+        }
+      }
+      return {
+        soul: reduceToSingleDigit(soulSum || 1),
+        personality: reduceToSingleDigit(personalitySum || 1),
+      };
+    }
+
+    // 2. Unicode / Non-Latin script fallback (Hindi, Chinese, Arabic, Cyrillic, etc.)
+    const codePoints = Array.from(trimmed).map((c) => c.codePointAt(0) || 0).filter((cp) => cp > 32);
+    if (codePoints.length === 0) {
+      return { soul: 1, personality: 1 };
+    }
+
     let soulSum = 0;
-    let personalitySum = 0;
-    for (const char of str) {
-      const val = PYTHAGOREAN_MAP[char] || 0;
-      if (VOWELS.has(char)) {
+    let persSum = 0;
+    for (let i = 0; i < codePoints.length; i++) {
+      const val = (codePoints[i] % 9) + 1;
+      if (i % 2 === 0) {
         soulSum += val;
       } else {
-        personalitySum += val;
+        persSum += val;
       }
     }
+
     return {
       soul: reduceToSingleDigit(soulSum || 1),
-      personality: reduceToSingleDigit(personalitySum || 1),
+      personality: reduceToSingleDigit(persSum || 1),
     };
   };
 
-  const n1 = getNumbers(clean1);
-  const n2 = getNumbers(clean2);
+  const n1 = getNumbers(name1);
+  const n2 = getNumbers(name2);
 
   const soulDiff = Math.abs(n1.soul - n2.soul);
   const persDiff = Math.abs(n1.personality - n2.personality);
@@ -98,7 +122,7 @@ export function calculateNumerology(name1: string, name2: string): NumerologyBre
 }
 
 /**
- * Zodiac Western Astrology Compatibility Matcher
+ * Zodiac Western Astrology Compatibility Matcher (100% Comprehensive 16-Pair Coverage)
  */
 export function calculateZodiacMatch(sign1?: ZodiacSign, sign2?: ZodiacSign): ZodiacBreakdown {
   if (!sign1 || !sign2) {
@@ -114,23 +138,29 @@ export function calculateZodiacMatch(sign1?: ZodiacSign, sign2?: ZodiacSign): Zo
   const e2 = ZODIAC_ELEMENTS[sign2];
 
   let score = 75;
-  let verdict = "Dynamic Opposites Attract";
+  let verdict = "Dynamic Energy Dynamic";
 
   if (e1 === e2) {
     score = 92;
-    verdict = `Same Element (${e1.toUpperCase()}) — Deep Mutual Understanding`;
+    verdict = `Same Element (${e1.toUpperCase()}) — Deep Mutual Understanding & Natural Rapport`;
   } else if ((e1 === "fire" && e2 === "air") || (e1 === "air" && e2 === "fire")) {
     score = 96;
-    verdict = "Fire & Air — Inspiring, Passionate & Electrifying";
+    verdict = "Fire & Air — Inspiring, Passionate, Electrifying & Full of Spark";
   } else if ((e1 === "earth" && e2 === "water") || (e1 === "water" && e2 === "earth")) {
     score = 95;
-    verdict = "Earth & Water — Nurturing, Stable & Long-Lasting";
+    verdict = "Earth & Water — Nurturing, Grounded, Supportive & Long-Lasting";
+  } else if ((e1 === "fire" && e2 === "earth") || (e1 === "earth" && e2 === "fire")) {
+    score = 72;
+    verdict = "Fire & Earth — Lava & Hearth: Creative Ambition Balanced by Grounded Structure";
+  } else if ((e1 === "air" && e2 === "water") || (e1 === "water" && e2 === "air")) {
+    score = 74;
+    verdict = "Air & Water — Waves & Breeze: Intuitive Imagination Meets Intellectual Clarity";
   } else if ((e1 === "fire" && e2 === "water") || (e1 === "water" && e2 === "fire")) {
     score = 65;
-    verdict = "Fire & Water — Steam & High Passion, Needs Emotional Patience";
+    verdict = "Fire & Water — Steam & Intense Emotion: High Chemistry That Thrives on Patience";
   } else if ((e1 === "earth" && e2 === "air") || (e1 === "air" && e2 === "earth")) {
     score = 68;
-    verdict = "Earth & Air — Practical vs Conceptual, Fosters Personal Growth";
+    verdict = "Earth & Air — Practical vs Conceptual: Fosters Mutual Broadening & Personal Growth";
   }
 
   return {
@@ -170,13 +200,24 @@ export function calculateLifePath(dob1?: string, dob2?: string): LifePathBreakdo
 }
 
 /**
- * 90s Classic "FLAMES" Game Engine
+ * 90s Classic "FLAMES" Game Engine (Authentic Step-by-Step Circular Elimination)
  */
 export function calculateFLAMES(name1: string, name2: string): FLAMESResult {
-  let arr1 = name1.toLowerCase().replace(/[^a-z]/g, "").split("");
-  let arr2 = name2.toLowerCase().replace(/[^a-z]/g, "").split("");
+  // Support both Latin and Unicode graphemes
+  const toLetters = (str: string) => {
+    return Array.from(str.toLowerCase())
+      .map((c) => c.normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
+      .filter((c) => /\p{L}/u.test(c));
+  };
 
-  // Cross out matching letters
+  let arr1 = toLetters(name1);
+  let arr2 = toLetters(name2);
+
+  // If no letters found (e.g. numeric or symbolic names), fall back to clean characters
+  if (arr1.length === 0) arr1 = Array.from(name1.toLowerCase().trim());
+  if (arr2.length === 0) arr2 = Array.from(name2.toLowerCase().trim());
+
+  // Step 1 & 2: Cross out matching common letters
   for (let i = arr1.length - 1; i >= 0; i--) {
     const idxIn2 = arr2.indexOf(arr1[i]);
     if (idxIn2 !== -1) {
@@ -190,31 +231,47 @@ export function calculateFLAMES(name1: string, name2: string): FLAMESResult {
     return {
       outcome: "Lovers",
       remainingLettersCount: 0,
-      description: "Identical letter resonance — Pure Affection!",
+      description: "Identical letter resonance — Pure Romantic Connection!",
     };
   }
 
-  const flames: { code: FLAMESOutcome; desc: string }[] = [
-    { code: "Friends", desc: "Solid Foundation & Lifelong Support" },
-    { code: "Lovers", desc: "Passionate Romantic Connection" },
-    { code: "Affection", desc: "Sweet Emotional Warmth & Caring" },
-    { code: "Marriage", desc: "Long-Term Devotion & Shared Future" },
-    { code: "Enemies", desc: "Fiery Dynamic — High Tension & Spark" },
-    { code: "Siblings", desc: "Comfortable Familiarity & Protective Trust" },
+  // Step 3 & 4: Authentic Circular Elimination on F-L-A-M-E-S
+  const acronym: FLAMESOutcome[] = [
+    "Friends",
+    "Lovers",
+    "Affection",
+    "Marriage",
+    "Enemies",
+    "Siblings",
   ];
 
-  const index = (totalRemaining - 1) % flames.length;
-  const match = flames[index];
+  const descriptions: Record<FLAMESOutcome, string> = {
+    Friends: "Solid Foundation & Lifelong Mutual Support",
+    Lovers: "Passionate Chemistry & Deep Romantic Attraction",
+    Affection: "Sweet Emotional Warmth, Tenderness & Caring",
+    Marriage: "Long-Term Devotion, Sacred Bond & Shared Life Vision",
+    Enemies: "Fiery Dynamic — Intense Sparks That Demand Emotional Maturity",
+    Siblings: "Comfortable Familiarity, Protective Loyalty & Playful Trust",
+  };
+
+  let currentPos = 0;
+  while (acronym.length > 1) {
+    const eliminateIdx = (currentPos + totalRemaining - 1) % acronym.length;
+    acronym.splice(eliminateIdx, 1);
+    currentPos = eliminateIdx % acronym.length;
+  }
+
+  const finalOutcome = acronym[0];
 
   return {
-    outcome: match.code,
+    outcome: finalOutcome,
     remainingLettersCount: totalRemaining,
-    description: match.desc,
+    description: descriptions[finalOutcome],
   };
 }
 
 /**
- * Generate Portmanteau Couple Moniker (e.g. Brad + Angelina => Brangelina)
+ * Generate Portmanteau Couple Moniker (with Unicode Surrogate Safety)
  */
 export function generateCoupleMoniker(name1: string, name2: string): string {
   const n1 = name1.trim();
@@ -222,27 +279,40 @@ export function generateCoupleMoniker(name1: string, name2: string): string {
 
   if (!n1 || !n2) return "The Couple";
 
-  const half1 = n1.substring(0, Math.max(2, Math.ceil(n1.length / 2)));
-  const half2 = n2.substring(Math.floor(n2.length / 2));
+  // Use Array.from to properly handle multi-byte Unicode characters & emojis
+  const chars1 = Array.from(n1);
+  const chars2 = Array.from(n2);
+
+  const half1 = chars1.slice(0, Math.max(1, Math.min(6, Math.ceil(chars1.length / 2)))).join("");
+  const half2 = chars2.slice(Math.max(1, Math.floor(chars2.length / 2))).join("");
 
   let moniker = (half1 + half2).toLowerCase();
-  moniker = moniker.charAt(0).toUpperCase() + moniker.slice(1);
+  if (moniker.length > 0) {
+    moniker = moniker.charAt(0).toUpperCase() + moniker.slice(1);
+  }
 
-  return moniker;
+  // Cap length to prevent layout breakage on 1000-char inputs
+  if (moniker.length > 16) {
+    moniker = moniker.substring(0, 16);
+  }
+
+  return moniker || "The Couple";
 }
 
 /**
  * Bilateral Hash Synthesizer for 100% Deterministic & Consistent Fair Score
  */
 export function calculateLoveCalculator(inputs: Record<string, any>): LoveCalculatorOutputs {
-  const name1 = String(inputs.name1 || "Romeo").trim();
-  const name2 = String(inputs.name2 || "Juliet").trim();
+  const rawName1 = inputs.name1 !== undefined ? String(inputs.name1) : "Romeo";
+  const rawName2 = inputs.name2 !== undefined ? String(inputs.name2) : "Juliet";
+  const name1 = rawName1.trim() || "Romeo";
+  const name2 = rawName2.trim() || "Juliet";
   const mode = String(inputs.mode || "name").toLowerCase();
 
-  const dob1 = inputs.dob1 ? String(inputs.dob1) : undefined;
-  const dob2 = inputs.dob2 ? String(inputs.dob2) : undefined;
-  const sign1 = inputs.sign1 ? (String(inputs.sign1).toLowerCase() as ZodiacSign) : undefined;
-  const sign2 = inputs.sign2 ? (String(inputs.sign2).toLowerCase() as ZodiacSign) : undefined;
+  const dob1 = inputs.dob1 ? String(inputs.dob1) : "1996-05-15";
+  const dob2 = inputs.dob2 ? String(inputs.dob2) : "1998-09-20";
+  const sign1 = (inputs.sign1 ? String(inputs.sign1).toLowerCase() : "leo") as ZodiacSign;
+  const sign2 = (inputs.sign2 ? String(inputs.sign2).toLowerCase() : "gemini") as ZodiacSign;
 
   // Bilateral alphabet sort so order doesn't change score
   const sortedNames = [name1.toLowerCase(), name2.toLowerCase()].sort().join("");
@@ -258,41 +328,48 @@ export function calculateLoveCalculator(inputs: Record<string, any>): LoveCalcul
   const flames = calculateFLAMES(name1, name2);
   const moniker = generateCoupleMoniker(name1, name2);
 
+  const flamesScoreMap: Record<FLAMESOutcome, number> = {
+    Marriage: 98,
+    Lovers: 92,
+    Affection: 86,
+    Friends: 78,
+    Siblings: 65,
+    Enemies: 54,
+  };
+  const flamesScore = flamesScoreMap[flames.outcome] || 80;
+
   let finalScore = 82;
 
   if (mode === "flames") {
-    // FLAMES outcome score mapping
-    const flamesMap: Record<FLAMESOutcome, number> = {
-      Marriage: 98,
-      Lovers: 92,
-      Affection: 86,
-      Friends: 78,
-      Siblings: 65,
-      Enemies: 54,
-    };
-    finalScore = flamesMap[flames.outcome] || 80;
+    finalScore = flamesScore;
   } else if (mode === "zodiac") {
     finalScore = zodiac.elementHarmonyScore;
   } else if (mode === "birthday") {
     finalScore = lifePath.lifePathScore;
   } else if (mode === "ultimate") {
-    // Aggregate multi-engine
-    finalScore = Math.round(
-      numerology.harmonyScore * 0.35 +
-        zodiac.elementHarmonyScore * 0.25 +
-        lifePath.lifePathScore * 0.25 +
-        (hash % 10)
+    // Rebalanced Aggregate multi-engine: Weights sum to 100% (30% + 25% + 25% + 20%)
+    finalScore = Math.min(
+      100,
+      Math.max(
+        50,
+        Math.round(
+          numerology.harmonyScore * 0.30 +
+            zodiac.elementHarmonyScore * 0.25 +
+            lifePath.lifePathScore * 0.25 +
+            flamesScore * 0.20
+        )
+      )
     );
   } else {
     // Default Name Numerology Mode
-    const hashBonus = (hash % 15);
+    const hashBonus = hash % 15;
     finalScore = Math.min(99, Math.max(52, Math.round(numerology.harmonyScore * 0.85 + hashBonus)));
   }
 
-  // Tier Badges
-  let tierBadge = "Opposites Attract / Dynamic Balance";
-  let verdict = "You bring different strengths to the table, creating a vibrant dynamic!";
-  let advice = "Focus on active listening and discovering shared hobbies to deepen your bond.";
+  // Tier Badges & Verdicts
+  let tierBadge = "Opposites Attract / Dynamic Balance ⚖️";
+  let verdict = "A balanced mix of similarities and differences that inspires mutual growth!";
+  let advice = "Embrace each other's unique perspectives as opportunities to learn and expand together.";
 
   if (finalScore >= 90) {
     tierBadge = "Cosmic Soulmates / Twin Flames ✨";
