@@ -1,12 +1,13 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateBacCalculator } from "./calculator";
+import { bacFaqs } from "./faq";
 
 export const bac_calculatorConfig: CalculatorModuleDefinition = {
   id: "bac-calculator",
   slug: "bac-calculator",
   title: "Blood Alcohol Concentration (BAC) Calculator",
   description:
-    "Professional Blood Alcohol Concentration (BAC) suite supporting Widmark & Seidl equations, hour-by-hour elimination schedule, legal DUI limits, and alcohol calories.",
+    "Estimate blood alcohol concentration (BAC) from drinks, alcohol strength, body weight and elapsed time. Compare Widmark, Seidl and Watson models and view modeled BAC elimination.",
   category: "health",
   subcategory: "Nutrition & Health",
   iconName: "Activity",
@@ -19,6 +20,15 @@ export const bac_calculatorConfig: CalculatorModuleDefinition = {
     "alcohol elimination",
     "alcohol calories",
     "drinking calculator",
+  ],
+  relatedCalculators: [
+    "calorie-calculator",
+    "body-fat-calculator",
+    "lean-body-mass-calculator",
+    "ideal-weight-calculator",
+    "tdee-calculator",
+    "bmi-calculator",
+    "body-surface-area-calculator",
   ],
   modes: [
     { id: "widmark-standard", name: "Widmark Standard", description: "Classic Widmark BAC & elimination formula" },
@@ -68,8 +78,9 @@ export const bac_calculatorConfig: CalculatorModuleDefinition = {
   outputs: [
     { id: "currentBacPercent", name: "currentBacPercent", label: "Estimated BAC (%)", type: "number" },
     { id: "peakBacPercent", name: "peakBacPercent", label: "Peak BAC (%)", type: "number" },
-    { id: "hoursUntilSober000", name: "hoursUntilSober000", label: "Hours to Sobriety (0.00%)", type: "number" },
-    { id: "hoursUntilLegalLimit008", name: "hoursUntilLegalLimit008", label: "Hours to 0.08% Limit", type: "number" },
+    { id: "hoursUntilSober000", name: "hoursUntilSober000", label: "Hours to 0.00% Modeled BAC", type: "number" },
+    { id: "hoursUntilLegalLimit008", name: "hoursUntilLegalLimit008", label: "Hours to 0.08% Reference Limit", type: "number" },
   ],
+  faqs: bacFaqs.map((f) => ({ question: f.question, answer: f.answer })),
   calculate: (inputs: Record<string, any>) => calculateBacCalculator(inputs as any) as any,
 };

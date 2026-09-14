@@ -1,37 +1,35 @@
 import { Metadata } from "next";
 
 export const bacMetadata: Metadata = {
-  title: "Blood Alcohol Concentration (BAC) Calculator | Sobriety & DUI Limits",
+  title: "BAC Calculator: Blood Alcohol Level, Widmark Formula & Elimination",
   description:
-    "Free Blood Alcohol Concentration (BAC) calculator. Calculate BAC %, hour-by-hour elimination schedule, legal DUI limits (0.08%), time to sobriety, and alcohol calories.",
+    "Estimate blood alcohol concentration (BAC) from drinks, alcohol strength, body weight and elapsed time. Compare Widmark, Seidl and Watson models and view modeled BAC elimination.",
   keywords: [
-    "blood alcohol concentration calculator",
     "BAC calculator",
-    "blood alcohol calculator",
-    "widmark formula calculator",
-    "time to sober calculator",
-    "DUI limit calculator",
-    "can I drive BAC calculator",
-    "alcohol elimination calculator",
-    "seidl BAC formula",
-    "alcohol calories calculator",
+    "blood alcohol concentration calculator",
+    "blood alcohol level",
+    "widmark formula",
+    "alcohol elimination",
+    "standard drinks calculator",
+    "seidl formula",
+    "watson TBW",
+    "peak BAC calculator",
   ],
-  authors: [{ name: "Calculator Platform Clinical Team" }],
+  authors: [{ name: "Calculator Platform Editorial Team" }],
   openGraph: {
-    title: "Blood Alcohol Concentration (BAC) Calculator & Sobriety Suite",
+    title: "BAC Calculator: Blood Alcohol Level, Widmark Formula & Elimination",
     description:
-      "Calculate your BAC %, hour-by-hour elimination curve, time to 0.08% driving limit, and zero-tolerance sobriety schedule.",
+      "Estimate blood alcohol concentration (BAC) from drinks, alcohol strength, body weight and elapsed time. Compare Widmark, Seidl and Watson models and view modeled BAC elimination.",
     url: "https://calculator-platform.com/calculators/bac-calculator",
     siteName: "Calculator Platform",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BAC Calculator & Hour-by-Hour Sobriety Schedule",
+    title: "BAC Calculator: Blood Alcohol Level, Widmark Formula & Elimination",
     description:
-      "Calculate Blood Alcohol Concentration %, legal driving limits (0.08%), and hour-by-hour alcohol elimination.",
+      "Estimate blood alcohol concentration (BAC) from drinks, alcohol strength, body weight and elapsed time. Compare Widmark, Seidl and Watson models and view modeled BAC elimination.",
   },
 };
 
 export const bac_calculatorMetadata = bacMetadata;
-

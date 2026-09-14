@@ -28,7 +28,7 @@ export interface EliminationPoint {
   bacPercent: number;
   bacGramsPerLiter: number;
   status: string;
-  canDrive: boolean;
+  isBelowRef008: boolean;
 }
 
 export interface ImpairmentStage {
@@ -42,8 +42,9 @@ export interface ImpairmentStage {
 export interface LegalDrivingThreshold {
   countryRegion: string;
   legalLimitBac: number;
-  status: "Legal" | "Warning" | "Illegal / License Revocation";
+  status: "Below Reference Limit" | "Approaching Limit" | "At or Above Legal Limit";
   hoursUntilLegal: number;
+  jurisdictionNote: string;
 }
 
 export interface BacInputs {
@@ -76,6 +77,9 @@ export interface BacInputs {
 }
 
 export interface BacResults {
+  isValid: boolean;
+  errorMessages: string[];
+
   mode: BacMode;
   gender: Gender;
   unitSystem: UnitSystem;
@@ -112,3 +116,4 @@ export interface BacResults {
   safetyWarnings: string[];
   recommendations: string[];
 }
+

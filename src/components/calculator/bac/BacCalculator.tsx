@@ -26,6 +26,7 @@ import {
   LineChart as LineIcon,
   BarChart2,
   AlertTriangle,
+  RotateCcw,
 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -207,21 +208,49 @@ export function BacCalculator() {
     drinks,
   ]);
 
+  // Reset Defaults Handler
+  const handleResetDefaults = () => {
+    setMode("widmark-standard");
+    setGender("male");
+    setUnitSystem("us");
+    setAgeYears(30);
+    setWeightLbs(165);
+    setHeightFeet(5);
+    setHeightInches(10);
+    setWeightKg(75);
+    setHeightCm(178);
+    setTimeSinceFirstDrinkHours(2);
+    setTimeSinceFirstDrinkMinutes(0);
+    setStomachState("light");
+    setEliminationRateBeta(0.015);
+    setDrinks([
+      {
+        id: "1",
+        name: "Standard Beer (5% ABV)",
+        category: "beer",
+        count: 2,
+        volumeMl: 355, // 12 oz
+        abvPercent: 5.0,
+      },
+    ]);
+    setActiveTab("elimination-chart");
+  };
+
   // Dynamic Hero Card Content based on Selected Mode
   const heroContent = useMemo(() => {
     switch (mode) {
       case "driving-sobriety":
         return {
-          badge: "DRIVING SOBRIETY & LEGAL DUI LIMITS",
-          title: `${results.currentBacPercent}% BAC`,
-          subtitle: `US Legal Limit (0.08%): ${results.hoursUntilLegalLimit008 > 0 ? `${results.hoursUntilLegalLimit008} hours until legal` : "WITHIN LEGAL LIMIT"}. EU Limit (0.05%): ${results.hoursUntilLegalLimit005 > 0 ? `${results.hoursUntilLegalLimit005} hrs` : "Legal"}.`,
-          tag: "LEGAL DUI STATUS",
+          badge: "REFERENCE DRIVING THRESHOLDS",
+          title: `${results.currentBacPercent}% Modeled BAC`,
+          subtitle: `0.08% Standard Adult Ref: ${results.hoursUntilLegalLimit008 > 0 ? `Estimated ${results.hoursUntilLegalLimit008} hrs until below limit` : "Currently below reference threshold"}. 0.05% Threshold: ${results.hoursUntilLegalLimit005 > 0 ? `${results.hoursUntilLegalLimit005} hrs` : "Below"}. Limits vary by jurisdiction.`,
+          tag: "REFERENCE LIMITS",
         };
       case "elimination-timeline":
         return {
-          badge: "HOUR-BY-HOUR ALCOHOL ELIMINATION CURVE",
+          badge: "HOUR-BY-HOUR ALCOHOL ELIMINATION PROJECTION",
           title: `${results.hoursUntilSober000} Hours to 0.00%`,
-          subtitle: `Peak BAC reached ${results.peakBacPercent}% (~${results.peakTimeMinutes} mins post drink). Liver clearance rate: ${eliminationRateBeta}% per hour.`,
+          subtitle: `Estimated time until modeled zero BAC. Peak modeled BAC: ${results.peakBacPercent}% (~${results.peakTimeMinutes} min peak). Assumed clearance rate: ${eliminationRateBeta}%/hr.`,
           tag: "ELIMINATION TIMELINE",
         };
       case "drink-counter":
@@ -309,20 +338,21 @@ export function BacCalculator() {
 
   // CSV Export Handler
   const handleExportCSV = () => {
+    if (!results.isValid) return;
     let csvContent = "data:text/csv;charset=utf-8,";
     csvContent += "Category,Parameter,Value\n";
     csvContent += `Calculation Mode,${results.mode}\n`;
     csvContent += `Gender,${results.gender.toUpperCase()}\n`;
-    csvContent += `Current BAC (%),${results.currentBacPercent}%\n`;
+    csvContent += `Current Modeled BAC (%),${results.currentBacPercent}%\n`;
     csvContent += `Current BAC (g/L),${results.currentBacGramsPerLiter} g/L\n`;
-    csvContent += `Peak BAC (%),${results.peakBacPercent}%\n`;
+    csvContent += `Peak Modeled BAC (%),${results.peakBacPercent}%\n`;
     csvContent += `Impairment Stage,${results.impairmentStage.stageName}\n`;
-    csvContent += `Hours to 0.08% Legal Limit,${results.hoursUntilLegalLimit008} hours\n`;
-    csvContent += `Hours to 0.00% Complete Sobriety,${results.hoursUntilSober000} hours\n`;
+    csvContent += `Hours to 0.08% Reference Threshold,${results.hoursUntilLegalLimit008} hours\n`;
+    csvContent += `Hours to 0.00% Modeled BAC,${results.hoursUntilSober000} hours\n`;
     csvContent += `Total Pure Alcohol,${results.totalPureAlcoholGrams} grams (${results.totalStandardDrinks} US drinks)\n`;
     csvContent += `Total Alcohol Calories,${results.totalAlcoholCalories} kcal\n\n`;
 
-    csvContent += "Hour,Timeline Label,BAC (%),BAC (g/L),Driving Status\n";
+    csvContent += "Hour,Timeline Label,BAC (%),BAC (g/L),Reference Status\n";
     results.eliminationCurve.forEach((ep) => {
       csvContent += `${ep.hour},"${ep.timeLabel}",${ep.bacPercent},${ep.bacGramsPerLiter},"${ep.status}"\n`;
     });
@@ -330,7 +360,7 @@ export function BacCalculator() {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `bac_toxicology_report_${results.currentBacPercent}percent.csv`);
+    link.setAttribute("download", `bac_estimation_report_${results.currentBacPercent}percent.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -338,7 +368,8 @@ export function BacCalculator() {
 
   // Copy Summary Handler
   const handleCopy = () => {
-    const summaryText = `Blood Alcohol Concentration (BAC) Results:\n• Estimated BAC: ${results.currentBacPercent}% (${results.currentBacGramsPerLiter} g/L)\n• Peak BAC: ${results.peakBacPercent}%\n• Stage: ${results.impairmentStage.stageName}\n• Hours to 0.08% DUI Limit: ${results.hoursUntilLegalLimit008} hrs\n• Hours to 0.00% Sobriety: ${results.hoursUntilSober000} hrs\n• Total Pure Alcohol: ${results.totalPureAlcoholGrams}g (${results.totalStandardDrinks} standard drinks, ~${results.totalAlcoholCalories} kcal)\nCalculated at Calculator Platform.`;
+    if (!results.isValid) return;
+    const summaryText = `Blood Alcohol Concentration (BAC) Mathematical Estimate:\n• Current Modeled BAC: ${results.currentBacPercent}% (${results.currentBacGramsPerLiter} g/L)\n• Peak Modeled BAC: ${results.peakBacPercent}% (~${results.peakTimeMinutes} min peak)\n• Stage: ${results.impairmentStage.stageName}\n• Hours to < 0.08% Reference Threshold: ${results.hoursUntilLegalLimit008} hrs\n• Hours to 0.00% Modeled BAC: ${results.hoursUntilSober000} hrs\n• Total Pure Alcohol: ${results.totalPureAlcoholGrams}g (${results.totalStandardDrinks} standard drinks, ~${results.totalAlcoholCalories} kcal)\n• Safety Notice: Theoretical mathematical estimate only. Never use to assess sobriety or fitness to drive.\nCalculated at Calculator Platform.`;
     navigator.clipboard.writeText(summaryText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
@@ -353,7 +384,7 @@ export function BacCalculator() {
   const reportData: CalculatorReportData = {
     meta: {
       calculatorName: "Professional Blood Alcohol Concentration (BAC) Suite",
-      reportTitle: "Clinical BAC Toxicology & Driving Sobriety Report",
+      reportTitle: "Blood Alcohol Concentration (BAC) Mathematical Estimate Report",
       generatedDate: new Date().toLocaleDateString("en-US", {
         month: "long",
         day: "numeric",
@@ -366,27 +397,27 @@ export function BacCalculator() {
     },
     keyMetrics: [
       {
-        label: "Estimated BAC (%)",
+        label: "Current Modeled BAC (%)",
         value: `${results.currentBacPercent}%`,
         subtitle: `${results.currentBacGramsPerLiter} g/L (${results.impairmentStage.stageName})`,
         colorTheme: results.currentBacPercent >= 0.08 ? "rose" : "cyan",
       },
       {
-        label: "Peak BAC Reached",
+        label: "Peak Modeled BAC",
         value: `${results.peakBacPercent}%`,
         subtitle: `~${results.peakTimeMinutes} mins post drinking`,
         colorTheme: "amber",
       },
       {
-        label: "Time to 0.08% Legal Limit",
+        label: "Time to < 0.08% Reference Threshold",
         value: `${results.hoursUntilLegalLimit008} Hours`,
-        subtitle: "US / UK / Canada DUI threshold",
+        subtitle: "Example standard adult reference threshold",
         colorTheme: "purple",
       },
       {
-        label: "Time to Complete Sobriety (0.00%)",
+        label: "Time to 0.00% Modeled BAC",
         value: `${results.hoursUntilSober000} Hours`,
-        subtitle: "Zero alcohol remaining",
+        subtitle: "Estimated time until modeled zero alcohol",
         colorTheme: "emerald",
       },
     ],
@@ -416,19 +447,19 @@ export function BacCalculator() {
       },
     ],
     recommendation: {
-      title: "Driving & Safety Recommendation",
-      text: results.safetyWarnings[0] || results.recommendations[0] || "DO NOT DRIVE if alcohol has been consumed.",
+      title: "Public Safety Advisory",
+      text: results.safetyWarnings[0] || results.recommendations[0] || "Never operate a motor vehicle or machinery after consuming alcohol.",
       reasons: results.recommendations,
       score: Math.round(results.currentBacPercent * 1000),
       rating: results.impairmentStage.stageName,
     },
     table: {
-      title: "Hour-by-Hour Sobriety Schedule",
+      title: "Hour-by-Hour Elimination Projection (From Now)",
       headers: [
-        { key: "hour", label: "Hour", align: "left" },
-        { key: "bac", label: "BAC (%)", align: "right" },
+        { key: "hour", label: "Timeline", align: "left" },
+        { key: "bac", label: "Modeled BAC (%)", align: "right" },
         { key: "gL", label: "BAC (g/L)", align: "right" },
-        { key: "status", label: "Impairment Status", align: "left" },
+        { key: "status", label: "Reference Status", align: "left" },
       ],
       rows: results.eliminationCurve.slice(0, 10).map((ep) => ({
         hour: ep.timeLabel,
@@ -438,9 +469,10 @@ export function BacCalculator() {
       })),
     },
     notes: [
-      "BAC calculations are scientific estimations based on average metabolism rates (~0.015%/hr).",
-      "Individual BAC can vary due to genetic liver enzymes, recent illness, hydration, and medication interaction.",
-      "NEVER operate a motor vehicle or machinery after consuming alcohol.",
+      "BAC calculations are theoretical mathematical estimates based on average metabolism rates (~0.015%/hr).",
+      "Individual alcohol absorption and clearance vary widely based on genetic liver enzymes, hydration, health, and medications.",
+      "A modeled BAC of 0.00% is not proof of physical sobriety or lack of impairment.",
+      "NEVER operate a motor vehicle, watercraft, or machinery after consuming alcohol.",
     ],
   };
 
@@ -492,6 +524,15 @@ export function BacCalculator() {
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold text-blue-600 flex items-center gap-2">Personal Parameters
               </h2>
+              <button
+                type="button"
+                onClick={handleResetDefaults}
+                className="text-xs font-semibold text-slate-500 hover:text-blue-600 flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-slate-200 hover:border-blue-300 bg-slate-50 hover:bg-white transition-all shadow-2xs"
+                title="Reset all inputs to default benchmark values"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                Reset Defaults
+              </button>
             </div>
 
             {/* Sub-row for Gender & Unit System Toggles */}
@@ -731,9 +772,25 @@ export function BacCalculator() {
 
         {/* Right Column: Sticky Results & Interactive Visualizations */}
         <div className="lg:col-span-7 space-y-6">
+          {/* Validation Error Alert Banner if Inputs are Invalid */}
+          {!results.isValid && (
+            <div className="bg-rose-50 border border-rose-200 p-4 rounded-2xl text-rose-800 text-xs space-y-2 shadow-xs">
+              <div className="font-bold flex items-center gap-2 text-sm text-rose-900">
+                <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+                Input Validation Notice
+              </div>
+              <p className="text-rose-700">Please correct the following input issues to calculate BAC:</p>
+              <ul className="list-disc list-inside space-y-1 text-rose-700 font-medium pl-1">
+                {results.errorMessages.map((err, idx) => (
+                  <li key={idx}>{err}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {/* Dynamic Key Metric Highlights Hero Card */}
           <div
-            className={`p-6 rounded-2xl text-white shadow-xl transition-all space-y-6 ${
+            className={`p-6 rounded-2xl text-white shadow-xl transition-all space-y-5 ${
               results.currentBacPercent >= 0.08
                 ? "bg-gradient-to-br from-rose-600 via-red-600 to-purple-800 shadow-rose-600/10"
                 : results.currentBacPercent >= 0.05
@@ -764,6 +821,14 @@ export function BacCalculator() {
               </div>
             </div>
 
+            {/* Prominent Mandatory Public Safety Notice */}
+            <div className="bg-black/20 backdrop-blur-md border border-white/20 rounded-xl p-3 text-white text-xs leading-relaxed flex items-start gap-2.5">
+              <AlertTriangle className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" />
+              <div>
+                <span className="font-bold text-amber-200">SAFETY NOTICE:</span> This calculator provides a theoretical mathematical estimate based on the inputs and assumptions selected. It cannot determine whether a person is sober, unimpaired, or legally permitted to drive. Alcohol absorption and metabolism vary substantially between individuals. Never use this calculator to decide whether to drive or perform a safety-sensitive activity.
+              </div>
+            </div>
+
             {/* Sub-Metrics Cards Grid */}
             <div className="grid grid-cols-3 gap-3">
               <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20 text-center">
@@ -773,23 +838,28 @@ export function BacCalculator() {
               </div>
 
               <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20 text-center">
-                <div className="text-[11px] text-white/90 font-semibold uppercase">Time to 0.08% DUI</div>
+                <div className="text-[11px] text-white/90 font-semibold uppercase">Time to &lt; 0.08% Ref</div>
                 <div className="text-xl font-black text-white mt-0.5">{results.hoursUntilLegalLimit008} hrs</div>
-                <div className="text-[10px] text-white/80 truncate">{results.hoursUntilLegalLimit008 === 0 ? "Legal Now" : "Wait to Drive"}</div>
+                <div className="text-[10px] text-white/80 truncate">{results.hoursUntilLegalLimit008 === 0 ? "Below 0.08% Ref" : "Estimated Time Above"}</div>
               </div>
 
               <div className="bg-white/15 backdrop-blur-md p-3.5 rounded-xl border border-white/20 text-center">
-                <div className="text-[11px] text-white/90 font-semibold uppercase">Time to 0.00% Sober</div>
+                <div className="text-[11px] text-white/90 font-semibold uppercase">Time to 0.00% Modeled</div>
                 <div className="text-lg font-black text-white mt-0.5">{results.hoursUntilSober000} hrs</div>
-                <div className="text-[10px] text-white/80">Complete Sobriety</div>
+                <div className="text-[10px] text-white/80">Modeled 0.000% BAC</div>
               </div>
             </div>
 
             {/* Action Toolbar */}
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/20 pt-4 print:hidden">
               <button
+                disabled={!results.isValid}
                 onClick={() => setIsReportOpen(true)}
-                className="flex items-center gap-2 bg-white text-slate-900 hover:bg-slate-50 px-4 py-2 rounded-xl text-xs font-bold shadow-md transition-all"
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold shadow-md transition-all ${
+                  results.isValid
+                    ? "bg-white text-slate-900 hover:bg-slate-50 cursor-pointer"
+                    : "bg-white/40 text-slate-500 cursor-not-allowed"
+                }`}
               >
                 <Download className="w-4 h-4 text-cyan-600" />
                 Generate PDF Report
@@ -797,8 +867,13 @@ export function BacCalculator() {
 
               <div className="flex items-center gap-2">
                 <button
+                  disabled={!results.isValid}
                   onClick={handleExportCSV}
-                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all ${
+                    results.isValid
+                      ? "bg-white/20 hover:bg-white/30 text-white cursor-pointer"
+                      : "bg-white/10 text-white/40 cursor-not-allowed"
+                  }`}
                   title="Export CSV Data"
                 >
                   <FileSpreadsheet className="w-4 h-4" />
@@ -806,8 +881,13 @@ export function BacCalculator() {
                 </button>
 
                 <button
+                  disabled={!results.isValid}
                   onClick={handleCopy}
-                  className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all"
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium backdrop-blur-sm transition-all ${
+                    results.isValid
+                      ? "bg-white/20 hover:bg-white/30 text-white cursor-pointer"
+                      : "bg-white/10 text-white/40 cursor-not-allowed"
+                  }`}
                   title="Copy Summary"
                 >
                   <Copy className="w-4 h-4" />
@@ -853,7 +933,7 @@ export function BacCalculator() {
                     : "text-slate-600 hover:text-slate-900"
                 }`}
               >
-                Legal DUI Thresholds
+                Reference Thresholds
               </button>
 
               <button
@@ -875,7 +955,7 @@ export function BacCalculator() {
                     : "text-slate-600 hover:text-slate-900"
                 }`}
               >
-                Sobriety Action Plan
+                Safety Protocol
               </button>
             </div>
 
@@ -883,8 +963,14 @@ export function BacCalculator() {
             {activeTab === "elimination-chart" && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">Hour-by-Hour BAC Elimination Schedule (%)
-                  </h3>
+                  <div>
+                    <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">
+                      Hour-by-Hour BAC Elimination Schedule (Future Projection From Now)
+                    </h3>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Starting at current modeled BAC ({results.currentBacPercent}%) &bull; Peak modeled BAC reached {results.peakBacPercent}%
+                    </p>
+                  </div>
                   <span className="text-xs text-slate-500 font-medium">Rate: {eliminationRateBeta}% / hr</span>
                 </div>
 
@@ -946,26 +1032,30 @@ export function BacCalculator() {
             {/* TAB 3: International Driving Legal Limits */}
             {activeTab === "legal-limits" && (
               <div className="space-y-4">
-                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">International Driving Thresholds & Hours Until Legal
+                <h3 className="text-sm font-bold text-blue-600 flex items-center gap-2">
+                  International Reference Driving Thresholds &amp; Estimated Clearance
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   {results.legalThresholds.map((lt, idx) => (
-                    <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-1.5">
+                    <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
                       <div className="font-bold text-slate-900">{lt.countryRegion}</div>
                       <div className="flex items-center justify-between">
                         <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                          lt.status === "Legal"
+                          lt.status === "Below Reference Limit"
                             ? "bg-emerald-100 text-emerald-800"
-                            : lt.status === "Warning"
+                            : lt.status === "Approaching Limit"
                             ? "bg-amber-100 text-amber-800"
                             : "bg-rose-100 text-rose-800"
                         }`}>
                           {lt.status}
                         </span>
                         <span className="text-slate-500 font-semibold">
-                          {lt.hoursUntilLegal > 0 ? `${lt.hoursUntilLegal} hrs to legal` : "Legal to drive"}
+                          {lt.hoursUntilLegal > 0 ? `~${lt.hoursUntilLegal} hrs above threshold` : "Currently below reference limit"}
                         </span>
+                      </div>
+                      <div className="text-[11px] text-slate-500 italic pt-1 border-t border-slate-200/60">
+                        {lt.jurisdictionNote}
                       </div>
                     </div>
                   ))}
@@ -1048,6 +1138,128 @@ export function BacCalculator() {
           reportData={reportData}
         />
       )}
+
+      {/* Dedicated Print-Only Report Container (#bac-print-report) */}
+      <div id="bac-print-report" className="hidden print:block p-8 font-sans space-y-6 text-slate-900 bg-white">
+        <div className="border-b border-slate-300 pb-4">
+          <h2 className="text-2xl font-bold text-slate-900">Blood Alcohol Concentration (BAC) Estimation Report</h2>
+          <p className="text-xs text-slate-500 mt-1">
+            Generated: {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })} | Model: {results.mode.toUpperCase()}
+          </p>
+        </div>
+
+        {/* Mandatory Public Safety Notice in Print */}
+        <div className="bg-amber-50 border border-amber-300 p-3 rounded text-xs text-amber-900">
+          <strong>PUBLIC SAFETY NOTICE:</strong> This document provides theoretical mathematical estimates of Blood Alcohol Concentration based on user-entered values. Individual alcohol absorption, metabolism, and impairment vary significantly due to biological, medical, and environmental factors. Modeled estimates must NEVER be used to assess fitness to operate a motor vehicle, watercraft, or machinery.
+        </div>
+
+        {/* Key Metrics Grid */}
+        <div className="grid grid-cols-4 gap-4 p-4 bg-slate-50 border border-slate-200 rounded text-center">
+          <div>
+            <div className="text-xs text-slate-500">Current Modeled BAC</div>
+            <div className="text-xl font-bold">{results.currentBacPercent}%</div>
+            <div className="text-[10px] text-slate-400">{results.currentBacGramsPerLiter} g/L</div>
+          </div>
+          <div>
+            <div className="text-xs text-slate-500">Peak Modeled BAC</div>
+            <div className="text-xl font-bold">{results.peakBacPercent}%</div>
+            <div className="text-[10px] text-slate-400">~{results.peakTimeMinutes} min peak</div>
+          </div>
+          <div>
+            <div className="text-xs text-slate-500">Time Until &lt; 0.08% Ref</div>
+            <div className="text-xl font-bold">{results.hoursUntilLegalLimit008} hrs</div>
+            <div className="text-[10px] text-slate-400">{results.hoursUntilLegalLimit008 === 0 ? "Below Ref" : "Above Ref"}</div>
+          </div>
+          <div>
+            <div className="text-xs text-slate-500">Time to 0.00% Modeled BAC</div>
+            <div className="text-xl font-bold">{results.hoursUntilSober000} hrs</div>
+            <div className="text-[10px] text-slate-400">Modeled zero alcohol</div>
+          </div>
+        </div>
+
+        {/* Input Parameters Table */}
+        <div className="space-y-2">
+          <h2 className="text-sm font-bold border-b border-slate-200 pb-1">Session &amp; Subject Parameters</h2>
+          <table className="w-full text-xs border-collapse">
+            <tbody>
+              <tr className="border-b border-slate-100">
+                <td className="py-1 text-slate-500 font-medium">Gender &amp; Age</td>
+                <td className="py-1 font-semibold">{gender.toUpperCase()}, {ageYears} years</td>
+                <td className="py-1 text-slate-500 font-medium">Body Weight &amp; Height</td>
+                <td className="py-1 font-semibold">{results.weightKg} kg ({results.weightLbs} lbs), {results.heightCm} cm</td>
+              </tr>
+              <tr className="border-b border-slate-100">
+                <td className="py-1 text-slate-500 font-medium">Elapsed Session Duration</td>
+                <td className="py-1 font-semibold">{timeSinceFirstDrinkHours}h {timeSinceFirstDrinkMinutes}m since first drink</td>
+                <td className="py-1 text-slate-500 font-medium">Stomach State</td>
+                <td className="py-1 font-semibold">{stomachState.toUpperCase()}</td>
+              </tr>
+              <tr className="border-b border-slate-100">
+                <td className="py-1 text-slate-500 font-medium">Metabolic Clearance Rate (Beta)</td>
+                <td className="py-1 font-semibold">{eliminationRateBeta}% BAC / hour</td>
+                <td className="py-1 text-slate-500 font-medium">Total Pure Alcohol Consumed</td>
+                <td className="py-1 font-semibold">{results.totalPureAlcoholGrams}g ({results.totalStandardDrinks} std drinks, {results.totalAlcoholCalories} kcal)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Drinks Log */}
+        <div className="space-y-2">
+          <h2 className="text-sm font-bold border-b border-slate-200 pb-1">Drinks Consumed Log</h2>
+          <table className="w-full text-xs border border-slate-200">
+            <thead className="bg-slate-100 font-bold">
+              <tr>
+                <th className="p-1.5 text-left">Beverage</th>
+                <th className="p-1.5 text-center">Quantity</th>
+                <th className="p-1.5 text-right">Volume</th>
+                <th className="p-1.5 text-right">ABV</th>
+                <th className="p-1.5 text-right">Pure Ethanol</th>
+              </tr>
+            </thead>
+            <tbody>
+              {drinks.map((d, idx) => (
+                <tr key={idx} className="border-t border-slate-200">
+                  <td className="p-1.5">{d.name}</td>
+                  <td className="p-1.5 text-center">{d.count}</td>
+                  <td className="p-1.5 text-right">{d.volumeMl} mL</td>
+                  <td className="p-1.5 text-right">{d.abvPercent}%</td>
+                  <td className="p-1.5 text-right">{(d.count * d.volumeMl * (d.abvPercent / 100) * 0.7891).toFixed(1)} g</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Elimination Schedule (First 8 Hours) */}
+        <div className="space-y-2">
+          <h2 className="text-sm font-bold border-b border-slate-200 pb-1">Hour-by-Hour Elimination Projection</h2>
+          <table className="w-full text-xs border border-slate-200">
+            <thead className="bg-slate-100 font-bold">
+              <tr>
+                <th className="p-1.5 text-left">Time</th>
+                <th className="p-1.5 text-right">Modeled BAC (%)</th>
+                <th className="p-1.5 text-right">Concentration (g/L)</th>
+                <th className="p-1.5 text-left">Reference Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {results.eliminationCurve.slice(0, 9).map((ep, idx) => (
+                <tr key={idx} className="border-t border-slate-200">
+                  <td className="p-1.5">{ep.timeLabel}</td>
+                  <td className="p-1.5 text-right font-semibold">{ep.bacPercent}%</td>
+                  <td className="p-1.5 text-right">{ep.bacGramsPerLiter} g/L</td>
+                  <td className="p-1.5">{ep.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="text-[10px] text-slate-400 pt-4 border-t border-slate-200 text-center">
+          Blood Alcohol Concentration Calculator &bull; Educational and Informational Reference &bull; Do not use for legal or medical determinations.
+        </div>
+      </div>
     </div>
   );
 }
