@@ -4,114 +4,65 @@ import { army_body_fat_calculatorFaqs } from "./faq";
 
 export const army_body_fat_calculatorConfig: CalculatorModuleDefinition = {
   id: "army-body-fat-calculator",
-  title: "Army Body Fat Calculator",
+  title: "Army Waist-to-Height Ratio Calculator",
   slug: "army-body-fat-calculator",
   category: "Health",
   subcategory: "Fitness",
-  description: "Determine body fat compliance according to U.S. Army Standards (AR 600-9 tape test).",
+  description:
+    "Use the 2026 Army Body Composition Calculator to calculate waist-to-height ratio (WHtR), check the 0.55 Army standard, and understand compliant and non-compliant results.",
   iconName: "ShieldCheck",
   featured: true,
-  keywords: ["army body fat","ar 600-9","tape test","military fitness"],
+  keywords: [
+    "army waist to height ratio",
+    "army body composition 2026",
+    "whtr calculator army",
+    "ar 600-9",
+    "army directive 2026-13",
+    "army body fat calculator",
+  ],
   priority: 1,
-  relatedCalculators: ["body-fat-calculator","lean-body-mass-calculator"],
-  formulaDescription: "AR 600-9 Army Body Composition Tape Measurement Standard.",
+  relatedCalculators: ["bmi-calculator", "body-fat-calculator", "lean-body-mass-calculator"],
+  formulaDescription:
+    "Army Directive 2026-13 Standard: Waist-to-Height Ratio (WHtR) = Waist Circumference / Standing Height. Compliant if strictly < 0.55.",
   faqs: army_body_fat_calculatorFaqs,
   inputs: [
-  {
-    "name": "gender",
-    "label": "Gender",
-    "type": "select",
-    "defaultValue": "male",
-    "options": [
-      {
-        "label": "Male",
-        "value": "male"
-      },
-      {
-        "label": "Female",
-        "value": "female"
-      }
-    ]
-  },
-  {
-    "name": "age",
-    "label": "Age Group",
-    "type": "select",
-    "defaultValue": "21",
-    "options": [
-      {
-        "label": "17 - 20",
-        "value": "18"
-      },
-      {
-        "label": "21 - 27",
-        "value": "24"
-      },
-      {
-        "label": "28 - 39",
-        "value": "33"
-      },
-      {
-        "label": "40+",
-        "value": "45"
-      }
-    ]
-  },
-  {
-    "name": "heightCm",
-    "label": "Height (cm)",
-    "type": "number",
-    "defaultValue": 175,
-    "min": 120,
-    "max": 230,
-    "step": 0.5
-  },
-  {
-    "name": "neckCm",
-    "label": "Neck (cm)",
-    "type": "number",
-    "defaultValue": 38,
-    "min": 20,
-    "max": 60,
-    "step": 0.5
-  },
-  {
-    "name": "waistCm",
-    "label": "Waist (cm)",
-    "type": "number",
-    "defaultValue": 82,
-    "min": 40,
-    "max": 180,
-    "step": 0.5
-  },
-  {
-    "name": "hipCm",
-    "label": "Hip (cm - Female)",
-    "type": "number",
-    "defaultValue": 95,
-    "min": 40,
-    "max": 180,
-    "step": 0.5
-  }
-],
+    {
+      name: "heightInches",
+      label: "Standing Height (inches)",
+      type: "number",
+      defaultValue: 70,
+      min: 48,
+      max: 96,
+      step: 0.25,
+    },
+    {
+      name: "waistInches",
+      label: "Abdominal Waist Circumference (inches)",
+      type: "number",
+      defaultValue: 34,
+      min: 18,
+      max: 80,
+      step: 0.25,
+    },
+  ],
   outputs: [
-  {
-    "name": "bodyFatPercent",
-    "label": "Army Body Fat %",
-    "format": "percentage",
-    "highlight": true
-  },
-  {
-    "name": "maxAllowed",
-    "label": "Max Allowed Body Fat",
-    "format": "percentage"
-  },
-  {
-    "name": "status",
-    "label": "Compliance Status",
-    "format": "text"
-  }
-],
+    {
+      name: "whtr",
+      label: "Waist-to-Height Ratio",
+      format: "number",
+      highlight: true,
+    },
+    {
+      name: "maxAllowedWhtr",
+      label: "Army Threshold (< 0.55)",
+      format: "number",
+    },
+    {
+      name: "status",
+      label: "Compliance Status",
+      format: "text",
+    },
+  ],
   calculate: calculateArmyBodyFatCalculator,
 };
 
