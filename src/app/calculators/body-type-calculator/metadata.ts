@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 
 export const body_type_calculatorMetadata: Metadata = {
-  title: "Professional Body Type Calculator | Female & Male Body Shape Analytics",
+  title: "Body Type Calculator: Find Your Body Shape, Ratios & Measurements",
   description:
-    "Free scientific Body Type Calculator. Determine your body shape (Hourglass, Pear, Apple, Spoon, Rectangle, V-Shape), Waist-to-Hip Ratio (WHR), WHtR health risk, and Heath-Carter Somatotype with tailored wardrobe styling guidance.",
+    "Use this body type calculator to estimate your body shape from measurements, calculate WHR and WHtR, explore shape similarity, and get practical style guidance.",
   keywords: [
     "body type calculator",
     "body shape calculator",
@@ -12,14 +12,14 @@ export const body_type_calculatorMetadata: Metadata = {
     "pear shape calculator",
     "waist to hip ratio calculator",
     "whr calculator",
-    "somatotype calculator",
+    "somatotype proxy calculator",
     "male body type calculator",
     "body shape fashion guide",
   ],
   openGraph: {
-    title: "Scientific Body Type & Body Shape Calculator",
+    title: "Body Type Calculator: Shape Classification & Morphological Ratios",
     description:
-      "Determine your anatomical body shape category, WHR cardiovascular risk, and custom wardrobe styling tips based on 6,000-woman scientific study.",
+      "Determine your female or male body shape classification, WHR, WHtR, shape similarity score, and somatotype proxy with practical wardrobe guidance.",
     type: "website",
   },
 };

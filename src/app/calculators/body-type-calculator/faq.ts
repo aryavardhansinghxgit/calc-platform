@@ -1,207 +1,114 @@
-export interface BodyTypeFaq {
-  question: string;
-  answer: string;
-}
+import { CalculatorFAQ } from "@/lib/calculator-engine/types";
 
-export const body_type_calculatorFaqs: BodyTypeFaq[] = [
+export const body_type_calculatorFaqs: CalculatorFAQ[] = [
   {
-    question: "What is a Body Type Calculator?",
+    question: "What measurements do I need for the body type calculator?",
     answer:
-      "A Body Type Calculator determines your anatomical body shape category—such as Hourglass, Pear/Triangle, Apple/Inverted Triangle, Spoon, or Rectangle/Banana—by mathematically comparing the proportions between your bust/chest, waist, high hip, and lower hip circumferences.",
+      "The calculator can use bust/chest, natural waist, high hip, low/total hip, height and weight, depending on the selected mode. The exact fields vary between the female-shape, male-frame and analysis tools.",
   },
   {
-    question: "How are the 7 female body shapes mathematically defined?",
+    question: "What is the most important measurement for body shape?",
     answer:
-      "Our calculator uses the scientific algorithms from a landmark study of over 6,000 women conducted by North Carolina State University (NCSU) published in the International Journal of Clothing Science and Technology. Shapes are defined by exact inch differentials between bust, waist, high hip, and hip measurements.",
+      "There is no single universally dominant measurement. Body shape is fundamentally about relationships between measurements, especially bust/chest, waist and hip proportions.",
   },
   {
-    question: "What are the 4 main female body shape classes?",
+    question: "Can men use a body type calculator?",
     answer:
-      "The four classic industry body shape classes are: Banana/Rectangle (46% of women), Pear/Triangle (20% of women), Apple/Inverted Triangle (14% of women), and Hourglass (8% of women).",
+      "Yes, but the classification framework should be made explicit. This calculator uses a separate Male Frame Classification rather than applying the female FFIT-derived model to men.",
   },
   {
-    question: "Why is the Hourglass shape so rare (8%)?",
+    question: "What is the difference between body shape and body type?",
     answer:
-      "To qualify as a true Hourglass mathematically, a woman must have nearly identical bust and hip measurements (within 1 inch) combined with a waist measurement at least 9 to 10 inches smaller than the hips and bust.",
+      "The terms are often used interchangeably online. In this calculator, “body shape” primarily refers to proportional silhouette categories, while “somatotype” is treated separately as an estimated anthropometric proxy.",
   },
   {
-    question: "What is the difference between a Pear and a Spoon body shape?",
+    question: "Is the Hourglass body shape healthier?",
     answer:
-      "While both Pear (Triangle) and Spoon shapes feature hips wider than the bust, a Spoon shape has a distinct high-hip 'shelf' where the upper hip-to-waist ratio is >= 1.193, creating a sudden curve below the waist.",
+      "No. Body shape is not a health diagnosis. A person's health cannot be inferred from an Hourglass, Rectangle, Pear or other silhouette label.",
   },
   {
-    question: "What is Waist-to-Hip Ratio (WHR) and why is it important?",
+    question: "Is the Pear body shape healthy?",
     answer:
-      "Waist-to-Hip Ratio (WHR) is calculated by dividing your waist measurement by your hip measurement. According to the World Health Organization (WHO), WHR is a critical indicator of cardiovascular and metabolic risk.",
+      "A Pear/Triangle classification describes proportions in which the hips are relatively larger than the bust. It does not by itself determine health.",
   },
   {
-    question: "What are the WHO healthy WHR cutoffs for women and men?",
+    question: "Is the Apple body shape unhealthy?",
     answer:
-      "For women, a WHR of 0.80 or less indicates low health risk, 0.81–0.84 is moderate, and 0.85 or higher indicates high risk. For men, a WHR under 0.90 is low risk, 0.90–0.99 is moderate, and 1.00 or higher is high risk.",
+      "No body-shape label by itself diagnoses health. Central adiposity can be associated with health risk, but body shape alone does not directly measure visceral fat or diagnose disease.",
   },
   {
-    question: "What is Waist-to-Height Ratio (WHtR)?",
+    question: "What does a 0.72 waist-to-hip ratio mean?",
     answer:
-      "Waist-to-Height Ratio (WHtR) measures central fat distribution by dividing waist circumference by height. The universal health guideline is to 'keep your waist circumference to less than half your height' (WHtR < 0.50).",
+      "It means the waist measurement is about 72% of the hip measurement when both are expressed in the same unit. Health interpretation requires population-specific context.",
   },
   {
-    question: "Can I change my natural body shape?",
+    question: "What does a 0.39 waist-to-height ratio mean?",
     answer:
-      "Your underlying bone structure (hip width, rib cage size, shoulder width) is genetic. However, you can significantly alter your body composition and silhouette through muscle growth and body fat reduction.",
+      "It means the waist is approximately 39% of the person's height in the same unit system. NICE's adult guidance focuses on 0.4–0.49 as healthy central adiposity and recommends keeping waist-to-height ratio below 0.5.",
   },
   {
-    question: "What are the Heath-Carter Somatotypes (Endomorph, Mesomorph, Ectomorph)?",
+    question: "What WHtR should I aim for?",
     answer:
-      "Somatotyping categorizes body physique into three components: Endomorphy (relative fatness and digestive dominance), Mesomorphy (relative musculoskeletal robustness), and Ectomorphy (relative linearity and slenderness).",
+      "NICE recommends that adults try to keep their waist circumference below half their height, corresponding to a WHtR below 0.5. This is a general health message, not the same thing as a body-shape classification.",
   },
   {
-    question: "How do I measure my Bust size accurately?",
+    question: "Is WHR or WHtR better?",
     answer:
-      "Stand straight with arms at your side. Wrap a soft measuring tape snugly around the fullest part of your chest/bust across the nipple line while wearing a unpadded bra.",
+      "They measure different relationships. WHR compares waist with hips, while WHtR compares waist with height. They should not be treated as interchangeable.",
   },
   {
-    question: "How do I measure my natural Waist size?",
+    question: "Can body shape change with age?",
     answer:
-      "Locate the narrowest part of your torso, typically 1 to 2 inches above your belly button. Measure at the end of a normal exhale without pulling the tape too tight or pulling in your stomach.",
+      "Yes. Weight, muscle, fat distribution, pregnancy, posture and changes in body proportions can all affect a later classification.",
   },
   {
-    question: "What is High Hip size vs Low Hip size?",
+    question: "Can exercise change body shape?",
     answer:
-      "High Hip is measured over the upper swell of the hip bone (iliac crest), about 3 to 4 inches below the natural waist. Low Hip is measured around the widest, fullest part of the buttocks and hips.",
+      "Exercise can change muscle mass and body composition, which can change your measurements and therefore your calculated proportions. It does not mean that a particular body shape determines a particular workout.",
   },
   {
-    question: "What clothing styles look best on an Hourglass body shape?",
+    question: "Can I change my body shape naturally?",
     answer:
-      "Fitted garments that accentuate the narrow waist—such as wrap dresses, pencil skirts, high-waisted trousers, V-neck tops, and belted coats—look best on Hourglass figures.",
+      "Your proportions can change through changes in body composition, muscle development and overall body weight. However, your underlying skeletal structure places limits on how much particular dimensions can change.",
   },
   {
-    question: "What clothing styles flatter a Pear / Triangle body shape?",
+    question: "Why did I get a different shape from another calculator?",
     answer:
-      "Flatter a Pear shape by drawing visual attention upward to the shoulders and bust with statement sleeves, boat necklines, and bright tops, paired with A-line skirts and dark bootcut pants.",
+      "Different systems can use different measurements, definitions and classification thresholds. Even changes in measurement definitions can affect body-shape classification results.",
   },
   {
-    question: "What clothing styles suit an Inverted Triangle / Apple shape?",
+    question: "Is this calculator the original NCSU FFIT calculator?",
     answer:
-      "Balance a broader upper body with V-neck tops, scoop necklines, unbuttoned cardigans, full A-line skirts, wide-leg trousers, and peplum hem details that add volume to the hips.",
+      "No. The original NCSU FFIT system used 3D body-scan data and nine female categories for apparel applications. This calculator uses a seven-category adaptation designed for self-measured tape dimensions.",
   },
   {
-    question: "How should a Rectangle / Banana body shape dress?",
+    question: "Why are Oval and Diamond missing from this calculator?",
     answer:
-      "Create the illusion of curves using belted blazers, fit-and-flare dresses, ruffled blouses, cowl necklines, and pocket-detailed pants.",
+      "The calculator does not attempt to reproduce the full nine-category FFIT system. Oval and Diamond were omitted because the available 2D tape measurements do not provide the multidimensional surface information needed to distinguish those forms reliably.",
   },
   {
-    question: "What is the ideal male body shape proportion?",
+    question: "Is the Shape Similarity Score scientifically validated?",
     answer:
-      "In male aesthetic science and classical sculpture, the Trapezoid / V-Shape proportion—where shoulders and chest are 6 to 8 inches broader than the waist—is considered the athletic ideal.",
+      "The score is a calculator-generated mathematical similarity measure. Its scoring constants are application-defined heuristics and are not presented as a published NCSU accuracy model.",
   },
   {
-    question: "How does aging affect body shape?",
+    question: "Is the somatotype result a true Heath-Carter assessment?",
     answer:
-      "As people age, hormonal changes (such as declining estrogen in women and testosterone in men) can shift fat storage from the hips/thighs toward the abdomen, transitioning pear silhouettes toward apple shapes.",
+      "No. It is an Estimated Anthropometric Somatotype Proxy. A full Heath-Carter assessment requires additional anthropometric measurements, including skinfolds, bone breadths and limb girths.",
   },
   {
-    question: "Is Body Mass Index (BMI) better than Waist-to-Hip Ratio?",
+    question: "Does body shape predict fertility?",
     answer:
-      "Numerous medical studies (e.g. Yusuf et al. Lancet 2005) demonstrate that WHR and WHtR are superior to BMI for predicting cardiovascular events and mortality, as BMI cannot distinguish between muscle and visceral fat.",
+      "No. Historical studies may report population-level associations between body proportions and reproductive variables, but body shape or WHR is not a fertility diagnostic test.",
   },
   {
-    question: "What exercise regimen helps an Endomorph body type?",
+    question: "Can body shape tell me how much visceral fat I have?",
     answer:
-      "Endomorphs benefit from a combination of High-Intensity Interval Training (HIIT), moderate steady-state cardio, and full-body strength training to maximize metabolic rate and burn central fat.",
+      "No. Tape measurements and body-shape labels cannot directly quantify visceral fat. Imaging or other specialized assessment is needed for direct anatomical quantification.",
   },
   {
-    question: "What exercise strategy works best for an Ectomorph?",
+    question: "Can a body type calculator diagnose health problems?",
     answer:
-      "Ectomorphs should focus on heavy, compound resistance training (squats, deadlifts, bench press) with longer rest intervals and a consistent caloric surplus with high protein.",
-  },
-  {
-    question: "What exercise strategy suits a Mesomorph?",
-    answer:
-      "Mesomorphs respond quickly to almost all resistance and athletic training. A balanced routine combining strength training, athletic conditioning, and moderate cardio maintains lean symmetry.",
-  },
-  {
-    question: "What is Body Adiposity Index (BAI)?",
-    answer:
-      "BAI estimates body fat percentage using hip circumference and height without requiring body weight: BAI = (Hip Circumference in cm / (Height in m)^1.5) - 18.",
-  },
-  {
-    question: "What is Body Volume Index (BVI)?",
-    answer:
-      "BVI uses 3D body volume distribution (comparing chest, waist, and hip volumes) to assess health risks associated with central obesity more accurately than weight-height ratios.",
-  },
-  {
-    question: "Why do my measurements change throughout the month?",
-    answer:
-      "Fluid retention during menstrual cycles, digestive bloating, and time of day can cause waist circumference to fluctuate by 1 to 2 inches. Measure first thing in the morning for consistency.",
-  },
-  {
-    question: "Can posture change my body shape evaluation?",
-    answer:
-      "Yes. Slouching or anterior pelvic tilt can push the abdomen forward and alter waist measurements. Stand erect with shoulders back and feet shoulder-width apart when taking measurements.",
-  },
-  {
-    question: "How often should I re-measure my body type?",
-    answer:
-      "Re-measuring every 4 to 8 weeks during a fitness or body recomposition program allows you to track true structural shape changes accurately.",
-  },
-  {
-    question: "Does chest measurement include bra cup size?",
-    answer:
-      "Yes. Bust measurement measures total circumference over the fullest part of the chest including breast tissue, which incorporates bra size.",
-  },
-  {
-    question: "What is the difference between Top Hourglass and Bottom Hourglass?",
-    answer:
-      "A Top Hourglass has a bust measurement slightly larger than the hips, whereas a Bottom Hourglass has hips slightly larger than the bust, though both maintain a distinct narrow waist.",
-  },
-  {
-    question: "Why do some online body calculators give different results?",
-    answer:
-      "Many basic calculators use simple 2-variable rules (bust vs hip). Our calculator implements the complete 4-variable (Bust, Waist, High Hip, Low Hip) algorithms from the NCSU fashion study.",
-  },
-  {
-    question: "How does body shape correlate with fertility in women?",
-    answer:
-      "Research shows women with lower WHRs (0.70 to 0.79) have optimal estrogen levels and higher luteal phase hormone concentrations, which are correlated with higher conception rates.",
-  },
-  {
-    question: "What is the difference between subcutaneous fat and visceral fat?",
-    answer:
-      "Subcutaneous fat lies directly beneath the skin (common in Pear shapes on hips/thighs). Visceral fat surrounds internal organs inside the abdominal cavity (common in Apple shapes) and poses higher metabolic risk.",
-  },
-  {
-    question: "Which body type is most prone to joint pain?",
-    answer:
-      "Individuals carrying higher body weight on a smaller frame (higher Endomorphy score) or carrying significant weight in the lower body may experience higher load on knee and hip joints.",
-  },
-  {
-    question: "Can men use the female body shape algorithm?",
-    answer:
-      "Men should select 'Male' in the calculator, as male fat distribution and musculoskeletal structure follow different anatomical patterns (Trapezoid, V-Shape, Rectangle, Oval).",
-  },
-  {
-    question: "What is the significance of the 0.70 Waist-to-Hip ratio in fashion history?",
-    answer:
-      "In fashion, art, and evolutionary psychology, a WHR near 0.70 has historically represented classic female aesthetic proportion and ideal waist-hip curvature.",
-  },
-  {
-    question: "Does weight loss change your body shape category?",
-    answer:
-      "It depends. Losing overall body fat reduces circumference everywhere, but if fat is lost disproportionately from the abdomen, an Apple or Rectangle shape can transition toward an Hourglass or Pear.",
-  },
-  {
-    question: "What are the best jeans for a Spoon body type?",
-    answer:
-      "Jeans with a contoured high waistband, stretch denim, and bootcut or wide-leg silhouettes prevent gaping at the waist while fitting comfortably over high hips.",
-  },
-  {
-    question: "Why does the calculator require High Hip size?",
-    answer:
-      "High Hip size is crucial for distinguishing between Spoon and Pear shapes. The shelf-like curve of the upper hip is a key differentiator in garment tailoring.",
-  },
-  {
-    question: "How accurate is the online Body Type Calculator?",
-    answer:
-      "Our calculator is 100% mathematically precise based on your entered measurements and validated clinical equations. Ensure exact measuring tape placement for best accuracy.",
+      "No. This calculator provides anthropometric and descriptive information. WHR and WHtR can be useful screening indicators, but they are not diagnoses. WHO describes WHR in the context of epidemiological risk assessment, while NICE uses WHtR as a practical measure of central adiposity.",
   },
 ];

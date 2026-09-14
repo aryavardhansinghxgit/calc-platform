@@ -30,17 +30,27 @@ export type MaleBodyShape =
   | "Triangle (Pear)";
 
 export type WhrHealthRiskCategory =
+  | "Lower Risk Reference (< 0.80)"
+  | "Moderate Risk Reference (0.80–0.84)"
+  | "Higher Risk Reference (≥ 0.85)"
+  | "Lower Risk Reference (< 0.90)"
+  | "Moderate Risk Reference (0.90–0.99)"
+  | "Higher Risk Reference (≥ 1.00)"
   | "Low Risk (Optimal)"
   | "Moderate Risk"
   | "High Risk (Substantial Abdominal Adiposity)"
   | "Very High Risk";
 
 export type WhtrHealthRiskCategory =
+  | "Below 0.40 Reference Point"
+  | "Healthy Central Adiposity (0.40–0.49)"
+  | "Increased Central Adiposity (0.50–0.59)"
+  | "High Central Adiposity (≥ 0.60)"
   | "Abnormally Slim"
   | "Healthy / Optimal (Keep Waist Below Half Height)"
   | "Overweight (Increased Health Risk)"
   | "Very Overweight"
-  | "Morbidly Obese / High Risk";
+  | "High Central Adiposity (Higher Health Risk)";
 
 export interface SomatotypeScores {
   endomorphy: number; // Fatness / Roundness (1-7)
@@ -77,6 +87,8 @@ export interface ShapeComparisonItem {
 }
 
 export interface BodyTypeResults {
+  isValid: boolean;
+  validationError?: string;
   mode: BodyTypeMode;
   gender: Gender;
   unitSystem: UnitSystem;
@@ -114,6 +126,9 @@ export interface BodyTypeResults {
     pearPct: number;
     applePct: number;
     hourglassPct: number;
+    spoonPct: number;
+    topHourglassPct: number;
+    bottomHourglassPct: number;
   };
   shapeComparisons: ShapeComparisonItem[];
 }

@@ -9,7 +9,7 @@ export const body_type_calculatorConfig: CalculatorModuleDefinition = {
   category: "Health",
   subcategory: "Nutrition & Health",
   description:
-    "Determine your anatomical body shape category (Hourglass, Pear, Apple, Spoon, Rectangle, V-Shape), Waist-to-Hip Ratio (WHR), WHtR health risk, and Heath-Carter Somatotype with custom wardrobe styling recommendations.",
+    "Determine your body shape classification (Hourglass, Pear, Apple, Spoon, Rectangle, V-Shape), Waist-to-Hip Ratio (WHR), Waist-to-Height Ratio (WHtR), shape similarity score, and estimated somatotype proxy with practical wardrobe recommendations.",
   iconName: "User",
   featured: true,
   keywords: [
@@ -19,7 +19,7 @@ export const body_type_calculatorConfig: CalculatorModuleDefinition = {
     "pear shape calculator",
     "waist to hip ratio calculator",
     "whr calculator",
-    "somatotype calculator",
+    "somatotype proxy calculator",
   ],
   priority: 1,
   relatedCalculators: [
@@ -32,7 +32,7 @@ export const body_type_calculatorConfig: CalculatorModuleDefinition = {
     "calorie-calculator",
   ],
   formulaDescription:
-    "Body shapes classified via 4-variable algorithms from the 6,000-woman North Carolina State University (NCSU) fashion study combined with WHO Waist-to-Hip & Waist-to-Height health risk standards.",
+    "Body shapes classified via 4-variable criteria adapted from apparel anthropometric research combined with WHO WHR and NICE WHtR health risk screening benchmarks.",
   faqs: body_type_calculatorFaqs,
   inputs: [
     {
@@ -41,15 +41,15 @@ export const body_type_calculatorConfig: CalculatorModuleDefinition = {
       type: "select",
       defaultValue: "female-fashion",
       options: [
-        { label: "Female Fashion Industry (7 Shapes - NCSU Study)", value: "female-fashion" },
-        { label: "Male Structural Frame (V-Shape / Trapezoid)", value: "male-structure" },
-        { label: "Heath-Carter Somatotype Scoring (Endo/Meso/Ecto)", value: "somatotype" },
-        { label: "WHR Cardiovascular Risk (WHO Standard)", value: "whr-health" },
-        { label: "WHtR Metabolic Risk (Waist-to-Height)", value: "whtr-metabolic" },
-        { label: "Body Volume & Proportion Index", value: "body-volume" },
-        { label: "Wardrobe & Clothing Fit Guide", value: "wardrobe-style" },
-        { label: "Fitness & Body Shaping Guide", value: "fitness-shaping" },
-        { label: "Shape Comparison Matrix", value: "comparison" },
+        { label: "Female Frame Classification (7-Shape Reference)", value: "female-fashion" },
+        { label: "Male Frame Classification (5-Shape Model)", value: "male-structure" },
+        { label: "Estimated Somatotype Proxy (Endo / Meso / Ecto)", value: "somatotype" },
+        { label: "Waist-to-Hip Ratio (WHO Cardiovascular Risk Indicator)", value: "whr-health" },
+        { label: "Waist-to-Height Ratio (NICE Central Adiposity Standard)", value: "whtr-metabolic" },
+        { label: "Body Circumference & Proportion Ratios", value: "body-volume" },
+        { label: "Wardrobe & Clothing Styling Guide", value: "wardrobe-style" },
+        { label: "Fitness & Conditioning Recommendations", value: "fitness-shaping" },
+        { label: "Shape Similarity Score Matrix", value: "comparison" },
         { label: "Custom Morphological Evaluation", value: "custom" },
       ],
     },
