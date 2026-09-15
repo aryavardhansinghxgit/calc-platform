@@ -15,6 +15,9 @@ import {
   Globe,
   Sparkles,
   ListOrdered,
+  Download,
+  Printer,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,10 +26,14 @@ import {
   parseBatchDates,
   isLeapYear,
   getDaysInMonth,
+  isValidCalendarDate,
+  getWeekdayForCalendarDate,
   DayOfWeekParams,
   DayOfWeekResult,
   BatchDateResultItem,
   DAY_ETYMOLOGY_DATABASE,
+  MONTH_NAMES,
+  DAY_NAMES,
 } from "@/lib/calculator-engine/formulas/day-of-week";
 
 interface SavedDayRecord {
@@ -37,11 +44,6 @@ interface SavedDayRecord {
   dayOfYear: number;
   timestamp: string;
 }
-
-const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
 
 export function DayOfWeekCalculator() {
   // ==========================================
@@ -67,15 +69,29 @@ export function DayOfWeekCalculator() {
   const [copySuccess, setCopySuccess] = useState<boolean>(false);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
   const [savedRecords, setSavedRecords] = useState<SavedDayRecord[]>([]);
+  const [isMounted, setIsMounted] = useState<boolean>(false);
 
   // Sync with URL query parameters on initial mount
   useEffect(() => {
+    setIsMounted(true);
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const tabParam = params.get("tab");
       if (tabParam === "batch" || tabParam === "historical" || tabParam === "single") {
         setActiveTab(tabParam);
       }
+      const y = parseInt(params.get("year") || "", 10);
+      const m = parseInt(params.get("month") || "", 10);
+      const d = parseInt(params.get("day") || "", 10);
+      const cal = params.get("calendar");
+      const ws = params.get("weekStart");
+
+      if (!isNaN(y) && y >= 1 && y <= 9999) setTargetYear(y);
+      if (!isNaN(m) && m >= 0 && m <= 11) setTargetMonth(m);
+      if (!isNaN(d) && d >= 1 && d <= 31) setTargetDay(d);
+      if (cal === "julian" || cal === "gregorian") setCalendarSystem(cal);
+      if (ws === "sunday") setFirstDaySunday(true);
+      else if (ws === "monday") setFirstDaySunday(false);
 
       // Load saved records from localStorage
       try {
@@ -89,12 +105,14 @@ export function DayOfWeekCalculator() {
     }
   }, []);
 
-  // Preset Handlers
+  // Preset Handlers (all explicitly reset to Gregorian & single mode)
   const handleSetToToday = () => {
     const now = new Date();
     setTargetMonth(now.getMonth());
     setTargetDay(now.getDate());
     setTargetYear(now.getFullYear());
+    setCalendarSystem("gregorian");
+    setActiveTab("single");
   };
 
   const handleSetToYesterday = () => {
@@ -103,18 +121,24 @@ export function DayOfWeekCalculator() {
     setTargetMonth(yest.getMonth());
     setTargetDay(yest.getDate());
     setTargetYear(yest.getFullYear());
+    setCalendarSystem("gregorian");
+    setActiveTab("single");
   };
 
   const handleSetApollo11 = () => {
     setTargetMonth(6); // July
     setTargetDay(20);
     setTargetYear(1969);
+    setCalendarSystem("gregorian");
+    setActiveTab("single");
   };
 
   const handleSetDeclaration = () => {
     setTargetMonth(6); // July
     setTargetDay(4);
     setTargetYear(1776);
+    setCalendarSystem("gregorian");
+    setActiveTab("single");
   };
 
   const handleReset = () => {
@@ -124,6 +148,8 @@ export function DayOfWeekCalculator() {
     setTargetYear(now.getFullYear());
     setCalendarSystem("gregorian");
     setFirstDaySunday(true);
+    setActiveTab("single");
+    setBatchText("1969-07-20\n1776-07-04\n2000-01-01\n2026-08-18");
   };
 
   // --- COMPUTATIONS ---
@@ -137,17 +163,19 @@ export function DayOfWeekCalculator() {
   }, [targetYear, targetMonth, targetDay, calendarSystem]);
 
   const batchResults: BatchDateResultItem[] = useMemo(() => {
-    return parseBatchDates(batchText);
+    return parseBatchDates(batchText, "gregorian");
   }, [batchText]);
 
   // Save calculation to LocalStorage
   const handleSaveCalculation = () => {
-    const summary = `${singleResult.formattedDate} (${calendarSystem === "julian" ? "Julian" : "Gregorian"})`;
+    if (!singleResult.isValid) return;
+
+    const summary = `${singleResult.formattedDate} (${calendarSystem === "julian" ? "Proleptic Julian" : "Gregorian"})`;
     const primaryResult = `${singleResult.dayName} (Day ${singleResult.dayOfYear} of ${singleResult.totalDaysInYear})`;
 
     const newRecord: SavedDayRecord = {
       id: Date.now().toString(),
-      tab: activeTab === "batch" ? "Batch Parser" : activeTab === "historical" ? "Julian Calendar" : "Day Finder",
+      tab: activeTab === "batch" ? "Batch Parser" : activeTab === "historical" ? "Proleptic Julian" : "Day Finder",
       summary,
       primaryResult,
       dayOfYear: singleResult.dayOfYear,
@@ -186,17 +214,21 @@ export function DayOfWeekCalculator() {
   const handleCopySummary = () => {
     let summary = "";
     if (activeTab === "batch") {
-      summary = `Batch Date Results:\n` + batchResults.map((r) => `• ${r.dateString}: ${r.dayName} (Day ${r.dayOfYear})`).join("\n") + `\nGenerated by CalcPlatform Day of Week Calculator`;
+      summary = `Batch Date Results:\n` + batchResults.map((r) => `• ${r.dateString}: ${r.dayName} ${r.isValid ? `(Day ${r.dayOfYear})` : "(Invalid Date)"}`).join("\n") + `\nGenerated by CalcPlatform Day of Week Calculator`;
     } else {
-      summary = `Day of the Week Calculation:
+      if (!singleResult.isValid) {
+        summary = `Day of the Week Calculation:\n• Target Date: ${targetMonth + 1}/${targetDay}/${targetYear}\n• Error: ${singleResult.errorMessage}\nGenerated by CalcPlatform Day of Week Calculator`;
+      } else {
+        summary = `Day of the Week Calculation:
 • Target Date: ${singleResult.formattedDate}
 • Day of the Week: ${singleResult.dayName}
 • Day of Year: Day ${singleResult.dayOfYear} of ${singleResult.totalDaysInYear} (${singleResult.daysRemainingInYear} days remaining)
 • ISO 8601 Week Number: Week ${singleResult.isoWeekNumber}
-• Calendar System: ${calendarSystem === "julian" ? "Julian Calendar" : "Gregorian Calendar"}
+• Calendar System: ${calendarSystem === "julian" ? "Proleptic Julian Calendar" : "Gregorian Calendar"}
 • Celestial Deity: ${singleResult.etymology.celestialBody}
 • Japanese: ${singleResult.etymology.japaneseName} | Sanskrit: ${singleResult.etymology.sanskritName}
 Generated by CalcPlatform Day of Week Calculator`;
+      }
     }
 
     navigator.clipboard.writeText(summary);
@@ -204,13 +236,110 @@ Generated by CalcPlatform Day of Week Calculator`;
     setTimeout(() => setCopySuccess(false), 2500);
   };
 
-  // Share URL Generator
+  // Share URL Generator (with serialized state)
   const handleShareLink = () => {
     if (typeof window !== "undefined") {
-      const url = `${window.location.origin}${window.location.pathname}?tab=${activeTab}`;
+      const p = new URLSearchParams();
+      p.set("tab", activeTab);
+      p.set("year", targetYear.toString());
+      p.set("month", targetMonth.toString());
+      p.set("day", targetDay.toString());
+      p.set("calendar", calendarSystem);
+      p.set("weekStart", firstDaySunday ? "sunday" : "monday");
+      const url = `${window.location.origin}${window.location.pathname}?${p.toString()}`;
       navigator.clipboard.writeText(url);
       setShareSuccess(true);
       setTimeout(() => setShareSuccess(false), 2500);
+    }
+  };
+
+  // CSV Export for Single Date
+  const handleExportSingleCsv = () => {
+    if (!singleResult.isValid) return;
+    const escapeCsv = (val: any) => {
+      let str = String(val ?? "");
+      if (/^[=+\-@]/.test(str)) str = "'" + str;
+      if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+        str = '"' + str.replace(/"/g, '""') + '"';
+      }
+      return str;
+    };
+    const headers = [
+      "Date",
+      "Day of Week",
+      "Calendar System",
+      "Day of Year",
+      "Days in Year",
+      "ISO Week",
+      "Leap Year",
+      "Days Remaining",
+    ];
+    const row = [
+      escapeCsv(singleResult.formattedDate),
+      escapeCsv(singleResult.dayName),
+      escapeCsv(singleResult.calendarSystem === "julian" ? "Proleptic Julian" : "Gregorian"),
+      escapeCsv(singleResult.dayOfYear),
+      escapeCsv(singleResult.totalDaysInYear),
+      escapeCsv(singleResult.isoWeekNumber),
+      escapeCsv(singleResult.isLeapYear ? "Yes" : "No"),
+      escapeCsv(singleResult.daysRemainingInYear),
+    ];
+    const csvContent = headers.join(",") + "\n" + row.join(",");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `day_of_week_${targetYear}_${targetMonth + 1}_${targetDay}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  // CSV Export for Batch Parser
+  const handleExportBatchCsv = () => {
+    const escapeCsv = (val: any) => {
+      let str = String(val ?? "");
+      if (/^[=+\-@]/.test(str)) str = "'" + str;
+      if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+        str = '"' + str.replace(/"/g, '""') + '"';
+      }
+      return str;
+    };
+    const headers = [
+      "Date",
+      "Day of Week",
+      "Calendar System",
+      "Day of Year",
+      "Days in Year",
+      "ISO Week",
+      "Leap Year",
+    ];
+    const rows = batchResults.map((r) => [
+      escapeCsv(r.dateString),
+      escapeCsv(r.dayName),
+      escapeCsv("Gregorian"),
+      escapeCsv(r.isValid ? r.dayOfYear : "N/A"),
+      escapeCsv(r.isValid ? r.totalDaysInYear : "N/A"),
+      escapeCsv(r.isValid ? r.isoWeekNumber : "N/A"),
+      escapeCsv(r.isValid ? (r.isLeapYear ? "Yes" : "No") : "N/A"),
+    ]);
+    const csvContent = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `batch_day_of_week_results.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  // Dedicated Browser Print
+  const handlePrintReport = () => {
+    if (typeof window !== "undefined") {
+      window.print();
     }
   };
 
@@ -254,9 +383,18 @@ Generated by CalcPlatform Day of Week Calculator`;
               return <div key={`empty-${idx}`} className="h-6 sm:h-7" />;
             }
             const isSelected = d === selectedDay;
+            const dayOfWeekForCell = getWeekdayForCalendarDate(targetYear, targetMonth, d, calendarSystem);
+            const calSystemLabel = calendarSystem === "julian" ? "Proleptic Julian Calendar" : "Gregorian Calendar";
+            const accessibleLabel = `${MONTH_NAMES[targetMonth]} ${d}, ${targetYear}, ${dayOfWeekForCell.dayName}, ${calSystemLabel}`;
+
             return (
-              <div
+              <button
+                type="button"
                 key={`day-${d}`}
+                role="button"
+                tabIndex={0}
+                aria-label={accessibleLabel}
+                aria-current={isSelected ? "date" : undefined}
                 onClick={() => setTargetDay(d)}
                 className={`h-6 sm:h-7 flex items-center justify-center rounded text-xs font-semibold cursor-pointer transition-all ${
                   isSelected
@@ -265,7 +403,7 @@ Generated by CalcPlatform Day of Week Calculator`;
                 }`}
               >
                 {d}
-              </div>
+              </button>
             );
           })}
         </div>
@@ -273,32 +411,61 @@ Generated by CalcPlatform Day of Week Calculator`;
     );
   };
 
+  const dayHeaders = firstDaySunday
+    ? ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+    : ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+
+  const printDays: (number | null)[] = useMemo(() => {
+    const { daysInMonth, firstDayOfWeekIndex } = singleResult.calendarGrid;
+    const arr: (number | null)[] = [];
+    let offset = firstDaySunday ? firstDayOfWeekIndex : (firstDayOfWeekIndex === 0 ? 6 : firstDayOfWeekIndex - 1);
+    for (let i = 0; i < offset; i++) arr.push(null);
+    for (let d = 1; d <= daysInMonth; d++) arr.push(d);
+    return arr;
+  }, [singleResult.calendarGrid, firstDaySunday]);
+
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
+      <style jsx global>{`
+        @media print {
+          body {
+            background: white !important;
+            color: black !important;
+          }
+          nav, header, footer, .no-print, [role="navigation"] {
+            display: none !important;
+          }
+          #day-of-week-print-report {
+            display: block !important;
+          }
+        }
+      `}</style>
+
       {/* ========================================================================= */}
-      {/* 1. MAIN THIN BLUE BORDER ISOLATED CARD CONTAINER */}
+      {/* 1. MAIN THIN BLUE BORDER ISOLATED CARD CONTAINER (Interactive Mode) */}
       {/* ========================================================================= */}
-      <div className="border border-blue-600 dark:border-blue-500 rounded-xl shadow-md bg-white dark:bg-slate-900 overflow-hidden">
+      <div className="border border-blue-600 dark:border-blue-500 rounded-xl shadow-md bg-white dark:bg-slate-900 overflow-hidden no-print print:hidden">
         
         {/* Context Tabs Header */}
         <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 sm:p-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
-                Day of the Week Calculator & Calendar History
-              </h1>
+              {/* Changed h1 to h2 for single-H1 compliance */}
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                Day of the Week Calculator &amp; Calendar History
+              </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Zeller&apos;s congruence algorithm • ISO 8601 week solver • Planetary etymology & trivia
+                Zeller&apos;s congruence algorithm • ISO 8601 week solver • Planetary etymology &amp; trivia
               </p>
             </div>
 
             {/* Top Quick Actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleCopySummary}
-                className="h-8 text-xs border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xs"
+                className="h-8 text-xs border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xs cursor-pointer"
               >
                 {copySuccess ? (
                   <>
@@ -314,7 +481,7 @@ Generated by CalcPlatform Day of Week Calculator`;
                 variant="outline"
                 size="sm"
                 onClick={handleShareLink}
-                className="h-8 text-xs border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xs"
+                className="h-8 text-xs border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xs cursor-pointer"
               >
                 {shareSuccess ? (
                   <>
@@ -326,14 +493,34 @@ Generated by CalcPlatform Day of Week Calculator`;
                   </>
                 )}
               </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={activeTab === "batch" ? handleExportBatchCsv : handleExportSingleCsv}
+                disabled={activeTab !== "batch" && !singleResult.isValid}
+                className="h-8 text-xs border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xs cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5 mr-1 text-emerald-600" /> Export CSV
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePrintReport}
+                className="h-8 text-xs border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xs cursor-pointer"
+              >
+                <Printer className="w-3.5 h-3.5 mr-1 text-slate-700 dark:text-slate-300" /> Print Report
+              </Button>
             </div>
           </div>
 
-          {/* Context Mode Tabs */}
+          {/* Context Mode Tabs: Mode switch explicitly resets calendarSystem */}
           <div className="flex flex-wrap gap-2 mt-4">
             <button
-              onClick={() => setActiveTab("single")}
-              className={`px-3.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition-all ${
+              onClick={() => {
+                setActiveTab("single");
+                setCalendarSystem("gregorian");
+              }}
+              className={`px-3.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition-all cursor-pointer ${
                 activeTab === "single"
                   ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                   : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50"
@@ -342,8 +529,11 @@ Generated by CalcPlatform Day of Week Calculator`;
               Day Finder (Single Date)
             </button>
             <button
-              onClick={() => setActiveTab("batch")}
-              className={`px-3.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition-all ${
+              onClick={() => {
+                setActiveTab("batch");
+                setCalendarSystem("gregorian");
+              }}
+              className={`px-3.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition-all cursor-pointer ${
                 activeTab === "batch"
                   ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                   : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50"
@@ -356,7 +546,7 @@ Generated by CalcPlatform Day of Week Calculator`;
                 setActiveTab("historical");
                 setCalendarSystem("julian");
               }}
-              className={`px-3.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition-all ${
+              className={`px-3.5 py-1.5 text-xs sm:text-sm font-semibold rounded-lg transition-all cursor-pointer ${
                 activeTab === "historical"
                   ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                   : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50"
@@ -385,25 +575,25 @@ Generated by CalcPlatform Day of Week Calculator`;
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <button
                       onClick={handleSetToToday}
-                      className="text-xs px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 font-bold border border-blue-200 dark:border-blue-800"
+                      className="text-xs px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 font-bold border border-blue-200 dark:border-blue-800 cursor-pointer"
                     >
                       Today
                     </button>
                     <button
                       onClick={handleSetToYesterday}
-                      className="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold border border-slate-200"
+                      className="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold border border-slate-200 cursor-pointer"
                     >
                       Yesterday
                     </button>
                     <button
                       onClick={handleSetApollo11}
-                      className="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold border border-slate-200"
+                      className="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold border border-slate-200 cursor-pointer"
                     >
                       Apollo 11 (1969)
                     </button>
                     <button
                       onClick={handleSetDeclaration}
-                      className="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold border border-slate-200"
+                      className="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold border border-slate-200 cursor-pointer"
                     >
                       US Independence (1776)
                     </button>
@@ -446,6 +636,17 @@ Generated by CalcPlatform Day of Week Calculator`;
                     />
                   </div>
                 </div>
+
+                {/* Validation Error Alert */}
+                {!singleResult.isValid && (
+                  <div role="alert" className="p-3 rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50 dark:bg-rose-950/30 text-xs text-rose-800 dark:text-rose-300 flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                    <div>
+                      <div className="font-bold">Invalid Calendar Date</div>
+                      <div>{singleResult.errorMessage}</div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -453,14 +654,24 @@ Generated by CalcPlatform Day of Week Calculator`;
           {/* TAB 2: BATCH PARSER */}
           {activeTab === "batch" && (
             <div className="p-3.5 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs space-y-3">
-              <span className="text-sm font-bold text-slate-900 dark:text-white block">
-                Batch Date Input (One per line)
-              </span>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-slate-900 dark:text-white block">
+                  Batch Date Input (One per line, format: YYYY-MM-DD)
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportBatchCsv}
+                  className="h-7 text-xs border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 cursor-pointer"
+                >
+                  <Download className="w-3 h-3 mr-1 text-emerald-600" /> Export CSV
+                </Button>
+              </div>
               <textarea
                 rows={5}
                 value={batchText}
                 onChange={(e) => setBatchText(e.target.value)}
-                placeholder="2026-08-18&#10;1969-07-20&#10;1776-07-04"
+                placeholder="2026-08-18&#10;1969-07-20&#10;1776-07-04&#10;2026-02-30"
                 className="w-full p-2.5 text-xs font-mono rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-inner"
               />
             </div>
@@ -471,7 +682,7 @@ Generated by CalcPlatform Day of Week Calculator`;
             <div className="flex items-center justify-between">
               <button
                 onClick={() => setShowSettings(!showSettings)}
-                className="text-xs sm:text-sm font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1.5 hover:underline"
+                className="text-xs sm:text-sm font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1.5 hover:underline cursor-pointer"
               >
                 {showSettings ? "Hide Settings" : "Calculation Settings (Calendar System, Week Start)"}
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showSettings ? "rotate-180" : ""}`} />
@@ -481,7 +692,7 @@ Generated by CalcPlatform Day of Week Calculator`;
                 variant="ghost"
                 size="sm"
                 onClick={handleReset}
-                className="h-7 text-xs text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                className="h-7 text-xs text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3 mr-1" /> Reset Defaults
               </Button>
@@ -499,7 +710,7 @@ Generated by CalcPlatform Day of Week Calculator`;
                     className={input3DStyle}
                   >
                     <option value="gregorian">Gregorian Calendar (Modern Standard)</option>
-                    <option value="julian">Julian Calendar (Historic Pre-1582)</option>
+                    <option value="julian">Proleptic Julian Calendar (Historical / Astronomical)</option>
                   </select>
                 </div>
 
@@ -520,6 +731,21 @@ Generated by CalcPlatform Day of Week Calculator`;
             )}
           </div>
 
+          {/* Educational Julian Banner */}
+          {calendarSystem === "julian" && (
+            <div className="p-3.5 rounded-xl border border-amber-200 dark:border-amber-800/60 bg-amber-50 dark:bg-amber-950/30 text-xs text-amber-900 dark:text-amber-300 space-y-1">
+              <div className="font-bold flex items-center gap-1.5">
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                Proleptic Julian Calendar Active
+              </div>
+              <p>
+                The proleptic Julian calendar applies Julian calendar leap rules mathematically to any selected date.
+                In 2026, the Julian calendar is 13 days behind the modern civil Gregorian calendar.
+                September 15 Julian corresponds to September 28 Gregorian. The month calendar grid and result card below are fully synchronized under this Julian system.
+              </p>
+            </div>
+          )}
+
           {/* ========================================================================= */}
           {/* 3. DYNAMIC OUTPUT CARD & PRIMARY RESULTS */}
           {/* ========================================================================= */}
@@ -529,34 +755,39 @@ Generated by CalcPlatform Day of Week Calculator`;
               {/* Primary Day Highlight */}
               <div className="text-center space-y-2">
                 <span className="text-xs uppercase font-bold tracking-wider text-blue-600 dark:text-blue-400">
-                  Calculated Day of the Week
+                  {singleResult.isValid ? "Calculated Day of the Week" : "Validation Error"}
                 </span>
 
-                <div className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                  {singleResult.dayName}
+                <div className={`text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight ${singleResult.isValid ? "text-slate-900 dark:text-white" : "text-rose-600 dark:text-rose-400"}`}>
+                  {singleResult.isValid ? singleResult.dayName : "Invalid Date"}
                 </div>
 
                 <p className="text-sm sm:text-base font-bold text-blue-600 dark:text-blue-400">
-                  {singleResult.formattedDate}
+                  {singleResult.isValid ? singleResult.formattedDate : singleResult.errorMessage}
                 </p>
 
                 {/* Sub-Badges */}
-                <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-                  <Badge variant="secondary" className="text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-                    Day {singleResult.dayOfYear} of {singleResult.totalDaysInYear}
-                  </Badge>
-                  <Badge variant="secondary" className="text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-                    ISO Week {singleResult.isoWeekNumber}
-                  </Badge>
-                  <Badge variant="secondary" className="text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
-                    {singleResult.daysRemainingInYear} Days Left in Year
-                  </Badge>
-                  {singleResult.isLeapYear && (
-                    <Badge variant="secondary" className="text-xs font-semibold bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300">
-                      Leap Year (366 Days)
+                {singleResult.isValid && (
+                  <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                    <Badge variant="secondary" className="text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                      Day {singleResult.dayOfYear} of {singleResult.totalDaysInYear}
                     </Badge>
-                  )}
-                </div>
+                    <Badge variant="secondary" className="text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                      ISO Week {singleResult.isoWeekNumber}
+                    </Badge>
+                    <Badge variant="secondary" className="text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                      {singleResult.daysRemainingInYear} Days Left in Year
+                    </Badge>
+                    {singleResult.isLeapYear && (
+                      <Badge variant="secondary" className="text-xs font-semibold bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300">
+                        Leap Year (366 Days)
+                      </Badge>
+                    )}
+                    <Badge variant="outline" className="text-xs font-semibold border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300">
+                      {calendarSystem === "julian" ? "Proleptic Julian" : "Gregorian"}
+                    </Badge>
+                  </div>
+                )}
               </div>
 
               {/* Calendar Grid & Etymology Row */}
@@ -565,7 +796,7 @@ Generated by CalcPlatform Day of Week Calculator`;
                 {/* Active Interactive Calendar Grid */}
                 <div>
                   <h3 className="text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">
-                    Month Calendar View
+                    Month Calendar View ({calendarSystem === "julian" ? "Proleptic Julian" : "Gregorian"})
                   </h3>
                   {renderCalendarMatrix()}
                 </div>
@@ -575,7 +806,7 @@ Generated by CalcPlatform Day of Week Calculator`;
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-amber-500" />
                     <h3 className="font-bold text-slate-900 dark:text-white">
-                      {singleResult.dayName} Trivia & Etymology
+                      {singleResult.dayName} Trivia &amp; Etymology
                     </h3>
                   </div>
 
@@ -604,7 +835,7 @@ Generated by CalcPlatform Day of Week Calculator`;
                   </span>
                   <button
                     onClick={() => setShowZellerSteps(!showZellerSteps)}
-                    className="text-[11px] text-blue-600 hover:underline"
+                    className="text-[11px] text-blue-600 hover:underline cursor-pointer"
                   >
                     {showZellerSteps ? "Hide Steps" : "Show Steps"}
                   </button>
@@ -614,7 +845,7 @@ Generated by CalcPlatform Day of Week Calculator`;
                   <div className="font-mono text-[11px] p-2 rounded bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 space-y-1">
                     <div>Formula: {singleResult.zellerSteps.formula}</div>
                     <div>Inputs: q = {singleResult.zellerSteps.q}, m = {singleResult.zellerSteps.m}, K = {singleResult.zellerSteps.K}, J = {singleResult.zellerSteps.J}</div>
-                    <div>Computed h = {singleResult.zellerSteps.h} → <strong>{singleResult.dayName}</strong></div>
+                    <div>Computed h = {singleResult.zellerSteps.h} → <strong>{singleResult.dayName}</strong> ({calendarSystem === "julian" ? "Proleptic Julian" : "Gregorian"})</div>
                   </div>
                 )}
               </div>
@@ -634,16 +865,28 @@ Generated by CalcPlatform Day of Week Calculator`;
                       <th className="py-2 px-2">Date Input</th>
                       <th className="py-2 px-2">Day of the Week</th>
                       <th className="py-2 px-2">Day of Year</th>
+                      <th className="py-2 px-2">ISO Week</th>
                       <th className="py-2 px-2">Leap Year</th>
+                      <th className="py-2 px-2">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
                     {batchResults.map((r, idx) => (
                       <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-800">
                         <td className="py-2 px-2 font-mono">{r.dateString}</td>
-                        <td className="py-2 px-2 font-bold text-blue-600 dark:text-blue-400">{r.dayName}</td>
+                        <td className={`py-2 px-2 font-bold ${r.isValid ? "text-blue-600 dark:text-blue-400" : "text-rose-600 dark:text-rose-400"}`}>
+                          {r.dayName}
+                        </td>
                         <td className="py-2 px-2">{r.isValid ? `Day ${r.dayOfYear}` : "—"}</td>
+                        <td className="py-2 px-2">{r.isValid ? `Week ${r.isoWeekNumber}` : "—"}</td>
                         <td className="py-2 px-2">{r.isValid ? (r.isLeapYear ? "Yes (366d)" : "No (365d)") : "—"}</td>
+                        <td className="py-2 px-2">
+                          {r.isValid ? (
+                            <span className="text-emerald-600 font-semibold text-[11px]">Valid</span>
+                          ) : (
+                            <span className="text-rose-600 font-semibold text-[11px]">{r.errorMessage || "Invalid"}</span>
+                          )}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -658,7 +901,8 @@ Generated by CalcPlatform Day of Week Calculator`;
           <div className="pt-1">
             <Button
               onClick={handleSaveCalculation}
-              className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+              disabled={!singleResult.isValid}
+              className="w-full h-11 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold text-sm sm:text-base rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <Bookmark className="w-4 h-4" />
               Save Date Calculation to History
@@ -674,7 +918,7 @@ Generated by CalcPlatform Day of Week Calculator`;
                 </h3>
                 <button
                   onClick={handleClearAllRecords}
-                  className="text-xs text-rose-600 hover:underline flex items-center gap-1"
+                  className="text-xs text-rose-600 hover:underline flex items-center gap-1 cursor-pointer"
                 >
                   <Trash2 className="w-3 h-3" /> Clear History
                 </button>
@@ -699,7 +943,7 @@ Generated by CalcPlatform Day of Week Calculator`;
                         <td className="py-2.5 px-2 text-right space-x-2">
                           <button
                             onClick={() => handleDeleteRecord(rec.id)}
-                            className="text-rose-500 hover:underline"
+                            className="text-rose-500 hover:underline cursor-pointer"
                           >
                             Delete
                           </button>
@@ -716,8 +960,87 @@ Generated by CalcPlatform Day of Week Calculator`;
       </div>
 
       {/* ========================================================================= */}
-      {/* 5. EDUCATIONAL KNOWLEDGE BASE */}
+      {/* 5. DEDICATED PRINT REPORT CONTAINER (Visible only in print media) */}
       {/* ========================================================================= */}
+      <div id="day-of-week-print-report" className="hidden print:block p-8 bg-white text-black space-y-6">
+        <div className="border-b-2 border-slate-900 pb-3">
+          <h2 className="text-2xl font-bold text-slate-900">Day of the Week Calculator</h2>
+          <p className="text-xs text-slate-600 mt-0.5" suppressHydrationWarning>
+            Authoritative Date Calculation &amp; Calendar Analysis Report • Generated on{" "}
+            <span suppressHydrationWarning>
+              {isMounted ? new Date().toLocaleDateString() : ""}
+            </span>
+          </p>
+        </div>
+
+        {/* Executive Summary Card */}
+        <div className="p-4 rounded-lg border border-slate-300 bg-slate-50 space-y-2.5">
+          <div className="text-xs font-semibold uppercase tracking-wider text-slate-600">Calculated Result</div>
+          <div className="text-3xl font-extrabold text-slate-900">
+            {singleResult.isValid ? singleResult.dayName : "Invalid Date"}
+          </div>
+          <div className="text-base font-bold text-blue-800">
+            {singleResult.isValid ? singleResult.formattedDate : singleResult.errorMessage}
+          </div>
+          {singleResult.isValid && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs pt-2 border-t border-slate-200">
+              <div><span className="font-semibold">Calendar System:</span> {calendarSystem === "julian" ? "Proleptic Julian" : "Gregorian"}</div>
+              <div><span className="font-semibold">Day of Year:</span> Day {singleResult.dayOfYear} of {singleResult.totalDaysInYear}</div>
+              <div><span className="font-semibold">ISO 8601 Week:</span> Week {singleResult.isoWeekNumber}</div>
+              <div><span className="font-semibold">Days Remaining:</span> {singleResult.daysRemainingInYear} days</div>
+            </div>
+          )}
+        </div>
+
+        {/* Compact Print Calendar (Preserving 7 columns) */}
+        <div className="space-y-2">
+          <div className="text-xs font-bold uppercase tracking-wider text-slate-700">
+            Month Calendar View ({MONTH_NAMES[targetMonth]} {targetYear} • {calendarSystem === "julian" ? "Proleptic Julian" : "Gregorian"})
+          </div>
+          <div className="border border-slate-300 rounded p-2">
+            <div className="grid grid-cols-7 gap-1 text-center text-xs">
+              {dayHeaders.map((dh) => (
+                <span key={dh} className="font-bold text-slate-700 py-0.5 border-b border-slate-200">{dh}</span>
+              ))}
+              {printDays.map((d, idx) => (
+                <div
+                  key={idx}
+                  className={`h-6 flex items-center justify-center font-medium ${
+                    d === singleResult.calendarGrid.selectedDay
+                      ? "bg-slate-900 text-white font-bold rounded"
+                      : "text-slate-800"
+                  }`}
+                >
+                  {d || ""}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Zeller Mathematical Derivation */}
+        <div className="p-3 border border-slate-300 rounded text-xs space-y-1 bg-slate-50 font-mono">
+          <div className="font-bold font-sans">Zeller&apos;s Congruence Derivation:</div>
+          <div>Formula: {singleResult.zellerSteps.formula}</div>
+          <div>Parameters: q = {singleResult.zellerSteps.q}, m = {singleResult.zellerSteps.m}, K = {singleResult.zellerSteps.K}, J = {singleResult.zellerSteps.J}</div>
+          <div>Computed h = {singleResult.zellerSteps.h} → {singleResult.dayName} ({calendarSystem === "julian" ? "Proleptic Julian" : "Gregorian"})</div>
+        </div>
+
+        {/* Historical Calendar Disclaimer */}
+        {calendarSystem === "julian" && (
+          <div className="p-3 border border-amber-300 bg-amber-50 rounded text-xs text-amber-900 space-y-1">
+            <div className="font-bold">Proleptic Julian Calendar Notice:</div>
+            <p>
+              This report reflects the mathematical proleptic Julian calendar. For dates in 2026, the Julian calendar is 13 days behind the civil Gregorian calendar. Historical adoption occurred regionally across different countries between 1582 and 1923.
+            </p>
+          </div>
+        )}
+
+        <div className="text-[10px] text-slate-500 pt-3 border-t border-slate-200 text-center">
+          CalcPlatform Educational Reference • Deterministic calendar modular arithmetic • https://calcplatform.com/calculators/day-of-the-week-calculator
+        </div>
+      </div>
+
     </div>
   );
 }

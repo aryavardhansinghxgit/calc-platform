@@ -2,6 +2,7 @@ import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateDayoftheWeekCalculator } from "./calculator";
 import { DayOfWeekCalculator } from "@/components/calculator/day-of-week/DayOfWeekCalculator";
 import { DayOfWeekContent } from "@/components/calculator/day-of-week/DayOfWeekContent";
+import { day_of_the_week_calculatorFaqs } from "./faq";
 
 export const day_of_the_week_calculatorConfig: CalculatorModuleDefinition = {
   id: "day-of-the-week-calculator",
@@ -23,6 +24,7 @@ export const day_of_the_week_calculatorConfig: CalculatorModuleDefinition = {
   priority: 1,
   relatedCalculators: ["date-calculator", "day-counter-calculator", "age-calculator", "time-calculator", "hours-calculator"],
   formulaDescription: "Zeller's Congruence & ISO 8601 Calendar Algorithm",
+  faqs: day_of_the_week_calculatorFaqs,
   CustomComponent: DayOfWeekCalculator,
   ContentComponent: DayOfWeekContent,
   inputs: [

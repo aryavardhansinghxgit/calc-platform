@@ -2,18 +2,20 @@ import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateDayCounter } from "./calculator";
 import { DayCounterCalculator } from "@/components/calculator/day-counter/DayCounterCalculator";
 import { DayCounterContent } from "@/components/calculator/day-counter/DayCounterContent";
+import { day_counter_calculatorFaqs } from "./faq";
 
 export const day_counter_calculatorConfig: CalculatorModuleDefinition = {
   id: "day-counter-calculator",
-  title: "Day Counter",
+  title: "Day Counter Calculator",
   slug: "day-counter-calculator",
   category: "date",
   subcategory: "Date & Time",
-  description: "Count exact total calendar days, working days, and weekends between two dates, or solve day-of-week with Conway's Doomsday rule.",
+  description:
+    "Calculate days between two dates, working days, weekends and U.S. federal holidays. Add or subtract days, check weekdays with Doomsday, and explore date-count conventions.",
   iconName: "Calendar",
   featured: true,
   keywords: [
-    "day counter",
+    "day counter calculator",
     "days between dates",
     "calendar days calculator",
     "working days counter",
@@ -21,8 +23,16 @@ export const day_counter_calculatorConfig: CalculatorModuleDefinition = {
     "conway doomsday rule",
   ],
   priority: 1,
-  relatedCalculators: ["date-calculator", "time-calculator", "hours-calculator", "time-card-calculator", "time-duration-calculator"],
+  relatedCalculators: [
+    "date-calculator",
+    "time-calculator",
+    "hours-calculator",
+    "time-card-calculator",
+    "time-duration-calculator",
+    "age-calculator",
+  ],
   formulaDescription: "Total Days = End Date - Start Date (with business days and holiday exclusions)",
+  faqs: day_counter_calculatorFaqs,
   CustomComponent: DayCounterCalculator,
   ContentComponent: DayCounterContent,
   inputs: [
@@ -30,13 +40,13 @@ export const day_counter_calculatorConfig: CalculatorModuleDefinition = {
       name: "startDate",
       label: "Start Date",
       type: "date",
-      defaultValue: "2026-01-01",
+      defaultValue: "2026-09-14",
     },
     {
       name: "endDate",
       label: "End Date",
       type: "date",
-      defaultValue: "2026-12-31",
+      defaultValue: "2026-12-14",
     },
   ],
   outputs: [
