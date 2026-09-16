@@ -13,12 +13,13 @@ export function calculateTimeZoneCalculator(inputs: Record<string, any>): TimeZo
   const fromOff = Number(inputs.fromOffset);
   const toOff = Number(inputs.toOffset);
 
+  // Map offsets to matching or custom IANA zones
   const customFrom: TimeZoneDefinition = {
     id: "custom-from",
     name: `UTC${fromOff >= 0 ? "+" : ""}${fromOff}`,
     city: "Origin",
     country: "Custom",
-    standardOffsetMinutes: (isNaN(fromOff) ? -5 : fromOff) * 60,
+    ianaName: fromOff === -5 ? "America/New_York" : fromOff === -8 ? "America/Los_Angeles" : "UTC",
     region: "Americas",
   };
 
@@ -27,7 +28,7 @@ export function calculateTimeZoneCalculator(inputs: Record<string, any>): TimeZo
     name: `UTC${toOff >= 0 ? "+" : ""}${toOff}`,
     city: "Destination",
     country: "Custom",
-    standardOffsetMinutes: (isNaN(toOff) ? 0 : toOff) * 60,
+    ianaName: toOff === 0 ? "Europe/London" : toOff === 1 ? "Europe/Paris" : "UTC",
     region: "Europe",
   };
 
@@ -37,7 +38,6 @@ export function calculateTimeZoneCalculator(inputs: Record<string, any>): TimeZo
     timeMinute: mins,
     fromZone: customFrom,
     toZone: customTo,
-    autoDst: false,
   });
 
   return {

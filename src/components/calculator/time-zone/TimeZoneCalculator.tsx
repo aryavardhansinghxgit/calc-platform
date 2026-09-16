@@ -13,8 +13,8 @@ import {
   ArrowRightLeft,
   Calendar as CalendarIcon,
   Clock,
-  Sun,
-  Moon,
+  Download,
+  AlertCircle,
   Plus,
   X,
   MapPin,
@@ -26,8 +26,7 @@ import {
   TimeZoneDefinition,
   convertTimeZone,
   generateMeetingPlannerGrid,
-  getActiveOffsetMinutes,
-  formatOffsetString,
+  formatUtcInstantInIanaZone,
   ConvertTimeZoneResult,
 } from "@/lib/calculator-engine/formulas/time-zone";
 
@@ -44,6 +43,18 @@ const MONTH_NAMES = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
+
+// CSV formula injection sanitizer
+function sanitizeCsvCell(cell: string | number): string {
+  const str = String(cell ?? "").trim();
+  if (/^[=+\-@\t\r]/.test(str)) {
+    return `"'${str.replace(/"/g, '""')}"`;
+  }
+  if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+    return `"${str.replace(/"/g, '""')}"`;
+  }
+  return str;
+}
 
 export function TimeZoneCalculator() {
   // ==========================================
@@ -63,31 +74,27 @@ export function TimeZoneCalculator() {
   const [inputMeridiem, setInputMeridiem] = useState<"AM" | "PM">("PM");
 
   // Single Converter Zones
-  const [fromZoneId, setFromZoneId] = useState<string>("utc-5"); // New York (EST/EDT)
-  const [toZoneId, setToZoneId] = useState<string>("utc-0-gmt"); // London (GMT/BST)
+  const [fromZoneId, setFromZoneId] = useState<string>("utc-5-ny"); // New York (EST/EDT)
+  const [toZoneId, setToZoneId] = useState<string>("utc-0-lon"); // London (GMT/BST)
 
   // Settings
   const [is24Hour, setIs24Hour] = useState<boolean>(false);
-  const [autoDst, setAutoDst] = useState<boolean>(true);
   const [showSettings, setShowSettings] = useState<boolean>(false);
 
-  // Meeting Planner Selected Cities (Up to 5)
+  // Meeting Planner Selected Cities (Up to 6)
   const [meetingCityIds, setMeetingCityIds] = useState<string[]>([
-    "utc-8",       // Los Angeles
-    "utc-5",       // New York
-    "utc-0-gmt",   // London
-    "utc-5-30",    // India
-    "utc-9-jst",   // Tokyo
+    "utc-8-la",       // Los Angeles
+    "utc-5-ny",       // New York
+    "utc-0-lon",      // London
+    "utc-5-30-del",   // New Delhi
+    "utc-9-tok",      // Tokyo
   ]);
 
   // Feedback & History
   const [copySuccess, setCopySuccess] = useState<boolean>(false);
   const [shareSuccess, setShareSuccess] = useState<boolean>(false);
+  const [csvDownloaded, setCsvDownloaded] = useState<boolean>(false);
   const [savedRecords, setSavedRecords] = useState<SavedTimeZoneRecord[]>([]);
-
-  // Search Filter for Dropdowns
-  const [fromSearch, setFromSearch] = useState<string>("");
-  const [toSearch, setToSearch] = useState<string>("");
 
   // Sync with URL query parameters on initial mount
   useEffect(() => {
@@ -96,6 +103,12 @@ export function TimeZoneCalculator() {
       const tabParam = params.get("tab");
       const fromParam = params.get("from");
       const toParam = params.get("to");
+      const yrParam = params.get("y");
+      const moParam = params.get("m");
+      const dyParam = params.get("d");
+      const hrParam = params.get("h");
+      const minParam = params.get("min");
+      const fmtParam = params.get("fmt");
 
       if (tabParam === "meeting" || tabParam === "worldclock" || tabParam === "single") {
         setActiveTab(tabParam);
@@ -106,6 +119,12 @@ export function TimeZoneCalculator() {
       if (toParam && TIME_ZONE_DATABASE.some((z) => z.id === toParam)) {
         setToZoneId(toParam);
       }
+      if (yrParam) setSelectedYear(parseInt(yrParam, 10) || today.getFullYear());
+      if (moParam) setSelectedMonth(parseInt(moParam, 10) || 0);
+      if (dyParam) setSelectedDay(parseInt(dyParam, 10) || 1);
+      if (hrParam) setInputHour(parseInt(hrParam, 10) || 14);
+      if (minParam) setInputMinute(parseInt(minParam, 10) || 0);
+      if (fmtParam === "24") setIs24Hour(true);
 
       // Load saved records from localStorage
       try {
@@ -151,19 +170,18 @@ export function TimeZoneCalculator() {
     setInputMinute(30);
     setInputSecond(0);
     setInputMeridiem("PM");
-    setFromZoneId("utc-5");
-    setToZoneId("utc-0-gmt");
-    setAutoDst(true);
+    setFromZoneId("utc-5-ny");
+    setToZoneId("utc-0-lon");
     setIs24Hour(false);
   };
 
   // Find Zone definitions
   const fromZone = useMemo(() => {
-    return TIME_ZONE_DATABASE.find((z) => z.id === fromZoneId) || TIME_ZONE_DATABASE[10]; // Default New York
+    return TIME_ZONE_DATABASE.find((z) => z.id === fromZoneId) || TIME_ZONE_DATABASE[13]; // Default New York
   }, [fromZoneId]);
 
   const toZone = useMemo(() => {
-    return TIME_ZONE_DATABASE.find((z) => z.id === toZoneId) || TIME_ZONE_DATABASE[17]; // Default London
+    return TIME_ZONE_DATABASE.find((z) => z.id === toZoneId) || TIME_ZONE_DATABASE[20]; // Default London
   }, [toZoneId]);
 
   // Selected date object
@@ -186,9 +204,8 @@ export function TimeZoneCalculator() {
       timeSecond: inputSecond,
       fromZone,
       toZone,
-      autoDst,
     });
-  }, [currentDateObj, inputHour, inputMinute, inputSecond, inputMeridiem, is24Hour, fromZone, toZone, autoDst]);
+  }, [currentDateObj, inputHour, inputMinute, inputSecond, inputMeridiem, is24Hour, fromZone, toZone]);
 
   // --- MEETING PLANNER GRID COMPUTATION ---
   const meetingCities = useMemo(() => {
@@ -198,8 +215,8 @@ export function TimeZoneCalculator() {
   }, [meetingCityIds]);
 
   const meetingSlots = useMemo(() => {
-    return generateMeetingPlannerGrid(meetingCities, currentDateObj, autoDst);
-  }, [meetingCities, currentDateObj, autoDst]);
+    return generateMeetingPlannerGrid(meetingCities, currentDateObj);
+  }, [meetingCities, currentDateObj]);
 
   const handleAddMeetingCity = (cityId: string) => {
     if (meetingCityIds.length < 6 && !meetingCityIds.includes(cityId)) {
@@ -255,12 +272,12 @@ export function TimeZoneCalculator() {
   // Formatted Summary Copy
   const handleCopySummary = () => {
     const summary = `Time Zone Conversion:
-• From: ${fromZone.city} (${fromZone.country}) [${conversionResult.fromOffsetFormatted}]
+• From: ${fromZone.city} (${fromZone.country}) [${conversionResult.fromOffsetFormatted} ${conversionResult.fromAbbr}]
 • Time: ${conversionResult.sourceDateTimeFormatted}
-• To: ${toZone.city} (${toZone.country}) [${conversionResult.toOffsetFormatted}]
+• To: ${toZone.city} (${toZone.country}) [${conversionResult.toOffsetFormatted} ${conversionResult.toAbbr}]
 • Result: ${conversionResult.targetDateTimeFormatted}
 • Difference: ${conversionResult.timeDifferenceFormatted}
-${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight Saving Time (DST) automatically applied.\n" : ""}Generated by CalcPlatform Time Zone Calculator`;
+${conversionResult.isFromDst || conversionResult.isToDst ? "• Daylight Saving Time: Active\n" : ""}Generated by CalcPlatform Time Zone Calculator`;
 
     navigator.clipboard.writeText(summary);
     setCopySuccess(true);
@@ -270,11 +287,91 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
   // Share URL Generator
   const handleShareLink = () => {
     if (typeof window !== "undefined") {
-      const url = `${window.location.origin}${window.location.pathname}?tab=${activeTab}&from=${fromZoneId}&to=${toZoneId}`;
+      let normalizedHour = inputHour;
+      if (!is24Hour) {
+        normalizedHour = inputHour % 12;
+        if (inputMeridiem === "PM") normalizedHour += 12;
+      }
+      const url = `${window.location.origin}${window.location.pathname}?tab=${activeTab}&from=${fromZoneId}&to=${toZoneId}&y=${selectedYear}&m=${selectedMonth}&d=${selectedDay}&h=${normalizedHour}&min=${inputMinute}&fmt=${is24Hour ? "24" : "12"}`;
       navigator.clipboard.writeText(url);
       setShareSuccess(true);
       setTimeout(() => setShareSuccess(false), 2500);
     }
+  };
+
+  // CSV Export Generator
+  const handleExportCsv = () => {
+    let csvContent = "";
+    if (activeTab === "single") {
+      const headers = [
+        "Origin City",
+        "Origin IANA Zone",
+        "Origin Local Time",
+        "Origin UTC Offset",
+        "Origin DST",
+        "Destination City",
+        "Destination IANA Zone",
+        "Destination Local Time",
+        "Destination UTC Offset",
+        "Destination DST",
+        "Offset Difference",
+      ];
+      const row = [
+        fromZone.city,
+        fromZone.ianaName,
+        conversionResult.sourceDateTimeFormatted,
+        conversionResult.fromOffsetFormatted,
+        conversionResult.isFromDst ? "Yes" : "No",
+        toZone.city,
+        toZone.ianaName,
+        conversionResult.targetDateTimeFormatted,
+        conversionResult.toOffsetFormatted,
+        conversionResult.isToDst ? "Yes" : "No",
+        conversionResult.timeDifferenceFormatted,
+      ];
+      csvContent = `${headers.map(sanitizeCsvCell).join(",")}\n${row.map(sanitizeCsvCell).join(",")}\n`;
+    } else if (activeTab === "meeting") {
+      const headers = ["UTC Hour", ...meetingCities.map((c) => `${c.city} (${c.country})`), "Status"];
+      const rows = meetingSlots.map((slot) => {
+        const h12 = slot.utcHour % 12 === 0 ? 12 : slot.utcHour % 12;
+        const ampm = slot.utcHour >= 12 ? "PM" : "AM";
+        const utcLabel = `${h12}:00 ${ampm} (${String(slot.utcHour).padStart(2, "0")}:00)`;
+        const cityLabels = slot.cityTimes.map((ct) => {
+          const cH12 = ct.localHour % 12 === 0 ? 12 : ct.localHour % 12;
+          const cAmpm = ct.localHour >= 12 ? "PM" : "AM";
+          return `${cH12}:${String(ct.localMinute).padStart(2, "0")} ${cAmpm} [${ct.status.toUpperCase()}]`;
+        });
+        const statusLabel = slot.allWorkingHours ? "ALL WORKING HOURS" : "PARTIAL";
+        return [utcLabel, ...cityLabels, statusLabel];
+      });
+      csvContent = `${headers.map(sanitizeCsvCell).join(",")}\n${rows.map((r) => r.map(sanitizeCsvCell).join(",")).join("\n")}\n`;
+    } else {
+      const headers = ["City", "Country", "IANA Zone", "UTC Offset", "Current Local Time", "DST Active"];
+      const rows = TIME_ZONE_DATABASE.map((tz) => {
+        const target = formatUtcInstantInIanaZone(new Date(), tz.ianaName);
+        return [
+          tz.city,
+          tz.country,
+          tz.ianaName,
+          target.offsetFormatted,
+          target.formatted,
+          target.isDst ? "Yes" : "No",
+        ];
+      });
+      csvContent = `${headers.map(sanitizeCsvCell).join(",")}\n${rows.map((r) => r.map(sanitizeCsvCell).join(",")).join("\n")}\n`;
+    }
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const filename = `timezone_export_${activeTab}_${selectedYear}-${String(selectedMonth + 1).padStart(2, "0")}-${String(selectedDay).padStart(2, "0")}.csv`;
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    setCsvDownloaded(true);
+    setTimeout(() => setCsvDownloaded(false), 2500);
   };
 
   // Pure White 3D tactile input styling
@@ -291,16 +388,32 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
         <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-4 sm:p-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
                 Global Time Zone Converter & Meeting Planner
-              </h1>
+              </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Precision conversions (UTC-12 to UTC+14) • Automated DST engine • Multi-city golden hour planner
+                Precision conversions (UTC-12 to UTC+14) • Authoritative IANA engine • Multi-city availability planner
               </p>
             </div>
 
             {/* Top Quick Actions */}
             <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleExportCsv}
+                className="h-8 text-xs border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xs"
+              >
+                {csvDownloaded ? (
+                  <>
+                    <CheckCircle2 className="w-3.5 h-3.5 mr-1 text-emerald-600" /> Downloaded!
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-3.5 h-3.5 mr-1" /> Export CSV
+                  </>
+                )}
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
@@ -503,12 +616,12 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
                   >
                     {TIME_ZONE_DATABASE.map((tz) => (
                       <option key={tz.id} value={tz.id}>
-                        {tz.city} ({tz.country}) — {tz.name.split(" (")[0]}
+                        {tz.city} ({tz.country}) — {tz.ianaName}
                       </option>
                     ))}
                   </select>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    {fromZone.name} {conversionResult.isFromDst ? "(DST Active)" : ""}
+                    {fromZone.name} {conversionResult.isFromDst ? `(DST Active — ${conversionResult.fromAbbr})` : `(${conversionResult.fromAbbr})`}
                   </p>
                 </div>
 
@@ -543,16 +656,24 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
                   >
                     {TIME_ZONE_DATABASE.map((tz) => (
                       <option key={tz.id} value={tz.id}>
-                        {tz.city} ({tz.country}) — {tz.name.split(" (")[0]}
+                        {tz.city} ({tz.country}) — {tz.ianaName}
                       </option>
                     ))}
                   </select>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    {toZone.name} {conversionResult.isToDst ? "(DST Active)" : ""}
+                    {toZone.name} {conversionResult.isToDst ? `(DST Active — ${conversionResult.toAbbr})` : `(${conversionResult.toAbbr})`}
                   </p>
                 </div>
 
               </div>
+
+              {/* Transition Warning if Ambiguous or Nonexistent */}
+              {conversionResult.transitionNote && (
+                <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs text-amber-800 dark:text-amber-200 flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 mt-0.5 text-amber-600 shrink-0" />
+                  <span>{conversionResult.transitionNote}</span>
+                </div>
+              )}
 
               {/* Dynamic Output Card */}
               <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-blue-50 via-indigo-50/40 to-blue-50/20 dark:from-slate-800/80 dark:via-slate-800/40 dark:to-slate-800/80 border border-blue-200 dark:border-blue-900/60 shadow-inner space-y-3">
@@ -578,13 +699,13 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
                   <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
                     <span className="text-slate-500 dark:text-slate-400 block mb-0.5 font-medium">Origin Time ({fromZone.city})</span>
                     <span className="text-sm font-bold text-slate-900 dark:text-white block">{conversionResult.sourceDateTimeFormatted}</span>
-                    <span className="text-[11px] font-mono text-slate-500">{fromZone.name}</span>
+                    <span className="text-[11px] font-mono text-slate-500">{fromZone.ianaName} ({conversionResult.fromOffsetFormatted})</span>
                   </div>
 
                   <div className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
                     <span className="text-slate-500 dark:text-slate-400 block mb-0.5 font-medium">Destination Time ({toZone.city})</span>
                     <span className="text-sm font-bold text-blue-600 dark:text-blue-400 block">{conversionResult.targetDateTimeFormatted}</span>
-                    <span className="text-[11px] font-mono text-slate-500">{toZone.name}</span>
+                    <span className="text-[11px] font-mono text-slate-500">{toZone.ianaName} ({conversionResult.toOffsetFormatted})</span>
                   </div>
                 </div>
               </div>
@@ -604,7 +725,7 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
                       Selected Meeting Cities ({meetingCities.length} / 6)
                     </span>
                     <p className="text-xs text-slate-500">
-                      Green indicates overlapping business working hours (9 AM–5 PM).
+                      Green indicates overlapping core business working hours (9 AM–5 PM).
                     </p>
                   </div>
 
@@ -631,25 +752,28 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
 
                 {/* City Chips */}
                 <div className="flex flex-wrap gap-2">
-                  {meetingCities.map((c) => (
-                    <div
-                      key={c.id}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200"
-                    >
-                      <span>{c.city}</span>
-                      <span className="text-[10px] text-slate-500 font-mono">
-                        {formatOffsetString(getActiveOffsetMinutes(c, currentDateObj, autoDst).offsetMinutes)}
-                      </span>
-                      {meetingCities.length > 2 && (
-                        <button
-                          onClick={() => handleRemoveMeetingCity(c.id)}
-                          className="p-0.5 text-slate-400 hover:text-rose-500 rounded"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                  {meetingCities.map((c) => {
+                    const formatted = formatUtcInstantInIanaZone(currentDateObj, c.ianaName);
+                    return (
+                      <div
+                        key={c.id}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200"
+                      >
+                        <span>{c.city}</span>
+                        <span className="text-[10px] text-slate-500 font-mono">
+                          {formatted.offsetFormatted}
+                        </span>
+                        {meetingCities.length > 2 && (
+                          <button
+                            onClick={() => handleRemoveMeetingCity(c.id)}
+                            className="p-0.5 text-slate-400 hover:text-rose-500 rounded"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -676,7 +800,7 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
                   <table className="w-full text-left text-xs border-collapse">
                     <thead>
                       <tr className="border-b border-slate-200 dark:border-slate-700 text-slate-500">
-                        <th className="py-2 px-2 w-24">UTC Time</th>
+                        <th className="py-2 px-2 w-28">UTC Time</th>
                         {meetingCities.map((c) => (
                           <th key={c.id} className="py-2 px-2 font-bold text-slate-900 dark:text-white">
                             {c.city}
@@ -723,7 +847,7 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
                             <td className="py-2 px-2 text-right">
                               {slot.allWorkingHours ? (
                                 <Badge className="bg-emerald-600 text-white text-[10px]">
-                                  Golden Hour
+                                  All Working Hours
                                 </Badge>
                               ) : (
                                 <span className="text-[11px] text-slate-400">Partial</span>
@@ -745,16 +869,15 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
             <div className="space-y-4">
               <div className="p-3.5 sm:p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3">
-                  Major Global Clocks (Real-Time Live Offsets)
+                  Major Global Clocks (Real-Time Synchronized IANA Offsets)
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs">
                   {TIME_ZONE_DATABASE.map((tz) => {
-                    const offset = getActiveOffsetMinutes(tz, currentDateObj, autoDst);
-                    const utcMs = currentDateObj.getTime() + currentDateObj.getTimezoneOffset() * 60000;
-                    const targetDate = new Date(utcMs + offset.offsetMinutes * 60000);
-                    const h = targetDate.getHours();
-                    const m = targetDate.getMinutes();
+                    const nowUtc = new Date();
+                    const target = formatUtcInstantInIanaZone(nowUtc, tz.ianaName);
+                    const h = target.targetHour;
+                    const m = target.targetMinute;
                     const ampm = h >= 12 ? "PM" : "AM";
                     const h12 = h % 12 === 0 ? 12 : h % 12;
 
@@ -770,14 +893,14 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-slate-900 dark:text-white">{tz.city}</span>
                           <span className="font-mono text-[11px] text-blue-600 dark:text-blue-400 font-bold">
-                            {formatOffsetString(offset.offsetMinutes)}
+                            {target.offsetFormatted}
                           </span>
                         </div>
                         <div className="text-sm font-extrabold text-slate-800 dark:text-slate-100 font-mono">
                           {h12}:{String(m).padStart(2, "0")} {ampm}
                         </div>
                         <div className="text-[11px] text-slate-500 truncate">
-                          {tz.country} • {tz.name.split(" (")[0]}
+                          {tz.country} • {tz.ianaName} {target.isDst ? `(${target.timeZoneAbbr})` : ""}
                         </div>
                       </div>
                     );
@@ -794,7 +917,7 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
                 onClick={() => setShowSettings(!showSettings)}
                 className="text-xs sm:text-sm font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1.5 hover:underline"
               >
-                {showSettings ? "Hide Settings" : "Calculation Settings (Automatic Daylight Saving Time, 12H / 24H Format)"}
+                {showSettings ? "Hide Settings" : "Calculation Settings (Clock Format 12H / 24H)"}
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showSettings ? "rotate-180" : ""}`} />
               </button>
 
@@ -826,16 +949,11 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
 
                 <div>
                   <label className="font-semibold text-slate-700 dark:text-slate-300 block mb-1">
-                    Automatic Daylight Saving Time (DST):
+                    Engine Time Zone Rules:
                   </label>
-                  <select
-                    value={autoDst ? "true" : "false"}
-                    onChange={(e) => setAutoDst(e.target.value === "true")}
-                    className={input3DStyle}
-                  >
-                    <option value="true">Enabled (Auto-adjust for US, EU & AU summer clocks)</option>
-                    <option value="false">Disabled (Enforce standard winter UTC offsets)</option>
-                  </select>
+                  <div className="p-2.5 rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-[11px] text-slate-600 dark:text-slate-300">
+                    Automated IANA Dynamic Database (tzdb) with exact transition offsets.
+                  </div>
                 </div>
               </div>
             )}
@@ -905,10 +1023,6 @@ ${conversionResult.isFromDst || conversionResult.isToDst ? "• Note: Daylight S
 
         </div>
       </div>
-
-      {/* ========================================================================= */}
-      {/* 4. EDUCATIONAL KNOWLEDGE BASE */}
-      {/* ========================================================================= */}
     </div>
   );
 }

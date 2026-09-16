@@ -2,6 +2,7 @@ import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateTimeZoneCalculator } from "./calculator";
 import { TimeZoneCalculator } from "@/components/calculator/time-zone/TimeZoneCalculator";
 import { TimeZoneContent } from "@/components/calculator/time-zone/TimeZoneContent";
+import { time_zone_calculatorFaqs } from "./faq";
 
 export const time_zone_calculatorConfig: CalculatorModuleDefinition = {
   id: "time-zone-calculator",
@@ -9,7 +10,7 @@ export const time_zone_calculatorConfig: CalculatorModuleDefinition = {
   slug: "time-zone-calculator",
   category: "date",
   subcategory: "Date & Time",
-  description: "Convert time across global time zones (UTC-12 to UTC+14), plan multi-city meetings, and account for automated Daylight Saving Time (DST).",
+  description: "Convert time across global IANA time zones (UTC-12 to UTC+14), resolve dynamic Daylight Saving Time shifts, plan multi-city meetings, and export schedules.",
   iconName: "Globe",
   featured: true,
   keywords: [
@@ -20,12 +21,15 @@ export const time_zone_calculatorConfig: CalculatorModuleDefinition = {
     "world clock meeting planner",
     "est to gmt converter",
     "daylight saving time converter",
+    "iana time zone converter",
+    "meeting planner grid",
   ],
   priority: 1,
   relatedCalculators: ["time-calculator", "hours-calculator", "time-card-calculator", "time-duration-calculator", "date-calculator"],
-  formulaDescription: "Target Time = Origin Time - Origin Offset + Destination Offset",
+  formulaDescription: "Target Instant = Local Wall Clock (Origin) -> UTC Instant (via IANA offset) -> Local Wall Clock (Destination)",
   CustomComponent: TimeZoneCalculator,
   ContentComponent: TimeZoneContent,
+  faqs: time_zone_calculatorFaqs,
   inputs: [
     {
       name: "timeStr",

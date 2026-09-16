@@ -2,9 +2,9 @@ import { Metadata } from "next";
 import { generateCalculatorMetadata } from "@/lib/seo-helpers";
 
 export const time_zone_calculatorMetadata: Metadata = generateCalculatorMetadata({
-  title: "Time Zone Converter — Global Meeting Planner & World Clock",
+  title: "Time Zone Calculator & Converter — World Clock & Meeting Planner",
   description:
-    "Free advanced Time Zone Converter. Convert time between global cities (UTC-12 to UTC+14), automatically calculate Daylight Saving Time (DST) shifts, and plan multi-city meetings with 3D world map.",
+    "Convert time between cities with DST-aware time zone calculations. Compare world clocks, check date changes, and find working-hour overlaps for international meetings.",
   slug: "time-zone-calculator",
   keywords: [
     "time zone calculator",
@@ -12,8 +12,9 @@ export const time_zone_calculatorMetadata: Metadata = generateCalculatorMetadata
     "utc converter",
     "gmt time converter",
     "world clock meeting planner",
-    "est to gmt calculator",
-    "convert timezones online",
+    "convert time between time zones",
     "daylight saving time converter",
+    "meeting planner grid",
+    "iana time zone calculator",
   ],
 });
