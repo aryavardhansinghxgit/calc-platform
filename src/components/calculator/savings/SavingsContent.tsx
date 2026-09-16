@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { ChevronDown, BookOpen, HelpCircle, ShieldCheck } from "lucide-react";
 import Link from "next/link";
-import { SAVINGS_CALCULATOR } from "@/calculators/finance/savings";
+import { savingsFaqs } from "@/calculators/finance/savings/faq";
 
 export function SavingsContent() {
   // All 20 FAQs open by default
@@ -23,7 +23,7 @@ export function SavingsContent() {
     });
   };
 
-  const faqs = SAVINGS_CALCULATOR.faqs || [];
+  const faqs = savingsFaqs || [];
 
   return (
     <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-6">

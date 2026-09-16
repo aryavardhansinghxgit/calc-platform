@@ -8,7 +8,7 @@ import {
   ShieldCheck,
   ChevronDown,
 } from "lucide-react";
-import { HOUSE_AFFORDABILITY_CALCULATOR } from "@/calculators/finance/house-affordability";
+import { houseAffordabilityFaqs } from "@/calculators/finance/house-affordability/faq";
 
 export function HouseAffordabilityContentSection() {
   // All 12 FAQs open by default
@@ -28,7 +28,7 @@ export function HouseAffordabilityContentSection() {
     });
   };
 
-  const faqs = HOUSE_AFFORDABILITY_CALCULATOR.faqs || [];
+  const faqs = houseAffordabilityFaqs || [];
 
   return (
     <div className="space-y-8 py-2 text-zinc-700 dark:text-zinc-300">

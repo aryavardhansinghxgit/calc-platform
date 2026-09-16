@@ -9,7 +9,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import Link from "next/link";
-import { STUDENT_LOAN_CALCULATOR } from "@/calculators/finance/student-loan";
+import { studentLoanFaqs } from "@/calculators/finance/student-loan/faq";
 
 export function StudentLoanContent() {
   // All 20 FAQs open by default
@@ -29,7 +29,7 @@ export function StudentLoanContent() {
     });
   };
 
-  const faqs = STUDENT_LOAN_CALCULATOR.faqs || [];
+  const faqs = studentLoanFaqs || [];
 
   return (
     <div className="mt-8 space-y-10 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200">

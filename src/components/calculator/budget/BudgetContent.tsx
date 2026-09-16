@@ -15,10 +15,10 @@ import {
   Layers,
 } from "lucide-react";
 import Link from "next/link";
-import { BUDGET_CALCULATOR } from "@/calculators/finance/budget";
+import { budgetFaqs } from "@/calculators/finance/budget/faq";
 
 export function BudgetContent() {
-  const faqs = BUDGET_CALCULATOR.faqs || [];
+  const faqs = budgetFaqs || [];
 
   // All FAQs open by default (matching 401(k) standard)
   const [openFaqIndices, setOpenFaqIndices] = useState<Set<number>>(

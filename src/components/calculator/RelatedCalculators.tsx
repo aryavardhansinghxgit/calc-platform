@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 import Link from "next/link";
 import { getCalculatorDefinition, getRelatedCalculators } from "@/lib/calculator-engine/registry";
 import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
-import { CalculatorModuleDefinition } from "@/calculators";
+import type { CalculatorModuleDefinition } from "@/calculators/types";
 
 export interface RelatedCalculatorsProps {
   currentId?: string;
