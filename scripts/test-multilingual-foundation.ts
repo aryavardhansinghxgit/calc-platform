@@ -173,9 +173,13 @@ assert(en1.locale === "en", "E1: First EN request returns English overlay");
 const es = getMortgageOverlay("es");
 assert(es.locale === "es", "E2: Requesting published ES returns Spanish overlay");
 
-// Request French (draft)
+// Request French (now fully implemented)
 const fr = getMortgageOverlay("fr");
-assert(fr.locale === "en", "E3: Requesting draft FR safely returns fallback without error");
+assert(fr.locale === "fr", "E3: Requesting FR returns French overlay");
+
+// Request unknown locale (fallback)
+const unk = getMortgageOverlay("zh");
+assert(unk.locale === "en", "E4: Requesting unknown locale safely returns English fallback without error");
 
 // Request English again
 const en2 = getMortgageOverlay("en");
@@ -222,20 +226,28 @@ assert(
 console.log("\n--- SUITE H: Publication Gating ---");
 assert(isLocalePublished("en", "mortgage-calculator") === true, "H1: 'en' is PUBLISHED");
 assert(isLocalePublished("es", "mortgage-calculator") === true, "H2: 'es' mortgage pilot is PUBLISHED");
-assert(isLocalePublished("fr", "mortgage-calculator") === false, "H3: 'fr' is GATED (false)");
-assert(isLocalePublished("de", "mortgage-calculator") === false, "H4: 'de' is GATED (false)");
-assert(isLocalePublished("hi", "mortgage-calculator") === false, "H5: 'hi' is GATED (false)");
-assert(isLocalePublished("pt", "mortgage-calculator") === false, "H6: 'pt' is GATED (false)");
+assert(isLocalePublished("fr", "mortgage-calculator") === true, "H3: 'fr' mortgage is PUBLISHED");
+assert(isLocalePublished("de", "mortgage-calculator") === true, "H4: 'de' mortgage is PUBLISHED");
+assert(isLocalePublished("hi", "mortgage-calculator") === true, "H5: 'hi' mortgage is PUBLISHED");
+assert(isLocalePublished("pt", "mortgage-calculator") === true, "H6: 'pt' mortgage is PUBLISHED");
+assert(isLocalePublished("fr", "percentage-calculator") === false, "H7: 'fr' on percentage remains GATED (false)");
+assert(isLocalePublished("zh", "mortgage-calculator") === false, "H8: 'zh' remains GATED (false)");
 
 const publishedLocales = getPublishedLocalesForCalculator("mortgage-calculator");
 assert(
-  publishedLocales.length === 2 && publishedLocales.includes("en") && publishedLocales.includes("es"),
-  "H7: Exactly 'en' and 'es' are in published locales list",
+  publishedLocales.length === 6 &&
+  publishedLocales.includes("en") &&
+  publishedLocales.includes("es") &&
+  publishedLocales.includes("fr") &&
+  publishedLocales.includes("de") &&
+  publishedLocales.includes("hi") &&
+  publishedLocales.includes("pt"),
+  "H9: Exactly 6 locales are published for mortgage-calculator",
   `Got: ${JSON.stringify(publishedLocales)}`
 );
 
-const frMeta = getLocalePublishingMetadata("fr", "mortgage-calculator");
-assert(frMeta.isPublished === false && frMeta.uiStatus === "DRAFT", "H8: Metadata indicates DRAFT for unpublished locale");
+const zhMeta = getLocalePublishingMetadata("zh" as any, "mortgage-calculator");
+assert(zhMeta.isPublished === false && zhMeta.uiStatus === "DRAFT", "H10: Metadata indicates DRAFT for unpublished locale");
 
 // -------------------------------------------------------------
 // SUITE I: Mortgage Mathematical Invariance (20 Test Scenarios)

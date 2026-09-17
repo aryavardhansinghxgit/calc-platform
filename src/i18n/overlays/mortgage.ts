@@ -328,14 +328,682 @@ export const MORTGAGE_ES_OVERLAY: MortgageLocaleOverlay = {
   clearAllSavedBtn: "Borrar Todo",
 };
 
+export const MORTGAGE_FR_OVERLAY: MortgageLocaleOverlay = {
+  locale: "fr",
+  title: "Calculateur de Prêt Hypothécaire – Simulateur de Mensualités et Tableau d'Amortissement",
+  description: "Calculez vos mensualités de prêt hypothécaire (capital et intérêts), taxes foncières, assurance habitation, PMI et charges de copropriété avec tableau d'amortissement complet.",
+  // Action bar
+  managerTitle: "Gestionnaire de Calcul Hypothécaire",
+  savedCountBadge: "Sauvegardés",
+  clearBtn: "Effacer",
+  printPdfBtn: "Imprimer / PDF",
+  saveBtn: "Enregistrer",
+  savedBtn: "Enregistré !",
+
+  // Basic loan details
+  inputsTitle: "Données du Prêt Hypothécaire",
+  inputsSubtitle: "Modifiez les paramètres pour recalculer instantanément vos mensualités",
+  basicLoanDetails: "Détails de Base du Prêt",
+  homePrice: "Prix du Bien ($)",
+  downPayment: "Apport Personnel",
+  amountBtn: "$ Montant",
+  percentBtn: "% Pourcentage",
+  calculatedDownPayment: "Calculé",
+  loanLabel: "Montant Emprunté",
+  loanTermYears: "Durée du Prêt (Années)",
+  interestRate: "Taux d'Intérêt (%)",
+  startMonth: "Mois de Début",
+  startYear: "Année de Début",
+  monthOptions: [
+    { value: 1, label: "Janv" },
+    { value: 2, label: "Févr" },
+    { value: 3, label: "Mars" },
+    { value: 4, label: "Avr" },
+    { value: 5, label: "Mai" },
+    { value: 6, label: "Juin" },
+    { value: 7, label: "Juil" },
+    { value: 8, label: "Août" },
+    { value: 9, label: "Sept" },
+    { value: 10, label: "Oct" },
+    { value: 11, label: "Nov" },
+    { value: 12, label: "Déc" },
+  ],
+
+  // Taxes & Insurance collapsible
+  includeTaxesAndFees: "Inclure Taxes et Frais Annexes",
+  propertyTaxes: "Taxe Foncière",
+  homeInsurance: "Assurance Habitation ($/an)",
+  pmiInsurance: "Assurance Emprunteur / PMI (%/an)",
+  hoaFee: "Charges de Copropriété ($/mois)",
+  otherCosts: "Autres Frais ($/an)",
+
+  // Annual cost increase collapsible
+  annualIncreaseTitle: "Augmentation Annuelle des Taxes et Coûts (%)",
+  annualIncreaseSubtitle: "Modéliser l'inflation sur les dépenses annexes",
+  propertyTaxIncrease: "Hausse Taxe Foncière %",
+  insuranceIncrease: "Hausse Assurance %",
+  hoaIncrease: "Hausse Copropriété %",
+  otherCostsIncrease: "Hausse Autres Frais %",
+
+  // Extra payments collapsible
+  extraPaymentsTitle: "Remboursements Anticipés de Capital",
+  extraPaymentsSubtitle: "Accélérez l'amortissement et réduisez les intérêts cumulés",
+  monthlyExtraPayment: "Paiement Extra Mensuel",
+  yearlyExtraPayment: "Paiement Extra Annuel",
+  fromMonth: "à partir de",
+  inMonth: "en",
+  oneTimePaymentsTitle: "Paiements Ponctuels Exceptionnels",
+  addPaymentRow: "Ajouter une Ligne",
+  amountHeader: "Montant ($)",
+  monthHeader: "Mois",
+  yearHeader: "Année",
+  actionHeader: "Action",
+
+  // Biweekly toggle
+  biweeklyTitle: "Option de Paiement Toutes les Deux Semaines",
+  biweeklySubtitle: "Payez la moitié de l'échéance mensuelle toutes les 2 semaines (26 demi-paiements/an)",
+  enableBiweekly: "Afficher l'Option Bihebdomadaire",
+  biweeklySummary: "Synthèse du Remboursement Bihebdomadaire",
+  payPeriodsYear: "26 Périodes de Paiement / An",
+  biweeklyPayment: "Paiement Bihebdomadaire",
+  biweeklyPayoffDate: "Date de Remboursement Final",
+  biweeklyTotalInterest: "Intérêts Totaux Bihebdomadaires",
+
+  // KPI & Results Summary
+  paymentBreakdown: "Décomposition de la Mensualité",
+  totalMonthlyPayment: "Mensualité Totale Estimée",
+  principalAndInterest: "Capital & Intérêts (Base)",
+  propertyTax: "Taxe Foncière",
+  homeInsuranceLabel: "Assurance Habitation",
+  pmi: "PMI / Assurance",
+  hoaFeeLabel: "Charges Copropriété",
+  otherCostsLabel: "Autres Frais",
+  extraPayment: "Paiement Anticipé",
+
+  loanPayoffSummary: "Synthèse d'Amortissement du Prêt",
+  loanAmount: "Montant du Prêt",
+  payoffDateLabel: "Date de Fin de Prêt",
+  totalInterestLabel: "Intérêts Totaux",
+  totalCostLabel: "Coût Total du Prêt",
+  interestSavedLabel: "Économies d'Intérêts",
+  timeSavedLabel: "Temps Gagné",
+
+  // Extra payments impact banner
+  extraPaymentsImpact: "Impact des Remboursements Anticipés :",
+  saves: "Économise",
+  inInterestPaysOff: "d'intérêts et solde le prêt",
+  monthsEarly: "mois plus tôt !",
+
+  // Charts
+  chartsTitle: "Analyses Visuelles et Graphiques",
+  tabDoughnut: "Donut",
+  tabBalance: "Courbe du Capital",
+  tabArea: "Capital vs Intérêts",
+  loadingChart: "Chargement du graphique...",
+
+  // Breakdown Table
+  monthlyVsTotalBreakdown: "Comparatif Mensuel vs Coût Total sur la Durée",
+  categoryCol: "Catégorie",
+  monthlyYear1Col: "Mensuel (Année 1)",
+  lifetimeTotalCol: "Total sur la Durée",
+  pctTotalCostCol: "% du Coût Total",
+  totalOutOfPocket: "Total Décaissé",
+
+  // Amortization Table
+  amortizationScheduleTitle: "Tableau d'Amortissement du Prêt",
+  amortizationSubtitle: "Évolution détaillée des paiements, amortissement du capital, intérêts et capital restant dû",
+  annualSummaryTab: "Synthèse Annuelle",
+  monthlyScheduleTab: "Échéancier Mensuel",
+  biweeklyScheduleTab: "Échéancier Bihebdomadaire",
+  searchSchedulePlaceholder: "Rechercher dans l'échéancier...",
+  downloadCsv: "Télécharger CSV",
+  yearCol: "Année",
+  periodCol: "Période",
+  dateRangeCol: "Période / Date",
+  paymentCol: "Paiement",
+  principalCol: "Capital",
+  interestCol: "Intérêts",
+  extraCol: "Extra",
+  taxesInsCol: "Taxes & Assur.",
+  pmiFeesCol: "PMI & Frais",
+  balanceCol: "Solde Restant Dû",
+  prevPage: "Précédent",
+  nextPage: "Suivant",
+  pageOf: "Page",
+  showingRecords: "Affichage de",
+
+  // Modals & Storage
+  saveModalTitle: "Enregistrer",
+  saveModalSubtitle: "Renseignez un nom et une description pour enregistrer ce calcul (jusqu'à 100 calculs)",
+  calcSummaryLabel: "Résumé du Calcul Actuel :",
+  monthlyPayLabel: "Mensualité :",
+  saveModalNameLabel: "Nom (optionnel)",
+  saveModalDescLabel: "Description (optionnelle)",
+  saveModalNamePlaceholder: "ex. Résidence Principale 30 ans",
+  saveModalDescPlaceholder: "ex. Comparatif 20% vs 10% d'apport",
+  cancelBtn: "Annuler",
+  resetBtn: "Réinitialiser",
+  confirmSaveBtn: "Enregistrer",
+  saveSuccessMsg: "Calcul enregistré avec succès !",
+  savedLibraryTitle: "Calculs Enregistrés",
+  noSavedCalculations: "Aucun calcul enregistré.",
+  loadBtn: "Charger",
+  deleteBtn: "Supprimer",
+  clearAllSavedBtn: "Tout Effacer",
+};
+
+export const MORTGAGE_DE_OVERLAY: MortgageLocaleOverlay = {
+  locale: "de",
+  title: "Baufinanzierungsrechner – Monatsrate & Tilgungsplan Berechnen",
+  description: "Berechnen Sie Ihre monatliche Baufinanzierungsrate (Tilgung & Zinsen), Grundsteuer, Wohngebäudeversicherung, Restschuldversicherung und Hausgeld mit vollständigem Tilgungsplan.",
+  // Action bar
+  managerTitle: "Baufinanzierungs-Manager",
+  savedCountBadge: "Gespeichert",
+  clearBtn: "Löschen",
+  printPdfBtn: "Drucken / PDF",
+  saveBtn: "Speichern",
+  savedBtn: "Gespeichert!",
+
+  // Basic loan details
+  inputsTitle: "Kreditparameter",
+  inputsSubtitle: "Werte anpassen, um die Raten sofort neu zu berechnen",
+  basicLoanDetails: "Grundlegende Darlehensdaten",
+  homePrice: "Kaufpreis der Immobilie ($)",
+  downPayment: "Eigenkapital",
+  amountBtn: "$ Betrag",
+  percentBtn: "% Prozent",
+  calculatedDownPayment: "Berechnet",
+  loanLabel: "Nettodarlehensbetrag",
+  loanTermYears: "Laufzeit (Jahre)",
+  interestRate: "Sollzinssatz (%)",
+  startMonth: "Startmonat",
+  startYear: "Startjahr",
+  monthOptions: [
+    { value: 1, label: "Jan" },
+    { value: 2, label: "Feb" },
+    { value: 3, label: "Mär" },
+    { value: 4, label: "Apr" },
+    { value: 5, label: "Mai" },
+    { value: 6, label: "Jun" },
+    { value: 7, label: "Jul" },
+    { value: 8, label: "Aug" },
+    { value: 9, label: "Sep" },
+    { value: 10, label: "Okt" },
+    { value: 11, label: "Nov" },
+    { value: 12, label: "Dez" },
+  ],
+
+  // Taxes & Insurance collapsible
+  includeTaxesAndFees: "Steuern & Nebenkosten einbeziehen",
+  propertyTaxes: "Grundsteuer",
+  homeInsurance: "Wohngebäudeversicherung ($/Jahr)",
+  pmiInsurance: "Restschuldversicherung / PMI (%/Jahr)",
+  hoaFee: "Hausgeld / Nebenkosten ($/Monat)",
+  otherCosts: "Sonstige Instandhaltungskosten ($/Jahr)",
+
+  // Annual cost increase collapsible
+  annualIncreaseTitle: "Jährliche Kostensteigerung / Inflation (%)",
+  annualIncreaseSubtitle: "Geschätzte Teuerung auf Nebenkosten modellieren",
+  propertyTaxIncrease: "Grundsteuer-Steigerung %",
+  insuranceIncrease: "Versicherungs-Steigerung %",
+  hoaIncrease: "Hausgeld-Steigerung %",
+  otherCostsIncrease: "Sonstige Kosten-Steigerung %",
+
+  // Extra payments collapsible
+  extraPaymentsTitle: "Sondertilgungen",
+  extraPaymentsSubtitle: "Schnellere Entschuldung und Zinsersparnis erzielen",
+  monthlyExtraPayment: "Monatliche Sondertilgung",
+  yearlyExtraPayment: "Jährliche Sondertilgung",
+  fromMonth: "ab",
+  inMonth: "im",
+  oneTimePaymentsTitle: "Einmalige Sondertilgungen",
+  addPaymentRow: "Zahlung hinzufügen",
+  amountHeader: "Betrag ($)",
+  monthHeader: "Monat",
+  yearHeader: "Jahr",
+  actionHeader: "Aktion",
+
+  // Biweekly toggle
+  biweeklyTitle: "Zweiwöchentliche Zahlungsoption",
+  biweeklySubtitle: "Halbmonatliche Rate alle 2 Wochen zahlen (26 Raten/Jahr)",
+  enableBiweekly: "Zweiwöchentliche Tilgung anzeigen",
+  biweeklySummary: "Zusammenfassung der zweiwöchentlichen Tilgung",
+  payPeriodsYear: "26 Zahlungsperioden / Jahr",
+  biweeklyPayment: "Zweiwöchentliche Rate",
+  biweeklyPayoffDate: "Schuldenfrei-Datum (zweiwöchentlich)",
+  biweeklyTotalInterest: "Gesamtzinsen (zweiwöchentlich)",
+
+  // KPI & Results Summary
+  paymentBreakdown: "Zusammensetzung der Monatsrate",
+  totalMonthlyPayment: "Geschätzte Gesamte Monatsrate",
+  principalAndInterest: "Zins & Tilgung (Basis)",
+  propertyTax: "Grundsteuer",
+  homeInsuranceLabel: "Gebäudeversicherung",
+  pmi: "PMI / Absicherung",
+  hoaFeeLabel: "Hausgeld",
+  otherCostsLabel: "Sonstige Kosten",
+  extraPayment: "Sondertilgung",
+
+  loanPayoffSummary: "Darlehens- und Tilgungsübersicht",
+  loanAmount: "Darlehensbetrag",
+  payoffDateLabel: "Voraussichtliche Volltilgung",
+  totalInterestLabel: "Gesamtzinsen",
+  totalCostLabel: "Gesamtkosten des Darlehens",
+  interestSavedLabel: "Zinsersparnis",
+  timeSavedLabel: "Laufzeitverkürzung",
+
+  // Extra payments impact banner
+  extraPaymentsImpact: "Wirkung der Sondertilgungen:",
+  saves: "Spart",
+  inInterestPaysOff: "an Zinsen & tilgt das Darlehen",
+  monthsEarly: "Monate früher ab!",
+
+  // Charts
+  chartsTitle: "Grafische Analyse & Diagramme",
+  tabDoughnut: "Donut",
+  tabBalance: "Restschuldverlauf",
+  tabArea: "Tilgung vs Zinsen",
+  loadingChart: "Diagramm wird geladen...",
+
+  // Breakdown Table
+  monthlyVsTotalBreakdown: "Monatliche vs. Gesamte Laufzeitkosten",
+  categoryCol: "Kategorie",
+  monthlyYear1Col: "Monatlich (Jahr 1)",
+  lifetimeTotalCol: "Gesamte Laufzeit",
+  pctTotalCostCol: "% der Gesamtkosten",
+  totalOutOfPocket: "Gesamtaufwand",
+
+  // Amortization Table
+  amortizationScheduleTitle: "Vollständiger Tilgungsplan",
+  amortizationSubtitle: "Detaillierte Aufstellung von Raten, Tilgung, Zinsanteil und verbleibender Restschuld",
+  annualSummaryTab: "Jahresübersicht",
+  monthlyScheduleTab: "Monatlicher Tilgungsplan",
+  biweeklyScheduleTab: "Zweiwöchentlicher Plan",
+  searchSchedulePlaceholder: "Tilgungsplan durchsuchen...",
+  downloadCsv: "CSV herunterladen",
+  yearCol: "Jahr",
+  periodCol: "Periode",
+  dateRangeCol: "Zeitraum / Datum",
+  paymentCol: "Rate",
+  principalCol: "Tilgung",
+  interestCol: "Zinsen",
+  extraCol: "Sondertilgung",
+  taxesInsCol: "Steuern & Vers.",
+  pmiFeesCol: "Gebühren",
+  balanceCol: "Restschuld",
+  prevPage: "Zurück",
+  nextPage: "Weiter",
+  pageOf: "Seite",
+  showingRecords: "Zeige",
+
+  // Modals & Storage
+  saveModalTitle: "Speichern",
+  saveModalSubtitle: "Geben Sie einen Namen und eine Beschreibung ein, um diese Berechnung zu speichern (bis zu 100 Berechnungen)",
+  calcSummaryLabel: "Aktuelle Berechnung:",
+  monthlyPayLabel: "Monatsrate:",
+  saveModalNameLabel: "Name (optional)",
+  saveModalDescLabel: "Beschreibung (optional)",
+  saveModalNamePlaceholder: "z.B. Eigenheim 30 Jahre",
+  saveModalDescPlaceholder: "z.B. Vergleich 20% vs 10% Eigenkapital",
+  cancelBtn: "Abbrechen",
+  resetBtn: "Zurücksetzen",
+  confirmSaveBtn: "Speichern",
+  saveSuccessMsg: "Berechnung erfolgreich gespeichert!",
+  savedLibraryTitle: "Gespeicherte Berechnungen",
+  noSavedCalculations: "Keine gespeicherten Berechnungen gefunden.",
+  loadBtn: "Laden",
+  deleteBtn: "Löschen",
+  clearAllSavedBtn: "Alle löschen",
+};
+
+export const MORTGAGE_HI_OVERLAY: MortgageLocaleOverlay = {
+  locale: "hi",
+  title: "मॉर्गेज कैलकुलेटर – गृह ऋण ईएमआई और परिशोधन विश्लेषक",
+  description: "अपने मासिक मॉर्गेज भुगतान (मूलधन और ब्याज), संपत्ति कर, गृह बीमा, पीएमआई और रखरखाव शुल्क की गणना करें।",
+  // Action bar
+  managerTitle: "मॉर्गेज गणना प्रबंधक",
+  savedCountBadge: "सहेजे गए",
+  clearBtn: "साफ़ करें",
+  printPdfBtn: "प्रिंट / पीडीएफ",
+  saveBtn: "सहेजें",
+  savedBtn: "सहेजा गया!",
+
+  // Basic loan details
+  inputsTitle: "ऋण इनपुट डेटा",
+  inputsSubtitle: "मासिक किस्तों की तुरंत पुनर्गणना के लिए मान बदलें",
+  basicLoanDetails: "मूल ऋण विवरण",
+  homePrice: "घर का मूल्य ($)",
+  downPayment: "डाउन पेमेंट",
+  amountBtn: "$ राशि",
+  percentBtn: "% प्रतिशत",
+  calculatedDownPayment: "गणना की गई",
+  loanLabel: "ऋण राशि",
+  loanTermYears: "ऋण अवधि (वर्ष)",
+  interestRate: "ब्याज दर (%)",
+  startMonth: "प्रारंभ माह",
+  startYear: "प्रारंभ वर्ष",
+  monthOptions: [
+    { value: 1, label: "जन" },
+    { value: 2, label: "फ़र" },
+    { value: 3, label: "मार्च" },
+    { value: 4, label: "अप्रै" },
+    { value: 5, label: "मई" },
+    { value: 6, label: "जून" },
+    { value: 7, label: "जुला" },
+    { value: 8, label: "अग" },
+    { value: 9, label: "सितं" },
+    { value: 10, label: "अक्टू" },
+    { value: 11, label: "नव" },
+    { value: 12, label: "दिसं" },
+  ],
+
+  // Taxes & Insurance collapsible
+  includeTaxesAndFees: "कर और शुल्क शामिल करें",
+  propertyTaxes: "संपत्ति कर",
+  homeInsurance: "गृह बीमा ($/वर्ष)",
+  pmiInsurance: "पीएमआई बीमा (%/वर्ष)",
+  hoaFee: "सोसायटी शुल्क ($/माह)",
+  otherCosts: "अन्य रखरखाव लागत ($/वर्ष)",
+
+  // Annual cost increase collapsible
+  annualIncreaseTitle: "वार्षिक कर और लागत वृद्धि (%)",
+  annualIncreaseSubtitle: "गैर-ऋण खर्चों पर मुद्रास्फीति का अनुमान लगाएं",
+  propertyTaxIncrease: "संपत्ति कर वृद्धि %",
+  insuranceIncrease: "गृह बीमा वृद्धि %",
+  hoaIncrease: "सोसायटी शुल्क वृद्धि %",
+  otherCostsIncrease: "अन्य लागत वृद्धि %",
+
+  // Extra payments collapsible
+  extraPaymentsTitle: "अतिरिक्त मूलधन भुगतान",
+  extraPaymentsSubtitle: "ऋणमुक्ति में तेजी लाएं और चक्रवृद्धि ब्याज बचाएं",
+  monthlyExtraPayment: "अतिरिक्त मासिक भुगतान",
+  yearlyExtraPayment: "अतिरिक्त वार्षिक भुगतान",
+  fromMonth: "से",
+  inMonth: "में",
+  oneTimePaymentsTitle: "एकमुश्त अतिरिक्त भुगतान",
+  addPaymentRow: "भुगतान पंक्ति जोड़ें",
+  amountHeader: "राशि ($)",
+  monthHeader: "माह",
+  yearHeader: "वर्ष",
+  actionHeader: "कार्रवाई",
+
+  // Biweekly toggle
+  biweeklyTitle: "पाक्षिक (हर 2 सप्ताह) भुगतान विकल्प",
+  biweeklySubtitle: "हर दो सप्ताह में आधी मासिक किस्त का भुगतान करें (26 भुगतान/वर्ष)",
+  enableBiweekly: "पाक्षिक भुगतान परिणाम देखें",
+  biweeklySummary: "पाक्षिक भुगतान सारांश",
+  payPeriodsYear: "26 भुगतान अवधियाँ / वर्ष",
+  biweeklyPayment: "पाक्षिक भुगतान",
+  biweeklyPayoffDate: "पाक्षिक ऋणमुक्ति तिथि",
+  biweeklyTotalInterest: "पाक्षिक कुल ब्याज",
+
+  // KPI & Results Summary
+  paymentBreakdown: "भुगतान विवरण",
+  totalMonthlyPayment: "कुल अनुमानित मासिक भुगतान",
+  principalAndInterest: "मूलधन और ब्याज (आधार)",
+  propertyTax: "संपत्ति कर",
+  homeInsuranceLabel: "गृह बीमा",
+  pmi: "पीएमआई",
+  hoaFeeLabel: "सोसायटी शुल्क",
+  otherCostsLabel: "अन्य लागत",
+  extraPayment: "अतिरिक्त भुगतान",
+
+  loanPayoffSummary: "ऋण चुकौती सारांश",
+  loanAmount: "ऋण राशि",
+  payoffDateLabel: "ऋणमुक्ति तिथि",
+  totalInterestLabel: "कुल ब्याज",
+  totalCostLabel: "ऋण की कुल लागत",
+  interestSavedLabel: "ब्याज की बचत",
+  timeSavedLabel: "बचाया गया समय",
+
+  // Extra payments impact banner
+  extraPaymentsImpact: "अतिरिक्त भुगतान का प्रभाव:",
+  saves: "बचाता है",
+  inInterestPaysOff: "ब्याज में और ऋण चुकता करता है",
+  monthsEarly: "महीने पहले!",
+
+  // Charts
+  chartsTitle: "दृश्य विश्लेषण और चार्ट",
+  tabDoughnut: "डोनट",
+  tabBalance: "शेष राशि रेखा",
+  tabArea: "मूलधन बनाम ब्याज",
+  loadingChart: "चार्ट लोड हो रहा है...",
+
+  // Breakdown Table
+  monthlyVsTotalBreakdown: "मासिक बनाम कुल जीवनकाल लागत विवरण",
+  categoryCol: "श्रेणी",
+  monthlyYear1Col: "मासिक (वर्ष 1)",
+  lifetimeTotalCol: "जीवनकाल कुल",
+  pctTotalCostCol: "कुल लागत का %",
+  totalOutOfPocket: "कुल व्यक्तिगत खर्च",
+
+  // Amortization Table
+  amortizationScheduleTitle: "मॉर्गेज परिशोधन सारणी",
+  amortizationSubtitle: "भुगतान, मूलधन कमी, ब्याज और शेष राशि का विस्तृत विवरण",
+  annualSummaryTab: "वार्षिक सारांश",
+  monthlyScheduleTab: "मासिक अनुसूची",
+  biweeklyScheduleTab: "पाक्षिक अनुसूची",
+  searchSchedulePlaceholder: "अनुसूची खोजें...",
+  downloadCsv: "सीएसवी डाउनलोड करें",
+  yearCol: "वर्ष",
+  periodCol: "अवधि",
+  dateRangeCol: "तिथि सीमा",
+  paymentCol: "भुगतान",
+  principalCol: "मूलधन",
+  interestCol: "ब्याज",
+  extraCol: "अतिरिक्त",
+  taxesInsCol: "कर और बीमा",
+  pmiFeesCol: "पीएमआई और शुल्क",
+  balanceCol: "शेष राशि",
+  prevPage: "पिछला",
+  nextPage: "अगला",
+  pageOf: "पृष्ठ",
+  showingRecords: "दिखा रहा है",
+
+  // Modals & Storage
+  saveModalTitle: "सहेजें",
+  saveModalSubtitle: "इस गणना को सहेजने के लिए कृपया नाम और विवरण प्रदान करें (100 गणनाओं तक)",
+  calcSummaryLabel: "वर्तमान गणना सारांश:",
+  monthlyPayLabel: "मासिक भुगतान:",
+  saveModalNameLabel: "नाम (वैकल्पिक)",
+  saveModalDescLabel: "विवरण (वैकल्पिक)",
+  saveModalNamePlaceholder: "उदा. प्राथमिक निवास 30 वर्ष",
+  saveModalDescPlaceholder: "उदा. 20% बनाम 10% डाउन पेमेंट तुलना",
+  cancelBtn: "रद्द करें",
+  resetBtn: "रीसेट करें",
+  confirmSaveBtn: "सहेजें",
+  saveSuccessMsg: "गणना सफलतापूर्वक सहेजी गई!",
+  savedLibraryTitle: "सहेजी गई गणनाएं",
+  noSavedCalculations: "कोई सहेजी गई गणना नहीं मिली।",
+  loadBtn: "लोड करें",
+  deleteBtn: "हटाएं",
+  clearAllSavedBtn: "सभी साफ़ करें",
+};
+
+export const MORTGAGE_PT_OVERLAY: MortgageLocaleOverlay = {
+  locale: "pt",
+  title: "Calculadora de Hipoteca – Simulador de Prestações e Amortização",
+  description: "Calcule as suas prestações mensais de hipoteca (capital e juros), impostos sobre a propriedade, seguro de habitação, PMI e quotas de condomínio com plano de amortização completo.",
+  // Action bar
+  managerTitle: "Gestor de Cálculos Hipotecários",
+  savedCountBadge: "Guardados",
+  clearBtn: "Limpar",
+  printPdfBtn: "Imprimir / PDF",
+  saveBtn: "Guardar",
+  savedBtn: "Guardado!",
+
+  // Basic loan details
+  inputsTitle: "Dados da Hipoteca",
+  inputsSubtitle: "Modifique os valores para recalcular as prestações instantaneamente",
+  basicLoanDetails: "Detalhes Básicos do Empréstimo",
+  homePrice: "Preço do Imóvel ($)",
+  downPayment: "Entrada Inicial",
+  amountBtn: "$ Montante",
+  percentBtn: "% Percentagem",
+  calculatedDownPayment: "Calculado",
+  loanLabel: "Montante do Empréstimo",
+  loanTermYears: "Prazo do Empréstimo (Anos)",
+  interestRate: "Taxa de Juro (%)",
+  startMonth: "Mês de Início",
+  startYear: "Ano de Início",
+  monthOptions: [
+    { value: 1, label: "Jan" },
+    { value: 2, label: "Fev" },
+    { value: 3, label: "Mar" },
+    { value: 4, label: "Abr" },
+    { value: 5, label: "Mai" },
+    { value: 6, label: "Jun" },
+    { value: 7, label: "Jul" },
+    { value: 8, label: "Ago" },
+    { value: 9, label: "Set" },
+    { value: 10, label: "Out" },
+    { value: 11, label: "Nov" },
+    { value: 12, label: "Dez" },
+  ],
+
+  // Taxes & Insurance collapsible
+  includeTaxesAndFees: "Incluir Impostos e Taxas",
+  propertyTaxes: "Impostos sobre Imóveis",
+  homeInsurance: "Seguro de Habitação ($/ano)",
+  pmiInsurance: "Seguro PMI (%/ano)",
+  hoaFee: "Quotas de Condomínio ($/mês)",
+  otherCosts: "Outros Custos de Manutenção ($/ano)",
+
+  // Annual cost increase collapsible
+  annualIncreaseTitle: "Aumento Anual de Impostos e Custos (%)",
+  annualIncreaseSubtitle: "Estimar a inflação em despesas acessórias",
+  propertyTaxIncrease: "Aumento do Imposto Imobiliário %",
+  insuranceIncrease: "Aumento do Seguro %",
+  hoaIncrease: "Aumento do Condomínio %",
+  otherCostsIncrease: "Aumento de Outros Custos %",
+
+  // Extra payments collapsible
+  extraPaymentsTitle: "Amortizações Extraordinárias de Capital",
+  extraPaymentsSubtitle: "Acelere a liquidação da dívida e poupe em juros compostos",
+  monthlyExtraPayment: "Pagamento Extra Mensal",
+  yearlyExtraPayment: "Pagamento Extra Anual",
+  fromMonth: "a partir de",
+  inMonth: "em",
+  oneTimePaymentsTitle: "Amortizações Pontuais Extraordinárias",
+  addPaymentRow: "Adicionar Linha",
+  amountHeader: "Montante ($)",
+  monthHeader: "Mês",
+  yearHeader: "Ano",
+  actionHeader: "Ação",
+
+  // Biweekly toggle
+  biweeklyTitle: "Opção de Pagamento Quinzenal",
+  biweeklySubtitle: "Pague metade da prestação mensal a cada 2 semanas (26 pagamentos/ano)",
+  enableBiweekly: "Mostrar Resultados do Pagamento Quinzenal",
+  biweeklySummary: "Resumo dos Resultados do Pagamento Quinzenal",
+  payPeriodsYear: "26 Períodos de Pagamento / Ano",
+  biweeklyPayment: "Pagamento Quinzenal",
+  biweeklyPayoffDate: "Data de Liquidação Quinzenal",
+  biweeklyTotalInterest: "Juros Totais Quinzenais",
+
+  // KPI & Results Summary
+  paymentBreakdown: "Discriminação da Prestação",
+  totalMonthlyPayment: "Prestação Mensal Total Estimada",
+  principalAndInterest: "Capital e Juros (Base)",
+  propertyTax: "Imposto sobre Imóveis",
+  homeInsuranceLabel: "Seguro de Habitação",
+  pmi: "PMI",
+  hoaFeeLabel: "Condomínio",
+  otherCostsLabel: "Outros Custos",
+  extraPayment: "Pagamento Extra",
+
+  loanPayoffSummary: "Resumo da Liquidação do Empréstimo",
+  loanAmount: "Montante do Empréstimo",
+  payoffDateLabel: "Data de Liquidação",
+  totalInterestLabel: "Juros Totais",
+  totalCostLabel: "Custo Total do Empréstimo",
+  interestSavedLabel: "Poupança em Juros",
+  timeSavedLabel: "Tempo Poupado",
+
+  // Extra payments impact banner
+  extraPaymentsImpact: "Impacto das Amortizações Extraordinárias:",
+  saves: "Poupa",
+  inInterestPaysOff: "em juros e liquida",
+  monthsEarly: "meses mais cedo!",
+
+  // Charts
+  chartsTitle: "Análise Visual e Gráficos",
+  tabDoughnut: "Donut",
+  tabBalance: "Evolução do Saldo",
+  tabArea: "Capital vs Juros",
+  loadingChart: "A carregar gráfico...",
+
+  // Breakdown Table
+  monthlyVsTotalBreakdown: "Comparativo de Custos Mensais vs. Totais",
+  categoryCol: "Categoria",
+  monthlyYear1Col: "Mensal (Ano 1)",
+  lifetimeTotalCol: "Total ao Longo do Prazo",
+  pctTotalCostCol: "% do Custo Total",
+  totalOutOfPocket: "Total Pago",
+
+  // Amortization Table
+  amortizationScheduleTitle: "Tabela de Amortização da Hipoteca",
+  amortizationSubtitle: "Discriminação completa de pagamentos, amortização de capital, juros e saldo em dívida",
+  annualSummaryTab: "Resumo Anual",
+  monthlyScheduleTab: "Plano Mensal",
+  biweeklyScheduleTab: "Plano Quinzenal",
+  searchSchedulePlaceholder: "Pesquisar no plano...",
+  downloadCsv: "Descarregar CSV",
+  yearCol: "Ano",
+  periodCol: "Período",
+  dateRangeCol: "Intervalo de Datas",
+  paymentCol: "Pagamento",
+  principalCol: "Capital",
+  interestCol: "Juros",
+  extraCol: "Extra",
+  taxesInsCol: "Impostos & Seguro",
+  pmiFeesCol: "PMI & Taxas",
+  balanceCol: "Saldo Devedor",
+  prevPage: "Anterior",
+  nextPage: "Seguinte",
+  pageOf: "Página",
+  showingRecords: "A mostrar",
+
+  // Modals & Storage
+  saveModalTitle: "Guardar",
+  saveModalSubtitle: "Indique um nome e descrição para guardar este cálculo na sua conta (até 100 cálculos)",
+  calcSummaryLabel: "Resumo do Cálculo Atual:",
+  monthlyPayLabel: "Prestação Mensal:",
+  saveModalNameLabel: "Nome (opcional)",
+  saveModalDescLabel: "Descrição (opcional)",
+  saveModalNamePlaceholder: "ex. Habitação Própria 30 anos",
+  saveModalDescPlaceholder: "ex. Comparação de 20% vs 10% de entrada",
+  cancelBtn: "Cancelar",
+  resetBtn: "Repor",
+  confirmSaveBtn: "Guardar",
+  saveSuccessMsg: "Cálculo guardado com sucesso!",
+  savedLibraryTitle: "Cálculos Guardados",
+  noSavedCalculations: "Nenhum cálculo guardado encontrado.",
+  loadBtn: "Carregar",
+  deleteBtn: "Eliminar",
+  clearAllSavedBtn: "Limpar Tudo",
+};
+
 /**
  * Returns the immutable locale overlay for mortgage calculator.
- * Supports English ("en") and Spanish ("es").
+ * Supports all 6 locales: English ("en"), Spanish ("es"), French ("fr"),
+ * German ("de"), Hindi ("hi"), and Portuguese ("pt").
  * Defaults safely to English if requested locale is unrecognized.
  */
 export function getMortgageOverlay(locale?: string): MortgageLocaleOverlay {
-  if (locale === "es") {
-    return MORTGAGE_ES_OVERLAY;
+  switch (locale) {
+    case "es":
+      return MORTGAGE_ES_OVERLAY;
+    case "fr":
+      return MORTGAGE_FR_OVERLAY;
+    case "de":
+      return MORTGAGE_DE_OVERLAY;
+    case "hi":
+      return MORTGAGE_HI_OVERLAY;
+    case "pt":
+      return MORTGAGE_PT_OVERLAY;
+    case "en":
+    default:
+      return MORTGAGE_EN_OVERLAY;
   }
-  return MORTGAGE_EN_OVERLAY;
 }

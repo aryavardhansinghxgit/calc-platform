@@ -20,6 +20,7 @@ import { concrete_calculatorConfig } from "@/app/calculators/concrete-calculator
 import { currency_calculatorConfig } from "@/app/calculators/currency-calculator/config";
 import { AUTO_LOAN_CONFIG } from "@/app/calculators/auto-loan-calculator/config";
 import { ohms_law_calculatorConfig } from "@/app/calculators/ohms-law-calculator/config";
+import { fuel_cost_calculatorConfig } from "@/app/calculators/fuel-cost-calculator/config";
 import { SPANISH_MORTGAGE_SEO, SPANISH_MORTGAGE_FAQS } from "@/i18n/content/mortgage/es";
 
 const CONFIG_MAP: Record<string, any> = {
@@ -32,6 +33,7 @@ const CONFIG_MAP: Record<string, any> = {
   "currency-calculator": currency_calculatorConfig,
   "auto-loan-calculator": AUTO_LOAN_CONFIG,
   "ohms-law-calculator": ohms_law_calculatorConfig,
+  "fuel-cost-calculator": fuel_cost_calculatorConfig,
 };
 
 interface LocalizedPageProps {
@@ -54,8 +56,10 @@ export async function generateStaticParams() {
   return params;
 }
 
-export async function generateMetadata({ params }: LocalizedPageProps): Promise<Metadata> {
-  const { locale, slug } = await params;
+export async function generateMetadata({ params }: any): Promise<Metadata> {
+  const resolvedParams = params instanceof Promise || (params && typeof params.then === "function") ? await params : params;
+  const locale = resolvedParams?.locale || "en";
+  const slug = resolvedParams?.slug || "";
 
   if (!isLocalePublished(locale, slug)) {
     notFound();
@@ -97,8 +101,10 @@ export async function generateMetadata({ params }: LocalizedPageProps): Promise<
   });
 }
 
-export default async function LocalizedCalculatorPage({ params }: LocalizedPageProps) {
-  const { locale, slug } = await params;
+export default async function LocalizedCalculatorPage({ params }: any) {
+  const resolvedParams = params instanceof Promise || (params && typeof params.then === "function") ? await params : params;
+  const locale = resolvedParams?.locale || "en";
+  const slug = resolvedParams?.slug || "";
 
   // Strict publishing gatekeeper: Reject any draft or unpublished locale/slug combinations
   if (!isLocalePublished(locale, slug)) {
@@ -112,6 +118,7 @@ export default async function LocalizedCalculatorPage({ params }: LocalizedPageP
 
   const { calculate, ContentComponent, ...serializableDef } = def;
   const localizedPack = getCalculatorLocalizedContent(slug, locale);
+  const overlay = getCalculatorOverlay(slug, locale);
 
   let pageTitle = def.title;
   let pageDescription = def.description;
@@ -138,11 +145,40 @@ export default async function LocalizedCalculatorPage({ params }: LocalizedPageP
     locale,
   });
 
+  const localizedInputs = (def.inputs || []).map((inp: any) => {
+    const inputOverlay = overlay?.inputs?.[inp.name];
+    if (inputOverlay) {
+      return {
+        ...inp,
+        label: typeof inputOverlay === "string" ? inputOverlay : inputOverlay.label || inp.label,
+        unit: typeof inputOverlay === "object" && inputOverlay.unit !== undefined ? inputOverlay.unit : inp.unit,
+        description: typeof inputOverlay === "object" && inputOverlay.description !== undefined ? inputOverlay.description : inp.description,
+        placeholder: typeof inputOverlay === "object" && inputOverlay.placeholder !== undefined ? inputOverlay.placeholder : inp.placeholder,
+      };
+    }
+    return inp;
+  });
+
+  const localizedOutputs = (def.outputs || []).map((out: any) => {
+    const outputOverlay = overlay?.outputs?.[out.name];
+    if (outputOverlay) {
+      return {
+        ...out,
+        label: typeof outputOverlay === "string" ? outputOverlay : outputOverlay.label || out.label,
+        description: typeof outputOverlay === "object" && outputOverlay.description !== undefined ? outputOverlay.description : out.description,
+        unit: typeof outputOverlay === "object" && outputOverlay.unit !== undefined ? outputOverlay.unit : out.unit,
+      };
+    }
+    return out;
+  });
+
   const localizedDef = {
     ...serializableDef,
     title: pageTitle,
     description: pageDescription,
     faqs: pageFaqs,
+    inputs: localizedInputs,
+    outputs: localizedOutputs,
   };
 
   return (

@@ -44,7 +44,6 @@ async function runRemediationVerification() {
     "scientific-calculator",
     "bmi-calculator",
     "date-calculator",
-    "mortgage-calculator",
   ];
   const gatedBatch1 = [
     "concrete-calculator",
@@ -60,6 +59,12 @@ async function runRemediationVerification() {
     assert(`${slug} is gated in 'hi'`, isLocalePublished("hi", slug) === false);
     assert(`${slug} is gated in 'pt'`, isLocalePublished("pt", slug) === false);
   }
+
+  assert("mortgage-calculator is published in 'es'", isLocalePublished("es", "mortgage-calculator") === true);
+  assert("mortgage-calculator is published in 'fr'", isLocalePublished("fr", "mortgage-calculator") === true);
+  assert("mortgage-calculator is published in 'de'", isLocalePublished("de", "mortgage-calculator") === true);
+  assert("mortgage-calculator is published in 'hi'", isLocalePublished("hi", "mortgage-calculator") === true);
+  assert("mortgage-calculator is published in 'pt'", isLocalePublished("pt", "mortgage-calculator") === true);
 
   for (const slug of gatedBatch1) {
     assert(`${slug} is gated in 'es'`, isLocalePublished("es", slug) === false);

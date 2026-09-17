@@ -415,16 +415,27 @@ export function MortgageCalculator({
     showBiweekly,
   ]);
 
+  const LOCALE_INTL_MAP: Record<string, string> = {
+    en: "en-US",
+    es: "es-ES",
+    fr: "fr-FR",
+    de: "de-DE",
+    hi: "hi-IN",
+    pt: "pt-PT",
+  };
+
   const payoffDateDisplay = useMemo(() => {
-    if (locale === "es" && results.payoffMonth && results.payoffYear) {
-      return formatMonthYear(results.payoffMonth, results.payoffYear, "es-ES", "long");
+    if (results.payoffMonth && results.payoffYear) {
+      const targetLocale = LOCALE_INTL_MAP[locale] || locale;
+      return formatMonthYear(results.payoffMonth, results.payoffYear, targetLocale, "long");
     }
     return results.payoffDate;
   }, [locale, results.payoffMonth, results.payoffYear, results.payoffDate]);
 
   const biweeklyPayoffDateDisplay = useMemo(() => {
-    if (locale === "es" && results.biweeklyPayoffMonth && results.biweeklyPayoffYear) {
-      return formatMonthYear(results.biweeklyPayoffMonth, results.biweeklyPayoffYear, "es-ES", "long");
+    if (results.biweeklyPayoffMonth && results.biweeklyPayoffYear) {
+      const targetLocale = LOCALE_INTL_MAP[locale] || locale;
+      return formatMonthYear(results.biweeklyPayoffMonth, results.biweeklyPayoffYear, targetLocale, "long");
     }
     return results.biweeklyPayoffDate;
   }, [locale, results.biweeklyPayoffMonth, results.biweeklyPayoffYear, results.biweeklyPayoffDate]);

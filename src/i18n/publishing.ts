@@ -9,10 +9,10 @@ export const PUBLISHED_MATRIX: Record<string, Partial<Record<Locale, boolean>>> 
   "mortgage-calculator": {
     en: true,
     es: true,
-    fr: false,
-    de: false,
-    hi: false,
-    pt: false,
+    fr: true,
+    de: true,
+    hi: true,
+    pt: true,
   },
   "percentage-calculator": {
     en: true,
@@ -73,6 +73,14 @@ export const PUBLISHED_MATRIX: Record<string, Partial<Record<Locale, boolean>>> 
   "ohms-law-calculator": {
     en: true,
     es: false,
+    fr: false,
+    de: false,
+    hi: false,
+    pt: false,
+  },
+  "fuel-cost-calculator": {
+    en: true,
+    es: true,
     fr: false,
     de: false,
     hi: false,

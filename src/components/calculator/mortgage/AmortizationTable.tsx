@@ -159,6 +159,39 @@ export function AmortizationTable({
     document.body.removeChild(link);
   };
 
+  const LOCALE_INTL_MAP: Record<string, string> = {
+    en: "en-US",
+    es: "es-ES",
+    fr: "fr-FR",
+    de: "de-DE",
+    hi: "hi-IN",
+    pt: "pt-PT",
+  };
+  const targetIntlLocale = LOCALE_INTL_MAP[locale] || locale;
+
+  const getEmptyMessage = () => {
+    switch (locale) {
+      case "es":
+        return `No se encontraron registros de amortización para "${searchTerm}".`;
+      case "fr":
+        return `Aucun enregistrement d'amortissement trouvé pour « ${searchTerm} ».`;
+      case "de":
+        return `Keine Tilgungseinträge für „${searchTerm}“ gefunden.`;
+      case "hi":
+        return `"${searchTerm}" के लिए कोई परिशोधन प्रविष्टि नहीं मिली।`;
+      case "pt":
+        return `Nenhum registo de amortização encontrado para "${searchTerm}".`;
+      default:
+        return `No amortization entries found for "${searchTerm}".`;
+    }
+  };
+
+  const getPeriodHeader = () => {
+    if (viewMode === "annual") return `${overlay.periodCol} (${overlay.yearCol})`;
+    if (viewMode === "biweekly") return overlay.biweeklyPayment;
+    return `${overlay.periodCol} (${overlay.monthHeader || "Month"})`;
+  };
+
   return (
     <div className="space-y-4">
       {/* Tab Controls & Filter Bar */}
@@ -216,13 +249,7 @@ export function AmortizationTable({
           <div className="relative flex-1 sm:flex-none">
             <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
             <Input
-              placeholder={
-                viewMode === "annual"
-                  ? "Filter by year..."
-                  : viewMode === "biweekly"
-                  ? "Filter by period..."
-                  : "Filter by month..."
-              }
+              placeholder={overlay.searchSchedulePlaceholder}
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -248,11 +275,7 @@ export function AmortizationTable({
           <TableHeader>
             <TableRow className="border-zinc-200 dark:border-zinc-800 bg-zinc-100/80 dark:bg-zinc-800/80">
               <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
-                {viewMode === "annual"
-                  ? `${overlay.periodCol} (${overlay.yearCol})`
-                  : viewMode === "biweekly"
-                  ? (locale === "es" ? "Período Quincenal" : "Biweekly Period")
-                  : `${overlay.periodCol} (${locale === "es" ? "Mes" : "Month"})`}
+                {getPeriodHeader()}
               </TableHead>
               <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300">{overlay.dateRangeCol}</TableHead>
               <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">{overlay.paymentCol}</TableHead>
@@ -267,9 +290,7 @@ export function AmortizationTable({
             {paginatedRows.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center text-xs text-zinc-500 py-8">
-                  {locale === "es"
-                    ? `No se encontraron registros de amortización para "${searchTerm}".`
-                    : `No amortization entries found for "${searchTerm}".`}
+                  {getEmptyMessage()}
                 </TableCell>
               </TableRow>
             ) : (
@@ -279,12 +300,12 @@ export function AmortizationTable({
                     ? `${overlay.yearCol} ${row.year}`
                     : viewMode === "biweekly"
                     ? `${overlay.periodCol} ${row.month}`
-                    : `${locale === "es" ? "Mes" : "Month"} ${row.month}`;
+                    : `${overlay.monthHeader || "Month"} ${row.month}`;
                 const dateLabel =
                   viewMode === "annual"
                     ? row.dateRange
-                    : locale === "es" && row.calendarMonth && row.calendarYear
-                    ? formatMonthYear(row.calendarMonth, row.calendarYear, "es-ES", "short")
+                    : row.calendarMonth && row.calendarYear
+                    ? formatMonthYear(row.calendarMonth, row.calendarYear, targetIntlLocale, "short")
                     : row.date;
                 const paymentAmount = viewMode === "annual" ? row.totalPayment : row.payment;
                 const principalAmount =
@@ -312,16 +333,16 @@ export function AmortizationTable({
                       {dateLabel}
                     </TableCell>
                     <TableCell className="text-xs font-sans tabular-nums font-semibold text-zinc-900 dark:text-zinc-100 text-right">
-                      {formatCurrency(paymentAmount, "$", 2, locale)}
+                      {formatCurrency(paymentAmount, "$", 2, targetIntlLocale)}
                     </TableCell>
                     <TableCell className="text-xs font-sans tabular-nums text-emerald-600 dark:text-emerald-400 font-medium text-right">
-                      {formatCurrency(principalAmount, "$", 2, locale)}
+                      {formatCurrency(principalAmount, "$", 2, targetIntlLocale)}
                     </TableCell>
                     <TableCell className="text-xs font-sans tabular-nums text-amber-600 dark:text-amber-400 font-medium text-right">
-                      {formatCurrency(interestAmount, "$", 2, locale)}
+                      {formatCurrency(interestAmount, "$", 2, targetIntlLocale)}
                     </TableCell>
                     <TableCell className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400 text-right">
-                      {formatCurrency(balanceAmount, "$", 2, locale)}
+                      {formatCurrency(balanceAmount, "$", 2, targetIntlLocale)}
                     </TableCell>
                   </TableRow>
                 );
@@ -335,9 +356,7 @@ export function AmortizationTable({
       {totalPages > 1 && (
         <div className="flex items-center justify-between pt-1">
           <span className="text-xs text-zinc-500 dark:text-zinc-400 font-sans tabular-nums">
-            {locale === "es"
-              ? `Mostrando página ${currentPage} de ${totalPages} (${displayedRows.length} registros totales)`
-              : `Showing page ${currentPage} of ${totalPages} (${displayedRows.length} total entries)`}
+            {overlay.showingRecords} {overlay.pageOf.toLowerCase()} {currentPage} / {totalPages} ({displayedRows.length})
           </span>
           <div className="flex items-center gap-1.5">
             <Button

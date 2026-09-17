@@ -60,6 +60,13 @@ import { PT_OHMS_LAW_SEO, PT_OHMS_LAW_FAQS, PtOhmsLawContent } from "./ohms-law/
 // Mortgage
 import { SPANISH_MORTGAGE_SEO, SPANISH_MORTGAGE_FAQS } from "./mortgage/es";
 import { MortgageContentSectionEs } from "@/components/calculator/mortgage/MortgageContentSectionEs";
+import { FRENCH_MORTGAGE_SEO, FRENCH_MORTGAGE_FAQS, FrenchMortgageContent } from "./mortgage/fr";
+import { GERMAN_MORTGAGE_SEO, GERMAN_MORTGAGE_FAQS, GermanMortgageContent } from "./mortgage/de";
+import { HINDI_MORTGAGE_SEO, HINDI_MORTGAGE_FAQS, HindiMortgageContent } from "./mortgage/hi";
+import { PORTUGUESE_MORTGAGE_SEO, PORTUGUESE_MORTGAGE_FAQS, PortugueseMortgageContent } from "./mortgage/pt";
+
+// Fuel Cost
+import { SPANISH_FUEL_COST_SEO, SPANISH_FUEL_COST_FAQS, SpanishFuelCostContent } from "./fuel-cost/es";
 
 export interface LocalizedCalculatorContentPack {
   seo: {
@@ -130,6 +137,13 @@ export const LOCALIZED_CONTENT_REGISTRY: Record<string, Record<string, Localized
   },
   "mortgage-calculator": {
     es: { seo: SPANISH_MORTGAGE_SEO, faqs: SPANISH_MORTGAGE_FAQS, ContentComponent: MortgageContentSectionEs },
+    fr: { seo: FRENCH_MORTGAGE_SEO, faqs: FRENCH_MORTGAGE_FAQS, ContentComponent: FrenchMortgageContent },
+    de: { seo: GERMAN_MORTGAGE_SEO, faqs: GERMAN_MORTGAGE_FAQS, ContentComponent: GermanMortgageContent },
+    hi: { seo: HINDI_MORTGAGE_SEO, faqs: HINDI_MORTGAGE_FAQS, ContentComponent: HindiMortgageContent },
+    pt: { seo: PORTUGUESE_MORTGAGE_SEO, faqs: PORTUGUESE_MORTGAGE_FAQS, ContentComponent: PortugueseMortgageContent },
+  },
+  "fuel-cost-calculator": {
+    es: { seo: SPANISH_FUEL_COST_SEO, faqs: SPANISH_FUEL_COST_FAQS, ContentComponent: SpanishFuelCostContent },
   },
 };
 
