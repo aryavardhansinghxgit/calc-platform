@@ -9,7 +9,8 @@ import { formatCurrency, formatPercent, formatNumber } from "./formatters";
 export class CalculatorEngine {
   public static run(
     calculatorIdOrSlug: string,
-    userInputs: Record<string, any>
+    userInputs: Record<string, any>,
+    locale: string = "en-US"
   ): CalculationResult {
     const def = getCalculatorDefinition(calculatorIdOrSlug);
 
@@ -32,13 +33,13 @@ export class CalculatorEngine {
         if (typeof val === "number") {
           switch (out.format) {
             case "currency":
-              formatted[out.name] = formatCurrency(val, out.unit || "$");
+              formatted[out.name] = formatCurrency(val, out.unit || "$", 2, locale);
               break;
             case "percentage":
-              formatted[out.name] = formatPercent(val);
+              formatted[out.name] = formatPercent(val, 2, locale);
               break;
             case "number":
-              formatted[out.name] = formatNumber(val);
+              formatted[out.name] = formatNumber(val, 2, locale);
               break;
             default:
               formatted[out.name] = String(val);

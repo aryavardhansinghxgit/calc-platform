@@ -15,6 +15,7 @@ import { FormulaSection } from "./FormulaSection";
 import { RelatedCalculators } from "./RelatedCalculators";
 import { AmortizationTable } from "./mortgage/AmortizationTable";
 import { MortgageContentSection } from "./mortgage/MortgageContentSection";
+import { MortgageContentSectionEs } from "./mortgage/MortgageContentSectionEs";
 import { MortgageCalculator } from "./mortgage/MortgageCalculator";
 import { AmortizationCalculator } from "./amortization/AmortizationCalculator";
 import { LoanCalculator } from "./loan/LoanCalculator";
@@ -249,6 +250,10 @@ import { HoursCalculator } from "./hours/HoursCalculator";
 import { HoursContent } from "./hours/HoursContent";
 import { TimeDurationContent } from "./time-duration/TimeDurationContent";
 import { AutoLoanContentSection } from "./auto-loan/AutoLoanContentSection";
+import { PercentageCalculator } from "./percentage/PercentageCalculator";
+import { CurrencyCalculator } from "./currency/CurrencyCalculator";
+import { getCalculatorLocalizedContent } from "@/i18n/content";
+import { getCalculatorOverlay } from "@/i18n/overlays";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -273,12 +278,15 @@ const AmortizationAreaChart = dynamic(() => import("./charts/AmortizationAreaCha
 export interface CalculatorLayoutProps {
   definition: Omit<CalculatorModuleDefinition, "calculate">;
   children?: React.ReactNode;
+  locale?: string;
+  overlay?: any;
 }
 
-export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
+export function CalculatorLayout({ definition, locale, overlay: propOverlay }: CalculatorLayoutProps) {
+  const overlay = propOverlay || (locale && definition.slug ? getCalculatorOverlay(definition.slug, locale) : null);
   const initialInputs = useMemo(() => {
     const defaults: Record<string, any> = {};
-    definition.inputs.forEach((input) => {
+    (definition.inputs || []).forEach((input) => {
       defaults[input.name] = input.defaultValue;
     });
     return defaults;
@@ -312,7 +320,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
 
   const handleSaveCalculation = () => {
     if (!calculationResult.success) return;
-    const firstOutput = definition.outputs[0];
+    const firstOutput = definition.outputs?.[0];
     const primaryResult = firstOutput ? `${firstOutput.label}: ${calculationResult.formatted[firstOutput.name] || (calculationResult.data ? calculationResult.data[firstOutput.name] : "")}` : "Calculated Result";
     const newItem = {
       id: Date.now().toString(),
@@ -567,73 +575,90 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isDayOfWeek = idLower === "day-of-the-week-calculator" || slugLower === "day-of-the-week-calculator" || idLower === "day-of-week-calculator" || slugLower === "day-of-week-calculator";
   const isBraSize = idLower === "bra-size-calculator" || slugLower === "bra-size-calculator";
   const isTimeZone = idLower === "time-zone-calculator" || slugLower === "time-zone-calculator" || idLower === "time-zone" || slugLower === "time-zone";
+  const isPercentage = idLower === "percentage-calculator" || slugLower === "percentage-calculator";
 
-  const CustomContent = isResistor ? ResistorContent : isBandwidth ? BandwidthContent : isIpSubnet ? IPSubnetContent : isOhmsLaw ? OhmsLawContent : isVoltageDrop ? VoltageDropContent : isShoeSize ? ShoeSizeContent : (definition as any).ContentComponent || (
-    isVat ? VatContent :
-    isGst ? GstContent :
-    isBudget ? BudgetContent :
-    isBusinessLoan ? BusinessLoanContent :
-    isCommission ? CommissionContent :
-    isAnnuityPayout ? AnnuityPayoutContent :
-    isPension ? PensionContent :
-    isIra ? TraditionalIraContent :
-    isRmd ? RmdContent :
-    isAutoLease ? AutoLeaseContent :
-    isSimpleInterest ? SimpleInterestContent :
-    isSocialSecurity ? SocialSecurityContent :
-    isInterest ? InterestContent :
-    isRothIra ? RothIraContent :
-    isTimeDuration ? TimeDurationContent :
-    isInvestment ? InvestmentContent :
-      isRetirement ? RetirementContent :
-        isGdp ? GDPContent :
-          isCreditCardPayoff ? CreditCardPayoffContent :
-            isBoatLoan ? BoatLoanContent :
-              isDepreciation ? DepreciationContent :
-                isCollegeCost ? CollegeCostContent :
-                  isLease ? LeaseContent :
-                    isRepayment ? RepaymentContent :
-                      isCreditCard ? CreditCardContent :
-                        isRoman ? RomanNumeralContent :
-                          isSpeed ? SpeedContent :
-                            isMass ? MassContent :
-                              isDensity ? DensityContent :
-                                isConversion ? ConversionContent :
-                                  isHeight ? HeightContent :
-                                    isElectricity ? ElectricityContent :
-                                      isGravel ? GravelContent :
-                                        isMulch ? MulchContent :
-                                          isTile ? TileContent :
-                                            isRoofing ? RoofingContent :
-                                              isStair ? StairContent :
-                                                isSquareFootage ? SquareFootageContent :
-                                                  isBtu ? BTUContent :
-                                                    isConcrete ? ConcreteContent :
-                                                      isMolecularWeight ? MolecularWeightContent :
-                                                        isMolarity ? MolarityContent :
-                                                          isGrade ? GradeContent :
-                                                            isGPA ? GPAContent :
-                                                              isDate ? DateContent :
-                                                                isHours ? HoursContent :
-                                                                  isLove ? LoveContent :
-                                                                    isDiceRoller ? DiceRollerContent :
-                                                                      isTireSize ? TireSizeContent :
-                                                                        isMileage ? MileageContent :
-                                                                          isEngineHorsepower ? EngineHorsepowerContent :
-                                                                            isHorsepower ? HorsepowerContent :
-                                                                            isGasMileage ? GasMileageContent :
-                                                                              isFuelCost ? FuelCostContent :
-                                                                                isDewPoint ? DewPointContent :
-                                                                                  isHeatIndex ? HeatIndexContent :
-                                                                                    isWindChill ? WindChillContent :
-                                                                                      isSleep ? SleepContent :
-                                                                                      isIncomeTax ? IncomeTaxContent :
-                                                                                        isSalary ? SalaryContent :
-                                                                                           isMargin ? MarginContent :
-                                                                                           isDiscount ? DiscountContent :
-                                                                                           isAutoLoan ? AutoLoanContentSection :
-                                                                                              isDebtConsolidation ? DebtConsolidationContent : isScientific ? ScientificCalculatorContent : isFraction ? FractionContent : isStatistics ? StatisticsContent : isPercentError ? PercentErrorContent : isDownPayment ? DownPaymentContent : isRentVsBuy ? RentVsBuyContent : isBac ? BacContent : isBsa ? BsaContent : isBodyType ? BodyTypeContent : isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null
-  );
+  const localizedPack = (locale && definition.slug) ? getCalculatorLocalizedContent(definition.slug, locale) : null;
+  const CustomContent = (definition as any).ContentComponent || localizedPack?.ContentComponent || (
+    (isMortgage && locale === "es")
+      ? MortgageContentSectionEs
+      : isResistor
+        ? ResistorContent
+        : isBandwidth
+          ? BandwidthContent
+          : isIpSubnet
+            ? IPSubnetContent
+            : isOhmsLaw
+              ? OhmsLawContent
+              : isVoltageDrop
+                ? VoltageDropContent
+                : isShoeSize
+                  ? ShoeSizeContent
+                  : (
+                    isVat ? VatContent :
+                    isGst ? GstContent :
+                    isBudget ? BudgetContent :
+                    isBusinessLoan ? BusinessLoanContent :
+                    isCommission ? CommissionContent :
+                    isAnnuityPayout ? AnnuityPayoutContent :
+                    isPension ? PensionContent :
+                    isIra ? TraditionalIraContent :
+                    isRmd ? RmdContent :
+                    isAutoLease ? AutoLeaseContent :
+                    isSimpleInterest ? SimpleInterestContent :
+                    isSocialSecurity ? SocialSecurityContent :
+                    isInterest ? InterestContent :
+                    isRothIra ? RothIraContent :
+                    isTimeDuration ? TimeDurationContent :
+                    isInvestment ? InvestmentContent :
+                      isRetirement ? RetirementContent :
+                        isGdp ? GDPContent :
+                          isCreditCardPayoff ? CreditCardPayoffContent :
+                            isBoatLoan ? BoatLoanContent :
+                              isDepreciation ? DepreciationContent :
+                                isCollegeCost ? CollegeCostContent :
+                                  isLease ? LeaseContent :
+                                    isRepayment ? RepaymentContent :
+                                      isCreditCard ? CreditCardContent :
+                                        isRoman ? RomanNumeralContent :
+                                          isSpeed ? SpeedContent :
+                                            isMass ? MassContent :
+                                              isDensity ? DensityContent :
+                                                isConversion ? ConversionContent :
+                                                  isHeight ? HeightContent :
+                                                    isElectricity ? ElectricityContent :
+                                                      isGravel ? GravelContent :
+                                                        isMulch ? MulchContent :
+                                                          isTile ? TileContent :
+                                                            isRoofing ? RoofingContent :
+                                                              isStair ? StairContent :
+                                                                isSquareFootage ? SquareFootageContent :
+                                                                  isBtu ? BTUContent :
+                                                                    isConcrete ? ConcreteContent :
+                                                                      isMolecularWeight ? MolecularWeightContent :
+                                                                        isMolarity ? MolarityContent :
+                                                                          isGrade ? GradeContent :
+                                                                            isGPA ? GPAContent :
+                                                                              isDate ? DateContent :
+                                                                                isHours ? HoursContent :
+                                                                                  isLove ? LoveContent :
+                                                                                    isDiceRoller ? DiceRollerContent :
+                                                                                      isTireSize ? TireSizeContent :
+                                                                                        isMileage ? MileageContent :
+                                                                                          isEngineHorsepower ? EngineHorsepowerContent :
+                                                                                            isHorsepower ? HorsepowerContent :
+                                                                                            isGasMileage ? GasMileageContent :
+                                                                                              isFuelCost ? FuelCostContent :
+                                                                                                isDewPoint ? DewPointContent :
+                                                                                                  isHeatIndex ? HeatIndexContent :
+                                                                                                    isWindChill ? WindChillContent :
+                                                                                                      isSleep ? SleepContent :
+                                                                                                      isIncomeTax ? IncomeTaxContent :
+                                                                                                        isSalary ? SalaryContent :
+                                                                                                            isMargin ? MarginContent :
+                                                                                                            isDiscount ? DiscountContent :
+                                                                                                            isAutoLoan ? AutoLoanContentSection :
+                                                                                                               isDebtConsolidation ? DebtConsolidationContent : isScientific ? ScientificCalculatorContent : isFraction ? FractionContent : isStatistics ? StatisticsContent : isPercentError ? PercentErrorContent : isDownPayment ? DownPaymentContent : isRentVsBuy ? RentVsBuyContent : isBac ? BacContent : isBsa ? BsaContent : isBodyType ? BodyTypeContent : isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null
+                  ));
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -641,21 +666,31 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       {/* 1. Accessible Breadcrumbs Navigation */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
         <Link
-          href="/"
+          href={locale && locale !== "en" ? `/${locale}` : "/"}
           className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-600 rounded px-1"
         >
-          Home
+          {locale === "es" ? "Inicio" : "Home"}
         </Link>
         <ChevronRight className="h-3 w-3 text-zinc-300 dark:text-zinc-600" />
         <Link
-          href={`/category/${definition.category.toLowerCase()}`}
+          href={locale && locale !== "en" ? `/${locale}/category/${(definition?.category || "general").toLowerCase()}` : `/category/${(definition?.category || "general").toLowerCase()}`}
           className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-600 rounded px-1"
         >
-          {definition.category}
+          {locale === "es"
+            ? (definition?.category?.toLowerCase().includes("math")
+                ? "Matemáticas"
+                : definition?.category?.toLowerCase().includes("health")
+                ? "Salud"
+                : definition?.category?.toLowerCase().includes("date") || definition?.category?.toLowerCase().includes("time")
+                ? "Fecha y Hora"
+                : definition?.category || "General")
+            : (definition?.category || "General")}
         </Link>
         <ChevronRight className="h-3 w-3 text-zinc-300 dark:text-zinc-600" />
         <span className="font-medium text-zinc-800 dark:text-zinc-200 truncate">
-          {definition.id === "area-calculator" ? "Area Calculator" : (definition.title.includes("—") ? definition.title.split("—")[0].trim() : definition.title)}
+          {definition?.id === "area-calculator"
+            ? "Area Calculator"
+            : getCalculatorDisplayTitle(overlay?.title || definition?.title || "")}
         </span>
       </nav>
 
@@ -663,10 +698,16 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
       <div className="w-full min-w-0 space-y-4">
         <div className="bg-slate-50 dark:bg-slate-900/50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
           <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
-            {isLoan ? "Loan Calculator & Amortization Payment Analyzer" : isPersonalLoan ? "Personal Loan Calculator & Amortization Payment Suite" : isTimeDuration ? "Time Duration Calculator – Calculate Elapsed Time Between Two Times and Dates" : definition.title}
+            {isLoan
+              ? (locale === "es" ? "Calculadora de Préstamos y Amortización" : "Loan Calculator & Amortization Payment Analyzer")
+              : isPersonalLoan
+              ? (locale === "es" ? "Calculadora de Préstamos Personales" : "Personal Loan Calculator & Amortization Payment Suite")
+              : isTimeDuration
+              ? (locale === "es" ? "Calculadora de Duración de Tiempo" : "Time Duration Calculator – Calculate Elapsed Time Between Two Times and Dates")
+              : (overlay?.title || definition?.title || "")}
           </h1>
           <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 max-w-xl leading-normal font-medium">
-            {definition.description}
+            {overlay?.description || definition?.description || ""}
           </p>
         </div>
 
@@ -678,11 +719,11 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           ) : isIpSubnet ? (
             <IPSubnetCalculator />
           ) : isOhmsLaw ? (
-            <OhmsLawCalculator />
+            <OhmsLawCalculator overlay={overlay} locale={locale} />
           ) : isVoltageDrop ? (
             <VoltageDropCalculator />
           ) : (definition as any).CustomComponent ? (
-            React.createElement((definition as any).CustomComponent)
+            React.createElement((definition as any).CustomComponent, { overlay, locale })
           ) : isMolecularWeight ? (
             <MolecularWeightCalculator />
           ) : isMolarity ? (
@@ -692,11 +733,11 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           ) : isGPA ? (
             <GPACalculator />
           ) : isDate ? (
-            <DateCalculator />
+            <DateCalculator overlay={overlay} locale={locale} />
           ) : isHours ? (
             <HoursCalculator />
           ) : isScientific ? (
-            <ScientificCalculator />
+            <ScientificCalculator overlay={overlay} locale={locale} />
           ) : isFraction ? (
             <FractionCalculator />
           ) : isStatistics ? (
@@ -788,13 +829,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           ) : isCalorie ? (
             <CalorieCalculator />
           ) : isBmi ? (
-            <BmiCalculator />
+            <BmiCalculator overlay={overlay} locale={locale} />
           ) : isBudget ? (
             <BudgetCalculator />
           ) : isStudentLoan ? (
             <StudentLoanCalculator />
           ) : isAutoLoan ? (
-            <AutoLoanCalculator />
+            <AutoLoanCalculator overlay={overlay} locale={locale} />
           ) : isBusinessLoan ? (
             <BusinessLoanCalculator />
           ) : isPersonalLoan ? (
@@ -888,7 +929,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           ) : isAutoLease ? (
             <AutoLeaseCalculator />
           ) : isAutoLoan ? (
-            <AutoLoanCalculator />
+            <AutoLoanCalculator overlay={overlay} locale={locale} />
           ) : isRefinance ? (
             <RefinanceCalculator />
           ) : isHouseAffordability ? (
@@ -900,9 +941,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           ) : isAmortization ? (
             <AmortizationCalculator />
           ) : isMortgage ? (
-            <MortgageCalculator />
+            <MortgageCalculator overlay={overlay} locale={locale} />
           ) : isConcrete ? (
-            <ConcreteCalculator />
+            <ConcreteCalculator overlay={overlay} locale={locale} />
+          ) : isCurrency ? (
+            <CurrencyCalculator overlay={overlay} locale={locale} />
+          ) : isPercentage ? (
+            <PercentageCalculator overlay={overlay} locale={locale} />
           ) : isBtu ? (
             <BTUCalculator />
           ) : isSquareFootage ? (
@@ -970,7 +1015,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                         size="sm"
                         onClick={() => {
                           if (calculationResult.success) {
-                            const summary = definition.outputs.map(o => `${o.label}: ${calculationResult.formatted[o.name] || (calculationResult.data ? calculationResult.data[o.name] : "")}`).join(" | ");
+                            const summary = (definition.outputs || []).map(o => `${o.label}: ${calculationResult.formatted[o.name] || (calculationResult.data ? calculationResult.data[o.name] : "")}`).join(" | ");
                             navigator.clipboard.writeText(summary);
                           }
                         }}
@@ -1030,12 +1075,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
         {!isPeriod && !isVolume && !isSlope && !isDistance && !isMatrix && !isCircle && !isSurfaceArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRandomNumberGenerator && !isBinary && !isHex && !isHalfLife && !isRightTriangle && !isConcrete && !isSquareFootage && !isRoofing && !isBtu && !isTile && !isStair && !isGravel && !isMulch && !isConversion && !isMass && !isSpeed && !isHeight && !isElectricity && !isDensity && !isRoman && !isShoeSize && !isFuelCost && !isVoltageDrop && !isOhmsLaw && !isIpSubnet && !isBandwidth && !isDewPoint && !isDiceRoller && (
           <div className="no-print pt-3 pb-1 space-y-1.5 border-t border-slate-200/60 dark:border-slate-800">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
-              RELATED CALCULATORS:
+              {locale === "es" ? "CALCULADORAS RELACIONADAS:" : "RELATED CALCULATORS:"}
             </span>
             <RelatedCalculators
               currentId={definition.id}
               category={definition.category}
               explicitRelated={definition.relatedCalculators}
+              locale={locale}
             />
           </div>
         )}
@@ -1067,7 +1113,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
 
           {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
-          {Boolean(definition.faqs && definition.faqs.length > 0) && !isTimeZone && !isDayCounter && !isDayOfWeek && !isBac && !isBodyType && !isArmyBodyFat && !isOneRepMax && !isTargetHeartRate && !isLove && !isSleep && !isTip && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isDiceRoller && !isRounding && !isBigNumber && !isBinary && !isHex && !isHalfLife && !isRightTriangle && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && !isPythagorean && !isDistance && !isMatrix && !isCircle && !isSurfaceArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRandomNumberGenerator && !isConcrete && !isSquareFootage && !isRoofing && !isBtu && !isTile && !isStair && !isGravel && !isMulch && !isConversion && !isMass && !isSpeed && !isHeight && !isDensity && !isRoman && !isShoeSize && !isElectricity && !isFuelCost && !isGasMileage && !isVoltageDrop && !isOhmsLaw && !isIpSubnet && !isBandwidth && !isResistor && !isBase64 && !isUrlEncoder && !isPasswordGenerator && !isMileage && !isHorsepower && !isEngineHorsepower && !isTireSize && !isGPA && !isGrade && !isWindChill && !isHeatIndex && !isDewPoint && !isMolarity && !isMolecularWeight && !isGdp ? (
+          {Boolean(definition.faqs && definition.faqs.length > 0) && !isMortgage && !isTimeZone && !isDayCounter && !isDayOfWeek && !isBac && !isBodyType && !isArmyBodyFat && !isOneRepMax && !isTargetHeartRate && !isLove && !isSleep && !isTip && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isDiceRoller && !isRounding && !isBigNumber && !isBinary && !isHex && !isHalfLife && !isRightTriangle && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && !isPythagorean && !isDistance && !isMatrix && !isCircle && !isSurfaceArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRandomNumberGenerator && !isConcrete && !isSquareFootage && !isRoofing && !isBtu && !isTile && !isStair && !isGravel && !isMulch && !isConversion && !isMass && !isSpeed && !isHeight && !isDensity && !isRoman && !isShoeSize && !isElectricity && !isFuelCost && !isGasMileage && !isVoltageDrop && !isOhmsLaw && !isIpSubnet && !isBandwidth && !isResistor && !isBase64 && !isUrlEncoder && !isPasswordGenerator && !isMileage && !isHorsepower && !isEngineHorsepower && !isTireSize && !isGPA && !isGrade && !isWindChill && !isHeatIndex && !isDewPoint && !isMolarity && !isMolecularWeight && !isGdp ? (
             <div className="space-y-4 pt-2">
               <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 Frequently Asked Questions
@@ -1109,12 +1155,13 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           {(isTimeZone || isBac || isBodyType || isArmyBodyFat || isOneRepMax || isTargetHeartRate || isLove || isResistor || isBase64 || isUrlEncoder || isPasswordGenerator || isMileage || isHorsepower || isEngineHorsepower || isTireSize || isGPA || isGrade || isWindChill || isHeatIndex || isMolarity || isMolecularWeight || isGdp || isBraSize || isTip || isGolfHandicap || isSleep || isDayCounter || isDayOfWeek) && (
             <div className="no-print pt-6 pb-2 space-y-1.5 border-t border-slate-200/60 dark:border-slate-800">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
-                RELATED CALCULATORS:
+                {locale === "es" ? "CALCULADORAS RELACIONADAS:" : "RELATED CALCULATORS:"}
               </span>
               <RelatedCalculators
                 currentId={definition.id}
                 category={definition.category}
                 explicitRelated={definition.relatedCalculators}
+                locale={locale}
               />
             </div>
           )}

@@ -78,7 +78,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-zinc-50 text-zinc-900 font-sans selection:bg-blue-600 selection:text-white">
+      <body className="min-h-full flex flex-col bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-sans selection:bg-blue-600 selection:text-white transition-colors duration-150">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -86,7 +86,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TooltipProvider>
-            <div id="main-web-app" className="no-print-main-app flex flex-col min-h-screen">
+            <div id="main-web-app" className="no-print-main-app flex flex-col min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-150">
               <Navbar />
               <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex-1 w-full space-y-6">
                 {children}

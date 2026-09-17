@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { PercentageLocaleOverlay, getPercentageOverlay } from "@/i18n/overlays/percentage";
 
 export interface SavedCalcItem {
   id: string;
@@ -10,7 +11,13 @@ export interface SavedCalcItem {
   timestamp: string;
 }
 
-export function PercentageCalculator() {
+export interface PercentageCalculatorProps {
+  overlay?: PercentageLocaleOverlay;
+  locale?: string;
+}
+
+export function PercentageCalculator({ overlay: propOverlay, locale = "en" }: PercentageCalculatorProps = {}) {
+  const o = propOverlay || getPercentageOverlay(locale);
   const [savedItems, setSavedItems] = useState<SavedCalcItem[]>([]);
   const [savedSection, setSavedSection] = useState<string | null>(null);
 
@@ -89,17 +96,17 @@ export function PercentageCalculator() {
       const dec = Number.isInteger(p / 100) ? (p / 100).toString() : parseFloat((p / 100).toFixed(8)).toString();
       return {
         resultStr: resFormatted,
-        summaryText: <span>{p}% of {v1} = <strong className="text-blue-600 dark:text-blue-400 font-bold">{resFormatted}</strong></span>,
-        summaryRawText: `${p}% of ${v1} = ${resFormatted}`,
-        stepText: `${p}% of ${v1} = ${dec} × ${v1} = ${resFormatted}`
+        summaryText: <span>{p}% {o.s1SummaryOf} {v1} = <strong className="text-blue-600 dark:text-blue-400 font-bold">{resFormatted}</strong></span>,
+        summaryRawText: `${p}% ${o.s1SummaryOf} ${v1} = ${resFormatted}`,
+        stepText: `${p}% × ${v1} = ${dec} × ${v1} = ${resFormatted}`
       };
     } else if (hasV2 && hasV1) {
       if (v1 === 0) {
         return {
-          resultStr: "Undefined",
-          summaryText: <span>{v2} is <strong className="text-red-600 font-bold">Undefined</strong> (division by zero).</span>,
-          summaryRawText: `${v2} is Undefined of ${v1}`,
-          stepText: `${v2} ÷ 0 × 100 = Undefined (division by zero)`
+          resultStr: o.s1Undefined,
+          summaryText: <span>{v2} {o.s1SummaryIs} <strong className="text-red-600 font-bold">{o.s1Undefined}</strong>.</span>,
+          summaryRawText: `${v2} ${o.s1SummaryIs} ${o.s1Undefined}`,
+          stepText: `${v2} ÷ 0 × 100 = ${o.s1Undefined}`
         };
       }
       const resP = (v2 / v1) * 100;
@@ -107,25 +114,25 @@ export function PercentageCalculator() {
       const ratio = v2 / v1;
       return {
         resultStr: resFormatted,
-        summaryText: <span>{v2} is <strong className="text-blue-600 dark:text-blue-400 font-bold">{resFormatted}</strong> of {v1}.</span>,
-        summaryRawText: `${v2} is ${resFormatted} of ${v1}`,
+        summaryText: <span>{o.s2Phrase2Summary(String(v2), resFormatted, String(v1))}</span>,
+        summaryRawText: o.s2Phrase2Summary(String(v2), resFormatted, String(v1)),
         stepText: `${v2} ÷ ${v1} = ${parseFloat(ratio.toFixed(8))} = ${resFormatted}`
       };
     } else if (hasV2 && hasP) {
       if (p === 0) {
         return {
-          resultStr: "Undefined",
-          summaryText: <span>{v2} is 0% of <strong className="text-red-600 font-bold">Undefined</strong> (division by zero).</span>,
-          summaryRawText: `${v2} is 0% of Undefined`,
-          stepText: `${v2} ÷ 0% = Undefined (division by zero)`
+          resultStr: o.s1Undefined,
+          summaryText: <span>{v2} {o.s1SummaryIs} 0% {o.s1SummaryOf} <strong className="text-red-600 font-bold">{o.s1Undefined}</strong>.</span>,
+          summaryRawText: `${v2} ${o.s1SummaryIs} 0% ${o.s1SummaryOf} ${o.s1Undefined}`,
+          stepText: `${v2} ÷ 0% = ${o.s1Undefined}`
         };
       }
       const resV1 = v2 / (p / 100);
       const resFormatted = Number.isInteger(resV1) ? resV1.toString() : parseFloat(resV1.toFixed(8)).toString();
       return {
         resultStr: resFormatted,
-        summaryText: <span>{v2} is {p}% of <strong className="text-blue-600 dark:text-blue-400 font-bold">{resFormatted}</strong>.</span>,
-        summaryRawText: `${v2} is ${p}% of ${resFormatted}`,
+        summaryText: <span>{o.s2Phrase3Summary(String(v2), String(p), resFormatted)}</span>,
+        summaryRawText: o.s2Phrase3Summary(String(v2), String(p), resFormatted),
         stepText: `${v2} ÷ (${p} / 100) = ${v2} ÷ ${parseFloat((p / 100).toFixed(8))} = ${resFormatted}`
       };
     }
@@ -162,8 +169,8 @@ export function PercentageCalculator() {
     const resFormatted = Number.isInteger(res) ? res.toString() : parseFloat(res.toFixed(8)).toString();
     return {
       resultStr: resFormatted,
-      summaryText: <span><strong className="text-blue-600 dark:text-blue-400 font-bold">{resFormatted}</strong> is {p}% of {v1}.</span>,
-      summaryRawText: `${resFormatted} is ${p}% of ${v1}`,
+      summaryText: <span>{o.s2Phrase1Summary(resFormatted, String(p), String(v1))}</span>,
+      summaryRawText: o.s2Phrase1Summary(resFormatted, String(p), String(v1)),
       stepText: `${p}% × ${v1} = (${p} / 100) × ${v1} = ${resFormatted}`
     };
   }
@@ -182,10 +189,10 @@ export function PercentageCalculator() {
     if (Number.isNaN(v2) || Number.isNaN(v1)) return null;
     if (v1 === 0) {
       return {
-        resultStr: "Undefined",
-        summaryText: <span>{v2} is <strong className="text-red-600 font-bold">Undefined</strong> of {v1} (division by zero).</span>,
-        summaryRawText: `${v2} is Undefined of ${v1}`,
-        stepText: `${v2} ÷ 0 × 100 = Undefined (division by zero)`
+        resultStr: o.s1Undefined,
+        summaryText: <span>{v2} {o.s1SummaryIs} <strong className="text-red-600 font-bold">{o.s1Undefined}</strong>.</span>,
+        summaryRawText: `${v2} ${o.s1SummaryIs} ${o.s1Undefined}`,
+        stepText: `${v2} ÷ 0 × 100 = ${o.s1Undefined}`
       };
     }
     const resP = (v2 / v1) * 100;
@@ -193,8 +200,8 @@ export function PercentageCalculator() {
     const ratio = v2 / v1;
     return {
       resultStr: resFormatted,
-      summaryText: <span>{v2} is <strong className="text-blue-600 dark:text-blue-400 font-bold">{resFormatted}</strong> of {v1}.</span>,
-      summaryRawText: `${v2} is ${resFormatted} of ${v1}`,
+      summaryText: <span>{o.s2Phrase2Summary(String(v2), resFormatted, String(v1))}</span>,
+      summaryRawText: o.s2Phrase2Summary(String(v2), resFormatted, String(v1)),
       stepText: `${v2} ÷ ${v1} × 100 = ${parseFloat(ratio.toFixed(8))} × 100 = ${resFormatted}`
     };
   }
@@ -213,18 +220,18 @@ export function PercentageCalculator() {
     if (Number.isNaN(v2) || Number.isNaN(p)) return null;
     if (p === 0) {
       return {
-        resultStr: "Undefined",
-        summaryText: <span>{v2} is 0% of <strong className="text-red-600 font-bold">Undefined</strong> (division by zero).</span>,
-        summaryRawText: `${v2} is 0% of Undefined`,
-        stepText: `${v2} ÷ (0 / 100) = Undefined (division by zero)`
+        resultStr: o.s1Undefined,
+        summaryText: <span>{v2} {o.s1SummaryIs} 0% {o.s1SummaryOf} <strong className="text-red-600 font-bold">{o.s1Undefined}</strong>.</span>,
+        summaryRawText: `${v2} ${o.s1SummaryIs} 0% ${o.s1SummaryOf} ${o.s1Undefined}`,
+        stepText: `${v2} ÷ (0 / 100) = ${o.s1Undefined}`
       };
     }
     const resV1 = v2 / (p / 100);
     const resFormatted = Number.isInteger(resV1) ? resV1.toString() : parseFloat(resV1.toFixed(8)).toString();
     return {
       resultStr: resFormatted,
-      summaryText: <span>{v2} is {p}% of <strong className="text-blue-600 dark:text-blue-400 font-bold">{resFormatted}</strong>.</span>,
-      summaryRawText: `${v2} is ${p}% of ${resFormatted}`,
+      summaryText: <span>{o.s2Phrase3Summary(String(v2), String(p), resFormatted)}</span>,
+      summaryRawText: o.s2Phrase3Summary(String(v2), String(p), resFormatted),
       stepText: `${v2} ÷ (${p} / 100) = ${v2} ÷ ${parseFloat((p / 100).toFixed(8))} = ${resFormatted}`
     };
   }
@@ -415,7 +422,7 @@ export function PercentageCalculator() {
       {/* ========================================================================= */}
       <section className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg p-5 shadow-xs space-y-4">
         <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
-          Percentage Calculator
+          {o.s1Title}
         </h2>
 
         {/* Inputs Form */}
@@ -429,7 +436,7 @@ export function PercentageCalculator() {
               aria-label="Percentage rate P"
               className="w-24 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2.5 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600"
             />
-            <span className="font-bold">% of</span>
+            <span className="font-bold">{o.s1PctOf}</span>
             <input
               type="text"
               value={s1V1}
@@ -438,7 +445,7 @@ export function PercentageCalculator() {
               aria-label="Base value V1"
               className="w-28 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2.5 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600"
             />
-            <span className="font-bold">=</span>
+            <span className="font-bold">{o.s1Equals}</span>
             <input
               type="text"
               value={s1V2}
@@ -455,14 +462,14 @@ export function PercentageCalculator() {
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors flex items-center justify-center cursor-pointer"
             >
-              Calculate
+              {o.s1CalcBtn}
             </button>
             <button
               type="button"
               onClick={handleS1Clear}
               className="bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-semibold text-xs rounded px-4 py-1.5 transition-colors cursor-pointer"
             >
-              Clear
+              {o.s1ClearBtn}
             </button>
           </div>
         </form>
@@ -472,13 +479,13 @@ export function PercentageCalculator() {
           <div className="space-y-3 max-w-xl">
             <div className="border border-blue-600 rounded overflow-hidden">
               <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5 flex items-center justify-between">
-                <span>Result: {s1Result.resultStr}</span>
+                <span>{o.s1ResultLabel}: {s1Result.resultStr}</span>
                 <button
                   type="button"
-                  onClick={(e) => handleSaveResult(e, "s1", "Percentage Calculator", s1Result.summaryRawText, s1Result.resultStr)}
+                  onClick={(e) => handleSaveResult(e, "s1", o.s1Title, s1Result.summaryRawText, s1Result.resultStr)}
                   className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
                 >
-                  {savedSection === "s1" ? "Saved!" : "Save"}
+                  {savedSection === "s1" ? o.s1SavedBtn : o.s1SaveBtn}
                 </button>
               </div>
               <div className="bg-white dark:bg-slate-900 p-3.5 text-xs font-sans space-y-3">
@@ -486,7 +493,7 @@ export function PercentageCalculator() {
                   {s1Result.summaryText}
                 </div>
                 <div className="pt-1 border-t border-slate-100 dark:border-slate-800 space-y-1">
-                  <div className="font-bold text-slate-900 dark:text-slate-100 text-xs">Steps:</div>
+                  <div className="font-bold text-slate-900 dark:text-slate-100 text-xs">{o.s1StepsLabel}</div>
                   <p className="font-sans tabular-nums text-slate-700 dark:text-slate-300 font-semibold text-xs">
                     {s1Result.stepText}
                   </p>
@@ -503,7 +510,7 @@ export function PercentageCalculator() {
       {/* ========================================================================= */}
       <section className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg p-5 shadow-xs space-y-4">
         <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
-          Percentage Calculator in Common Phrases
+          {o.s2Title}
         </h2>
 
         {/* Phrases Rows */}
@@ -511,7 +518,7 @@ export function PercentageCalculator() {
           {/* Row 1: what is [ P ] % of [ V1 ] */}
           <form onSubmit={handleS2R1Calculate} className="bg-slate-50 dark:bg-slate-800/50 p-3 rounded border border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2 font-semibold">
-              <span>what is</span>
+              <span>{o.s2WhatIs}</span>
               <input
                 type="text"
                 value={s2R1P}
@@ -520,7 +527,7 @@ export function PercentageCalculator() {
                 aria-label="Percentage P"
                 className="w-20 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600 text-center"
               />
-              <span>% of</span>
+              <span>{o.s2PctOf}</span>
               <input
                 type="text"
                 value={s2R1V1}
@@ -534,7 +541,7 @@ export function PercentageCalculator() {
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1 transition-colors cursor-pointer shrink-0"
             >
-              Calculate
+              {o.s2CalcBtn}
             </button>
           </form>
 
@@ -549,7 +556,7 @@ export function PercentageCalculator() {
                 aria-label="Part V2"
                 className="w-20 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600 text-center"
               />
-              <span>is what % of</span>
+              <span>{o.s2IsWhatPctOf}</span>
               <input
                 type="text"
                 value={s2R2V1}
@@ -563,7 +570,7 @@ export function PercentageCalculator() {
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1 transition-colors cursor-pointer shrink-0"
             >
-              Calculate
+              {o.s2CalcBtn}
             </button>
           </form>
 
@@ -578,7 +585,7 @@ export function PercentageCalculator() {
                 aria-label="Part V2"
                 className="w-20 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600 text-center"
               />
-              <span>is</span>
+              <span>{o.s2Is}</span>
               <input
                 type="text"
                 value={s2R3P}
@@ -587,13 +594,13 @@ export function PercentageCalculator() {
                 aria-label="Percentage P"
                 className="w-20 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600 text-center"
               />
-              <span>% of what</span>
+              <span>{o.s2PctOfWhat}</span>
             </div>
             <button
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1 transition-colors cursor-pointer shrink-0"
             >
-              Calculate
+              {o.s2CalcBtn}
             </button>
           </form>
         </div>
@@ -603,13 +610,13 @@ export function PercentageCalculator() {
           <div className="space-y-3 max-w-xl pt-1">
             <div className="border border-blue-600 rounded overflow-hidden">
               <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5 flex items-center justify-between">
-                <span>Result: {s2PhraseResult.resultStr}</span>
+                <span>{o.s2ResultLabel}: {s2PhraseResult.resultStr}</span>
                 <button
                   type="button"
-                  onClick={(e) => handleSaveResult(e, "s2", "Common Phrases", s2PhraseResult.summaryRawText, s2PhraseResult.resultStr)}
+                  onClick={(e) => handleSaveResult(e, "s2", o.s2Title, s2PhraseResult.summaryRawText, s2PhraseResult.resultStr)}
                   className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
                 >
-                  {savedSection === "s2" ? "Saved!" : "Save"}
+                  {savedSection === "s2" ? o.s2SavedBtn : o.s2SaveBtn}
                 </button>
               </div>
               <div className="bg-white dark:bg-slate-900 p-3.5 text-xs font-sans space-y-3">
@@ -617,7 +624,7 @@ export function PercentageCalculator() {
                   {s2PhraseResult.summaryText}
                 </div>
                 <div className="pt-1 border-t border-slate-100 dark:border-slate-800 space-y-1">
-                  <div className="font-bold text-slate-900 dark:text-slate-100 text-xs">Steps:</div>
+                  <div className="font-bold text-slate-900 dark:text-slate-100 text-xs">{o.s2StepsLabel}</div>
                   <p className="font-sans tabular-nums text-slate-700 dark:text-slate-300 font-semibold text-xs">
                     {s2PhraseResult.stepText}
                   </p>
@@ -634,13 +641,13 @@ export function PercentageCalculator() {
       {/* ========================================================================= */}
       <section className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg p-5 shadow-xs space-y-4">
         <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
-          Percentage Difference Calculator
+          {o.s3Title}
         </h2>
 
         {/* Inputs Form */}
         <form onSubmit={handleS3Calculate} className="space-y-3 bg-slate-50 dark:bg-slate-800/50 p-4 rounded border border-slate-200 dark:border-slate-700 max-w-md">
           <div className="flex items-center justify-between gap-4">
-            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Value 1</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">{o.s3Val1Label}</label>
             <input
               type="text"
               value={s3V1}
@@ -652,7 +659,7 @@ export function PercentageCalculator() {
           </div>
 
           <div className="flex items-center justify-between gap-4">
-            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Value 2</label>
+            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">{o.s3Val2Label}</label>
             <input
               type="text"
               value={s3V2}
@@ -669,14 +676,14 @@ export function PercentageCalculator() {
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors cursor-pointer"
             >
-              Calculate
+              {o.s3CalcBtn}
             </button>
             <button
               type="button"
               onClick={handleS3Clear}
               className="bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-semibold text-xs rounded px-4 py-1.5 transition-colors cursor-pointer"
             >
-              Clear
+              {o.s3ClearBtn}
             </button>
           </div>
         </form>
@@ -686,25 +693,25 @@ export function PercentageCalculator() {
           <div className="space-y-3 max-w-xl">
             <div className="border border-blue-600 rounded overflow-hidden">
               <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5 flex items-center justify-between">
-                <span>Result: {s3Result.resultStr}</span>
+                <span>{o.s3ResultLabel}: {s3Result.resultStr}</span>
                 <button
                   type="button"
-                  onClick={(e) => handleSaveResult(e, "s3", "Percentage Difference", s3Result.summaryRawText, s3Result.resultStr)}
+                  onClick={(e) => handleSaveResult(e, "s3", o.s3Title, s3Result.summaryRawText, s3Result.resultStr)}
                   className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
                 >
-                  {savedSection === "s3" ? "Saved!" : "Save"}
+                  {savedSection === "s3" ? o.s3SavedBtn : o.s3SaveBtn}
                 </button>
               </div>
               <div className="bg-white dark:bg-slate-900 p-3.5 text-xs font-sans space-y-3">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                  Difference of {s3Result.v1} and {s3Result.v2} is <strong className="text-blue-600 dark:text-blue-400 font-bold">{s3Result.resultStr}</strong>
+                  {o.s3Summary(s3Result.v1, s3Result.v2, s3Result.resultStr)}
                 </div>
 
                 <div className="pt-1 border-t border-slate-100 dark:border-slate-800 space-y-2">
-                  <div className="font-bold text-slate-900 dark:text-slate-100 text-xs">Steps:</div>
+                  <div className="font-bold text-slate-900 dark:text-slate-100 text-xs">{o.s3StepsLabel}</div>
                   <div className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded border border-slate-200 dark:border-slate-700 font-sans tabular-nums text-xs leading-relaxed space-y-1.5 overflow-x-auto">
                     <p className="font-semibold text-slate-800 dark:text-slate-200">
-                      Difference of {s3Result.v1} and {s3Result.v2} = <span className="inline-flex items-center align-middle mx-1"><sup>|{s3Result.v1} - {s3Result.v2}|</sup>&frasl;<sub>({s3Result.v1} + {s3Result.v2})/2</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>{s3Result.diff}</sup>&frasl;<sub>{s3Result.avg}</sub></span> = {parseFloat((s3Result.diff / s3Result.avg).toFixed(14))} = {s3Result.resultStr}
+                      Difference = <span className="inline-flex items-center align-middle mx-1"><sup>|{s3Result.v1} - {s3Result.v2}|</sup>&frasl;<sub>({s3Result.v1} + {s3Result.v2})/2</sub></span> = <span className="inline-flex items-center align-middle mx-1"><sup>{s3Result.diff}</sup>&frasl;<sub>{s3Result.avg}</sub></span> = {parseFloat((s3Result.diff / s3Result.avg).toFixed(14))} = {s3Result.resultStr}
                     </p>
                   </div>
                 </div>
@@ -720,7 +727,7 @@ export function PercentageCalculator() {
       {/* ========================================================================= */}
       <section className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg p-5 shadow-xs space-y-4">
         <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
-          Percentage Change Calculator
+          {o.s4Title}
         </h2>
 
         {/* Inputs Form */}
@@ -740,24 +747,24 @@ export function PercentageCalculator() {
               aria-label="Change direction"
               className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-xs font-sans font-semibold outline-none focus:ring-1 focus:ring-blue-600 cursor-pointer"
             >
-              <option value="Increase">Increase</option>
-              <option value="Decrease">Decrease</option>
+              <option value="Increase">{o.s4Increase}</option>
+              <option value="Decrease">{o.s4Decrease}</option>
             </select>
             <input
               type="text"
               value={s4P}
               onChange={(e) => setS4P(e.target.value)}
               placeholder="8"
-              aria-label="Percentage P"
+              aria-label={o.ariaPercentage}
               className="w-24 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2.5 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600"
             />
-            <span className="font-bold">% =</span>
+            <span className="font-bold">{o.s4Equals}</span>
             <input
               type="text"
               value={s4V2}
               onChange={(e) => setS4V2(e.target.value)}
               placeholder="5.4"
-              aria-label="Final target V2"
+              aria-label={o.ariaTarget}
               className="w-28 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded px-2.5 py-1 text-xs font-sans tabular-nums font-semibold outline-none focus:ring-1 focus:ring-blue-600"
             />
           </div>
@@ -768,14 +775,14 @@ export function PercentageCalculator() {
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded px-4 py-1.5 transition-colors cursor-pointer"
             >
-              Calculate
+              {o.s4CalcBtn}
             </button>
             <button
               type="button"
               onClick={handleS4Clear}
               className="bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-semibold text-xs rounded px-4 py-1.5 transition-colors cursor-pointer"
             >
-              Clear
+              {o.s4ClearBtn}
             </button>
           </div>
         </form>
@@ -785,22 +792,22 @@ export function PercentageCalculator() {
           <div className="space-y-3 max-w-xl">
             <div className="border border-blue-600 rounded overflow-hidden">
               <div className="bg-blue-600 text-white font-bold text-xs px-3 py-1.5 flex items-center justify-between">
-                <span>Result: {s4Result.resultStr}</span>
+                <span>{o.s4ResultLabel}: {s4Result.resultStr}</span>
                 <button
                   type="button"
-                  onClick={(e) => handleSaveResult(e, "s4", "Percentage Change", s4Result.summaryRawText, s4Result.resultStr)}
+                  onClick={(e) => handleSaveResult(e, "s4", o.s4Title, s4Result.summaryRawText, s4Result.resultStr)}
                   className="bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold px-2.5 py-0.5 rounded transition-colors flex items-center gap-1 cursor-pointer"
                 >
-                  {savedSection === "s4" ? "Saved!" : "Save"}
+                  {savedSection === "s4" ? o.s4SavedBtn : o.s4SaveBtn}
                 </button>
               </div>
               <div className="bg-white dark:bg-slate-900 p-3.5 text-xs font-sans space-y-3">
                 <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-                  {s4Result.v1} {s4Result.mode.toLowerCase()} {s4Result.p}% = <strong className="text-blue-600 dark:text-blue-400 font-bold">{s4Result.resultStr}</strong>
+                  {s4Result.v1} {s4Result.mode === "Increase" ? o.s4Increase.toLowerCase() : o.s4Decrease.toLowerCase()} {s4Result.p}% = <strong className="text-blue-600 dark:text-blue-400 font-bold">{s4Result.resultStr}</strong>
                 </div>
 
                 <div className="pt-1 border-t border-slate-100 dark:border-slate-800 space-y-2">
-                  <div className="font-bold text-slate-900 dark:text-slate-100 text-xs">Steps:</div>
+                  <div className="font-bold text-slate-900 dark:text-slate-100 text-xs">{o.s4StepsLabel}</div>
                   <div className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded border border-slate-200 dark:border-slate-700 font-sans tabular-nums text-xs leading-relaxed overflow-x-auto">
                     <p className="font-semibold text-slate-800 dark:text-slate-200">
                       {s4Result.stepText}
@@ -822,14 +829,14 @@ export function PercentageCalculator() {
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
               <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
-              <span>Saved Calculations ({savedItems.length})</span>
+              <span>{o.historyTitle} ({savedItems.length})</span>
             </h3>
             <button
               type="button"
               onClick={handleClearAllSaved}
               className="text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer"
             >
-              Clear All
+              {o.clearHistoryBtn}
             </button>
           </div>
 
@@ -853,7 +860,7 @@ export function PercentageCalculator() {
                   type="button"
                   onClick={() => handleDeleteSaved(item.id)}
                   className="text-slate-400 hover:text-red-600 p-1 transition-colors cursor-pointer shrink-0"
-                  title="Delete calculation"
+                  title={o.deleteTooltip}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                 </button>

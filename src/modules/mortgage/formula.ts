@@ -192,6 +192,8 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
     schedule.push({
       month: currentMonthIndex,
       year: Math.ceil(currentMonthIndex / 12),
+      calendarMonth: mNum,
+      calendarYear: yNum,
       date: dateStr,
       payment: totalOutofPocket,
       principalPaid: basePrincipalPaid,
@@ -213,6 +215,8 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
   const lastMonthOffset = (startMonth - 1) + (payoffMonths - 1);
   const finalM = (lastMonthOffset % 12);
   const finalY = startYear + Math.floor(lastMonthOffset / 12);
+  const payoffMonth = finalM + 1; // 1-12
+  const payoffYear = finalY;
   const payoffDate = `${fullMonthNames[finalM]} ${finalY}`;
 
   const totalInterestPaid = accumulatedInterest;
@@ -265,6 +269,8 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
     biweeklySchedule.push({
       month: biweeklyPeriodCount,
       year: Math.ceil(biweeklyPeriodCount / 26),
+      calendarMonth: bM + 1,
+      calendarYear: bY,
       date: bDateStr,
       payment: periodPrincipal + periodInterest + (initialMonthlyTax / 2) + (initialMonthlyInsurance / 2),
       principalPaid: periodPrincipal,
@@ -286,6 +292,8 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
   const bwLastMonthOffset = (startMonth - 1) + (biweeklyPayoffMonths - 1);
   const bwFinalM = (bwLastMonthOffset % 12);
   const bwFinalY = startYear + Math.floor(bwLastMonthOffset / 12);
+  const biweeklyPayoffMonth = bwFinalM + 1; // 1-12
+  const biweeklyPayoffYear = bwFinalY;
   const biweeklyPayoffDate = `${fullMonthNames[bwFinalM]} ${bwFinalY}`;
 
   const biweeklyInterestSavings = Math.max(0, baselineInterestPaid - biweeklyAccumulatedInterest);
@@ -353,10 +361,14 @@ export function calculateMortgageModule(inputs: MortgageModuleInput): MortgageMo
     totalCost,
 
     payoffDate,
+    payoffMonth,
+    payoffYear,
     payoffMonths,
 
     biweeklyPayment,
     biweeklyPayoffDate,
+    biweeklyPayoffMonth,
+    biweeklyPayoffYear,
     biweeklyPayoffMonths,
     biweeklyTotalInterest: biweeklyAccumulatedInterest,
     biweeklyInterestSavings,

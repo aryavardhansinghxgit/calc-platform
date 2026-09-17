@@ -40,8 +40,10 @@ import {
 import { AutoLoanAmortizationTable } from "./AutoLoanAmortizationTable";
 import { AutoLoanContentSection } from "./AutoLoanContentSection";
 import { AutoLoanReportModal } from "./AutoLoanReportModal";
+import { AutoLoanLocaleOverlay, getAutoLoanOverlay } from "@/i18n/overlays/auto-loan";
 
-export function AutoLoanCalculator() {
+export function AutoLoanCalculator({ overlay: propOverlay, locale = "en" }: { overlay?: AutoLoanLocaleOverlay; locale?: string } = {}) {
+  const overlay = propOverlay || getAutoLoanOverlay(locale);
   // Mode selection: 1 = Payment, 2 = Affordable Price, 3 = Scenario Comparison
   const [activeTab, setActiveTab] = useState<"payment" | "affordable" | "comparison">("payment");
 

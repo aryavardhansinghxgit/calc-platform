@@ -55,6 +55,8 @@ export interface MortgageModuleInput {
 export interface AmortizationRow {
   month: number;
   year: number;
+  calendarMonth?: number; // 1-12
+  calendarYear?: number;
   date: string;
   payment: number;
   principalPaid: number;
@@ -104,11 +106,15 @@ export interface MortgageModuleOutput {
   totalCost: number;
 
   payoffDate: string;
+  payoffMonth: number; // 1-12
+  payoffYear: number;
   payoffMonths: number;
 
   // Biweekly Engine Results
   biweeklyPayment: number;
   biweeklyPayoffDate: string;
+  biweeklyPayoffMonth: number; // 1-12
+  biweeklyPayoffYear: number;
   biweeklyPayoffMonths: number;
   biweeklyTotalInterest: number;
   biweeklyInterestSavings: number;
@@ -118,3 +124,4 @@ export interface MortgageModuleOutput {
   breakdown: CostBreakdownItem[];
   amortizationSchedule: AmortizationRow[];
 }
+

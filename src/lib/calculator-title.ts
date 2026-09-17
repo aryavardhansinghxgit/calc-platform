@@ -1,3 +1,8 @@
-export function getCalculatorDisplayTitle(title: string): string {
-  return title.replace(/\s+[-–—]\s+.*$/, "").trim();
+export function getCalculatorDisplayTitle(title?: string): string {
+  if (!title) return "";
+  return title
+    .replace(/\s*\|.*$/, "")
+    .replace(/\s+[-–—]\s+.*$/, "")
+    .trim();
 }
+

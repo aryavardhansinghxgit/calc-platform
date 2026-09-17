@@ -628,7 +628,15 @@ function calculateMath(
 // MAIN SCIENTIFIC CALCULATOR COMPONENT
 // ==========================================
 
-export function ScientificCalculator() {
+import { ScientificLocaleOverlay, getScientificOverlay } from "@/i18n/overlays/scientific";
+
+export interface ScientificCalculatorProps {
+  overlay?: ScientificLocaleOverlay;
+  locale?: string;
+}
+
+export function ScientificCalculator({ overlay: propOverlay, locale = "en" }: ScientificCalculatorProps = {}) {
+  const o = propOverlay || getScientificOverlay(locale);
   const [expression, setExpression] = useState<string>("");
   const [cursorPos, setCursorPos] = useState<number>(0);
   const [displayValue, setDisplayValue] = useState<string>("0");
@@ -1259,7 +1267,7 @@ export function ScientificCalculator() {
                     onChange={() => setAngleMode("deg")}
                     className="accent-blue-600"
                   />
-                  <span>Deg</span>
+                  <span>{o.degMode}</span>
                 </label>
                 <label className="flex items-center gap-1 cursor-pointer hover:text-blue-600">
                   <input
@@ -1269,7 +1277,7 @@ export function ScientificCalculator() {
                     onChange={() => setAngleMode("rad")}
                     className="accent-blue-600"
                   />
-                  <span>Rad</span>
+                  <span>{o.radMode}</span>
                 </label>
                 <label className="flex items-center gap-1 cursor-pointer hover:text-blue-600">
                   <input
@@ -1279,7 +1287,7 @@ export function ScientificCalculator() {
                     onChange={() => setAngleMode("grad")}
                     className="accent-blue-600"
                   />
-                  <span>Grad</span>
+                  <span>{o.gradMode}</span>
                 </label>
               </div>
 
@@ -1295,7 +1303,7 @@ export function ScientificCalculator() {
                     onChange={() => setDisplayFormat("fix")}
                     className="accent-blue-600"
                   />
-                  <span>Fix</span>
+                  <span>{o.fixFormat}</span>
                 </label>
                 <label className="flex items-center gap-1 cursor-pointer hover:text-blue-600">
                   <input
@@ -1305,7 +1313,7 @@ export function ScientificCalculator() {
                     onChange={() => setDisplayFormat("sci")}
                     className="accent-blue-600"
                   />
-                  <span>Sci</span>
+                  <span>{o.sciFormat}</span>
                 </label>
               </div>
 
@@ -1323,7 +1331,7 @@ export function ScientificCalculator() {
                 }`}
               >
                 <HistoryIcon className="w-3 h-3" />
-                History {history.length > 0 && `(${history.length})`}
+                {o.historyBtn} {history.length > 0 && `(${history.length})`}
               </button>
 
               {/* Copy Button */}
@@ -1332,7 +1340,7 @@ export function ScientificCalculator() {
                 className="ml-auto text-[11px] text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-semibold"
               >
                 {copied ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
-                {copied ? "Copied" : "Copy"}
+                {copied ? o.copiedBtn : o.copyBtn}
               </button>
             </div>
 
@@ -1342,23 +1350,23 @@ export function ScientificCalculator() {
                 <div className="flex items-center justify-between text-xs font-bold text-purple-950 dark:text-purple-200 border-b border-zinc-100 dark:border-zinc-800 pb-2">
                   <span className="flex items-center gap-1.5">
                     <HistoryIcon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                    Calculation History ({history.length})
+                    {o.historyTitle} ({history.length})
                   </span>
                   <div className="flex items-center gap-2">
                     {history.length > 0 && (
                       <button
                         onClick={() => {
                           setHistory([]);
-                          triggerStatus("Calculation History Cleared");
+                          triggerStatus("History Cleared");
                         }}
-                        className="text-rose-600 dark:text-rose-400 hover:underline text-[11px] flex items-center gap-1 font-semibold"
+                        className="text-rose-600 dark:text-rose-400 hover:underline text-[11px] flex items-center gap-1 font-semibold cursor-pointer"
                       >
-                        <Trash2 className="w-3 h-3" /> Clear History
+                        <Trash2 className="w-3 h-3" /> {o.clearHistoryBtn}
                       </button>
                     )}
                     <button
                       onClick={() => setShowHistory(false)}
-                      className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 text-xs px-1"
+                      className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 text-xs px-1 cursor-pointer"
                     >
                       ✕
                     </button>
@@ -1367,7 +1375,7 @@ export function ScientificCalculator() {
 
                 {history.length === 0 ? (
                   <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center py-3">
-                    No past calculations saved yet. Evaluate expressions with <strong className="font-sans tabular-nums text-blue-600">=</strong> or <strong className="font-sans tabular-nums text-blue-600">Enter</strong> to populate history.
+                    {o.emptyHistoryExplanation}
                   </p>
                 ) : (
                   <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1 text-xs">
@@ -1404,7 +1412,7 @@ export function ScientificCalculator() {
                 <button
                   type="button"
                   onClick={moveCursorUp}
-                  title="Jump to Start of Equation (Up Arrow ▲)"
+                  title={o.tooltipUp}
                   className="w-8 h-7 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-xs font-bold shadow-xs transition-all cursor-pointer"
                 >
                   ▲
@@ -1415,16 +1423,16 @@ export function ScientificCalculator() {
                   <button
                     type="button"
                     onClick={moveCursorLeft}
-                    title="Move Cursor Left 1 Character (Left Arrow ◀)"
+                    title={o.tooltipLeft}
                     className="w-8 h-7 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-xs font-bold shadow-xs transition-all cursor-pointer"
                   >
                     ◀
                   </button>
 
                   <div
-                    onClick={() => triggerStatus(`Cursor Position: ${safeCursorPos} / ${expression.length}`)}
+                    onClick={() => triggerStatus(`Cursor: ${safeCursorPos} / ${expression.length}`)}
                     className="h-7 px-1.5 text-[8px] font-sans tabular-nums font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/80 rounded flex items-center justify-center cursor-pointer select-none shadow-xs"
-                    title="Current Cursor Position"
+                    title={o.tooltipCursorPos}
                   >
                     {safeCursorPos}/{expression.length}
                   </div>
@@ -1432,7 +1440,7 @@ export function ScientificCalculator() {
                   <button
                     type="button"
                     onClick={moveCursorRight}
-                    title="Move Cursor Right 1 Character (Right Arrow ▶)"
+                    title={o.tooltipRight}
                     className="w-8 h-7 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-xs font-bold shadow-xs transition-all cursor-pointer"
                   >
                     ▶
@@ -1443,7 +1451,7 @@ export function ScientificCalculator() {
                 <button
                   type="button"
                   onClick={moveCursorDown}
-                  title="Jump to End of Equation (Down Arrow ▼)"
+                  title={o.tooltipDown}
                   className="w-8 h-7 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 border-b-2 border-b-zinc-400 dark:border-b-zinc-900 rounded text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 active:translate-y-0.5 active:border-b-0 flex items-center justify-center text-xs font-bold shadow-xs transition-all cursor-pointer"
                 >
                   ▼
@@ -1481,7 +1489,7 @@ export function ScientificCalculator() {
               >
                 <span className="flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 text-amber-500" />
-                  Additional Functions
+                  {o.additionalFunctionsTitle}
                 </span>
                 {showAdditional ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
               </button>
@@ -1514,32 +1522,32 @@ export function ScientificCalculator() {
         {/* Math Calculators Links */}
         <Card className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-sm p-4 space-y-3">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-            Math Calculators
+            {o.mathCalculatorsTitle}
           </h3>
           <div className="grid grid-cols-2 gap-2 text-xs">
-            <a href="/calculators/scientific-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              Scientific
+            <a href={locale === "es" ? "/es/calculators/scientific-calculator" : "/calculators/scientific-calculator"} className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+              {o.sidebarScientific}
             </a>
             <a href="/calculators/fraction-calculator" className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 hover:underline">
-              Fraction
+              {o.sidebarFraction}
             </a>
-            <a href="/calculators/percentage-calculator" className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 hover:underline">
-              Percentage
+            <a href={locale === "es" ? "/es/calculators/percentage-calculator" : "/calculators/percentage-calculator"} className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 hover:underline">
+              {o.sidebarPercentage}
             </a>
             <a href="/calculators/triangle-calculator" className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 hover:underline">
-              Triangle
+              {o.sidebarTriangle}
             </a>
             <a href="/calculators/volume-calculator" className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 hover:underline">
-              Volume
+              {o.sidebarVolume}
             </a>
             <a href="/calculators/standard-deviation-calculator" className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 hover:underline">
-              Standard Deviation
+              {o.sidebarStdDev}
             </a>
             <a href="/calculators/random-number-generator" className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 hover:underline">
-              Random Generator
+              {o.sidebarRandom}
             </a>
             <a href="/category/math" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              More Math...
+              {o.sidebarMoreMath}
             </a>
           </div>
         </Card>
@@ -1547,39 +1555,39 @@ export function ScientificCalculator() {
         {/* Calculator Features Guide */}
         <Card className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-sm p-4 space-y-3">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-            Calculator Features
+            {o.featuresTitle}
           </h3>
 
           <div className="space-y-2.5 text-xs">
             <div className="flex items-start gap-2.5">
               <Keyboard className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-zinc-800 dark:text-zinc-200 block">Keyboard Support</strong>
-                <span className="text-zinc-500 dark:text-zinc-400">Use your physical keyboard to type expressions directly.</span>
+                <strong className="text-zinc-800 dark:text-zinc-200 block">{o.featKeyboardTitle}</strong>
+                <span className="text-zinc-500 dark:text-zinc-400">{o.featKeyboardDesc}</span>
               </div>
             </div>
 
             <div className="flex items-start gap-2.5">
               <Clock className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-zinc-800 dark:text-zinc-200 block">Calculation History</strong>
-                <span className="text-zinc-500 dark:text-zinc-400">View, click to restore, and clear calculation history.</span>
+                <strong className="text-zinc-800 dark:text-zinc-200 block">{o.featHistoryTitle}</strong>
+                <span className="text-zinc-500 dark:text-zinc-400">{o.featHistoryDesc}</span>
               </div>
             </div>
 
             <div className="flex items-start gap-2.5">
               <Database className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-zinc-800 dark:text-zinc-200 block">Memory Functions</strong>
-                <span className="text-zinc-500 dark:text-zinc-400">Store and recall values (M+, M-, MR, MC, Store, Recall).</span>
+                <strong className="text-zinc-800 dark:text-zinc-200 block">{o.featMemoryTitle}</strong>
+                <span className="text-zinc-500 dark:text-zinc-400">{o.featMemoryDesc}</span>
               </div>
             </div>
 
             <div className="flex items-start gap-2.5">
               <Compass className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-zinc-800 dark:text-zinc-200 block">Angle Unit Modes</strong>
-                <span className="text-zinc-500 dark:text-zinc-400">Switch seamlessly between Degrees, Radians, and Gradians.</span>
+                <strong className="text-zinc-800 dark:text-zinc-200 block">{o.featAngleTitle}</strong>
+                <span className="text-zinc-500 dark:text-zinc-400">{o.featAngleDesc}</span>
               </div>
             </div>
           </div>
@@ -1588,9 +1596,9 @@ export function ScientificCalculator() {
         {/* Interactive Quick Examples */}
         <Card className="bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-sm p-4 space-y-3">
           <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-            Quick Math Examples
+            {o.examplesTitle}
           </h3>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">Click any example to load it into the calculator:</p>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">{o.examplesSubtitle}</p>
 
           <div className="space-y-1.5 font-sans tabular-nums text-xs">
             {sampleExamples.map((ex, idx) => (
@@ -1602,10 +1610,10 @@ export function ScientificCalculator() {
                   const res = calculateMath(ex, angleMode, lastAns);
                   if (!res.error && !isNaN(res.num)) setDisplayValue(res.str);
                 }}
-                className="w-full text-left p-2 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:bg-blue-50 dark:hover:bg-zinc-800 text-blue-700 dark:text-blue-400 transition-colors flex items-center justify-between"
+                className="w-full text-left p-2 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 hover:bg-blue-50 dark:hover:bg-zinc-800 text-blue-700 dark:text-blue-400 transition-colors flex items-center justify-between cursor-pointer"
               >
                 <span>{ex}</span>
-                <span className="text-[10px] text-zinc-400 font-sans font-semibold">Load →</span>
+                <span className="text-[10px] text-zinc-400 font-sans font-semibold">{o.loadArrow}</span>
               </button>
             ))}
           </div>

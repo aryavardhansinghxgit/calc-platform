@@ -203,6 +203,10 @@ export interface DateDurationResult {
   years: number;
   months: number;
   days: number;
+  weeks: number;
+  remDays: number;
+  totalMonthsApprox: number;
+  remMonthDays: number;
   yearsMonthsDays: string;
   totalDays: number;
   totalWeeksDays: string;
@@ -215,6 +219,8 @@ export interface DateDurationResult {
   totalMinutes: number;
   totalSeconds: number;
   percentageOfYear: number;
+  startDayOfWeekIndex: number;
+  endDayOfWeekIndex: number;
   startDayOfWeek: string;
   endDayOfWeek: string;
 }
@@ -346,6 +352,10 @@ export function calculateDateDuration(params: DateDurationParams): DateDurationR
     years: yDiff,
     months: mDiff,
     days: dDiff,
+    weeks,
+    remDays,
+    totalMonthsApprox,
+    remMonthDays: dDiff,
     yearsMonthsDays,
     totalDays,
     totalWeeksDays,
@@ -358,6 +368,8 @@ export function calculateDateDuration(params: DateDurationParams): DateDurationR
     totalMinutes,
     totalSeconds,
     percentageOfYear,
+    startDayOfWeekIndex: d1.getUTCDay(),
+    endDayOfWeekIndex: d2.getUTCDay(),
     startDayOfWeek: DAY_NAMES[d1.getUTCDay()],
     endDayOfWeek: DAY_NAMES[d2.getUTCDay()],
   };
@@ -381,6 +393,8 @@ export interface DateOffsetParams {
 
 export interface DateOffsetResult {
   targetDateStr: string;
+  targetParts: DateParts;
+  targetDayOfWeekIndex: number;
   targetDayOfWeek: string;
   targetFormatted: string;
   totalCalendarDaysOffset: number;
@@ -443,6 +457,8 @@ export function calculateDateOffset(params: DateOffsetParams): DateOffsetResult 
 
     return {
       targetDateStr,
+      targetParts,
+      targetDayOfWeekIndex: cur.getUTCDay(),
       targetDayOfWeek,
       targetFormatted,
       totalCalendarDaysOffset,
@@ -462,7 +478,7 @@ export function calculateDateOffset(params: DateOffsetParams): DateOffsetResult 
     targetYear -= 1;
   }
   while (targetMonth > 11) {
-    targetMonth -= 12;
+    targetMonth += 12;
     targetYear += 1;
   }
 
@@ -488,6 +504,8 @@ export function calculateDateOffset(params: DateOffsetParams): DateOffsetResult 
 
   return {
     targetDateStr,
+    targetParts: finalParts,
+    targetDayOfWeekIndex: intermediateDate.getUTCDay(),
     targetDayOfWeek,
     targetFormatted,
     totalCalendarDaysOffset,

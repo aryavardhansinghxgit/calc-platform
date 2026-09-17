@@ -4,13 +4,17 @@ import React, { useState, useMemo } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Download, Search, Calendar, Clock, RefreshCw } from "lucide-react";
+import { Download, Search } from "lucide-react";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
-import { formatCurrency } from "@/lib/calculator-engine/formatters";
+import { formatCurrency, formatMonthYear } from "@/lib/calculator-engine/formatters";
+import { MortgageLocaleOverlay } from "@/i18n/types";
+import { getMortgageOverlay } from "@/i18n/overlays/mortgage";
 
 export interface AmortizationTableProps {
   schedule: AmortizationRow[];
   biweeklySchedule?: AmortizationRow[];
+  overlay?: MortgageLocaleOverlay;
+  locale?: string;
 }
 
 interface AnnualScheduleRow {
@@ -28,7 +32,13 @@ interface AnnualScheduleRow {
   dateRange: string;
 }
 
-export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTableProps) {
+export function AmortizationTable({
+  schedule,
+  biweeklySchedule,
+  overlay: propsOverlay,
+  locale = "en",
+}: AmortizationTableProps) {
+  const overlay = propsOverlay || getMortgageOverlay(locale);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<"annual" | "monthly" | "biweekly">("annual");
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,7 +55,7 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
       if (!map.has(y)) {
         map.set(y, {
           year: y,
-          periodLabel: `Year ${y}`,
+          periodLabel: `${overlay.yearCol} ${y}`,
           totalPayment: 0,
           principalPaid: 0,
           interestPaid: 0,
@@ -75,7 +85,7 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
     });
 
     return Array.from(map.values());
-  }, [schedule]);
+  }, [schedule, overlay.yearCol]);
 
   // Filtered data based on active view mode and search term
   const displayedRows = useMemo(() => {
@@ -167,7 +177,7 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
             }`}
           >
-            Annual Schedule
+            {overlay.annualSummaryTab}
           </button>
           <button
             type="button"
@@ -181,7 +191,7 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
             }`}
           >
-            Monthly Schedule
+            {overlay.monthlyScheduleTab}
           </button>
           {biweeklySchedule && biweeklySchedule.length > 0 && (
             <button
@@ -196,7 +206,7 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
               }`}
             >
-              Biweekly Schedule
+              {overlay.biweeklyScheduleTab}
             </button>
           )}
         </div>
@@ -227,7 +237,7 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
             onClick={handleDownloadCsv}
             className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-4 py-2 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
-            <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Export CSV
+            <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> {overlay.downloadCsv}
           </button>
         </div>
       </div>
@@ -239,17 +249,17 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
             <TableRow className="border-zinc-200 dark:border-zinc-800 bg-zinc-100/80 dark:bg-zinc-800/80">
               <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
                 {viewMode === "annual"
-                  ? "Period (Year)"
+                  ? `${overlay.periodCol} (${overlay.yearCol})`
                   : viewMode === "biweekly"
-                  ? "Biweekly Period"
-                  : "Period (Month)"}
+                  ? (locale === "es" ? "Período Quincenal" : "Biweekly Period")
+                  : `${overlay.periodCol} (${locale === "es" ? "Mes" : "Month"})`}
               </TableHead>
-              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Date</TableHead>
-              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Payment</TableHead>
-              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Principal</TableHead>
-              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Interest</TableHead>
+              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300">{overlay.dateRangeCol}</TableHead>
+              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">{overlay.paymentCol}</TableHead>
+              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">{overlay.principalCol}</TableHead>
+              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">{overlay.interestCol}</TableHead>
               <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">
-                Remaining Balance
+                {overlay.balanceCol}
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -257,18 +267,25 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
             {paginatedRows.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center text-xs text-zinc-500 py-8">
-                  No amortization entries found for "{searchTerm}".
+                  {locale === "es"
+                    ? `No se encontraron registros de amortización para "${searchTerm}".`
+                    : `No amortization entries found for "${searchTerm}".`}
                 </TableCell>
               </TableRow>
             ) : (
               paginatedRows.map((row: any) => {
                 const periodLabel =
                   viewMode === "annual"
-                    ? `Year ${row.year}`
+                    ? `${overlay.yearCol} ${row.year}`
                     : viewMode === "biweekly"
-                    ? `Period ${row.month}`
-                    : `Month ${row.month}`;
-                const dateLabel = viewMode === "annual" ? row.dateRange : row.date;
+                    ? `${overlay.periodCol} ${row.month}`
+                    : `${locale === "es" ? "Mes" : "Month"} ${row.month}`;
+                const dateLabel =
+                  viewMode === "annual"
+                    ? row.dateRange
+                    : locale === "es" && row.calendarMonth && row.calendarYear
+                    ? formatMonthYear(row.calendarMonth, row.calendarYear, "es-ES", "short")
+                    : row.date;
                 const paymentAmount = viewMode === "annual" ? row.totalPayment : row.payment;
                 const principalAmount =
                   viewMode === "annual"
@@ -295,16 +312,16 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
                       {dateLabel}
                     </TableCell>
                     <TableCell className="text-xs font-sans tabular-nums font-semibold text-zinc-900 dark:text-zinc-100 text-right">
-                      {formatCurrency(paymentAmount)}
+                      {formatCurrency(paymentAmount, "$", 2, locale)}
                     </TableCell>
                     <TableCell className="text-xs font-sans tabular-nums text-emerald-600 dark:text-emerald-400 font-medium text-right">
-                      {formatCurrency(principalAmount)}
+                      {formatCurrency(principalAmount, "$", 2, locale)}
                     </TableCell>
                     <TableCell className="text-xs font-sans tabular-nums text-amber-600 dark:text-amber-400 font-medium text-right">
-                      {formatCurrency(interestAmount)}
+                      {formatCurrency(interestAmount, "$", 2, locale)}
                     </TableCell>
                     <TableCell className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400 text-right">
-                      {formatCurrency(balanceAmount)}
+                      {formatCurrency(balanceAmount, "$", 2, locale)}
                     </TableCell>
                   </TableRow>
                 );
@@ -318,7 +335,9 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
       {totalPages > 1 && (
         <div className="flex items-center justify-between pt-1">
           <span className="text-xs text-zinc-500 dark:text-zinc-400 font-sans tabular-nums">
-            Showing Page {currentPage} of {totalPages} ({displayedRows.length} total entries)
+            {locale === "es"
+              ? `Mostrando página ${currentPage} de ${totalPages} (${displayedRows.length} registros totales)`
+              : `Showing page ${currentPage} of ${totalPages} (${displayedRows.length} total entries)`}
           </span>
           <div className="flex items-center gap-1.5">
             <Button
@@ -329,7 +348,7 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               className="h-7 text-xs px-2.5 border-zinc-200 dark:border-zinc-700"
             >
-              Previous
+              {overlay.prevPage}
             </Button>
             <Button
               type="button"
@@ -339,7 +358,7 @@ export function AmortizationTable({ schedule, biweeklySchedule }: AmortizationTa
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               className="h-7 text-xs px-2.5 border-zinc-200 dark:border-zinc-700"
             >
-              Next
+              {overlay.nextPage}
             </Button>
           </div>
         </div>
