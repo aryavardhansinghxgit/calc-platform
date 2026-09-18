@@ -74,6 +74,7 @@ import { PORTUGUESE_AMORTIZATION_SEO, PORTUGUESE_AMORTIZATION_FAQS, PortugueseAm
 
 // Fuel Cost
 import { SPANISH_FUEL_COST_SEO, SPANISH_FUEL_COST_FAQS, SpanishFuelCostContent } from "./fuel-cost/es";
+import { FRENCH_FUEL_COST_SEO, FRENCH_FUEL_COST_FAQS, FrenchFuelCostContent } from "./fuel-cost/fr";
 
 export interface LocalizedCalculatorContentPack {
   seo: {
@@ -158,6 +159,7 @@ export const LOCALIZED_CONTENT_REGISTRY: Record<string, Record<string, Localized
   },
   "fuel-cost-calculator": {
     es: { seo: SPANISH_FUEL_COST_SEO, faqs: SPANISH_FUEL_COST_FAQS, ContentComponent: SpanishFuelCostContent },
+    fr: { seo: FRENCH_FUEL_COST_SEO, faqs: FRENCH_FUEL_COST_FAQS, ContentComponent: FrenchFuelCostContent },
   },
 };
 

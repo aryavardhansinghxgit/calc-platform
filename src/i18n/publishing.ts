@@ -89,7 +89,7 @@ export const PUBLISHED_MATRIX: Record<string, Partial<Record<Locale, boolean>>> 
   "fuel-cost-calculator": {
     en: true,
     es: true,
-    fr: false,
+    fr: true,
     de: false,
     hi: false,
     pt: false,
