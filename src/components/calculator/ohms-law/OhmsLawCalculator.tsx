@@ -25,7 +25,6 @@ import {
   formatPower 
 } from "@/app/calculators/ohms-law-calculator/calculator";
 import { OhmsLawCalculatorInputs, OhmsLawCalculatorOutputs } from "@/app/calculators/ohms-law-calculator/types";
-import { OhmsLawLocaleOverlay, getOhmsLawOverlay } from "@/i18n/overlays/ohms-law";
 
 // Tab Definitions
 const TABS = [
@@ -53,8 +52,7 @@ export interface SavedOhmsRecord {
   };
 }
 
-export function OhmsLawCalculator({ overlay: propOverlay, locale = "en" }: { overlay?: OhmsLawLocaleOverlay; locale?: string } = {}) {
-  const overlay = propOverlay || getOhmsLawOverlay(locale);
+export function OhmsLawCalculator() {
   // Tab State
   const [activeTab, setActiveTab] = useState<string>("ohms_law");
 

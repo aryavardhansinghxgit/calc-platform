@@ -16,14 +16,10 @@ import {
 } from "lucide-react";
 import { AmortizationRow, AnnualAmortizationRow } from "@/modules/amortization/types";
 import { formatCurrency, formatMonthYear } from "@/lib/calculator-engine/formatters";
-import { AmortizationLocaleOverlay } from "@/i18n/types";
-import { getAmortizationOverlay } from "@/i18n/overlays/amortization";
 
 export interface AmortizationScheduleTableProps {
   monthlySchedule: AmortizationRow[];
   annualSchedule: AnnualAmortizationRow[];
-  overlay?: AmortizationLocaleOverlay;
-  locale?: string;
 }
 
 type SortField =
@@ -37,25 +33,35 @@ type SortField =
   | "year";
 type SortDirection = "asc" | "desc";
 
+const DEFAULT_AMORTIZATION_OVERLAY = {
+  annualTab: "Annual Schedule",
+  monthlyTab: "Monthly Schedule",
+  searchYearPlaceholder: "Search year...",
+  searchPaymentPlaceholder: "Search payment or date...",
+  exportCsvBtn: "Export CSV",
+  exportExcelBtn: "Excel",
+  yearCol: "Year",
+  paymentNumberCol: "Payment #",
+  paymentDateCol: "Payment Date",
+  beginningBalanceCol: "Beginning Balance",
+  paymentAmountCol: "Payment Amount",
+  principalPaidCol: "Principal",
+  interestPaidCol: "Interest",
+  extraPaidCol: "Extra Paid",
+  endingBalanceCol: "Ending Balance",
+  prevPage: "Prev",
+  nextPage: "Next",
+  pageOf: "Page",
+  showingRecords: "Showing",
+  paymentsLabel: "payments",
+};
+
 export function AmortizationScheduleTable({
   monthlySchedule,
   annualSchedule,
-  overlay: propOverlay,
-  locale = "en",
 }: AmortizationScheduleTableProps) {
-  const overlay = propOverlay || getAmortizationOverlay(locale);
-  const activeIntlLocale =
-    locale === "es"
-      ? "es-ES"
-      : locale === "fr"
-      ? "fr-FR"
-      : locale === "de"
-      ? "de-DE"
-      : locale === "hi"
-      ? "hi-IN"
-      : locale === "pt"
-      ? "pt-BR"
-      : "en-US";
+  const overlay = DEFAULT_AMORTIZATION_OVERLAY;
+  const activeIntlLocale = "en-US";
 
   const [activeTab, setActiveTab] = useState<"annual" | "monthly">("annual");
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -169,7 +175,7 @@ export function AmortizationScheduleTable({
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `amortization_${activeTab}_schedule_${locale}.csv`);
+    link.setAttribute("download", `amortization_${activeTab}_schedule.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

@@ -1,7 +1,6 @@
 import { MetadataRoute } from "next";
 import { getAllCalculatorDefinitions } from "@/calculators";
 import { CATEGORIES } from "@/data/categories";
-import { getPublishedLocalesForCalculator } from "@/i18n/publishing";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.com";
@@ -25,7 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  // 3. Calculator Tool Pages (Deduplicated across all categories & published locales)
+  // 3. Calculator Tool Pages (Deduplicated across all categories)
   const allCalculators = getAllCalculatorDefinitions();
   const seenSlugs = new Set<string>();
   const calculatorRoutes: MetadataRoute.Sitemap = [];
@@ -34,25 +33,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     if (!calc.slug || seenSlugs.has(calc.slug)) continue;
     seenSlugs.add(calc.slug);
 
-    // Root canonical English route
+    // Canonical English route
     calculatorRoutes.push({
       url: `${baseUrl}/calculators/${calc.slug}`,
       lastModified: currentDate,
       changeFrequency: "weekly",
       priority: calc.featured ? 0.9 : 0.75,
     });
-
-    // Enumerate published non-English localized routes
-    const publishedLocales = getPublishedLocalesForCalculator(calc.slug);
-    for (const locale of publishedLocales) {
-      if (locale === "en") continue; // Never emit duplicate /en/ prefix
-      calculatorRoutes.push({
-        url: `${baseUrl}/${locale}/calculators/${calc.slug}`,
-        lastModified: currentDate,
-        changeFrequency: "weekly",
-        priority: calc.featured ? 0.9 : 0.75,
-      });
-    }
   }
 
   // 4. Standalone Top-Level Aliases

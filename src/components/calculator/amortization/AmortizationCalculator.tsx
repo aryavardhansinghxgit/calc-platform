@@ -38,8 +38,6 @@ import { formatCurrency, formatMonthYear } from "@/lib/calculator-engine/formatt
 import AmortizationScheduleTable from "./AmortizationScheduleTable";
 import ReportModal from "@/components/report/ReportModal";
 import { generateLoanReportData } from "@/lib/report-generator/loan-report";
-import { AmortizationLocaleOverlay } from "@/i18n/types";
-import { getAmortizationOverlay } from "@/i18n/overlays/amortization";
 
 // Lazy load visual chart components
 const AmortizationPieChart = dynamic(
@@ -66,28 +64,114 @@ const AmortizationProgressChart = dynamic(
   }
 );
 
-export interface AmortizationCalculatorProps {
-  overlay?: AmortizationLocaleOverlay;
-  locale?: string;
-}
+const DEFAULT_AMORTIZATION_OVERLAY = {
+  locale: "en",
+  title: "Amortization Calculator — Mortgage & Loan Payment Schedule",
+  description:
+    "Calculate monthly payments, principal and interest, amortization schedules, payoff dates and interest savings with extra monthly, yearly or lump-sum payments.",
+  managerTitle: "Amortization Manager",
+  savedCountBadge: "Saved",
+  printPdfBtn: "Print / PDF",
+  saveBtn: "Save",
+  savedBtn: "Saved",
+  shareSuccessMsg: "Shareable link copied to clipboard!",
+  inputsTitle: "Loan Inputs",
+  inputsSubtitle: "Modify the values and click the Calculate button to use",
+  loanAmount: "Loan Amount ($)",
+  loanTermYears: "Loan Term (Years)",
+  loanTermMonths: "Loan Term (Months)",
+  interestRate: "Interest Rate (%)",
+  startMonth: "Start Month",
+  startYear: "Start Year",
+  monthOptions: [
+    { value: 1, label: "Jan" },
+    { value: 2, label: "Feb" },
+    { value: 3, label: "Mar" },
+    { value: 4, label: "Apr" },
+    { value: 5, label: "May" },
+    { value: 6, label: "Jun" },
+    { value: 7, label: "Jul" },
+    { value: 8, label: "Aug" },
+    { value: 9, label: "Sep" },
+    { value: 10, label: "Oct" },
+    { value: 11, label: "Nov" },
+    { value: 12, label: "Dec" },
+  ],
+  fullMonthNames: [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ],
+  optionalExtraPayments: "Optional: make extra payments",
+  extraMonthlyPayment: "Extra Monthly Payment ($)",
+  extraYearlyPayment: "Extra Yearly Payment ($)",
+  extraOneTimePayment: "One-Time Extra Payment ($)",
+  extraStartMonth: "Extra Start Month",
+  extraStartYear: "Extra Start Year",
+  calculateBtn: "Calculate",
+  clearBtn: "Clear",
+  validationErrorAmount: "Loan amount must be greater than $0.",
+  validationErrorRate: "Interest rate must be between 0% and 100%.",
+  validationErrorTerm: "Loan term must be greater than 0.",
+  validationErrorMaxTerm: "Maximum supported loan term is 50 years.",
+  monthlyPaymentTitle: "Monthly Loan Payment",
+  totalPaymentsCount: "Total Payments",
+  paymentsLabel: "payments",
+  totalPrincipal: "Total Principal",
+  totalInterest: "Total Interest",
+  totalAmountPaid: "Total Amount Paid",
+  loanPayoffDate: "Loan Payoff Date",
+  interestSaved: "Interest Saved",
+  comparisonTitle: "Comparison: Original Loan vs. Extra Payments Loan",
+  originalInterestVsNew: "Original Interest vs. New Interest",
+  savedLabel: "Saved",
+  originalPayoffVsNew: "Original Payoff Date vs. New Payoff Date",
+  timeSavedLabel: "Time Saved",
+  yearsLabel: "Years",
+  monthsLabel: "Months",
+  chartsTitle: "Visual Charts & Loan Breakdown",
+  tabBreakdown: "Chart 1: Breakdown",
+  tabProgress: "Chart 2: Progress",
+  loadingPieChart: "Loading pie chart...",
+  loadingProgressChart: "Loading progress chart...",
+  scheduleTitle: "Amortization Schedule",
+  scheduleSubtitle:
+    "Annual & Monthly breakdown tables with search, sorting, pagination, and CSV / Excel / PDF / Print export",
+  annualTab: "Annual Schedule",
+  monthlyTab: "Monthly Schedule",
+  searchYearPlaceholder: "Search year...",
+  searchPaymentPlaceholder: "Search payment or date...",
+  exportCsvBtn: "Export CSV",
+  exportExcelBtn: "Excel",
+  yearCol: "Year",
+  paymentNumberCol: "Payment #",
+  paymentDateCol: "Payment Date",
+  beginningBalanceCol: "Beginning Balance",
+  paymentAmountCol: "Payment Amount",
+  principalPaidCol: "Principal",
+  interestPaidCol: "Interest",
+  extraPaidCol: "Extra Paid",
+  endingBalanceCol: "Ending Balance",
+  prevPage: "Prev",
+  nextPage: "Next",
+  pageOf: "Page",
+  showingRecords: "Showing",
+  saveModalTitle: "Save Calculation",
+  saveModalSubtitle: "Save your amortization calculation setup locally to restore later",
+  calcSummaryLabel: "Calculation Summary",
+  monthlyPaySummary: "Monthly Pay",
+  saveNameLabel: "Calculation Name",
+  saveNamePlaceholder: "e.g. 15-Year Mortgage Setup",
+  cancelBtn: "Cancel",
+  confirmSaveBtn: "Save",
+  saveSuccessMsg: "Calculation saved successfully!",
+  savedCalculationsTitle: "Saved Calculations",
+  restoreBtn: "Restore",
+  deleteBtnTitle: "Delete saved calculation",
+};
 
-export function AmortizationCalculator({
-  overlay: propOverlay,
-  locale = "en",
-}: AmortizationCalculatorProps = {}) {
-  const overlay = propOverlay || getAmortizationOverlay(locale);
-  const activeIntlLocale =
-    locale === "es"
-      ? "es-ES"
-      : locale === "fr"
-      ? "fr-FR"
-      : locale === "de"
-      ? "de-DE"
-      : locale === "hi"
-      ? "hi-IN"
-      : locale === "pt"
-      ? "pt-BR"
-      : "en-US";
+export function AmortizationCalculator() {
+  const overlay = DEFAULT_AMORTIZATION_OVERLAY;
+  const activeIntlLocale = "en-US";
 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
@@ -820,8 +904,6 @@ export function AmortizationCalculator({
           <AmortizationScheduleTable
             monthlySchedule={results.monthlySchedule}
             annualSchedule={results.annualSchedule}
-            overlay={overlay}
-            locale={locale}
           />
         </CardContent>
       </Card>

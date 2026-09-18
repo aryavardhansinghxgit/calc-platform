@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo, useEffect } from "react";
 import { calculateBmi, BmiInput, UnitSystem, Gender, BmiResult } from "@/lib/formulas/bmi";
-import { BmiLocaleOverlay, getBmiOverlay } from "@/i18n/overlays/bmi";
 import {
   BmiArchGauge,
   BmiScaleMeter,
@@ -16,15 +15,48 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Activity, Copy, Share2, Printer, Bookmark, Trash2, Check, RefreshCw, Flame, Target, Sparkles, AlertCircle, Heart, Scale } from "lucide-react";
+import { Activity, Copy, Share2, Printer, Bookmark, Trash2, Check, RefreshCw, Flame, Target, Sparkles, AlertCircle } from "lucide-react";
 
-export interface BmiCalculatorProps {
-  overlay?: BmiLocaleOverlay;
-  locale?: string;
-}
+const DEFAULT_BMI_OVERLAY = {
+  locale: "en",
+  title: "Body Mass Index (BMI) Calculator",
+  description: "Calculate BMI, BMI Prime, ponderal index, and healthy body weight ranges with WHO and CDC pediatric charts.",
+  tabUsUnits: "US Units",
+  tabMetricUnits: "Metric Units",
+  tabOtherUnits: "Other Units",
+  ageLabel: "Age (2 - 120 yrs)",
+  genderLabel: "Biological Sex",
+  maleOption: "Male",
+  femaleOption: "Female",
+  heightLabel: "Height",
+  heightFeetLabel: "Feet",
+  heightInchesLabel: "Inches",
+  heightCmLabel: "Height (cm)",
+  weightLabel: "Weight",
+  weightLbsLabel: "Pounds (lbs)",
+  weightKgLabel: "Weight (kg)",
+  unitMeters: "Meters",
+  unitInches: "Inches",
+  unitFeet: "Feet",
+  unitKg: "Kilograms",
+  unitLbs: "Pounds",
+  bmiScoreTitle: "Your BMI Score",
+  catUnderweight: "Underweight",
+  catHealthyWeight: "Healthy Weight",
+  catOverweight: "Overweight",
+  catObesityClass1: "Class 1 Obesity",
+  catObesityClass2: "Class 2 Obesity",
+  catObesityClass3: "Class 3 Obesity",
+  bmiPrimeLabel: "BMI Prime",
+  ponderalIndexLabel: "Ponderal Index",
+  estimatedBodyFatLabel: "Estimated Body Fat",
+  bmrLabel: "Basal Metabolic Rate (BMR)",
+  resetBtn: "Reset",
+};
 
-export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalculatorProps = {}) {
-  const o = propOverlay || getBmiOverlay(locale);
+export function BmiCalculator() {
+  const o = DEFAULT_BMI_OVERLAY;
+
   // Unit System
   const [unitSystem, setUnitSystem] = useState<UnitSystem>("us");
 
@@ -116,9 +148,7 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
 
   // Action Handlers
   const handleCopyResults = () => {
-    const text = locale === "es"
-      ? `Mi IMC: ${result.bmi} (${result.category})\nRango de Peso Saludable: ${result.healthyWeightRangeLbs[0]} - ${result.healthyWeightRangeLbs[1]} lbs\nIMC Prime: ${result.bmiPrime}\nÍndice Ponderal: ${result.ponderalIndexMetric} kg/m³\nCalculado en CalcPlatform`
-      : `My BMI: ${result.bmi} (${result.category})\nHealthy Weight Range: ${result.healthyWeightRangeLbs[0]} - ${result.healthyWeightRangeLbs[1]} lbs\nBMI Prime: ${result.bmiPrime}\nPonderal Index: ${result.ponderalIndexMetric} kg/m³\nCalculated on CalcPlatform`;
+    const text = `My BMI: ${result.bmi} (${result.category})\nHealthy Weight Range: ${result.healthyWeightRangeLbs[0]} - ${result.healthyWeightRangeLbs[1]} lbs\nBMI Prime: ${result.bmiPrime}\nPonderal Index: ${result.ponderalIndexMetric} kg/m³\nCalculated on CalcPlatform`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -127,10 +157,8 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: locale === "es" ? "Mi Resultado de IMC" : "My BMI Result",
-        text: locale === "es"
-          ? `Mi Índice de Masa Corporal es ${result.bmi} (${result.category}). ¡Calcula tu IMC online!`
-          : `My Body Mass Index is ${result.bmi} (${result.category}). Check your BMI score online!`,
+        title: "My BMI Result",
+        text: `My Body Mass Index is ${result.bmi} (${result.category}). Check your BMI score online!`,
         url: window.location.href,
       }).catch(() => {});
     } else {
@@ -144,7 +172,7 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
 
   const handleSaveResult = () => {
     const newEntry = {
-      timestamp: new Date().toLocaleDateString(locale === "es" ? "es-ES" : "en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
+      timestamp: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }),
       bmi: result.bmi,
       category: result.category,
       weight: `${result.weightLbs} lbs (${result.weightKg} kg)`,
@@ -416,7 +444,7 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               {/* Left Gauge Column (Col 5) */}
               <div className="lg:col-span-5 space-y-4">
-                <BmiArchGauge result={result} overlay={o} locale={locale} />
+                <BmiArchGauge result={result} />
               </div>
 
               {/* Right Hero Breakdown Column (Col 7) */}
@@ -427,7 +455,7 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
                     <div>
                       <span className="text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                         {result.isChild
-                          ? (locale === "es" ? "Evaluación Pediátrica de IMC CDC" : "CDC Pediatric BMI-for-Age Assessment")
+                          ? "CDC Pediatric BMI-for-Age Assessment"
                           : o.bmiScoreTitle}
                       </span>
                       <div className="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-zinc-100 mt-1 flex items-baseline gap-2">
@@ -454,13 +482,13 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
                   </div>
 
                   {/* Healthy range bar */}
-                  <WeightPositionIndicator result={result} overlay={o} locale={locale} />
+                  <WeightPositionIndicator result={result} />
 
                   {/* Health Risk Guidance alert */}
                   <div className="p-3 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 flex items-start gap-2.5 shadow-sm">
                     <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
                     <div className="text-xs">
-                      <strong className="text-zinc-800 dark:text-zinc-200 block">{result.healthRisk} {locale === "es" ? "Evaluación" : "Assessment"}</strong>
+                      <strong className="text-zinc-800 dark:text-zinc-200 block">{result.healthRisk} Assessment</strong>
                       <span className="text-zinc-600 dark:text-zinc-400">{result.healthRiskDescription}</span>
                     </div>
                   </div>
@@ -470,19 +498,19 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
 
             {/* Linear Scale & Child CDC Chart */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <BmiScaleMeter result={result} overlay={o} locale={locale} />
+              <BmiScaleMeter result={result} />
               {result.isChild ? (
-                <ChildBmiPercentileChart result={result} overlay={o} locale={locale} />
+                <ChildBmiPercentileChart result={result} />
               ) : (
                 <div className="p-4 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-2">
                   <h4 className="text-xs font-bold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
-                    {locale === "es" ? "Índices Antropométricos" : "Anthropometric Indices"}
+                    Anthropometric Indices
                   </h4>
                   <div className="grid grid-cols-2 gap-2 pt-1 text-xs">
                     <div className="p-2.5 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800">
                       <span className="text-zinc-500 dark:text-zinc-400 block text-[10px]">{o.bmiPrimeLabel}</span>
                       <strong className="text-sky-700 dark:text-sky-400 text-sm font-bold">{result.bmiPrime}</strong>
-                      <span className="text-[10px] text-zinc-500 block mt-0.5">&lt; 1.0 {locale === "es" ? "es saludable" : "is healthy"}</span>
+                      <span className="text-[10px] text-zinc-500 block mt-0.5">&lt; 1.0 is healthy</span>
                     </div>
                     <div className="p-2.5 bg-zinc-50 dark:bg-zinc-950 rounded-lg border border-zinc-200 dark:border-zinc-800">
                       <span className="text-zinc-500 dark:text-zinc-400 block text-[10px]">{o.ponderalIndexLabel}</span>
@@ -495,7 +523,7 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
             </div>
 
             {/* Contour Heatmap Chart */}
-            <AdultBmiHeightWeightChart result={result} overlay={o} locale={locale} />
+            <AdultBmiHeightWeightChart result={result} />
 
             {/* ADVANCED HEALTH PANELS (Ideal Weight, BFP, Calories, Goal Planner) */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
@@ -503,7 +531,7 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
               <div className="p-4 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-3">
                 <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold text-xs uppercase tracking-wider">
                   <Sparkles className="w-4 h-4" />
-                  {locale === "es" ? "Fórmulas de Peso Ideal" : "Ideal Weight Formulas"}
+                  Ideal Weight Formulas
                 </div>
                 <div className="space-y-1.5 text-xs text-zinc-700 dark:text-zinc-300">
                   <div className="flex justify-between py-1 border-b border-zinc-100 dark:border-zinc-800/60">
@@ -523,7 +551,7 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
                     <span className="font-semibold">{result.idealWeight.hamwiLbs} lbs ({result.idealWeight.hamwiKg} kg)</span>
                   </div>
                   <div className="flex justify-between pt-1 font-bold text-emerald-700 dark:text-emerald-400">
-                    <span>{locale === "es" ? "Promedio Clínico:" : "Clinical Average:"}</span>
+                    <span>Clinical Average:</span>
                     <span>{result.idealWeight.averageLbs} lbs ({result.idealWeight.averageKg} kg)</span>
                   </div>
                 </div>
@@ -533,39 +561,39 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
               <div className="p-4 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-3">
                 <div className="flex items-center gap-2 text-sky-700 dark:text-sky-400 font-bold text-xs uppercase tracking-wider">
                   <Flame className="w-4 h-4" />
-                  {locale === "es" ? "Grasa Corporal y Calorías" : "Body Fat & Calories"}
+                  Body Fat &amp; Calories
                 </div>
                 <div className="space-y-2 text-xs">
                   <div className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg flex justify-between items-center border border-zinc-200/80 dark:border-zinc-800">
                     <div className="flex flex-col">
                       <span className="text-zinc-700 dark:text-zinc-300 font-semibold">{o.estimatedBodyFatLabel}:</span>
-                      <span className="text-[10px] text-zinc-500 dark:text-zinc-400">{locale === "es" ? "Estimación (Deurenberg)" : "Statistical estimate (Deurenberg)"}</span>
+                      <span className="text-[10px] text-zinc-500 dark:text-zinc-400">Statistical estimate (Deurenberg)</span>
                     </div>
                     <strong className="text-sky-700 dark:text-sky-300 font-bold text-sm">{result.bodyFatPercentage}%</strong>
                   </div>
                   <div className="p-2 bg-zinc-50 dark:bg-zinc-950 rounded-lg flex justify-between items-center border border-zinc-200/80 dark:border-zinc-800">
                     <span className="text-zinc-500 dark:text-zinc-400">{o.bmrLabel}:</span>
-                    <strong className="text-emerald-700 dark:text-emerald-400 font-bold">{result.bmr} kcal/{locale === "es" ? "día" : "day"}</strong>
+                    <strong className="text-emerald-700 dark:text-emerald-400 font-bold">{result.bmr} kcal/day</strong>
                   </div>
                   <div>
                     <Label className="text-[11px] text-zinc-500 dark:text-zinc-400 mb-1 block">
-                      {locale === "es" ? "Nivel de Actividad (TDEE):" : "Activity Level for TDEE:"}
+                      Activity Level for TDEE:
                     </Label>
                     <select
                       value={activityLevel}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setActivityLevel(e.target.value as any)}
                       className="w-full px-2 py-1.5 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg text-xs font-semibold text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
                     >
-                      <option value="sedentary">{locale === "es" ? "Sedentario (Poco o nada de ejercicio)" : "Sedentary (Little to no exercise)"}</option>
-                      <option value="light">{locale === "es" ? "Actividad Ligera (1-3 días/sem)" : "Lightly Active (1-3 days/week)"}</option>
-                      <option value="moderate">{locale === "es" ? "Actividad Moderada (3-5 días/sem)" : "Moderately Active (3-5 days/week)"}</option>
-                      <option value="active">{locale === "es" ? "Muy Activo (6-7 días/sem)" : "Very Active (6-7 days/week)"}</option>
-                      <option value="very_active">{locale === "es" ? "Extra Activo (Entrenamiento intenso)" : "Extra Active (Hard training)"}</option>
+                      <option value="sedentary">Sedentary (Little to no exercise)</option>
+                      <option value="light">Lightly Active (1-3 days/week)</option>
+                      <option value="moderate">Moderately Active (3-5 days/week)</option>
+                      <option value="active">Very Active (6-7 days/week)</option>
+                      <option value="very_active">Extra Active (Hard training)</option>
                     </select>
                   </div>
                   <div className="flex justify-between items-center text-xs font-bold text-amber-700 dark:text-amber-400 pt-1">
-                    <span>{locale === "es" ? "Calorías de Mantenimiento:" : "Maintenance Calories:"}</span>
-                    <span>{result.tdee} kcal/{locale === "es" ? "día" : "day"}</span>
+                    <span>Maintenance Calories:</span>
+                    <span>{result.tdee} kcal/day</span>
                   </div>
                 </div>
               </div>
@@ -574,12 +602,12 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
               <div className="p-4 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-3">
                 <div className="flex items-center gap-2 text-purple-700 dark:text-purple-400 font-bold text-xs uppercase tracking-wider">
                   <Target className="w-4 h-4" />
-                  {locale === "es" ? "Planificador de Meta de Peso" : "Target Weight Goal Planner"}
+                  Target Weight Goal Planner
                 </div>
                 <div className="space-y-2 text-xs">
                   <div>
                     <Label className="text-[11px] text-zinc-500 dark:text-zinc-400 mb-1 block">
-                      {locale === "es" ? "IMC Objetivo Deseado:" : "Desired Goal BMI:"}
+                      Desired Goal BMI:
                     </Label>
                     <div className="flex gap-2 items-center">
                       <Input
@@ -591,24 +619,24 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
                         onChange={(e) => setTargetBmi(Number(e.target.value))}
                         className="bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 text-xs h-8 w-24 text-center font-bold text-zinc-900 dark:text-zinc-100"
                       />
-                      <span className="text-[11px] text-zinc-500 dark:text-zinc-400">({locale === "es" ? "Saludable: 18.5 – 24.9" : "Healthy: 18.5 – 24.9"})</span>
+                      <span className="text-[11px] text-zinc-500 dark:text-zinc-400">(Healthy: 18.5 – 24.9)</span>
                     </div>
                   </div>
 
                   <div className="p-2.5 bg-zinc-50 dark:bg-zinc-950 rounded-lg space-y-1 text-zinc-700 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-800">
                     <div className="flex justify-between">
-                      <span className="text-zinc-500 dark:text-zinc-400">{locale === "es" ? "Peso Objetivo:" : "Target Weight:"}</span>
+                      <span className="text-zinc-500 dark:text-zinc-400">Target Weight:</span>
                       <strong className="text-purple-700 dark:text-purple-300">{result.goalPlanner.targetWeightLbs} lbs ({result.goalPlanner.targetWeightKg} kg)</strong>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-zinc-500 dark:text-zinc-400">{locale === "es" ? "Variación Requerida:" : "Weight to Change:"}</span>
+                      <span className="text-zinc-500 dark:text-zinc-400">Weight to Change:</span>
                       <strong className={result.goalPlanner.weightDeltaLbs > 0 ? "text-amber-700 dark:text-amber-400" : "text-sky-700 dark:text-sky-400"}>
                         {Math.abs(result.goalPlanner.weightDeltaLbs)} lbs
                       </strong>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-zinc-500 dark:text-zinc-400">{locale === "es" ? "Tiempo Estimado (0.5 kg/sem):" : "Est. Timeline (0.5 kg/wk):"}</span>
-                      <strong className="text-emerald-700 dark:text-emerald-400">{result.goalPlanner.weeksToGoal} {locale === "es" ? "semanas" : "weeks"}</strong>
+                      <span className="text-zinc-500 dark:text-zinc-400">Est. Timeline (0.5 kg/wk):</span>
+                      <strong className="text-emerald-700 dark:text-emerald-400">{result.goalPlanner.weeksToGoal} weeks</strong>
                     </div>
                   </div>
                 </div>
@@ -620,13 +648,13 @@ export function BmiCalculator({ overlay: propOverlay, locale = "en" }: BmiCalcul
               <div className="p-4 bg-zinc-50 dark:bg-zinc-950/70 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-3">
                 <div className="flex justify-between items-center">
                   <h4 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 uppercase tracking-wider flex items-center gap-1.5">
-                    {o.historyTitle} ({savedHistory.length})
+                    Saved Calculation History ({savedHistory.length})
                   </h4>
                   <button
                     onClick={handleClearHistory}
                     className="text-xs text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1 cursor-pointer"
                   >
-                    <Trash2 className="w-3 h-3" /> {o.clearHistoryBtn}
+                    <Trash2 className="w-3 h-3" /> Clear History
                   </button>
                 </div>
 

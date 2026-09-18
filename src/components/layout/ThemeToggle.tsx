@@ -5,11 +5,10 @@ import { useTheme } from "next-themes";
 import { Sun, Moon } from "lucide-react";
 
 interface ThemeToggleProps {
-  locale?: string;
   className?: string;
 }
 
-export function ThemeToggle({ locale = "en", className = "" }: ThemeToggleProps) {
+export function ThemeToggle({ className = "" }: ThemeToggleProps) {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -17,16 +16,8 @@ export function ThemeToggle({ locale = "en", className = "" }: ThemeToggleProps)
     setMounted(true);
   }, []);
 
-  const isSpanish = locale === "es";
   const isDark = mounted && resolvedTheme === "dark";
-
-  const toggleLabel = isDark
-    ? isSpanish
-      ? "Cambiar a modo claro"
-      : "Switch to light mode"
-    : isSpanish
-    ? "Cambiar a modo oscuro"
-    : "Switch to dark mode";
+  const toggleLabel = isDark ? "Switch to light mode" : "Switch to dark mode";
 
   const handleToggle = () => {
     setTheme(isDark ? "light" : "dark");
@@ -36,7 +27,7 @@ export function ThemeToggle({ locale = "en", className = "" }: ThemeToggleProps)
     return (
       <button
         type="button"
-        aria-label={isSpanish ? "Tema" : "Theme"}
+        aria-label="Theme"
         className={`h-8 w-8 rounded-lg flex items-center justify-center text-blue-100 hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${className}`}
       >
         <span className="h-4 w-4 opacity-0" />

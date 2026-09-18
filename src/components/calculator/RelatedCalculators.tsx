@@ -4,22 +4,18 @@ import React, { useMemo } from "react";
 import Link from "next/link";
 import { getCalculatorDefinition, getRelatedCalculators } from "@/lib/calculator-engine/registry";
 import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
-import { isLocalePublished } from "@/i18n/publishing";
-import { SPANISH_MORTGAGE_SEO } from "@/i18n/content/mortgage/es";
 import type { CalculatorModuleDefinition } from "@/calculators/types";
 
 export interface RelatedCalculatorsProps {
   currentId?: string;
   category?: string;
   explicitRelated?: (string | CalculatorModuleDefinition)[];
-  locale?: string;
 }
 
 export function RelatedCalculators({
   currentId = "",
   category = "Finance",
   explicitRelated,
-  locale,
 }: RelatedCalculatorsProps) {
   const relatedList = useMemo(() => {
     if (explicitRelated && explicitRelated.length > 0) {
@@ -63,12 +59,8 @@ export function RelatedCalculators({
   return (
     <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
       {relatedList.map((calc, idx) => {
-        const isTargetPublished = locale && locale !== "en" && isLocalePublished(locale, calc.slug);
-        const href = isTargetPublished ? `/${locale}/calculators/${calc.slug}` : `/calculators/${calc.slug}`;
-        const displayTitle =
-          locale === "es" && calc.slug === "mortgage-calculator"
-            ? SPANISH_MORTGAGE_SEO.title
-            : getCalculatorDisplayTitle(calc.title);
+        const href = `/calculators/${calc.slug}`;
+        const displayTitle = getCalculatorDisplayTitle(calc.title);
 
         return (
           <React.Fragment key={calc.id || calc.slug}>

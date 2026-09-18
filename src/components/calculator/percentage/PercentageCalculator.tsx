@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { PercentageLocaleOverlay, getPercentageOverlay } from "@/i18n/overlays/percentage";
 
 export interface SavedCalcItem {
   id: string;
@@ -11,13 +10,70 @@ export interface SavedCalcItem {
   timestamp: string;
 }
 
-export interface PercentageCalculatorProps {
-  overlay?: PercentageLocaleOverlay;
-  locale?: string;
-}
+const o = {
+  title: "Percentage Calculator",
+  description: "Calculate percentage values, 3-way solvers, percentage changes, percentage differences, discounts, and proportions.",
+  s1Title: "Percentage Calculator",
+  s1PctOf: "% of",
+  s1Equals: "=",
+  s1CalcBtn: "Calculate",
+  s1ClearBtn: "Clear",
+  s1ResultLabel: "Result",
+  s1SaveBtn: "Save",
+  s1SavedBtn: "Saved!",
+  s1StepsLabel: "Steps:",
+  s1Undefined: "Undefined (division by zero)",
+  s1SummaryOf: "of",
+  s1SummaryIs: "is",
 
-export function PercentageCalculator({ overlay: propOverlay, locale = "en" }: PercentageCalculatorProps = {}) {
-  const o = propOverlay || getPercentageOverlay(locale);
+  s2Title: "Percentage Calculator in Common Phrases",
+  s2WhatIs: "what is",
+  s2PctOf: "% of",
+  s2IsWhatPctOf: "is what % of",
+  s2Is: "is",
+  s2PctOfWhat: "% of what",
+  s2CalcBtn: "Calculate",
+  s2ResultLabel: "Result",
+  s2SaveBtn: "Save",
+  s2SavedBtn: "Saved!",
+  s2StepsLabel: "Steps:",
+  s2Phrase1Summary: (res: string, p: string, v: string) => `${res} is ${p}% of ${v}.`,
+  s2Phrase2Summary: (v2: string, res: string, v1: string) => `${v2} is ${res} of ${v1}.`,
+  s2Phrase3Summary: (v2: string, p: string, res: string) => `${v2} is ${p}% of ${res}.`,
+
+  s3Title: "Percentage Difference Calculator",
+  s3Val1Label: "Value 1",
+  s3Val2Label: "Value 2",
+  s3CalcBtn: "Calculate",
+  s3ClearBtn: "Clear",
+  s3ResultLabel: "Result",
+  s3SaveBtn: "Save",
+  s3SavedBtn: "Saved!",
+  s3Summary: (v1: number | string, v2: number | string, res: string) => `Difference of ${v1} and ${v2} is ${res}`,
+  s3StepsLabel: "Steps:",
+
+  s4Title: "Percentage Change Calculator",
+  s4Increase: "Increase",
+  s4Decrease: "Decrease",
+  s4Equals: "% =",
+  s4CalcBtn: "Calculate",
+  s4ClearBtn: "Clear",
+  s4ResultLabel: "Result",
+  s4SaveBtn: "Save",
+  s4SavedBtn: "Saved!",
+  s4StepsLabel: "Steps:",
+  s4SummaryChange: (v1: number | string, mode: string, p: number | string, res: string) => `${v1} ${mode.toLowerCase()} ${p}% = ${res}`,
+  s4SummaryDirection: (v1: number | string, v2: number | string, p: string, mode: string) => `${v1} to ${v2} is a ${p} ${mode.toLowerCase()}`,
+
+  historyTitle: "Saved Calculations",
+  clearHistoryBtn: "Clear All",
+  deleteTooltip: "Delete calculation",
+  ariaPercentage: "Percentage P",
+  ariaBase: "Base value V1",
+  ariaTarget: "Final target V2",
+};
+
+export function PercentageCalculator() {
   const [savedItems, setSavedItems] = useState<SavedCalcItem[]>([]);
   const [savedSection, setSavedSection] = useState<string | null>(null);
 

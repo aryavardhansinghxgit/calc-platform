@@ -40,7 +40,6 @@ import {
   convertToFeet,
   DEFAULT_CONCRETE_DENSITY_LBS_PER_CUFT,
 } from "@/lib/calculator-engine/formulas/concrete";
-import { ConcreteLocaleOverlay, getConcreteOverlay } from "@/i18n/overlays/concrete";
 
 // ─── Shared Interfaces ────────────────────────────────────────────────────────
 
@@ -882,8 +881,7 @@ function StairsDiagram({
 
 // ─── Main Concrete Calculator Component ──────────────────────────────────────
 
-export function ConcreteCalculator({ overlay: propOverlay, locale = "en" }: { overlay?: ConcreteLocaleOverlay; locale?: string } = {}) {
-  const overlay = propOverlay || getConcreteOverlay(locale);
+export function ConcreteCalculator() {
   // ─── Card 1: Slab State ──────────────────────────────────────────────────
   const [slabLength, setSlabLength] = useState("5");
   const [slabWidth, setSlabWidth] = useState("2.5");

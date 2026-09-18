@@ -15,7 +15,6 @@ import { FormulaSection } from "./FormulaSection";
 import { RelatedCalculators } from "./RelatedCalculators";
 import { AmortizationTable } from "./mortgage/AmortizationTable";
 import { MortgageContentSection } from "./mortgage/MortgageContentSection";
-import { MortgageContentSectionEs } from "./mortgage/MortgageContentSectionEs";
 import { MortgageCalculator } from "./mortgage/MortgageCalculator";
 import { AmortizationCalculator } from "./amortization/AmortizationCalculator";
 import { LoanCalculator } from "./loan/LoanCalculator";
@@ -251,8 +250,6 @@ import { TimeDurationContent } from "./time-duration/TimeDurationContent";
 import { AutoLoanContentSection } from "./auto-loan/AutoLoanContentSection";
 import { PercentageCalculator } from "./percentage/PercentageCalculator";
 import { CurrencyCalculator } from "./currency/CurrencyCalculator";
-import { getCalculatorLocalizedContent } from "@/i18n/content";
-import { getCalculatorOverlay } from "@/i18n/overlays";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { CalculatorErrorBoundary } from "./CalculatorErrorBoundary";
 import { Input } from "@/components/ui/input";
@@ -277,12 +274,9 @@ const AmortizationAreaChart = dynamic(() => import("./charts/AmortizationAreaCha
 export interface CalculatorLayoutProps {
   definition: Omit<CalculatorModuleDefinition, "calculate">;
   children?: React.ReactNode;
-  locale?: string;
-  overlay?: any;
 }
 
-export function CalculatorLayout({ definition, locale, overlay: propOverlay }: CalculatorLayoutProps) {
-  const overlay = propOverlay || (locale && definition.slug ? getCalculatorOverlay(definition.slug, locale) : null);
+export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const initialInputs = useMemo(() => {
     const defaults: Record<string, any> = {};
     (definition.inputs || []).forEach((input) => {
@@ -351,9 +345,8 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
   };
 
   const calculationResult: CalculationResult = useMemo(() => {
-    const activeLocale = locale === "es" ? "es-ES" : (locale || "en-US");
-    return CalculatorEngine.run(definition.id, inputs, activeLocale);
-  }, [definition.id, inputs, locale]);
+    return CalculatorEngine.run(definition.id, inputs, "en-US");
+  }, [definition.id, inputs]);
 
   const genericReportData = useMemo(() => {
     return generateGenericReportData(definition, inputs, calculationResult);
@@ -577,13 +570,8 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
   const isTimeZone = idLower === "time-zone-calculator" || slugLower === "time-zone-calculator" || idLower === "time-zone" || slugLower === "time-zone";
   const isPercentage = idLower === "percentage-calculator" || slugLower === "percentage-calculator";
 
-  const localizedPack = (locale && definition.slug) ? getCalculatorLocalizedContent(definition.slug, locale) : null;
-  const CustomContent = (locale && locale !== "en" && localizedPack?.ContentComponent)
-    ? localizedPack.ContentComponent
-    : (definition as any).ContentComponent || (
-        (isMortgage && locale === "es")
-          ? MortgageContentSectionEs
-      : isResistor
+  const CustomContent = (definition as any).ContentComponent || (
+      isResistor
         ? ResistorContent
         : isBandwidth
           ? BandwidthContent
@@ -669,31 +657,23 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
       {/* 1. Accessible Breadcrumbs Navigation */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
         <Link
-          href={locale && locale !== "en" ? `/${locale}` : "/"}
+          href="/"
           className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-600 rounded px-1"
         >
-          {locale === "es" ? "Inicio" : "Home"}
+          Home
         </Link>
         <ChevronRight className="h-3 w-3 text-zinc-300 dark:text-zinc-600" />
         <Link
-          href={locale && locale !== "en" ? `/${locale}/category/${(definition?.category || "general").toLowerCase()}` : `/category/${(definition?.category || "general").toLowerCase()}`}
+          href={`/category/${(definition?.category || "general").toLowerCase()}`}
           className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-600 rounded px-1"
         >
-          {locale === "es"
-            ? (definition?.category?.toLowerCase().includes("math")
-                ? "Matemáticas"
-                : definition?.category?.toLowerCase().includes("health")
-                ? "Salud"
-                : definition?.category?.toLowerCase().includes("date") || definition?.category?.toLowerCase().includes("time")
-                ? "Fecha y Hora"
-                : definition?.category || "General")
-            : (definition?.category || "General")}
+          {definition?.category || "General"}
         </Link>
         <ChevronRight className="h-3 w-3 text-zinc-300 dark:text-zinc-600" />
         <span className="font-medium text-zinc-800 dark:text-zinc-200 truncate">
           {definition?.id === "area-calculator"
             ? "Area Calculator"
-            : getCalculatorDisplayTitle(overlay?.title || definition?.title || "")}
+            : getCalculatorDisplayTitle(definition?.title || "")}
         </span>
       </nav>
 
@@ -702,15 +682,15 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
         <div className="bg-slate-50 dark:bg-slate-900/50 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
           <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-blue-600 dark:text-blue-400">
             {isLoan
-              ? (locale === "es" ? "Calculadora de Préstamos y Amortización" : "Loan Calculator & Amortization Payment Analyzer")
+              ? "Loan Calculator & Amortization Payment Analyzer"
               : isPersonalLoan
-              ? (locale === "es" ? "Calculadora de Préstamos Personales" : "Personal Loan Calculator & Amortization Payment Suite")
+              ? "Personal Loan Calculator & Amortization Payment Suite"
               : isTimeDuration
-              ? (locale === "es" ? "Calculadora de Duración de Tiempo" : "Time Duration Calculator – Calculate Elapsed Time Between Two Times and Dates")
-              : (overlay?.title || definition?.title || "")}
+              ? "Time Duration Calculator – Calculate Elapsed Time Between Two Times and Dates"
+              : (definition?.title || "")}
           </h1>
           <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 max-w-xl leading-normal font-medium">
-            {overlay?.description || definition?.description || ""}
+            {definition?.description || ""}
           </p>
         </div>
 
@@ -722,11 +702,11 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
           ) : isIpSubnet ? (
             <IPSubnetCalculator />
           ) : isOhmsLaw ? (
-            <OhmsLawCalculator overlay={overlay} locale={locale} />
+            <OhmsLawCalculator />
           ) : isVoltageDrop ? (
             <VoltageDropCalculator />
           ) : (definition as any).CustomComponent ? (
-            React.createElement((definition as any).CustomComponent, { overlay, locale })
+            React.createElement((definition as any).CustomComponent)
           ) : isMolecularWeight ? (
             <MolecularWeightCalculator />
           ) : isMolarity ? (
@@ -736,11 +716,11 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
           ) : isGPA ? (
             <GPACalculator />
           ) : isDate ? (
-            <DateCalculator overlay={overlay} locale={locale} />
+            <DateCalculator />
           ) : isHours ? (
             <HoursCalculator />
           ) : isScientific ? (
-            <ScientificCalculator overlay={overlay} locale={locale} />
+            <ScientificCalculator />
           ) : isFraction ? (
             <FractionCalculator />
           ) : isStatistics ? (
@@ -830,13 +810,13 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
           ) : isCalorie ? (
             <CalorieCalculator />
           ) : isBmi ? (
-            <BmiCalculator overlay={overlay} locale={locale} />
+            <BmiCalculator />
           ) : isBudget ? (
             <BudgetCalculator />
           ) : isStudentLoan ? (
             <StudentLoanCalculator />
           ) : isAutoLoan ? (
-            <AutoLoanCalculator overlay={overlay} locale={locale} />
+            <AutoLoanCalculator />
           ) : isBusinessLoan ? (
             <BusinessLoanCalculator />
           ) : isPersonalLoan ? (
@@ -930,7 +910,7 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
           ) : isAutoLease ? (
             <AutoLeaseCalculator />
           ) : isAutoLoan ? (
-            <AutoLoanCalculator overlay={overlay} locale={locale} />
+            <AutoLoanCalculator />
           ) : isRefinance ? (
             <RefinanceCalculator />
           ) : isHouseAffordability ? (
@@ -942,13 +922,13 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
           ) : isAmortization ? (
             <AmortizationCalculator />
           ) : isMortgage ? (
-            <MortgageCalculator overlay={overlay} locale={locale} />
+            <MortgageCalculator />
           ) : isConcrete ? (
-            <ConcreteCalculator overlay={overlay} locale={locale} />
+            <ConcreteCalculator />
           ) : isCurrency ? (
-            <CurrencyCalculator overlay={overlay} locale={locale} />
+            <CurrencyCalculator />
           ) : isPercentage ? (
-            <PercentageCalculator overlay={overlay} locale={locale} />
+            <PercentageCalculator />
           ) : isBtu ? (
             <BTUCalculator />
           ) : isSquareFootage ? (
@@ -983,8 +963,8 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
                 {/* Left: Inputs Panel */}
                 <div className="min-w-0 md:col-span-6 space-y-2 border-b md:border-b-0 md:border-r border-zinc-100 dark:border-zinc-800 pb-4 md:pb-0 md:pr-4">
                   <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center justify-between">
-                    <span>{overlay?.labels?.inputsTitle || (locale === "es" ? "Entradas" : "Inputs")}</span>
-                    <span className="text-[10px] font-normal text-zinc-400">{overlay?.labels?.realtimeBadge || (locale === "es" ? "Tiempo real" : "Real-time")}</span>
+                    <span>Inputs</span>
+                    <span className="text-[10px] font-normal text-zinc-400">Real-time</span>
                   </h2>
                   <CalculatorForm
                     definition={definition}
@@ -997,7 +977,7 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
                 <div className="min-w-0 md:col-span-6 space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <h2 className="min-w-0 text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                      {overlay?.labels?.summaryTitle || (locale === "es" ? "Resumen Calculado" : "Calculated Summary")}
+                      Calculated Summary
                     </h2>
                     <div className="flex flex-wrap items-center justify-end gap-1.5">
                       <Button
@@ -1008,7 +988,7 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
                         className="h-7 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer hover:bg-zinc-50"
                       >
                         {isSaved ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Bookmark className="h-3.5 w-3.5 text-blue-500" />}
-                        {isSaved ? (overlay?.labels?.savedBtn || (locale === "es" ? "¡Guardado!" : "Saved!")) : (overlay?.labels?.saveBtn || (locale === "es" ? "Guardar" : "Save"))}
+                        {isSaved ? "Saved!" : "Save"}
                       </Button>
                       <Button
                         type="button"
@@ -1022,7 +1002,7 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
                         }}
                         className="h-7 text-xs gap-1.5 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 cursor-pointer hover:bg-zinc-50 no-print"
                       >
-                        <Copy className="h-3.5 w-3.5 text-zinc-500" /> {overlay?.labels?.copyBtn || (locale === "es" ? "Copiar" : "Copy")}
+                        <Copy className="h-3.5 w-3.5 text-zinc-500" /> Copy
                       </Button>
                     </div>
                   </div>
@@ -1036,7 +1016,7 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
                     <div className="p-3 bg-zinc-50 dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-2">
                       <div className="flex items-center justify-between pb-1 border-b border-zinc-200 dark:border-zinc-800">
                         <span className="text-[11px] font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1">
-                          <History className="w-3 h-3 text-blue-500" /> {overlay?.labels?.savedListTitle || (locale === "es" ? "Cálculos guardados" : "Saved Calculations")} ({savedItems.length})
+                          <History className="w-3 h-3 text-blue-500" /> Saved Calculations ({savedItems.length})
                         </span>
                         <button
                           onClick={() => {
@@ -1045,7 +1025,7 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
                           }}
                           className="text-[10px] text-zinc-400 hover:text-red-500 font-medium cursor-pointer"
                         >
-                          {overlay?.labels?.clearBtn || (locale === "es" ? "Borrar" : "Clear")}
+                          Clear
                         </button>
                       </div>
                       <div className="space-y-1.5 max-h-36 overflow-y-auto">
@@ -1076,23 +1056,12 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
         {!isPeriod && !isVolume && !isSlope && !isDistance && !isMatrix && !isCircle && !isSurfaceArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRandomNumberGenerator && !isBinary && !isHex && !isHalfLife && !isRightTriangle && !isConcrete && !isSquareFootage && !isRoofing && !isBtu && !isTile && !isStair && !isGravel && !isMulch && !isConversion && !isMass && !isSpeed && !isHeight && !isElectricity && !isDensity && !isRoman && !isShoeSize && !isFuelCost && !isVoltageDrop && !isOhmsLaw && !isIpSubnet && !isBandwidth && !isDewPoint && !isDiceRoller && (
           <div className="no-print pt-3 pb-1 space-y-1.5 border-t border-slate-200/60 dark:border-slate-800">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
-              {locale === "es"
-                ? "CALCULADORAS RELACIONADAS:"
-                : locale === "fr"
-                ? "CALCULATEURS CONNEXES :"
-                : locale === "de"
-                ? "ÄHNLICHE RECHNER:"
-                : locale === "hi"
-                ? "संबंधित कैलकुलेटर:"
-                : locale === "pt"
-                ? "CALCULADORAS RELACIONADAS:"
-                : "RELATED CALCULATORS:"}
+              RELATED CALCULATORS:
             </span>
             <RelatedCalculators
               currentId={definition.id}
               category={definition.category}
               explicitRelated={definition.relatedCalculators}
-              locale={locale}
             />
           </div>
         )}
@@ -1166,13 +1135,12 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
           {(isTimeZone || isBac || isBodyType || isArmyBodyFat || isOneRepMax || isTargetHeartRate || isLove || isResistor || isBase64 || isUrlEncoder || isPasswordGenerator || isMileage || isHorsepower || isEngineHorsepower || isTireSize || isGPA || isGrade || isWindChill || isHeatIndex || isMolarity || isMolecularWeight || isGdp || isBraSize || isTip || isGolfHandicap || isSleep || isDayCounter || isDayOfWeek) && (
             <div className="no-print pt-6 pb-2 space-y-1.5 border-t border-slate-200/60 dark:border-slate-800">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
-                {locale === "es" ? "CALCULADORAS RELACIONADAS:" : "RELATED CALCULATORS:"}
+                RELATED CALCULATORS:
               </span>
               <RelatedCalculators
                 currentId={definition.id}
                 category={definition.category}
                 explicitRelated={definition.relatedCalculators}
-                locale={locale}
               />
             </div>
           )}

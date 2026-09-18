@@ -55,8 +55,6 @@ import { formatCurrency, formatMonthYear } from "@/lib/calculator-engine/formatt
 import { AmortizationTable } from "./AmortizationTable";
 import ReportModal from "@/components/report/ReportModal";
 import { generateMortgageReportData } from "@/lib/report-generator/mortgage-report";
-import { MortgageLocaleOverlay } from "@/i18n/types";
-import { getMortgageOverlay } from "@/i18n/overlays/mortgage";
 
 // Lazy load chart components
 const MortgagePieChart = dynamic(
@@ -95,17 +93,149 @@ const AmortizationAreaChart = dynamic(
   }
 );
 
-export interface MortgageCalculatorProps {
-  overlay?: MortgageLocaleOverlay;
-  locale?: string;
-}
+const DEFAULT_MORTGAGE_OVERLAY = {
+  locale: "en",
+  title: "Mortgage Calculator",
+  description: "Calculate your monthly mortgage payment including principal and interest, property taxes, homeowners insurance, PMI, and HOA fees with full amortization schedules.",
+  managerTitle: "Mortgage Calculation Manager",
+  savedCountBadge: "Saved",
+  clearBtn: "Clear",
+  printPdfBtn: "Print / PDF",
+  saveBtn: "Save",
+  savedBtn: "Saved!",
+  inputsTitle: "Mortgage Inputs",
+  inputsSubtitle: "Modify values to recalculate payments instantly",
+  basicLoanDetails: "Basic Loan Details",
+  homePrice: "Home Price ($)",
+  downPayment: "Down Payment",
+  amountBtn: "$ Amount",
+  percentBtn: "% Percent",
+  calculatedDownPayment: "Calculated",
+  loanLabel: "Loan",
+  loanTermYears: "Loan Term (Years)",
+  interestRate: "Interest Rate (%)",
+  startMonth: "Start Month",
+  startYear: "Start Year",
+  monthOptions: [
+    { value: 1, label: "Jan" },
+    { value: 2, label: "Feb" },
+    { value: 3, label: "Mar" },
+    { value: 4, label: "Apr" },
+    { value: 5, label: "May" },
+    { value: 6, label: "Jun" },
+    { value: 7, label: "Jul" },
+    { value: 8, label: "Aug" },
+    { value: 9, label: "Sep" },
+    { value: 10, label: "Oct" },
+    { value: 11, label: "Nov" },
+    { value: 12, label: "Dec" },
+  ],
+  includeTaxesAndFees: "Include Taxes & Fees",
+  propertyTaxes: "Property Taxes",
+  homeInsurance: "Home Insurance ($/yr)",
+  pmiInsurance: "PMI Insurance (%/yr)",
+  hoaFee: "HOA Fee ($/mo)",
+  otherCosts: "Other Costs ($/yr)",
+  annualIncreaseTitle: "Annual Tax & Cost Increase (%)",
+  annualIncreaseSubtitle: "Model estimated inflation on non-loan expenses",
+  propertyTaxIncrease: "Property Tax Increase %",
+  insuranceIncrease: "Home Insurance Increase %",
+  hoaIncrease: "HOA Fee Increase %",
+  otherCostsIncrease: "Other Costs Increase %",
+  extraPaymentsTitle: "Extra Principal Payments",
+  extraPaymentsSubtitle: "Accelerate debt reduction and eliminate compounding interest",
+  monthlyExtraPayment: "Extra Monthly Pay",
+  yearlyExtraPayment: "Extra Yearly Pay",
+  fromMonth: "from",
+  inMonth: "in",
+  oneTimePaymentsTitle: "Extra One-Time Payments",
+  addPaymentRow: "Add Payment Row",
+  amountHeader: "Amount ($)",
+  monthHeader: "Month",
+  yearHeader: "Year",
+  actionHeader: "Action",
+  biweeklyTitle: "Biweekly Payment Option",
+  biweeklySubtitle: "Pay half of monthly P&I every two weeks (26 half-payments/yr)",
+  enableBiweekly: "Show Biweekly Payback Results",
+  biweeklySummary: "Biweekly Payback Results Summary",
+  payPeriodsYear: "26 Pay Periods / Yr",
+  biweeklyPayment: "Biweekly Payment",
+  biweeklyPayoffDate: "Biweekly Payoff Date",
+  biweeklyTotalInterest: "Biweekly Total Interest",
+  paymentBreakdown: "Payment Breakdown",
+  totalMonthlyPayment: "Total Estimated Monthly Payment",
+  principalAndInterest: "P&I Base",
+  propertyTax: "Property Tax",
+  homeInsuranceLabel: "Home Insurance",
+  pmi: "PMI",
+  hoaFeeLabel: "HOA Fee",
+  otherCostsLabel: "Other Costs",
+  extraPayment: "Extra Payment",
+  loanPayoffSummary: "Loan Payoff Summary",
+  loanAmount: "Loan Amount",
+  payoffDateLabel: "Payoff Date",
+  totalInterestLabel: "Total Interest",
+  totalCostLabel: "Total Cost of Loan",
+  interestSavedLabel: "Interest Savings",
+  timeSavedLabel: "Time Saved",
+  extraPaymentsImpact: "Extra Payments Impact:",
+  saves: "Saves",
+  inInterestPaysOff: "in interest & pays off",
+  monthsEarly: "months early!",
+  chartsTitle: "Visual Analytics & Charts",
+  tabDoughnut: "Doughnut",
+  tabBalance: "Balance Line",
+  tabArea: "Principal vs Interest",
+  loadingChart: "Loading chart...",
+  monthlyVsTotalBreakdown: "Monthly vs. Total Lifetime Cost Breakdown",
+  categoryCol: "Category",
+  monthlyYear1Col: "Monthly (Year 1)",
+  lifetimeTotalCol: "Lifetime Total",
+  pctTotalCostCol: "% of Total Cost",
+  totalOutOfPocket: "Total Out of Pocket",
+  amortizationScheduleTitle: "Mortgage Amortization Schedule",
+  amortizationSubtitle: "Full breakdown of payments, principal reduction, interest, and remaining balance over time",
+  annualSummaryTab: "Annual Summary",
+  monthlyScheduleTab: "Monthly Schedule",
+  biweeklyScheduleTab: "Biweekly Schedule",
+  searchSchedulePlaceholder: "Search schedule...",
+  downloadCsv: "Download CSV",
+  yearCol: "Year",
+  periodCol: "Period",
+  dateRangeCol: "Date Range",
+  paymentCol: "Payment",
+  principalCol: "Principal",
+  interestCol: "Interest",
+  extraCol: "Extra",
+  taxesInsCol: "Taxes & Ins.",
+  pmiFeesCol: "PMI & Fees",
+  balanceCol: "Balance",
+  prevPage: "Previous",
+  nextPage: "Next",
+  pageOf: "Page",
+  showingRecords: "Showing",
+  saveModalTitle: "Save",
+  saveModalSubtitle: "Please provide a name and description to save it to your account (up to 100 calculations)",
+  calcSummaryLabel: "Current Calculation Summary:",
+  monthlyPayLabel: "Monthly Pay:",
+  saveModalNameLabel: "Name (optional)",
+  saveModalDescLabel: "Description (optional)",
+  saveModalNamePlaceholder: "e.g. Primary Residence 30yr",
+  saveModalDescPlaceholder: "e.g. Comparing 20% down vs 10% down options",
+  cancelBtn: "Cancel",
+  resetBtn: "Reset",
+  confirmSaveBtn: "Save",
+  saveSuccessMsg: "Calculation saved successfully!",
+  savedLibraryTitle: "Saved Calculations",
+  noSavedCalculations: "No saved calculations found.",
+  loadBtn: "Load",
+  deleteBtn: "Delete",
+  clearAllSavedBtn: "Clear",
+};
 
-export function MortgageCalculator({
-  overlay: propsOverlay,
-  locale = "en",
-}: MortgageCalculatorProps = {}) {
-  const overlay = propsOverlay || getMortgageOverlay(locale);
-  const formatMoney = (amount: number) => formatCurrency(amount, "$", 2, locale);
+export function MortgageCalculator() {
+  const overlay = DEFAULT_MORTGAGE_OVERLAY;
+  const formatMoney = (amount: number) => formatCurrency(amount, "$", 2);
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
 
@@ -415,30 +545,19 @@ export function MortgageCalculator({
     showBiweekly,
   ]);
 
-  const LOCALE_INTL_MAP: Record<string, string> = {
-    en: "en-US",
-    es: "es-ES",
-    fr: "fr-FR",
-    de: "de-DE",
-    hi: "hi-IN",
-    pt: "pt-PT",
-  };
-
   const payoffDateDisplay = useMemo(() => {
     if (results.payoffMonth && results.payoffYear) {
-      const targetLocale = LOCALE_INTL_MAP[locale] || locale;
-      return formatMonthYear(results.payoffMonth, results.payoffYear, targetLocale, "long");
+      return formatMonthYear(results.payoffMonth, results.payoffYear, "en-US", "long");
     }
     return results.payoffDate;
-  }, [locale, results.payoffMonth, results.payoffYear, results.payoffDate]);
+  }, [results.payoffMonth, results.payoffYear, results.payoffDate]);
 
   const biweeklyPayoffDateDisplay = useMemo(() => {
     if (results.biweeklyPayoffMonth && results.biweeklyPayoffYear) {
-      const targetLocale = LOCALE_INTL_MAP[locale] || locale;
-      return formatMonthYear(results.biweeklyPayoffMonth, results.biweeklyPayoffYear, targetLocale, "long");
+      return formatMonthYear(results.biweeklyPayoffMonth, results.biweeklyPayoffYear, "en-US", "long");
     }
     return results.biweeklyPayoffDate;
-  }, [locale, results.biweeklyPayoffMonth, results.biweeklyPayoffYear, results.biweeklyPayoffDate]);
+  }, [results.biweeklyPayoffMonth, results.biweeklyPayoffYear, results.biweeklyPayoffDate]);
 
   const reportData = useMemo(() => {
     return generateMortgageReportData(
@@ -477,16 +596,6 @@ export function MortgageCalculator({
   ]);
 
   const monthOptions = overlay.monthOptions;
-
-  const displayPayoffDate =
-    locale === "en"
-      ? results.payoffDate
-      : formatMonthYear(results.payoffYear, results.payoffMonth, locale) || results.payoffDate;
-
-  const displayBiweeklyPayoffDate =
-    locale === "en"
-      ? results.biweeklyPayoffDate
-      : formatMonthYear(results.biweeklyPayoffYear, results.biweeklyPayoffMonth, locale) || results.biweeklyPayoffDate;
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -1367,8 +1476,6 @@ export function MortgageCalculator({
           <AmortizationTable
             schedule={results.amortizationSchedule}
             biweeklySchedule={showBiweekly ? results.biweeklyAmortizationSchedule : undefined}
-            overlay={overlay}
-            locale={locale}
           />
         </CardContent>
       </Card>

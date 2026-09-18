@@ -628,15 +628,60 @@ function calculateMath(
 // MAIN SCIENTIFIC CALCULATOR COMPONENT
 // ==========================================
 
-import { ScientificLocaleOverlay, getScientificOverlay } from "@/i18n/overlays/scientific";
+const o = {
+  degMode: "Deg",
+  radMode: "Rad",
+  gradMode: "Grad",
+  fixFormat: "Fix",
+  sciFormat: "Sci",
+  historyBtn: "History",
+  copyBtn: "Copy",
+  copiedBtn: "Copied!",
+  historyTitle: "Calculation History",
+  noHistory: "No calculations in memory.",
+  clearHistoryBtn: "Clear History",
+  loadBtn: "Load",
+  deleteBtn: "Delete",
+  tabBasic: "Basic",
+  tabTrig: "Trig",
+  tabAlgebra: "Algebra",
+  tabStats: "Stats",
 
-export interface ScientificCalculatorProps {
-  overlay?: ScientificLocaleOverlay;
-  locale?: string;
-}
+  mathCalculatorsTitle: "Math Calculators",
+  sidebarScientific: "Scientific",
+  sidebarFraction: "Fraction",
+  sidebarPercentage: "Percentage",
+  sidebarTriangle: "Triangle",
+  sidebarVolume: "Volume",
+  sidebarStdDev: "Standard Deviation",
+  sidebarRandom: "Random Generator",
+  sidebarMoreMath: "More Math...",
 
-export function ScientificCalculator({ overlay: propOverlay, locale = "en" }: ScientificCalculatorProps = {}) {
-  const o = propOverlay || getScientificOverlay(locale);
+  featuresTitle: "Calculator Features",
+  featKeyboardTitle: "Keyboard Support",
+  featKeyboardDesc: "Use your physical keyboard to type expressions directly.",
+  featHistoryTitle: "Calculation History",
+  featHistoryDesc: "View, click to restore, and clear calculation history.",
+  featMemoryTitle: "Memory Functions",
+  featMemoryDesc: "Store and recall values (M+, M-, MR, MC, Store, Recall).",
+  featAngleTitle: "Angle Unit Modes",
+  featAngleDesc: "Switch seamlessly between Degrees, Radians, and Gradians.",
+
+  examplesTitle: "Quick Math Examples",
+  examplesSubtitle: "Click any example to load it into the calculator:",
+  loadArrow: "Load →",
+
+  additionalFunctionsTitle: "Additional Functions",
+  tooltipUp: "Jump to Start of Equation (Up Arrow ▲)",
+  tooltipLeft: "Move Cursor Left 1 Character (Left Arrow ◀)",
+  tooltipRight: "Move Cursor Right 1 Character (Right Arrow ▶)",
+  tooltipDown: "Jump to End of Equation (Down Arrow ▼)",
+  tooltipCursorPos: "Current Cursor Position",
+  emptyHistoryExplanation: "No past calculations saved yet. Evaluate expressions with = or Enter to populate history.",
+  mathError: "Math Error",
+};
+
+export function ScientificCalculator() {
   const [expression, setExpression] = useState<string>("");
   const [cursorPos, setCursorPos] = useState<number>(0);
   const [displayValue, setDisplayValue] = useState<string>("0");
@@ -1525,13 +1570,13 @@ export function ScientificCalculator({ overlay: propOverlay, locale = "en" }: Sc
             {o.mathCalculatorsTitle}
           </h3>
           <div className="grid grid-cols-2 gap-2 text-xs">
-            <a href={locale === "es" ? "/es/calculators/scientific-calculator" : "/calculators/scientific-calculator"} className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+            <a href="/calculators/scientific-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
               {o.sidebarScientific}
             </a>
             <a href="/calculators/fraction-calculator" className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 hover:underline">
               {o.sidebarFraction}
             </a>
-            <a href={locale === "es" ? "/es/calculators/percentage-calculator" : "/calculators/percentage-calculator"} className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 hover:underline">
+            <a href="/calculators/percentage-calculator" className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 hover:underline">
               {o.sidebarPercentage}
             </a>
             <a href="/calculators/triangle-calculator" className="text-zinc-700 dark:text-zinc-300 hover:text-blue-600 hover:underline">

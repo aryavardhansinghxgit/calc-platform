@@ -34,7 +34,94 @@ import {
   DateDurationResult,
   DateOffsetResult,
 } from "@/lib/calculator-engine/formulas/date-calculator";
-import { DateLocaleOverlay, getDateOverlay } from "@/i18n/overlays/date";
+
+const DEFAULT_DATE_OVERLAY = {
+  locale: "en",
+  title: "Date Calculator",
+  description: "Calculate the number of days between two dates, add or subtract days, weeks, months, and years, and calculate working business days with leap year rules.",
+  suiteTitle: "Advanced Date Calculator Suite",
+  suiteSubtitle: "Exact day counter • Add/subtract dates • Business day & holiday solver",
+
+  tabDuration: "Date Difference",
+  tabOffset: "Add / Subtract Days",
+  tabBusiness: "Business Days",
+
+  startDateLabel: "Start Date",
+  endDateLabel: "End Date",
+  calcDurationBtn: "Calculate Difference",
+  resetBtn: "Reset Defaults",
+  todayBtn: "Today",
+  calendarPickerLabel: "Calendar Picker:",
+
+  yearsLabel: "Years",
+  monthsLabel: "Months",
+  weeksLabel: "Weeks",
+  daysLabel: "Days",
+  addBtn: "Add",
+  subtractBtn: "Subtract",
+  calcOffsetBtn: "Calculate Target Date",
+
+  settingsToggle: "Holiday & Workweek Settings (US Federal, UK, Custom Weekends, Inclusive Count)",
+  holidayCalendarLabel: "Holiday Calendar:",
+  holidayHandlingLabel: "Holiday Handling:",
+  holidayExcludeOption: "Exclude holidays from business days",
+  holidayCountOption: "Count holidays as normal working days",
+  dayCountingModeLabel: "Day Counting Mode:",
+  includeEndDayLabel: "Include End Day (+1 Day)",
+  exclusiveOption: "Standard (Exclusive)",
+  weekendDaysLabel: "Non-Working Weekend Days:",
+  dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+  monthNames: [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ],
+
+  resultsTitle: "Calculated Date Span",
+  calcTargetDateHeader: "Calculated Target Date",
+  calcDurationHeader: "Calculated Duration Between Dates",
+  allUnitsTitle: "All-Units Conversion Matrix",
+  totalDaysLabel: "Total Calendar Days",
+  dayOfWeekLabel: "Day of the Week",
+  weekendDaysSkippedLabel: "Weekend Days Skipped",
+  holidaysSkippedLabel: "Holidays Skipped",
+  totalWeeksDaysLabel: "Total Weeks & Days",
+  workingDaysLabel: "Working Business Days",
+  totalHoursLabel: "Total Hours",
+  totalMinutesLabel: "Total Minutes",
+  totalSecondsLabel: "Total Seconds",
+  pctOfYearLabel: "% of Solar Year",
+
+  workdayBreakdownTitle: "Workday & Calendar Breakdown",
+  daysDistributionTitle: "Days Distribution",
+  totalSpanLabel: "Total Span",
+  exactSpanLabel: "Exact Span",
+  encounteredHolidaysLabel: "Encountered Holidays:",
+
+  copySummaryBtn: "Copy Summary",
+  copiedBtn: "Copied!",
+  shareBtn: "Share",
+  linkCopiedBtn: "Link Copied!",
+  saveToHistoryBtn: "Save Calculation to History",
+  historyTitle: "Saved Calculations History",
+  clearHistoryBtn: "Clear History",
+  historyModeCol: "Mode",
+  historyInputCol: "Dates / Offset",
+  historyOutputCol: "Output",
+  historyDaysCol: "Total Days",
+  historyActionsCol: "Actions",
+  historyLoadBtn: "Load",
+  historyDeleteBtn: "Delete",
+
+  formatYearsMonthsDays: (y: number, m: number, d: number) => {
+    if (y === 0 && m === 0 && d === 0) return "0 days (Same date)";
+    const parts: string[] = [];
+    if (y > 0) parts.push(y === 1 ? "1 year" : `${y} years`);
+    if (m > 0) parts.push(m === 1 ? "1 month" : `${m} months`);
+    if (d > 0 || parts.length === 0) parts.push(d === 1 ? "1 day" : `${d} days`);
+    return parts.join(", ");
+  },
+  formatWeeksDays: (w: number, d: number) => `${w} weeks${d > 0 ? ` and ${d} days` : ""}`,
+};
 
 interface SavedDateRecord {
   id: string;
@@ -45,8 +132,8 @@ interface SavedDateRecord {
   timestamp: string;
 }
 
-export function DateCalculator({ overlay: propOverlay, locale = "en" }: { overlay?: DateLocaleOverlay; locale?: string } = {}) {
-  const overlay = propOverlay || getDateOverlay(locale);
+export function DateCalculator() {
+  const overlay = DEFAULT_DATE_OVERLAY;
   // ==========================================
   // STATE MANAGEMENT
   // ==========================================
@@ -257,10 +344,8 @@ export function DateCalculator({ overlay: propOverlay, locale = "en" }: { overla
   const localizedOffsetTargetFormatted = useMemo(() => {
     const dayName = overlay.dayNames[offsetResult.targetDayOfWeekIndex] || offsetResult.targetDayOfWeek;
     const monthName = overlay.monthNames[offsetResult.targetParts.month] || MONTH_NAMES[offsetResult.targetParts.month];
-    return locale === "es"
-      ? `${dayName}, ${offsetResult.targetParts.day} de ${monthName} de ${offsetResult.targetParts.year}`
-      : `${dayName}, ${monthName} ${offsetResult.targetParts.day}, ${offsetResult.targetParts.year}`;
-  }, [offsetResult, overlay, locale]);
+    return `${dayName}, ${monthName} ${offsetResult.targetParts.day}, ${offsetResult.targetParts.year}`;
+  }, [offsetResult, overlay]);
 
   // Save calculation to LocalStorage
   const handleSaveCalculation = () => {
@@ -285,7 +370,7 @@ export function DateCalculator({ overlay: propOverlay, locale = "en" }: { overla
       summary,
       primaryResult,
       totalDays,
-      timestamp: new Date().toLocaleString(locale === "es" ? "es-ES" : "en-US"),
+      timestamp: new Date().toLocaleString("en-US"),
     };
 
     const updated = [newRecord, ...savedRecords].slice(0, 15);
@@ -804,9 +889,7 @@ Generated by CalcPlatform Date Calculator`;
                       className="w-4 h-4 text-blue-600 rounded cursor-pointer"
                     />
                     <span>
-                      {locale === "es"
-                        ? <>Calcular en <strong>Días Hábiles</strong> (omitiendo fines de semana y festivos)</>
-                        : <>Calculate in <strong>Business Days</strong> (skipping weekends &amp; holidays)</>}
+                      Calculate in <strong>Business Days</strong> (skipping weekends &amp; holidays)
                     </span>
                   </label>
                 </div>
@@ -823,7 +906,7 @@ Generated by CalcPlatform Date Calculator`;
                 onClick={() => setShowSettings(!showSettings)}
                 className="text-xs sm:text-sm font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1.5 hover:underline cursor-pointer"
               >
-                {showSettings ? (locale === "es" ? "Ocultar Configuración de Calendario" : "Hide Calendar Settings") : overlay.settingsToggle}
+                {showSettings ? "Hide Calendar Settings" : overlay.settingsToggle}
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showSettings ? "rotate-180" : ""}`} />
               </button>
 
@@ -850,12 +933,12 @@ Generated by CalcPlatform Date Calculator`;
                     onChange={(e) => setHolidayRegion(e.target.value as HolidayRegion)}
                     className={input3DStyle}
                   >
-                    <option value="us">{locale === "es" ? "Estados Unidos (Festivos Federales)" : "United States (Federal Holidays)"}</option>
-                    <option value="uk">{locale === "es" ? "Reino Unido (Bank Holidays)" : "United Kingdom (Bank Holidays)"}</option>
-                    <option value="canada">{locale === "es" ? "Canadá (Festivos Estatutarios)" : "Canada (Statutory Holidays)"}</option>
-                    <option value="australia">{locale === "es" ? "Australia (Festivos Nacionales)" : "Australia (National Holidays)"}</option>
-                    <option value="india">{locale === "es" ? "India (Festivos Oficiales)" : "India (Gazetted Holidays)"}</option>
-                    <option value="none">{locale === "es" ? "Ninguno (Sin festivos excluidos)" : "None (No holidays excluded)"}</option>
+                    <option value="us">United States (Federal Holidays)</option>
+                    <option value="uk">United Kingdom (Bank Holidays)</option>
+                    <option value="canada">Canada (Statutory Holidays)</option>
+                    <option value="australia">Australia (National Holidays)</option>
+                    <option value="india">India (Gazetted Holidays)</option>
+                    <option value="none">None (No holidays excluded)</option>
                   </select>
                 </div>
 
@@ -959,7 +1042,7 @@ Generated by CalcPlatform Date Calculator`;
                     {localizedYearsMonthsDays}
                   </div>
                   <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1">
-                    {locale === "es" ? "Desde" : "From"} <strong>{startDateStr}</strong> ({localizedStartDayName}) {locale === "es" ? "hasta" : "to"} <strong>{endDateStr}</strong> ({localizedEndDayName})
+                    From <strong>{startDateStr}</strong> ({localizedStartDayName}) to <strong>{endDateStr}</strong> ({localizedEndDayName})
                   </p>
                 </div>
               )}
@@ -1033,14 +1116,14 @@ Generated by CalcPlatform Date Calculator`;
                   <div className="p-2.5 sm:p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
                     <span className="text-xs text-slate-500 dark:text-slate-400 block">{overlay.totalHoursLabel}</span>
                     <span className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
-                      {durationResult.totalHours.toLocaleString()} {locale === "es" ? "hrs" : "hrs"}
+                      {durationResult.totalHours.toLocaleString()} hrs
                     </span>
                   </div>
 
                   <div className="p-2.5 sm:p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
                     <span className="text-xs text-slate-500 dark:text-slate-400 block">{overlay.totalMinutesLabel}</span>
                     <span className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
-                      {durationResult.totalMinutes.toLocaleString()} {locale === "es" ? "min" : "min"}
+                      {durationResult.totalMinutes.toLocaleString()} min
                     </span>
                   </div>
 
@@ -1076,7 +1159,7 @@ Generated by CalcPlatform Date Calculator`;
                     {overlay.workdayBreakdownTitle}
                   </h3>
                   <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
-                    {durationResult.totalDays > 0 ? Math.round((durationResult.businessDays / durationResult.totalDays) * 100) : 0}% {locale === "es" ? "Días Hábiles" : "Workdays"}
+                    {durationResult.totalDays > 0 ? Math.round((durationResult.businessDays / durationResult.totalDays) * 100) : 0}% Workdays
                   </span>
                 </div>
 

@@ -7,14 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Download, Search } from "lucide-react";
 import { AmortizationRow } from "@/lib/calculator-engine/formulas/mortgage";
 import { formatCurrency, formatMonthYear } from "@/lib/calculator-engine/formatters";
-import { MortgageLocaleOverlay } from "@/i18n/types";
-import { getMortgageOverlay } from "@/i18n/overlays/mortgage";
 
 export interface AmortizationTableProps {
   schedule: AmortizationRow[];
   biweeklySchedule?: AmortizationRow[];
-  overlay?: MortgageLocaleOverlay;
-  locale?: string;
 }
 
 interface AnnualScheduleRow {
@@ -35,10 +31,7 @@ interface AnnualScheduleRow {
 export function AmortizationTable({
   schedule,
   biweeklySchedule,
-  overlay: propsOverlay,
-  locale = "en",
 }: AmortizationTableProps) {
-  const overlay = propsOverlay || getMortgageOverlay(locale);
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<"annual" | "monthly" | "biweekly">("annual");
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,7 +48,7 @@ export function AmortizationTable({
       if (!map.has(y)) {
         map.set(y, {
           year: y,
-          periodLabel: `${overlay.yearCol} ${y}`,
+          periodLabel: `Year ${y}`,
           totalPayment: 0,
           principalPaid: 0,
           interestPaid: 0,
@@ -85,7 +78,7 @@ export function AmortizationTable({
     });
 
     return Array.from(map.values());
-  }, [schedule, overlay.yearCol]);
+  }, [schedule]);
 
   // Filtered data based on active view mode and search term
   const displayedRows = useMemo(() => {
@@ -159,37 +152,10 @@ export function AmortizationTable({
     document.body.removeChild(link);
   };
 
-  const LOCALE_INTL_MAP: Record<string, string> = {
-    en: "en-US",
-    es: "es-ES",
-    fr: "fr-FR",
-    de: "de-DE",
-    hi: "hi-IN",
-    pt: "pt-PT",
-  };
-  const targetIntlLocale = LOCALE_INTL_MAP[locale] || locale;
-
-  const getEmptyMessage = () => {
-    switch (locale) {
-      case "es":
-        return `No se encontraron registros de amortización para "${searchTerm}".`;
-      case "fr":
-        return `Aucun enregistrement d'amortissement trouvé pour « ${searchTerm} ».`;
-      case "de":
-        return `Keine Tilgungseinträge für „${searchTerm}“ gefunden.`;
-      case "hi":
-        return `"${searchTerm}" के लिए कोई परिशोधन प्रविष्टि नहीं मिली।`;
-      case "pt":
-        return `Nenhum registo de amortização encontrado para "${searchTerm}".`;
-      default:
-        return `No amortization entries found for "${searchTerm}".`;
-    }
-  };
-
   const getPeriodHeader = () => {
-    if (viewMode === "annual") return `${overlay.periodCol} (${overlay.yearCol})`;
-    if (viewMode === "biweekly") return overlay.biweeklyPayment;
-    return `${overlay.periodCol} (${overlay.monthHeader || "Month"})`;
+    if (viewMode === "annual") return "Period (Year)";
+    if (viewMode === "biweekly") return "Biweekly Payment";
+    return "Period (Month)";
   };
 
   return (
@@ -210,7 +176,7 @@ export function AmortizationTable({
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
             }`}
           >
-            {overlay.annualSummaryTab}
+            Annual Summary
           </button>
           <button
             type="button"
@@ -224,7 +190,7 @@ export function AmortizationTable({
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
             }`}
           >
-            {overlay.monthlyScheduleTab}
+            Monthly Schedule
           </button>
           {biweeklySchedule && biweeklySchedule.length > 0 && (
             <button
@@ -239,7 +205,7 @@ export function AmortizationTable({
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
               }`}
             >
-              {overlay.biweeklyScheduleTab}
+              Biweekly Schedule
             </button>
           )}
         </div>
@@ -249,7 +215,7 @@ export function AmortizationTable({
           <div className="relative flex-1 sm:flex-none">
             <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
             <Input
-              placeholder={overlay.searchSchedulePlaceholder}
+              placeholder="Search schedule..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -264,7 +230,7 @@ export function AmortizationTable({
             onClick={handleDownloadCsv}
             className="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-medium rounded-xl px-4 py-2 text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
           >
-            <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> {overlay.downloadCsv}
+            <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> Download CSV
           </button>
         </div>
       </div>
@@ -277,12 +243,12 @@ export function AmortizationTable({
               <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
                 {getPeriodHeader()}
               </TableHead>
-              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300">{overlay.dateRangeCol}</TableHead>
-              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">{overlay.paymentCol}</TableHead>
-              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">{overlay.principalCol}</TableHead>
-              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">{overlay.interestCol}</TableHead>
+              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Date Range</TableHead>
+              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Payment</TableHead>
+              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Principal</TableHead>
+              <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">Interest</TableHead>
               <TableHead className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right">
-                {overlay.balanceCol}
+                Balance
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -290,22 +256,22 @@ export function AmortizationTable({
             {paginatedRows.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={6} className="text-center text-xs text-zinc-500 py-8">
-                  {getEmptyMessage()}
+                  No amortization entries found for &quot;{searchTerm}&quot;.
                 </TableCell>
               </TableRow>
             ) : (
               paginatedRows.map((row: any) => {
                 const periodLabel =
                   viewMode === "annual"
-                    ? `${overlay.yearCol} ${row.year}`
+                    ? `Year ${row.year}`
                     : viewMode === "biweekly"
-                    ? `${overlay.periodCol} ${row.month}`
-                    : `${overlay.monthHeader || "Month"} ${row.month}`;
+                    ? `Period ${row.month}`
+                    : `Month ${row.month}`;
                 const dateLabel =
                   viewMode === "annual"
                     ? row.dateRange
                     : row.calendarMonth && row.calendarYear
-                    ? formatMonthYear(row.calendarMonth, row.calendarYear, targetIntlLocale, "short")
+                    ? formatMonthYear(row.calendarMonth, row.calendarYear, "en-US", "short")
                     : row.date;
                 const paymentAmount = viewMode === "annual" ? row.totalPayment : row.payment;
                 const principalAmount =
@@ -333,16 +299,16 @@ export function AmortizationTable({
                       {dateLabel}
                     </TableCell>
                     <TableCell className="text-xs font-sans tabular-nums font-semibold text-zinc-900 dark:text-zinc-100 text-right">
-                      {formatCurrency(paymentAmount, "$", 2, targetIntlLocale)}
+                      {formatCurrency(paymentAmount)}
                     </TableCell>
                     <TableCell className="text-xs font-sans tabular-nums text-emerald-600 dark:text-emerald-400 font-medium text-right">
-                      {formatCurrency(principalAmount, "$", 2, targetIntlLocale)}
+                      {formatCurrency(principalAmount)}
                     </TableCell>
                     <TableCell className="text-xs font-sans tabular-nums text-amber-600 dark:text-amber-400 font-medium text-right">
-                      {formatCurrency(interestAmount, "$", 2, targetIntlLocale)}
+                      {formatCurrency(interestAmount)}
                     </TableCell>
                     <TableCell className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400 text-right">
-                      {formatCurrency(balanceAmount, "$", 2, targetIntlLocale)}
+                      {formatCurrency(balanceAmount)}
                     </TableCell>
                   </TableRow>
                 );
@@ -356,7 +322,7 @@ export function AmortizationTable({
       {totalPages > 1 && (
         <div className="flex items-center justify-between pt-1">
           <span className="text-xs text-zinc-500 dark:text-zinc-400 font-sans tabular-nums">
-            {overlay.showingRecords} {overlay.pageOf.toLowerCase()} {currentPage} / {totalPages} ({displayedRows.length})
+            Showing page {currentPage} / {totalPages} ({displayedRows.length})
           </span>
           <div className="flex items-center gap-1.5">
             <Button
@@ -367,7 +333,7 @@ export function AmortizationTable({
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               className="h-7 text-xs px-2.5 border-zinc-200 dark:border-zinc-700"
             >
-              {overlay.prevPage}
+              Previous
             </Button>
             <Button
               type="button"
@@ -377,7 +343,7 @@ export function AmortizationTable({
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               className="h-7 text-xs px-2.5 border-zinc-200 dark:border-zinc-700"
             >
-              {overlay.nextPage}
+              Next
             </Button>
           </div>
         </div>

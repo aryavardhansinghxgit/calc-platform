@@ -10,7 +10,6 @@ import { NAVIGATION_CATEGORIES } from "@/constants/navigation";
 import { getCalculatorDefinition, searchCalculators } from "@/calculators";
 import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
 
-import { LanguageSelector } from "./LanguageSelector";
 import { ThemeToggle } from "./ThemeToggle";
 
 export interface NavbarProps {
@@ -26,21 +25,18 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
   const searchInputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname() || "/";
 
-  const currentLocale = pathname.startsWith("/es") ? "es" : "en";
-  const isSpanish = currentLocale === "es";
-
   const categories = NAVIGATION_CATEGORIES;
   const routeCategory = useMemo(() => {
-    if (!pathname || pathname === "/" || pathname === "/es") return "Home";
+    if (!pathname || pathname === "/") return "Home";
 
     const category = categories.find(
       (cat) => pathname === `/category/${cat.slug}` || pathname.startsWith(`/category/${cat.slug}/`)
     );
     if (category) return category.name;
 
-    if (pathname.startsWith("/calculators/") || pathname.startsWith("/es/calculators/")) {
+    if (pathname.startsWith("/calculators/")) {
       const parts = pathname.split("/");
-      const calculatorSlug = pathname.startsWith("/es/calculators/") ? parts[3] : parts[2];
+      const calculatorSlug = parts[2];
       return calculatorSlug ? getCalculatorDefinition(calculatorSlug)?.category : undefined;
     }
 
@@ -85,7 +81,7 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
         {/* Left Section: Logo & Desktop Categories */}
         <div className="flex items-center gap-3 min-w-0">
           <Link
-            href={isSpanish ? "/es" : "/"}
+            href="/"
             className="flex min-w-0 items-center gap-2 cursor-pointer group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white dark:focus-visible:ring-zinc-400 rounded-lg p-1 xl:shrink-0 xl:whitespace-nowrap"
             aria-label="CalcPlatform Home"
           >
@@ -106,7 +102,7 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
           <nav className="hidden xl:ml-2 xl:flex items-center gap-1" aria-label="Main Categories Navigation">
             {categories.map((cat) => {
               const isActive = selectedCategory === cat.name;
-              const href = cat.slug === "home" || cat.id === "home" ? (isSpanish ? "/es" : "/") : `/category/${cat.slug}`;
+              const href = cat.slug === "home" || cat.id === "home" ? "/" : `/category/${cat.slug}`;
               return (
                 <Link
                   key={cat.name}
@@ -132,12 +128,12 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
             <Input
               ref={searchInputRef}
               type="text"
-              placeholder={isSpanish ? "Buscar herramientas... (/)" : "Search tools... (/)"}
+              placeholder="Search tools... (/)"
               value={searchTerm}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setTimeout(() => setIsFocused(false), 200)}
               onChange={handleSearch}
-              aria-label={isSpanish ? "Buscar calculadoras" : "Search calculators"}
+              aria-label="Search calculators"
               className="pl-8 pr-8 sm:pr-12 bg-blue-700/80 dark:bg-zinc-800 border border-blue-400/60 dark:border-zinc-700 hover:border-blue-300 dark:hover:border-zinc-600 text-white dark:text-zinc-100 placeholder:text-blue-200 dark:placeholder:text-zinc-400 focus:border-white dark:focus:border-blue-500 focus:ring-1 focus:ring-white/30 dark:focus:ring-blue-500/30 rounded-lg h-8 text-xs transition-all shadow-none"
             />
             {/* Autocomplete Popup */}
@@ -145,25 +141,23 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
               <div className="absolute top-10 right-0 left-0 sm:left-auto sm:w-80 z-50 bg-white dark:bg-zinc-900 border border-blue-200 dark:border-zinc-700 rounded-2xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto">
                 <div className="flex items-center justify-between px-3 py-2 border-b border-blue-100 dark:border-zinc-800 bg-blue-50/70 dark:bg-zinc-800/50">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">
-                    {isSpanish ? "Sugerencias de calculadoras" : "Calculator suggestions"}
+                    Calculator suggestions
                   </span>
                   {searchResults.length > 0 && (
                     <span className="text-[10px] font-sans tabular-nums font-semibold text-blue-600 dark:text-blue-400">
-                      {searchResults.length} {isSpanish ? "coincidencias" : "matches"}
+                      {searchResults.length} matches
                     </span>
                   )}
                 </div>
                 {searchResults.length === 0 ? (
                   <div className="p-3.5 text-center text-xs text-zinc-500 dark:text-zinc-400">
-                    {isSpanish
-                      ? `No se encontraron calculadoras que coincidan con "${searchTerm}"`
-                      : `No calculators found matching "${searchTerm}"`}
+                    No calculators found matching &quot;{searchTerm}&quot;
                   </div>
                 ) : (
                   searchResults.map((calc) => (
                     <Link
                       key={calc.id}
-                      href={isSpanish && calc.slug === "mortgage-calculator" ? `/es/calculators/${calc.slug}` : `/calculators/${calc.slug}`}
+                      href={`/calculators/${calc.slug}`}
                       className="p-2.5 flex min-w-0 items-center gap-2 border-b border-blue-50 last:border-b-0 dark:border-zinc-800/60 hover:bg-blue-50/70 dark:hover:bg-zinc-800/60 transition-colors group cursor-pointer"
                     >
                       <div className="min-w-0 flex-1 space-y-0.5">
@@ -184,20 +178,19 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
             )}
           </div>
 
-          {/* Desktop Language Selector & Theme Toggle */}
+          {/* Desktop Theme Toggle */}
           <div className="hidden sm:flex items-center gap-1 border-l border-blue-500/80 dark:border-zinc-800 pl-1.5 sm:pl-2">
-            <LanguageSelector />
-            <ThemeToggle locale={currentLocale} />
+            <ThemeToggle />
           </div>
 
           {/* Mobile Navigation Toggle */}
           <div className="flex sm:hidden items-center gap-1">
-            <ThemeToggle locale={currentLocale} />
+            <ThemeToggle />
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label={isSpanish ? "Alternar menú de navegación" : "Toggle navigation menu"}
+              aria-label="Toggle navigation menu"
               aria-expanded={mobileMenuOpen}
               className="text-white dark:text-zinc-200 hover:bg-white/15 dark:hover:bg-zinc-800 h-8 w-8 p-0"
             >
@@ -210,18 +203,10 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
         <div className="xl:hidden border-t border-blue-500 dark:border-zinc-800 bg-blue-600 dark:bg-zinc-900 px-4 py-3 space-y-2">
-          {/* Mobile Language Selector & Controls Row */}
-          <div className="flex sm:hidden items-center justify-between pb-2 border-b border-blue-500/60 dark:border-zinc-800">
-            <span className="text-xs font-semibold text-blue-100 dark:text-zinc-400 uppercase tracking-wider">
-              {isSpanish ? "Idioma" : "Language"}
-            </span>
-            <LanguageSelector />
-          </div>
-
           <div className="space-y-1">
             {categories.map((cat) => {
               const isActive = selectedCategory === cat.name;
-              const href = cat.slug === "home" || cat.id === "home" ? (isSpanish ? "/es" : "/") : `/category/${cat.slug}`;
+              const href = cat.slug === "home" || cat.id === "home" ? "/" : `/category/${cat.slug}`;
               return (
                 <Link
                   key={cat.name}
