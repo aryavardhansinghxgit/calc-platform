@@ -18,8 +18,13 @@ import {
   SavedHomeEquityItem,
 } from "@/app/calculators/home-equity-loan-calculator/types";
 
-export function HomeEquityCalculator() {
-  const [currencySymbol, setCurrencySymbol] = useState<string>("$");
+export interface HomeEquityCalculatorProps {
+  overlay?: any;
+  locale?: string;
+}
+
+export function HomeEquityCalculator({ overlay, locale = "en" }: HomeEquityCalculatorProps = {}) {
+  const [currencySymbol, setCurrencySymbol] = useState<string>(locale === "es" || locale === "pt" ? "$" : locale === "fr" || locale === "de" ? "€" : "$");
 
   // =========================================================================
   // BOX 1: HOME EQUITY LOAN ENGINE STATES (MODE A & B)

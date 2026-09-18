@@ -4,6 +4,25 @@
 
 export const SUPPORTED_LOCALES = ["en", "es", "fr", "de", "hi", "pt"] as const;
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
+export type SupportedLocale = Locale;
+
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export interface CalculatorLocalizedContent {
+  slug?: string;
+  calculatorSlug?: string;
+  locale?: Locale | string;
+  seo: {
+    title: string;
+    description: string;
+    shortDescription?: string;
+  };
+  faqs: FAQItem[];
+  ContentComponent: React.ComponentType<any>;
+}
 
 export type PublishingStatus = "DRAFT" | "TRANSLATING" | "REVIEW" | "PUBLISHED";
 

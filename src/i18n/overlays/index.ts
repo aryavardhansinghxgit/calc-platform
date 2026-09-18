@@ -9,6 +9,12 @@ import { getOhmsLawOverlay } from "./ohms-law";
 import { getMortgageOverlay } from "./mortgage";
 import { getFuelCostOverlay } from "./fuel-cost";
 import { getAmortizationOverlay } from "./amortization";
+import { getHomeEquityOverlay } from "./home-equity";
+import { getHelocOverlay } from "./heloc";
+import { getDownPaymentOverlay } from "./down-payment";
+import { getRentVsBuyOverlay } from "./rent-vs-buy";
+import { getVaOverlay } from "./va";
+import { getBusinessLoanOverlay } from "./business-loan";
 
 export {
   getPercentageOverlay,
@@ -22,6 +28,12 @@ export {
   getMortgageOverlay,
   getFuelCostOverlay,
   getAmortizationOverlay,
+  getHomeEquityOverlay,
+  getHelocOverlay,
+  getDownPaymentOverlay,
+  getRentVsBuyOverlay,
+  getVaOverlay,
+  getBusinessLoanOverlay,
 };
 
 export function getCalculatorOverlay(slug: string, locale: string): any {
@@ -30,6 +42,18 @@ export function getCalculatorOverlay(slug: string, locale: string): any {
       return getMortgageOverlay(locale);
     case "amortization-calculator":
       return getAmortizationOverlay(locale);
+    case "home-equity-loan-calculator":
+      return getHomeEquityOverlay(locale);
+    case "heloc-calculator":
+      return getHelocOverlay(locale);
+    case "down-payment-calculator":
+      return getDownPaymentOverlay(locale);
+    case "rent-vs-buy-calculator":
+      return getRentVsBuyOverlay(locale);
+    case "va-mortgage-calculator":
+      return getVaOverlay(locale);
+    case "business-loan-calculator":
+      return getBusinessLoanOverlay(locale);
     case "percentage-calculator":
       return getPercentageOverlay(locale);
     case "bmi-calculator":
@@ -52,3 +76,4 @@ export function getCalculatorOverlay(slug: string, locale: string): any {
       return null;
   }
 }
+

@@ -76,6 +76,43 @@ import { PORTUGUESE_AMORTIZATION_SEO, PORTUGUESE_AMORTIZATION_FAQS, PortugueseAm
 import { SPANISH_FUEL_COST_SEO, SPANISH_FUEL_COST_FAQS, SpanishFuelCostContent } from "./fuel-cost/es";
 import { FRENCH_FUEL_COST_SEO, FRENCH_FUEL_COST_FAQS, FrenchFuelCostContent } from "./fuel-cost/fr";
 
+// Batch 1 Finance Calculators
+import * as HomeEquityEs from "./home-equity/es";
+import * as HomeEquityFr from "./home-equity/fr";
+import * as HomeEquityDe from "./home-equity/de";
+import * as HomeEquityHi from "./home-equity/hi";
+import * as HomeEquityPt from "./home-equity/pt";
+
+import * as HelocEs from "./heloc/es";
+import * as HelocFr from "./heloc/fr";
+import * as HelocDe from "./heloc/de";
+import * as HelocHi from "./heloc/hi";
+import * as HelocPt from "./heloc/pt";
+
+import * as DownPaymentEs from "./down-payment/es";
+import * as DownPaymentFr from "./down-payment/fr";
+import * as DownPaymentDe from "./down-payment/de";
+import * as DownPaymentHi from "./down-payment/hi";
+import * as DownPaymentPt from "./down-payment/pt";
+
+import * as RentVsBuyEs from "./rent-vs-buy/es";
+import * as RentVsBuyFr from "./rent-vs-buy/fr";
+import * as RentVsBuyDe from "./rent-vs-buy/de";
+import * as RentVsBuyHi from "./rent-vs-buy/hi";
+import * as RentVsBuyPt from "./rent-vs-buy/pt";
+
+import * as VaEs from "./va/es";
+import * as VaFr from "./va/fr";
+import * as VaDe from "./va/de";
+import * as VaHi from "./va/hi";
+import * as VaPt from "./va/pt";
+
+import * as BusinessLoanEs from "./business-loan/es";
+import * as BusinessLoanFr from "./business-loan/fr";
+import * as BusinessLoanDe from "./business-loan/de";
+import * as BusinessLoanHi from "./business-loan/hi";
+import * as BusinessLoanPt from "./business-loan/pt";
+
 export interface LocalizedCalculatorContentPack {
   seo: {
     title: string;
@@ -125,7 +162,7 @@ export const LOCALIZED_CONTENT_REGISTRY: Record<string, Record<string, Localized
   "concrete-calculator": {
     es: { seo: ES_CONCRETE_SEO, faqs: ES_CONCRETE_FAQS, ContentComponent: EsConcreteContent },
     fr: { seo: FR_CONCRETE_SEO, faqs: FR_CONCRETE_FAQS, ContentComponent: FrConcreteContent },
-    de: { seo: DE_CONCRETE_SEO, faqs: DE_CONCRETE_FAQS, ContentComponent: DeConcreteContent },
+    de: { seo: DE_CONCRETE_SEO, faqs: DE_CONCRETE_FAQS, ContentComponent: DeDateContent },
     hi: { seo: HI_CONCRETE_SEO, faqs: HI_CONCRETE_FAQS, ContentComponent: HiConcreteContent },
     pt: { seo: PT_CONCRETE_SEO, faqs: PT_CONCRETE_FAQS, ContentComponent: PtConcreteContent },
   },
@@ -161,8 +198,52 @@ export const LOCALIZED_CONTENT_REGISTRY: Record<string, Record<string, Localized
     es: { seo: SPANISH_FUEL_COST_SEO, faqs: SPANISH_FUEL_COST_FAQS, ContentComponent: SpanishFuelCostContent },
     fr: { seo: FRENCH_FUEL_COST_SEO, faqs: FRENCH_FUEL_COST_FAQS, ContentComponent: FrenchFuelCostContent },
   },
+  "home-equity-loan-calculator": {
+    es: { seo: HomeEquityEs.seo, faqs: HomeEquityEs.faqs, ContentComponent: HomeEquityEs.ContentComponent },
+    fr: { seo: HomeEquityFr.seo, faqs: HomeEquityFr.faqs, ContentComponent: HomeEquityFr.ContentComponent },
+    de: { seo: HomeEquityDe.seo, faqs: HomeEquityDe.faqs, ContentComponent: HomeEquityDe.ContentComponent },
+    hi: { seo: HomeEquityHi.seo, faqs: HomeEquityHi.faqs, ContentComponent: HomeEquityHi.ContentComponent },
+    pt: { seo: HomeEquityPt.seo, faqs: HomeEquityPt.faqs, ContentComponent: HomeEquityPt.ContentComponent },
+  },
+  "heloc-calculator": {
+    es: { seo: HelocEs.seo, faqs: HelocEs.faqs, ContentComponent: HelocEs.ContentComponent },
+    fr: { seo: HelocFr.seo, faqs: HelocFr.faqs, ContentComponent: HelocFr.ContentComponent },
+    de: { seo: HelocDe.seo, faqs: HelocDe.faqs, ContentComponent: HelocDe.ContentComponent },
+    hi: { seo: HelocHi.seo, faqs: HelocHi.faqs, ContentComponent: HelocHi.ContentComponent },
+    pt: { seo: HelocPt.seo, faqs: HelocPt.faqs, ContentComponent: HelocPt.ContentComponent },
+  },
+  "down-payment-calculator": {
+    es: { seo: DownPaymentEs.seo, faqs: DownPaymentEs.faqs, ContentComponent: DownPaymentEs.ContentComponent },
+    fr: { seo: DownPaymentFr.seo, faqs: DownPaymentFr.faqs, ContentComponent: DownPaymentFr.ContentComponent },
+    de: { seo: DownPaymentDe.seo, faqs: DownPaymentDe.faqs, ContentComponent: DownPaymentDe.ContentComponent },
+    hi: { seo: DownPaymentHi.seo, faqs: DownPaymentHi.faqs, ContentComponent: DownPaymentHi.ContentComponent },
+    pt: { seo: DownPaymentPt.seo, faqs: DownPaymentPt.faqs, ContentComponent: DownPaymentPt.ContentComponent },
+  },
+  "rent-vs-buy-calculator": {
+    es: { seo: RentVsBuyEs.seo, faqs: RentVsBuyEs.faqs, ContentComponent: RentVsBuyEs.ContentComponent },
+    fr: { seo: RentVsBuyFr.seo, faqs: RentVsBuyFr.faqs, ContentComponent: RentVsBuyFr.ContentComponent },
+    de: { seo: RentVsBuyDe.seo, faqs: RentVsBuyDe.faqs, ContentComponent: RentVsBuyDe.ContentComponent },
+    hi: { seo: RentVsBuyHi.seo, faqs: RentVsBuyHi.faqs, ContentComponent: RentVsBuyHi.ContentComponent },
+    pt: { seo: RentVsBuyPt.seo, faqs: RentVsBuyPt.faqs, ContentComponent: RentVsBuyPt.ContentComponent },
+  },
+  "va-mortgage-calculator": {
+    es: { seo: VaEs.seo, faqs: VaEs.faqs, ContentComponent: VaEs.ContentComponent },
+    fr: { seo: VaFr.seo, faqs: VaFr.faqs, ContentComponent: VaFr.ContentComponent },
+    de: { seo: VaDe.seo, faqs: VaDe.faqs, ContentComponent: VaDe.ContentComponent },
+    hi: { seo: VaHi.seo, faqs: VaHi.faqs, ContentComponent: VaHi.ContentComponent },
+    pt: { seo: VaPt.seo, faqs: VaPt.faqs, ContentComponent: VaPt.ContentComponent },
+  },
+  "business-loan-calculator": {
+    es: { seo: BusinessLoanEs.seo, faqs: BusinessLoanEs.faqs, ContentComponent: BusinessLoanEs.ContentComponent },
+    fr: { seo: BusinessLoanFr.seo, faqs: BusinessLoanFr.faqs, ContentComponent: BusinessLoanFr.ContentComponent },
+    de: { seo: BusinessLoanDe.seo, faqs: BusinessLoanDe.faqs, ContentComponent: BusinessLoanDe.ContentComponent },
+    hi: { seo: BusinessLoanHi.seo, faqs: BusinessLoanHi.faqs, ContentComponent: BusinessLoanHi.ContentComponent },
+    pt: { seo: BusinessLoanPt.seo, faqs: BusinessLoanPt.faqs, ContentComponent: BusinessLoanPt.ContentComponent },
+  },
 };
 
 export function getCalculatorLocalizedContent(slug: string, locale: string): LocalizedCalculatorContentPack | null {
   return LOCALIZED_CONTENT_REGISTRY[slug]?.[locale] || null;
 }
+
+

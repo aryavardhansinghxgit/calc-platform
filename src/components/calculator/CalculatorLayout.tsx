@@ -578,9 +578,11 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
   const isPercentage = idLower === "percentage-calculator" || slugLower === "percentage-calculator";
 
   const localizedPack = (locale && definition.slug) ? getCalculatorLocalizedContent(definition.slug, locale) : null;
-  const CustomContent = (definition as any).ContentComponent || localizedPack?.ContentComponent || (
-    (isMortgage && locale === "es")
-      ? MortgageContentSectionEs
+  const CustomContent = (locale && locale !== "en" && localizedPack?.ContentComponent)
+    ? localizedPack.ContentComponent
+    : (definition as any).ContentComponent || (
+        (isMortgage && locale === "es")
+          ? MortgageContentSectionEs
       : isResistor
         ? ResistorContent
         : isBandwidth
@@ -653,12 +655,13 @@ export function CalculatorLayout({ definition, locale, overlay: propOverlay }: C
                                                                                                     isWindChill ? WindChillContent :
                                                                                                       isSleep ? SleepContent :
                                                                                                       isIncomeTax ? IncomeTaxContent :
-                                                                                                        isSalary ? SalaryContent :
-                                                                                                            isMargin ? MarginContent :
-                                                                                                            isDiscount ? DiscountContent :
-                                                                                                            isAutoLoan ? AutoLoanContentSection :
+                                                                                                      isSalary ? SalaryContent :
+                                                                                                          isMargin ? MarginContent :
+                                                                                                          isDiscount ? DiscountContent :
+                                                                                                          isAutoLoan ? AutoLoanContentSection :
                                                                                                                isDebtConsolidation ? DebtConsolidationContent : isScientific ? ScientificCalculatorContent : isFraction ? FractionContent : isStatistics ? StatisticsContent : isPercentError ? PercentErrorContent : isDownPayment ? DownPaymentContent : isRentVsBuy ? RentVsBuyContent : isBac ? BacContent : isBsa ? BsaContent : isBodyType ? BodyTypeContent : isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null
-                  ));
+                                                  )
+      );
   const CustomChart = definition.ChartComponent;
 
   return (

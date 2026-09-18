@@ -15,8 +15,13 @@ import {
   SavedRentVsBuyItem,
 } from "@/app/calculators/rent-vs-buy-calculator/types";
 
-export function RentVsBuyCalculator() {
-  const [currencySymbol, setCurrencySymbol] = useState<string>("$");
+export interface RentVsBuyCalculatorProps {
+  overlay?: any;
+  locale?: string;
+}
+
+export function RentVsBuyCalculator({ overlay, locale = "en" }: RentVsBuyCalculatorProps = {}) {
+  const [currencySymbol, setCurrencySymbol] = useState<string>(locale === "es" || locale === "pt" ? "$" : locale === "fr" || locale === "de" ? "€" : "$");
 
   // =========================================================================
   // BOX 1: RENT VS BUY CALCULATOR STATES (EXACT COMPETITOR PARITY)

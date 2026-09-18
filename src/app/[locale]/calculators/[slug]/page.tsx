@@ -18,10 +18,10 @@ import { bmi_calculatorConfig } from "@/app/calculators/bmi-calculator/config";
 import { scientific_calculatorConfig } from "@/app/calculators/scientific-calculator/config";
 import { date_calculatorConfig } from "@/app/calculators/date-calculator/config";
 import { concrete_calculatorConfig } from "@/app/calculators/concrete-calculator/config";
-import { currency_calculatorConfig } from "@/app/calculators/currency-calculator/config";
 import { AUTO_LOAN_CONFIG } from "@/app/calculators/auto-loan-calculator/config";
 import { ohms_law_calculatorConfig } from "@/app/calculators/ohms-law-calculator/config";
 import { fuel_cost_calculatorConfig } from "@/app/calculators/fuel-cost-calculator/config";
+import { getCalculatorDefinition } from "@/calculators";
 import { SPANISH_MORTGAGE_SEO, SPANISH_MORTGAGE_FAQS } from "@/i18n/content/mortgage/es";
 
 const CONFIG_MAP: Record<string, any> = {
@@ -32,7 +32,6 @@ const CONFIG_MAP: Record<string, any> = {
   "scientific-calculator": scientific_calculatorConfig,
   "date-calculator": date_calculatorConfig,
   "concrete-calculator": concrete_calculatorConfig,
-  "currency-calculator": currency_calculatorConfig,
   "auto-loan-calculator": AUTO_LOAN_CONFIG,
   "ohms-law-calculator": ohms_law_calculatorConfig,
   "fuel-cost-calculator": fuel_cost_calculatorConfig,
@@ -67,7 +66,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     notFound();
   }
 
-  const def = CONFIG_MAP[slug];
+  const def = CONFIG_MAP[slug] || getCalculatorDefinition(slug);
   if (!def) {
     notFound();
   }
@@ -113,7 +112,7 @@ export default async function LocalizedCalculatorPage({ params }: any) {
     notFound();
   }
 
-  const def = CONFIG_MAP[slug];
+  const def = CONFIG_MAP[slug] || getCalculatorDefinition(slug);
   if (!def) {
     notFound();
   }

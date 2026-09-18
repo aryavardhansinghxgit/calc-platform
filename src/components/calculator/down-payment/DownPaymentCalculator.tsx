@@ -15,8 +15,13 @@ import {
   SavedDownPaymentItem,
 } from "@/app/calculators/down-payment-calculator/types";
 
-export function DownPaymentCalculator() {
-  const [currencySymbol, setCurrencySymbol] = useState<string>("$");
+export interface DownPaymentCalculatorProps {
+  overlay?: any;
+  locale?: string;
+}
+
+export function DownPaymentCalculator({ overlay, locale = "en" }: DownPaymentCalculatorProps = {}) {
+  const [currencySymbol, setCurrencySymbol] = useState<string>(locale === "es" || locale === "pt" ? "$" : locale === "fr" || locale === "de" ? "€" : "$");
 
   // =========================================================================
   // BOX 1: CORE MORTGAGE DOWN PAYMENT & PITI ENGINE STATES

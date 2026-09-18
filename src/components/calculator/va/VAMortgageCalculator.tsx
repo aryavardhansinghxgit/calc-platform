@@ -15,8 +15,13 @@ import {
   SavedVAItem,
 } from "@/app/calculators/va-mortgage-calculator/types";
 
-export function VAMortgageCalculator() {
-  const [currencySymbol, setCurrencySymbol] = useState<string>("$");
+export interface VAMortgageCalculatorProps {
+  overlay?: any;
+  locale?: string;
+}
+
+export function VAMortgageCalculator({ overlay, locale = "en" }: VAMortgageCalculatorProps = {}) {
+  const [currencySymbol, setCurrencySymbol] = useState<string>(locale === "es" || locale === "pt" ? "$" : locale === "fr" || locale === "de" ? "€" : "$");
 
   // =========================================================================
   // BOX 1: COMPREHENSIVE VA PITI ENGINE STATES

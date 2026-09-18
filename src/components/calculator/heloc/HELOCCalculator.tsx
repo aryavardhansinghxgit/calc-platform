@@ -16,8 +16,13 @@ import {
   SavedHELOCItem,
 } from "@/app/calculators/heloc-calculator/types";
 
-export function HELOCCalculator() {
-  const [currencySymbol, setCurrencySymbol] = useState<string>("$");
+export interface HELOCCalculatorProps {
+  overlay?: any;
+  locale?: string;
+}
+
+export function HELOCCalculator({ overlay, locale = "en" }: HELOCCalculatorProps = {}) {
+  const [currencySymbol, setCurrencySymbol] = useState<string>(locale === "es" || locale === "pt" ? "$" : locale === "fr" || locale === "de" ? "€" : "$");
 
   // =========================================================================
   // BOX 1: STANDARD TWO-PHASE HELOC PAYMENT ENGINE STATES

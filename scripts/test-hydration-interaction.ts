@@ -37,7 +37,7 @@ async function testHydrationAndInteractions() {
   // 2. MORTGAGE (FR) INTERACTION & HYDRATION
   console.log("\n--- 2. Mortgage (FR) Client Hydration & Interactive Calculation ---");
   const mortgageInputs = {
-    homeValue: 400000,
+    homePrice: 400000,
     downPayment: 80000,
     loanTermYears: 30,
     interestRate: 6.5,
