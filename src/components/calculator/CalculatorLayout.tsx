@@ -1053,19 +1053,17 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           )}
         </CalculatorErrorBoundary>
 
-        {/* Related Calculators Links directly below calculator box */}
-        {!isPeriod && !isVolume && !isSlope && !isDistance && !isMatrix && !isCircle && !isSurfaceArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRandomNumberGenerator && !isBinary && !isHex && !isHalfLife && !isRightTriangle && !isConcrete && !isSquareFootage && !isRoofing && !isBtu && !isTile && !isStair && !isGravel && !isMulch && !isConversion && !isMass && !isSpeed && !isHeight && !isElectricity && !isDensity && !isRoman && !isShoeSize && !isFuelCost && !isVoltageDrop && !isOhmsLaw && !isIpSubnet && !isBandwidth && !isDewPoint && !isDiceRoller && (
-          <div className="no-print pt-3 pb-1 space-y-1.5 border-t border-slate-200/60 dark:border-slate-800">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
-              RELATED CALCULATORS:
-            </span>
-            <RelatedCalculators
-              currentId={definition.id}
-              category={definition.category}
-              explicitRelated={definition.relatedCalculators}
-            />
-          </div>
-        )}
+        {/* Related Calculators Links directly below calculator box (Universal Standard for all 196 calculators) */}
+        <div className="no-print pt-3 pb-1 space-y-1.5 border-t border-slate-200/60 dark:border-slate-800">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
+            RELATED CALCULATORS:
+          </span>
+          <RelatedCalculators
+            currentId={definition.id}
+            category={definition.category}
+            explicitRelated={definition.relatedCalculators}
+          />
+        </div>
       </div>
 
 
@@ -1132,20 +1130,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             </div>
           ) : null}
 
-          {/* Related Calculators Below */}
-          {(isTimeZone || isBac || isBodyType || isArmyBodyFat || isOneRepMax || isTargetHeartRate || isLove || isResistor || isBase64 || isUrlEncoder || isPasswordGenerator || isMileage || isHorsepower || isEngineHorsepower || isTireSize || isGPA || isGrade || isWindChill || isHeatIndex || isMolarity || isMolecularWeight || isGdp || isBraSize || isTip || isGolfHandicap || isSleep || isDayCounter || isDayOfWeek) && (
-            <div className="no-print pt-6 pb-2 space-y-1.5 border-t border-slate-200/60 dark:border-slate-800">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
-                RELATED CALCULATORS:
-              </span>
-              <RelatedCalculators
-                currentId={definition.id}
-                category={definition.category}
-                explicitRelated={definition.relatedCalculators}
-              />
-            </div>
-          )}
-        </div>
+      </div>
 
       {/* Generic Report Modal */}
       <ReportModal

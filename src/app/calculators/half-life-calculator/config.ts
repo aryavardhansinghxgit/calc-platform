@@ -22,7 +22,12 @@ export const half_life_calculatorConfig: CalculatorModuleDefinition = {
     "isotope half life"
   ],
   priority: 1,
-  relatedCalculators: ["exponent-calculator", "log-calculator", "scientific-calculator"],
+  relatedCalculators: [
+    "exponent-calculator",
+    "log-calculator",
+    "scientific-notation-calculator",
+    "scientific-calculator"
+  ],
   formulaDescription: "Solves exponential decay N(t) = N₀ × (1/2)^(t / t½) or N(t) = N₀ × e^(-λt) with step-by-step proofs.",
   faqs: half_life_calculatorFaqs,
   inputs: [

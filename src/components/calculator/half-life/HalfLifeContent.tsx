@@ -25,38 +25,8 @@ export function HalfLifeContent() {
 
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
-      {/* 3. RELATED CALCULATORS — TOP BLOCK */}
-      <div className="pb-4">
-        <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm">
-          <span className="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-            <Calculator className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-            Related Calculators:
-          </span>
-          <Link
-            href="/calculators/exponent-calculator"
-            className="text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-0.5"
-          >
-            Exponent Calculator
-          </Link>
-          <span className="text-slate-300 dark:text-slate-600 font-bold">|</span>
-          <Link
-            href="/calculators/log-calculator"
-            className="text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-0.5"
-          >
-            Log Calculator
-          </Link>
-          <span className="text-slate-300 dark:text-slate-600 font-bold">|</span>
-          <Link
-            href="/calculators/scientific-notation-calculator"
-            className="text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-0.5"
-          >
-            Scientific Notation Calculator
-          </Link>
-        </div>
-      </div>
-
-      {/* 4. MAIN LONG-FORM EDUCATIONAL ARTICLE */}
-      <div className="pt-8 space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+      {/* 1. MAIN LONG-FORM EDUCATIONAL ARTICLE */}
+      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
         {/* Section 1: What Is Half-Life? */}
         <section className="space-y-3">
           <h2 className="text-lg sm:text-xl font-bold text-blue-600 dark:text-blue-400">
@@ -619,38 +589,6 @@ export function HalfLifeContent() {
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* 23. RELATED CALCULATORS — BOTTOM BLOCK */}
-      <div className="pt-8">
-        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
-          <span className="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-            <Calculator className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-            Explore Related Calculators:
-          </span>
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <Link
-              href="/calculators/exponent-calculator"
-              className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-            >
-              Exponent Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600 font-bold">|</span>
-            <Link
-              href="/calculators/log-calculator"
-              className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-            >
-              Log Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600 font-bold">|</span>
-            <Link
-              href="/calculators/scientific-notation-calculator"
-              className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-            >
-              Scientific Notation Calculator
-            </Link>
-          </div>
         </div>
       </div>
     </article>
